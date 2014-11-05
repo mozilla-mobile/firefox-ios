@@ -20,7 +20,7 @@ func createMockFavicon(icon: UIImage) -> UIImage {
 
 class BookmarksViewController: UITableViewController
 {
-    var bookmarksResponse: BookmarksResponse?
+    var bookmarks: [Bookmark] = [];
     
     override func viewDidLoad()
     {
@@ -34,15 +34,13 @@ class BookmarksViewController: UITableViewController
     }
     
     func reloadData() {
-        Alamofire.request(.GET, "https://syncapi-dev.sateh.com/1.0/bookmarks/recent")
-            .authenticate(user: "sarentz+syncapi@mozilla.com", password: "q1w2e3r4")
-            .responseJSON { (request, response, data, error) in
-                self.bookmarksResponse = parseBookmarksResponse(data)
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.refreshControl?.endRefreshing()
-                    self.tableView.reloadData()
-                }
-        }
+        Bookmarks.getAll({ (response: [Bookmark]) in
+            self.bookmarks = response
+            dispatch_async(dispatch_get_main_queue()) {
+                self.refreshControl?.endRefreshing()
+                self.tableView.reloadData()
+            }
+        });
     }
     
     func refresh() {
@@ -58,11 +56,7 @@ class BookmarksViewController: UITableViewController
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let r = bookmarksResponse {
-            return r.bookmarks.count
-        } else {
-            return 0
-        }
+        return bookmarks.count;
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -72,9 +66,9 @@ class BookmarksViewController: UITableViewController
             cell.imageView.image = createMockFavicon(image)
         }
         
-        let bookmark = bookmarksResponse?.bookmarks[indexPath.row]
+        let bookmark = bookmarks[indexPath.row]
         
-        cell.textLabel.text = bookmark?.title
+        cell.textLabel.text = bookmark.title
         cell.textLabel.font = UIFont(name: "FiraSans-SemiBold", size: 13)
         cell.textLabel.textColor = UIColor.darkGrayColor()
         cell.indentationWidth = 20
@@ -113,7 +107,7 @@ class BookmarksViewController: UITableViewController
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
-        //let bookmark = bookmarksResponse?.bookmarks[indexPath.row]
-        //UIApplication.sharedApplication().openURL(NSURL(string: bookmark?.url!)!)
+        let bookmark = bookmarks[indexPath.row]
+        UIApplication.sharedApplication().openURL(NSURL(string: bookmark.url)!)
     }
 }
