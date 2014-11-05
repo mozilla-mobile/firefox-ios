@@ -36,6 +36,10 @@ class BookmarksViewController: UITableViewController
     func reloadData() {
         Bookmarks.getAll({ (response: [Bookmark]) in
             self.bookmarks = response
+            dispatch_async(dispatch_get_main_queue()) {
+                self.refreshControl?.endRefreshing()
+                self.tableView.reloadData()
+            }
         });
     }
     
@@ -103,7 +107,7 @@ class BookmarksViewController: UITableViewController
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
-        //let bookmark = bookmarks[indexPath.row]
-        //UIApplication.sharedApplication().openURL(NSURL(string: bookmark?.url!)!)
+        let bookmark = bookmarks[indexPath.row]
+        UIApplication.sharedApplication().openURL(NSURL(string: bookmark.url)!)
     }
 }

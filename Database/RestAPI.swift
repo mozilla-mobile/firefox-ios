@@ -18,7 +18,7 @@ class RestAPI {
         Alamofire.request(.GET, BASE_URL + request)
             .authenticate(user: username, password: password)
             .responseJSON { (request, response, data, error) in
-                callback(response: response?);
+                callback(response: data?);
         }
     }
 }
