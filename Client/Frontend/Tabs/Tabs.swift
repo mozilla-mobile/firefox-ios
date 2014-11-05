@@ -4,45 +4,6 @@
 
 import Foundation
 
-class Bookmark
-{
-    var title: String
-    var url: String
-
-    init(title: String, url: String) {
-        self.title = title
-        self.url = url
-    }
-}
-
-class BookmarksResponse: NSObject
-{
-    var bookmarks: [Bookmark] = []
-}
-
-func parseBookmarksResponse(response: AnyObject?) -> BookmarksResponse {
-    let bookmarksResponse = BookmarksResponse()
-    
-    if let response: NSArray = response as? NSArray {
-        for bookmark in response {
-            var title: String = ""
-            var url: String = ""
-            
-            if let t = bookmark.valueForKey("title") as? String {
-                title = t
-            }
-            if let u = bookmark.valueForKey("url") as? String {
-                url = u
-            }
-
-            println(title)
-            bookmarksResponse.bookmarks.append(Bookmark(title: title, url: url))
-        }
-    }
-    
-    return bookmarksResponse
-}
-
 class Tab
 {
     var title: String
