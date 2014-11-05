@@ -4,15 +4,69 @@
 
 import UIKit
 import Social
+import MobileCoreServices
 
+typealias ShareHandler = (url: NSURL, title: String?) -> Void
 typealias ShareDestinationPickerCompletionHandler = (selectedItem: Int) -> Void
 
 let SharedContainerIdentifier = "group.Client" // TODO: Can we grab this from the .entitlements file instead?
 let LastSelectedShareDestinationDefault = "LastSelectedShareDestination"
 
+class ShareDestination {
+    var name: NSString = "";
+    var callback: ShareHandler;
+
+    init(name: NSString, callback: ShareHandler) {
+        self.name = name;
+        self.callback = callback;
+    }
+
+    func share(url: NSURL, title: String?) {
+        callback(url: url, title: title);
+    }
+}
+
+func BookmarkCallback(url: NSURL, title: String?) {
+    NSLog("Share bookmark");
+    let request = NSMutableURLRequest(URL: NSURL(string: "https://moz-syncapi.sateh.com/1.0/bookmarks")!)
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.addValue("application/json", forHTTPHeaderField: "Accept")
+    request.HTTPMethod = "POST"
+    
+    var object = NSMutableDictionary()
+    object["url"] = url
+    object["title"] = title
+    
+    var jsonError: NSError?
+    let data = NSJSONSerialization.dataWithJSONObject(object, options: nil, error: &jsonError)
+    if data != nil {
+        request.HTTPBody = data
+    }
+    
+    // Login().getKeychainUser(login.getUsername())
+    let credentials = Credentials(username: "sarentz+syncapi@mozilla.com", password: "q1w2e3r4")
+    let userPasswordString = "\(credentials.username!):\(credentials.password!)"
+    let userPasswordData = userPasswordString.dataUsingEncoding(NSUTF8StringEncoding)
+    let base64EncodedCredential = userPasswordData!.base64EncodedStringWithOptions(nil)
+    let authString = "Basic \(base64EncodedCredential)"
+    
+    let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("com.Client.ShareToFirefox")
+    configuration.HTTPAdditionalHeaders = ["Authorization" : authString]
+    configuration.sharedContainerIdentifier = SharedContainerIdentifier
+    
+    let session = NSURLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+    let task = session.dataTaskWithRequest(request)
+    task.resume()
+}
+
+func ReaderCallback(url: NSURL, title: String?) {
+    NSLog("Share reader");
+    // Not implemented
+}
+
 let ShareDestinations = [
-    NSLocalizedString("Add to my Mobile Bookmarks", comment: ""),
-    NSLocalizedString("Add to my Reading List", comment: "")
+    ShareDestination(name: NSLocalizedString("Bookmarks",    comment: ""), callback: BookmarkCallback),
+    ShareDestination(name: NSLocalizedString("Reading List", comment: ""), callback: ReaderCallback)
 ]
 
 class ShareDestinationPickerViewController: UITableViewController
@@ -25,12 +79,12 @@ class ShareDestinationPickerViewController: UITableViewController
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return ShareDestinations.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel.text = ShareDestinations[indexPath.row]
+        cell.textLabel.text = ShareDestinations[indexPath.row].name
         return cell
     }
     
@@ -59,7 +113,6 @@ func findViewInSubviews(view: UIView, test: (UIView) -> Bool) -> UIView? {
 class ShareViewController: SLComposeServiceViewController, NSURLSessionDelegate
 {
     var selectedItem = 0
-    var configurationItem = SLComposeSheetConfigurationItem()
     var logo: UIImageView?
     
     func findNavigationBar() -> UINavigationBar? {
@@ -79,19 +132,6 @@ class ShareViewController: SLComposeServiceViewController, NSURLSessionDelegate
         }
         
         selectedItem = NSUserDefaults.standardUserDefaults().integerForKey(LastSelectedShareDestinationDefault)
-        
-        configurationItem.title = ShareDestinations[selectedItem]
-        configurationItem.tapHandler = {
-            let vc = ShareDestinationPickerViewController()
-            vc.completionHandler = { (selectedItem:Int) -> Void in
-                NSUserDefaults.standardUserDefaults().setInteger(selectedItem, forKey: LastSelectedShareDestinationDefault)
-                self.selectedItem = selectedItem
-                self.configurationItem.title = ShareDestinations[selectedItem]
-                self.reloadConfigurationItems()
-                self.popConfigurationViewController()
-            }
-            self.pushConfigurationViewController(vc)
-        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -111,42 +151,15 @@ class ShareViewController: SLComposeServiceViewController, NSURLSessionDelegate
         return true
     }
     
-    func shareBookmark(bookmark: SharedBookmark, credentials: Credentials) {
-        let request = NSMutableURLRequest(URL: NSURL(string: "https://moz-syncapi.sateh.com/1.0/bookmarks")!)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.HTTPMethod = "POST"
-        
-        var object = NSMutableDictionary()
-        object["url"] = bookmark.url
-        object["title"] = bookmark.title
-        
-        var jsonError: NSError?
-        let data = NSJSONSerialization.dataWithJSONObject(object, options: nil, error: &jsonError)
-        if data != nil {
-            request.HTTPBody = data
-        }
-        
-        let userPasswordString = "\(credentials.username!):\(credentials.password!)"
-        let userPasswordData = userPasswordString.dataUsingEncoding(NSUTF8StringEncoding)
-        let base64EncodedCredential = userPasswordData!.base64EncodedStringWithOptions(nil)
-        let authString = "Basic \(base64EncodedCredential)"
-        
-        let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("com.Client.ShareToFirefox")
-        configuration.HTTPAdditionalHeaders = ["Authorization" : authString]
-        configuration.sharedContainerIdentifier = SharedContainerIdentifier
-        
-        let session = NSURLSession(configuration: configuration, delegate: self, delegateQueue: nil)
-        let task = session.dataTaskWithRequest(request)
-        task.resume()
-    }
-    
-    func fetchSharedURL(completionHandler: (NSURL!, NSError!) -> Void) {
+    func fetchSharedURL(completionHandler: (NSURL!, String?, NSError!) -> Void) {
+        var title : String? = nil;
+
         if let inputItems : [NSExtensionItem] = self.extensionContext!.inputItems as? [NSExtensionItem] {
             let item = inputItems[0]
+            title = item.attributedContentText?.string as String?
             if let attachments = item.attachments as? [NSItemProvider] {
-                attachments[0].loadItemForTypeIdentifier("public.url", options:nil, completionHandler: { (obj, error) in
-                    completionHandler(obj as? NSURL, error)
+                attachments[0].loadItemForTypeIdentifier(kUTTypeURL as NSString, options:nil, completionHandler: { (obj, error) in
+                    completionHandler(obj as? NSURL, title, error)
                 })
             }
         }
@@ -154,20 +167,33 @@ class ShareViewController: SLComposeServiceViewController, NSURLSessionDelegate
     
     override func didSelectPost() {
         let login = Login()
-//        if login.isLoggedIn() {
-            fetchSharedURL({ (url, error) -> Void in
-                if url != nil {
-                    let sharedBookmark = SharedBookmark(url: url.absoluteString!, title: self.textView.text)
-                    let credentials = Credentials(username: "sarentz+syncapi@mozilla.com", password: "q1w2e3r4") // Login().getKeychainUser(login.getUsername())
-                    self.shareBookmark(sharedBookmark, credentials: credentials)
-                    self.extensionContext!.completeRequestReturningItems([], completionHandler: nil)
-                }
-            })
-//        }
+//      if login.isLoggedIn() {
+        fetchSharedURL({ (url, title, error) -> Void in
+            if url != nil {
+                let dest : ShareDestination = ShareDestinations[self.selectedItem];
+                dest.share(url, title: title);
+                self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
+            }
+        })
+//      }
     }
     
     override func configurationItems() -> [AnyObject]! {
-        return [configurationItem]
+        var item = SLComposeSheetConfigurationItem();
+        item.title = "Send to";
+        item.value = ShareDestinations[selectedItem].name;
+        item.tapHandler = {
+            let vc = ShareDestinationPickerViewController()
+            vc.completionHandler = { (selectedItem:Int) -> Void in
+                NSUserDefaults.standardUserDefaults().setInteger(selectedItem, forKey: LastSelectedShareDestinationDefault)
+                self.selectedItem = selectedItem
+                item.value = ShareDestinations[selectedItem].name;
+                self.reloadConfigurationItems()
+                self.popConfigurationViewController()
+            }
+            self.pushConfigurationViewController(vc)
+        }
+        return [item]
     }
     
     override func loadPreviewView() -> UIView! {
