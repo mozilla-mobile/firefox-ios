@@ -166,7 +166,7 @@ class ShareViewController: SLComposeServiceViewController, NSURLSessionDelegate
     }
     
     override func didSelectPost() {
-        let login = Login()
+        let accountManager = AccountManager()
 //      if login.isLoggedIn() {
         fetchSharedURL({ (url, title, error) -> Void in
             if url != nil {
