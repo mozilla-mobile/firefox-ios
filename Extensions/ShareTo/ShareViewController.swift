@@ -9,7 +9,7 @@ import MobileCoreServices
 typealias ShareHandler = (url: NSURL, title: String?) -> Void
 typealias ShareDestinationPickerCompletionHandler = (selectedItem: Int) -> Void
 
-let SharedContainerIdentifier = "group.Client" // TODO: Can we grab this from the .entitlements file instead?
+let SharedContainerIdentifier = "group.org.allizom.Client" // TODO: Can we grab this from the .entitlements file instead?
 let LastSelectedShareDestinationDefault = "LastSelectedShareDestination"
 
 class ShareDestination {
