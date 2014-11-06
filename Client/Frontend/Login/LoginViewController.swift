@@ -14,6 +14,8 @@ class LoginViewController: UIViewController
     var userText: UITextField!
     var passText: UITextField!
     var statusLabel: UILabel!
+
+    var accountManager: AccountManager!
     
     private final let IMAGE_PATH_LOGO = "guidelines-logo"
     private final let IMAGE_PATH_EMAIL = "email.png"
@@ -31,7 +33,7 @@ class LoginViewController: UIViewController
     
     // True if showing login state; false if showing sign up state.
     private var stateLogin = true
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -148,6 +150,7 @@ class LoginViewController: UIViewController
         revealButton.addTarget(self, action: "didClickPasswordReveal", forControlEvents: UIControlEvents.TouchUpInside)
         signupButton.addTarget(self, action: "didClickSignup", forControlEvents: UIControlEvents.TouchUpInside)
         forgotPasswordButton.addTarget(self, action: "didClickForgotPassword", forControlEvents: UIControlEvents.TouchUpInside)
+        loginButton.addTarget(self, action: "didClickLogin", forControlEvents: UIControlEvents.TouchUpInside)
     }
     
     // Referenced as button selector.
@@ -174,6 +177,12 @@ class LoginViewController: UIViewController
     
     // Referenced as button selector.
     func didClickForgotPassword() {
+    }
+
+    // Referenced as button selector.
+    func didClickLogin() {
+        // TODO: Use/check the login values given by the user.
+        accountManager.login("moz", password: "test")
     }
     
     private func addPaddedLeftView(textField: UITextField, image: UIImage) {

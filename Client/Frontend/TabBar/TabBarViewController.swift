@@ -24,17 +24,6 @@ struct ToolbarItem
     var viewController: UIViewController
 }
 
-
-extension ToolbarItem
-{
-    static let Tabs = ToolbarItem(title: "Tabs", imageName: "tabs", viewController: TabsViewController(nibName: nil, bundle: nil))
-    static let Bookmarks = ToolbarItem(title: "Bookmarks", imageName: "bookmarks", viewController: BookmarksViewController(nibName: nil, bundle: nil))
-    static let History = ToolbarItem(title: "History", imageName: "history", viewController: HistoryViewController(nibName: "HistoryViewController", bundle: nil))
-    static let Reader = ToolbarItem(title: "Reader", imageName: "reader", viewController: SiteTableViewController(nibName: nil, bundle: nil))
-    static let Settings = ToolbarItem(title: "Settings", imageName: "settings", viewController: SettingsViewController(nibName: "SettingsViewController", bundle: nil))
-}
-
-
 class ToolbarButton: UIButton
 {
     var item: ToolbarItem?
@@ -101,10 +90,12 @@ class ToolbarContainerView: UIView
 
 class TabBarViewController: UIViewController
 {
-    var items: [ToolbarItem] = [ToolbarItem.Tabs, ToolbarItem.Bookmarks, ToolbarItem.History, ToolbarItem.Reader, ToolbarItem.Settings]
+    var items: [ToolbarItem]!
     var buttons: [ToolbarButton] = []
     
     var _selectedButtonIndex: Int = -1
+
+    var accountManager: AccountManager!
     
     var selectedButtonIndex: Int {
         get {
@@ -179,8 +170,17 @@ class TabBarViewController: UIViewController
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
-    
+
     override func viewDidLoad() {
+        let tabs = ToolbarItem(title: "Tabs", imageName: "tabs", viewController: TabsViewController(nibName: nil, bundle: nil))
+        let bookmarks = ToolbarItem(title: "Bookmarks", imageName: "bookmarks", viewController: BookmarksViewController(nibName: nil, bundle: nil))
+        let history = ToolbarItem(title: "History", imageName: "history", viewController: HistoryViewController(nibName: "HistoryViewController", bundle: nil))
+        let reader = ToolbarItem(title: "Reader", imageName: "reader", viewController: SiteTableViewController(nibName: nil, bundle: nil))
+        let settingsViewController = SettingsViewController(nibName: "SettingsViewController", bundle: nil)
+        settingsViewController.accountManager = accountManager
+        let settings = ToolbarItem(title: "Settings", imageName: "settings", viewController: settingsViewController)
+        items = [tabs, bookmarks, history, reader, settings]
+
         if let buttonContainerView = view.viewWithTag(1) {
             for (index, item) in enumerate(items) {
                 var toolbarButton = ToolbarButton(toolbarItem: item)

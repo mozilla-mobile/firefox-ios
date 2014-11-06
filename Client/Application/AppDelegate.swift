@@ -10,10 +10,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     var window: UIWindow!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        let tabBarViewController = TabBarViewController(nibName: "TabBarViewController", bundle: nil)
+
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        self.window.rootViewController = tabBarViewController
         self.window.backgroundColor = UIColor.whiteColor()
+
+        let accountManager = AccountManager()
+
+        let loginViewController = LoginViewController()
+        loginViewController.accountManager = accountManager
+
+        let tabBarViewController = TabBarViewController(nibName: "TabBarViewController", bundle: nil)
+        tabBarViewController.accountManager = accountManager
+
+        accountManager.loginCallback = {
+            // Show the tab controller once the user logs in.
+            self.window.rootViewController = tabBarViewController
+        }
+        accountManager.logoutCallback = {
+            // Show the login controller once the user logs out.
+            self.window.rootViewController = loginViewController
+        }
+
+        if (accountManager.isLoggedIn()) {
+            self.window.rootViewController = tabBarViewController
+        } else {
+            let loginViewController = loginViewController
+            self.window.rootViewController = loginViewController
+        }
+
         self.window.makeKeyAndVisible()
         return true
     }
