@@ -34,7 +34,7 @@ func BookmarkCallback(url: NSURL, title: String?) {
     request.HTTPMethod = "POST"
     
     var object = NSMutableDictionary()
-    object["url"] = url
+    object["url"] = url.absoluteString
     object["title"] = title
     
     var jsonError: NSError?
