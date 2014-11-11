@@ -38,12 +38,16 @@ class Bookmarks: NSObject {
                 
                 if let t = bookmark.valueForKey("title") as? String {
                     title = t
+                } else {
+                    continue;
                 }
 
-                if let u = bookmark.valueForKey("url") as? String {
+                if let u = bookmark.valueForKey("bmkUri") as? String {
                     url = u
+                } else {
+                    continue;
                 }
-                
+
                 resp.append(Bookmark(title: title, url: url))
             }
         }
