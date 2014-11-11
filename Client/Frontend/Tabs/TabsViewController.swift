@@ -8,10 +8,13 @@ import Alamofire
 class TabsViewController: UITableViewController
 {
     var tabsResponse: TabsResponse?
+    // TODO: Move this to the authenticator when its available.
+    var favicons: Favicons = BasicFavicons();
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        favicons = BasicFavicons();
         
         tableView.sectionFooterHeight = 0
         //tableView.separatorStyle = UITableViewCellSeparatorStyle.None
@@ -58,18 +61,21 @@ class TabsViewController: UITableViewController
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-        
-        if let image = (UIImage(named: "leaf.png")) {
-            cell.imageView.image = createMockFavicon(image)
+
+        if let tab = tabsResponse?.clients[indexPath.section].tabs[indexPath.row] {
+            // TODO: We need better async image loading here
+            favicons.getForUrl(NSURL(string: tab.url)!, options: nil, callback: { (icon: Favicon) -> Void in
+                if var img = icon.img {
+                    cell.imageView.image = createMockFavicon(img);
+                    cell.setNeedsLayout()
+                }
+            });
+            cell.textLabel.text = tab.title
         }
         
-        let tab = tabsResponse?.clients[indexPath.section].tabs[indexPath.row]
-        
-        cell.textLabel.text = tab?.title
         cell.textLabel.font = UIFont(name: "FiraSans-SemiBold", size: 13)
         cell.textLabel.textColor = UIColor.darkGrayColor()
         cell.indentationWidth = 20
-        
         return cell
     }
     
