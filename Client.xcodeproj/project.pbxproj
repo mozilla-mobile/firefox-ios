@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0B4599A81A0AB0180020771C /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4599A61A0AB0180020771C /* Bookmarks.swift */; };
 		0B4599A91A0AB0180020771C /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4599A71A0AB0180020771C /* RestAPI.swift */; };
+		0BE592A51A118B6600FED5E2 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4599A61A0AB0180020771C /* Bookmarks.swift */; };
+		0BE592A81A118B9F00FED5E2 /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4599A71A0AB0180020771C /* RestAPI.swift */; };
 		E4D6BEA61A092A4700F538BD /* Login.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEA51A092A4700F538BD /* Login.xcassets */; };
 		E4D6BEB11A092D5700F538BD /* Snappy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D6BEAD1A092AD300F538BD /* Snappy.framework */; };
 		E4D6BEB21A092D5700F538BD /* Snappy.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E4D6BEAD1A092AD300F538BD /* Snappy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -737,7 +739,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BE592A81A118B9F00FED5E2 /* RestAPI.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
+				0BE592A51A118B6600FED5E2 /* Bookmarks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
