@@ -6,6 +6,7 @@ import UIKit
 
 class SiteTableViewController: UITableViewController
 {
+    private var SITE_CELL_IDENTIFIER = "SITE_CELL";
     // TODO: Move this to the authenticator when its available.
     var favicons: Favicons = BasicFavicons();
     
@@ -21,6 +22,10 @@ class SiteTableViewController: UITableViewController
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sites.count
+    }
+    
+    override func viewDidLoad() {
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: SITE_CELL_IDENTIFIER)
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -45,7 +50,7 @@ class SiteTableViewController: UITableViewController
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(SITE_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell
         let site = sites[indexPath.row]
 
         let readerController = ReaderViewController(nibName: "ReaderViewController", bundle: nil)

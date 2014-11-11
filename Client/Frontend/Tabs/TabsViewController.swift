@@ -7,6 +7,8 @@ import Alamofire
 
 class TabsViewController: UITableViewController
 {
+    private var TABS_CELL_IDENTIFIER = "TABS_CELL"
+
     var tabsResponse: TabsResponse?
     // TODO: Move this to the authenticator when its available.
     var favicons: Favicons = BasicFavicons();
@@ -21,6 +23,7 @@ class TabsViewController: UITableViewController
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: TABS_CELL_IDENTIFIER)
     }
 
     func reloadData() {
@@ -60,7 +63,7 @@ class TabsViewController: UITableViewController
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+        let cell : UITableViewCell = tableView.dequeueReusableCellWithIdentifier(TABS_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell;
 
         if let tab = tabsResponse?.clients[indexPath.section].tabs[indexPath.row] {
             // TODO: We need better async image loading here

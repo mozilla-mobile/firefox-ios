@@ -20,6 +20,8 @@ func createMockFavicon(icon: UIImage) -> UIImage {
 
 class BookmarksViewController: UITableViewController
 {
+    private let BOOKMARK_CELL_IDENTIFIER = "BOOKMARk_CELL"
+
     var bookmarks: [Bookmark] = [];
     // TODO: Move this to the authenticator when its available.
     var favicons: Favicons = BasicFavicons();
@@ -33,6 +35,7 @@ class BookmarksViewController: UITableViewController
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: BOOKMARK_CELL_IDENTIFIER)
     }
     
     func reloadData() {
@@ -63,19 +66,13 @@ class BookmarksViewController: UITableViewController
     
     private let FAVICON_SIZE = 32;
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+        let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(BOOKMARK_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell;
 
         if let image = (UIImage(named: "leaf.png")) {
             cell.imageView.image = createMockFavicon(image)
         }
         
         let bookmark = bookmarks[indexPath.row]
-        // TODO: We need an async image loader api here
-        favicons.getForUrl(NSURL(string: bookmark.url)!, options: nil, callback: { (icon: Favicon) -> Void in
-            if var img = icon.img {
-                cell.imageView.image = createMockFavicon(img);
-            }
-        });
         
         cell.textLabel.text = bookmark.title
         cell.textLabel.font = UIFont(name: "FiraSans-SemiBold", size: 13)
