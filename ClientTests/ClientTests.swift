@@ -7,10 +7,6 @@ import XCTest
 
 class ClientTests: XCTestCase {
     
-    func testExample() {
-        XCTAssert(true, "Pass")
-    }
-
     func testBookmarks() {
         var expectation = expectationWithDescription("asynchronous request")
         Bookmarks.getAll({ (response: [Bookmark]) in
@@ -23,11 +19,6 @@ class ClientTests: XCTestCase {
         });
 
         waitForExpectationsWithTimeout(10.0, handler:nil)
-    }
-    
-    func testPerformanceExample() {
-        self.measureBlock() {
-        }
     }
     
     func testFavicons() {
