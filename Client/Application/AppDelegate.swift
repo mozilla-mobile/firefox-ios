@@ -10,35 +10,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     var window: UIWindow!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window.backgroundColor = UIColor.whiteColor()
 
-        let accountManager = AccountManager()
+        var accountManager: AccountManager!
+        accountManager = AccountManager(
+            loginCallback: { account in
+                // Show the tab controller once the user logs in.
+                self.showTabBarViewController(account)
+            },
+            logoutCallback: {
+                // Show the login controller once the user logs out.
+                self.showLoginViewController(accountManager)
+            })
 
-        let loginViewController = LoginViewController()
-        loginViewController.accountManager = accountManager
-
-        let tabBarViewController = TabBarViewController(nibName: "TabBarViewController", bundle: nil)
-        tabBarViewController.accountManager = accountManager
-
-        accountManager.loginCallback = {
-            // Show the tab controller once the user logs in.
-            self.window.rootViewController = tabBarViewController
-        }
-        accountManager.logoutCallback = {
-            // Show the login controller once the user logs out.
-            self.window.rootViewController = loginViewController
-        }
-
-        if (accountManager.isLoggedIn()) {
-            self.window.rootViewController = tabBarViewController
+        if let account = accountManager.getAccount() {
+            // The user is already logged in, so go straight to the tab controller.
+            showTabBarViewController(account)
         } else {
-            let loginViewController = loginViewController
-            self.window.rootViewController = loginViewController
+            // The user is not logged in, so show the login screen.
+            showLoginViewController(accountManager)
         }
 
         self.window.makeKeyAndVisible()
         return true
+    }
+
+    func showTabBarViewController(account: Account) {
+        let tabBarViewController = TabBarViewController(nibName: "TabBarViewController", bundle: nil)
+        tabBarViewController.account = account
+        self.window.rootViewController = tabBarViewController
+    }
+
+    func showLoginViewController(accountManager: AccountManager) {
+        let loginViewController = LoginViewController()
+        loginViewController.accountManager = accountManager
+        self.window.rootViewController = loginViewController
     }
 }

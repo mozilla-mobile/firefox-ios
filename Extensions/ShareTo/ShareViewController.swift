@@ -44,8 +44,8 @@ func BookmarkCallback(url: NSURL, title: String?) {
     }
     
     // Login().getKeychainUser(login.getUsername())
-    let credentials = Credentials(username: "sarentz+syncapi@mozilla.com", password: "q1w2e3r4")
-    let userPasswordString = "\(credentials.username!):\(credentials.password!)"
+    let credentials = NSURLCredential(user: "sarentz+syncapi@mozilla.com", password: "q1w2e3r4", persistence: .None)
+    let userPasswordString = "\(credentials.user!):\(credentials.password!)"
     let userPasswordData = userPasswordString.dataUsingEncoding(NSUTF8StringEncoding)
     let base64EncodedCredential = userPasswordData!.base64EncodedStringWithOptions(nil)
     let authString = "Basic \(base64EncodedCredential)"
@@ -165,19 +165,19 @@ class ShareViewController: SLComposeServiceViewController, NSURLSessionDelegate
         }
     }
     
-    override func didSelectPost() {
-        let accountManager = AccountManager()
-//      if login.isLoggedIn() {
-        fetchSharedURL({ (url, title, error) -> Void in
-            if url != nil {
-                let dest : ShareDestination = ShareDestinations[self.selectedItem];
-                dest.share(url, title: title);
-                self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
-            }
-        })
-//      }
-    }
-    
+//    override func didSelectPost() {
+//        let accountManager = AccountManager()
+////      if login.isLoggedIn() {
+//        fetchSharedURL({ (url, title, error) -> Void in
+//            if url != nil {
+//                let dest : ShareDestination = ShareDestinations[self.selectedItem];
+//                dest.share(url, title: title);
+//                self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
+//            }
+//        })
+////      }
+//    }
+
     override func configurationItems() -> [AnyObject]! {
         var item = SLComposeSheetConfigurationItem();
         item.title = "Send to";

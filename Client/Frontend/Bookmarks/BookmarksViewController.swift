@@ -20,6 +20,7 @@ func createMockFavicon(icon: UIImage) -> UIImage {
 
 class BookmarksViewController: UITableViewController
 {
+    var account: Account!
     var bookmarks: [Bookmark] = [];
     
     override func viewDidLoad()
@@ -34,13 +35,18 @@ class BookmarksViewController: UITableViewController
     }
     
     func reloadData() {
-        Bookmarks.getAll({ (response: [Bookmark]) in
-            self.bookmarks = response
-            dispatch_async(dispatch_get_main_queue()) {
-                self.refreshControl?.endRefreshing()
-                self.tableView.reloadData()
-            }
-        });
+        account.bookmarks.getAll(
+            { response in
+                self.bookmarks = response
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.refreshControl?.endRefreshing()
+                    self.tableView.reloadData()
+                }
+            },
+            error: { err in
+                // TODO: Figure out a good way to handle this.
+                println("Error: could not load bookmarks")
+            })
     }
     
     func refresh() {

@@ -7,14 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0B4599A81A0AB0180020771C /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4599A61A0AB0180020771C /* Bookmarks.swift */; };
-		0B4599A91A0AB0180020771C /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4599A71A0AB0180020771C /* RestAPI.swift */; };
+		D394D2401A119D2800A2009F /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D394D23C1A119D2800A2009F /* Account.swift */; };
+		D394D2411A119D2800A2009F /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D394D23C1A119D2800A2009F /* Account.swift */; };
+		D394D2421A119D2800A2009F /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D394D23D1A119D2800A2009F /* AccountManager.swift */; };
+		D394D2431A119D2800A2009F /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D394D23D1A119D2800A2009F /* AccountManager.swift */; };
+		D394D2441A119D2800A2009F /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D394D23E1A119D2800A2009F /* Bookmarks.swift */; };
+		D394D2451A119D2800A2009F /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D394D23E1A119D2800A2009F /* Bookmarks.swift */; };
+		D394D2461A119D2800A2009F /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D394D23F1A119D2800A2009F /* RestAPI.swift */; };
+		D394D2471A119D2800A2009F /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D394D23F1A119D2800A2009F /* RestAPI.swift */; };
 		E4D6BEA61A092A4700F538BD /* Login.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEA51A092A4700F538BD /* Login.xcassets */; };
 		E4D6BEB11A092D5700F538BD /* Snappy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D6BEAD1A092AD300F538BD /* Snappy.framework */; };
 		E4D6BEB21A092D5700F538BD /* Snappy.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E4D6BEAD1A092AD300F538BD /* Snappy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */; };
-		E4D6BEBF1A09353A00F538BD /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D6BEBE1A09353A00F538BD /* AccountManager.swift */; };
-		E4D6BEC01A09355C00F538BD /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D6BEBE1A09353A00F538BD /* AccountManager.swift */; };
 		F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21D91A090F8100AAB793 /* ClientTests.swift */; };
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
@@ -149,13 +153,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0B4599A61A0AB0180020771C /* Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
-		0B4599A71A0AB0180020771C /* RestAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestAPI.swift; sourceTree = "<group>"; };
+		D394D23C1A119D2800A2009F /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		D394D23D1A119D2800A2009F /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
+		D394D23E1A119D2800A2009F /* Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
+		D394D23F1A119D2800A2009F /* RestAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestAPI.swift; sourceTree = "<group>"; };
 		E4D6BEA51A092A4700F538BD /* Login.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Login.xcassets; sourceTree = "<group>"; };
 		E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Snappy.xcodeproj; path = ThirdParty/Snappy/Snappy.xcodeproj; sourceTree = "<group>"; };
 		E4D6BEB51A092E0300F538BD /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Client.entitlements; sourceTree = "<group>"; };
 		E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
-		E4D6BEBE1A09353A00F538BD /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
 		F84B21BE1A090F8100AAB793 /* Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D31A090F8100AAB793 /* ClientTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D81A090F8100AAB793 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -233,13 +238,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0B4599A51A0AB0180020771C /* Database */ = {
+		D394D23B1A119D2800A2009F /* Providers */ = {
 			isa = PBXGroup;
 			children = (
-				0B4599A61A0AB0180020771C /* Bookmarks.swift */,
-				0B4599A71A0AB0180020771C /* RestAPI.swift */,
+				D394D23C1A119D2800A2009F /* Account.swift */,
+				D394D23D1A119D2800A2009F /* AccountManager.swift */,
+				D394D23E1A119D2800A2009F /* Bookmarks.swift */,
+				D394D23F1A119D2800A2009F /* RestAPI.swift */,
 			);
-			path = Database;
+			path = Providers;
 			sourceTree = "<group>";
 		};
 		E4D6BEA81A092AD300F538BD /* Products */ = {
@@ -254,7 +261,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
-				0B4599A51A0AB0180020771C /* Database */,
+				D394D23B1A119D2800A2009F /* Providers */,
 				F84B222A1A0913F100AAB793 /* Alamofire.xcodeproj */,
 				E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */,
 				F84B21C01A090F8100AAB793 /* Client */,
@@ -358,7 +365,6 @@
 		F84B21F41A0910F600AAB793 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				E4D6BEBE1A09353A00F538BD /* AccountManager.swift */,
 				F84B221F1A0911D400AAB793 /* LoginViewController.swift */,
 				E4D6BEA51A092A4700F538BD /* Login.xcassets */,
 			);
@@ -717,15 +723,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				F84B22191A0911B500AAB793 /* BookmarksViewController.swift in Sources */,
+				D394D2441A119D2800A2009F /* Bookmarks.swift in Sources */,
 				F84B22101A0910F600AAB793 /* SiteTableViewController.swift in Sources */,
-				0B4599A91A0AB0180020771C /* RestAPI.swift in Sources */,
 				F84B22141A0910F600AAB793 /* TabsViewController.swift in Sources */,
-				E4D6BEBF1A09353A00F538BD /* AccountManager.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
 				F84B22241A09122500AAB793 /* TabBarViewController.swift in Sources */,
+				D394D2461A119D2800A2009F /* RestAPI.swift in Sources */,
+				D394D2401A119D2800A2009F /* Account.swift in Sources */,
 				F84B220F1A0910F600AAB793 /* Site.swift in Sources */,
 				F84B22111A0910F600AAB793 /* SettingsViewController.swift in Sources */,
-				0B4599A81A0AB0180020771C /* Bookmarks.swift in Sources */,
+				D394D2421A119D2800A2009F /* AccountManager.swift in Sources */,
 				F84B221D1A0911BF00AAB793 /* HistoryViewController.swift in Sources */,
 				F84B220D1A0910F600AAB793 /* ReaderViewController.swift in Sources */,
 				F84B22201A0911D400AAB793 /* LoginViewController.swift in Sources */,
@@ -746,7 +753,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
-				E4D6BEC01A09355C00F538BD /* AccountManager.swift in Sources */,
+				D394D2471A119D2800A2009F /* RestAPI.swift in Sources */,
+				D394D2411A119D2800A2009F /* Account.swift in Sources */,
+				D394D2431A119D2800A2009F /* AccountManager.swift in Sources */,
+				D394D2451A119D2800A2009F /* Bookmarks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

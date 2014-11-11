@@ -12,7 +12,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var settingsTableView: UITableView!
     @IBOutlet weak var signOutButton: UIButton!
 
-    var accountManager: AccountManager!
+    var account: Account!
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
@@ -32,15 +32,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         signOutButton.layer.borderColor = UIColor.whiteColor().CGColor
         signOutButton.layer.borderWidth = 1.0
         signOutButton.layer.cornerRadius = 6.0
-        signOutButton.addTarget(self, action: "didClickLogin", forControlEvents: UIControlEvents.TouchUpInside)
+        signOutButton.addTarget(self, action: "didClickLogout", forControlEvents: UIControlEvents.TouchUpInside)
     }
 
     // Referenced as button selector.
-    func didClickLogin() {
-        accountManager.logout()
+    func didClickLogout() {
+        account.logout()
     }
-
-    //
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
