@@ -5,6 +5,8 @@
 import Foundation
 import Alamofire
 
+let SharedContainerIdentifier = "group.org.allizom.Client" // TODO: Can we grab this from the .entitlements file instead?
+
 class Client {
     var id: String!
     var name: String!
@@ -46,5 +48,35 @@ class Clients: NSObject {
         }
         
         return resp;
+    }
+    
+    class func sendURL(url: String, toClient client: Client) {
+        let request = NSMutableURLRequest(URL: NSURL(string: "https://moz-syncapi.sateh.com/1.0/clients/" + client.id + "/tab")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.HTTPMethod = "POST"
+        
+        var object = NSMutableDictionary()
+        object["url"] = url
+        object["title"] = ""
+        
+        var jsonError: NSError?
+        let data = NSJSONSerialization.dataWithJSONObject(object, options: nil, error: &jsonError)
+        if data != nil {
+            request.HTTPBody = data
+        }
+        
+        let userPasswordString = "sarentz+syncapi@mozilla.com:q1w2e3r4"
+        let userPasswordData = userPasswordString.dataUsingEncoding(NSUTF8StringEncoding)
+        let base64EncodedCredential = userPasswordData!.base64EncodedStringWithOptions(nil)
+        let authString = "Basic \(base64EncodedCredential)"
+        
+        let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("org.allizom.Client.SendTo")
+        configuration.HTTPAdditionalHeaders = ["Authorization" : authString]
+        configuration.sharedContainerIdentifier = SharedContainerIdentifier
+        
+        let session = NSURLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+        let task = session.dataTaskWithRequest(request)
+        task.resume()
     }
 };

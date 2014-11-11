@@ -5,38 +5,6 @@
 import UIKit
 import MobileCoreServices
 
-let SharedContainerIdentifier = "group.org.allizom.Client" // TODO: Can we grab this from the .entitlements file instead?
-
-func pushUrl(url: String, #title: String, toClient client: Client) {
-    let request = NSMutableURLRequest(URL: NSURL(string: "https://moz-syncapi.sateh.com/1.0/clients/" + client.id + "/tab")!)
-    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-    request.addValue("application/json", forHTTPHeaderField: "Accept")
-    request.HTTPMethod = "POST"
-    
-    var object = NSMutableDictionary()
-    object["url"] = url
-    object["title"] = title
-    
-    var jsonError: NSError?
-    let data = NSJSONSerialization.dataWithJSONObject(object, options: nil, error: &jsonError)
-    if data != nil {
-        request.HTTPBody = data
-    }
-    
-    let userPasswordString = "sarentz+syncapi@mozilla.com:q1w2e3r4"
-    let userPasswordData = userPasswordString.dataUsingEncoding(NSUTF8StringEncoding)
-    let base64EncodedCredential = userPasswordData!.base64EncodedStringWithOptions(nil)
-    let authString = "Basic \(base64EncodedCredential)"
-    
-    let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("org.allizom.Client.SendTo")
-    configuration.HTTPAdditionalHeaders = ["Authorization" : authString]
-    configuration.sharedContainerIdentifier = SharedContainerIdentifier
-    
-    let session = NSURLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
-    let task = session.dataTaskWithRequest(request)
-    task.resume()
-}
-
 class DevicesViewController: UITableViewController
 {
     var clients: [Client] = []
@@ -71,7 +39,7 @@ class DevicesViewController: UITableViewController
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let client = clients[indexPath.row]
         fetchSharedURL { (url, title, error) -> Void in
-            pushUrl(url.absoluteString!, title: "", toClient: client)
+            Clients.sendURL(url.absoluteString!, toClient: client)
             self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
         }
     }
@@ -87,8 +55,12 @@ class DevicesViewController: UITableViewController
             let item = inputItems[0]
             title = item.attributedContentText?.string as String?
             if let attachments = item.attachments as? [NSItemProvider] {
-                attachments[0].loadItemForTypeIdentifier(kUTTypeURL as NSString, options:nil, completionHandler: { (obj, error) in
-                    completionHandler(obj as? NSURL, title, error)
+                attachments[0].loadItemForTypeIdentifier(kUTTypeURL, options:nil, completionHandler: { (obj, error) in
+                    if error == nil {
+                        completionHandler(obj as? NSURL, title, error)
+                    } else {
+                        completionHandler(nil, nil, error)
+                    }
                 })
             }
         }
