@@ -10,17 +10,17 @@ import UIKit
  * favicons, and other types of images provided by the site.
  */
 enum FaviconType {
-    case FAVICON;
-    case ARTICLE_IMAGE;
+    case Favicon;
+    case ArticleImage;
 }
 
 /*
 * Useful constants
 */
 struct FaviconConsts {
-    static let DEFAULT_FAVICON_NAME : String = "leaf.png";
-    static let DEFAULT_FAVICON : String = "resource:" + DEFAULT_FAVICON_NAME;
-    static let DEFAULT_FAVICON_URL : NSURL = NSURL(string: DEFAULT_FAVICON)!
+    static let DefaultFaviconName : String = "leaf.png";
+    static let DefaultFavicon : String = "resource:" + DefaultFaviconName;
+    static let DefaultFaviconUrl : NSURL = NSURL(string: DefaultFavicon)!
 }
 
 /*
@@ -65,7 +65,7 @@ struct FaviconOptions {
  */
 class BasicFavicons : Favicons {
     lazy var DEFAULT_IMAGE : UIImage = {
-        var img = UIImage(named: FaviconConsts.DEFAULT_FAVICON_NAME)!
+        var img = UIImage(named: FaviconConsts.DefaultFaviconName)!
         return img;
     }();
 
@@ -73,12 +73,11 @@ class BasicFavicons : Favicons {
     }
 
     func getForUrls(urls: [NSURL], options: FaviconOptions?, callback: (ArrayCursor<Favicon>) -> Void) {
-
         // Do an async dispatch to ensure this behaves like an async api
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () in
             var data : [Favicon] = [];
             for url in urls {
-                let def = Favicon(siteUrl: url, sourceUrl: FaviconConsts.DEFAULT_FAVICON_URL);
+                let def = Favicon(siteUrl: url, sourceUrl: FaviconConsts.DefaultFaviconUrl);
                 def.img = self.DEFAULT_IMAGE;
                 data.append(def);
             }
@@ -96,11 +95,10 @@ class BasicFavicons : Favicons {
             if var group = cursor[0] {
                 callback(group);
             } else {
-                let def = Favicon(siteUrl: url, sourceUrl: FaviconConsts.DEFAULT_FAVICON_URL);
+                let def = Favicon(siteUrl: url, sourceUrl: FaviconConsts.DefaultFaviconUrl);
                 def.img = self.DEFAULT_IMAGE;
                 callback(def);
             }
-            return;
         })
     }
 }
