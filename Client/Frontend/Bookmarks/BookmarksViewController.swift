@@ -18,7 +18,7 @@ func createMockFavicon(icon: UIImage) -> UIImage {
     return image
 }
 
-class BookmarksViewController: UITableViewController
+class BookmarksViewController: ToolbarTableViewController 
 {
     var bookmarks: [Bookmark] = [];
     // TODO: Move this to the authenticator when its available.

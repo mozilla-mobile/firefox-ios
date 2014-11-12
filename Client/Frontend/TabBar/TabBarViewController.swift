@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Foundation
 import UIKit
 
 
@@ -17,16 +18,9 @@ let LABEL_FONT_NAME: String = "FiraSans-Light"
 let LABEL_FONT_SIZE: CGFloat = 13.0
 
 
-struct ToolbarItem
-{
-    var title: String
-    var imageName: String
-    var viewController: UIViewController
-}
-
 class ToolbarButton: UIButton
 {
-    var item: ToolbarItem?
+    var _item: ToolbarItem?;
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -45,19 +39,32 @@ class ToolbarButton: UIButton
     
     init(toolbarItem item: ToolbarItem) {
         super.init(frame: CGRect(x: 0, y: 0, width: BUTTON_SIZE.width, height: BUTTON_SIZE.height))
-        self.item = item
-        
-        setImage(UIImage(named: "nav-\(item.imageName)-off.png"), forState: UIControlState.Normal)
-        setImage(UIImage(named: "nav-\(item.imageName)-on.png"), forState: UIControlState.Selected)
-        
         titleLabel?.font = UIFont(name: LABEL_FONT_NAME, size: LABEL_FONT_SIZE)
         titleLabel?.textAlignment = NSTextAlignment.Center
         titleLabel?.sizeToFit()
-        titleLabel?.textColor = UIColor.whiteColor()
-        
-        setTitle(item.title, forState: UIControlState.Normal)
+
+        self.item = item
     }
 
+    var item: ToolbarItem? {
+        get {
+            return self._item;
+        }
+
+        set {
+            self._item = newValue;
+            if var item = newValue {
+                setImage(UIImage(named: "nav-\(item.imageName)-off.png"), forState: UIControlState.Normal)
+                setImage(UIImage(named: "nav-\(item.imageName)-on.png"), forState: UIControlState.Selected)
+                setTitle(item.title, forState: UIControlState.Normal)
+            } else {
+                setImage(nil, forState: UIControlState.Normal)
+                setImage(nil, forState: UIControlState.Selected)
+                setTitle("", forState: UIControlState.Normal)
+            }
+        }
+    }
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -90,17 +97,31 @@ class ToolbarContainerView: UIView
 
 class TabBarViewController: UIViewController
 {
-    var items: [ToolbarItem]!
     var buttons: [ToolbarButton] = []
-    
+    var panels : [ToolbarItem];
     var _selectedButtonIndex: Int = -1
-
     var accountManager: AccountManager!
+    
+    init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?, accountManager: AccountManager) {
+        self.accountManager = accountManager;
+        panels = Panels(accountManager: self.accountManager).enabledItems;
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil);
+
+        NSNotificationCenter.defaultCenter().addObserverForName(PanelsNotificationName, object: nil, queue: nil) { notif in
+            self.panels = Panels(accountManager: accountManager).enabledItems;
+            self.updateButtons();
+        }
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     var selectedButtonIndex: Int {
         get {
             return _selectedButtonIndex
         }
+
         set (newButtonIndex) {
             if (_selectedButtonIndex != -1) {
                 let currentButton = buttons[_selectedButtonIndex]
@@ -111,7 +132,6 @@ class TabBarViewController: UIViewController
             newButton.selected = true
             
             // Update the active view controller
-            
             if let buttonContainerView = view.viewWithTag(1) {
                 var onScreenFrame = view.frame
                 onScreenFrame.size.height -= buttonContainerView.frame.height
@@ -121,17 +141,24 @@ class TabBarViewController: UIViewController
                 offScreenFrame.origin.y += offScreenFrame.height
 
                 if (_selectedButtonIndex == -1) {
-                    var visibleViewController = items[newButtonIndex].viewController
-                    visibleViewController.view.frame = onScreenFrame
-                    addChildViewController(visibleViewController)
-                    view.addSubview(visibleViewController.view)
-                    visibleViewController.didMoveToParentViewController(self)
+                    var visibleViewController : UIViewController?;
+                    if (childViewControllers.count > 0) {
+                        visibleViewController = childViewControllers[0] as? UIViewController
+                    } else {
+                        visibleViewController = panels[0].generator(accountManager: accountManager)
+                    }
+
+                    if var vc = visibleViewController {
+                        vc.view.frame = onScreenFrame
+                        addChildViewController(vc)
+                        view.addSubview(vc.view)
+                        vc.didMoveToParentViewController(self)
+                    }
                 } else {
-                    var visibleViewController = items[_selectedButtonIndex].viewController
-                    var newViewController = items[newButtonIndex].viewController
+                    var visibleViewController = childViewControllers[0] as UIViewController;
+                    var newViewController = panels[newButtonIndex].generator(accountManager: accountManager)
                     
                     visibleViewController.willMoveToParentViewController(nil)
-                    
                     newViewController.view.frame = offScreenFrame
                     addChildViewController(newViewController)
                     
@@ -171,24 +198,41 @@ class TabBarViewController: UIViewController
         return UIStatusBarStyle.LightContent
     }
 
-    override func viewDidLoad() {
-        let tabs = ToolbarItem(title: "Tabs", imageName: "tabs", viewController: TabsViewController(nibName: nil, bundle: nil))
-        let bookmarks = ToolbarItem(title: "Bookmarks", imageName: "bookmarks", viewController: BookmarksViewController(nibName: nil, bundle: nil))
-        let history = ToolbarItem(title: "History", imageName: "history", viewController: HistoryViewController(nibName: "HistoryViewController", bundle: nil))
-        let reader = ToolbarItem(title: "Reader", imageName: "reader", viewController: SiteTableViewController(nibName: nil, bundle: nil))
-        let settingsViewController = SettingsViewController(nibName: "SettingsViewController", bundle: nil)
-        settingsViewController.accountManager = accountManager
-        let settings = ToolbarItem(title: "Settings", imageName: "settings", viewController: settingsViewController)
-        items = [tabs, bookmarks, history, reader, settings]
+    private func updateButtons() {
+        for (var index = 0; index < panels.count; index++) {
+            let item = panels[index];
+            // If we have a button, we'll just reuse it
+            if (index < buttons.count) {
+                let button = buttons[index];
+                // TODO: Write a better equality check here.
+                if (item.title == button.item!.title) {
+                    continue;
+                }
 
-        if let buttonContainerView = view.viewWithTag(1) {
-            for (index, item) in enumerate(items) {
-                var toolbarButton = ToolbarButton(toolbarItem: item)
-                buttonContainerView.addSubview(toolbarButton)
-                toolbarButton.addTarget(self, action: "tappedButton:", forControlEvents: UIControlEvents.TouchUpInside)
-                buttons.append(toolbarButton)
+                button.item = item;
+            } else {
+                // Otherwise create one
+                if let buttonContainerView = view.viewWithTag(1) {
+                    let toolbarButton = ToolbarButton(toolbarItem: item)
+                    buttonContainerView.addSubview(toolbarButton)
+                    toolbarButton.addTarget(self, action: "tappedButton:", forControlEvents: UIControlEvents.TouchUpInside)
+                    buttons.append(toolbarButton)
+                }
             }
+        }
 
+        // Now remove any extra buttons we find
+        for (var index = panels.count; index < buttons.count; index++) {
+            let button = buttons[index]
+            button.removeFromSuperview()
+            buttons.removeAtIndex(index);
+            index--;
+        }
+    }
+    
+    override func viewDidLoad() {
+        if let buttonContainerView = view.viewWithTag(1) {
+            updateButtons();
             selectedButtonIndex = 0
         }
     }

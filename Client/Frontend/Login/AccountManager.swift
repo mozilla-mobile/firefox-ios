@@ -13,9 +13,11 @@ struct Credentials {
     var password: NSString!
 }
 
+var ACCOUNT_MANAGER_KEY: String = "ACCOUNT_MANAGER_KEY";
+
 class AccountManager: NSObject {
-    var loginCallback: (() -> ())!
-    var logoutCallback: (() -> ())!
+    var loginCallback = { () -> Void in }
+    var logoutCallback = { () -> Void in }
 
     func isLoggedIn() -> Bool {
         var isLoggedIn: Bool = false

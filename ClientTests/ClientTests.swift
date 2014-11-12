@@ -92,3 +92,7 @@ class ClientTests: XCTestCase {
         XCTAssertFalse(ran, "for...in didn't run for failed cursor");
     }
 }
+
+
+
+
