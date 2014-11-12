@@ -21,6 +21,8 @@ func createMockFavicon(icon: UIImage) -> UIImage {
 class BookmarksViewController: UITableViewController
 {
     var bookmarks: [Bookmark] = [];
+    // TODO: Move this to the authenticator when its available.
+    var favicons: Favicons = BasicFavicons();
     
     override func viewDidLoad()
     {
@@ -59,14 +61,21 @@ class BookmarksViewController: UITableViewController
         return bookmarks.count;
     }
     
+    private let FAVICON_SIZE = 32;
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-        
+
         if let image = (UIImage(named: "leaf.png")) {
             cell.imageView.image = createMockFavicon(image)
         }
         
         let bookmark = bookmarks[indexPath.row]
+        // TODO: We need an async image loader api here
+        favicons.getForUrl(NSURL(string: bookmark.url)!, options: nil, callback: { (icon: Favicon) -> Void in
+            if var img = icon.img {
+                cell.imageView.image = createMockFavicon(img);
+            }
+        });
         
         cell.textLabel.text = bookmark.title
         cell.textLabel.font = UIFont(name: "FiraSans-SemiBold", size: 13)
