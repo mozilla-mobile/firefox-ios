@@ -8,8 +8,8 @@ import Foundation
  * Status results for a Cursor
  */
 enum CursorStatus {
-    case SUCCESS;
-    case FAILURE;
+    case Success;
+    case Failure;
 }
 
 /**
@@ -23,7 +23,7 @@ protocol Cursor : SequenceType {
     var status : CursorStatus { get }
     var statusMessage : String { get }
 
-    // Colleciton iteration and access functions
+    // Collection iteration and access functions
     subscript(index: Int) -> ItemType? { get }
     func generate() -> GeneratorOf<ItemType>
 }
@@ -37,7 +37,7 @@ class ArrayCursor<T> : Cursor {
     let statusMessage : String = "";
 
     var count : Int {
-        if (status != CursorStatus.SUCCESS) {
+        if (status != CursorStatus.Success) {
             return 0;
         }
         return data.count;
@@ -46,7 +46,7 @@ class ArrayCursor<T> : Cursor {
     func generate() -> GeneratorOf<T> {
         var nextIndex = 0;
         return GeneratorOf<T>() {
-            if (nextIndex >= self.data.count || self.status != CursorStatus.SUCCESS) {
+            if (nextIndex >= self.data.count || self.status != CursorStatus.Success) {
                 return nil;
             }
             return self.data[nextIndex++];
@@ -61,12 +61,12 @@ class ArrayCursor<T> : Cursor {
     
     init(data: [T]) {
         self.data = data;
-        self.status = CursorStatus.SUCCESS;
+        self.status = CursorStatus.Success;
         self.statusMessage = "Success";
     }
     
     subscript(index: Int) -> T? {
-        if (index >= data.count || index < 0 || status != CursorStatus.SUCCESS) {
+        if (index >= data.count || index < 0 || status != CursorStatus.Success) {
             return nil;
         }
         return data[index];

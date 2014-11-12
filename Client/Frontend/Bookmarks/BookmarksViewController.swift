@@ -22,7 +22,7 @@ class BookmarksViewController: UITableViewController
 {
     var bookmarks: [Bookmark] = [];
     // TODO: Move this to the authenticator when its available.
-    var favicons: Favicons = BasicFavicons();
+    let favicons: Favicons = BasicFavicons();
     
     override func viewDidLoad()
     {
@@ -72,7 +72,7 @@ class BookmarksViewController: UITableViewController
         let bookmark = bookmarks[indexPath.row]
         // TODO: We need an async image loader api here
         favicons.getForUrl(NSURL(string: bookmark.url)!, options: nil, callback: { (icon: Favicon) -> Void in
-            if var img = icon.img {
+            if let img = icon.img {
                 cell.imageView.image = createMockFavicon(img);
             }
         });

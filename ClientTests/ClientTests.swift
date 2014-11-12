@@ -28,7 +28,7 @@ class ClientTests: XCTestCase {
         var expectation = expectationWithDescription("asynchronous request")
         fav.getForUrl(url!, options: nil, callback: { (data: Favicon) -> Void in
             XCTAssertEqual(data.siteUrl!, url!, "Site url is correct");
-            XCTAssertEqual(data.sourceUrl!, FaviconConsts.DEFAULT_FAVICON_URL, "Source url is correct");
+            XCTAssertEqual(data.sourceUrl!, FaviconConsts.DefaultFaviconUrl, "Source url is correct");
             expectation.fulfill()
         });
         waitForExpectationsWithTimeout(10.0, handler:nil)
@@ -40,7 +40,7 @@ class ClientTests: XCTestCase {
 
             var favicon : Favicon = data[0]!;
             XCTAssertEqual(favicon.siteUrl!, url!, "Site url is correct");
-            XCTAssertEqual(favicon.sourceUrl!, FaviconConsts.DEFAULT_FAVICON_URL, "Favicon url is correct");
+            XCTAssertEqual(favicon.sourceUrl!, FaviconConsts.DefaultFaviconUrl, "Favicon url is correct");
             XCTAssertNotNil(favicon.img!, "Favicon image is not null");
 
             expectation.fulfill()
@@ -60,7 +60,7 @@ class ClientTests: XCTestCase {
         XCTAssertNil(t[3], "Subscript three returns nil");
 
         // Test status data with default initializer
-        XCTAssertEqual(t.status, CursorStatus.SUCCESS, "Cursor as correct status");
+        XCTAssertEqual(t.status, CursorStatus.Success, "Cursor as correct status");
         XCTAssertEqual(t.statusMessage, "Success", "Cursor as correct status message");
         XCTAssertEqual(t.count, 3, "Cursor as correct size");
 
@@ -72,8 +72,8 @@ class ClientTests: XCTestCase {
         }
 
         // Test creating a failed cursor
-        let t2 = ArrayCursor<String>(data: data, status: CursorStatus.FAILURE, statusMessage: "Custom status message");
-        XCTAssertEqual(t2.status, CursorStatus.FAILURE, "Cursor as correct status");
+        let t2 = ArrayCursor<String>(data: data, status: CursorStatus.Failure, statusMessage: "Custom status message");
+        XCTAssertEqual(t2.status, CursorStatus.Failure, "Cursor as correct status");
         XCTAssertEqual(t2.statusMessage, "Custom status message", "Cursor as correct status message");
         XCTAssertEqual(t2.count, 0, "Cursor as correct size");
 
