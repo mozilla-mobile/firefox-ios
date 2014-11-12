@@ -35,7 +35,7 @@ func BookmarkCallback(url: NSURL, title: String?) {
     
     var object = NSMutableDictionary()
     object.setValue(url.absoluteString!, forKey: "url")
-    object.setValue(title != nil ? title : "", forKey: "title")
+    object.setValue(title != nil ? title! : "", forKey: "title")
     
     var jsonError: NSError?
     let data = NSJSONSerialization.dataWithJSONObject(object, options: nil, error: &jsonError)
