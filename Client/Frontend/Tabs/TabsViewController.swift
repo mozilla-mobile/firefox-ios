@@ -5,7 +5,7 @@
 import UIKit
 import Alamofire
 
-class TabsViewController: UITableViewController
+class TabsViewController: ToolbarTableViewController
 {
     var tabsResponse: TabsResponse?
     // TODO: Move this to the authenticator when its available.

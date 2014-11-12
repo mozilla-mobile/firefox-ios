@@ -4,7 +4,7 @@
 
 import UIKit
 
-class SiteTableViewController: UITableViewController
+class SiteTableViewController: ToolbarTableViewController
 {
     // TODO: Move this to the authenticator when its available.
     var favicons: Favicons = BasicFavicons();

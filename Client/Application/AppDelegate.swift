@@ -19,13 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         let loginViewController = LoginViewController()
         loginViewController.accountManager = accountManager
 
-        let tabBarViewController = TabBarViewController(nibName: "TabBarViewController", bundle: nil)
-        tabBarViewController.accountManager = accountManager
+        let tabBarViewController = TabBarViewController(nibName: "TabBarViewController", bundle: nil, accountManager: accountManager)
 
         accountManager.loginCallback = {
             // Show the tab controller once the user logs in.
             self.window.rootViewController = tabBarViewController
         }
+
         accountManager.logoutCallback = {
             // Show the login controller once the user logs out.
             self.window.rootViewController = loginViewController

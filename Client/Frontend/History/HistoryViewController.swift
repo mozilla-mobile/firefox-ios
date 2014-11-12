@@ -4,7 +4,7 @@
 
 import UIKit
 
-class HistoryViewController: UIViewController {
+class HistoryViewController: ToolbarViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
