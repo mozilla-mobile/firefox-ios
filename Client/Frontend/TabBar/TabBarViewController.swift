@@ -95,7 +95,7 @@ class TabBarViewController: UIViewController
     
     var _selectedButtonIndex: Int = -1
 
-    var accountManager: AccountManager!
+    var account: Account!
     
     var selectedButtonIndex: Int {
         get {
@@ -173,12 +173,17 @@ class TabBarViewController: UIViewController
 
     override func viewDidLoad() {
         let tabs = ToolbarItem(title: "Tabs", imageName: "tabs", viewController: TabsViewController(nibName: nil, bundle: nil))
-        let bookmarks = ToolbarItem(title: "Bookmarks", imageName: "bookmarks", viewController: BookmarksViewController(nibName: nil, bundle: nil))
         let history = ToolbarItem(title: "History", imageName: "history", viewController: HistoryViewController(nibName: "HistoryViewController", bundle: nil))
         let reader = ToolbarItem(title: "Reader", imageName: "reader", viewController: SiteTableViewController(nibName: nil, bundle: nil))
+
+        let bookmarksViewController = BookmarksViewController(nibName: nil, bundle: nil)
+        bookmarksViewController.account = account
+        let bookmarks = ToolbarItem(title: "Bookmarks", imageName: "bookmarks", viewController: bookmarksViewController)
+
         let settingsViewController = SettingsViewController(nibName: "SettingsViewController", bundle: nil)
-        settingsViewController.accountManager = accountManager
+        settingsViewController.account = account
         let settings = ToolbarItem(title: "Settings", imageName: "settings", viewController: settingsViewController)
+
         items = [tabs, bookmarks, history, reader, settings]
 
         if let buttonContainerView = view.viewWithTag(1) {
