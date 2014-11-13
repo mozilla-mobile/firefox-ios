@@ -5,55 +5,68 @@
 import Foundation
 
 let SuiteName = "group.org.allizom.Client"
-let KeyLoggedIn = "isLoggedIn"
 let KeyUsername = "username"
-
-struct Credentials {
-    var username: NSString!
-    var password: NSString!
-}
+let KeyLoggedIn = "loggedIn"
 
 class AccountManager: NSObject {
-    var loginCallback: (() -> ())!
-    var logoutCallback: (() -> ())!
+    private let loginCallback: (account: Account) -> ()
+    private let logoutCallback: () -> ()
+    private let userDefaults = NSUserDefaults(suiteName: SuiteName)!
 
-    func isLoggedIn() -> Bool {
-        var isLoggedIn: Bool = false
+    init(loginCallback: (account: Account) -> (), logoutCallback: () -> ()) {
+        self.loginCallback = loginCallback
+        self.logoutCallback = logoutCallback
+    }
 
-        let userDefaults: NSUserDefaults = NSUserDefaults(suiteName: SuiteName)!
-
-        if userDefaults.objectForKey(KeyLoggedIn) != nil {
-            isLoggedIn = userDefaults.objectForKey(KeyLoggedIn) as Bool
+    func getAccount() -> Account? {
+        if !isLoggedIn() {
+            return nil
         }
 
-        return isLoggedIn
-    }
-
-    func getUsername() -> NSString {
-        var str: NSString! = "Not logged in"
-        let userDefaults: NSUserDefaults = NSUserDefaults(suiteName: SuiteName)!
-
-        if userDefaults.objectForKey(KeyUsername) != nil {
-            str = userDefaults.objectForKey(KeyUsername) as NSString
+        if let user = getUsername() {
+            let credential = getKeychainUser(user)
+            return Account(credential: credential, self.logoutCallback)
         }
 
-        return str
+        return nil
     }
 
-    func login(username: NSString, password: NSString) {
-        setKeychainUser(username, password: password)
-        loginCallback()
+    private func isLoggedIn() -> Bool {
+        if let loggedIn = userDefaults.objectForKey(KeyLoggedIn) as? Bool {
+            return loggedIn
+        }
+
+        return false
     }
 
-    func logout() {
-        let userDefaults: NSUserDefaults = NSUserDefaults(suiteName: SuiteName)!
-        removeKeychain(getUsername())
-        userDefaults.removeObjectForKey(KeyUsername)
-        userDefaults.setObject(false, forKey: KeyLoggedIn)
-        logoutCallback()
+    func getUsername() -> String? {
+        return userDefaults.objectForKey(KeyUsername) as? String
     }
 
-    func getKeychainUser(username: NSString) -> Credentials {
+    // TODO: Logging in once saves the credentials for the entire session, making it impossible
+    // to really log out. Using "None" as persistence should fix this -- why doesn't it?
+    func login(username: String, password: String, error: ((error: RequestError) -> ())) {
+        let credential = NSURLCredential(user: username, password: password, persistence: .None)
+        RestAPI.sendRequest(
+            credential,
+            // TODO: this should use a different request
+            request: "bookmarks/recent",
+            success: { _ in
+                println("Logged in as user \(username)")
+                self.setKeychainUser(username, password: password)
+                let account = Account(credential: credential, {
+                    self.removeKeychain(username)
+                    self.userDefaults.removeObjectForKey(KeyUsername)
+                    self.userDefaults.setObject(false, forKey: KeyLoggedIn)
+                    self.logoutCallback()
+                })
+                self.loginCallback(account: account)
+            },
+            error: error
+        )
+    }
+
+    func getKeychainUser(username: NSString) -> NSURLCredential {
         let kSecClassValue = NSString(format: kSecClass)
         let kSecAttrAccountValue = NSString(format: kSecAttrAccount)
         let kSecValueDataValue = NSString(format: kSecValueData)
@@ -83,9 +96,9 @@ class AccountManager: NSObject {
             println("Nothing was retrieved from the keychain. Status code \(status)")
         }
 
-        var credentials = Credentials(username: username, password: contentsOfKeychain!)
+        let credential = NSURLCredential(user: username, password: contentsOfKeychain!, persistence: .None)
 
-        return credentials
+        return credential
     }
 
     private func removeKeychain(username: NSString) {
@@ -104,7 +117,7 @@ class AccountManager: NSObject {
         SecItemDelete(query as CFDictionaryRef)
     }
 
-    private func setKeychainUser(username: NSString, password: NSString) -> Bool {
+    private func setKeychainUser(username: String, password: String) -> Bool {
         let kSecClassValue = NSString(format: kSecClass)
         let kSecAttrAccountValue = NSString(format: kSecAttrAccount)
         let kSecValueDataValue = NSString(format: kSecValueData)
@@ -114,14 +127,11 @@ class AccountManager: NSObject {
         let kSecReturnDataValue = NSString(format: kSecReturnData)
         let kSecMatchLimitOneValue = NSString(format: kSecMatchLimitOne)
 
-        var User = Credentials(username: username, password: password)
-
-        var secret: NSData = User.password!.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
-        let query = NSDictionary(objects: [kSecClassGenericPassword, "Firefox105", User.username!, secret], forKeys: [kSecClass,kSecAttrService, kSecAttrAccount, kSecValueData])
+        let secret: NSData = password.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        let query = NSDictionary(objects: [kSecClassGenericPassword, "Firefox105", username, secret], forKeys: [kSecClass,kSecAttrService, kSecAttrAccount, kSecValueData])
 
         SecItemDelete(query as CFDictionaryRef)
         SecItemAdd(query as CFDictionaryRef, nil)
-        let userDefaults: NSUserDefaults = NSUserDefaults(suiteName: SuiteName)!
 
         userDefaults.setObject(username, forKey: KeyUsername)
         userDefaults.setObject(true, forKey: KeyLoggedIn)

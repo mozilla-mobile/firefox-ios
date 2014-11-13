@@ -181,8 +181,14 @@ class LoginViewController: UIViewController
 
     // Referenced as button selector.
     func didClickLogin() {
-        // TODO: Use/check the login values given by the user.
-        accountManager.login("moz", password: "test")
+        accountManager.login(userText.text, password: passText.text, { err in
+            switch err {
+                case .BadAuth:
+                    println("Invalid username and/or password")
+                default:
+                    println("Connection error")
+            }
+        })
     }
     
     private func addPaddedLeftView(textField: UITextField, image: UIImage) {

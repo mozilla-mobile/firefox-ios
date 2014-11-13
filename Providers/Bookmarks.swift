@@ -1,19 +1,14 @@
-//
-//  BookmarksDB.swift
-//  Client
-//
-//  Created by Wes Johnston on 11/5/14.
-//  Copyright (c) 2014 Mozilla. All rights reserved.
-//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Alamofire
 
-class Bookmark
-{
+class Bookmark {
     var title: String
     var url: String
-    
+
     init(title: String, url: String) {
         self.title = title
         self.url = url
@@ -21,21 +16,29 @@ class Bookmark
 }
 
 class Bookmarks: NSObject {
-    class func getAll(handler: ([Bookmark]) -> Void) {
-        RestAPI.sendRequest("bookmarks/recent", callback: { (response: AnyObject?) -> Void in
-            // TODO: We should cache these locally so that we don't have to query the server all the time
-            handler(self.parseResponse(response));
-        });
+    private let account: Account
+
+    init(account: Account) {
+        self.account = account
     }
 
-    class func parseResponse(response: AnyObject?) -> [Bookmark] {
+    func getAll(success: ([Bookmark]) -> (), error: (RequestError) -> ()) {
+        account.makeAuthRequest(
+            "bookmarks/recent",
+            success: { data in
+                 success(self.parseResponse(data));
+            },
+            error: error)
+    }
+
+    private func parseResponse(response: AnyObject?) -> [Bookmark] {
         var resp : [Bookmark] = [];
-        
+
         if let response: NSArray = response as? NSArray {
             for bookmark in response {
                 var title: String = ""
                 var url: String = ""
-                
+
                 if let t = bookmark.valueForKey("title") as? String {
                     title = t
                 } else {
