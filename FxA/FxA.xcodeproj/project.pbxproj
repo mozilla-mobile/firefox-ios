@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		286CCAF719D37B7F008B7374 /* FxASwiftly-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 286CCAF619D37B7F008B7374 /* FxASwiftly-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		28F9520119D0F9FA00DCE892 /* FxA.h in Headers */ = {isa = PBXBuildFile; fileRef = 28F9520019D0F9FA00DCE892 /* FxA.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		28F9520B19D0F9FB00DCE892 /* FxATests.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9520A19D0F9FB00DCE892 /* FxATests.m */; };
 		2FA17F7E19D3D2D100F3D844 /* MockMyIDTokenFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FA17F7C19D3D2D100F3D844 /* MockMyIDTokenFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -136,7 +135,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		286CCAF619D37B7F008B7374 /* FxASwiftly-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "FxASwiftly-Bridging-Header.h"; path = "../FxASwiftly/FxASwiftly/FxASwiftly-Bridging-Header.h"; sourceTree = "<group>"; };
 		28F951FB19D0F9FA00DCE892 /* FxA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FxA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F951FF19D0F9FA00DCE892 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		28F9520019D0F9FA00DCE892 /* FxA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FxA.h; sourceTree = "<group>"; };
@@ -281,7 +279,6 @@
 		28F951F119D0F9FA00DCE892 = {
 			isa = PBXGroup;
 			children = (
-				286CCAF619D37B7F008B7374 /* FxASwiftly-Bridging-Header.h */,
 				28F951FD19D0F9FA00DCE892 /* FxA */,
 				28F9520719D0F9FB00DCE892 /* FxATests */,
 				28F951FC19D0F9FA00DCE892 /* Products */,
@@ -528,7 +525,6 @@
 				2FF8264619D3CAFF003ED08E /* NSData+KeyDerivation.h in Headers */,
 				2FF825F019D3CAFF003ED08E /* CHNumber_Private.h in Headers */,
 				2FA1801719D3D32300F3D844 /* ui.h in Headers */,
-				286CCAF719D37B7F008B7374 /* FxASwiftly-Bridging-Header.h in Headers */,
 				2FA17FF219D3D32300F3D844 /* krb5_asn.h in Headers */,
 				2FA17FF019D3D32300F3D844 /* hmac.h in Headers */,
 				2FA17FFB19D3D32300F3D844 /* ocsp.h in Headers */,
@@ -619,7 +615,7 @@
 		28F951F219D0F9FA00DCE892 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					28F951FA19D0F9FA00DCE892 = {
@@ -745,10 +741,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = iphoneos8.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -784,10 +780,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = iphoneos8.0;
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
