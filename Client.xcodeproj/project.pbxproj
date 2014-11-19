@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		28CE83C21A1D1D3200576538 /* FxAClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83B81A1D1D3200576538 /* FxAClient.swift */; };
+		28CE83C31A1D1D3200576538 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BA1A1D1D3200576538 /* Bytes.swift */; };
+		28CE83C41A1D1D3200576538 /* ClientPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BB1A1D1D3200576538 /* ClientPayload.swift */; };
+		28CE83C51A1D1D3200576538 /* EncryptedRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BC1A1D1D3200576538 /* EncryptedRecord.swift */; };
+		28CE83C61A1D1D3200576538 /* KeysPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BD1A1D1D3200576538 /* KeysPayload.swift */; };
+		28CE83C71A1D1D3200576538 /* Records.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BE1A1D1D3200576538 /* Records.swift */; };
+		28CE83C81A1D1D3200576538 /* SyncMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BF1A1D1D3200576538 /* SyncMeta.swift */; };
+		28CE83C91A1D1D3200576538 /* TokenServerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83C11A1D1D3200576538 /* TokenServerClient.swift */; };
+		28CE83DA1A1D1E7C00576538 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
+		28CE83DB1A1D1E7C00576538 /* FxA.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D34DC8531A16C40C00D49B7B /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Account.swift */; };
 		D34DC8541A16C40C00D49B7B /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84E1A16C40C00D49B7B /* AccountManager.swift */; };
 		D34DC8551A16C40C00D49B7B /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84F1A16C40C00D49B7B /* Bookmarks.swift */; };
@@ -64,6 +74,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		28CE83CF1A1D1D5100576538 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 28F951FB19D0F9FA00DCE892;
+			remoteInfo = FxA;
+		};
+		28CE83D11A1D1D5100576538 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 28F9520619D0F9FB00DCE892;
+			remoteInfo = FxATests;
+		};
+		28CE83DC1A1D1E7C00576538 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 28F951FA19D0F9FA00DCE892;
+			remoteInfo = FxA;
+		};
 		E4D6BEAC1A092AD300F538BD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */;
@@ -138,6 +169,7 @@
 			files = (
 				F84B22361A09145F00AAB793 /* Alamofire.framework in Copy Frameworks */,
 				E4D6BEB21A092D5700F538BD /* Snappy.framework in Copy Frameworks */,
+				28CE83DB1A1D1E7C00576538 /* FxA.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -157,6 +189,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		28CE83B81A1D1D3200576538 /* FxAClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAClient.swift; sourceTree = "<group>"; };
+		28CE83BA1A1D1D3200576538 /* Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
+		28CE83BB1A1D1D3200576538 /* ClientPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientPayload.swift; sourceTree = "<group>"; };
+		28CE83BC1A1D1D3200576538 /* EncryptedRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptedRecord.swift; sourceTree = "<group>"; };
+		28CE83BD1A1D1D3200576538 /* KeysPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeysPayload.swift; sourceTree = "<group>"; };
+		28CE83BE1A1D1D3200576538 /* Records.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Records.swift; sourceTree = "<group>"; };
+		28CE83BF1A1D1D3200576538 /* SyncMeta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncMeta.swift; sourceTree = "<group>"; };
+		28CE83C11A1D1D3200576538 /* TokenServerClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenServerClient.swift; sourceTree = "<group>"; };
+		28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FxA.xcodeproj; path = FxA/FxA.xcodeproj; sourceTree = "<group>"; };
 		D34DC84D1A16C40C00D49B7B /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		D34DC84E1A16C40C00D49B7B /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
 		D34DC84F1A16C40C00D49B7B /* Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
@@ -213,6 +254,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		28CE83DE1A1D1E7C00576538 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28CE83DA1A1D1E7C00576538 /* FxA.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F84B21D01A090F8100AAB793 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -237,6 +286,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		28CE83B71A1D1D3200576538 /* FxAClient */ = {
+			isa = PBXGroup;
+			children = (
+				28CE83B81A1D1D3200576538 /* FxAClient.swift */,
+			);
+			path = FxAClient;
+			sourceTree = "<group>";
+		};
+		28CE83B91A1D1D3200576538 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				28CE83BA1A1D1D3200576538 /* Bytes.swift */,
+				28CE83BB1A1D1D3200576538 /* ClientPayload.swift */,
+				28CE83BC1A1D1D3200576538 /* EncryptedRecord.swift */,
+				28CE83BD1A1D1D3200576538 /* KeysPayload.swift */,
+				28CE83BE1A1D1D3200576538 /* Records.swift */,
+				28CE83BF1A1D1D3200576538 /* SyncMeta.swift */,
+			);
+			path = Sync;
+			sourceTree = "<group>";
+		};
+		28CE83C01A1D1D3200576538 /* Token */ = {
+			isa = PBXGroup;
+			children = (
+				28CE83C11A1D1D3200576538 /* TokenServerClient.swift */,
+			);
+			path = Token;
+			sourceTree = "<group>";
+		};
+		28CE83CB1A1D1D5100576538 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				28CE83D01A1D1D5100576538 /* FxA.framework */,
+				28CE83D21A1D1D5100576538 /* FxATests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		D34DC84C1A16C40C00D49B7B /* Providers */ = {
 			isa = PBXGroup;
 			children = (
@@ -262,6 +349,10 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
+				28CE83B71A1D1D3200576538 /* FxAClient */,
+				28CE83B91A1D1D3200576538 /* Sync */,
+				28CE83C01A1D1D3200576538 /* Token */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,
 				F84B222A1A0913F100AAB793 /* Alamofire.xcodeproj */,
 				E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */,
@@ -485,6 +576,7 @@
 				F84B21BC1A090F8100AAB793 /* Resources */,
 				F84B22351A09144D00AAB793 /* Copy Frameworks */,
 				F84B22531A0920C600AAB793 /* Embed App Extensions */,
+				28CE83DE1A1D1E7C00576538 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -493,6 +585,7 @@
 				F84B22521A0920C600AAB793 /* PBXTargetDependency */,
 				F84B22651A09210A00AAB793 /* PBXTargetDependency */,
 				E4D6BEB41A092D5700F538BD /* PBXTargetDependency */,
+				28CE83DD1A1D1E7C00576538 /* PBXTargetDependency */,
 			);
 			name = Client;
 			productName = Client;
@@ -619,6 +712,10 @@
 					ProjectRef = F84B222A1A0913F100AAB793 /* Alamofire.xcodeproj */;
 				},
 				{
+					ProductGroup = 28CE83CB1A1D1D5100576538 /* Products */;
+					ProjectRef = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
+				},
+				{
 					ProductGroup = E4D6BEA81A092AD300F538BD /* Products */;
 					ProjectRef = E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */;
 				},
@@ -634,6 +731,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		28CE83D01A1D1D5100576538 /* FxA.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FxA.framework;
+			remoteRef = 28CE83CF1A1D1D5100576538 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		28CE83D21A1D1D5100576538 /* FxATests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FxATests.xctest;
+			remoteRef = 28CE83D11A1D1D5100576538 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		E4D6BEAD1A092AD300F538BD /* Snappy.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -725,15 +836,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				F84B22191A0911B500AAB793 /* BookmarksViewController.swift in Sources */,
+				28CE83C51A1D1D3200576538 /* EncryptedRecord.swift in Sources */,
+				28CE83C31A1D1D3200576538 /* Bytes.swift in Sources */,
 				F84B22101A0910F600AAB793 /* SiteTableViewController.swift in Sources */,
 				F84B22141A0910F600AAB793 /* TabsViewController.swift in Sources */,
+				28CE83C81A1D1D3200576538 /* SyncMeta.swift in Sources */,
 				D34DC8561A16C40C00D49B7B /* Cursor.swift in Sources */,
+				28CE83C61A1D1D3200576538 /* KeysPayload.swift in Sources */,
 				D34DC8541A16C40C00D49B7B /* AccountManager.swift in Sources */,
 				D34DC8571A16C40C00D49B7B /* Favicons.swift in Sources */,
+				28CE83C41A1D1D3200576538 /* ClientPayload.swift in Sources */,
+				28CE83C21A1D1D3200576538 /* FxAClient.swift in Sources */,
 				D34DC8581A16C40C00D49B7B /* RestAPI.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
 				F84B22241A09122500AAB793 /* TabBarViewController.swift in Sources */,
 				F84B220F1A0910F600AAB793 /* Site.swift in Sources */,
+				28CE83C91A1D1D3200576538 /* TokenServerClient.swift in Sources */,
+				28CE83C71A1D1D3200576538 /* Records.swift in Sources */,
 				F84B22111A0910F600AAB793 /* SettingsViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Account.swift in Sources */,
 				D34DC8551A16C40C00D49B7B /* Bookmarks.swift in Sources */,
@@ -777,6 +896,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		28CE83DD1A1D1E7C00576538 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FxA;
+			targetProxy = 28CE83DC1A1D1E7C00576538 /* PBXContainerItemProxy */;
+		};
 		E4D6BEB41A092D5700F538BD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Snappy;
