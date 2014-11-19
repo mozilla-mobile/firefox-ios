@@ -9,7 +9,7 @@ import Foundation
  */
 public class Bytes {
     public class func generateRandomBytes(len: UInt) -> NSData {
-        let data = NSMutableData(length: Int(len))
+        let data: NSMutableData! = NSMutableData(length: Int(len))
         let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
         let result: Int32 = SecRandomCopyBytes(kSecRandomDefault, len, bytes)
         
@@ -23,7 +23,7 @@ public class Bytes {
     
     public class func decodeBase64(b64: String) -> NSData {
         return NSData(base64EncodedString: b64,
-                      options: NSDataBase64DecodingOptions.allZeros)
+                      options: NSDataBase64DecodingOptions.allZeros)!
     }
 
     /**

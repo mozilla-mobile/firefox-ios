@@ -71,13 +71,13 @@ public class FxAClient {
         let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: "identity.mozilla.com/picl/v1/authPW".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false), length: 32)
         
         let parameters = [
-            "email": NSString(data: emailUTF8, encoding: NSUTF8StringEncoding),
+            "email": NSString(data: emailUTF8, encoding: NSUTF8StringEncoding)!,
             "authPW": authPW.base16EncodedStringWithOptions(NSDataBase16EncodingOptions.LowerCase),
         ]
 
-        let url = NSURL(string: self.url + (getKeys ? "/account/login?keys=true" : "/account/login"))
+        let url = NSURL(string: self.url + (getKeys ? "/account/login?keys=true" : "/account/login"))!
         let mutableURLRequest = NSMutableURLRequest(URL: url)
-        mutableURLRequest.HTTPMethod = Method.POST.toRaw()
+        mutableURLRequest.HTTPMethod = Method.POST.rawValue
         
         let (r, e) = ParameterEncoding.JSON.encode(mutableURLRequest, parameters: parameters)
         if e != nil {

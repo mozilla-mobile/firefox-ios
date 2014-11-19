@@ -40,7 +40,7 @@ public class TokenServerClient {
     }
 
     public class func getAudienceForEndpoint(endpoint: String) -> String {
-        let url = NSURL(string: endpoint)
+        let url = NSURL(string: endpoint)!
         if let port = url.port {
             return "\(url.scheme!)://\(url.host!):\(port)"
         } else {
@@ -124,7 +124,7 @@ public class TokenServerClient {
     }
 
     public func tokenRequest(queue: dispatch_queue_t? = nil, assertion: String, clientState: String? = nil) -> Request {
-        let URL = NSURL(string: url)
+        let URL = NSURL(string: url)!
         var mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.setValue("BrowserID " + assertion, forHTTPHeaderField: "Authorization")
         if let clientState = clientState {
