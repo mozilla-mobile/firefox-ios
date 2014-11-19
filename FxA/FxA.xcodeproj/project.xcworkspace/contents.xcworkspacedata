@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "container:"
+      name = "FxA Stuff">
+      <FileRef
+         location = "self:FxA.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:../../FxASwiftly/FxASwiftly.xcodeproj">
+      </FileRef>
+   </Group>
+</Workspace>
