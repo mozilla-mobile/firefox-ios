@@ -27,6 +27,7 @@ class LoginView: UIView {
     private var userText: ImageTextField!
     private var passText: PasswordTextField!
     private var statusLabel: UILabel!
+    private var scrollView: KeyboardAwareScrollView!
 
     // True if showing login state; false if showing sign up state.
     private var stateLogin = true
@@ -69,10 +70,18 @@ class LoginView: UIView {
     private func didInitView() {
         backgroundColor = UIColor.darkGrayColor()
 
+        // Outer scroll view
+        scrollView = KeyboardAwareScrollView()
+        self.addSubview(scrollView)
+        scrollView.snp_makeConstraints { make in
+            make.edges.equalTo(self)
+            return
+        }
+
         // Firefox logo
         let image = UIImage(named: ImagePathLogo)!
         let logo = UIImageView(image: image)
-        addSubview(logo)
+        scrollView.addSubview(logo)
         let ratio = image.size.width / image.size.height
         logo.snp_makeConstraints { make in
             make.top.equalTo(60)
@@ -86,7 +95,7 @@ class LoginView: UIView {
         label105.textColor = UIColor.whiteColor()
         label105.font = UIFont(name: "HelveticaNeue-UltraLight", size: 25)
         label105.text = "105"
-        addSubview(label105)
+        scrollView.addSubview(label105)
         label105.snp_makeConstraints { make in
             make.top.equalTo(logo.snp_bottom).offset(8)
             make.centerX.equalTo(self)
@@ -101,11 +110,10 @@ class LoginView: UIView {
         userText.placeholder = "Email address"
         userText.layer.borderColor = UIColor.whiteColor().CGColor
         userText.layer.borderWidth = 1
-        addSubview(userText)
+        scrollView.addSubview(userText)
         userText.snp_makeConstraints { make in
             make.top.equalTo(label105.snp_bottom).offset(40)
-            make.left.equalTo(self.snp_left)
-            make.right.equalTo(self.snp_right)
+            make.left.right.equalTo(self)
             make.height.equalTo(30)
         }
 
@@ -119,11 +127,10 @@ class LoginView: UIView {
         passText.layer.borderColor = UIColor.whiteColor().CGColor
         passText.layer.borderWidth = 1
         passText.secureTextEntry = true
-        addSubview(passText)
+        scrollView.addSubview(passText)
         passText.snp_makeConstraints { make in
             make.top.equalTo(self.userText.snp_bottom).offset(-1)
-            make.left.equalTo(self.snp_left)
-            make.right.equalTo(self.snp_right)
+            make.left.right.equalTo(self)
             make.height.equalTo(30)
         }
 
@@ -132,7 +139,7 @@ class LoginView: UIView {
         loginLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 12)
         loginLabel.textColor = UIColor.whiteColor()
         loginLabel.text = "Sign in with your Firefox account"
-        addSubview(loginLabel)
+        scrollView.addSubview(loginLabel)
         loginLabel.snp_makeConstraints { make in
             make.top.equalTo(self.passText.snp_bottom).offset(5)
             make.centerX.equalTo(self)
@@ -147,7 +154,7 @@ class LoginView: UIView {
         loginButton.layer.borderColor = UIColor.whiteColor().CGColor
         loginButton.layer.borderWidth = 1
         loginButton.layer.cornerRadius = 6
-        addSubview(loginButton)
+        scrollView.addSubview(loginButton)
         loginButton.snp_makeConstraints { make in
             make.top.equalTo(self.loginLabel.snp_bottom).offset(25)
             make.centerX.equalTo(self)
@@ -158,7 +165,7 @@ class LoginView: UIView {
         forgotPasswordButton.titleLabel!.font = UIFont(name: "HelveticaNeue-Thin", size: 12)
         forgotPasswordButton.setTitle("Forgot password?", forState: UIControlState.Normal)
         forgotPasswordButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        addSubview(forgotPasswordButton)
+        scrollView.addSubview(forgotPasswordButton)
         forgotPasswordButton.snp_makeConstraints { make in
             make.top.equalTo(self.loginButton.snp_bottom).offset(25)
             make.centerX.equalTo(self)
@@ -169,11 +176,13 @@ class LoginView: UIView {
         switchLoginOrSignUpButton.titleLabel!.font = UIFont(name: "HelveticaNeue-Thin", size: 12)
         switchLoginOrSignUpButton.setTitle("Sign up instead", forState: UIControlState.Normal)
         switchLoginOrSignUpButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        addSubview(switchLoginOrSignUpButton)
+        scrollView.addSubview(switchLoginOrSignUpButton)
         switchLoginOrSignUpButton.snp_makeConstraints { make in
             make.top.equalTo(self.forgotPasswordButton.snp_bottom)
             make.centerX.equalTo(self)
         }
+
+        scrollView.enableKeyboardScrolling(switchLoginOrSignUpButton)
 
         // Click listeners
         switchLoginOrSignUpButton.addTarget(self, action: "SELdidClickSwitchLoginOrSignUp", forControlEvents: UIControlEvents.TouchUpInside)
