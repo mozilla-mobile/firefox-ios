@@ -34,8 +34,11 @@ class Account {
         return Bookmarks(account: self)
     } ()
 
+    lazy var clients: Clients = {
+        return Clients(account: self)
+    } ()
+
     //        lazy var ReadingList readingList
     //        lazy var History history
-    //        lazy var Devices devices
     //        lazy var Favicons favicons;
 }
