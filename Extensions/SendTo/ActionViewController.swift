@@ -5,7 +5,6 @@
 import UIKit
 import Snappy
 
-<<<<<<< HEAD
 protocol LoginViewControllerDelegate {
     func loginViewControllerDidCancel(loginViewController: LoginViewController) -> Void
 }
