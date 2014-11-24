@@ -3,23 +3,70 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import MobileCoreServices
+import Snappy
 
-class DevicesViewController: UITableViewController
-{
+protocol LoginViewControllerDelegate {
+    func loginViewControllerDidCancel(loginViewController: LoginViewController) -> Void
+}
+
+/*!
+The LoginViewController is a viewcontroller that we show if the user is not logged in yet.
+It not clear yet what needs to be done so consider this a temporary placeholder for now.
+*/
+
+class LoginViewController: UIViewController {
+    var delegate: LoginViewControllerDelegate?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.backgroundColor = UIColor.whiteColor()
+        
+        let label = UILabel()
+        label.text = NSLocalizedString("TODO Not logged in.", comment: "")
+        view.addSubview(label)
+        label.snp_makeConstraints { (make) -> () in
+            make.center.equalTo(label.superview!)
+            return
+        }
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
+    }
+
+    func cancel() {
+        delegate?.loginViewControllerDidCancel(self)
+    }
+}
+
+protocol ClientPickerViewControllerDelegate {
+    func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) -> Void
+    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [Client]) -> Void
+}
+
+/*!
+The ClientPickerViewController displays a list of clients associated with the provided Account.
+The user can select a number of devices and hit the Send button.
+This viewcontroller does not implement any specific business logic that needs to happen with the selected clients.
+That is up to it's delegate, who can listen for cancellation and success events.
+*/
+
+class ClientPickerViewController: UITableViewController {
+    var account: Account?
+    var clientPickerDelegate: ClientPickerViewControllerDelegate?
+    
     var clients: [Client] = []
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = NSLocalizedString("Send To Device", comment: "")
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
+    }
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        Clients.getAll { (clients) -> Void in
-            self.clients = clients
-            self.tableView.reloadData()
-        }
-    }
-    
-    override func viewDidLoad() {
-        title = NSLocalizedString("Send To Device", comment: "")
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
+        reloadClients()
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -32,47 +79,96 @@ class DevicesViewController: UITableViewController
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel.text = clients[indexPath.row].name
+        cell.textLabel.font = UIFont(name: "FiraSans-Regular", size: 17)
+        cell.textLabel.text = NSLocalizedString("Send to ", comment: "") + clients[indexPath.row].name // TODO This needs a localized format string
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let client = clients[indexPath.row]
-        fetchSharedURL { (url, title, error) -> Void in
-            Clients.sendURL(url.absoluteString!, toClient: client)
-            self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
-        }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        clientPickerDelegate?.clientPickerViewController(self, didPickClients: [clients[indexPath.row]])
+    }
+    
+    private func reloadClients() {
+        account?.clients.getAll(
+            { response in
+                self.clients = response
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.refreshControl?.endRefreshing()
+                    self.tableView.reloadData()
+                }
+            },
+            error: { err in
+                // TODO: Figure out a good way to handle this.
+                print("Error: could not load clients: ")
+                println(err)
+        })
+    }
+    
+    func refresh() {
+        reloadClients()
     }
     
     func cancel() {
         self.extensionContext!.completeRequestReturningItems(nil, completionHandler: nil)
     }
+}
+
+/*!
+The ActionViewController is the initial viewcontroller that is presented (full screen) when the share extension is activated.
+Depending on whether the user is logged in or not, this viewcontroller will present either a Login or ClientPicker.
+*/
+
+@objc(ActionViewController)
+class ActionViewController: UINavigationController, ClientPickerViewControllerDelegate, LoginViewControllerDelegate
+{
+    var account: Account?
+    var sharedItem: ShareItem?
     
-    func fetchSharedURL(completionHandler: (NSURL!, String?, NSError!) -> Void) {
-        var title : String? = nil;
-        
-        if let inputItems : [NSExtensionItem] = self.extensionContext!.inputItems as? [NSExtensionItem] {
-            let item = inputItems[0]
-            title = item.attributedContentText?.string as String?
-            if let attachments = item.attachments as? [NSItemProvider] {
-                attachments[0].loadItemForTypeIdentifier(kUTTypeURL, options:nil, completionHandler: { (obj, error) in
-                    if error == nil {
-                        completionHandler(obj as? NSURL, title, error)
-                    } else {
-                        completionHandler(nil, nil, error)
-                    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        findSharedItem { (item, error) -> Void in
+            if error == nil && item != nil {
+                self.sharedItem = item
+                
+                let accountManager = AccountManager(loginCallback: { (account) -> () in
+                    return
+                }, logoutCallback: { () -> () in
+                    return
                 })
+                
+                self.account = accountManager.getAccount()
+                if self.account == nil {
+                    let loginViewController = LoginViewController()
+                    loginViewController.delegate = self
+                    self.pushViewController(loginViewController, animated: false)
+                } else {
+                    let clientPickerViewController = ClientPickerViewController()
+                    clientPickerViewController.clientPickerDelegate = self
+                    clientPickerViewController.account = self.account
+                    self.pushViewController(clientPickerViewController, animated: false)
+                }
+            } else {
+                self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
             }
         }
     }
-}
 
-@objc(ActionViewController)
-class ActionViewController: UINavigationController
-{
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
-        pushViewController(DevicesViewController(), animated: false)
+    func cancel() {
+        self.extensionContext!.completeRequestReturningItems(nil, completionHandler: nil)
+    }
+
+    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [Client]) {
+        Clients.sendItem(self.sharedItem!, toClients: clients)
+        cancel()
+    }
+    
+    func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) {
+        cancel()
+    }
+    
+    func loginViewControllerDidCancel(loginViewController: LoginViewController) {
+        cancel()
     }
 }
