@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import MobileCoreServices
 
 let LastUsedShareDestinationsKey = "LastUsedShareDestinations"
 
@@ -66,30 +65,6 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     }
     
     //
-
-    func findSharedItem(completionHandler: (ShareItem?, NSError!) -> Void) {
-        if let inputItems : [NSExtensionItem] = self.extensionContext!.inputItems as? [NSExtensionItem] {
-            for inputItem in inputItems {
-                if let attachments = inputItem.attachments as? [NSItemProvider] {
-                    for attachment in attachments {
-                        if attachment.hasItemConformingToTypeIdentifier(kUTTypeURL) {
-                            attachment.loadItemForTypeIdentifier(kUTTypeURL, options: nil, completionHandler: { (obj, err) -> Void in
-                                if err != nil {
-                                    completionHandler(nil, err)
-                                } else {
-                                    let title = inputItem.attributedContentText?.string as String?
-                                    let url = obj as NSURL
-                                    completionHandler(ShareItem(title: title, url: url.absoluteString!, icon: ""), nil)
-                                }
-                            })
-                            return
-                        }
-                    }
-                }
-            }
-        }
-        completionHandler(nil, nil)
-    }
     
     func getLastUsedShareDestinations() -> NSSet {
         if let destinations = NSUserDefaults.standardUserDefaults().objectForKey(LastUsedShareDestinationsKey) as? NSArray {

@@ -4,12 +4,6 @@
 
 import UIKit
 
-struct ShareItem {
-    var title: String?
-    var url: String
-    var icon: String? // TODO: This is just a placeholder until we figure out how to do this.
-}
-
 struct ShareDestination {
     let code: String
     let name: String
