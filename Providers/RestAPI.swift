@@ -5,9 +5,7 @@
 import Foundation
 import AlamoFire
 
-//private let username = "sarentz+syncapi@mozilla.com";
-//private let password = "q1w2e3r4";
-private let BASE_URL = "https://syncapi-dev.sateh.com/1.0/"
+private let BASE_URL = "https://moz-syncapi.sateh.com/1.0/"
 
 enum RequestError {
     case BadAuth
