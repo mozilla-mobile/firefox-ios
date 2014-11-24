@@ -34,10 +34,18 @@
 				<true/>
 			</dict>
 		</dict>
-		<key>NSExtensionMainStoryboard</key>
-		<string>MainInterface</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>InitialViewController</string>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.share-services</string>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>FiraSans-Regular.ttf</string>
+		<string>FiraSans-SemiBold.ttf</string>
+		<string>FiraSans-Light.ttf</string>
+		<string>FiraSans-UltraLight.ttf</string>
+		<string>FiraSans-Medium.ttf</string>
+	</array>
 </dict>
 </plist>

@@ -33,6 +33,14 @@
 		D34F86DB1A1AC35B00331EC4 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34F86DA1A1AC35B00331EC4 /* LoginView.swift */; };
 		D34F86E71A1AC7DD00331EC4 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34F86E61A1AC7DD00331EC4 /* PasswordTextField.swift */; };
 		D34F86E91A1ACD1200331EC4 /* ImageTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34F86E81A1ACD1200331EC4 /* ImageTextField.swift */; };
+		E41A7D431A1BDFD800245963 /* FiraSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E41A7D421A1BDFD800245963 /* FiraSans-Regular.ttf */; };
+		E41A7D441A1BDFD800245963 /* FiraSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E41A7D421A1BDFD800245963 /* FiraSans-Regular.ttf */; };
+		E41A7D481A1BE00100245963 /* FiraMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E41A7D471A1BE00100245963 /* FiraMono-Medium.ttf */; };
+		E41A7D491A1BE00100245963 /* FiraMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E41A7D471A1BE00100245963 /* FiraMono-Medium.ttf */; };
+		E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41A7D4A1A1BE04500245963 /* InitialViewController.swift */; };
+		E41A7D4C1A1BE26000245963 /* FiraSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84B223B1A0914A300AAB793 /* FiraSans-SemiBold.ttf */; };
+		E41A7D4D1A1BE26700245963 /* FiraSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84B223A1A0914A300AAB793 /* FiraSans-Light.ttf */; };
+		E41A7D4E1A1BE26B00245963 /* FiraSans-UltraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F84B223C1A0914A300AAB793 /* FiraSans-UltraLight.ttf */; };
 		E4D6BEA61A092A4700F538BD /* Login.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEA51A092A4700F538BD /* Login.xcassets */; };
 		E4D6BEB21A092D5700F538BD /* Snappy.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E4D6BEAD1A092AD300F538BD /* Snappy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */; };
@@ -72,7 +80,6 @@
 		F8708D2D1A0970B40051AB07 /* SendTo.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = F8708D231A0970990051AB07 /* SendTo.entitlements */; };
 		F8708D2E1A0970B70051AB07 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8708D251A0970990051AB07 /* Images.xcassets */; };
 		F8708D2F1A0970B70051AB07 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F8708D261A0970990051AB07 /* Info.plist */; };
-		F8708D301A0970B70051AB07 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F8708D271A0970990051AB07 /* MainInterface.storyboard */; };
 		F8708D311A0970B70051AB07 /* ShareTo.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = F8708D281A0970990051AB07 /* ShareTo.entitlements */; };
 		F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8708D291A0970990051AB07 /* ShareViewController.swift */; };
 /* End PBXBuildFile section */
@@ -213,6 +220,9 @@
 		D34F86DA1A1AC35B00331EC4 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		D34F86E61A1AC7DD00331EC4 /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		D34F86E81A1ACD1200331EC4 /* ImageTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTextField.swift; sourceTree = "<group>"; };
+		E41A7D421A1BDFD800245963 /* FiraSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Regular.ttf"; sourceTree = "<group>"; };
+		E41A7D471A1BE00100245963 /* FiraMono-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraMono-Medium.ttf"; sourceTree = "<group>"; };
+		E41A7D4A1A1BE04500245963 /* InitialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
 		E4D6BEA51A092A4700F538BD /* Login.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Login.xcassets; sourceTree = "<group>"; };
 		E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Snappy.xcodeproj; path = ThirdParty/Snappy/Snappy.xcodeproj; sourceTree = "<group>"; };
 		E4D6BEB51A092E0300F538BD /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Client.entitlements; sourceTree = "<group>"; };
@@ -257,7 +267,6 @@
 		F8708D231A0970990051AB07 /* SendTo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SendTo.entitlements; sourceTree = "<group>"; };
 		F8708D251A0970990051AB07 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F8708D261A0970990051AB07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F8708D271A0970990051AB07 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		F8708D281A0970990051AB07 /* ShareTo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ShareTo.entitlements; sourceTree = "<group>"; };
 		F8708D291A0970990051AB07 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -547,9 +556,11 @@
 		F84B22391A0914A300AAB793 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				E41A7D421A1BDFD800245963 /* FiraSans-Regular.ttf */,
 				F84B223A1A0914A300AAB793 /* FiraSans-Light.ttf */,
 				F84B223B1A0914A300AAB793 /* FiraSans-SemiBold.ttf */,
 				F84B223C1A0914A300AAB793 /* FiraSans-UltraLight.ttf */,
+				E41A7D471A1BE00100245963 /* FiraMono-Medium.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -578,11 +589,11 @@
 		F8708D241A0970990051AB07 /* ShareTo */ = {
 			isa = PBXGroup;
 			children = (
-				F8708D251A0970990051AB07 /* Images.xcassets */,
-				F8708D261A0970990051AB07 /* Info.plist */,
-				F8708D271A0970990051AB07 /* MainInterface.storyboard */,
-				F8708D281A0970990051AB07 /* ShareTo.entitlements */,
+				E41A7D4A1A1BE04500245963 /* InitialViewController.swift */,
 				F8708D291A0970990051AB07 /* ShareViewController.swift */,
+				F8708D261A0970990051AB07 /* Info.plist */,
+				F8708D281A0970990051AB07 /* ShareTo.entitlements */,
+				F8708D251A0970990051AB07 /* Images.xcassets */,
 			);
 			path = ShareTo;
 			sourceTree = "<group>";
@@ -804,6 +815,7 @@
 			files = (
 				F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */,
 				F84B223D1A0914A300AAB793 /* FiraSans-Light.ttf in Resources */,
+				E41A7D481A1BE00100245963 /* FiraMono-Medium.ttf in Resources */,
 				F84B223E1A0914A300AAB793 /* FiraSans-SemiBold.ttf in Resources */,
 				F84B22161A0910F600AAB793 /* TabsViewControllerHeader.xib in Resources */,
 				F84B220C1A0910F600AAB793 /* Readability.js in Resources */,
@@ -813,6 +825,7 @@
 				F84B22251A09122500AAB793 /* TabBarViewController.xib in Resources */,
 				F84B220E1A0910F600AAB793 /* ReaderViewController.xib in Resources */,
 				F84B22121A0910F600AAB793 /* SettingsViewController.xib in Resources */,
+				E41A7D431A1BDFD800245963 /* FiraSans-Regular.ttf in Resources */,
 				F84B22291A0912C500AAB793 /* Settings.xcassets in Resources */,
 				E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */,
 				F84B221A1A0911B500AAB793 /* BookmarksViewController.xib in Resources */,
@@ -833,9 +846,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8708D2F1A0970B70051AB07 /* Info.plist in Resources */,
-				F8708D301A0970B70051AB07 /* MainInterface.storyboard in Resources */,
+				E41A7D441A1BDFD800245963 /* FiraSans-Regular.ttf in Resources */,
+				E41A7D4C1A1BE26000245963 /* FiraSans-SemiBold.ttf in Resources */,
+				E41A7D491A1BE00100245963 /* FiraMono-Medium.ttf in Resources */,
+				E41A7D4D1A1BE26700245963 /* FiraSans-Light.ttf in Resources */,
 				F8708D311A0970B70051AB07 /* ShareTo.entitlements in Resources */,
 				F8708D2E1A0970B70051AB07 /* Images.xcassets in Resources */,
+				E41A7D4E1A1BE26B00245963 /* FiraSans-UltraLight.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -908,6 +925,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
+				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

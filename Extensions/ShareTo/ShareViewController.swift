@@ -3,200 +3,224 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Social
-import MobileCoreServices
 
-typealias ShareHandler = (url: NSURL, title: String?) -> Void
-typealias ShareDestinationPickerCompletionHandler = (selectedItem: Int) -> Void
-
-let SharedContainerIdentifier = "group.org.allizom.Client" // TODO: Can we grab this from the .entitlements file instead?
-let LastSelectedShareDestinationDefault = "LastSelectedShareDestination"
-
-class ShareDestination {
-    var name: NSString = "";
-    var callback: ShareHandler;
-
-    init(name: NSString, callback: ShareHandler) {
-        self.name = name;
-        self.callback = callback;
-    }
-
-    func share(url: NSURL, title: String?) {
-        callback(url: url, title: title);
-    }
+struct ShareItem {
+    var title: String?
+    var url: String
+    var icon: String? // TODO: This is just a placeholder until we figure out how to do this.
 }
 
-func BookmarkCallback(url: NSURL, title: String?) {
-    NSLog("Share bookmark");
-    let request = NSMutableURLRequest(URL: NSURL(string: "https://moz-syncapi.sateh.com/1.0/bookmarks")!)
-    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-    request.addValue("application/json", forHTTPHeaderField: "Accept")
-    request.HTTPMethod = "POST"
-    
-    var object = NSMutableDictionary()
-    object.setValue(url.absoluteString!, forKey: "url")
-    object.setValue(title != nil ? title! : "", forKey: "title")
-    
-    var jsonError: NSError?
-    let data = NSJSONSerialization.dataWithJSONObject(object, options: nil, error: &jsonError)
-    if data != nil {
-        request.HTTPBody = data
-    }
-    
-    // Login().getKeychainUser(login.getUsername())
-    let credentials = NSURLCredential(user: "sarentz+syncapi@mozilla.com", password: "q1w2e3r4", persistence: .None)
-    let userPasswordString = "\(credentials.user!):\(credentials.password!)"
-    let userPasswordData = userPasswordString.dataUsingEncoding(NSUTF8StringEncoding)
-    let base64EncodedCredential = userPasswordData!.base64EncodedStringWithOptions(nil)
-    let authString = "Basic \(base64EncodedCredential)"
-    
-    let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("com.Client.ShareToFirefox")
-    configuration.HTTPAdditionalHeaders = ["Authorization" : authString]
-    configuration.sharedContainerIdentifier = SharedContainerIdentifier
-    
-    let session = NSURLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
-    let task = session.dataTaskWithRequest(request)
-    task.resume()
+struct ShareDestination {
+    let code: String
+    let name: String
+    let image: String
 }
 
-func ReaderCallback(url: NSURL, title: String?) {
-    NSLog("Share reader");
-    // Not implemented
-}
+// TODO: See if we can do this with an Enum instead. Previous attempts failed because for example NSSet does not take (string) enum values.
+let ShareDestinationBookmarks: NSString = "Bookmarks"
+let ShareDestinationReadingList: NSString = "ReadingList"
 
 let ShareDestinations = [
-    ShareDestination(name: NSLocalizedString("Bookmarks",    comment: ""), callback: BookmarkCallback),
-    ShareDestination(name: NSLocalizedString("Reading List", comment: ""), callback: ReaderCallback)
+    ShareDestination(code: ShareDestinationBookmarks, name: NSLocalizedString("Add to Bookmarks",    comment: ""), image: "bookmarkStar"),
+    ShareDestination(code: ShareDestinationReadingList, name: NSLocalizedString("Add to Reading List", comment: ""), image: "readingList")
 ]
 
-class ShareDestinationPickerViewController: UITableViewController
+protocol ShareControllerDelegate {
+    func shareControllerDidCancel(shareController: ShareDialogController) -> Void
+    func shareController(shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet) -> Void
+}
+
+class ShareDialogController: UIViewController, UITableViewDataSource, UITableViewDelegate
 {
-    var completionHandler: ShareDestinationPickerCompletionHandler?
-    var selectedItem: Int?
+    var delegate: ShareControllerDelegate!
+    var item: ShareItem!
+    var initialShareDestinations: NSSet = NSSet(object: ShareDestinationBookmarks)
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ShareDestinations.count
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel.text = ShareDestinations[indexPath.row].name
-        return cell
-    }
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        completionHandler?(selectedItem: indexPath.row)
-    }
-}
-
-struct SharedBookmark {
-    var url: String
-    var title: String
-}
-
-func findViewInSubviews(view: UIView, test: (UIView) -> Bool) -> UIView? {
-    for v in view.subviews as [UIView] {
-        if test(v) {
-            return v
-        }
-        if let r = findViewInSubviews(v, test) {
-            return r
-        }
-    }
-    return nil
-}
-
-class ShareViewController: SLComposeServiceViewController, NSURLSessionDelegate
-{
-    var selectedItem = 0
-    var logo: UIImageView?
-    
-    func findNavigationBar() -> UINavigationBar? {
-        return findViewInSubviews(view, { (v) -> Bool in
-            return (v as? UINavigationBar) != nil
-        }) as? UINavigationBar
-    }
+    var selectedShareDestinations: NSMutableSet = NSMutableSet()
+    var navBar: UINavigationBar!
+    var navItem: UINavigationItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.tintColor = UIColor.whiteColor()
-        navigationController?.navigationBar.backgroundColor = UIColor.orangeColor()
         
-        if let navigationBar = findNavigationBar() {
-            logo = UIImageView(image: UIImage(named: "flat-logo"))
-            navigationBar.addSubview(logo!)
+        selectedShareDestinations = NSMutableSet(set: initialShareDestinations)
+        
+        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.layer.cornerRadius = 8
+        self.view.clipsToBounds = true
+        
+        // Setup the NavigationBar
+        
+        navBar = UINavigationBar()
+        navBar.setTranslatesAutoresizingMaskIntoConstraints(false)
+        navBar.barTintColor = UIColor.orangeColor()
+        navBar.tintColor = UIColor.whiteColor()
+        navBar.translucent = false
+        self.view.addSubview(navBar)
+        
+        // Setup the NavigationItem
+        
+        navItem = UINavigationItem()
+        navItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
+        navItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "FiraSans-Regular", size: 17.0)!], forState: UIControlState.Normal)
+        
+        navItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: UIBarButtonItemStyle.Done, target: self, action: "add")
+        navItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "FiraSans-SemiBold", size: 17.0)!], forState: UIControlState.Normal)
+        
+        let size = 44.0 * 0.7
+        let logo = UIImageView(frame: CGRect(x: 0, y: 0, width: size, height: size))
+        logo.image = UIImage(named: "flat-logo")
+        logo.contentMode = UIViewContentMode.ScaleAspectFit
+        navItem.titleView = logo
+        
+        navBar.pushNavigationItem(navItem, animated: false)
+        
+        // Setup the title view
+        
+        let titleView = UILabel()
+        titleView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        titleView.numberOfLines = 3
+        titleView.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        titleView.text = item.title
+        titleView.font = UIFont(name: "FiraSans-Medium", size: 12)
+        view.addSubview(titleView)
+        
+        // Setup the link view
+        
+        let linkView = UILabel()
+        linkView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        linkView.numberOfLines = 3
+        linkView.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        linkView.text = item.url
+        linkView.font = UIFont(name: "FiraSans-Light", size: 10)
+        view.addSubview(linkView)
+        
+        // Setup the icon
+        
+        let iconView = UIImageView()
+        iconView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        iconView.image = UIImage(named: "defaultFavicon")
+        view.addSubview(iconView)
+        
+        // Setup the divider
+        
+        let dividerView = UIView()
+        dividerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        dividerView.backgroundColor = UIColor.lightGrayColor()
+        view.addSubview(dividerView)
+        
+        // Setup the table with destinations
+        
+        let tableView = UITableView()
+        tableView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        tableView.separatorInset = UIEdgeInsetsZero
+        tableView.layoutMargins = UIEdgeInsetsZero
+        tableView.userInteractionEnabled = true
+        tableView.delegate = self
+        tableView.allowsSelection = true
+        tableView.dataSource = self
+        tableView.scrollEnabled = false
+        view.addSubview(tableView)
+        
+        // Setup constraints
+        
+        let views = [
+            "nav": navBar,
+            "title": titleView,
+            "link": linkView,
+            "icon": iconView,
+            "divider": dividerView,
+            "table": tableView
+        ]
+        
+        let iconSize = iconView.image!.size.width
+        let leftPadding = item.icon != nil ? iconSize + 16 : 8
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[nav]|",
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[nav]",
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+        
+        if item.icon != nil {
+            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[icon(\(iconSize))]",
+                options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[nav]-8-[icon(\(iconSize))]",
+                options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
         }
         
-        selectedItem = NSUserDefaults.standardUserDefaults().integerForKey(LastSelectedShareDestinationDefault)
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-\(leftPadding)-[title]-8-|",
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[nav]-8-[title]",
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-\(leftPadding)-[link]-8-|",
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[title]-8-[link]",
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[divider]|",
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[divider(0.5)]",
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[link]-8-[divider]",
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+        
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[table]|",
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[divider][table]",
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[table(88)]|",
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if logo != nil {
-            let navigationBar: UINavigationBar = view.subviews[2].subviews[2] as UINavigationBar
-            if navigationBar.frame.height < 44 { // TODO: Is there a better way to detect the smaller navigation bar?
-                logo?.frame = CGRect(x: (navigationBar.frame.width/2)-16, y: 4, width: 24, height: 24)
-            } else {
-                logo?.frame = CGRect(x: (navigationBar.frame.width/2)-16, y: 6, width: 32, height: 32)
-            }
-            logo?.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin
-        }
+    // UITabBarItem Actions that map to our delegate methods
+    
+    func cancel() {
+        delegate?.shareControllerDidCancel(self)
     }
     
-    override func isContentValid() -> Bool {
-        return true
+    func add() {
+        delegate?.shareController(self, didShareItem: item, toDestinations: NSSet(set: selectedShareDestinations))
     }
     
-    func fetchSharedURL(completionHandler: (NSURL!, String?, NSError!) -> Void) {
-        var title : String? = nil;
+    // UITableView Delegate and DataSource
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return ShareDestinations.count
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 44
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = UITableViewCell()
+        cell.textLabel.textColor = UIColor(red:0.733, green:0.729, blue:0.757, alpha:1.000)
+        cell.textLabel.font = UIFont(name: "FiraSans-Regular", size: 17)
+        cell.imageView.transform = CGAffineTransformMakeScale(0.5, 0.5)
+        cell.accessoryType = selectedShareDestinations.containsObject(ShareDestinations[indexPath.row].code) ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
+        cell.tintColor = UIColor(red:0.427, green:0.800, blue:0.102, alpha:1.0)
+        cell.layoutMargins = UIEdgeInsetsZero
+        cell.textLabel.text = ShareDestinations[indexPath.row].name
+        cell.imageView.image = UIImage(named: ShareDestinations[indexPath.row].image)
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
 
-        if let inputItems : [NSExtensionItem] = self.extensionContext!.inputItems as? [NSExtensionItem] {
-            let item = inputItems[0]
-            title = item.attributedContentText?.string as String?
-            if let attachments = item.attachments as? [NSItemProvider] {
-                attachments[0].loadItemForTypeIdentifier(kUTTypeURL as NSString, options:nil, completionHandler: { (obj, error) in
-                    completionHandler(obj as? NSURL, title, error)
-                })
-            }
+        let code = ShareDestinations[indexPath.row].code
+        if selectedShareDestinations.containsObject(code) {
+            selectedShareDestinations.removeObject(code)
+        } else {
+            selectedShareDestinations.addObject(code)
         }
-    }
-    
-//    override func didSelectPost() {
-//        let accountManager = AccountManager()
-////      if login.isLoggedIn() {
-//        fetchSharedURL({ (url, title, error) -> Void in
-//            if url != nil {
-//                let dest : ShareDestination = ShareDestinations[self.selectedItem];
-//                dest.share(url, title: title);
-//                self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
-//            }
-//        })
-////      }
-//    }
-
-    override func configurationItems() -> [AnyObject]! {
-        var item = SLComposeSheetConfigurationItem();
-        item.title = "Send to";
-        item.value = ShareDestinations[selectedItem].name;
-        item.tapHandler = {
-            let vc = ShareDestinationPickerViewController()
-            vc.completionHandler = { (selectedItem:Int) -> Void in
-                NSUserDefaults.standardUserDefaults().setInteger(selectedItem, forKey: LastSelectedShareDestinationDefault)
-                self.selectedItem = selectedItem
-                item.value = ShareDestinations[selectedItem].name;
-                self.reloadConfigurationItems()
-                self.popConfigurationViewController()
-            }
-            self.pushConfigurationViewController(vc)
-        }
-        return [item]
-    }
-    
-    override func loadPreviewView() -> UIView! {
-        return nil
+        tableView.reloadData()
+        
+        navItem.rightBarButtonItem?.enabled = (selectedShareDestinations.count != 0)
     }
 }
