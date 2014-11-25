@@ -6,32 +6,6 @@ import UIKit
 import XCTest
 
 class ClientTests: XCTestCase {
-    
-    func testBookmarks() {
-        var expectation = expectationWithDescription("asynchronous request")
-
-        var accountManager = AccountManager(
-            loginCallback: { account in
-            },
-            logoutCallback: {
-        });
-        
-        if let account = accountManager.getAccount() {
-            account.bookmarks.getAll({ (response: [Bookmark]) in
-                XCTAssert(response.count > 0, "Found some bookmarks");
-                for bookmark in response {
-                    XCTAssert(bookmark.url != "", "Bookmarks has url \(bookmark.url)");
-                    XCTAssert(bookmark.title != "", "Bookmarks has title  \(bookmark.title)");
-                }
-                expectation.fulfill()
-            }, error: { (err: RequestError) -> Void in
-                XCTAssertTrue(false, "Should not have failed to get bookmarks \(err)");
-            });
-        }
-
-        waitForExpectationsWithTimeout(10.0, handler:nil)
-    }
-    
     func testFavicons() {
         var fav : Favicons = BasicFavicons();
         var url = NSURL(string: "http://www.example.com");

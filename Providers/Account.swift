@@ -4,11 +4,13 @@
 
 import Foundation
 
-class Account {
-    private let credential: NSURLCredential
-    private let logoutCallback: () -> ()
+typealias LogoutCallback = (account: Account) -> ()
 
-    init(credential: NSURLCredential, logoutCallback: () -> ()) {
+class Account {
+    let credential: NSURLCredential
+    private let logoutCallback: LogoutCallback
+
+    init(credential: NSURLCredential, logoutCallback: LogoutCallback) {
         self.credential = credential
         self.logoutCallback = logoutCallback
     }
@@ -27,7 +29,7 @@ class Account {
     }
 
     func logout() {
-        logoutCallback()
+        logoutCallback(account: self)
     }
 
     lazy var bookmarks: Bookmarks = {
