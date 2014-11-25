@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import MobileCoreServices
 
 let LastUsedShareDestinationsKey = "LastUsedShareDestinations"
 
@@ -23,13 +22,13 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     {
         super.viewDidAppear(animated)
         
-        findSharedItem { (item, error) -> Void in
+        ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
             if error == nil && item != nil {
                 self.presentShareDialog(item!)
             } else {
                 self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
             }
-        }
+        })
     }
     
     //
@@ -44,7 +43,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate
         })
     }
 
-    func shareController(shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet)
+    func shareController(shareController: ShareDialogController, didShareItem item: ExtensionUtils.ShareItem, toDestinations destinations: NSSet)
     {
         setLastUsedShareDestinations(destinations)
         
@@ -66,30 +65,6 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     }
     
     //
-
-    func findSharedItem(completionHandler: (ShareItem?, NSError!) -> Void) {
-        if let inputItems : [NSExtensionItem] = self.extensionContext!.inputItems as? [NSExtensionItem] {
-            for inputItem in inputItems {
-                if let attachments = inputItem.attachments as? [NSItemProvider] {
-                    for attachment in attachments {
-                        if attachment.hasItemConformingToTypeIdentifier(kUTTypeURL) {
-                            attachment.loadItemForTypeIdentifier(kUTTypeURL, options: nil, completionHandler: { (obj, err) -> Void in
-                                if err != nil {
-                                    completionHandler(nil, err)
-                                } else {
-                                    let title = inputItem.attributedContentText?.string as String?
-                                    let url = obj as NSURL
-                                    completionHandler(ShareItem(title: title, url: url.absoluteString!, icon: ""), nil)
-                                }
-                            })
-                            return
-                        }
-                    }
-                }
-            }
-        }
-        completionHandler(nil, nil)
-    }
     
     func getLastUsedShareDestinations() -> NSSet {
         if let destinations = NSUserDefaults.standardUserDefaults().objectForKey(LastUsedShareDestinationsKey) as? NSArray {
@@ -103,7 +78,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate
         NSUserDefaults.standardUserDefaults().synchronize()
     }
     
-    func presentShareDialog(item: ShareItem) {
+    func presentShareDialog(item: ExtensionUtils.ShareItem) {
         shareDialogController = ShareDialogController()
         shareDialogController.delegate = self
         shareDialogController.item = item
@@ -146,11 +121,11 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     
     //
     
-    func shareToReadingList(item: ShareItem) {
+    func shareToReadingList(item: ExtensionUtils.ShareItem) {
         // TODO: Discuss how to share to the (local) reading list
     }
     
-    func shareToBookmarks(item: ShareItem) {
+    func shareToBookmarks(item: ExtensionUtils.ShareItem) {
         // TODO: Discuss how to share to bookmarks
     }
 }

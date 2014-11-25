@@ -33,10 +33,14 @@
 			<key>NSExtensionActivationRule</key>
 			<string>TRUEPREDICATE</string>
 		</dict>
-		<key>NSExtensionMainStoryboard</key>
-		<string>MainInterface</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>ActionViewController</string>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.ui-services</string>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>FiraSans-Regular.ttf</string>
+	</array>
 </dict>
 </plist>
