@@ -48,7 +48,6 @@ class AccountManager: NSObject {
     // to really log out. Using "None" as persistence should fix this -- why doesn't it?
     func login(username: String, password: String, error: ((error: RequestError) -> ())) {
         let credential = NSURLCredential(user: username, password: password, persistence: .None)
-
         RestAPI.sendRequest(
             credential,
             // TODO: this should use a different request
@@ -56,7 +55,7 @@ class AccountManager: NSObject {
             success: { _ in
                 println("Logged in as user \(username)")
                 self.setKeychainUser(username, password: password)
-                let account = Account(credential: credential, { (account: Account) -> Void in
+                let account = Account(credential: credential, { account in
                     self.removeKeychain(username)
                     self.userDefaults.removeObjectForKey(KeyUsername)
                     self.userDefaults.setObject(false, forKey: KeyLoggedIn)

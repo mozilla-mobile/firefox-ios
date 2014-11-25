@@ -4,8 +4,9 @@
 
 import UIKit
 
-class HistoryViewController: UIViewController {
+class HistoryViewController: UIViewController, ToolbarViewProtocol {
 
+    var account : Account!
     override func viewDidLoad() {
         super.viewDidLoad()
 

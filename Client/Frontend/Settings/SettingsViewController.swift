@@ -4,7 +4,7 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate
+class SettingsViewController: UIViewController, ToolbarViewProtocol, UITableViewDataSource, UITableViewDelegate
 {
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -13,6 +13,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var signOutButton: UIButton!
 
     var account: Account!
+
+    let SETTING_CELL_ID = "SETTING_CELL_ID"
+
+    lazy var panels: Panels = {
+        return Panels(account: self.account)
+    }()
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
@@ -27,7 +33,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         settingsTableView.separatorStyle = UITableViewCellSeparatorStyle.None
         settingsTableView.separatorInset = UIEdgeInsetsZero
         settingsTableView.editing = true
+        settingsTableView.allowsSelectionDuringEditing = true
+        
         settingsTableView.backgroundColor = view.backgroundColor
+        settingsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: SETTING_CELL_ID)
         
         signOutButton.layer.borderColor = UIColor.whiteColor().CGColor
         signOutButton.layer.borderWidth = 1.0
@@ -39,30 +48,41 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func didClickLogout() {
         account.logout()
     }
-    
+
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+
+    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        if let sw = cell?.editingAccessoryView as? UISwitch {
+            sw.setOn(!sw.on, animated: true)
+            panels.enablePanelAt(sw.on, position: indexPath.item)
+        }
+
+        return indexPath;
     }
     
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Subtract one so that we don't show our own panel
+        return panels.count - 1;
+    }
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+        let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(SETTING_CELL_ID, forIndexPath: indexPath) as UITableViewCell
         
-        let labels = ["Tabs", "History", "Bookmarks", "Reader"]
-        
-        cell.textLabel.text = labels[indexPath.row]
-        cell.textLabel.font = UIFont(name: "FiraSans-Light", size: cell.textLabel.font.pointSize)
-        cell.textLabel.textColor = UIColor.whiteColor()
-        cell.backgroundColor = self.view.backgroundColor
-        cell.separatorInset = UIEdgeInsetsZero
-        
-        let switsch: UISwitch = UISwitch()
-        switsch.on = (indexPath.row != 1)
-        cell.editingAccessoryView = switsch
-        
+        if var item = panels[indexPath.item] {
+            cell.textLabel.text = item.title
+            cell.textLabel.font = UIFont(name: "FiraSans-Light", size: cell.textLabel.font.pointSize)
+            cell.textLabel.textColor = UIColor.whiteColor()
+            cell.backgroundColor = self.view.backgroundColor
+            cell.separatorInset = UIEdgeInsetsZero
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            
+            let toggle: UISwitch = UISwitch()
+            toggle.on = item.enabled;
+            cell.editingAccessoryView = toggle
+        }
         return cell
     }
     
@@ -75,6 +95,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        panels.moveItem(sourceIndexPath.item, to: destinationIndexPath.item)
+        settingsTableView.setNeedsDisplay();
     }
     
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {

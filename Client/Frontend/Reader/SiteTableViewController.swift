@@ -4,10 +4,10 @@
 
 import UIKit
 
-class SiteTableViewController: UITableViewController
-{
+class SiteTableViewController: UITableViewController {
     // TODO: Move this to the authenticator when its available.
     var favicons: Favicons = BasicFavicons();
+    var account: Account!
     
     private var sites = [
         Site(title:"Royals Sweep Orioles to Advance to World Series", url:"http://www.nytimes.com/2014/10/16/sports/baseball/royals-keep-rolling-and-advance-to-the-world-series.html?hp&action=click&pgtype=Homepage&version=LargeMediaHeadlineSum&module=photo-spot-region&region=top-news&WT.nav=top-news&_r=0"),
