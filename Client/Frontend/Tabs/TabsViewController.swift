@@ -7,6 +7,9 @@ import Alamofire
 
 class TabsViewController: UITableViewController
 {
+    private var TABS_HEADER_IDENTIFIER = "TABS_HEADER"
+    private var TABS_CELL_IDENTIFIER = "TABS_CELL"
+
     var tabsResponse: TabsResponse?
     // TODO: Move this to the authenticator when its available.
     var favicons: Favicons = BasicFavicons();
@@ -18,9 +21,13 @@ class TabsViewController: UITableViewController
         
         tableView.sectionFooterHeight = 0
         //tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: TABS_CELL_IDENTIFIER);
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+
+        let nib = UINib(nibName: "TabsViewControllerHeader", bundle: nil);
+        tableView.registerNib(nib, forHeaderFooterViewReuseIdentifier: TABS_HEADER_IDENTIFIER)
     }
 
     func reloadData() {
@@ -60,7 +67,7 @@ class TabsViewController: UITableViewController
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+        let cell : UITableViewCell = tableView.dequeueReusableCellWithIdentifier(TABS_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell
 
         if let tab = tabsResponse?.clients[indexPath.section].tabs[indexPath.row] {
             // TODO: We need better async image loading here
@@ -88,9 +95,8 @@ class TabsViewController: UITableViewController
     }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let objects = UINib(nibName: "TabsViewControllerHeader", bundle: nil).instantiateWithOwner(nil, options: nil)
-        let view = objects[0] as? UIView
-        
+        let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(TABS_HEADER_IDENTIFIER) as? UIView
+    
         if let label = view?.viewWithTag(1) as? UILabel {
             if let response = tabsResponse {
                 let client = response.clients[section]
