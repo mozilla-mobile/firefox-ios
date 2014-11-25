@@ -123,19 +123,19 @@ Depending on whether the user is logged in or not, this viewcontroller will pres
 class ActionViewController: UINavigationController, ClientPickerViewControllerDelegate, LoginViewControllerDelegate
 {
     var account: Account?
-    var sharedItem: ShareItem?
+    var sharedItem: ExtensionUtils.ShareItem?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        findSharedItem { (item, error) -> Void in
+        ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
             if error == nil && item != nil {
                 self.sharedItem = item
                 
                 let accountManager = AccountManager(loginCallback: { (account) -> () in
                     return
-                }, logoutCallback: { () -> () in
-                    return
+                    }, logoutCallback: { () -> () in
+                        return
                 })
                 
                 self.account = accountManager.getAccount()
@@ -152,7 +152,7 @@ class ActionViewController: UINavigationController, ClientPickerViewControllerDe
             } else {
                 self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
             }
-        }
+        })
     }
 
     func cancel() {

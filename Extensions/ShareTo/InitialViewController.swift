@@ -22,13 +22,13 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     {
         super.viewDidAppear(animated)
         
-        findSharedItem { (item, error) -> Void in
+        ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
             if error == nil && item != nil {
                 self.presentShareDialog(item!)
             } else {
                 self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
             }
-        }
+        })
     }
     
     //
@@ -43,7 +43,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate
         })
     }
 
-    func shareController(shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet)
+    func shareController(shareController: ShareDialogController, didShareItem item: ExtensionUtils.ShareItem, toDestinations destinations: NSSet)
     {
         setLastUsedShareDestinations(destinations)
         
@@ -78,7 +78,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate
         NSUserDefaults.standardUserDefaults().synchronize()
     }
     
-    func presentShareDialog(item: ShareItem) {
+    func presentShareDialog(item: ExtensionUtils.ShareItem) {
         shareDialogController = ShareDialogController()
         shareDialogController.delegate = self
         shareDialogController.item = item
@@ -121,11 +121,11 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     
     //
     
-    func shareToReadingList(item: ShareItem) {
+    func shareToReadingList(item: ExtensionUtils.ShareItem) {
         // TODO: Discuss how to share to the (local) reading list
     }
     
-    func shareToBookmarks(item: ShareItem) {
+    func shareToBookmarks(item: ExtensionUtils.ShareItem) {
         // TODO: Discuss how to share to bookmarks
     }
 }

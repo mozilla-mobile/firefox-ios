@@ -52,10 +52,10 @@
 		E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDE21A23A6F900B794D3 /* Clients.swift */; };
 		E42CCDEF1A23C84700B794D3 /* FiraSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E41A7D421A1BDFD800245963 /* FiraSans-Regular.ttf */; };
 		E42CCDF01A23C8FC00B794D3 /* Snappy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D6BEAD1A092AD300F538BD /* Snappy.framework */; };
-		E42CCDF21A23CE5C00B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDF11A23CE5C00B794D3 /* ExtensionUtils.swift */; };
-		E42CCDF31A23CE5C00B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDF11A23CE5C00B794D3 /* ExtensionUtils.swift */; };
-		E42CCDF41A23CE5C00B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDF11A23CE5C00B794D3 /* ExtensionUtils.swift */; };
-		E42CCDF51A23CFC700B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDF11A23CE5C00B794D3 /* ExtensionUtils.swift */; };
+		E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
+		E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
+		E42CCE031A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
+		E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E4D6BEA61A092A4700F538BD /* Login.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEA51A092A4700F538BD /* Login.xcassets */; };
 		E4D6BEB21A092D5700F538BD /* Snappy.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E4D6BEAD1A092AD300F538BD /* Snappy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */; };
@@ -241,7 +241,7 @@
 		E41A7D471A1BE00100245963 /* FiraMono-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraMono-Medium.ttf"; sourceTree = "<group>"; };
 		E41A7D4A1A1BE04500245963 /* InitialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
 		E42CCDE21A23A6F900B794D3 /* Clients.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clients.swift; sourceTree = "<group>"; };
-		E42CCDF11A23CE5C00B794D3 /* ExtensionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUtils.swift; sourceTree = SOURCE_ROOT; };
+		E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUtils.swift; sourceTree = "<group>"; };
 		E4D6BEA51A092A4700F538BD /* Login.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Login.xcassets; sourceTree = "<group>"; };
 		E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Snappy.xcodeproj; path = ThirdParty/Snappy/Snappy.xcodeproj; sourceTree = "<group>"; };
 		E4D6BEB51A092E0300F538BD /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Client.entitlements; sourceTree = "<group>"; };
@@ -385,6 +385,14 @@
 			path = Providers;
 			sourceTree = "<group>";
 		};
+		E42CCDFF1A24C4E300B794D3 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		E4D6BEA81A092AD300F538BD /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -409,6 +417,7 @@
 				F84B21C01A090F8100AAB793 /* Client */,
 				F84B21D61A090F8100AAB793 /* ClientTests */,
 				F8708D1E1A0970990051AB07 /* Extensions */,
+				E42CCDFF1A24C4E300B794D3 /* Utils */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -541,7 +550,6 @@
 		F84B21FE1A0910F600AAB793 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				E42CCDF11A23CE5C00B794D3 /* ExtensionUtils.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -906,7 +914,6 @@
 				28CE83C81A1D1D3200576538 /* SyncMeta.swift in Sources */,
 				D34DC8561A16C40C00D49B7B /* Cursor.swift in Sources */,
 				28CE83C61A1D1D3200576538 /* KeysPayload.swift in Sources */,
-				E42CCDF21A23CE5C00B794D3 /* ExtensionUtils.swift in Sources */,
 				D34DC8541A16C40C00D49B7B /* AccountManager.swift in Sources */,
 				D34DC8571A16C40C00D49B7B /* Favicons.swift in Sources */,
 				28CE83C41A1D1D3200576538 /* ClientPayload.swift in Sources */,
@@ -927,6 +934,7 @@
 				28CE84301A1E571900576538 /* json.swift in Sources */,
 				F84B221D1A0911BF00AAB793 /* HistoryViewController.swift in Sources */,
 				F84B220D1A0910F600AAB793 /* ReaderViewController.swift in Sources */,
+				E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				F84B22201A0911D400AAB793 /* LoginViewController.swift in Sources */,
 				F84B22131A0910F600AAB793 /* Tabs.swift in Sources */,
 			);
@@ -939,10 +947,10 @@
 				D34DC8641A16C49600D49B7B /* Cursor.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */,
-				E42CCDF51A23CFC700B794D3 /* ExtensionUtils.swift in Sources */,
 				D34DC8661A16C49600D49B7B /* RestAPI.swift in Sources */,
 				D34DC8611A16C47300D49B7B /* Account.swift in Sources */,
 				D34DC8621A16C49600D49B7B /* AccountManager.swift in Sources */,
+				E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				D34DC8651A16C49600D49B7B /* Favicons.swift in Sources */,
 				D34DC8631A16C49600D49B7B /* Bookmarks.swift in Sources */,
 			);
@@ -952,7 +960,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E42CCDF31A23CE5C00B794D3 /* ExtensionUtils.swift in Sources */,
+				E42CCE031A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
 			);
@@ -969,8 +977,8 @@
 				E42CCDED1A23A76800B794D3 /* Favicons.swift in Sources */,
 				E42CCDE81A23A73D00B794D3 /* Account.swift in Sources */,
 				E42CCDEC1A23A76400B794D3 /* Cursor.swift in Sources */,
-				E42CCDF41A23CE5C00B794D3 /* ExtensionUtils.swift in Sources */,
 				E4F21A891A1267B500B0FAAA /* (null) in Sources */,
+				E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				F8708D2A1A0970B40051AB07 /* ActionViewController.swift in Sources */,
 				E42CCDE71A23A73800B794D3 /* Clients.swift in Sources */,
 			);

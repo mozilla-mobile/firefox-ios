@@ -58,7 +58,7 @@ class Clients: NSObject {
         return resp;
     }
 
-    class func sendItem(item: ShareItem, toClients clients: [Client]) {
+    class func sendItem(item: ExtensionUtils.ShareItem, toClients clients: [Client]) {
         for client in clients {
             println("TODO Sending \(item.url) to \(client.name)")
         }
