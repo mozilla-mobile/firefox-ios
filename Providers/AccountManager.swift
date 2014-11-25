@@ -24,9 +24,9 @@ class AccountManager: NSObject {
             return nil
         }
 
-        if let user = getUsername() {
-            let credential = getKeychainUser(user)
-            return Account(credential: credential, self.logoutCallback)
+        if let username = getUsername() {
+            let credential = getKeychainUser(username)
+            return getAccount(credential)
         }
 
         return nil
@@ -56,16 +56,25 @@ class AccountManager: NSObject {
             success: { _ in
                 println("Logged in as user \(username)")
                 self.setKeychainUser(username, password: password)
-                let account = Account(credential: credential, { (account: Account) -> Void in
-                    self.removeKeychain(username)
-                    self.userDefaults.removeObjectForKey(KeyUsername)
-                    self.userDefaults.setObject(false, forKey: KeyLoggedIn)
-                    self.logoutCallback(account: account)
-                })
+                let account = self.getAccount(credential)
                 self.loginCallback(account: account)
             },
             error: error
         )
+    }
+
+    private func getAccount(credential: NSURLCredential) -> Account {
+        return Account(credential: credential, logoutCallback: { account in
+            // Remove this user from the keychain, regardless of whether the account is actually logged in.
+            self.removeKeychain(credential.user!)
+
+            // If the username is the active account, log out.
+            if credential.user! == self.getUsername() {
+                self.userDefaults.removeObjectForKey(KeyUsername)
+                self.userDefaults.setObject(false, forKey: KeyLoggedIn)
+                self.logoutCallback(account: account)
+            }
+        })
     }
 
     func getKeychainUser(username: NSString) -> NSURLCredential {
