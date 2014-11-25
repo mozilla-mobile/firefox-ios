@@ -4,12 +4,6 @@
 
 import UIKit
 
-struct ShareItem {
-    var title: String?
-    var url: String
-    var icon: String? // TODO: This is just a placeholder until we figure out how to do this.
-}
-
 struct ShareDestination {
     let code: String
     let name: String
@@ -27,13 +21,13 @@ let ShareDestinations = [
 
 protocol ShareControllerDelegate {
     func shareControllerDidCancel(shareController: ShareDialogController) -> Void
-    func shareController(shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet) -> Void
+    func shareController(shareController: ShareDialogController, didShareItem item: ExtensionUtils.ShareItem, toDestinations destinations: NSSet) -> Void
 }
 
 class ShareDialogController: UIViewController, UITableViewDataSource, UITableViewDelegate
 {
     var delegate: ShareControllerDelegate!
-    var item: ShareItem!
+    var item: ExtensionUtils.ShareItem!
     var initialShareDestinations: NSSet = NSSet(object: ShareDestinationBookmarks)
     
     var selectedShareDestinations: NSMutableSet = NSMutableSet()
