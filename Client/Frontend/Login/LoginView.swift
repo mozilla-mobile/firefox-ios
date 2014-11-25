@@ -101,6 +101,7 @@ class LoginView: UIView {
         userText.placeholder = "Email address"
         userText.layer.borderColor = UIColor.whiteColor().CGColor
         userText.layer.borderWidth = 1
+        userText.keyboardType = UIKeyboardType.EmailAddress
         addSubview(userText)
         userText.snp_makeConstraints { make in
             make.top.equalTo(label105.snp_bottom).offset(40)
