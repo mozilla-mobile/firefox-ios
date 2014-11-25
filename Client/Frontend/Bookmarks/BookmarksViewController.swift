@@ -21,6 +21,10 @@ func createMockFavicon(icon: UIImage) -> UIImage {
 class BookmarksViewController: UITableViewController
 {
     var account: Account!
+
+    private let BOOKMARK_CELL_IDENTIFIER = "BOOKMARK_CELL"
+    private let BOOKMARK_HEADER_IDENTIFIER = "BOOKMARK_HEADER"
+
     var bookmarks: [Bookmark] = [];
     // TODO: Move this to the authenticator when its available.
     let favicons: Favicons = BasicFavicons();
@@ -31,6 +35,9 @@ class BookmarksViewController: UITableViewController
         
         tableView.sectionFooterHeight = 0
         //tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: BOOKMARK_CELL_IDENTIFIER)
+        let nib = UINib(nibName: "TabsViewControllerHeader", bundle: nil);
+        tableView.registerNib(nib, forHeaderFooterViewReuseIdentifier: BOOKMARK_HEADER_IDENTIFIER)
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
@@ -69,8 +76,8 @@ class BookmarksViewController: UITableViewController
     
     private let FAVICON_SIZE = 32;
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-
+        let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(BOOKMARK_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell;
+        
         if let image = (UIImage(named: "leaf.png")) {
             cell.imageView.image = createMockFavicon(image)
         }
@@ -100,8 +107,7 @@ class BookmarksViewController: UITableViewController
     }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let objects = UINib(nibName: "TabsViewControllerHeader", bundle: nil).instantiateWithOwner(nil, options: nil)
-        let view = objects[0] as? UIView
+        let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(BOOKMARK_HEADER_IDENTIFIER) as? UIView;
         
         if let label = view?.viewWithTag(1) as? UILabel {
             label.text = "Recent Bookmarks"
