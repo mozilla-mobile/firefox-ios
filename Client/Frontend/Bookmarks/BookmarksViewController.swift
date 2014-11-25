@@ -18,8 +18,7 @@ func createMockFavicon(icon: UIImage) -> UIImage {
     return image
 }
 
-class BookmarksViewController: UITableViewController
-{
+class BookmarksViewController: UITableViewController {
     var account: Account!
 
     private let BOOKMARK_CELL_IDENTIFIER = "BOOKMARK_CELL"
@@ -29,8 +28,7 @@ class BookmarksViewController: UITableViewController
     // TODO: Move this to the authenticator when its available.
     let favicons: Favicons = BasicFavicons();
     
-    override func viewDidLoad()
-    {
+    override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.sectionFooterHeight = 0

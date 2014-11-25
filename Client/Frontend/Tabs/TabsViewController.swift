@@ -10,6 +10,7 @@ class TabsViewController: UITableViewController
     private var TABS_HEADER_IDENTIFIER = "TABS_HEADER"
     private var TABS_CELL_IDENTIFIER = "TABS_CELL"
 
+    var account: Account!
     var tabsResponse: TabsResponse?
     // TODO: Move this to the authenticator when its available.
     var favicons: Favicons = BasicFavicons();

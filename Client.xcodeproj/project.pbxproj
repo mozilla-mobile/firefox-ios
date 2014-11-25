@@ -7,8 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B9E3DE71A23FBD1008A7877 /* TestPanels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */; };
 		0BA8964B1A250E6500C1010C /* AccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA896491A250E6500C1010C /* AccountTest.swift */; };
 		0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA8964A1A250E6500C1010C /* TestBookmarks.swift */; };
+		0BD19A5F1A2530320084FBA7 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22221A09122500AAB793 /* TabBarViewController.swift */; };
+		0BD19A631A2530740084FBA7 /* Panels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DD91A23FBBC008A7877 /* Panels.swift */; };
+		0BD19A641A2530750084FBA7 /* Panels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DD91A23FBBC008A7877 /* Panels.swift */; };
+		0BD19A651A2530840084FBA7 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
+		0BD19A671A25309B0084FBA7 /* AccountPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* AccountPrefs.swift */; };
+		0BD19A681A2530A40084FBA7 /* AccountPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* AccountPrefs.swift */; };
+		0BD19A691A2530B60084FBA7 /* BookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22171A0911B500AAB793 /* BookmarksViewController.swift */; };
+		0BD19A6A1A2530BB0084FBA7 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B221B1A0911BF00AAB793 /* HistoryViewController.swift */; };
+		0BD19A6B1A2530C20084FBA7 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21FA1A0910F600AAB793 /* SiteTableViewController.swift */; };
+		0BD19A6C1A2530C60084FBA7 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21F91A0910F600AAB793 /* Site.swift */; };
+		0BD19A6D1A2530C80084FBA7 /* ReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21F71A0910F600AAB793 /* ReaderViewController.swift */; };
+		0BD19A6E1A2530CE0084FBA7 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21FC1A0910F600AAB793 /* SettingsViewController.swift */; };
+		0BD19A6F1A2530D30084FBA7 /* TabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22011A0910F600AAB793 /* TabsViewController.swift */; };
+		0BD19A701A2530DE0084FBA7 /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22001A0910F600AAB793 /* Tabs.swift */; };
 		0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108351A1B1EC700D4B712 /* TestLocking.swift */; };
 		0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		28CE83C21A1D1D3200576538 /* FxAClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83B81A1D1D3200576538 /* FxAClient.swift */; };
@@ -219,8 +234,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0B9E3DD91A23FBBC008A7877 /* Panels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Panels.swift; sourceTree = "<group>"; };
+		0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPanels.swift; sourceTree = "<group>"; };
 		0BA896491A250E6500C1010C /* AccountTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTest.swift; sourceTree = "<group>"; };
 		0BA8964A1A250E6500C1010C /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
+		0BD19A661A25309B0084FBA7 /* AccountPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountPrefs.swift; sourceTree = "<group>"; };
 		0BE108351A1B1EC700D4B712 /* TestLocking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLocking.swift; sourceTree = "<group>"; };
 		0BE108391A1B1ED200D4B712 /* Locking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locking.swift; sourceTree = "<group>"; };
 		28CE83B81A1D1D3200576538 /* FxAClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAClient.swift; sourceTree = "<group>"; };
@@ -380,6 +398,8 @@
 		D34DC84C1A16C40C00D49B7B /* Providers */ = {
 			isa = PBXGroup;
 			children = (
+				0BD19A661A25309B0084FBA7 /* AccountPrefs.swift */,
+				0B9E3DD91A23FBBC008A7877 /* Panels.swift */,
 				D34DC84D1A16C40C00D49B7B /* Account.swift */,
 				D34DC84E1A16C40C00D49B7B /* AccountManager.swift */,
 				D34DC84F1A16C40C00D49B7B /* Bookmarks.swift */,
@@ -458,6 +478,7 @@
 				0BA896491A250E6500C1010C /* AccountTest.swift */,
 				0BA8964A1A250E6500C1010C /* TestBookmarks.swift */,
 				0BE108351A1B1EC700D4B712 /* TestLocking.swift */,
+				0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */,
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
 				F84B21D71A090F8100AAB793 /* Supporting Files */,
 			);
@@ -924,9 +945,11 @@
 				28CE83C61A1D1D3200576538 /* KeysPayload.swift in Sources */,
 				D34DC8541A16C40C00D49B7B /* AccountManager.swift in Sources */,
 				D34DC8571A16C40C00D49B7B /* Favicons.swift in Sources */,
+				0BD19A631A2530740084FBA7 /* Panels.swift in Sources */,
 				28CE83C41A1D1D3200576538 /* ClientPayload.swift in Sources */,
 				28CE83C21A1D1D3200576538 /* FxAClient.swift in Sources */,
 				D34DC8581A16C40C00D49B7B /* RestAPI.swift in Sources */,
+				0BD19A651A2530840084FBA7 /* Locking.swift in Sources */,
 				D34F86E91A1ACD1200331EC4 /* ImageTextField.swift in Sources */,
 				E42CCDE31A23A6F900B794D3 /* Clients.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
@@ -940,6 +963,7 @@
 				D34F86DB1A1AC35B00331EC4 /* LoginView.swift in Sources */,
 				D34DC8551A16C40C00D49B7B /* Bookmarks.swift in Sources */,
 				28CE84301A1E571900576538 /* json.swift in Sources */,
+				0BD19A671A25309B0084FBA7 /* AccountPrefs.swift in Sources */,
 				F84B221D1A0911BF00AAB793 /* HistoryViewController.swift in Sources */,
 				F84B220D1A0910F600AAB793 /* ReaderViewController.swift in Sources */,
 				E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
@@ -952,18 +976,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BD19A691A2530B60084FBA7 /* BookmarksViewController.swift in Sources */,
 				D34DC8641A16C49600D49B7B /* Cursor.swift in Sources */,
 				0BA8964B1A250E6500C1010C /* AccountTest.swift in Sources */,
+				0BD19A701A2530DE0084FBA7 /* Tabs.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */,
 				D34DC8661A16C49600D49B7B /* RestAPI.swift in Sources */,
 				D34DC8611A16C47300D49B7B /* Account.swift in Sources */,
+				0BD19A6C1A2530C60084FBA7 /* Site.swift in Sources */,
 				D34DC8621A16C49600D49B7B /* AccountManager.swift in Sources */,
+				0BD19A6B1A2530C20084FBA7 /* SiteTableViewController.swift in Sources */,
 				E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
+				0B9E3DE71A23FBD1008A7877 /* TestPanels.swift in Sources */,
 				D34DC8651A16C49600D49B7B /* Favicons.swift in Sources */,
+				0BD19A6D1A2530C80084FBA7 /* ReaderViewController.swift in Sources */,
+				0BD19A641A2530750084FBA7 /* Panels.swift in Sources */,
+				0BD19A6E1A2530CE0084FBA7 /* SettingsViewController.swift in Sources */,
+				0BD19A681A2530A40084FBA7 /* AccountPrefs.swift in Sources */,
 				D34DC8631A16C49600D49B7B /* Bookmarks.swift in Sources */,
 				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
 				0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */,
+				0BD19A6F1A2530D30084FBA7 /* TabsViewController.swift in Sources */,
+				0BD19A6A1A2530BB0084FBA7 /* HistoryViewController.swift in Sources */,
+				0BD19A5F1A2530320084FBA7 /* TabBarViewController.swift in Sources */,
 				0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

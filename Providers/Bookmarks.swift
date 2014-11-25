@@ -15,6 +15,17 @@ class Bookmark {
     }
 }
 
+class TestBookmarksProvder : Bookmarks {
+    override func getAll(success: ([Bookmark]) -> (), error: (RequestError) -> ()) {
+        var res = [Bookmark]()
+        for i in 0...10 {
+            var b = Bookmark(title: "Title \(i)", url: "http://www.example.com/\(i)")
+            res.append(b)
+        }
+        success(res)
+    }
+}
+
 class Bookmarks: NSObject {
     private let account: Account
 

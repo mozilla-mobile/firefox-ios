@@ -16,6 +16,8 @@ class TestBookmarks : AccountTest {
                 for bookmark in response {
                     XCTAssertNotEqual(bookmark.url, "", "Bookmarks has url \(bookmark.url)")
                     XCTAssertNotEqual(bookmark.title, "", "Bookmarks has title \(bookmark.title)")
+                    XCTAssert(bookmark.url != "", "Bookmarks has url \(bookmark.url)");
+                    XCTAssert(bookmark.title != "", "Bookmarks has title  \(bookmark.title)");
                 }
                 expectation.fulfill()
             }, error: { (err: RequestError) -> Void in

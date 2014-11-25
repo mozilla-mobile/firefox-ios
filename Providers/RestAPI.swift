@@ -14,11 +14,9 @@ enum RequestError {
 
 class RestAPI {
     class func sendRequest(credential: NSURLCredential, request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ()) {
-        println("Authenticating as user: \(credential.user)")
         Alamofire.request(.GET, BASE_URL + request)
             .authenticate(usingCredential: credential)
             .responseJSON { (request, response, data, err) in
-                println("Status code: \(response?.statusCode)")
                 switch response?.statusCode {
                 case .Some(let status) where status == 200:
                     success(data: data)
