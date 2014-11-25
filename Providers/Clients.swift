@@ -58,9 +58,44 @@ class Clients: NSObject {
         return resp;
     }
 
-    class func sendItem(item: ExtensionUtils.ShareItem, toClients clients: [Client]) {
-        for client in clients {
-            println("TODO Sending \(item.url) to \(client.name)")
+    /// Send a ShareItem to the specified clients.
+    ///
+    /// :param: item    the item to be sent
+    /// :param: clients the clients that need to display the item
+    ///
+    /// The UX for the sharing dialog is incomplete. At this point sharing only
+    /// works with a single destination client. That is why this code makes no
+    /// effort to send to multiple clients. Multiple clients will also need
+    /// a change in the REST API, since extensions can make only one final HTTP
+    /// call when they finish.
+    ///
+    /// Note that this code currently uses NSURLSession directly because AlamoFire
+    /// does not work from an Extension. (Bug 1104884)
+    
+    func sendItem(item: ExtensionUtils.ShareItem, toClients clients: [Client]) {
+        if clients.count > 0 {
+            let request = NSMutableURLRequest(URL: NSURL(string: "https://moz-syncapi.sateh.com/1.0/clients/\(clients[0].id)/tab")!)
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            request.HTTPMethod = "POST"
+            
+            var object = NSMutableDictionary()
+            object["url"] = item.url
+            object["title"] = item.title == nil ? "" : item.title
+            
+            var jsonError: NSError?
+            let data = NSJSONSerialization.dataWithJSONObject(object, options: nil, error: &jsonError)
+            if data != nil {
+                request.HTTPBody = data
+            }
+            
+            let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("Clients/sendItem")
+            configuration.HTTPAdditionalHeaders = ["Authorization" : account.basicAuthorizationHeader()]
+            configuration.sharedContainerIdentifier = ExtensionUtils.sharedContainerIdentifier()
+            
+            let session = NSURLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+            let task = session.dataTaskWithRequest(request)
+            task.resume()
         }
     }
 }

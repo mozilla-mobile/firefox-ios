@@ -150,20 +150,20 @@ class ActionViewController: UINavigationController, ClientPickerViewControllerDe
         })
     }
 
-    func cancel() {
+    func finish() {
         self.extensionContext!.completeRequestReturningItems(nil, completionHandler: nil)
     }
 
     func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [Client]) {
-        Clients.sendItem(self.sharedItem!, toClients: clients)
-        cancel()
+        account?.clients.sendItem(self.sharedItem!, toClients: clients)
+        finish()
     }
     
     func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) {
-        cancel()
+        finish()
     }
     
     func loginViewControllerDidCancel(loginViewController: LoginViewController) {
-        cancel()
+        finish()
     }
 }
