@@ -10,12 +10,14 @@ let LastUsedShareDestinationsKey = "LastUsedShareDestinations"
 class InitialViewController: UIViewController, ShareControllerDelegate
 {
     var shareDialogController: ShareDialogController!
+    var account: Account?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(white: 0.75, alpha: 0.65) // TODO: Is the correct color documented somewhere?
         
-        println(self.extensionContext!.inputItems)
+        let accountManager = AccountManager(loginCallback: { _ in () }, logoutCallback: { _ in () })
+        self.account = accountManager.getAccount()
     }
     
     override func viewDidAppear(animated: Bool)
@@ -126,6 +128,8 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     }
     
     func shareToBookmarks(item: ExtensionUtils.ShareItem) {
-        // TODO: Discuss how to share to bookmarks
+        if account != nil { // TODO: We need to properly deal with this.
+            account?.bookmarks.shareItem(item)
+        }
     }
 }

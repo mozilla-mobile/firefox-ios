@@ -57,4 +57,40 @@ class Bookmarks: NSObject {
 
         return resp;
     }
-};
+    
+    /// Send a ShareItem to this user's bookmarks
+    ///
+    /// :param: item    the item to be sent
+    ///
+    /// Note that this code currently uses NSURLSession directly because AlamoFire
+    /// does not work from an Extension. (Bug 1104884)
+    ///
+    /// Note that the bookmark will end up in the Unsorted Bookmarks. We have Bug
+    /// 1094233 open for the REST API to store the incoming item in the Mobile
+    /// Bookmarks instead.
+    
+    func shareItem(item: ExtensionUtils.ShareItem) {
+        let request = NSMutableURLRequest(URL: NSURL(string: "https://moz-syncapi.sateh.com/1.0/bookmarks")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.HTTPMethod = "POST"
+        
+        var object = NSMutableDictionary()
+        object["url"] = item.url
+        object["title"] = item.title == nil ? "" : item.title
+        
+        var jsonError: NSError?
+        let data = NSJSONSerialization.dataWithJSONObject(object, options: nil, error: &jsonError)
+        if data != nil {
+            request.HTTPBody = data
+        }
+        
+        let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("Bookmarks/shareItem")
+        configuration.HTTPAdditionalHeaders = ["Authorization" : account.basicAuthorizationHeader()]
+        configuration.sharedContainerIdentifier = ExtensionUtils.sharedContainerIdentifier()
+        
+        let session = NSURLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+        let task = session.dataTaskWithRequest(request)
+        task.resume()
+    }
+}
