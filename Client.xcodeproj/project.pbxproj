@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0BA8964B1A250E6500C1010C /* AccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA896491A250E6500C1010C /* AccountTest.swift */; };
+		0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA8964A1A250E6500C1010C /* TestBookmarks.swift */; };
 		0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108351A1B1EC700D4B712 /* TestLocking.swift */; };
 		0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		28CE83C21A1D1D3200576538 /* FxAClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83B81A1D1D3200576538 /* FxAClient.swift */; };
@@ -217,6 +219,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0BA896491A250E6500C1010C /* AccountTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTest.swift; sourceTree = "<group>"; };
+		0BA8964A1A250E6500C1010C /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
 		0BE108351A1B1EC700D4B712 /* TestLocking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLocking.swift; sourceTree = "<group>"; };
 		0BE108391A1B1ED200D4B712 /* Locking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locking.swift; sourceTree = "<group>"; };
 		28CE83B81A1D1D3200576538 /* FxAClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAClient.swift; sourceTree = "<group>"; };
@@ -451,6 +455,8 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				0BA896491A250E6500C1010C /* AccountTest.swift */,
+				0BA8964A1A250E6500C1010C /* TestBookmarks.swift */,
 				0BE108351A1B1EC700D4B712 /* TestLocking.swift */,
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
 				F84B21D71A090F8100AAB793 /* Supporting Files */,
@@ -947,6 +953,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D34DC8641A16C49600D49B7B /* Cursor.swift in Sources */,
+				0BA8964B1A250E6500C1010C /* AccountTest.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */,
 				D34DC8661A16C49600D49B7B /* RestAPI.swift in Sources */,
@@ -955,6 +962,7 @@
 				E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				D34DC8651A16C49600D49B7B /* Favicons.swift in Sources */,
 				D34DC8631A16C49600D49B7B /* Bookmarks.swift in Sources */,
+				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
 				0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */,
 				0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */,
 			);

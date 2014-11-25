@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
                 // Show the tab controller once the user logs in.
                 self.showTabBarViewController(account)
             },
-            logoutCallback: {
+            logoutCallback: { account in
                 // Show the login controller once the user logs out.
                 self.showLoginViewController(accountManager)
             })
