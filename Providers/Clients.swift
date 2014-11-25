@@ -63,4 +63,4 @@ class Clients: NSObject {
             println("TODO Sending \(item.url) to \(client.name)")
         }
     }
-};
+}

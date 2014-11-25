@@ -132,12 +132,7 @@ class ActionViewController: UINavigationController, ClientPickerViewControllerDe
             if error == nil && item != nil {
                 self.sharedItem = item
                 
-                let accountManager = AccountManager(loginCallback: { (account) -> () in
-                    return
-                    }, logoutCallback: { () -> () in
-                        return
-                })
-                
+                let accountManager = AccountManager(loginCallback: { _ in () }, logoutCallback: { _ in () })
                 self.account = accountManager.getAccount()
                 if self.account == nil {
                     let loginViewController = LoginViewController()
