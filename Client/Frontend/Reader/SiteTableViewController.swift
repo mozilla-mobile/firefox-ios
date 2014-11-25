@@ -28,14 +28,8 @@ class SiteTableViewController: UITableViewController
         
         let site = sites[indexPath.row]
         
-        // TODO: We need better async image loading here
-        favicons.getForUrl(NSURL(string: site.url)!, options: nil, callback: { (icon: Favicon) -> Void in
-            if var img = icon.img {
-                cell.imageView.image = createMockFavicon(img);
-                cell.setNeedsLayout()
-            }
-        });
-        
+        favicons.loadIntoCell(site.url, view: cell)
+
         cell.textLabel.text = site.title
         cell.textLabel.font = UIFont(name: "FiraSans-SemiBold", size: 13)
         cell.textLabel.textColor = UIColor.darkGrayColor()

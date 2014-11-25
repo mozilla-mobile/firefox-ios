@@ -5,19 +5,6 @@
 import UIKit
 import Alamofire
 
-func createMockFavicon(icon: UIImage) -> UIImage {
-    let size = CGSize(width: 30, height: 30)
-    UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-    var context = UIGraphicsGetCurrentContext()
-    icon.drawInRect(CGRectInset(CGRect(origin: CGPointZero, size: size), 1.0, 1.0))
-    CGContextSetStrokeColorWithColor(context, UIColor.grayColor().CGColor)
-    CGContextSetLineWidth(context, 0.5);
-    CGContextStrokeEllipseInRect(context, CGRectInset(CGRect(origin: CGPointZero, size: size), 1.0, 1.0))
-    let image = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
-    return image
-}
-
 class BookmarksViewController: UITableViewController
 {
     var account: Account!
@@ -74,22 +61,12 @@ class BookmarksViewController: UITableViewController
         return bookmarks.count;
     }
     
-    private let FAVICON_SIZE = 32;
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(BOOKMARK_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell;
         
-        if let image = (UIImage(named: "leaf.png")) {
-            cell.imageView.image = createMockFavicon(image)
-        }
-        
-        let bookmark = bookmarks[indexPath.row]
-        // TODO: We need an async image loader api here
-        favicons.getForUrl(NSURL(string: bookmark.url)!, options: nil, callback: { (icon: Favicon) -> Void in
-            if let img = icon.img {
-                cell.imageView.image = createMockFavicon(img);
-            }
-        });
-        
+            let bookmark = bookmarks[indexPath.row]
+        favicons.loadIntoCell(bookmark.url, view: cell)
+
         cell.textLabel.text = bookmark.title
         cell.textLabel.font = UIFont(name: "FiraSans-SemiBold", size: 13)
         cell.textLabel.textColor = UIColor.darkGrayColor()

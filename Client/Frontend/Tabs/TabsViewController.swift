@@ -70,13 +70,7 @@ class TabsViewController: UITableViewController
         let cell : UITableViewCell = tableView.dequeueReusableCellWithIdentifier(TABS_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell
 
         if let tab = tabsResponse?.clients[indexPath.section].tabs[indexPath.row] {
-            // TODO: We need better async image loading here
-            favicons.getForUrl(NSURL(string: tab.url)!, options: nil, callback: { (icon: Favicon) -> Void in
-                if var img = icon.img {
-                    cell.imageView.image = createMockFavicon(img);
-                    cell.setNeedsLayout()
-                }
-            });
+            favicons.loadIntoCell(tab.url, view: cell)
             cell.textLabel.text = tab.title
         }
         
