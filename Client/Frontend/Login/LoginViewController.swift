@@ -17,7 +17,7 @@ class LoginViewController: UIViewController {
 
         let loginView = view as LoginView
 
-        loginView.didClickLogin = {
+        loginView.didClickLogin = { [unowned self] in
             self.accountManager.login(loginView.username, password: loginView.password, { err in
                 switch err {
                 case .BadAuth:
