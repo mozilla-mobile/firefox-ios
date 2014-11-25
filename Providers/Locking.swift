@@ -13,7 +13,7 @@ class Lock {
     init(name: String) {
         queue = dispatch_queue_create(name, DISPATCH_QUEUE_CONCURRENT)
     }
-    
+
     func withReadLock(closure: () -> Void) {
         dispatch_sync(queue) {
             closure()
@@ -34,18 +34,18 @@ class Lock {
 class Protector<T> {
     private let lock : Lock
     private var item: T
-    
+
     init(name: String, item: T) {
         self.lock = Lock(name: name)
         self.item = item
     }
-    
+
     func withReadLock(block: (T) -> Void) {
         lock.withReadLock() { [unowned self] in
             block(self.item)
         }
     }
-    
+
     func withWriteLock(block: (inout T) -> Void) {
         lock.withWriteLock() { [unowned self] in
             block(&self.item)

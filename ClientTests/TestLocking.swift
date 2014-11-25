@@ -12,7 +12,7 @@ class TestLocking: XCTestCase {
         var reading = false
         var writing = false
         var passed = false
-        
+
         var expectation = expectationWithDescription("main thread")
         lock.withReadLock { () -> Void in
             reading = true
@@ -78,13 +78,13 @@ class TestLocking: XCTestCase {
         var reading = false
         var passed = false
         var queue = dispatch_queue_create("Test", nil)
-        
+
         var expectation = expectationWithDescription("main thread")
         dispatch_async(queue) { () -> Void in
             p.withReadLock { protected -> Void in
-                XCTAssertEqual(protected[0], 1, "Item zero is correct");
-                XCTAssertEqual(protected[1], 2, "Item one is correct");
-                XCTAssertEqual(protected[2], 3, "Item two is correct");
+                XCTAssertEqual(protected[0], 1, "Item zero is correct")
+                XCTAssertEqual(protected[1], 2, "Item one is correct")
+                XCTAssertEqual(protected[2], 3, "Item two is correct")
                 // protected[0] = 4 // This array is immuatable, so this won't build. Need a better way to test.
                 passed = reading
                 XCTAssertTrue(reading, "Can get two read protectors at once")
@@ -112,21 +112,21 @@ class TestLocking: XCTestCase {
         var reading = false
         var writing = false
         var started = false
-        
+
         var expectation = expectationWithDescription("main thread")
         var queue = dispatch_queue_create("Test", nil)
-        
+
         lock.withReadLock { protected -> Void in
             reading = true
             dispatch_async(queue) { () -> Void in
                 started = true
                 lock.withWriteLock { protected -> Void in
                     writing = true
-                    XCTAssertEqual(protected[0], 1, "Item zero is correct");
-                    XCTAssertEqual(protected[1], 2, "Item one is correct");
-                    XCTAssertEqual(protected[2], 3, "Item two is correct");
+                    XCTAssertEqual(protected[0], 1, "Item zero is correct")
+                    XCTAssertEqual(protected[1], 2, "Item one is correct")
+                    XCTAssertEqual(protected[2], 3, "Item two is correct")
                     protected[0] = 4
-                    XCTAssertEqual(protected[0], 4, "Item zero modified");
+                    XCTAssertEqual(protected[0], 4, "Item zero modified")
                     XCTAssertTrue(writing, "Writer is running")
                     XCTAssertFalse(reading, "Reader is finished")
                     writing = false
@@ -134,7 +134,7 @@ class TestLocking: XCTestCase {
                 }
                 started = false
             }
-            
+
             // Give the write thread some time to start
             sleep(1)
             XCTAssertEqual(protected[0], 1, "Item zero is correct");
@@ -145,7 +145,7 @@ class TestLocking: XCTestCase {
             XCTAssertFalse(writing, "Write task is blocked")
             reading = false
         }
-        
+
         self.waitForExpectationsWithTimeout(10, handler: nil)
         XCTAssertFalse(reading, "Reader is done")
         XCTAssertFalse(started, "Writer is done")
