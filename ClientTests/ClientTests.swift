@@ -6,33 +6,6 @@ import UIKit
 import XCTest
 
 class ClientTests: XCTestCase {
-    func testFavicons() {
-        var fav : Favicons = BasicFavicons();
-        var url = NSURL(string: "http://www.example.com");
-
-        var expectation = expectationWithDescription("asynchronous request")
-        fav.getForUrl(url!, options: nil, callback: { (data: Favicon) -> Void in
-            XCTAssertEqual(data.siteUrl!, url!, "Site url is correct");
-            XCTAssertEqual(data.sourceUrl!, FaviconConsts.DefaultFaviconUrl, "Source url is correct");
-            expectation.fulfill()
-        });
-        waitForExpectationsWithTimeout(10.0, handler:nil)
-
-        expectation = expectationWithDescription("asynchronous request")
-        var urls = [url!, url!, url!];
-        fav.getForUrls(urls, options: nil, callback: { (data: ArrayCursor<Favicon>) -> Void in
-            XCTAssertTrue(data.count == urls.count, "At least one favicon was returned for each url requested");
-
-            var favicon : Favicon = data[0]!;
-            XCTAssertEqual(favicon.siteUrl!, url!, "Site url is correct");
-            XCTAssertEqual(favicon.sourceUrl!, FaviconConsts.DefaultFaviconUrl, "Favicon url is correct");
-            XCTAssertNotNil(favicon.img!, "Favicon image is not null");
-
-            expectation.fulfill()
-        });
-        waitForExpectationsWithTimeout(10.0, handler:nil)
-    }
-    
     func testArrayCursor() {
         let data = ["One", "Two", "Three"];
         let t = ArrayCursor<String>(data: data);

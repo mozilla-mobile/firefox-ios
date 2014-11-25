@@ -8,7 +8,7 @@ typealias LogoutCallback = (account: Account) -> ()
 
 class Account {
     let credential: NSURLCredential
-    private let logoutCallback: LogoutCallback
+    let logoutCallback: LogoutCallback
 
     init(credential: NSURLCredential, logoutCallback: LogoutCallback) {
         self.credential = credential

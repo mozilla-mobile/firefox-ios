@@ -7,8 +7,44 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B9E3DC51A23FABC008A7877 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DC31A23FABC008A7877 /* ImageLoader.swift */; };
+		0B9E3DC61A23FABC008A7877 /* LRUCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DC41A23FABC008A7877 /* LRUCache.swift */; };
+		0B9E3DCE1A23FACC008A7877 /* CacheTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DCA1A23FACC008A7877 /* CacheTest.swift */; };
+		0B9E3DCF1A23FACC008A7877 /* FaviconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DCB1A23FACC008A7877 /* FaviconTests.swift */; };
+		0B9E3DD01A23FACC008A7877 /* ImageLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DCC1A23FACC008A7877 /* ImageLoaderTests.swift */; };
+		0B9E3DD11A23FACC008A7877 /* SiteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DCD1A23FACC008A7877 /* SiteTests.swift */; };
 		0BA8964B1A250E6500C1010C /* AccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA896491A250E6500C1010C /* AccountTest.swift */; };
 		0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA8964A1A250E6500C1010C /* TestBookmarks.swift */; };
+		0BA896601A2511AA00C1010C /* Favicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8511A16C40C00D49B7B /* Favicons.swift */; };
+		0BA896641A2511CD00C1010C /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DC31A23FABC008A7877 /* ImageLoader.swift */; };
+		0BA896651A2511CD00C1010C /* LRUCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DC41A23FABC008A7877 /* LRUCache.swift */; };
+		0BA896661A2511CD00C1010C /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
+		0BA896671A2511CE00C1010C /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DC31A23FABC008A7877 /* ImageLoader.swift */; };
+		0BA896681A2511CE00C1010C /* LRUCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DC41A23FABC008A7877 /* LRUCache.swift */; };
+		0BA896691A2511CE00C1010C /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Account.swift */; };
+		0BA8966A1A2511CE00C1010C /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84E1A16C40C00D49B7B /* AccountManager.swift */; };
+		0BA8966B1A2511CE00C1010C /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84F1A16C40C00D49B7B /* Bookmarks.swift */; };
+		0BA8966C1A2511CE00C1010C /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDE21A23A6F900B794D3 /* Clients.swift */; };
+		0BA8966D1A2511CE00C1010C /* Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8501A16C40C00D49B7B /* Cursor.swift */; };
+		0BA8966E1A2511CE00C1010C /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8521A16C40C00D49B7B /* RestAPI.swift */; };
+		0BA8966F1A2511CE00C1010C /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
+		0BA896701A2511CF00C1010C /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DC31A23FABC008A7877 /* ImageLoader.swift */; };
+		0BA896711A2511CF00C1010C /* LRUCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DC41A23FABC008A7877 /* LRUCache.swift */; };
+		0BA896721A2511D000C1010C /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
+		0BA8968C1A2516B100C1010C /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BA8968B1A2516B100C1010C /* libxml2.dylib */; };
+		0BD19A371A2520330084FBA7 /* HTMLDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A341A2520330084FBA7 /* HTMLDocument.swift */; };
+		0BD19A381A2520330084FBA7 /* HTMLNode+XPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A351A2520330084FBA7 /* HTMLNode+XPath.swift */; };
+		0BD19A391A2520330084FBA7 /* HTMLNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A361A2520330084FBA7 /* HTMLNode.swift */; };
+		0BD19A3A1A2520430084FBA7 /* HTMLDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A341A2520330084FBA7 /* HTMLDocument.swift */; };
+		0BD19A3B1A2520430084FBA7 /* HTMLNode+XPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A351A2520330084FBA7 /* HTMLNode+XPath.swift */; };
+		0BD19A3C1A2520430084FBA7 /* HTMLNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A361A2520330084FBA7 /* HTMLNode.swift */; };
+		0BD19A3D1A2520440084FBA7 /* HTMLDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A341A2520330084FBA7 /* HTMLDocument.swift */; };
+		0BD19A3E1A2520440084FBA7 /* HTMLNode+XPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A351A2520330084FBA7 /* HTMLNode+XPath.swift */; };
+		0BD19A3F1A2520440084FBA7 /* HTMLNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A361A2520330084FBA7 /* HTMLNode.swift */; };
+		0BD19A401A2520450084FBA7 /* HTMLDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A341A2520330084FBA7 /* HTMLDocument.swift */; };
+		0BD19A411A2520450084FBA7 /* HTMLNode+XPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A351A2520330084FBA7 /* HTMLNode+XPath.swift */; };
+		0BD19A421A2520450084FBA7 /* HTMLNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A361A2520330084FBA7 /* HTMLNode.swift */; };
+		0BD19A431A2528C20084FBA7 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21F91A0910F600AAB793 /* Site.swift */; };
 		0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108351A1B1EC700D4B712 /* TestLocking.swift */; };
 		0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		28CE83C21A1D1D3200576538 /* FxAClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83B81A1D1D3200576538 /* FxAClient.swift */; };
@@ -219,8 +255,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0B9E3DC31A23FABC008A7877 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		0B9E3DC41A23FABC008A7877 /* LRUCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LRUCache.swift; sourceTree = "<group>"; };
+		0B9E3DCA1A23FACC008A7877 /* CacheTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheTest.swift; sourceTree = "<group>"; };
+		0B9E3DCB1A23FACC008A7877 /* FaviconTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaviconTests.swift; sourceTree = "<group>"; };
+		0B9E3DCC1A23FACC008A7877 /* ImageLoaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoaderTests.swift; sourceTree = "<group>"; };
+		0B9E3DCD1A23FACC008A7877 /* SiteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTests.swift; sourceTree = "<group>"; };
 		0BA896491A250E6500C1010C /* AccountTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTest.swift; sourceTree = "<group>"; };
 		0BA8964A1A250E6500C1010C /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
+		0BA8968B1A2516B100C1010C /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		0BD19A331A2520330084FBA7 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		0BD19A341A2520330084FBA7 /* HTMLDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTMLDocument.swift; sourceTree = "<group>"; };
+		0BD19A351A2520330084FBA7 /* HTMLNode+XPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HTMLNode+XPath.swift"; sourceTree = "<group>"; };
+		0BD19A361A2520330084FBA7 /* HTMLNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTMLNode.swift; sourceTree = "<group>"; };
 		0BE108351A1B1EC700D4B712 /* TestLocking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLocking.swift; sourceTree = "<group>"; };
 		0BE108391A1B1ED200D4B712 /* Locking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locking.swift; sourceTree = "<group>"; };
 		28CE83B81A1D1D3200576538 /* FxAClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAClient.swift; sourceTree = "<group>"; };
@@ -301,6 +348,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BA8968C1A2516B100C1010C /* libxml2.dylib in Frameworks */,
 				28CE83DA1A1D1E7C00576538 /* FxA.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,6 +379,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0BD19A321A2520330084FBA7 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				0BD19A331A2520330084FBA7 /* Bridging-Header.h */,
+				0BD19A341A2520330084FBA7 /* HTMLDocument.swift */,
+				0BD19A351A2520330084FBA7 /* HTMLNode+XPath.swift */,
+				0BD19A361A2520330084FBA7 /* HTMLNode.swift */,
+			);
+			name = Swift;
+			path = ThirdParty/HTMLDocument/Swift;
+			sourceTree = "<group>";
+		};
 		28CE83B71A1D1D3200576538 /* FxAClient */ = {
 			isa = PBXGroup;
 			children = (
@@ -380,6 +440,8 @@
 		D34DC84C1A16C40C00D49B7B /* Providers */ = {
 			isa = PBXGroup;
 			children = (
+				0B9E3DC31A23FABC008A7877 /* ImageLoader.swift */,
+				0B9E3DC41A23FABC008A7877 /* LRUCache.swift */,
 				D34DC84D1A16C40C00D49B7B /* Account.swift */,
 				D34DC84E1A16C40C00D49B7B /* AccountManager.swift */,
 				D34DC84F1A16C40C00D49B7B /* Bookmarks.swift */,
@@ -412,6 +474,8 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				0BD19A321A2520330084FBA7 /* Swift */,
+				0BA8968B1A2516B100C1010C /* libxml2.dylib */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */,
@@ -458,6 +522,10 @@
 				0BA896491A250E6500C1010C /* AccountTest.swift */,
 				0BA8964A1A250E6500C1010C /* TestBookmarks.swift */,
 				0BE108351A1B1EC700D4B712 /* TestLocking.swift */,
+				0B9E3DCA1A23FACC008A7877 /* CacheTest.swift */,
+				0B9E3DCB1A23FACC008A7877 /* FaviconTests.swift */,
+				0B9E3DCC1A23FACC008A7877 /* ImageLoaderTests.swift */,
+				0B9E3DCD1A23FACC008A7877 /* SiteTests.swift */,
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
 				F84B21D71A090F8100AAB793 /* Supporting Files */,
 			);
@@ -916,10 +984,13 @@
 			files = (
 				F84B22191A0911B500AAB793 /* BookmarksViewController.swift in Sources */,
 				28CE83C51A1D1D3200576538 /* EncryptedRecord.swift in Sources */,
+				0B9E3DC51A23FABC008A7877 /* ImageLoader.swift in Sources */,
 				28CE83C31A1D1D3200576538 /* Bytes.swift in Sources */,
 				F84B22101A0910F600AAB793 /* SiteTableViewController.swift in Sources */,
 				F84B22141A0910F600AAB793 /* TabsViewController.swift in Sources */,
+				0BD19A381A2520330084FBA7 /* HTMLNode+XPath.swift in Sources */,
 				28CE83C81A1D1D3200576538 /* SyncMeta.swift in Sources */,
+				0B9E3DC61A23FABC008A7877 /* LRUCache.swift in Sources */,
 				D34DC8561A16C40C00D49B7B /* Cursor.swift in Sources */,
 				28CE83C61A1D1D3200576538 /* KeysPayload.swift in Sources */,
 				D34DC8541A16C40C00D49B7B /* AccountManager.swift in Sources */,
@@ -937,10 +1008,13 @@
 				28CE83C71A1D1D3200576538 /* Records.swift in Sources */,
 				F84B22111A0910F600AAB793 /* SettingsViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Account.swift in Sources */,
+				0BD19A371A2520330084FBA7 /* HTMLDocument.swift in Sources */,
+				0BD19A391A2520330084FBA7 /* HTMLNode.swift in Sources */,
 				D34F86DB1A1AC35B00331EC4 /* LoginView.swift in Sources */,
 				D34DC8551A16C40C00D49B7B /* Bookmarks.swift in Sources */,
 				28CE84301A1E571900576538 /* json.swift in Sources */,
 				F84B221D1A0911BF00AAB793 /* HistoryViewController.swift in Sources */,
+				0BA896721A2511D000C1010C /* Locking.swift in Sources */,
 				F84B220D1A0910F600AAB793 /* ReaderViewController.swift in Sources */,
 				E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				F84B22201A0911D400AAB793 /* LoginViewController.swift in Sources */,
@@ -952,16 +1026,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B9E3DD01A23FACC008A7877 /* ImageLoaderTests.swift in Sources */,
 				D34DC8641A16C49600D49B7B /* Cursor.swift in Sources */,
 				0BA8964B1A250E6500C1010C /* AccountTest.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */,
+				0BD19A3A1A2520430084FBA7 /* HTMLDocument.swift in Sources */,
+				0BD19A3C1A2520430084FBA7 /* HTMLNode.swift in Sources */,
+				0BA896711A2511CF00C1010C /* LRUCache.swift in Sources */,
 				D34DC8661A16C49600D49B7B /* RestAPI.swift in Sources */,
+				0B9E3DD11A23FACC008A7877 /* SiteTests.swift in Sources */,
 				D34DC8611A16C47300D49B7B /* Account.swift in Sources */,
 				D34DC8621A16C49600D49B7B /* AccountManager.swift in Sources */,
 				E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				D34DC8651A16C49600D49B7B /* Favicons.swift in Sources */,
+				0B9E3DCE1A23FACC008A7877 /* CacheTest.swift in Sources */,
+				0B9E3DCF1A23FACC008A7877 /* FaviconTests.swift in Sources */,
+				0BD19A431A2528C20084FBA7 /* Site.swift in Sources */,
+				0BD19A3B1A2520430084FBA7 /* HTMLNode+XPath.swift in Sources */,
 				D34DC8631A16C49600D49B7B /* Bookmarks.swift in Sources */,
+				0BA896701A2511CF00C1010C /* ImageLoader.swift in Sources */,
 				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
 				0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */,
 				0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */,
@@ -972,9 +1056,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BA8966E1A2511CE00C1010C /* RestAPI.swift in Sources */,
+				0BA896681A2511CE00C1010C /* LRUCache.swift in Sources */,
 				E42CCE031A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
+				0BD19A3E1A2520440084FBA7 /* HTMLNode+XPath.swift in Sources */,
+				0BD19A3F1A2520440084FBA7 /* HTMLNode.swift in Sources */,
+				0BA8966D1A2511CE00C1010C /* Cursor.swift in Sources */,
+				0BA8966B1A2511CE00C1010C /* Bookmarks.swift in Sources */,
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
+				0BA8966C1A2511CE00C1010C /* Clients.swift in Sources */,
+				0BA896671A2511CE00C1010C /* ImageLoader.swift in Sources */,
+				0BA896601A2511AA00C1010C /* Favicons.swift in Sources */,
+				0BA8966F1A2511CE00C1010C /* Locking.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
+				0BD19A3D1A2520440084FBA7 /* HTMLDocument.swift in Sources */,
+				0BA896691A2511CE00C1010C /* Account.swift in Sources */,
+				0BA8966A1A2511CE00C1010C /* AccountManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -982,15 +1079,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BD19A401A2520450084FBA7 /* HTMLDocument.swift in Sources */,
 				E42CCDEA1A23A74400B794D3 /* RestAPI.swift in Sources */,
 				E42CCDEB1A23A76200B794D3 /* Bookmarks.swift in Sources */,
+				0BA896641A2511CD00C1010C /* ImageLoader.swift in Sources */,
 				E42CCDE91A23A74000B794D3 /* AccountManager.swift in Sources */,
 				E4F21A891A1267B500B0FAAA /* (null) in Sources */,
 				E42CCDED1A23A76800B794D3 /* Favicons.swift in Sources */,
 				E42CCDE81A23A73D00B794D3 /* Account.swift in Sources */,
 				E42CCDEC1A23A76400B794D3 /* Cursor.swift in Sources */,
 				E4F21A891A1267B500B0FAAA /* (null) in Sources */,
+				0BD19A411A2520450084FBA7 /* HTMLNode+XPath.swift in Sources */,
+				0BA896651A2511CD00C1010C /* LRUCache.swift in Sources */,
 				E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
+				0BA896661A2511CD00C1010C /* Locking.swift in Sources */,
+				0BD19A421A2520450084FBA7 /* HTMLNode.swift in Sources */,
 				F8708D2A1A0970B40051AB07 /* ActionViewController.swift in Sources */,
 				E42CCDE71A23A73800B794D3 /* Clients.swift in Sources */,
 			);
@@ -1066,12 +1169,21 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					$SDKROOT/usr/include/libxml2,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-lxml2";
 				SDKROOT = iphoneos;
+				SWIFT_INCLUDE_PATHS = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -1103,10 +1215,19 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					$SDKROOT/usr/include/libxml2,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-lxml2";
 				SDKROOT = iphoneos;
+				SWIFT_INCLUDE_PATHS = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Brdiging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
