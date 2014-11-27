@@ -14,6 +14,13 @@ class Account {
         self.credential = credential
         self.logoutCallback = logoutCallback
     }
+    
+    func basicAuthorizationHeader() -> String {
+        let userPasswordString = "\(credential.user!):\(credential.password!)"
+        let userPasswordData = userPasswordString.dataUsingEncoding(NSUTF8StringEncoding)
+        let base64EncodedCredential = userPasswordData!.base64EncodedStringWithOptions(nil)
+        return "Basic \(base64EncodedCredential)"
+    }
 
     func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ()) {
         RestAPI.sendRequest(
