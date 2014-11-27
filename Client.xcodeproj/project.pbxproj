@@ -52,6 +52,14 @@
 		D34F86DB1A1AC35B00331EC4 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34F86DA1A1AC35B00331EC4 /* LoginView.swift */; };
 		D34F86E71A1AC7DD00331EC4 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34F86E61A1AC7DD00331EC4 /* PasswordTextField.swift */; };
 		D34F86E91A1ACD1200331EC4 /* ImageTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34F86E81A1ACD1200331EC4 /* ImageTextField.swift */; };
+		E418D0D91A251B3200CAE47A /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Account.swift */; };
+		E418D0DA1A251B3200CAE47A /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84E1A16C40C00D49B7B /* AccountManager.swift */; };
+		E418D0DB1A251B3200CAE47A /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84F1A16C40C00D49B7B /* Bookmarks.swift */; };
+		E418D0DC1A251B3200CAE47A /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDE21A23A6F900B794D3 /* Clients.swift */; };
+		E418D0DD1A251B3200CAE47A /* Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8501A16C40C00D49B7B /* Cursor.swift */; };
+		E418D0DE1A251B3200CAE47A /* Favicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8511A16C40C00D49B7B /* Favicons.swift */; };
+		E418D0DF1A251B3200CAE47A /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8521A16C40C00D49B7B /* RestAPI.swift */; };
+		E418D0E01A25634D00CAE47A /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F84B22301A0913F200AAB793 /* Alamofire.framework */; };
 		E41A7D431A1BDFD800245963 /* FiraSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E41A7D421A1BDFD800245963 /* FiraSans-Regular.ttf */; };
 		E41A7D441A1BDFD800245963 /* FiraSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E41A7D421A1BDFD800245963 /* FiraSans-Regular.ttf */; };
 		E41A7D481A1BE00100245963 /* FiraMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E41A7D471A1BE00100245963 /* FiraMono-Medium.ttf */; };
@@ -334,6 +342,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E418D0E01A25634D00CAE47A /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1008,9 +1017,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E418D0DA1A251B3200CAE47A /* AccountManager.swift in Sources */,
+				E418D0DC1A251B3200CAE47A /* Clients.swift in Sources */,
 				E42CCE031A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
+				E418D0D91A251B3200CAE47A /* Account.swift in Sources */,
+				E418D0DE1A251B3200CAE47A /* Favicons.swift in Sources */,
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
+				E418D0DF1A251B3200CAE47A /* RestAPI.swift in Sources */,
+				E418D0DD1A251B3200CAE47A /* Cursor.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
+				E418D0DB1A251B3200CAE47A /* Bookmarks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
