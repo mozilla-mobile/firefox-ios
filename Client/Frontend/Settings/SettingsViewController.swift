@@ -72,16 +72,19 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol, UITableView
         let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(SETTING_CELL_ID, forIndexPath: indexPath) as UITableViewCell
         
         if var item = panels[indexPath.item] {
-            cell.textLabel.text = item.title
-            cell.textLabel.font = UIFont(name: "FiraSans-Light", size: cell.textLabel.font.pointSize)
-            cell.textLabel.textColor = UIColor.whiteColor()
-            cell.backgroundColor = self.view.backgroundColor
-            cell.separatorInset = UIEdgeInsetsZero
-            cell.selectionStyle = UITableViewCellSelectionStyle.None
+            if let label = cell.textLabel{
+                label.text = item.title
+                label.font = UIFont(name: "FiraSans-Light", size: label.font.pointSize)
+                label.textColor = UIColor.whiteColor()
+            }
+                cell.backgroundColor = self.view.backgroundColor
+                cell.separatorInset = UIEdgeInsetsZero
+                cell.selectionStyle = UITableViewCellSelectionStyle.None
+                
+                let toggle: UISwitch = UISwitch()
+                toggle.on = item.enabled;
+                cell.editingAccessoryView = toggle
             
-            let toggle: UISwitch = UISwitch()
-            toggle.on = item.enabled;
-            cell.editingAccessoryView = toggle
         }
         return cell
     }
