@@ -79,8 +79,8 @@ class ClientPickerViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel.font = UIFont(name: "FiraSans-Regular", size: 17)
-        cell.textLabel.text = NSLocalizedString("Send to ", comment: "") + clients[indexPath.row].name // TODO This needs a localized format string
+        cell.textLabel?.font = UIFont(name: "FiraSans-Regular", size: 17)
+        cell.textLabel?.text = NSLocalizedString("Send to ", comment: "") + clients[indexPath.row].name // TODO This needs a localized format string
         return cell
     }
     
