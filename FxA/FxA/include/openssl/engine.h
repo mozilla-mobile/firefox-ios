@@ -650,7 +650,7 @@ typedef struct st_dynamic_MEM_fns {
 	dyn_MEM_free_cb				free_cb;
 	} dynamic_MEM_fns;
 /* FIXME: Perhaps the memory and locking code (crypto.h) should declare and use
- * these types so we (and any other dependant code) can simplify a bit?? */
+ * these types so we (and any other dependent code) can simplify a bit?? */
 typedef void (*dyn_lock_locking_cb)(int,int,const char *,int);
 typedef int (*dyn_lock_add_lock_cb)(int*,int,int,const char *,int);
 typedef struct CRYPTO_dynlock_value *(*dyn_dynlock_create_cb)(

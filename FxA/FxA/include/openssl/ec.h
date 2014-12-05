@@ -633,7 +633,7 @@ int EC_POINTs_make_affine(const EC_GROUP *group, size_t num, EC_POINT *points[],
  *  \param  group  underlying EC_GROUP object
  *  \param  r      EC_POINT object for the result
  *  \param  n      BIGNUM with the multiplier for the group generator (optional)
- *  \param  num    number futher summands
+ *  \param  num    number further summands
  *  \param  p      array of size num of EC_POINT objects
  *  \param  m      array of size num of BIGNUM objects
  *  \param  ctx    BN_CTX object (optional)
@@ -840,7 +840,7 @@ int EC_KEY_generate_key(EC_KEY *key);
 int EC_KEY_check_key(const EC_KEY *key);
 
 /** Sets a public key from affine coordindates performing
- *  neccessary NIST PKV tests.
+ *  necessary NIST PKV tests.
  *  \param  key  the EC_KEY object
  *  \param  x    public key x coordinate
  *  \param  y    public key y coordinate

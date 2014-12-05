@@ -56,7 +56,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * The licence and distribution terms for any publically available version or
+ * The licence and distribution terms for any publicly available version or
  * derivative of this code cannot be changed.  i.e. this code cannot simply be
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
@@ -2349,7 +2349,7 @@
 #define OBJ_delta_crl		OBJ_id_ce,27L
 
 #define SN_issuing_distribution_point		"issuingDistributionPoint"
-#define LN_issuing_distribution_point		"X509v3 Issuing Distrubution Point"
+#define LN_issuing_distribution_point		"X509v3 Issuing Distribution Point"
 #define NID_issuing_distribution_point		770
 #define OBJ_issuing_distribution_point		OBJ_id_ce,28L
 

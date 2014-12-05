@@ -58,7 +58,7 @@
 #pragma mark Mathematical Operations
 
 /**
- Performs a modular divison on the receiver.
+ Performs a modular division on the receiver.
  @param mod the NSInteger by which to divide.
  */
 - (void)modByInteger:(int)mod;
