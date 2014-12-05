@@ -77,20 +77,20 @@ class BookmarksViewController: UITableViewController {
         let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(BOOKMARK_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell;
         
         if let image = (UIImage(named: "leaf.png")) {
-            cell.imageView.image = createMockFavicon(image)
+            cell.imageView?.image = createMockFavicon(image)
         }
         
         let bookmark = bookmarks[indexPath.row]
         // TODO: We need an async image loader api here
         favicons.getForUrl(NSURL(string: bookmark.url)!, options: nil, callback: { (icon: Favicon) -> Void in
             if let img = icon.img {
-                cell.imageView.image = createMockFavicon(img);
+                cell.imageView?.image = createMockFavicon(img);
             }
         });
         
-        cell.textLabel.text = bookmark.title
-        cell.textLabel.font = UIFont(name: "FiraSans-SemiBold", size: 13)
-        cell.textLabel.textColor = UIColor.darkGrayColor()
+        cell.textLabel?.text = bookmark.title
+        cell.textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
+        cell.textLabel?.textColor = UIColor.darkGrayColor()
         cell.indentationWidth = 20
         
         return cell
