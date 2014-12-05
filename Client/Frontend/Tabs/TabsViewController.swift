@@ -33,7 +33,7 @@ class TabsViewController: UITableViewController
 
     func reloadData() {
         Alamofire.request(.GET, "https://syncapi-dev.sateh.com/1.0/tabs")
-            .authenticate(user: "sarentz+syncapi@mozilla.com", password: "q1w2e3r4")
+            .authenticate(user: "sarentz+syncapi@mozilla.com", password: "q1w2e3r4") // TODO: Get rid of test account and use AccountManager and TabProvider to obtain tabs.
             .responseJSON { (request, response, data, error) in
                 self.tabsResponse = parseTabsResponse(data)
                 dispatch_async(dispatch_get_main_queue()) {
