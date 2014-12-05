@@ -77,6 +77,7 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol, UITableView
                 label.font = UIFont(name: "FiraSans-Light", size: label.font.pointSize)
                 label.textColor = UIColor.whiteColor()
             }
+
                 cell.backgroundColor = self.view.backgroundColor
                 cell.separatorInset = UIEdgeInsetsZero
                 cell.selectionStyle = UITableViewCellSelectionStyle.None
@@ -84,7 +85,7 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol, UITableView
                 let toggle: UISwitch = UISwitch()
                 toggle.on = item.enabled;
                 cell.editingAccessoryView = toggle
-            
+
         }
         return cell
     }
