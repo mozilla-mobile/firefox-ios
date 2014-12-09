@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // The user is already logged in, so go straight to the tab controller.
             showTabBarViewController(account)
         } else {
-            // The user is not logged in, so show the login screen.
+            // The user is not logged in, show the login screen.
             showLoginViewController(accountManager)
         }
 
