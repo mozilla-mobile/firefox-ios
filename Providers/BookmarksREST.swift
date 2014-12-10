@@ -15,7 +15,7 @@ class Bookmark {
     }
 }
 
-class TestBookmarksProvder : Bookmarks {
+class TestBookmarksProvider : BookmarksREST {
     override func getAll(success: ([Bookmark]) -> (), error: (RequestError) -> ()) {
         var res = [Bookmark]()
         for i in 0...10 {
@@ -26,7 +26,7 @@ class TestBookmarksProvder : Bookmarks {
     }
 }
 
-class Bookmarks: NSObject {
+class BookmarksREST: NSObject {
     private let account: Account
 
     init(account: Account) {
