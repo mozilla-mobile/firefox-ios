@@ -39,8 +39,8 @@ class Account {
         logoutCallback(account: self)
     }
 
-    lazy var bookmarks: Bookmarks = {
-        return Bookmarks(account: self)
+    lazy var bookmarks: BookmarksREST = {
+        return BookmarksREST(account: self)
     } ()
 
     lazy var clients: Clients = {
