@@ -5,8 +5,8 @@
 import Foundation
 import WebKit
 
-class Browser {
-    private let webView = WKWebView()
+class Browser : NSObject {
+    dynamic private let webView = WKWebView()
 
     var view: UIView {
         return webView
