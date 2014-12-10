@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		28F9520119D0F9FA00DCE892 /* FxA.h in Headers */ = {isa = PBXBuildFile; fileRef = 28F9520019D0F9FA00DCE892 /* FxA.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		28F9520B19D0F9FB00DCE892 /* FxATests.m in Sources */ = {isa = PBXBuildFile; fileRef = 28F9520A19D0F9FB00DCE892 /* FxATests.m */; };
+		2F7926421A38EC2000609E27 /* TokenServerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7926401A38EC2000609E27 /* TokenServerClient.swift */; };
+		2F79264C1A38ED2300609E27 /* json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F79264B1A38ED2300609E27 /* json.swift */; };
+		2F79264E1A38ED5E00609E27 /* TokenServerClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F79264D1A38ED5E00609E27 /* TokenServerClientTests.swift */; };
 		2FA17F7E19D3D2D100F3D844 /* MockMyIDTokenFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FA17F7C19D3D2D100F3D844 /* MockMyIDTokenFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2FA17F7F19D3D2D100F3D844 /* MockMyIDTokenFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA17F7D19D3D2D100F3D844 /* MockMyIDTokenFactory.m */; };
 		2FA17FD219D3D32300F3D844 /* aes.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FA17F8219D3D32300F3D844 /* aes.h */; };
@@ -141,6 +144,9 @@
 		28F9520619D0F9FB00DCE892 /* FxATests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FxATests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		28F9520919D0F9FB00DCE892 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		28F9520A19D0F9FB00DCE892 /* FxATests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FxATests.m; sourceTree = "<group>"; };
+		2F7926401A38EC2000609E27 /* TokenServerClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenServerClient.swift; sourceTree = "<group>"; };
+		2F79264B1A38ED2300609E27 /* json.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = json.swift; path = ../ThirdParty/json.swift; sourceTree = "<group>"; };
+		2F79264D1A38ED5E00609E27 /* TokenServerClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TokenServerClientTests.swift; path = Token/TokenServerClientTests.swift; sourceTree = "<group>"; };
 		2FA17F7C19D3D2D100F3D844 /* MockMyIDTokenFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockMyIDTokenFactory.h; sourceTree = "<group>"; };
 		2FA17F7D19D3D2D100F3D844 /* MockMyIDTokenFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MockMyIDTokenFactory.m; sourceTree = "<group>"; };
 		2FA17F8219D3D32300F3D844 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -279,6 +285,7 @@
 		28F951F119D0F9FA00DCE892 = {
 			isa = PBXGroup;
 			children = (
+				2F79264B1A38ED2300609E27 /* json.swift */,
 				28F951FD19D0F9FA00DCE892 /* FxA */,
 				28F9520719D0F9FB00DCE892 /* FxATests */,
 				28F951FC19D0F9FA00DCE892 /* Products */,
@@ -297,6 +304,7 @@
 		28F951FD19D0F9FA00DCE892 /* FxA */ = {
 			isa = PBXGroup;
 			children = (
+				2F7926411A38EC2000609E27 /* Token */,
 				28F9520019D0F9FA00DCE892 /* FxA.h */,
 				2FA17FCD19D3D32300F3D844 /* JSONWebTokenUtils.h */,
 				2FA17FCE19D3D32300F3D844 /* JSONWebTokenUtils.m */,
@@ -352,6 +360,7 @@
 		28F9520719D0F9FB00DCE892 /* FxATests */ = {
 			isa = PBXGroup;
 			children = (
+				2F79264F1A38ED6300609E27 /* Token */,
 				28F9520A19D0F9FB00DCE892 /* FxATests.m */,
 				28F9520819D0F9FB00DCE892 /* Supporting Files */,
 			);
@@ -364,6 +373,22 @@
 				28F9520919D0F9FB00DCE892 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2F7926411A38EC2000609E27 /* Token */ = {
+			isa = PBXGroup;
+			children = (
+				2F7926401A38EC2000609E27 /* TokenServerClient.swift */,
+			);
+			path = Token;
+			sourceTree = "<group>";
+		};
+		2F79264F1A38ED6300609E27 /* Token */ = {
+			isa = PBXGroup;
+			children = (
+				2F79264D1A38ED5E00609E27 /* TokenServerClientTests.swift */,
+			);
+			name = Token;
 			sourceTree = "<group>";
 		};
 		2FA17F8019D3D32300F3D844 /* include */ = {
@@ -667,6 +692,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F79264C1A38ED2300609E27 /* json.swift in Sources */,
 				2FF824DF19D3C6D8003ED08E /* DSAKeyPair.m in Sources */,
 				2FF825F219D3CAFF003ED08E /* CHNumber.m in Sources */,
 				2FF824E119D3C6D8003ED08E /* KeyPair.m in Sources */,
@@ -676,6 +702,7 @@
 				2FA1801E19D3D32300F3D844 /* JSONWebTokenUtils.m in Sources */,
 				2FF824E719D3C6D8003ED08E /* RSAKeyPair.m in Sources */,
 				2FA17F7F19D3D2D100F3D844 /* MockMyIDTokenFactory.m in Sources */,
+				2F7926421A38EC2000609E27 /* TokenServerClient.swift in Sources */,
 				2FF8264D19D3CAFF003ED08E /* NSString+Utils.m in Sources */,
 				2FF825F419D3CAFF003ED08E /* CHUtils.m in Sources */,
 				2FF825EC19D3CAFF003ED08E /* ASNUtils.m in Sources */,
@@ -692,6 +719,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28F9520B19D0F9FB00DCE892 /* FxATests.m in Sources */,
+				2F79264E1A38ED5E00609E27 /* TokenServerClientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
