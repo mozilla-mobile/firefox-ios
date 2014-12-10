@@ -10,6 +10,10 @@ public struct ShareItem {
     let title: String?
 }
 
+protocol ShareToDestination {
+    func shareItem(item: ShareItem)
+}
+
 struct ExtensionUtils {
     /// Small structure to encapsulate all the possible data that we can get from an application sharing a web page or a url.
 

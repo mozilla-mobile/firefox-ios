@@ -76,8 +76,10 @@ class RESTAccount: Account {
         logoutCallback(account: self)
     }
 
-    lazy var bookmarks: BookmarksREST = {
-        return BookmarksREST(account: self)
+    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
+        // Stubbed out to populate data from server.
+        // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
+        return BookmarksRESTModelFactory(account: self)
     } ()
 
     lazy var clients: Clients = {

@@ -3,18 +3,37 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Alamofire
 
 class BookmarksViewController: UITableViewController {
-    var account: Account!
-
     private let BOOKMARK_CELL_IDENTIFIER = "BOOKMARK_CELL"
     private let BOOKMARK_HEADER_IDENTIFIER = "BOOKMARK_HEADER"
 
-    var bookmarks: [Bookmark] = [];
-    // TODO: Move this to the authenticator when its available.
-    let favicons: Favicons = BasicFavicons();
-    
+    var source: BookmarksModel!
+    var _account: Account!
+    var account: Account! {
+        get {
+            return _account
+        }
+
+        set (account) {
+            self._account = account
+            self.source = account.bookmarks.nullModel
+        }
+    }
+
+    func onNewModel(model: BookmarksModel) {
+        // Switch out the model and redisplay.
+        self.source = model
+        dispatch_async(dispatch_get_main_queue()) {
+            self.refreshControl?.endRefreshing()
+            self.tableView.reloadData()
+        }
+    }
+
+    func onModelFailure(e: Any) {
+        // Do nothing.
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,19 +47,9 @@ class BookmarksViewController: UITableViewController {
         refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
     }
     
+
     func reloadData() {
-        account.bookmarks.getAll(
-            { response in
-                self.bookmarks = response
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.refreshControl?.endRefreshing()
-                    self.tableView.reloadData()
-                }
-            },
-            error: { err in
-                // TODO: Figure out a good way to handle this.
-                println("Error: could not load bookmarks")
-            })
+        self.source.reloadData(self.onNewModel, self.onModelFailure)
     }
     
     func refresh() {
@@ -56,26 +65,17 @@ class BookmarksViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return bookmarks.count;
+        return self.source.current.count
     }
     
     private let FAVICON_SIZE = 32;
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(BOOKMARK_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell;
+
+        let bookmark: BookmarkNode? = self.source.current.get(indexPath.row)
         
-        if let image = (UIImage(named: "leaf.png")) {
-            cell.imageView?.image = createMockFavicon(image)
-        }
-        
-        let bookmark = bookmarks[indexPath.row]
-        // TODO: We need an async image loader api here
-        favicons.getForUrl(NSURL(string: bookmark.url)!, options: nil, callback: { (icon: Favicon) -> Void in
-            if let img = icon.img {
-                cell.imageView?.image = createMockFavicon(img);
-            }
-        });
-        
-        cell.textLabel?.text = bookmark.title
+        cell.imageView?.image = bookmark?.icon
+        cell.textLabel?.text = bookmark?.title
         cell.textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
         cell.textLabel?.textColor = UIColor.darkGrayColor()
         cell.indentationWidth = 20
@@ -113,7 +113,22 @@ class BookmarksViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
-        let bookmark = bookmarks[indexPath.row]
-        UIApplication.sharedApplication().openURL(NSURL(string: bookmark.url)!)
+        let bookmark = self.source.current.get(indexPath.row)
+
+        switch (bookmark) {
+        case let item as BookmarkItem:
+            // Click it.
+            UIApplication.sharedApplication().openURL(NSURL(string: item.url)!)
+            break;
+
+        case let folder as BookmarkFolder:
+            // Descend into the folder.
+            self.source.selectFolder(folder, success: self.onNewModel, failure: self.onModelFailure)
+            break;
+
+        default:
+            // Weird.
+            break;        // Just here until there's another executable statement (compiler requires one).
+        }
     }
 }
