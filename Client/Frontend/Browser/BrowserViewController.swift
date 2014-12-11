@@ -26,7 +26,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate {
         }
 
         browser.view.snp_makeConstraints { make in
-            make.top.equalTo(self.toolbar.snp_bottom)
+            make.top.equalTo(self.toolbar.snp_bottom).with.offset(2)
             make.leading.trailing.bottom.equalTo(self.view)
         }
 
