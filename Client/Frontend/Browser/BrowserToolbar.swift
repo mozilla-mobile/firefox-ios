@@ -59,7 +59,6 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
         progressBar = UIProgressView()
         let progressBarButton = UIBarButtonItem()
         progressBarButton.customView = progressBar
-        progressBar.progress = 99.0
         
         let items = [forwardButtonItem, backButtonItem, urlButtonItem, progressBarButton]
         setItems(items, animated: true)
@@ -111,7 +110,15 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
     }
     
     func updateProgressBar(progress : Float) {
-        progressBar.progress = progress
+        if progress == 1.0 {
+            self.progressBar.setProgress(progress, animated: true)
+            UIView.animateWithDuration(1.5, animations: {self.progressBar.alpha = 0.0},
+                completion:{_ in self.progressBar.setProgress(0.0, animated: false)})
+        } else {
+            self.progressBar.alpha = 1.0
+            self.progressBar.setProgress(progress, animated: true)
+        }
+        
     }
 }
 

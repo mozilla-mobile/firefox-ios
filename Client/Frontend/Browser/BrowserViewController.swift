@@ -36,7 +36,9 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate {
         AnyObject, change:[NSObject: AnyObject], context:
         UnsafeMutablePointer<Void>) {
             if keyPath == "estimatedProgress"{
-                println("webView changed: \(change[NSKeyValueChangeNewKey])")
+                if let progress = change[NSKeyValueChangeNewKey] as Float? {
+                    self.toolbar.updateProgressBar(progress)
+                }
             } else {
                 super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context:nil)
             }
