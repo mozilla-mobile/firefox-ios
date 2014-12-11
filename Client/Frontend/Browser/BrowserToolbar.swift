@@ -48,6 +48,7 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
         urlTextField = ToolbarTextField()
         urlTextField.keyboardType = UIKeyboardType.URL
         urlTextField.autocorrectionType = UITextAutocorrectionType.No
+        urlTextField.autocapitalizationType = UITextAutocapitalizationType.None
         urlTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
         urlTextField.layer.cornerRadius = 8
         urlTextField.setContentHuggingPriority(0, forAxis: UILayoutConstraintAxis.Horizontal)
