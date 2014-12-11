@@ -11,10 +11,8 @@ protocol BrowserToolbarDelegate {
     func didEnterURL(url: NSURL)
 }
 
-class BrowserToolbar: UIToolbar, UITextFieldDelegate {
+class BrowserToolbar: UIView, UITextFieldDelegate {
     var browserToolbarDelegate: BrowserToolbarDelegate?
-
-    private var urlTextField: UITextField!
 
     override init() {
         super.init()
@@ -30,56 +28,101 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
         viewDidInit()
     }
 
+    private var forwardButton: UIButton!
+    private var backButton: UIButton!
+    private var toolbarTextField: ToolbarTextField!
+    private var cancelButton: UIButton!
+    
     private func viewDidInit() {
-        let backButton = UIButton()
+        self.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+        
+        backButton = UIButton()
         backButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         backButton.setTitle("<", forState: UIControlState.Normal)
         backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
-        let backButtonItem = UIBarButtonItem()
-        backButtonItem.customView = backButton
+        self.addSubview(backButton)
 
-        let forwardButton = UIButton()
+        forwardButton = UIButton()
         forwardButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         forwardButton.setTitle(">", forState: UIControlState.Normal)
         forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
-        let forwardButtonItem = UIBarButtonItem()
-        forwardButtonItem.customView = forwardButton
+        self.addSubview(forwardButton)
 
-        urlTextField = ToolbarTextField()
-        urlTextField.keyboardType = UIKeyboardType.URL
-        urlTextField.autocorrectionType = UITextAutocorrectionType.No
-        urlTextField.autocapitalizationType = UITextAutocapitalizationType.None
-        urlTextField.returnKeyType = UIReturnKeyType.Go
-        urlTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
-        urlTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
-        urlTextField.layer.cornerRadius = 8
-        urlTextField.setContentHuggingPriority(0, forAxis: UILayoutConstraintAxis.Horizontal)
-        urlTextField.delegate = self
-        let urlButtonItem = UIBarButtonItem()
-        urlButtonItem.customView = urlTextField
+        toolbarTextField = ToolbarTextField()
+        toolbarTextField.keyboardType = UIKeyboardType.URL
+        toolbarTextField.autocorrectionType = UITextAutocorrectionType.No
+        toolbarTextField.autocapitalizationType = UITextAutocapitalizationType.None
+        toolbarTextField.returnKeyType = UIReturnKeyType.Go
+        toolbarTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
+        toolbarTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
+        toolbarTextField.layer.cornerRadius = 8
+        toolbarTextField.setContentHuggingPriority(0, forAxis: UILayoutConstraintAxis.Horizontal)
+        toolbarTextField.delegate = self
+        self.addSubview(toolbarTextField)
 
-        let items = [forwardButtonItem, backButtonItem, urlButtonItem]
-        setItems(items, animated: true)
+        cancelButton = UIButton()
+        cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
+        cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
+        self.addSubview(cancelButton)
 
-        backButton.snp_makeConstraints { make in
-            make.left.equalTo(self)
-            make.centerY.equalTo(self)
-            make.width.height.equalTo(44)
-        }
-
-        forwardButton.snp_makeConstraints { make in
-            make.left.equalTo(backButton.snp_right)
-            make.centerY.equalTo(self)
-            make.width.height.equalTo(44)
-        }
-
-        urlTextField.snp_makeConstraints { make in
-            make.left.equalTo(forwardButton.snp_right)
-            make.centerY.equalTo(self)
-            make.right.equalTo(self).offset(-8)
-        }
+        arrangeToolbar(editing: false)
     }
 
+    func arrangeToolbar(#editing: Bool) {
+
+        UIView.animateWithDuration(0.5, animations: { () -> Void in
+            if editing {
+                // These two buttons are off screen
+                self.backButton.snp_remakeConstraints { make in
+                    make.right.equalTo(self.forwardButton.snp_left)
+                    make.centerY.equalTo(self)
+                    make.width.height.equalTo(44)
+                }
+                
+                self.forwardButton.snp_remakeConstraints { make in
+                    make.right.equalTo(self.toolbarTextField.snp_left)
+                    make.centerY.equalTo(self)
+                    make.width.height.equalTo(44)
+                }
+                
+                self.toolbarTextField.snp_remakeConstraints { make in
+                    make.left.equalTo(self).offset(8)
+                    make.centerY.equalTo(self)
+                }
+                self.cancelButton.snp_remakeConstraints { make in
+                    make.left.equalTo(self.toolbarTextField.snp_right).offset(8)
+                    make.centerY.equalTo(self)
+                    make.right.equalTo(self).offset(-8)
+                }
+            } else {
+                self.backButton.snp_remakeConstraints { make in
+                    make.left.equalTo(self)
+                    make.centerY.equalTo(self)
+                    make.width.height.equalTo(44)
+                }
+                
+                self.forwardButton.snp_remakeConstraints { make in
+                    make.left.equalTo(self.backButton.snp_right)
+                    make.centerY.equalTo(self)
+                    make.width.height.equalTo(44)
+                }
+                
+                self.toolbarTextField.snp_remakeConstraints { make in
+                    make.left.equalTo(self.forwardButton.snp_right)
+                    make.centerY.equalTo(self)
+                    make.right.equalTo(self).offset(-8)
+                }
+
+                // The cancel button is off screen
+                self.cancelButton.snp_remakeConstraints { make in
+                    make.left.equalTo(self.toolbarTextField.snp_right).offset(8)
+                    make.centerY.equalTo(self)
+                }
+            }
+        })
+    }
+    
     func SELdidClickBack() {
         browserToolbarDelegate?.didClickBack()
     }
@@ -88,8 +131,18 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
         browserToolbarDelegate?.didClickForward()
     }
 
+    func SELdidClickCancel() {
+        // toolbarTextField.text = webView.location TODO Can't do this right now because we can't access the webview
+        toolbarTextField.resignFirstResponder()
+        arrangeToolbar(editing: false)
+    }
+
+    func textFieldDidBeginEditing(textField: UITextField) {
+        arrangeToolbar(editing: true)
+    }
+    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        let urlString = urlTextField.text
+        let urlString = toolbarTextField.text
         
         // If the URL is missing a scheme then parse then we manually prefix it with http:// and try
         // again. We can probably do some smarter things here but I think this is a
@@ -103,7 +156,9 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
                 return false
             }
         }
-        
+
+        arrangeToolbar(editing: false)
+
         textField.resignFirstResponder()
         browserToolbarDelegate?.didEnterURL(url!)
         return false

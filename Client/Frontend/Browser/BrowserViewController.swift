@@ -20,6 +20,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate {
 
         toolbar.snp_makeConstraints { make in
             make.top.equalTo(self.view).offset(StatusBarHeight)
+            make.height.equalTo(44)
             make.leading.trailing.equalTo(self.view)
         }
 
