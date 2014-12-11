@@ -156,6 +156,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0B9144371A5B552F00236DCB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0B91442F1A5B552F00236DCB /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DD76FA10486AA7600D96B5E;
+			remoteInfo = fmdb;
+		};
+		0B9144391A5B552F00236DCB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0B91442F1A5B552F00236DCB /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EE4290EF12B42F870088BD94;
+			remoteInfo = FMDB;
+		};
+		0B91443B1A5B552F00236DCB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0B91442F1A5B552F00236DCB /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BF5D041618416BB2008C5AA9;
+			remoteInfo = Tests;
+		};
+		0B91443D1A5B552F00236DCB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0B91442F1A5B552F00236DCB /* fmdb.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6290CBB5188FE836009790F8;
+			remoteInfo = "FMDB-IOS";
+		};
 		0BF9F8A91A3A3B410049A0FA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0BF9F89F1A3A3B410049A0FA /* MagicalRecord.xcodeproj */;
@@ -300,6 +328,7 @@
 
 /* Begin PBXFileReference section */
 		0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListViewController.swift; sourceTree = "<group>"; };
+		0B91442F1A5B552F00236DCB /* fmdb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = fmdb.xcodeproj; path = ThirdParty/fmdb/fmdb.xcodeproj; sourceTree = SOURCE_ROOT; };
 		0B9E3DD91A23FBBC008A7877 /* Panels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Panels.swift; sourceTree = "<group>"; };
 		0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPanels.swift; sourceTree = "<group>"; };
 		0BA896491A250E6500C1010C /* AccountTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTest.swift; sourceTree = "<group>"; };
@@ -431,6 +460,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B9144301A5B552F00236DCB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0B9144381A5B552F00236DCB /* fmdb */,
+				0B91443A1A5B552F00236DCB /* libFMDB.a */,
+				0B91443C1A5B552F00236DCB /* Tests.xctest */,
+				0B91443E1A5B552F00236DCB /* libFMDB-IOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		0BF9F8A01A3A3B410049A0FA /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -574,6 +614,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				0B91442F1A5B552F00236DCB /* fmdb.xcodeproj */,
 				28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */,
 				F84B222A1A0913F100AAB793 /* Alamofire.xcodeproj */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
@@ -953,6 +994,10 @@
 					ProjectRef = F84B222A1A0913F100AAB793 /* Alamofire.xcodeproj */;
 				},
 				{
+					ProductGroup = 0B9144301A5B552F00236DCB /* Products */;
+					ProjectRef = 0B91442F1A5B552F00236DCB /* fmdb.xcodeproj */;
+				},
+				{
 					ProductGroup = 28CE83CB1A1D1D5100576538 /* Products */;
 					ProjectRef = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
 				},
@@ -976,6 +1021,34 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		0B9144381A5B552F00236DCB /* fmdb */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = fmdb;
+			remoteRef = 0B9144371A5B552F00236DCB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0B91443A1A5B552F00236DCB /* libFMDB.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libFMDB.a;
+			remoteRef = 0B9144391A5B552F00236DCB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0B91443C1A5B552F00236DCB /* Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = Tests.xctest;
+			remoteRef = 0B91443B1A5B552F00236DCB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0B91443E1A5B552F00236DCB /* libFMDB-IOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libFMDB-IOS.a";
+			remoteRef = 0B91443D1A5B552F00236DCB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		0BF9F8AA1A3A3B410049A0FA /* libMagicalRecord-iOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1317,6 +1390,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$SRCROOT/ThirdParty/magicalrecord/MagicalRecord/**",
+					$SRCROOT/ThirdParty/fmdb/src/fmdb,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -1361,6 +1435,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$SRCROOT/ThirdParty/magicalrecord/MagicalRecord/**",
+					$SRCROOT/ThirdParty/fmdb/src/fmdb,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
