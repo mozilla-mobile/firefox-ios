@@ -6,9 +6,8 @@ import UIKit
 import MobileCoreServices
 
 public struct ShareItem {
-    var title: String?
-    var url: String
-    var icon: String? // TODO: This is just a placeholder until we figure out how to do this.
+    let url: String
+    let title: String?
 }
 
 struct ExtensionUtils {
@@ -31,7 +30,7 @@ struct ExtensionUtils {
                                     } else {
                                         let title = inputItem.attributedContentText?.string as String?
                                         let url = obj as NSURL
-                                        completionHandler(ShareItem(title: title, url: url.absoluteString!, icon: nil), nil)
+                                        completionHandler(ShareItem(url: url.absoluteString!, title: title), nil)
                                     }
                                 })
                                 return
