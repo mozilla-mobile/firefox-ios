@@ -16,6 +16,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate {
         view.addSubview(toolbar)
 
         browser = Browser()
+        browser.view.addObserver(self, forKeyPath: "estimatedProgress", options: .New, context: nil)
         view.addSubview(browser.view)
 
         toolbar.snp_makeConstraints { make in
@@ -24,12 +25,27 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate {
         }
 
         browser.view.snp_makeConstraints { make in
-            make.top.equalTo(self.toolbar.snp_bottom)
+            make.top.equalTo(self.toolbar.snp_bottom).with.offset(2)
             make.leading.trailing.bottom.equalTo(self.view)
         }
 
         toolbar.browserToolbarDelegate = self
         browser.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.mozilla.org")!))
+    }
+    override func observeValueForKeyPath(keyPath: String, ofObject object:
+        AnyObject, change:[NSObject: AnyObject], context:
+        UnsafeMutablePointer<Void>) {
+            if keyPath == "estimatedProgress"{
+                if let progress = change[NSKeyValueChangeNewKey] as Float? {
+                    self.toolbar.updateProgressBar(progress)
+                }
+            } else {
+                super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context:nil)
+            }
+    }
+    
+    deinit {
+        browser.view.removeObserver(self, forKeyPath: "estimatedProgress", context: nil)
     }
 
     func didClickBack() {

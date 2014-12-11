@@ -15,6 +15,7 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
     var browserToolbarDelegate: BrowserToolbarDelegate?
 
     private var urlTextField: UITextField!
+    private var progressBar : UIProgressView!
 
     override init() {
         super.init()
@@ -54,9 +55,14 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
         urlTextField.delegate = self
         let urlButtonItem = UIBarButtonItem()
         urlButtonItem.customView = urlTextField
-
-        let items = [forwardButtonItem, backButtonItem, urlButtonItem]
+        
+        progressBar = UIProgressView()
+        let progressBarButton = UIBarButtonItem()
+        progressBarButton.customView = progressBar
+        
+        let items = [forwardButtonItem, backButtonItem, urlButtonItem, progressBarButton]
         setItems(items, animated: true)
+        
 
         backButton.snp_makeConstraints { make in
             make.left.equalTo(self)
@@ -74,6 +80,11 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
             make.left.equalTo(forwardButton.snp_right)
             make.centerY.equalTo(self)
             make.right.equalTo(self).offset(-8)
+        }
+        
+        progressBar.snp_makeConstraints { make in
+            make.centerY.equalTo(self.snp_bottom)
+            make.width.equalTo(self)
         }
     }
 
@@ -96,6 +107,18 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
 
         browserToolbarDelegate?.didEnterURL(url!)
         return false
+    }
+    
+    func updateProgressBar(progress : Float) {
+        if progress == 1.0 {
+            self.progressBar.setProgress(progress, animated: true)
+            UIView.animateWithDuration(1.5, animations: {self.progressBar.alpha = 0.0},
+                completion:{_ in self.progressBar.setProgress(0.0, animated: false)})
+        } else {
+            self.progressBar.alpha = 1.0
+            self.progressBar.setProgress(progress, animated: true)
+        }
+        
     }
 }
 
