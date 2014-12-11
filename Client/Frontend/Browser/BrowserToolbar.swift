@@ -69,8 +69,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         arrangeToolbar(editing: false)
     }
 
-    func arrangeToolbar(#editing: Bool) {
-
+    private func arrangeToolbar(#editing: Bool) {
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             if editing {
                 // These two buttons are off screen
