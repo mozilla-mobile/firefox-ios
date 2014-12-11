@@ -30,6 +30,9 @@
 		28784D1A1A38CA9400021E35 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28784D181A38CA9400021E35 /* Bookmarks.swift */; };
 		28784D1B1A38CA9400021E35 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28784D181A38CA9400021E35 /* Bookmarks.swift */; };
 		28784D3E1A39BF2A00021E35 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28784D181A38CA9400021E35 /* Bookmarks.swift */; };
+		28784D451A39C48900021E35 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BA1A1D1D3200576538 /* Bytes.swift */; };
+		28784D491A39C48900021E35 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BA1A1D1D3200576538 /* Bytes.swift */; };
+		28784D4A1A39C48A00021E35 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BA1A1D1D3200576538 /* Bytes.swift */; };
 		28CE83C21A1D1D3200576538 /* FxAClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83B81A1D1D3200576538 /* FxAClient.swift */; };
 		28CE83C31A1D1D3200576538 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BA1A1D1D3200576538 /* Bytes.swift */; };
 		28CE83C41A1D1D3200576538 /* ClientPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BB1A1D1D3200576538 /* ClientPayload.swift */; };
@@ -1027,6 +1030,7 @@
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */,
 				D34DC8661A16C49600D49B7B /* RestAPI.swift in Sources */,
+				28784D451A39C48900021E35 /* Bytes.swift in Sources */,
 				D34DC8611A16C47300D49B7B /* Account.swift in Sources */,
 				0BD19A6C1A2530C60084FBA7 /* Site.swift in Sources */,
 				D34DC8621A16C49600D49B7B /* AccountManager.swift in Sources */,
@@ -1054,6 +1058,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E418D0DA1A251B3200CAE47A /* AccountManager.swift in Sources */,
+				28784D491A39C48900021E35 /* Bytes.swift in Sources */,
 				E418D0DC1A251B3200CAE47A /* Clients.swift in Sources */,
 				28784D1A1A38CA9400021E35 /* Bookmarks.swift in Sources */,
 				E42CCE031A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
@@ -1082,6 +1087,7 @@
 				E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				F8708D2A1A0970B40051AB07 /* ActionViewController.swift in Sources */,
 				E42CCDE71A23A73800B794D3 /* Clients.swift in Sources */,
+				28784D4A1A39C48A00021E35 /* Bytes.swift in Sources */,
 				28784D1B1A38CA9400021E35 /* Bookmarks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
