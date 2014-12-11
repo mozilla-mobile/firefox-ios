@@ -50,7 +50,7 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
         urlTextField.autocorrectionType = UITextAutocorrectionType.No
         urlTextField.autocapitalizationType = UITextAutocapitalizationType.None
         urlTextField.returnKeyType = UIReturnKeyType.Go
-        
+        urlTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
         urlTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
         urlTextField.layer.cornerRadius = 8
         urlTextField.setContentHuggingPriority(0, forAxis: UILayoutConstraintAxis.Horizontal)
