@@ -5,19 +5,6 @@
 import UIKit
 import Alamofire
 
-func createMockFavicon(icon: UIImage) -> UIImage {
-    let size = CGSize(width: 30, height: 30)
-    UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-    var context = UIGraphicsGetCurrentContext()
-    icon.drawInRect(CGRectInset(CGRect(origin: CGPointZero, size: size), 1.0, 1.0))
-    CGContextSetStrokeColorWithColor(context, UIColor.grayColor().CGColor)
-    CGContextSetLineWidth(context, 0.5);
-    CGContextStrokeEllipseInRect(context, CGRectInset(CGRect(origin: CGPointZero, size: size), 1.0, 1.0))
-    let image = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
-    return image
-}
-
 class BookmarksViewController: UITableViewController {
     var account: Account!
 
