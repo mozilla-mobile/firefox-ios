@@ -15,6 +15,7 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
     var browserToolbarDelegate: BrowserToolbarDelegate?
 
     private var urlTextField: UITextField!
+    private var progressBar : UIProgressView!
 
     override init() {
         super.init()
@@ -55,7 +56,7 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
         let urlButtonItem = UIBarButtonItem()
         urlButtonItem.customView = urlTextField
         
-        let progressBar = UIProgressView()
+        progressBar = UIProgressView()
         let progressBarButton = UIBarButtonItem()
         progressBarButton.customView = progressBar
         progressBar.progress = 99.0
@@ -107,6 +108,10 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
 
         browserToolbarDelegate?.didEnterURL(url!)
         return false
+    }
+    
+    func updateProgressBar(progress : Float) {
+        progressBar.progress = progress
     }
 }
 

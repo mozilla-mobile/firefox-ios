@@ -6,7 +6,7 @@ import Foundation
 import WebKit
 
 class Browser {
-    dynamic private let webView = WKWebView()
+    private let webView = WKWebView()
 
     var view: UIView {
         return webView

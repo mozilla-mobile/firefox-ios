@@ -10,14 +10,13 @@ private let StatusBarHeight = 20
 class BrowserViewController: UIViewController, BrowserToolbarDelegate {
     var toolbar: BrowserToolbar!
     var browser: Browser!
-    private var myContext = 0
 
     override func viewDidLoad() {
         toolbar = BrowserToolbar()
         view.addSubview(toolbar)
 
         browser = Browser()
-        browser.view.addObserver(self, forKeyPath: "estimatedProgress", options: .New, context: &myContext)
+        browser.view.addObserver(self, forKeyPath: "estimatedProgress", options: .New, context: nil)
         view.addSubview(browser.view)
 
         toolbar.snp_makeConstraints { make in
@@ -36,15 +35,15 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate {
     override func observeValueForKeyPath(keyPath: String, ofObject object:
         AnyObject, change:[NSObject: AnyObject], context:
         UnsafeMutablePointer<Void>) {
-            if context == &myContext && keyPath == "estimatedProgress"{
+            if keyPath == "estimatedProgress"{
                 println("webView changed: \(change[NSKeyValueChangeNewKey])")
             } else {
-                super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context:context)
+                super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context:nil)
             }
     }
     
     deinit {
-        browser.view.removeObserver(self, forKeyPath: "estimatedProgress", context: &myContext)
+        browser.view.removeObserver(self, forKeyPath: "estimatedProgress", context: nil)
     }
 
     func didClickBack() {
