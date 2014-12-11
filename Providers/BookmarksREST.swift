@@ -80,7 +80,7 @@ class BookmarksREST: NSObject {
     /// 1094233 open for the REST API to store the incoming item in the Mobile
     /// Bookmarks instead.
     
-    func shareItem(item: ExtensionUtils.ShareItem) {
+    func shareItem(item: ShareItem) {
         let request = NSMutableURLRequest(URL: NSURL(string: "https://moz-syncapi.sateh.com/1.0/bookmarks")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")

@@ -5,13 +5,15 @@
 import UIKit
 import MobileCoreServices
 
+public struct ShareItem {
+    var title: String?
+    var url: String
+    var icon: String? // TODO: This is just a placeholder until we figure out how to do this.
+}
+
 struct ExtensionUtils {
     /// Small structure to encapsulate all the possible data that we can get from an application sharing a web page or a url.
-    struct ShareItem {
-        var title: String?
-        var url: String
-        var icon: String? // TODO: This is just a placeholder until we figure out how to do this.
-    }
+
 
     /// Look through the extensionContext for a url and title. Walks over all inputItems and then over all the attachments.
     /// Has a completionHandler because ultimately an XPC call to the sharing application is done.

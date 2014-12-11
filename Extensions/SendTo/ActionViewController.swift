@@ -123,7 +123,7 @@ Depending on whether the user is logged in or not, this viewcontroller will pres
 class ActionViewController: UINavigationController, ClientPickerViewControllerDelegate, LoginViewControllerDelegate
 {
     var account: Account?
-    var sharedItem: ExtensionUtils.ShareItem?
+    var sharedItem: ShareItem?
     
     override func viewDidLoad() {
         super.viewDidLoad()
