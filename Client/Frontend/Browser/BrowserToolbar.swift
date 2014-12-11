@@ -90,13 +90,20 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         let urlString = urlTextField.text
-        let url = NSURL(string: urlString)
-
-        if url == nil {
-            println("Error parsing URL: " + urlString)
-            return false
+        
+        // If the URL is missing a scheme then parse then we manually prefix it with http:// and try
+        // again. We can probably do some smarter things here but I think this is a
+        // decent start that at least lets people skip typing the protocol.
+        
+        var url = NSURL(string: urlString)
+        if url == nil || url?.scheme == nil {
+            url = NSURL(string: "http://" + urlString)
+            if url == nil {
+                println("Error parsing URL: " + urlString)
+                return false
+            }
         }
-
+        
         textField.resignFirstResponder()
         browserToolbarDelegate?.didEnterURL(url!)
         return false
