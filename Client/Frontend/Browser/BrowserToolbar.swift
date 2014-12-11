@@ -97,6 +97,7 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
             return false
         }
 
+        textField.resignFirstResponder()
         browserToolbarDelegate?.didEnterURL(url!)
         return false
     }
