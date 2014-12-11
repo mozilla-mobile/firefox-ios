@@ -54,9 +54,15 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
         urlTextField.delegate = self
         let urlButtonItem = UIBarButtonItem()
         urlButtonItem.customView = urlTextField
-
-        let items = [forwardButtonItem, backButtonItem, urlButtonItem]
+        
+        let progressBar = UIProgressView()
+        let progressBarButton = UIBarButtonItem()
+        progressBarButton.customView = progressBar
+        progressBar.progress = 99.0
+        
+        let items = [forwardButtonItem, backButtonItem, urlButtonItem, progressBarButton]
         setItems(items, animated: true)
+        
 
         backButton.snp_makeConstraints { make in
             make.left.equalTo(self)
@@ -74,6 +80,11 @@ class BrowserToolbar: UIToolbar, UITextFieldDelegate {
             make.left.equalTo(forwardButton.snp_right)
             make.centerY.equalTo(self)
             make.right.equalTo(self).offset(-8)
+        }
+        
+        progressBar.snp_makeConstraints { make in
+            make.centerY.equalTo(self.snp_bottom)
+            make.width.equalTo(self)
         }
     }
 
