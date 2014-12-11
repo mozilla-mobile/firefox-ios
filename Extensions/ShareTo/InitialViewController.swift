@@ -47,7 +47,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate
         })
     }
 
-    func shareController(shareController: ShareDialogController, didShareItem item: ExtensionUtils.ShareItem, toDestinations destinations: NSSet)
+    func shareController(shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet)
     {
         setLastUsedShareDestinations(destinations)
         
@@ -82,7 +82,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate
         NSUserDefaults.standardUserDefaults().synchronize()
     }
     
-    func presentShareDialog(item: ExtensionUtils.ShareItem) {
+    func presentShareDialog(item: ShareItem) {
         shareDialogController = ShareDialogController()
         shareDialogController.delegate = self
         shareDialogController.item = item
@@ -125,13 +125,13 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     
     //
     
-    func shareToReadingList(item: ExtensionUtils.ShareItem) {
+    func shareToReadingList(item: ShareItem) {
         // TODO: Discuss how to share to the (local) reading list
     }
     
-    func shareToBookmarks(item: ExtensionUtils.ShareItem) {
+    func shareToBookmarks(item: ShareItem) {
         if account != nil { // TODO: We need to properly deal with this.
-            account?.bookmarks.shareItem(item)
+            account!.bookmarks.shareItem(item)
         }
     }
 }

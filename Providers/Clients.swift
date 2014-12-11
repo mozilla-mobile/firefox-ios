@@ -71,7 +71,7 @@ class Clients: NSObject {
     ///
     /// Note that this code currently uses NSURLSession directly because AlamoFire
     /// does not work from an Extension. (Bug 1104884)
-    func sendItem(item: ExtensionUtils.ShareItem, toClients clients: [Client]) {
+    func sendItem(item: ShareItem, toClients clients: [Client]) {
         if clients.count > 0 {
             let request = NSMutableURLRequest(URL: NSURL(string: "https://moz-syncapi.sateh.com/1.0/clients/\(clients[0].id)/tab")!)
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
