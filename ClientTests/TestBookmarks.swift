@@ -7,29 +7,20 @@ import XCTest
 
 class TestBookmarks : AccountTest {
     func testBookmarks() {
-        // Get the test account
         withTestAccount { account -> Void in
             let expectation = self.expectationWithDescription("asynchronous request")
 
-            account.bookmarks.getAll({ (response: [Bookmark]) in
-                XCTAssert(response.count > 0, "Found some bookmarks");
-                for bookmark in response {
-                    XCTAssertNotEqual(bookmark.url, "", "Bookmarks has url \(bookmark.url)")
-                    XCTAssertNotEqual(bookmark.title, "", "Bookmarks has title \(bookmark.title)")
-                    XCTAssert(bookmark.url != "", "Bookmarks has url \(bookmark.url)");
-                    XCTAssert(bookmark.title != "", "Bookmarks has title  \(bookmark.title)");
-                }
+            MockAccount().bookmarks.modelForFolder("mobile", success: { (model: BookmarksModel) in
+                XCTAssert(model.current.count == 11, "We create 11 stub bookmarks.")
+                let bookmark = model.current.get(0)
+                XCTAssertTrue(bookmark != nil)
+                XCTAssertTrue(bookmark is BookmarkItem)
+                XCTAssertEqual((bookmark as BookmarkItem).url, "http://www.example.com/0", "Example URL found.")
                 expectation.fulfill()
-            }, error: { (err: RequestError) -> Void in
-                // Something has gone wrong. Assert and finish the test
-                switch(err) {
-                case RequestError.BadAuth:
-                    XCTAssertTrue(false, "Should not have failed to get bookmarks (bad auth)")
-                case RequestError.ConnectionFailed:
-                    XCTAssertTrue(false, "Should not have failed to get bookmarks (connection failed)")
-                }
+            }, failure: { (Any) -> () in
+                XCTFail("Should not have failed to get mock bookmarks.")
                 expectation.fulfill()
-            });
+            })
 
             self.waitForExpectationsWithTimeout(10.0, handler:nil)
         }
