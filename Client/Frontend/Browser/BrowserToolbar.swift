@@ -14,6 +14,11 @@ protocol BrowserToolbarDelegate {
 class BrowserToolbar: UIView, UITextFieldDelegate {
     var browserToolbarDelegate: BrowserToolbarDelegate?
 
+    private var forwardButton: UIButton!
+    private var backButton: UIButton!
+    private var toolbarTextField: ToolbarTextField!
+    private var cancelButton: UIButton!
+
     override init() {
         super.init()
     }
@@ -27,11 +32,6 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         super.init(coder: aDecoder)
         viewDidInit()
     }
-
-    private var forwardButton: UIButton!
-    private var backButton: UIButton!
-    private var toolbarTextField: ToolbarTextField!
-    private var cancelButton: UIButton!
     
     private func viewDidInit() {
         self.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
