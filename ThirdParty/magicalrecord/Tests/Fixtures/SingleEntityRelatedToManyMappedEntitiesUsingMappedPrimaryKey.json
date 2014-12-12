@@ -1,0 +1,24 @@
+{
+    "mappedEntities":
+    [
+        {
+            "id": 1,
+            "sampleAttribute": "Sample Attribute Value 1"
+        }
+        ,
+        {
+            "id": 2,
+            "sampleAttribute": "Sample Attribute Value 2"
+        }
+        ,
+        {
+            "id": 3,
+            "sampleAttribute": "Sample Attribute Value 3"
+        }
+        ,
+        {
+            "id": 4,
+            "sampleAttribute": "Sample Attribute Value 4"
+        }
+    ]
+}
