@@ -21,13 +21,13 @@ let ShareDestinations = [
 
 protocol ShareControllerDelegate {
     func shareControllerDidCancel(shareController: ShareDialogController) -> Void
-    func shareController(shareController: ShareDialogController, didShareItem item: ExtensionUtils.ShareItem, toDestinations destinations: NSSet) -> Void
+    func shareController(shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet) -> Void
 }
 
 class ShareDialogController: UIViewController, UITableViewDataSource, UITableViewDelegate
 {
     var delegate: ShareControllerDelegate!
-    var item: ExtensionUtils.ShareItem!
+    var item: ShareItem!
     var initialShareDestinations: NSSet = NSSet(object: ShareDestinationBookmarks)
     
     var selectedShareDestinations: NSMutableSet = NSMutableSet()
@@ -126,21 +126,13 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
             "divider": dividerView,
             "table": tableView
         ]
-        
-        let iconSize = iconView.image!.size.width
-        let leftPadding = item.icon != nil ? iconSize + 16 : 8
+
+        let leftPadding = 8
         
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[nav]|",
             options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[nav]",
             options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
-        
-        if item.icon != nil {
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-8-[icon(\(iconSize))]",
-                options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[nav]-8-[icon(\(iconSize))]",
-                options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
-        }
         
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-\(leftPadding)-[title]-8-|",
             options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))

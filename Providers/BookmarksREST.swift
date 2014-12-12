@@ -15,7 +15,7 @@ class Bookmark {
     }
 }
 
-class TestBookmarksProvder : Bookmarks {
+class TestBookmarksProvider : BookmarksREST {
     override func getAll(success: ([Bookmark]) -> (), error: (RequestError) -> ()) {
         var res = [Bookmark]()
         for i in 0...10 {
@@ -26,7 +26,7 @@ class TestBookmarksProvder : Bookmarks {
     }
 }
 
-class Bookmarks: NSObject {
+class BookmarksREST: NSObject {
     private let account: Account
 
     init(account: Account) {
@@ -80,7 +80,7 @@ class Bookmarks: NSObject {
     /// 1094233 open for the REST API to store the incoming item in the Mobile
     /// Bookmarks instead.
     
-    func shareItem(item: ExtensionUtils.ShareItem) {
+    func shareItem(item: ShareItem) {
         let request = NSMutableURLRequest(URL: NSURL(string: "https://moz-syncapi.sateh.com/1.0/bookmarks")!)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
