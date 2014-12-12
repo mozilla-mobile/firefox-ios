@@ -32,6 +32,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     private var backButton: UIButton!
     private var toolbarTextField: ToolbarTextField!
     private var cancelButton: UIButton!
+    private var progressBar : UIProgressView!
     
     private func viewDidInit() {
         self.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
@@ -46,6 +47,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         forwardButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         forwardButton.setTitle(">", forState: UIControlState.Normal)
         forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
+
         self.addSubview(forwardButton)
 
         toolbarTextField = ToolbarTextField()
@@ -65,8 +67,13 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
         cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(cancelButton)
+        
+        self.progressBar = UIProgressView()
+        self.progressBar.trackTintColor = self.backgroundColor
+        self.addSubview(progressBar)
 
         arrangeToolbar(editing: false)
+
     }
 
     private func arrangeToolbar(#editing: Bool) {
@@ -94,6 +101,11 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
                     make.centerY.equalTo(self)
                     make.right.equalTo(self).offset(-8)
                 }
+                
+                self.progressBar.snp_remakeConstraints { make in
+                    make.centerY.equalTo(self.snp_bottom)
+                    make.width.equalTo(self)
+                }
             } else {
                 self.backButton.snp_remakeConstraints { make in
                     make.left.equalTo(self)
@@ -117,6 +129,11 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
                 self.cancelButton.snp_remakeConstraints { make in
                     make.left.equalTo(self.toolbarTextField.snp_right).offset(8)
                     make.centerY.equalTo(self)
+                }
+                
+                self.progressBar.snp_remakeConstraints { make in
+                    make.centerY.equalTo(self.snp_bottom)
+                    make.width.equalTo(self)
                 }
             }
         })
@@ -161,6 +178,18 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         textField.resignFirstResponder()
         browserToolbarDelegate?.didEnterURL(url!)
         return false
+    }
+    
+    func updateProgressBar(progress : Float) {
+        if progress == 1.0 {
+            self.progressBar.setProgress(progress, animated: true)
+            UIView.animateWithDuration(1.5, animations: {self.progressBar.alpha = 0.0},
+                completion:{_ in self.progressBar.setProgress(0.0, animated: false)})
+        } else {
+            self.progressBar.alpha = 1.0
+            self.progressBar.setProgress(progress, animated: true)
+        }
+        
     }
 }
 
