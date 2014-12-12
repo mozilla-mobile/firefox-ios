@@ -26,7 +26,7 @@ class AccountManager: NSObject {
 
         if let user = getUsername() {
             let credential = getKeychainUser(user)
-            return Account(credential: credential, self.logoutCallback)
+            return RESTAccount(credential: credential, self.logoutCallback)
         }
 
         return nil
@@ -55,7 +55,7 @@ class AccountManager: NSObject {
             success: { _ in
                 println("Logged in as user \(username)")
                 self.setKeychainUser(username, password: password)
-                let account = Account(credential: credential, { account in
+                let account = RESTAccount(credential: credential, { account in
                     self.removeKeychain(username)
                     self.userDefaults.removeObjectForKey(KeyUsername)
                     self.userDefaults.setObject(false, forKey: KeyLoggedIn)
