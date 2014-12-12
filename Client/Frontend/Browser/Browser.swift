@@ -12,6 +12,10 @@ class Browser {
         return webView
     }
 
+    var url: String? {
+        return webView.URL?.absoluteString
+    }
+
     var canGoBack: Bool {
         return webView.canGoBack
     }
