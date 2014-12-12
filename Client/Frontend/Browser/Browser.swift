@@ -11,6 +11,10 @@ class Browser {
     var view: UIView {
         return webView
     }
+    
+    init() {
+        webView.allowsBackForwardNavigationGestures = true
+    }
 
     var canGoBack: Bool {
         return webView.canGoBack
