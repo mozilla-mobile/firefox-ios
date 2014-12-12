@@ -74,6 +74,17 @@ public class MemoryBookmarkFolder: BookmarkFolder {
     public func get(index: Int) -> BookmarkNode? {
         return children[index]
     }
+
+    /**
+     * Return a new immutable folder that's just like this one,
+     * but also contains the new items.
+     */
+    func append(items: [BookmarkNode]) -> MemoryBookmarkFolder {
+        if (items.isEmpty) {
+            return self
+        }
+        return MemoryBookmarkFolder(id: self.id, name: self.title, children: self.children + items)
+    }
 }
 
 /**
@@ -187,13 +198,14 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         var m: BookmarkFolder
         switch (guid) {
         case "mobile":
-            m = self.mobile
+            // Transparently merges in any queued items.
+            m = self.mobile.append(self.sink.queue)
             break;
         case "root":
             m = self.root
             break;
         case "unsorted":
-            m = self.unsorted         // TODO: virtually merge sink into this.
+            m = self.unsorted
             break;
         default:
             failure("No such folder.")
