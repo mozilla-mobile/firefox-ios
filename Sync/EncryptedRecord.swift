@@ -11,7 +11,10 @@ public class KeyBundle : Equatable {
     let hmacKey: NSData;
 
     public class func random() -> KeyBundle {
-        // TODO: ensure seeded random.
+        // Bytes.generateRandomBytes uses SecRandomCopyBytes, which hits /dev/random, which
+        // on iOS is populated by the OS from kernel-level sources of entropy.
+        // That should mean that we don't need to seed or initialize anything before calling
+        // this. That is probably not true on (some versions of) OS X.
         return KeyBundle(encKey: Bytes.generateRandomBytes(32), hmacKey: Bytes.generateRandomBytes(32))
     }
 
