@@ -58,7 +58,7 @@ public class BookmarkItem: BookmarkNode {
  */
 @objc public protocol BookmarkFolder: BookmarkNode {
     var count: Int { get }
-    func get(index: Int) -> BookmarkNode?
+    subscript(index: Int) -> BookmarkNode { get }
 }
 
 /**
@@ -97,8 +97,10 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
         return children.count
     }
 
-    public func get(index: Int) -> BookmarkNode? {
-        return children[index]
+    public subscript(index: Int) -> BookmarkNode {
+        get {
+            return children[index]
+        }
     }
 
     public func generate() -> BookmarkNodeGenerator {

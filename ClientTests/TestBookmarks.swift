@@ -12,8 +12,7 @@ class TestBookmarks : AccountTest {
 
             MockAccount().bookmarks.modelForFolder("mobile", success: { (model: BookmarksModel) in
                 XCTAssert(model.current.count == 11, "We create 11 stub bookmarks.")
-                let bookmark = model.current.get(0)
-                XCTAssertTrue(bookmark != nil)
+                let bookmark = model.current[0]
                 XCTAssertTrue(bookmark is BookmarkItem)
                 XCTAssertEqual((bookmark as BookmarkItem).url, "http://www.example.com/0", "Example URL found.")
                 expectation.fulfill()

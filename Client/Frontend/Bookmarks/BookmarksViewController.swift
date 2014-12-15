@@ -72,10 +72,10 @@ class BookmarksViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(BOOKMARK_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell
 
-        let bookmark: BookmarkNode? = self.source.current.get(indexPath.row)
+        let bookmark: BookmarkNode = self.source.current[indexPath.row]
         
-        cell.imageView?.image = bookmark?.icon
-        cell.textLabel?.text = bookmark?.title
+        cell.imageView?.image = bookmark.icon
+        cell.textLabel?.text = bookmark.title
         cell.textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
         cell.textLabel?.textColor = UIColor.darkGrayColor()
         cell.indentationWidth = 20
@@ -113,7 +113,7 @@ class BookmarksViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
-        let bookmark = self.source.current.get(indexPath.row)
+        let bookmark = self.source.current[indexPath.row]
 
         switch (bookmark) {
         case let item as BookmarkItem:
