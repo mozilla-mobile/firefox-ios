@@ -74,7 +74,7 @@ class TabsViewController: UITableViewController
             // TODO: We need better async image loading here
             favicons.getForUrl(NSURL(string: tab.url)!, options: nil, callback: { (icon: Favicon) -> Void in
                 if var img = icon.img {
-                    cell.imageView?.image = createMockFavicon(img);
+                    cell.imageView?.image = createSizedFavicon(img)
                     cell.setNeedsLayout()
                 }
             });

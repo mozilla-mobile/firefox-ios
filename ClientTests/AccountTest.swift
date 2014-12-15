@@ -16,7 +16,7 @@ class TestAccountManager : AccountManager {
     }
 }
 
-class TestAccount : Account {
+class TestAccount : RESTAccount {
     override init(credential: NSURLCredential, logoutCallback: LogoutCallback) {
         super.init(credential: credential, logoutCallback: logoutCallback)
     }

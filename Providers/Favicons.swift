@@ -104,7 +104,7 @@ class BasicFavicons : Favicons {
 }
 
 
-public func createMockFavicon(icon: UIImage) -> UIImage {
+public func createSizedFavicon(icon: UIImage) -> UIImage {
     let size = CGSize(width: 30, height: 30)
     UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
     var context = UIGraphicsGetCurrentContext()

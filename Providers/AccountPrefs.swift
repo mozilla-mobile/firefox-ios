@@ -13,7 +13,7 @@ class AccountPrefs : NSUserDefaults {
     }
 
     private func qualifyKey(key:String) -> String {
-        return self.account.credential.user! + key
+        return self.account.user + key
     }
     
     override func setBool(value: Bool, forKey defaultName: String) {
