@@ -42,7 +42,7 @@ public class BookmarkItem: BookmarkNode {
         if (self._icon != nil) {
             return self._icon!
         }
-        return createMockFavicon(UIImage(named: "leaf.png")!)
+        return createSizedFavicon(UIImage(named: "leaf.png")!)
     }
 
     init(id: String, title: String, url: String) {
@@ -70,7 +70,7 @@ public class MemoryBookmarkFolder: BookmarkFolder {
     let children: [BookmarkNode]
 
     public var icon: UIImage {
-        return createMockFavicon(UIImage(named: "bookmark_folder_closed.png")!)
+        return createSizedFavicon(UIImage(named: "bookmark_folder_closed.png")!)
     }
 
     init(id: String, name: String, children: [BookmarkNode]) {
