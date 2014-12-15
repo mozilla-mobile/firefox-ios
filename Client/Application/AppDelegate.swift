@@ -13,8 +13,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window.backgroundColor = UIColor.whiteColor()
 
         self.window.rootViewController = BrowserViewController()
+        // TODO: Datastores should be tied to a profile/account
+        MagicalRecord.setupCoreDataStackWithStoreNamed("Default_Store")
 
         self.window.makeKeyAndVisible()
         return true
+    }
+
+    func application(application: UIApplication, applicationWillTerminate app: UIApplication) {
+        // TODO: Datastores should be tied to a profile/account
+        MagicalRecord.cleanUp()
     }
 }
