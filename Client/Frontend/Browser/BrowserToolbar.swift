@@ -9,10 +9,17 @@ protocol BrowserToolbarDelegate {
     func didClickBack()
     func didClickForward()
     func didEnterURL(url: NSURL)
+    func didClickAddTab()
 }
 
 class BrowserToolbar: UIView, UITextFieldDelegate {
     var browserToolbarDelegate: BrowserToolbarDelegate?
+
+    private var forwardButton: UIButton!
+    private var backButton: UIButton!
+    private var toolbarTextField: ToolbarTextField!
+    private var cancelButton: UIButton!
+    private var tabsButton: UIButton!
 
     override init() {
         super.init()
@@ -27,11 +34,6 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         super.init(coder: aDecoder)
         viewDidInit()
     }
-
-    private var forwardButton: UIButton!
-    private var backButton: UIButton!
-    private var toolbarTextField: ToolbarTextField!
-    private var cancelButton: UIButton!
     
     private func viewDidInit() {
         self.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
@@ -66,7 +68,25 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(cancelButton)
 
+        tabsButton = UIButton()
+        tabsButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        tabsButton.titleLabel?.layer.borderColor = UIColor.blackColor().CGColor
+        tabsButton.titleLabel?.layer.cornerRadius = 4
+        tabsButton.titleLabel?.layer.borderWidth = 1
+        tabsButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 12)
+        tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        tabsButton.titleLabel?.snp_makeConstraints { make in
+            make.size.equalTo(24)
+            return
+        }
+        tabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
+        self.addSubview(tabsButton)
+
         arrangeToolbar(editing: false)
+    }
+
+    func updateTabCount(count: Int) {
+        tabsButton.setTitle(count.description, forState: UIControlState.Normal)
     }
 
     private func arrangeToolbar(#editing: Bool) {
@@ -89,10 +109,18 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
                     make.left.equalTo(self).offset(8)
                     make.centerY.equalTo(self)
                 }
+
                 self.cancelButton.snp_remakeConstraints { make in
                     make.left.equalTo(self.toolbarTextField.snp_right).offset(8)
                     make.centerY.equalTo(self)
                     make.right.equalTo(self).offset(-8)
+                }
+
+                // Tabs button is off the screen.
+                self.tabsButton.snp_remakeConstraints { make in
+                    make.left.equalTo(self.cancelButton.snp_right)
+                    make.centerY.equalTo(self)
+                    make.width.height.equalTo(44)
                 }
             } else {
                 self.backButton.snp_remakeConstraints { make in
@@ -110,12 +138,18 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
                 self.toolbarTextField.snp_remakeConstraints { make in
                     make.left.equalTo(self.forwardButton.snp_right)
                     make.centerY.equalTo(self)
+                }
+
+                self.tabsButton.snp_remakeConstraints { make in
+                    make.left.equalTo(self.toolbarTextField.snp_right)
+                    make.centerY.equalTo(self)
+                    make.width.height.equalTo(44)
                     make.right.equalTo(self).offset(-8)
                 }
 
                 // The cancel button is off screen
                 self.cancelButton.snp_remakeConstraints { make in
-                    make.left.equalTo(self.toolbarTextField.snp_right).offset(8)
+                    make.left.equalTo(self.tabsButton.snp_right).offset(8)
                     make.centerY.equalTo(self)
                 }
             }
@@ -134,6 +168,10 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         // toolbarTextField.text = webView.location TODO Can't do this right now because we can't access the webview
         toolbarTextField.resignFirstResponder()
         arrangeToolbar(editing: false)
+    }
+
+    func SELdidClickAddTab() {
+        browserToolbarDelegate?.didClickAddTab()
     }
 
     func textFieldDidBeginEditing(textField: UITextField) {

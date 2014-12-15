@@ -16,6 +16,10 @@ class Browser {
         webView.allowsBackForwardNavigationGestures = true
     }
 
+    var url: String? {
+        return webView.URL?.absoluteString
+    }
+
     var canGoBack: Bool {
         return webView.canGoBack
     }

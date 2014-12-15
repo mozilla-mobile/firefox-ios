@@ -7,16 +7,13 @@ import UIKit
 
 private let StatusBarHeight = 20
 
-class BrowserViewController: UIViewController, BrowserToolbarDelegate {
+class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManagerDelegate {
     var toolbar: BrowserToolbar!
-    var browser: Browser!
+    let tabManager = TabManager()
 
     override func viewDidLoad() {
         toolbar = BrowserToolbar()
         view.addSubview(toolbar)
-
-        browser = Browser()
-        view.addSubview(browser.view)
 
         toolbar.snp_makeConstraints { make in
             make.top.equalTo(self.view).offset(StatusBarHeight)
@@ -24,24 +21,50 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate {
             make.leading.trailing.equalTo(self.view)
         }
 
-        browser.view.snp_makeConstraints { make in
-            make.top.equalTo(self.toolbar.snp_bottom)
-            make.leading.trailing.bottom.equalTo(self.view)
-        }
-
         toolbar.browserToolbarDelegate = self
-        browser.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.mozilla.org")!))
+        tabManager.delegate = self
+
+        tabManager.addTab()
     }
 
     func didClickBack() {
-        browser.goBack()
+        tabManager.selectedTab?.goBack()
     }
 
     func didClickForward() {
-        browser.goForward()
+        tabManager.selectedTab?.goForward()
+    }
+
+    func didClickAddTab() {
+        let controller = TabTrayController()
+        controller.tabManager = tabManager
+        presentViewController(controller, animated: true, completion: nil)
     }
 
     func didEnterURL(url: NSURL) {
-        browser.loadRequest(NSURLRequest(URL: url))
+        tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url))
+    }
+
+    func didSelectedTabChange(selected: Browser?, previous: Browser?) {
+        previous?.view.hidden = true
+        selected?.view.hidden = false
+    }
+
+    func didAddTab(tab: Browser) {
+        toolbar.updateTabCount(tabManager.count)
+
+        tab.view.hidden = true
+        view.addSubview(tab.view)
+        tab.view.snp_makeConstraints { make in
+            make.top.equalTo(self.toolbar.snp_bottom)
+            make.leading.trailing.bottom.equalTo(self.view)
+        }
+        tab.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.mozilla.org")!))
+    }
+
+    func didRemoveTab(tab: Browser) {
+        toolbar.updateTabCount(tabManager.count)
+
+        tab.view.removeFromSuperview()
     }
 }
