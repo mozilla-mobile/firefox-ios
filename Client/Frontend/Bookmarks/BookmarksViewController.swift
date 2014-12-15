@@ -40,7 +40,7 @@ class BookmarksViewController: UITableViewController {
         tableView.sectionFooterHeight = 0
         //tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: BOOKMARK_CELL_IDENTIFIER)
-        let nib = UINib(nibName: "TabsViewControllerHeader", bundle: nil);
+        let nib = UINib(nibName: "TabsViewControllerHeader", bundle: nil)
         tableView.registerNib(nib, forHeaderFooterViewReuseIdentifier: BOOKMARK_HEADER_IDENTIFIER)
         
         refreshControl = UIRefreshControl()
@@ -68,9 +68,9 @@ class BookmarksViewController: UITableViewController {
         return self.source.current.count
     }
     
-    private let FAVICON_SIZE = 32;
+    private let FAVICON_SIZE = 32
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(BOOKMARK_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell;
+        let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(BOOKMARK_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell
 
         let bookmark: BookmarkNode? = self.source.current.get(indexPath.row)
         
@@ -92,7 +92,7 @@ class BookmarksViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(BOOKMARK_HEADER_IDENTIFIER) as? UIView;
+        let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(BOOKMARK_HEADER_IDENTIFIER) as? UIView
         
         if let label = view?.viewWithTag(1) as? UILabel {
             label.text = "Recent Bookmarks"
@@ -119,16 +119,16 @@ class BookmarksViewController: UITableViewController {
         case let item as BookmarkItem:
             // Click it.
             UIApplication.sharedApplication().openURL(NSURL(string: item.url)!)
-            break;
+            break
 
         case let folder as BookmarkFolder:
             // Descend into the folder.
             self.source.selectFolder(folder, success: self.onNewModel, failure: self.onModelFailure)
-            break;
+            break
 
         default:
             // Weird.
-            break;        // Just here until there's another executable statement (compiler requires one).
+            break        // Just here until there's another executable statement (compiler requires one).
         }
     }
 }
