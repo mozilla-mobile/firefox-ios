@@ -25,10 +25,10 @@ struct FaviconConsts {
 }
 
 protocol Favicons {
-    func clearFavicons(siteUrl: String, callback: () -> Void)
-    func saveFavicon(siteUrl: String, iconUrl: String, image: UIImage?, callback: () -> Void)
-    func getForUrls(urls: [String], options: FaviconOptions?, callback: ([String: [Favicon]]) -> Void)
-    func getForUrl(url: String, options: FaviconOptions?, callback: (Favicon) -> Void)
+    func clearFavicons(siteUrl: String, success: () -> Void, failure: (Any) -> Void)
+    func saveFavicon(siteUrl: String, iconUrl: String, image: UIImage?, success: (Favicon) -> Void, failure: (Any) -> Void)
+    func getForUrls(urls: [String], options: FaviconOptions?, success: ([String: [Favicon]]) -> Void)
+    func getForUrl(url: String, options: FaviconOptions?, success: (Favicon) -> Void)
 }
 
 /*
@@ -56,7 +56,7 @@ class BasicFavicons : Favicons {
     init() {
     }
 
-    func clearFavicons(siteUrl: String, callback: () -> Void) {
+    func clearFavicons(siteUrl: String, success: () -> Void, failure: (Any) -> Void) {
         MagicalRecord.saveWithBlock({ context in
             var site = Site.MR_findFirstByAttribute("url", withValue: siteUrl)
             if site == nil {
@@ -68,86 +68,71 @@ class BasicFavicons : Favicons {
                     favicon.MR_deleteEntityInContext(context)
                 }
             }
-        }, completion: { _ in
-            callback()
+        }, { (s, error) in
+            if error == nil {
+                success()
+            } else {
+                failure(error)
+            }
         })
     }
 
-    func saveFavicon(siteUrl: String, iconUrl: String, image: UIImage? = nil, callback: () -> Void) {
+    func saveFavicon(siteUrl: String, iconUrl: String, image: UIImage? = nil, success: (Favicon) -> Void, failure: (Any) -> Void) {
+        var icon: Favicon = Favicon()
         MagicalRecord.saveWithBlock({ context in
-            var site = Site.MR_findFirstByAttribute("url", withValue: siteUrl)
-            if site == nil {
-                site = Site.MR_createEntityInContext(context)
-                site.url = siteUrl
+            var site = Site.MR_findFirstOrCreateByAttribute("url", withValue: siteUrl)
+            icon = Favicon.MR_findFirstOrCreateByAttribute("url", withValue: iconUrl)
+            if (site.favicons.containsObject(icon)) {
+                return
             }
 
-            var icon = Favicon.MR_findFirstByAttribute("url", withValue: iconUrl)
-
-            if (icon == nil) {
-                icon = Favicon.MR_createEntityInContext(context)
-                icon.url = iconUrl
-                icon.updatedDate = NSDate()
-            } else {
-                if (site.favicons.containsObject(icon)) {
-                    return
-                }
-            }
-
+            icon.updatedDate = NSDate()
             if image != nil {
-                icon.image = icon.image
+                icon.image = image!
             }
 
             site.addFavicon(icon)
-        }, completion: { _ in
-            callback()
+        }, { (s, error) in
+            if (error == nil) {
+                success(icon)
+            } else {
+                failure(error)
+            }
         })
     }
 
-    func getForUrls(urls: [String], options: FaviconOptions?, callback: ([String: [Favicon]]) -> Void) {
+    func getForUrls(urls: [String], options: FaviconOptions?, success: ([String: [Favicon]]) -> Void) {
         // Do an async dispatch to ensure this behaves like an async api
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () in
             var data = [String: [Favicon]]()
             for url in urls {
                 // XXX: Do we want to block here?
-                var s: Site?
-                var found = false
-
-                // Try to find it in CoreData
-                s = Site.MR_findFirstByAttribute("url", withValue: url)
-                if s != nil {
-                    if s!.favicons.count > 0 {
-                        data[url] = s!.favicons.allObjects as? [Favicon]
-                        found = true
-                    }
+                var site = Site.MR_findFirstOrCreateByAttribute("url", withValue: url)
+                if site.favicons.count > 0 {
+                    data[url] = site!.favicons.allObjects as [Favicon]
                 } else {
-                    s = Site.MR_createEntity() as Site
-                    s!.url = url
-                    s!.title = ""
-                }
-
-                if (!found) {
                     // If we didn't find a site or a favicon, create (and save) them
                     let icon = Favicon.MR_createEntity() as Favicon
                     icon.url = FaviconConsts.DefaultFavicon
                     icon.updatedDate = NSDate()
                     icon.image = self.DEFAULT_IMAGE;
 
-                    s!.addFavicon(icon)
+                    site!.addFavicon(icon)
                     data[url] = [icon]
                 }
             }
             
             dispatch_async(dispatch_get_main_queue(), { () in
-                callback(data)
+                success(data)
             })
         })
     }
     
-    func getForUrl(url: String, options: FaviconOptions?, callback: (Favicon) -> Void) {
+    func getForUrl(url: String, options: FaviconOptions?, success: (Favicon) -> Void) {
         let urls = [url];
-        getForUrls(urls, options: options, callback: { data in
+        getForUrls(urls, options: options, success: { data in
             var icons = data[url]
-            callback(icons![0])
+            success(icons![0])
         })
     }
 }
