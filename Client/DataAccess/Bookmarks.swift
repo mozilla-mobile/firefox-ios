@@ -6,6 +6,18 @@ import Foundation
 
 import UIKit
 
+public struct BookmarkRoots {
+    // These are stolen from Fennec's BrowserContract.
+    static let MOBILE_FOLDER_GUID = "mobile"
+    static let PLACES_FOLDER_GUID = "places"
+    static let MENU_FOLDER_GUID = "menu"
+    static let TAGS_FOLDER_GUID = "tags"
+    static let TOOLBAR_FOLDER_GUID = "toolbar"
+    static let UNFILED_FOLDER_GUID = "unfiled"
+    static let FAKE_DESKTOP_FOLDER_GUID = "desktop"
+    static let PINNED_FOLDER_GUID = "pinned"
+}
+
 /**
  * The immutable base interface for bookmarks and folders.
  */
@@ -182,12 +194,12 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
             res.append(BookmarkItem(id: Bytes.generateGUID(), title: "Title \(i)", url: "http://www.example.com/\(i)"))
         }
 
-        mobile = MemoryBookmarkFolder(id: "mobile", name: "Mobile Bookmarks", children: res)
+        mobile = MemoryBookmarkFolder(id: BookmarkRoots.MOBILE_FOLDER_GUID, name: "Mobile Bookmarks", children: res)
 
-        unsorted = MemoryBookmarkFolder(id: "unsorted", name: "Unsorted Bookmarks", children: [])
+        unsorted = MemoryBookmarkFolder(id: BookmarkRoots.UNFILED_FOLDER_GUID, name: "Unsorted Bookmarks", children: [])
         sink = MemoryBookmarksSink()
 
-        root = MemoryBookmarkFolder(id: "root", name: "Root", children: [mobile, unsorted])
+        root = MemoryBookmarkFolder(id: BookmarkRoots.PLACES_FOLDER_GUID, name: "Root", children: [mobile, unsorted])
     }
 
     func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
@@ -197,14 +209,14 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
     func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         var m: BookmarkFolder
         switch (guid) {
-        case "mobile":
+        case BookmarkRoots.MOBILE_FOLDER_GUID:
             // Transparently merges in any queued items.
             m = self.mobile.append(self.sink.queue)
             break;
-        case "root":
+        case BookmarkRoots.PLACES_FOLDER_GUID:
             m = self.root
             break;
-        case "unsorted":
+        case BookmarkRoots.UNFILED_FOLDER_GUID:
             m = self.unsorted
             break;
         default:
@@ -223,7 +235,7 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
      * This class could return the full data immediately. We don't, because real DB-backed code won't.
      */
     var nullModel: BookmarksModel {
-        let f = MemoryBookmarkFolder(id: "root", name: "Root", children: [])
+        let f = MemoryBookmarkFolder(id: BookmarkRoots.PLACES_FOLDER_GUID, name: "Root", children: [])
         return BookmarksModel(modelFactory: self, root: f)
     }
 
