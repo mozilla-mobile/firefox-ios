@@ -64,10 +64,24 @@ public class BookmarkItem: BookmarkNode {
 /**
  * A folder that contains an array of children.
  */
-public class MemoryBookmarkFolder: BookmarkFolder {
+public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
     public let id: String
     public let title: String
     let children: [BookmarkNode]
+
+    public struct BookmarkNodeGenerator: GeneratorType {
+        typealias Element = BookmarkNode
+        let children: [BookmarkNode]
+        var index: Int = 0
+
+        init(children: [BookmarkNode]) {
+            self.children = children
+        }
+
+        public mutating func next() -> BookmarkNode? {
+            return index < children.count ? children[index++] : nil
+        }
+    }
 
     public var icon: UIImage {
         return createSizedFavicon(UIImage(named: "bookmark_folder_closed.png")!)
@@ -85,6 +99,10 @@ public class MemoryBookmarkFolder: BookmarkFolder {
 
     public func get(index: Int) -> BookmarkNode? {
         return children[index]
+    }
+
+    public func generate() -> BookmarkNodeGenerator {
+        return BookmarkNodeGenerator(children: self.children)
     }
 
     /**
