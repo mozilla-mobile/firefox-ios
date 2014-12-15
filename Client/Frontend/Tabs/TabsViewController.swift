@@ -12,13 +12,10 @@ class TabsViewController: UITableViewController
 
     var account: Account!
     var tabsResponse: TabsResponse?
-    // TODO: Move this to the authenticator when its available.
-    var favicons: Favicons = BasicFavicons();
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        favicons = BasicFavicons();
         
         tableView.sectionFooterHeight = 0
         //tableView.separatorStyle = UITableViewCellSeparatorStyle.None
@@ -72,7 +69,7 @@ class TabsViewController: UITableViewController
 
         if let tab = tabsResponse?.clients[indexPath.section].tabs[indexPath.row] {
             // TODO: We need better async image loading here
-            favicons.getForUrl(tab.url, options: nil) { icon in
+            account.favicons.getForUrl(tab.url, options: nil) { icon in
                 if var img = icon.image as? UIImage {
                     cell.imageView?.image = createSizedFavicon(img)
                     cell.setNeedsLayout()

@@ -116,7 +116,7 @@ class BasicFavicons : Favicons {
                 s = Site.MR_findFirstByAttribute("url", withValue: url)
                 if s != nil {
                     if s!.favicons.count > 0 {
-                        data[url] = s!.favicons.allObjects as [Favicon]
+                        data[url] = s!.favicons.allObjects as? [Favicon]
                         found = true
                     }
                 } else {

@@ -5,8 +5,6 @@
 import UIKit
 
 class SiteTableViewController: UITableViewController {
-    // TODO: Move this to the authenticator when its available.
-    var favicons: Favicons = BasicFavicons();
     var account: Account!
     
     private var sites = [Site]()
@@ -31,7 +29,7 @@ class SiteTableViewController: UITableViewController {
         let site = sites[indexPath.row]
         
         // TODO: We need better async image loading here
-        favicons.getForUrl(site.url, options: nil) { icon in
+        account.favicons.getForUrl(site.url, options: nil) { icon in
             if var img = icon.image as? UIImage {
                 cell.imageView?.image = createSizedFavicon(img)
                 cell.setNeedsLayout()

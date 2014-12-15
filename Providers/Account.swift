@@ -12,6 +12,7 @@ protocol Account {
     func basicAuthorizationHeader() -> String
     func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ())
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
+    var favicons: Favicons { get }
     var clients: Clients { get }
 }
 
@@ -26,6 +27,10 @@ class MockAccount: Account {
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
         return MockMemoryBookmarksStore()
+    } ()
+
+    lazy var favicons: Favicons = {
+        return BasicFavicons()
     } ()
 
     lazy var clients: Clients = {
@@ -91,6 +96,9 @@ class RESTAccount: Account {
     }
 
     //        lazy var ReadingList readingList
-    //        lazy var History history
-    //        lazy var Favicons favicons;
+    //        lazy var History
+
+    lazy var favicons: Favicons = {
+        return BasicFavicons()
+    }()
 }
