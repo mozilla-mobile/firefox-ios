@@ -1,0 +1,3 @@
+[submodule "Tests/Vendor/Expecta"]
+	path = Tests/Vendor/Expecta
+	url=https://github.com/specta/expecta.git

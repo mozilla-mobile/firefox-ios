@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>numberAsStringTestAttribute</key>
+	<integer>10248909829</integer>
+	<key>int64TestAttribute</key>
+	<integer>42</integer>
+	<key>stringTestAttribute</key>
+	<string>This is a test value</string>
+	<key>int32TestAttribute</key>
+	<integer>32</integer>
+	<key>int16TestAttribute</key>
+	<integer>256</integer>
+	<key>decimalTestAttribute</key>
+	<real>1.2</real>
+	<key>doubleTestAttribute</key>
+	<real>124.3</real>
+	<key>floatTestAttribute</key>
+	<integer>10000000000</integer>
+	<key>booleanTestAttribute</key>
+	<false/>
+	<key>dateTestAttribute</key>
+	<date>2011-07-24T04:30:40Z</date>
+	<key>colorTestAttribute</key>
+	<string>rgba(64,128,225,1)</string>
+	<key>mappedAttributeWithStringValue</key>
+	<string>Mapped value</string>
+	<key>dateWithCustomFormat</key>
+	<string>8/5/2011 1-56-04 AM</string>
+	<key>nullTestAttribte</key>
+	<string></string>
+    <key>booleanAsStringTestAttribute</key>
+	<string>true</string>
+</dict>
+</plist>

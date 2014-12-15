@@ -1,0 +1,44 @@
+{
+    "testAbstractToOneRelationship":
+    {
+        "sampleBaseAttribute": "This should be imported as: BASE ATTRIBUTE TEST",
+        "sampleConcreteAttribute": "This should be imported as: DESCENDANT ATTRIBUTE TEST"
+    }
+    ,
+    "testAbstractToManyRelationship":
+    [
+         {
+             "sampleBaseAttribute": "Import as BASE ATTRIBUTE TEST 1",
+             "sampleConcreteAttribute": "Import as DESCENDANT ATTRIBUTE TEST 1"
+         }
+         ,
+         {
+             "sampleBaseAttribute": "Import as BASE ATTRIBUTE TEST 2",
+             "sampleConcreteAttribute": "Import as DESCENDANT ATTRIBUTE TEST 2"
+         }
+    ]
+    ,
+    "testConcreteToOneRelationship":
+    {
+        "sampleBaseAttribute": "Import as BASE ATTRIBUTE TEST",
+        "sampleConcreteAttribute": "Import as DESCENDANT ATTRIBUTE TEST"
+    }
+    ,
+    "testConcreteToManyRelationship":
+    [
+        {
+            "sampleBaseAttribute": "Import as BASE ATTRIBUTE TEST 1",
+            "sampleConcreteAttribute": "Import as DESCENDANT ATTRIBUTE TEST 1"
+        }
+        ,
+         {
+         "sampleBaseAttribute": "Import as BASE ATTRIBUTE TEST 2",
+         "sampleConcreteAttribute": "Import as DESCENDANT ATTRIBUTE TEST 2"
+         }
+        ,
+         {
+         "sampleBaseAttribute": "Import as BASE ATTRIBUTE TEST 3",
+         "sampleConcreteAttribute": "Import as DESCENDANT ATTRIBUTE TEST 3"
+         }
+    ]
+}

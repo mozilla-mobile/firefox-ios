@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6208.6" systemVersion="14A298i" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="AbstractRelatedEntity" representedClassName="AbstractRelatedEntity" isAbstract="YES" syncable="YES">
+        <attribute name="sampleBaseAttribute" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="ConcreteRelatedEntity" representedClassName="ConcreteRelatedEntity" parentEntity="AbstractRelatedEntity" syncable="YES">
+        <attribute name="sampleConcreteAttribute" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EntityWithDifferentClassName" representedClassName="DifferentClassNameMapping" syncable="YES"/>
+    <entity name="EntityWithoutEntityNameMethodWithASuffix" representedClassName="EntityWithoutEntityNameMethod" syncable="YES"/>
+    <entity name="MappedEntity" representedClassName="MappedEntity" syncable="YES">
+        <attribute name="mappedEntityID" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="nestedAttribute" optional="YES" attributeType="String" syncable="YES">
+            <userInfo>
+                <entry key="mappedKeyName" value="attributeValue.nestedValue"/>
+            </userInfo>
+        </attribute>
+        <attribute name="sampleAttribute" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="testMappedEntityID" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES">
+            <userInfo>
+                <entry key="mappedKeyName" value="id"/>
+            </userInfo>
+        </attribute>
+        <userInfo>
+            <entry key="relatedByAttribute" value="mapped"/>
+        </userInfo>
+    </entity>
+    <entity name="SingleEntityRelatedToManyMappedEntitiesUsingMappedPrimaryKey" representedClassName="SingleEntityRelatedToManyMappedEntitiesUsingMappedPrimaryKey" syncable="YES">
+        <attribute name="testPrimaryKey" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="mappedEntities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MappedEntity" syncable="YES">
+            <userInfo>
+                <entry key="relatedByAttribute" value="testMappedEntityID"/>
+            </userInfo>
+        </relationship>
+        <userInfo>
+            <entry key="relatedByAttribute" value="testPrimaryKey"/>
+        </userInfo>
+    </entity>
+    <entity name="SingleEntityRelatedToMappedEntityUsingDefaults" representedClassName="SingleEntityRelatedToMappedEntityUsingDefaults" syncable="YES">
+        <attribute name="singleEntityRelatedToMappedEntityUsingDefaultsID" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="mappedEntity" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="MappedEntity" syncable="YES"/>
+    </entity>
+    <entity name="SingleEntityRelatedToMappedEntityUsingMappedPrimaryKey" representedClassName="SingleEntityRelatedToMappedEntityUsingMappedPrimaryKey" syncable="YES">
+        <relationship name="mappedEntity" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="MappedEntity" syncable="YES">
+            <userInfo>
+                <entry key="mappedKeyName" value="someRandomAttributeName"/>
+                <entry key="relatedByAttribute" value="testMappedEntityID"/>
+            </userInfo>
+        </relationship>
+    </entity>
+    <entity name="SingleEntityRelatedToMappedEntityWithNestedMappedAttributes" representedClassName="SingleEntityRelatedToMappedEntityWithNestedMappedAttributes" syncable="YES">
+        <relationship name="mappedEntity" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="MappedEntity" syncable="YES"/>
+    </entity>
+    <entity name="SingleEntityRelatedToMappedEntityWithSecondaryMappings" representedClassName="SingleEntityRelatedToMappedEntityWithSecondaryMappings" syncable="YES">
+        <attribute name="notImportedAttribute" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
+        <attribute name="secondaryMappedAttribute" optional="YES" attributeType="String" syncable="YES">
+            <userInfo>
+                <entry key="mappedKeyName" value="no_in_use"/>
+                <entry key="mappedKeyName.1" value="getting_warmer"/>
+                <entry key="mappedKeyName.2" value="actualMappedKey"/>
+            </userInfo>
+        </attribute>
+        <relationship name="mappedRelationship" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="MappedEntity" syncable="YES">
+            <userInfo>
+                <entry key="mappedKeyName" value="not_in_use"/>
+                <entry key="mappedKeyName.1" value="almost_there"/>
+                <entry key="mappedKeyName.2" value="actualRelatedObject"/>
+            </userInfo>
+        </relationship>
+    </entity>
+    <entity name="SingleEntityWithNoRelationships" representedClassName="SingleEntityWithNoRelationships" syncable="YES">
+        <attribute name="booleanAsStringTestAttribute" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="booleanTestAttribute" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="colorTestAttribute" optional="YES" attributeType="Transformable" syncable="YES">
+            <userInfo>
+                <entry key="attributeValueClassName" value="*Color"/>
+            </userInfo>
+        </attribute>
+        <attribute name="dateTestAttribute" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateWithCustomFormat" optional="YES" attributeType="Date" syncable="YES">
+            <userInfo>
+                <entry key="dateFormat" value="M/d/yyyy H-mm-ss"/>
+            </userInfo>
+        </attribute>
+        <attribute name="decimalTestAttribute" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="doubleTestAttribute" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="floatTestAttribute" optional="YES" attributeType="Float" defaultValueString="0" syncable="YES"/>
+        <attribute name="int16TestAttribute" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="int32TestAttribute" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="int64TestAttribute" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="mappedStringAttribute" optional="YES" attributeType="String" syncable="YES">
+            <userInfo>
+                <entry key="mappedKeyName" value="mappedAttributeWithStringValue"/>
+            </userInfo>
+        </attribute>
+        <attribute name="notInJsonAttribute" optional="YES" attributeType="String" defaultValueString="Set From Core Data Model Editor" syncable="YES"/>
+        <attribute name="nullTestAttribute" optional="YES" attributeType="Integer 64" defaultValueString="100" syncable="YES"/>
+        <attribute name="numberAsStringTestAttribute" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stringTestAttribute" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="unixTime13TestAttribute" optional="YES" attributeType="Date" syncable="YES">
+            <userInfo>
+                <entry key="dateFormat" value="UnixTime"/>
+            </userInfo>
+        </attribute>
+        <attribute name="unixTimeTestAttribute" optional="YES" attributeType="Date" syncable="YES"/>
+    </entity>
+    <entity name="SingleRelatedEntity" representedClassName="SingleRelatedEntity" syncable="YES">
+        <attribute name="mappedStringAttribute" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="testAbstractToManyRelationship" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="AbstractRelatedEntity" syncable="YES">
+            <userInfo>
+                <entry key="relatedByAttribute" value="sampleBaseAttribute"/>
+            </userInfo>
+        </relationship>
+        <relationship name="testAbstractToOneRelationship" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="AbstractRelatedEntity" syncable="YES">
+            <userInfo>
+                <entry key="relatedByAttribute" value="sampleBaseAttribute"/>
+            </userInfo>
+        </relationship>
+        <relationship name="testConcreteToManyRelationship" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ConcreteRelatedEntity" syncable="YES">
+            <userInfo>
+                <entry key="relatedByAttribute" value="sampleConcreteAttribute"/>
+            </userInfo>
+        </relationship>
+        <relationship name="testConcreteToOneRelationship" optional="YES" minCount="1" maxCount="1" deletionRule="Cascade" destinationEntity="ConcreteRelatedEntity" syncable="YES">
+            <userInfo>
+                <entry key="relatedByAttribute" value="sampleConcreteAttribute"/>
+            </userInfo>
+        </relationship>
+    </entity>
+    <elements>
+        <element name="AbstractRelatedEntity" positionX="0" positionY="0" width="128" height="60"/>
+        <element name="ConcreteRelatedEntity" positionX="0" positionY="0" width="128" height="60"/>
+        <element name="EntityWithDifferentClassName" positionX="0" positionY="0" width="128" height="45"/>
+        <element name="EntityWithoutEntityNameMethodWithASuffix" positionX="18" positionY="144" width="128" height="45"/>
+        <element name="MappedEntity" positionX="0" positionY="0" width="128" height="105"/>
+        <element name="SingleEntityRelatedToManyMappedEntitiesUsingMappedPrimaryKey" positionX="0" positionY="0" width="128" height="75"/>
+        <element name="SingleEntityRelatedToMappedEntityUsingDefaults" positionX="0" positionY="0" width="128" height="75"/>
+        <element name="SingleEntityRelatedToMappedEntityUsingMappedPrimaryKey" positionX="0" positionY="0" width="128" height="60"/>
+        <element name="SingleEntityRelatedToMappedEntityWithNestedMappedAttributes" positionX="0" positionY="0" width="128" height="60"/>
+        <element name="SingleEntityRelatedToMappedEntityWithSecondaryMappings" positionX="0" positionY="0" width="128" height="90"/>
+        <element name="SingleEntityWithNoRelationships" positionX="0" positionY="0" width="128" height="315"/>
+        <element name="SingleRelatedEntity" positionX="0" positionY="0" width="128" height="118"/>
+    </elements>
+</model>

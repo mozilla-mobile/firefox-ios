@@ -1,0 +1,12 @@
+additional_guides:
+  - https://github.com/magicalpanda/MagicalRecord/wiki/Installing-MagicalRecord
+  - https://github.com/magicalpanda/MagicalRecord/wiki/Getting-Started
+  - https://github.com/magicalpanda/MagicalRecord/wiki/Working-with-Managed-Object-Contexts
+  - https://github.com/magicalpanda/MagicalRecord/wiki/Creating-Entities
+  - https://github.com/magicalpanda/MagicalRecord/wiki/Deleting-Entities
+  - https://github.com/magicalpanda/MagicalRecord/wiki/Fetching-Entities
+  - https://github.com/magicalpanda/MagicalRecord/wiki/Saving
+  - https://github.com/magicalpanda/MagicalRecord/wiki/Usage-Patterns
+  - https://github.com/magicalpanda/MagicalRecord/wiki/Importing-Data
+  - https://github.com/magicalpanda/MagicalRecord/wiki/Logging
+  - https://github.com/magicalpanda/MagicalRecord/wiki/Upgrading-to-MagicalRecord-2.3

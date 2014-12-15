@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>f</key>
+		<string>225</string>
+		<key>c</key>
+		<string>110</string>
+		<key>g</key>
+		<string>1/4</string>
+		<key>d</key>
+		<string>Very Slow</string>
+	</dict>
+	<dict>
+		<key>f</key>
+		<string>250</string>
+		<key>c</key>
+		<string>120</string>
+		<key>g</key>
+		<string>1/2</string>
+		<key>d</key>
+		<string>Very Slow</string>
+	</dict>
+	<dict>
+		<key>f</key>
+		<string>275</string>
+		<key>c</key>
+		<string>140</string>
+		<key>g</key>
+		<string>1</string>
+		<key>d</key>
+		<string>Slow</string>
+	</dict>
+	<dict>
+		<key>f</key>
+		<string>300</string>
+		<key>c</key>
+		<string>150</string>
+		<key>g</key>
+		<string>2</string>
+		<key>d</key>
+		<string>Slow</string>
+	</dict>
+	<dict>
+		<key>f</key>
+		<string>325</string>
+		<key>c</key>
+		<string>160</string>
+		<key>g</key>
+		<string>3</string>
+		<key>d</key>
+		<string>Moderate</string>
+	</dict>
+	<dict>
+		<key>f</key>
+		<string>350</string>
+		<key>c</key>
+		<string>180</string>
+		<key>g</key>
+		<string>4</string>
+		<key>d</key>
+		<string>Moderate</string>
+	</dict>
+	<dict>
+		<key>f</key>
+		<string>375</string>
+		<key>c</key>
+		<string>190</string>
+		<key>g</key>
+		<string>5</string>
+		<key>d</key>
+		<string>Moderately Hot</string>
+	</dict>
+	<dict>
+		<key>f</key>
+		<string>400</string>
+		<key>c</key>
+		<string>200</string>
+		<key>g</key>
+		<string>6</string>
+		<key>d</key>
+		<string>Moderately Hot</string>
+	</dict>
+	<dict>
+		<key>f</key>
+		<string>425</string>
+		<key>c</key>
+		<string>220</string>
+		<key>g</key>
+		<string>7</string>
+		<key>d</key>
+		<string>Hot</string>
+	</dict>
+	<dict>
+		<key>f</key>
+		<string>450</string>
+		<key>c</key>
+		<string>230</string>
+		<key>g</key>
+		<string>8</string>
+		<key>d</key>
+		<string>Hot</string>
+	</dict>
+	<dict>
+		<key>f</key>
+		<string>475</string>
+		<key>c</key>
+		<string>240</string>
+		<key>g</key>
+		<string>9</string>
+		<key>d</key>
+		<string>Very Hot</string>
+	</dict>
+</array>
+</plist>

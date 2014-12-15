@@ -19,13 +19,16 @@
 		0BD19A691A2530B60084FBA7 /* BookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22171A0911B500AAB793 /* BookmarksViewController.swift */; };
 		0BD19A6A1A2530BB0084FBA7 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B221B1A0911BF00AAB793 /* HistoryViewController.swift */; };
 		0BD19A6B1A2530C20084FBA7 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21FA1A0910F600AAB793 /* SiteTableViewController.swift */; };
-		0BD19A6C1A2530C60084FBA7 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21F91A0910F600AAB793 /* Site.swift */; };
 		0BD19A6D1A2530C80084FBA7 /* ReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21F71A0910F600AAB793 /* ReaderViewController.swift */; };
 		0BD19A6E1A2530CE0084FBA7 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21FC1A0910F600AAB793 /* SettingsViewController.swift */; };
 		0BD19A6F1A2530D30084FBA7 /* TabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22011A0910F600AAB793 /* TabsViewController.swift */; };
 		0BD19A701A2530DE0084FBA7 /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22001A0910F600AAB793 /* Tabs.swift */; };
+		0BDB95111A3B91EB000F2B0F /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB95101A3B91EB000F2B0F /* Site.swift */; };
+		0BDB95191A3B91F7000F2B0F /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB95101A3B91EB000F2B0F /* Site.swift */; };
 		0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108351A1B1EC700D4B712 /* TestLocking.swift */; };
 		0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
+		0BF9F8B31A3A3B540049A0FA /* libMagicalRecord-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BF9F8AA1A3A3B410049A0FA /* libMagicalRecord-iOS.a */; };
+		0BF9F8BC1A3A82CA0049A0FA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
 		28784D191A38CA9400021E35 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28784D181A38CA9400021E35 /* Bookmarks.swift */; };
 		28784D1A1A38CA9400021E35 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28784D181A38CA9400021E35 /* Bookmarks.swift */; };
 		28784D1B1A38CA9400021E35 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28784D181A38CA9400021E35 /* Bookmarks.swift */; };
@@ -109,7 +112,6 @@
 		F84B220C1A0910F600AAB793 /* Readability.js in Resources */ = {isa = PBXBuildFile; fileRef = F84B21F61A0910F600AAB793 /* Readability.js */; };
 		F84B220D1A0910F600AAB793 /* ReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21F71A0910F600AAB793 /* ReaderViewController.swift */; };
 		F84B220E1A0910F600AAB793 /* ReaderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F84B21F81A0910F600AAB793 /* ReaderViewController.xib */; };
-		F84B220F1A0910F600AAB793 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21F91A0910F600AAB793 /* Site.swift */; };
 		F84B22101A0910F600AAB793 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21FA1A0910F600AAB793 /* SiteTableViewController.swift */; };
 		F84B22111A0910F600AAB793 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21FC1A0910F600AAB793 /* SettingsViewController.swift */; };
 		F84B22121A0910F600AAB793 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F84B21FD1A0910F600AAB793 /* SettingsViewController.xib */; };
@@ -141,6 +143,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0BF9F8A91A3A3B410049A0FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0BF9F89F1A3A3B410049A0FA /* MagicalRecord.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C7CF97AB17498414008D9D13;
+			remoteInfo = "libMagicalRecord-iOS";
+		};
+		0BF9F8AB1A3A3B410049A0FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0BF9F89F1A3A3B410049A0FA /* MagicalRecord.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C7CF97BB1749843F008D9D13;
+			remoteInfo = "libMagicalRecord-OSX";
+		};
+		0BF9F8AD1A3A3B410049A0FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0BF9F89F1A3A3B410049A0FA /* MagicalRecord.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C7CF97FF174984CA008D9D13;
+			remoteInfo = "MagicalRecordTests-iOS";
+		};
+		0BF9F8AF1A3A3B410049A0FA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0BF9F89F1A3A3B410049A0FA /* MagicalRecord.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C7CF9816174984E4008D9D13;
+			remoteInfo = "MagicalRecordTests-OSX";
+		};
 		28CE83CF1A1D1D5100576538 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
@@ -261,8 +291,10 @@
 		0BA896491A250E6500C1010C /* AccountTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTest.swift; sourceTree = "<group>"; };
 		0BA8964A1A250E6500C1010C /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
 		0BD19A661A25309B0084FBA7 /* AccountPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountPrefs.swift; sourceTree = "<group>"; };
+		0BDB95101A3B91EB000F2B0F /* Site.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Site.swift; sourceTree = "<group>"; };
 		0BE108351A1B1EC700D4B712 /* TestLocking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLocking.swift; sourceTree = "<group>"; };
 		0BE108391A1B1ED200D4B712 /* Locking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locking.swift; sourceTree = "<group>"; };
+		0BF9F89F1A3A3B410049A0FA /* MagicalRecord.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MagicalRecord.xcodeproj; path = ThirdParty/magicalrecord/MagicalRecord.xcodeproj; sourceTree = SOURCE_ROOT; };
 		28784D181A38CA9400021E35 /* Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Bookmarks.swift; path = Client/DataAccess/Bookmarks.swift; sourceTree = "<group>"; };
 		28C077971A3B064000834FE5 /* CryptoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
 		28C077991A3B064F00834FE5 /* FxAClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAClientTests.swift; sourceTree = "<group>"; };
@@ -310,7 +342,6 @@
 		F84B21F61A0910F600AAB793 /* Readability.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Readability.js; sourceTree = "<group>"; };
 		F84B21F71A0910F600AAB793 /* ReaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderViewController.swift; sourceTree = "<group>"; };
 		F84B21F81A0910F600AAB793 /* ReaderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReaderViewController.xib; sourceTree = "<group>"; };
-		F84B21F91A0910F600AAB793 /* Site.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Site.swift; sourceTree = "<group>"; };
 		F84B21FA1A0910F600AAB793 /* SiteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewController.swift; sourceTree = "<group>"; };
 		F84B21FC1A0910F600AAB793 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		F84B21FD1A0910F600AAB793 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewController.xib; sourceTree = "<group>"; };
@@ -349,6 +380,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BF9F8B31A3A3B540049A0FA /* libMagicalRecord-iOS.a in Frameworks */,
 				28CE83DA1A1D1E7C00576538 /* FxA.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -380,6 +412,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0BF9F8A01A3A3B410049A0FA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0BF9F8AA1A3A3B410049A0FA /* libMagicalRecord-iOS.a */,
+				0BF9F8AC1A3A3B410049A0FA /* libMagicalRecord-OSX.dylib */,
+				0BF9F8AE1A3A3B410049A0FA /* MagicalRecordTests-iOS.xctest */,
+				0BF9F8B01A3A3B410049A0FA /* MagicalRecordTests-OSX.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		28784D141A38C96900021E35 /* DataAccess */ = {
 			isa = PBXGroup;
 			children = (
@@ -506,6 +549,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				0BF9F89F1A3A3B410049A0FA /* MagicalRecord.xcodeproj */,
 				28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */,
 				F84B222A1A0913F100AAB793 /* Alamofire.xcodeproj */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
@@ -638,10 +682,10 @@
 		F84B21F51A0910F600AAB793 /* Reader */ = {
 			isa = PBXGroup;
 			children = (
+				0BDB95101A3B91EB000F2B0F /* Site.swift */,
 				F84B21F61A0910F600AAB793 /* Readability.js */,
 				F84B21F71A0910F600AAB793 /* ReaderViewController.swift */,
 				F84B21F81A0910F600AAB793 /* ReaderViewController.xib */,
-				F84B21F91A0910F600AAB793 /* Site.swift */,
 				F84B21FA1A0910F600AAB793 /* SiteTableViewController.swift */,
 			);
 			path = Reader;
@@ -890,6 +934,10 @@
 					ProjectRef = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
 				},
 				{
+					ProductGroup = 0BF9F8A01A3A3B410049A0FA /* Products */;
+					ProjectRef = 0BF9F89F1A3A3B410049A0FA /* MagicalRecord.xcodeproj */;
+				},
+				{
 					ProductGroup = E4D6BEA81A092AD300F538BD /* Products */;
 					ProjectRef = E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */;
 				},
@@ -905,6 +953,34 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		0BF9F8AA1A3A3B410049A0FA /* libMagicalRecord-iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libMagicalRecord-iOS.a";
+			remoteRef = 0BF9F8A91A3A3B410049A0FA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0BF9F8AC1A3A3B410049A0FA /* libMagicalRecord-OSX.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = "libMagicalRecord-OSX.dylib";
+			remoteRef = 0BF9F8AB1A3A3B410049A0FA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0BF9F8AE1A3A3B410049A0FA /* MagicalRecordTests-iOS.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "MagicalRecordTests-iOS.xctest";
+			remoteRef = 0BF9F8AD1A3A3B410049A0FA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0BF9F8B01A3A3B410049A0FA /* MagicalRecordTests-OSX.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "MagicalRecordTests-OSX.xctest";
+			remoteRef = 0BF9F8AF1A3A3B410049A0FA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		28CE83D01A1D1D5100576538 /* FxA.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -979,6 +1055,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BF9F8BC1A3A82CA0049A0FA /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1024,6 +1101,7 @@
 				D314E7F71A37B98700426A76 /* BrowserToolbar.swift in Sources */,
 				28CE83C61A1D1D3200576538 /* KeysPayload.swift in Sources */,
 				D34DC8541A16C40C00D49B7B /* AccountManager.swift in Sources */,
+				0BDB95111A3B91EB000F2B0F /* Site.swift in Sources */,
 				D34DC8571A16C40C00D49B7B /* Favicons.swift in Sources */,
 				0BD19A631A2530740084FBA7 /* Panels.swift in Sources */,
 				28CE83C41A1D1D3200576538 /* ClientPayload.swift in Sources */,
@@ -1036,7 +1114,6 @@
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
 				F84B22241A09122500AAB793 /* TabBarViewController.swift in Sources */,
 				D34F86E71A1AC7DD00331EC4 /* PasswordTextField.swift in Sources */,
-				F84B220F1A0910F600AAB793 /* Site.swift in Sources */,
 				28CE83C91A1D1D3200576538 /* TokenServerClient.swift in Sources */,
 				28CE83C71A1D1D3200576538 /* Records.swift in Sources */,
 				F84B22111A0910F600AAB793 /* SettingsViewController.swift in Sources */,
@@ -1063,12 +1140,12 @@
 				D34DC8641A16C49600D49B7B /* Cursor.swift in Sources */,
 				0BA8964B1A250E6500C1010C /* AccountTest.swift in Sources */,
 				0BD19A701A2530DE0084FBA7 /* Tabs.swift in Sources */,
+				0BDB95191A3B91F7000F2B0F /* Site.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */,
 				D34DC8661A16C49600D49B7B /* RestAPI.swift in Sources */,
 				28784D451A39C48900021E35 /* Bytes.swift in Sources */,
 				D34DC8611A16C47300D49B7B /* Account.swift in Sources */,
-				0BD19A6C1A2530C60084FBA7 /* Site.swift in Sources */,
 				D34DC8621A16C49600D49B7B /* AccountManager.swift in Sources */,
 				0BD19A6B1A2530C20084FBA7 /* SiteTableViewController.swift in Sources */,
 				E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
@@ -1202,10 +1279,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$SRCROOT/ThirdParty/magicalrecord/MagicalRecord/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1239,9 +1323,16 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$SRCROOT/ThirdParty/magicalrecord/MagicalRecord/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};

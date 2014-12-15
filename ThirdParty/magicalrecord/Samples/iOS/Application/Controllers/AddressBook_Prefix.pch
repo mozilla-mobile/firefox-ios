@@ -1,0 +1,12 @@
+//
+// Prefix header for all source files of the 'AddressBook' target in the 'AddressBook' project
+//
+
+#ifdef __OBJC__
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#endif
+
+#ifndef __ADDRESS_BOOK_FOR_IPHONE__
+#define __ADDRESS_BOOK_FOR_IPHONE__ 1
+#endif

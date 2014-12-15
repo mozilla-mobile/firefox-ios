@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'MagicalRecordTests' target in the 'MagicalRecordTests' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+    #import "CoreData+MagicalRecord.h"
+#endif
