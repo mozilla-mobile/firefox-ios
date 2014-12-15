@@ -73,7 +73,6 @@ class BookmarksViewController: UITableViewController {
         let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(BOOKMARK_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell
 
         let bookmark: BookmarkNode = self.source.current[indexPath.row]
-        
         cell.imageView?.image = bookmark.icon
         cell.textLabel?.text = bookmark.title
         cell.textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
