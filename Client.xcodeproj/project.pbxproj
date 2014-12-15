@@ -571,14 +571,14 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
-				0BF9F89F1A3A3B410049A0FA /* MagicalRecord.xcodeproj */,
 				28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */,
 				F84B222A1A0913F100AAB793 /* Alamofire.xcodeproj */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
+				0BF9F89F1A3A3B410049A0FA /* MagicalRecord.xcodeproj */,
 				E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */,
-				28784D141A38C96900021E35 /* DataAccess */,
 				F84B21C01A090F8100AAB793 /* Client */,
 				F84B21D61A090F8100AAB793 /* ClientTests */,
+				28784D141A38C96900021E35 /* DataAccess */,
 				F8708D1E1A0970990051AB07 /* Extensions */,
 				28CE83B71A1D1D3200576538 /* FxAClient */,
 				28C077951A3B060E00834FE5 /* FxATests */,
