@@ -1,25 +1,22 @@
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import UIKit
 
-
 // This is the bounding box of the button. The image is aligned to the top of the box, the text label to the bottom.
-let BUTTON_SIZE = CGSize(width: 72, height: 56)
+private let ButtonSize = CGSize(width: 72, height: 56)
 
 // Color and height of the orange divider
-let DIVIDER_COLOR: UIColor = UIColor(red: 255.0/255.0, green: 149.0/255.0, blue: 0.0, alpha: 1.0)
-let DIVIDER_HEIGHT: CGFloat = 4.0
+private let DividerColor: UIColor = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
+private let DividerHeight: CGFloat = 4.0
 
 // Font name and size used for the button label
-let LABEL_FONT_NAME: String = "FiraSans-Light"
-let LABEL_FONT_SIZE: CGFloat = 13.0
+private let LabelFontName: String = "FiraSans-Light"
+private let LabelFontSize: CGFloat = 13.0
 
-
-class ToolbarButton: UIButton
-{
+class ToolbarButton: UIButton {
     private var _item: ToolbarItem
 
     override func layoutSubviews() {
@@ -40,8 +37,8 @@ class ToolbarButton: UIButton
     init(toolbarItem item: ToolbarItem) {
         _item = item
 
-        super.init(frame: CGRect(x: 0, y: 0, width: BUTTON_SIZE.width, height: BUTTON_SIZE.height))
-        titleLabel?.font = UIFont(name: LABEL_FONT_NAME, size: LABEL_FONT_SIZE)
+        super.init(frame: CGRect(x: 0, y: 0, width: ButtonSize.width, height: ButtonSize.height))
+        titleLabel?.font = UIFont(name: LabelFontName, size: LabelFontSize)
         titleLabel?.textAlignment = NSTextAlignment.Center
         titleLabel?.sizeToFit()
         updateForItem()
@@ -69,48 +66,46 @@ class ToolbarButton: UIButton
     }
 }
 
-class ToolbarContainerView: UIView
-{
+class ToolbarContainerView: UIView {
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)
         
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetFillColorWithColor(context, DIVIDER_COLOR.CGColor)
-        CGContextFillRect(context, CGRect(x: 0, y: frame.height-DIVIDER_HEIGHT, width: frame.width, height: DIVIDER_HEIGHT))
+        CGContextSetFillColorWithColor(context, DividerColor.CGColor)
+        CGContextFillRect(context, CGRect(x: 0, y: frame.height-DividerHeight, width: frame.width, height: DividerHeight))
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        var origin = CGPoint(x: (frame.width - CGFloat(countElements(subviews)) * BUTTON_SIZE.width) / 2.0,
-            y: (frame.height - BUTTON_SIZE.height) / 2.0)
-        origin.y += 15 - DIVIDER_HEIGHT
+        var origin = CGPoint(x: (frame.width - CGFloat(countElements(subviews)) * ButtonSize.width) / 2.0,
+            y: (frame.height - ButtonSize.height) / 2.0)
+        origin.y += 15 - DividerHeight
         
         for view in subviews as [UIView] {
             view.frame = CGRect(origin: origin, size: view.frame.size)
-            origin.x += BUTTON_SIZE.width
+            origin.x += ButtonSize.width
         }
     }
 }
 
-class TabBarViewController: UIViewController
-{
+class TabBarViewController: UIViewController {
     @IBOutlet weak var buttonContainerView: ToolbarContainerView!
 
     let TransitionDuration = 0.25
     var buttons: [ToolbarButton] = []
     var account: Account!
     var notificationToken: NSObjectProtocol!
-    var panels : [ToolbarItem]!
+    var panels: [ToolbarItem]!
 
-    var onScreenFrame : CGRect {
+    var onScreenFrame: CGRect {
         var frame = view.frame
         frame.size.height -= buttonContainerView.frame.height
         frame.origin.y += buttonContainerView.frame.height
-        return frame;
+        return frame
     }
 
-    var offScreenFrame : CGRect {
+    var offScreenFrame: CGRect {
         var frame = self.onScreenFrame
         frame.origin.y += frame.height
         return frame
@@ -172,7 +167,7 @@ class TabBarViewController: UIViewController
             vc.view.frame = self.onScreenFrame
         }, completion: { (Bool) -> Void in
             UIApplication.sharedApplication().endIgnoringInteractionEvents()
-            callback();
+            callback()
         })
     }
     
