@@ -40,12 +40,14 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         
         backButton = UIButton()
         backButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        backButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
         backButton.setTitle("<", forState: UIControlState.Normal)
         backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(backButton)
 
         forwardButton = UIButton()
         forwardButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        forwardButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
         forwardButton.setTitle(">", forState: UIControlState.Normal)
         forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(forwardButton)
@@ -87,6 +89,14 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
 
     func updateTabCount(count: Int) {
         tabsButton.setTitle(count.description, forState: UIControlState.Normal)
+    }
+    
+    func setBackStatus(canGoBack: Bool) {
+        self.backButton.enabled = canGoBack
+    }
+    
+    func setFowardStatus(canGoForward: Bool) {
+        self.forwardButton.enabled = canGoForward
     }
 
     private func arrangeToolbar(#editing: Bool) {

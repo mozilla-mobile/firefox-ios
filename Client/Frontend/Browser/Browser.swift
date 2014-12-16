@@ -13,6 +13,14 @@ class Browser {
         return webView
     }
     
+    var didLoadCallBack: ((tab: Browser) -> ())? {
+        didSet {
+            if let callback = self.didLoadCallBack {
+                self.webViewObserver.didLoadCallback = { callback(tab: self) }
+            }
+        }
+    }
+    
     init() {
         webView.allowsBackForwardNavigationGestures = true
         webViewObserver.startObservingWebView(webView)
@@ -47,6 +55,8 @@ private class WebViewObserver : NSObject {
     typealias KVOContext = UInt8
     private var ThisKVOContext = KVOContext()
     
+    var didLoadCallback: (() -> ())?
+    
     func startObservingWebView(webView: WKWebView) {
         webView.addObserver(self, forKeyPath: "estimatedProgress", options: NSKeyValueObservingOptions.New, context: &ThisKVOContext)
     }
@@ -59,6 +69,12 @@ private class WebViewObserver : NSObject {
         switch (keyPath, context) {
         case ("estimatedProgress", &ThisKVOContext):
             println("Estimated Progress: \(change)")
+            let propChange = change["new"] as Float
+            if propChange >= 1.0 {
+                if let callback = self.didLoadCallback {
+                    callback()
+                }
+            }
         default:
             println("Uknown Key: \(keyPath)")
         }
