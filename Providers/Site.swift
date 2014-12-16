@@ -14,14 +14,12 @@ class Site: NSManagedObject {
 
 extension Site {
     func addFavicon(favicon: Favicon) {
-        println("Add favicon \(favicon)")
         var items = self.mutableSetValueForKey("favicons");
         items.addObject(favicon)
         favicons = items
     }
 
     func removeFavicon(favicon: Favicon) {
-        println("Remove favicon \(favicon)")
         var items = self.mutableSetValueForKey("favicons");
         items.removeObject(favicon)
         favicons = items

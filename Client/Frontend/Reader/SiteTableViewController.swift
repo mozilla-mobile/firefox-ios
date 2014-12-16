@@ -29,8 +29,8 @@ class SiteTableViewController: UITableViewController {
         let site = sites[indexPath.row]
         
         // TODO: We need better async image loading here
-        account.favicons.getForUrl(site.url, options: nil) { icon in
-            if var img = icon.image as? UIImage {
+        account.favicons.getForUrl(site.url, options: nil) { icons in
+            if var img = icons[0].image as? UIImage {
                 cell.imageView?.image = createSizedFavicon(img)
                 cell.setNeedsLayout()
             }

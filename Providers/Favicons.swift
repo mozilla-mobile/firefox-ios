@@ -28,7 +28,7 @@ protocol Favicons {
     func clearFavicons(siteUrl: String, callback: () -> Void)
     func saveFavicon(siteUrl: String, iconUrl: String, image: UIImage?, callback: () -> Void)
     func getForUrls(urls: [String], options: FaviconOptions?, callback: ([String: [Favicon]]) -> Void)
-    func getForUrl(url: String, options: FaviconOptions?, callback: (Favicon) -> Void)
+    func getForUrl(url: String, options: FaviconOptions?, callback: ([Favicon]) -> Void)
 }
 
 /*
@@ -44,110 +44,80 @@ struct FaviconOptions {
     }
 }
 
-/*
- * A Base favicon implementation, Always returns a default for now.
- */
 class BasicFavicons : Favicons {
-    lazy var DEFAULT_IMAGE : UIImage = {
-        var img = UIImage(named: FaviconConsts.DefaultFaviconName)!
-        return img;
-    }();
+    private let faviconCache: GenericCache<String, [Favicon]>
 
     init() {
+        let f = Favicon.MR_createEntity()
+        f.url = FaviconConsts.DefaultFavicon
+        f.updatedDate = NSDate()
+
+        faviconCache = OrderedCache<String, [Favicon]>(caches: [
+            LRUCache(cacheSize: 10), // An in memory cache of recent favicons
+            CoreDataFaviconCache(),  // A CoreData cache of favicons
+            DefaultCache(def: [f])   // Always returns the default icon
+        ])
+
     }
 
     func clearFavicons(siteUrl: String, callback: () -> Void) {
-        MagicalRecord.saveWithBlock({ context in
-            var site = Site.MR_findFirstByAttribute("url", withValue: siteUrl)
-            if site == nil {
-                return
-            }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { _ in
+            self.faviconCache[siteUrl] = nil
 
-            for favicon in site.favicons {
-                if var f = favicon as? Favicon {
-                    favicon.MR_deleteEntityInContext(context)
-                }
+            dispatch_async(dispatch_get_main_queue()) { _ in
+                callback()
             }
-        }, completion: { _ in
-            callback()
-        })
+        }
     }
 
     func saveFavicon(siteUrl: String, iconUrl: String, image: UIImage? = nil, callback: () -> Void) {
-        MagicalRecord.saveWithBlock({ context in
-            var site = Site.MR_findFirstByAttribute("url", withValue: siteUrl)
-            if site == nil {
-                site = Site.MR_createEntityInContext(context)
-                site.url = siteUrl
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { _ in
+
+            var f = Favicon.MR_createEntity()
+            f.url = iconUrl
+            if let i = image {
+                f.image = i
             }
 
-            var icon = Favicon.MR_findFirstByAttribute("url", withValue: iconUrl)
-
-            if (icon == nil) {
-                icon = Favicon.MR_createEntityInContext(context)
-                icon.url = iconUrl
-                icon.updatedDate = NSDate()
-            } else {
-                if (site.favicons.containsObject(icon)) {
-                    return
+            if var favicons = self.faviconCache[siteUrl] {
+                // If the only favicon we found was the default, don't use it!
+                // XXX - This is dumb of me...
+                if (favicons.count == 1 && favicons[0].url == FaviconConsts.DefaultFavicon) {
+                    self.faviconCache[siteUrl] = [f]
+                } else {
+                    favicons.append(f)
+                    self.faviconCache[siteUrl] = favicons
                 }
+            } else {
+                self.faviconCache[siteUrl] = [f]
             }
 
-            if image != nil {
-                icon.image = icon.image
-            }
-
-            site.addFavicon(icon)
-        }, completion: { _ in
-            callback()
+            dispatch_async(dispatch_get_main_queue(), { _ in
+                callback()
+            })
         })
     }
 
     func getForUrls(urls: [String], options: FaviconOptions?, callback: ([String: [Favicon]]) -> Void) {
-        // Do an async dispatch to ensure this behaves like an async api
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () in
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) { () in
             var data = [String: [Favicon]]()
             for url in urls {
-                // XXX: Do we want to block here?
-                var s: Site?
-                var found = false
-
-                // Try to find it in CoreData
-                s = Site.MR_findFirstByAttribute("url", withValue: url)
-                if s != nil {
-                    if s!.favicons.count > 0 {
-                        data[url] = s!.favicons.allObjects as? [Favicon]
-                        found = true
-                    }
-                } else {
-                    s = Site.MR_createEntity() as Site
-                    s!.url = url
-                    s!.title = ""
-                }
-
-                if (!found) {
-                    // If we didn't find a site or a favicon, create (and save) them
-                    let icon = Favicon.MR_createEntity() as Favicon
-                    icon.url = FaviconConsts.DefaultFavicon
-                    icon.updatedDate = NSDate()
-                    icon.image = self.DEFAULT_IMAGE;
-
-                    s!.addFavicon(icon)
-                    data[url] = [icon]
+                if let icons = self.faviconCache[url] {
+                    data[url] = icons
                 }
             }
             
             dispatch_async(dispatch_get_main_queue(), { () in
                 callback(data)
             })
-        })
+        }
     }
     
-    func getForUrl(url: String, options: FaviconOptions?, callback: (Favicon) -> Void) {
+    func getForUrl(url: String, options: FaviconOptions?, callback: ([Favicon]) -> Void) {
         let urls = [url];
         getForUrls(urls, options: options, callback: { data in
             var icons = data[url]
-            callback(icons![0])
+            callback(icons!)
         })
     }
 }
