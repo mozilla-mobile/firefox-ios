@@ -28,10 +28,6 @@ class TabManager {
         return tabs[selectedIndex]
     }
 
-    func getTabs() -> [Browser] {
-        return tabs
-    }
-
     func getTab(index: Int) -> Browser {
         return tabs[index]
     }
