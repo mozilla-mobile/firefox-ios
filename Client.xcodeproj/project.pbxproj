@@ -137,7 +137,6 @@
 		F84B221E1A0911BF00AAB793 /* HistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F84B221C1A0911BF00AAB793 /* HistoryViewController.xib */; };
 		F84B22201A0911D400AAB793 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B221F1A0911D400AAB793 /* LoginViewController.swift */; };
 		F84B22241A09122500AAB793 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22221A09122500AAB793 /* TabBarViewController.swift */; };
-		F84B22251A09122500AAB793 /* TabBarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F84B22231A09122500AAB793 /* TabBarViewController.xib */; };
 		F84B22271A09127C00AAB793 /* TabBar.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B22261A09127C00AAB793 /* TabBar.xcassets */; };
 		F84B22291A0912C500AAB793 /* Settings.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B22281A0912C500AAB793 /* Settings.xcassets */; };
 		F84B22361A09145F00AAB793 /* Alamofire.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F84B22301A0913F200AAB793 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -372,7 +371,6 @@
 		F84B221C1A0911BF00AAB793 /* HistoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HistoryViewController.xib; sourceTree = "<group>"; };
 		F84B221F1A0911D400AAB793 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		F84B22221A09122500AAB793 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
-		F84B22231A09122500AAB793 /* TabBarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TabBarViewController.xib; sourceTree = "<group>"; };
 		F84B22261A09127C00AAB793 /* TabBar.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TabBar.xcassets; sourceTree = "<group>"; };
 		F84B22281A0912C500AAB793 /* Settings.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Settings.xcassets; sourceTree = "<group>"; };
 		F84B222A1A0913F100AAB793 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = ThirdParty/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
@@ -747,7 +745,6 @@
 			isa = PBXGroup;
 			children = (
 				F84B22221A09122500AAB793 /* TabBarViewController.swift */,
-				F84B22231A09122500AAB793 /* TabBarViewController.xib */,
 				F84B22261A09127C00AAB793 /* TabBar.xcassets */,
 			);
 			path = TabBar;
@@ -1063,7 +1060,6 @@
 				F84B221E1A0911BF00AAB793 /* HistoryViewController.xib in Resources */,
 				E4D6BEA61A092A4700F538BD /* Login.xcassets in Resources */,
 				F84B22271A09127C00AAB793 /* TabBar.xcassets in Resources */,
-				F84B22251A09122500AAB793 /* TabBarViewController.xib in Resources */,
 				F84B220E1A0910F600AAB793 /* ReaderViewController.xib in Resources */,
 				F84B22121A0910F600AAB793 /* SettingsViewController.xib in Resources */,
 				E41A7D431A1BDFD800245963 /* FiraSans-Regular.ttf in Resources */,

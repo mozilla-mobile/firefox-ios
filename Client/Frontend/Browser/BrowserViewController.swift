@@ -30,7 +30,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
 
     func didBeginEditing() {
         let account = MockAccount()
-        let controller = TabBarViewController(nibName: "TabBarViewController", bundle: nil)
+        let controller = TabBarViewController()
         controller.account = account
         presentViewController(controller, animated: true, completion: nil)
     }
