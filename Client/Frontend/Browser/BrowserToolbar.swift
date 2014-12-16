@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 
 protocol BrowserToolbarDelegate {
+    func didBeginEditing()
     func didClickBack()
     func didClickForward()
     func didEnterURL(url: NSURL)
@@ -196,7 +197,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     }
 
     func textFieldDidBeginEditing(textField: UITextField) {
-        arrangeToolbar(editing: true)
+        browserToolbarDelegate?.didBeginEditing()
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {

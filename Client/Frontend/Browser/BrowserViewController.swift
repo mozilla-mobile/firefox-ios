@@ -28,6 +28,13 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
         tabManager.addTab()
     }
 
+    func didBeginEditing() {
+        let account = MockAccount()
+        let controller = TabBarViewController(nibName: "TabBarViewController", bundle: nil)
+        controller.account = account
+        presentViewController(controller, animated: true, completion: nil)
+    }
+
     func didClickBack() {
         tabManager.selectedTab?.goBack()
     }
