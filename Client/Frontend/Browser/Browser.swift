@@ -6,18 +6,14 @@ import Foundation
 import WebKit
 
 class Browser {
-    private let webView = WKWebView()
+    let webView = WKWebView()
 
-    var view: UIView {
-        return webView
-    }
-    
     init() {
         webView.allowsBackForwardNavigationGestures = true
     }
 
-    var url: String? {
-        return webView.URL?.absoluteString
+    var url: NSURL? {
+        return webView.URL?
     }
 
     var canGoBack: Bool {

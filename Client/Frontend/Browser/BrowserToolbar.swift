@@ -88,6 +88,10 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     func updateTabCount(count: Int) {
         tabsButton.setTitle(count.description, forState: UIControlState.Normal)
     }
+    
+    func updateURL(url: NSURL?) {
+        toolbarTextField.text = url?.absoluteString
+    }
 
     private func arrangeToolbar(#editing: Bool) {
         UIView.animateWithDuration(0.5, animations: { () -> Void in
