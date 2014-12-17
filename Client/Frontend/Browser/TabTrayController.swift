@@ -93,7 +93,7 @@ private class TabTableDataSource: NSObject, UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let tab = tabs[indexPath.item]
         let cell = UITableViewCell()
-        cell.textLabel?.text = tab.url
+        cell.textLabel?.text = tab.url?.absoluteString
         cell.selected = (tab === selectedTab)
         return cell
     }
