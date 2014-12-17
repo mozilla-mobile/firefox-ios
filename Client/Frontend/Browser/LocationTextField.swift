@@ -48,11 +48,21 @@ class LocationTextField: UITextField, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        let urlString = textField.text
+        // If we have an completion suggestion then we use that URL
+        if let completionURL = self.completionURL {
+            dispatch_async(dispatch_get_main_queue()) {
+                if let locationTextFieldDelegate = self.locationTextFieldDelegate {
+                    locationTextFieldDelegate.locationTextFieldDidReturn(self, url: completionURL)
+                }
+            }
+            return false
+        }
         
-        // If the URL is missing a scheme then parse then we manually prefix it with http:// and try
-        // again. We can probably do some smarter things here but I think this is a
-        // decent start that at least lets people skip typing the protocol.
+        // Otherwise take the URL from the text field. We parse it and if a scheme is missing we
+        // add http:// and try again. We can probably do some smarter things here but I think
+        // this is a decent start that at least lets people skip typing the protocol.
+
+        let urlString = textField.text
         
         var url = NSURL(string: urlString)
         if url == nil || url?.scheme == nil {
@@ -77,6 +87,7 @@ class LocationTextField: UITextField, UITextFieldDelegate {
     private var completionActive = false
     private var completionColor: UIColor = UIColor(red: 0.8, green: 0.87, blue: 0.93, alpha: 1.0)
     private var completionPrefixLength = 0
+    private var completionURL: NSURL?
     
     private func applyCompletion() {
         if completionActive {
@@ -116,7 +127,10 @@ class LocationTextField: UITextField, UITextFieldDelegate {
         if countElements(self.text) != 0 {
             if let suggestion = locationTextFieldDelegate?.locationTextField(self, completionForPrefix: self.text) {
                 let location = suggestion.location
+                self.completionURL = suggestion.url
                 return location.substringFromIndex(advance(location.startIndex, countElements(self.text!)))
+            } else {
+                self.completionURL = nil
             }
         }
         return nil
