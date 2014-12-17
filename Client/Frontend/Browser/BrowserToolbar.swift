@@ -21,6 +21,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     private var backButton: UIButton!
     private var toolbarTextButton: UIButton!
     private var tabsButton: UIButton!
+    private var progressBar: UIProgressView!
 
     private var longPressGestureBackButton: UILongPressGestureRecognizer!
     private var longPressGestureForwardButton: UILongPressGestureRecognizer!
@@ -69,6 +70,10 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         toolbarTextButton.addTarget(self, action: "SELdidClickToolbar", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(toolbarTextButton)
 
+        progressBar = UIProgressView()
+        self.progressBar.trackTintColor = self.backgroundColor
+        self.addSubview(progressBar)
+
         tabsButton = UIButton()
         tabsButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         tabsButton.titleLabel?.layer.borderColor = UIColor.blackColor().CGColor
@@ -106,6 +111,11 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
             make.width.height.equalTo(44)
             make.right.equalTo(self).offset(-8)
         }
+
+        self.progressBar.snp_remakeConstraints { make in
+            make.centerY.equalTo(self.snp_bottom)
+            make.width.equalTo(self)
+        }
     }
 
     func updateURL(url: NSURL?) {
@@ -138,5 +148,16 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
 
     func SELdidClickToolbar() {
         browserToolbarDelegate?.didBeginEditing()
+    }
+
+    func updateProgressBar(progress: Float) {
+        if progress == 1.0 {
+            self.progressBar.setProgress(progress, animated: true)
+            UIView.animateWithDuration(1.5, animations: {self.progressBar.alpha = 0.0},
+                completion: {_ in self.progressBar.setProgress(0.0, animated: false)})
+        } else {
+            self.progressBar.alpha = 1.0
+            self.progressBar.setProgress(progress, animated: true)
+        }
     }
 }
