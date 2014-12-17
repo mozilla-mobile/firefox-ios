@@ -20,13 +20,21 @@ private let LabelFontSize: CGFloat = 13.0
 private let BackgroundColor = UIColor(red: 57.0 / 255, green: 57.0 / 255, blue: 57.0 / 255, alpha: 1)
 private let TransitionDuration = 0.25
 
-class TabBarViewController: UIViewController {
+protocol TabBarViewControllerDelegate {
+    func didEnterURL(url: NSURL)
+}
+
+class TabBarViewController: UIViewController, UITextFieldDelegate {
     var account: Account!
     var notificationToken: NSObjectProtocol!
     var panels: [ToolbarItem]!
+    var delegate: TabBarViewControllerDelegate?
+    var url: NSURL?
 
     private var buttonContainerView: ToolbarContainerView!
     private var controllerContainerView: UIView!
+    private var toolbarTextField: UITextField!
+    private var cancelButton: UIButton!
     private var buttons: [ToolbarButton] = []
     
     override func viewWillDisappear(animated: Bool) {
@@ -117,6 +125,8 @@ class TabBarViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        view.backgroundColor = BackgroundColor
+
         buttonContainerView = ToolbarContainerView()
         buttonContainerView.backgroundColor = BackgroundColor
         view.addSubview(buttonContainerView)
@@ -124,9 +134,46 @@ class TabBarViewController: UIViewController {
         controllerContainerView = UIView()
         view.addSubview(controllerContainerView)
 
+        toolbarTextField = ToolbarTextField()
+        toolbarTextField.keyboardType = UIKeyboardType.URL
+        toolbarTextField.autocorrectionType = UITextAutocorrectionType.No
+        toolbarTextField.autocapitalizationType = UITextAutocapitalizationType.None
+        toolbarTextField.returnKeyType = UIReturnKeyType.Go
+        toolbarTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
+        toolbarTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
+        toolbarTextField.layer.cornerRadius = 8
+        toolbarTextField.setContentHuggingPriority(0, forAxis: UILayoutConstraintAxis.Horizontal)
+        toolbarTextField.delegate = self
+        toolbarTextField.text = url?.absoluteString
+        toolbarTextField.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        toolbarTextField.becomeFirstResponder()
+        view.addSubview(toolbarTextField)
+
+        cancelButton = UIButton()
+        cancelButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
+        cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
+        view.addSubview(cancelButton)
+
+        toolbarTextField.snp_makeConstraints { make in
+            // 28.5 matches the position of the URL bar in BrowserViewController. If we want this to be
+            // less fragile, we could pass the offset as a parameter to this view controller.
+            make.top.equalTo(self.view).offset(28.5)
+            make.left.equalTo(self.view).offset(8)
+            return
+        }
+
+        self.cancelButton.snp_remakeConstraints { make in
+            make.left.equalTo(self.toolbarTextField.snp_right).offset(8)
+            make.centerY.equalTo(self.toolbarTextField)
+            make.right.equalTo(self.view).offset(-8)
+        }
+
         buttonContainerView.snp_makeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.height.equalTo(110)
+            make.top.equalTo(self.toolbarTextField.snp_bottom)
+            make.left.right.equalTo(self.view)
+            make.height.equalTo(90)
         }
 
         controllerContainerView.snp_makeConstraints { make in
@@ -138,12 +185,40 @@ class TabBarViewController: UIViewController {
         updateButtons()
         selectedButtonIndex = 0
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         notificationToken = NSNotificationCenter.defaultCenter().addObserverForName(PanelsNotificationName, object: nil, queue: nil) { notif in
             self.panels = Panels(account: self.account).enabledItems
             self.updateButtons()
         }
+    }
+
+    func textFieldDidBeginEditing(textField: UITextField) {
+        textField.selectAll(nil)
+    }
+
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        let urlString = toolbarTextField.text
+
+        // If the URL is missing a scheme then parse then we manually prefix it with http:// and try
+        // again. We can probably do some smarter things here but I think this is a
+        // decent start that at least lets people skip typing the protocol.
+        var url = NSURL(string: urlString)
+        if url == nil || url?.scheme == nil {
+            url = NSURL(string: "http://" + urlString)
+            if url == nil {
+                println("Error parsing URL: " + urlString)
+                return false
+            }
+        }
+
+        delegate?.didEnterURL(url!)
+        dismissViewControllerAnimated(true, completion: nil)
+        return false
+    }
+
+    func SELdidClickCancel() {
+        dismissViewControllerAnimated(true, completion: nil)
     }
 }
 
@@ -211,11 +286,23 @@ private class ToolbarContainerView: UIView {
 
         var origin = CGPoint(x: (frame.width - CGFloat(countElements(subviews)) * ButtonSize.width) / 2.0,
             y: (frame.height - ButtonSize.height) / 2.0)
-        origin.y += 15 - DividerHeight
+        origin.y += 5 - DividerHeight
 
         for view in subviews as [UIView] {
             view.frame = CGRect(origin: origin, size: view.frame.size)
             origin.x += ButtonSize.width
         }
+    }
+}
+
+private class ToolbarTextField: UITextField {
+    override func textRectForBounds(bounds: CGRect) -> CGRect {
+        let rect = super.textRectForBounds(bounds)
+        return rect.rectByInsetting(dx: 5, dy: 5)
+    }
+
+    override func editingRectForBounds(bounds: CGRect) -> CGRect {
+        let rect = super.editingRectForBounds(bounds)
+        return rect.rectByInsetting(dx: 5, dy: 5)
     }
 }
