@@ -48,6 +48,9 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     func didSelectedTabChange(selected: Browser?, previous: Browser?) {
         previous?.view.hidden = true
         selected?.view.hidden = false
+        if let selected = selected {
+            setToolbarStateForTab(selected)
+        }
     }
 
     func didAddTab(tab: Browser) {
@@ -59,7 +62,8 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
             make.top.equalTo(self.toolbar.snp_bottom)
             make.leading.trailing.bottom.equalTo(self.view)
         }
-        tab.didLoadCallBack = self.didFinishLoadingTab
+        tab.loadingCallback = self.setToolbarStateForTab
+        setToolbarStateForTab(tab)
         tab.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.mozilla.org")!))
     }
 
@@ -69,7 +73,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
         tab.view.removeFromSuperview()
     }
     
-    func didFinishLoadingTab(tab: Browser) {
+    func setToolbarStateForTab(tab: Browser) {
         self.toolbar.setBackStatus(tab.canGoBack)
         self.toolbar.setFowardStatus(tab.canGoForward)
     }

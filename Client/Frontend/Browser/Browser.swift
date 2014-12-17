@@ -13,10 +13,10 @@ class Browser {
         return webView
     }
     
-    var didLoadCallBack: ((tab: Browser) -> ())? {
+    var loadingCallback: ((tab: Browser) -> ())? {
         didSet {
-            if let callback = self.didLoadCallBack {
-                self.webViewObserver.didLoadCallback = { callback(tab: self) }
+            if let callback = self.loadingCallback {
+                self.webViewObserver.loadingCallback = { callback(tab: self) }
             }
         }
     }
@@ -55,7 +55,7 @@ private class WebViewObserver : NSObject {
     typealias KVOContext = UInt8
     private var ThisKVOContext = KVOContext()
     
-    var didLoadCallback: (() -> ())?
+    var loadingCallback: (() -> ())?
     
     func startObservingWebView(webView: WKWebView) {
         webView.addObserver(self, forKeyPath: "estimatedProgress", options: NSKeyValueObservingOptions.New, context: &ThisKVOContext)
@@ -68,12 +68,10 @@ private class WebViewObserver : NSObject {
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
         switch (keyPath, context) {
         case ("estimatedProgress", &ThisKVOContext):
-            println("Estimated Progress: \(change)")
-            let propChange = change["new"] as Float
-            if propChange >= 1.0 {
-                if let callback = self.didLoadCallback {
-                    callback()
-                }
+            let propChange = change["new"] as Double
+            println("Estimated Progress: \(propChange)")
+            if let callback = self.loadingCallback {
+                callback()
             }
         default:
             println("Uknown Key: \(keyPath)")
