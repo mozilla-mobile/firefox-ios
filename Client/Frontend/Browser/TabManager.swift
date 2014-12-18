@@ -28,10 +28,6 @@ class TabManager {
         return tabs[selectedIndex]
     }
 
-    func getTabs() -> [Browser] {
-        return tabs
-    }
-
     func getTab(index: Int) -> Browser {
         return tabs[index]
     }
@@ -65,7 +61,19 @@ class TabManager {
     }
 
     func removeTab(tab: Browser) {
-        let index = getIndex(tab)
+        // If the removed tab was selected, find the new tab to select.
+        if tab === selectedTab {
+            let index = getIndex(tab)
+            if index + 1 < count {
+                selectTab(tabs[index + 1])
+            } else if index - 1 >= 0 {
+                selectTab(tabs[index - 1])
+            } else {
+                assert(count == 1, "Removing last tab")
+                selectTab(nil)
+            }
+        }
+
         let prevCount = count
         for i in 0..<count {
             if tabs[i] === tab {
@@ -74,15 +82,6 @@ class TabManager {
             }
         }
         assert(count == prevCount - 1, "Tab removed")
-
-        if index < count {
-            selectTab(tabs[index])
-        } else if index - 1 >= 0 {
-            selectTab(tabs[index - 1])
-        } else {
-            assert(count == 0, "Removed last tab")
-            selectTab(nil)
-        }
 
         delegate?.didRemoveTab(tab)
     }
