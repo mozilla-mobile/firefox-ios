@@ -10,6 +10,8 @@ protocol BrowserToolbarDelegate {
     func didClickForward()
     func didEnterURL(url: NSURL)
     func didClickAddTab()
+    func didLongPressBack()
+    func didLongPressForward()
 }
 
 class BrowserToolbar: UIView, UITextFieldDelegate {
@@ -20,7 +22,10 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     private var toolbarTextField: ToolbarTextField!
     private var cancelButton: UIButton!
     private var tabsButton: UIButton!
-
+    
+    private var longPressGestureBackButton: UILongPressGestureRecognizer!
+    private var longPressGestureForwardButton: UILongPressGestureRecognizer!
+    
     override init() {
         super.init()
     }
@@ -42,12 +47,16 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         backButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         backButton.setTitle("<", forState: UIControlState.Normal)
         backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
+        longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack")
+        backButton.addGestureRecognizer(longPressGestureBackButton)
         self.addSubview(backButton)
 
         forwardButton = UIButton()
         forwardButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         forwardButton.setTitle(">", forState: UIControlState.Normal)
         forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
+        longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward")
+        forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         self.addSubview(forwardButton)
 
         toolbarTextField = ToolbarTextField()
@@ -163,9 +172,17 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     func SELdidClickBack() {
         browserToolbarDelegate?.didClickBack()
     }
+    
+    func SELdidLongPressBack() {
+        browserToolbarDelegate?.didLongPressBack()
+    }
 
     func SELdidClickForward() {
         browserToolbarDelegate?.didClickForward()
+    }
+    
+    func SELdidLongPressForward() {
+        browserToolbarDelegate?.didLongPressForward()
     }
 
     func SELdidClickCancel() {
