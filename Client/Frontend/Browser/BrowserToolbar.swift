@@ -10,6 +10,8 @@ protocol BrowserToolbarDelegate {
     func didClickForward()
     func didEnterURL(url: NSURL)
     func didClickAddTab()
+    func didLongPressBack()
+    func didLongPressForward()
 }
 
 class BrowserToolbar: UIView, LocationTextFieldDelegate {
@@ -20,7 +22,10 @@ class BrowserToolbar: UIView, LocationTextFieldDelegate {
     private var toolbarTextField: LocationTextField!
     private var cancelButton: UIButton!
     private var tabsButton: UIButton!
-
+    
+    private var longPressGestureBackButton: UILongPressGestureRecognizer!
+    private var longPressGestureForwardButton: UILongPressGestureRecognizer!
+    
     override init() {
         super.init()
     }
@@ -42,12 +47,16 @@ class BrowserToolbar: UIView, LocationTextFieldDelegate {
         backButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         backButton.setTitle("<", forState: UIControlState.Normal)
         backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
+        longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack")
+        backButton.addGestureRecognizer(longPressGestureBackButton)
         self.addSubview(backButton)
 
         forwardButton = UIButton()
         forwardButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         forwardButton.setTitle(">", forState: UIControlState.Normal)
         forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
+        longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward")
+        forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         self.addSubview(forwardButton)
 
         toolbarTextField = LocationTextField(frame: CGRectZero)
@@ -87,6 +96,10 @@ class BrowserToolbar: UIView, LocationTextFieldDelegate {
 
     func updateTabCount(count: Int) {
         tabsButton.setTitle(count.description, forState: UIControlState.Normal)
+    }
+    
+    func updateURL(url: NSURL?) {
+        toolbarTextField.text = url?.absoluteString
     }
 
     private func arrangeToolbar(#editing: Bool) {
@@ -159,9 +172,17 @@ class BrowserToolbar: UIView, LocationTextFieldDelegate {
     func SELdidClickBack() {
         browserToolbarDelegate?.didClickBack()
     }
+    
+    func SELdidLongPressBack() {
+        browserToolbarDelegate?.didLongPressBack()
+    }
 
     func SELdidClickForward() {
         browserToolbarDelegate?.didClickForward()
+    }
+    
+    func SELdidLongPressForward() {
+        browserToolbarDelegate?.didLongPressForward()
     }
 
     func SELdidClickCancel() {

@@ -6,18 +6,22 @@ import Foundation
 import WebKit
 
 class Browser {
-    private let webView = WKWebView()
+    let webView = WKWebView()
 
-    var view: UIView {
-        return webView
-    }
-    
     init() {
         webView.allowsBackForwardNavigationGestures = true
     }
+    
+    var backList: [WKBackForwardListItem]? {
+        return webView.backForwardList.backList as? [WKBackForwardListItem]
+    }
+    
+    var forwardList: [WKBackForwardListItem]? {
+        return webView.backForwardList.forwardList as? [WKBackForwardListItem]
+    }
 
-    var url: String? {
-        return webView.URL?.absoluteString
+    var url: NSURL? {
+        return webView.URL?
     }
 
     var canGoBack: Bool {
@@ -34,6 +38,10 @@ class Browser {
 
     func goForward() {
         webView.goForward()
+    }
+    
+    func goToBackForwardListItem(item: WKBackForwardListItem) {
+        webView.goToBackForwardListItem(item)
     }
 
     func loadRequest(request: NSURLRequest) {

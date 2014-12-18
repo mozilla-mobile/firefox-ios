@@ -4,10 +4,11 @@
 
 import Foundation
 import UIKit
+import WebKit
 
 private let StatusBarHeight = 20
 
-class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManagerDelegate {
+class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManagerDelegate, WKNavigationDelegate {
     var toolbar: BrowserToolbar!
     let tabManager = TabManager()
 
@@ -30,11 +31,25 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     func didClickBack() {
         tabManager.selectedTab?.goBack()
     }
+    
+    func didLongPressBack() {
+        let controller = BackForwardListViewController()
+        controller.listData = tabManager.selectedTab?.backList
+        controller.tabManager = tabManager
+        presentViewController(controller, animated: true, completion: nil)
+    }
 
     func didClickForward() {
         tabManager.selectedTab?.goForward()
     }
 
+    func didLongPressForward() {
+        let controller = BackForwardListViewController()
+        controller.listData = tabManager.selectedTab?.forwardList
+        controller.tabManager = tabManager
+        presentViewController(controller, animated: true, completion: nil)
+    }
+    
     func didClickAddTab() {
         let controller = TabTrayController()
         controller.tabManager = tabManager
@@ -46,16 +61,20 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     }
 
     func didSelectedTabChange(selected: Browser?, previous: Browser?) {
-        previous?.view.hidden = true
-        selected?.view.hidden = false
+        previous?.webView.hidden = true
+        selected?.webView.hidden = false
+        
+        previous?.webView.navigationDelegate = nil
+        selected?.webView.navigationDelegate = self
+        toolbar.updateURL(selected?.url?)
     }
 
     func didAddTab(tab: Browser) {
         toolbar.updateTabCount(tabManager.count)
 
-        tab.view.hidden = true
-        view.addSubview(tab.view)
-        tab.view.snp_makeConstraints { make in
+        tab.webView.hidden = true
+        view.addSubview(tab.webView)
+        tab.webView.snp_makeConstraints { make in
             make.top.equalTo(self.toolbar.snp_bottom)
             make.leading.trailing.bottom.equalTo(self.view)
         }
@@ -65,6 +84,10 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     func didRemoveTab(tab: Browser) {
         toolbar.updateTabCount(tabManager.count)
 
-        tab.view.removeFromSuperview()
+        tab.webView.removeFromSuperview()
+    }
+    
+    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+        toolbar.updateURL(webView.URL);
     }
 }
