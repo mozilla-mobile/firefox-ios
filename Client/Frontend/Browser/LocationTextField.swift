@@ -17,7 +17,7 @@ protocol LocationTextFieldDelegate {
     /// Fired with the text field has been submitted
     func locationTextFieldDidReturn(locationTextField: LocationTextField, url: NSURL)
     /// Fired when the text field is asking for a completion suggestion. Return nil if no completion is available.
-    func locationTextField(locationTextField: LocationTextField, completionForPrefix prefix: String) -> LocationSuggestion?
+    func locationTextField(locationTextField: LocationTextField, suggestionForPartialLocation partialLocation: String) -> LocationSuggestion?
 }
 
 class LocationTextField: UITextField, UITextFieldDelegate {
@@ -125,7 +125,7 @@ class LocationTextField: UITextField, UITextFieldDelegate {
     
     private func endingString() -> String? {
         if countElements(self.text) != 0 {
-            if let suggestion = locationTextFieldDelegate?.locationTextField(self, completionForPrefix: self.text) {
+            if let suggestion = locationTextFieldDelegate?.locationTextField(self, suggestionForPartialLocation: self.text) {
                 let location = suggestion.location
                 self.completionURL = suggestion.url
                 return location.substringFromIndex(advance(location.startIndex, countElements(self.text!)))

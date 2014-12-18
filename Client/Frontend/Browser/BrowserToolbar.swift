@@ -208,7 +208,7 @@ class BrowserToolbar: UIView, LocationTextFieldDelegate {
     /// Suggest a completion based on a prefix. Currently this just has some predefined sites and this also only works for hostnames and is currently ignoring paths.
     /// TODO: Hook this up to our real data sources.
 
-    func locationTextField(locationTextField: LocationTextField, completionForPrefix prefix: String) -> LocationSuggestion? {
+    func locationTextField(locationTextField: LocationTextField, suggestionForPartialLocation partialLocation: String) -> LocationSuggestion? {
         let MOCK_SUGGESTIONS = [
             "http://www.apple.com",
             "https://ask.mozilla.org",
@@ -225,25 +225,25 @@ class BrowserToolbar: UIView, LocationTextFieldDelegate {
 
         // First try to find a match on full urls that include the scheme
         for s in MOCK_SUGGESTIONS {
-            if s.hasPrefix(prefix) {
+            if s.hasPrefix(partialLocation) {
                 return LocationSuggestion(location: s, url: NSURL(string: s)!)
             }
         }
         
         // Then, if the partial completion has no scheme, try to find a match on just the hostname
-        if !prefix.hasPrefix("http://") && !prefix.hasPrefix("https://") {
+        if !partialLocation.hasPrefix("http://") && !partialLocation.hasPrefix("https://") {
             for s in MOCK_SUGGESTIONS {
                 let url = NSURL(string: s)!
                 if let host = url.host {
-                    if host.hasPrefix(prefix) {
+                    if host.hasPrefix(partialLocation) {
                         // If we directly match the host then we are done
                         return LocationSuggestion(location: host, url: url)
                     } else {
                         // If the host has a www. prefix, chop that off and see if we can match
                         if host.hasPrefix("www.") {
-                            let partialHost = host.substringFromIndex(advance(host.startIndex, countElements("www.")))
-                            if partialHost.hasPrefix(prefix) {
-                                return LocationSuggestion(location: partialHost, url: url)
+                            let domain = host.substringFromIndex(advance(host.startIndex, countElements("www.")))
+                            if domain.hasPrefix(partialLocation) {
+                                return LocationSuggestion(location: domain, url: url)
                             }
                         }
                     }
