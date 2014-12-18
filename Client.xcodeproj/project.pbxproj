@@ -112,7 +112,7 @@
 		E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E42CCE031A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
-		E49373591A41FF5000FDB16A /* LocationTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49373581A41FF5000FDB16A /* LocationTextField.swift */; };
+		E49373801A432A4E00FDB16A /* LocationTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E493737F1A432A4E00FDB16A /* LocationTextField.swift */; };
 		E4D6BEA61A092A4700F538BD /* Login.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEA51A092A4700F538BD /* Login.xcassets */; };
 		E4D6BEB21A092D5700F538BD /* Snappy.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E4D6BEAD1A092AD300F538BD /* Snappy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */; };
@@ -346,7 +346,7 @@
 		E41A7D4A1A1BE04500245963 /* InitialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
 		E42CCDE21A23A6F900B794D3 /* Clients.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clients.swift; sourceTree = "<group>"; };
 		E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUtils.swift; sourceTree = "<group>"; };
-		E49373581A41FF5000FDB16A /* LocationTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationTextField.swift; sourceTree = "<group>"; };
+		E493737F1A432A4E00FDB16A /* LocationTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationTextField.swift; sourceTree = "<group>"; };
 		E4D6BEA51A092A4700F538BD /* Login.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Login.xcassets; sourceTree = "<group>"; };
 		E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Snappy.xcodeproj; path = ThirdParty/Snappy/Snappy.xcodeproj; sourceTree = "<group>"; };
 		E4D6BEB51A092E0300F538BD /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Client.entitlements; sourceTree = "<group>"; };
@@ -551,7 +551,8 @@
 				D3A994961A3686BD008AD1AC /* Browser.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				D301AAED1A3A55B70078DD1D /* TabTrayController.swift */,
-				E49373581A41FF5000FDB16A /* LocationTextField.swift */,
+				0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */,
+				E493737F1A432A4E00FDB16A /* LocationTextField.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -1152,7 +1153,6 @@
 				28CE84301A1E571900576538 /* json.swift in Sources */,
 				0BD19A671A25309B0084FBA7 /* AccountPrefs.swift in Sources */,
 				F84B221D1A0911BF00AAB793 /* HistoryViewController.swift in Sources */,
-				E49373591A41FF5000FDB16A /* LocationTextField.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Browser.swift in Sources */,
 				0BDB95211A3B9844000F2B0F /* Models.xcdatamodeld in Sources */,
@@ -1161,6 +1161,7 @@
 				E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				F84B22201A0911D400AAB793 /* LoginViewController.swift in Sources */,
 				F84B22131A0910F600AAB793 /* Tabs.swift in Sources */,
+				E49373801A432A4E00FDB16A /* LocationTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
