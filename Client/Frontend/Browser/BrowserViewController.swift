@@ -8,7 +8,7 @@ import WebKit
 
 private let StatusBarHeight = 20
 
-class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManagerDelegate, WKNavigationDelegate {
+class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManagerDelegate, WKNavigationDelegate, TabBarViewControllerDelegate {
     var toolbar: BrowserToolbar!
     let tabManager = TabManager()
 
@@ -26,6 +26,16 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
         tabManager.delegate = self
 
         tabManager.addTab()
+    }
+
+    func didBeginEditing() {
+        let account = MockAccount()
+        let controller = TabBarViewController()
+        controller.account = account
+        controller.delegate = self
+        controller.url = tabManager.selectedTab?.url
+        controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+        presentViewController(controller, animated: true, completion: nil)
     }
 
     func didClickBack() {
@@ -57,6 +67,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     }
 
     func didEnterURL(url: NSURL) {
+        toolbar.updateURL(url)
         tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url))
     }
 
@@ -66,7 +77,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
         
         previous?.webView.navigationDelegate = nil
         selected?.webView.navigationDelegate = self
-        toolbar.updateURL(selected?.url?)
+        toolbar.updateURL(selected?.url)
     }
 
     func didAddTab(tab: Browser) {

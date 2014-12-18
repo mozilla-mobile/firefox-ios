@@ -1,120 +1,41 @@
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Snappy
 import UIKit
 
-
 // This is the bounding box of the button. The image is aligned to the top of the box, the text label to the bottom.
-let BUTTON_SIZE = CGSize(width: 72, height: 56)
+private let ButtonSize = CGSize(width: 72, height: 56)
 
 // Color and height of the orange divider
-let DIVIDER_COLOR: UIColor = UIColor(red: 255.0/255.0, green: 149.0/255.0, blue: 0.0, alpha: 1.0)
-let DIVIDER_HEIGHT: CGFloat = 4.0
+private let DividerColor: UIColor = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
+private let DividerHeight: CGFloat = 4.0
 
 // Font name and size used for the button label
-let LABEL_FONT_NAME: String = "FiraSans-Light"
-let LABEL_FONT_SIZE: CGFloat = 13.0
+private let LabelFontName: String = "FiraSans-Light"
+private let LabelFontSize: CGFloat = 13.0
 
+private let BackgroundColor = UIColor(red: 57.0 / 255, green: 57.0 / 255, blue: 57.0 / 255, alpha: 1)
+private let TransitionDuration = 0.25
 
-class ToolbarButton: UIButton
-{
-    private var _item: ToolbarItem
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        if let imageView = self.imageView {
-            imageView.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds))
-            imageView.frame =  CGRect(origin: CGPointMake(imageView.frame.origin.x, 0), size: imageView.frame.size)
-        }
-        
-        if let titleLabel = self.titleLabel {
-            titleLabel.frame.size.width = frame.size.width
-            titleLabel.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds))
-            titleLabel.frame = CGRect(origin: CGPointMake(titleLabel.frame.origin.x, super.frame.height - titleLabel.frame.height), size: titleLabel.frame.size)
-        }
-    }
-    
-    init(toolbarItem item: ToolbarItem) {
-        _item = item
-
-        super.init(frame: CGRect(x: 0, y: 0, width: BUTTON_SIZE.width, height: BUTTON_SIZE.height))
-        titleLabel?.font = UIFont(name: LABEL_FONT_NAME, size: LABEL_FONT_SIZE)
-        titleLabel?.textAlignment = NSTextAlignment.Center
-        titleLabel?.sizeToFit()
-        updateForItem()
-    }
-
-    var item: ToolbarItem {
-        get {
-            return self._item
-        }
-
-        set {
-            self._item = newValue
-            updateForItem()
-        }
-    }
-
-    private func updateForItem() {
-        setImage(UIImage(named: "nav-\(_item.imageName)-off.png"), forState: UIControlState.Normal)
-        setImage(UIImage(named: "nav-\(_item.imageName)-on.png"), forState: UIControlState.Selected)
-        setTitle(_item.title, forState: UIControlState.Normal)
-    }
-    
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+protocol TabBarViewControllerDelegate {
+    func didEnterURL(url: NSURL)
 }
 
-class ToolbarContainerView: UIView
-{
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
-        
-        let context = UIGraphicsGetCurrentContext()
-        CGContextSetFillColorWithColor(context, DIVIDER_COLOR.CGColor)
-        CGContextFillRect(context, CGRect(x: 0, y: frame.height-DIVIDER_HEIGHT, width: frame.width, height: DIVIDER_HEIGHT))
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        var origin = CGPoint(x: (frame.width - CGFloat(countElements(subviews)) * BUTTON_SIZE.width) / 2.0,
-            y: (frame.height - BUTTON_SIZE.height) / 2.0)
-        origin.y += 15 - DIVIDER_HEIGHT
-        
-        for view in subviews as [UIView] {
-            view.frame = CGRect(origin: origin, size: view.frame.size)
-            origin.x += BUTTON_SIZE.width
-        }
-    }
-}
-
-class TabBarViewController: UIViewController
-{
-    @IBOutlet weak var buttonContainerView: ToolbarContainerView!
-
-    let TransitionDuration = 0.25
-    var buttons: [ToolbarButton] = []
+class TabBarViewController: UIViewController, UITextFieldDelegate {
     var account: Account!
     var notificationToken: NSObjectProtocol!
-    var panels : [ToolbarItem]!
+    var panels: [ToolbarItem]!
+    var delegate: TabBarViewControllerDelegate?
+    var url: NSURL?
 
-    var onScreenFrame : CGRect {
-        var frame = view.frame
-        frame.size.height -= buttonContainerView.frame.height
-        frame.origin.y += buttonContainerView.frame.height
-        return frame;
-    }
-
-    var offScreenFrame : CGRect {
-        var frame = self.onScreenFrame
-        frame.origin.y += frame.height
-        return frame
-    }
+    private var buttonContainerView: ToolbarContainerView!
+    private var controllerContainerView: UIView!
+    private var toolbarTextField: UITextField!
+    private var cancelButton: UIButton!
+    private var buttons: [ToolbarButton] = []
     
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(notificationToken)
@@ -133,47 +54,29 @@ class TabBarViewController: UIViewController
             let newButton = buttons[newButtonIndex]
             newButton.selected = true
             
-            hideCurrentViewController() {
-                var vc = self.panels[newButtonIndex].generator(account: self.account)
-                self.showViewController(vc) {
-                    // Do Nothing
-                }
-            }
+            hideCurrentViewController()
+            var vc = self.panels[newButtonIndex].generator(account: self.account)
+            self.showViewController(vc)
 
             _selectedButtonIndex = newButtonIndex
         }
     }
 
-    private func hideCurrentViewController(callback: () -> Void) {
-        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
-
-        if (childViewControllers.count > 0) {
-            if var vc = childViewControllers[0] as? UIViewController {
-                transitionFromViewController(vc, toViewController: vc, duration: self.TransitionDuration, options: UIViewAnimationOptions.allZeros, animations: { () -> Void in
-                        // Slide the visible controller down
-                        vc.view.frame = self.offScreenFrame
-                    }, completion: { (Bool) -> Void in
-                        vc.view.removeFromSuperview()
-                        vc.removeFromParentViewController()
-                        callback()
-                    })
-            }
-        } else {
-            callback()
+    private func hideCurrentViewController() {
+        if let vc = childViewControllers.first? as? UIViewController {
+            vc.view.removeFromSuperview()
+            vc.removeFromParentViewController()
         }
     }
     
-    private func showViewController(vc: UIViewController, callback: () -> Void) {
-        self.view.addSubview(vc.view)
-        vc.view.frame = offScreenFrame
+    private func showViewController(vc: UIViewController) {
+        controllerContainerView.addSubview(vc.view)
+        vc.view.snp_makeConstraints { make in
+            make.top.equalTo(self.buttonContainerView.snp_bottom)
+            make.left.right.bottom.equalTo(self.view)
+        }
+
         addChildViewController(vc)
-        
-        UIView.animateWithDuration(self.TransitionDuration, animations: { () -> Void in
-            vc.view.frame = self.onScreenFrame
-        }, completion: { (Bool) -> Void in
-            UIApplication.sharedApplication().endIgnoringInteractionEvents()
-            callback();
-        })
     }
     
     func tappedButton(sender: UIButton!) {
@@ -222,15 +125,184 @@ class TabBarViewController: UIViewController
     }
     
     override func viewDidLoad() {
+        view.backgroundColor = BackgroundColor
+
+        buttonContainerView = ToolbarContainerView()
+        buttonContainerView.backgroundColor = BackgroundColor
+        view.addSubview(buttonContainerView)
+
+        controllerContainerView = UIView()
+        view.addSubview(controllerContainerView)
+
+        toolbarTextField = ToolbarTextField()
+        toolbarTextField.keyboardType = UIKeyboardType.URL
+        toolbarTextField.autocorrectionType = UITextAutocorrectionType.No
+        toolbarTextField.autocapitalizationType = UITextAutocapitalizationType.None
+        toolbarTextField.returnKeyType = UIReturnKeyType.Go
+        toolbarTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
+        toolbarTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
+        toolbarTextField.layer.cornerRadius = 8
+        toolbarTextField.setContentHuggingPriority(0, forAxis: UILayoutConstraintAxis.Horizontal)
+        toolbarTextField.delegate = self
+        toolbarTextField.text = url?.absoluteString
+        toolbarTextField.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        toolbarTextField.becomeFirstResponder()
+        view.addSubview(toolbarTextField)
+
+        cancelButton = UIButton()
+        cancelButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
+        cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
+        view.addSubview(cancelButton)
+
+        toolbarTextField.snp_makeConstraints { make in
+            // 28.5 matches the position of the URL bar in BrowserViewController. If we want this to be
+            // less fragile, we could pass the offset as a parameter to this view controller.
+            make.top.equalTo(self.view).offset(28.5)
+            make.left.equalTo(self.view).offset(8)
+            return
+        }
+
+        self.cancelButton.snp_remakeConstraints { make in
+            make.left.equalTo(self.toolbarTextField.snp_right).offset(8)
+            make.centerY.equalTo(self.toolbarTextField)
+            make.right.equalTo(self.view).offset(-8)
+        }
+
+        buttonContainerView.snp_makeConstraints { make in
+            make.top.equalTo(self.toolbarTextField.snp_bottom)
+            make.left.right.equalTo(self.view)
+            make.height.equalTo(90)
+        }
+
+        controllerContainerView.snp_makeConstraints { make in
+            make.top.equalTo(self.buttonContainerView.snp_bottom)
+            make.left.right.bottom.equalTo(self.view)
+        }
+
         self.panels = Panels(account: self.account).enabledItems
         updateButtons()
         selectedButtonIndex = 0
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         notificationToken = NSNotificationCenter.defaultCenter().addObserverForName(PanelsNotificationName, object: nil, queue: nil) { notif in
             self.panels = Panels(account: self.account).enabledItems
             self.updateButtons()
         }
+    }
+
+    func textFieldDidBeginEditing(textField: UITextField) {
+        textField.selectAll(nil)
+    }
+
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        let urlString = toolbarTextField.text
+
+        // If the URL is missing a scheme then parse then we manually prefix it with http:// and try
+        // again. We can probably do some smarter things here but I think this is a
+        // decent start that at least lets people skip typing the protocol.
+        var url = NSURL(string: urlString)
+        if url == nil || url?.scheme == nil {
+            url = NSURL(string: "http://" + urlString)
+            if url == nil {
+                println("Error parsing URL: " + urlString)
+                return false
+            }
+        }
+
+        delegate?.didEnterURL(url!)
+        dismissViewControllerAnimated(true, completion: nil)
+        return false
+    }
+
+    func SELdidClickCancel() {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+}
+
+private class ToolbarButton: UIButton {
+    private var _item: ToolbarItem
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        if let imageView = self.imageView {
+            imageView.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds))
+            imageView.frame =  CGRect(origin: CGPointMake(imageView.frame.origin.x, 0), size: imageView.frame.size)
+        }
+
+        if let titleLabel = self.titleLabel {
+            titleLabel.frame.size.width = frame.size.width
+            titleLabel.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds))
+            titleLabel.frame = CGRect(origin: CGPointMake(titleLabel.frame.origin.x, super.frame.height - titleLabel.frame.height), size: titleLabel.frame.size)
+        }
+    }
+
+    init(toolbarItem item: ToolbarItem) {
+        _item = item
+
+        super.init(frame: CGRect(x: 0, y: 0, width: ButtonSize.width, height: ButtonSize.height))
+        titleLabel?.font = UIFont(name: LabelFontName, size: LabelFontSize)
+        titleLabel?.textAlignment = NSTextAlignment.Center
+        titleLabel?.sizeToFit()
+        updateForItem()
+    }
+
+    var item: ToolbarItem {
+        get {
+            return self._item
+        }
+
+        set {
+            self._item = newValue
+            updateForItem()
+        }
+    }
+
+    private func updateForItem() {
+        setImage(UIImage(named: "nav-\(_item.imageName)-off.png"), forState: UIControlState.Normal)
+        setImage(UIImage(named: "nav-\(_item.imageName)-on.png"), forState: UIControlState.Selected)
+        setTitle(_item.title, forState: UIControlState.Normal)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+private class ToolbarContainerView: UIView {
+    override func drawRect(rect: CGRect) {
+        super.drawRect(rect)
+
+        let context = UIGraphicsGetCurrentContext()
+        CGContextSetFillColorWithColor(context, DividerColor.CGColor)
+        CGContextFillRect(context, CGRect(x: 0, y: frame.height-DividerHeight, width: frame.width, height: DividerHeight))
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        var origin = CGPoint(x: (frame.width - CGFloat(countElements(subviews)) * ButtonSize.width) / 2.0,
+            y: (frame.height - ButtonSize.height) / 2.0)
+        origin.y += 5 - DividerHeight
+
+        for view in subviews as [UIView] {
+            view.frame = CGRect(origin: origin, size: view.frame.size)
+            origin.x += ButtonSize.width
+        }
+    }
+}
+
+private class ToolbarTextField: UITextField {
+    override func textRectForBounds(bounds: CGRect) -> CGRect {
+        let rect = super.textRectForBounds(bounds)
+        return rect.rectByInsetting(dx: 5, dy: 5)
+    }
+
+    override func editingRectForBounds(bounds: CGRect) -> CGRect {
+        let rect = super.editingRectForBounds(bounds)
+        return rect.rectByInsetting(dx: 5, dy: 5)
     }
 }
