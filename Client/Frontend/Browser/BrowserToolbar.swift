@@ -14,12 +14,12 @@ protocol BrowserToolbarDelegate {
     func didLongPressForward()
 }
 
-class BrowserToolbar: UIView, UITextFieldDelegate {
+class BrowserToolbar: UIView, LocationTextFieldDelegate {
     var browserToolbarDelegate: BrowserToolbarDelegate?
 
     private var forwardButton: UIButton!
     private var backButton: UIButton!
-    private var toolbarTextField: ToolbarTextField!
+    private var toolbarTextField: LocationTextField!
     private var cancelButton: UIButton!
     private var tabsButton: UIButton!
     
@@ -59,7 +59,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         self.addSubview(forwardButton)
 
-        toolbarTextField = ToolbarTextField()
+        toolbarTextField = LocationTextField(frame: CGRectZero)
         toolbarTextField.keyboardType = UIKeyboardType.URL
         toolbarTextField.autocorrectionType = UITextAutocorrectionType.No
         toolbarTextField.autocapitalizationType = UITextAutocapitalizationType.None
@@ -68,7 +68,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         toolbarTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
         toolbarTextField.layer.cornerRadius = 8
         toolbarTextField.setContentHuggingPriority(0, forAxis: UILayoutConstraintAxis.Horizontal)
-        toolbarTextField.delegate = self
+        toolbarTextField.locationTextFieldDelegate = self
         self.addSubview(toolbarTextField)
 
         cancelButton = UIButton()
@@ -195,42 +195,62 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         browserToolbarDelegate?.didClickAddTab()
     }
 
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func locationTextFieldDidBeginEditing(locationTextField: LocationTextField) {
         arrangeToolbar(editing: true)
     }
+
+    func locationTextFieldDidReturn(locationTextField: LocationTextField, url: NSURL) {
+        arrangeToolbar(editing: false)
+        locationTextField.resignFirstResponder()
+        browserToolbarDelegate?.didEnterURL(url)
+    }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        let urlString = toolbarTextField.text
-        
-        // If the URL is missing a scheme then parse then we manually prefix it with http:// and try
-        // again. We can probably do some smarter things here but I think this is a
-        // decent start that at least lets people skip typing the protocol.
-        
-        var url = NSURL(string: urlString)
-        if url == nil || url?.scheme == nil {
-            url = NSURL(string: "http://" + urlString)
-            if url == nil {
-                println("Error parsing URL: " + urlString)
-                return false
+    /// Suggest a completion based on a prefix. Currently this just has some predefined sites and this also only works for hostnames and is currently ignoring paths.
+    /// TODO: Hook this up to our real data sources.
+
+    func locationTextField(locationTextField: LocationTextField, suggestionForPartialLocation partialLocation: String) -> LocationSuggestion? {
+        let MOCK_SUGGESTIONS = [
+            "http://www.apple.com",
+            "https://ask.mozilla.org",
+            "http://apple.stackexchange.com",
+            "http://www.wikipedia.org",
+            "https://wiki.mozilla.org",
+            "https://www.mozilla.org",
+            "https://news.ycombinator.com",
+            "https://bugzilla.mozilla.org",
+            "http://www.reddit.com",
+            "https://twitter.com",
+            "https://mobile.twitter.com"
+        ]
+
+        // First try to find a match on full urls that include the scheme
+        for s in MOCK_SUGGESTIONS {
+            if s.hasPrefix(partialLocation) {
+                return LocationSuggestion(location: s, url: NSURL(string: s)!)
             }
         }
-
-        arrangeToolbar(editing: false)
-
-        textField.resignFirstResponder()
-        browserToolbarDelegate?.didEnterURL(url!)
-        return false
-    }
-}
-
-private class ToolbarTextField: UITextField {
-    override func textRectForBounds(bounds: CGRect) -> CGRect {
-        let rect = super.textRectForBounds(bounds)
-        return rect.rectByInsetting(dx: 5, dy: 5)
-    }
-
-    override func editingRectForBounds(bounds: CGRect) -> CGRect {
-        let rect = super.editingRectForBounds(bounds)
-        return rect.rectByInsetting(dx: 5, dy: 5)
+        
+        // Then, if the partial completion has no scheme, try to find a match on just the hostname
+        if !partialLocation.hasPrefix("http://") && !partialLocation.hasPrefix("https://") {
+            for s in MOCK_SUGGESTIONS {
+                let url = NSURL(string: s)!
+                if let host = url.host {
+                    if host.hasPrefix(partialLocation) {
+                        // If we directly match the host then we are done
+                        return LocationSuggestion(location: host, url: url)
+                    } else {
+                        // If the host has a www. prefix, chop that off and see if we can match
+                        if host.hasPrefix("www.") {
+                            let domain = host.substringFromIndex(advance(host.startIndex, countElements("www.")))
+                            if domain.hasPrefix(partialLocation) {
+                                return LocationSuggestion(location: domain, url: url)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return nil
     }
 }
