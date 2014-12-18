@@ -41,7 +41,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     func didClickBack() {
         tabManager.selectedTab?.goBack()
     }
-    
+
     func didLongPressBack() {
         let controller = BackForwardListViewController()
         controller.listData = tabManager.selectedTab?.backList
@@ -59,7 +59,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
     }
-    
+
     func didClickAddTab() {
         let controller = TabTrayController()
         controller.tabManager = tabManager
@@ -74,7 +74,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     func didSelectedTabChange(selected: Browser?, previous: Browser?) {
         previous?.webView.hidden = true
         selected?.webView.hidden = false
-        
+
         previous?.webView.navigationDelegate = nil
         selected?.webView.navigationDelegate = self
         toolbar.updateURL(selected?.url)
@@ -97,7 +97,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
 
         tab.webView.removeFromSuperview()
     }
-    
+
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         toolbar.updateURL(webView.URL);
     }

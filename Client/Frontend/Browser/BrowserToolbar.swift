@@ -21,10 +21,10 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     private var backButton: UIButton!
     private var toolbarTextButton: UIButton!
     private var tabsButton: UIButton!
-    
+
     private var longPressGestureBackButton: UILongPressGestureRecognizer!
     private var longPressGestureForwardButton: UILongPressGestureRecognizer!
-    
+
     override init() {
         super.init()
     }
@@ -38,10 +38,10 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         super.init(coder: aDecoder)
         viewDidInit()
     }
-    
+
     private func viewDidInit() {
         self.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
-        
+
         backButton = UIButton()
         backButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         backButton.setTitle("<", forState: UIControlState.Normal)
@@ -115,11 +115,11 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     func updateTabCount(count: Int) {
         tabsButton.setTitle(count.description, forState: UIControlState.Normal)
     }
-    
+
     func SELdidClickBack() {
         browserToolbarDelegate?.didClickBack()
     }
-    
+
     func SELdidLongPressBack() {
         browserToolbarDelegate?.didLongPressBack()
     }
@@ -127,7 +127,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     func SELdidClickForward() {
         browserToolbarDelegate?.didClickForward()
     }
-    
+
     func SELdidLongPressForward() {
         browserToolbarDelegate?.didLongPressForward()
     }
