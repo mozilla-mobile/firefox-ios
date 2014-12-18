@@ -31,11 +31,25 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     func didClickBack() {
         tabManager.selectedTab?.goBack()
     }
+    
+    func didLongPressBack() {
+        let controller = BackForwardListViewController()
+        controller.listData = tabManager.selectedTab?.backList
+        controller.tabManager = tabManager
+        presentViewController(controller, animated: true, completion: nil)
+    }
 
     func didClickForward() {
         tabManager.selectedTab?.goForward()
     }
 
+    func didLongPressForward() {
+        let controller = BackForwardListViewController()
+        controller.listData = tabManager.selectedTab?.forwardList
+        controller.tabManager = tabManager
+        presentViewController(controller, animated: true, completion: nil)
+    }
+    
     func didClickAddTab() {
         let controller = TabTrayController()
         controller.tabManager = tabManager
