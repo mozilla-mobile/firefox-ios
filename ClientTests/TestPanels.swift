@@ -88,7 +88,7 @@ class TestPanels: AccountTest {
     }
     
     private func validatePrefs(profile: Profile, expectOrder: [String]?, expectEnabled: [Bool]?) {
-        let prefs = ProfilePrefs(profile: profile)!
+        let prefs = profile.prefs
         validatePrefs(prefs, data: expectOrder, key: "PANELS_ORDER");
         validatePrefs(prefs, data: expectEnabled, key: "PANELS_ENABLED");
     }

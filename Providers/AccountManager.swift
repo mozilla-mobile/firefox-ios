@@ -63,7 +63,7 @@ class AccountProfileManager: NSObject {
     }
 
     private func getRESTAccount(credential: NSURLCredential) -> RESTAccountProfile {
-        return RESTAccountProfile(credential: credential, logoutCallback: { account in
+        return RESTAccountProfile(localName: "default", credential: credential, logoutCallback: { account in
             // Remove this user from the keychain, regardless of whether the account is actually logged in.
             self.removeKeychain(credential.user!)
 
