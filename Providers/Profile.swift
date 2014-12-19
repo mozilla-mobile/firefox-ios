@@ -4,24 +4,40 @@
 
 import Foundation
 
-typealias LogoutCallback = (account: Account) -> ()
+typealias LogoutCallback = (profile: AccountProfile) -> ()
 
-protocol Account {
-    var user: String { get }
-    func logout()
-    func basicAuthorizationHeader() -> String
-    func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ())
+/**
+ * A Profile manages access to the user's data.
+ */
+protocol Profile {
+    var localName: String { get }
+
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
     var favicons: Favicons { get }
     var clients: Clients { get }
+
+    // Because we can't test for whether this is an AccountProfile.
+    // TODO: probably Profile should own an Account.
+    func logout()
 }
 
-class MockAccount: Account {
+protocol AccountProfile: Profile {
+    var accountName: String { get }
+
+    func basicAuthorizationHeader() -> String
+    func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ())
+}
+
+class MockAccountProfile: AccountProfile {
     init() {
     }
 
-    var user: String {
+    var localName: String {
         return "tester"
+    }
+
+    var accountName: String {
+        return "tester@mozilla.org"
     }
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
@@ -34,7 +50,7 @@ class MockAccount: Account {
     } ()
 
     lazy var clients: Clients = {
-        return Clients(account: self)
+        return MockClients(profile: self)
     } ()
 
     func basicAuthorizationHeader() -> String {
@@ -48,7 +64,7 @@ class MockAccount: Account {
     }
 }
 
-class RESTAccount: Account {
+class RESTAccountProfile: AccountProfile {
     let credential: NSURLCredential
     private let logoutCallback: LogoutCallback
 
@@ -56,7 +72,7 @@ class RESTAccount: Account {
         self.credential = credential
         self.logoutCallback = logoutCallback
     }
-    
+
     func basicAuthorizationHeader() -> String {
         let userPasswordString = "\(credential.user!):\(credential.password!)"
         let userPasswordData = userPasswordString.dataUsingEncoding(NSUTF8StringEncoding)
@@ -78,20 +94,24 @@ class RESTAccount: Account {
     }
 
     func logout() {
-        logoutCallback(account: self)
+        logoutCallback(profile: self)
     }
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         // Stubbed out to populate data from server.
         // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
-        return BookmarksRESTModelFactory(account: self)
+        return BookmarksRESTModelFactory(profile: self)
     } ()
 
     lazy var clients: Clients = {
-        return Clients(account: self)
+        return RESTClients(profile: self)
     } ()
 
-    var user: String {
+    var localName: String {
+        return "default"
+    }
+
+    var accountName: String {
         return credential.user!
     }
 

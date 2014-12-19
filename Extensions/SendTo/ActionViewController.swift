@@ -51,7 +51,7 @@ That is up to it's delegate, who can listen for cancellation and success events.
 */
 
 class ClientPickerViewController: UITableViewController {
-    var account: Account?
+    var profile: Profile?
     var clientPickerDelegate: ClientPickerViewControllerDelegate?
     
     var clients: [Client] = []
@@ -90,7 +90,7 @@ class ClientPickerViewController: UITableViewController {
     }
     
     private func reloadClients() {
-        account?.clients.getAll(
+        profile?.clients.getAll(
             { response in
                 self.clients = response
                 dispatch_async(dispatch_get_main_queue()) {
@@ -122,7 +122,7 @@ Depending on whether the user is logged in or not, this viewcontroller will pres
 @objc(ActionViewController)
 class ActionViewController: UINavigationController, ClientPickerViewControllerDelegate, LoginViewControllerDelegate
 {
-    var account: Account?
+    var profile: Profile?
     var sharedItem: ShareItem?
     
     override func viewDidLoad() {
@@ -132,16 +132,16 @@ class ActionViewController: UINavigationController, ClientPickerViewControllerDe
             if error == nil && item != nil {
                 self.sharedItem = item
                 
-                let accountManager = AccountManager(loginCallback: { _ in () }, logoutCallback: { _ in () })
-                self.account = accountManager.getAccount()
-                if self.account == nil {
+                let accountManager = AccountProfileManager(loginCallback: { _ in () }, logoutCallback: { _ in () })
+                self.profile = accountManager.getAccount()
+                if self.profile == nil {
                     let loginViewController = LoginViewController()
                     loginViewController.delegate = self
                     self.pushViewController(loginViewController, animated: false)
                 } else {
                     let clientPickerViewController = ClientPickerViewController()
                     clientPickerViewController.clientPickerDelegate = self
-                    clientPickerViewController.account = self.account
+                    clientPickerViewController.profile = self.profile
                     self.pushViewController(clientPickerViewController, animated: false)
                 }
             } else {
@@ -155,7 +155,7 @@ class ActionViewController: UINavigationController, ClientPickerViewControllerDe
     }
 
     func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [Client]) {
-        account?.clients.sendItem(self.sharedItem!, toClients: clients)
+        profile?.clients.sendItem(self.sharedItem!, toClients: clients)
         finish()
     }
     

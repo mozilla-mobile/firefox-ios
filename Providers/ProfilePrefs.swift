@@ -4,18 +4,20 @@
 
 import Foundation
 
-class AccountPrefs : NSUserDefaults {
-    private let account:Account
+class ProfilePrefs : NSUserDefaults {
+    private let profile: Profile
 
-    init?(account: Account) {
-        self.account = account
+    init?(profile: Profile) {
+        self.profile = profile
         super.init(suiteName: SuiteName)
     }
 
-    private func qualifyKey(key:String) -> String {
-        return self.account.user + key
+    // Preferences are qualified by the profile's local name.
+    // Connecting a profile to a Firefox Account, or changing to another, won't alter this.
+    private func qualifyKey(key: String) -> String {
+        return self.profile.localName + key
     }
-    
+
     override func setBool(value: Bool, forKey defaultName: String) {
         super.setBool(value, forKey: qualifyKey(defaultName))
     }
@@ -95,7 +97,7 @@ class AccountPrefs : NSUserDefaults {
     override func URLForKey(defaultName: String) -> NSURL? {
         return super.URLForKey(qualifyKey(defaultName))
     }
-    
+
     override func removeObjectForKey(defaultName: String) {
         super.removeObjectForKey(qualifyKey(defaultName));
     }

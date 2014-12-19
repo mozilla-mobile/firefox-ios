@@ -8,18 +8,18 @@ let SuiteName = "group.org.allizom.Client"
 let KeyUsername = "username"
 let KeyLoggedIn = "loggedIn"
 
-class AccountManager: NSObject {
-    let loginCallback: (account: Account) -> ()
+class AccountProfileManager: NSObject {
+    let loginCallback: (account: Profile) -> ()
     let logoutCallback: LogoutCallback
 
     private let userDefaults = NSUserDefaults(suiteName: SuiteName)!
 
-    init(loginCallback: (account: Account) -> (), logoutCallback: LogoutCallback) {
+    init(loginCallback: (account: Profile) -> (), logoutCallback: LogoutCallback) {
         self.loginCallback = loginCallback
         self.logoutCallback = logoutCallback
     }
 
-    func getAccount() -> Account? {
+    func getAccount() -> Profile? {
         if !isLoggedIn() {
             return nil
         }
@@ -62,8 +62,8 @@ class AccountManager: NSObject {
         )
     }
 
-    private func getRESTAccount(credential: NSURLCredential) -> Account {
-        return RESTAccount(credential: credential, logoutCallback: { account in
+    private func getRESTAccount(credential: NSURLCredential) -> RESTAccountProfile {
+        return RESTAccountProfile(credential: credential, logoutCallback: { account in
             // Remove this user from the keychain, regardless of whether the account is actually logged in.
             self.removeKeychain(credential.user!)
 
@@ -71,7 +71,7 @@ class AccountManager: NSObject {
             if credential.user! == self.getUsername() {
                 self.userDefaults.removeObjectForKey(KeyUsername)
                 self.userDefaults.setObject(false, forKey: KeyLoggedIn)
-                self.logoutCallback(account: account)
+                self.logoutCallback(profile: account)
             }
         })
     }

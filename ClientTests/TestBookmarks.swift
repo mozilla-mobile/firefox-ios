@@ -10,7 +10,7 @@ class TestBookmarks : AccountTest {
         withTestAccount { account -> Void in
             let expectation = self.expectationWithDescription("asynchronous request")
 
-            MockAccount().bookmarks.modelForFolder("mobile", success: { (model: BookmarksModel) in
+            MockAccountProfile().bookmarks.modelForFolder("mobile", success: { (model: BookmarksModel) in
                 XCTAssert(model.current.count == 11, "We create 11 stub bookmarks.")
                 let bookmark = model.current[0]
                 XCTAssertTrue(bookmark is BookmarkItem)

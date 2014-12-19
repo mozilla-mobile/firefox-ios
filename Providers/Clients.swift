@@ -15,15 +15,35 @@ class Client {
     }
 }
 
-class Clients: NSObject {
-    private let account: Account
+protocol Clients {
+    func getAll(success: ([Client]) -> (), error: (RequestError) -> ())
+    func sendItem(item: ShareItem, toClients clients: [Client])
+}
 
-    init(account: Account) {
-        self.account = account
+class MockClients: Clients {
+    private let profile: Profile
+
+    init(profile: Profile) {
+        self.profile = profile
     }
 
     func getAll(success: ([Client]) -> (), error: (RequestError) -> ()) {
-        account.makeAuthRequest(
+        success([])
+    }
+
+    func sendItem(item: ShareItem, toClients clients: [Client]) {
+    }
+}
+
+class RESTClients: Clients {
+    private let profile: RESTAccountProfile
+
+    init(profile: RESTAccountProfile) {
+        self.profile = profile
+    }
+
+    func getAll(success: ([Client]) -> (), error: (RequestError) -> ()) {
+        profile.makeAuthRequest(
             "clients",
             success: { data in
                 success(self.parseResponse(data));
@@ -89,7 +109,7 @@ class Clients: NSObject {
             }
             
             let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("Clients/sendItem")
-            configuration.HTTPAdditionalHeaders = ["Authorization" : account.basicAuthorizationHeader()]
+            configuration.HTTPAdditionalHeaders = ["Authorization" : self.profile.basicAuthorizationHeader()]
             configuration.sharedContainerIdentifier = ExtensionUtils.sharedContainerIdentifier()
             
             let session = NSURLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
