@@ -4,101 +4,79 @@
 
 import Foundation
 
-class ProfilePrefs : NSUserDefaults {
-    private let profile: Profile
+public protocol ProfilePrefs {
+    func setObject(value: AnyObject?, forKey defaultName: String)
+    func stringArrayForKey(defaultName: String) -> [AnyObject]?
+    func arrayForKey(defaultName: String) -> [AnyObject]?
+    func dictionaryForKey(defaultName: String) -> [NSObject : AnyObject]?
+    func removeObjectForKey(defaultName: String)
+}
 
-    init?(profile: Profile) {
+public class MockProfilePrefs : ProfilePrefs {
+    var things: NSMutableDictionary = NSMutableDictionary()
+
+    public func setObject(value: AnyObject?, forKey defaultName: String) {
+        things[defaultName] = value
+    }
+
+    public func stringArrayForKey(defaultName: String) -> [AnyObject]? {
+        return self.arrayForKey(defaultName)
+    }
+
+    public func arrayForKey(defaultName: String) -> [AnyObject]? {
+        let r: AnyObject? = things.objectForKey(defaultName)
+        if (r == nil) {
+            return nil
+        }
+        if let arr = r as? [AnyObject] {
+            return arr
+        }
+        return nil
+    }
+
+    public func dictionaryForKey(defaultName: String) -> [NSObject : AnyObject]? {
+        return things.objectForKey(defaultName) as? [NSObject: AnyObject]
+    }
+
+    public func removeObjectForKey(defaultName: String) {
+        self.things[defaultName] = nil
+    }
+}
+
+public class NSUserDefaultsProfilePrefs : ProfilePrefs {
+    private let profile: Profile
+    private let prefix: String
+    private let userDefaults: NSUserDefaults
+
+    init(profile: Profile) {
         self.profile = profile
-        super.init(suiteName: SuiteName)
+        self.prefix = profile.localName() + "."
+        self.userDefaults = NSUserDefaults(suiteName: SuiteName)!
     }
 
     // Preferences are qualified by the profile's local name.
     // Connecting a profile to a Firefox Account, or changing to another, won't alter this.
     private func qualifyKey(key: String) -> String {
-        return self.profile.localName + key
+        return self.prefix + key
     }
 
-    override func setBool(value: Bool, forKey defaultName: String) {
-        super.setBool(value, forKey: qualifyKey(defaultName))
+    public func setObject(value: AnyObject?, forKey defaultName: String) {
+        userDefaults.setObject(value, forKey: qualifyKey(defaultName))
     }
 
-    override func setDouble(value: Double, forKey defaultName: String) {
-        super.setDouble(value, forKey: qualifyKey(defaultName))
+    public func stringArrayForKey(defaultName: String) -> [AnyObject]? {
+        return userDefaults.stringArrayForKey(qualifyKey(defaultName))
     }
 
-    override func setInteger(value: Int, forKey defaultName: String) {
-        super.setInteger(value, forKey: qualifyKey(defaultName))
+    public func arrayForKey(defaultName: String) -> [AnyObject]? {
+        return userDefaults.arrayForKey(qualifyKey(defaultName))
     }
 
-    override func setFloat(value: Float, forKey defaultName: String) {
-        super.setFloat(value, forKey: qualifyKey(defaultName))
+    public func dictionaryForKey(defaultName: String) -> [NSObject : AnyObject]? {
+        return userDefaults.dictionaryForKey(qualifyKey(defaultName))
     }
 
-    override func setNilValueForKey(key: String) {
-        super.setNilValueForKey(qualifyKey(key))
-    }
-
-    override func setObject(value: AnyObject?, forKey defaultName: String) {
-        super.setObject(value, forKey: qualifyKey(defaultName))
-    }
-
-    override func setPersistentDomain(domain: [NSObject : AnyObject], forName domainName: String) {
-        super.setPersistentDomain(domain, forName: qualifyKey(domainName))
-    }
-
-    override func setURL(url: NSURL, forKey defaultName: String) {
-        super.setURL(url, forKey: qualifyKey(defaultName))
-    }
-
-    override func setValue(value: AnyObject?, forKey key: String) {
-        super.setValue(value, forKey: qualifyKey(key))
-    }
-
-    override func setValue(value: AnyObject?, forKeyPath keyPath: String) {
-        super.setValue(value, forKeyPath: qualifyKey(keyPath))
-    }
-
-    override func setValue(value: AnyObject?, forUndefinedKey key: String) {
-        super.setValue(value, forUndefinedKey: qualifyKey(key))
-    }
-
-    override func boolForKey(defaultName: String) -> Bool {
-        return super.boolForKey(qualifyKey(defaultName))
-    }
-
-    override func stringForKey(defaultName: String) -> String? {
-        return super.stringForKey(qualifyKey(defaultName))
-    }
-
-    override func integerForKey(defaultName: String) -> Int {
-        return super.integerForKey(qualifyKey(defaultName))
-    }
-
-    override func doubleForKey(defaultName: String) -> Double {
-        return super.doubleForKey(qualifyKey(defaultName))
-    }
-
-    override func floatForKey(defaultName: String) -> Float {
-        return super.floatForKey(qualifyKey(defaultName))
-    }
-
-    override func stringArrayForKey(defaultName: String) -> [AnyObject]? {
-        return super.stringArrayForKey(qualifyKey(defaultName))
-    }
-
-    override func arrayForKey(defaultName: String) -> [AnyObject]? {
-        return super.arrayForKey(qualifyKey(defaultName))
-    }
-
-    override func dictionaryForKey(defaultName: String) -> [NSObject : AnyObject]? {
-        return super.dictionaryForKey(qualifyKey(defaultName))
-    }
-
-    override func URLForKey(defaultName: String) -> NSURL? {
-        return super.URLForKey(qualifyKey(defaultName))
-    }
-
-    override func removeObjectForKey(defaultName: String) {
-        super.removeObjectForKey(qualifyKey(defaultName));
+    public func removeObjectForKey(defaultName: String) {
+        userDefaults.removeObjectForKey(qualifyKey(defaultName));
     }
 }

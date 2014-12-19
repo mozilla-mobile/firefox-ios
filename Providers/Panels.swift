@@ -84,10 +84,10 @@ class Panels : SequenceType {
         // Prefs are stored in a static cache, so we only want to do this setup
         // the first time a Panels object is created
         if (!setup) {
-            let prefs = ProfilePrefs(profile: profile)!
+            let prefs = profile.prefs
             
             if var enabled = prefs.arrayForKey(PanelsEnabledKey) as? [Bool] {
-                if var order = prefs.arrayForKey(PanelsOrderKey) as? [String] {
+                if var order = prefs.stringArrayForKey(PanelsOrderKey) as? [String] {
                     // Now we loop through the panels and sort them based on the order stored
                     // in PanelsOrderKey. We also disable them based on PanelsEnabledKey.
                     Controllers.withWriteLock { protected -> Void in
@@ -171,7 +171,7 @@ class Panels : SequenceType {
                 }
             }
 
-            let prefs = ProfilePrefs(profile: self.profile)!
+            let prefs = self.profile.prefs
             prefs.setObject(order, forKey: self.PanelsOrderKey)
             prefs.setObject(enabled, forKey: self.PanelsEnabledKey)
 

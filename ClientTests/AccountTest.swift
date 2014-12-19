@@ -17,8 +17,12 @@ class TestAccountManager : AccountProfileManager {
 }
 
 class TestAccount : RESTAccountProfile {
-    override init(credential: NSURLCredential, logoutCallback: LogoutCallback) {
-        super.init(credential: credential, logoutCallback: logoutCallback)
+    init(credential: NSURLCredential, logoutCallback: LogoutCallback) {
+        super.init(localName: "testing", credential: credential, logoutCallback: logoutCallback)
+    }
+
+    override func makePrefs() -> ProfilePrefs {
+        return MockProfilePrefs()
     }
 
     override func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ()) {
@@ -47,7 +51,7 @@ class AccountTest: XCTestCase {
     func withTestAccount(callback: (profile: Profile) -> Void) {
         var ranTest = false
         let expectation = self.expectationWithDescription("asynchronous request")
-        var prof : Profile?
+        var prof : Profile!
 
         let am = TestAccountManager(loginCallback: { (profile: Profile) -> Void in
             ranTest = true
@@ -64,7 +68,12 @@ class AccountTest: XCTestCase {
         }
 
         waitForExpectationsWithTimeout(10.0, handler:nil)
-        callback(profile: prof!)
-        prof?.logout()
+        if (prof == nil) {
+            XCTFail("Profile never set.")
+            return
+        }
+
+        callback(profile: prof)
+        prof.logout()
     }
 }

@@ -10,15 +10,18 @@ typealias LogoutCallback = (profile: AccountProfile) -> ()
  * A Profile manages access to the user's data.
  */
 protocol Profile {
-    var localName: String { get }
-
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
     var favicons: Favicons { get }
     var clients: Clients { get }
+    var prefs: ProfilePrefs { get }
 
     // Because we can't test for whether this is an AccountProfile.
     // TODO: probably Profile should own an Account.
     func logout()
+
+    // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
+    // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
+    func localName() -> String
 }
 
 protocol AccountProfile: Profile {
@@ -29,15 +32,19 @@ protocol AccountProfile: Profile {
 }
 
 class MockAccountProfile: AccountProfile {
+    private let name: String = "mockaccount"
+
     init() {
     }
 
-    var localName: String {
-        return "tester"
+    func localName() -> String {
+        return name
     }
 
     var accountName: String {
-        return "tester@mozilla.org"
+        get {
+            return "tester@mozilla.org"
+        }
     }
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
@@ -53,6 +60,10 @@ class MockAccountProfile: AccountProfile {
         return MockClients(profile: self)
     } ()
 
+    lazy var prefs: ProfilePrefs = {
+        return MockProfilePrefs()
+    } ()
+
     func basicAuthorizationHeader() -> String {
         return ""
     }
@@ -64,13 +75,26 @@ class MockAccountProfile: AccountProfile {
     }
 }
 
-class RESTAccountProfile: AccountProfile {
+public class RESTAccountProfile: AccountProfile {
+    private let name: String
     let credential: NSURLCredential
+
     private let logoutCallback: LogoutCallback
 
-    init(credential: NSURLCredential, logoutCallback: LogoutCallback) {
+    init(localName: String, credential: NSURLCredential, logoutCallback: LogoutCallback) {
+        self.name = localName
         self.credential = credential
         self.logoutCallback = logoutCallback
+    }
+
+    func localName() -> String {
+        return name
+    }
+
+    var accountName: String {
+        get {
+            return credential.user!
+        }
     }
 
     func basicAuthorizationHeader() -> String {
@@ -107,18 +131,18 @@ class RESTAccountProfile: AccountProfile {
         return RESTClients(profile: self)
     } ()
 
-    var localName: String {
-        return "default"
-    }
-
-    var accountName: String {
-        return credential.user!
-    }
-
     //        lazy var ReadingList readingList
     //        lazy var History
 
     lazy var favicons: Favicons = {
         return BasicFavicons()
+    }()
+
+    func makePrefs() -> ProfilePrefs {
+        return NSUserDefaultsProfilePrefs(profile: self)
+    }
+
+    lazy var prefs: ProfilePrefs = {
+        self.makePrefs()
     }()
 }
