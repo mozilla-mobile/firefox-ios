@@ -8,24 +8,14 @@ import XCTest
 class TestAccountManager : AccountProfileManager {
     override func login(username: String, password: String, error: ((error: RequestError) -> ())) {
         let credential = NSURLCredential(user: username, password: password, persistence: .None)
-        let account = TestAccount(credential: credential, { (profile: AccountProfile) -> Void in
-            self.logoutCallback(profile: profile)
-        })
+        let account = MockAccountProfile()
         self.loginCallback(account: account)
         return
     }
 }
 
-class TestAccount : RESTAccountProfile {
-    init(credential: NSURLCredential, logoutCallback: LogoutCallback) {
-        super.init(localName: "testing", credential: credential, logoutCallback: logoutCallback)
-    }
-
-    override func makePrefs() -> ProfilePrefs {
-        return MockProfilePrefs()
-    }
-
-    override func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ()) {
+/*
+    func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ()) {
         if (request == "bookmarks/recent") {
             var jsonString = "["
             for i in 0...10 {
@@ -42,7 +32,7 @@ class TestAccount : RESTAccountProfile {
         
         error(error: RequestError.ConnectionFailed)
     }
-}
+*/
 
 /*
  * A base test type for tests that need to login to the test account
