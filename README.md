@@ -10,6 +10,8 @@ Getting involved
 
 This is a work in progress on some early ideas.  Don't get too attached to this code. Tomorrow everything will be different.
 
+*GitHub issues are enabled* on this repository, but we encourage you to file a bug (see above). We'll accept issues to track work items that don't yet have a pull request, and also as an early funnel for bug reports, but Bugzilla is the source of truth for lots of good reasons — issues will be shifted into Bugzilla, and pull requests need a bug number.
+
 Contributor guidelines
 ----------------------
 
