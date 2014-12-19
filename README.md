@@ -13,12 +13,16 @@ This is a work in progress on some early ideas.  Don't get too attached to this 
 Contributor guidelines
 ----------------------
 
-* Swift code should follow the conventions listed at https://github.com/raywenderlich/swift-style-guide.
-  * The only exception is that we use 4-space indentation instead of 2.
-* Make sure each commit has a clear purpose.
-  * If a single commit contains multiple unrelated changes, those changes should be split into separate commits.
-  * If a commit requires another commit to build properly, those commits should be squashed.
-  * Follow-up commits for any review comments should be squashed. Do not include "Fixed PR comments", merge commits, or other "temporary" commits in pull requests.
-* Make sure not to commit any trailing whitespace.
-  * We recommend enabling both the "Automatically trim trailing whitespace" and "Including whitespace-only lines" preferences in Xcode (under Text Editing).
-  * "git rebase --whitespace=fix" can also be used to remove whitespace from your commits before issuing a pull request.
+### Swift style
+* Swift code should generally follow the conventions listed at https://github.com/raywenderlich/swift-style-guide.
+  * Exception: we use 4-space indentation instead of 2.
+
+### Whitespace
+* New code should not contain any trailing whitespace.
+* We recommend enabling both the "Automatically trim trailing whitespace" and "Including whitespace-only lines" preferences in Xcode (under Text Editing).
+* <code>git rebase --whitespace=fix</code> can also be used to remove whitespace from your commits before issuing a pull request.
+
+### Commits
+* Each commit should have a single clear purpose. If a commit contains multiple unrelated changes, those changes should be split into separate commits.
+* If a commit requires another commit to build properly, those commits should be squashed.
+* Follow-up commits for any review comments should be squashed. Do not include "Fixed PR comments", merge commits, or other "temporary" commits in pull requests.
