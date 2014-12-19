@@ -5,18 +5,18 @@
 import Foundation
 import XCTest
 
-class TestAccountManager : AccountManager {
+class TestAccountManager : AccountProfileManager {
     override func login(username: String, password: String, error: ((error: RequestError) -> ())) {
         let credential = NSURLCredential(user: username, password: password, persistence: .None)
-        let account = TestAccount(credential: credential, { (account: Account) -> Void in
-            self.logoutCallback(account: account)
+        let account = TestAccount(credential: credential, { (profile: AccountProfile) -> Void in
+            self.logoutCallback(profile: profile)
         })
         self.loginCallback(account: account)
         return
     }
 }
 
-class TestAccount : RESTAccount {
+class TestAccount : RESTAccountProfile {
     override init(credential: NSURLCredential, logoutCallback: LogoutCallback) {
         super.init(credential: credential, logoutCallback: logoutCallback)
     }
@@ -44,16 +44,16 @@ class TestAccount : RESTAccount {
  * A base test type for tests that need to login to the test account
  */
 class AccountTest: XCTestCase {
-    func withTestAccount(callback: (account: Account) -> Void) {
+    func withTestAccount(callback: (profile: Profile) -> Void) {
         var ranTest = false
         let expectation = self.expectationWithDescription("asynchronous request")
-        var acc : Account?
+        var prof : Profile?
 
-        let am = TestAccountManager(loginCallback: { (account: Account) -> Void in
+        let am = TestAccountManager(loginCallback: { (profile: Profile) -> Void in
             ranTest = true
-            acc = account
+            prof = profile
             expectation.fulfill()
-        }, logoutCallback: { (account: Account) -> Void in
+        }, logoutCallback: { (profile: Profile) -> Void in
             XCTAssertTrue(ranTest, "Tests were run")
         })
 
@@ -64,7 +64,7 @@ class AccountTest: XCTestCase {
         }
 
         waitForExpectationsWithTimeout(10.0, handler:nil)
-        callback(account: acc!)
-        acc?.logout()
+        callback(profile: prof!)
+        prof?.logout()
     }
 }

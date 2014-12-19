@@ -6,19 +6,19 @@ import Foundation
 import UIKit
 
 /*
- * This protocol is used for instantiating new tab panels. It ensures
+ * This protocol is used for instantiating new tab panels. It ensures...
  */
 protocol ToolbarViewProtocol {
-    var account: Account! { get set }
+    var profile: Profile! { get set }
 }
 
 /*
  * This struct holds basic data about the tabs shown in our UI.
  */
 struct ToolbarItem {
-    let title: String /* We use title all over the palce as a unique identifier. Be careful not to have duplicates */
+    let title: String    // We use title all over the place as a unique identifier. Be careful not to have duplicates.
     let imageName: String
-    let generator: (account: Account) -> UIViewController;
+    let generator: (profile: Profile) -> UIViewController;
     var enabled : Bool;
 }
 
@@ -27,29 +27,29 @@ struct ToolbarItem {
  * This will be rearranged on startup to make the order stored/enabled-states set in NSUserDefaults.
  */
 private var Controllers: Protector<[ToolbarItem]> = Protector(name: "Controllers", item: [
-    ToolbarItem(title: "Tabs", imageName: "tabs", generator: { (account: Account) -> UIViewController in
-        var controller = TabsViewController(nibName: nil, bundle: nil)
-        controller.account = account
+    ToolbarItem(title: "Tabs", imageName: "tabs", generator: { (profile: Profile) -> UIViewController in
+        let controller = TabsViewController(nibName: nil, bundle: nil)
+        controller.profile = profile
         return controller
     }, enabled: true),
-    ToolbarItem(title: "Bookmarks", imageName: "bookmarks", generator: { (account: Account) -> UIViewController in
-        var controller = BookmarksViewController(nibName: nil, bundle: nil)
-        controller.account = account
+    ToolbarItem(title: "Bookmarks", imageName: "bookmarks", generator: { (profile: Profile) -> UIViewController in
+        let controller = BookmarksViewController(nibName: nil, bundle: nil)
+        controller.profile = profile
         return controller
     }, enabled: true),
-    ToolbarItem(title: "History", imageName: "history", generator: { (account: Account) -> UIViewController in
-        var controller = HistoryViewController(nibName: "HistoryViewController", bundle: nil)
-        controller.account = account
+    ToolbarItem(title: "History", imageName: "history", generator: { (profile: Profile) -> UIViewController in
+        let controller = HistoryViewController(nibName: "HistoryViewController", bundle: nil)
+        controller.profile = profile
         return controller
     }, enabled: true),
-    ToolbarItem(title: "Reader", imageName: "reader", generator: { (account: Account) -> UIViewController in
-        var controller = SiteTableViewController(nibName: nil, bundle: nil)
-        controller.account = account
+    ToolbarItem(title: "Reader", imageName: "reader", generator: { (profile: Profile) -> UIViewController in
+        let controller = SiteTableViewController(nibName: nil, bundle: nil)
+        controller.profile = profile
         return controller
     }, enabled: true),
-    ToolbarItem(title: "Settings", imageName: "settings",  generator: { (account: Account) -> UIViewController in
-        var controller = SettingsViewController(nibName: "SettingsViewController", bundle: nil)
-        controller.account = account
+    ToolbarItem(title: "Settings", imageName: "settings",  generator: { (profile: Profile) -> UIViewController in
+        let controller = SettingsViewController(nibName: "SettingsViewController", bundle: nil)
+        controller.profile = profile
         return controller
     }, enabled: true),
 ])
@@ -74,17 +74,17 @@ private func indexOf(items: [ToolbarItem], val: String) -> Int {
  * The main object people wanting to interact with panels should use.
  */
 class Panels : SequenceType {
-    private var account: Account
+    private var profile: Profile
     private var PanelsOrderKey : String = "PANELS_ORDER"
     private var PanelsEnabledKey : String = "PANELS_ENABLED"
     
-    init(account : Account) {
-        self.account = account;
+    init(profile : Profile) {
+        self.profile = profile;
         
         // Prefs are stored in a static cache, so we only want to do this setup
         // the first time a Panels object is created
         if (!setup) {
-            let prefs = AccountPrefs(account: account)!
+            let prefs = ProfilePrefs(profile: profile)!
             
             if var enabled = prefs.arrayForKey(PanelsEnabledKey) as? [Bool] {
                 if var order = prefs.arrayForKey(PanelsOrderKey) as? [String] {
@@ -171,7 +171,7 @@ class Panels : SequenceType {
                 }
             }
 
-            let prefs = AccountPrefs(account: self.account)!
+            let prefs = ProfilePrefs(profile: self.profile)!
             prefs.setObject(order, forKey: self.PanelsOrderKey)
             prefs.setObject(enabled, forKey: self.PanelsEnabledKey)
 

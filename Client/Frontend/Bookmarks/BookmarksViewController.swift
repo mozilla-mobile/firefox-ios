@@ -9,15 +9,15 @@ class BookmarksViewController: UITableViewController {
     private let BOOKMARK_HEADER_IDENTIFIER = "BOOKMARK_HEADER"
 
     var source: BookmarksModel!
-    var _account: Account!
-    var account: Account! {
+    var _profile: Profile!
+    var profile: Profile! {
         get {
-            return _account
+            return _profile
         }
 
-        set (account) {
-            self._account = account
-            self.source = account.bookmarks.nullModel
+        set (profile) {
+            self._profile = profile
+            self.source = profile.bookmarks.nullModel
         }
     }
 

@@ -7,10 +7,10 @@ import XCTest
 
 class TestPanels: AccountTest {
     func testPanels() {
-        withTestAccount { account -> Void in
-            self.validatePrefs(account, expectOrder: nil, expectEnabled: nil);
+        withTestAccount { profile -> Void in
+            self.validatePrefs(profile, expectOrder: nil, expectEnabled: nil);
             
-            var panels = Panels(account: account)
+            var panels = Panels(profile: profile)
             XCTAssertEqual(panels.count, 5, "Right number of panels found");
             
             // Test moving an item
@@ -19,7 +19,7 @@ class TestPanels: AccountTest {
             self.expectNotification("Moving an item should notify us") { () -> Void in
                 panels.moveItem(1, to: 0);
             }
-            self.validatePrefs(account, expectOrder: ["Bookmarks", "Tabs", "History", "Reader", "Settings"],
+            self.validatePrefs(profile, expectOrder: ["Bookmarks", "Tabs", "History", "Reader", "Settings"],
                 expectEnabled: [true, true, true, true, true]);
             
             XCTAssertNotEqual(a!.title, panels[0]!.title, "Original panel is not in place any more")
@@ -28,7 +28,7 @@ class TestPanels: AccountTest {
             self.expectNotification("Moving an item should notify us") { () -> Void in
                 panels.moveItem(1, to: 0);
             }
-            self.validatePrefs(account, expectOrder: ["Tabs", "Bookmarks", "History", "Reader", "Settings"],
+            self.validatePrefs(profile, expectOrder: ["Tabs", "Bookmarks", "History", "Reader", "Settings"],
                 expectEnabled: [true, true, true, true, true]);
             
             // Tests enabling/disabling items
@@ -37,7 +37,7 @@ class TestPanels: AccountTest {
             self.expectNotification("Disabling a panel should fire a notification") { () -> Void in
                 panels.enablePanelAt(false, position: 0);
             }
-            self.validatePrefs(account, expectOrder: ["Tabs", "Bookmarks", "History", "Reader", "Settings"],
+            self.validatePrefs(profile, expectOrder: ["Tabs", "Bookmarks", "History", "Reader", "Settings"],
                 expectEnabled: [false, true, true, true, true]);
             
             XCTAssertEqual(enabledPanels.count, 5, "Right number of enabled panels found"); // Still holding a old reference
@@ -47,7 +47,7 @@ class TestPanels: AccountTest {
             self.expectNotification("Enabling a panel should fire a notification") { () -> Void in
                 panels.enablePanelAt(true, position: 0);
             }
-            self.validatePrefs(account, expectOrder: ["Tabs", "Bookmarks", "History", "Reader", "Settings"],
+            self.validatePrefs(profile, expectOrder: ["Tabs", "Bookmarks", "History", "Reader", "Settings"],
                 expectEnabled: [true, true, true, true, true]);
         }
     }
@@ -71,7 +71,7 @@ class TestPanels: AccountTest {
         XCTAssertTrue(fulfilled, "Received notification of change")
     }
     
-    private func validatePrefs<T : AnyObject>(prefs: AccountPrefs, data: [T]?, key: String) {
+    private func validatePrefs<T : AnyObject>(prefs: ProfilePrefs, data: [T]?, key: String) {
         if var data2 = prefs.arrayForKey(key) as? [T] {
             if (data != nil) {
                 XCTAssertTrue(true, "Should find \(key) prefs");
@@ -87,8 +87,8 @@ class TestPanels: AccountTest {
         }
     }
     
-    private func validatePrefs(account: Account, expectOrder: [String]?, expectEnabled: [Bool]?) {
-        let prefs = AccountPrefs(account: account)!
+    private func validatePrefs(profile: Profile, expectOrder: [String]?, expectEnabled: [Bool]?) {
+        let prefs = ProfilePrefs(profile: profile)!
         validatePrefs(prefs, data: expectOrder, key: "PANELS_ORDER");
         validatePrefs(prefs, data: expectEnabled, key: "PANELS_ENABLED");
     }

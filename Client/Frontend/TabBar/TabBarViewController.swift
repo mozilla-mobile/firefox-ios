@@ -25,7 +25,7 @@ protocol TabBarViewControllerDelegate {
 }
 
 class TabBarViewController: UIViewController, UITextFieldDelegate {
-    var account: Account!
+    var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [ToolbarItem]!
     var delegate: TabBarViewControllerDelegate?
@@ -55,7 +55,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
             newButton.selected = true
             
             hideCurrentViewController()
-            var vc = self.panels[newButtonIndex].generator(account: self.account)
+            var vc = self.panels[newButtonIndex].generator(profile: self.profile)
             self.showViewController(vc)
 
             _selectedButtonIndex = newButtonIndex
@@ -181,14 +181,14 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
             make.left.right.bottom.equalTo(self.view)
         }
 
-        self.panels = Panels(account: self.account).enabledItems
+        self.panels = Panels(profile: self.profile).enabledItems
         updateButtons()
         selectedButtonIndex = 0
     }
 
     override func viewWillAppear(animated: Bool) {
         notificationToken = NSNotificationCenter.defaultCenter().addObserverForName(PanelsNotificationName, object: nil, queue: nil) { notif in
-            self.panels = Panels(account: self.account).enabledItems
+            self.panels = Panels(profile: self.profile).enabledItems
             self.updateButtons()
         }
     }

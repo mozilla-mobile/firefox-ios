@@ -29,9 +29,9 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     }
 
     func didBeginEditing() {
-        let account = MockAccount()
+        let profile = MockAccountProfile()
         let controller = TabBarViewController()
-        controller.account = account
+        controller.profile = profile
         controller.delegate = self
         controller.url = tabManager.selectedTab?.url
         controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve

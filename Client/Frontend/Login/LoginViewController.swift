@@ -6,7 +6,7 @@ import UIKit
 import Snappy
 
 class LoginViewController: UIViewController {
-    var accountManager: AccountManager!
+    var accountManager: AccountProfileManager!
 
     override func loadView() {
         view = LoginView()
