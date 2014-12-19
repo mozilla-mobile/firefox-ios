@@ -6,11 +6,11 @@ import Foundation
 import Alamofire
 
 public class BookmarksRESTModelFactory: BookmarksModelFactory, ShareToDestination {
-    private let account: Account
+    private let profile: RESTAccountProfile
     private let sink: MemoryBookmarksSink = MemoryBookmarksSink()
 
-    init(account: Account) {
-        self.account = account
+    init(profile: RESTAccountProfile) {
+        self.profile = profile
     }
 
     func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
@@ -23,7 +23,7 @@ public class BookmarksRESTModelFactory: BookmarksModelFactory, ShareToDestinatio
 
 
     func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
-        account.makeAuthRequest(
+        self.profile.makeAuthRequest(
             "bookmarks/recent",
             success: { data in
                 success(self.parseResponse(data))
@@ -94,7 +94,7 @@ public class BookmarksRESTModelFactory: BookmarksModelFactory, ShareToDestinatio
  *
  * Eventually this code will go away altogether as we talk directly to Sync.
  */
-func sendBookmarkREST(account: Account, item: BookmarkItem) {
+func sendBookmarkREST(profile: RESTAccountProfile, item: BookmarkItem) {
     let request = NSMutableURLRequest(URL: NSURL(string: "https://moz-syncapi.sateh.com/1.0/bookmarks")!)
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -111,7 +111,7 @@ func sendBookmarkREST(account: Account, item: BookmarkItem) {
     }
 
     let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier("Bookmarks/shareItem")
-    configuration.HTTPAdditionalHeaders = ["Authorization" : account.basicAuthorizationHeader()]
+    configuration.HTTPAdditionalHeaders = ["Authorization" : profile.basicAuthorizationHeader()]
     configuration.sharedContainerIdentifier = ExtensionUtils.sharedContainerIdentifier()
 
     let session = NSURLSession(configuration: configuration, delegate: nil, delegateQueue: nil)

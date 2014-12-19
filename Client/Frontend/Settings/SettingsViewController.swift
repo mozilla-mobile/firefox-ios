@@ -12,12 +12,12 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol, UITableView
     @IBOutlet weak var settingsTableView: UITableView!
     @IBOutlet weak var signOutButton: UIButton!
 
-    var account: Account!
+    var profile: Profile!
 
     let SETTING_CELL_ID = "SETTING_CELL_ID"
 
     lazy var panels: Panels = {
-        return Panels(account: self.account)
+        return Panels(profile: self.profile)
     }()
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -46,7 +46,7 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol, UITableView
 
     // Referenced as button selector.
     func didClickLogout() {
-        account.logout()
+        profile.logout()
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

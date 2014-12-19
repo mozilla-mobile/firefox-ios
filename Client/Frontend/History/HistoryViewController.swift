@@ -6,7 +6,7 @@ import UIKit
 
 class HistoryViewController: UIViewController, ToolbarViewProtocol {
 
-    var account : Account!
+    var profile: Profile!
     override func viewDidLoad() {
         super.viewDidLoad()
 

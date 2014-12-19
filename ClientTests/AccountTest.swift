@@ -5,23 +5,17 @@
 import Foundation
 import XCTest
 
-class TestAccountManager : AccountManager {
+class TestAccountManager : AccountProfileManager {
     override func login(username: String, password: String, error: ((error: RequestError) -> ())) {
         let credential = NSURLCredential(user: username, password: password, persistence: .None)
-        let account = TestAccount(credential: credential, { (account: Account) -> Void in
-            self.logoutCallback(account: account)
-        })
+        let account = MockAccountProfile()
         self.loginCallback(account: account)
         return
     }
 }
 
-class TestAccount : RESTAccount {
-    override init(credential: NSURLCredential, logoutCallback: LogoutCallback) {
-        super.init(credential: credential, logoutCallback: logoutCallback)
-    }
-
-    override func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ()) {
+/*
+    func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ()) {
         if (request == "bookmarks/recent") {
             var jsonString = "["
             for i in 0...10 {
@@ -38,22 +32,22 @@ class TestAccount : RESTAccount {
         
         error(error: RequestError.ConnectionFailed)
     }
-}
+*/
 
 /*
  * A base test type for tests that need to login to the test account
  */
 class AccountTest: XCTestCase {
-    func withTestAccount(callback: (account: Account) -> Void) {
+    func withTestAccount(callback: (profile: Profile) -> Void) {
         var ranTest = false
         let expectation = self.expectationWithDescription("asynchronous request")
-        var acc : Account?
+        var prof : Profile!
 
-        let am = TestAccountManager(loginCallback: { (account: Account) -> Void in
+        let am = TestAccountManager(loginCallback: { (profile: Profile) -> Void in
             ranTest = true
-            acc = account
+            prof = profile
             expectation.fulfill()
-        }, logoutCallback: { (account: Account) -> Void in
+        }, logoutCallback: { (profile: Profile) -> Void in
             XCTAssertTrue(ranTest, "Tests were run")
         })
 
@@ -64,7 +58,12 @@ class AccountTest: XCTestCase {
         }
 
         waitForExpectationsWithTimeout(10.0, handler:nil)
-        callback(account: acc!)
-        acc?.logout()
+        if (prof == nil) {
+            XCTFail("Profile never set.")
+            return
+        }
+
+        callback(profile: prof)
+        prof.logout()
     }
 }
