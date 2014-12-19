@@ -78,6 +78,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
         previous?.webView.navigationDelegate = nil
         selected?.webView.navigationDelegate = self
         toolbar.updateURL(selected?.url)
+        toolbar.updateProgressBar(0.0)
     }
 
     func didAddTab(tab: Browser) {
@@ -89,16 +90,28 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
             make.top.equalTo(self.toolbar.snp_bottom)
             make.leading.trailing.bottom.equalTo(self.view)
         }
+        tab.webView.addObserver(self, forKeyPath: "estimatedProgress", options: .New, context: nil)
         tab.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.mozilla.org")!))
     }
 
     func didRemoveTab(tab: Browser) {
         toolbar.updateTabCount(tabManager.count)
 
+        tab.webView.removeObserver(self, forKeyPath: "estimatedProgress")
         tab.webView.removeFromSuperview()
     }
 
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         toolbar.updateURL(webView.URL);
+    }
+
+    override func observeValueForKeyPath(keyPath: String, ofObject object:
+        AnyObject, change:[NSObject: AnyObject], context:
+        UnsafeMutablePointer<Void>) {
+            if keyPath == "estimatedProgress" && object as? WKWebView == tabManager.selectedTab?.webView {
+                if let progress = change[NSKeyValueChangeNewKey] as Float? {
+                    toolbar.updateProgressBar(progress)
+                }
+            }
     }
 }
