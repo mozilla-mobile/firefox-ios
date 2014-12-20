@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */; };
 		0B657B451A3B9CAB005A9E43 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB952B1A3B9918000F2B0F /* Site.swift */; };
 		0B657B461A3B9CAB005A9E43 /* Favicon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB95291A3B9917000F2B0F /* Favicon.swift */; };
 		0B657B4B1A3BA859005A9E43 /* libMagicalRecord-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BF9F8AA1A3A3B410049A0FA /* libMagicalRecord-iOS.a */; };
@@ -136,7 +137,6 @@
 		F84B221E1A0911BF00AAB793 /* HistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F84B221C1A0911BF00AAB793 /* HistoryViewController.xib */; };
 		F84B22201A0911D400AAB793 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B221F1A0911D400AAB793 /* LoginViewController.swift */; };
 		F84B22241A09122500AAB793 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22221A09122500AAB793 /* TabBarViewController.swift */; };
-		F84B22251A09122500AAB793 /* TabBarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F84B22231A09122500AAB793 /* TabBarViewController.xib */; };
 		F84B22271A09127C00AAB793 /* TabBar.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B22261A09127C00AAB793 /* TabBar.xcassets */; };
 		F84B22291A0912C500AAB793 /* Settings.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B22281A0912C500AAB793 /* Settings.xcassets */; };
 		F84B22361A09145F00AAB793 /* Alamofire.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F84B22301A0913F200AAB793 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -297,6 +297,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListViewController.swift; sourceTree = "<group>"; };
 		0B9E3DD91A23FBBC008A7877 /* Panels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Panels.swift; sourceTree = "<group>"; };
 		0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPanels.swift; sourceTree = "<group>"; };
 		0BA896491A250E6500C1010C /* AccountTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTest.swift; sourceTree = "<group>"; };
@@ -370,7 +371,6 @@
 		F84B221C1A0911BF00AAB793 /* HistoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HistoryViewController.xib; sourceTree = "<group>"; };
 		F84B221F1A0911D400AAB793 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		F84B22221A09122500AAB793 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
-		F84B22231A09122500AAB793 /* TabBarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TabBarViewController.xib; sourceTree = "<group>"; };
 		F84B22261A09127C00AAB793 /* TabBar.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TabBar.xcassets; sourceTree = "<group>"; };
 		F84B22281A0912C500AAB793 /* Settings.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Settings.xcassets; sourceTree = "<group>"; };
 		F84B222A1A0913F100AAB793 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = ThirdParty/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
@@ -547,6 +547,7 @@
 				D3A994961A3686BD008AD1AC /* Browser.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				D301AAED1A3A55B70078DD1D /* TabTrayController.swift */,
+				0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -744,7 +745,6 @@
 			isa = PBXGroup;
 			children = (
 				F84B22221A09122500AAB793 /* TabBarViewController.swift */,
-				F84B22231A09122500AAB793 /* TabBarViewController.xib */,
 				F84B22261A09127C00AAB793 /* TabBar.xcassets */,
 			);
 			path = TabBar;
@@ -1060,7 +1060,6 @@
 				F84B221E1A0911BF00AAB793 /* HistoryViewController.xib in Resources */,
 				E4D6BEA61A092A4700F538BD /* Login.xcassets in Resources */,
 				F84B22271A09127C00AAB793 /* TabBar.xcassets in Resources */,
-				F84B22251A09122500AAB793 /* TabBarViewController.xib in Resources */,
 				F84B220E1A0910F600AAB793 /* ReaderViewController.xib in Resources */,
 				F84B22121A0910F600AAB793 /* SettingsViewController.xib in Resources */,
 				E41A7D431A1BDFD800245963 /* FiraSans-Regular.ttf in Resources */,
@@ -1126,6 +1125,7 @@
 				D34DC8541A16C40C00D49B7B /* AccountManager.swift in Sources */,
 				D34DC8571A16C40C00D49B7B /* Favicons.swift in Sources */,
 				0BD19A631A2530740084FBA7 /* Panels.swift in Sources */,
+				0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */,
 				28CE83C41A1D1D3200576538 /* ClientPayload.swift in Sources */,
 				0BDB952A1A3B9917000F2B0F /* Favicon.swift in Sources */,
 				28784D191A38CA9400021E35 /* Bookmarks.swift in Sources */,

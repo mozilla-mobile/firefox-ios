@@ -6,13 +6,11 @@ import Foundation
 import WebKit
 
 class Browser {
-    private let webView = WKWebView()
+
+    let webView = WKWebView()
+    
     private let webViewObserver = WebViewObserver()
 
-    var view: UIView {
-        return webView
-    }
-    
     var loadingCallback: ((tab: Browser) -> ())? {
         didSet {
             if let callback = self.loadingCallback {
@@ -26,8 +24,16 @@ class Browser {
         webViewObserver.startObservingWebView(webView)
     }
 
-    var url: String? {
-        return webView.URL?.absoluteString
+    var backList: [WKBackForwardListItem]? {
+        return webView.backForwardList.backList as? [WKBackForwardListItem]
+    }
+
+    var forwardList: [WKBackForwardListItem]? {
+        return webView.backForwardList.forwardList as? [WKBackForwardListItem]
+    }
+
+    var url: NSURL? {
+        return webView.URL?
     }
 
     var canGoBack: Bool {
@@ -44,6 +50,10 @@ class Browser {
 
     func goForward() {
         webView.goForward()
+    }
+
+    func goToBackForwardListItem(item: WKBackForwardListItem) {
+        webView.goToBackForwardListItem(item)
     }
 
     func loadRequest(request: NSURLRequest) {

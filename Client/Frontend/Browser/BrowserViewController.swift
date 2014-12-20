@@ -4,10 +4,11 @@
 
 import Foundation
 import UIKit
+import WebKit
 
 private let StatusBarHeight = 20
 
-class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManagerDelegate {
+class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManagerDelegate, WKNavigationDelegate, TabBarViewControllerDelegate {
     var toolbar: BrowserToolbar!
     let tabManager = TabManager()
 
@@ -27,12 +28,36 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
         tabManager.addTab()
     }
 
+    func didBeginEditing() {
+        let account = MockAccount()
+        let controller = TabBarViewController()
+        controller.account = account
+        controller.delegate = self
+        controller.url = tabManager.selectedTab?.url
+        controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+        presentViewController(controller, animated: true, completion: nil)
+    }
+
     func didClickBack() {
         tabManager.selectedTab?.goBack()
     }
 
+    func didLongPressBack() {
+        let controller = BackForwardListViewController()
+        controller.listData = tabManager.selectedTab?.backList
+        controller.tabManager = tabManager
+        presentViewController(controller, animated: true, completion: nil)
+    }
+
     func didClickForward() {
         tabManager.selectedTab?.goForward()
+    }
+
+    func didLongPressForward() {
+        let controller = BackForwardListViewController()
+        controller.listData = tabManager.selectedTab?.forwardList
+        controller.tabManager = tabManager
+        presentViewController(controller, animated: true, completion: nil)
     }
 
     func didClickAddTab() {
@@ -42,12 +67,20 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     }
 
     func didEnterURL(url: NSURL) {
+        toolbar.updateURL(url)
         tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url))
     }
 
     func didSelectedTabChange(selected: Browser?, previous: Browser?) {
-        previous?.view.hidden = true
-        selected?.view.hidden = false
+
+        previous?.webView.hidden = true
+        selected?.webView.hidden = false
+
+        previous?.webView.navigationDelegate = nil
+        selected?.webView.navigationDelegate = self
+        toolbar.updateURL(selected?.url)
+        toolbar.updateProgressBar(0.0)
+        
         if let selected = selected {
             setToolbarStateForTab(selected)
         }
@@ -56,21 +89,40 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     func didAddTab(tab: Browser) {
         toolbar.updateTabCount(tabManager.count)
 
-        tab.view.hidden = true
-        view.addSubview(tab.view)
-        tab.view.snp_makeConstraints { make in
+        tab.webView.hidden = true
+        view.addSubview(tab.webView)
+        tab.webView.snp_makeConstraints { make in
             make.top.equalTo(self.toolbar.snp_bottom)
             make.leading.trailing.bottom.equalTo(self.view)
         }
+
         tab.loadingCallback = self.setToolbarStateForTab
         setToolbarStateForTab(tab)
+        
+        tab.webView.addObserver(self, forKeyPath: "estimatedProgress", options: .New, context: nil)
+
         tab.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.mozilla.org")!))
     }
 
     func didRemoveTab(tab: Browser) {
         toolbar.updateTabCount(tabManager.count)
 
-        tab.view.removeFromSuperview()
+        tab.webView.removeObserver(self, forKeyPath: "estimatedProgress")
+        tab.webView.removeFromSuperview()
+    }
+
+    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+        toolbar.updateURL(webView.URL);
+    }
+
+    override func observeValueForKeyPath(keyPath: String, ofObject object:
+        AnyObject, change:[NSObject: AnyObject], context:
+        UnsafeMutablePointer<Void>) {
+            if keyPath == "estimatedProgress" && object as? WKWebView == tabManager.selectedTab?.webView {
+                if let progress = change[NSKeyValueChangeNewKey] as Float? {
+                    toolbar.updateProgressBar(progress)
+                }
+            }
     }
     
     func setToolbarStateForTab(tab: Browser) {
