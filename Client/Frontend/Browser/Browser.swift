@@ -43,6 +43,10 @@ class Browser {
     var canGoForward: Bool {
         return webView.canGoForward
     }
+    
+    var estimatedProgresss: Float {
+        return Float(webView.estimatedProgress)
+    }
 
     func goBack() {
         webView.goBack()

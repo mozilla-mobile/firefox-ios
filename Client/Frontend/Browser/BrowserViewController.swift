@@ -8,7 +8,7 @@ import WebKit
 
 private let StatusBarHeight = 20
 
-class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManagerDelegate, WKNavigationDelegate, TabBarViewControllerDelegate {
+class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManagerDelegate, TabBarViewControllerDelegate {
     var toolbar: BrowserToolbar!
     let tabManager = TabManager()
 
@@ -67,7 +67,6 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     }
 
     func didEnterURL(url: NSURL) {
-        toolbar.updateURL(url)
         tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url))
     }
 
@@ -76,11 +75,6 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
         previous?.webView.hidden = true
         selected?.webView.hidden = false
 
-        previous?.webView.navigationDelegate = nil
-        selected?.webView.navigationDelegate = self
-        toolbar.updateURL(selected?.url)
-        toolbar.updateProgressBar(0.0)
-        
         if let selected = selected {
             setToolbarStateForTab(selected)
         }
@@ -98,8 +92,6 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
 
         tab.loadingCallback = self.setToolbarStateForTab
         setToolbarStateForTab(tab)
-        
-        tab.webView.addObserver(self, forKeyPath: "estimatedProgress", options: .New, context: nil)
 
         tab.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.mozilla.org")!))
     }
@@ -107,26 +99,13 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
     func didRemoveTab(tab: Browser) {
         toolbar.updateTabCount(tabManager.count)
 
-        tab.webView.removeObserver(self, forKeyPath: "estimatedProgress")
         tab.webView.removeFromSuperview()
-    }
-
-    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
-        toolbar.updateURL(webView.URL);
-    }
-
-    override func observeValueForKeyPath(keyPath: String, ofObject object:
-        AnyObject, change:[NSObject: AnyObject], context:
-        UnsafeMutablePointer<Void>) {
-            if keyPath == "estimatedProgress" && object as? WKWebView == tabManager.selectedTab?.webView {
-                if let progress = change[NSKeyValueChangeNewKey] as Float? {
-                    toolbar.updateProgressBar(progress)
-                }
-            }
     }
     
     func setToolbarStateForTab(tab: Browser) {
-        self.toolbar.setBackStatus(tab.canGoBack)
-        self.toolbar.setFowardStatus(tab.canGoForward)
+        toolbar.setBackStatus(tab.canGoBack)
+        toolbar.setFowardStatus(tab.canGoForward)
+        toolbar.updateProgressBar(tab.estimatedProgresss)
+        toolbar.updateURL(tab.url)
     }
 }
