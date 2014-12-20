@@ -85,6 +85,10 @@ extension BrowserViewController: TabManagerDelegate {
         selected?.webView.navigationDelegate = self
         toolbar.updateURL(selected?.url)
         toolbar.updateProgressBar(0.0)
+        if let selected = selected {
+            toolbar.updateBackStatus(selected.canGoBack)
+            toolbar.updateFowardStatus(selected.canGoForward)
+        }
     }
 
     func didAddTab(tab: Browser) {
@@ -111,7 +115,10 @@ extension BrowserViewController: TabManagerDelegate {
 extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         toolbar.updateURL(webView.URL);
+        toolbar.updateBackStatus(webView.canGoBack)
+        toolbar.updateFowardStatus(webView.canGoForward)
     }
+
 
     override func observeValueForKeyPath(keyPath: String, ofObject object:
         AnyObject, change:[NSObject: AnyObject], context:
