@@ -76,7 +76,7 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
         selected?.webView.hidden = false
 
         if let selected = selected {
-            setToolbarStateForTab(selected)
+            updateToolbarStateForTab(selected)
         }
     }
 
@@ -90,8 +90,8 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
             make.leading.trailing.bottom.equalTo(self.view)
         }
 
-        tab.loadingCallback = self.setToolbarStateForTab
-        setToolbarStateForTab(tab)
+        tab.loadingCallback = self.updateToolbarStateForTab
+        updateToolbarStateForTab(tab)
 
         tab.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.mozilla.org")!))
     }
@@ -102,9 +102,9 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
         tab.webView.removeFromSuperview()
     }
     
-    func setToolbarStateForTab(tab: Browser) {
-        toolbar.setBackStatus(tab.canGoBack)
-        toolbar.setFowardStatus(tab.canGoForward)
+    func updateToolbarStateForTab(tab: Browser) {
+        toolbar.updateBackStatus(tab.canGoBack)
+        toolbar.updateFowardStatus(tab.canGoForward)
         toolbar.updateProgressBar(tab.estimatedProgresss)
         toolbar.updateURL(tab.url)
     }

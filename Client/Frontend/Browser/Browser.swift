@@ -10,18 +10,18 @@ class Browser {
     let webView = WKWebView()
     
     private let webViewObserver = WebViewObserver()
-
+    
+    init() {
+        webView.allowsBackForwardNavigationGestures = true
+        webViewObserver.startObservingWebView(webView)
+    }
+    
     var loadingCallback: ((tab: Browser) -> ())? {
         didSet {
             if let callback = self.loadingCallback {
                 self.webViewObserver.loadingCallback = { callback(tab: self) }
             }
         }
-    }
-    
-    init() {
-        webView.allowsBackForwardNavigationGestures = true
-        webViewObserver.startObservingWebView(webView)
     }
 
     var backList: [WKBackForwardListItem]? {

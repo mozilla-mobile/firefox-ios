@@ -128,11 +128,11 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         tabsButton.setTitle(count.description, forState: UIControlState.Normal)
     }
     
-    func setBackStatus(canGoBack: Bool) {
+    func updateBackStatus(canGoBack: Bool) {
         self.backButton.enabled = canGoBack
     }
     
-    func setFowardStatus(canGoForward: Bool) {
+    func updateFowardStatus(canGoForward: Bool) {
         self.forwardButton.enabled = canGoForward
     }
 
