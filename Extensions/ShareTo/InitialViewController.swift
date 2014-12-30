@@ -10,14 +10,14 @@ let LastUsedShareDestinationsKey = "LastUsedShareDestinations"
 class InitialViewController: UIViewController, ShareControllerDelegate
 {
     var shareDialogController: ShareDialogController!
-    var account: Account?
+    var profile: Profile?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(white: 0.75, alpha: 0.65) // TODO: Is the correct color documented somewhere?
         
-        let accountManager = AccountManager(loginCallback: { _ in () }, logoutCallback: { _ in () })
-        self.account = accountManager.getAccount()
+        let accountManager = AccountProfileManager(loginCallback: { _ in () }, logoutCallback: { _ in () })
+        self.profile = accountManager.getAccount()        // Or, eventually, a local-only one.
     }
     
     override func viewDidAppear(animated: Bool)
@@ -130,8 +130,8 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     }
     
     func shareToBookmarks(item: ShareItem) {
-        if account != nil { // TODO: We need to properly deal with this.
-            account!.bookmarks.shareItem(item)
+        if profile != nil { // TODO: We need to properly deal with this.
+            profile!.bookmarks.shareItem(item)
         }
     }
 }
