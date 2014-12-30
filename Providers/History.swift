@@ -39,7 +39,6 @@ private let queue = dispatch_queue_create("HistoryQueue", DISPATCH_QUEUE_SERIAL)
 public class History {
     private let model = HistoryCoreDataModel()
 
-<<<<<<< HEAD
     init() {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
@@ -60,8 +59,6 @@ public class History {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
-=======
->>>>>>> 761ec62... Add a history provider with CoreData support
     func addVisit(url: String, title: String, callback: (Site) -> Void) {
         // Do an async dispatch to ensure this behaves like an async api
         dispatch_async(queue, { _ in

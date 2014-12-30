@@ -23,9 +23,9 @@
 		0BA8964B1A250E6500C1010C /* AccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA896491A250E6500C1010C /* AccountTest.swift */; };
 		0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA8964A1A250E6500C1010C /* TestBookmarks.swift */; };
 		0BCAF3151A53252E009F8615 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCAF3141A53252E009F8615 /* History.swift */; };
-		0BCAF34D1A532FF8009F8615 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCAF3141A53252E009F8615 /* History.swift */; };
-		0BCAF3551A532FF9009F8615 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCAF3141A53252E009F8615 /* History.swift */; };
-		0BCAF3561A532FF9009F8615 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCAF3141A53252E009F8615 /* History.swift */; };
+		0BCAF31D1A532827009F8615 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCAF3141A53252E009F8615 /* History.swift */; };
+		0BCAF31E1A532828009F8615 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCAF3141A53252E009F8615 /* History.swift */; };
+		0BCAF31F1A532828009F8615 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCAF3141A53252E009F8615 /* History.swift */; };
 		0BD19A5F1A2530320084FBA7 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22221A09122500AAB793 /* TabBarViewController.swift */; };
 		0BD19A631A2530740084FBA7 /* Panels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DD91A23FBBC008A7877 /* Panels.swift */; };
 		0BD19A641A2530750084FBA7 /* Panels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DD91A23FBBC008A7877 /* Panels.swift */; };
@@ -1174,7 +1174,6 @@
 				D34DC8641A16C49600D49B7B /* Cursor.swift in Sources */,
 				0BA8964B1A250E6500C1010C /* AccountTest.swift in Sources */,
 				0BCAF34D1A532FF8009F8615 /* History.swift in Sources */,
-				0BCAF31D1A532827009F8615 /* History.swift in Sources */,
 				0BD19A701A2530DE0084FBA7 /* Tabs.swift in Sources */,
 				0B657B451A3B9CAB005A9E43 /* Site.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
