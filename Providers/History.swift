@@ -39,6 +39,26 @@ private let queue = dispatch_queue_create("HistoryQueue", DISPATCH_QUEUE_SERIAL)
 public class History {
     private let model = HistoryCoreDataModel()
 
+    init() {
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        let mainQueue = NSOperationQueue.mainQueue()
+        notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: "LocationChange", object: nil)
+    }
+
+    @objc
+    func onLocationChange(notification: NSNotification) {
+        if var u = notification.userInfo!["url"] as? NSURL {
+            if let title = notification.userInfo!["title"] as? NSString {
+                self.addVisit(u.absoluteString!, title: title) { site in
+                }
+            }
+        }
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     func addVisit(url: String, title: String, callback: (Site) -> Void) {
         // Do an async dispatch to ensure this behaves like an async api
         dispatch_async(queue, { _ in
