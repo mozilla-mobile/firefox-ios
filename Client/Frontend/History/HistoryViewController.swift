@@ -88,5 +88,11 @@ class HistoryViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if let hist = self.history {
+            let site = hist[indexPath.row]
+            if let vc = parentViewController as? TabBarViewController {
+                vc.loadUrl(site.url)
+            }
+        }
     }
 }
