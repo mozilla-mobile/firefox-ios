@@ -5,7 +5,7 @@
 import UIKit
 
 class SiteTableViewController: UITableViewController {
-    var account: Account!
+    var profile: Profile!
     
     private var sites = [Site]()
     /*
@@ -29,7 +29,7 @@ class SiteTableViewController: UITableViewController {
         let site = sites[indexPath.row]
         
         // TODO: We need better async image loading here
-        account.favicons.getForUrl(site.url, options: nil) { icon in
+        profile.favicons.getForUrl(site.url, options: nil) { icon in
             if var img = icon.image as? UIImage {
                 cell.imageView?.image = createSizedFavicon(img)
                 cell.setNeedsLayout()
