@@ -58,7 +58,7 @@ public class History {
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
-    
+
     func addVisit(url: String, title: String, callback: (Site) -> Void) {
         // Do an async dispatch to ensure this behaves like an async api
         dispatch_async(queue, { _ in
