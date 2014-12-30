@@ -6,10 +6,22 @@ import Foundation
 import WebKit
 
 class Browser {
-    let webView = WKWebView()
 
+    let webView = WKWebView()
+    
+    private let webViewObserver = WebViewObserver()
+    
     init() {
         webView.allowsBackForwardNavigationGestures = true
+        webViewObserver.startObservingWebView(webView)
+    }
+    
+    var loadingCallback: ((tab: Browser) -> ())? {
+        didSet {
+            if let callback = self.loadingCallback {
+                self.webViewObserver.loadingCallback = { callback(tab: self) }
+            }
+        }
     }
 
     var backList: [WKBackForwardListItem]? {
@@ -31,6 +43,10 @@ class Browser {
     var canGoForward: Bool {
         return webView.canGoForward
     }
+    
+    var estimatedProgresss: Float {
+        return Float(webView.estimatedProgress)
+    }
 
     func goBack() {
         webView.goBack()
@@ -46,5 +62,33 @@ class Browser {
 
     func loadRequest(request: NSURLRequest) {
         webView.loadRequest(request)
+    }
+}
+
+private class WebViewObserver : NSObject {
+    typealias KVOContext = UInt8
+    private var ThisKVOContext = KVOContext()
+    
+    var loadingCallback: (() -> ())?
+    
+    func startObservingWebView(webView: WKWebView) {
+        webView.addObserver(self, forKeyPath: "estimatedProgress", options: NSKeyValueObservingOptions.New, context: &ThisKVOContext)
+    }
+    
+    func stopObservingWebView(webView: WKWebView) {
+        webView.removeObserver(self, forKeyPath: "estimatedProgress", context: &ThisKVOContext)
+    }
+    
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        switch (keyPath, context) {
+        case ("estimatedProgress", &ThisKVOContext):
+            let propChange = change["new"] as Double
+            println("Estimated Progress: \(propChange)")
+            if let callback = self.loadingCallback {
+                callback()
+            }
+        default:
+            println("Uknown Key: \(keyPath)")
+        }
     }
 }
