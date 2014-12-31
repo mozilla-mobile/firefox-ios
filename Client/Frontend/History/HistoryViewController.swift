@@ -5,10 +5,10 @@
 import UIKit
 
 class HistoryViewController: UITableViewController {
-    private let CELL_IDENTIFIER = "HISTORY_CELL"
-    private let HEADER_IDENTIFIER = "HISTORY_HEADER"
+    private let CELL_IDENTIFIER = "SITE_CELL"
+    private let HEADER_IDENTIFIER = "SITE_HEADER"
 
-    var history: [Site]? = nil
+    var sites: [Site]? = nil
     var _profile: Profile? = nil
 
     var profile: Profile! {
@@ -18,7 +18,7 @@ class HistoryViewController: UITableViewController {
 
         set (profile) {
             self._profile = profile
-            self.history = profile.history.getAll()
+            self.sites = profile.history.getSites(nil)
         }
     }
 
@@ -37,8 +37,8 @@ class HistoryViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if var hist = self.history {
-            return hist.count
+        if var sites = self.sites {
+            return sites.count
         }
         return 0
     }
@@ -64,8 +64,8 @@ class HistoryViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as UITableViewCell
 
-        if var hist = self.history {
-            let site = hist[indexPath.row]
+        if var site = self.sites {
+            let site = site[indexPath.row]
 
             // cell.imageView?.image = site.icon
             cell.textLabel?.text = site.title
@@ -88,10 +88,25 @@ class HistoryViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let hist = self.history {
-            let site = hist[indexPath.row]
+        if let sites = self.sites {
+            let site = sites[indexPath.row]
             if let vc = parentViewController as? TabBarViewController {
                 vc.loadUrl(site.url)
+            }
+        }
+    }
+}
+
+class SearchViewController: HistoryViewController {
+    var filter: String? {
+        get {
+            return ""
+        }
+
+        set {
+            if let p = profile {
+                self.sites = profile.history.getSites(newValue)
+                tableView.reloadData()
             }
         }
     }

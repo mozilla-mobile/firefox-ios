@@ -40,25 +40,69 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(notificationToken)
     }
-    
-    private var _selectedButtonIndex: Int = 0
+
+    private var _selectedButtonIndex: Int = -1
     var selectedButtonIndex: Int {
         get {
             return _selectedButtonIndex
         }
 
         set (newButtonIndex) {
-            let currentButton = buttons[_selectedButtonIndex]
-            currentButton.selected = false
+            if _selectedButtonIndex == newButtonIndex {
+                return
+            }
 
-            let newButton = buttons[newButtonIndex]
-            newButton.selected = true
-            
-            hideCurrentViewController()
-            var vc = self.panels[newButtonIndex].generator(profile: self.profile)
-            self.showViewController(vc)
+            if _selectedButtonIndex >= 0 {
+                let currentButton = buttons[_selectedButtonIndex]
+                currentButton.selected = false
+            }
+
+            if (newButtonIndex >= 0) {
+                let newButton = buttons[newButtonIndex]
+                newButton.selected = true
+
+                hideCurrentViewController()
+                var vc = self.panels[newButtonIndex].generator(profile: self.profile)
+                self.showViewController(vc)
+            } else {
+                hideCurrentViewController()
+            }
 
             _selectedButtonIndex = newButtonIndex
+        }
+    }
+
+    private var prevIndex = -1;
+    private func showSearchViewController(filter: String?) {
+        if var vc = childViewControllers.first? as? SearchViewController {
+            vc.filter = filter
+        } else {
+            var vc = SearchViewController(nibName: nil, bundle: nil)
+            vc.profile = profile
+            vc.filter = filter
+
+            prevIndex = selectedButtonIndex
+            selectedButtonIndex = -1
+            showViewController(vc)
+            buttonContainerView.hidden = true
+            buttonContainerView.snp_remakeConstraints { make in
+                make.top.equalTo(self.toolbarTextField.snp_bottom)
+                make.left.right.equalTo(self.view)
+                make.height.equalTo(10)
+            }
+        }
+    }
+
+    private func hideSearchViewController() {
+        if var vc = childViewControllers.first? as? SearchViewController {
+            vc.filter = ""
+            selectedButtonIndex = prevIndex
+            buttonContainerView.hidden = false
+            buttonContainerView.snp_remakeConstraints { make in
+                make.top.equalTo(self.toolbarTextField.snp_bottom)
+                make.left.right.equalTo(self.view)
+                make.height.equalTo(90)
+            }
         }
     }
 
@@ -68,7 +112,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
             vc.removeFromParentViewController()
         }
     }
-    
+
     private func showViewController(vc: UIViewController) {
         controllerContainerView.addSubview(vc.view)
         vc.view.snp_makeConstraints { make in
@@ -200,6 +244,24 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         let urlString = textField.text
         return loadUrl(urlString)
+    }
+
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        if var newText = textField.text {
+            let start = advance(newText.startIndex, range.location)
+            let end = advance(newText.startIndex, range.location+range.length)
+
+            let r = start..<end
+            newText = newText.stringByReplacingCharactersInRange(r, withString: string)
+            if newText == "" {
+                hideSearchViewController()
+            } else {
+                showSearchViewController(newText)
+            }
+        } else {
+            hideSearchViewController()
+        }
+        return true;
     }
 
     func loadUrl(urlString: String) -> Bool {

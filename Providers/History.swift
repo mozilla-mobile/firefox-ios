@@ -5,16 +5,27 @@
 import Foundation
 import Alamofire
 
-private protocol Model {
+public protocol SiteModel {
     typealias T
     subscript(key: String) -> T { get }
+    func getSites(filter: String?) -> [T]
 }
 
 // TODO: Move this to DataAccess once we have a better data abstraction (i.e. protocol)
 //       around it
 /* This provides basic access to History records stored in core data */
-private class HistoryCoreDataModel {
+private class HistoryCoreDataModel : SiteModel {
     typealias T = Site
+
+    func getSites(filter: String?) -> [T] {
+        if var f = filter {
+            let predicate = NSPredicate(format: "title CONTAINS[cd] %@", f)
+            let request = Site.MR_findAllWithPredicate(predicate)
+            return request as [T]
+        } else {
+            return Site.MR_findAllSortedBy("lastVisit", ascending: false) as [T]
+        }
+    }
 
     subscript(key: String) -> T {
         get {
@@ -36,7 +47,9 @@ private class HistoryCoreDataModel {
 // A private queue for history actions. This is used to ensure that actions happen serially on a background thread.
 private let queue = dispatch_queue_create("HistoryQueue", DISPATCH_QUEUE_SERIAL)
 
-public class History {
+class History {
+    typealias T = Site
+
     private let model = HistoryCoreDataModel()
 
     init() {
@@ -78,7 +91,7 @@ public class History {
         })
     }
 
-    func getAll() -> [Site] {
-        return Site.MR_findAllSortedBy("lastVisit", ascending: false) as [Site]
+    func getSites(filter: String?) -> [T] {
+        return model.getSites(filter)
     }
 }
