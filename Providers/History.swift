@@ -8,7 +8,7 @@ import Alamofire
 public protocol SiteModel {
     typealias T
     subscript(key: String) -> T { get }
-    func getSites(filter: String?) -> [T]
+    func getSites(filter: String?, success: ([T]) -> Void, failure: (AnyObject) -> Void) -> Void
 }
 
 // TODO: Move this to DataAccess once we have a better data abstraction (i.e. protocol)
@@ -17,13 +17,13 @@ public protocol SiteModel {
 private class HistoryCoreDataModel : SiteModel {
     typealias T = Site
 
-    func getSites(filter: String?) -> [T] {
+    func getSites(filter: String?, success: ([T]) -> Void, failure: (AnyObject) -> Void) -> Void {
         if var f = filter {
             let predicate = NSPredicate(format: "title CONTAINS[cd] %@", f)
             let request = Site.MR_findAllWithPredicate(predicate)
-            return request as [T]
+            success(request as [T])
         } else {
-            return Site.MR_findAllSortedBy("lastVisit", ascending: false) as [T]
+            success(Site.MR_findAllSortedBy("lastVisit", ascending: false) as [T])
         }
     }
 
@@ -91,7 +91,18 @@ class History {
         })
     }
 
-    func getSites(filter: String?) -> [T] {
-        return model.getSites(filter)
+    func getSites(filter: String?, success: ([Site]) -> Void, failure: (AnyObject) -> Void) -> Void {
+        // Do an async dispatch to ensure this behaves like an async api
+        dispatch_async(queue) { _ in
+            var sites = self.model.getSites(filter, success: { sites in
+                dispatch_async(dispatch_get_main_queue()) { () in
+                    success(sites)
+                }
+            }, failure: { err in
+                dispatch_async(dispatch_get_main_queue()) { () in
+                    failure(err)
+                }
+            })
+        }
     }
 }

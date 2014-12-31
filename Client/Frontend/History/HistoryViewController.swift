@@ -18,7 +18,12 @@ class HistoryViewController: UITableViewController {
 
         set (profile) {
             self._profile = profile
-            self.sites = profile.history.getSites(nil)
+            self.sites = [Site]()
+            profile.history.getSites(nil, success: { sites in
+                self.sites = sites
+            }, failure: { err in
+                println("Err getting sites \(err)")
+            })
         }
     }
 
@@ -105,8 +110,13 @@ class SearchViewController: HistoryViewController {
 
         set {
             if let p = profile {
-                self.sites = profile.history.getSites(newValue)
-                tableView.reloadData()
+                profile.history.getSites(newValue, success: { sites in
+                    self.sites = sites
+                    self.tableView.reloadData()
+                }, failure: { err in
+                    println("Error filtering with \(newValue)")
+                    // XXX - Do we keep the old data?
+                })
             }
         }
     }
