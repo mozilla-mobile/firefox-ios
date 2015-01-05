@@ -70,7 +70,7 @@ class TabsViewController: UITableViewController
         if let tab = tabsResponse?.clients[indexPath.section].tabs[indexPath.row] {
             // TODO: We need better async image loading here
             profile.favicons.getForUrl(tab.url, options: nil) { icon in
-                if var img = icon.image as? UIImage {
+                if var img = icon.image {
                     cell.imageView?.image = createSizedFavicon(img)
                     cell.setNeedsLayout()
                 }

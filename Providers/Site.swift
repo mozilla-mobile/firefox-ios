@@ -5,25 +5,22 @@
 import Foundation
 import CoreData
 
-@objc(Site)
-class Site: NSManagedObject {
-    @NSManaged var url: String
-    @NSManaged var title: String
-    @NSManaged var favicons: NSSet
+class Site {
+    var url: String
+    var title: String
+    var favicons: NSSet
+
+    init(url: String, title: String, favicons: NSSet) {
+        self.url = url
+        self.title = title
+        self.favicons = favicons
+    }
 }
 
 extension Site {
     func addFavicon(favicon: Favicon) {
-        println("Add favicon \(favicon)")
-        var items = self.mutableSetValueForKey("favicons");
-        items.addObject(favicon)
-        favicons = items
     }
 
     func removeFavicon(favicon: Favicon) {
-        println("Remove favicon \(favicon)")
-        var items = self.mutableSetValueForKey("favicons");
-        items.removeObject(favicon)
-        favicons = items
     }
 }

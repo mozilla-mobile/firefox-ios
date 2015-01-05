@@ -1,7 +1,0 @@
-language: objective-c
-script: Support/Scripts/objc-build-scripts/cibuild
-before_install:
-  - brew update
-  - if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
-  
-osx_image: xcode61
