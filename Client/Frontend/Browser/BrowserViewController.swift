@@ -8,9 +8,9 @@ import WebKit
 
 private let StatusBarHeight = 20
 
-class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManagerDelegate, WKNavigationDelegate, TabBarViewControllerDelegate {
-    var toolbar: BrowserToolbar!
-    let tabManager = TabManager()
+class BrowserViewController: UIViewController {
+    private var toolbar: BrowserToolbar!
+    private let tabManager = TabManager()
 
     override func viewDidLoad() {
         toolbar = BrowserToolbar()
@@ -27,7 +27,9 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
 
         tabManager.addTab()
     }
+}
 
+extension BrowserViewController: BrowserToolbarDelegate {
     func didBeginEditing() {
         let profile = MockAccountProfile()
         let controller = TabBarViewController()
@@ -65,12 +67,16 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
     }
+}
 
+extension BrowserViewController: TabBarViewControllerDelegate {
     func didEnterURL(url: NSURL) {
         toolbar.updateURL(url)
         tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url))
     }
+}
 
+extension BrowserViewController: TabManagerDelegate {
     func didSelectedTabChange(selected: Browser?, previous: Browser?) {
         previous?.webView.hidden = true
         selected?.webView.hidden = false
@@ -100,7 +106,9 @@ class BrowserViewController: UIViewController, BrowserToolbarDelegate, TabManage
         tab.webView.removeObserver(self, forKeyPath: "estimatedProgress")
         tab.webView.removeFromSuperview()
     }
+}
 
+extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         toolbar.updateURL(webView.URL);
     }
