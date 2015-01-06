@@ -66,6 +66,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
         if let vc = childViewControllers.first? as? UIViewController {
             vc.view.removeFromSuperview()
             vc.removeFromParentViewController()
+            toolbarTextField.resignFirstResponder()
         }
     }
     
