@@ -8,8 +8,10 @@ import CoreData
 @objc(Site)
 class Site: NSManagedObject {
     @NSManaged var url: String
-    @NSManaged var title: String
+    @NSManaged var title: String?
     @NSManaged var favicons: NSSet
+    @NSManaged var lastVisit: NSDate?
+    @NSManaged var numVisits: Int
 }
 
 extension Site {

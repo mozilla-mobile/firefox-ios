@@ -199,8 +199,11 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
     }
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        let urlString = toolbarTextField.text
+        let urlString = textField.text
+        return loadUrl(urlString)
+    }
 
+    func loadUrl(urlString: String) -> Bool {
         // If the URL is missing a scheme then parse then we manually prefix it with http:// and try
         // again. We can probably do some smarter things here but I think this is a
         // decent start that at least lets people skip typing the protocol.
