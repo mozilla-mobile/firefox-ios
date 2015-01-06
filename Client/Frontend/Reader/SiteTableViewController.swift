@@ -5,6 +5,7 @@
 import UIKit
 
 class SiteTableViewController: UITableViewController {
+
     var profile: Profile!
     
     private var sites = [Site]()
