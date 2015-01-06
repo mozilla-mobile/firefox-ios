@@ -22,6 +22,10 @@
 		0B9E3DE71A23FBD1008A7877 /* TestPanels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */; };
 		0BA8964B1A250E6500C1010C /* AccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA896491A250E6500C1010C /* AccountTest.swift */; };
 		0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA8964A1A250E6500C1010C /* TestBookmarks.swift */; };
+		0BCAF3151A53252E009F8615 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCAF3141A53252E009F8615 /* History.swift */; };
+		0BCAF34D1A532FF8009F8615 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCAF3141A53252E009F8615 /* History.swift */; };
+		0BCAF3551A532FF9009F8615 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCAF3141A53252E009F8615 /* History.swift */; };
+		0BCAF3561A532FF9009F8615 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCAF3141A53252E009F8615 /* History.swift */; };
 		0BD19A5F1A2530320084FBA7 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22221A09122500AAB793 /* TabBarViewController.swift */; };
 		0BD19A631A2530740084FBA7 /* Panels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DD91A23FBBC008A7877 /* Panels.swift */; };
 		0BD19A641A2530750084FBA7 /* Panels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DD91A23FBBC008A7877 /* Panels.swift */; };
@@ -304,6 +308,7 @@
 		0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPanels.swift; sourceTree = "<group>"; };
 		0BA896491A250E6500C1010C /* AccountTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTest.swift; sourceTree = "<group>"; };
 		0BA8964A1A250E6500C1010C /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
+		0BCAF3141A53252E009F8615 /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePrefs.swift; sourceTree = "<group>"; };
 		0BDB95201A3B9844000F2B0F /* Models.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Models.xcdatamodel; sourceTree = "<group>"; };
 		0BDB95291A3B9917000F2B0F /* Favicon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favicon.swift; sourceTree = "<group>"; };
@@ -525,6 +530,8 @@
 			isa = PBXGroup;
 			children = (
 				0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */,
+				0BCAF3141A53252E009F8615 /* History.swift */,
+				0BD19A661A25309B0084FBA7 /* AccountPrefs.swift */,
 				0B9E3DD91A23FBBC008A7877 /* Panels.swift */,
 				D34DC84D1A16C40C00D49B7B /* Profile.swift */,
 				D34DC84E1A16C40C00D49B7B /* AccountManager.swift */,
@@ -1153,6 +1160,7 @@
 				0BDB95211A3B9844000F2B0F /* Models.xcdatamodeld in Sources */,
 				F84B220D1A0910F600AAB793 /* ReaderViewController.swift in Sources */,
 				D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */,
+				0BCAF3151A53252E009F8615 /* History.swift in Sources */,
 				E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				F84B22201A0911D400AAB793 /* LoginViewController.swift in Sources */,
 				F84B22131A0910F600AAB793 /* Tabs.swift in Sources */,
@@ -1166,6 +1174,8 @@
 				0BD19A691A2530B60084FBA7 /* BookmarksViewController.swift in Sources */,
 				D34DC8641A16C49600D49B7B /* Cursor.swift in Sources */,
 				0BA8964B1A250E6500C1010C /* AccountTest.swift in Sources */,
+				0BCAF34D1A532FF8009F8615 /* History.swift in Sources */,
+				0BCAF31D1A532827009F8615 /* History.swift in Sources */,
 				0BD19A701A2530DE0084FBA7 /* Tabs.swift in Sources */,
 				0B657B451A3B9CAB005A9E43 /* Site.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
@@ -1211,7 +1221,9 @@
 				E42CCE031A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				E418D0D91A251B3200CAE47A /* Profile.swift in Sources */,
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
+				0BCAF31E1A532828009F8615 /* History.swift in Sources */,
 				E418D0DF1A251B3200CAE47A /* RestAPI.swift in Sources */,
+				0BCAF3551A532FF9009F8615 /* History.swift in Sources */,
 				28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */,
 				E418D0DD1A251B3200CAE47A /* Cursor.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
@@ -1224,6 +1236,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BCAF3561A532FF9009F8615 /* History.swift in Sources */,
 				0B79B1891A3F6DE000DBECB3 /* Favicon.swift in Sources */,
 				0B79B18B1A3F6DE900DBECB3 /* Site.swift in Sources */,
 				E42CCDEA1A23A74400B794D3 /* RestAPI.swift in Sources */,
@@ -1234,6 +1247,7 @@
 				E42CCDEC1A23A76400B794D3 /* Cursor.swift in Sources */,
 				E4F21A891A1267B500B0FAAA /* (null) in Sources */,
 				E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
+				0BCAF31F1A532828009F8615 /* History.swift in Sources */,
 				F8708D2A1A0970B40051AB07 /* ActionViewController.swift in Sources */,
 				E42CCDE71A23A73800B794D3 /* Clients.swift in Sources */,
 				28784D4A1A39C48A00021E35 /* Bytes.swift in Sources */,

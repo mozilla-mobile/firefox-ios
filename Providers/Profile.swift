@@ -12,6 +12,7 @@ typealias LogoutCallback = (profile: AccountProfile) -> ()
 protocol Profile {
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
     var favicons: Favicons { get }
+    var history: History { get }
     var clients: Clients { get }
     var prefs: ProfilePrefs { get }
 
@@ -55,6 +56,9 @@ class MockAccountProfile: AccountProfile {
     lazy var favicons: Favicons = {
         return BasicFavicons()
     } ()
+
+    //        lazy var ReadingList readingList
+    var history = History()
 
     lazy var clients: Clients = {
         return MockClients(profile: self)
@@ -132,7 +136,7 @@ public class RESTAccountProfile: AccountProfile {
     } ()
 
     //        lazy var ReadingList readingList
-    //        lazy var History
+    var history = History()
 
     lazy var favicons: Favicons = {
         return BasicFavicons()

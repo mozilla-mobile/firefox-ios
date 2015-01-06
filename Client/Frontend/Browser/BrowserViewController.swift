@@ -110,7 +110,17 @@ extension BrowserViewController: TabManagerDelegate {
 
 extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
-        toolbar.updateURL(webView.URL);
+        toolbar.updateURL(webView.URL)
+    }
+
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        var info = [NSObject: AnyObject]()
+        info["url"] = webView.URL
+        info["title"] = webView.title
+
+        notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
     }
 
     override func observeValueForKeyPath(keyPath: String, ofObject object:
