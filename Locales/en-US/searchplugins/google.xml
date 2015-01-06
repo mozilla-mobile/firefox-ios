@@ -1,0 +1,16 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Google</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACv0lEQVR42sWX208TURDG958x8M+It5CoDxojGn0wPvCg8UljYhRjBCpqJBQbL6lgI5JyERpFRLAiF7GiqI0QbUCIlm1pQ6XM556z7dQNbTl1l/olkzTd0zO/THe+OUfbXk8ithnhM0I3Alscusxl5tRE8gojokagzBEVubUMDUqJ4x6CNwhMfQOiCSCVRl6tpYFHY8DeGwX38mkllF1u9OwDkEwB90cIZx4SrvQSpiNgEYC218DFLsKR1k33jGuqyfcZyWeXgPQ6UOu1PtvZSBj6BJaeBI7eVttXGWDkC4REorzPq5sIS3GwQt/hHMDpdkJWd4YLr3MPEv7WibsOAfgnwbo1UHjdwWYrwLWAQwDjc2D53hQv7fwyWC2DDgGMzYI1HSkKIFqTVdftEED7KFhEwGH35gCpNWD/TfsAbDxEYAXe56/CLheJFpTyDDnchg+CsKixf+Mab2ZN11ugqt5ZALGhdL+1dM7xhj+bIK4AYWIOUq0v+DeOAnDUuEmWd3AGCIaBnytgie/kOvsA6rEYA8vzksoPoCfBWtCBQy1lBuiZgkW/EsCptq0D4Ol3zEM495ik263TxnNAXbdzANzj9X3SlqXJrBoxM29Ox9538rNFAup8p0MAtV7p8Txmz3YIIOuaHQ3SByyGlViFOEfYApBl/m32vvy/qxqKr7/UxV6R8QUbANVN/JbLft/tUvu7rj4hZW/QVDd6/hEoxTUX9OwJygZA5wRYA6oAPBXZnP4ZQHp/VstJYI9LvQI/YuYBtsZtA+DkPQIhp76Q2pS73EOAeTy334Yd47BITD0BVsigrj8lpNLSG0RrKgHoxcspp58wH4siUfMN90+a8SoM2TFLcXEpUX5X4spXswPNJHt69CvkBEymcpeQ8CLQHwIu+NmgVIKvZpX/8XJamb2eV2QqEStD4pjMZebU/gD3oidE+JhxZwAAAABJRU5ErkJggg==</Image>
+<Url type="application/x-suggestions+json" method="GET" template="https://www.google.com/complete/search?client=firefox&amp;q={searchTerms}"/>
+<Url type="text/html" method="GET" template="https://www.google.com/search">
+  <Param name="q" value="{searchTerms}"/>
+  <Param name="ie" value="utf-8"/>
+  <Param name="oe" value="utf-8"/>
+</Url>
+<SearchForm>https://www.google.com</SearchForm>
+</SearchPlugin>
