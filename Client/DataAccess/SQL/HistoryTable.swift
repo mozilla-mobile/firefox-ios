@@ -15,7 +15,7 @@ class HistoryTable: Table {
         return TableName
     }
 
-    let debug_enabled = true
+    let debug_enabled = false
     func debug(msg: String) {
         if debug_enabled {
             println("HistoryTable: \(msg)")
@@ -23,7 +23,6 @@ class HistoryTable: Table {
     }
 
     func create(db: FMDatabase, version: UInt32) -> Bool {
-        debug("Create table \(TableName)")
         db.executeStatements("CREATE TABLE IF NOT EXISTS \(TableName) (\(Rows))")
         return true
     }

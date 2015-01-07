@@ -17,6 +17,7 @@ class TestHistory : AccountTest {
                 h.get(nil, options: nil, complete: { cursor in
                     XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
                     XCTAssertEqual(cursor.count, 1, "cursor has one entry")
+
                     let s = cursor[0] as? Site
                     XCTAssertNotNil(s, "cursor has a site for entry")
                     XCTAssertEqual(s!.url, "url", "Found right url")
