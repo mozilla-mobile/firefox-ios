@@ -44,6 +44,8 @@
 		28784D451A39C48900021E35 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BA1A1D1D3200576538 /* Bytes.swift */; };
 		28784D491A39C48900021E35 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BA1A1D1D3200576538 /* Bytes.swift */; };
 		28784D4A1A39C48A00021E35 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BA1A1D1D3200576538 /* Bytes.swift */; };
+		288289C81A5CC84900DD091F /* LiveTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288289C71A5CC84900DD091F /* LiveTest.swift */; };
+		288289D11A5CE4C700DD091F /* signedInUser.json in Resources */ = {isa = PBXBuildFile; fileRef = 288289D01A5CE4C700DD091F /* signedInUser.json */; };
 		28C077981A3B064000834FE5 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C077971A3B064000834FE5 /* CryptoTests.swift */; };
 		28C0779A1A3B064F00834FE5 /* FxAClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C077991A3B064F00834FE5 /* FxAClientTests.swift */; };
 		28C0779C1A3B065800834FE5 /* TokenServerClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C0779B1A3B065800834FE5 /* TokenServerClientTests.swift */; };
@@ -307,6 +309,8 @@
 		0BE108351A1B1EC700D4B712 /* TestLocking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLocking.swift; sourceTree = "<group>"; };
 		0BE108391A1B1ED200D4B712 /* Locking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locking.swift; sourceTree = "<group>"; };
 		28784D181A38CA9400021E35 /* Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Bookmarks.swift; path = Client/DataAccess/Bookmarks.swift; sourceTree = "<group>"; };
+		288289C71A5CC84900DD091F /* LiveTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LiveTest.swift; path = SyncTests/LiveTest.swift; sourceTree = "<group>"; };
+		288289D01A5CE4C700DD091F /* signedInUser.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = signedInUser.json; sourceTree = "<group>"; };
 		28C077971A3B064000834FE5 /* CryptoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CryptoTests.swift; path = SyncTests/CryptoTests.swift; sourceTree = "<group>"; };
 		28C077991A3B064F00834FE5 /* FxAClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxAClientTests.swift; path = FxAClientTests/FxAClientTests.swift; sourceTree = "<group>"; };
 		28C0779B1A3B065800834FE5 /* TokenServerClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TokenServerClientTests.swift; path = Token/TokenServerClientTests.swift; sourceTree = "<group>"; };
@@ -447,6 +451,7 @@
 			children = (
 				28C077971A3B064000834FE5 /* CryptoTests.swift */,
 				28C0779D1A3B066000834FE5 /* RecordTests.swift */,
+				288289C71A5CC84900DD091F /* LiveTest.swift */,
 			);
 			name = SyncTests;
 			sourceTree = "<group>";
@@ -565,6 +570,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				288289D01A5CE4C700DD091F /* signedInUser.json */,
 				0B91442F1A5B552F00236DCB /* fmdb.xcodeproj */,
 				28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */,
 				F84B222A1A0913F100AAB793 /* Alamofire.xcodeproj */,
@@ -830,6 +836,7 @@
 			buildPhases = (
 				F84B21CF1A090F8100AAB793 /* Sources */,
 				F84B21D01A090F8100AAB793 /* Frameworks */,
+				288289CF1A5CD7E900DD091F /* ShellScript */,
 				F84B21D11A090F8100AAB793 /* Resources */,
 			);
 			buildRules = (
@@ -1068,6 +1075,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				288289D11A5CE4C700DD091F /* signedInUser.json in Resources */,
 				0BF9F8BC1A3A82CA0049A0FA /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1098,6 +1106,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		288289CF1A5CD7E900DD091F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -e signedInUser.json ]\nthen\n  echo \"signedInUser.json already exists.\"\nelse\n  echo \"{}\" > signedInUser.json\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F84B21BA1A090F8100AAB793 /* Sources */ = {
@@ -1181,6 +1205,7 @@
 				28C0779A1A3B064F00834FE5 /* FxAClientTests.swift in Sources */,
 				0BD19A6F1A2530D30084FBA7 /* TabsViewController.swift in Sources */,
 				28C077981A3B064000834FE5 /* CryptoTests.swift in Sources */,
+				288289C81A5CC84900DD091F /* LiveTest.swift in Sources */,
 				0BD19A6A1A2530BB0084FBA7 /* HistoryViewController.swift in Sources */,
 				0BD19A5F1A2530320084FBA7 /* TabBarViewController.swift in Sources */,
 				28C0779E1A3B066000834FE5 /* RecordTests.swift in Sources */,
