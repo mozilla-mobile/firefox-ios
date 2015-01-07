@@ -4,23 +4,26 @@
 
 import Foundation
 import CoreData
+import UIKit
 
-@objc(Favicon)
-class Favicon: NSManagedObject {
-    @NSManaged var url: String
-    @NSManaged var image: AnyObject
-    @NSManaged var updatedDate: NSDate
-    @NSManaged var sites: NSSet
+class Favicon {
+    var url: String
+    var image: UIImage?
+    var updatedDate: NSDate
+    var sites: NSSet
+
+    init(url: String, image: UIImage?, updatedDate: NSDate, sites: NSSet) {
+        self.url = url
+        self.image = image
+        self.updatedDate = NSDate()
+        self.sites = NSSet()
+    }
 }
 
 extension Favicon {
     func addSite(site: Site) {
-        var items = self.mutableSetValueForKey("sites");
-        items.addObject(site)
     }
 
     func removeSite(site: Site) {
-        var items = self.mutableSetValueForKey("sites");
-        items.removeObject(site)
     }
 }

@@ -1,8 +1,0 @@
-{
-    "actualMappedKey": "mapped value from sample json file",
-    "actualRelatedObject":
-    {
-        "id": 50,
-        "sampleAttribute": "actualMappedRelationship value from sample json file"
-    }
-}

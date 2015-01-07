@@ -5,6 +5,9 @@
 import Foundation
 import UIKit
 
+let documentsFolder = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+let path = documentsFolder.stringByAppendingPathComponent("test.sqlite")
+
 /*
  * This protocol is used for instantiating new tab panels. It ensures...
  */

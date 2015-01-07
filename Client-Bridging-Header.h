@@ -3,6 +3,6 @@
 
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCrypto.h>
-#import <CoreData+MagicalRecord.h>
+#import "FMDB.h"
 
 #endif
