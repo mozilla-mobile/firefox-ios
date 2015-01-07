@@ -16,7 +16,7 @@ class FxAClientTests: XCTestCase {
         let email : NSData = "testtestoo@mockmyid.com".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
         let password : NSData = email
         let quickStretchedPW : NSData = FxAClient.quickStretchPW(email, password: password)
-        
+
         let expectation = expectationWithDescription("login to \(TEST_AUTH_API_ENDPOINT)")
         client.login(emailUTF8: email, quickStretchedPW: quickStretchedPW, getKeys: true) { (response, error) in
             XCTAssertNil(error)
