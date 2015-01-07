@@ -7,7 +7,7 @@
 protocol Table {
     func getName() -> String
     func create(db: FMDatabase, version: UInt32) -> Bool
-    func updateTable(db: FMDatabase, currentVersion: UInt32) -> Bool
+    func updateTable(db: FMDatabase, from: UInt32, to: UInt32) -> Bool
 
     func insert<T>(db: FMDatabase, item: T?, inout err: NSError?) -> Int64
     func update<T>(db: FMDatabase, item: T?, inout err: NSError?) -> Int32
@@ -23,8 +23,8 @@ class BrowserDB {
     private let Version: UInt32 = 1
     private let FileName = "browser.db"
     private let tables: [String: Table] = [String: Table]()
-        // HISTORY_TABLE: HistoryTable(),
-    // ]
+        //HISTORY_TABLE: HistoryTable(),
+    //]
 
     private func exists(table: Table) -> Bool {
         let res = db.executeQuery("SELECT name FROM sqlite_master WHERE type=? AND name=?", withArgumentsInArray: [ table.getName(), "table" ])
@@ -37,7 +37,7 @@ class BrowserDB {
     }
 
     init?(profile: Profile) {
-        db = FMDatabase(path: FileName) // profile.getFile("browser.db"))
+        db = FMDatabase(path: profile.files.get(FileName))
         if (!db.open()) {
             debug("Could not open database (\(db.lastErrorMessage()))")
             return nil
@@ -63,7 +63,7 @@ class BrowserDB {
                         return false
                     }
                 } else {
-                    if !table.1.updateTable(db, currentVersion: version) {
+                    if !table.1.updateTable(db, from: version, to: Version) {
                         // Update failed, give up!
                         db.rollback()
                         return false
@@ -97,7 +97,7 @@ class BrowserDB {
         // HISTORY_TABLE: HistoryTable(),
 
     init?(profile: Profile) {
-        db = FMDatabase(path: "browser.db") // profile.getFile("browser.db"))
+        db = FMDatabase(path: profile.getFile("browser.db"))
         if (!db.open()) {
             return nil
         }
@@ -129,8 +129,23 @@ class BrowserDB {
 
 <<<<<<< HEAD
     private func deleteAndRecreate(profile: Profile) -> Bool {
-        // No op for now
-        return false
+        let date = NSDate()
+        let newFilename = "\(FileName).bak"
+
+        if let file = profile.files.get(newFilename) {
+            if let attrs = NSFileManager.defaultManager().attributesOfItemAtPath(file, error: nil) {
+                if let creationDate = attrs[NSFileCreationDate] as? NSDate {
+                    // If the old backup is less than an hour old, we just give up
+                    let interval = date.timeIntervalSinceDate(creationDate)
+                    if interval < 60*60 {
+                        return false
+                    }
+                }
+            }
+        }
+
+        profile.files.move(FileName, dest: newFilename)
+        return createDB(profile)
     }
 
     func insert<T>(name: String, item: T, inout err: NSError?) -> Int64 {

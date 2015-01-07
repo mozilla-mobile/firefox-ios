@@ -14,6 +14,7 @@ protocol Profile {
     var favicons: Favicons { get }
     var clients: Clients { get }
     var prefs: ProfilePrefs { get }
+    var files: FileAccessor { get }
 
     // Because we can't test for whether this is an AccountProfile.
     // TODO: probably Profile should own an Account.
@@ -31,11 +32,8 @@ protocol AccountProfile: Profile {
     func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ())
 }
 
-class MockAccountProfile: AccountProfile {
+public class MockAccountProfile: Profile, AccountProfile {
     private let name: String = "mockaccount"
-
-    init() {
-    }
 
     func localName() -> String {
         return name
@@ -47,37 +45,34 @@ class MockAccountProfile: AccountProfile {
         }
     }
 
-    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
-        // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
-        return MockMemoryBookmarksStore()
-    } ()
-
-    lazy var favicons: Favicons = {
-        return BasicFavicons()
-    } ()
-
-    lazy var clients: Clients = {
-        return MockClients(profile: self)
-    } ()
-
+    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { return MockMemoryBookmarksStore() }
+    var favicons: Favicons  { return BasicFavicons() }
+    var clients: Clients    { return MockClients(profile: self) }
     lazy var prefs: ProfilePrefs = {
         return MockProfilePrefs()
-    } ()
+    }()
+    var files: FileAccessor { return ProfileFileAccessor(profile: self) }
 
-    func basicAuthorizationHeader() -> String {
-        return ""
-    }
+    func logout() { }
 
+    func basicAuthorizationHeader() -> String { return "" }
     func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ()) {
+        success(data: nil)
     }
 
-    func logout() {
-    }
 }
 
-public class RESTAccountProfile: AccountProfile {
-    private let name: String
+public class RESTAccountProfile: Profile, AccountProfile {
+    let name: String
     let credential: NSURLCredential
+
+    func localName() -> String {
+        return name
+    }
+
+    var accountName: String {
+        return credential.user!
+    }
 
     private let logoutCallback: LogoutCallback
 
@@ -87,14 +82,8 @@ public class RESTAccountProfile: AccountProfile {
         self.logoutCallback = logoutCallback
     }
 
-    func localName() -> String {
-        return name
-    }
-
-    var accountName: String {
-        get {
-            return credential.user!
-        }
+    var files: FileAccessor {
+        return ProfileFileAccessor(profile: self)
     }
 
     func basicAuthorizationHeader() -> String {
@@ -125,24 +114,21 @@ public class RESTAccountProfile: AccountProfile {
         // Stubbed out to populate data from server.
         // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
         return BookmarksRESTModelFactory(profile: self)
-    } ()
+    }()
+
+    var favicons: Favicons  { return BasicFavicons() }
+
+    // lazy var ReadingList readingList
+    // lazy var History
+
+    lazy var prefs: ProfilePrefs = {
+        return NSUserDefaultsProfilePrefs(profile: self)
+    }()
 
     lazy var clients: Clients = {
         return RESTClients(profile: self)
-    } ()
-
-    //        lazy var ReadingList readingList
-    //        lazy var History
-
-    lazy var favicons: Favicons = {
-        return BasicFavicons()
     }()
 
-    func makePrefs() -> ProfilePrefs {
-        return NSUserDefaultsProfilePrefs(profile: self)
-    }
-
-    lazy var prefs: ProfilePrefs = {
-        self.makePrefs()
-    }()
+    // lazy var ReadingList readingList
+    // lazy var History
 }
