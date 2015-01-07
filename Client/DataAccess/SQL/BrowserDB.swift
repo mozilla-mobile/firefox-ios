@@ -21,9 +21,9 @@ class BrowserDB {
     private let db: FMDatabase
     private let Version: UInt32 = 1
     private let FileName = "browser.db"
-    private let tables: [String: Table] = [String: Table]()
-        //HISTORY_TABLE: HistoryTable(),
-    //]
+    private let tables: [String: Table] = [
+        HISTORY_TABLE: HistoryTable(),
+    ]
 
     private func exists(table: Table) -> Bool {
         let res = db.executeQuery("SELECT name FROM sqlite_master WHERE type=? AND name=?", withArgumentsInArray: [ table.getName(), "table" ])
