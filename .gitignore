@@ -1,5 +1,4 @@
 # Xcode
-#
 build/
 *.pbxuser
 !default.pbxuser
@@ -18,7 +17,6 @@ DerivedData
 *.xcuserstate
 
 # OS X
-#
 .DS_Store
 
 # Vim
@@ -26,6 +24,9 @@ DerivedData
 
 # IDEA
 .idea
+
+# Saved Sync credentials for tests.
+signedInUser.json
 
 # CocoaPods
 #
