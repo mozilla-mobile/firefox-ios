@@ -167,7 +167,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
                 completion: {_ in self.progressBar.setProgress(0.0, animated: false)})
         } else {
             self.progressBar.alpha = 1.0
-            self.progressBar.setProgress(progress, animated: true)
+            self.progressBar.setProgress(progress, animated: (progress > progressBar.progress))
         }
     }
 }
