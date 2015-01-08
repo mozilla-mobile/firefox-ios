@@ -24,7 +24,7 @@ protocol TabBarViewControllerDelegate {
     func didEnterURL(url: NSURL)
 }
 
-class TabBarViewController: UIViewController, UITextFieldDelegate {
+class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewControllerDelegate {
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [ToolbarItem]!
@@ -36,6 +36,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
     private var toolbarTextField: UITextField!
     private var cancelButton: UIButton!
     private var buttons: [ToolbarButton] = []
+    private var searchController: SearchViewController?
     
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(notificationToken)
@@ -78,6 +79,32 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
         }
 
         addChildViewController(vc)
+    }
+
+    private func showSearchController() {
+        if searchController != nil {
+            return
+        }
+
+        searchController = SearchViewController()
+        searchController!.searchEngines = profile.searchEngines.list
+        searchController!.delegate = self
+
+        view.addSubview(searchController!.view)
+        searchController!.view.snp_makeConstraints { make in
+            make.top.equalTo(self.toolbarTextField.snp_bottom).offset(10)
+            make.left.right.bottom.equalTo(self.view)
+        }
+
+        addChildViewController(searchController!)
+    }
+
+    private func hideSearchController() {
+        if let searchController = searchController {
+            searchController.view.removeFromSuperview()
+            searchController.removeFromParentViewController()
+            self.searchController = nil
+        }
     }
     
     func tappedButton(sender: UIButton!) {
@@ -194,6 +221,19 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        let text = textField.text as NSString
+        let searchText = text.stringByReplacingCharactersInRange(range, withString: string)
+        if searchText.isEmpty {
+            hideSearchController()
+        } else {
+            showSearchController()
+            searchController!.updateSearchQuery(searchText)
+        }
+
+        return true
+    }
+
     func textFieldDidBeginEditing(textField: UITextField) {
         textField.selectAll(nil)
     }
@@ -216,6 +256,16 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
         delegate?.didEnterURL(url!)
         dismissViewControllerAnimated(true, completion: nil)
         return false
+    }
+
+    func textFieldShouldClear(textField: UITextField) -> Bool {
+        hideSearchController()
+        return true
+    }
+
+    func didClickSearchResult(url: NSURL) {
+        delegate?.didEnterURL(url)
+        dismissViewControllerAnimated(true, completion: nil)
     }
 
     func SELdidClickCancel() {

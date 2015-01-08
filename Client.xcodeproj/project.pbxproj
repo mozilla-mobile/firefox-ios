@@ -84,6 +84,8 @@
 		D34F86DB1A1AC35B00331EC4 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34F86DA1A1AC35B00331EC4 /* LoginView.swift */; };
 		D34F86E71A1AC7DD00331EC4 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34F86E61A1AC7DD00331EC4 /* PasswordTextField.swift */; };
 		D34F86E91A1ACD1200331EC4 /* ImageTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34F86E81A1ACD1200331EC4 /* ImageTextField.swift */; };
+		D35179BC1A5C69FE00E7622E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35179BB1A5C69FE00E7622E /* SearchViewController.swift */; };
+		D35179BD1A5C6D4200E7622E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35179BB1A5C69FE00E7622E /* SearchViewController.swift */; };
 		D35179BE1A5C8D5F00E7622E /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D35179BF1A5C8D5F00E7622E /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D35179C01A5C8D6700E7622E /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
@@ -348,6 +350,7 @@
 		D34F86DA1A1AC35B00331EC4 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		D34F86E61A1AC7DD00331EC4 /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		D34F86E81A1ACD1200331EC4 /* ImageTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTextField.swift; sourceTree = "<group>"; };
+		D35179BB1A5C69FE00E7622E /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		D3968F241A38FE8500CEFD3B /* TabManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabManager.swift; sourceTree = "<group>"; };
 		D3A994951A3686BD008AD1AC /* BrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		D3A994961A3686BD008AD1AC /* Browser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
@@ -754,6 +757,7 @@
 			children = (
 				F84B22221A09122500AAB793 /* TabBarViewController.swift */,
 				F84B22261A09127C00AAB793 /* TabBar.xcassets */,
+				D35179BB1A5C69FE00E7622E /* SearchViewController.swift */,
 			);
 			path = TabBar;
 			sourceTree = "<group>";
@@ -1125,6 +1129,7 @@
 				F84B22191A0911B500AAB793 /* BookmarksViewController.swift in Sources */,
 				28CE83C51A1D1D3200576538 /* EncryptedRecord.swift in Sources */,
 				28CE83C31A1D1D3200576538 /* Bytes.swift in Sources */,
+				D35179BC1A5C69FE00E7622E /* SearchViewController.swift in Sources */,
 				F84B22101A0910F600AAB793 /* SiteTableViewController.swift in Sources */,
 				F84B22141A0910F600AAB793 /* TabsViewController.swift in Sources */,
 				28CE83C81A1D1D3200576538 /* SyncMeta.swift in Sources */,
@@ -1203,6 +1208,7 @@
 				28784D3E1A39BF2A00021E35 /* Bookmarks.swift in Sources */,
 				28C0779A1A3B064F00834FE5 /* FxAClientTests.swift in Sources */,
 				0BD19A6F1A2530D30084FBA7 /* TabsViewController.swift in Sources */,
+				D35179BD1A5C6D4200E7622E /* SearchViewController.swift in Sources */,
 				28C077981A3B064000834FE5 /* CryptoTests.swift in Sources */,
 				0BD19A6A1A2530BB0084FBA7 /* HistoryViewController.swift in Sources */,
 				0BD19A5F1A2530320084FBA7 /* TabBarViewController.swift in Sources */,
