@@ -26,12 +26,12 @@ struct FaviconConsts {
 /*
  * Options opbject to allow specifying a preferred size or type of favicon to request
  */
-struct FaviconOptions {
+public struct FaviconOptions {
     let type: FaviconType
     let desiredSize: Int
 }
 
-protocol Favicons {
+public protocol Favicons {
     func clearFavicons(siteUrl: String, success: () -> Void, failure: (Any) -> Void)
     func saveFavicon(siteUrl: String, iconUrl: String, image: UIImage?, success: (Favicon) -> Void, failure: (Any) -> Void)
     func getForUrls(urls: [String], options: FaviconOptions?, success: ([String: [Favicon]]) -> Void)

@@ -6,7 +6,7 @@ import Foundation
 import CoreData
 import UIKit
 
-class Favicon {
+public class Favicon {
     var url: String
     var image: UIImage?
     var updatedDate: NSDate

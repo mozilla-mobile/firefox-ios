@@ -7,14 +7,21 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow!
+    var profile: Profile!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        profile = RESTAccountProfile(localName: "profile", credential: NSURLCredential(), logoutCallback: { (profile) -> () in
+            // Nothing to do
+        })
+
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window.backgroundColor = UIColor.whiteColor()
 
-        self.window.rootViewController = BrowserViewController()
-
+        let controller = BrowserViewController()
+        controller.profile = profile
+        self.window.rootViewController = controller
         self.window.makeKeyAndVisible()
+
         return true
     }
 

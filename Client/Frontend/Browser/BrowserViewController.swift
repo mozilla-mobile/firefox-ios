@@ -11,6 +11,7 @@ private let StatusBarHeight = 20
 class BrowserViewController: UIViewController {
     private var toolbar: BrowserToolbar!
     private let tabManager = TabManager()
+    var profile: Profile?
 
     override func viewDidLoad() {
         toolbar = BrowserToolbar()
@@ -31,9 +32,12 @@ class BrowserViewController: UIViewController {
 
 extension BrowserViewController: BrowserToolbarDelegate {
     func didBeginEditing() {
-        let profile = MockAccountProfile()
         let controller = TabBarViewController()
-        controller.profile = profile
+        if var p = profile {
+            controller.profile = profile
+        } else {
+            controller.profile = MockAccountProfile()
+        }
         controller.delegate = self
         controller.url = tabManager.selectedTab?.url
         controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
@@ -110,7 +114,17 @@ extension BrowserViewController: TabManagerDelegate {
 
 extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
-        toolbar.updateURL(webView.URL);
+        toolbar.updateURL(webView.URL)
+    }
+
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        var info = [NSObject: AnyObject]()
+        info["url"] = webView.URL
+        info["title"] = webView.title
+
+        notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
     }
 
     override func observeValueForKeyPath(keyPath: String, ofObject object:

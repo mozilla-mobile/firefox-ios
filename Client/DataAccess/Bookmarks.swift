@@ -187,7 +187,7 @@ public class MemoryBookmarksSink: ShareToDestination {
     }
 }
 
-protocol BookmarksModelFactory {
+public protocol BookmarksModelFactory {
     func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ())
     func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ())
 
@@ -222,11 +222,11 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         root = MemoryBookmarkFolder(id: BookmarkRoots.PLACES_FOLDER_GUID, name: "Root", children: [mobile, unsorted])
     }
 
-    func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         self.modelForFolder(folder.id, success, failure)
     }
 
-    func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         var m: BookmarkFolder
         switch (guid) {
         case BookmarkRoots.MOBILE_FOLDER_GUID:
@@ -247,14 +247,14 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         success(BookmarksModel(modelFactory: self, root: m))
     }
 
-    func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         success(BookmarksModel(modelFactory: self, root: self.root))
     }
 
     /**
      * This class could return the full data immediately. We don't, because real DB-backed code won't.
      */
-    var nullModel: BookmarksModel {
+    public var nullModel: BookmarksModel {
         let f = MemoryBookmarkFolder(id: BookmarkRoots.PLACES_FOLDER_GUID, name: "Root", children: [])
         return BookmarksModel(modelFactory: self, root: f)
     }

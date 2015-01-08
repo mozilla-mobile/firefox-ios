@@ -11,7 +11,7 @@
 
 import Foundation
 
-protocol FileAccessor {
+public protocol FileAccessor {
     func get(filename: String) -> String?
     func remove(filename: String)
     func move(src: String, dest: String) -> Bool

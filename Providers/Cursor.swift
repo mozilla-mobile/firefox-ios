@@ -15,7 +15,7 @@ enum CursorStatus {
 /**
 * Provides a generic method of returning some data and status information about a request.
 */
-class Cursor :SequenceType {
+public class Cursor :SequenceType {
     var count: Int {
         get { return 0 }
     }
@@ -34,7 +34,7 @@ class Cursor :SequenceType {
         get { return nil }
     }
 
-    func generate() -> GeneratorOf<Any> {
+    public func generate() -> GeneratorOf<Any> {
         return GeneratorOf<Any>() {
             return nil
         }

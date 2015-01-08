@@ -15,7 +15,7 @@ class HistoryTable: Table {
         return TableName
     }
 
-    let debug_enabled = false
+    let debug_enabled = true
     func debug(msg: String) {
         if debug_enabled {
             println("HistoryTable: \(msg)")

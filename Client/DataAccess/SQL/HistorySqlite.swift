@@ -3,14 +3,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /* The sqlite backed implementation of the history protocol */
-class SqliteHistory : History {
+public class SqliteHistory : History {
     var profile: Profile
 
-    required init(profile: Profile) {
+    required public init(profile: Profile) {
         self.profile = profile
     }
 
-    func clear(filter: String?, options: HistoryOptions?, complete: (success: Bool) -> Void) {
+    public func clear(filter: String?, options: HistoryOptions?, complete: (success: Bool) -> Void) {
         if let wrapper = BrowserDB(profile: profile) {
             let s: Site? = nil
             var err: NSError? = nil
@@ -30,7 +30,7 @@ class SqliteHistory : History {
         }
     }
 
-    func get(filter: String?, options: HistoryOptions?, complete: (data: Cursor) -> Void) {
+    public func get(filter: String?, options: HistoryOptions?, complete: (data: Cursor) -> Void) {
         if let wrapper = BrowserDB(profile: profile) {
             let res = wrapper.query(HISTORY_TABLE)
             dispatch_async(dispatch_get_main_queue()) {
@@ -44,7 +44,7 @@ class SqliteHistory : History {
         }
     }
 
-    func addVisit(site: Site, options: HistoryOptions?, complete: (success: Bool) -> Void) {
+    public func addVisit(site: Site, options: HistoryOptions?, complete: (success: Bool) -> Void) {
         if let wrapper = BrowserDB(profile: profile) {
             var err: NSError? = nil
             wrapper.insert(HISTORY_TABLE, item: site, err: &err)
@@ -66,7 +66,7 @@ class SqliteHistory : History {
         }
     }
 
-    private let debug_enabled = false
+    private let debug_enabled = true
     private func debug(msg: String) {
         if debug_enabled {
             println("HistorySqlite: " + msg)
