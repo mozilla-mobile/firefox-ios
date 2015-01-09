@@ -35,12 +35,10 @@ class ProfileFileAccessor : FileAccessor {
             }
         }
 
-        println("Found dir \(path)")
         return path
     }
 
     func move(src: String, dest: String) -> Bool {
-        println("Move file \(src) to \(dest)")
         if let f = get(src) {
             if let f2 = get(dest) {
                 return NSFileManager.defaultManager().moveItemAtPath(f, toPath: f2, error: nil)
@@ -51,12 +49,10 @@ class ProfileFileAccessor : FileAccessor {
     }
 
     func get(filename: String) -> String? {
-        println("Get file \(filename)")
         return getDir()?.stringByAppendingPathComponent(filename)
     }
 
     func remove(filename: String) {
-        println("Remove file \(filename)")
         let fileManager = NSFileManager.defaultManager()
         if var file = get(filename) {
             fileManager.removeItemAtPath(file, error: nil)

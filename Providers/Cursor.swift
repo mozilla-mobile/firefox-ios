@@ -15,7 +15,7 @@ enum CursorStatus {
 /**
 * Provides a generic method of returning some data and status information about a request.
 */
-class Cursor :SequenceType {
+public class Cursor :SequenceType {
     var count: Int {
         get { return 0 }
     }
@@ -23,6 +23,11 @@ class Cursor :SequenceType {
     // Extra status information
     var status: CursorStatus
     var statusMessage: String
+
+    init(err: NSError) {
+        self.status = .Failure
+        self.statusMessage = err.description
+    }
 
     init(status: CursorStatus = CursorStatus.Success, msg: String = "") {
         self.status = status
@@ -34,39 +39,17 @@ class Cursor :SequenceType {
         get { return nil }
     }
 
-    func generate() -> GeneratorOf<Any> {
+    public func generate() -> GeneratorOf<Any> {
+        var nextIndex = 0;
         return GeneratorOf<Any>() {
-            return nil
+            if (nextIndex >= self.count || self.status != CursorStatus.Success) {
+                return nil
+            }
+
+            return self[nextIndex++]
         }
     }
 }
-
-/*
-class SqliteCursor<T> : BaseCursor<T> {
-    let results: FMResultSet
-    init(results: FMResultSet) {
-        self.results = results
-    }
-
-    override var count: Int {
-        // This is really expensive here...
-        return super.count
-    }
-
-    override subscript(index: Int) -> T? {
-        get {
-            //results
-            return super[index]
-        }
-    }
-
-    override func generate() -> GeneratorOf<T> {
-        return GeneratorOf<T>() {
-            return nil
-        }
-    }
-}
-*/
 
 /*
  * A cursor implementation that wraps an array.
@@ -79,16 +62,6 @@ class ArrayCursor<T : Any> : Cursor {
             return 0;
         }
         return data.count;
-    }
-    
-    override func generate() -> GeneratorOf<Any> {
-        var nextIndex = 0;
-        return GeneratorOf<Any>() {
-            if (nextIndex >= self.data.count || self.status != CursorStatus.Success) {
-                return nil;
-            }
-            return self.data[nextIndex++];
-        }
     }
 
     init(data: [T], status: CursorStatus, statusMessage: String) {

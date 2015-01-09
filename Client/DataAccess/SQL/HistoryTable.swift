@@ -6,14 +6,10 @@ let HISTORY_TABLE = "history"
 
 class HistoryTable: Table {
     let NotASiteErrorCode = 100
-    private let TableName = "History"
+    let name = "History"
     private let Rows = "guid TEXT NOT NULL UNIQUE, " +
                        "url TEXT NOT NULL UNIQUE, " +
                        "title TEXT NOT NULL"
-
-    func getName() -> String {
-        return TableName
-    }
 
     let debug_enabled = false
     func debug(msg: String) {
@@ -22,87 +18,100 @@ class HistoryTable: Table {
         }
     }
 
-    func create(db: FMDatabase, version: UInt32) -> Bool {
-        db.executeStatements("CREATE TABLE IF NOT EXISTS \(TableName) (\(Rows))")
+    func create(db: SQLiteDBConnection, version: Int) -> Bool {
+        db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (\(Rows))")
         return true
     }
 
-    func updateTable(db: FMDatabase, from: UInt32, to: UInt32) -> Bool {
-        debug("Update table \(TableName) from \(from) to \(to)")
+    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
+        debug("Update table \(name) from \(from) to \(to)")
         // No upgrades yet
         return false
     }
 
-    func insert<T>(db: FMDatabase, item: T?, inout err: NSError?) -> Int64 {
-        debug("Insert into \(TableName) \(item)")
+    func insert<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int {
+        debug("Insert into \(name) \(item)")
         if let site = item as? Site {
-            if db.executeUpdate("INSERT INTO \(TableName) (guid, url, title) VALUES (?,?,?)", withArgumentsInArray: [
+            if var error = db.executeChange("INSERT INTO \(self.name) (guid, url, title) VALUES (?,?,?)", withArgs: [
                     site.guid,
                     site.url,
                     site.title]) {
-                return db.lastInsertRowId()
+                err = error
+                return 0
             }
-            err = db.lastError()
-            return 0
+            return db.lastInsertedRowID
         }
+
         err = NSError(domain: "mozilla.org", code: NotASiteErrorCode, userInfo: [
             NSLocalizedDescriptionKey: "Tried to save something that isn't a site"
         ])
         return 0
     }
 
-    func update<T>(db: FMDatabase, item: T?, inout err: NSError?) -> Int32 {
-        debug("Update into \(TableName) \(item)")
+    func update<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int {
+        debug("Update into \(name) \(item)")
         if let site = item as? Site {
-            if db.executeUpdate("UPDATE \(TableName) SET title = ? WHERE guid = ? AND url = ?", withArgumentsInArray: [
+            if let error = db.executeChange("UPDATE \(self.name) SET title = ? WHERE guid = ? AND url = ?", withArgs: [
                     site.title,
                     site.guid,
                     site.url]) {
-                return db.changes()
+                println(error.description)
+                err = error
+                return 0
             }
+
+            return db.numberOfRowsModified
         }
+
         err = NSError(domain: "mozilla.org", code: NotASiteErrorCode, userInfo: [
             NSLocalizedDescriptionKey: "Tried to save something that isn't a site"
         ])
         return 0
     }
 
-    func delete<T>(db: FMDatabase, item: T?, inout err: NSError?) -> Int32 {
-        debug("Delete from \(TableName) \(item)")
+    func delete<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int {
+        debug("Delete from \(name) \(item)")
+        var numDeleted: Int = 0
+        var str = "DELETE FROM \(name)"
+        var args = [String]()
+
         if let site = item as? Site {
-            if db.executeUpdate("DELETE FROM \(TableName) WHERE url = ?", withArgumentsInArray: [ site.url ]) {
-                return db.changes()
-            }
-            err = db.lastError()
-            return 0
-        } else if item == nil {
-            if db.executeUpdate("DELETE FROM \(TableName)", withArgumentsInArray: [ ]) {
-                return db.changes()
+            str += " WHERE url = ?"
+            args.append(site.url)
+        } else if item != nil {
+            err = NSError(domain: "org.mozilla", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid object"])
+            return numDeleted
+        }
+
+        if str != "" {
+            if let error = db.executeChange(str, withArgs: args) {
+                println(error.description)
+                err = error
+                return 0
             }
         }
-        err = NSError(domain: "mozilla.org", code: NotASiteErrorCode, userInfo: [
-            NSLocalizedDescriptionKey: "Tried to delete something that isn't a site"
-        ])
-        return 0
+
+        return db.numberOfRowsModified
     }
 
-    private func fromResult(result: FMResultSet) -> Site {
-        let site = Site(url: result.stringForColumn("url"), title: result.stringForColumn("title"))
-        site.guid = result.stringForColumn("guid")
+    private func fromResult(result: SDRow) -> Site {
+        let site = Site(url: result[1] as String, title: result[2] as String)
+        site.guid = result[0] as String
         return site
     }
 
-    func query(db: FMDatabase) -> Cursor {
-        debug("Query \(TableName)")
-        let res = db.executeQuery("SELECT * FROM \(TableName)", withArgumentsInArray: [])
+    func factory(row: SDRow) -> Site {
+        let url = row["url"] as String
+        let title = row["title"] as String
+        let guid = row["guid"] as String
 
-        // XXX - This should do something super smart to avoid paging the entire db into memory. Right now it doesn't.
-        //       i.e. return SqliteWindowedCursor(res)
-        var resArray = [Site]()
-        while res.next() {
-            resArray.append(fromResult(res))
-        }
+        let s = Site(url: url, title: title)
+        s.guid = guid
+        return s
+    }
 
-        return ArrayCursor(data: resArray)
+    func query(db: SQLiteDBConnection) -> Cursor {
+        debug("Query \(name)")
+        return db.executeQuery("SELECT guid, url, title FROM \(name)", factory: self.factory)
     }
 }

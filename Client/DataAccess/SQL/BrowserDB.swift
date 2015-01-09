@@ -4,80 +4,70 @@
 
 /* A table in our database. Note this doesn't have to be a real table. It might be backed by a join or something else interesting. */
 protocol Table {
-    func getName() -> String
-    func create(db: FMDatabase, version: UInt32) -> Bool
-    func updateTable(db: FMDatabase, from: UInt32, to: UInt32) -> Bool
+    var name: String { get }
+    func create(db: SQLiteDBConnection, version: Int) -> Bool
+    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool
 
-    func insert<T>(db: FMDatabase, item: T?, inout err: NSError?) -> Int64
-    func update<T>(db: FMDatabase, item: T?, inout err: NSError?) -> Int32
-    func delete<T>(db: FMDatabase, item: T?, inout err: NSError?) -> Int32
-    func query(db: FMDatabase) -> Cursor
+    func insert<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int
+    func update<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int
+    func delete<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int
+    func query(db: SQLiteDBConnection) -> Cursor
 }
 
 let DBCouldNotOpenErrorCode = 200
 
 /* This is a base interface into our browser db. It holds arrays of tables and handles basic creation/updating of them. */
 class BrowserDB {
-    private let db: FMDatabase
-    private let Version: UInt32 = 1
+    private let db: SwiftData
+    private let Version: Int = 1
     private let FileName = "browser.db"
     private let tables: [String: Table] = [
         HISTORY_TABLE: HistoryTable(),
     ]
 
-    private func exists(table: Table) -> Bool {
-        let res = db.executeQuery("SELECT name FROM sqlite_master WHERE type=? AND name=?", withArgumentsInArray: [ table.getName(), "table" ])
-
-        if res.next() {
-            return true
-        }
-
-        return false
+    private func exists(db: SQLiteDBConnection, table: Table) -> Bool {
+        var found = false
+        let sqlStr = "SELECT name FROM sqlite_master WHERE type = 'table' AND name=?"
+        let res = db.executeQuery(sqlStr, factory: StringFactory, withArgs: [table.name])
+        return res.count > 0
     }
 
     init?(profile: Profile) {
-        db = FMDatabase(path: profile.files.get(FileName))
-        if (!db.open()) {
-            debug("Could not open database (\(db.lastErrorMessage()))")
-            return nil
-        }
-
+        db = SwiftData(filename: profile.files.get(FileName)!)
         if !createDB(profile) {
             if !deleteAndRecreate(profile) {
                 return nil
             }
         }
-
     }
 
     private func createDB(profile: Profile) -> Bool {
-        let version = db.userVersion() // - Crashes...
-        if Version != version {
-            db.beginTransaction()
-            for table in tables {
-                // If it doesn't exist create it
-                if !exists(table.1) {
-                    if !table.1.create(db, version: Version) {
-                        db.rollback()
-                        return false
-                    }
-                } else {
-                    if !table.1.updateTable(db, from: version, to: Version) {
-                        // Update failed, give up!
-                        db.rollback()
-                        return false
+        db.transaction({ connection -> Bool in
+            let version = connection.version
+            if self.Version != version {
+                for table in self.tables {
+                    // If it doesn't exist create it
+                    if !self.exists(connection, table: table.1) {
+                        if !table.1.create(connection, version: self.Version) {
+                            return false
+                        }
+                    } else {
+                        if !table.1.updateTable(connection, from: version, to: self.Version) {
+                            return false
+                        }
                     }
                 }
-            }
 
-            db.setUserVersion(Version)
-            db.commit()
-        }
+                self.updateTable(connection, from: version, to: self.Version)
+            }
+            return true
+        })
         return true
     }
 
-    deinit {
-        db.close()
+    private func updateTable(connection: SQLiteDBConnection, from: Int, to: Int) {
+        connection.executeChange("PRAGMA journal_mode = WAL")
+        connection.version = self.Version
     }
 
     private func deleteAndRecreate(profile: Profile) -> Bool {
@@ -100,42 +90,56 @@ class BrowserDB {
         return createDB(profile)
     }
 
-    func insert<T>(name: String, item: T, inout err: NSError?) -> Int64 {
+    func insert<T>(name: String, item: T, inout err: NSError?) -> Int {
+        var res = 0
         if let table = tables[name] {
-            let res = table.insert(db, item: item, err: &err)
-            if err != nil {
-                debug(err!)
+            db.withConnection(SwiftData.Flags.ReadWrite) { connection in
+                res = table.insert(connection, item: item, err: &err)
+                if err != nil {
+                    self.debug(err!)
+                }
+                return err
             }
-            return res
         }
-        return 0
+        return res
     }
 
-    func update<T>(name: String, item: T, inout err: NSError?) -> Int32 {
+    func update<T>(name: String, item: T, inout err: NSError?) -> Int {
+        var res = 0
         if let table = tables[name] {
-            let res = table.update(db, item: item, err: &err)
-            if err != nil {
-                debug(err!)
+            db.withConnection(SwiftData.Flags.ReadWrite) { connection in
+                res = table.update(connection, item: item, err: &err)
+                if err != nil {
+                    self.debug(err!)
+                }
+                return err
             }
-            return res
         }
-        return 0
+        return res
     }
 
-    func delete<T>(name: String, item: T?, inout err: NSError?) -> Int32 {
+    func delete<T>(name: String, item: T?, inout err: NSError?) -> Int {
+        var res = 0
         if let table = tables[name] {
-            let res = table.delete(db, item: item, err: &err)
-            if err != nil {
-                debug(err!)
+            db.withConnection(SwiftData.Flags.ReadWrite) { connection in
+                res = table.delete(connection, item: item, err: &err)
+                if err != nil {
+                    self.debug(err!)
+                }
+                return err
             }
-            return res
         }
-        return 0
+        return res
     }
 
     func query(name: String) -> Cursor {
         if let table = tables[name] {
-            return table.query(db)
+            var c: Cursor!
+            db.withConnection(SwiftData.Flags.ReadWrite) { connection in
+                c = table.query(connection)
+                return nil
+            }
+            return c
         }
         return Cursor(status: .Failure, msg: "Invalid table name")
     }
