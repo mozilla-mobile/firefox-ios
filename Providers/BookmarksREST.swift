@@ -13,16 +13,16 @@ public class BookmarksRESTModelFactory: BookmarksModelFactory, ShareToDestinatio
         self.profile = profile
     }
 
-    func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         failure("Not supported")
     }
 
-    func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         failure("Not supported")
     }
 
 
-    func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         self.profile.makeAuthRequest(
             "bookmarks/recent",
             success: { data in
@@ -36,7 +36,7 @@ public class BookmarksRESTModelFactory: BookmarksModelFactory, ShareToDestinatio
 
     // Return synchronously to allow for init. You can asynchronously reinit through the returned model.
     // Better would be for the view controller to be prepared for this to arrive later.
-    var nullModel: BookmarksModel {
+    public var nullModel: BookmarksModel {
         let f = MemoryBookmarkFolder(id: "stub", name: "", children: [])
         return BookmarksModel(modelFactory: self, root: f)
     }
@@ -77,7 +77,7 @@ public class BookmarksRESTModelFactory: BookmarksModelFactory, ShareToDestinatio
     }
 
     // Don't do uploading yet. We want to exercise merging.
-    func shareItem(item: ShareItem) {
+    public func shareItem(item: ShareItem) {
         sink.shareItem(item)
     }
 }

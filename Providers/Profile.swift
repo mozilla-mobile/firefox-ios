@@ -9,11 +9,13 @@ typealias LogoutCallback = (profile: AccountProfile) -> ()
 /**
  * A Profile manages access to the user's data.
  */
-protocol Profile {
+public protocol Profile {
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
     var favicons: Favicons { get }
     var clients: Clients { get }
     var prefs: ProfilePrefs { get }
+    var files: FileAccessor { get }
+    var history: History { get }
 
     // Because we can't test for whether this is an AccountProfile.
     // TODO: probably Profile should own an Account.
@@ -31,70 +33,80 @@ protocol AccountProfile: Profile {
     func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ())
 }
 
-class MockAccountProfile: AccountProfile {
+public class MockAccountProfile: Profile, AccountProfile {
     private let name: String = "mockaccount"
 
-    init() {
-    }
-
-    func localName() -> String {
+    public func localName() -> String {
         return name
     }
 
-    var accountName: String {
+    public var accountName: String {
         get {
             return "tester@mozilla.org"
         }
     }
 
-    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
-        // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
-        return MockMemoryBookmarksStore()
-    } ()
-
-    lazy var favicons: Favicons = {
-        return BasicFavicons()
-    } ()
-
-    lazy var clients: Clients = {
-        return MockClients(profile: self)
-    } ()
-
-    lazy var prefs: ProfilePrefs = {
+    public var history: History {
+        return SqliteHistory(profile: self)
+    }
+    public var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { return MockMemoryBookmarksStore() }
+    public var favicons: Favicons  { return BasicFavicons() }
+    public var clients: Clients    { return MockClients(profile: self) }
+    lazy public var prefs: ProfilePrefs = {
         return MockProfilePrefs()
-    } ()
+    }()
+    public var files: FileAccessor { return ProfileFileAccessor(profile: self) }
 
-    func basicAuthorizationHeader() -> String {
-        return ""
-    }
+    public func logout() { }
 
+    func basicAuthorizationHeader() -> String { return "" }
     func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ()) {
+        success(data: nil)
     }
 
-    func logout() {
-    }
 }
 
-public class RESTAccountProfile: AccountProfile {
-    private let name: String
+public class RESTAccountProfile: Profile, AccountProfile {
+    var accountName: String { return credential.user! }
+    let name: String
     let credential: NSURLCredential
-
+    public func localName() -> String { return name }
     private let logoutCallback: LogoutCallback
+
+    // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
+    lazy public var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = { return MockMemoryBookmarksStore() }()
+    lazy public var history: History = { return SqliteHistory(profile: self) }()
+    lazy public var prefs: ProfilePrefs = { return NSUserDefaultsProfilePrefs(profile: self) }()
+    lazy public var favicons: Favicons = { return BasicFavicons() }()
+    lazy public var clients: Clients = { return RESTClients(profile: self) }()
+    lazy public var files: FileAccessor = { return ProfileFileAccessor(profile: self) }()
+    // lazy var ReadingList readingList
 
     init(localName: String, credential: NSURLCredential, logoutCallback: LogoutCallback) {
         self.name = localName
         self.credential = credential
         self.logoutCallback = logoutCallback
+
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        let mainQueue = NSOperationQueue.mainQueue()
+        notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: "LocationChange", object: nil)
     }
 
-    func localName() -> String {
-        return name
-    }
-
-    var accountName: String {
-        get {
-            return credential.user!
+    @objc
+    func onLocationChange(notification: NSNotification) {
+        if let url = notification.userInfo!["url"] as? NSURL {
+            if let title = notification.userInfo!["title"] as? NSString {
+                println("on location change \(url) \(title)")
+                history.addVisit(Site(url: url.absoluteString!, title: title), options: nil, complete: { (success) -> Void in
+                    // nothing to do
+                    println("stored = \(success)")
+                })
+            }
         }
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     func basicAuthorizationHeader() -> String {
@@ -117,32 +129,7 @@ public class RESTAccountProfile: AccountProfile {
         })
     }
 
-    func logout() {
+    public func logout() {
         logoutCallback(profile: self)
     }
-
-    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
-        // Stubbed out to populate data from server.
-        // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
-        return BookmarksRESTModelFactory(profile: self)
-    } ()
-
-    lazy var clients: Clients = {
-        return RESTClients(profile: self)
-    } ()
-
-    //        lazy var ReadingList readingList
-    //        lazy var History
-
-    lazy var favicons: Favicons = {
-        return BasicFavicons()
-    }()
-
-    func makePrefs() -> ProfilePrefs {
-        return NSUserDefaultsProfilePrefs(profile: self)
-    }
-
-    lazy var prefs: ProfilePrefs = {
-        self.makePrefs()
-    }()
 }

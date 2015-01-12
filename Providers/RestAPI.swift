@@ -7,7 +7,7 @@ import AlamoFire
 
 private let BASE_URL = "https://moz-syncapi.sateh.com/1.0/"
 
-enum RequestError {
+public enum RequestError {
     case BadAuth
     case ConnectionFailed
 }

@@ -10,7 +10,7 @@ public struct ShareItem {
     let title: String?
 }
 
-protocol ShareToDestination {
+public protocol ShareToDestination {
     func shareItem(item: ShareItem)
 }
 

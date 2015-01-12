@@ -5,7 +5,7 @@
 import Foundation
 import Alamofire
 
-class Client {
+public class Client {
     var id: String
     var name: String
     
@@ -15,7 +15,7 @@ class Client {
     }
 }
 
-protocol Clients {
+public protocol Clients {
     func getAll(success: ([Client]) -> (), error: (RequestError) -> ())
     func sendItem(item: ShareItem, toClients clients: [Client])
 }

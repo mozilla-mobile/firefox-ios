@@ -20,11 +20,17 @@ private let LabelFontSize: CGFloat = 13.0
 private let BackgroundColor = UIColor(red: 57.0 / 255, green: 57.0 / 255, blue: 57.0 / 255, alpha: 1)
 private let TransitionDuration = 0.25
 
+@objc
 protocol TabBarViewControllerDelegate {
     func didEnterURL(url: NSURL)
 }
 
-class TabBarViewController: UIViewController, UITextFieldDelegate {
+@objc
+protocol TabBarView {
+    var delegate: TabBarViewControllerDelegate? { get set }
+}
+
+class TabBarViewController: UIViewController, UITextFieldDelegate, TabBarViewControllerDelegate  {
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [ToolbarItem]!
@@ -77,9 +83,18 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
             make.left.right.bottom.equalTo(self.view)
         }
 
+        if let v = vc as? TabBarView {
+            v.delegate = self
+        }
+
         addChildViewController(vc)
     }
     
+    func didEnterURL(url: NSURL) {
+        delegate?.didEnterURL(url)
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+
     func tappedButton(sender: UIButton!) {
         for (index, button) in enumerate(buttons) {
             if (button == sender) {
@@ -213,8 +228,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate {
             }
         }
 
-        delegate?.didEnterURL(url!)
-        dismissViewControllerAnimated(true, completion: nil)
+        didEnterURL(url!)
         return false
     }
 
