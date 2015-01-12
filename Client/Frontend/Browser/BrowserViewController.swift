@@ -56,6 +56,16 @@ extension BrowserViewController: BrowserToolbarDelegate {
         tabManager.selectedTab?.goBack()
     }
 
+    override func accessibilityPerformEscape() -> Bool {
+        if let selectedTab = tabManager.selectedTab? {
+            if selectedTab.canGoBack {
+                didClickBack()
+                return true
+            }
+        }
+        return false
+    }
+
     func didLongPressBack() {
         let controller = BackForwardListViewController()
         controller.listData = tabManager.selectedTab?.backList

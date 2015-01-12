@@ -285,6 +285,11 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
     func SELdidClickCancel() {
         dismissViewControllerAnimated(true, completion: nil)
     }
+
+    override func accessibilityPerformEscape() -> Bool {
+        self.SELdidClickCancel()
+        return true
+    }
 }
 
 private class ToolbarButton: UIButton {
