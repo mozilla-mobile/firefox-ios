@@ -49,8 +49,10 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         backButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         backButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
         backButton.setTitle("<", forState: UIControlState.Normal)
+        backButton.accessibilityLabel = NSLocalizedString("Back", comment: "")
         backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
         longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack")
+        backButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
         backButton.addGestureRecognizer(longPressGestureBackButton)
         self.addSubview(backButton)
 
@@ -58,8 +60,10 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         forwardButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         forwardButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
         forwardButton.setTitle(">", forState: UIControlState.Normal)
+        forwardButton.accessibilityLabel = NSLocalizedString("Forward", comment: "")
         forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
         longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward")
+        forwardButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
         forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         self.addSubview(forwardButton)
 
@@ -124,6 +128,8 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
 
     func updateTabCount(count: Int) {
         tabsButton.setTitle(count.description, forState: UIControlState.Normal)
+        tabsButton.accessibilityValue = count.description
+        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "")
     }
 
     func updateBackStatus(canGoBack: Bool) {
