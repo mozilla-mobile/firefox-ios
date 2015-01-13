@@ -110,6 +110,8 @@
 		E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E42CCE031A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
+		E45DD1681A645E6B00C6058D /* ReaderMode.js in Resources */ = {isa = PBXBuildFile; fileRef = E45DD1671A645E6B00C6058D /* ReaderMode.js */; };
+		E4CD9E741A684F2200318571 /* ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9E731A684F2200318571 /* ReaderMode.swift */; };
 		E4D6BEA61A092A4700F538BD /* Login.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEA51A092A4700F538BD /* Login.xcassets */; };
 		E4D6BEB21A092D5700F538BD /* Snappy.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E4D6BEAD1A092AD300F538BD /* Snappy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */; };
@@ -341,6 +343,8 @@
 		E41A7D4A1A1BE04500245963 /* InitialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
 		E42CCDE21A23A6F900B794D3 /* Clients.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clients.swift; sourceTree = "<group>"; };
 		E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUtils.swift; sourceTree = "<group>"; };
+		E45DD1671A645E6B00C6058D /* ReaderMode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ReaderMode.js; sourceTree = "<group>"; };
+		E4CD9E731A684F2200318571 /* ReaderMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderMode.swift; sourceTree = "<group>"; };
 		E4D6BEA51A092A4700F538BD /* Login.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Login.xcassets; sourceTree = "<group>"; };
 		E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Snappy.xcodeproj; path = ThirdParty/Snappy/Snappy.xcodeproj; sourceTree = "<group>"; };
 		E4D6BEB51A092E0300F538BD /* Client.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Client.entitlements; sourceTree = "<group>"; };
@@ -702,6 +706,8 @@
 				F84B21F71A0910F600AAB793 /* ReaderViewController.swift */,
 				F84B21F81A0910F600AAB793 /* ReaderViewController.xib */,
 				F84B21FA1A0910F600AAB793 /* SiteTableViewController.swift */,
+				E45DD1671A645E6B00C6058D /* ReaderMode.js */,
+				E4CD9E731A684F2200318571 /* ReaderMode.swift */,
 			);
 			path = Reader;
 			sourceTree = "<group>";
@@ -1054,6 +1060,7 @@
 				E4D6BEA61A092A4700F538BD /* Login.xcassets in Resources */,
 				F84B22271A09127C00AAB793 /* TabBar.xcassets in Resources */,
 				F84B220E1A0910F600AAB793 /* ReaderViewController.xib in Resources */,
+				E45DD1681A645E6B00C6058D /* ReaderMode.js in Resources */,
 				F84B22121A0910F600AAB793 /* SettingsViewController.xib in Resources */,
 				E41A7D431A1BDFD800245963 /* FiraSans-Regular.ttf in Resources */,
 				F84B22291A0912C500AAB793 /* Settings.xcassets in Resources */,
@@ -1110,6 +1117,7 @@
 				28CE83C31A1D1D3200576538 /* Bytes.swift in Sources */,
 				F84B22101A0910F600AAB793 /* SiteTableViewController.swift in Sources */,
 				F84B22141A0910F600AAB793 /* TabsViewController.swift in Sources */,
+				E4CD9E741A684F2200318571 /* ReaderMode.swift in Sources */,
 				28CE83C81A1D1D3200576538 /* SyncMeta.swift in Sources */,
 				D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */,
 				D34DC8561A16C40C00D49B7B /* Cursor.swift in Sources */,

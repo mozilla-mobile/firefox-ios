@@ -62,6 +62,14 @@ extension BrowserViewController: BrowserToolbarDelegate {
         presentViewController(controller, animated: true, completion: nil)
     }
 
+    func didClickReaderMode() {
+        if let tab = tabManager.selectedTab {
+            if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
+                readerMode.toggleReaderMode()
+            }
+        }
+    }
+    
     func didClickAddTab() {
         let controller = TabTrayController()
         controller.tabManager = tabManager
@@ -83,8 +91,20 @@ extension BrowserViewController: TabManagerDelegate {
 
         previous?.webView.navigationDelegate = nil
         selected?.webView.navigationDelegate = self
+
         toolbar.updateURL(selected?.url)
         toolbar.updateProgressBar(0.0)
+
+        if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
+            toolbar.updateReaderModeState(readerMode.state)
+        }
+    }
+
+    func didCreateTab(tab: Browser) {
+        if let readerMode = ReaderMode(browser: tab) {
+            readerMode.delegate = self
+            tab.addHelper(readerMode, name: ReaderMode.name())
+        }
     }
 
     func didAddTab(tab: Browser) {
@@ -97,7 +117,7 @@ extension BrowserViewController: TabManagerDelegate {
             make.leading.trailing.bottom.equalTo(self.view)
         }
         tab.webView.addObserver(self, forKeyPath: "estimatedProgress", options: .New, context: nil)
-        tab.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.mozilla.org")!))
+        tab.loadRequest(NSURLRequest(URL: NSURL(string: "https://www.mozilla.org")!))
     }
 
     func didRemoveTab(tab: Browser) {
@@ -109,8 +129,16 @@ extension BrowserViewController: TabManagerDelegate {
 }
 
 extension BrowserViewController: WKNavigationDelegate {
+    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        toolbar.updateReaderModeState(ReaderModeState.Unavailable)
+    }
+    
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         toolbar.updateURL(webView.URL);
+//        println("didCommitNavigation")
+//        webView.evaluateJavaScript("mozCheckReadability()", completionHandler: { (object, error) -> Void in
+//            // We don't get a result here, the result comes in via browser:didChangeReaderModeState:
+//        })
     }
 
     override func observeValueForKeyPath(keyPath: String, ofObject object:
@@ -121,5 +149,16 @@ extension BrowserViewController: WKNavigationDelegate {
                     toolbar.updateProgressBar(progress)
                 }
             }
+    }
+}
+
+extension BrowserViewController: ReaderModeDelegate {
+    func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forBrowser browser: Browser) {
+        // If this reader mode availability state change is for the tab that we currently show, then update
+        // the button. Otherwise do nothing and the button will be updated when the tab is made active.
+        if tabManager.selectedTab == browser {
+            println("DEBUG: New readerModeState: \(state.rawValue)")
+            toolbar.updateReaderModeState(state)
+        }
     }
 }
