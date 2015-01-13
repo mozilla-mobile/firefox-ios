@@ -13,10 +13,26 @@ protocol SearchViewControllerDelegate: class {
 
 class SearchViewController: UIViewController {
     weak var delegate: SearchViewControllerDelegate?
-    var searchEngines: [OpenSearchEngine]?
-
-    private var searchText = ""
     private var tableView = UITableView()
+    private var sortedEngines = [OpenSearchEngine]()
+
+    var searchEngines: SearchEngines? {
+        didSet {
+            if let searchEngines = searchEngines {
+                // Show the default search engine first.
+                sortedEngines = searchEngines.list.sorted { engine, _ in engine === searchEngines.defaultEngine }
+            } else {
+                sortedEngines = []
+            }
+            tableView.reloadData()
+        }
+    }
+
+    var searchQuery: String = "" {
+        didSet {
+            tableView.reloadData()
+        }
+    }
 
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -43,19 +59,14 @@ class SearchViewController: UIViewController {
             return
         }
     }
-
-    func updateSearchQuery(text: String) {
-        searchText = text
-        tableView.reloadData()
-    }
 }
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath) as SearchTableViewCell
-        let searchEngine = searchEngines?[indexPath.item]
-        cell.textLabel?.text = searchText
-        cell.imageView?.image = searchEngine?.image
+        let searchEngine = sortedEngines[indexPath.row]
+        cell.textLabel?.text = searchQuery
+        cell.imageView?.image = searchEngine.image
 
         // Make the row separators span the width of the entire table.
         cell.layoutMargins = UIEdgeInsetsZero
@@ -64,14 +75,14 @@ extension SearchViewController: UITableViewDataSource {
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchEngines?.count ?? 0
+        return sortedEngines.count
     }
 }
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let engine = searchEngines?[indexPath.item]
-        let url = engine?.urlForQuery(searchText)
+        let engine = sortedEngines[indexPath.row]
+        let url = engine.urlForQuery(searchQuery)
         if let url = url {
             delegate?.didClickSearchResult(url)
         }
