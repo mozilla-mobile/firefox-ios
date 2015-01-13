@@ -14,6 +14,7 @@ protocol Profile {
     var favicons: Favicons { get }
     var clients: Clients { get }
     var prefs: ProfilePrefs { get }
+    var searchEngines: SearchEngines { get }
 
     // Because we can't test for whether this is an AccountProfile.
     // TODO: probably Profile should own an Account.
@@ -58,6 +59,10 @@ class MockAccountProfile: AccountProfile {
 
     lazy var clients: Clients = {
         return MockClients(profile: self)
+    } ()
+
+    lazy var searchEngines: SearchEngines = {
+        return SearchEngines()
     } ()
 
     lazy var prefs: ProfilePrefs = {
@@ -136,7 +141,11 @@ public class RESTAccountProfile: AccountProfile {
 
     lazy var favicons: Favicons = {
         return BasicFavicons()
-    }()
+    } ()
+
+    lazy var searchEngines: SearchEngines = {
+        return SearchEngines()
+    } ()
 
     func makePrefs() -> ProfilePrefs {
         return NSUserDefaultsProfilePrefs(profile: self)
@@ -144,5 +153,5 @@ public class RESTAccountProfile: AccountProfile {
 
     lazy var prefs: ProfilePrefs = {
         self.makePrefs()
-    }()
+    } ()
 }

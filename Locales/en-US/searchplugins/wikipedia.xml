@@ -1,0 +1,23 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Wikipedia</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAACXBIWXMAAAsTAAALEwEAmpwYAAADGGlDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjaY2BgnuDo4uTKJMDAUFBUUuQe5BgZERmlwH6egY2BmYGBgYGBITG5uMAxIMCHgYGBIS8/L5UBFTAyMHy7xsDIwMDAcFnX0cXJlYE0wJpcUFTCwMBwgIGBwSgltTiZgYHhCwMDQ3p5SUEJAwNjDAMDg0hSdkEJAwNjAQMDg0h2SJAzAwNjCwMDE09JakUJAwMDg3N+QWVRZnpGiYKhpaWlgmNKflKqQnBlcUlqbrGCZ15yflFBflFiSWoKAwMD1A4GBgYGXpf8EgX3xMw8BSMDVQYqg4jIKAUICxE+CDEESC4tKoMHJQODAIMCgwGDA0MAQyJDPcMChqMMbxjFGV0YSxlXMN5jEmMKYprAdIFZmDmSeSHzGxZLlg6WW6x6rK2s99gs2aaxfWMPZ9/NocTRxfGFM5HzApcj1xZuTe4FPFI8U3mFeCfxCfNN45fhXyygI7BD0FXwilCq0A/hXhEVkb2i4aJfxCaJG4lfkaiQlJM8JpUvLS19QqZMVl32llyfvIv8H4WtioVKekpvldeqFKiaqP5UO6jepRGqqaT5QeuA9iSdVF0rPUG9V/pHDBYY1hrFGNuayJsym740u2C+02KJ5QSrOutcmzjbQDtXe2sHY0cdJzVnJRcFV3k3BXdlD3VPXS8Tbxsfd99gvwT//ID6wIlBS4N3hVwMfRnOFCEXaRUVEV0RMzN2T9yDBLZE3aSw5IaUNak30zkyLDIzs+ZmX8xlz7PPryjYVPiuWLskq3RV2ZsK/cqSql01jLVedVPrHzbqNdU0n22VaytsP9op3VXUfbpXta+x/+5Em0mzJ/+dGj/t8AyNmf2zvs9JmHt6vvmCpYtEFrcu+bYsc/m9lSGrTq9xWbtvveWGbZtMNm/ZarJt+w6rnft3u+45uy9s/4ODOYd+Hmk/Jn58xUnrU+fOJJ/9dX7SRe1LR68kXv13fc5Nm1t379TfU75/4mHeY7En+59lvhB5efB1/lv5dxc+NH0y/fzq64Lv4T8Ffp360/rP8f9/AA0ADzT6lvFdAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAHqSURBVHjapJUxb9NQFIW/JAip2xNS1/J+goeqUqeajdGVmFgwI1OcmYEgITFG7EgJQ+b2HzgbElJF+QU2iBl7YAFRnQ5+fnFcB0J8Jp/r53vPu+f6vYEA4JBTTjhkN/zkio9kAAihpyr1v/ijN7ovEHqiffFeDHTAdx6wL46HnPX4HM6HHNEHR0NGvRKMhvRE7wT3ACYssBggpyThIRMCAFaEzHhOiQWumfGFBQGQY0kB9EKSCsVCyKpQxUMhdOEMj4Vi91wIGX2uyNJtwTDHAgbjOUBJ/T50ETDAzCn0CiRpLkSd2VW1rqZR6uOpzHoWl40EkmkIlTIhNJc0bUSlSNNtCaZCKGtpyDZimXB92uhBhTEAHzx/BuQ8Isb62Dti16c7PahrNnbovFhXLGQaau4oqDSULDx/BcCl55cEDTUdCqqagWcXbjpqWD8ZWxRUGq5ZOTYhAXLHV0DU/qCtQLJCkZuM0PHQGThvL152JJh5M61SP2CpMpmmgdsTFDJCiaaubq0haQ7Q3xLUZq4NqzS0DNzWxNq8ksgbFmGgwf95oFgijJuB6v9L3Fx2HSg3XeExZxv1xuSEXQt/o8fqg9cDHfB15zuxjRuOETrfu/5b9bhcf+mlRmLgr/cTgp1vqR9c8YlvALcDAPr5jIx+4LKcAAAAAElFTkSuQmCC</Image>
+<Url type="application/x-suggestions+json" method="GET" template="https://en.wikipedia.org/w/api.php">
+  <Param name="action" value="opensearch"/>
+  <Param name="search" value="{searchTerms}"/>
+</Url>
+<Url type="text/html" method="GET" template="https://en.wikipedia.org/wiki/Special:Search">
+  <Param name="search" value="{searchTerms}"/>
+  <Param name="sourceid" value="Mozilla-search"/>
+</Url>
+<!-- Search activity -->
+<Url type="text/html" method="GET" rel="mobile" template="https://en.m.wikipedia.org/wiki/Special:Search">
+  <Param name="search" value="{searchTerms}"/>
+  <Param name="sourceid" value="Mozilla-search"/>
+</Url>
+<SearchForm>https://en.wikipedia.org/wiki/Special:Search</SearchForm>
+</SearchPlugin>
