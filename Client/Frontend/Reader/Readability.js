@@ -1525,7 +1525,8 @@ Readability.prototype = {
 
     var excerpt = this._getExcerpt(articleContent);
 
-    return { title: articleTitle,
+    return { uri: this._uri,
+             title: articleTitle,
              byline: this._articleByline,
              dir: this._articleDir,
              content: articleContent.innerHTML,

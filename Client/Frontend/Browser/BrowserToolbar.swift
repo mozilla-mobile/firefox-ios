@@ -12,6 +12,7 @@ protocol BrowserToolbarDelegate {
     func didClickAddTab()
     func didLongPressBack()
     func didLongPressForward()
+    func didClickReaderMode()
 }
 
 class BrowserToolbar: UIView, UITextFieldDelegate {
@@ -20,6 +21,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     private var forwardButton: UIButton!
     private var backButton: UIButton!
     private var toolbarTextButton: UIButton!
+    private var readerModeButton: UIButton!
     private var tabsButton: UIButton!
     private var progressBar: UIProgressView!
 
@@ -74,6 +76,23 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         self.progressBar.trackTintColor = self.backgroundColor
         self.addSubview(progressBar)
 
+        readerModeButton = UIButton()
+        readerModeButton.enabled = false
+        readerModeButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        readerModeButton.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Disabled)
+        readerModeButton.titleLabel?.layer.borderColor = UIColor.blackColor().CGColor
+        readerModeButton.titleLabel?.layer.cornerRadius = 4
+        readerModeButton.titleLabel?.layer.borderWidth = 1
+        readerModeButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 12)
+        readerModeButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        readerModeButton.setTitle("R", forState: UIControlState.Normal)
+        readerModeButton.titleLabel?.snp_makeConstraints { make in
+            make.size.equalTo(24)
+            return
+        }
+        readerModeButton.addTarget(self, action: "SELdidClickReaderMode", forControlEvents: UIControlEvents.TouchUpInside)
+        self.addSubview(readerModeButton)
+        
         tabsButton = UIButton()
         tabsButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         tabsButton.titleLabel?.layer.borderColor = UIColor.blackColor().CGColor
@@ -105,8 +124,14 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
             make.centerY.equalTo(self)
         }
 
-        self.tabsButton.snp_remakeConstraints { make in
+        self.readerModeButton.snp_remakeConstraints { make in
             make.left.equalTo(self.toolbarTextButton.snp_right)
+            make.centerY.equalTo(self)
+            make.width.height.equalTo(44)
+        }
+
+        self.tabsButton.snp_remakeConstraints { make in
+            make.left.equalTo(self.readerModeButton.snp_right)
             make.centerY.equalTo(self)
             make.width.height.equalTo(44)
             make.right.equalTo(self).offset(-8)
@@ -125,6 +150,19 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     func updateTabCount(count: Int) {
         tabsButton.setTitle(count.description, forState: UIControlState.Normal)
     }
+    
+    func updateReaderModeState(state: ReaderModeState) {
+        switch state {
+        case .Unavailable:
+            readerModeButton.enabled = false
+        case .Available:
+            readerModeButton.enabled = true
+            readerModeButton.selected = false
+        case .Active:
+            readerModeButton.enabled = true
+            readerModeButton.selected = true
+        }
+    }
 
     func SELdidClickBack() {
         browserToolbarDelegate?.didClickBack()
@@ -142,6 +180,10 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         browserToolbarDelegate?.didLongPressForward()
     }
 
+    func SELdidClickReaderMode() {
+        browserToolbarDelegate?.didClickReaderMode()
+    }
+    
     func SELdidClickAddTab() {
         browserToolbarDelegate?.didClickAddTab()
     }
