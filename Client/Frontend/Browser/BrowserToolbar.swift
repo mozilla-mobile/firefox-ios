@@ -92,24 +92,24 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
 
         self.backButton.snp_remakeConstraints { make in
             make.left.equalTo(self)
-            make.centerY.equalTo(self)
+            make.centerY.equalTo(self).offset(10)
             make.width.height.equalTo(44)
         }
 
         self.forwardButton.snp_remakeConstraints { make in
             make.left.equalTo(self.backButton.snp_right)
-            make.centerY.equalTo(self)
+            make.centerY.equalTo(self).offset(10)
             make.width.height.equalTo(44)
         }
 
         self.toolbarTextButton.snp_remakeConstraints { make in
             make.left.equalTo(self.forwardButton.snp_right)
-            make.centerY.equalTo(self)
+            make.centerY.equalTo(self).offset(10)
         }
 
         self.tabsButton.snp_remakeConstraints { make in
             make.left.equalTo(self.toolbarTextButton.snp_right)
-            make.centerY.equalTo(self)
+            make.centerY.equalTo(self).offset(10)
             make.width.height.equalTo(44)
             make.right.equalTo(self).offset(-8)
         }
