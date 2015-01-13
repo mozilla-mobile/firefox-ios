@@ -37,6 +37,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
     private var cancelButton: UIButton!
     private var buttons: [ToolbarButton] = []
     private var searchController: SearchViewController?
+    private let uriFixup = URIFixup()
     
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(notificationToken)
@@ -241,18 +242,18 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
     }
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        let urlString = toolbarTextField.text
+        let text = toolbarTextField.text
+        var url = uriFixup.getURL(text)
 
-        // If the URL is missing a scheme then parse then we manually prefix it with http:// and try
-        // again. We can probably do some smarter things here but I think this is a
-        // decent start that at least lets people skip typing the protocol.
-        var url = NSURL(string: urlString)
-        if url == nil || url?.scheme == nil {
-            url = NSURL(string: "http://" + urlString)
-            if url == nil {
-                println("Error parsing URL: " + urlString)
-                return false
-            }
+        // If we can't make a valid URL, do a search query.
+        if url == nil {
+            url = profile.searchEngines.defaultEngine.urlForQuery(text)
+        }
+
+        // If we still don't have a valid URL, something is broken. Give up.
+        if url == nil {
+            println("Error handling URL entry: " + text)
+            return false
         }
 
         delegate?.didEnterURL(url!)
