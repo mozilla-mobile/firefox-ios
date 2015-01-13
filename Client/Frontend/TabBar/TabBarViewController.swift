@@ -170,7 +170,6 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
         toolbarTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
         toolbarTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
         toolbarTextField.layer.cornerRadius = 8
-        toolbarTextField.setContentHuggingPriority(0, forAxis: UILayoutConstraintAxis.Horizontal)
         toolbarTextField.delegate = self
         toolbarTextField.text = url?.absoluteString
         toolbarTextField.font = UIFont(name: "HelveticaNeue-Light", size: 14)
@@ -184,15 +183,18 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
         cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(cancelButton)
 
+        // Since the cancel button is next to toolbarTextField, and toolbarTextField can expand to the full width,
+        // give the cancel button a higher compression resistance priority to prevent it from being hidden.g
+        cancelButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
+
         toolbarTextField.snp_makeConstraints { make in
             // 28.5 matches the position of the URL bar in BrowserViewController. If we want this to be
             // less fragile, we could pass the offset as a parameter to this view controller.
             make.top.equalTo(self.view).offset(28.5)
             make.left.equalTo(self.view).offset(8)
-            return
         }
 
-        self.cancelButton.snp_remakeConstraints { make in
+        cancelButton.snp_makeConstraints { make in
             make.left.equalTo(self.toolbarTextField.snp_right).offset(8)
             make.centerY.equalTo(self.toolbarTextField)
             make.right.equalTo(self.view).offset(-8)
