@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 
 private let TypeSearch = "text/html"
+private let TypeSuggest = "application/x-suggestions+json"
 
 private class OpenSearchURL {
     let template: String
@@ -22,12 +23,14 @@ class OpenSearchEngine {
     let description: String?
     let image: UIImage?
     private let searchURL: OpenSearchURL
+    private let suggestURL: OpenSearchURL?
 
-    private init(shortName: String, description: String?, image: UIImage?, searchURL: OpenSearchURL) {
+    private init(shortName: String, description: String?, image: UIImage?, searchURL: OpenSearchURL, suggestURL: OpenSearchURL?) {
         self.shortName = shortName
         self.description = description
         self.image = image
         self.searchURL = searchURL
+        self.suggestURL = suggestURL
     }
 
     /**
@@ -35,6 +38,17 @@ class OpenSearchEngine {
      */
     func searchURLForQuery(query: String) -> NSURL? {
         return getURLFromTemplate(searchURL, query: query)
+    }
+
+    /**
+     * Returns the search suggestion URL for the given query.
+     */
+    func suggestURLForQuery(query: String) -> NSURL? {
+        if suggestURL == nil {
+            return nil
+        }
+
+        return getURLFromTemplate(suggestURL!, query: query)
     }
 
     private func getURLFromTemplate(openSearchURL: OpenSearchURL, query: String) -> NSURL? {
@@ -104,6 +118,7 @@ class OpenSearchParser {
         }
 
         var searchURL: OpenSearchURL!
+        var suggestURL: OpenSearchURL?
         var searchURLs = [OpenSearchURL]()
         for url in urls! {
             let type = url.attributes["type"]
@@ -112,7 +127,7 @@ class OpenSearchParser {
                 return nil
             }
 
-            if type != TypeSearch {
+            if type != TypeSearch && type != TypeSuggest {
                 // Not a supported search type.
                 continue
             }
@@ -150,6 +165,8 @@ class OpenSearchParser {
             let url = OpenSearchURL(template: template!, type: type!)
             if type == TypeSearch {
                 searchURL = url
+            } else {
+                suggestURL = url
             }
         }
 
@@ -191,6 +208,6 @@ class OpenSearchParser {
             }
         }
 
-        return OpenSearchEngine(shortName: shortName!, description: description, image: uiImage, searchURL: searchURL)
+        return OpenSearchEngine(shortName: shortName!, description: description, image: uiImage, searchURL: searchURL, suggestURL: suggestURL)
     }
 }
