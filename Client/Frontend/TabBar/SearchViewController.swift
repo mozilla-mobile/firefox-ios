@@ -82,7 +82,7 @@ extension SearchViewController: UITableViewDataSource {
 extension SearchViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let engine = sortedEngines[indexPath.row]
-        let url = engine.urlForQuery(searchQuery)
+        let url = engine.searchURLForQuery(searchQuery)
         if let url = url {
             delegate?.didClickSearchResult(url)
         }

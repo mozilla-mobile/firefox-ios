@@ -247,7 +247,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
 
         // If we can't make a valid URL, do a search query.
         if url == nil {
-            url = profile.searchEngines.defaultEngine.urlForQuery(text)
+            url = profile.searchEngines.defaultEngine.searchURLForQuery(text)
         }
 
         // If we still don't have a valid URL, something is broken. Give up.

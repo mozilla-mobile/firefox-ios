@@ -20,7 +20,7 @@ class SearchTests: XCTestCase {
         XCTAssertNil(engine.description)
 
         // Test regular search queries.
-        XCTAssertEqual(engine.urlForQuery("foobar")!.absoluteString!, "https://www.google.com/search?q=foobar&ie=utf-8&oe=utf-8")
+        XCTAssertEqual(engine.searchURLForQuery("foobar")!.absoluteString!, "https://www.google.com/search?q=foobar&ie=utf-8&oe=utf-8")
     }
 
     func testSearchEngines() {
