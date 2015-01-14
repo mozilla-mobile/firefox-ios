@@ -20,7 +20,7 @@ private let LabelFontSize: CGFloat = 13.0
 private let BackgroundColor = UIColor(red: 57.0 / 255, green: 57.0 / 255, blue: 57.0 / 255, alpha: 1)
 private let TransitionDuration = 0.25
 
-protocol TabBarViewControllerDelegate {
+protocol TabBarViewControllerDelegate: class {
     func didEnterURL(url: NSURL)
 }
 
@@ -28,8 +28,8 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [ToolbarItem]!
-    var delegate: TabBarViewControllerDelegate?
     var url: NSURL?
+    weak var delegate: TabBarViewControllerDelegate?
 
     private var buttonContainerView: ToolbarContainerView!
     private var controllerContainerView: UIView!
@@ -217,7 +217,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
     }
 
     override func viewWillAppear(animated: Bool) {
-        notificationToken = NSNotificationCenter.defaultCenter().addObserverForName(PanelsNotificationName, object: nil, queue: nil) { notif in
+        notificationToken = NSNotificationCenter.defaultCenter().addObserverForName(PanelsNotificationName, object: nil, queue: nil) { [unowned self] notif in
             self.panels = Panels(profile: self.profile).enabledItems
             self.updateButtons()
         }
