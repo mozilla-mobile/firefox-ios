@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 
 private let ReuseIdentifier = "cell"
+private let SuggestionsLimitCount = 3
 
 protocol SearchViewControllerDelegate: class {
     func didClickSearchResult(url: NSURL)
@@ -15,21 +16,34 @@ class SearchViewController: UIViewController {
     weak var delegate: SearchViewControllerDelegate?
     private var tableView = UITableView()
     private var sortedEngines = [OpenSearchEngine]()
+    private var suggestClient: SearchSuggestClient?
+    private var searchSuggestions = [String]()
 
     var searchEngines: SearchEngines? {
         didSet {
+            suggestClient?.cancelPendingRequest()
+
             if let searchEngines = searchEngines {
                 // Show the default search engine first.
                 sortedEngines = searchEngines.list.sorted { engine, _ in engine === searchEngines.defaultEngine }
+                suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine)
             } else {
                 sortedEngines = []
+                suggestClient = nil
             }
+
+            querySuggestClient()
+
+            // Reload the tableView to show the new list of search engines.
             tableView.reloadData()
         }
     }
 
     var searchQuery: String = "" {
         didSet {
+            querySuggestClient()
+
+            // Reload the tableView to show the updated text in each engine.
             tableView.reloadData()
         }
     }
@@ -59,14 +73,58 @@ class SearchViewController: UIViewController {
             return
         }
     }
+
+    private func querySuggestClient() {
+        suggestClient?.cancelPendingRequest()
+
+        if searchQuery.isEmpty {
+            searchSuggestions = []
+            return
+        }
+
+        suggestClient?.query(searchQuery, callback: { suggestions, error in
+            if let error = error {
+                let isSuggestClientError = error.domain == SearchSuggestClientErrorDomain
+
+                switch error.code {
+                case NSURLErrorCancelled where error.domain == NSURLErrorDomain:
+                    // Request was cancelled. Do nothing.
+                    break
+                case SearchSuggestClientErrorInvalidEngine where isSuggestClientError:
+                    // Engine does not support search suggestions. Do nothing.
+                    break
+                case SearchSuggestClientErrorInvalidResponse where isSuggestClientError:
+                    println("Error: Invalid search suggestion data")
+                default:
+                    println("Error: \(error.description)")
+                }
+
+                self.searchSuggestions = []
+            } else {
+                self.searchSuggestions = suggestions!
+                if self.searchSuggestions.count > SuggestionsLimitCount {
+                    self.searchSuggestions.removeRange(SuggestionsLimitCount..<self.searchSuggestions.count)
+                }
+            }
+
+            // Reload the tableView to show the new list of search suggestions.
+            self.tableView.reloadData()
+        })
+    }
 }
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath) as SearchTableViewCell
-        let searchEngine = sortedEngines[indexPath.row]
-        cell.textLabel?.text = searchQuery
-        cell.imageView?.image = searchEngine.image
+
+        if indexPath.row < searchSuggestions.count {
+            cell.textLabel?.text = searchSuggestions[indexPath.row]
+            cell.imageView?.image = nil
+        } else {
+            let searchEngine = sortedEngines[indexPath.row - searchSuggestions.count]
+            cell.textLabel?.text = searchQuery
+            cell.imageView?.image = searchEngine.image
+        }
 
         // Make the row separators span the width of the entire table.
         cell.layoutMargins = UIEdgeInsetsZero
@@ -75,14 +133,23 @@ extension SearchViewController: UITableViewDataSource {
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sortedEngines.count
+        return searchSuggestions.count + sortedEngines.count
     }
 }
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let engine = sortedEngines[indexPath.row]
-        let url = engine.searchURLForQuery(searchQuery)
+        var url: NSURL?
+        if indexPath.row < searchSuggestions.count {
+            let suggestion = searchSuggestions[indexPath.row]
+
+            // Assume that only the default search engine can provide search suggestions.
+            url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
+        } else {
+            let engine = sortedEngines[indexPath.row - searchSuggestions.count]
+            url = engine.searchURLForQuery(searchQuery)
+        }
+
         if let url = url {
             delegate?.didClickSearchResult(url)
         }
