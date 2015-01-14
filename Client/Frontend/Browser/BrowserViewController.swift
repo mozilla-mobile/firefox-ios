@@ -115,7 +115,7 @@ extension BrowserViewController: TabManagerDelegate {
             make.leading.trailing.bottom.equalTo(self.view)
         }
         tab.webView.addObserver(self, forKeyPath: "estimatedProgress", options: .New, context: nil)
-        tab.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.mozilla.org")!))
+        tab.loadRequest(NSURLRequest(URL: NSURL(string: "https://news.ycombinator.com")!))
     }
 
     func didRemoveTab(tab: Browser) {

@@ -4,6 +4,185 @@
 
 import Foundation
 import UIKit
+import Snappy
+
+protocol BrowserLocationViewDelegate {
+    func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView)
+    func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView)
+}
+
+enum ReaderModeState: String {
+    case Available = "Available"
+    case Unavailable = "Unavailable"
+    case Active = "Active"
+}
+
+class ReaderModeButton: UIButton {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setImage(UIImage(named: "reader.png"), forState: UIControlState.Normal)
+        setImage(UIImage(named: "reader_active.png"), forState: UIControlState.Selected)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    var _readerModeState: ReaderModeState = ReaderModeState.Unavailable
+
+    var readerModeState: ReaderModeState {
+        get {
+            return _readerModeState;
+        }
+        set (newReaderModeState) {
+            _readerModeState = newReaderModeState
+            switch _readerModeState {
+            case .Available:
+                self.enabled = true
+                self.selected = false
+            case .Unavailable:
+                self.enabled = false
+                self.selected = false
+            case .Active:
+                self.enabled = true
+                self.selected = true
+            }
+        }
+    }
+}
+
+class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
+    var delegate: BrowserLocationViewDelegate?
+
+    private var lockImageView: UIImageView!
+    private var locationLabel: UILabel!
+    private var readerModeButton: ReaderModeButton!
+    var readerModeButtonWidthConstraint: NSLayoutConstraint?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.backgroundColor = UIColor.whiteColor()
+        self.clipsToBounds = true
+        self.layer.cornerRadius = 5
+        //self.alpha = 0.5
+
+        lockImageView = UIImageView(image: UIImage(named: "lock_verified.png"))
+        lockImageView.hidden = false
+        addSubview(lockImageView)
+
+        locationLabel = UILabel()
+        //locationLabel.backgroundColor = UIColor.redColor()
+        locationLabel.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        locationLabel.lineBreakMode = NSLineBreakMode.ByClipping
+        locationLabel.userInteractionEnabled = true
+        addSubview(locationLabel)
+
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocationLabel:")
+        //tapGestureRecognizer.delegate = self
+        locationLabel.addGestureRecognizer(tapGestureRecognizer)
+
+        readerModeButton = ReaderModeButton(frame: CGRectZero)
+        readerModeButton.hidden = true
+        //readerModeButton.backgroundColor = UIColor.greenColor()
+        readerModeButton.addTarget(self, action: "SELtapReaderModeButton", forControlEvents: UIControlEvents.TouchUpInside)
+        addSubview(readerModeButton)
+
+        makeConstraints()
+    }
+
+    private func makeConstraints() {
+        let container = self
+        let padding = UIEdgeInsetsMake(4, 8, 4, 8)
+
+        lockImageView.snp_remakeConstraints { make in
+            make.centerY.equalTo(container).centerY
+            make.left.equalTo(container.snp_left).with.offset(8)
+            make.width.equalTo(self.lockImageView.intrinsicContentSize().width)
+        }
+
+        locationLabel.snp_remakeConstraints { make in
+            make.centerY.equalTo(container.snp_centerY)
+            if self.url?.scheme == "https" {
+                make.left.equalTo(self.lockImageView.snp_right).with.offset(8)
+            } else {
+                make.left.equalTo(container.snp_left).with.offset(8)
+            }
+            if self.readerModeButton.readerModeState == ReaderModeState.Unavailable {
+                make.right.equalTo(container.snp_right).with.offset(-8)
+            } else {
+                make.right.equalTo(self.readerModeButton.snp_left).with.offset(-4)
+            }
+        }
+
+        readerModeButton.snp_remakeConstraints { make in
+            make.centerY.equalTo(container).centerY
+            make.right.equalTo(container.snp_right).with.offset(-4)
+        }
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func intrinsicContentSize() -> CGSize {
+        return CGSize(width: 200, height: 28)
+    }
+
+    func SELtapLocationLabel(recognizer: UITapGestureRecognizer) {
+        delegate?.browserLocationViewDidTapLocation(self)
+    }
+
+    func SELtapReaderModeButton() {
+        delegate?.browserLocationViewDidTapReaderMode(self)
+    }
+
+    var _url: NSURL?
+    var url: NSURL? {
+        get {
+            return _url
+        }
+        set (newURL) {
+            _url = newURL
+            lockImageView.hidden = (_url?.scheme != "https")
+            if let t = _url?.absoluteString {
+                if t.hasPrefix("http://") {
+                    locationLabel.text = t.substringFromIndex(advance(t.startIndex, 7))
+                } else if t.hasPrefix("https://") {
+                    locationLabel.text = t.substringFromIndex(advance(t.startIndex, 8))
+                } else {
+                    locationLabel.text = t
+                }
+            }
+            makeConstraints()
+        }
+    }
+
+    var readerModeState: ReaderModeState {
+        get {
+            return readerModeButton.readerModeState
+        }
+        set (newReaderModeState) {
+            if newReaderModeState != self.readerModeButton.readerModeState {
+                self.readerModeButton.readerModeState = newReaderModeState
+                makeConstraints()
+                readerModeButton.hidden = (newReaderModeState == ReaderModeState.Unavailable)
+//                if newReaderModeState == ReaderModeState.Unavailable {
+//                    self.readerModeButtonWidthConstraint?.constant = 0
+//                } else {
+//                    self.readerModeButtonWidthConstraint?.constant = self.readerModeButton.intrinsicContentSize().width+8
+//                }
+                UIView.animateWithDuration(0.1, animations: { () -> Void in
+                    if newReaderModeState == ReaderModeState.Unavailable {
+                        self.readerModeButton.alpha = 0.0
+                    } else {
+                        self.readerModeButton.alpha = 1.0
+                    }
+                    self.layoutIfNeeded()
+                })
+            }
+        }
+    }
+}
 
 protocol BrowserToolbarDelegate {
     func didBeginEditing()
@@ -14,12 +193,12 @@ protocol BrowserToolbarDelegate {
     func didLongPressForward()
 }
 
-class BrowserToolbar: UIView, UITextFieldDelegate {
+class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
     var browserToolbarDelegate: BrowserToolbarDelegate?
 
     private var forwardButton: UIButton!
     private var backButton: UIButton!
-    private var toolbarTextButton: UIButton!
+    private var locationView: BrowserLocationView!
     private var tabsButton: UIButton!
     private var progressBar: UIProgressView!
 
@@ -41,7 +220,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     }
 
     private func viewDidInit() {
-        self.backgroundColor = UIColor(white: 0.95, alpha: 1.0)
+        self.backgroundColor = UIColor(white: 0.80, alpha: 1.0)
 
         backButton = UIButton()
         backButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
@@ -61,16 +240,10 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         self.addSubview(forwardButton)
 
-        toolbarTextButton = UIButton()
-        toolbarTextButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        toolbarTextButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
-        toolbarTextButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        toolbarTextButton.layer.backgroundColor = UIColor.whiteColor().CGColor
-        toolbarTextButton.layer.cornerRadius = 8
-        toolbarTextButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 14)
-        toolbarTextButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByTruncatingTail
-        toolbarTextButton.addTarget(self, action: "SELdidClickToolbar", forControlEvents: UIControlEvents.TouchUpInside)
-        self.addSubview(toolbarTextButton)
+        locationView = BrowserLocationView(frame: CGRectZero)
+        locationView.readerModeState = ReaderModeState.Unavailable
+        locationView.delegate = self
+        addSubview(locationView)
 
         progressBar = UIProgressView()
         self.progressBar.trackTintColor = self.backgroundColor
@@ -102,13 +275,13 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
             make.width.height.equalTo(44)
         }
 
-        self.toolbarTextButton.snp_remakeConstraints { make in
+        self.locationView.snp_remakeConstraints { make in
             make.left.equalTo(self.forwardButton.snp_right)
             make.centerY.equalTo(self).offset(10)
         }
 
         self.tabsButton.snp_remakeConstraints { make in
-            make.left.equalTo(self.toolbarTextButton.snp_right)
+            make.left.equalTo(self.locationView.snp_right)
             make.centerY.equalTo(self).offset(10)
             make.width.height.equalTo(44)
             make.right.equalTo(self).offset(-8)
@@ -121,7 +294,9 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     }
 
     func updateURL(url: NSURL?) {
-        toolbarTextButton.setTitle(url?.absoluteString, forState: UIControlState.Normal)
+        if let url = url {
+            locationView.url = url
+        }
     }
 
     func updateTabCount(count: Int) {
@@ -156,10 +331,6 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         browserToolbarDelegate?.didClickAddTab()
     }
 
-    func SELdidClickToolbar() {
-        browserToolbarDelegate?.didBeginEditing()
-    }
-
     func updateProgressBar(progress: Float) {
         if progress == 1.0 {
             self.progressBar.setProgress(progress, animated: true)
@@ -168,6 +339,24 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
         } else {
             self.progressBar.alpha = 1.0
             self.progressBar.setProgress(progress, animated: (progress > progressBar.progress))
+        }
+    }
+
+    func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView) {
+        if locationView.readerModeState == ReaderModeState.Available {
+            locationView.readerModeState = ReaderModeState.Active
+        } else if locationView.readerModeState == ReaderModeState.Active {
+            locationView.readerModeState = ReaderModeState.Available
+        }
+    }
+
+    func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
+        //browserToolbarDelegate?.didBeginEditing()
+
+        if locationView.readerModeState == ReaderModeState.Unavailable {
+            locationView.readerModeState = ReaderModeState.Available
+        } else if locationView.readerModeState == ReaderModeState.Available {
+            locationView.readerModeState = ReaderModeState.Unavailable
         }
     }
 }
