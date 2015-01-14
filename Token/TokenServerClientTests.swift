@@ -34,7 +34,7 @@ class TokenServerClientTests: XCTestCase {
         XCTAssertEqual("https://test.com:4430", TokenServerClient.getAudienceForEndpoint("https://test.com:4430"));
     }
 
-    func testSuccess() {
+    func DISABLED_testSuccess() {
         let url = TEST_TOKEN_SERVER_ENDPOINT
         let expectation = expectationWithDescription("\(url)")
 
@@ -61,7 +61,7 @@ class TokenServerClientTests: XCTestCase {
         }
     }
 
-    func testFailure() {
+    func DISABLED_testFailure() {
         let url = TEST_TOKEN_SERVER_ENDPOINT
         let expectation = expectationWithDescription("\(url)")
 

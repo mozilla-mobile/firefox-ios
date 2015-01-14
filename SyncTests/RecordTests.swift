@@ -16,11 +16,11 @@ class RecordTests: XCTestCase {
     func testEnvelopeJSON() {
         let e = EnvelopeJSON(JSON.parse("{}"))
         XCTAssertFalse(e.isValid())
-        
+
         let ee = EnvelopeJSON("{\"id\": \"foo\"}")
         XCTAssertFalse(ee.isValid())
         XCTAssertEqual(ee.id, "foo")
-        
+
         let eee = EnvelopeJSON(JSON.parse("{\"id\": \"foo\", \"collection\": \"bar\", \"payload\": \"baz\"}"))
         XCTAssertTrue(eee.isValid())
         XCTAssertEqual(eee.id, "foo")
@@ -63,7 +63,7 @@ class RecordTests: XCTestCase {
     func testEncryptedClientRecord() {
         let b64E = "0A7mU5SZ/tu7ZqwXW1og4qHVHN+zgEi4Xwfwjw+vEJw="
         let b64H = "11GN34O9QWXkjR06g8t0gWE1sGgQeWL0qxxWwl8Dmxs="
-        
+
         let expectedGUID = "0-P9fabp9vJD"
         let expectedSortIndex = 131
         let expectedLastModified: UInt64 = 1326254123650
