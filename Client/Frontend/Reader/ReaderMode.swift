@@ -19,7 +19,7 @@ protocol ReaderModeDelegate {
 class ReaderMode: BrowserHelper {
     var delegate: ReaderModeDelegate?
 
-    private let browser: Browser
+    private weak var browser: Browser?
     var state: ReaderModeState = ReaderModeState.Unavailable
     private var originalURL: NSURL?
 
@@ -55,7 +55,7 @@ class ReaderMode: BrowserHelper {
         println("DEBUG: readerModeMessageHandler message: \(message.body)")
         if let state = ReaderModeState(rawValue: message.body as String) {
             self.state = state
-            delegate?.readerMode(self, didChangeReaderModeState: state, forBrowser: browser)
+            delegate?.readerMode(self, didChangeReaderModeState: state, forBrowser: browser!)
         }
     }
 
@@ -72,12 +72,12 @@ class ReaderMode: BrowserHelper {
 
     func enableReaderMode() {
         if state == ReaderModeState.Available {
-            browser.webView.evaluateJavaScript("mozReaderize()", completionHandler: { (object, error) -> Void in
+            browser!.webView.evaluateJavaScript("mozReaderize()", completionHandler: { (object, error) -> Void in
                 println("DEBUG: mozReaderize object=\(object != nil) error=\(error)")
                 if error == nil {
                     self.state = ReaderModeState.Active
-                    self.originalURL = self.browser.webView.URL
-                    self.browser.webView.loadHTMLString(object as String, baseURL: self.constructAboutReaderURL(self.browser.webView.URL))
+                    self.originalURL = self.browser!.webView.URL
+                    self.browser!.webView.loadHTMLString(object as String, baseURL: self.constructAboutReaderURL(self.browser!.webView.URL))
                 } else {
                     // TODO What do we do in case of errors? At this point we actually did show the button, so the user does expect some feedback I think.
                 }
@@ -88,7 +88,7 @@ class ReaderMode: BrowserHelper {
     func disableReaderMode() {
         if state == ReaderModeState.Active {
             state = ReaderModeState.Available
-            self.browser.webView.loadRequest(NSURLRequest(URL: originalURL!))
+            self.browser!.webView.loadRequest(NSURLRequest(URL: originalURL!))
             originalURL = nil
         }
     }
