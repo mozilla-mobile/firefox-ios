@@ -36,11 +36,24 @@ class BrowserViewController: UIViewController {
         }
 
         self.view.addSubview(navigationView)
+        
+        navigationView.snp_remakeConstraints { make in
+            let myView = self.view!
+            make.left.equalTo(myView)
+            make.top.equalTo(self.toolbar.snp_bottom)
+            make.width.equalTo(myView)
+            make.height.equalTo(myView).offset(self.toolbar.bounds.size.height)
+        }
 
         toolbar.browserToolbarDelegate = self
         tabManager.delegate = self
 
         tabManager.addTab()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationView.hideNotification()
     }
 }
 
@@ -141,11 +154,13 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
-        navigationView.notification(error, type: NotificationType.Failure)
+        webView.stopLoading()
+        navigationView.notification(error)
     }
 
     func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
-        navigationView.notification(error, type: NotificationType.Failure)
+        webView.stopLoading()
+        navigationView.notification(error)
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
