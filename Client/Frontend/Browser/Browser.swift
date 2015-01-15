@@ -5,43 +5,21 @@
 import Foundation
 import WebKit
 
-enum ReaderModeState: String {
-    case Available = "Available"
-    case Unavailable = "Unavailable"
-    case Active = "Active"
-}
-
-/// Delegate that contains callbacks that we have added on top of the built-in WKWebViewDelegate
-protocol BrowserDelegate {
-    func browser(browser: Browser, didChangeReaderModeState state: ReaderModeState)
+protocol BrowserHelper {
+    init?(browser: Browser)
+    class func name() -> String
+    func scriptMessageHandlerName() -> String?
+    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
 }
 
 class Browser: NSObject, WKScriptMessageHandler {
     let webView = WKWebView(frame: CGRectZero, configuration: WKWebViewConfiguration())
-    var delegate: BrowserDelegate?
 
     override init() {
         super.init()
         
         webView.allowsBackForwardNavigationGestures = true
         webView.configuration.userContentController = WKUserContentController()
-
-        // This is a WKUserScript at the moment because webView.evaluateJavaScript() fails with an unspecified error. Possibly script size related.
-        if let path = NSBundle.mainBundle().pathForResource("Readability", ofType: "js") {
-            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) {
-                var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
-                webView.configuration.userContentController.addUserScript(userScript)
-            }
-        }
-        
-        // This is executed after a page has been loaded. It executes Readability and then fires a script message to let us know if the page is compatible with reader mode.
-        if let path = NSBundle.mainBundle().pathForResource("ReaderMode", ofType: "js") {
-            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) {
-                var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
-                webView.configuration.userContentController.addUserScript(userScript)
-                webView.configuration.userContentController.addScriptMessageHandler(self, name: "readerModeMessageHandler")
-            }
-        }
     }
 
     var backList: [WKBackForwardListItem]? {
@@ -80,63 +58,34 @@ class Browser: NSObject, WKScriptMessageHandler {
         webView.loadRequest(request)
     }
 
-    // This lives here because it is tightly coupled to the WKWebView and the WKUserScript requires
-    // a target to dispatch messages to. That target can only be set when the userscripts are
-    // created initially and cannot be swapped in/out on tab change so they cannot be handled by the
-    // BrowserViewController.
-
-    var readerModeState: ReaderModeState = ReaderModeState.Unavailable
-    var readerModeOriginalURL: NSURL?
+    private var helpers: [String: BrowserHelper] = [String: BrowserHelper]()
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if message.name == "readerModeMessageHandler" {
-            println("DEBUG: readerModeMessageHandler message: \(message.body)")
-            if let state = ReaderModeState(rawValue: message.body as String) {
-                readerModeState = state
-                delegate?.browser(self, didChangeReaderModeState: readerModeState)
+        for helper in helpers.values {
+            if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
+                if scriptMessageHandlerName == message.name {
+                    helper.userContentController(userContentController, didReceiveScriptMessage: message)
+                    return
+                }
             }
         }
     }
 
-    private func constructAboutReaderURL(originalURL: NSURL?) -> NSURL {
-        if let url = originalURL?.absoluteString {
-            if let encoded = url.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
-                if let aboutReaderURL = NSURL(string: "about:reader?url=\(encoded)") {
-                    return aboutReaderURL
-                }
-            }
+    func addHelper(helper: BrowserHelper, name: String) {
+        if let existingHelper = helpers[name] {
+            assertionFailure("Duplicate helper added: \(name)")
         }
-        return NSURL(string: "about:reader")!
-    }
-    
-    func enableReaderMode() {
-        if readerModeState == ReaderModeState.Available {
-            webView.evaluateJavaScript("mozReaderize()", completionHandler: { (object, error) -> Void in
-                println("DEBUG: mozReaderize object=\(object != nil) error=\(error)")
-                if error == nil {
-                    self.readerModeState = ReaderModeState.Active
-                    self.readerModeOriginalURL = self.webView.URL
-                    self.webView.loadHTMLString(object as String, baseURL: self.constructAboutReaderURL(self.webView.URL))
-                } else {
-                    // TODO What do we do in case of errors? At this point we actually did show the button, so the user does expect some feedback I think.
-                }
-            })
-        }
-    }
-    
-    func disableReaderMode() {
-        if readerModeState == ReaderModeState.Active {
-            readerModeState = ReaderModeState.Available
-            webView.loadRequest(NSURLRequest(URL: readerModeOriginalURL!))
-            readerModeOriginalURL = nil
+
+        helpers[name] = helper
+
+        // If this helper handles script messages, then get the handler name and register it. The Browser
+        // receives all messages and then dispatches them to the right BrowserHelper.
+        if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
+            webView.configuration.userContentController.addScriptMessageHandler(self, name: scriptMessageHandlerName)
         }
     }
 
-    func toggleReaderMode() {
-        if readerModeState == ReaderModeState.Active {
-            disableReaderMode()
-        } else {
-            enableReaderMode()
-        }
+    func getHelper(#name: String) -> BrowserHelper? {
+        return helpers[name]
     }
 }

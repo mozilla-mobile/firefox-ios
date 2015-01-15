@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 // If this is http or https content, and not an index page, then try to run Readability. If anything
 // fails, the app will never be notified and we don't show the button. That is ok for now since there
