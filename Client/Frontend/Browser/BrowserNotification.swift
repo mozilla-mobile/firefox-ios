@@ -46,7 +46,7 @@ class BrowserNotification: UIView {
         }
     }
 
-    func notification(error: NSError?) {
+    func showNotification(error: NSError?) {
         errorLabel.text = error?.localizedDescription
         showError()
     }

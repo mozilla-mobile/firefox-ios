@@ -155,12 +155,12 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
         webView.stopLoading()
-        navigationView.notification(error)
+        navigationView.showNotification(error)
     }
 
     func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
         webView.stopLoading()
-        navigationView.notification(error)
+        navigationView.showNotification(error)
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
