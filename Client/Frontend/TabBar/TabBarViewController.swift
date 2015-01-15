@@ -49,8 +49,10 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
         }
 
         set (newButtonIndex) {
-            let currentButton = buttons[_selectedButtonIndex]
-            currentButton.selected = false
+            if _selectedButtonIndex < buttons.count {
+                let currentButton = buttons[_selectedButtonIndex]
+                currentButton.selected = false
+            }
 
             let newButton = buttons[newButtonIndex]
             newButton.selected = true
