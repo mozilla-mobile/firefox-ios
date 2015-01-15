@@ -12,6 +12,7 @@ private let ToolbarHeight: CGFloat = 44
 class BrowserViewController: UIViewController {
     private var toolbar: BrowserToolbar!
     private let tabManager = TabManager()
+    private let navigationView = BrowserNotification()
 
     override func viewDidLoad() {
         let headerView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
@@ -33,6 +34,8 @@ class BrowserViewController: UIViewController {
             make.bottom.equalTo(headerView.snp_bottom)
             make.right.equalTo(headerView.snp_right)
         }
+
+        self.view.addSubview(navigationView)
 
         toolbar.browserToolbarDelegate = self
         tabManager.delegate = self
@@ -127,12 +130,32 @@ extension BrowserViewController: TabManagerDelegate {
 }
 
 extension BrowserViewController: WKNavigationDelegate {
+
+    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    }
+
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         toolbar.updateURL(webView.URL);
         toolbar.updateBackStatus(webView.canGoBack)
         toolbar.updateFowardStatus(webView.canGoForward)
     }
 
+    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+        navigationView.notification(error, type: NotificationType.Failure)
+    }
+
+    func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
+        navigationView.notification(error, type: NotificationType.Failure)
+    }
+
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+    }
+
+    func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
+    }
+
+    func webView(webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+    }
 
     override func observeValueForKeyPath(keyPath: String, ofObject object:
         AnyObject, change:[NSObject: AnyObject], context:
