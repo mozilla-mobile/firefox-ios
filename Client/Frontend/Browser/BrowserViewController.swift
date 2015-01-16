@@ -79,6 +79,14 @@ extension BrowserViewController: BrowserToolbarDelegate {
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
     }
+
+    func didClickReaderMode() {
+        if let tab = tabManager.selectedTab {
+            if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
+                readerMode.toggleReaderMode()
+            }
+        }
+    }
 }
 
 extension BrowserViewController: TabBarViewControllerDelegate {
@@ -100,6 +108,10 @@ extension BrowserViewController: TabManagerDelegate {
         if let selected = selected {
             toolbar.updateBackStatus(selected.canGoBack)
             toolbar.updateFowardStatus(selected.canGoForward)
+        }
+
+        if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
+            toolbar.updateReaderModeState(readerMode.state)
         }
     }
 
@@ -135,7 +147,7 @@ extension BrowserViewController: TabManagerDelegate {
 
 extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        // TODO Update the reader mode button (to disabled)
+        toolbar.updateReaderModeState(ReaderModeState.Unavailable)
     }
 
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
@@ -161,7 +173,7 @@ extension BrowserViewController: ReaderModeDelegate {
         // the button. Otherwise do nothing and the button will be updated when the tab is made active.
         if tabManager.selectedTab == browser {
             println("DEBUG: New readerModeState: \(state.rawValue)")
-            // TODO Update the reader mode button
+            toolbar.updateReaderModeState(state)
         }
     }
 }
