@@ -87,7 +87,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
         }
 
         searchController = SearchViewController()
-        searchController!.searchEngines = profile.searchEngines.list
+        searchController!.searchEngines = profile.searchEngines
         searchController!.delegate = self
 
         view.addSubview(searchController!.view)
@@ -230,7 +230,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
             hideSearchController()
         } else {
             showSearchController()
-            searchController!.updateSearchQuery(searchText)
+            searchController!.searchQuery = searchText
         }
 
         return true
