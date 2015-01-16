@@ -10,6 +10,7 @@
 		0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */; };
 		0B3342DE1A5CA93D000AE428 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B3342DB1A5CA929000AE428 /* libsqlite3.0.dylib */; };
 		0B33431B1A5CB14B000AE428 /* Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8501A16C40C00D49B7B /* Cursor.swift */; };
+		0B0E923F1A6079B0006A606F /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0E923E1A6079B0006A606F /* SwiftData.swift */; };
 		0B657B451A3B9CAB005A9E43 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB952B1A3B9918000F2B0F /* Site.swift */; };
 		0B657B461A3B9CAB005A9E43 /* Favicon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB95291A3B9917000F2B0F /* Favicon.swift */; };
 		0B79B17F1A3F6DD500DBECB3 /* Favicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8511A16C40C00D49B7B /* Favicons.swift */; };
@@ -40,6 +41,7 @@
 		0BDB952C1A3B9918000F2B0F /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB952B1A3B9918000F2B0F /* Site.swift */; };
 		0BE00DCD1A5DEA560081E374 /* FileAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE00DB91A5DE1420081E374 /* FileAccessor.swift */; };
 		0BDBCC7E1A60839D00D0440E /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B3342DB1A5CA929000AE428 /* libsqlite3.0.dylib */; };
+		0BDBCC7D1A607A6500D0440E /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0E923E1A6079B0006A606F /* SwiftData.swift */; };
 		0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108351A1B1EC700D4B712 /* TestLocking.swift */; };
 		0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		0BF9F8BC1A3A82CA0049A0FA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
@@ -279,6 +281,7 @@
 /* Begin PBXFileReference section */
 		0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListViewController.swift; sourceTree = "<group>"; };
 		0B3343021A5CADA2000AE428 /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = History.swift; path = Client/DataAccess/History.swift; sourceTree = "<group>"; };
+		0B0E923E1A6079B0006A606F /* SwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftData.swift; sourceTree = "<group>"; };
 		0B3342DB1A5CA929000AE428 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		0B9E3DD91A23FBBC008A7877 /* Panels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Panels.swift; sourceTree = "<group>"; };
 		0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPanels.swift; sourceTree = "<group>"; };
@@ -505,6 +508,7 @@
 			children = (
 				D34C5AF11A5E0C9800E0DF7B /* SWXMLHash.swift */,
 				28CE842F1A1E571900576538 /* json.swift */,
+				0B0E923E1A6079B0006A606F /* SwiftData.swift */,
 			);
 			name = "Third-Party Source";
 			sourceTree = "<group>";
@@ -1072,6 +1076,7 @@
 			files = (
 				0BDB952C1A3B9918000F2B0F /* Site.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
+				0B0E923F1A6079B0006A606F /* SwiftData.swift in Sources */,
 				F84B22191A0911B500AAB793 /* BookmarksViewController.swift in Sources */,
 				28CE83C51A1D1D3200576538 /* EncryptedRecord.swift in Sources */,
 				28CE83C31A1D1D3200576538 /* Bytes.swift in Sources */,
@@ -1162,6 +1167,7 @@
 				D35179BD1A5C6D4200E7622E /* SearchViewController.swift in Sources */,
 				28C077981A3B064000834FE5 /* CryptoTests.swift in Sources */,
 				0BD19A6A1A2530BB0084FBA7 /* HistoryViewController.swift in Sources */,
+				0BDBCC7B1A607A6300D0440E /* SwiftData.swift in Sources */,
 				0BD19A5F1A2530320084FBA7 /* TabBarViewController.swift in Sources */,
 				28C0779E1A3B066000834FE5 /* RecordTests.swift in Sources */,
 				0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */,
@@ -1192,6 +1198,7 @@
 				0BE00DC31A5DE1CE0081E374 /* FileAccessor.swift in Sources */,
 				0B79B17F1A3F6DD500DBECB3 /* Favicons.swift in Sources */,
 				D35179C01A5C8D6700E7622E /* OpenSearch.swift in Sources */,
+				0BDBCC7C1A607A6400D0440E /* SwiftData.swift in Sources */,
 				E418D0DB1A251B3200CAE47A /* BookmarksREST.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1220,6 +1227,7 @@
 				D34C5AF51A5E0C9C00E0DF7B /* SWXMLHash.swift in Sources */,
 				D35179BF1A5C8D5F00E7622E /* SearchEngines.swift in Sources */,
 				28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */,
+				0BDBCC7D1A607A6500D0440E /* SwiftData.swift in Sources */,
 				0B79B1871A3F6DD600DBECB3 /* Favicons.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
