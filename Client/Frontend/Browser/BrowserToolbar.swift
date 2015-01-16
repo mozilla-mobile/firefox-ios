@@ -11,12 +11,6 @@ protocol BrowserLocationViewDelegate {
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView)
 }
 
-enum ReaderModeState: String {
-    case Available = "Available"
-    case Unavailable = "Unavailable"
-    case Active = "Active"
-}
-
 class ReaderModeButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -64,26 +58,22 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         self.backgroundColor = UIColor.whiteColor()
         self.clipsToBounds = true
         self.layer.cornerRadius = 5
-        //self.alpha = 0.5
 
         lockImageView = UIImageView(image: UIImage(named: "lock_verified.png"))
         lockImageView.hidden = false
         addSubview(lockImageView)
 
         locationLabel = UILabel()
-        //locationLabel.backgroundColor = UIColor.redColor()
         locationLabel.font = UIFont(name: "HelveticaNeue-Light", size: 14)
         locationLabel.lineBreakMode = NSLineBreakMode.ByClipping
         locationLabel.userInteractionEnabled = true
         addSubview(locationLabel)
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocationLabel:")
-        //tapGestureRecognizer.delegate = self
         locationLabel.addGestureRecognizer(tapGestureRecognizer)
 
         readerModeButton = ReaderModeButton(frame: CGRectZero)
         readerModeButton.hidden = true
-        //readerModeButton.backgroundColor = UIColor.greenColor()
         readerModeButton.addTarget(self, action: "SELtapReaderModeButton", forControlEvents: UIControlEvents.TouchUpInside)
         addSubview(readerModeButton)
 
@@ -166,11 +156,6 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
                 self.readerModeButton.readerModeState = newReaderModeState
                 makeConstraints()
                 readerModeButton.hidden = (newReaderModeState == ReaderModeState.Unavailable)
-//                if newReaderModeState == ReaderModeState.Unavailable {
-//                    self.readerModeButtonWidthConstraint?.constant = 0
-//                } else {
-//                    self.readerModeButtonWidthConstraint?.constant = self.readerModeButton.intrinsicContentSize().width+8
-//                }
                 UIView.animateWithDuration(0.1, animations: { () -> Void in
                     if newReaderModeState == ReaderModeState.Unavailable {
                         self.readerModeButton.alpha = 0.0
@@ -191,6 +176,7 @@ protocol BrowserToolbarDelegate {
     func didClickAddTab()
     func didLongPressBack()
     func didLongPressForward()
+    func didClickReaderMode()
 }
 
 class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
@@ -342,21 +328,16 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         }
     }
 
+
+    func updateReaderModeState(state: ReaderModeState) {
+        locationView.readerModeState = state
+    }
+
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView) {
-        if locationView.readerModeState == ReaderModeState.Available {
-            locationView.readerModeState = ReaderModeState.Active
-        } else if locationView.readerModeState == ReaderModeState.Active {
-            locationView.readerModeState = ReaderModeState.Available
-        }
+        browserToolbarDelegate?.didClickReaderMode()
     }
 
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
-        //browserToolbarDelegate?.didBeginEditing()
-
-        if locationView.readerModeState == ReaderModeState.Unavailable {
-            locationView.readerModeState = ReaderModeState.Available
-        } else if locationView.readerModeState == ReaderModeState.Available {
-            locationView.readerModeState = ReaderModeState.Unavailable
-        }
+        browserToolbarDelegate?.didBeginEditing()
     }
 }
