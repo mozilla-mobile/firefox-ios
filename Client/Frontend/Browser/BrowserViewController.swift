@@ -12,6 +12,7 @@ private let ToolbarHeight: CGFloat = 44
 class BrowserViewController: UIViewController {
     private var toolbar: BrowserToolbar!
     private let tabManager = TabManager()
+    var profile: Profile!
 
     override func viewDidLoad() {
         let headerView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
@@ -43,7 +44,6 @@ class BrowserViewController: UIViewController {
 
 extension BrowserViewController: BrowserToolbarDelegate {
     func didBeginEditing() {
-        let profile = MockAccountProfile()
         let controller = TabBarViewController()
         controller.profile = profile
         controller.delegate = self
@@ -155,6 +155,16 @@ extension BrowserViewController: WKNavigationDelegate {
         toolbar.updateBackStatus(webView.canGoBack)
         toolbar.updateFowardStatus(webView.canGoForward)
     }
+
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        var info = [NSObject: AnyObject]()
+        info["url"] = webView.URL
+        info["title"] = webView.title
+
+        notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
+    }
+
 
     override func observeValueForKeyPath(keyPath: String, ofObject object:
         AnyObject, change:[NSObject: AnyObject], context:

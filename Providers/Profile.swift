@@ -16,6 +16,7 @@ protocol Profile {
     var prefs: ProfilePrefs { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
+    var history: History { get }
 
     // Because we can't test for whether this is an AccountProfile.
     // TODO: probably Profile should own an Account.
@@ -81,6 +82,11 @@ public class MockAccountProfile: Profile, AccountProfile {
 
     func logout() {
     }
+
+    lazy var history: History = {
+        return SqliteHistory(profile: self)
+    }()
+
 }
 
 public class RESTAccountProfile: Profile, AccountProfile {
@@ -93,6 +99,25 @@ public class RESTAccountProfile: Profile, AccountProfile {
         self.name = localName
         self.credential = credential
         self.logoutCallback = logoutCallback
+
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        let mainQueue = NSOperationQueue.mainQueue()
+        notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: "LocationChange", object: nil)
+    }
+
+    @objc
+    func onLocationChange(notification: NSNotification) {
+        if let url = notification.userInfo!["url"] as? NSURL {
+            if let title = notification.userInfo!["title"] as? NSString {
+                history.addVisit(Site(url: url.absoluteString!, title: title), options: nil, complete: { (success) -> Void in
+                    // nothing to do
+                })
+            }
+        }
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     func localName() -> String {
@@ -141,6 +166,7 @@ public class RESTAccountProfile: Profile, AccountProfile {
         return _bookmarks!
     }
 
+
     lazy var favicons: Favicons = {
         return BasicFavicons()
     } ()
@@ -162,9 +188,12 @@ public class RESTAccountProfile: Profile, AccountProfile {
     }
 
     // lazy var ReadingList readingList
-    // lazy var History
 
     lazy var prefs: ProfilePrefs = {
         return self.makePrefs()
-    } ()
+    }()
+
+    lazy var history: History = {
+        return SqliteHistory(profile: self)
+    }()
 }
