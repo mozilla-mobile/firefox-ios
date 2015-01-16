@@ -10,6 +10,8 @@ import XCTest
 let ExpectedEngines = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "Twitter", "Wikipedia", "Yahoo"]
 
 class SearchTests: XCTestCase {
+    private let uriFixup = URIFixup()
+
     func testParsing() {
         let parser = OpenSearchParser(pluginMode: true)
         let file = NSBundle.mainBundle().pathForResource("google", ofType: "xml", inDirectory: "Locales/en-US/searchplugins")
@@ -29,5 +31,33 @@ class SearchTests: XCTestCase {
             let engine = engines[i]
             XCTAssertEqual(engine.shortName, ExpectedEngines[i])
         }
+    }
+
+    func testURIFixup() {
+        // Check valid URLs. We can load these after some fixup.
+        checkValidURL("http://www.mozilla.org", afterFixup: "http://www.mozilla.org")
+        checkValidURL("about:", afterFixup: "about:")
+        checkValidURL("about:config", afterFixup: "about:config")
+        checkValidURL("file:///f/o/o", afterFixup: "file:///f/o/o")
+        checkValidURL("ftp://ftp.mozilla.org", afterFixup: "ftp://ftp.mozilla.org")
+        checkValidURL("foo.bar", afterFixup: "http://foo.bar")
+        checkValidURL(" foo.bar ", afterFixup: "http://foo.bar")
+        checkValidURL("1.2.3", afterFixup: "http://1.2.3")
+
+        // Check invalid URLs. These are passed along to the default search engine.
+        checkInvalidURL("foobar")
+        checkInvalidURL("foo bar")
+        checkInvalidURL("mozilla. org")
+        checkInvalidURL("about: config")
+        checkInvalidURL("123")
+        checkInvalidURL("a/b")
+    }
+
+    private func checkValidURL(beforeFixup: String, afterFixup: String) {
+        XCTAssertEqual(uriFixup.getURL(beforeFixup)!.absoluteString!, afterFixup)
+    }
+
+    private func checkInvalidURL(beforeFixup: String) {
+        XCTAssertNil(uriFixup.getURL(beforeFixup))
     }
 }
