@@ -32,10 +32,9 @@ class HistoryTable: Table {
     func insert<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int {
         debug("Insert into \(name) \(item)")
         if let site = item as? Site {
-            if var error = db.executeChange("INSERT INTO \(self.name) (guid, url, title) VALUES (?,?,?)", withArgs: [
-                    site.guid,
-                    site.url,
-                    site.title]) {
+            let query = "INSERT INTO \(self.name) (guid, url, title) VALUES (?,?,?)"
+            let args = [site.guid, site.url, site.title]
+            if let error = db.executeChange(query, withArgs: args) {
                 err = error
                 return 0
             }
@@ -51,10 +50,9 @@ class HistoryTable: Table {
     func update<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int {
         debug("Update into \(name) \(item)")
         if let site = item as? Site {
-            if let error = db.executeChange("UPDATE \(self.name) SET title = ? WHERE guid = ? AND url = ?", withArgs: [
-                    site.title,
-                    site.guid,
-                    site.url]) {
+            let query = "UPDATE \(self.name) SET title = ? WHERE guid = ? AND url = ?"
+            let args = [site.title, site.guid, site.url]
+            if let error = db.executeChange(query, withArgs: args) {
                 println(error.description)
                 err = error
                 return 0
