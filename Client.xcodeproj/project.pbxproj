@@ -313,6 +313,7 @@
 
 /* Begin PBXFileReference section */
 		0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListViewController.swift; sourceTree = "<group>"; };
+		0B3343021A5CADA2000AE428 /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = History.swift; path = Client/DataAccess/History.swift; sourceTree = "<group>"; };
 		0B91442F1A5B552F00236DCB /* fmdb.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = fmdb.xcodeproj; path = ThirdParty/fmdb/fmdb.xcodeproj; sourceTree = SOURCE_ROOT; };
 		0B9E3DD91A23FBBC008A7877 /* Panels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Panels.swift; sourceTree = "<group>"; };
 		0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPanels.swift; sourceTree = "<group>"; };
@@ -462,6 +463,7 @@
 		28784D141A38C96900021E35 /* DataAccess */ = {
 			isa = PBXGroup;
 			children = (
+				0B3343021A5CADA2000AE428 /* History.swift */,
 				28784D181A38CA9400021E35 /* Bookmarks.swift */,
 			);
 			name = DataAccess;
@@ -1167,6 +1169,7 @@
 				D34F86DB1A1AC35B00331EC4 /* LoginView.swift in Sources */,
 				D34DC8551A16C40C00D49B7B /* BookmarksREST.swift in Sources */,
 				28CE84301A1E571900576538 /* json.swift in Sources */,
+				0B3343031A5CADA2000AE428 /* History.swift in Sources */,
 				0BD19A671A25309B0084FBA7 /* ProfilePrefs.swift in Sources */,
 				F84B221D1A0911BF00AAB793 /* HistoryViewController.swift in Sources */,
 				D34C5AF21A5E0C9800E0DF7B /* SWXMLHash.swift in Sources */,
@@ -1193,6 +1196,7 @@
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */,
 				D34DC8661A16C49600D49B7B /* RestAPI.swift in Sources */,
+				0B3343061A5CADCD000AE428 /* History.swift in Sources */,
 				28784D451A39C48900021E35 /* Bytes.swift in Sources */,
 				D34DC8611A16C47300D49B7B /* Profile.swift in Sources */,
 				D34DC8621A16C49600D49B7B /* AccountManager.swift in Sources */,
@@ -1229,6 +1233,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B3343071A5CADCF000AE428 /* History.swift in Sources */,
 				0B79B18A1A3F6DE900DBECB3 /* Site.swift in Sources */,
 				E418D0DA1A251B3200CAE47A /* AccountManager.swift in Sources */,
 				28784D491A39C48900021E35 /* Bytes.swift in Sources */,
@@ -1254,6 +1259,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B3343081A5CADD0000AE428 /* History.swift in Sources */,
 				0B79B1891A3F6DE000DBECB3 /* Favicon.swift in Sources */,
 				0B79B18B1A3F6DE900DBECB3 /* Site.swift in Sources */,
 				E42CCDEA1A23A74400B794D3 /* RestAPI.swift in Sources */,
