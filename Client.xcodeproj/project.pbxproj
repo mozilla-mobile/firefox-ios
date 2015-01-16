@@ -11,6 +11,7 @@
 		0B3342DE1A5CA93D000AE428 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B3342DB1A5CA929000AE428 /* libsqlite3.0.dylib */; };
 		0B33431B1A5CB14B000AE428 /* Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8501A16C40C00D49B7B /* Cursor.swift */; };
 		0B0E923F1A6079B0006A606F /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0E923E1A6079B0006A606F /* SwiftData.swift */; };
+		0B3342D71A5CA89E000AE428 /* BrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3342CC1A5CA893000AE428 /* BrowserDB.swift */; };
 		0B657B451A3B9CAB005A9E43 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB952B1A3B9918000F2B0F /* Site.swift */; };
 		0B657B461A3B9CAB005A9E43 /* Favicon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB95291A3B9917000F2B0F /* Favicon.swift */; };
 		0B79B17F1A3F6DD500DBECB3 /* Favicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8511A16C40C00D49B7B /* Favicons.swift */; };
@@ -284,6 +285,7 @@
 		0B0E923E1A6079B0006A606F /* SwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftData.swift; sourceTree = "<group>"; };
 		0B3342DB1A5CA929000AE428 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		0B3342F81A5CAD94000AE428 /* HistoryTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTable.swift; sourceTree = "<group>"; };
+		0B3342CC1A5CA893000AE428 /* BrowserDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserDB.swift; sourceTree = "<group>"; };
 		0B9E3DD91A23FBBC008A7877 /* Panels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Panels.swift; sourceTree = "<group>"; };
 		0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPanels.swift; sourceTree = "<group>"; };
 		0BA896491A250E6500C1010C /* AccountTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTest.swift; sourceTree = "<group>"; };
@@ -427,6 +429,7 @@
 			isa = PBXGroup;
 			children = (
 				0B3342F81A5CAD94000AE428 /* HistoryTable.swift */,
+				0B3342CC1A5CA893000AE428 /* BrowserDB.swift */,
 			);
 			name = SQL;
 			path = Client/DataAccess/SQL;
@@ -1104,6 +1107,7 @@
 				0BD19A651A2530840084FBA7 /* Locking.swift in Sources */,
 				0B3342FA1A5CAD94000AE428 /* HistoryTable.swift in Sources */,
 				D34F86E91A1ACD1200331EC4 /* ImageTextField.swift in Sources */,
+				0B3342CD1A5CA893000AE428 /* BrowserDB.swift in Sources */,
 				E42CCDE31A23A6F900B794D3 /* Clients.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
 				F84B22241A09122500AAB793 /* TabBarViewController.swift in Sources */,
@@ -1143,6 +1147,7 @@
 				E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */,
 				D34DC8661A16C49600D49B7B /* RestAPI.swift in Sources */,
 				0B3343061A5CADCD000AE428 /* History.swift in Sources */,
+				0B3342D51A5CA89D000AE428 /* BrowserDB.swift in Sources */,
 				28784D451A39C48900021E35 /* Bytes.swift in Sources */,
 				D34DC8611A16C47300D49B7B /* Profile.swift in Sources */,
 				0BE00DC21A5DE1CD0081E374 /* FileAccessor.swift in Sources */,
@@ -1188,6 +1193,7 @@
 				0BD2C61D1A643B6000BB4BB9 /* Locking.swift in Sources */,
 				28784D491A39C48900021E35 /* Bytes.swift in Sources */,
 				E418D0DC1A251B3200CAE47A /* Clients.swift in Sources */,
+				0B3342D61A5CA89E000AE428 /* BrowserDB.swift in Sources */,
 				0B79B1881A3F6DE000DBECB3 /* Favicon.swift in Sources */,
 				0B925B491A5C56E1007EA8E7 /* Cursor.swift in Sources */,
 				28784D1A1A38CA9400021E35 /* Bookmarks.swift in Sources */,
@@ -1225,6 +1231,7 @@
 				0B33430D1A5CADD7000AE428 /* HistorySqlite.swift in Sources */,
 				E42CCDE81A23A73D00B794D3 /* Profile.swift in Sources */,
 				E42CCDEC1A23A76400B794D3 /* Cursor.swift in Sources */,
+				0B3342D71A5CA89E000AE428 /* BrowserDB.swift in Sources */,
 				E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				F8708D2A1A0970B40051AB07 /* ActionViewController.swift in Sources */,
 				E42CCDE71A23A73800B794D3 /* Clients.swift in Sources */,
