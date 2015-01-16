@@ -163,7 +163,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
         view.addSubview(controllerContainerView)
 
         toolbarTextField = ToolbarTextField()
-        toolbarTextField.keyboardType = UIKeyboardType.URL
+        toolbarTextField.keyboardType = UIKeyboardType.WebSearch
         toolbarTextField.autocorrectionType = UITextAutocorrectionType.No
         toolbarTextField.autocapitalizationType = UITextAutocapitalizationType.None
         toolbarTextField.returnKeyType = UIReturnKeyType.Go
