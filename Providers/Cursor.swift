@@ -15,7 +15,7 @@ enum CursorStatus {
 /**
 * Provides a generic method of returning some data and status information about a request.
 */
-public class Cursor :SequenceType {
+public class Cursor: SequenceType {
     var count: Int {
         get { return 0 }
     }

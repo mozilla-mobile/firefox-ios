@@ -141,7 +141,7 @@ public class SQLiteDBConnection {
         return Int(sqlite3_changes(sqliteDB))
     }
 
-    // Creates an error from a squlite status. Will print to the console if debug_enabled is set
+    // Creates an error from a sqlite status. Will print to the console if debug_enabled is set.
     // (i.e. Do not call this unless you're going to return this error)
     private func createErr(description: String, status: Int) -> NSError {
         var msg = SDError.errorMessageFromCode(status)
