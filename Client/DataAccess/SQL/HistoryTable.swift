@@ -2,12 +2,12 @@
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-let HISTORY_TABLE = "history"
+let TableNameHistory = "history"
+let NotASiteErrorCode = 100
 
 class HistoryTable: Table {
-    let NotASiteErrorCode = 100
     let name = "History"
-    private let Rows = "guid TEXT NOT NULL UNIQUE, " +
+    private let rows = "guid TEXT NOT NULL UNIQUE, " +
                        "url TEXT NOT NULL UNIQUE, " +
                        "title TEXT NOT NULL"
 
@@ -19,7 +19,7 @@ class HistoryTable: Table {
     }
 
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
-        db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (\(Rows))")
+        db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (\(self.rows))")
         return true
     }
 

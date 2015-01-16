@@ -15,7 +15,7 @@ class SqliteHistory : History {
     func clear(filter: String?, options: HistoryOptions?, complete: (success: Bool) -> Void) {
         let s: Site? = nil
         var err: NSError? = nil
-        db.delete(HISTORY_TABLE, item: s, err: &err)
+        db.delete(TableNameHistory, item: s, err: &err)
         dispatch_async(dispatch_get_main_queue()) {
             if err != nil {
                 self.debug("Clear failed: \(err!.localizedDescription)")
@@ -25,7 +25,7 @@ class SqliteHistory : History {
     }
 
     func get(filter: String?, options: HistoryOptions?, complete: (data: Cursor) -> Void) {
-        let res = db.query(HISTORY_TABLE)
+        let res = db.query(TableNameHistory)
         dispatch_async(dispatch_get_main_queue()) {
             complete(data: res)
         }
@@ -33,7 +33,7 @@ class SqliteHistory : History {
 
     func addVisit(site: Site, options: HistoryOptions?, complete: (success: Bool) -> Void) {
         var err: NSError? = nil
-        db.insert(HISTORY_TABLE, item: site, err: &err)
+        db.insert(TableNameHistory, item: site, err: &err)
         // TODO: Track visits in a separate table
 
         dispatch_async(dispatch_get_main_queue()) {

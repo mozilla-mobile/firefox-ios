@@ -22,7 +22,7 @@ class BrowserDB {
     private let Version: Int = 1
     private let FileName = "browser.db"
     private let tables: [String: Table] = [
-        HISTORY_TABLE: HistoryTable(),
+        TableNameHistory: HistoryTable(),
     ]
 
     private func exists(db: SQLiteDBConnection, table: Table) -> Bool {
