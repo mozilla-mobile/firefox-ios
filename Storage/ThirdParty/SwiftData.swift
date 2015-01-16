@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this file,
-* You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /*
  * This is a heavily modified version of SwiftData.swift by Ryan Fowler
@@ -34,6 +34,7 @@
 
 import Foundation
 import UIKit
+import sqlite3
 
 // All database operations actually occur serially on this queue. Careful not to deadlock it!
 private let queue = dispatch_queue_create("swiftdata queue", DISPATCH_QUEUE_SERIAL)
@@ -493,7 +494,7 @@ public class SDCursor<T> : Cursor {
     // XXX - When Cursor becomes an interface, this should be a normal property, but right now
     //       we can't override the Cursor getter for count with a stored property.
     private let _count: Int
-    override var count: Int {
+    override public var count: Int {
         get { return _count }
     }
 
@@ -530,7 +531,7 @@ public class SDCursor<T> : Cursor {
         self.stmt = stmt
         self.factory = factory
 
-        // The only way I know to get a count. Walk through the entire statement to see how many rows their are
+        // The only way I know to get a count. Walk through the entire statement to see how many rows there are.
         var count = 0
         self.sqlStatus = sqlite3_step(self.stmt)
         while self.sqlStatus != SQLITE_DONE {
@@ -562,7 +563,7 @@ public class SDCursor<T> : Cursor {
         sqlite3_finalize(self.stmt)
     }
 
-    override subscript(index: Int) -> Any? {
+    override public subscript(index: Int) -> Any? {
         get {
             if let row = cache[index] {
                 return row
