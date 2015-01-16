@@ -16,13 +16,13 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         let headerView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
         view.addSubview(headerView);
-        
+
         headerView.snp_makeConstraints { make in
             make.top.equalTo(self.view.snp_top)
             make.height.equalTo(ToolbarHeight + StatusBarHeight)
             make.leading.trailing.equalTo(self.view)
         }
-        
+
         toolbar = BrowserToolbar()
         toolbar.backgroundColor = UIColor.clearColor()
         headerView.addSubview(toolbar)
@@ -103,6 +103,13 @@ extension BrowserViewController: TabManagerDelegate {
         }
     }
 
+    func didCreateTab(tab: Browser) {
+        if let readerMode = ReaderMode(browser: tab) {
+            readerMode.delegate = self
+            tab.addHelper(readerMode, name: ReaderMode.name())
+        }
+    }
+
     func didAddTab(tab: Browser) {
         toolbar.updateTabCount(tabManager.count)
 
@@ -127,12 +134,15 @@ extension BrowserViewController: TabManagerDelegate {
 }
 
 extension BrowserViewController: WKNavigationDelegate {
+    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        // TODO Update the reader mode button (to disabled)
+    }
+
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         toolbar.updateURL(webView.URL);
         toolbar.updateBackStatus(webView.canGoBack)
         toolbar.updateFowardStatus(webView.canGoForward)
     }
-
 
     override func observeValueForKeyPath(keyPath: String, ofObject object:
         AnyObject, change:[NSObject: AnyObject], context:
@@ -142,5 +152,16 @@ extension BrowserViewController: WKNavigationDelegate {
                     toolbar.updateProgressBar(progress)
                 }
             }
+    }
+}
+
+extension BrowserViewController: ReaderModeDelegate {
+    func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forBrowser browser: Browser) {
+        // If this reader mode availability state change is for the tab that we currently show, then update
+        // the button. Otherwise do nothing and the button will be updated when the tab is made active.
+        if tabManager.selectedTab == browser {
+            println("DEBUG: New readerModeState: \(state.rawValue)")
+            // TODO Update the reader mode button
+        }
     }
 }
