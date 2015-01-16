@@ -51,6 +51,14 @@
                BlueprintName = "ClientTests"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "TokenServerClientTests">
+               </Test>
+               <Test
+                  Identifier = "FxAClientTests/testLoginSuccess()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>
