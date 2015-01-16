@@ -3,6 +3,6 @@
 
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCrypto.h>
-#import "FMDB.h"
+#import "sqlite3.h"
 
 #endif
