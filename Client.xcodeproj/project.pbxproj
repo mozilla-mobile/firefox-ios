@@ -451,6 +451,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B3342CB1A5CA893000AE428 /* SQL */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = SQL;
+			path = Client/DataAccess/SQL;
+			sourceTree = "<group>";
+		};
 		0B9144301A5B552F00236DCB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -465,6 +473,7 @@
 		28784D141A38C96900021E35 /* DataAccess */ = {
 			isa = PBXGroup;
 			children = (
+				0B3342CB1A5CA893000AE428 /* SQL */,
 				0B3343021A5CADA2000AE428 /* History.swift */,
 				28784D181A38CA9400021E35 /* Bookmarks.swift */,
 			);
