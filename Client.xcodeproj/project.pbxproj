@@ -33,6 +33,7 @@
 		0BD19A6E1A2530CE0084FBA7 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21FC1A0910F600AAB793 /* SettingsViewController.swift */; };
 		0BD19A6F1A2530D30084FBA7 /* TabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22011A0910F600AAB793 /* TabsViewController.swift */; };
 		0BD19A701A2530DE0084FBA7 /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22001A0910F600AAB793 /* Tabs.swift */; };
+		0BD2C61D1A643B6000BB4BB9 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		0BDB952A1A3B9917000F2B0F /* Favicon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB95291A3B9917000F2B0F /* Favicon.swift */; };
 		0BDB952C1A3B9918000F2B0F /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB952B1A3B9918000F2B0F /* Site.swift */; };
 		0BE00DCD1A5DEA560081E374 /* FileAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE00DB91A5DE1420081E374 /* FileAccessor.swift */; };
@@ -1185,6 +1186,7 @@
 				0B3343071A5CADCF000AE428 /* History.swift in Sources */,
 				0B79B18A1A3F6DE900DBECB3 /* Site.swift in Sources */,
 				E418D0DA1A251B3200CAE47A /* AccountManager.swift in Sources */,
+				0BD2C61D1A643B6000BB4BB9 /* Locking.swift in Sources */,
 				28784D491A39C48900021E35 /* Bytes.swift in Sources */,
 				E418D0DC1A251B3200CAE47A /* Clients.swift in Sources */,
 				0B79B1881A3F6DE000DBECB3 /* Favicon.swift in Sources */,
@@ -1212,6 +1214,7 @@
 				0B3343081A5CADD0000AE428 /* History.swift in Sources */,
 				0B79B1891A3F6DE000DBECB3 /* Favicon.swift in Sources */,
 				0B79B18B1A3F6DE900DBECB3 /* Site.swift in Sources */,
+				0BD2C6211A643B6100BB4BB9 /* Locking.swift in Sources */,
 				E42CCDEA1A23A74400B794D3 /* RestAPI.swift in Sources */,
 				D35179C11A5C8D6800E7622E /* OpenSearch.swift in Sources */,
 				E42CCDEB1A23A76200B794D3 /* BookmarksREST.swift in Sources */,
