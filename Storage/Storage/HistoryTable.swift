@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+import Foundation
 
 let TableNameHistory = "history"
 let NotASiteErrorCode = 100
@@ -93,9 +95,7 @@ class HistoryTable: Table {
     }
 
     private func fromResult(result: SDRow) -> Site {
-        let site = Site(url: result[1] as String, title: result[2] as String)
-        site.guid = result[0] as String
-        return site
+        return Site(guid: result[0] as String, url: result[1] as String, title: result[2] as String)
     }
 
     func factory(row: SDRow) -> Site {
@@ -103,9 +103,7 @@ class HistoryTable: Table {
         let title = row["title"] as String
         let guid = row["guid"] as String
 
-        let s = Site(url: url, title: title)
-        s.guid = guid
-        return s
+        return Site(guid: guid, url: url, title: title)
     }
 
     func query(db: SQLiteDBConnection) -> Cursor {

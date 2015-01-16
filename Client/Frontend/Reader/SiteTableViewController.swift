@@ -4,6 +4,8 @@
 
 import UIKit
 
+import Storage
+
 class SiteTableViewController: UITableViewController {
     var profile: Profile!
     

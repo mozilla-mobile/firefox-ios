@@ -4,7 +4,52 @@
 
 import Foundation
 
+import Storage
+
 typealias LogoutCallback = (profile: AccountProfile) -> ()
+
+class ProfileFileAccessor : FileAccessor {
+    let profile: Profile
+    init(profile: Profile) {
+        self.profile = profile
+    }
+
+    private func getDir() -> String? {
+        let basePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0] as String
+        let path = basePath.stringByAppendingPathComponent("profile.\(profile.localName())")
+
+        if !NSFileManager.defaultManager().fileExistsAtPath(path) {
+            var err: NSError? = nil
+            if !NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil, error: &err) {
+                println("Error creating profile folder at \(path): \(err?.localizedDescription)")
+                return nil
+            }
+        }
+
+        return path
+    }
+
+    func move(src: String, dest: String) -> Bool {
+        if let f = get(src) {
+            if let f2 = get(dest) {
+                return NSFileManager.defaultManager().moveItemAtPath(f, toPath: f2, error: nil)
+            }
+        }
+
+        return false
+    }
+
+    func get(filename: String) -> String? {
+        return getDir()?.stringByAppendingPathComponent(filename)
+    }
+
+    func remove(filename: String) {
+        let fileManager = NSFileManager.defaultManager()
+        if var file = get(filename) {
+            fileManager.removeItemAtPath(file, error: nil)
+        }
+    }
+}
 
 /**
  * A Profile manages access to the user's data.
@@ -84,8 +129,8 @@ public class MockAccountProfile: Profile, AccountProfile {
     }
 
     lazy var history: History = {
-        return SqliteHistory(profile: self)
-    }()
+        return SQLiteHistory(files: self.files)
+    } ()
 
 }
 
@@ -194,6 +239,6 @@ public class RESTAccountProfile: Profile, AccountProfile {
     }()
 
     lazy var history: History = {
-        return SqliteHistory(profile: self)
+        return SQLiteHistory(files: self.files)
     }()
 }

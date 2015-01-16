@@ -5,6 +5,8 @@
 import UIKit
 import XCTest
 
+import Storage
+
 class ClientTests: XCTestCase {
     func testFavicons() {
         /* CoreData tests don't really work yet. Enable this if we ever fix them
