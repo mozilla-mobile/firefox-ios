@@ -33,7 +33,7 @@ class HistoryTable: Table {
         debug("Insert into \(name) \(item)")
         if let site = item as? Site {
             let query = "INSERT INTO \(self.name) (guid, url, title) VALUES (?,?,?)"
-            let args = [site.guid, site.url, site.title]
+            let args: [AnyObject?] = [site.guid, site.url, site.title]
             if let error = db.executeChange(query, withArgs: args) {
                 err = error
                 return 0

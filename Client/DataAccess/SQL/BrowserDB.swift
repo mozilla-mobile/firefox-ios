@@ -144,7 +144,7 @@ class BrowserDB {
         return Cursor(status: .Failure, msg: "Invalid table name")
     }
 
-    private let debug_enabled = false
+    private let debug_enabled = true
     private func debug(err: NSError) {
         debug("\(err.code): \(err.localizedDescription)")
     }

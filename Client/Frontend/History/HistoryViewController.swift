@@ -4,29 +4,106 @@
 
 import UIKit
 
-class HistoryViewController: UIViewController, ToolbarViewProtocol {
+class HistoryViewController: UITableViewController, UrlViewController {
+    private let CELL_IDENTIFIER = "HISTORY_CELL"
+    private let HEADER_IDENTIFIER = "HISTORY_HEADER"
 
-    var profile: Profile!
+    var history: Cursor? = nil
+    var _profile: Profile? = nil
+    var delegate: UrlViewControllerDelegate? = nil
+
+    var profile: Profile! {
+        get {
+            return _profile
+        }
+
+        set (profile) {
+            self._profile = profile
+            profile.history.get(nil, options: nil, complete: { (data: Cursor) -> Void in
+                if data.status != .Success {
+                    println("Err: \(data.statusMessage)")
+                } else {
+                    self.history = data
+                }
+            })
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        tableView.registerClass(CustomCell.self, forCellReuseIdentifier: CELL_IDENTIFIER)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-    
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if var hist = self.history {
+            return hist.count
+        }
+        return 0
     }
-    */
 
+    // UITableViewController doesn't let us specify a style for recycling views. We override the default style here.
+    private class CustomCell : UITableViewCell {
+        override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+            // ignore the style argument, use our own to override
+            super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
+            textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
+            textLabel?.textColor = UIColor.darkGrayColor()
+            indentationWidth = 20
+
+            detailTextLabel?.textColor = UIColor.lightGrayColor()
+        }
+
+        required init(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
+
+    private let FAVICON_SIZE = 32
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as UITableViewCell
+
+        if var hist = self.history {
+            if let site = hist[indexPath.row] as? Site {
+                // cell.imageView?.image = site.icon
+                cell.textLabel?.text = site.title
+                cell.detailTextLabel?.text = site.url
+            }
+        }
+
+        return cell
+    }
+
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
+    }
+
+    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
+    }
+
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
+
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if var hist = self.history {
+            if let site = hist[indexPath.row] as? Site {
+                if let url = NSURL(string: site.url) {
+                    delegate?.didClickUrl(NSURL(string: site.url)!)
+                } else {
+                    println("Error creating url for \(site.url)")
+                }
+                return
+            } else {
+                println("Could not find a site for \(indexPath)")
+            }
+        } else {
+            println("Could not get history")
+        }
+    }
 }

@@ -20,7 +20,6 @@ class SqliteHistory : History {
             if err != nil {
                 self.debug("Clear failed: \(err!.localizedDescription)")
             }
-            complete(success: err == nil)
         }
     }
 
@@ -44,7 +43,7 @@ class SqliteHistory : History {
         }
     }
 
-    private let debug_enabled = false
+    private let debug_enabled = true
     private func debug(msg: String) {
         if debug_enabled {
             println("HistorySqlite: " + msg)
