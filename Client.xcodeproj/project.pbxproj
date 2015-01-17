@@ -92,6 +92,10 @@
 		D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D308E4EC1A530A8B00842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D314E7F71A37B98700426A76 /* BrowserToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D314E7F51A37B98700426A76 /* BrowserToolbar.swift */; };
+		D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */; };
+		D31A0FC81A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */; };
+		D31A0FC91A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */; };
+		D31A0FCA1A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */; };
 		D34C5AF21A5E0C9800E0DF7B /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34C5AF11A5E0C9800E0DF7B /* SWXMLHash.swift */; };
 		D34C5AF31A5E0C9B00E0DF7B /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34C5AF11A5E0C9800E0DF7B /* SWXMLHash.swift */; };
 		D34C5AF41A5E0C9B00E0DF7B /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34C5AF11A5E0C9800E0DF7B /* SWXMLHash.swift */; };
@@ -339,6 +343,7 @@
 		D301AAED1A3A55B70078DD1D /* TabTrayController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayController.swift; sourceTree = "<group>"; };
 		D308E4E31A5306F500842685 /* SearchEngines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngines.swift; sourceTree = "<group>"; };
 		D314E7F51A37B98700426A76 /* BrowserToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserToolbar.swift; sourceTree = "<group>"; };
+		D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSuggestClient.swift; sourceTree = "<group>"; };
 		D34C5AF11A5E0C9800E0DF7B /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SWXMLHash.swift; path = ThirdParty/SWXMLHash.swift; sourceTree = "<group>"; };
 		D34DC84D1A16C40C00D49B7B /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		D34DC84E1A16C40C00D49B7B /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
@@ -572,6 +577,7 @@
 				D3A994951A3686BD008AD1AC /* BrowserViewController.swift */,
 				D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */,
 				D308E4E31A5306F500842685 /* SearchEngines.swift */,
+				D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				D301AAED1A3A55B70078DD1D /* TabTrayController.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
@@ -1136,6 +1142,7 @@
 				282DA4711A68C1C500A406E2 /* HistoryTable.swift in Sources */,
 				E42CCDE31A23A6F900B794D3 /* Clients.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
+				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				F84B22241A09122500AAB793 /* TabBarViewController.swift in Sources */,
 				D34F86E71A1AC7DD00331EC4 /* PasswordTextField.swift in Sources */,
 				28CE83C91A1D1D3200576538 /* TokenServerClient.swift in Sources */,
@@ -1196,6 +1203,7 @@
 				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
 				0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */,
 				28784D3E1A39BF2A00021E35 /* Bookmarks.swift in Sources */,
+				D31A0FC81A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				28C0779A1A3B064F00834FE5 /* FxAClientTests.swift in Sources */,
 				0BD19A6F1A2530D30084FBA7 /* TabsViewController.swift in Sources */,
 				D35179BD1A5C6D4200E7622E /* SearchViewController.swift in Sources */,
@@ -1227,6 +1235,7 @@
 				E418D0D91A251B3200CAE47A /* Profile.swift in Sources */,
 				282DA4701A68C16900A406E2 /* FileAccessor.swift in Sources */,
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
+				D31A0FC91A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				E418D0DF1A251B3200CAE47A /* RestAPI.swift in Sources */,
 				28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
@@ -1250,6 +1259,7 @@
 				0B33431B1A5CB14B000AE428 /* Cursor.swift in Sources */,
 				E42CCDE81A23A73D00B794D3 /* Profile.swift in Sources */,
 				0B3342D71A5CA89E000AE428 /* BrowserDB.swift in Sources */,
+				D31A0FCA1A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				F8708D2A1A0970B40051AB07 /* ActionViewController.swift in Sources */,
 				28784D4A1A39C48A00021E35 /* Bytes.swift in Sources */,
