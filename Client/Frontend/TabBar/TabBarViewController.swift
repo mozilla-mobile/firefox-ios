@@ -24,7 +24,14 @@ protocol TabBarViewControllerDelegate: class {
     func didEnterURL(url: NSURL)
 }
 
-class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewControllerDelegate {
+// A protocol to support clicking on rows in the view controller
+// This needs to be accessible to objc for UIViewControllers to implement it
+@objc
+protocol UrlViewController: class {
+    var delegate: UrlViewControllerDelegate? { get set }
+}
+
+class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewControllerDelegate {
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [ToolbarItem]!
@@ -59,6 +66,9 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
             hideCurrentViewController()
             var vc = self.panels[newButtonIndex].generator(profile: self.profile)
             self.showViewController(vc)
+            if let v = vc as? UrlViewController {
+                v.delegate = self
+            }
 
             _selectedButtonIndex = newButtonIndex
         }
@@ -266,7 +276,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, SearchViewCon
         return true
     }
 
-    func didClickSearchResult(url: NSURL) {
+    func didClickUrl(url: NSURL) {
         delegate?.didEnterURL(url)
         dismissViewControllerAnimated(true, completion: nil)
     }

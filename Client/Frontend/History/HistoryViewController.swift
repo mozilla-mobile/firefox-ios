@@ -4,12 +4,13 @@
 
 import UIKit
 
-class HistoryViewController: UITableViewController {
+class HistoryViewController: UITableViewController, UrlViewController {
     private let CELL_IDENTIFIER = "HISTORY_CELL"
     private let HEADER_IDENTIFIER = "HISTORY_HEADER"
 
     var history: Cursor? = nil
     var _profile: Profile? = nil
+    var delegate: UrlViewControllerDelegate? = nil
 
     var profile: Profile! {
         get {
@@ -21,9 +22,9 @@ class HistoryViewController: UITableViewController {
             profile.history.get(nil, options: nil, complete: { (data: Cursor) -> Void in
                 if data.status != .Success {
                     println("Err: \(data.statusMessage)")
+                } else {
+                    self.history = data
                 }
-                self.history = data
-                println("Found history \(data.count)")
             })
         }
     }
@@ -90,5 +91,19 @@ class HistoryViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if var hist = self.history {
+            if let site = hist[indexPath.row] as? Site {
+                if let url = NSURL(string: site.url) {
+                    delegate?.didClickUrl(NSURL(string: site.url)!)
+                } else {
+                    println("Error creating url for \(site.url)")
+                }
+                return
+            } else {
+                println("Could not find a site for \(indexPath)")
+            }
+        } else {
+            println("Could not get history")
+        }
     }
 }

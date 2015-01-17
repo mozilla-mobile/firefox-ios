@@ -7,12 +7,15 @@ import UIKit
 
 private let ReuseIdentifier = "cell"
 
-protocol SearchViewControllerDelegate: class {
-    func didClickSearchResult(url: NSURL)
+// A delegate to support clicking on rows in the view controller
+// This needs to be accessible to objc for UIViewControllers to call it
+@objc
+protocol UrlViewControllerDelegate: class {
+    func didClickUrl(url: NSURL)
 }
 
 class SearchViewController: UIViewController {
-    weak var delegate: SearchViewControllerDelegate?
+    weak var delegate: UrlViewControllerDelegate?
     private var tableView = UITableView()
     private var sortedEngines = [OpenSearchEngine]()
 
@@ -84,7 +87,7 @@ extension SearchViewController: UITableViewDelegate {
         let engine = sortedEngines[indexPath.row]
         let url = engine.urlForQuery(searchQuery)
         if let url = url {
-            delegate?.didClickSearchResult(url)
+            delegate?.didClickUrl(url)
         }
     }
 }
