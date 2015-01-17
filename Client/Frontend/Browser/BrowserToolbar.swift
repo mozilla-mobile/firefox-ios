@@ -119,7 +119,17 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
             make.width.equalTo(self)
         }
     }
-
+    
+    func currentURL() -> NSURL? {
+        //TODO: maybe we need a property for current url displayed in toolbar
+        if let currentTitle = toolbarTextButton.currentTitle as String! {
+            return NSURL(string: currentTitle)
+        }
+        else {
+            return nil
+        }
+    }
+    
     func updateURL(url: NSURL?) {
         toolbarTextButton.setTitle(url?.absoluteString, forState: UIControlState.Normal)
     }
@@ -161,6 +171,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate {
     }
 
     func updateProgressBar(progress: Float) {
+        //TODO: Float == Float ?
         if progress == 1.0 {
             self.progressBar.setProgress(progress, animated: true)
             UIView.animateWithDuration(1.5, animations: {self.progressBar.alpha = 0.0},

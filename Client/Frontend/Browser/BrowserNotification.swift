@@ -44,7 +44,25 @@ class BrowserNotification: UIView {
 
     func showNotification(error: NSError?) {
         errorLabel.text = error?.localizedDescription
+        errorLabel.text = self.fullDescriptionOf(error);
         showError()
+    }
+    
+    func fullDescriptionOf(error: NSError?) -> String {
+        var resultString = ""
+        let errorNew = error!
+        
+        resultString += "code: \(errorNew.code)\n"
+        resultString += "domain: \(errorNew.domain)\n"
+        resultString += "userInfo: \(errorNew.userInfo)\n"
+        resultString += "localizedDescription: \(errorNew.localizedDescription)\n"
+        resultString += "localizedRecoveryOptions: \(errorNew.localizedRecoveryOptions)\n"
+        resultString += "localizedRecoverySuggestion: \(errorNew.localizedRecoverySuggestion)\n"
+        resultString += "localizedFailureReason: \(errorNew.localizedFailureReason)\n"
+        resultString += "recoveryAttempter: \(errorNew.recoveryAttempter)\n"
+        resultString += "helpAnchor: \(errorNew.helpAnchor)\n"
+        
+        return resultString
     }
     
     func hideNotification() {
