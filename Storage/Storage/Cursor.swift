@@ -1,4 +1,4 @@
-/*  This Source Code Form is subject to the terms of the Mozilla Public
+/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
@@ -7,7 +7,7 @@ import Foundation
 /**
  * Status results for a Cursor
  */
-enum CursorStatus {
+public enum CursorStatus {
     case Success;
     case Failure;
 }
@@ -16,13 +16,13 @@ enum CursorStatus {
 * Provides a generic method of returning some data and status information about a request.
 */
 public class Cursor: SequenceType {
-    var count: Int {
+    public var count: Int {
         get { return 0 }
     }
 
     // Extra status information
-    var status: CursorStatus
-    var statusMessage: String
+    public let status: CursorStatus
+    public let statusMessage: String
 
     init(err: NSError) {
         self.status = .Failure
@@ -35,7 +35,7 @@ public class Cursor: SequenceType {
     }
 
     // Collection iteration and access functions
-    subscript(index: Int) -> Any? {
+    public subscript(index: Int) -> Any? {
         get { return nil }
     }
 
@@ -54,31 +54,26 @@ public class Cursor: SequenceType {
 /*
  * A cursor implementation that wraps an array.
  */
-class ArrayCursor<T : Any> : Cursor {
+public class ArrayCursor<T : Any> : Cursor {
     private let data : [T];
 
-    override var count : Int {
+    public override var count : Int {
         if (status != CursorStatus.Success) {
             return 0;
         }
         return data.count;
     }
 
-    init(data: [T], status: CursorStatus, statusMessage: String) {
+    public init(data: [T], status: CursorStatus, statusMessage: String) {
         self.data = data;
-        super.init()
-        self.status = status;
-        self.statusMessage = statusMessage;
+        super.init(status: status, msg: statusMessage)
     }
-    
-    init(data: [T]) {
-        self.data = data;
-        super.init()
-        self.status = CursorStatus.Success;
-        self.statusMessage = "Success";
+
+    public convenience init(data: [T]) {
+        self.init(data: data, status: CursorStatus.Success, statusMessage: "Success")
     }
-    
-    override subscript(index: Int) -> Any? {
+
+    public override subscript(index: Int) -> Any? {
         get {
             if (index >= data.count || index < 0 || status != CursorStatus.Success) {
                 return nil;

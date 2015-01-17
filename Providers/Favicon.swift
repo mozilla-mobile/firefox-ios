@@ -6,6 +6,8 @@ import Foundation
 import CoreData
 import UIKit
 
+import Storage
+
 class Favicon {
     var url: String
     var image: UIImage?
