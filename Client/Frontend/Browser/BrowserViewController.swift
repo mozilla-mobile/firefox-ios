@@ -12,7 +12,6 @@ private let ToolbarHeight: CGFloat = 44
 class BrowserViewController: UIViewController {
     private var toolbar: BrowserToolbar!
     private let tabManager = TabManager()
-    private let navigationView = BrowserNotification()
 
     override func viewDidLoad() {
         let headerView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
@@ -33,16 +32,6 @@ class BrowserViewController: UIViewController {
             make.left.equalTo(headerView.snp_left)
             make.bottom.equalTo(headerView.snp_bottom)
             make.right.equalTo(headerView.snp_right)
-        }
-
-        self.view.addSubview(navigationView)
-        
-        navigationView.snp_remakeConstraints { make in
-            let myView = self.view!
-            make.left.equalTo(myView)
-            make.top.equalTo(self.toolbar.snp_bottom)
-            make.width.equalTo(myView)
-            make.height.equalTo(myView).offset(self.toolbar.bounds.size.height)
         }
 
         toolbar.browserToolbarDelegate = self
