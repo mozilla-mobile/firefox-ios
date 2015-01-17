@@ -185,6 +185,7 @@ public class SQLiteDBConnection {
 
     // Executes a change on the datbase
     func executeChange(sqlStr: String, withArgs: [AnyObject?]? = nil) -> NSError? {
+        println("Execute change \(sqlStr) \(withArgs)")
         var err: NSError? = nil
         var pStmt: COpaquePointer = nil
 
