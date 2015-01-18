@@ -185,7 +185,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.textColor = UIColor(red:0.733, green:0.729, blue:0.757, alpha:1.000)
+        cell.textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor(red:0.733, green:0.729, blue:0.757, alpha:1.000)
         cell.textLabel?.font = UIFont(name: "FiraSans-Regular", size: 17)
         cell.imageView?.transform = CGAffineTransformMakeScale(0.5, 0.5)
         cell.accessoryType = selectedShareDestinations.containsObject(ShareDestinations[indexPath.row].code) ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
