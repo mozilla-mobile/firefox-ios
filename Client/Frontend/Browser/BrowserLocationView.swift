@@ -91,15 +91,10 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         delegate?.browserLocationViewDidTapReaderMode(self)
     }
 
-    var _url: NSURL?
     var url: NSURL? {
-        get {
-            return _url
-        }
-        set (newURL) {
-            _url = newURL
-            lockImageView.hidden = (_url?.scheme != "https")
-            if let t = _url?.absoluteString {
+        didSet {
+            lockImageView.hidden = (url?.scheme != "https")
+            if let t = url?.absoluteString {
                 if t.hasPrefix("http://") {
                     locationLabel.text = t.substringFromIndex(advance(t.startIndex, 7))
                 } else if t.hasPrefix("https://") {
