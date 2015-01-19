@@ -15,6 +15,8 @@ protocol Profile {
     var clients: Clients { get }
     var prefs: ProfilePrefs { get }
     var searchEngines: SearchEngines { get }
+    var files: FileAccessor { get }
+    var history: History { get }
 
     // Because we can't test for whether this is an AccountProfile.
     // TODO: probably Profile should own an Account.
@@ -32,11 +34,8 @@ protocol AccountProfile: Profile {
     func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ())
 }
 
-class MockAccountProfile: AccountProfile {
+public class MockAccountProfile: Profile, AccountProfile {
     private let name: String = "mockaccount"
-
-    init() {
-    }
 
     func localName() -> String {
         return name
@@ -69,18 +68,28 @@ class MockAccountProfile: AccountProfile {
         return MockProfilePrefs()
     } ()
 
+    lazy var files: FileAccessor = {
+        return ProfileFileAccessor(profile: self)
+    } ()
+
     func basicAuthorizationHeader() -> String {
         return ""
     }
 
     func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ()) {
+        success(data: nil)
     }
 
     func logout() {
     }
+
+    lazy var history: History = {
+        return SqliteHistory(profile: self)
+    }()
+
 }
 
-public class RESTAccountProfile: AccountProfile {
+public class RESTAccountProfile: Profile, AccountProfile {
     private let name: String
     let credential: NSURLCredential
 
@@ -90,6 +99,25 @@ public class RESTAccountProfile: AccountProfile {
         self.name = localName
         self.credential = credential
         self.logoutCallback = logoutCallback
+
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        let mainQueue = NSOperationQueue.mainQueue()
+        notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: "LocationChange", object: nil)
+    }
+
+    @objc
+    func onLocationChange(notification: NSNotification) {
+        if let url = notification.userInfo!["url"] as? NSURL {
+            if let title = notification.userInfo!["title"] as? NSString {
+                history.addVisit(Site(url: url.absoluteString!, title: title), options: nil, complete: { (success) -> Void in
+                    // nothing to do
+                })
+            }
+        }
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     func localName() -> String {
@@ -97,9 +125,11 @@ public class RESTAccountProfile: AccountProfile {
     }
 
     var accountName: String {
-        get {
-            return credential.user!
-        }
+        return credential.user!
+    }
+
+    var files: FileAccessor {
+        return ProfileFileAccessor(profile: self)
     }
 
     func basicAuthorizationHeader() -> String {
@@ -126,18 +156,16 @@ public class RESTAccountProfile: AccountProfile {
         logoutCallback(profile: self)
     }
 
-    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
-        // Stubbed out to populate data from server.
-        // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
-        return BookmarksRESTModelFactory(profile: self)
-    } ()
+    var _bookmarks: protocol<BookmarksModelFactory, ShareToDestination>? = nil
+    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> {
+        if (_bookmarks == nil) {
+            // Stubbed out to populate data from server.
+            // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
+            _bookmarks = BookmarksRESTModelFactory(profile: self)
+        }
+        return _bookmarks!
+    }
 
-    lazy var clients: Clients = {
-        return RESTClients(profile: self)
-    } ()
-
-    //        lazy var ReadingList readingList
-    //        lazy var History
 
     lazy var favicons: Favicons = {
         return BasicFavicons()
@@ -151,7 +179,21 @@ public class RESTAccountProfile: AccountProfile {
         return NSUserDefaultsProfilePrefs(profile: self)
     }
 
+    var _clients: Clients? = nil
+    var clients: Clients {
+        if _clients == nil {
+            _clients = RESTClients(profile: self)
+        }
+        return _clients!
+    }
+
+    // lazy var ReadingList readingList
+
     lazy var prefs: ProfilePrefs = {
-        self.makePrefs()
-    } ()
+        return self.makePrefs()
+    }()
+
+    lazy var history: History = {
+        return SqliteHistory(profile: self)
+    }()
 }

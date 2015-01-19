@@ -6,6 +6,7 @@ import Foundation
 
 protocol TabManagerDelegate {
     func didSelectedTabChange(selected: Browser?, previous: Browser?)
+    func didCreateTab(tab: Browser)
     func didAddTab(tab: Browser)
     func didRemoveTab(tab: Browser)
 }
@@ -54,6 +55,7 @@ class TabManager {
 
     func addTab() -> Browser {
         let tab = Browser()
+        delegate?.didCreateTab(tab)
         tabs.append(tab)
         delegate?.didAddTab(tab)
         selectTab(tab)
@@ -92,7 +94,7 @@ class TabManager {
                 return i
             }
         }
-
+        
         assertionFailure("Tab not in tabs list")
     }
 }

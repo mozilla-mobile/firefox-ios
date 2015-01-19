@@ -5,6 +5,9 @@
 import Foundation
 import UIKit
 
+private let TypeSearch = "text/html"
+private let TypeSuggest = "application/x-suggestions+json"
+
 private class OpenSearchURL {
     let template: String
     let type: String
@@ -19,34 +22,41 @@ class OpenSearchEngine {
     let shortName: String
     let description: String?
     let image: UIImage?
-    private let urls: [OpenSearchURL]
+    private let searchURL: OpenSearchURL
+    private let suggestURL: OpenSearchURL?
 
-    private init(shortName: String, description: String?, urls: [OpenSearchURL], image: UIImage?) {
+    private init(shortName: String, description: String?, image: UIImage?, searchURL: OpenSearchURL, suggestURL: OpenSearchURL?) {
         self.shortName = shortName
         self.description = description
-        self.urls = urls
         self.image = image
+        self.searchURL = searchURL
+        self.suggestURL = suggestURL
     }
 
     /**
      * Returns the search URL for the given query.
-     *
-     * The <Url> element with the "text/html" type is used for the template.
      */
-    func urlForQuery(query: String) -> NSURL? {
-        for url in urls {
-            if url.type == "text/html" {
-                let escapedQuery = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())
-                if escapedQuery == nil {
-                    return nil
-                }
+    func searchURLForQuery(query: String) -> NSURL? {
+        return getURLFromTemplate(searchURL, query: query)
+    }
 
-                let urlString = url.template.stringByReplacingOccurrencesOfString("{searchTerms}", withString: escapedQuery!, options: NSStringCompareOptions.LiteralSearch, range: nil)
-                return NSURL(string: urlString)
-            }
+    /**
+     * Returns the search suggestion URL for the given query.
+     */
+    func suggestURLForQuery(query: String) -> NSURL? {
+        if suggestURL == nil {
+            return nil
         }
 
-        println("Error: search engine does not support text/html searches")
+        return getURLFromTemplate(suggestURL!, query: query)
+    }
+
+    private func getURLFromTemplate(openSearchURL: OpenSearchURL, query: String) -> NSURL? {
+        if let escapedQuery = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) {
+            let urlString = openSearchURL.template.stringByReplacingOccurrencesOfString("{searchTerms}", withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            return NSURL(string: urlString)
+        }
+
         return nil
     }
 }
@@ -107,17 +117,24 @@ class OpenSearchParser {
             return nil
         }
 
+        var searchURL: OpenSearchURL!
+        var suggestURL: OpenSearchURL?
         var searchURLs = [OpenSearchURL]()
         for url in urls! {
-            var template = url.attributes["template"]
-            if template == nil {
-                println("Url element requires a template attribute")
-                return nil
-            }
-
             let type = url.attributes["type"]
             if type == nil {
                 println("Url element requires a type attribute")
+                return nil
+            }
+
+            if type != TypeSearch && type != TypeSuggest {
+                // Not a supported search type.
+                continue
+            }
+
+            var template = url.attributes["template"]
+            if template == nil {
+                println("Url element requires a template attribute")
                 return nil
             }
 
@@ -145,8 +162,17 @@ class OpenSearchParser {
                 }
             }
 
-            let searchURL = OpenSearchURL(template: template!, type: type!)
-            searchURLs.append(searchURL)
+            let url = OpenSearchURL(template: template!, type: type!)
+            if type == TypeSearch {
+                searchURL = url
+            } else {
+                suggestURL = url
+            }
+        }
+
+        if searchURL == nil {
+            println("Search engine must have a text/html type")
+            return nil
         }
 
         var uiImage: UIImage?
@@ -182,6 +208,6 @@ class OpenSearchParser {
             }
         }
 
-        return OpenSearchEngine(shortName: shortName!, description: description, urls: searchURLs, image: uiImage)
+        return OpenSearchEngine(shortName: shortName!, description: description, image: uiImage, searchURL: searchURL, suggestURL: suggestURL)
     }
 }

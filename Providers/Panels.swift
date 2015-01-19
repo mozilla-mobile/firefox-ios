@@ -41,7 +41,7 @@ private var Controllers: Protector<[ToolbarItem]> = Protector(name: "Controllers
         return controller
     }, enabled: true),
     ToolbarItem(title: "History", imageName: "history", generator: { (profile: Profile) -> UIViewController in
-        let controller = HistoryViewController(nibName: "HistoryViewController", bundle: nil)
+        var controller = HistoryViewController(nibName: nil, bundle: nil)
         controller.profile = profile
         return controller
     }, enabled: true),

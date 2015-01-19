@@ -12,17 +12,18 @@ private let ToolbarHeight: CGFloat = 44
 class BrowserViewController: UIViewController {
     private var toolbar: BrowserToolbar!
     private let tabManager = TabManager()
+    var profile: Profile!
 
     override func viewDidLoad() {
         let headerView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
         view.addSubview(headerView);
-        
+
         headerView.snp_makeConstraints { make in
             make.top.equalTo(self.view.snp_top)
             make.height.equalTo(ToolbarHeight + StatusBarHeight)
             make.leading.trailing.equalTo(self.view)
         }
-        
+
         toolbar = BrowserToolbar()
         toolbar.backgroundColor = UIColor.clearColor()
         headerView.addSubview(toolbar)
@@ -43,7 +44,6 @@ class BrowserViewController: UIViewController {
 
 extension BrowserViewController: BrowserToolbarDelegate {
     func didBeginEditing() {
-        let profile = MockAccountProfile()
         let controller = TabBarViewController()
         controller.profile = profile
         controller.delegate = self
@@ -79,6 +79,14 @@ extension BrowserViewController: BrowserToolbarDelegate {
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
     }
+
+    func didClickReaderMode() {
+        if let tab = tabManager.selectedTab {
+            if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
+                readerMode.toggleReaderMode()
+            }
+        }
+    }
 }
 
 extension BrowserViewController: TabBarViewControllerDelegate {
@@ -100,6 +108,17 @@ extension BrowserViewController: TabManagerDelegate {
         if let selected = selected {
             toolbar.updateBackStatus(selected.canGoBack)
             toolbar.updateFowardStatus(selected.canGoForward)
+        }
+
+        if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
+            toolbar.updateReaderModeState(readerMode.state)
+        }
+    }
+
+    func didCreateTab(tab: Browser) {
+        if let readerMode = ReaderMode(browser: tab) {
+            readerMode.delegate = self
+            tab.addHelper(readerMode, name: ReaderMode.name())
         }
     }
 
@@ -127,8 +146,8 @@ extension BrowserViewController: TabManagerDelegate {
 }
 
 extension BrowserViewController: WKNavigationDelegate {
-
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        toolbar.updateReaderModeState(ReaderModeState.Unavailable)
     }
 
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
@@ -148,25 +167,12 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-    }
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        var info = [NSObject: AnyObject]()
+        info["url"] = webView.URL
+        info["title"] = webView.title
 
-    func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
-    }
-
-    func webView(webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-    }
-    
-    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
-        decisionHandler(WKNavigationActionPolicy.Allow)
-    }
-    
-    func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
-        if (navigationResponse.canShowMIMEType) {
-            decisionHandler(WKNavigationResponsePolicy.Allow)
-        }
-        else {
-            decisionHandler(WKNavigationResponsePolicy.Cancel)
-        }
+        notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
     }
 
     override func observeValueForKeyPath(keyPath: String, ofObject object:
@@ -202,5 +208,16 @@ extension BrowserViewController: WKNavigationDelegate {
         
         //TOOD: It's a rough web page
         return "<html><head><title></title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=gb2312\"/><style type=\"text/css\">html{text-align: center;}body{position: relative;text-align: center;}div{width: 50%; height: 50%;overflow: auto; position: absolute;margin: auto;top:0;left: 0;bottom: 0;right: 0;}</style></head><body><div><font size=\"12\" color=\"#C0C0C0\">\(error.localizedDescription)</font></div></body></html>"
+    }
+}
+
+extension BrowserViewController: ReaderModeDelegate {
+    func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forBrowser browser: Browser) {
+        // If this reader mode availability state change is for the tab that we currently show, then update
+        // the button. Otherwise do nothing and the button will be updated when the tab is made active.
+        if tabManager.selectedTab == browser {
+            println("DEBUG: New readerModeState: \(state.rawValue)")
+            toolbar.updateReaderModeState(state)
+        }
     }
 }

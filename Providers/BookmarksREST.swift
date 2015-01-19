@@ -5,7 +5,7 @@
 import Foundation
 import Alamofire
 
-public class BookmarksRESTModelFactory: BookmarksModelFactory, ShareToDestination {
+class BookmarksRESTModelFactory: BookmarksModelFactory, ShareToDestination {
     private let profile: RESTAccountProfile
     private let sink: MemoryBookmarksSink = MemoryBookmarksSink()
 
