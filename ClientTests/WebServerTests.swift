@@ -5,16 +5,26 @@
 import UIKit
 import XCTest
 
+/// Minimal web server tests. This class can be used as a base class for tests that need a real web server.
+/// Simply add additional handlers your test class' setUp() method.
 class WebServerTests: XCTestCase {
+    let webServer: GCDWebServer = GCDWebServer()
+    var webServerBase: String!
 
-    let webServer = GCDWebServer()
+    /// Setup a basic web server that binds to a random port and that has one default handler on /hello
+    private func setupWebServer() {
+        webServer.addHandlerForMethod("GET", path: "/hello", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            return GCDWebServerDataResponse(HTML: "<html><body><p>Hello World</p></body></html>")
+        }
+        if webServer.startWithPort(0, bonjourName: nil) == false {
+            XCTFail("Can't start the GCDWebServer")
+        }
+        webServerBase = "http://localhost:\(webServer.port)"
+    }
 
     override func setUp() {
         super.setUp()
-        webServer.addDefaultHandlerForMethod("GET", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-            return GCDWebServerDataResponse(HTML: "<html><body><p>Hello World</p></body></html>")
-        }
-        webServer.startWithPort(17825, bonjourName: nil)
+        setupWebServer()
     }
     
     override func tearDown() {
@@ -26,9 +36,8 @@ class WebServerTests: XCTestCase {
     }
 
     func testWebServerIsServingRequests() {
-        let response = NSString(contentsOfURL: NSURL(string: "http://localhost:17825/")!, encoding: NSUTF8StringEncoding, error: nil)
+        let response = NSString(contentsOfURL: NSURL(string: "\(webServerBase)/hello")!, encoding: NSUTF8StringEncoding, error: nil)
         XCTAssertNotNil(response)
         XCTAssertTrue(response == "<html><body><p>Hello World</p></body></html>")
     }
-
 }
