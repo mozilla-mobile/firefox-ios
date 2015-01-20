@@ -19,7 +19,8 @@ let DBCouldNotOpenErrorCode = 200
 /* This is a base interface into our browser db. It holds arrays of tables and handles basic creation/updating of them. */
 class BrowserDB {
     private let db: SwiftData
-    private let Version: Int = 1
+    // XXX: Increasing this should blow away old history, since we currently dont' support any upgrades
+    private let Version: Int = 2
     private let FileName = "browser.db"
     private let tables: [String: Table] = [
         TableNameHistory: HistoryTable(),

@@ -24,16 +24,45 @@ class SqliteHistory : History {
     }
 
     func get(filter: String?, options: HistoryOptions?, complete: (data: Cursor) -> Void) {
-        let res = db.query(TableNameHistory)
+        var res: Cursor!
+        if options?.visits == true {
+            res = db.query(TableNameVisits, filter: filter)
+        } else {
+            res = db.query(TableNameHistory, filter: filter)
+        }
+
         dispatch_async(dispatch_get_main_queue()) {
             complete(data: res)
         }
     }
 
-    func addVisit(site: Site, options: HistoryOptions?, complete: (success: Bool) -> Void) {
+    private func getGuidFor(site: Site) -> String? {
+        let cursor = db.query(TableNameHistory, filter: site.url)
+        if (cursor.count != 1) {
+            return nil
+        }
+        return (cursor[0] as Site).guid
+    }
+
+    func addVisit(visit: Visit, options: HistoryOptions?, complete: (success: Bool) -> Void) {
         var err: NSError? = nil
-        db.insert(TableNameHistory, item: site, err: &err)
-        // TODO: Track visits in a separate table
+
+        // If our site doesn't have a guid, we need to find one
+        if visit.site.guid == nil {
+            if let guid = getGuidFor(visit.site) {
+                visit.site.guid = guid
+                db.update(TableNameHistory, item: visit.site, err: &err)
+            } else {
+                // Make sure we have a site in the table first
+                visit.site.guid = NSUUID().UUIDString
+                db.insert(TableNameHistory, item: visit.site, err: &err)
+            }
+        } else {
+            db.update(TableNameHistory, item: visit.site, err: &err)
+        }
+
+        // Now add a visit
+        db.insert(TableNameVisits, item: visit, err: &err)
 
         dispatch_async(dispatch_get_main_queue()) {
             if err != nil {
