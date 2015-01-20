@@ -5,111 +5,41 @@
 let TableNameHistory = "history"
 let NotASiteErrorCode = 100
 
-class HistoryTable: Table {
-    let name = "History"
-    private let rows = "guid TEXT NOT NULL UNIQUE, " +
+class HistoryTable: GenericTable {
+    override var name: String { return TableNameHistory }
+    override var rows: String { return "guid TEXT NOT NULL UNIQUE, " +
                        "url TEXT NOT NULL UNIQUE, " +
-                       "title TEXT NOT NULL"
+                       "title TEXT NOT NULL" }
 
-    let debug_enabled = false
-    func debug(msg: String) {
-        if debug_enabled {
-            println("HistoryTable: \(msg)")
-        }
+    override func getInsertAndArgs<T>(item: T) -> (String?, [AnyObject?]) {
+        let site = item as Site
+        return ("INSERT INTO \(TableNameHistory) (guid, url, title) VALUES (?,?,?)",
+            [site.guid, site.url, site.title])
     }
 
-    func create(db: SQLiteDBConnection, version: Int) -> Bool {
-        db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (\(self.rows))")
-        return true
+    override func getUpdateAndArgs<T>(item: T) -> (String?, [AnyObject?]) {
+        let site = item as Site
+        return ("UPDATE \(TableNameHistory) (guid, url, title) SET title = ? WHERE guid = ? AND url = ?",
+            [site.guid, site.url, site.title])
     }
 
-    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
-        debug("Update table \(name) from \(from) to \(to)")
-        // No upgrades yet
-        return false
-    }
-
-    func insert<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int {
-        debug("Insert into \(name) \(item)")
+    override func getDeleteAndArgs<T>(item: T?) -> (String, [AnyObject?]) {
         if let site = item as? Site {
-            let query = "INSERT INTO \(self.name) (guid, url, title) VALUES (?,?,?)"
-            let args: [AnyObject?] = [site.guid, site.url, site.title]
-            if let error = db.executeChange(query, withArgs: args) {
-                err = error
-                return 0
-            }
-            return db.lastInsertedRowID
+            return ("DELETE FROM \(TableNameHistory) WHERE url = ?", [site.url])
         }
-
-        err = NSError(domain: "mozilla.org", code: NotASiteErrorCode, userInfo: [
-            NSLocalizedDescriptionKey: "Tried to save something that isn't a site"
-        ])
-        return 0
+        return ("DELETE FROM \(TableNameHistory)", [String]())
     }
 
-    func update<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int {
-        debug("Update into \(name) \(item)")
-        if let site = item as? Site {
-            let query = "UPDATE \(self.name) SET title = ? WHERE guid = ? AND url = ?"
-            let args = [site.title, site.guid, site.url]
-            if let error = db.executeChange(query, withArgs: args) {
-                println(error.description)
-                err = error
-                return 0
-            }
-
-            return db.numberOfRowsModified
-        }
-
-        err = NSError(domain: "mozilla.org", code: NotASiteErrorCode, userInfo: [
-            NSLocalizedDescriptionKey: "Tried to save something that isn't a site"
-        ])
-        return 0
-    }
-
-    func delete<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int {
-        debug("Delete from \(name) \(item)")
-        var numDeleted: Int = 0
-        var str = "DELETE FROM \(name)"
-        var args = [String]()
-
-        if let site = item as? Site {
-            str += " WHERE url = ?"
-            args.append(site.url)
-        } else if item != nil {
-            err = NSError(domain: "org.mozilla", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid object"])
-            return numDeleted
-        }
-
-        if str != "" {
-            if let error = db.executeChange(str, withArgs: args) {
-                println(error.description)
-                err = error
-                return 0
-            }
-        }
-
-        return db.numberOfRowsModified
-    }
-
-    private func fromResult(result: SDRow) -> Site {
+    override func factory(result: SDRow) -> AnyObject {
         let site = Site(url: result[1] as String, title: result[2] as String)
-        site.guid = result[0] as String
+        site.guid = result[0] as? String
         return site
     }
 
-    func factory(row: SDRow) -> Site {
-        let url = row["url"] as String
-        let title = row["title"] as String
-        let guid = row["guid"] as String
-
-        let s = Site(url: url, title: title)
-        s.guid = guid
-        return s
-    }
-
-    func query(db: SQLiteDBConnection) -> Cursor {
-        debug("Query \(name)")
-        return db.executeQuery("SELECT guid, url, title FROM \(name)", factory: self.factory)
+    override func getQueryAndArgs(filter: String?) -> (String, [AnyObject?]) {
+        if let filter = filter {
+            return ("SELECT guid, url, title FROM \(TableNameHistory) WHERE url LIKE ?", [filter])
+        }
+        return ("SELECT guid, url, title FROM \(TableNameHistory)", [String]())
     }
 }

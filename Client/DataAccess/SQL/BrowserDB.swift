@@ -11,7 +11,7 @@ protocol Table {
     func insert<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int
     func update<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int
     func delete<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int
-    func query(db: SQLiteDBConnection) -> Cursor
+    func query(db: SQLiteDBConnection, filter: String?) -> Cursor
 }
 
 let DBCouldNotOpenErrorCode = 200
@@ -19,10 +19,12 @@ let DBCouldNotOpenErrorCode = 200
 /* This is a base interface into our browser db. It holds arrays of tables and handles basic creation/updating of them. */
 class BrowserDB {
     private let db: SwiftData
-    private let Version: Int = 1
+    // XXX: Increasing this should blow away old history, since we currently dont' support any upgrades
+    private let Version: Int = 2
     private let FileName = "browser.db"
     private let tables: [String: Table] = [
         TableNameHistory: HistoryTable(),
+        TableNameVisits: VisitsTable()
     ]
 
     private func exists(db: SQLiteDBConnection, table: Table) -> Bool {
@@ -132,11 +134,11 @@ class BrowserDB {
         return res
     }
 
-    func query(name: String) -> Cursor {
+    func query(name: String, filter: String? = nil) -> Cursor {
         if let table = tables[name] {
             var c: Cursor!
             db.withConnection(SwiftData.Flags.ReadWrite) { connection in
-                c = table.query(connection)
+                c = table.query(connection, filter: filter)
                 return nil
             }
             return c

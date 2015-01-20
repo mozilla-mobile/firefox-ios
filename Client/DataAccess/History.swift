@@ -2,7 +2,9 @@
 * License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-enum HistoryOptions {
+class HistoryOptions {
+    var visits = false // Return visits, not sites?
+    init() { }
 }
 
 /* The base history protocol */
@@ -11,5 +13,5 @@ protocol History {
 
     func clear(filter: String?, options: HistoryOptions?, complete: (success: Bool) -> Void)
     func get(filter: String?, options: HistoryOptions?, complete: (data: Cursor) -> Void)
-    func addVisit(site: Site, options: HistoryOptions?, complete: (success: Bool) -> Void)
+    func addVisit(visit: Visit, options: HistoryOptions?, complete: (success: Bool) -> Void)
 }
