@@ -4,5 +4,7 @@
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCrypto.h>
 #import "sqlite3.h"
+#import "GCDWebServer.h"
+#import "GCDWebServerDataResponse.h"
 
 #endif
