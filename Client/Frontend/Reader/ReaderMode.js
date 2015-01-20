@@ -38,6 +38,10 @@ var _firefox_ReaderMode = {
         domain = domain.toLowerCase();
         if (domain.indexOf("www.") == 0) {
             domain = domain.substring(4);
+        } else if (domain.indexOf("m.") == 0) {
+            domain = domain.substring(2);
+        } else if (domain.indexOf("mobile.") == 0) {
+            domain = domain.substring(7);
         }
         return domain;
     },
