@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Foundation
+
 /* A table in our database. Note this doesn't have to be a real table. It might be backed by a join or something else interesting. */
 protocol Table {
     var name: String { get }
@@ -32,16 +34,16 @@ class BrowserDB {
         return res.count > 0
     }
 
-    init?(profile: Profile) {
-        db = SwiftData(filename: profile.files.get(FileName)!)
-        if !createDB(profile) {
-            if !deleteAndRecreate(profile) {
+    init?(files: FileAccessor) {
+        db = SwiftData(filename: files.get(FileName)!)
+        if !createDB(files) {
+            if !deleteAndRecreate(files) {
                 return nil
             }
         }
     }
 
-    private func createDB(profile: Profile) -> Bool {
+    private func createDB(files: FileAccessor) -> Bool {
         db.transaction({ connection -> Bool in
             let version = connection.version
             if self.Version != version {
@@ -70,11 +72,11 @@ class BrowserDB {
         connection.version = self.Version
     }
 
-    private func deleteAndRecreate(profile: Profile) -> Bool {
+    private func deleteAndRecreate(files: FileAccessor) -> Bool {
         let date = NSDate()
         let newFilename = "\(FileName).bak"
 
-        if let file = profile.files.get(newFilename) {
+        if let file = files.get(newFilename) {
             if let attrs = NSFileManager.defaultManager().attributesOfItemAtPath(file, error: nil) {
                 if let creationDate = attrs[NSFileCreationDate] as? NSDate {
                     // If the old backup is less than an hour old, we just give up
@@ -86,8 +88,8 @@ class BrowserDB {
             }
         }
 
-        profile.files.move(FileName, dest: newFilename)
-        return createDB(profile)
+        files.move(FileName, dest: newFilename)
+        return createDB(files)
     }
 
     func insert<T>(name: String, item: T, inout err: NSError?) -> Int {

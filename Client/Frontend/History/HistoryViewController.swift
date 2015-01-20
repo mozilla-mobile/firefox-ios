@@ -4,6 +4,8 @@
 
 import UIKit
 
+import Storage
+
 class HistoryViewController: UITableViewController, UrlViewController {
     private let CELL_IDENTIFIER = "HISTORY_CELL"
     private let HEADER_IDENTIFIER = "HISTORY_HEADER"
