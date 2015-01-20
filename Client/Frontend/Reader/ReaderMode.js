@@ -64,5 +64,6 @@ function mozReaderModeTemplate() {
     return window.atob(s);
 }
 
-mozCheckReadability();
-
+window.addEventListener('pageshow', function(event) {
+    mozCheckReadability();
+});
