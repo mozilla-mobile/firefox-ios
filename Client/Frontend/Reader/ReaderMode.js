@@ -49,7 +49,6 @@ function mozReaderize() {
         template = template.replace("%READER-URL%", mozReadabilityResult.uri.spec);
         template = template.replace("%READER-CONTENT%", mozReadabilityResult.content);
         template = template.replace("%READER-TITLE%", mozReadabilityResult.title);
-        template = template.replace("%READER-MESSAGE%", mozReadabilityResult.title);
         return template;
     } else {
         return "<p>This should not happen</p>";
