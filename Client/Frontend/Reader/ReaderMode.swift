@@ -16,6 +16,8 @@ protocol ReaderModeDelegate {
     func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forBrowser browser: Browser)
 }
 
+private let ReaderModeNamespace = "_firefox_ReaderMode"
+
 class ReaderMode: BrowserHelper {
     var delegate: ReaderModeDelegate?
 
@@ -72,7 +74,7 @@ class ReaderMode: BrowserHelper {
 
     func enableReaderMode() {
         if state == ReaderModeState.Available {
-            browser!.webView.evaluateJavaScript("mozReaderize()", completionHandler: { (object, error) -> Void in
+            browser!.webView.evaluateJavaScript("\(ReaderModeNamespace).readerize()", completionHandler: { (object, error) -> Void in
                 println("DEBUG: mozReaderize object=\(object != nil) error=\(error)")
                 if error == nil {
                     self.state = ReaderModeState.Active
