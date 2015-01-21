@@ -40,7 +40,7 @@ class SiteTableViewController: UITableViewController {
         
         cell.textLabel?.text = site.title
         cell.textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
-        cell.textLabel?.textColor = UIColor.darkGrayColor()
+        cell.textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
         cell.indentationWidth = 20
         
         return cell

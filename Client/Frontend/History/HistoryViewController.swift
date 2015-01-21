@@ -54,10 +54,10 @@ class HistoryViewController: UITableViewController, UrlViewController {
             // ignore the style argument, use our own to override
             super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
             textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
-            textLabel?.textColor = UIColor.darkGrayColor()
+            textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
             indentationWidth = 20
 
-            detailTextLabel?.textColor = UIColor.lightGrayColor()
+            detailTextLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
         }
 
         required init(coder aDecoder: NSCoder) {

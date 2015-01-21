@@ -76,7 +76,7 @@ class BookmarksViewController: UITableViewController {
         cell.imageView?.image = bookmark.icon
         cell.textLabel?.text = bookmark.title
         cell.textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
-        cell.textLabel?.textColor = UIColor.darkGrayColor()
+        cell.textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
         cell.indentationWidth = 20
         
         return cell
