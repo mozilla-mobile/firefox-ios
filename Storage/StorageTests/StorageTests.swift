@@ -3,15 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import XCTest
 
-public class Site {
-    var guid: String
-    var url: String
-    var title: String
-
-    init(url: String, title: String) {
-        self.guid = NSUUID().UUIDString
-        self.url = url
-        self.title = title
-    }
+class StorageTests: XCTestCase {
 }

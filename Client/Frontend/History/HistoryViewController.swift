@@ -4,6 +4,8 @@
 
 import UIKit
 
+import Storage
+
 class HistoryViewController: UITableViewController, UrlViewController {
     private let CELL_IDENTIFIER = "HISTORY_CELL"
     private let HEADER_IDENTIFIER = "HISTORY_HEADER"
@@ -52,10 +54,10 @@ class HistoryViewController: UITableViewController, UrlViewController {
             // ignore the style argument, use our own to override
             super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
             textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
-            textLabel?.textColor = UIColor.darkGrayColor()
+            textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
             indentationWidth = 20
 
-            detailTextLabel?.textColor = UIColor.lightGrayColor()
+            detailTextLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
         }
 
         required init(coder aDecoder: NSCoder) {

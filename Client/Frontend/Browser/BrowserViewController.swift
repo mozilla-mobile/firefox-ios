@@ -147,7 +147,15 @@ extension BrowserViewController: TabManagerDelegate {
 
 extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        toolbar.updateReaderModeState(ReaderModeState.Unavailable)
+        // If we are going to navigate to a new page, hide the reader mode button. Unless we
+        // are going to a about:reader page. Then we keep it on screen: it will change status
+        // (orange color) as soon as the page has loaded.
+        if let absoluteString = webView.URL?.absoluteString {
+            // TODO String comparison here because NSURL cannot parse about:reader URLs (1123509)
+            if absoluteString.hasPrefix("about:reader") == false {
+                toolbar.updateReaderModeState(ReaderModeState.Unavailable)
+            }
+        }
     }
 
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
