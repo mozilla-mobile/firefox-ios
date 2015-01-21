@@ -94,20 +94,23 @@ class JoinedHistoryVisitsTable: Table {
     }
 
     func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor {
-        println("Query \(options)")
         var args = [AnyObject?]()
         var sql = "SELECT siteGuid as guid, url, title FROM \(TableNameVisits) " +
-            "INNER JOIN \(TableNameHistory) ON \(TableNameHistory).guid = \(TableNameVisits).siteGuid ";
+                  "INNER JOIN \(TableNameHistory) ON \(TableNameHistory).guid = \(TableNameVisits).siteGuid ";
 
         if let filter = options?.filter {
             sql += "WHERE url LIKE ? "
             args.append(filter)
         }
+
         sql += "GROUP BY siteGuid";
 
-        // if options?.sort == .LastVisit {
-            // sql += " ORDER BY date DESC"
-        // }
+        // Trying to do this in one line (i.e. options?.sort == .LastVisit) breaks the Swift compiler
+        if let sort = options?.sort {
+            if sort == .LastVisit {
+                sql += " ORDER BY date DESC"
+            }
+        }
 
         return db.executeQuery(sql, factory: factory, withArgs: args)
     }

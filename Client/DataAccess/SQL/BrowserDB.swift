@@ -12,7 +12,7 @@ enum FilterType {
 
 class QueryOptions {
     // A filter string to apploy to the query
-    var filter: String = ""
+    var filter: String? = nil
 
     // Allows for customizing how the filter is applied (i.e. only urls or urls and titles?)
     var filterType: FilterType = .None

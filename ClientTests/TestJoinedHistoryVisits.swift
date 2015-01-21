@@ -58,6 +58,23 @@ class TestJoinedHistoryVisits : AccountTest {
         }
     }
 
+    private func checkSitesOrdered(history: JoinedHistoryVisitsTable, options: QueryOptions?, urls: [(String, String)], s: Bool = true) {
+        db.withConnection(.ReadOnly) { connection -> NSError? in
+            var cursor = history.query(connection, options: options)
+            XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
+            XCTAssertEqual(cursor.count, urls.count, "cursor has right num of entries")
+
+            for index in 0..<urls.count {
+                let site = cursor[index] as Site
+                XCTAssertNotNil(s, "cursor has a site for entry")
+                let info = urls[index]
+                XCTAssertEqual(site.url, info.0, "Found url")
+                XCTAssertEqual(site.title, info.1, "Found right title")
+            }
+            return nil
+        }
+    }
+
     private func clear(history: JoinedHistoryVisitsTable, item: AnyObject? = nil, s: Bool = true) {
         var deleted = -1;
         db.withConnection(.ReadWrite) { connection -> NSError? in
@@ -83,30 +100,43 @@ class TestJoinedHistoryVisits : AccountTest {
                 return nil
             })
 
+            // Add a few visits to some sites
             self.addSite(h, url: "url", title: "title")
             let site = self.addSite(h, url: "url", title: "title")
             self.addSite(h, url: "url2", title: "title")
             self.addSite(h, url: "url2", title: "title")
 
+            // Query all the sites
             self.checkSites(h, options: nil, urls: ["url": "title", "url2": "title"])
 
+            // Query all the sites sorted by data
+            let opts = QueryOptions()
+            opts.sort = .LastVisit
+            self.checkSitesOrdered(h, options: opts, urls: [("url2", "title"), ("url", "title 2")])
+
+            // Adding an already existing site should update the title
             self.addSite(h, url: "url", title: "title 2")
             self.checkSites(h, options: nil, urls: ["url": "title 2", "url2": "title"])
 
+            // Adding an visit with an existing site should update the title
             site.title = "title 3"
             let visit = self.addVisit(h, site: site)
             self.checkSites(h, options: nil, urls: ["url": "title 3", "url2": "title"])
 
+            // Filtering should default to matching urls
             let options = QueryOptions()
             options.filter = "url2"
             self.checkSites(h, options: options, urls: ["url2": "title"])
 
+            // Clearing with a site should remove the site
             self.clear(h, item: site)
             self.checkSites(h, options: nil, urls: ["url2": "title"])
 
+            // Clearing with a site should remove the visit
             self.clear(h, item: visit)
             self.checkSites(h, options: nil, urls: ["url2": "title"])
 
+            // Clearing with nil should remove everything
             self.clear(h)
             self.checkSites(h, options: nil, urls: [String: String]())
             

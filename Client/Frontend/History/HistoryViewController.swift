@@ -19,7 +19,11 @@ class HistoryViewController: UITableViewController, UrlViewController {
 
         set (profile) {
             self._profile = profile
-            profile.history.get(nil, complete: { (data: Cursor) -> Void in
+
+            let opts = QueryOptions()
+            opts.sort = .LastVisit
+
+            profile.history.get(opts, complete: { (data: Cursor) -> Void in
                 if data.status != .Success {
                     println("Err: \(data.statusMessage)")
                 } else {
