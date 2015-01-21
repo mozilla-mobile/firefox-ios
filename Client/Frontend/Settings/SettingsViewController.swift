@@ -27,6 +27,8 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol, UITableView
     override func viewDidLoad() {
         avatarImageView.layer.cornerRadius = 50
         avatarImageView.layer.masksToBounds = true
+        avatarImageView.isAccessibilityElement = true
+        avatarImageView.accessibilityLabel = NSLocalizedString("Avatar", comment: "")
         
         settingsTableView.delegate = self
         settingsTableView.dataSource = self

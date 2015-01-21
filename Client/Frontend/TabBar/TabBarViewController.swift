@@ -183,6 +183,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
         toolbarTextField.layer.cornerRadius = 8
         toolbarTextField.delegate = self
         toolbarTextField.text = url?.absoluteString
+        toolbarTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         toolbarTextField.font = UIFont(name: "HelveticaNeue-Light", size: 14)
         toolbarTextField.becomeFirstResponder()
         view.addSubview(toolbarTextField)
@@ -283,6 +284,11 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
 
     func SELdidClickCancel() {
         dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    override func accessibilityPerformEscape() -> Bool {
+        self.SELdidClickCancel()
+        return true
     }
 }
 

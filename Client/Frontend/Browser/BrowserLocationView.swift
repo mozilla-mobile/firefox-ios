@@ -26,6 +26,8 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
 
         lockImageView = UIImageView(image: UIImage(named: "lock_verified.png"))
         lockImageView.hidden = false
+        lockImageView.isAccessibilityElement = true
+        lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "")
         addSubview(lockImageView)
 
         locationLabel = UILabel()
@@ -134,6 +136,7 @@ private class ReaderModeButton: UIButton {
         super.init(frame: frame)
         setImage(UIImage(named: "reader.png"), forState: UIControlState.Normal)
         setImage(UIImage(named: "reader_active.png"), forState: UIControlState.Selected)
+        accessibilityLabel = NSLocalizedString("Reader", comment: "Browser function that presents simplified version of the page with bigger text.")
     }
     
     required init(coder aDecoder: NSCoder) {
