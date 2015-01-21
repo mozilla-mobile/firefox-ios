@@ -16,15 +16,16 @@ class WebServerTests: XCTestCase {
         webServer.addHandlerForMethod("GET", path: "/hello", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             return GCDWebServerDataResponse(HTML: "<html><body><p>Hello World</p></body></html>")
         }
-        if webServer.startWithPort(0, bonjourName: nil) == false {
-            XCTFail("Can't start the GCDWebServer")
-        }
-        webServerBase = "http://localhost:\(webServer.port)"
     }
 
     override func setUp() {
         super.setUp()
         setupWebServer()
+
+        if webServer.startWithPort(0, bonjourName: nil) == false {
+            XCTFail("Can't start the GCDWebServer")
+        }
+        webServerBase = "http://localhost:\(webServer.port)"
     }
     
     override func tearDown() {
