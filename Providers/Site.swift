@@ -5,12 +5,11 @@
 import UIKit
 
 public class Site {
-    var guid: String
+    var guid: String? = nil
     var url: String
     var title: String
 
     init(url: String, title: String) {
-        self.guid = NSUUID().UUIDString
         self.url = url
         self.title = title
     }

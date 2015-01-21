@@ -12,10 +12,10 @@ class SqliteHistory : History {
         self.db = BrowserDB(profile: profile)!
     }
 
-    func clear(filter: String?, options: HistoryOptions?, complete: (success: Bool) -> Void) {
+    func clear(complete: (success: Bool) -> Void) {
         let s: Site? = nil
         var err: NSError? = nil
-        db.delete(TableNameHistory, item: s, err: &err)
+        db.delete(HistoryVisits, item: s, err: &err)
         dispatch_async(dispatch_get_main_queue()) {
             if err != nil {
                 self.debug("Clear failed: \(err!.localizedDescription)")
@@ -23,18 +23,17 @@ class SqliteHistory : History {
         }
     }
 
-    func get(filter: String?, options: HistoryOptions?, complete: (data: Cursor) -> Void) {
-        let res = db.query(TableNameHistory)
+    func get(options: QueryOptions?, complete: (data: Cursor) -> Void) {
+        let res = db.query(HistoryVisits, options: options)
+
         dispatch_async(dispatch_get_main_queue()) {
             complete(data: res)
         }
     }
 
-    func addVisit(site: Site, options: HistoryOptions?, complete: (success: Bool) -> Void) {
+    func addVisit(visit: Visit, complete: (success: Bool) -> Void) {
         var err: NSError? = nil
-        db.insert(TableNameHistory, item: site, err: &err)
-        // TODO: Track visits in a separate table
-
+        db.insert(HistoryVisits, item: visit, err: &err)
         dispatch_async(dispatch_get_main_queue()) {
             if err != nil {
                 self.debug("Add failed: \(err!.localizedDescription)")

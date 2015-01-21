@@ -109,7 +109,9 @@ public class RESTAccountProfile: Profile, AccountProfile {
     func onLocationChange(notification: NSNotification) {
         if let url = notification.userInfo!["url"] as? NSURL {
             if let title = notification.userInfo!["title"] as? NSString {
-                history.addVisit(Site(url: url.absoluteString!, title: title), options: nil, complete: { (success) -> Void in
+                let site = Site(url: url.absoluteString!, title: title)
+                let visit = Visit(site: site, date: NSDate())
+                history.addVisit(visit, complete: { (success) -> Void in
                     // nothing to do
                 })
             }

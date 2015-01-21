@@ -5,7 +5,9 @@ class TestHistory : AccountTest {
 
     private func innerAddSite(history: History, url: String, title: String, callback: (success: Bool) -> Void) {
         // Add an entry
-        history.addVisit(Site(url: url, title: title), options: nil) { success in
+        let site = Site(url: url, title: title)
+        let visit = Visit(site: site, date: NSDate())
+        history.addVisit(visit, options: nil) { success in
             callback(success: success)
         }
     }
@@ -34,7 +36,7 @@ class TestHistory : AccountTest {
             XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
             XCTAssertEqual(cursor.count, urls.count, "cursor has one entry")
 
-            for (index, url) in enumerate(urls) {
+            for index in 0..<cursor.count() {
                 let s = cursor[index] as Site
                 XCTAssertNotNil(s, "cursor has a site for entry")
                 XCTAssertEqual(s.url, url, "Found right url")
@@ -63,26 +65,59 @@ class TestHistory : AccountTest {
         self.waitForExpectationsWithTimeout(100, handler: nil)
     }
 
+    private func checkVisits(history: History, url: String, visits: Int) {
+        let expectation = self.expectationWithDescription("Wait for history")
+        history.get(url, options: nil) { cursor in
+            let siteGuid = (cursor[0] as Site).guid
+            let options = HistoryOptions()
+            options.visits = true
+            history.get(url, options: options) { cursor in
+                XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
+                XCTAssertEqual(cursor.count, visits, "cursor has one entry")
+
+                for index in 0..<visits {
+                    let s = cursor[index] as Visit
+                    XCTAssertNotNil(s, "cursor has a visit for entry")
+                    XCTAssertEqual(s.site.guid!, siteGuid!, "Found right guid")
+
+                    let now = NSDate()
+                    let DT: Double = 1000
+                    XCTAssertTrue(now.timeIntervalSinceDate(s.date) < DT, "Visit has a recent time")
+                }
+
+                expectation.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(100, handler: nil)
+    }
+
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testSqliteHistory() {
         withTestAccount { account -> Void in
             let h = SqliteHistory(profile: account)
             self.addSite(h, url: "url", title: "title")
             self.addSite(h, url: "url", title: "title", s: false)
-            self.checkSites(h, urls: ["url"], titles: ["title"])
+            self.addSite(h, url: "url", title: "title 2", s: false)
+            self.addSite(h, url: "url2", title: "title")
+            self.addSite(h, url: "url2", title: "title", s: false)
+            self.checkSites(h, urls: ["url", "url2"], titles: ["title 2", "title"])
+            self.checkVisits(h, url: "url", visits: 3)
+            self.checkVisits(h, url: "url2", visits: 3)
             self.clear(h)
             account.files.remove("browser.db")
         }
     }
 
-    let size = 1000
+    let NumThreads = 5
+    let NumCmds = 10
+
     func testInsertPerformance() {
         withTestAccount { account -> Void in
             let h = SqliteHistory(profile: account)
             var j = 0
 
             self.measureBlock({ () -> Void in
-                for i in 0...self.size {
+                for i in 0...self.NumCmds {
                     self.addSite(h, url: "url \(j)", title: "title \(j)")
                     j++
                 }
@@ -100,7 +135,7 @@ class TestHistory : AccountTest {
             var titles = [String]()
 
             self.clear(h)
-            for i in 0...self.size {
+            for i in 0...self.NumCmds {
                 self.addSite(h, url: "url \(j)", title: "title \(j)")
                 urls.append("url \(j)")
                 titles.append("title \(j)")
@@ -115,9 +150,6 @@ class TestHistory : AccountTest {
             account.files.remove("browser.db")
         }
     }
-
-    let NumThreads = 5
-    let NumCmds = 1000
 
     // Fuzzing tests. These fire random insert/query/clear commands into the history database from threads. The don't check
     // the results. Just look for crashes.
