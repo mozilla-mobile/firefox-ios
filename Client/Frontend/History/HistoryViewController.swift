@@ -19,7 +19,7 @@ class HistoryViewController: UITableViewController, UrlViewController {
 
         set (profile) {
             self._profile = profile
-            profile.history.get(nil, options: nil, complete: { (data: Cursor) -> Void in
+            profile.history.get(nil, complete: { (data: Cursor) -> Void in
                 if data.status != .Success {
                     println("Err: \(data.statusMessage)")
                 } else {

@@ -2,6 +2,25 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+enum QuerySort {
+    case None, LastVisit, Frecency
+}
+
+enum FilterType {
+    case None
+}
+
+class QueryOptions {
+    // A filter string to apploy to the query
+    var filter: String = ""
+
+    // Allows for customizing how the filter is applied (i.e. only urls or urls and titles?)
+    var filterType: FilterType = .None
+
+    // The way to sort the query
+    var sort: QuerySort = .None
+}
+
 /* A table in our database. Note this doesn't have to be a real table. It might be backed by a join or something else interesting. */
 protocol Table {
     var name: String { get }
@@ -11,7 +30,7 @@ protocol Table {
     func insert<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int
     func update<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int
     func delete<T>(db: SQLiteDBConnection, item: T?, inout err: NSError?) -> Int
-    func query(db: SQLiteDBConnection) -> Cursor
+    func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor
 }
 
 let DBCouldNotOpenErrorCode = 200
@@ -19,10 +38,11 @@ let DBCouldNotOpenErrorCode = 200
 /* This is a base interface into our browser db. It holds arrays of tables and handles basic creation/updating of them. */
 class BrowserDB {
     private let db: SwiftData
-    private let Version: Int = 1
+    // XXX: Increasing this should blow away old history, since we currently dont' support any upgrades
+    private let Version: Int = 2
     private let FileName = "browser.db"
     private let tables: [String: Table] = [
-        TableNameHistory: HistoryTable(),
+        HistoryVisits: JoinedHistoryVisitsTable()
     ]
 
     private func exists(db: SQLiteDBConnection, table: Table) -> Bool {
@@ -132,11 +152,11 @@ class BrowserDB {
         return res
     }
 
-    func query(name: String) -> Cursor {
+    func query(name: String, filter: String? = nil, options: QueryOptions?) -> Cursor {
         if let table = tables[name] {
             var c: Cursor!
             db.withConnection(SwiftData.Flags.ReadWrite) { connection in
-                c = table.query(connection)
+                c = table.query(connection, options: options)
                 return nil
             }
             return c
