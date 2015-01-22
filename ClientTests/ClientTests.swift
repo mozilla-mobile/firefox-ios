@@ -37,7 +37,7 @@ class ClientTests: XCTestCase {
     
     func testArrayCursor() {
         let data = ["One", "Two", "Three"];
-        let t = ArrayCursor<String>(data: data);
+        let t = ArrayCursor<String>(data: data, factory: nil);
         
         // Test subscript access
         XCTAssertNil(t[-1] as? String, "Subscript -1 returns nil");
@@ -48,7 +48,7 @@ class ClientTests: XCTestCase {
 
         // Test status data with default initializer
         XCTAssertEqual(t.status, CursorStatus.Success, "Cursor as correct status");
-        XCTAssertEqual(t.statusMessage, "Success", "Cursor as correct status message");
+        XCTAssertEqual(t.statusMessage, "", "Cursor as correct status message");
         XCTAssertEqual(t.count, 3, "Cursor as correct size");
 
         // Test generator access

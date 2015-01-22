@@ -61,6 +61,7 @@ class ArrayCursor<T : Any> : Cursor {
     func setData(data: [T]) {
         self.data = data
     }
+    private let factory : ((Any) -> Any)?
 
     override var count : Int {
         if (status != CursorStatus.Success) {
@@ -69,18 +70,12 @@ class ArrayCursor<T : Any> : Cursor {
         return data.count;
     }
 
-    init(data: [T], status: CursorStatus, statusMessage: String) {
+    init(data: [T], factory: ((obj: Any) -> Any)? = nil, status: CursorStatus = .Success, statusMessage: String = "") {
         self.data = data;
         super.init()
         self.status = status;
         self.statusMessage = statusMessage;
-    }
-    
-    init(data: [T]) {
-        self.data = data;
-        super.init()
-        self.status = CursorStatus.Success;
-        self.statusMessage = "Success";
+        self.factory = factory
     }
     
     override subscript(index: Int) -> Any? {
@@ -88,7 +83,11 @@ class ArrayCursor<T : Any> : Cursor {
             if (index >= data.count || index < 0 || status != CursorStatus.Success) {
                 return nil;
             }
-            return data[index];
+
+            if let f = factory {
+                return f(data[index])
+            }
+            return data[index]
         }
     }
 }

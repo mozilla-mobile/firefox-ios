@@ -15,24 +15,68 @@ protocol UrlViewControllerDelegate: class {
     func didClickUrl(url: NSURL)
 }
 
+class TableViewData {
+    let text: String
+    let description: String?
+    let icon: UIImage?
+    let url: NSURL?
+
+    init(text: String, description: String?, icon: UIImage?, url: NSURL?) {
+        self.text = text
+        self.description = description
+        self.icon = icon
+        self.url = url
+    }
+}
+
 class SearchViewController: UIViewController {
     weak var delegate: UrlViewControllerDelegate?
     private var tableView = UITableView()
-    private var sortedEngines = [OpenSearchEngine]()
-    private var suggestClient = SearchSuggestClient<String>(searchEngine: nil)
+    private var results = MultiCursor()
+    private var searchSuggestions = [String]()
+
+    private func SearchEngineToView(obj: Any) -> Any? {
+        if let engine = obj as? OpenSearchEngine {
+            return TableViewData(text: engine.shortName,
+                description: engine.description,
+                icon: engine.image,
+                url: engine.searchURLForQuery(self.searchQuery))
+        }
+        return nil
+    }
+
+    private func SuggestionToView(engine: OpenSearchEngine) -> (Any) -> Any? {
+        return { obj -> Any? in
+            if let suggestion = obj as? String {
+                return TableViewData(text: suggestion,
+                    description: nil,
+                    icon: nil,
+                    url: engine.searchURLForQuery(self.searchQuery))
+            }
+            return nil
+        }
+    }
 
     var searchEngines: SearchEngines? {
         didSet {
-            suggestClient.cancelPendingRequest()
+            results.clearPendingRequests()
 
             if let searchEngines = searchEngines {
-                // Show the default search engine first.
-                sortedEngines = searchEngines.list.sorted { engine, _ in engine === searchEngines.defaultEngine }
-                suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine)
-                suggestClient.maxResults = SuggestionsLimitCount
+                // Show suggestions at the top of the list
+                // TODO: If suggestions are disabled, the suggest client should still show the default search engine on top
+                let defaultEngine = searchEngines.defaultEngine
+                let suggestions = SearchSuggestClient<String>(searchEngine: defaultEngine, factory: SuggestionToView(defaultEngine))
+                suggestions.maxResults = SuggestionsLimitCount
+                results.addCursor(suggestions, index: 0)
+
+                // At the bottom show sorted search engines
+                // Sort the list so the default is on top.
+                // TODO: The sgugestions client can handle showing thie row on top. We should just remove it from this list
+                //       SearchViewController is the only one that needs to know about this detail.
+                let sortedEngines = searchEngines.list.sorted { engine, _ in engine === searchEngines.defaultEngine }
+                results.addCursor(ArrayCursor(data: sortedEngines, factory: SearchEngineToView))
             } else {
-                sortedEngines = []
-                suggestClient = SearchSuggestClient()
+                results.removeAll()
             }
 
             querySuggestClient()
@@ -78,68 +122,86 @@ class SearchViewController: UIViewController {
     }
 
     private func querySuggestClient() {
-        suggestClient.cancelPendingRequest()
-
-        if searchQuery.isEmpty {
-            suggestClient.clear()
-            return
-        }
-
-        suggestClient.query(searchQuery, callback: { _ in
-            if self.suggestClient.status == .Failure {
-                println("Error: \(self.suggestClient.statusMessage)")
-            }
-
-            // Reload the tableView to show the new list of search suggestions.
+        results.clearPendingRequests()
+        results.query(searchQuery) {
             self.tableView.reloadData()
-        })
+        }
     }
 }
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath) as SearchTableViewCell
-
-        if indexPath.row < suggestClient.count {
-            cell.textLabel?.text = suggestClient[indexPath.row] as? String
-            cell.imageView?.image = nil
+        var cell: UITableViewCell!
+        if let data = results[indexPath.item] {
+            //if let presenter = data as? Presenter {
+            //    cell = presenter(tableView)
+            //} else
+            if let v = data as? TableViewData {
+                cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath) as SearchTableViewCell
+                cell.textLabel?.text = v.text
+                cell.detailTextLabel?.text = v.description
+                cell.imageView?.image = v.icon
+                 cell.isAccessibilityElement = false
+            } else {
+                cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath) as SearchTableViewCell
+                cell.textLabel?.text = "\(data)"
+                cell.detailTextLabel?.text = nil
+                cell.imageView?.image = nil
+            }
         } else {
-            let searchEngine = sortedEngines[indexPath.row - suggestClient.count]
-            cell.textLabel?.text = searchQuery
-            cell.imageView?.image = searchEngine.image
+            cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath) as SearchTableViewCell
+            cell.textLabel?.text = "No data?"
+            cell.detailTextLabel?.text = nil
+            cell.imageView?.image = nil
         }
-
-        // Make the row separators span the width of the entire table.
-        cell.layoutMargins = UIEdgeInsetsZero
 
         return cell
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return suggestClient.count + sortedEngines.count
+        return results.count
     }
 }
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var url: NSURL?
-        if indexPath.row < suggestClient.count {
-            let suggestion = suggestClient[indexPath.row] as String
+        if let data = results[indexPath.row] {
+            var url: NSURL? = nil
+            if let v = data as? TableViewData {
+                url = v.url
+            } else if let d = data as? String {
+                // XXX - This should fixup the url
+                url = NSURL(string: d)
+            } else {
+                println("Not sure how to open \(data)")
+            }
 
-            // Assume that only the default search engine can provide search suggestions.
-            url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
-        } else {
-            let engine = sortedEngines[indexPath.row - suggestClient.count]
-            url = engine.searchURLForQuery(searchQuery)
-        }
-
-        if let url = url {
-            delegate?.didClickUrl(url)
+            if let url = url {
+                delegate?.didClickUrl(url)
+            }
         }
     }
 }
 
 private class SearchTableViewCell: UITableViewCell {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        // ignore the style argument, use our own to override
+        super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
+        textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
+        textLabel?.textColor = UIColor.darkGrayColor()
+        indentationWidth = 20
+
+        // Make the row separators span the width of the entire table.
+        layoutMargins = UIEdgeInsetsZero
+
+        detailTextLabel?.textColor = UIColor.lightGrayColor()
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     private override func layoutSubviews() {
         super.layoutSubviews()
         self.imageView?.bounds = CGRectMake(0, 0, 24, 24)

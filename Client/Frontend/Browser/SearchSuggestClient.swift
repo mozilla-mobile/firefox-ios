@@ -21,9 +21,9 @@ class SearchSuggestClient<T> : ArrayCursor<String> {
     private weak var request: Request?
     var maxResults = -1
 
-    init(searchEngine: OpenSearchEngine? = nil) {
+    init(searchEngine: OpenSearchEngine? = nil, factory: ((Any) -> Any?)? = nil) {
         self.searchEngine = searchEngine
-        super.init(data: [String](), status: .Success, statusMessage: "")
+        super.init(data: [String](), factory: factory)
     }
 
     func clear(err: NSError? = nil) {
