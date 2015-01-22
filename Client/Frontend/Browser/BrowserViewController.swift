@@ -220,18 +220,18 @@ extension BrowserViewController: WKNavigationDelegate {
         
         var resultString = ""
         
-        resultString += "code: \(error.code)\n"
-        resultString += "domain: \(error.domain)\n"
-        resultString += "userInfo: \(error.userInfo)\n"
-        resultString += "localizedDescription: \(error.localizedDescription)\n"
-        resultString += "localizedRecoveryOptions: \(error.localizedRecoveryOptions)\n"
-        resultString += "localizedRecoverySuggestion: \(error.localizedRecoverySuggestion)\n"
-        resultString += "localizedFailureReason: \(error.localizedFailureReason)\n"
-        resultString += "recoveryAttempter: \(error.recoveryAttempter)\n"
-        resultString += "helpAnchor: \(error.helpAnchor)\n"
+        resultString += "code: \(error.code)<br>"
+        resultString += "domain: \(error.domain)<br>"
+        resultString += "userInfo: \(error.userInfo)<br>"
+        resultString += "localizedDescription: \(error.localizedDescription)<br>"
+        resultString += "localizedRecoveryOptions: \(error.localizedRecoveryOptions)<br>"
+        resultString += "localizedRecoverySuggestion: \(error.localizedRecoverySuggestion)<br>"
+        resultString += "localizedFailureReason: \(error.localizedFailureReason)<br>"
+        resultString += "recoveryAttempter: \(error.recoveryAttempter)<br>"
+        resultString += "helpAnchor: \(error.helpAnchor)<br>"
         
         //TOOD: It's a rough web page
-        return "<html><head><title></title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=gb2312\"/><style type=\"text/css\">html{text-align: center;}body{position: relative;text-align: center;}div{width: 50%; height: 50%;overflow: auto; position: absolute;margin: auto;top:0;left: 0;bottom: 0;right: 0;}</style></head><body><div><font size=\"12\" color=\"#C0C0C0\">\(error.localizedDescription)</font></div></body></html>"
+        return "<html><head><title></title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=gb2312\"/><style type=\"text/css\">html{text-align: center;}body{position: relative;text-align: center;}div{width: 100%; height: 100%;overflow: auto; position: absolute;margin: auto;top:0;left: 0;bottom: 0;right: 0;}</style></head><body><div><font size=\"12\" color=\"#C0C0C0\">\(resultString)</font></div></body></html>"
     }
 }
 
