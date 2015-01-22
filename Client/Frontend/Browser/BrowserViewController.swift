@@ -8,6 +8,8 @@ import WebKit
 
 private let StatusBarHeight: CGFloat = 20 // TODO: Can't assume this is correct. Status bar height is dynamic.
 private let ToolbarHeight: CGFloat = 44
+private let OKString = NSLocalizedString("OK", comment: "OK button")
+private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
 
 class BrowserViewController: UIViewController {
     private var toolbar: BrowserToolbar!
@@ -223,6 +225,47 @@ extension BrowserViewController: WKUIDelegate {
         // TODO: This doesn't work for window.open() without user action (bug 1124942).
         let tab = tabManager.addTab(request: navigationAction.request, configuration: configuration)
         return tab.webView
+    }
+
+    func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
+        // Show JavaScript alerts.
+        let title = frame.request.URL.host
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
+            completionHandler()
+        }))
+        presentViewController(alertController, animated: true, completion: nil)
+    }
+
+    func webView(webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (Bool) -> Void) {
+        // Show JavaScript confirm dialogs.
+        let title = frame.request.URL.host
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
+            completionHandler(true)
+        }))
+        alertController.addAction(UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: { _ in
+            completionHandler(false)
+        }))
+        presentViewController(alertController, animated: true, completion: nil)
+    }
+
+    func webView(webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: (String!) -> Void) {
+        // Show JavaScript input dialogs.
+        let title = frame.request.URL.host
+        let alertController = UIAlertController(title: title, message: prompt, preferredStyle: UIAlertControllerStyle.Alert)
+        var input: UITextField!
+        alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField!) in
+            textField.text = defaultText
+            input = textField
+        })
+        alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
+            completionHandler(input.text)
+        }))
+        alertController.addAction(UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: { _ in
+            completionHandler(nil)
+        }))
+        presentViewController(alertController, animated: true, completion: nil)
     }
 }
 
