@@ -123,10 +123,14 @@ extension SearchViewController: UITableViewDataSource {
         if indexPath.row < searchSuggestions.count {
             cell.textLabel?.text = searchSuggestions[indexPath.row]
             cell.imageView?.image = nil
+            cell.isAccessibilityElement = false
+            cell.accessibilityLabel = nil
         } else {
             let searchEngine = sortedEngines[indexPath.row - searchSuggestions.count]
             cell.textLabel?.text = searchQuery
             cell.imageView?.image = searchEngine.image
+            cell.isAccessibilityElement = true
+            cell.accessibilityLabel = NSString(format: NSLocalizedString("%@ search for %@", comment: "E.g. \"Google search for Mars\". Please keep the first \"%@\" (which contains the search engine name) as close to the beginning of the translated phrase as possible (it is best to have it as the very first word). This is because the phrase is an accessibility label and VoiceOver users need to hear the search engine name first as that is the key information in the whole phrase (they know the search term because they typed it and from previous rows of the table)."), searchEngine.shortName, searchQuery)
         }
 
         // Make the row separators span the width of the entire table.

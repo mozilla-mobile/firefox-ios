@@ -11,6 +11,36 @@ enum ReaderModeState: String {
     case Active = "Active"
 }
 
+enum ReaderModeTheme: String {
+    case Light = "light"
+    case Dark = "dark"
+}
+
+enum ReaderModeFontType: String {
+    case Serif = "serif"
+    case SansSerif = "sans-serif"
+}
+
+enum ReaderModeFontSize: Int {
+    case Smallest = 1
+    case Small
+    case Normal = 3
+    case Large = 4
+    case Largest = 5
+}
+
+struct ReaderModeStyle {
+    var theme: ReaderModeTheme
+    var fontType: ReaderModeFontType
+    var fontSize: ReaderModeFontSize
+    
+    func encode() -> String {
+        return JSON(["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]).toString(pretty: false)
+    }
+}
+
+let DefaultReaderModeStyle = ReaderModeStyle(theme: .Light, fontType: .SansSerif, fontSize: .Normal)
+
 /// Delegate that contains callbacks that we have added on top of the built-in WKWebViewDelegate
 protocol ReaderModeDelegate {
     func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forBrowser browser: Browser)
@@ -74,9 +104,9 @@ class ReaderMode: BrowserHelper {
 
     func enableReaderMode() {
         if state == ReaderModeState.Available {
-            browser!.webView.evaluateJavaScript("\(ReaderModeNamespace).readerize()", completionHandler: { (object, error) -> Void in
+            browser!.webView.evaluateJavaScript("\(ReaderModeNamespace).readerize(\(style.encode()))", completionHandler: { (object, error) -> Void in
                 println("DEBUG: mozReaderize object=\(object != nil) error=\(error)")
-                if error == nil {
+                if error == nil && object != nil {
                     self.state = ReaderModeState.Active
                     self.originalURL = self.browser!.webView.URL
                     self.browser!.webView.loadHTMLString(object as String, baseURL: self.constructAboutReaderURL(self.browser!.webView.URL))
@@ -94,12 +124,15 @@ class ReaderMode: BrowserHelper {
             originalURL = nil
         }
     }
-
-    func toggleReaderMode() {
-        if state == ReaderModeState.Active {
-            disableReaderMode()
-        } else {
-            enableReaderMode()
+    
+    var style: ReaderModeStyle = DefaultReaderModeStyle {
+        didSet {
+            if state == ReaderModeState.Active {
+                browser!.webView.evaluateJavaScript("\(ReaderModeNamespace).setStyle(\(style.encode()))", completionHandler: {
+                    (object, error) -> Void in
+                    return
+                })
+            }
         }
     }
 }

@@ -56,6 +56,16 @@ extension BrowserViewController: BrowserToolbarDelegate {
         tabManager.selectedTab?.goBack()
     }
 
+    override func accessibilityPerformEscape() -> Bool {
+        if let selectedTab = tabManager.selectedTab? {
+            if selectedTab.canGoBack {
+                didClickBack()
+                return true
+            }
+        }
+        return false
+    }
+
     func didLongPressBack() {
         let controller = BackForwardListViewController()
         controller.listData = tabManager.selectedTab?.backList
@@ -83,7 +93,13 @@ extension BrowserViewController: BrowserToolbarDelegate {
     func didClickReaderMode() {
         if let tab = tabManager.selectedTab {
             if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
-                readerMode.toggleReaderMode()
+                if readerMode.state == .Available {
+                    // TODO: When we persist the style, it can be passed here. This will be part of the UI bug that we already have.
+                    //readerMode.style = getStyleFromProfile()
+                    readerMode.enableReaderMode()
+                } else {
+                    readerMode.disableReaderMode()
+                }
             }
         }
     }
