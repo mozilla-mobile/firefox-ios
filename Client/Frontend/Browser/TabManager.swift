@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import WebKit
 
 protocol TabManagerDelegate {
     func didSelectedTabChange(selected: Browser?, previous: Browser?)
@@ -16,6 +17,11 @@ class TabManager {
 
     private var tabs: [Browser] = []
     private var selectedIndex = -1
+    private let defaultNewTabRequest: NSURLRequest
+
+    init(defaultNewTabRequest: NSURLRequest) {
+        self.defaultNewTabRequest = defaultNewTabRequest
+    }
 
     var count: Int {
         return tabs.count
@@ -53,11 +59,16 @@ class TabManager {
         delegate?.didSelectedTabChange(tab, previous: previous)
     }
 
-    func addTab() -> Browser {
-        let tab = Browser()
+    func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration = WKWebViewConfiguration()) -> Browser {
+        if request == nil {
+            request = defaultNewTabRequest
+        }
+
+        let tab = Browser(configuration: configuration)
         delegate?.didCreateTab(tab)
         tabs.append(tab)
         delegate?.didAddTab(tab)
+        tab.loadRequest(request)
         selectTab(tab)
         return tab
     }

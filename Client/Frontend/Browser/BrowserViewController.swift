@@ -11,8 +11,24 @@ private let ToolbarHeight: CGFloat = 44
 
 class BrowserViewController: UIViewController {
     private var toolbar: BrowserToolbar!
-    private let tabManager = TabManager()
+    private var tabManager: TabManager!
     var profile: Profile!
+
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        didInit()
+    }
+
+    override init() {
+        super.init(nibName: nil, bundle: nil)
+        didInit()
+    }
+
+    private func didInit() {
+        let defaultURL = NSURL(string: "http://www.mozilla.org")!
+        let defaultRequest = NSURLRequest(URL: defaultURL)
+        tabManager = TabManager(defaultNewTabRequest: defaultRequest)
+    }
 
     override func viewDidLoad() {
         let headerView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
@@ -150,7 +166,7 @@ extension BrowserViewController: TabManagerDelegate {
             make.leading.trailing.bottom.equalTo(self.view)
         }
         tab.webView.addObserver(self, forKeyPath: "estimatedProgress", options: .New, context: nil)
-        tab.loadRequest(NSURLRequest(URL: NSURL(string: "http://www.mozilla.org")!))
+        tab.webView.UIDelegate = self
     }
 
     func didRemoveTab(tab: Browser) {
@@ -198,6 +214,15 @@ extension BrowserViewController: WKNavigationDelegate {
                     toolbar.updateProgressBar(progress)
                 }
             }
+    }
+}
+
+extension BrowserViewController: WKUIDelegate {
+    func webView(webView: WKWebView, createWebViewWithConfiguration configuration: WKWebViewConfiguration, forNavigationAction navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        // If the page uses window.open() or target="_blank", open the page in a new tab.
+        // TODO: This doesn't work for window.open() without user action (bug 1124942).
+        let tab = tabManager.addTab(request: navigationAction.request, configuration: configuration)
+        return tab.webView
     }
 }
 
