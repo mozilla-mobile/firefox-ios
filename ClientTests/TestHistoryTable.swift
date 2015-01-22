@@ -35,7 +35,7 @@ class TestHistoryTable : AccountTest {
         }
     }
 
-    private func checkSites(history: HistoryTable<Site>, options: QueryOptions?, urls: [String], titles: [String], s: Bool = true) {
+    private func checkSites(history: HistoryTable<Site>, options: QueryOptions?, urls: [String: String], s: Bool = true) {
         db.withConnection(.ReadOnly) { connection -> NSError? in
             var cursor = history.query(connection, options: options)
             XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
@@ -44,8 +44,10 @@ class TestHistoryTable : AccountTest {
             for index in 0..<cursor.count {
                 if let s = cursor[index] as? Site {
                     XCTAssertNotNil(s, "cursor has a site for entry")
-                    XCTAssertEqual(s.url, urls[index], "Found right url")
-                    XCTAssertEqual(s.title, titles[index], "Found right title")
+                    println("Lookging for \(s.url)")
+                    let title = urls[s.url]
+                    XCTAssertNotNil(title, "Found right url")
+                    XCTAssertEqual(s.title, title!, "Found right title")
                 } else {
                     XCTAssertFalse(true, "Should not be nil...")
                 }
@@ -79,23 +81,23 @@ class TestHistoryTable : AccountTest {
                 return nil
             })
 
-            self.addSite(h, url: "url", title: "title")
-            self.addSite(h, url: "url", title: "title", s: false)
-            self.updateSite(h, url: "url", title: "title 2")
-            self.addSite(h, url: "url2", title: "title")
-            self.addSite(h, url: "url2", title: "title", s: false)
+            self.addSite(h, url: "url1", title: "title1")
+            self.addSite(h, url: "url1", title: "title1", s: false)
+            self.updateSite(h, url: "url1", title: "title1 alt")
+            self.addSite(h, url: "url2", title: "title2")
+            self.addSite(h, url: "url2", title: "title2", s: false)
 
-            self.checkSites(h, options: nil, urls: ["url", "url2"], titles: ["title 2", "title"])
+            self.checkSites(h, options: nil, urls: ["url1": "title1 alt", "url2": "title2"])
 
             let options = QueryOptions()
             options.filter = "url2"
-            self.checkSites(h, options: options, urls: ["url2"], titles: ["title"])
+            self.checkSites(h, options: options, urls: ["url2": "title2"])
 
-            var site = Site(url: "url", title: "title 2")
+            var site = Site(url: "url1", title: "title1 alt")
             self.clear(h, site: site, s: true)
-            self.checkSites(h, options: nil, urls: ["url2"], titles: ["title"])
+            self.checkSites(h, options: nil, urls: ["url2": "title2"])
             self.clear(h)
-            self.checkSites(h, options: nil, urls: [], titles: [])
+            self.checkSites(h, options: nil, urls: [String: String]())
 
             account.files.remove("test.db")
         }

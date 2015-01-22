@@ -14,7 +14,7 @@ class TestJoinedHistoryVisits : AccountTest {
         }
 
         if s {
-            XCTAssert(inserted >= 0, "Inserted succeeded")
+            XCTAssert(inserted >= 0, "Inserted succeeded \(url) \(title)")
         } else {
             XCTAssert(inserted == -1, "Inserted failed")
         }
@@ -101,40 +101,40 @@ class TestJoinedHistoryVisits : AccountTest {
             })
 
             // Add a few visits to some sites
-            self.addSite(h, url: "url", title: "title")
-            let site = self.addSite(h, url: "url", title: "title")
-            self.addSite(h, url: "url2", title: "title")
-            self.addSite(h, url: "url2", title: "title")
+            self.addSite(h, url: "url1", title: "title1")
+            let site = self.addSite(h, url: "url1", title: "title1")
+            self.addSite(h, url: "url2", title: "title2")
+            self.addSite(h, url: "url2", title: "title2")
 
             // Query all the sites
-            self.checkSites(h, options: nil, urls: ["url": "title", "url2": "title"])
+            self.checkSites(h, options: nil, urls: ["url1": "title1", "url2": "title2"])
 
             // Query all the sites sorted by data
             let opts = QueryOptions()
             opts.sort = .LastVisit
-            self.checkSitesOrdered(h, options: opts, urls: [("url2", "title"), ("url", "title 2")])
+            self.checkSitesOrdered(h, options: opts, urls: [("url2", "title2"), ("url1", "title1")])
 
             // Adding an already existing site should update the title
-            self.addSite(h, url: "url", title: "title 2")
-            self.checkSites(h, options: nil, urls: ["url": "title 2", "url2": "title"])
+            self.addSite(h, url: "url1", title: "title1 alt")
+            self.checkSites(h, options: nil, urls: ["url1": "title1 alt", "url2": "title2"])
 
             // Adding an visit with an existing site should update the title
-            site.title = "title 3"
+            site.title = "title1 second alt"
             let visit = self.addVisit(h, site: site)
-            self.checkSites(h, options: nil, urls: ["url": "title 3", "url2": "title"])
+            self.checkSites(h, options: nil, urls: ["url1": "title1 second alt", "url2": "title2"])
 
             // Filtering should default to matching urls
             let options = QueryOptions()
             options.filter = "url2"
-            self.checkSites(h, options: options, urls: ["url2": "title"])
+            self.checkSites(h, options: options, urls: ["url2": "title2"])
 
             // Clearing with a site should remove the site
             self.clear(h, item: site)
-            self.checkSites(h, options: nil, urls: ["url2": "title"])
+            self.checkSites(h, options: nil, urls: ["url2": "title2"])
 
             // Clearing with a site should remove the visit
             self.clear(h, item: visit)
-            self.checkSites(h, options: nil, urls: ["url2": "title"])
+            self.checkSites(h, options: nil, urls: ["url2": "title2"])
 
             // Clearing with nil should remove everything
             self.clear(h)

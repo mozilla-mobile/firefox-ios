@@ -35,7 +35,7 @@ class JoinedHistoryVisitsTable: Table {
             if let guid = getGuidFor(db, site: site) {
                 site.guid = guid
                 // Update the page title
-                return history.update(db, item: site, err: &err);
+                return history.update(db, item: site, err: &err)
             } else {
                 // Make sure we have a site in the table first
                 site.guid = NSUUID().UUIDString
@@ -100,7 +100,7 @@ class JoinedHistoryVisitsTable: Table {
 
         if let filter = options?.filter {
             sql += "WHERE url LIKE ? "
-            args.append(filter)
+            args.append("%\(filter)%")
         }
 
         sql += "GROUP BY siteGuid";

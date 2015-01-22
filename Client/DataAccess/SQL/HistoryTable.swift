@@ -55,7 +55,7 @@ class HistoryTable<T>: GenericTable<Site> {
     override func getQueryAndArgs(options: QueryOptions?) -> (String?, [AnyObject?]) {
         var args = [AnyObject?]()
         if let filter = options?.filter {
-            args.append(filter)
+            args.append("%\(filter)%")
             return ("SELECT guid, url, title FROM \(TableNameHistory) WHERE url LIKE ?", args)
         }
         return ("SELECT guid, url, title FROM \(TableNameHistory)", args)
