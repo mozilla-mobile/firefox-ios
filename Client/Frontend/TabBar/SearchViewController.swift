@@ -29,6 +29,44 @@ class TableViewData {
     }
 }
 
+private class HistoryCursorWrapper: Cursor, Queryable {
+    let history: History
+    var cursor: Cursor
+
+    init(history: History) {
+        self.history = history
+        self.cursor = Cursor(status: .Success, msg: "not run")
+        super.init(status: self.cursor.status, msg: self.cursor.statusMessage)
+    }
+
+    func clearPendingRequests() {
+        // Not much to do right now...
+    }
+
+    func query(filter: String, callback: () -> Void) {
+        let opts = QueryOptions()
+        opts.filter = filter
+        history.get(opts) { (data) -> Void in
+            self.cursor = data
+            self.status = self.cursor.status
+            self.statusMessage = self.cursor.statusMessage
+            callback()
+        }
+    }
+
+    override var count: Int {
+        return cursor.count
+    }
+
+    // Collection iteration and access functions
+    override subscript(index: Int) -> Any? {
+        if let site = cursor[index] as? Site {
+            return TableViewData(text: site.title, description: site.url, icon: nil, url: NSURL(string: site.url))
+        }
+        return nil
+    }
+}
+
 class SearchViewController: UIViewController {
     weak var delegate: UrlViewControllerDelegate?
     private var tableView = UITableView()
@@ -54,6 +92,16 @@ class SearchViewController: UIViewController {
                     url: engine.searchURLForQuery(self.searchQuery))
             }
             return nil
+        }
+    }
+
+    var history: History? {
+        didSet {
+            results.clearPendingRequests()
+            if let history = history {
+                results.addCursor(HistoryCursorWrapper(history: history), index: 1)
+                querySuggestClient()
+            }
         }
     }
 

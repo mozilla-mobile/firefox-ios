@@ -98,7 +98,9 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
         }
 
         searchController = SearchViewController()
+        // Order is important here. The search
         searchController!.searchEngines = profile.searchEngines
+        searchController!.history = profile.history
         searchController!.delegate = self
 
         view.addSubview(searchController!.view)
