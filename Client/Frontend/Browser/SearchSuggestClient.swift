@@ -4,60 +4,94 @@
 
 import Alamofire
 import Foundation
+import UIKit
 
 let SearchSuggestClientErrorDomain = "org.mozilla.firefox.SearchSuggestClient"
 let SearchSuggestClientErrorInvalidEngine = 0
 let SearchSuggestClientErrorInvalidResponse = 1
 
-class SearchSuggestClient {
-    private let searchEngine: OpenSearchEngine
-    private weak var request: Request?
+enum SearchStatus {
+    case None
+    case Searching
+    case Error
+}
 
-    init(searchEngine: OpenSearchEngine) {
+class SearchSuggestClient<T> : ArrayCursor<String> {
+    private let searchEngine: OpenSearchEngine?
+    private weak var request: Request?
+    var maxResults = -1
+
+    init(searchEngine: OpenSearchEngine? = nil) {
         self.searchEngine = searchEngine
+        super.init(data: [String](), status: .Success, statusMessage: "")
     }
 
-    func query(query: String, callback: (response: [String]?, error: NSError?) -> ()) {
-        let url = searchEngine.suggestURLForQuery(query)
-        if url == nil {
-            let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidEngine, userInfo: nil)
-            callback(response: nil, error: error)
-            return
-        }
-
-        request = Alamofire.request(.GET, url!)
-            .validate(statusCode: 200..<300)
-            .responseJSON { (_, _, data, err) in
-                if err != nil {
-                    callback(response: nil, error: err)
-                    return
-                }
-
-                // The response will be of the following format:
-                //    ["foobar",["foobar","foobar2000 mac","foobar skins",...]]
-                // That is, an array of at least two elements: the search term and an array of suggestions.
-                let array = data as? NSArray
-                if array == nil || array?.count < 2 {
-                    let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
-                    callback(response: nil, error: error)
-                    return
-                }
-
-                let suggestions = array![1] as? [String]
-                if suggestions == nil {
-                    let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
-                    callback(response: nil, error: error)
-                    return
-                }
-
-                callback(response: suggestions!, error: nil)
+    func clear(err: NSError? = nil) {
+        setData([String]())
+        if let err = err {
+            status = .Failure
+            statusMessage = err.description
+        } else {
+            status = .Success
+            statusMessage = ""
         }
     }
 
     func cancelPendingRequest() {
-        if request != nil {
-            println("cancelled!")
+        if let req = request {
+            req.cancel()
         }
-        request?.cancel()
+    }
+
+    func query(filter: String, callback: ()->Void) {
+        if let searchEngine = searchEngine {
+            let url = searchEngine.suggestURLForQuery(filter)
+            if url == nil {
+                let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidEngine, userInfo: [NSLocalizedDescriptionKey: "Invalid engine"])
+                clear(err: error)
+                callback()
+                return
+            }
+
+            request = Alamofire.request(.GET, url!)
+                .validate(statusCode: 200..<300)
+                .responseJSON { (_, _, data, err) in
+                    if let err = err {
+                        self.clear(err: err)
+                        callback()
+                        return
+                    }
+
+                    // The response will be of the following format:
+                    //    ["foobar",["foobar","foobar2000 mac","foobar skins",...]]
+                    // That is, an array of at least two elements: the search term and an array of suggestions.
+                    let array = data as? NSArray
+                    if array == nil || array?.count < 2 {
+                        let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])
+                        self.clear(err: error)
+                        callback()
+                        return
+                    }
+
+                    if var suggestions = array![1] as? [String] {
+                        self.status = .Success
+                        // If we got more than maxCount suggestions, clip the list
+                        if self.maxResults > -1 && suggestions.count > self.maxResults {
+                            suggestions.removeRange(self.maxResults..<suggestions.count)
+                        }
+                        self.setData(suggestions)
+                        self.statusMessage = ""
+                        callback()
+                    } else {
+                        let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])
+                        self.clear(err: error)
+                        callback()
+                    }
+            }
+        } else {
+            self.clear()
+            self.statusMessage = "No search engine"
+            callback()
+        }
     }
 }

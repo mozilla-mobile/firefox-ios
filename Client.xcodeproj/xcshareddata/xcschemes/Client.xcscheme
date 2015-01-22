@@ -56,9 +56,6 @@
                   Identifier = "FxAClientTests/testLoginSuccess()">
                </Test>
                <Test
-                  Identifier = "SearchTests">
-               </Test>
-               <Test
                   Identifier = "TokenServerClientTests">
                </Test>
             </SkippedTests>

@@ -9,6 +9,7 @@ import Foundation
  */
 enum CursorStatus {
     case Success;
+    case Thinking;
     case Failure;
 }
 
@@ -55,7 +56,11 @@ public class Cursor: SequenceType {
  * A cursor implementation that wraps an array.
  */
 class ArrayCursor<T : Any> : Cursor {
-    private let data : [T];
+    private var data : [T]
+
+    func setData(data: [T]) {
+        self.data = data
+    }
 
     override var count : Int {
         if (status != CursorStatus.Success) {
