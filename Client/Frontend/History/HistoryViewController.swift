@@ -26,6 +26,7 @@ class HistoryViewController: UITableViewController, UrlViewController {
                     println("Err: \(data.statusMessage)")
                 } else {
                     self.history = data
+                    self.tableView.reloadData()
                 }
             })
         }
