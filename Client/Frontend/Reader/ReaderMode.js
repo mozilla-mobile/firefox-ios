@@ -34,84 +34,13 @@ var _firefox_ReaderMode = {
         }
     },
 
-    simplifyReaderDomain: function(domain) {
-        domain = domain.toLowerCase();
-        if (domain.indexOf("www.") == 0) {
-            domain = domain.substring(4);
-        } else if (domain.indexOf("m.") == 0) {
-            domain = domain.substring(2);
-        } else if (domain.indexOf("mobile.") == 0) {
-            domain = domain.substring(7);
-        }
-        return domain;
+    // Readerize the document. Since we did the actual readerization already in checkReadability, we
+    // can simply return the results we already have.
+
+    readerize: function() {
+        return _firefox_ReaderMode.readabilityResult;
     },
 
-    readerize: function(style) {
-        if (_firefox_ReaderMode.readabilityResult) {
-            var template = _firefox_ReaderMode.readerModeTemplate();
-            template = template.replace("%READER-STYLE%", JSON.stringify(style));
-            template = template.replace("%READER-DOMAIN%", _firefox_ReaderMode.simplifyReaderDomain(_firefox_ReaderMode.readabilityResult.uri.host));
-            template = template.replace("%READER-URL%", _firefox_ReaderMode.readabilityResult.uri.spec || "");
-            template = template.replace("%READER-CONTENT%", _firefox_ReaderMode.readabilityResult.content || "");
-            template = template.replace("%READER-TITLE%", _firefox_ReaderMode.readabilityResult.title || "");
-            template = template.replace("%READER-CREDITS%", _firefox_ReaderMode.readabilityResult.byline || "");
-            return template;
-        }
-    },
-
-    // This is inline here because I don't have a good answer just yet about loading non-js content into
-    // the sandboxed javascript world. This is far from ideal but will be addressed in a next iteration.
-    // The CSS is currently linked to a remote site. This will be fixed as part of bug 1123408.
-
-    readerModeTemplate: function() {
-        var template = '';
-        template += '<!DOCTYPE html>\n';
-        template += '<html>\n';
-        template += '\n';
-        template += '<head>\n';
-        template += '  <meta content="text/html; charset=UTF-8" http-equiv="content-type">\n';
-        template += '  <meta name="viewport" content="width=device-width, user-scalable=no" />\n';
-        template += '  <link rel="stylesheet" href="http://wopr.norad.org/~stefan/Reader.css" type="text/css"/>\n';
-        template += '  <script type="">var _firefox_ReaderPage = { style: %READER-STYLE% };</script>\n';
-        template += '</head>\n';
-        template += '\n';
-        template += '<body>\n';
-        template += '  <div id="reader-header" class="header">\n';
-        template += '    <a id="reader-domain" class="domain" href="%READER-URL%">%READER-DOMAIN%</a>\n';
-        template += '    <div class="domain-border"></div>\n';
-        template += '    <h1 id="reader-title">%READER-TITLE%</h1>\n';
-        template += '    <div id="reader-credits" class="credits">%READER-CREDITS%</div>\n';
-        template += '  </div>\n';
-        template += '\n';
-        template += '  <div id="reader-content" class="content">\n';
-        template += '    %READER-CONTENT%\n';
-        template += '  </div>\n';
-        template += '\n';
-        template += '  <div id="reader-message" class="message">\n';
-        template += '    %READER-MESSAGE%\n';
-        template += '  </div>\n';
-        template += '\n';
-        template += '  <ul id="reader-toolbar" class="toolbar toolbar-hidden">\n';
-        template += '    <li><a id="share-button" class="button share-button" href="#"></a></li>\n';
-        template += '    <ul class="dropdown">\n';
-        template += '      <li><a class="dropdown-toggle button style-button" href="#"></a></li>\n';
-        template += '      <li class="dropdown-popup">\n';
-        template += '        <ul id="font-type-buttons"></ul>\n';
-        template += '        <hr></hr>\n';
-        template += '        <ul id="font-size-buttons" class="segmented-button"></ul>\n';
-        template += '        <hr></hr>\n';
-        template += '        <ul id="color-scheme-buttons" class="segmented-button"></ul>\n';
-        template += '      </li>\n';
-        template += '    </ul>\n';
-        template += '    <li><a id="toggle-button" class="button toggle-button" href="#"></a></li>\n';
-        template += '  </ul>\n';
-        template += '\n';
-        template += '</body>\n';
-        template += '\n';
-        template += '</html>\n';
-        return template;
-    },
-    
     // TODO The following code only makes sense in about:reader context. It may be a good idea to move
     //   it out of this file and into for example a Reader.js.
     
