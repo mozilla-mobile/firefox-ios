@@ -83,7 +83,6 @@ class SearchTests: XCTestCase {
             XCTAssertEqual(client[0] as String, "foobar")
             XCTAssertEqual(client[1] as String, "foobar2000 mac")
             XCTAssertEqual(client[2] as String, "foobar skins")
-
             expectation.fulfill()
         })
 
