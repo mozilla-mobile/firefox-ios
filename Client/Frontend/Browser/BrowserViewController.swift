@@ -198,6 +198,16 @@ extension BrowserViewController: WKNavigationDelegate {
         toolbar.updateFowardStatus(webView.canGoForward)
     }
 
+    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+        webView.stopLoading()
+        self.displayErrorPage(error)
+    }
+
+    func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
+        webView.stopLoading()
+        self.displayErrorPage(error)
+    }
+
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         var info = [NSObject: AnyObject]()
@@ -207,7 +217,6 @@ extension BrowserViewController: WKNavigationDelegate {
         notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
     }
 
-
     override func observeValueForKeyPath(keyPath: String, ofObject object:
         AnyObject, change:[NSObject: AnyObject], context:
         UnsafeMutablePointer<Void>) {
@@ -216,6 +225,31 @@ extension BrowserViewController: WKNavigationDelegate {
                     toolbar.updateProgressBar(progress)
                 }
             }
+    }
+    
+    private func displayErrorPage(error: NSError) {
+        if let webView = tabManager.selectedTab?.webView {
+            //TODO: I prefer to read errorURL from NSError, but it's weird
+            webView.loadHTMLString(self.generateErrorPage(error), baseURL: toolbar.currentURL())
+        }
+    }
+    
+    private func generateErrorPage(error: NSError) -> String {
+        
+        var resultString = ""
+        
+        resultString += "code: \(error.code)<br>"
+        resultString += "domain: \(error.domain)<br>"
+        resultString += "userInfo: \(error.userInfo)<br>"
+        resultString += "localizedDescription: \(error.localizedDescription)<br>"
+        resultString += "localizedRecoveryOptions: \(error.localizedRecoveryOptions)<br>"
+        resultString += "localizedRecoverySuggestion: \(error.localizedRecoverySuggestion)<br>"
+        resultString += "localizedFailureReason: \(error.localizedFailureReason)<br>"
+        resultString += "recoveryAttempter: \(error.recoveryAttempter)<br>"
+        resultString += "helpAnchor: \(error.helpAnchor)<br>"
+        
+        //TOOD: It's a rough web page
+        return "<html><head><title></title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=gb2312\"/><style type=\"text/css\">html{text-align: center;}body{position: relative;text-align: center;}div{width: 100%; height: 100%;overflow: auto; position: absolute;margin: auto;top:0;left: 0;bottom: 0;right: 0;}</style></head><body><div><font size=\"12\" color=\"#C0C0C0\">\(resultString)</font></div></body></html>"
     }
 }
 
