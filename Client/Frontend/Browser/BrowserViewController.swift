@@ -11,6 +11,8 @@ private let ToolbarHeight: CGFloat = 44
 private let OKString = NSLocalizedString("OK", comment: "OK button")
 private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
 
+private let KVOEstimatedProgress = "estimatedProgress"
+
 class BrowserViewController: UIViewController {
     private var toolbar: BrowserToolbar!
     private var tabManager: TabManager!
@@ -57,6 +59,19 @@ class BrowserViewController: UIViewController {
         tabManager.delegate = self
 
         tabManager.addTab()
+    }
+
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject: AnyObject], context: UnsafeMutablePointer<Void>) {
+        if object as? WKWebView !== tabManager.selectedTab?.webView {
+            return
+        }
+
+        switch keyPath {
+        case KVOEstimatedProgress:
+            toolbar.updateProgressBar(change[NSKeyValueChangeNewKey] as Float)
+        default:
+            assertionFailure("Unhandled KVO key: \(keyPath)")
+        }
     }
 }
 
@@ -138,10 +153,10 @@ extension BrowserViewController: TabManagerDelegate {
         previous?.webView.navigationDelegate = nil
         selected?.webView.navigationDelegate = self
         toolbar.updateURL(selected?.url)
-        toolbar.updateProgressBar(0.0)
         if let selected = selected {
             toolbar.updateBackStatus(selected.canGoBack)
             toolbar.updateFowardStatus(selected.canGoForward)
+            toolbar.updateProgressBar(Float(selected.webView.estimatedProgress))
         }
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
@@ -167,14 +182,14 @@ extension BrowserViewController: TabManagerDelegate {
             make.top.equalTo(self.view.snp_top)
             make.leading.trailing.bottom.equalTo(self.view)
         }
-        tab.webView.addObserver(self, forKeyPath: "estimatedProgress", options: .New, context: nil)
+        tab.webView.addObserver(self, forKeyPath: KVOEstimatedProgress, options: .New, context: nil)
         tab.webView.UIDelegate = self
     }
 
     func didRemoveTab(tab: Browser) {
         toolbar.updateTabCount(tabManager.count)
 
-        tab.webView.removeObserver(self, forKeyPath: "estimatedProgress")
+        tab.webView.removeObserver(self, forKeyPath: KVOEstimatedProgress)
         tab.webView.removeFromSuperview()
     }
 }
@@ -205,17 +220,6 @@ extension BrowserViewController: WKNavigationDelegate {
         info["title"] = webView.title
 
         notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
-    }
-
-
-    override func observeValueForKeyPath(keyPath: String, ofObject object:
-        AnyObject, change:[NSObject: AnyObject], context:
-        UnsafeMutablePointer<Void>) {
-            if keyPath == "estimatedProgress" && object as? WKWebView == tabManager.selectedTab?.webView {
-                if let progress = change[NSKeyValueChangeNewKey] as Float? {
-                    toolbar.updateProgressBar(progress)
-                }
-            }
     }
 }
 
