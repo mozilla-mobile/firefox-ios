@@ -49,7 +49,6 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
 
     private func makeConstraints() {
         let container = self
-        let padding = UIEdgeInsetsMake(4, 8, 4, 8)
 
         lockImageView.snp_remakeConstraints { make in
             make.centerY.equalTo(container).centerY
@@ -74,6 +73,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         readerModeButton.snp_remakeConstraints { make in
             make.centerY.equalTo(container).centerY
             make.right.equalTo(container.snp_right).with.offset(-4)
+            make.width.equalTo(container.snp_height)
         }
     }
 
