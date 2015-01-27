@@ -220,6 +220,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 }
 
+
 extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
@@ -245,7 +246,11 @@ extension BrowserViewController: WKNavigationDelegate {
         info["url"] = webView.URL
         info["title"] = webView.title
 
-        notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
+        webView.runScript("getAll()", js: "Favicons", callback: { obj in
+            info["icons"] = obj as [String]
+            notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
+        })
+    }
 
         UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver

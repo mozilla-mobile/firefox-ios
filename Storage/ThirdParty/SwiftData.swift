@@ -246,21 +246,22 @@ public class SQLiteDBConnection {
         for (index, obj) in enumerate(objects) {
             var status: Int32 = SQLITE_OK
 
-            if let i = obj as? Int {
-                status = sqlite3_bind_int(stmt, Int32(index+1), Int32(i))
-            } else if let i = obj as? Double {
-                status = sqlite3_bind_double(stmt, Int32(index+1), i)
-            } else if let i = obj as? Bool {
-                status = sqlite3_bind_int(stmt, Int32(index+1), i ? 1 : 0)
-            } else if let i = obj as? String {
+            // Double's also pass obj is Int, so order is important here
+            if obj is Double {
+                status = sqlite3_bind_double(stmt, Int32(index+1), obj as Double)
+            } else if obj is Int {
+                status = sqlite3_bind_int(stmt, Int32(index+1), Int32(obj as Int))
+            } else if obj is Bool {
+                status = sqlite3_bind_int(stmt, Int32(index+1), (obj as Bool) ? 1 : 0)
+            } else if obj is String {
                 let negativeOne = UnsafeMutablePointer<Int>(bitPattern: -1)
                 let opaquePointer = COpaquePointer(negativeOne)
                 let transient = CFunctionPointer<((UnsafeMutablePointer<()>) -> Void)>(opaquePointer)
-                status = sqlite3_bind_text(stmt, Int32(index+1), i.cStringUsingEncoding(NSUTF8StringEncoding)!, -1, transient)
-            } else if let i = obj as? NSData {
-                status = sqlite3_bind_blob(stmt, Int32(index+1), i.bytes, -1, nil)
-            } else if let i = obj as? NSDate {
-                var timestamp = Double(i.timeIntervalSince1970)
+                status = sqlite3_bind_text(stmt, Int32(index+1), (obj as String).cStringUsingEncoding(NSUTF8StringEncoding)!, -1, transient)
+            } else if obj is NSData {
+                status = sqlite3_bind_blob(stmt, Int32(index+1), (obj as NSData).bytes, -1, nil)
+            } else if obj is NSDate {
+                var timestamp = (obj as NSDate).timeIntervalSince1970
                 status = sqlite3_bind_double(stmt, Int32(index+1), timestamp)
             } else if obj === nil {
                 status = sqlite3_bind_null(stmt, Int32(index+1))
@@ -483,7 +484,7 @@ private struct SDError {
 public class SDCursor<T> : Cursor {
     private let stmt: COpaquePointer
     // Function for generating objects of type T from a row.
-    private let factory: (SDRow) -> T?
+    private let factory: (SDRow) -> T
     // Status of the previous fetch request.
     private var sqlStatus: Int32 = 0
     // Hold a reference to the connection so that it isn't closed
@@ -497,7 +498,6 @@ public class SDCursor<T> : Cursor {
     override public var count: Int {
         get { return _count }
     }
-
 
     private var _position = -1
     private var position: Int {
@@ -569,14 +569,13 @@ public class SDCursor<T> : Cursor {
                 return row
             }
 
-            var res: T? = nil
             self.position = index
             if self.sqlStatus != SQLITE_ROW {
-                return res
+                return nil
             }
 
             let row = SDRow(connection: db, stmt: self.stmt, columns: self.columns)
-            res = self.factory(row)
+            let res = self.factory(row)
             self.cache[index] = res
             sqlite3_reset(self.stmt)
             self._position = -1

@@ -21,7 +21,11 @@ class HistoryViewController: UITableViewController, UrlViewController {
 
         set (profile) {
             self._profile = profile
-            profile.history.get(nil, options: nil, complete: { (data: Cursor) -> Void in
+
+            let opts = QueryOptions()
+            opts.sort = .LastVisit
+
+            profile.history.get(opts, complete: { (data: Cursor) -> Void in
                 if data.status != .Success {
                     println("Err: \(data.statusMessage)")
                 } else {
@@ -56,9 +60,10 @@ class HistoryViewController: UITableViewController, UrlViewController {
             super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
             textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
             textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
-            indentationWidth = 20
-
+            indentationWidth = 0
             detailTextLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
+            imageView?.bounds = CGRectMake(0, 0, 24, 24)
+            // imageView?
         }
 
         required init(coder aDecoder: NSCoder) {
@@ -72,9 +77,20 @@ class HistoryViewController: UITableViewController, UrlViewController {
 
         if var hist = self.history {
             if let site = hist[indexPath.row] as? Site {
-                // cell.imageView?.image = site.icon
                 cell.textLabel?.text = site.title
                 cell.detailTextLabel?.text = site.url
+                // cell.imageView?.image = UIImage(named: "leaf")
+
+                let opts = QueryOptions()
+                opts.filter = site.url
+                profile.favicons.get(opts) { data in
+                    if let icon = data[0] as? Favicon {
+                        if let img = icon.image {
+                            cell.imageView?.image = createSizedFavicon(img)
+                            cell.setNeedsLayout()
+                        }
+                    }
+                }
             }
         }
 

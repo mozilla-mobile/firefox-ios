@@ -3,10 +3,42 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-
 import Storage
 
 typealias LogoutCallback = (profile: AccountProfile) -> ()
+
+class MockFavicons : Favicons {
+    private let files: FileAccessor
+    private var icons = [String: Favicon]()
+
+   required init(files: FileAccessor) {
+        self.files = files
+    }
+
+    func clear(complete: (success: Bool) -> Void) {
+        icons = [String: Favicon]()
+        dispatch_async(dispatch_get_main_queue()) {
+            complete(success: true)
+        }
+    }
+
+    func get(options: QueryOptions?, complete: (data: Cursor) -> Void) {
+        var ret = [Favicon]()
+        for site in icons {
+            ret.append(site.1)
+        }
+        dispatch_async(dispatch_get_main_queue()) {
+            complete(data: ArrayCursor<Favicon>(data: ret))
+        }
+    }
+
+    func add(favicon: Favicon, site: Site, complete: (success: Bool) -> Void) {
+        icons[site.url] = favicon
+        dispatch_async(dispatch_get_main_queue()) {
+            complete(success: true)
+        }
+    }
+}
 
 class ProfileFileAccessor : FileAccessor {
     let profile: Profile
@@ -49,6 +81,13 @@ class ProfileFileAccessor : FileAccessor {
             fileManager.removeItemAtPath(file, error: nil)
         }
     }
+
+    func exists(filename: String) -> Bool {
+        if var file = get(filename) {
+            return NSFileManager.defaultManager().fileExistsAtPath(file)
+        }
+        return false
+    }
 }
 
 /**
@@ -56,12 +95,13 @@ class ProfileFileAccessor : FileAccessor {
  */
 protocol Profile {
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
-    var favicons: Favicons { get }
+    // var favicons: Favicons { get }
     var clients: Clients { get }
     var prefs: ProfilePrefs { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
     var history: History { get }
+    var favicons: Favicons { get }
 
     // Because we can't test for whether this is an AccountProfile.
     // TODO: probably Profile should own an Account.
@@ -97,9 +137,9 @@ public class MockAccountProfile: Profile, AccountProfile {
         return MockMemoryBookmarksStore()
     } ()
 
-    lazy var favicons: Favicons = {
-        return BasicFavicons()
-    } ()
+    //lazy var favicons: Favicons = {
+    //    return BasicFavicons()
+    //} ()
 
     lazy var clients: Clients = {
         return MockClients(profile: self)
@@ -116,6 +156,11 @@ public class MockAccountProfile: Profile, AccountProfile {
     lazy var files: FileAccessor = {
         return ProfileFileAccessor(profile: self)
     } ()
+
+    lazy var favicons: Favicons = {
+        return MockFavicons(files: self.files)
+    }()
+
 
     func basicAuthorizationHeader() -> String {
         return ""
@@ -153,10 +198,22 @@ public class RESTAccountProfile: Profile, AccountProfile {
     @objc
     func onLocationChange(notification: NSNotification) {
         if let url = notification.userInfo!["url"] as? NSURL {
+            var site: Site!
             if let title = notification.userInfo!["title"] as? NSString {
-                history.addVisit(Site(url: url.absoluteString!, title: title), options: nil, complete: { (success) -> Void in
+                site = Site(url: url.absoluteString!, title: title)
+                let visit = Visit(site: site, date: NSDate())
+                history.addVisit(visit, complete: { (success) -> Void in
                     // nothing to do
                 })
+            }
+
+            if let icons = notification.userInfo!["icons"] as? [String] {
+                for icon in icons {
+                    let f = Favicon(url: icon, image: nil, date: nil)
+                    favicons.add(f, site: site, complete: { success in
+                        // nothing?
+                    })
+                }
             }
         }
     }
@@ -212,9 +269,9 @@ public class RESTAccountProfile: Profile, AccountProfile {
     }
 
 
-    lazy var favicons: Favicons = {
-        return BasicFavicons()
-    } ()
+    //lazy var favicons: Favicons = {
+    //    return BasicFavicons()
+    //} ()
 
     lazy var searchEngines: SearchEngines = {
         return SearchEngines()
@@ -241,4 +298,9 @@ public class RESTAccountProfile: Profile, AccountProfile {
     lazy var history: History = {
         return SQLiteHistory(files: self.files)
     }()
+
+    lazy var favicons: Favicons = {
+        return SQLiteFavicons(files: self.files)
+    }()
+
 }

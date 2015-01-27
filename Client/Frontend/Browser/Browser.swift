@@ -98,3 +98,31 @@ class Browser: NSObject, WKScriptMessageHandler {
         return helpers[name]
     }
 }
+
+extension WKWebView {
+
+    func runScript(src: String, js: String, callback: (AnyObject?) -> Void) {
+        if let path = NSBundle.mainBundle().pathForResource(js, ofType: "js") {
+            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) {
+                evaluateJavaScript(source, completionHandler: { (obj, err) -> Void in
+                    if let err = err {
+                        
+                        println("Error injecting \(err)")
+                        return
+                    }
+
+                    self.evaluateJavaScript("__firefox__.\(js).\(src)", completionHandler: { (obj, err) -> Void in
+                        self.evaluateJavaScript("delete window.__firefox__.\(js)", completionHandler: { (obj, err) -> Void in })
+                        if let err = err {
+                            println("Error running \(err)")
+                            return
+                        }
+                        callback(obj)
+                    })
+                })
+            }
+        }
+    }
+}
+
+
