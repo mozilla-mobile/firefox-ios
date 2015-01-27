@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0BA497761A7B08B4004C8E17 /* GenericTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA497741A7B08B4004C8E17 /* GenericTable.swift */; };
+		0BA497771A7B08B4004C8E17 /* HistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA497751A7B08B4004C8E17 /* HistoryTable.swift */; };
 		282DA49B1A699E0300A406E2 /* Storage.h in Headers */ = {isa = PBXBuildFile; fileRef = 282DA49A1A699E0300A406E2 /* Storage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		282DA4A11A699E0300A406E2 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 282DA4951A699E0300A406E2 /* Storage.framework */; };
 		282DA4A81A699E0300A406E2 /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4A71A699E0300A406E2 /* StorageTests.swift */; };
@@ -16,10 +18,6 @@
 		282DA4C61A699F8A00A406E2 /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4C41A699F8A00A406E2 /* SwiftData.swift */; };
 		282DA4C81A699FD900A406E2 /* BrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4C71A699FD900A406E2 /* BrowserDB.swift */; };
 		282DA4C91A699FD900A406E2 /* BrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4C71A699FD900A406E2 /* BrowserDB.swift */; };
-		282DA4CC1A69A0BB00A406E2 /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4CA1A69A0BB00A406E2 /* SQLiteHistory.swift */; };
-		282DA4CD1A69A0BB00A406E2 /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4CA1A69A0BB00A406E2 /* SQLiteHistory.swift */; };
-		282DA4CE1A69A0BB00A406E2 /* HistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4CB1A69A0BB00A406E2 /* HistoryTable.swift */; };
-		282DA4CF1A69A0BB00A406E2 /* HistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4CB1A69A0BB00A406E2 /* HistoryTable.swift */; };
 		282DA4D11A69A14500A406E2 /* FileAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4D01A69A14500A406E2 /* FileAccessor.swift */; };
 		282DA4D21A69A14500A406E2 /* FileAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4D01A69A14500A406E2 /* FileAccessor.swift */; };
 		282DA4D41A69A24300A406E2 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4D31A69A24300A406E2 /* History.swift */; };
@@ -43,6 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0BA497741A7B08B4004C8E17 /* GenericTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenericTable.swift; path = SQL/GenericTable.swift; sourceTree = "<group>"; };
+		0BA497751A7B08B4004C8E17 /* HistoryTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HistoryTable.swift; path = SQL/HistoryTable.swift; sourceTree = "<group>"; };
 		282DA4951A699E0300A406E2 /* Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		282DA4991A699E0300A406E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		282DA49A1A699E0300A406E2 /* Storage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Storage.h; sourceTree = "<group>"; };
@@ -52,8 +52,6 @@
 		282DA4C01A699EF200A406E2 /* Cursor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cursor.swift; sourceTree = "<group>"; };
 		282DA4C41A699F8A00A406E2 /* SwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftData.swift; path = ThirdParty/SwiftData.swift; sourceTree = "<group>"; };
 		282DA4C71A699FD900A406E2 /* BrowserDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserDB.swift; sourceTree = "<group>"; };
-		282DA4CA1A69A0BB00A406E2 /* SQLiteHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteHistory.swift; sourceTree = "<group>"; };
-		282DA4CB1A69A0BB00A406E2 /* HistoryTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTable.swift; sourceTree = "<group>"; };
 		282DA4D01A69A14500A406E2 /* FileAccessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileAccessor.swift; sourceTree = "<group>"; };
 		282DA4D31A69A24300A406E2 /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		282DA4D61A69A28000A406E2 /* Site.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Site.swift; sourceTree = "<group>"; };
@@ -153,8 +151,8 @@
 		282DA4D91A69A2C400A406E2 /* SQL */ = {
 			isa = PBXGroup;
 			children = (
-				282DA4CB1A69A0BB00A406E2 /* HistoryTable.swift */,
-				282DA4CA1A69A0BB00A406E2 /* SQLiteHistory.swift */,
+				0BA497741A7B08B4004C8E17 /* GenericTable.swift */,
+				0BA497751A7B08B4004C8E17 /* HistoryTable.swift */,
 				282DA4C71A699FD900A406E2 /* BrowserDB.swift */,
 			);
 			name = SQL;
@@ -280,9 +278,9 @@
 				282DA5211A69BCB700A406E2 /* module.modulemap in Sources */,
 				282DA4D71A69A28000A406E2 /* Site.swift in Sources */,
 				282DA4D41A69A24300A406E2 /* History.swift in Sources */,
-				282DA4CE1A69A0BB00A406E2 /* HistoryTable.swift in Sources */,
-				282DA4CC1A69A0BB00A406E2 /* SQLiteHistory.swift in Sources */,
 				282DA4D11A69A14500A406E2 /* FileAccessor.swift in Sources */,
+				0BA497761A7B08B4004C8E17 /* GenericTable.swift in Sources */,
+				0BA497771A7B08B4004C8E17 /* HistoryTable.swift in Sources */,
 				282DA4C81A699FD900A406E2 /* BrowserDB.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,11 +293,9 @@
 				282DA4D21A69A14500A406E2 /* FileAccessor.swift in Sources */,
 				282DA4C91A699FD900A406E2 /* BrowserDB.swift in Sources */,
 				282DA4D51A69A24300A406E2 /* History.swift in Sources */,
-				282DA4CF1A69A0BB00A406E2 /* HistoryTable.swift in Sources */,
 				282DA4D81A69A28000A406E2 /* Site.swift in Sources */,
 				282DA4A81A699E0300A406E2 /* StorageTests.swift in Sources */,
 				282DA4C61A699F8A00A406E2 /* SwiftData.swift in Sources */,
-				282DA4CD1A69A0BB00A406E2 /* SQLiteHistory.swift in Sources */,
 				282DA4C21A699EF200A406E2 /* Cursor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

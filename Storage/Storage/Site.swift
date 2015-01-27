@@ -5,18 +5,14 @@
 import UIKit
 
 public class Site {
-    public let guid: String
+    var id: Int? = nil
+    var guid: String? = nil
+
     public let url: String
     public let title: String
 
-    public init(guid: String, url: String, title: String) {
-        self.guid = guid
+    public init(url: String, title: String) {
         self.url = url
         self.title = title
-    }
-
-    public convenience init(url: String, title: String) {
-        let id = NSUUID().UUIDString       // TODO: make this a GUID!
-        self.init(guid: id, url: url, title: title)
     }
 }
