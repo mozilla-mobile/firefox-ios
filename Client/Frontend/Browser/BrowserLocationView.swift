@@ -51,27 +51,28 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
 
         lockImageView.snp_remakeConstraints { make in
             make.centerY.equalTo(container).centerY
-            make.left.equalTo(container.snp_left).with.offset(8)
+            make.leading.equalTo(container).with.offset(8)
             make.width.equalTo(self.lockImageView.intrinsicContentSize().width)
         }
 
         locationLabel.snp_remakeConstraints { make in
             make.centerY.equalTo(container.snp_centerY)
             if self.url?.scheme == "https" {
-                make.left.equalTo(self.lockImageView.snp_right).with.offset(8)
+                make.leading.equalTo(self.lockImageView.snp_trailing).with.offset(8)
             } else {
-                make.left.equalTo(container.snp_left).with.offset(8)
+                make.leading.equalTo(container).with.offset(8)
             }
             if self.readerModeButton.readerModeState == ReaderModeState.Unavailable {
-                make.right.equalTo(container.snp_right).with.offset(-8)
+                make.trailing.equalTo(container).with.offset(-8)
             } else {
-                make.right.equalTo(self.readerModeButton.snp_left).with.offset(-4)
+                make.trailing.equalTo(self.readerModeButton.snp_leading).with.offset(-8)
             }
         }
 
         readerModeButton.snp_remakeConstraints { make in
             make.centerY.equalTo(container).centerY
-            make.right.equalTo(container.snp_right).with.offset(-4)
+            make.trailing.equalTo(container).with.offset(-4)
+
             // We fix the width of the button (to the height of the view) to prevent content
             // compression when the locationLabel has more text contents than will fit. It
             // would be nice to do this with a content compression priority but that does
