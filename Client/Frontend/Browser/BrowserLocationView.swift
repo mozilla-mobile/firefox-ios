@@ -21,7 +21,6 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.whiteColor()
-        self.clipsToBounds = true
         self.layer.cornerRadius = 5
 
         lockImageView = UIImageView(image: UIImage(named: "lock_verified.png"))
@@ -132,6 +131,28 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
                 })
             }
         }
+    }
+
+    override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
+        if let hitView = super.hitTest(point, withEvent: event) {
+            return hitView
+        }
+
+        // If the hit test failed, offset it by moving it up and try again.
+        var fuzzPoint = point
+        fuzzPoint.y -= 20
+        if let hitView = super.hitTest(fuzzPoint, withEvent: event) {
+            return hitView
+        }
+
+        // If the hit test failed, offset it by moving it down and try again.
+        fuzzPoint = point
+        fuzzPoint.y += 20
+        if let hitView = super.hitTest(fuzzPoint, withEvent: event) {
+            return hitView
+        }
+
+        return nil
     }
 }
 
