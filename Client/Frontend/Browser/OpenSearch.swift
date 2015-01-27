@@ -8,52 +8,42 @@ import UIKit
 private let TypeSearch = "text/html"
 private let TypeSuggest = "application/x-suggestions+json"
 
-private class OpenSearchURL {
-    let template: String
-    let type: String
-
-    init(template: String, type: String) {
-        self.template = template;
-        self.type = type;
-    }
-}
-
 class OpenSearchEngine {
     let shortName: String
     let description: String?
     let image: UIImage?
-    private let searchURL: OpenSearchURL
-    private let suggestURL: OpenSearchURL?
+    private let searchTemplate: String
+    private let suggestTemplate: String?
 
-    private init(shortName: String, description: String?, image: UIImage?, searchURL: OpenSearchURL, suggestURL: OpenSearchURL?) {
+    init(shortName: String, description: String?, image: UIImage?, searchTemplate: String, suggestTemplate: String?) {
         self.shortName = shortName
         self.description = description
         self.image = image
-        self.searchURL = searchURL
-        self.suggestURL = suggestURL
+        self.searchTemplate = searchTemplate
+        self.suggestTemplate = suggestTemplate
     }
 
     /**
      * Returns the search URL for the given query.
      */
     func searchURLForQuery(query: String) -> NSURL? {
-        return getURLFromTemplate(searchURL, query: query)
+        return getURLFromTemplate(searchTemplate, query: query)
     }
 
     /**
      * Returns the search suggestion URL for the given query.
      */
     func suggestURLForQuery(query: String) -> NSURL? {
-        if suggestURL == nil {
-            return nil
+        if let suggestTemplate = suggestTemplate {
+            return getURLFromTemplate(suggestTemplate, query: query)
         }
 
-        return getURLFromTemplate(suggestURL!, query: query)
+        return nil
     }
 
-    private func getURLFromTemplate(openSearchURL: OpenSearchURL, query: String) -> NSURL? {
+    private func getURLFromTemplate(searchTemplate: String, query: String) -> NSURL? {
         if let escapedQuery = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) {
-            let urlString = openSearchURL.template.stringByReplacingOccurrencesOfString("{searchTerms}", withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
+            let urlString = searchTemplate.stringByReplacingOccurrencesOfString("{searchTerms}", withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
             return NSURL(string: urlString)
         }
 
@@ -117,9 +107,8 @@ class OpenSearchParser {
             return nil
         }
 
-        var searchURL: OpenSearchURL!
-        var suggestURL: OpenSearchURL?
-        var searchURLs = [OpenSearchURL]()
+        var searchTemplate: String!
+        var suggestTemplate: String?
         for url in urls! {
             let type = url.attributes["type"]
             if type == nil {
@@ -162,15 +151,14 @@ class OpenSearchParser {
                 }
             }
 
-            let url = OpenSearchURL(template: template!, type: type!)
             if type == TypeSearch {
-                searchURL = url
+                searchTemplate = template
             } else {
-                suggestURL = url
+                suggestTemplate = template
             }
         }
 
-        if searchURL == nil {
+        if searchTemplate == nil {
             println("Search engine must have a text/html type")
             return nil
         }
@@ -208,6 +196,6 @@ class OpenSearchParser {
             }
         }
 
-        return OpenSearchEngine(shortName: shortName!, description: description, image: uiImage, searchURL: searchURL, suggestURL: suggestURL)
+        return OpenSearchEngine(shortName: shortName!, description: description, image: uiImage, searchTemplate: searchTemplate, suggestTemplate: suggestTemplate)
     }
 }
