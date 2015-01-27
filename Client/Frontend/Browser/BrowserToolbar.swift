@@ -14,6 +14,8 @@ protocol BrowserToolbarDelegate {
     func didLongPressBack()
     func didLongPressForward()
     func didClickReaderMode()
+    func didClickStop()
+    func didClickReload()
 }
 
 class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
@@ -140,6 +142,10 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         forwardButton.enabled = canGoForward
     }
 
+    func updateLoading(loading: Bool) {
+        locationView.loading = loading
+    }
+
     func SELdidClickBack() {
         browserToolbarDelegate?.didClickBack()
     }
@@ -182,5 +188,13 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
 
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
         browserToolbarDelegate?.didBeginEditing()
+    }
+
+    func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView) {
+        browserToolbarDelegate?.didClickReload()
+    }
+
+    func browserLocationViewDidTapStop(browserLocationView: BrowserLocationView) {
+        browserToolbarDelegate?.didClickStop()
     }
 }

@@ -8,13 +8,19 @@ import UIKit
 protocol BrowserLocationViewDelegate {
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView)
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView)
+    func browserLocationViewDidTapStop(browserLocationView: BrowserLocationView)
+    func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView)
 }
+
+let ImageReload = UIImage(named: "toolbar_reload.png")
+let ImageStop = UIImage(named: "toolbar_stop.png")
 
 class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     var delegate: BrowserLocationViewDelegate?
 
     private var lockImageView: UIImageView!
     private var locationLabel: UILabel!
+    private var stopReloadButton: UIButton!
     private var readerModeButton: ReaderModeButton!
     var readerModeButtonWidthConstraint: NSLayoutConstraint?
 
@@ -37,6 +43,11 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocationLabel:")
         locationLabel.addGestureRecognizer(tapGestureRecognizer)
+
+        stopReloadButton = UIButton()
+        stopReloadButton.setImage(ImageReload, forState: UIControlState.Normal)
+        stopReloadButton.addTarget(self, action: "SELtapStopReload", forControlEvents: UIControlEvents.TouchUpInside)
+        addSubview(stopReloadButton)
 
         readerModeButton = ReaderModeButton(frame: CGRectZero)
         readerModeButton.hidden = true
@@ -63,15 +74,21 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
                 make.leading.equalTo(container).with.offset(8)
             }
             if self.readerModeButton.readerModeState == ReaderModeState.Unavailable {
-                make.trailing.equalTo(container).with.offset(-8)
+                make.trailing.equalTo(self.stopReloadButton.snp_leading).with.offset(-8)
             } else {
                 make.trailing.equalTo(self.readerModeButton.snp_leading).with.offset(-8)
             }
         }
 
-        readerModeButton.snp_remakeConstraints { make in
+        stopReloadButton.snp_remakeConstraints { make in
             make.centerY.equalTo(container).centerY
             make.trailing.equalTo(container).with.offset(-4)
+            make.size.equalTo(20)
+        }
+
+        readerModeButton.snp_remakeConstraints { make in
+            make.centerY.equalTo(container).centerY
+            make.trailing.equalTo(self.stopReloadButton.snp_leading).offset(-4)
 
             // We fix the width of the button (to the height of the view) to prevent content
             // compression when the locationLabel has more text contents than will fit. It
@@ -97,6 +114,14 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         delegate?.browserLocationViewDidTapReaderMode(self)
     }
 
+    func SELtapStopReload() {
+        if loading {
+            delegate?.browserLocationViewDidTapStop(self)
+        } else {
+            delegate?.browserLocationViewDidTapReload(self)
+        }
+    }
+
     var url: NSURL? {
         didSet {
             lockImageView.hidden = (url?.scheme != "https")
@@ -110,6 +135,16 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
                 }
             }
             makeConstraints()
+        }
+    }
+
+    var loading: Bool = false {
+        didSet {
+            if loading {
+                stopReloadButton.setImage(ImageStop, forState: .Normal)
+            } else {
+                stopReloadButton.setImage(ImageReload, forState: .Normal)
+            }
         }
     }
 

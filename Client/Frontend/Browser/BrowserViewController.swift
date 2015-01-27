@@ -11,6 +11,7 @@ private let ToolbarHeight: CGFloat = 44
 private let OKString = NSLocalizedString("OK", comment: "OK button")
 private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
 
+private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
 
 class BrowserViewController: UIViewController {
@@ -69,6 +70,8 @@ class BrowserViewController: UIViewController {
         switch keyPath {
         case KVOEstimatedProgress:
             toolbar.updateProgressBar(change[NSKeyValueChangeNewKey] as Float)
+        case KVOLoading:
+            toolbar.updateLoading(change[NSKeyValueChangeNewKey] as Bool)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath)")
         }
@@ -117,6 +120,14 @@ extension BrowserViewController: BrowserToolbarDelegate {
         presentViewController(controller, animated: true, completion: nil)
     }
 
+    func didClickReload() {
+        tabManager.selectedTab?.reload()
+    }
+
+    func didClickStop() {
+        tabManager.selectedTab?.stop()
+    }
+
     func didClickAddTab() {
         let controller = TabTrayController()
         controller.tabManager = tabManager
@@ -157,6 +168,7 @@ extension BrowserViewController: TabManagerDelegate {
             toolbar.updateBackStatus(selected.canGoBack)
             toolbar.updateFowardStatus(selected.canGoForward)
             toolbar.updateProgressBar(Float(selected.webView.estimatedProgress))
+            toolbar.updateLoading(selected.webView.loading)
         }
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
@@ -183,6 +195,7 @@ extension BrowserViewController: TabManagerDelegate {
             make.leading.trailing.bottom.equalTo(self.view)
         }
         tab.webView.addObserver(self, forKeyPath: KVOEstimatedProgress, options: .New, context: nil)
+        tab.webView.addObserver(self, forKeyPath: KVOLoading, options: .New, context: nil)
         tab.webView.UIDelegate = self
     }
 
@@ -190,6 +203,7 @@ extension BrowserViewController: TabManagerDelegate {
         toolbar.updateTabCount(tabManager.count)
 
         tab.webView.removeObserver(self, forKeyPath: KVOEstimatedProgress)
+        tab.webView.removeObserver(self, forKeyPath: KVOLoading)
         tab.webView.removeFromSuperview()
     }
 }

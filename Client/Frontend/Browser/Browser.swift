@@ -59,6 +59,14 @@ class Browser: NSObject, WKScriptMessageHandler {
         webView.loadRequest(request)
     }
 
+    func stop() {
+        webView.stopLoading()
+    }
+
+    func reload() {
+        webView.reload()
+    }
+
     private var helpers: [String: BrowserHelper] = [String: BrowserHelper]()
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
