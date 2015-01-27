@@ -198,14 +198,9 @@ extension BrowserViewController: WKNavigationDelegate {
         toolbar.updateFowardStatus(webView.canGoForward)
     }
 
-    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
-        webView.stopLoading()
-        self.displayErrorPage(error)
-    }
-
     func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
-        webView.stopLoading()
-        self.displayErrorPage(error)
+        let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL
+        webView.loadHTMLString(generateErrorPage(error), baseURL: url)
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
@@ -227,15 +222,7 @@ extension BrowserViewController: WKNavigationDelegate {
             }
     }
     
-    private func displayErrorPage(error: NSError) {
-        if let webView = tabManager.selectedTab?.webView {
-            //TODO: I prefer to read errorURL from NSError, but it's weird
-            webView.loadHTMLString(self.generateErrorPage(error), baseURL: toolbar.currentURL())
-        }
-    }
-    
     private func generateErrorPage(error: NSError) -> String {
-        
         var resultString = ""
         
         resultString += "code: \(error.code)<br>"
