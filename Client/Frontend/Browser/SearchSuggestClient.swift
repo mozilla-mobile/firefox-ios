@@ -55,9 +55,6 @@ class SearchSuggestClient {
     }
 
     func cancelPendingRequest() {
-        if request != nil {
-            println("cancelled!")
-        }
         request?.cancel()
     }
 }
