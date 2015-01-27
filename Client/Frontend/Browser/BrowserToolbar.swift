@@ -120,10 +120,6 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         }
     }
     
-    func currentURL() -> NSURL? {
-        return locationView.url
-    }
-    
     func updateURL(url: NSURL?) {
         if let url = url {
             locationView.url = url
@@ -165,7 +161,6 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
     }
 
     func updateProgressBar(progress: Float) {
-        //TODO: Float == Float ?
         if progress == 1.0 {
             self.progressBar.setProgress(progress, animated: true)
             UIView.animateWithDuration(1.5, animations: {self.progressBar.alpha = 0.0},
