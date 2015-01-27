@@ -14,6 +14,7 @@ enum ReaderModeState: String {
 enum ReaderModeTheme: String {
     case Light = "light"
     case Dark = "dark"
+    case Print = "print"
 }
 
 enum ReaderModeFontType: String {
@@ -92,7 +93,7 @@ protocol ReaderModeDelegate {
 
 private let ReaderModeNamespace = "_firefox_ReaderMode"
 
-class ReaderMode: BrowserHelper {
+class ReaderMode: BrowserHelper, ReaderModeStyleViewControllerDelegate {
     var delegate: ReaderModeDelegate?
 
     private weak var browser: Browser?
@@ -216,5 +217,9 @@ class ReaderMode: BrowserHelper {
             }
         }
         return nil
+    }
+
+    func readerModeStyleViewController(readerModeStyleViewController: ReaderModeStyleViewController, didConfigureStyle style: ReaderModeStyle) {
+        self.style = style
     }
 }
