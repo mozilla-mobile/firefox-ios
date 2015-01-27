@@ -4,6 +4,7 @@
 
 import Foundation
 import Alamofire
+import Storage
 
 class BookmarksRESTModelFactory: BookmarksModelFactory, ShareToDestination {
     private let profile: RESTAccountProfile
@@ -37,7 +38,7 @@ class BookmarksRESTModelFactory: BookmarksModelFactory, ShareToDestination {
     // Return synchronously to allow for init. You can asynchronously reinit through the returned model.
     // Better would be for the view controller to be prepared for this to arrive later.
     var nullModel: BookmarksModel {
-        let f = MemoryBookmarkFolder(id: "stub", name: "", children: [])
+        let f = MemoryBookmarkFolder(id: "stub", title: "", children: [])
         return BookmarksModel(modelFactory: self, root: f)
     }
 
@@ -72,7 +73,7 @@ class BookmarksRESTModelFactory: BookmarksModelFactory, ShareToDestination {
             }
         }
 
-        let f = MemoryBookmarkFolder(id: "unsorted", name: "Unsorted", children: resp)
+        let f = MemoryBookmarkFolder(id: "unsorted", title: "Unsorted", children: resp)
         return BookmarksModel(modelFactory: self, root: f)
     }
 

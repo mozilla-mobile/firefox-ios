@@ -3,8 +3,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-
 import UIKit
+
+public struct ShareItem {
+    public let url: String
+    public let title: String?
+
+    public init(url: String, title: String?) {
+        self.url = url
+        self.title = title
+    }
+}
+
+public protocol ShareToDestination {
+    func shareItem(item: ShareItem)
+}
 
 public struct BookmarkRoots {
     // These are stolen from Fennec's BrowserContract.
@@ -34,7 +47,7 @@ public struct BookmarkRoots {
  */
 public class BookmarkItem: BookmarkNode {
     public let id: String
-    public let url: String
+    public let url: String!
     public let title: String
 
     var _icon: UIImage?
@@ -42,10 +55,10 @@ public class BookmarkItem: BookmarkNode {
         if (self._icon != nil) {
             return self._icon!
         }
-        return createSizedFavicon(UIImage(named: "leaf.png")!)
+        return UIImage(named: "leaf.png")!
     }
 
-    init(id: String, title: String, url: String) {
+    public init(id: String, title: String, url: String) {
         self.id = id
         self.title = title
         self.url = url
@@ -69,6 +82,12 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
     public let title: String
     let children: [BookmarkNode]
 
+    public init(id: String, title: String, children: [BookmarkNode]) {
+        self.id = id;
+        self.title = title
+        self.children = children
+    }
+
     public struct BookmarkNodeGenerator: GeneratorType {
         typealias Element = BookmarkNode
         let children: [BookmarkNode]
@@ -84,7 +103,7 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
     }
 
     public var icon: UIImage {
-        return createSizedFavicon(UIImage(named: "bookmark_folder_closed.png")!)
+        return createSizedFavicon(UIImage(named: "bookmark_folder_closed")!)
     }
 
     init(id: String, name: String, children: [BookmarkNode]) {
@@ -130,9 +149,9 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
  */
 public class BookmarksModel {
     let modelFactory: BookmarksModelFactory
-    let current: BookmarkFolder
+    public let current: BookmarkFolder
 
-    init(modelFactory: BookmarksModelFactory, root: BookmarkFolder) {
+    public init(modelFactory: BookmarksModelFactory, root: BookmarkFolder) {
         self.modelFactory = modelFactory
         self.current = root
     }
@@ -170,6 +189,8 @@ public class BookmarksModel {
 public class MemoryBookmarksSink: ShareToDestination {
     var queue: [BookmarkNode] = []
 
+    public init() { }
+
     public func shareItem(item: ShareItem) {
         let title = item.title == nil ? "Untitled" : item.title!
 
@@ -182,12 +203,12 @@ public class MemoryBookmarksSink: ShareToDestination {
 
         // Don't create duplicates.
         if (!contains(queue, exists)) {
-            queue.append(BookmarkItem(id: Bytes.generateGUID(), title: title, url: item.url))
+            queue.append(BookmarkItem(id: NSUUID().UUIDString, title: title, url: item.url))
         }
     }
 }
 
-protocol BookmarksModelFactory {
+public protocol BookmarksModelFactory {
     func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ())
     func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ())
 
@@ -208,10 +229,10 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
 
     let sink: MemoryBookmarksSink
 
-    init() {
+    public init() {
         var res = [BookmarkItem]()
         for i in 0...10 {
-            res.append(BookmarkItem(id: Bytes.generateGUID(), title: "Title \(i)", url: "http://www.example.com/\(i)"))
+            res.append(BookmarkItem(id: NSUUID().UUIDString, title: "Title \(i)", url: "http://www.example.com/\(i)"))
         }
 
         mobile = MemoryBookmarkFolder(id: BookmarkRoots.MOBILE_FOLDER_GUID, name: "Mobile Bookmarks", children: res)
@@ -222,11 +243,11 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         root = MemoryBookmarkFolder(id: BookmarkRoots.PLACES_FOLDER_GUID, name: "Root", children: [mobile, unsorted])
     }
 
-    func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         self.modelForFolder(folder.id, success, failure)
     }
 
-    func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+   public  func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         var m: BookmarkFolder
         switch (guid) {
         case BookmarkRoots.MOBILE_FOLDER_GUID:
@@ -247,14 +268,14 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         success(BookmarksModel(modelFactory: self, root: m))
     }
 
-    func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         success(BookmarksModel(modelFactory: self, root: self.root))
     }
 
     /**
      * This class could return the full data immediately. We don't, because real DB-backed code won't.
      */
-    var nullModel: BookmarksModel {
+    public var nullModel: BookmarksModel {
         let f = MemoryBookmarkFolder(id: BookmarkRoots.PLACES_FOLDER_GUID, name: "Root", children: [])
         return BookmarksModel(modelFactory: self, root: f)
     }

@@ -4,6 +4,7 @@
 
 import Foundation
 import Alamofire
+import Storage
 
 class Client {
     var id: String

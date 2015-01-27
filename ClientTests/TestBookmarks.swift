@@ -4,6 +4,7 @@
 
 import Foundation
 import XCTest
+import Storage
 
 class TestBookmarks : AccountTest {
     func testBookmarks() {
