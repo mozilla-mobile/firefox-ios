@@ -73,6 +73,10 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         readerModeButton.snp_remakeConstraints { make in
             make.centerY.equalTo(container).centerY
             make.right.equalTo(container.snp_right).with.offset(-4)
+            // We fix the width of the button (to the height of the view) to prevent content
+            // compression when the locationLabel has more text contents than will fit. It
+            // would be nice to do this with a content compression priority but that does
+            // not seem to work.
             make.width.equalTo(container.snp_height)
         }
     }
