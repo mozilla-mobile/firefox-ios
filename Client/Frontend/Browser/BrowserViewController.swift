@@ -153,6 +153,12 @@ extension BrowserViewController: TabManagerDelegate {
         if let readerMode = ReaderMode(browser: tab) {
             readerMode.delegate = self
             tab.addHelper(readerMode, name: ReaderMode.name())
+
+            // TODO: This is a *temporary* way to trigger the reader mode style dialog via 3 taps in the webview. When
+            // we know where the Aa button needs to go, all code below can be refactored properly.
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: "SELshowReaderModeStyle:")
+            gestureRecognizer.numberOfTapsRequired = 3
+            tab.webView.addGestureRecognizer(gestureRecognizer)
         }
     }
 
@@ -277,36 +283,24 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
             println("DEBUG: New readerModeState: \(state.rawValue)")
             toolbar.updateReaderModeState(state)
         }
-
-        // TODO: This is a *temporary* way to trigger the reader mode style dialog via 3 taps in the webview. When
-        // we know where the Aa button needs to go, all code below can be refactored properly.
-        if state == ReaderModeState.Active {
-            let gestureRecognizer = UITapGestureRecognizer(target: self, action: "SELshowReaderModeStyle:")
-            gestureRecognizer.numberOfTapsRequired = 3
-            browser.webView.addGestureRecognizer(gestureRecognizer)
-        } else {
-            if let gestureRecognizers = browser.webView.gestureRecognizers {
-                if gestureRecognizers.count == 1 {
-                    browser.webView.removeGestureRecognizer(gestureRecognizers[0] as UIGestureRecognizer)
-                }
-            }
-        }
     }
 
     func SELshowReaderModeStyle(recognizer: UITapGestureRecognizer) {
         if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode {
-            let readerModeStyleViewController = ReaderModeStyleViewController()
-            readerModeStyleViewController.delegate = readerMode
-            readerModeStyleViewController.readerModeStyle = readerMode.style
-            readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
+            if readerMode.state == ReaderModeState.Active {
+                let readerModeStyleViewController = ReaderModeStyleViewController()
+                readerModeStyleViewController.delegate = readerMode
+                readerModeStyleViewController.readerModeStyle = readerMode.style
+                readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
 
-            let popoverPresentationController = readerModeStyleViewController.popoverPresentationController
-            popoverPresentationController?.backgroundColor = UIColor.whiteColor()
-            popoverPresentationController?.delegate = self
-            popoverPresentationController?.sourceView = self.view
-            popoverPresentationController?.sourceRect = CGRect(x: self.view.frame.width/2, y: self.view.frame.height-4, width: 4, height: 4)
+                let popoverPresentationController = readerModeStyleViewController.popoverPresentationController
+                popoverPresentationController?.backgroundColor = UIColor.whiteColor()
+                popoverPresentationController?.delegate = self
+                popoverPresentationController?.sourceView = self.view
+                popoverPresentationController?.sourceRect = CGRect(x: self.view.frame.width/2, y: self.view.frame.height-4, width: 4, height: 4)
 
-            self.presentViewController(readerModeStyleViewController, animated: true, completion: nil)
+                self.presentViewController(readerModeStyleViewController, animated: true, completion: nil)
+            }
         }
     }
 
