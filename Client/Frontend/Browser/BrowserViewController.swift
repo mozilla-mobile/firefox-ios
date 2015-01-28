@@ -298,7 +298,6 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
             let readerModeStyleViewController = ReaderModeStyleViewController()
             readerModeStyleViewController.delegate = readerMode
             readerModeStyleViewController.readerModeStyle = readerMode.style
-            //readerModeStyleViewController.preferredContentSize = CGSize(width: 260, height: 211)
             readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
 
             let popoverPresentationController = readerModeStyleViewController.popoverPresentationController
