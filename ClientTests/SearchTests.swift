@@ -64,29 +64,62 @@ class SearchTests: XCTestCase {
         XCTAssertNil(uriFixup.getURL(beforeFixup))
     }
 
-    // TODO: Use a mock HTTP server instead.
     func testSuggestClient() {
-        let parser = OpenSearchParser(pluginMode: true)
-        let file = NSBundle.mainBundle().pathForResource("google", ofType: "xml", inDirectory: "Locales/en-US/searchplugins")
-        let engine: OpenSearchEngine! = parser.parse(file!)
+        let webServerBase = startMockSuggestServer()
+
+        let engine = OpenSearchEngine(shortName: "Mock engine", description: nil, image: nil, searchTemplate: "", suggestTemplate: "\(webServerBase)?q={searchTerms}")
         let client = SearchSuggestClient(searchEngine: engine)
 
-        let expectation = self.expectationWithDescription("Response received")
-
-        client.query("foobar", callback: { response, error in
+        let query1 = self.expectationWithDescription("foo query")
+        client.query("foo", callback: { response, error in
             if error != nil {
                 XCTFail("Error: \(error?.description)")
             }
 
-            // TODO: This test is especially fragile since the suggestions list may change at any time.
-            // Check just the first few results since they're likely more stable.
-            XCTAssertEqual(response![0], "foobar")
-            XCTAssertEqual(response![1], "foobar2000 mac")
-            XCTAssertEqual(response![2], "foobar skins")
+            XCTAssertEqual(response![0], "foo")
+            XCTAssertEqual(response![1], "foo2")
+            XCTAssertEqual(response![2], "foo you")
 
-            expectation.fulfill()
+            query1.fulfill()
         })
-
         waitForExpectationsWithTimeout(10, handler: nil)
+
+        let query2 = self.expectationWithDescription("foo bar query")
+        client.query("foo bar", callback: { response, error in
+            if error != nil {
+                XCTFail("Error: \(error?.description)")
+            }
+
+            XCTAssertEqual(response![0], "foo bar soap")
+            XCTAssertEqual(response![1], "foo barstool")
+            XCTAssertEqual(response![2], "foo bartender")
+
+            query2.fulfill()
+        })
+        waitForExpectationsWithTimeout(10, handler: nil)
+    }
+
+    private func startMockSuggestServer() -> String {
+        let webServer: GCDWebServer = GCDWebServer()
+
+        webServer.addHandlerForMethod("GET", path: "/", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            var suggestions: [String]!
+            let query = request.query["q"] as String
+            switch query {
+            case "foo":
+                suggestions = ["foo", "foo2", "foo you"]
+            case "foo bar":
+                suggestions = ["foo bar soap", "foo barstool", "foo bartender"]
+            default:
+                XCTFail("Unexpected query: \(query)")
+            }
+            return GCDWebServerDataResponse(JSONObject: [query, suggestions])
+        }
+
+        if !webServer.startWithPort(0, bonjourName: nil) {
+            XCTFail("Can't start the GCDWebServer")
+        }
+
+        return "http://localhost:\(webServer.port)"
     }
 }

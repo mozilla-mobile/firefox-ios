@@ -773,15 +773,15 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
-				0B3343041A5CADC1000AE428 /* TestHistory.swift */,
 				0BA896491A250E6500C1010C /* AccountTest.swift */,
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
 				D3FA777A1A43B2990010CD32 /* SearchTests.swift */,
 				0BA8964A1A250E6500C1010C /* TestBookmarks.swift */,
+				0B3343041A5CADC1000AE428 /* TestHistory.swift */,
 				0BE108351A1B1EC700D4B712 /* TestLocking.swift */,
 				0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */,
-				F84B21D71A090F8100AAB793 /* Supporting Files */,
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
+				F84B21D71A090F8100AAB793 /* Supporting Files */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
