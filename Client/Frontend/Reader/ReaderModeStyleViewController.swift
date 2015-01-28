@@ -49,7 +49,7 @@ class ReaderModeStyleViewController: UIViewController {
                 if idx == 0 {
                     make.top.equalTo(self.view.snp_top)
                 } else {
-                    make.top.equalTo(self.rows[idx-1].snp_bottom).offset(1)
+                    make.top.equalTo(self.rows[idx - 1].snp_bottom).offset(1)
                 }
                 make.height.equalTo(self.rowHeights[idx])
             }
@@ -116,10 +116,10 @@ class ReaderModeStyleViewController: UIViewController {
                 if idx == 0 {
                     make.left.equalTo(row.snp_left)
                 } else {
-                    make.left.equalTo(buttons[idx-1].snp_right).offset(1)
+                    make.left.equalTo(buttons[idx - 1].snp_right).offset(1)
                 }
                 make.bottom.equalTo(row.snp_bottom)
-                make.width.equalTo(self.preferredContentSize.width/CGFloat(buttons.count))
+                make.width.equalTo(self.preferredContentSize.width / CGFloat(buttons.count))
             }
         }
     }
