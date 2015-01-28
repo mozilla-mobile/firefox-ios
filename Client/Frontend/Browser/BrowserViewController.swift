@@ -177,6 +177,12 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func didCreateTab(tab: Browser) {
+        if let longPressGestureRecognizer = LongPressGestureRecognizer(browser: tab) {
+            tab.webView.addGestureRecognizer(longPressGestureRecognizer)
+            longPressGestureRecognizer.longPressGestureDelegate = self
+            tab.addHelper(longPressGestureRecognizer, name: LongPressGestureRecognizer.name())
+        }
+
         if let readerMode = ReaderMode(browser: tab) {
             readerMode.delegate = self
             tab.addHelper(readerMode, name: ReaderMode.name())
@@ -333,5 +339,50 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.None
+    }
+}
+
+extension BrowserViewController: LongPressGestureDelegate {
+    func longPressRecognizer(longPressRecognizer: LongPressGestureRecognizer, didLongPressElements elements: [LongPressElementType: NSURL]) {
+        var actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        var dialogTitleURL: NSURL?
+        if let linkURL = elements[LongPressElementType.Link] {
+            dialogTitleURL = linkURL
+            var openNewTabAction =  UIAlertAction(title: "Open In New Tab", style: UIAlertActionStyle.Default) { (action: UIAlertAction!) in
+                let request =  NSURLRequest(URL: linkURL)
+                let tab = self.tabManager.addTab(request: request)
+            }
+            actionSheetController.addAction(openNewTabAction)
+
+            var copyAction = UIAlertAction(title: "Copy", style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
+                var pasteBoard = UIPasteboard.generalPasteboard()
+                pasteBoard.string = linkURL.absoluteString
+            }
+            actionSheetController.addAction(copyAction)
+        }
+        if let imageURL = elements[LongPressElementType.Image] {
+            if dialogTitleURL == nil {
+                dialogTitleURL = imageURL
+            }
+            var saveImageAction = UIAlertAction(title: "Save Image", style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+                    var imageData = NSData(contentsOfURL: imageURL)
+                    if imageData != nil {
+                        UIImageWriteToSavedPhotosAlbum(UIImage(data: imageData!), nil, nil, nil)
+                    }
+                })
+            }
+            actionSheetController.addAction(saveImageAction)
+
+            var copyAction = UIAlertAction(title: "Copy Image URL", style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
+                var pasteBoard = UIPasteboard.generalPasteboard()
+                pasteBoard.string = imageURL.absoluteString
+            }
+            actionSheetController.addAction(copyAction)
+        }
+        actionSheetController.title = dialogTitleURL!.absoluteString
+        var cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, nil)
+        actionSheetController.addAction(cancelAction)
+        self.presentViewController(actionSheetController, animated: true, completion: nil)
     }
 }
