@@ -77,7 +77,7 @@ struct ReadabilityResult {
             if let title = dict["title"] as? String {
                 self.title = title
             }
-            if let credits = dict["credits"] as? String {
+            if let credits = dict["byline"] as? String {
                 self.credits = credits
             }
         } else {
