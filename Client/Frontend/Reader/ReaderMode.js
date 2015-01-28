@@ -55,13 +55,13 @@ var _firefox_ReaderMode = {
         
         // Configure the font size (1-5)
         if (_firefox_ReaderMode.currentStyle != null) {
-            document.body.classList.remove("font-size" + currentStyle.fontSize);
+            document.body.classList.remove("font-size" + _firefox_ReaderMode.currentStyle.fontSize);
         }
         document.body.classList.add("font-size" + style.fontSize);
 
         // Configure the font type
         if (_firefox_ReaderMode.currentStyle != null) {
-            document.body.classList.remove(currentStyle.fontType);
+            document.body.classList.remove(_firefox_ReaderMode.currentStyle.fontType);
         }
         document.body.classList.add(style.fontType);
         
