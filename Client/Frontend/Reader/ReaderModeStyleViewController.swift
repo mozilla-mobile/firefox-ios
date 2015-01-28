@@ -31,14 +31,15 @@ class ReaderModeStyleViewController: UIViewController {
 
         // Setup the rows. It is easier to setup a layout like this when we organize the buttons into rows.
 
-        for idx in 0...3 {
-            let row = UIView()
-            rows.append(row)
+        let fontTypeRow = UIView(), fontSizeRow = UIView(), themeRow = UIView(), sliderRow = UIView()
+        rows = [fontTypeRow, fontSizeRow, themeRow, sliderRow]
+
+        for (idx, row) in enumerate(rows) {
             view.addSubview(row)
 
             // The only row with a full white background is the one with the slider. The others are the default
             // clear color so that the gray dividers are visible between buttons in a row.
-            if idx == 3 {
+            if row == sliderRow {
                 row.backgroundColor = UIColor.whiteColor()
             }
 
@@ -61,7 +62,7 @@ class ReaderModeStyleViewController: UIViewController {
             FontTypeButton(fontType: ReaderModeFontType.Serif)
         ]
         
-        setupButtons(fontTypeButtons, inRow: rows[0], action: "SELchangeFontType:")
+        setupButtons(fontTypeButtons, inRow: fontTypeRow, action: "SELchangeFontType:")
 
         // Setup the font size buttons
 
@@ -73,7 +74,7 @@ class ReaderModeStyleViewController: UIViewController {
             FontSizeButton(fontSize: ReaderModeFontSize.Largest),
         ]
 
-        setupButtons(fontSizeButtons, inRow: rows[1], action: "SELchangeFontSize:")
+        setupButtons(fontSizeButtons, inRow: fontSizeRow, action: "SELchangeFontSize:")
 
         // Setup the theme buttons
 
@@ -83,17 +84,17 @@ class ReaderModeStyleViewController: UIViewController {
             ThemeButton(theme: ReaderModeTheme.Print)
         ]
 
-        setupButtons(themeButtons, inRow: rows[2], action: "SELchangeTheme:")
+        setupButtons(themeButtons, inRow: themeRow, action: "SELchangeTheme:")
 
         // Setup the brightness slider
 
         let slider = UISlider()
         slider.tintColor = UIColor.orangeColor()
-        rows[3].addSubview(slider)
+        sliderRow.addSubview(slider)
         slider.addTarget(self, action: "SELchangeBrightness:", forControlEvents: UIControlEvents.ValueChanged)
 
         slider.snp_makeConstraints { make in
-            make.center.equalTo(self.rows[3].center)
+            make.center.equalTo(sliderRow.center)
             make.width.equalTo(180)
         }
 
