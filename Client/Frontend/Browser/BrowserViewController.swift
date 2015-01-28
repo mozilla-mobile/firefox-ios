@@ -234,6 +234,13 @@ extension BrowserViewController: WKNavigationDelegate {
         info["title"] = webView.title
 
         notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
+
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+        // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
+        // cursor land on the correct initial element, but if not followed by LayoutChanged,
+        // VoiceOver will sometimes be stuck on the element, not allowing user to move
+        // forward/backward. Strange, but LayoutChanged fixes that.
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
     }
 }
 
