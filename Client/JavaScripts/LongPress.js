@@ -9,7 +9,7 @@ function findImageSrcLinkAtPoint(x, y) {
         e = e.parentNode;
     }
     if (e && e.src) {
-        imageLink["imageSrc"] = e.src
+        imageLink["imageSrc"] = e.src;
     }
     return imageLink;
 }
@@ -21,7 +21,7 @@ function findHrefLinkAtPoint(x, y) {
         e = e.parentNode;
     }
     if (e && e.href) {
-        hrefLink["hrefLink"] = e.href
+        hrefLink["hrefLink"] = e.href;
     }
     return hrefLink;
 }
@@ -30,5 +30,5 @@ function findElementsAtPoint(x, y) {
     var jsonResult = {};
     jsonResult["hrefElement"] = findHrefLinkAtPoint(x, y);
     jsonResult["imageElement"] = findImageSrcLinkAtPoint(x, y);
-    webkit.messageHandlers.longPressMessageHandler.postMessage(jsonResult);
+    return jsonResult;
 }
