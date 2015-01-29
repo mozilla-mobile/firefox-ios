@@ -177,10 +177,9 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func didCreateTab(tab: Browser) {
-        if let longPressGestureRecognizer = LongPressGestureRecognizer(browser: tab) {
+        if let longPressGestureRecognizer = LongPressGestureRecognizer(webView: tab.webView) {
             tab.webView.addGestureRecognizer(longPressGestureRecognizer)
             longPressGestureRecognizer.longPressGestureDelegate = self
-            tab.addHelper(longPressGestureRecognizer, name: LongPressGestureRecognizer.name())
         }
 
         if let readerMode = ReaderMode(browser: tab) {
