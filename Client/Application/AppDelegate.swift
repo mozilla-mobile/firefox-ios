@@ -10,6 +10,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var profile: Profile!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        // Setup a web server that serves us static content. Do this early so that it is ready when the UI is presented.
+        setupWebServer()
+
         profile = RESTAccountProfile(localName: "profile", credential: NSURLCredential(), logoutCallback: { (profile) -> () in
             // Nothing to do
         })
@@ -26,5 +29,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, applicationWillTerminate app: UIApplication) {
+    }
+
+    private func setupWebServer() {
+        let server = WebServer.sharedInstance
+        // Register our fonts, which we want to expose to web content that we present in the WebView
+        server.registerMainBundleResourcesOfType("ttf", module: "fonts")
+        // TODO: In the future let other modules register specific resources here. Unfortunately you cannot add
+        // more handlers after start() has been called, so we need to organize it all here at app startup time.
+        server.start()
     }
 }
