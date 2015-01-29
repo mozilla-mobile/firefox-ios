@@ -76,6 +76,8 @@
 		28CE83DB1A1D1E7C00576538 /* FxA.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		28CE84301A1E571900576538 /* json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE842F1A1E571900576538 /* json.swift */; };
 		28E5857A1A69E9DE00ACEB4F /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 282DA4BA1A699E0400A406E2 /* Storage.framework */; };
+		9B64C2A81A6451A800473AE3 /* LongPress.js in Resources */ = {isa = PBXBuildFile; fileRef = 9B64C2A71A6451A800473AE3 /* LongPress.js */; };
+		9B9AE2241A48B9A600AF2C23 /* LongPressGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B9AE2231A48B9A500AF2C23 /* LongPressGestureRecognizer.swift */; };
 		D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D301AAED1A3A55B70078DD1D /* TabTrayController.swift */; };
 		D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D308E4EC1A530A8B00842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
@@ -370,6 +372,8 @@
 		28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FxA.xcodeproj; path = FxA/FxA.xcodeproj; sourceTree = "<group>"; };
 		28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Client-Bridging-Header.h"; sourceTree = "<group>"; };
 		28CE842F1A1E571900576538 /* json.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = json.swift; path = ThirdParty/json.swift; sourceTree = "<group>"; };
+		9B64C2A71A6451A800473AE3 /* LongPress.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = LongPress.js; path = JavaScripts/LongPress.js; sourceTree = "<group>"; };
+		9B9AE2231A48B9A500AF2C23 /* LongPressGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LongPressGestureRecognizer.swift; sourceTree = "<group>"; };
 		D301AAED1A3A55B70078DD1D /* TabTrayController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayController.swift; sourceTree = "<group>"; };
 		D308E4E31A5306F500842685 /* SearchEngines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngines.swift; sourceTree = "<group>"; };
 		D314E7F51A37B98700426A76 /* BrowserToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserToolbar.swift; sourceTree = "<group>"; };
@@ -610,6 +614,14 @@
 			name = "Third-Party Source";
 			sourceTree = "<group>";
 		};
+		9B64C29F1A64518000473AE3 /* JavaScripts */ = {
+			isa = PBXGroup;
+			children = (
+				9B64C2A71A6451A800473AE3 /* LongPress.js */,
+			);
+			name = JavaScripts;
+			sourceTree = "<group>";
+		};
 		D34DC84C1A16C40C00D49B7B /* Providers */ = {
 			isa = PBXGroup;
 			children = (
@@ -640,6 +652,7 @@
 				D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				D301AAED1A3A55B70078DD1D /* TabTrayController.swift */,
+				9B9AE2231A48B9A500AF2C23 /* LongPressGestureRecognizer.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
 			);
 			path = Browser;
@@ -765,6 +778,7 @@
 			children = (
 				E4D6BEB51A092E0300F538BD /* Client.entitlements */,
 				F84B22431A09165600AAB793 /* Info.plist */,
+				9B64C29F1A64518000473AE3 /* JavaScripts */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
 				F84B21E41A0910F600AAB793 /* Application */,
 				F84B21F11A0910F600AAB793 /* Frontend */,
@@ -1206,6 +1220,7 @@
 				E4D6BEA61A092A4700F538BD /* Login.xcassets in Resources */,
 				F84B22271A09127C00AAB793 /* TabBar.xcassets in Resources */,
 				F84B220E1A0910F600AAB793 /* ReaderViewController.xib in Resources */,
+				9B64C2A81A6451A800473AE3 /* LongPress.js in Resources */,
 				E4CD9E9A1A68980A00318571 /* ReaderMode.js in Resources */,
 				F84B22121A0910F600AAB793 /* SettingsViewController.xib in Resources */,
 				F84B22291A0912C500AAB793 /* Settings.xcassets in Resources */,
@@ -1297,6 +1312,7 @@
 				F84B22241A09122500AAB793 /* TabBarViewController.swift in Sources */,
 				D34F86E71A1AC7DD00331EC4 /* PasswordTextField.swift in Sources */,
 				28CE83C91A1D1D3200576538 /* TokenServerClient.swift in Sources */,
+				9B9AE2241A48B9A600AF2C23 /* LongPressGestureRecognizer.swift in Sources */,
 				28CE83C71A1D1D3200576538 /* Records.swift in Sources */,
 				F84B22111A0910F600AAB793 /* SettingsViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
