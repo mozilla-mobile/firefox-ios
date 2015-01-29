@@ -46,9 +46,34 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol, UITableView
         signOutButton.addTarget(self, action: "didClickLogout", forControlEvents: UIControlEvents.TouchUpInside)
     }
 
-    // Referenced as button selector.
+    // A temporary delegate which merely updates the displayed email address on
+    // succesful Firefox Accounts sign in.
+    private class Delegate: FxASignInViewControllerDelegate {
+        private let vc: SettingsViewController
+
+        init(vc: SettingsViewController) {
+            self.vc = vc
+        }
+
+        func didCancel() {
+            vc.dismissViewControllerAnimated(true, completion: nil)
+        }
+
+        func didSignIn(data: JSON) {
+            vc.setSignedInUser(data)
+        }
+    }
+
+    func setSignedInUser(data: JSON) {
+        emailLabel.text = data["email"].asString
+    }
+
+    // Referenced as button selector. Temporarily, we show the Firefox
+    // Accounts sign in view.
     func didClickLogout() {
-        profile.logout()
+        let vc = FxASignInViewController()
+        vc.signInDelegate = Delegate(vc: self)
+        presentViewController(vc, animated: true, completion: nil)
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
