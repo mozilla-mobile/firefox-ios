@@ -53,10 +53,13 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "TokenServerClientTests">
+                  Identifier = "FxAClientTests/testLoginSuccess()">
                </Test>
                <Test
-                  Identifier = "FxAClientTests/testLoginSuccess()">
+                  Identifier = "SearchTests/testSuggestClient()">
+               </Test>
+               <Test
+                  Identifier = "TokenServerClientTests">
                </Test>
             </SkippedTests>
          </TestableReference>
