@@ -27,7 +27,6 @@ class LongPressGestureRecognizer: UILongPressGestureRecognizer, UIGestureRecogni
         super.init()
         self.webView = webView
         delegate = self
-        self.minimumPressDuration *= 0.9
         self.addTarget(self, action: "SELdidLongPress:")
 
         if let path = NSBundle.mainBundle().pathForResource("LongPress", ofType: "js") {
@@ -41,6 +40,11 @@ class LongPressGestureRecognizer: UILongPressGestureRecognizer, UIGestureRecogni
     // MARK: - Gesture Recognizer Delegate Methods
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
+    }
+
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailByGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Hack to detect the built-in context menu gesture recognizer.
+        return otherGestureRecognizer is UILongPressGestureRecognizer && otherGestureRecognizer.delegate?.description.rangeOfString("WKContentView") != nil
     }
 
     // MARK: - Long Press Gesture Handling
@@ -63,12 +67,6 @@ class LongPressGestureRecognizer: UILongPressGestureRecognizer, UIGestureRecogni
         }
     }
 
-    /// Recursively call block on view and its subviews
-    private func recursiveBlockOnViewAndSubviews(mainView: UIView, block:(view: UIView) -> Void) {
-        block(view: mainView)
-        mainView.subviews.map(){ self.recursiveBlockOnViewAndSubviews($0 as UIView, block) }
-    }
-
     private func handleTouchResult(elementsDict: [String: AnyObject]) {
         var elements = [LongPressElementType: NSURL]()
         if let hrefElement = elementsDict["hrefElement"] as? [String: String] {
@@ -86,21 +84,8 @@ class LongPressGestureRecognizer: UILongPressGestureRecognizer, UIGestureRecogni
             }
         }
 
-        if elements.count > 0 {
-            var disableGestures: [UIGestureRecognizer] = []
-            self.recursiveBlockOnViewAndSubviews(self.webView) { view in
-                if let gestureRecognizers = view.gestureRecognizers as? [UIGestureRecognizer] {
-                    for g in gestureRecognizers {
-                        if g != self && g.enabled == true {
-                            g.enabled = false
-                            disableGestures.append(g)
-                        }
-                    }
-                }
-            }
-
+        if !elements.isEmpty {
             self.longPressGestureDelegate?.longPressRecognizer(self, didLongPressElements: elements)
-            disableGestures.map({ $0.enabled = true })
         }
     }
 }
