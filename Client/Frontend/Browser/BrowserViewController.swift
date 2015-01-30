@@ -245,11 +245,7 @@ extension BrowserViewController: WKNavigationDelegate {
         var info = [NSObject: AnyObject]()
         info["url"] = webView.URL
         info["title"] = webView.title
-
-        webView.runScript("getAll()", js: "Favicons", callback: { obj in
-            info["icons"] = obj as [String]
-            notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
-        })
+        notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
 
         UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
