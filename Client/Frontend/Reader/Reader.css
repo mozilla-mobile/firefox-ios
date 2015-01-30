@@ -336,11 +336,13 @@ body {
 
 .content ul {
   -moz-padding-start: 30px !important;
+  -webkit-padding-start: 30px !important;
   list-style: disk !important;
 }
 
 .content ol {
   -moz-padding-start: 35px !important;
+  -webkit-padding-start: 35px !important;
   list-style: decimal !important;
 }
 
