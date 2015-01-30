@@ -2,33 +2,39 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-function findImageSrcLinkAtPoint(x, y) {
-    var  imageLink = {};
-    e = document.elementFromPoint(x, y);
-    while (e && ! e.src) {
-        e = e.parentNode;
-    }
-    if (e && e.src) {
-        imageLink["imageSrc"] = e.src
-    }
-    return imageLink;
+if (!this.__firefox__) {
+    __firefox__ = {};
 }
 
-function findHrefLinkAtPoint(x, y) {
-    var  hrefLink = {};
-    e = document.elementFromPoint(x, y);
-    while (e && ! e.href) {
-        e = e.parentNode;
-    }
-    if (e && e.href) {
-        hrefLink["hrefLink"] = e.href
-    }
-    return hrefLink;
-}
+__firefox__.LongPress = {
+    findImageSrcLinkAtPoint: function (x, y) {
+        var imageLink = {};
+        e = document.elementFromPoint(x, y);
+        while (e && ! e.src) {
+            e = e.parentNode;
+        }
+        if (e && e.src) {
+            imageLink["imageSrc"] = e.src;
+        }
+        return imageLink;
+    },
 
-function findElementsAtPoint(x, y) {
-    var jsonResult = {};
-    jsonResult["hrefElement"] = findHrefLinkAtPoint(x, y);
-    jsonResult["imageElement"] = findImageSrcLinkAtPoint(x, y);
-    webkit.messageHandlers.longPressMessageHandler.postMessage(jsonResult);
-}
+    findHrefLinkAtPoint: function (x, y) {
+        var hrefLink = {};
+        e = document.elementFromPoint(x, y);
+        while (e && ! e.href) {
+            e = e.parentNode;
+        }
+        if (e && e.href) {
+            hrefLink["hrefLink"] = e.href;
+        }
+        return hrefLink;
+    },
+
+    findElementsAtPoint: function (x, y) {
+        var jsonResult = {};
+        jsonResult["hrefElement"] = this.findHrefLinkAtPoint(x, y);
+        jsonResult["imageElement"] = this.findImageSrcLinkAtPoint(x, y);
+        return jsonResult;
+    },
+};
