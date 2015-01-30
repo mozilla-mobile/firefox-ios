@@ -53,7 +53,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         backButton.setTitle("<", forState: UIControlState.Normal)
         backButton.accessibilityLabel = NSLocalizedString("Back", comment: "")
         backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
-        longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack")
+        longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack:")
         backButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
         backButton.addGestureRecognizer(longPressGestureBackButton)
         self.addSubview(backButton)
@@ -64,7 +64,7 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         forwardButton.setTitle(">", forState: UIControlState.Normal)
         forwardButton.accessibilityLabel = NSLocalizedString("Forward", comment: "")
         forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
-        longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward")
+        longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward:")
         forwardButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
         forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         self.addSubview(forwardButton)
@@ -150,16 +150,20 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         browserToolbarDelegate?.didClickBack()
     }
 
-    func SELdidLongPressBack() {
-        browserToolbarDelegate?.didLongPressBack()
+    func SELdidLongPressBack(recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == UIGestureRecognizerState.Began {
+            browserToolbarDelegate?.didLongPressBack()
+        }
     }
 
     func SELdidClickForward() {
         browserToolbarDelegate?.didClickForward()
     }
 
-    func SELdidLongPressForward() {
-        browserToolbarDelegate?.didLongPressForward()
+    func SELdidLongPressForward(recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == UIGestureRecognizerState.Began {
+            browserToolbarDelegate?.didLongPressForward()
+        }
     }
 
     func SELdidClickAddTab() {
