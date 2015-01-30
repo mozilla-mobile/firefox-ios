@@ -6,7 +6,6 @@ import UIKit
 import WebKit
 
 class BackForwardListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
     private let StatusBarHeight = 20
     var listData: [WKBackForwardListItem]?
     var tabManager: TabManager!
@@ -43,16 +42,13 @@ class BackForwardListViewController: UIViewController, UITableViewDelegate, UITa
     // MARK: - Table view
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if listData != nil {
-            return listData!.count
-        }
-        return 0
+        return listData?.count ?? 0
     }
-
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.text = listData![indexPath.item].title
+        let item = listData![indexPath.item]
+        cell.textLabel?.text = item.title ?? item.URL.absoluteString
         return cell
     }
 
@@ -60,5 +56,4 @@ class BackForwardListViewController: UIViewController, UITableViewDelegate, UITa
         tabManager.selectedTab?.goToBackForwardListItem(listData![indexPath.item])
         dismissViewControllerAnimated(true, completion: nil)
     }
-
 }
