@@ -72,14 +72,6 @@ class TabsViewController: UITableViewController
             // TODO: We need better async image loading here
             let opts = QueryOptions()
             opts.filter = tab.url
-            profile.favicons.get(opts) { icons in
-                if let icon = icons[0] as? Favicon {
-                    if let img = icon.image {
-                        cell.imageView?.image = createSizedFavicon(img)
-                        cell.setNeedsLayout()
-                    }
-                }
-            }
             cell.textLabel?.text = tab.title
         }
         

@@ -103,7 +103,7 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
     }
 
     public var icon: UIImage {
-        return createSizedFavicon(UIImage(named: "bookmark_folder_closed")!)
+        return UIImage(named: "bookmark_folder_closed")!
     }
 
     init(id: String, name: String, children: [BookmarkNode]) {

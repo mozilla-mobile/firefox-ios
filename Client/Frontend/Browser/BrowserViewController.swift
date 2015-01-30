@@ -250,7 +250,6 @@ extension BrowserViewController: WKNavigationDelegate {
             info["icons"] = obj as [String]
             notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
         })
-    }
 
         UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
         // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver

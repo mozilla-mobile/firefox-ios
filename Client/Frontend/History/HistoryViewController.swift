@@ -83,14 +83,6 @@ class HistoryViewController: UITableViewController, UrlViewController {
 
                 let opts = QueryOptions()
                 opts.filter = site.url
-                profile.favicons.get(opts) { data in
-                    if let icon = data[0] as? Favicon {
-                        if let img = icon.image {
-                            cell.imageView?.image = createSizedFavicon(img)
-                            cell.setNeedsLayout()
-                        }
-                    }
-                }
             }
         }
 
