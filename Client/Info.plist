@@ -26,11 +26,17 @@
 	<string>Websites you visit may request your location.</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>CharisSILB.ttf</string>
+		<string>CharisSILBI.ttf</string>
+		<string>CharisSILI.ttf</string>
+		<string>CharisSILR.ttf</string>
+		<string>FiraSans-Bold.ttf</string>
+		<string>FiraSans-BoldItalic.ttf</string>
+		<string>FiraSans-Italic.ttf</string>
+		<string>FiraSans-Light.ttf</string>
 		<string>FiraSans-Regular.ttf</string>
 		<string>FiraSans-SemiBold.ttf</string>
-		<string>FiraSans-Light.ttf</string>
 		<string>FiraSans-UltraLight.ttf</string>
-		<string>FiraSans-Medium.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
