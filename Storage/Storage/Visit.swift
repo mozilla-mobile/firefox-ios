@@ -19,6 +19,7 @@ public enum VisitType : Int {
 }
 
 public class Visit {
+    var id: Int? = nil
     public let site: Site
     public let date: NSDate
     public let type: VisitType

@@ -10,7 +10,8 @@ let TableNameVisits = "visits"
 // This is our default visits store.
 class VisitsTable<T>: GenericTable<Visit> {
     override var name: String { return TableNameVisits }
-    override var rows: String { return "siteId INT NOT NULL, " +
+    override var rows: String { return "id INT PRIMARY KEY AUTOINCREMENT, " +
+                                       "siteId INT NOT NULL, " +
                                        "date REAL NOT NULL, " +
                                        "type INT NOT NULL" }
 
@@ -50,15 +51,17 @@ class VisitsTable<T>: GenericTable<Visit> {
             if type == nil {
                 type = VisitType.Unknown
             }
-            return Visit(site: site, date: date, type: type!)
+            let visit = Visit(site: site, date: date, type: type!)
+            visit.id = row["id"] as? Int
+            return visit
         }
     }
 
     override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
         if let filter = options?.filter {
             let args : [AnyObject?] = [filter]
-            return ("SELECT siteId, date, type FROM \(TableNameVisits) WHERE siteId = ?", args)
+            return ("SELECT id, siteId, date, type FROM \(TableNameVisits) WHERE siteId = ?", args)
         }
-        return ("SELECT siteId, date, type FROM \(TableNameVisits)", [AnyObject?]())
+        return ("SELECT id, siteId, date, type FROM \(TableNameVisits)", [AnyObject?]())
     }
 }
