@@ -57,7 +57,7 @@ class LongPressGestureRecognizer: UILongPressGestureRecognizer, UIGestureRecogni
             touchLocation.x /= self.webView.scrollView.zoomScale
             touchLocation.y /= self.webView.scrollView.zoomScale
 
-            self.webView.evaluateJavaScript("findElementsAtPoint(\(touchLocation.x),\(touchLocation.y))") { (response: AnyObject!, error: NSError!) in
+            self.webView.evaluateJavaScript("__firefox__.LongPress.findElementsAtPoint(\(touchLocation.x),\(touchLocation.y))") { (response: AnyObject!, error: NSError!) in
                 if error != nil {
                     println("Long press gesture recognizer error: \(error.description)")
                 } else {
