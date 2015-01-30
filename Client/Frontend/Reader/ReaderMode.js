@@ -119,6 +119,23 @@ var _firefox_ReaderMode = {
             }
         }
     },
+
+    // Loop over the style sheets, find all the the @font-face declarations and fix the
+    // relative src attributes so that they point to our embedded web server.
+    fixFontFaces: function(webServerBase) {
+        for (var i = 0; i < document.styleSheets.length; i++) {
+            var sheet = document.styleSheets[i];
+            for (var j = 0; j < sheet.cssRules.length; j++) {
+                var rule = sheet.cssRules[j];
+                if (rule.type === 5 && rule.style && rule.style.src) { // TODO: CSSFontFaceRule == 5 - No symbol for this? Or better check?
+                    var matches = rule.style.src.match(/^url\(((?:Charis|FiraSans).*\.ttf)\)$/);
+                    if (matches) {
+                        rule.style.src = "url(" + webServerBase + "/fonts/" + matches[1] + ")";
+                    }
+                }
+            }
+        }
+    },
     
     showContent: function() {
         // Make the reader visible
@@ -131,6 +148,10 @@ var _firefox_ReaderMode = {
     },
     
     configureReader: function() {
+        // Fix the @font-face declarations and turn their url into an absolute one, pointing to our
+        // embedded web server.
+        _firefox_ReaderMode.fixFontFaces(_firefox_ReaderPage.webServerBase);
+
         // Configure the reader with the initial style that was injected in the page.
         _firefox_ReaderMode.setStyle(_firefox_ReaderPage.style);
 

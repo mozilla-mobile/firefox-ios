@@ -2,6 +2,54 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+@font-face {
+    font-family: sans-serif;
+    src: url('FiraSans-Regular.ttf');
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url('FiraSans-Bold.ttf');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url('FiraSans-Italic.ttf');
+    font-style: italic;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url('FiraSans-BoldItalic.ttf');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: serif;
+    src: url('CharisSILR.ttf');
+}
+
+@font-face {
+    font-family: serif;
+    src: url('CharisSILB.ttf');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: serif;
+    src: url('CharisSILI.ttf');
+    font-style: italic;
+}
+
+@font-face {
+    font-family: serif;
+    src: url('CharisSILBI.ttf');
+    font-weight: bold;
+    font-style: italic;
+}
+
 html {
     -moz-text-size-adjust: none;
     -webkit-text-size-adjust: none;
