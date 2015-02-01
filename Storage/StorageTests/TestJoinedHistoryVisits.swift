@@ -9,7 +9,7 @@ class TestJoinedHistoryVisits : XCTestCase {
         let site = Site(url: url, title: title)
         db.withConnection(.ReadWrite) { connection -> NSError? in
             var err: NSError? = nil
-            inserted = history.insert(connection, item: site, err: &err)
+            inserted = history.insert(connection, item: (site, nil), err: &err)
             return err
         }
 
@@ -26,7 +26,7 @@ class TestJoinedHistoryVisits : XCTestCase {
         let visit = Visit(site: site, date: NSDate())
         db.withConnection(.ReadWrite) { connection -> NSError? in
             var err: NSError? = nil
-            inserted = history.insert(connection, item: visit, err: &err)
+            inserted = history.insert(connection, item: (nil, visit), err: &err)
             return err
         }
 
@@ -45,11 +45,11 @@ class TestJoinedHistoryVisits : XCTestCase {
             XCTAssertEqual(cursor.count, urls.count, "cursor has right num of entries")
 
             for index in 0..<cursor.count {
-                if let s = cursor[index] as? Site {
-                    XCTAssertNotNil(s, "cursor has a site for entry")
-                    let title = urls[s.url]
+                if let (site, visit) = cursor[index] as? (Site,Visit) {
+                    XCTAssertNotNil(site, "cursor has a site for entry")
+                    let title = urls[site.url]
                     XCTAssertNotNil(title, "Found url")
-                    XCTAssertEqual(s.title, title!, "Found right title")
+                    XCTAssertEqual(site.title, title!, "Found right title")
                 } else {
                     XCTAssertFalse(true, "Should not be nil...")
                 }
@@ -65,7 +65,9 @@ class TestJoinedHistoryVisits : XCTestCase {
             XCTAssertEqual(cursor.count, urls.count, "cursor has right num of entries")
 
             for index in 0..<urls.count {
-                let site = cursor[index] as Site
+                let d = cursor[index]
+                println("Found \(d)")
+                let (site, visit) = cursor[index] as (site: Site, visit: Visit)
                 XCTAssertNotNil(s, "cursor has a site for entry")
                 let info = urls[index]
                 XCTAssertEqual(site.url, info.0, "Found url")
@@ -75,7 +77,7 @@ class TestJoinedHistoryVisits : XCTestCase {
         }
     }
 
-    private func clear(history: JoinedHistoryVisitsTable, item: AnyObject? = nil, s: Bool = true) {
+    private func clear(history: JoinedHistoryVisitsTable, item: (site:Site?, visit:Visit?)? = nil, s: Bool = true) {
         var deleted = -1;
         db.withConnection(.ReadWrite) { connection -> NSError? in
             var err: NSError? = nil
@@ -92,7 +94,7 @@ class TestJoinedHistoryVisits : XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testJoinedHistoryVisitsTable() {
         let files = MockFiles()
-        self.db = SwiftData(filename: files.get("test.db")!)
+        self.db = SwiftData(filename: files.get("test.db", basePath: nil)!)
         let h = JoinedHistoryVisitsTable()
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
@@ -130,11 +132,11 @@ class TestJoinedHistoryVisits : XCTestCase {
         self.checkSites(h, options: options, urls: ["url2": "title2"])
 
         // Clearing with a site should remove the site
-        self.clear(h, item: site)
+        self.clear(h, item: (site, nil))
         self.checkSites(h, options: nil, urls: ["url2": "title2"])
 
         // Clearing with a site should remove the visit
-        self.clear(h, item: visit)
+        self.clear(h, item: (nil, visit))
         self.checkSites(h, options: nil, urls: ["url2": "title2"])
 
         // Clearing with nil should remove everything

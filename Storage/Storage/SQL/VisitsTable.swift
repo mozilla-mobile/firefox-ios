@@ -10,10 +10,10 @@ let TableNameVisits = "visits"
 // This is our default visits store.
 class VisitsTable<T>: GenericTable<Visit> {
     override var name: String { return TableNameVisits }
-    override var rows: String { return "id INT PRIMARY KEY AUTOINCREMENT, " +
-                                       "siteId INT NOT NULL, " +
+    override var rows: String { return "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                       "siteId INTEGER NOT NULL, " +
                                        "date REAL NOT NULL, " +
-                                       "type INT NOT NULL" }
+                                       "type INTEGER NOT NULL" }
 
     override func getInsertAndArgs(inout item: Visit) -> (String, [AnyObject?])? {
         // Runtime errors happen if we let Swift try to infer the type of this array
@@ -35,7 +35,7 @@ class VisitsTable<T>: GenericTable<Visit> {
 
     override func getDeleteAndArgs(inout item: Visit?) -> (String, [AnyObject?])? {
         if let visit = item {
-            return ("DELETE FROM \(TableNameVisits) WHERE siteId = ? AND date = ?", [visit.site.id, visit.date])
+            return ("DELETE FROM \(TableNameVisits) WHERE id = ?", [visit.id])
         }
         return ("DELETE FROM \(TableNameVisits)", [AnyObject]())
     }
@@ -58,7 +58,7 @@ class VisitsTable<T>: GenericTable<Visit> {
     }
 
     override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
-        if let filter = options?.filter {
+        if let filter: AnyObject = options?.filter {
             let args : [AnyObject?] = [filter]
             return ("SELECT id, siteId, date, type FROM \(TableNameVisits) WHERE siteId = ?", args)
         }

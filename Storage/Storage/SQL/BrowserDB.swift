@@ -14,7 +14,7 @@ public enum FilterType {
 
 public class QueryOptions {
     // A filter string to apploy to the query
-    public var filter: String? = nil
+    public var filter: AnyObject? = nil
 
     // Allows for customizing how the filter is applied (i.e. only urls or urls and titles?)
     public var filterType: FilterType = .None

@@ -108,7 +108,9 @@ class GenericTable<T>: Table {
     func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor {
         if var (query, args) = getQueryAndArgs(options) {
             if let factory = self.factory {
-                return db.executeQuery(query, factory: factory, withArgs: args)
+                let c =  db.executeQuery(query, factory: factory, withArgs: args)
+                debug("Insert \(query) \(args) = \(c)")
+                return c
             }
         }
         return Cursor(status: CursorStatus.Failure, msg: "Invalid query: \(options?.filter)")

@@ -35,10 +35,32 @@ public class SQLiteHistory : History {
         }
     }
 
+    public class WrappedCursor : Cursor {
+        private let cursor: Cursor
+        override public var count: Int {
+            get { return cursor.count }
+        }
+
+        init(cursor: Cursor) {
+            self.cursor = cursor
+            super.init(status: cursor.status, msg: cursor.statusMessage)
+        }
+
+        // Collection iteration and access functions
+        public override subscript(index: Int) -> Any? {
+            get {
+                if let (site, visit) = cursor[index] as? (Site, Visit) {
+                    return site
+                }
+                return nil
+            }
+        }
+    }
+
     public func get(options: QueryOptions?, complete: (data: Cursor) -> Void) {
         var err: NSError? = nil
         let res = db.query(&err) { connection, err in
-            return self.table.query(connection, options: options)
+            return WrappedCursor(cursor: self.table.query(connection, options: options))
         }
 
         dispatch_async(dispatch_get_main_queue()) {

@@ -97,17 +97,22 @@ class JoinedHistoryVisitsTable: Table {
         return -1
     }
 
-    func factory(result: SDRow) -> AnyObject {
+    func factory(result: SDRow) -> (site: Site, visit: Visit) {
         let site = Site(url: result["url"] as String, title: result["title"] as String)
         site.guid = result["guid"] as? String
-        site.id = result["id"] as? Int
-        return site
+        site.id = result["siteId"] as? Int
+
+        let d = NSDate(timeIntervalSince1970: result["date"] as Double)
+        let type = VisitType(rawValue: result["type"] as Int)
+        let visit = Visit(site: site, date: d, type: type!)
+        visit.id = result["visitId"] as Int
+        return (site, visit)
     }
 
     func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor {
         var args = [AnyObject?]()
-        var sql = "SELECT id, url, title, guid FROM \(TableNameVisits) " +
-                  "INNER JOIN \(TableNameHistory) ON \(TableNameHistory).id = \(TableNameVisits).siteId ";
+        var sql = "SELECT \(history.name).id as siteId, \(visits.name).id as visitId, url, title, guid, date, type FROM \(visits.name) " +
+            "INNER JOIN \(history.name) ON \(history.name).id = \(visits.name).siteId ";
 
         if let filter = options?.filter {
             sql += "WHERE url LIKE ? "
