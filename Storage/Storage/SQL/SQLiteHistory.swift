@@ -15,7 +15,7 @@ public class SQLiteHistory : History {
     required public init(files: FileAccessor) {
         self.files = files
         self.db = BrowserDB(files: files)!
-        db.create(table)
+        db.createOrUpdate(table)
     }
 
     public func clear(complete: (success: Bool) -> Void) {
