@@ -312,6 +312,7 @@ body {
   margin-bottom: 20px !important;
   padding: 0px !important;
   -moz-padding-start: 16px !important;
+  -webkit-padding-start: 16px !important;
   border: 0px !important;
   border-left: 2px solid !important;
 }
@@ -336,11 +337,13 @@ body {
 
 .content ul {
   -moz-padding-start: 30px !important;
+  -webkit-padding-start: 30px !important;
   list-style: disk !important;
 }
 
 .content ol {
   -moz-padding-start: 35px !important;
+  -webkit-padding-start: 35px !important;
   list-style: decimal !important;
 }
 

@@ -20,7 +20,7 @@ var _firefox_ReaderMode = {
                     spec: document.location.href,
                     host: document.location.host,
                     prePath: document.location.protocol + "//" + document.location.host, // TODO This is incomplete, needs username/password and port
-                    scheme: document.location.protocol,
+                    scheme: document.location.protocol.substr(0, document.location.protocol.indexOf(":")),
                     pathBase: document.location.protocol + "//" + document.location.host + location.pathname.substr(0, location.pathname.lastIndexOf("/") + 1)
                 }
                 var readability = new Readability(uri, document.cloneNode(true));
