@@ -4,14 +4,15 @@
 
 import Foundation
 import UIKit
+import Storage
 
 private let ReuseIdentifier = "cell"
 private let SuggestionsLimitCount = 3
 
 private enum SearchListSection: Int{
     case SuggestedSites = 0
-    case Search
     case BookmarksAndHistory
+    case Search
 }
 
 // A delegate to support clicking on rows in the view controller
@@ -27,6 +28,8 @@ class SearchViewController: UIViewController {
     private var sortedEngines = [OpenSearchEngine]()
     private var suggestClient: SearchSuggestClient?
     private var searchSuggestions = [String]()
+    private var history: Cursor?
+    var profile: Profile!
 
     var searchEngines: SearchEngines? {
         didSet {
@@ -51,9 +54,18 @@ class SearchViewController: UIViewController {
     var searchQuery: String = "" {
         didSet {
             querySuggestClient()
+            queryHistory()
 
             // Reload the tableView to show the updated text in each engine.
             tableView.reloadData()
+        }
+    }
+
+    private func queryHistory() {
+        println("Query history")
+        profile.history.get(QueryOptions(filter: searchQuery)) { cursor in
+            println("Query history \(cursor.count)")
+            self.history = cursor
         }
     }
 
@@ -131,14 +143,21 @@ extension SearchViewController: UITableViewDataSource {
             cell.imageView?.image = nil
             cell.isAccessibilityElement = false
             cell.accessibilityLabel = nil
+        } else if indexPath.section == SearchListSection.BookmarksAndHistory.rawValue {
+            if let history = history {
+                if let site = history[indexPath.row] as? Site {
+                    cell.textLabel?.text = site.url
+                    cell.imageView?.image = nil
+                    cell.isAccessibilityElement = false
+                    cell.accessibilityLabel = nil
+                }
+            }
         } else if indexPath.section == SearchListSection.Search.rawValue {
             let searchEngine = sortedEngines[indexPath.row]
             cell.textLabel?.text = searchQuery
             cell.imageView?.image = searchEngine.image
             cell.isAccessibilityElement = true
             cell.accessibilityLabel = NSString(format: NSLocalizedString("%@ search for %@", comment: "E.g. \"Google search for Mars\". Please keep the first \"%@\" (which contains the search engine name) as close to the beginning of the translated phrase as possible (it is best to have it as the very first word). This is because the phrase is an accessibility label and VoiceOver users need to hear the search engine name first as that is the key information in the whole phrase (they know the search term because they typed it and from previous rows of the table)."), searchEngine.shortName, searchQuery)
-        } else {
-            //Bookmarks&History
         }
 
         // Make the row separators span the width of the entire table.
@@ -155,12 +174,15 @@ extension SearchViewController: UITableViewDataSource {
             case .Search:
                 return sortedEngines.count
             case .BookmarksAndHistory:
+                if let history = history {
+                    return history.count
+                }
                 return 0
             }
         }
         return 0
     }
-    
+
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if let currentSection = SearchListSection(rawValue: section) {
             switch(currentSection) {
@@ -169,7 +191,7 @@ extension SearchViewController: UITableViewDataSource {
             case .Search:
                 return "Search"
             case .BookmarksAndHistory:
-                return "Bookmarks&History"
+                return "Bookmarks & History"
             }
         }
         return ""
@@ -183,7 +205,11 @@ extension SearchViewController: UITableViewDataSource {
         if sortedEngines.count > 0{
             sectionNum++
         }
-        //TODO: maybe we need + bookmark&history.count
+        if let history = history {
+            if history.count > 0 {
+                sectionNum++
+            }
+        }
         return sectionNum
     }
 }
