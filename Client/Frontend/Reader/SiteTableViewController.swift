@@ -31,12 +31,8 @@ class SiteTableViewController: UITableViewController {
         let site = sites[indexPath.row]
         
         // TODO: We need better async image loading here
-        profile.favicons.getForUrl(site.url, options: nil) { icon in
-            if var img = icon.image {
-                cell.imageView?.image = createSizedFavicon(img)
-                cell.setNeedsLayout()
-            }
-        }
+        let opts = QueryOptions()
+        opts.filter = site.url
         
         cell.textLabel?.text = site.title
         cell.textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)

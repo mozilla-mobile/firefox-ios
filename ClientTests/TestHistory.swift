@@ -1,11 +1,14 @@
 import Foundation
 import XCTest
+import Storage
 
 class TestHistory : AccountTest {
 
     private func innerAddSite(history: History, url: String, title: String, callback: (success: Bool) -> Void) {
         // Add an entry
-        history.addVisit(Site(url: url, title: title), options: nil) { success in
+        let site = Site(url: url, title: title)
+        let visit = Visit(site: site, date: NSDate())
+        history.addVisit(visit) { success in
             callback(success: success)
         }
     }
@@ -20,25 +23,26 @@ class TestHistory : AccountTest {
 
     private func innerCheckSites(history: History, callback: (cursor: Cursor) -> Void) {
         // Retrieve the entry
-        history.get(nil, options: nil, complete: { cursor in
+        history.get(nil, complete: { cursor in
             callback(cursor: cursor)
         })
     }
 
 
-    private func checkSites(history: History, urls: [String], titles: [String], s: Bool = true) {
+    private func checkSites(history: History, urls: [String: String], s: Bool = true) {
         let expectation = self.expectationWithDescription("Wait for history")
 
         // Retrieve the entry
         innerCheckSites(history) { cursor in
             XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
-            XCTAssertEqual(cursor.count, urls.count, "cursor has one entry")
+            XCTAssertEqual(cursor.count, urls.count, "cursor has \(urls.count) entries")
 
-            for (index, url) in enumerate(urls) {
+            for index in 0..<cursor.count {
                 let s = cursor[index] as Site
                 XCTAssertNotNil(s, "cursor has a site for entry")
-                XCTAssertEqual(s.url, url, "Found right url")
-                XCTAssertEqual(s.title, titles[index], "Found right title")
+                let title = urls[s.url]
+                XCTAssertNotNil(title, "Found right url")
+                XCTAssertEqual(s.title, title!, "Found right title")
             }
             expectation.fulfill()
         }
@@ -47,7 +51,7 @@ class TestHistory : AccountTest {
     }
 
     private func innerClear(history: History, callback: (s: Bool) -> Void) {
-        history.clear(nil, options: nil, complete: { success in
+        history.clear({ success in
             callback(s: success)
         })
     }
@@ -63,26 +67,47 @@ class TestHistory : AccountTest {
         self.waitForExpectationsWithTimeout(100, handler: nil)
     }
 
+    private func checkVisits(history: History, url: String) {
+        let expectation = self.expectationWithDescription("Wait for history")
+        history.get(nil) { cursor in
+            let options = QueryOptions()
+            options.filter = url
+            history.get(options) { cursor in
+                XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
+                // XXX - We don't allow querying much info about visits here anymore, so there isn't a lot to do
+                expectation.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(100, handler: nil)
+    }
+
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
-    func testSqliteHistory() {
+    func testHistory() {
         withTestAccount { account -> Void in
-            let h = SqliteHistory(profile: account)
-            self.addSite(h, url: "url", title: "title")
-            self.addSite(h, url: "url", title: "title", s: false)
-            self.checkSites(h, urls: ["url"], titles: ["title"])
+            let h = account.history
+            self.addSite(h, url: "url1", title: "title")
+            self.addSite(h, url: "url1", title: "title")
+            self.addSite(h, url: "url1", title: "title 2")
+            self.addSite(h, url: "url2", title: "title")
+            self.addSite(h, url: "url2", title: "title")
+            self.checkSites(h, urls: ["url1": "title 2", "url2": "title"])
+            self.checkVisits(h, url: "url1")
+            self.checkVisits(h, url: "url2")
             self.clear(h)
             account.files.remove("browser.db")
         }
     }
 
-    let size = 1000
+    let NumThreads = 5
+    let NumCmds = 10
+
     func testInsertPerformance() {
         withTestAccount { account -> Void in
-            let h = SqliteHistory(profile: account)
+            let h = account.history
             var j = 0
 
             self.measureBlock({ () -> Void in
-                for i in 0...self.size {
+                for i in 0...self.NumCmds {
                     self.addSite(h, url: "url \(j)", title: "title \(j)")
                     j++
                 }
@@ -94,30 +119,26 @@ class TestHistory : AccountTest {
 
     func testGetPerformance() {
         withTestAccount { account -> Void in
-            let h = SqliteHistory(profile: account)
+            let h = account.history
             var j = 0
-            var urls = [String]()
-            var titles = [String]()
+            var urls = [String: String]()
 
             self.clear(h)
-            for i in 0...self.size {
+            for i in 0...self.NumCmds {
                 self.addSite(h, url: "url \(j)", title: "title \(j)")
-                urls.append("url \(j)")
-                titles.append("title \(j)")
+                urls["url \(j)"] = "title \(j)"
                 j++
             }
 
             self.measureBlock({ () -> Void in
-                self.checkSites(h, urls: urls, titles: titles)
+                self.checkSites(h, urls: urls)
+                return
             })
 
             self.clear(h)
             account.files.remove("browser.db")
         }
     }
-
-    let NumThreads = 5
-    let NumCmds = 1000
 
     // Fuzzing tests. These fire random insert/query/clear commands into the history database from threads. The don't check
     // the results. Just look for crashes.
@@ -129,7 +150,7 @@ class TestHistory : AccountTest {
 
             let expectation = self.expectationWithDescription("Wait for history")
             for i in 0..<self.NumThreads {
-                var history = SqliteHistory(profile: account)
+                var history = account.history
                 self.runRandom(&history, queue: queue, cb: { () -> Void in
                     counter++
                     if counter == self.NumThreads {
@@ -147,7 +168,7 @@ class TestHistory : AccountTest {
     func testRandomThreading2() {
         withTestAccount { account -> Void in
             var queue = dispatch_queue_create("My Queue", DISPATCH_QUEUE_CONCURRENT)
-            var history = SqliteHistory(profile: account)
+            var history = account.history
             var counter = 0
 
             let expectation = self.expectationWithDescription("Wait for history")
@@ -167,7 +188,7 @@ class TestHistory : AccountTest {
 
 
     // Runs a random command on a database. Calls cb when finished
-    private func runRandom(inout history: SqliteHistory, cmdIn: Int, cb: () -> Void) {
+    private func runRandom(inout history: History, cmdIn: Int, cb: () -> Void) {
         var cmd = cmdIn
         if cmd < 0 {
             cmd = Int(rand() % 5)
@@ -192,7 +213,7 @@ class TestHistory : AccountTest {
 
     // Calls numCmds random methods on this database. val is a counter used by this interally (i.e. always pass zero for it)
     // Calls cb when finished
-    private func runMultiRandom(inout history: SqliteHistory, val: Int, numCmds: Int, cb: () -> Void) {
+    private func runMultiRandom(inout history: History, val: Int, numCmds: Int, cb: () -> Void) {
         if val == numCmds {
             cb()
             return
@@ -204,7 +225,7 @@ class TestHistory : AccountTest {
     }
 
     // Helper for starting a new thread running NumCmds random methods on it. Calls cb when done
-    private func runRandom(inout history: SqliteHistory, queue: dispatch_queue_t, cb: () -> Void) {
+    private func runRandom(inout history: History, queue: dispatch_queue_t, cb: () -> Void) {
         dispatch_async(queue) {
             // Each thread creates its own history provider
             self.runMultiRandom(&history, val: 0, numCmds: self.NumCmds) { _ in

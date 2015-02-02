@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-
 import Storage
 
 typealias LogoutCallback = (profile: AccountProfile) -> ()
@@ -49,6 +48,13 @@ class ProfileFileAccessor : FileAccessor {
             fileManager.removeItemAtPath(file, error: nil)
         }
     }
+
+    func exists(filename: String) -> Bool {
+        if var file = get(filename) {
+            return NSFileManager.defaultManager().fileExistsAtPath(file)
+        }
+        return false
+    }
 }
 
 /**
@@ -56,7 +62,7 @@ class ProfileFileAccessor : FileAccessor {
  */
 protocol Profile {
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
-    var favicons: Favicons { get }
+    // var favicons: Favicons { get }
     var clients: Clients { get }
     var prefs: ProfilePrefs { get }
     var searchEngines: SearchEngines { get }
@@ -95,10 +101,6 @@ public class MockAccountProfile: Profile, AccountProfile {
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
         return MockMemoryBookmarksStore()
-    } ()
-
-    lazy var favicons: Favicons = {
-        return BasicFavicons()
     } ()
 
     lazy var clients: Clients = {
@@ -153,8 +155,11 @@ public class RESTAccountProfile: Profile, AccountProfile {
     @objc
     func onLocationChange(notification: NSNotification) {
         if let url = notification.userInfo!["url"] as? NSURL {
+            var site: Site!
             if let title = notification.userInfo!["title"] as? NSString {
-                history.addVisit(Site(url: url.absoluteString!, title: title), options: nil, complete: { (success) -> Void in
+                site = Site(url: url.absoluteString!, title: title)
+                let visit = Visit(site: site, date: NSDate())
+                history.addVisit(visit, complete: { (success) -> Void in
                     // nothing to do
                 })
             }
@@ -211,11 +216,6 @@ public class RESTAccountProfile: Profile, AccountProfile {
         return _bookmarks!
     }
 
-
-    lazy var favicons: Favicons = {
-        return BasicFavicons()
-    } ()
-
     lazy var searchEngines: SearchEngines = {
         return SearchEngines()
     } ()
@@ -241,4 +241,5 @@ public class RESTAccountProfile: Profile, AccountProfile {
     lazy var history: History = {
         return SQLiteHistory(files: self.files)
     }()
+
 }
