@@ -10,7 +10,7 @@ var _firefox_ReaderMode = {
     readabilityResult: null,
 
     checkReadability: function() {
-        if ((document.location.protocol === "http:" || document.location.protocol === "https:") && document.location.pathname !== "/") {
+        if ((document.location.protocol === "http:" || document.location.protocol === "https:") && document.location.pathname !== "/" && document.body.childElementCount != 0) {
             // Short circuit in case we already ran Readability. This mostly happens when going
             // back/forward: the page will be cached and the result will still be there.
             if (_firefox_ReaderMode.readabilityResult && _firefox_ReaderMode.readabilityResult.content) {
