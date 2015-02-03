@@ -4,7 +4,8 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController, ToolbarViewProtocol, UITableViewDataSource, UITableViewDelegate
+class SettingsViewController: UIViewController, ToolbarViewProtocol,
+        UITableViewDataSource, UITableViewDelegate, FxASignInViewControllerDelegate
 {
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -46,9 +47,22 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol, UITableView
         signOutButton.addTarget(self, action: "didClickLogout", forControlEvents: UIControlEvents.TouchUpInside)
     }
 
-    // Referenced as button selector.
+    func signInViewControllerDidCancel(vc: FxASignInViewController) {
+        vc.dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    // A temporary delegate which merely updates the displayed email address on
+    // succesful Firefox Accounts sign in.
+    func signInViewControllerDidSignIn(vc: FxASignInViewController, data: JSON) {
+        emailLabel.text = data["email"].asString
+    }
+
+    // Referenced as button selector. Temporarily, we show the Firefox
+    // Accounts sign in view.
     func didClickLogout() {
-        profile.logout()
+        let vc = FxASignInViewController()
+        vc.signInDelegate = self
+        presentViewController(vc, animated: true, completion: nil)
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
