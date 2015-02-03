@@ -3,21 +3,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Snappy
 import UIKit
 import WebKit
 
-let SIGNUP_URI = "https://latest.dev.lcip.org/signup?service=sync&context=fx_desktop_v1"
-let SIGNIN_URI = "https://latest.dev.lcip.org/signin?service=sync&context=fx_desktop_v1"
+let FxASignUpEndpoint = "https://latest.dev.lcip.org/signup?service=sync&context=fx_desktop_v1"
+let FxASignInEndpoint = "https://latest.dev.lcip.org/signin?service=sync&context=fx_desktop_v1"
 
 protocol FxASignInViewControllerDelegate {
-    func didCancel()
-    func didSignIn(data: JSON)
+    func signInViewControllerDidCancel(vc: FxASignInViewController)
+    func signInViewControllerDidSignIn(vc: FxASignInViewController, data: JSON)
 }
 
 /**
  * A controller that connects an interstitial view with a background web view.
  */
-class FxASignInViewController: UINavigationController, FxASignInWebViewControllerDelegate, FxAGetStartedViewControllerDelegate, WKNavigationDelegate {
+class FxASignInViewController: UINavigationController, FxASignInWebViewControllerDelegate, FxAGetStartedViewControllerDelegate {
     var signInDelegate: FxASignInViewControllerDelegate?
 
     private var webViewController: FxASignInWebViewController!
@@ -29,8 +30,11 @@ class FxASignInViewController: UINavigationController, FxASignInWebViewControlle
         webViewController.delegate = self
         getStartedViewController = FxAGetStartedViewController()
         getStartedViewController.delegate = self
-        webViewController.navigationDelegate = self
         webViewController.startLoad(getUrl())
+    }
+
+    func getUrl() -> NSURL {
+        return NSURL(string: FxASignInEndpoint)!
     }
 
     override func viewDidLoad() {
@@ -41,44 +45,43 @@ class FxASignInViewController: UINavigationController, FxASignInWebViewControlle
 
         // This background agrees with the content server background.
         // Keeping the background constant prevents a pop of mismatched color.
-        view.backgroundColor = UIColor(red: 242/255.0, green: 242/255.0, blue:242/255.0, alpha:1.0)
+        view.backgroundColor = UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0)
 
         self.pushViewController(webViewController, animated: false)
         self.pushViewController(getStartedViewController, animated: false)
     }
 
-    func didStart() {
+    func getStartedViewControllerDidStart(vc: FxAGetStartedViewController) {
         popViewControllerAnimated(true)
     }
 
-    func getUrl() -> NSURL {
-        NSLog("getUrl: \(SIGNIN_URI)")
-        return NSURL(string: SIGNIN_URI)!
+    func getStartedViewControllerDidCancel(vc: FxAGetStartedViewController) {
+        signInDelegate?.signInViewControllerDidCancel(self)
     }
 
-    func didLoad() {
-        NSLog("didLoad")
+    func signInWebViewControllerDidLoad(vc: FxASignInWebViewController) {
         getStartedViewController.notifyReadyToStart()
     }
 
-    func didCancel() {
-        NSLog("didCancel")
-        signInDelegate?.didCancel()
+    func signInWebViewControllerDidCancel(vc: FxASignInWebViewController) {
+        signInDelegate?.signInViewControllerDidCancel(self)
     }
 
-    func didSignIn(data: JSON) {
-        NSLog("didSignIn")
-        signInDelegate?.didSignIn(data)
+    func signInWebViewControllerDidSignIn(vc: FxASignInWebViewController, data: JSON) {
+        signInDelegate?.signInViewControllerDidSignIn(self, data: data)
     }
 
-    func webView(webView: WKWebView!, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError!) {
-        NSLog("WebView didFailProvisionalNavigation withError: \(error)")
+
+    func signInWebViewControllerDidFailProvisionalNavigation(vc: FxASignInWebViewController, withError error:
+            NSError!) {
         // Assume that all provisional navigation failures mean we can't reach the Firefox Accounts server.
-        getStartedViewController.showError("Could not connect to Firefox Account server. Try again later.")
+        let errorString = NSLocalizedString("Could not connect to Firefox Account server. Try again later.",
+                comment: "Error shown when we can't connect to Firefox Accounts.")
+        getStartedViewController.showError(errorString)
     }
 
-    func webView(webView: WKWebView!, didFailNavigation navigation: WKNavigation!, withError error: NSError!) {
-        NSLog("WebView didFailNavigation withError: \(error)")
+    func signInWebViewControllerDidFailNavigation(vc: FxASignInWebViewController, withError error:
+            NSError!) {
         // Ignore inner navigation failures for now.
     }
 }

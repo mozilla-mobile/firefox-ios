@@ -7,8 +7,8 @@ import UIKit
 import WebKit
 
 protocol FxAGetStartedViewControllerDelegate {
-    func didStart() -> Void
-    func didCancel() -> Void
+    func getStartedViewControllerDidStart(vc: FxAGetStartedViewController) -> Void
+    func getStartedViewControllerDidCancel(vc: FxAGetStartedViewController) -> Void
 }
 
 /**
@@ -18,18 +18,31 @@ protocol FxAGetStartedViewControllerDelegate {
 class FxAGetStartedViewController: UIViewController {
     var delegate: FxAGetStartedViewControllerDelegate?
 
-    // Access this only on the main UI thread.
-    var waitingForReady: Bool = true
-
     private var icon: UIImageView!
     private var error: UILabel!
     private var button: UIButton!
     private var spinner: UIActivityIndicatorView!
 
+    // Are we still waiting for notification that we can advance?
+    // Access this only on the main UI thread.
+    var waitingForReady = true
+
+    // Are we animating in response to the button press?  This means we're
+    // waiting for the ready signal.  This is awkward due to the view
+    // controller possibly getting the ready signal before viewDidLoad.
+    func isAnimating() -> Bool {
+        if let theSpinner = self.spinner {
+            return theSpinner.isAnimating()
+        } else {
+            // We haven't yet created the spinner, so we can't be animating it.
+            return false
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "didCancel")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "SELdidCancel")
 
         view.backgroundColor = UIColor(red: 242/255.0, green: 242/255.0, blue:242/255.0, alpha:1.0)
 
@@ -50,21 +63,22 @@ class FxAGetStartedViewController: UIViewController {
 
         error = UILabel()
         error.textColor = UIColor(red: 214/255.0, green: 57/255.0, blue: 32/255.0, alpha: 1.0)
-        error.textAlignment = NSTextAlignment.Center
+        error.textAlignment = .Center
         error.text = " " // We want to take up space.
-        error.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        error.lineBreakMode = .ByWordWrapping
         error.numberOfLines = 0
         container.addSubview(error)
 
         button = UIButton.buttonWithType(UIButtonType.System) as UIButton
-        button.setTitle("Get started", forState: UIControlState.Normal)
+        button.setTitle(NSLocalizedString("Get started", comment: "Get started button"),
+                forState: UIControlState.Normal)
         // After clicking, we disable the button and show no message.
         button.setTitle("", forState: UIControlState.Disabled)
         button.addTarget(self, action: "didClickGetStarted", forControlEvents: UIControlEvents.TouchUpInside)
         container.addSubview(button)
 
         spinner = UIActivityIndicatorView()
-        spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
+        spinner.activityIndicatorViewStyle = .Gray
         spinner.frame = container.frame
         spinner.hidden = true
         container.addSubview(spinner)
@@ -97,20 +111,18 @@ class FxAGetStartedViewController: UIViewController {
 
     func notifyReadyToStart() {
         waitingForReady = false
-        if let theSpinner = self.spinner {
-            if (theSpinner.isAnimating()) {
-                // The user already clicked get started; we are just waiting to go.
-                button.enabled = true
-                spinner.hidden = true
-                theSpinner.stopAnimating()
-                delegate?.didStart()
-            }
+        if isAnimating() {
+            // The user already clicked get started; we are just waiting to go.
+            button.enabled = true
+            spinner.hidden = true
+            spinner.stopAnimating()
+            delegate?.getStartedViewControllerDidStart(self)
         }
     }
 
     func didClickGetStarted() {
         if (!waitingForReady) {
-            delegate?.didStart()
+            delegate?.getStartedViewControllerDidStart(self)
         } else {
             // The user wants to get started as soon as possible; spin while waiting for ready.
             button.enabled = false
@@ -119,8 +131,8 @@ class FxAGetStartedViewController: UIViewController {
         }
     }
 
-    func didCancel() {
-        delegate?.didCancel()
+    func SELdidCancel() {
+        delegate?.getStartedViewControllerDidCancel(self)
     }
 
     func showError(error: String) {

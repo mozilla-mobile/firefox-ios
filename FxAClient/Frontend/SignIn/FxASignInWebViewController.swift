@@ -3,13 +3,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Snappy
 import UIKit
 import WebKit
 
 protocol FxASignInWebViewControllerDelegate {
-    func didCancel() -> Void
-    func didLoad() -> Void
-    func didSignIn(data: JSON) -> Void
+    func signInWebViewControllerDidCancel(vc: FxASignInWebViewController) -> Void
+    func signInWebViewControllerDidLoad(vc: FxASignInWebViewController) -> Void
+    func signInWebViewControllerDidSignIn(vc: FxASignInWebViewController, data: JSON) -> Void
+    func signInWebViewControllerDidFailProvisionalNavigation
+            (vc: FxASignInWebViewController, withError error: NSError!) -> Void
+    func signInWebViewControllerDidFailNavigation
+            (vc: FxASignInWebViewController, withError error: NSError!) -> Void
 }
 
 /**
@@ -20,33 +25,34 @@ protocol FxASignInWebViewControllerDelegate {
  * enough.  I reverse engineered it from the Desktop Firefox code and the
  * fxa-content-server git repository.
  */
-class FxASignInWebViewController: UIViewController, WKScriptMessageHandler {
-    var delegate: FxASignInWebViewControllerDelegate?
+class FxASignInWebViewController: UIViewController, WKScriptMessageHandler, WKNavigationDelegate {
+    private enum RemoteCommand: String {
+        case CanLinkAccount = "can_link_account"
+        case Loaded = "loaded"
+        case Login = "login"
+        case SessionStatus = "session_status"
+        case SignOut = "sign_out"
+    }
 
-    // Optional delegate for detecting failed requests.
-    var navigationDelegate: WKNavigationDelegate?
+    var delegate: FxASignInWebViewControllerDelegate?
 
     var url: NSURL?
 
     private var webView: WKWebView!
 
     override func loadView() {
-        NSLog("loadView!")
         super.loadView()
     }
 
     func startLoad(url: NSURL) {
-        NSLog("startLoad")
         self.url = url
         loadWebView(url)
-        NSLog("startLoad: \(webView)")
     }
 
     override func viewDidLoad() {
-        NSLog("viewDidLoad!")
         super.viewDidLoad()
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "didCancel")
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "SELdidCancel")
 
         view.addSubview(webView!)
 
@@ -57,12 +63,7 @@ class FxASignInWebViewController: UIViewController, WKScriptMessageHandler {
         }
     }
 
-    override func viewDidDisappear(animated: Bool) {
-        super.viewDidDisappear(animated)
-        webView = nil
-    }
-
-    private func loadWebView(url: NSURL?) {
+    private func loadWebView(url: NSURL) {
         // Inject  our setup code after the page loads.
         let source = getJS()
         let userScript = WKUserScript(
@@ -86,17 +87,15 @@ class FxASignInWebViewController: UIViewController, WKScriptMessageHandler {
             frame: CGRectMake(0, 0, 0, 0),
             configuration: config
         )
-        webView.navigationDelegate = navigationDelegate
-        if let url = url {
-            webView!.loadRequest(NSURLRequest(URL: url))
-        }
+        webView.navigationDelegate = self
+        webView.loadRequest(NSURLRequest(URL: url))
 
         // Don't allow overscrolling.
         webView.scrollView.bounces = false
     }
 
-    func didCancel() {
-        delegate?.didCancel()
+    func SELdidCancel() {
+        delegate?.signInWebViewControllerDidCancel(self)
     }
 
     // Send a message to the content server.
@@ -106,9 +105,8 @@ class FxASignInWebViewController: UIViewController, WKScriptMessageHandler {
             "content": content,
         ]
         let json = JSON(data).toString(pretty: false)
-        let script = "window.postMessage(\(json), '\(url)');"
-        NSLog("reponse: \(json)")
-        webView!.evaluateJavaScript(script, completionHandler: nil)
+        let script = "window.postMessage(\(json), '\(self.url)');"
+        webView.evaluateJavaScript(script, completionHandler: nil)
     }
 
     private func onCanLinkAccount(data: JSON) {
@@ -130,33 +128,33 @@ class FxASignInWebViewController: UIViewController, WKScriptMessageHandler {
 
     // The user has signed in to a Firefox Account.  We're done!
     private func onLogin(data: JSON) {
-        NSLog("Logged in with email: %@ and uid: %@", data["email"].asString!, data["uid"].asString!)
         injectData("message", content: ["status": "login"])
         dismissViewControllerAnimated(true, completion: nil)
-        self.delegate?.didSignIn(data)
+        self.delegate?.signInWebViewControllerDidSignIn(self, data: data)
     }
 
     // The content server page is ready to be shown.
-    private func onLoad(data: JSON) {
-        delegate?.didLoad()
+    private func onLoaded(data: JSON) {
+        delegate?.signInWebViewControllerDidLoad(self)
     }
 
     // Handle a message coming from the content server.
     func handleRemoteCommand(command: String, data: JSON) {
-        NSLog("command: %@", command)
-        switch command {
-        case "load":
-            onLoad(data)
-        case "login":
-            onLogin(data)
-        case "can_link_account":
-            onCanLinkAccount(data)
-        case "session_status":
-            onSessionStatus(data)
-        case "sign_out":
-            onSignOut(data)
-        default:
-            NSLog("Unexpected remote command received: " + command + ". Ignoring command.");
+        if let command = RemoteCommand(rawValue: command) {
+            switch (command) {
+            case .Loaded:
+                onLoaded(data)
+            case .Login:
+                onLogin(data)
+            case .CanLinkAccount:
+                onCanLinkAccount(data)
+            case .SessionStatus:
+                onSessionStatus(data)
+            case .SignOut:
+                onSignOut(data)
+            }
+        } else {
+            NSLog("Unknown remote command '\(command)'; ignoring.");
         }
     }
 
@@ -175,5 +173,13 @@ class FxASignInWebViewController: UIViewController, WKScriptMessageHandler {
         let fileRoot = NSBundle.mainBundle().pathForResource("FxASignIn",
                 ofType: "js")
         return NSString(contentsOfFile: fileRoot!, encoding: NSUTF8StringEncoding, error: nil)!
+    }
+
+    func webView(webView: WKWebView!, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError!) {
+        delegate?.signInWebViewControllerDidFailProvisionalNavigation(self, withError: error)
+    }
+
+    func webView(webView: WKWebView!, didFailNavigation navigation: WKNavigation!, withError error: NSError!) {
+        delegate?.signInWebViewControllerDidFailNavigation(self, withError: error)
     }
 }
