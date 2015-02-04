@@ -5,8 +5,6 @@
 import Foundation
 import Storage
 
-typealias LogoutCallback = (profile: AccountProfile) -> ()
-
 class ProfileFileAccessor : FileAccessor {
     let profile: Profile
     init(profile: Profile) {
@@ -87,33 +85,16 @@ protocol Profile {
     var readingList: ReadingList { get }
     var passwords: Passwords { get }
 
-    // Because we can't test for whether this is an AccountProfile.
-    // TODO: probably Profile should own an Account.
-    func logout()
-
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
     func localName() -> String
 }
 
-protocol AccountProfile: Profile {
-    var accountName: String { get }
-
-    func basicAuthorizationHeader() -> String
-    func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ())
-}
-
-public class MockAccountProfile: Profile, AccountProfile {
+public class MockProfile: Profile {
     private let name: String = "mockaccount"
 
     func localName() -> String {
         return name
-    }
-
-    var accountName: String {
-        get {
-            return "tester@mozilla.org"
-        }
     }
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
@@ -137,24 +118,13 @@ public class MockAccountProfile: Profile, AccountProfile {
         return ProfileFileAccessor(profile: self)
     } ()
 
-    func basicAuthorizationHeader() -> String {
-        return ""
-    }
-
-    func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ()) {
-        success(data: nil)
-    }
-
-    func logout() {
-    }
-
     lazy var favicons: Favicons = {
         return SQLiteFavicons(files: self.files)
     }()
 
     lazy var history: History = {
         return SQLiteHistory(files: self.files)
-    } ()
+    }()
 
     lazy var readingList: ReadingList = {
         return SQLiteReadingList(files: self.files)
@@ -165,16 +135,11 @@ public class MockAccountProfile: Profile, AccountProfile {
     }()
 }
 
-public class RESTAccountProfile: Profile, AccountProfile {
+public class BrowserProfile: Profile {
     private let name: String
-    let credential: NSURLCredential
 
-    private let logoutCallback: LogoutCallback
-
-    init(localName: String, credential: NSURLCredential, logoutCallback: LogoutCallback) {
+    init(localName: String) {
         self.name = localName
-        self.credential = credential
-        self.logoutCallback = logoutCallback
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
@@ -203,36 +168,8 @@ public class RESTAccountProfile: Profile, AccountProfile {
         return name
     }
 
-    var accountName: String {
-        return credential.user!
-    }
-
     var files: FileAccessor {
         return ProfileFileAccessor(profile: self)
-    }
-
-    func basicAuthorizationHeader() -> String {
-        let userPasswordString = "\(credential.user!):\(credential.password!)"
-        let userPasswordData = userPasswordString.dataUsingEncoding(NSUTF8StringEncoding)
-        let base64EncodedCredential = userPasswordData!.base64EncodedStringWithOptions(nil)
-        return "Basic \(base64EncodedCredential)"
-    }
-
-    func makeAuthRequest(request: String, success: (data: AnyObject?) -> (), error: (error: RequestError) -> ()) {
-        RestAPI.sendRequest(
-            credential,
-            request: request,
-            success: success,
-            error: { err in
-                if err == .BadAuth {
-                    self.logout()
-                }
-                error(error: err)
-        })
-    }
-
-    func logout() {
-        logoutCallback(profile: self)
     }
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {

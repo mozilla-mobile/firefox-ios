@@ -10,6 +10,6 @@ import XCTest
  */
 class ProfileTest: XCTestCase {
     func withTestProfile(callback: (profile: Profile) -> Void) {
-        callback(profile: MockAccountProfile())
+        callback(profile: MockProfile())
     }
 }
