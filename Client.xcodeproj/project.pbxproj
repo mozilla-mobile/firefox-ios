@@ -96,9 +96,7 @@
 		D34C5AF41A5E0C9B00E0DF7B /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34C5AF11A5E0C9800E0DF7B /* SWXMLHash.swift */; };
 		D34C5AF51A5E0C9C00E0DF7B /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34C5AF11A5E0C9800E0DF7B /* SWXMLHash.swift */; };
 		D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
-		D34DC8541A16C40C00D49B7B /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84E1A16C40C00D49B7B /* AccountManager.swift */; };
 		D34DC8581A16C40C00D49B7B /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8521A16C40C00D49B7B /* RestAPI.swift */; };
-		D34DC8621A16C49600D49B7B /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84E1A16C40C00D49B7B /* AccountManager.swift */; };
 		D35179BF1A5C8D5F00E7622E /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D35179C11A5C8D6800E7622E /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
 		D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3968F241A38FE8500CEFD3B /* TabManager.swift */; };
@@ -136,14 +134,12 @@
 		E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40FAB0B1A7ABB77009CB80D /* WebServer.swift */; };
 		E414F0791A8445A500283322 /* FennecAurora.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = E414F0781A8445A500283322 /* FennecAurora.entitlements */; };
 		E418D0D91A251B3200CAE47A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
-		E418D0DA1A251B3200CAE47A /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84E1A16C40C00D49B7B /* AccountManager.swift */; };
 		E418D0DC1A251B3200CAE47A /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDE21A23A6F900B794D3 /* Clients.swift */; };
 		E418D0DF1A251B3200CAE47A /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8521A16C40C00D49B7B /* RestAPI.swift */; };
 		E418D0E01A25634D00CAE47A /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F84B22301A0913F200AAB793 /* Alamofire.framework */; };
 		E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41A7D4A1A1BE04500245963 /* InitialViewController.swift */; };
 		E42CCDE31A23A6F900B794D3 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDE21A23A6F900B794D3 /* Clients.swift */; };
 		E42CCDE81A23A73D00B794D3 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
-		E42CCDE91A23A74000B794D3 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84E1A16C40C00D49B7B /* AccountManager.swift */; };
 		E42CCDEA1A23A74400B794D3 /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8521A16C40C00D49B7B /* RestAPI.swift */; };
 		E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDE21A23A6F900B794D3 /* Clients.swift */; };
 		E42CCDF01A23C8FC00B794D3 /* Snappy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D6BEAD1A092AD300F538BD /* Snappy.framework */; };
@@ -454,7 +450,6 @@
 		D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSuggestClient.swift; sourceTree = "<group>"; };
 		D34C5AF11A5E0C9800E0DF7B /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SWXMLHash.swift; path = ThirdParty/SWXMLHash.swift; sourceTree = "<group>"; };
 		D34DC84D1A16C40C00D49B7B /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
-		D34DC84E1A16C40C00D49B7B /* AccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
 		D34DC8521A16C40C00D49B7B /* RestAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestAPI.swift; sourceTree = "<group>"; };
 		D3968F241A38FE8500CEFD3B /* TabManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabManager.swift; sourceTree = "<group>"; };
 		D39FA1431A83DFBF00EE869C /* KIF.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = KIF.xcodeproj; path = ThirdParty/KIF/KIF.xcodeproj; sourceTree = "<group>"; };
@@ -710,7 +705,6 @@
 			children = (
 				0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */,
 				D34DC84D1A16C40C00D49B7B /* Profile.swift */,
-				D34DC84E1A16C40C00D49B7B /* AccountManager.swift */,
 				E42CCDE21A23A6F900B794D3 /* Clients.swift */,
 				D34DC8521A16C40C00D49B7B /* RestAPI.swift */,
 				0BE108391A1B1ED200D4B712 /* Locking.swift */,
@@ -1451,7 +1445,6 @@
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
 				D314E7F71A37B98700426A76 /* BrowserToolbar.swift in Sources */,
 				28CE83C61A1D1D3200576538 /* KeysPayload.swift in Sources */,
-				D34DC8541A16C40C00D49B7B /* AccountManager.swift in Sources */,
 				E4CD9EFE1A6D9B0900318571 /* GCDWebServerConnection.m in Sources */,
 				E4CD9F2D1A6DC91200318571 /* BrowserLocationView.swift in Sources */,
 				0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */,
@@ -1517,7 +1510,6 @@
 				0BA2E43C1A69EDAB000581FA /* Profile.swift in Sources */,
 				E4CD9F151A6D9B0900318571 /* GCDWebServerStreamedResponse.m in Sources */,
 				2F834D211A8062D1006A0B7B /* json.swift in Sources */,
-				D34DC8621A16C49600D49B7B /* AccountManager.swift in Sources */,
 				E4CD9F091A6D9B0900318571 /* GCDWebServerFileRequest.m in Sources */,
 				E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				E4CD9F131A6D9B0900318571 /* GCDWebServerFileResponse.m in Sources */,
@@ -1567,7 +1559,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */,
-				E418D0DA1A251B3200CAE47A /* AccountManager.swift in Sources */,
 				0BD2C61D1A643B6000BB4BB9 /* Locking.swift in Sources */,
 				282DA46D1A68C15100A406E2 /* SearchEngines.swift in Sources */,
 				E418D0DC1A251B3200CAE47A /* Clients.swift in Sources */,
@@ -1591,7 +1582,6 @@
 				D3C744D01A687D6C004CE85D /* URIFixup.swift in Sources */,
 				E42CCDEA1A23A74400B794D3 /* RestAPI.swift in Sources */,
 				D35179C11A5C8D6800E7622E /* OpenSearch.swift in Sources */,
-				E42CCDE91A23A74000B794D3 /* AccountManager.swift in Sources */,
 				E42CCDE81A23A73D00B794D3 /* Profile.swift in Sources */,
 				D31A0FCA1A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,

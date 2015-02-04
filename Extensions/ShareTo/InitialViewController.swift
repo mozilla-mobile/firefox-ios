@@ -16,9 +16,6 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(white: 0.75, alpha: 0.65) // TODO: Is the correct color documented somewhere?
-        
-        let accountManager = AccountProfileManager(loginCallback: { _ in () }, logoutCallback: { _ in () })
-        self.profile = accountManager.getAccount()        // Or, eventually, a local-only one.
     }
     
     override func viewDidAppear(animated: Bool)
