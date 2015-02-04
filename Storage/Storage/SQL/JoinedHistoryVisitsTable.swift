@@ -30,6 +30,20 @@ class JoinedHistoryVisitsTable: Table {
         return (cursor[0] as Site).id
     }
 
+    func exists(db: SQLiteDBConnection) -> Bool {
+        var found = false
+        let sqlStr = "SELECT name FROM sqlite_master WHERE type = 'table' AND name=? OR name=?"
+        let res = db.executeQuery(sqlStr, factory: StringFactory, withArgs: [visits.name, history.name])
+        // If either of the tables is missing here, something has gone terribly wrong
+        return res.count > 1
+    }
+
+    func drop(db: SQLiteDBConnection) -> Bool {
+        let err = db.executeChange("DROP TABLE IF EXISTS \(visits.name)")
+        let err2 = db.executeChange("DROP TABLE IF EXISTS \(history.name)")
+        return err != nil && err2 != nil
+    }
+
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
         return history.create(db, version: version) && visits.create(db, version: version)
     }

@@ -118,7 +118,10 @@ public class SQLiteDBConnection {
         }
 
         set {
-            executeChange("PRAGMA user_version = \(newValue)")
+            let err = executeChange("PRAGMA user_version = \(newValue)")
+            if err != nil {
+                println("Err updating version \(newValue)  --  \(err!)")
+            }
         }
     }
 
@@ -278,18 +281,12 @@ public class SQLiteDBConnection {
 
 // Helper for queries that return a single integer result
 func IntFactory(row: SDRow) -> Int {
-    for val in row {
-        return val as Int
-    }
-    return 0
+    return row[0] as Int
 }
 
 // Helper for queries that return a single String result
 func StringFactory(row: SDRow) -> String {
-    for val in row {
-        return val as String
-    }
-    return ""
+    return row[0] as String
 }
 
 // Wrapper around a statment for getting data from a row. This provides accessors for subscript indexing
