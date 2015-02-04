@@ -23,7 +23,12 @@ var _firefox_ReaderMode = {
                     scheme: document.location.protocol.substr(0, document.location.protocol.indexOf(":")),
                     pathBase: document.location.protocol + "//" + document.location.host + location.pathname.substr(0, location.pathname.lastIndexOf("/") + 1)
                 }
-                var readability = new Readability(uri, document.cloneNode(true));
+
+                // document.cloneNode() can cause the webview to break (bug 1128774).
+                // Serialize and then parse the document instead.
+                var docStr = new XMLSerializer().serializeToString(document);
+                var doc = new DOMParser().parseFromString(docStr, "text/html");
+                var readability = new Readability(uri, doc);
                 _firefox_ReaderMode.readabilityResult = readability.parse();
                 webkit.messageHandlers.readerModeMessageHandler.postMessage(_firefox_ReaderMode.readabilityResult !== null ? "Available" : "Unavailable");
             }
