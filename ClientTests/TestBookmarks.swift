@@ -6,16 +6,16 @@ import Foundation
 import XCTest
 import Storage
 
-class TestBookmarks : AccountTest {
+class TestBookmarks : ProfileTest {
     func testBookmarks() {
-        withTestAccount { account -> Void in
+        withTestProfile { profile -> Void in
             for i in 0...10 {
                 let bookmark = ShareItem(url: "http://www.example.com/\(i)", title: "Example \(i)")
-                account.bookmarks.shareItem(bookmark)
+                profile.bookmarks.shareItem(bookmark)
             }
 
             let expectation = self.expectationWithDescription("asynchronous request")
-            account.bookmarks.modelForRoot({ (model: BookmarksModel) in
+            profile.bookmarks.modelForRoot({ (model: BookmarksModel) in
                 XCTAssertEqual(model.current.count, 11, "We create \(model.current.count) stub bookmarks.")
                 let bookmark = model.current[0]
                 XCTAssertTrue(bookmark is BookmarkItem)

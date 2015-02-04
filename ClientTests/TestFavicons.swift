@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 import Storage
 
-class TestFavicons : AccountTest {
+class TestFavicons : ProfileTest {
 
     private func innerAddIcon(favicons: Favicons, url: String, callback: (success: Bool) -> Void) {
         // Add an entry
@@ -54,8 +54,8 @@ class TestFavicons : AccountTest {
 
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testFavicons() {
-        withTestAccount { account -> Void in
-            let h = account.favicons
+        withTestProfile { profile -> Void in
+            let h = profile.favicons
             self.addSite(h, url: "url1")
             self.addSite(h, url: "url1")
             self.addSite(h, url: "url1")
@@ -63,9 +63,9 @@ class TestFavicons : AccountTest {
             self.addSite(h, url: "url2")
             self.checkSites(h, icons: ["url1/icon.png", "url2/icon.png"], s: true)
 
-            // TODO: Use the local file server for usrls ehre instead so that we can test download/save/delete of local storage
+            // TODO: Use the local file server for URLs here, so that we can test download/save/delete of local storage
             self.clear(h)
-            account.files.remove("browser.db", basePath: nil)
+            profile.files.remove("browser.db", basePath: nil)
         }
     }
 }
