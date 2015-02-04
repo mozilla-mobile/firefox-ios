@@ -247,13 +247,9 @@ public class RESTAccountProfile: Profile, AccountProfile {
         return NSUserDefaultsProfilePrefs(profile: self)
     }
 
-    var _clients: Clients? = nil
-    var clients: Clients {
-        if _clients == nil {
-            _clients = RESTClients(profile: self)
-        }
-        return _clients!
-    }
+    lazy var clients: Clients = {
+        return MockClients(profile: self)
+    } ()
 
     lazy var favicons: Favicons = {
         return SQLiteFavicons(files: self.files)
