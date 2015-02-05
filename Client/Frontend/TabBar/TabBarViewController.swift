@@ -101,6 +101,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
         searchController = SearchViewController()
         searchController!.searchEngines = profile.searchEngines
         searchController!.delegate = self
+        searchController?.profile = profile
 
         view.addSubview(searchController!.view)
         searchController!.view.snp_makeConstraints { make in

@@ -2,16 +2,27 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
+import Storage
 
 private let ReuseIdentifier = "cell"
 private let SuggestionsLimitCount = 3
 
 private enum SearchListSection: Int{
     case SuggestedSites = 0
-    case Search
     case BookmarksAndHistory
+    case Search
+
+    var description: String {
+        switch self {
+        case .SuggestedSites:
+            return "Suggested Sites"
+        case .BookmarksAndHistory:
+            return "Bookmarks&History"
+        case .Search:
+            return "Search"
+        }
+    }
 }
 
 // A delegate to support clicking on rows in the view controller
@@ -27,7 +38,11 @@ class SearchViewController: UIViewController {
     private var sortedEngines = [OpenSearchEngine]()
     private var suggestClient: SearchSuggestClient?
     private var searchSuggestions = [String]()
-
+    //Copy from HistoryViewController
+    //Since we create profile in didFinishLaunchingWithOptions and hundreds of class instance access profile, why wouldn't we make profile singleton?
+    var profile: Profile!
+    private var history: Cursor? = nil
+    
     var searchEngines: SearchEngines? {
         didSet {
             suggestClient?.cancelPendingRequest()
@@ -51,6 +66,14 @@ class SearchViewController: UIViewController {
     var searchQuery: String = "" {
         didSet {
             querySuggestClient()
+            
+            profile.history.get(searchQuery, options: nil, complete: { (data: Cursor) -> Void in
+                if data.status != .Success {
+                    println("Err: \(data.statusMessage)")
+                } else {
+                    self.history = data
+                }
+            })
 
             // Reload the tableView to show the updated text in each engine.
             tableView.reloadData()
@@ -126,21 +149,31 @@ extension SearchViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath) as SearchTableViewCell
 
-        if indexPath.section == SearchListSection.SuggestedSites.rawValue {
-            cell.textLabel?.text = searchSuggestions[indexPath.row]
-            cell.imageView?.image = nil
-            cell.isAccessibilityElement = false
-            cell.accessibilityLabel = nil
-        } else if indexPath.section == SearchListSection.Search.rawValue {
-            let searchEngine = sortedEngines[indexPath.row]
-            cell.textLabel?.text = searchQuery
-            cell.imageView?.image = searchEngine.image
-            cell.isAccessibilityElement = true
-            cell.accessibilityLabel = NSString(format: NSLocalizedString("%@ search for %@", comment: "E.g. \"Google search for Mars\". Please keep the first \"%@\" (which contains the search engine name) as close to the beginning of the translated phrase as possible (it is best to have it as the very first word). This is because the phrase is an accessibility label and VoiceOver users need to hear the search engine name first as that is the key information in the whole phrase (they know the search term because they typed it and from previous rows of the table)."), searchEngine.shortName, searchQuery)
-        } else {
-            //Bookmarks&History
+        if let currentSection = SearchListSection(rawValue: indexPath.section) {
+            switch currentSection {
+            case .SuggestedSites:
+                cell.textLabel?.text = searchSuggestions[indexPath.row]
+                cell.imageView?.image = nil
+                cell.isAccessibilityElement = false
+                cell.accessibilityLabel = nil
+            case .BookmarksAndHistory:
+                if let hasHistory = self.history {
+                    if let site = hasHistory[indexPath.row] as? Site {
+                        cell.textLabel?.text = site.title
+                        cell.imageView?.image = nil
+                        cell.isAccessibilityElement = false
+                        cell.accessibilityLabel = nil
+                    }
+                }
+            case .Search:
+                let searchEngine = sortedEngines[indexPath.row]
+                cell.textLabel?.text = searchQuery
+                cell.imageView?.image = searchEngine.image
+                cell.isAccessibilityElement = true
+                cell.accessibilityLabel = NSString(format: NSLocalizedString("%@ search for %@", comment: "E.g. \"Google search for Mars\". Please keep the first \"%@\" (which contains the search engine name) as close to the beginning of the translated phrase as possible (it is best to have it as the very first word). This is because the phrase is an accessibility label and VoiceOver users need to hear the search engine name first as that is the key information in the whole phrase (they know the search term because they typed it and from previous rows of the table)."), searchEngine.shortName, searchQuery)
+            }
         }
-
+        
         // Make the row separators span the width of the entire table.
         cell.layoutMargins = UIEdgeInsetsZero
 
@@ -155,7 +188,11 @@ extension SearchViewController: UITableViewDataSource {
             case .Search:
                 return sortedEngines.count
             case .BookmarksAndHistory:
-                return 0
+                if let hasHistory = history {
+                    return hasHistory.count
+                } else {
+                    return 0
+                }
             }
         }
         return 0
@@ -163,28 +200,32 @@ extension SearchViewController: UITableViewDataSource {
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if let currentSection = SearchListSection(rawValue: section) {
-            switch(currentSection) {
-            case .SuggestedSites:
-                return "Suggested Sites"
-            case .Search:
-                return "Search"
-            case .BookmarksAndHistory:
-                return "Bookmarks&History"
-            }
+            return currentSection.description
         }
         return ""
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        var sectionNum = 0
-        if searchSuggestions.count > 0 {
-            sectionNum++
-        }
-        if sortedEngines.count > 0{
-            sectionNum++
-        }
-        //TODO: maybe we need + bookmark&history.count
-        return sectionNum
+        return 3
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        if let currentSection = SearchListSection(rawValue: section) {
+//            switch(currentSection) {
+//            case .SuggestedSites:
+//                return searchSuggestions.count>0 ? UITableViewAutomaticDimension : 0
+//            case .Search:
+//                return sortedEngines.count>0 ? UITableViewAutomaticDimension : 0
+//            case .BookmarksAndHistory:
+//                if let hasHistory = history {
+//                    return hasHistory.count>0 ? UITableViewAutomaticDimension : 0
+//                } else {
+//                    return 0
+//                }
+//            }
+//        }
+//        return UITableViewAutomaticDimension
+        return 0
     }
 }
 
