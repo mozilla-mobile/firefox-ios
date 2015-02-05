@@ -39,6 +39,8 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         locationLabel.font = UIFont(name: "HelveticaNeue-Light", size: 14)
         locationLabel.lineBreakMode = NSLineBreakMode.ByClipping
         locationLabel.userInteractionEnabled = true
+        // TODO: This label isn't useful for people. We probably want this to be the page title or URL (see Safari).
+        locationLabel.accessibilityLabel = NSLocalizedString("URL", comment: "Accessibility label")
         addSubview(locationLabel)
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocationLabel:")

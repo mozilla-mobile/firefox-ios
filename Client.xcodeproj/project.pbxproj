@@ -96,6 +96,8 @@
 		D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3968F241A38FE8500CEFD3B /* TabManager.swift */; };
 		D39FA16A1A83E17100EE869C /* libKIF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D39FA14F1A83DFBF00EE869C /* libKIF.a */; };
 		D39FA16C1A83E17800EE869C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D39FA16B1A83E17800EE869C /* CoreGraphics.framework */; };
+		D39FA1811A83E84900EE869C /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39FA1801A83E84900EE869C /* Global.swift */; };
+		D39FA1831A83E87900EE869C /* NavigationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39FA1821A83E87900EE869C /* NavigationTests.swift */; };
 		D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A994951A3686BD008AD1AC /* BrowserViewController.swift */; };
 		D3A9949D1A3686BD008AD1AC /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A994961A3686BD008AD1AC /* Browser.swift */; };
 		D3C38C701A6F20D9005C702A /* Storage.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 282DA4BA1A699E0400A406E2 /* Storage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -103,6 +105,21 @@
 		D3C744CE1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
 		D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
 		D3C744D01A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
+		D3E171A81A83F75000AB44CD /* GCDWebServer.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EDF1A6D9B0900318571 /* GCDWebServer.m */; };
+		D3E171A91A83F75000AB44CD /* GCDWebServerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EE11A6D9B0900318571 /* GCDWebServerConnection.m */; };
+		D3E171AA1A83F75000AB44CD /* GCDWebServerFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EE31A6D9B0900318571 /* GCDWebServerFunctions.m */; };
+		D3E171AB1A83F75000AB44CD /* GCDWebServerRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EE71A6D9B0900318571 /* GCDWebServerRequest.m */; };
+		D3E171AC1A83F75000AB44CD /* GCDWebServerResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EE91A6D9B0900318571 /* GCDWebServerResponse.m */; };
+		D3E171B81A83F75A00AB44CD /* GCDWebServerDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EEC1A6D9B0900318571 /* GCDWebServerDataRequest.m */; };
+		D3E171B91A83F75A00AB44CD /* GCDWebServerFileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EEE1A6D9B0900318571 /* GCDWebServerFileRequest.m */; };
+		D3E171BA1A83F75A00AB44CD /* GCDWebServerMultiPartFormRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EF01A6D9B0900318571 /* GCDWebServerMultiPartFormRequest.m */; };
+		D3E171BB1A83F75A00AB44CD /* GCDWebServerURLEncodedFormRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EF21A6D9B0900318571 /* GCDWebServerURLEncodedFormRequest.m */; };
+		D3E171BC1A83F76200AB44CD /* GCDWebServerDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EF51A6D9B0900318571 /* GCDWebServerDataResponse.m */; };
+		D3E171BD1A83F76200AB44CD /* GCDWebServerErrorResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EF71A6D9B0900318571 /* GCDWebServerErrorResponse.m */; };
+		D3E171BE1A83F76200AB44CD /* GCDWebServerFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EF91A6D9B0900318571 /* GCDWebServerFileResponse.m */; };
+		D3E171BF1A83F76200AB44CD /* GCDWebServerStreamedResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9EFB1A6D9B0900318571 /* GCDWebServerStreamedResponse.m */; };
+		D3E171C01A83FB6300AB44CD /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E4CD9F191A6D9B7B00318571 /* libz.dylib */; };
+		D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D3E171C11A841EAD00AB44CD /* KIFHelper.js */; };
 		D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA777A1A43B2990010CD32 /* SearchTests.swift */; };
 		D3FA77971A43B5390010CD32 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
 		D3FA77C41A44F9A80010CD32 /* Locales in Resources */ = {isa = PBXBuildFile; fileRef = D3FA77C31A44F9A80010CD32 /* Locales */; };
@@ -431,9 +448,12 @@
 		D39FA1621A83E0EC00EE869C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D39FA16B1A83E17800EE869C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		D39FA16F1A83E62600EE869C /* UITests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D39FA1801A83E84900EE869C /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
+		D39FA1821A83E87900EE869C /* NavigationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationTests.swift; sourceTree = "<group>"; };
 		D3A994951A3686BD008AD1AC /* BrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		D3A994961A3686BD008AD1AC /* Browser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		D3C744CC1A687D6C004CE85D /* URIFixup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URIFixup.swift; sourceTree = "<group>"; };
+		D3E171C11A841EAD00AB44CD /* KIFHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = KIFHelper.js; sourceTree = "<group>"; };
 		D3FA777A1A43B2990010CD32 /* SearchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
 		D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSearch.swift; sourceTree = "<group>"; };
 		D3FA77C31A44F9A80010CD32 /* Locales */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Locales; sourceTree = "<group>"; };
@@ -545,6 +565,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3E171C01A83FB6300AB44CD /* libz.dylib in Frameworks */,
 				D39FA16C1A83E17800EE869C /* CoreGraphics.framework in Frameworks */,
 				D39FA16A1A83E17100EE869C /* libKIF.a in Frameworks */,
 			);
@@ -705,6 +726,9 @@
 			isa = PBXGroup;
 			children = (
 				D39FA16F1A83E62600EE869C /* UITests-Bridging-Header.h */,
+				D3E171C11A841EAD00AB44CD /* KIFHelper.js */,
+				D39FA1801A83E84900EE869C /* Global.swift */,
+				D39FA1821A83E87900EE869C /* NavigationTests.swift */,
 				D39FA1611A83E0EC00EE869C /* Supporting Files */,
 			);
 			path = UITests;
@@ -1354,6 +1378,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1427,6 +1452,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D39FA1811A83E84900EE869C /* Global.swift in Sources */,
+				D3E171AA1A83F75000AB44CD /* GCDWebServerFunctions.m in Sources */,
+				D3E171B81A83F75A00AB44CD /* GCDWebServerDataRequest.m in Sources */,
+				D3E171BF1A83F76200AB44CD /* GCDWebServerStreamedResponse.m in Sources */,
+				D3E171BE1A83F76200AB44CD /* GCDWebServerFileResponse.m in Sources */,
+				D39FA1831A83E87900EE869C /* NavigationTests.swift in Sources */,
+				D3E171BB1A83F75A00AB44CD /* GCDWebServerURLEncodedFormRequest.m in Sources */,
+				D3E171A91A83F75000AB44CD /* GCDWebServerConnection.m in Sources */,
+				D3E171B91A83F75A00AB44CD /* GCDWebServerFileRequest.m in Sources */,
+				D3E171AC1A83F75000AB44CD /* GCDWebServerResponse.m in Sources */,
+				D3E171AB1A83F75000AB44CD /* GCDWebServerRequest.m in Sources */,
+				D3E171BD1A83F76200AB44CD /* GCDWebServerErrorResponse.m in Sources */,
+				D3E171BC1A83F76200AB44CD /* GCDWebServerDataResponse.m in Sources */,
+				D3E171A81A83F75000AB44CD /* GCDWebServer.m in Sources */,
+				D3E171BA1A83F75A00AB44CD /* GCDWebServerMultiPartFormRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
