@@ -308,7 +308,7 @@
 			};
 			name = Debug;
 		};
-		F8111E4519A95C8B0040E7D1 /* Release */ = {
+		F8111E4519A95C8B0040E7D1 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -346,7 +346,7 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = FennecAurora;
 		};
 		F8111E4719A95C8B0040E7D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -367,7 +367,7 @@
 			};
 			name = Debug;
 		};
-		F8111E4819A95C8B0040E7D1 /* Release */ = {
+		F8111E4819A95C8B0040E7D1 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -383,7 +383,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
-			name = Release;
+			name = FennecAurora;
 		};
 		F8111E4A19A95C8B0040E7D1 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -402,7 +402,7 @@
 			};
 			name = Debug;
 		};
-		F8111E4B19A95C8B0040E7D1 /* Release */ = {
+		F8111E4B19A95C8B0040E7D1 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
@@ -413,7 +413,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
-			name = Release;
+			name = FennecAurora;
 		};
 /* End XCBuildConfiguration section */
 
@@ -422,28 +422,28 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F8111E4419A95C8B0040E7D1 /* Debug */,
-				F8111E4519A95C8B0040E7D1 /* Release */,
+				F8111E4519A95C8B0040E7D1 /* FennecAurora */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = FennecAurora;
 		};
 		F8111E4619A95C8B0040E7D1 /* Build configuration list for PBXNativeTarget "Alamofire" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F8111E4719A95C8B0040E7D1 /* Debug */,
-				F8111E4819A95C8B0040E7D1 /* Release */,
+				F8111E4819A95C8B0040E7D1 /* FennecAurora */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = FennecAurora;
 		};
 		F8111E4919A95C8B0040E7D1 /* Build configuration list for PBXNativeTarget "AlamofireTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F8111E4A19A95C8B0040E7D1 /* Debug */,
-				F8111E4B19A95C8B0040E7D1 /* Release */,
+				F8111E4B19A95C8B0040E7D1 /* FennecAurora */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = FennecAurora;
 		};
 /* End XCConfigurationList section */
 	};

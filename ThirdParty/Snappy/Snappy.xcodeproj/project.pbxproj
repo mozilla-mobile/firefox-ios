@@ -282,7 +282,7 @@
 			};
 			name = Debug;
 		};
-		DDC9FDB01981B4DD009612C7 /* Release */ = {
+		DDC9FDB01981B4DD009612C7 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -316,7 +316,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = FennecAurora;
 		};
 		EEBCC9E919CC627E0083B827 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -342,7 +342,7 @@
 			};
 			name = Debug;
 		};
-		EEBCC9EA19CC627E0083B827 /* Release */ = {
+		EEBCC9EA19CC627E0083B827 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -360,7 +360,7 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = FennecAurora;
 		};
 		EEBCC9EC19CC627E0083B827 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -380,7 +380,7 @@
 			};
 			name = Debug;
 		};
-		EEBCC9ED19CC627E0083B827 /* Release */ = {
+		EEBCC9ED19CC627E0083B827 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
@@ -392,7 +392,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
-			name = Release;
+			name = FennecAurora;
 		};
 /* End XCBuildConfiguration section */
 
@@ -401,28 +401,28 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DDC9FDAF1981B4DD009612C7 /* Debug */,
-				DDC9FDB01981B4DD009612C7 /* Release */,
+				DDC9FDB01981B4DD009612C7 /* FennecAurora */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = FennecAurora;
 		};
 		EEBCC9E819CC627E0083B827 /* Build configuration list for PBXNativeTarget "Snappy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EEBCC9E919CC627E0083B827 /* Debug */,
-				EEBCC9EA19CC627E0083B827 /* Release */,
+				EEBCC9EA19CC627E0083B827 /* FennecAurora */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = FennecAurora;
 		};
 		EEBCC9EB19CC627E0083B827 /* Build configuration list for PBXNativeTarget "SnappyTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EEBCC9EC19CC627E0083B827 /* Debug */,
-				EEBCC9ED19CC627E0083B827 /* Release */,
+				EEBCC9ED19CC627E0083B827 /* FennecAurora */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = FennecAurora;
 		};
 /* End XCConfigurationList section */
 	};

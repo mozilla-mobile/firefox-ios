@@ -398,7 +398,7 @@
 			};
 			name = Debug;
 		};
-		282DA4AA1A699E0300A406E2 /* Release */ = {
+		282DA4AA1A699E0300A406E2 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -436,7 +436,7 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = FennecAurora;
 		};
 		282DA4AC1A699E0300A406E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -461,7 +461,7 @@
 			};
 			name = Debug;
 		};
-		282DA4AD1A699E0300A406E2 /* Release */ = {
+		282DA4AD1A699E0300A406E2 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -482,7 +482,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/modules";
 			};
-			name = Release;
+			name = FennecAurora;
 		};
 		282DA4AF1A699E0300A406E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -501,7 +501,7 @@
 			};
 			name = Debug;
 		};
-		282DA4B01A699E0300A406E2 /* Release */ = {
+		282DA4B01A699E0300A406E2 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = (
@@ -512,7 +512,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
-			name = Release;
+			name = FennecAurora;
 		};
 /* End XCBuildConfiguration section */
 
@@ -521,28 +521,28 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				282DA4A91A699E0300A406E2 /* Debug */,
-				282DA4AA1A699E0300A406E2 /* Release */,
+				282DA4AA1A699E0300A406E2 /* FennecAurora */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = FennecAurora;
 		};
 		282DA4AB1A699E0300A406E2 /* Build configuration list for PBXNativeTarget "Storage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				282DA4AC1A699E0300A406E2 /* Debug */,
-				282DA4AD1A699E0300A406E2 /* Release */,
+				282DA4AD1A699E0300A406E2 /* FennecAurora */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = FennecAurora;
 		};
 		282DA4AE1A699E0300A406E2 /* Build configuration list for PBXNativeTarget "StorageTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				282DA4AF1A699E0300A406E2 /* Debug */,
-				282DA4B01A699E0300A406E2 /* Release */,
+				282DA4B01A699E0300A406E2 /* FennecAurora */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = FennecAurora;
 		};
 /* End XCConfigurationList section */
 	};
