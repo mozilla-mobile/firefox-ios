@@ -94,6 +94,8 @@
 		D35179BF1A5C8D5F00E7622E /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D35179C11A5C8D6800E7622E /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
 		D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3968F241A38FE8500CEFD3B /* TabManager.swift */; };
+		D39FA16A1A83E17100EE869C /* libKIF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D39FA14F1A83DFBF00EE869C /* libKIF.a */; };
+		D39FA16C1A83E17800EE869C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D39FA16B1A83E17800EE869C /* CoreGraphics.framework */; };
 		D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A994951A3686BD008AD1AC /* BrowserViewController.swift */; };
 		D3A9949D1A3686BD008AD1AC /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A994961A3686BD008AD1AC /* Browser.swift */; };
 		D3C38C701A6F20D9005C702A /* Storage.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 282DA4BA1A699E0400A406E2 /* Storage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -277,6 +279,13 @@
 			remoteGlobalIDString = EB60ECEB177F8DB3005A041A;
 			remoteInfo = "KIF Tests-OCUnit";
 		};
+		D39FA1651A83E0EC00EE869C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
+			remoteInfo = Client;
+		};
 		E4D6BEAC1A092AD300F538BD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */;
@@ -418,6 +427,10 @@
 		D35179BB1A5C69FE00E7622E /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		D3968F241A38FE8500CEFD3B /* TabManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabManager.swift; sourceTree = "<group>"; };
 		D39FA1431A83DFBF00EE869C /* KIF.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = KIF.xcodeproj; path = ThirdParty/KIF/KIF.xcodeproj; sourceTree = "<group>"; };
+		D39FA15F1A83E0EC00EE869C /* UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D39FA1621A83E0EC00EE869C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D39FA16B1A83E17800EE869C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		D39FA16F1A83E62600EE869C /* UITests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITests-Bridging-Header.h"; sourceTree = "<group>"; };
 		D3A994951A3686BD008AD1AC /* BrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		D3A994961A3686BD008AD1AC /* Browser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		D3C744CC1A687D6C004CE85D /* URIFixup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URIFixup.swift; sourceTree = "<group>"; };
@@ -525,6 +538,15 @@
 				E4CD9F1A1A6D9B7B00318571 /* libz.dylib in Frameworks */,
 				28E5857A1A69E9DE00ACEB4F /* Storage.framework in Frameworks */,
 				28CE83DA1A1D1E7C00576538 /* FxA.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D39FA15C1A83E0EC00EE869C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D39FA16C1A83E17800EE869C /* CoreGraphics.framework in Frameworks */,
+				D39FA16A1A83E17100EE869C /* libKIF.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -679,6 +701,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D39FA1601A83E0EC00EE869C /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				D39FA16F1A83E62600EE869C /* UITests-Bridging-Header.h */,
+				D39FA1611A83E0EC00EE869C /* Supporting Files */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
+		D39FA1611A83E0EC00EE869C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D39FA1621A83E0EC00EE869C /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		D3A994941A368691008AD1AC /* Browser */ = {
 			isa = PBXGroup;
 			children = (
@@ -778,6 +817,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				D39FA16B1A83E17800EE869C /* CoreGraphics.framework */,
 				D3FA77C31A44F9A80010CD32 /* Locales */,
 				E4CD9F191A6D9B7B00318571 /* libz.dylib */,
 				28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */,
@@ -798,6 +838,7 @@
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				28CE83C01A1D1D3200576538 /* Token */,
 				28C077961A3B061C00834FE5 /* TokenTests */,
+				D39FA1601A83E0EC00EE869C /* UITests */,
 				E42CCDFF1A24C4E300B794D3 /* Utils */,
 			);
 			sourceTree = "<group>";
@@ -809,6 +850,7 @@
 				F84B21D31A090F8100AAB793 /* FennecAurora.xctest */,
 				F84B22491A0920C600AAB793 /* ShareTo.appex */,
 				F84B225C1A09210A00AAB793 /* SendTo.appex */,
+				D39FA15F1A83E0EC00EE869C /* UITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -834,11 +876,11 @@
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
 				D3FA777A1A43B2990010CD32 /* SearchTests.swift */,
 				0BA8964A1A250E6500C1010C /* TestBookmarks.swift */,
+				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
 				0BE108351A1B1EC700D4B712 /* TestLocking.swift */,
 				0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */,
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
 				F84B21D71A090F8100AAB793 /* Supporting Files */,
-				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -1023,6 +1065,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D39FA15E1A83E0EC00EE869C /* UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D39FA1671A83E0EC00EE869C /* Build configuration list for PBXNativeTarget "UITests" */;
+			buildPhases = (
+				D39FA15B1A83E0EC00EE869C /* Sources */,
+				D39FA15C1A83E0EC00EE869C /* Frameworks */,
+				D39FA15D1A83E0EC00EE869C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D39FA1661A83E0EC00EE869C /* PBXTargetDependency */,
+			);
+			name = UITests;
+			productName = UITests;
+			productReference = D39FA15F1A83E0EC00EE869C /* UITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F84B21BD1A090F8100AAB793 /* Client */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F84B21DD1A090F8100AAB793 /* Build configuration list for PBXNativeTarget "Client" */;
@@ -1108,6 +1168,10 @@
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
+					D39FA15E1A83E0EC00EE869C = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = F84B21BD1A090F8100AAB793;
+					};
 					F84B21BD1A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
 						SystemCapabilities = {
@@ -1186,6 +1250,7 @@
 				F84B21D21A090F8100AAB793 /* ClientTests */,
 				F84B22481A0920C600AAB793 /* ShareTo */,
 				F84B225B1A09210A00AAB793 /* SendTo */,
+				D39FA15E1A83E0EC00EE869C /* UITests */,
 			);
 		};
 /* End PBXProject section */
@@ -1285,6 +1350,13 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D39FA15D1A83E0EC00EE869C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F84B21BC1A090F8100AAB793 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1351,6 +1423,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D39FA15B1A83E0EC00EE869C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F84B21BA1A090F8100AAB793 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1534,6 +1613,11 @@
 			name = FxA;
 			targetProxy = 28CE83DC1A1D1E7C00576538 /* PBXContainerItemProxy */;
 		};
+		D39FA1661A83E0EC00EE869C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F84B21BD1A090F8100AAB793 /* Client */;
+			targetProxy = D39FA1651A83E0EC00EE869C /* PBXContainerItemProxy */;
+		};
 		E4D6BEB41A092D5700F538BD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Snappy;
@@ -1562,6 +1646,51 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		D349D7381A85977700229905 /* FennecAurora */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = UITests;
+			};
+			name = FennecAurora;
+		};
+		D39FA1681A83E0EC00EE869C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = UITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/UITests/UITests-Bridging-Header.h";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+			};
+			name = Debug;
+		};
+		D39FA1691A83E0EC00EE869C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = UITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/UITests/UITests-Bridging-Header.h";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+			};
+			name = Release;
+		};
 		F84B21DB1A090F8100AAB793 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1671,6 +1800,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MOZ_BUNDLE_DISPLAY_NAME = "Fennec ($(USER))";
@@ -1693,6 +1826,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MOZ_BUNDLE_DISPLAY_NAME = "Fennec Aurora";
@@ -1827,6 +1964,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D39FA1671A83E0EC00EE869C /* Build configuration list for PBXNativeTarget "UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D39FA1681A83E0EC00EE869C /* Debug */,
+				D39FA1691A83E0EC00EE869C /* Release */,
+				D349D7381A85977700229905 /* FennecAurora */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F84B21B91A090F8100AAB793 /* Build configuration list for PBXProject "Client" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
