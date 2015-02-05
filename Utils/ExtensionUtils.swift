@@ -40,12 +40,12 @@ struct ExtensionUtils {
     }
     
     /// Return the shared identifier to be used with for example background http requests.
-    /// This is in ExtensionUtils because I think we can eventually do something smart here
-    /// to let the extension discover this value at runtime. (It is based on the app
-    ///  identifier, which will change for production and test builds)
     ///
     /// :returns: the shared container identifier
     static func sharedContainerIdentifier() -> String {
-        return "group.org.allizom.Client"
+        let identifier = NSBundle.mainBundle().bundleIdentifier!
+        let components = identifier.componentsSeparatedByString(".")
+        let baseIdentifier = ".".join(components[0..<components.count-1])
+        return "group.\(baseIdentifier)"
     }
 }
