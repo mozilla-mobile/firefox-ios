@@ -4,7 +4,6 @@
 
 import Foundation
 
-let SuiteName = "group.org.allizom.Client"
 let KeyUsername = "username"
 let KeyLoggedIn = "loggedIn"
 
@@ -12,7 +11,7 @@ class AccountProfileManager: NSObject {
     let loginCallback: (account: Profile) -> ()
     let logoutCallback: LogoutCallback
 
-    private let userDefaults = NSUserDefaults(suiteName: SuiteName)!
+    private let userDefaults = NSUserDefaults(suiteName: ExtensionUtils.sharedContainerIdentifier())!
 
     init(loginCallback: (account: Profile) -> (), logoutCallback: LogoutCallback) {
         self.loginCallback = loginCallback
