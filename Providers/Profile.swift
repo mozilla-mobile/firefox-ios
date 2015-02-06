@@ -88,6 +88,9 @@ protocol Profile {
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
     func localName() -> String
+
+    func getAccount() -> FirefoxAccount?
+    func setAccount(account: FirefoxAccount?)
 }
 
 public class MockProfile: Profile {
@@ -133,6 +136,16 @@ public class MockProfile: Profile {
     lazy var passwords: Passwords = {
         return MockPasswords(files: self.files)
     }()
+
+    var account: FirefoxAccount? = nil
+
+    func getAccount() -> FirefoxAccount? {
+        return account
+    }
+
+    func setAccount(account: FirefoxAccount?) {
+        self.account = account
+    }
 }
 
 public class BrowserProfile: Profile {
@@ -209,4 +222,24 @@ public class BrowserProfile: Profile {
     lazy var passwords: Passwords = {
         return SQLitePasswords(files: self.files)
     }()
+
+    private lazy var account: FirefoxAccount? = {
+        if let dictionary = KeychainWrapper.objectForKey(self.name + ".account") as? [String:AnyObject] {
+            return FirefoxAccount.fromDictionary(dictionary)
+        }
+        return nil
+    }()
+
+    func getAccount() -> FirefoxAccount? {
+        return account
+    }
+
+    func setAccount(account: FirefoxAccount?) {
+        if account == nil {
+            KeychainWrapper.removeObjectForKey(name + ".account")
+        } else {
+            KeychainWrapper.setObject(account!.asDictionary(), forKey: name + ".account")
+        }
+        self.account = account
+    }
 }

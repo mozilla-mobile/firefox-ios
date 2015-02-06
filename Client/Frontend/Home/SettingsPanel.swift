@@ -4,6 +4,7 @@
 
 import UIKit
 import Snap
+import FxA
 
 class SettingsPanel: UIViewController, ToolbarViewProtocol,
         UITableViewDataSource, UITableViewDelegate, FxASignInViewControllerDelegate
@@ -125,6 +126,18 @@ signOutButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Norma
             make.trailing.bottom.equalTo(self.view)
             return
         }
+        updateButton(profile.getAccount())
+    }
+
+    func updateButton(account: FirefoxAccount?) {
+        nameLabel.text = account?.email
+        emailLabel.text = account?.email
+
+        let signInOrOutLabel = account == nil
+            ? NSLocalizedString("Sign in", comment: "")
+            : NSLocalizedString("Sign out", comment: "")
+
+        signOutButton.setTitle(signInOrOutLabel, forState: UIControlState.Normal)
     }
 
     func signInViewControllerDidCancel(vc: FxASignInViewController) {
@@ -134,14 +147,37 @@ signOutButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Norma
     // A temporary delegate which merely updates the displayed email address on
     // succesful Firefox Accounts sign in.
     func signInViewControllerDidSignIn(vc: FxASignInViewController, data: JSON) {
-        emailLabel.text = data["email"].asString
+        // TODO: Error handling.
+        let state = FirefoxAccountState.Engaged(
+            verified: false, // TODO: have fxa-content-server provide this.
+            sessionToken: NSData(base16EncodedString: data["sessionToken"].asString!, options: NSDataBase16DecodingOptions.allZeros),
+            keyFetchToken: NSData(base16EncodedString: data["keyFetchToken"].asString!, options: NSDataBase16DecodingOptions.allZeros),
+            unwrapkB: NSData(base16EncodedString: data["unwrapBKey"].asString!, options: NSDataBase16DecodingOptions.allZeros)
+        )
+
+        let account = FirefoxAccount(
+            email: data["email"].asString!,
+            uid: data["uid"].asString!,
+            authEndpoint: NSURL(string: FxASignInEndpoint)!,
+            contentEndpoint: NSURL(string: FxASignInEndpoint)!,
+            oauthEndpoint: NSURL(string: FxASignInEndpoint)!,
+            state: state
+        )
+
+        profile.setAccount(account)
+        updateButton(account)
     }
 
     // Temporarily, we show the Firefox Accounts sign in view.
     func SELdidClickLogout() {
-        let vc = FxASignInViewController()
-        vc.signInDelegate = self
-        presentViewController(vc, animated: true, completion: nil)
+        if (profile.getAccount() != nil) {
+            profile.setAccount(nil)
+            updateButton(profile.getAccount())
+        } else {
+            let vc = FxASignInViewController()
+            vc.signInDelegate = self
+            presentViewController(vc, animated: true, completion: nil)
+        }
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
