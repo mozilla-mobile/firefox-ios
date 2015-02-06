@@ -1,0 +1,3 @@
+language: objective-c
+xcode_project: Client.xcodeproj
+xcode_scheme: Client
