@@ -14,6 +14,17 @@ class GenericTable<T>: Table {
         return nil
     }
 
+    func exists(db: SQLiteDBConnection) -> Bool {
+        let sqlStr = "SELECT name FROM sqlite_master WHERE type = 'table' AND name=?"
+        let res = db.executeQuery(sqlStr, factory: StringFactory, withArgs: [name])
+        return res.count > 0
+    }
+
+    func drop(db: SQLiteDBConnection) -> Bool {
+        let err = db.executeChange("DROP TABLE IF EXISTS ?", withArgs: [name])
+        return err != nil
+    }
+
     // These methods take an inout object to avoid some runtime crashes that seem to be due
     // to using generics. Yay Swift!
     func getInsertAndArgs(inout item: Type) -> (String, [AnyObject?])? {

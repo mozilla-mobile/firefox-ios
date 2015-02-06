@@ -33,6 +33,9 @@ public class QueryOptions {
 protocol Table {
     typealias Type
     var name: String { get }
+
+    func exists(db: SQLiteDBConnection) -> Bool
+    func drop(db: SQLiteDBConnection) -> Bool
     func create(db: SQLiteDBConnection, version: Int) -> Bool
     func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool
 
@@ -51,59 +54,55 @@ let DBCouldNotOpenErrorCode = 200
 class BrowserDB {
     private let db: SwiftData
     // XXX: Increasing this should blow away old history, since we currently dont' support any upgrades
-    private let Version: Int = 3
+    private let Version: Int = 4
     private let FileName = "browser.db"
+    private let files: FileAccessor
 
     private var initialized = [String]()
 
-    private func exists<T : Table>(db: SQLiteDBConnection, table: T) -> Bool {
-        var found = false
-        let sqlStr = "SELECT name FROM sqlite_master WHERE type = 'table' AND name=?"
-        let res = db.executeQuery(sqlStr, factory: StringFactory, withArgs: [table.name])
-        return res.count > 0
-    }
-
     init?(files: FileAccessor) {
+        self.files = files
         db = SwiftData(filename: files.get(FileName)!)
     }
 
     func create<T: Table>(table: T) -> Bool {
         var success = true
         db.transaction({ connection -> Bool in
-            let version = connection.version
-            if !self.exists(connection, table: table) {
+            if !table.exists(connection) {
                 if !table.create(connection, version: self.Version) {
+                    println("Creating \(table.name) failed")
                     success = false
                 }
             } else {
-                if !table.updateTable(connection, from: version, to: self.Version) {
+                let version = connection.version
+                if version != self.Version {
+                    // TODO: Support table upgrades.
+                    // table.updateTable(connection, from: version, to: self.Version)
+                    println("Table upgrades aren't supported yet")
                     success = false
+                    connection.version = self.Version
                 }
             }
+
+            // If the creation or ugrade failed, drop the table and try creating it.
+            if !success {
+                println("Dropping and recreating table \(table.name)")
+                table.drop(connection)
+                success = table.create(connection, version: self.Version)
+            }
+
+            // If the creation failed again, delete the file and try creating this again. This isn't
+            // particularly safe, but at least we should start on next run....
+            if !success {
+                println("Deleting db file")
+                self.files.move(self.FileName, dest: "\(self.FileName).bak")
+                success = table.create(connection, version: self.Version)
+            }
+
             return success
         })
+
         return success
-    }
-
-    private func deleteAndRecreate(files: FileAccessor) -> Bool {
-        let date = NSDate()
-        let newFilename = "\(FileName).bak"
-
-        if let file = files.get(newFilename) {
-            if let attrs = NSFileManager.defaultManager().attributesOfItemAtPath(file, error: nil) {
-                if let creationDate = attrs[NSFileCreationDate] as? NSDate {
-                    // If the old backup is less than an hour old, we just give up
-                    let interval = date.timeIntervalSinceDate(creationDate)
-                    if interval < 60*60 {
-                        return false
-                    }
-                }
-            }
-        }
-
-        files.move(FileName, dest: newFilename)
-        // return createDB(files)
-        return true
     }
 
     typealias CursorCallback = (connection: SQLiteDBConnection, inout err: NSError?) -> Cursor
