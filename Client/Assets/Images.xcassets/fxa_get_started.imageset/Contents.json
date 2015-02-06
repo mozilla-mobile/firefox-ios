@@ -1,14 +1,18 @@
 {
   "images" : [
     {
-      "filename" : "fxa_get_started.png",
       "idiom" : "universal",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "fxa_get_started.png"
     },
     {
-      "filename" : "fxa_get_started@2x.png",
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "fxa_get_started@2x.png"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

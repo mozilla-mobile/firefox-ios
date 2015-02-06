@@ -39,6 +39,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         locationLabel.font = UIFont(name: "HelveticaNeue-Light", size: 14)
         locationLabel.lineBreakMode = NSLineBreakMode.ByClipping
         locationLabel.userInteractionEnabled = true
+        locationLabel.accessibilityLabel = NSLocalizedString("Navigation screen", comment: "")
         addSubview(locationLabel)
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocationLabel:")
