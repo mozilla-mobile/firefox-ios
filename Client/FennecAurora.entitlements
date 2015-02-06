@@ -4,11 +4,11 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.org.allizom.Client</string>
+		<string>group.org.mozilla.ios.FennecAurora</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)org.allizom.Client</string>
+		<string>$(AppIdentifierPrefix)org.mozilla.ios.FennecAurora</string>
 	</array>
 </dict>
 </plist>

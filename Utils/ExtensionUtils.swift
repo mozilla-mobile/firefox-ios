@@ -39,13 +39,27 @@ struct ExtensionUtils {
         completionHandler(nil, nil)
     }
     
-    /// Return the shared identifier to be used with for example background http requests.
-    /// This is in ExtensionUtils because I think we can eventually do something smart here
-    /// to let the extension discover this value at runtime. (It is based on the app
-    ///  identifier, which will change for production and test builds)
+    /// Return the shared container identifier (also known as the app group) to be used with for example background http requests.
     ///
-    /// :returns: the shared container identifier
+    /// This function is smart enough to find out if it is being called from an extension or the main application. In case of the
+    /// former, it will chop off the extension identifier from the bundle since that is a suffix not used in the app group.
+    ///
+    /// :returns: the shared container identifier (app group) or the string "group.unknown" if it cannot find the group
     static func sharedContainerIdentifier() -> String {
-        return "group.org.allizom.Client"
+        let bundle = NSBundle.mainBundle()
+        if let packageType = bundle.objectForInfoDictionaryKey("CFBundlePackageType") as? NSString {
+            switch packageType {
+            case "XPC!":
+                let identifier = bundle.bundleIdentifier!
+                let components = identifier.componentsSeparatedByString(".")
+                let baseIdentifier = ".".join(components[0..<components.count-1])
+                return "group.\(baseIdentifier)"
+            case "APPL":
+                return "group.\(bundle.bundleIdentifier!)"
+            default:
+                return "group.unknown"
+            }
+        }
+        return "group.unknown"
     }
 }

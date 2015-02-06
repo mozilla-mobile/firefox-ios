@@ -51,7 +51,7 @@ public class NSUserDefaultsProfilePrefs : ProfilePrefs {
     init(profile: Profile) {
         self.profile = profile
         self.prefix = profile.localName() + "."
-        self.userDefaults = NSUserDefaults(suiteName: SuiteName)!
+        self.userDefaults = NSUserDefaults(suiteName: ExtensionUtils.sharedContainerIdentifier())!
     }
 
     // Preferences are qualified by the profile's local name.
