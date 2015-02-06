@@ -5,8 +5,6 @@
 import Foundation
 import UIKit
 
-private let StatusBarHeight = 20
-
 class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate, UITableViewDataSource {
     var tabManager: TabManager!
 
