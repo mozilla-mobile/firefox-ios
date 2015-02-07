@@ -6,8 +6,9 @@ import Foundation
 import UIKit
 import WebKit
 
-private let StatusBarHeight: CGFloat = 20 // TODO: Can't assume this is correct. Status bar height is dynamic.
-private let ToolbarHeight: CGFloat = 44
+public let StatusBarHeight: CGFloat = 20 // TODO: Can't assume this is correct. Status bar height is dynamic.
+public let ToolbarHeight: CGFloat = 44
+public let DefaultPadding: CGFloat = 10
 private let OKString = NSLocalizedString("OK", comment: "OK button")
 private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
 
@@ -15,6 +16,7 @@ private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
 
 class BrowserViewController: UIViewController {
+    private var urlbar: URLBarView!
     private var toolbar: BrowserToolbar!
     private var tabManager: TabManager!
     var profile: Profile!
@@ -35,29 +37,39 @@ class BrowserViewController: UIViewController {
         tabManager = TabManager(defaultNewTabRequest: defaultRequest)
     }
 
-    override func viewDidLoad() {
-        let headerView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
-        view.addSubview(headerView);
+    private func wrapInEffect(view: UIView) -> UIView {
+        let effect = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
+        self.view.addSubview(effect);
+        view.backgroundColor = UIColor.clearColor()
+        effect.addSubview(view)
 
-        headerView.snp_makeConstraints { make in
+        view.snp_makeConstraints { make in
+            make.edges.equalTo(effect)
+            return
+        }
+
+        return effect
+    }
+
+    override func viewDidLoad() {
+        urlbar = URLBarView()
+        let URLBarEffect = wrapInEffect(urlbar)
+        URLBarEffect.snp_makeConstraints { make in
             make.top.equalTo(self.view.snp_top)
             make.height.equalTo(ToolbarHeight + StatusBarHeight)
             make.leading.trailing.equalTo(self.view)
         }
+        urlbar.delegate = self
+        tabManager.delegate = self
 
         toolbar = BrowserToolbar()
-        toolbar.backgroundColor = UIColor.clearColor()
-        headerView.addSubview(toolbar)
-
-        toolbar.snp_makeConstraints { make in
-            make.top.equalTo(headerView.snp_top)
-            make.left.equalTo(headerView.snp_left)
-            make.bottom.equalTo(headerView.snp_bottom)
-            make.right.equalTo(headerView.snp_right)
+        let toolbarEffect = wrapInEffect(toolbar)
+        toolbarEffect.snp_makeConstraints { make in
+            make.bottom.equalTo(self.view.snp_bottom)
+            make.height.equalTo(ToolbarHeight)
+            make.leading.trailing.equalTo(self.view)
         }
-
         toolbar.browserToolbarDelegate = self
-        tabManager.delegate = self
 
         tabManager.addTab()
     }
@@ -69,16 +81,16 @@ class BrowserViewController: UIViewController {
 
         switch keyPath {
         case KVOEstimatedProgress:
-            toolbar.updateProgressBar(change[NSKeyValueChangeNewKey] as Float)
+            urlbar.updateProgressBar(change[NSKeyValueChangeNewKey] as Float)
         case KVOLoading:
-            toolbar.updateLoading(change[NSKeyValueChangeNewKey] as Bool)
+            urlbar.updateLoading(change[NSKeyValueChangeNewKey] as Bool)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath)")
         }
     }
 }
 
-extension BrowserViewController: BrowserToolbarDelegate {
+extension BrowserViewController: UrlBarDelegate {
     func didBeginEditing() {
         let controller = TabBarViewController()
         controller.profile = profile
@@ -86,10 +98,6 @@ extension BrowserViewController: BrowserToolbarDelegate {
         controller.url = tabManager.selectedTab?.url
         controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
         presentViewController(controller, animated: true, completion: nil)
-    }
-
-    func didClickBack() {
-        tabManager.selectedTab?.goBack()
     }
 
     override func accessibilityPerformEscape() -> Bool {
@@ -100,24 +108,6 @@ extension BrowserViewController: BrowserToolbarDelegate {
             }
         }
         return false
-    }
-
-    func didLongPressBack() {
-        let controller = BackForwardListViewController()
-        controller.listData = tabManager.selectedTab?.backList
-        controller.tabManager = tabManager
-        presentViewController(controller, animated: true, completion: nil)
-    }
-
-    func didClickForward() {
-        tabManager.selectedTab?.goForward()
-    }
-
-    func didLongPressForward() {
-        let controller = BackForwardListViewController()
-        controller.listData = tabManager.selectedTab?.forwardList
-        controller.tabManager = tabManager
-        presentViewController(controller, animated: true, completion: nil)
     }
 
     func didClickReload() {
@@ -149,9 +139,32 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 }
 
+extension BrowserViewController: BrowserToolbarDelegate {
+    func didClickBack() {
+        tabManager.selectedTab?.goBack()
+    }
+    func didLongPressBack() {
+        let controller = BackForwardListViewController()
+        controller.listData = tabManager.selectedTab?.backList
+        controller.tabManager = tabManager
+        presentViewController(controller, animated: true, completion: nil)
+    }
+
+    func didClickForward() {
+        tabManager.selectedTab?.goForward()
+    }
+
+    func didLongPressForward() {
+        let controller = BackForwardListViewController()
+        controller.listData = tabManager.selectedTab?.forwardList
+        controller.tabManager = tabManager
+        presentViewController(controller, animated: true, completion: nil)
+    }
+}
+
 extension BrowserViewController: TabBarViewControllerDelegate {
     func didEnterURL(url: NSURL) {
-        toolbar.updateURL(url)
+        urlbar.updateURL(url)
         tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url))
     }
 }
@@ -163,16 +176,16 @@ extension BrowserViewController: TabManagerDelegate {
 
         previous?.webView.navigationDelegate = nil
         selected?.webView.navigationDelegate = self
-        toolbar.updateURL(selected?.url)
+        urlbar.updateURL(selected?.url)
         if let selected = selected {
             toolbar.updateBackStatus(selected.canGoBack)
             toolbar.updateFowardStatus(selected.canGoForward)
-            toolbar.updateProgressBar(Float(selected.webView.estimatedProgress))
-            toolbar.updateLoading(selected.webView.loading)
+            urlbar.updateProgressBar(Float(selected.webView.estimatedProgress))
+            urlbar.updateLoading(selected.webView.loading)
         }
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
-            toolbar.updateReaderModeState(readerMode.state)
+            urlbar.updateReaderModeState(readerMode.state)
         }
     }
 
@@ -195,12 +208,12 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func didAddTab(tab: Browser) {
-        toolbar.updateTabCount(tabManager.count)
+        urlbar.updateTabCount(tabManager.count)
 
         tab.webView.hidden = true
         view.insertSubview(tab.webView, atIndex: 0)
-        tab.webView.scrollView.contentInset = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, 0, 0)
-        tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, 0, 0)
+        tab.webView.scrollView.contentInset = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
+        tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
         tab.webView.snp_makeConstraints { make in
             make.top.equalTo(self.view.snp_top)
             make.leading.trailing.bottom.equalTo(self.view)
@@ -211,7 +224,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func didRemoveTab(tab: Browser) {
-        toolbar.updateTabCount(tabManager.count)
+        urlbar.updateTabCount(tabManager.count)
 
         tab.webView.removeObserver(self, forKeyPath: KVOEstimatedProgress)
         tab.webView.removeObserver(self, forKeyPath: KVOLoading)
@@ -228,13 +241,13 @@ extension BrowserViewController: WKNavigationDelegate {
         if let absoluteString = webView.URL?.absoluteString {
             // TODO String comparison here because NSURL cannot parse about:reader URLs (1123509)
             if absoluteString.hasPrefix("about:reader") == false {
-                toolbar.updateReaderModeState(ReaderModeState.Unavailable)
+                urlbar.updateReaderModeState(ReaderModeState.Unavailable)
             }
         }
     }
 
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
-        toolbar.updateURL(webView.URL);
+        urlbar.updateURL(webView.URL);
         toolbar.updateBackStatus(webView.canGoBack)
         toolbar.updateFowardStatus(webView.canGoForward)
     }
@@ -311,7 +324,7 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
         // the button. Otherwise do nothing and the button will be updated when the tab is made active.
         if tabManager.selectedTab == browser {
             println("DEBUG: New readerModeState: \(state.rawValue)")
-            toolbar.updateReaderModeState(state)
+            urlbar.updateReaderModeState(state)
         }
     }
 

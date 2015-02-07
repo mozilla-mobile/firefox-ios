@@ -7,131 +7,95 @@ import UIKit
 import Snappy
 
 protocol BrowserToolbarDelegate {
-    func didBeginEditing()
     func didClickBack()
     func didClickForward()
-    func didClickAddTab()
     func didLongPressBack()
     func didLongPressForward()
-    func didClickReaderMode()
-    func didClickStop()
-    func didClickReload()
 }
 
-class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
+class BrowserToolbar: UIView {
     var browserToolbarDelegate: BrowserToolbarDelegate?
 
-    private var forwardButton: UIButton!
-    private var backButton: UIButton!
-    private var locationView: BrowserLocationView!
-    private var tabsButton: UIButton!
-    private var progressBar: UIProgressView!
-
-    private var longPressGestureBackButton: UILongPressGestureRecognizer!
-    private var longPressGestureForwardButton: UILongPressGestureRecognizer!
+    private let shareButton: UIButton
+    private let bookmarkButton: UIButton
+    private let forwardButton: UIButton
+    private let backButton: UIButton
+    private let longPressGestureBackButton: UILongPressGestureRecognizer!
+    private let longPressGestureForwardButton: UILongPressGestureRecognizer!
 
     override init() {
+        backButton = UIButton()
+        forwardButton = UIButton()
+        shareButton = UIButton()
+        bookmarkButton = UIButton()
+
         super.init()
+
+        backButton.setImage(UIImage(named: "back"), forState: .Normal)
+        backButton.accessibilityLabel = NSLocalizedString("Back", comment: "")
+        backButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
+        longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack:")
+        backButton.addGestureRecognizer(longPressGestureBackButton)
+        backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
+
+        forwardButton.setImage(UIImage(named: "forward"), forState: .Normal)
+        forwardButton.accessibilityLabel = NSLocalizedString("Forward", comment: "")
+        forwardButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
+        longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward:")
+        forwardButton.addGestureRecognizer(longPressGestureForwardButton)
+        forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
+
+        shareButton.setImage(UIImage(named: "send"), forState: .Normal)
+        shareButton.enabled = false
+
+        bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
+        bookmarkButton.enabled = false
+
+        addButtons(backButton, forwardButton, shareButton, bookmarkButton)
     }
 
-    override init(frame: CGRect) {
+    // This has to be here since init() calls it
+    override private init(frame: CGRect) {
+        // And these have to be initialized in here or the compiler will get angry
+        backButton = UIButton()
+        forwardButton = UIButton()
+        shareButton = UIButton()
+        bookmarkButton = UIButton()
+
         super.init(frame: frame)
-        viewDidInit()
     }
 
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        viewDidInit()
+        fatalError("init(coder:) has not been implemented")
     }
 
-    private func viewDidInit() {
-        self.backgroundColor = UIColor(white: 0.80, alpha: 1.0)
-
-        backButton = UIButton()
-        backButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        backButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
-        backButton.setTitle("<", forState: UIControlState.Normal)
-        backButton.accessibilityLabel = NSLocalizedString("Back", comment: "Accessibility label")
-        backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
-        longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack:")
-        backButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
-        backButton.addGestureRecognizer(longPressGestureBackButton)
-        self.addSubview(backButton)
-
-        forwardButton = UIButton()
-        forwardButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        forwardButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
-        forwardButton.setTitle(">", forState: UIControlState.Normal)
-        forwardButton.accessibilityLabel = NSLocalizedString("Forward", comment: "Accessibility label")
-        forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
-        longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward:")
-        forwardButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
-        forwardButton.addGestureRecognizer(longPressGestureForwardButton)
-        self.addSubview(forwardButton)
-
-        locationView = BrowserLocationView(frame: CGRectZero)
-        locationView.readerModeState = ReaderModeState.Unavailable
-        locationView.delegate = self
-        addSubview(locationView)
-
-        progressBar = UIProgressView()
-        self.progressBar.trackTintColor = self.backgroundColor
-        self.addSubview(progressBar)
-
-        tabsButton = UIButton()
-        tabsButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        tabsButton.titleLabel?.layer.borderColor = UIColor.blackColor().CGColor
-        tabsButton.titleLabel?.layer.cornerRadius = 4
-        tabsButton.titleLabel?.layer.borderWidth = 1
-        tabsButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 12)
-        tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
-        tabsButton.titleLabel?.snp_makeConstraints { make in
-            make.size.equalTo(24)
-            return
-        }
-        tabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
-        self.addSubview(tabsButton)
-
-        self.backButton.snp_remakeConstraints { make in
-            make.left.equalTo(self)
-            make.centerY.equalTo(self).offset(10)
-            make.width.height.equalTo(44)
-        }
-
-        self.forwardButton.snp_remakeConstraints { make in
-            make.left.equalTo(self.backButton.snp_right)
-            make.centerY.equalTo(self).offset(10)
-            make.width.height.equalTo(44)
-        }
-
-        self.locationView.snp_remakeConstraints { make in
-            make.left.equalTo(self.forwardButton.snp_right)
-            make.centerY.equalTo(self).offset(10)
-        }
-
-        self.tabsButton.snp_remakeConstraints { make in
-            make.left.equalTo(self.locationView.snp_right)
-            make.centerY.equalTo(self).offset(10)
-            make.width.height.equalTo(44)
-            make.right.equalTo(self).offset(-8)
-        }
-
-        self.progressBar.snp_remakeConstraints { make in
-            make.centerY.equalTo(self.snp_bottom)
-            make.width.equalTo(self)
+    private func addButtons(buttons: UIButton...) {
+        for button in buttons {
+            button.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+            button.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
+            button.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+            addSubview(button)
         }
     }
 
-    func updateURL(url: NSURL?) {
-        if let url = url {
-            locationView.url = url
-        }
-    }
+    override func layoutSubviews() {
+        var prev: UIView? = nil
+        for view in self.subviews {
+            if let view = view as? UIView {
+                view.snp_remakeConstraints { make in
+                    if let prev = prev {
+                        make.left.equalTo(prev.snp_right)
+                    } else {
+                        make.left.equalTo(self)
+                    }
+                    prev = view
 
-    func updateTabCount(count: Int) {
-        tabsButton.setTitle(count.description, forState: UIControlState.Normal)
-        tabsButton.accessibilityValue = count.description
-        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "")
+                    make.centerY.equalTo(self)
+                    make.height.equalTo(ToolbarHeight - DefaultPadding * 2)
+                    make.width.equalTo(self).dividedBy(self.subviews.count)
+                }
+            }
+        }
     }
 
     func updateBackStatus(canGoBack: Bool) {
@@ -140,10 +104,6 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
 
     func updateFowardStatus(canGoForward: Bool) {
         forwardButton.enabled = canGoForward
-    }
-
-    func updateLoading(loading: Bool) {
-        locationView.loading = loading
     }
 
     func SELdidClickBack() {
@@ -164,41 +124,5 @@ class BrowserToolbar: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         if recognizer.state == UIGestureRecognizerState.Began {
             browserToolbarDelegate?.didLongPressForward()
         }
-    }
-
-    func SELdidClickAddTab() {
-        browserToolbarDelegate?.didClickAddTab()
-    }
-
-    func updateProgressBar(progress: Float) {
-        if progress == 1.0 {
-            self.progressBar.setProgress(progress, animated: true)
-            UIView.animateWithDuration(1.5, animations: {self.progressBar.alpha = 0.0},
-                completion: {_ in self.progressBar.setProgress(0.0, animated: false)})
-        } else {
-            self.progressBar.alpha = 1.0
-            self.progressBar.setProgress(progress, animated: (progress > progressBar.progress))
-        }
-    }
-
-
-    func updateReaderModeState(state: ReaderModeState) {
-        locationView.readerModeState = state
-    }
-
-    func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView) {
-        browserToolbarDelegate?.didClickReaderMode()
-    }
-
-    func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
-        browserToolbarDelegate?.didBeginEditing()
-    }
-
-    func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView) {
-        browserToolbarDelegate?.didClickReload()
-    }
-
-    func browserLocationViewDidTapStop(browserLocationView: BrowserLocationView) {
-        browserToolbarDelegate?.didClickStop()
     }
 }
