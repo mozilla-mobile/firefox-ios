@@ -150,8 +150,11 @@ extension SearchViewController: UITableViewDelegate {
         if indexPath.row < searchSuggestions.count {
             let suggestion = searchSuggestions[indexPath.row]
 
-            // Assume that only the default search engine can provide search suggestions.
-            url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
+            url = URIFixup().getURL(suggestion)
+            if url == nil {
+                // Assume that only the default search engine can provide search suggestions.
+                url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
+            }
         } else {
             let engine = sortedEngines[indexPath.row - searchSuggestions.count]
             url = engine.searchURLForQuery(searchQuery)
