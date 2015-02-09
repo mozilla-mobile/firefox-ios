@@ -93,6 +93,10 @@ class BrowserViewController: UIViewController {
 
 extension BrowserViewController: UrlBarDelegate {
     func didBeginEditing() {
+        if tabManager.selectedTab == nil {
+            return
+        }
+
         let controller = TabBarViewController()
         controller.profile = profile
         controller.delegate = self
@@ -217,15 +221,15 @@ extension BrowserViewController: TabManagerDelegate {
         previous?.webView.navigationDelegate = nil
         selected?.webView.navigationDelegate = self
         urlbar.updateURL(selected?.url)
-        if let selected = selected {
-            toolbar.updateBackStatus(selected.canGoBack)
-            toolbar.updateFowardStatus(selected.canGoForward)
-            urlbar.updateProgressBar(Float(selected.webView.estimatedProgress))
-            urlbar.updateLoading(selected.webView.loading)
-        }
+        toolbar.updateBackStatus(selected?.canGoBack ?? false)
+        toolbar.updateFowardStatus(selected?.canGoForward ?? false)
+        urlbar.updateProgressBar(Float(selected?.webView.estimatedProgress ?? 0))
+        urlbar.updateLoading(selected?.webView.loading ?? false)
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
             urlbar.updateReaderModeState(readerMode.state)
+        } else {
+            urlbar.updateReaderModeState(ReaderModeState.Unavailable)
         }
     }
 

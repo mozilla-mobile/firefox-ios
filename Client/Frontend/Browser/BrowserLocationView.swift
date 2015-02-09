@@ -127,14 +127,13 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     var url: NSURL? {
         didSet {
             lockImageView.hidden = (url?.scheme != "https")
-            if let t = url?.absoluteString {
-                if t.hasPrefix("http://") {
-                    locationLabel.text = t.substringFromIndex(advance(t.startIndex, 7))
-                } else if t.hasPrefix("https://") {
-                    locationLabel.text = t.substringFromIndex(advance(t.startIndex, 8))
-                } else {
-                    locationLabel.text = t
-                }
+            let t = url?.absoluteString
+            if t?.hasPrefix("http://") ?? false {
+                locationLabel.text = t!.substringFromIndex(advance(t!.startIndex, 7))
+            } else if t?.hasPrefix("https://") ?? false {
+                locationLabel.text = t!.substringFromIndex(advance(t!.startIndex, 8))
+            } else {
+                locationLabel.text = t
             }
             makeConstraints()
         }
