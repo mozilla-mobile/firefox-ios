@@ -1,3 +1,4 @@
+osx_image: xcode611
 language: objective-c
 script:
   - xctool -project Client.xcodeproj -scheme Client -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
