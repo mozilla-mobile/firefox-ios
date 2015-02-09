@@ -38,10 +38,8 @@ class SearchViewController: UIViewController {
     private var sortedEngines = [OpenSearchEngine]()
     private var suggestClient: SearchSuggestClient?
     private var searchSuggestions = [String]()
-    //Copy from HistoryViewController
-    //Since we create profile in didFinishLaunchingWithOptions and hundreds of class instance access profile, why wouldn't we make profile singleton?
     var profile: Profile!
-    private var history: Cursor? = nil
+    private var history: Cursor?
     
     var searchEngines: SearchEngines? {
         didSet {
@@ -66,15 +64,8 @@ class SearchViewController: UIViewController {
     var searchQuery: String = "" {
         didSet {
             querySuggestClient()
+            queryHistoryClient()
             
-            profile.history.get(searchQuery, options: nil, complete: { (data: Cursor) -> Void in
-                if data.status != .Success {
-                    println("Err: \(data.statusMessage)")
-                } else {
-                    self.history = data
-                }
-            })
-
             // Reload the tableView to show the updated text in each engine.
             tableView.reloadData()
         }
@@ -143,6 +134,28 @@ class SearchViewController: UIViewController {
             self.tableView.reloadData()
         })
     }
+
+    private func queryHistoryClient() {
+
+        if searchQuery.isEmpty {
+            history = nil
+            return
+        }
+
+        let opts = QueryOptions()
+        opts.sort = .LastVisit
+        opts.filter = searchQuery
+
+        profile.history.get(opts, complete: { (data: Cursor) -> Void in
+            if data.status != .Success {
+                println("Err: \(data.statusMessage)")
+                self.history = nil
+            } else {
+                self.history = data
+            }
+            self.tableView.reloadData()
+        })
+    }
 }
 
 extension SearchViewController: UITableViewDataSource {
@@ -199,10 +212,7 @@ extension SearchViewController: UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if let currentSection = SearchListSection(rawValue: section) {
-            return currentSection.description
-        }
-        return ""
+        return SearchListSection(rawValue: section)?.description
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -232,14 +242,23 @@ extension SearchViewController: UITableViewDataSource {
 extension SearchViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var url: NSURL?
-        if indexPath.row < searchSuggestions.count {
-            let suggestion = searchSuggestions[indexPath.row]
+        if let currentSection = SearchListSection(rawValue: indexPath.section) {
+            switch currentSection {
+            case .SuggestedSites:
+                let suggestion = searchSuggestions[indexPath.row]
 
-            // Assume that only the default search engine can provide search suggestions.
-            url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
-        } else {
-            let engine = sortedEngines[indexPath.row - searchSuggestions.count]
-            url = engine.searchURLForQuery(searchQuery)
+                // Assume that only the default search engine can provide search suggestions.
+                url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
+            case .BookmarksAndHistory:
+                if var hasHistory = history {
+                    if let site = hasHistory[indexPath.row] as? Site {
+                        url = NSURL(string: site.url)
+                    }
+                }
+            case .Search:
+                let engine = sortedEngines[indexPath.row - searchSuggestions.count]
+                url = engine.searchURLForQuery(searchQuery)
+            }
         }
 
         if let url = url {
