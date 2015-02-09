@@ -33,7 +33,10 @@ extension KIFUITestActor {
             stepResult = result as Bool ? KIFTestStepResult.Success : KIFTestStepResult.Failure
         })
 
-        runBlock({ _ in
+        runBlock({ (error: NSErrorPointer) in
+            if stepResult == KIFTestStepResult.Failure {
+                error.memory = NSError(domain: "KIFHelper", code: 0, userInfo: [NSLocalizedDescriptionKey: "Accessibility label not found in webview: \(escaped)"])
+            }
             return stepResult
         })
     }
