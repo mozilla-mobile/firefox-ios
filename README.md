@@ -12,6 +12,21 @@ This is a work in progress on some early ideas.  Don't get too attached to this 
 
 *GitHub issues are enabled* on this repository, but we encourage you to file a bug (see above). We'll accept issues to track work items that don't yet have a pull request, and also as an early funnel for bug reports, but Bugzilla is the source of truth for lots of good reasons — issues will be shifted into Bugzilla, and pull requests need a bug number.
 
+Building the code
+-----------------
+
+1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
+1. Clone the repository:
+
+  ```
+  git clone https://github.com/mozilla/firefox-ios
+  ```
+
+1. Open `Client.xcodeproj` in Xcode.
+1. Build the `Client` scheme in Xcode.
+
+It is possible to use [App Code](https://www.jetbrains.com/objc/download/) instead of Xcode, but you will still require the Xcode developer tools.
+
 Contributor guidelines
 ----------------------
 
