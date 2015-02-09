@@ -1,3 +1,4 @@
 language: objective-c
-xcode_project: Client.xcodeproj
-xcode_scheme: Client
+script:
+  - xctool -project Client.xcodeproj -scheme Client -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+  - xctool test -freshSimulator -project Client.xcodeproj -scheme Client -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
