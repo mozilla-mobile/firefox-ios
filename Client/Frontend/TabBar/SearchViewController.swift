@@ -4,9 +4,16 @@
 
 import Foundation
 import UIKit
+import Storage
 
 private let ReuseIdentifier = "cell"
 private let SuggestionsLimitCount = 3
+
+private enum SearchListSection: Int{
+    case SuggestedSites = 0
+    case BookmarksAndHistory
+    case Search
+}
 
 // A delegate to support clicking on rows in the view controller
 // This needs to be accessible to objc for UIViewControllers to call it
@@ -21,6 +28,8 @@ class SearchViewController: UIViewController {
     private var sortedEngines = [OpenSearchEngine]()
     private var suggestClient: SearchSuggestClient?
     private var searchSuggestions = [String]()
+    private var history: Cursor?
+    var profile: Profile!
 
     var searchEngines: SearchEngines? {
         didSet {
@@ -45,9 +54,18 @@ class SearchViewController: UIViewController {
     var searchQuery: String = "" {
         didSet {
             querySuggestClient()
+            queryHistory()
 
             // Reload the tableView to show the updated text in each engine.
             tableView.reloadData()
+        }
+    }
+
+    private func queryHistory() {
+        println("Query history")
+        profile.history.get(QueryOptions(filter: searchQuery)) { cursor in
+            println("Query history \(cursor.count)")
+            self.history = cursor
         }
     }
 
@@ -120,13 +138,22 @@ extension SearchViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath) as SearchTableViewCell
 
-        if indexPath.row < searchSuggestions.count {
+        if indexPath.section == SearchListSection.SuggestedSites.rawValue {
             cell.textLabel?.text = searchSuggestions[indexPath.row]
             cell.imageView?.image = nil
             cell.isAccessibilityElement = false
             cell.accessibilityLabel = nil
-        } else {
-            let searchEngine = sortedEngines[indexPath.row - searchSuggestions.count]
+        } else if indexPath.section == SearchListSection.BookmarksAndHistory.rawValue {
+            if let history = history {
+                if let site = history[indexPath.row] as? Site {
+                    cell.textLabel?.text = site.url
+                    cell.imageView?.image = nil
+                    cell.isAccessibilityElement = false
+                    cell.accessibilityLabel = nil
+                }
+            }
+        } else if indexPath.section == SearchListSection.Search.rawValue {
+            let searchEngine = sortedEngines[indexPath.row]
             cell.textLabel?.text = searchQuery
             cell.imageView?.image = searchEngine.image
             cell.isAccessibilityElement = true
@@ -140,7 +167,50 @@ extension SearchViewController: UITableViewDataSource {
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchSuggestions.count + sortedEngines.count
+        if let currentSection = SearchListSection(rawValue: section) {
+            switch(currentSection) {
+            case .SuggestedSites:
+                return searchSuggestions.count
+            case .Search:
+                return sortedEngines.count
+            case .BookmarksAndHistory:
+                if let history = history {
+                    return history.count
+                }
+                return 0
+            }
+        }
+        return 0
+    }
+
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if let currentSection = SearchListSection(rawValue: section) {
+            switch(currentSection) {
+            case .SuggestedSites:
+                return "Suggested Sites"
+            case .Search:
+                return "Search"
+            case .BookmarksAndHistory:
+                return "Bookmarks & History"
+            }
+        }
+        return ""
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        var sectionNum = 0
+        if searchSuggestions.count > 0 {
+            sectionNum++
+        }
+        if sortedEngines.count > 0{
+            sectionNum++
+        }
+        if let history = history {
+            if history.count > 0 {
+                sectionNum++
+            }
+        }
+        return sectionNum
     }
 }
 
