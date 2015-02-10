@@ -21,6 +21,7 @@ class BrowserViewController: UIViewController {
     private var toolbar: BrowserToolbar!
     private var tabManager: TabManager!
     private var homePager: TabBarViewController?
+    private var searchController: SearchViewController?
     private var webViewContainer: UIView!
     private let uriFixup = URIFixup()
 
@@ -82,6 +83,35 @@ class BrowserViewController: UIViewController {
             homePager.view.removeFromSuperview()
             homePager.removeFromParentViewController()
             self.homePager = nil
+        }
+    }
+
+    private func showSearchController() {
+        if searchController != nil {
+            return
+        }
+
+        assert(homePager != nil)
+
+        searchController = SearchViewController()
+        searchController!.searchEngines = profile.searchEngines
+        searchController!.delegate = self
+
+        view.addSubview(searchController!.view)
+        searchController!.view.snp_makeConstraints { make in
+            make.top.equalTo(self.urlbar.snp_bottom)
+            make.left.right.bottom.equalTo(self.view)
+            return
+        }
+
+        addChildViewController(searchController!)
+    }
+
+    private func hideSearchController() {
+        if let searchController = searchController {
+            searchController.view.removeFromSuperview()
+            searchController.removeFromParentViewController()
+            self.searchController = nil
         }
     }
 
@@ -215,6 +245,15 @@ extension BrowserViewController: UrlBarDelegate {
         }
     }
 
+    func didEnterText(text: String) {
+        if text.isEmpty {
+            hideSearchController()
+        } else {
+            showSearchController()
+            searchController!.searchQuery = text
+        }
+    }
+
     func didSubmitText(text: String) {
         var url = uriFixup.getURL(text)
 
@@ -238,6 +277,7 @@ extension BrowserViewController: UrlBarDelegate {
 
     func didEndEditing() {
         hideHomePager()
+        hideSearchController()
     }
 }
 
@@ -277,6 +317,12 @@ extension BrowserViewController: BrowserToolbarDelegate {
 
 extension BrowserViewController: TabBarViewControllerDelegate {
     func didEnterURL(url: NSURL) {
+        finishEditingAndSubmit(url)
+    }
+}
+
+extension BrowserViewController: SearchViewControllerDelegate {
+    func didClickUrl(url: NSURL) {
         finishEditingAndSubmit(url)
     }
 }
