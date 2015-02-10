@@ -45,7 +45,6 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
     private var buttons: [ToolbarButton] = []
     private var searchController: SearchViewController?
     private let uriFixup = URIFixup()
-    private var didInitialLayout = false
     
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(notificationToken)
@@ -232,19 +231,6 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
         notificationToken = NSNotificationCenter.defaultCenter().addObserverForName(PanelsNotificationName, object: nil, queue: nil) { [unowned self] notif in
             self.panels = Panels(profile: self.profile).enabledItems
             self.updateButtons()
-        }
-    }
-
-    override func viewDidLayoutSubviews() {
-        // Due to an apparent bug on the iPhone 6 Plus (bug 1124310), calling textField.selectAll
-        // too early can cause a crash (which we do in response to making it the first responder).
-        // As a workaround, wait until the view layout has happened. Since this method is called
-        // for layout changes, we need to use a boolean flag to make sure we only handle it once.
-        // We could move this to viewDidAppear, but that results in a noticeable delay before the
-        // keyboard appears.
-        if !didInitialLayout {
-            didInitialLayout = true
-            toolbarTextField.becomeFirstResponder()
         }
     }
 
