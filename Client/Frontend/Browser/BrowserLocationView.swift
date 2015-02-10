@@ -27,7 +27,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.whiteColor()
-        self.layer.cornerRadius = 5
+        self.layer.cornerRadius = 3
 
         lockImageView = UIImageView(image: UIImage(named: "lock_verified.png"))
         lockImageView.hidden = false

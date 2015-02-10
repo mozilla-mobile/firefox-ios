@@ -20,6 +20,8 @@ class BrowserViewController: UIViewController {
     private var urlbar: URLBarView!
     private var toolbar: BrowserToolbar!
     private var tabManager: TabManager!
+    private let uriFixup = URIFixup()
+
     var profile: Profile!
 
     required init(coder aDecoder: NSCoder) {
@@ -180,6 +182,24 @@ extension BrowserViewController: UrlBarDelegate {
                 }
             }
         }
+    }
+
+    func didSubmitText(text: String) {
+        var url = uriFixup.getURL(text)
+
+        // If we can't make a valid URL, do a search query.
+        if url == nil {
+            url = profile.searchEngines.defaultEngine.searchURLForQuery(text)
+        }
+
+        // If we still don't have a valid URL, something is broken. Give up.
+        if url == nil {
+            println("Error handling URL entry: " + text)
+            return
+        }
+
+        urlbar.updateURL(url)
+        tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url!))
     }
 }
 

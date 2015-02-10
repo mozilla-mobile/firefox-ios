@@ -7,17 +7,18 @@ import UIKit
 import Snappy
 
 protocol UrlBarDelegate {
-    func didBeginEditing()
+    func didSubmitText(text: String)
     func didClickAddTab()
     func didClickReaderMode()
     func didClickStop()
     func didClickReload()
 }
 
-class URLBarView: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
+class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     var delegate: UrlBarDelegate?
 
     private var locationView: BrowserLocationView!
+    private var editTextField: ToolbarTextField!
     private var tabsButton: UIButton!
     private var progressBar: UIProgressView!
 
@@ -42,6 +43,19 @@ class URLBarView: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         locationView.delegate = self
         addSubview(locationView)
 
+        editTextField = ToolbarTextField()
+        editTextField.keyboardType = UIKeyboardType.WebSearch
+        editTextField.autocorrectionType = UITextAutocorrectionType.No
+        editTextField.autocapitalizationType = UITextAutocapitalizationType.None
+        editTextField.returnKeyType = UIReturnKeyType.Go
+        editTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
+        editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
+        editTextField.layer.cornerRadius = 3
+        editTextField.delegate = self
+        editTextField.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
+        insertSubview(editTextField, belowSubview: locationView)
+
         progressBar = UIProgressView()
         self.progressBar.trackTintColor = self.backgroundColor
         self.addSubview(progressBar)
@@ -63,6 +77,11 @@ class URLBarView: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         self.locationView.snp_remakeConstraints { make in
             make.left.equalTo(self.snp_left).offset(DefaultPadding)
             make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
+        }
+
+        self.editTextField.snp_remakeConstraints { make in
+            make.edges.equalTo(self.locationView)
+            return
         }
 
         self.tabsButton.snp_remakeConstraints { make in
@@ -117,7 +136,9 @@ class URLBarView: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
     }
 
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
-        delegate?.didBeginEditing()
+        insertSubview(editTextField, aboveSubview: locationView)
+        editTextField.text = locationView.url?.absoluteString
+        editTextField.selectAll(nil)
     }
 
     func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView) {
@@ -126,5 +147,23 @@ class URLBarView: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
     
     func browserLocationViewDidTapStop(browserLocationView: BrowserLocationView) {
         delegate?.didClickStop()
+    }
+
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        delegate?.didSubmitText(editTextField.text)
+        insertSubview(editTextField, belowSubview: locationView)
+        return true
+    }
+}
+
+private class ToolbarTextField: UITextField {
+    override func textRectForBounds(bounds: CGRect) -> CGRect {
+        let rect = super.textRectForBounds(bounds)
+        return rect.rectByInsetting(dx: 5, dy: 5)
+    }
+
+    override func editingRectForBounds(bounds: CGRect) -> CGRect {
+        let rect = super.editingRectForBounds(bounds)
+        return rect.rectByInsetting(dx: 5, dy: 5)
     }
 }
