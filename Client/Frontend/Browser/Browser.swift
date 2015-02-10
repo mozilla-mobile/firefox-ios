@@ -6,7 +6,6 @@ import Foundation
 import WebKit
 
 protocol BrowserHelper {
-    init?(browser: Browser)
     class func name() -> String
     func scriptMessageHandlerName() -> String?
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)

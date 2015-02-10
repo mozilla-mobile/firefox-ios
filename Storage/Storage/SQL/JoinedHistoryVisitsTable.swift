@@ -19,6 +19,13 @@ class JoinedHistoryVisitsTable: Table {
 
     private let visits = VisitsTable<Visit>()
     private let history = HistoryTable<Site>()
+    private let favicons: FaviconsTable<Favicon>
+    private let faviconSites: JoinedFaviconsHistoryTable<(Site, Favicon)>
+
+    init(files: FileAccessor) {
+        favicons = FaviconsTable<Favicon>(files: files)
+        faviconSites = JoinedFaviconsHistoryTable<(Site, Favicon)>(files: files)
+    }
 
     private func getIDFor(db: SQLiteDBConnection, site: Site) -> Int? {
         let opts = QueryOptions()
@@ -32,7 +39,7 @@ class JoinedHistoryVisitsTable: Table {
     }
 
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
-        return history.create(db, version: version) && visits.create(db, version: version)
+        return history.create(db, version: version) && visits.create(db, version: version) && faviconSites.create(db, version: version)
     }
 
     func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
@@ -107,36 +114,46 @@ class JoinedHistoryVisitsTable: Table {
     }
 
     func factory(result: SDRow) -> (site: Site, visit: Visit) {
-        let site = Site(url: result["url"] as String, title: result["title"] as String)
+        let site = Site(url: result["siteUrl"] as String, title: result["title"] as String)
         site.guid = result["guid"] as? String
-        site.id = result["siteId"] as? Int
+        site.id = result["historyId"] as? Int
 
-        let d = NSDate(timeIntervalSince1970: result["date"] as Double)
-        let type = VisitType(rawValue: result["type"] as Int)
+        let d = NSDate(timeIntervalSince1970: result["visitDate"] as Double)
+        let type = VisitType(rawValue: result["visitType"] as Int)
         let visit = Visit(site: site, date: d, type: type!)
         visit.id = result["visitId"] as? Int
+
+        if let iconurl = result["iconUrl"] as? String {
+            let icon = Favicon(url: iconurl, date: NSDate(timeIntervalSince1970: result["iconDate"] as Double), type: IconType(rawValue: result["iconType"] as Int)!)
+            icon.id = result["faviconId"] as? Int
+            site.icon = icon
+        }
+
         return (site, visit)
     }
 
     func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor {
         var args = [AnyObject?]()
-        var sql = "SELECT \(history.name).id as siteId, \(visits.name).id as visitId, url, title, guid, date, type FROM \(visits.name) " +
-            "INNER JOIN \(history.name) ON \(history.name).id = \(visits.name).siteId ";
+        var sql = "SELECT \(history.name).id as historyId, \(history.name).url as siteUrl, title, guid, \(visits.name).id as visitId, \(visits.name).date as visitDate, \(visits.name).type as visitType, " +
+                  "\(favicons.name).id as faviconId, \(favicons.name).url as iconUrl, \(favicons.name).date as iconDate, \(favicons.name).type as iconType FROM \(visits.name) " +
+                  "INNER JOIN \(history.name) ON \(history.name).id = \(visits.name).siteId " +
+                  "LEFT JOIN \(faviconSites.name) ON \(faviconSites.name).siteId = \(history.name).id LEFT JOIN \(favicons.name) ON \(faviconSites.name).faviconId = \(favicons.name).id ";
 
         if let filter: AnyObject = options?.filter {
-            sql += "WHERE url LIKE ? "
+            sql += "WHERE siteUrl LIKE ? "
             args.append("%\(filter)%")
         }
 
-        sql += "GROUP BY siteId";
+        sql += "GROUP BY historyId";
 
         // Trying to do this in one line (i.e. options?.sort == .LastVisit) breaks the Swift compiler
         if let sort = options?.sort {
             if sort == .LastVisit {
-                sql += " ORDER BY date DESC"
+                sql += " ORDER BY visitDate DESC"
             }
         }
 
+        // println("Query \(sql) \(args)")
         return db.executeQuery(sql, factory: factory, withArgs: args)
     }
 }
