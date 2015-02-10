@@ -11,6 +11,7 @@ let TableNameHistory = "history"
 // This is our default history store.
 class HistoryTable<T>: GenericTable<Site> {
     override var name: String { return TableNameHistory }
+    override var version: Int { return 1 }
     override var rows: String { return "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                        "guid TEXT NOT NULL UNIQUE, " +
                        "url TEXT NOT NULL UNIQUE, " +

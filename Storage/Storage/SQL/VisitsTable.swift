@@ -14,6 +14,7 @@ class VisitsTable<T>: GenericTable<Visit> {
                                        "siteId INTEGER NOT NULL, " +
                                        "date REAL NOT NULL, " +
                                        "type INTEGER NOT NULL" }
+    override var version: Int { return 1 }
 
     override func getInsertAndArgs(inout item: Visit) -> (String, [AnyObject?])? {
         // Runtime errors happen if we let Swift try to infer the type of this array

@@ -9,6 +9,7 @@ class GenericTable<T>: Table {
     // Implementors need override these methods
     let debug_enabled = false
     var name: String { return "" }
+    var version: Int { return 0 }
     var rows: String { return "" }
     var factory: ((row: SDRow) -> Type)? {
         return nil
@@ -40,13 +41,25 @@ class GenericTable<T>: Table {
     }
 
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
-        db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (\(rows))")
-        return true
+        let err = db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (\(rows))")
+        return err == nil
     }
 
     func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
         debug("Update table \(name) from \(from) to \(to)")
         return false
+    }
+
+    func exists(db: SQLiteDBConnection) -> Bool {
+        let res = db.executeQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name=?", factory: StringFactory, withArgs: [name])
+        return res.count > 0
+    }
+
+    func drop(db: SQLiteDBConnection) -> Bool {
+        let sqlStr = "DROP TABLE IF EXISTS ?"
+        let args: [AnyObject] = [name]
+        let err = db.executeChange(sqlStr, withArgs: args)
+        return err == nil
     }
 
     func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int {

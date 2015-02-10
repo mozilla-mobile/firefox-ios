@@ -94,7 +94,7 @@ class TestJoinedHistoryVisits : XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testJoinedHistoryVisitsTable() {
         let files = MockFiles()
-        self.db = SwiftData(filename: files.get("test.db", basePath: nil)!)
+        self.db = SwiftData(filename: files.get("test.db")!)
         let h = JoinedHistoryVisitsTable()
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in

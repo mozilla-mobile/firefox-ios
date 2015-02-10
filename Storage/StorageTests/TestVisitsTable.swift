@@ -58,7 +58,7 @@ class TestVisitsTable : XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testVisitsTable() {
         let files = MockFiles()
-        self.db = SwiftData(filename: files.get("test.db", basePath: nil)!)
+        self.db = SwiftData(filename: files.get("test.db")!)
         let h = VisitsTable<Visit>()
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in

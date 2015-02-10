@@ -29,19 +29,6 @@ public class QueryOptions {
     }
 }
 
-/* A table in our database. Note this doesn't have to be a real table. It might be backed by a join or something else interesting. */
-protocol Table {
-    typealias Type
-    var name: String { get }
-    func create(db: SQLiteDBConnection, version: Int) -> Bool
-    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool
-
-    func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
-    func update(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
-    func delete(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
-    func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor
-}
-
 let DBCouldNotOpenErrorCode = 200
 
 /* This is a base interface into our browser db. It holds arrays of tables and handles basic creation/updating of them. */
@@ -53,57 +40,95 @@ class BrowserDB {
     // XXX: Increasing this should blow away old history, since we currently dont' support any upgrades
     private let Version: Int = 3
     private let FileName = "browser.db"
+    private let files: FileAccessor
+    private let schemaTable: SchemaTable<TableInfo>
 
     private var initialized = [String]()
 
-    private func exists<T : Table>(db: SQLiteDBConnection, table: T) -> Bool {
-        var found = false
-        let sqlStr = "SELECT name FROM sqlite_master WHERE type = 'table' AND name=?"
-        let res = db.executeQuery(sqlStr, factory: StringFactory, withArgs: [table.name])
-        return res.count > 0
-    }
-
     init?(files: FileAccessor) {
+        self.files = files
         db = SwiftData(filename: files.get(FileName)!)
+        self.schemaTable = SchemaTable()
+        self.createOrUpdate(self.schemaTable)
     }
 
-    func create<T: Table>(table: T) -> Bool {
-        var success = true
-        db.transaction({ connection -> Bool in
-            let version = connection.version
-            if !self.exists(connection, table: table) {
-                if !table.create(connection, version: self.Version) {
-                    success = false
-                }
-            } else {
-                if !table.updateTable(connection, from: version, to: self.Version) {
-                    success = false
-                }
-            }
-            return success
-        })
-        return success
+    var filename: String {
+        return db.filename
     }
 
-    private func deleteAndRecreate(files: FileAccessor) -> Bool {
-        let date = NSDate()
-        let newFilename = "\(FileName).bak"
+    // Creates a table and writes its table info the the table-table database.
+    private func createTable<T:Table>(db: SQLiteDBConnection, table: T) -> Bool {
+        debug("Try create \(table.name) version \(table.version)")
+        if !table.create(db, version: table.version) {
+            // If creating failed, we'll bail without storing the table info
+            return false
+        }
 
-        if let file = files.get(newFilename) {
-            if let attrs = NSFileManager.defaultManager().attributesOfItemAtPath(file, error: nil) {
-                if let creationDate = attrs[NSFileCreationDate] as? NSDate {
-                    // If the old backup is less than an hour old, we just give up
-                    let interval = date.timeIntervalSinceDate(creationDate)
-                    if interval < 60*60 {
-                        return false
-                    }
-                }
+        var err: NSError? = nil
+        return schemaTable.insert(db, item: table, err: &err) > -1
+    }
+
+    // Updates a table and writes its table into the table-table database.
+    private func updateTable<T: Table>(db: SQLiteDBConnection, table: T) -> Bool {
+        debug("Try update \(table.name) version \(table.version)")
+        var from = 0
+        // Try to find the stored version of the table
+        let cursor = schemaTable.query(db, options: QueryOptions(filter: table.name))
+        if cursor.count > 0 {
+            if let info = cursor[0] as? TableInfoWrapper {
+                from = info.version
             }
         }
 
-        files.move(FileName, dest: newFilename)
-        // return createDB(files)
-        return true
+        // If the versions match, no need to update
+        if from == table.version {
+            return true
+        }
+
+        if !table.updateTable(db, from: from, to: table.version) {
+            // If the update failed, we'll bail without writing the change to the table-table
+            return false
+        }
+
+        var err: NSError? = nil
+        return schemaTable.update(db, item: table, err: &err) > 0
+    }
+
+    // Utility for table classes. They should call then when they're initialized to force
+    // creation of the table in the database
+    func createOrUpdate<T: Table>(table: T) -> Bool {
+        debug("Create or update \(table.name) version \(table.version)")
+        var success = true
+        db.transaction({ connection -> Bool in
+            // If the table doesn't exist, we'll create it
+            if !table.exists(connection) {
+                success = self.createTable(connection, table: table)
+            } else {
+                // Otherwise, we'll update it
+                success = self.updateTable(connection, table: table)
+                if !success {
+                    println("Update failed for \(table.name). Dropping and recreating")
+
+                    table.drop(connection)
+                    var err: NSError? = nil
+                    self.schemaTable.delete(connection, item: table, err: &err)
+
+                    success = self.createTable(connection, table: table)
+                }
+            }
+
+            // If we failed, move the file and try again. This will probably break things that are already
+            // attached and expecting a working DB, but at least we should be able to restart
+            if !success {
+                println("Couldn't create or update \(table.name)")
+                self.files.move(self.FileName, dest: "\(self.FileName).bak")
+                success = self.createTable(connection, table: table)
+            }
+
+            return success
+        })
+
+        return success
     }
 
     typealias CursorCallback = (connection: SQLiteDBConnection, inout err: NSError?) -> Cursor
@@ -149,7 +174,7 @@ class BrowserDB {
         return c
     }
 
-    private let debug_enabled = true
+    private let debug_enabled = false
     private func debug(err: NSError) {
         debug("\(err.code): \(err.localizedDescription)")
     }

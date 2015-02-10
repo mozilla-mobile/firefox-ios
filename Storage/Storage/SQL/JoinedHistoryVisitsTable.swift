@@ -15,6 +15,7 @@ let HistoryVisits = "history-visits"
 class JoinedHistoryVisitsTable: Table {
     typealias Type = (site: Site?, visit: Visit?)
     var name: String { return HistoryVisits }
+    var version: Int { return 1 }
 
     private let visits = VisitsTable<Visit>()
     private let history = HistoryTable<Site>()
@@ -36,6 +37,14 @@ class JoinedHistoryVisitsTable: Table {
 
     func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
         return history.updateTable(db, from: from, to: to) && visits.updateTable(db, from: from, to: to)
+    }
+
+    func exists(db: SQLiteDBConnection) -> Bool {
+        return history.exists(db) && visits.exists(db)
+    }
+
+    func drop(db: SQLiteDBConnection) -> Bool {
+        return history.drop(db) && visits.drop(db)
     }
 
     private func updateSite(db: SQLiteDBConnection, site: Site, inout err: NSError?) -> Int {
@@ -105,7 +114,7 @@ class JoinedHistoryVisitsTable: Table {
         let d = NSDate(timeIntervalSince1970: result["date"] as Double)
         let type = VisitType(rawValue: result["type"] as Int)
         let visit = Visit(site: site, date: d, type: type!)
-        visit.id = result["visitId"] as Int
+        visit.id = result["visitId"] as? Int
         return (site, visit)
     }
 
@@ -114,7 +123,7 @@ class JoinedHistoryVisitsTable: Table {
         var sql = "SELECT \(history.name).id as siteId, \(visits.name).id as visitId, url, title, guid, date, type FROM \(visits.name) " +
             "INNER JOIN \(history.name) ON \(history.name).id = \(visits.name).siteId ";
 
-        if let filter = options?.filter {
+        if let filter: AnyObject = options?.filter {
             sql += "WHERE url LIKE ? "
             args.append("%\(filter)%")
         }

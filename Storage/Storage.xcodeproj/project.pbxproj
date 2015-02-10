@@ -12,6 +12,9 @@
 		0BA497831A7B094B004C8E17 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA497811A7B094B004C8E17 /* Visit.swift */; };
 		0BA4978C1A7B0E44004C8E17 /* Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4C01A699EF200A406E2 /* Cursor.swift */; };
 		0BA4978D1A7B0E55004C8E17 /* FileAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4D01A69A14500A406E2 /* FileAccessor.swift */; };
+		0BAE69561A7E1FD100B3609D /* SchemaTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAE69551A7E1FD100B3609D /* SchemaTable.swift */; };
+		0BAE69571A7E209200B3609D /* SchemaTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAE69551A7E1FD100B3609D /* SchemaTable.swift */; };
+		0BAE69591A7EEF8E00B3609D /* TestTableTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAE69581A7EEF8E00B3609D /* TestTableTable.swift */; };
 		0BCFBBAF1A77650E0087E26D /* GenericTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59B3F1AAD619686DB9450C /* GenericTable.swift */; };
 		0BCFBBB41A7769A30087E26D /* JoinedHistoryVisitsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BCB8D38CE6E6F5F5F2DE /* JoinedHistoryVisitsTable.swift */; };
 		0BCFBBB51A7769B70087E26D /* VisitsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59B22E909B6CAC95DBE879 /* VisitsTable.swift */; };
@@ -55,6 +58,8 @@
 		0BA4977A1A7B0941004C8E17 /* SQLiteHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteHistory.swift; path = SQL/SQLiteHistory.swift; sourceTree = "<group>"; };
 		0BA497801A7B094B004C8E17 /* Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
 		0BA497811A7B094B004C8E17 /* Visit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Visit.swift; sourceTree = "<group>"; };
+		0BAE69551A7E1FD100B3609D /* SchemaTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaTable.swift; sourceTree = "<group>"; };
+		0BAE69581A7EEF8E00B3609D /* TestTableTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestTableTable.swift; sourceTree = "<group>"; };
 		0BCFBBB71A776A200087E26D /* MockFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFiles.swift; sourceTree = "<group>"; };
 		282DA4951A699E0300A406E2 /* Storage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Storage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		282DA4991A699E0300A406E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -153,6 +158,7 @@
 				4A59B33FF96A39A59CBBBBD7 /* TestJoinedHistoryVisits.swift */,
 				4A59BE48DBF43989C51D3F98 /* TestVisitsTable.swift */,
 				0BCFBBB71A776A200087E26D /* MockFiles.swift */,
+				0BAE69581A7EEF8E00B3609D /* TestTableTable.swift */,
 			);
 			path = StorageTests;
 			sourceTree = "<group>";
@@ -182,6 +188,7 @@
 				4A59B22E909B6CAC95DBE879 /* VisitsTable.swift */,
 				4A59B3F1AAD619686DB9450C /* GenericTable.swift */,
 				4A59BCB8D38CE6E6F5F5F2DE /* JoinedHistoryVisitsTable.swift */,
+				0BAE69551A7E1FD100B3609D /* SchemaTable.swift */,
 			);
 			name = SQL;
 			sourceTree = "<group>";
@@ -309,6 +316,7 @@
 				282DA4D71A69A28000A406E2 /* Site.swift in Sources */,
 				282DA4D41A69A24300A406E2 /* History.swift in Sources */,
 				0BA497831A7B094B004C8E17 /* Visit.swift in Sources */,
+				0BAE69561A7E1FD100B3609D /* SchemaTable.swift in Sources */,
 				4A59BB4F36A20F30229034C6 /* VisitsTable.swift in Sources */,
 				4A59B21913DCFA81C7CD9C91 /* GenericTable.swift in Sources */,
 				0BA4978D1A7B0E55004C8E17 /* FileAccessor.swift in Sources */,
@@ -333,10 +341,12 @@
 				282DA4C21A699EF200A406E2 /* Cursor.swift in Sources */,
 				0BF42D481A7C55D200889E28 /* Site.swift in Sources */,
 				4A59BA1E93D5603E198EDCB9 /* HistoryTable.swift in Sources */,
+				0BAE69571A7E209200B3609D /* SchemaTable.swift in Sources */,
 				4A59BF0BBF50FC218A6D1143 /* BrowserDB.swift in Sources */,
 				4A59B334A243792894D6E614 /* TestHistoryTable.swift in Sources */,
 				4A59BC6033BD93D1DC36E18F /* TestJoinedHistoryVisits.swift in Sources */,
 				4A59BF2F408CDEF8D50AF9D3 /* TestVisitsTable.swift in Sources */,
+				0BAE69591A7EEF8E00B3609D /* TestTableTable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
