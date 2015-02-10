@@ -7,6 +7,7 @@ import UIKit
 import Snappy
 
 protocol UrlBarDelegate {
+    func didEnterText(text: String)
     func didSubmitText(text: String)
     func didClickAddTab()
     func didClickReaderMode()
@@ -154,6 +155,19 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         delegate?.didSubmitText(editTextField.text)
+        return true
+    }
+
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        let text = textField.text as NSString
+        let fullText = text.stringByReplacingCharactersInRange(range, withString: string)
+        delegate?.didEnterText(fullText)
+
+        return true
+    }
+
+    func textFieldShouldClear(textField: UITextField) -> Bool {
+        delegate?.didEnterText("")
         return true
     }
 
