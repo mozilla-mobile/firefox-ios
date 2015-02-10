@@ -205,6 +205,10 @@ extension BrowserViewController: TabManagerDelegate {
             gestureRecognizer.numberOfTapsRequired = 3
             tab.webView.addGestureRecognizer(gestureRecognizer)
         }
+
+        let favicons = FaviconManager(browser: tab, profile: profile)
+        favicons.profile = profile
+        tab.addHelper(favicons, name: FaviconManager.name())
     }
 
     func didAddTab(tab: Browser) {

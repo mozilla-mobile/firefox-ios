@@ -61,14 +61,26 @@ class HistoryViewController: UITableViewController, UrlViewController {
             textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
             textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
             indentationWidth = 0
+
             detailTextLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
-            imageView?.bounds = CGRectMake(0, 0, 24, 24)
-            // imageView?
+            imageView?.frame = CGRectMake(0, 0, 24, 24)
         }
 
         required init(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
+    }
+
+    func createSizedFavicon(icon: UIImage) -> UIImage {
+        let size = CGSize(width: 30, height: 30)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        var context = UIGraphicsGetCurrentContext()
+
+        icon.drawInRect(CGRectInset(CGRect(origin: CGPointZero, size: size), 1.0, 1.0))
+
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
     }
 
     private let FAVICON_SIZE = 32
@@ -79,8 +91,11 @@ class HistoryViewController: UITableViewController, UrlViewController {
             if let site = hist[indexPath.row] as? Site {
                 cell.textLabel?.text = site.title
                 cell.detailTextLabel?.text = site.url
-                // cell.imageView?.image = UIImage(named: "leaf")
-
+                if let img = site.icon?.getImage(profile.files) {
+                    cell.imageView?.image = createSizedFavicon(img)
+                } else {
+                    cell.imageView?.image = UIImage(named: "defaultFavicon")
+                }
                 let opts = QueryOptions()
                 opts.filter = site.url
             }
