@@ -12,6 +12,8 @@ protocol UrlBarDelegate {
     func didClickReaderMode()
     func didClickStop()
     func didClickReload()
+    func didBeginEditing()
+    func didEndEditing()
 }
 
 class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
@@ -136,6 +138,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     }
 
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
+        delegate?.didBeginEditing()
         insertSubview(editTextField, aboveSubview: locationView)
         editTextField.text = locationView.url?.absoluteString
         editTextField.selectAll(nil)
@@ -151,8 +154,13 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         delegate?.didSubmitText(editTextField.text)
-        insertSubview(editTextField, belowSubview: locationView)
         return true
+    }
+
+    func finishEditing() {
+        editTextField.resignFirstResponder()
+        insertSubview(editTextField, belowSubview: locationView)
+        delegate?.didEndEditing()
     }
 }
 

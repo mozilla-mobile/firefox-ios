@@ -20,6 +20,8 @@ class BrowserViewController: UIViewController {
     private var urlbar: URLBarView!
     private var toolbar: BrowserToolbar!
     private var tabManager: TabManager!
+    private var homePager: TabBarViewController?
+    private var webViewContainer: UIView!
     private let uriFixup = URIFixup()
 
     var profile: Profile!
@@ -54,7 +56,49 @@ class BrowserViewController: UIViewController {
         return effect
     }
 
+    private func showHomePager() {
+        if homePager != nil {
+            return
+        }
+
+        homePager = TabBarViewController()
+        homePager!.profile = profile
+        homePager!.delegate = self
+        homePager!.url = tabManager.selectedTab?.url
+
+        view.addSubview(homePager!.view)
+
+        homePager!.view.snp_makeConstraints { make in
+            make.top.equalTo(self.urlbar.snp_bottom)
+            make.left.right.bottom.equalTo(self.view)
+            return
+        }
+
+        addChildViewController(homePager!)
+    }
+
+    private func hideHomePager() {
+        if let homePager = homePager {
+            homePager.view.removeFromSuperview()
+            homePager.removeFromParentViewController()
+            self.homePager = nil
+        }
+    }
+
+    private func finishEditingAndSubmit(url: NSURL) {
+        urlbar.updateURL(url)
+        urlbar.finishEditing()
+        tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url))
+    }
+
     override func viewDidLoad() {
+        webViewContainer = UIView()
+        view.addSubview(webViewContainer)
+        webViewContainer.snp_makeConstraints { make in
+            make.edges.equalTo(self.view)
+            return
+        }
+
         urlbar = URLBarView()
         let URLBarEffect = wrapInEffect(urlbar)
         URLBarEffect.snp_makeConstraints { make in
@@ -94,19 +138,6 @@ class BrowserViewController: UIViewController {
 }
 
 extension BrowserViewController: UrlBarDelegate {
-    func didBeginEditing() {
-        if tabManager.selectedTab == nil {
-            return
-        }
-
-        let controller = TabBarViewController()
-        controller.profile = profile
-        controller.delegate = self
-        controller.url = tabManager.selectedTab?.url
-        controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
-        presentViewController(controller, animated: true, completion: nil)
-    }
-
     override func accessibilityPerformEscape() -> Bool {
         if let selectedTab = tabManager.selectedTab? {
             if selectedTab.canGoBack {
@@ -198,8 +229,15 @@ extension BrowserViewController: UrlBarDelegate {
             return
         }
 
-        urlbar.updateURL(url)
-        tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url!))
+        finishEditingAndSubmit(url!)
+    }
+
+    func didBeginEditing() {
+        showHomePager()
+    }
+
+    func didEndEditing() {
+        hideHomePager()
     }
 }
 
@@ -207,6 +245,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
     func didClickBack() {
         tabManager.selectedTab?.goBack()
     }
+
     func didLongPressBack() {
         let controller = BackForwardListViewController()
         controller.listData = tabManager.selectedTab?.backList
@@ -238,8 +277,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
 
 extension BrowserViewController: TabBarViewControllerDelegate {
     func didEnterURL(url: NSURL) {
-        urlbar.updateURL(url)
-        tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url))
+        finishEditingAndSubmit(url)
     }
 }
 
@@ -289,7 +327,7 @@ extension BrowserViewController: TabManagerDelegate {
         urlbar.updateTabCount(tabManager.count)
 
         tab.webView.hidden = true
-        view.insertSubview(tab.webView, atIndex: 0)
+        webViewContainer.insertSubview(tab.webView, atIndex: 0)
         tab.webView.scrollView.contentInset = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
         tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
         tab.webView.snp_makeConstraints { make in
@@ -310,7 +348,6 @@ extension BrowserViewController: TabManagerDelegate {
     }
 }
 
-
 extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
@@ -318,7 +355,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // (orange color) as soon as the page has loaded.
         if let absoluteString = webView.URL?.absoluteString {
             // TODO String comparison here because NSURL cannot parse about:reader URLs (1123509)
-            if absoluteString.hasPrefix("about:reader") == false {
+            if !absoluteString.hasPrefix("about:reader") {
                 urlbar.updateReaderModeState(ReaderModeState.Unavailable)
             }
         }
