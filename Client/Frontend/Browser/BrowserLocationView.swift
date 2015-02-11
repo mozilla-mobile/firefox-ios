@@ -132,6 +132,9 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
                 locationLabel.text = t!.substringFromIndex(advance(t!.startIndex, 7))
             } else if t?.hasPrefix("https://") ?? false {
                 locationLabel.text = t!.substringFromIndex(advance(t!.startIndex, 8))
+            } else if t == "about:home" {
+                let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
+                locationLabel.attributedText = NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
             } else {
                 locationLabel.text = t
             }
