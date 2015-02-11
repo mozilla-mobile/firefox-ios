@@ -5,11 +5,13 @@
 import UIKit
 import Storage
 
-class BookmarksViewController: UITableViewController {
+class BookmarksViewController: UITableViewController, UrlViewController {
     private let BOOKMARK_CELL_IDENTIFIER = "BOOKMARK_CELL"
     private let BOOKMARK_HEADER_IDENTIFIER = "BOOKMARK_HEADER"
 
-    var source: BookmarksModel!
+    var delegate: UrlViewControllerDelegate? = nil
+
+    var source: BookmarksModel?
     var _profile: Profile!
     var profile: Profile! {
         get {
@@ -18,7 +20,7 @@ class BookmarksViewController: UITableViewController {
 
         set (profile) {
             self._profile = profile
-            self.source = profile.bookmarks.nullModel
+            profile.bookmarks.modelForRoot(self.onNewModel, failure: self.onModelFailure)
         }
     }
 
@@ -50,7 +52,7 @@ class BookmarksViewController: UITableViewController {
     
 
     func reloadData() {
-        self.source.reloadData(self.onNewModel, self.onModelFailure)
+        self.source?.reloadData(self.onNewModel, self.onModelFailure)
     }
     
     func refresh() {
@@ -58,7 +60,6 @@ class BookmarksViewController: UITableViewController {
     }
     
     override func viewDidAppear(animated: Bool) {
-        reloadData()
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -66,19 +67,23 @@ class BookmarksViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.source.current.count
+        if let source = source {
+            return source.current.count
+        }
+        return 0
     }
     
-    private let FAVICON_SIZE = 32
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(BOOKMARK_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell
 
-        let bookmark: BookmarkNode = self.source.current[indexPath.row]
-        cell.imageView?.image = bookmark.icon
-        cell.textLabel?.text = bookmark.title
-        cell.textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
-        cell.textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
-        cell.indentationWidth = 20
+        if let source = source {
+            let bookmark = source.current[indexPath.row]
+            cell.imageView?.image = bookmark.icon
+            cell.textLabel?.text = bookmark.title
+            cell.textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
+            cell.textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
+            cell.indentationWidth = 20
+        }
         
         return cell
     }
@@ -101,34 +106,25 @@ class BookmarksViewController: UITableViewController {
         return view
     }
     
-    //    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-    //        let objects = UINib(nibName: "TabsViewControllerHeader", bundle: nil).instantiateWithOwner(nil, options: nil)
-    //        if let view = objects[0] as? UIView {
-    //            if let label = view.viewWithTag(1) as? UILabel {
-    //                // TODO: More button
-    //            }
-    //        }
-    //        return view
-    //    }
-    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
-        let bookmark = self.source.current[indexPath.row]
+        if let source = source {
+            let bookmark = source.current[indexPath.row]
 
-        switch (bookmark) {
-        case let item as BookmarkItem:
-            // Click it.
-            UIApplication.sharedApplication().openURL(NSURL(string: item.url)!)
-            break
+            switch (bookmark) {
+            case let item as BookmarkItem:
+                delegate?.didClickUrl(NSURL(string: item.url)!)
+                break
 
-        case let folder as BookmarkFolder:
-            // Descend into the folder.
-            self.source.selectFolder(folder, success: self.onNewModel, failure: self.onModelFailure)
-            break
+            case let folder as BookmarkFolder:
+                // Descend into the folder.
+                source.selectFolder(folder, success: self.onNewModel, failure: self.onModelFailure)
+                break
 
-        default:
-            // Weird.
-            break        // Just here until there's another executable statement (compiler requires one).
+            default:
+                // Weird.
+                break        // Just here until there's another executable statement (compiler requires one).
+            }
         }
     }
 }

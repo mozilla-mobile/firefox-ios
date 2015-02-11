@@ -11,6 +11,8 @@ protocol BrowserToolbarDelegate {
     func didClickForward()
     func didLongPressBack()
     func didLongPressForward()
+
+    func didClickBookmark()
 }
 
 class BrowserToolbar: UIView {
@@ -49,7 +51,7 @@ class BrowserToolbar: UIView {
         shareButton.enabled = false
 
         bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
-        bookmarkButton.enabled = false
+        bookmarkButton.addTarget(self, action: "SELdidClickBookmark", forControlEvents: UIControlEvents.TouchUpInside)
 
         addButtons(backButton, forwardButton, shareButton, bookmarkButton)
     }
@@ -106,6 +108,14 @@ class BrowserToolbar: UIView {
         forwardButton.enabled = canGoForward
     }
 
+    func updateBookmarkStatus(isBookmarked: Bool) {
+        if isBookmarked {
+            bookmarkButton.imageView?.image = UIImage(named: "bookmarked")
+        } else {
+            bookmarkButton.imageView?.image = UIImage(named: "bookmark")
+        }
+    }
+
     func SELdidClickBack() {
         browserToolbarDelegate?.didClickBack()
     }
@@ -124,5 +134,9 @@ class BrowserToolbar: UIView {
         if recognizer.state == UIGestureRecognizerState.Began {
             browserToolbarDelegate?.didLongPressForward()
         }
+    }
+
+    func SELdidClickBookmark() {
+        browserToolbarDelegate?.didClickBookmark()
     }
 }

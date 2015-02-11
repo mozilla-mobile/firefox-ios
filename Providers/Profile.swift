@@ -116,7 +116,7 @@ public class MockAccountProfile: Profile, AccountProfile {
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
-        return MockMemoryBookmarksStore()
+        return BookmarksSqliteFactory(files: self.files)
     } ()
 
     lazy var clients: Clients = {
@@ -226,15 +226,9 @@ public class RESTAccountProfile: Profile, AccountProfile {
         logoutCallback(profile: self)
     }
 
-    var _bookmarks: protocol<BookmarksModelFactory, ShareToDestination>? = nil
-    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> {
-        if (_bookmarks == nil) {
-            // Stubbed out to populate data from server.
-            // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
-            _bookmarks = BookmarksRESTModelFactory(profile: self)
-        }
-        return _bookmarks!
-    }
+    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
+        return BookmarksSqliteFactory(files: self.files)
+    }()
 
     lazy var searchEngines: SearchEngines = {
         return SearchEngines()

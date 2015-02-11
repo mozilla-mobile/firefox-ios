@@ -9,6 +9,10 @@ public enum QuerySort {
 }
 
 public enum FilterType {
+    case ExactUrl
+    case Url
+    case Guid
+    case Id
     case None
 }
 
