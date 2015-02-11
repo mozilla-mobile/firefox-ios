@@ -17,10 +17,10 @@ private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
 
 class BrowserViewController: UIViewController {
-    private var urlbar: URLBarView!
+    private var urlBar: URLBarView!
     private var toolbar: BrowserToolbar!
     private var tabManager: TabManager!
-    private var homePager: TabBarViewController?
+    private var homePanelController: HomePanelViewController?
     private var searchController: SearchViewController?
     private var webViewContainer: UIView!
     private let uriFixup = URIFixup()
@@ -43,6 +43,36 @@ class BrowserViewController: UIViewController {
         tabManager = TabManager(defaultNewTabRequest: defaultRequest)
     }
 
+    override func viewDidLoad() {
+        webViewContainer = UIView()
+        view.addSubview(webViewContainer)
+        webViewContainer.snp_makeConstraints { make in
+            make.edges.equalTo(self.view)
+            return
+        }
+
+        urlBar = URLBarView()
+        let URLBarEffect = wrapInEffect(urlBar)
+        URLBarEffect.snp_makeConstraints { make in
+            make.top.equalTo(self.view.snp_top)
+            make.height.equalTo(ToolbarHeight + StatusBarHeight)
+            make.leading.trailing.equalTo(self.view)
+        }
+        urlBar.delegate = self
+        tabManager.delegate = self
+
+        toolbar = BrowserToolbar()
+        let toolbarEffect = wrapInEffect(toolbar)
+        toolbarEffect.snp_makeConstraints { make in
+            make.bottom.equalTo(self.view.snp_bottom)
+            make.height.equalTo(ToolbarHeight)
+            make.leading.trailing.equalTo(self.view)
+        }
+        toolbar.browserToolbarDelegate = self
+
+        tabManager.addTab()
+    }
+
     private func wrapInEffect(view: UIView) -> UIView {
         let effect = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
         self.view.addSubview(effect);
@@ -57,32 +87,32 @@ class BrowserViewController: UIViewController {
         return effect
     }
 
-    private func showHomePager() {
-        if homePager != nil {
+    private func showHomePanelController() {
+        if homePanelController != nil {
             return
         }
 
-        homePager = TabBarViewController()
-        homePager!.profile = profile
-        homePager!.delegate = self
-        homePager!.url = tabManager.selectedTab?.url
+        homePanelController = HomePanelViewController()
+        homePanelController!.profile = profile
+        homePanelController!.delegate = self
+        homePanelController!.url = tabManager.selectedTab?.url
 
-        view.addSubview(homePager!.view)
+        view.addSubview(homePanelController!.view)
 
-        homePager!.view.snp_makeConstraints { make in
-            make.top.equalTo(self.urlbar.snp_bottom)
+        homePanelController!.view.snp_makeConstraints { make in
+            make.top.equalTo(self.urlBar.snp_bottom)
             make.left.right.bottom.equalTo(self.view)
             return
         }
 
-        addChildViewController(homePager!)
+        addChildViewController(homePanelController!)
     }
 
-    private func hideHomePager() {
-        if let homePager = homePager {
-            homePager.view.removeFromSuperview()
-            homePager.removeFromParentViewController()
-            self.homePager = nil
+    private func hideHomePanelController() {
+        if let controller = homePanelController {
+            controller.view.removeFromSuperview()
+            controller.removeFromParentViewController()
+            homePanelController = nil
         }
     }
 
@@ -91,15 +121,13 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        assert(homePager != nil)
-
         searchController = SearchViewController()
         searchController!.searchEngines = profile.searchEngines
         searchController!.delegate = self
 
         view.addSubview(searchController!.view)
         searchController!.view.snp_makeConstraints { make in
-            make.top.equalTo(self.urlbar.snp_bottom)
+            make.top.equalTo(self.urlBar.snp_bottom)
             make.left.right.bottom.equalTo(self.view)
             return
         }
@@ -116,92 +144,12 @@ class BrowserViewController: UIViewController {
     }
 
     private func finishEditingAndSubmit(url: NSURL) {
-        urlbar.updateURL(url)
-        urlbar.finishEditing()
+        urlBar.updateURL(url)
+        urlBar.finishEditing()
         tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url))
     }
 
-    override func viewDidLoad() {
-        webViewContainer = UIView()
-        view.addSubview(webViewContainer)
-        webViewContainer.snp_makeConstraints { make in
-            make.edges.equalTo(self.view)
-            return
-        }
-
-        urlbar = URLBarView()
-        let URLBarEffect = wrapInEffect(urlbar)
-        URLBarEffect.snp_makeConstraints { make in
-            make.top.equalTo(self.view.snp_top)
-            make.height.equalTo(ToolbarHeight + StatusBarHeight)
-            make.leading.trailing.equalTo(self.view)
-        }
-        urlbar.delegate = self
-        tabManager.delegate = self
-
-        toolbar = BrowserToolbar()
-        let toolbarEffect = wrapInEffect(toolbar)
-        toolbarEffect.snp_makeConstraints { make in
-            make.bottom.equalTo(self.view.snp_bottom)
-            make.height.equalTo(ToolbarHeight)
-            make.leading.trailing.equalTo(self.view)
-        }
-        toolbar.browserToolbarDelegate = self
-
-        tabManager.addTab()
-    }
-
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject: AnyObject], context: UnsafeMutablePointer<Void>) {
-        if object as? WKWebView !== tabManager.selectedTab?.webView {
-            return
-        }
-
-        switch keyPath {
-        case KVOEstimatedProgress:
-            urlbar.updateProgressBar(change[NSKeyValueChangeNewKey] as Float)
-        case KVOLoading:
-            urlbar.updateLoading(change[NSKeyValueChangeNewKey] as Bool)
-        default:
-            assertionFailure("Unhandled KVO key: \(keyPath)")
-        }
-    }
-}
-
-extension BrowserViewController: UrlBarDelegate {
-    override func accessibilityPerformEscape() -> Bool {
-        if let selectedTab = tabManager.selectedTab? {
-            if selectedTab.canGoBack {
-                didClickBack()
-                return true
-            }
-        }
-        return false
-    }
-
-    func didClickReload() {
-        tabManager.selectedTab?.reload()
-    }
-
-    func didClickStop() {
-        tabManager.selectedTab?.stop()
-    }
-
-    func didClickAddTab() {
-        let controller = TabTrayController()
-        controller.tabManager = tabManager
-        presentViewController(controller, animated: true, completion: nil)
-    }
-
-    private func removeBookmark(url: String) {
-        var bookmark = BookmarkItem(guid: "", title: "", url: url)
-        profile.bookmarks.remove(bookmark, success: { success in
-            self.toolbar.updateBookmarkStatus(!success)
-        }, failure: { err in
-            println("Err removing bookmark \(err)")
-        })
-    }
-
-    private func doBookmark(url: String, title: String?) {
+    private func addBookmark(url: String, title: String?) {
         let shareItem = ShareItem(url: url, title: title)
         profile.bookmarks.shareItem(shareItem)
 
@@ -211,27 +159,58 @@ extension BrowserViewController: UrlBarDelegate {
         }
     }
 
-    func didClickBookmark() {
-        if let tab = tabManager.selectedTab? {
-            if let url = tab.url?.absoluteString {
-                profile.bookmarks.isBookmarked(url, success: { isBookmarked in
-                    if isBookmarked {
-                        self.removeBookmark(url)
-                    } else {
-                        self.doBookmark(url, title: tab.title)
-                    }
-                }, failure: { err in
-                    println("Error looking for bookmark \(err)")
-                })
-            } else {
-                println("Couldn't find a url for this tab")
-            }
-        } else {
-            println("No tab is selected...")
-        }
+    private func removeBookmark(url: String) {
+        var bookmark = BookmarkItem(guid: "", title: "", url: url)
+        profile.bookmarks.remove(bookmark, success: { success in
+            self.toolbar.updateBookmarkStatus(!success)
+            }, failure: { err in
+                println("Err removing bookmark \(err)")
+        })
     }
 
-    func didClickReaderMode() {
+    override func accessibilityPerformEscape() -> Bool {
+        if let selectedTab = tabManager.selectedTab? {
+            if selectedTab.canGoBack {
+                tabManager.selectedTab?.goBack()
+                return true
+            }
+        }
+        return false
+    }
+
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject: AnyObject], context: UnsafeMutablePointer<Void>) {
+        if object as? WKWebView !== tabManager.selectedTab?.webView {
+            return
+        }
+
+        switch keyPath {
+        case KVOEstimatedProgress:
+            urlBar.updateProgressBar(change[NSKeyValueChangeNewKey] as Float)
+        case KVOLoading:
+            urlBar.updateLoading(change[NSKeyValueChangeNewKey] as Bool)
+        default:
+            assertionFailure("Unhandled KVO key: \(keyPath)")
+        }
+    }
+}
+
+
+extension BrowserViewController: URLBarDelegate {
+    func urlBarDidPressReload(urlBar: URLBarView) {
+        tabManager.selectedTab?.reload()
+    }
+
+    func urlBarDidPressStop(urlBar: URLBarView) {
+        tabManager.selectedTab?.stop()
+    }
+
+    func urlBarDidPressTabs(urlBar: URLBarView) {
+        let controller = TabTrayController()
+        controller.tabManager = tabManager
+        presentViewController(controller, animated: true, completion: nil)
+    }
+
+    func urlBarDidPressReaderMode(urlBar: URLBarView) {
         if let tab = tabManager.selectedTab {
             if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
                 if readerMode.state == .Available {
@@ -245,7 +224,7 @@ extension BrowserViewController: UrlBarDelegate {
         }
     }
 
-    func didEnterText(text: String) {
+    func urlBar(urlBar: URLBarView, didEnterText text: String) {
         if text.isEmpty {
             hideSearchController()
         } else {
@@ -254,7 +233,7 @@ extension BrowserViewController: UrlBarDelegate {
         }
     }
 
-    func didSubmitText(text: String) {
+    func urlBar(urlBar: URLBarView, didSubmitText text: String) {
         var url = uriFixup.getURL(text)
 
         // If we can't make a valid URL, do a search query.
@@ -271,83 +250,106 @@ extension BrowserViewController: UrlBarDelegate {
         finishEditingAndSubmit(url!)
     }
 
-    func didBeginEditing() {
-        showHomePager()
+    func urlBarDidBeginEditing(urlBar: URLBarView) {
+        showHomePanelController()
     }
 
-    func didEndEditing() {
-        hideHomePager()
+    func urlBarDidEndEditing(urlBar: URLBarView) {
         hideSearchController()
+        hideHomePanelController()
     }
 }
 
 extension BrowserViewController: BrowserToolbarDelegate {
-    func didClickBack() {
+    func browserToolbarDidPressBack(browserToolbar: BrowserToolbar) {
         tabManager.selectedTab?.goBack()
     }
 
-    func didLongPressBack() {
+    func browserToolbarDidLongPressBack(browserToolbar: BrowserToolbar) {
         let controller = BackForwardListViewController()
         controller.listData = tabManager.selectedTab?.backList
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
     }
 
-    func didClickForward() {
+    func browserToolbarDidPressForward(browserToolbar: BrowserToolbar) {
         tabManager.selectedTab?.goForward()
     }
 
-    func didLongPressForward() {
+    func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbar) {
         let controller = BackForwardListViewController()
         controller.listData = tabManager.selectedTab?.forwardList
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
     }
 
-    func didClickShare() {
+    func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbar) {
+        if let tab = tabManager.selectedTab? {
+            if let url = tab.url?.absoluteString {
+                profile.bookmarks.isBookmarked(url,
+                    success: { isBookmarked in
+                        if isBookmarked {
+                            self.removeBookmark(url)
+                        } else {
+                            self.addBookmark(url, title: tab.title)
+                        }
+                    },
+                    failure: { err in
+                        println("Bookmark error: \(err)")
+                    }
+                )
+            } else {
+                println("Bookmark error: Couldn't find a URL for this tab")
+            }
+        } else {
+            println("Bookmark error: No tab is selected")
+        }
+    }
+
+    func browserToolbarDidPressShare(browserToolbar: BrowserToolbar) {
         if let selected = tabManager.selectedTab {
             if let url = selected.url {
-                var vc = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
-                vc.modalTransitionStyle = .CoverVertical
-                presentViewController(vc, animated: true, completion:nil)
+                var shareController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
+                shareController.modalTransitionStyle = .CoverVertical
+                presentViewController(shareController, animated: true, completion: nil)
             }
         }
     }
 }
 
-extension BrowserViewController: TabBarViewControllerDelegate {
-    func didEnterURL(url: NSURL) {
+extension BrowserViewController: HomePanelViewControllerDelegate {
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSubmitURL url: NSURL) {
         finishEditingAndSubmit(url)
     }
 }
 
 extension BrowserViewController: SearchViewControllerDelegate {
-    func didClickUrl(url: NSURL) {
+    func searchViewController(searchViewController: SearchViewController, didSubmitURL url: NSURL) {
         finishEditingAndSubmit(url)
     }
 }
 
 extension BrowserViewController: TabManagerDelegate {
-    func didSelectedTabChange(selected: Browser?, previous: Browser?) {
+    func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?) {
         previous?.webView.hidden = true
         selected?.webView.hidden = false
 
         previous?.webView.navigationDelegate = nil
         selected?.webView.navigationDelegate = self
-        urlbar.updateURL(selected?.url)
+        urlBar.updateURL(selected?.url)
         toolbar.updateBackStatus(selected?.canGoBack ?? false)
         toolbar.updateFowardStatus(selected?.canGoForward ?? false)
-        urlbar.updateProgressBar(Float(selected?.webView.estimatedProgress ?? 0))
-        urlbar.updateLoading(selected?.webView.loading ?? false)
+        urlBar.updateProgressBar(Float(selected?.webView.estimatedProgress ?? 0))
+        urlBar.updateLoading(selected?.webView.loading ?? false)
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
-            urlbar.updateReaderModeState(readerMode.state)
+            urlBar.updateReaderModeState(readerMode.state)
         } else {
-            urlbar.updateReaderModeState(ReaderModeState.Unavailable)
+            urlBar.updateReaderModeState(ReaderModeState.Unavailable)
         }
     }
 
-    func didCreateTab(tab: Browser) {
+    func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
         if let longPressGestureRecognizer = LongPressGestureRecognizer(webView: tab.webView) {
             tab.webView.addGestureRecognizer(longPressGestureRecognizer)
             longPressGestureRecognizer.longPressGestureDelegate = self
@@ -369,8 +371,8 @@ extension BrowserViewController: TabManagerDelegate {
         tab.addHelper(favicons, name: FaviconManager.name())
     }
 
-    func didAddTab(tab: Browser) {
-        urlbar.updateTabCount(tabManager.count)
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser) {
+        urlBar.updateTabCount(tabManager.count)
 
         tab.webView.hidden = true
         webViewContainer.insertSubview(tab.webView, atIndex: 0)
@@ -385,8 +387,8 @@ extension BrowserViewController: TabManagerDelegate {
         tab.webView.UIDelegate = self
     }
 
-    func didRemoveTab(tab: Browser) {
-        urlbar.updateTabCount(tabManager.count)
+    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser) {
+        urlBar.updateTabCount(tabManager.count)
 
         tab.webView.removeObserver(self, forKeyPath: KVOEstimatedProgress)
         tab.webView.removeObserver(self, forKeyPath: KVOLoading)
@@ -402,13 +404,13 @@ extension BrowserViewController: WKNavigationDelegate {
         if let absoluteString = webView.URL?.absoluteString {
             // TODO String comparison here because NSURL cannot parse about:reader URLs (1123509)
             if !absoluteString.hasPrefix("about:reader") {
-                urlbar.updateReaderModeState(ReaderModeState.Unavailable)
+                urlBar.updateReaderModeState(ReaderModeState.Unavailable)
             }
         }
     }
 
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
-        urlbar.updateURL(webView.URL);
+        urlBar.updateURL(webView.URL);
         toolbar.updateBackStatus(webView.canGoBack)
         toolbar.updateFowardStatus(webView.canGoForward)
 
@@ -416,7 +418,7 @@ extension BrowserViewController: WKNavigationDelegate {
             profile.bookmarks.isBookmarked(url, success: { bookmarked in
                 self.toolbar.updateBookmarkStatus(bookmarked)
             }, failure: { err in
-                println("Err bookmarking \(err)")
+                println("Error getting bookmark status: \(err)")
             })
         }
     }
@@ -493,7 +495,7 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
         // the button. Otherwise do nothing and the button will be updated when the tab is made active.
         if tabManager.selectedTab == browser {
             println("DEBUG: New readerModeState: \(state.rawValue)")
-            urlbar.updateReaderModeState(state)
+            urlBar.updateReaderModeState(state)
         }
     }
 

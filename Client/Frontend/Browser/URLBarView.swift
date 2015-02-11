@@ -1,24 +1,24 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import UIKit
 import Snappy
 
-protocol UrlBarDelegate {
-    func didClickAddTab()
-    func didClickReaderMode()
-    func didClickStop()
-    func didClickReload()
-    func didBeginEditing()
-    func didEndEditing()
-    func didEnterText(text: String)
-    func didSubmitText(text: String)
+protocol URLBarDelegate: class {
+    func urlBarDidPressTabs(urlBar: URLBarView)
+    func urlBarDidPressReaderMode(urlBar: URLBarView)
+    func urlBarDidPressStop(urlBar: URLBarView)
+    func urlBarDidPressReload(urlBar: URLBarView)
+    func urlBarDidBeginEditing(urlBar: URLBarView)
+    func urlBarDidEndEditing(urlBar: URLBarView)
+    func urlBar(urlBar: URLBarView, didEnterText text: String)
+    func urlBar(urlBar: URLBarView, didSubmitText text: String)
 }
 
 class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
-    var delegate: UrlBarDelegate?
+    weak var delegate: URLBarDelegate?
 
     private var locationView: BrowserLocationView!
     private var editTextField: ToolbarTextField!
@@ -123,7 +123,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     }
 
     func SELdidClickAddTab() {
-        delegate?.didClickAddTab()
+        delegate?.urlBarDidPressTabs(self)
     }
 
     func updateProgressBar(progress: Float) {
@@ -143,11 +143,11 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     }
 
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView) {
-        delegate?.didClickReaderMode()
+        delegate?.urlBarDidPressReaderMode(self)
     }
 
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
-        delegate?.didBeginEditing()
+        delegate?.urlBarDidBeginEditing(self)
 
         insertSubview(editTextField, aboveSubview: locationView)
         editTextField.snp_remakeConstraints { make in
@@ -161,22 +161,22 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     }
 
     func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView) {
-        delegate?.didClickReload()
+        delegate?.urlBarDidPressReload(self)
     }
     
     func browserLocationViewDidTapStop(browserLocationView: BrowserLocationView) {
-        delegate?.didClickStop()
+        delegate?.urlBarDidPressStop(self)
     }
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        delegate?.didSubmitText(editTextField.text)
+        delegate?.urlBar(self, didSubmitText: editTextField.text)
         return true
     }
 
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         let text = textField.text as NSString
         let fullText = text.stringByReplacingCharactersInRange(range, withString: string)
-        delegate?.didEnterText(fullText)
+        delegate?.urlBar(self, didEnterText: fullText)
 
         return true
     }
@@ -186,14 +186,14 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     }
 
     func textFieldShouldClear(textField: UITextField) -> Bool {
-        delegate?.didEnterText("")
+        delegate?.urlBar(self, didEnterText: "")
         return true
     }
 
     func finishEditing() {
         editTextField.resignFirstResponder()
         updateVisibleViews(editing: false)
-        delegate?.didEndEditing()
+        delegate?.urlBarDidEndEditing(self)
     }
 
     private func updateVisibleViews(#editing: Bool) {
