@@ -24,6 +24,12 @@ extension KIFUITestActor {
      */
     func waitForWebViewElementWithAccessibilityLabel(text: String) {
         let webView = waitForViewWithAccessibilityLabel("Web content") as WKWebView
+
+        // Wait for the webView to stop loading.
+        runBlock({ _ in
+            return webView.loading ? KIFTestStepResult.Wait : KIFTestStepResult.Success
+        })
+
         lazilyInjectKIFHelper(webView)
 
         var stepResult = KIFTestStepResult.Wait
