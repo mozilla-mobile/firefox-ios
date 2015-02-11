@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 import WebKit
+import Storage
 
 public let StatusBarHeight: CGFloat = 20 // TODO: Can't assume this is correct. Status bar height is dynamic.
 public let ToolbarHeight: CGFloat = 44
@@ -122,6 +123,45 @@ extension BrowserViewController: UrlBarDelegate {
         let controller = TabTrayController()
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
+    }
+
+    private func removeBookmark(url: String) {
+        var bookmark = BookmarkItem(guid: "", title: "", url: url)
+        profile.bookmarks.remove(bookmark, success: { success in
+            self.toolbar.updateBookmarkStatus(!success)
+        }, failure: { err in
+            println("Err removing bookmark \(err)")
+        })
+    }
+
+    private func doBookmark(url: String, title: String?) {
+        let shareItem = ShareItem(url: url, title: title)
+        profile.bookmarks.shareItem(shareItem)
+
+        // Dispatch to the main thread to update the UI
+        dispatch_async(dispatch_get_main_queue()) { _ in
+            self.toolbar.updateBookmarkStatus(true)
+        }
+    }
+
+    func didClickBookmark() {
+        if let tab = tabManager.selectedTab? {
+            if let url = tab.url?.absoluteString {
+                profile.bookmarks.isBookmarked(url, success: { isBookmarked in
+                    if isBookmarked {
+                        self.removeBookmark(url)
+                    } else {
+                        self.doBookmark(url, title: tab.title)
+                    }
+                }, failure: { err in
+                    println("Error looking for bookmark \(err)")
+                })
+            } else {
+                println("Couldn't find a url for this tab")
+            }
+        } else {
+            println("No tab is selected...")
+        }
     }
 
     func didClickReaderMode() {
@@ -254,6 +294,14 @@ extension BrowserViewController: WKNavigationDelegate {
         urlbar.updateURL(webView.URL);
         toolbar.updateBackStatus(webView.canGoBack)
         toolbar.updateFowardStatus(webView.canGoForward)
+
+        if let url = webView.URL?.absoluteString {
+            profile.bookmarks.isBookmarked(url, success: { bookmarked in
+                self.toolbar.updateBookmarkStatus(bookmarked)
+            }, failure: { err in
+                println("Err bookmarking \(err)")
+            })
+        }
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {

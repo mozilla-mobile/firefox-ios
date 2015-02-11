@@ -35,6 +35,10 @@ class Browser: NSObject, WKScriptMessageHandler {
         return webView.URL?
     }
 
+    var title: String? {
+        return webView.title
+    }
+
     var canGoBack: Bool {
         return webView.canGoBack
     }
