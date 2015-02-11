@@ -6,13 +6,13 @@ import UIKit
 
 import Storage
 
-class HistoryViewController: UITableViewController, UrlViewController {
+class HistoryPanel: UITableViewController, HomePanel {
     private let CELL_IDENTIFIER = "HISTORY_CELL"
     private let HEADER_IDENTIFIER = "HISTORY_HEADER"
 
     var history: Cursor? = nil
     var _profile: Profile? = nil
-    var delegate: UrlViewControllerDelegate? = nil
+    weak var delegate: HomePanelDelegate? = nil
 
     var profile: Profile! {
         get {
@@ -120,7 +120,7 @@ class HistoryViewController: UITableViewController, UrlViewController {
         if var hist = self.history {
             if let site = hist[indexPath.row] as? Site {
                 if let url = NSURL(string: site.url) {
-                    delegate?.didClickUrl(NSURL(string: site.url)!)
+                    delegate?.homePanel(didSubmitURL: NSURL(string: site.url)!)
                 } else {
                     println("Error creating url for \(site.url)")
                 }

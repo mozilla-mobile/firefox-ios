@@ -17,7 +17,7 @@
         </mutableArray>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController" customModule="Client" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsPanel" customModule="Client" customModuleProvider="target">
             <connections>
                 <outlet property="avatarImageView" destination="MEi-ax-1qK" id="QJ3-0P-66u"/>
                 <outlet property="emailLabel" destination="42Z-bf-iCM" id="mpl-qo-W7f"/>
