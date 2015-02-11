@@ -200,6 +200,16 @@ extension BrowserViewController: BrowserToolbarDelegate {
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
     }
+
+    func didClickShare() {
+        if let selected = tabManager.selectedTab {
+            if let url = selected.url {
+                var vc = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
+                vc.modalTransitionStyle = .CoverVertical
+                presentViewController(vc, animated: true, completion:nil)
+            }
+        }
+    }
 }
 
 extension BrowserViewController: TabBarViewControllerDelegate {
