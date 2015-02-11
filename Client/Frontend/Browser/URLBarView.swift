@@ -79,9 +79,7 @@ class URLBarView: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
     }
 
     func updateURL(url: NSURL?) {
-        if let url = url {
-            locationView.url = url
-        }
+        locationView.url = url
     }
 
     func updateTabCount(count: Int) {
