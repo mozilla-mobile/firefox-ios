@@ -4,7 +4,7 @@
 
 import UIKit
 import Storage
-import Snappy
+import Snap
 
 protocol LoginViewControllerDelegate {
     func loginViewControllerDidCancel(loginViewController: LoginViewController) -> Void
