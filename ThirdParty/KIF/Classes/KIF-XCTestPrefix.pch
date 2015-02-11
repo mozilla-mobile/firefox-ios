@@ -1,8 +1,0 @@
-//
-// Prefix header for all source files of the 'KIF' target in the 'KIF' project
-//
-
-#ifdef __OBJC__
-    #import <Foundation/Foundation.h>
-    #import <XCTest/XCTest.h>
-#endif

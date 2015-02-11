@@ -1,9 +1,0 @@
-//
-// Prefix header for all source files of the 'KIF Tests' target in the 'KIF Tests' project
-//
-
-#ifdef __OBJC__
-    #import <UIKit/UIKit.h>
-    #import <Foundation/Foundation.h>
-    #import <XCTest/XCTest.h>
-#endif
