@@ -6,9 +6,9 @@ import UIKit
 
 import Storage
 
-class SiteTableViewController: UITableViewController {
+class ReaderPanel: UITableViewController {
     var profile: Profile!
-    
+
     private var sites = [Site]()
     /*
         Site(title:"Royals Sweep Orioles to Advance to World Series", url:"http://www.nytimes.com/2014/10/16/sports/baseball/royals-keep-rolling-and-advance-to-the-world-series.html?hp&action=click&pgtype=Homepage&version=LargeMediaHeadlineSum&module=photo-spot-region&region=top-news&WT.nav=top-news&_r=0"),
@@ -16,32 +16,32 @@ class SiteTableViewController: UITableViewController {
         Site(title:"Against Rules, Amber Vinson, Dallas Worker With Ebola, Boarded Plane", url:"http://www.nytimes.com/2014/10/16/us/ebola-outbreak-texas.html?hp&action=click&pgtype=Homepage&version=LedeSum&module=first-column-region&region=top-news&WT.nav=top-news")
     ]
     */
- 
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-    
+
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sites.count
     }
-    
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-        
+
         let site = sites[indexPath.row]
-        
+
         // TODO: We need better async image loading here
         let opts = QueryOptions()
         opts.filter = site.url
-        
+
         cell.textLabel?.text = site.title
         cell.textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
         cell.textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
         cell.indentationWidth = 20
-        
+
         return cell
     }
-    
+
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath)
         let site = sites[indexPath.row]

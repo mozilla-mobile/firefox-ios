@@ -20,37 +20,35 @@ private let LabelFontSize: CGFloat = 13.0
 private let BackgroundColor = UIColor(red: 57.0 / 255, green: 57.0 / 255, blue: 57.0 / 255, alpha: 1)
 private let TransitionDuration = 0.25
 
-protocol TabBarViewControllerDelegate: class {
-    func didEnterURL(url: NSURL)
-}
-
-// A protocol to support clicking on rows in the view controller
-// This needs to be accessible to objc for UIViewControllers to implement it
-@objc
-protocol UrlViewController: class {
-    var delegate: UrlViewControllerDelegate? { get set }
+protocol HomePanelViewControllerDelegate: class {
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSubmitURL url: NSURL)
 }
 
 @objc
-protocol UrlViewControllerDelegate: class {
-    func didClickUrl(url: NSURL)
+protocol HomePanel: class {
+    weak var delegate: HomePanelDelegate? { get set }
 }
 
-class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewControllerDelegate {
+@objc
+protocol HomePanelDelegate: class {
+    func homePanel(didSubmitURL url: NSURL)
+}
+
+class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [ToolbarItem]!
     var url: NSURL?
-    weak var delegate: TabBarViewControllerDelegate?
+    weak var delegate: HomePanelViewControllerDelegate?
 
     private var buttonContainerView: ToolbarContainerView!
     private var controllerContainerView: UIView!
     private var buttons: [ToolbarButton] = []
-    
+
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(notificationToken)
     }
-    
+
     private var _selectedButtonIndex: Int = 0
     var selectedButtonIndex: Int {
         get {
@@ -63,11 +61,13 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
 
             let newButton = buttons[newButtonIndex]
             newButton.selected = true
-            
-            hideCurrentViewController()
-            var vc = self.panels[newButtonIndex].generator(profile: self.profile)
-            self.showViewController(vc)
-            if let v = vc as? UrlViewController {
+
+            hideCurrentPanel()
+            var panel = self.panels[newButtonIndex].generator(profile: self.profile)
+            self.showPanel(panel)
+
+            // TODO: Temporary workaround until all panels implement the HomePanel protocol.
+            if let v = panel as? HomePanel {
                 v.delegate = self
             }
 
@@ -75,23 +75,23 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
         }
     }
 
-    private func hideCurrentViewController() {
-        if let vc = childViewControllers.first? as? UIViewController {
-            vc.view.removeFromSuperview()
-            vc.removeFromParentViewController()
+    private func hideCurrentPanel() {
+        if let panel = childViewControllers.first? as? UIViewController {
+            panel.view.removeFromSuperview()
+            panel.removeFromParentViewController()
         }
     }
-    
-    private func showViewController(vc: UIViewController) {
-        controllerContainerView.addSubview(vc.view)
-        vc.view.snp_makeConstraints { make in
+
+    private func showPanel(panel: UIViewController) {
+        controllerContainerView.addSubview(panel.view)
+        panel.view.snp_makeConstraints { make in
             make.top.equalTo(self.buttonContainerView.snp_bottom)
             make.left.right.bottom.equalTo(self.view)
         }
 
-        addChildViewController(vc)
+        addChildViewController(panel)
     }
-    
+
     func tappedButton(sender: UIButton!) {
         for (index, button) in enumerate(buttons) {
             if (button == sender) {
@@ -100,7 +100,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
             }
         }
     }
-    
+
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
@@ -136,7 +136,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
             index--
         }
     }
-    
+
     override func viewDidLoad() {
         view.backgroundColor = BackgroundColor
 
@@ -169,8 +169,8 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
         }
     }
 
-    func didClickUrl(url: NSURL) {
-        delegate?.didEnterURL(url)
+    func homePanel(didSubmitURL url: NSURL) {
+        delegate?.homePanelViewController(self, didSubmitURL: url)
         dismissViewControllerAnimated(true, completion: nil)
     }
 }
