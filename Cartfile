@@ -1,2 +1,3 @@
 github "Alamofire/Alamofire"
 github "Masonry/Snap"
+github "swisspol/GCDWebServer"
