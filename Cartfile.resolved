@@ -1,1 +1,2 @@
 github "Alamofire/Alamofire" "1.1.4"
+github "Masonry/Snap" "0.0.6"

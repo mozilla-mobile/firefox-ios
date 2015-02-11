@@ -103,6 +103,8 @@
 		D35179BF1A5C8D5F00E7622E /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D35179C11A5C8D6800E7622E /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
 		D3589EF71A8D930000F28118 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E4CD9F191A6D9B7B00318571 /* libz.dylib */; };
+		D38B2CED1A8D94D20040E6B5 /* Snap.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2CE81A8D94CA0040E6B5 /* Snap.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D38B2CEE1A8D95020040E6B5 /* Snap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2CE81A8D94CA0040E6B5 /* Snap.framework */; };
 		D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3968F241A38FE8500CEFD3B /* TabManager.swift */; };
 		D39FA16A1A83E17100EE869C /* libKIF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D39FA14F1A83DFBF00EE869C /* libKIF.a */; };
 		D39FA16C1A83E17800EE869C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D39FA16B1A83E17800EE869C /* CoreGraphics.framework */; };
@@ -145,7 +147,6 @@
 		E42CCDE91A23A74000B794D3 /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84E1A16C40C00D49B7B /* AccountManager.swift */; };
 		E42CCDEA1A23A74400B794D3 /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8521A16C40C00D49B7B /* RestAPI.swift */; };
 		E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDE21A23A6F900B794D3 /* Clients.swift */; };
-		E42CCDF01A23C8FC00B794D3 /* Snappy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D6BEAD1A092AD300F538BD /* Snappy.framework */; };
 		E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E42CCE031A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
@@ -196,7 +197,6 @@
 		E4CD9F5B1A71506C00318571 /* Reader.css in Resources */ = {isa = PBXBuildFile; fileRef = E4CD9F5A1A71506C00318571 /* Reader.css */; };
 		E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9F6C1A77DD2800318571 /* ReaderModeStyleViewController.swift */; };
 		E4D6BEA61A092A4700F538BD /* Login.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEA51A092A4700F538BD /* Login.xcassets */; };
-		E4D6BEB21A092D5700F538BD /* Snappy.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E4D6BEAD1A092AD300F538BD /* Snappy.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */; };
 		E4F21AA61A13C4A300B0FAAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F21AA51A13C4A300B0FAAA /* Images.xcassets */; };
 		F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21D91A090F8100AAB793 /* ClientTests.swift */; };
@@ -285,6 +285,20 @@
 			remoteGlobalIDString = F8111E3219A95C8B0040E7D1;
 			remoteInfo = "Alamofire iOS";
 		};
+		D38B2CE71A8D94CA0040E6B5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D38B2CD81A8D94CA0040E6B5 /* Snap.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EEBCC9D819CC627D0083B827;
+			remoteInfo = Snap;
+		};
+		D38B2CE91A8D94CA0040E6B5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D38B2CD81A8D94CA0040E6B5 /* Snap.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EEBCC9E219CC627E0083B827;
+			remoteInfo = SnapTests;
+		};
 		D39FA14E1A83DFBF00EE869C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D39FA1431A83DFBF00EE869C /* KIF.xcodeproj */;
@@ -327,27 +341,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		E4D6BEAC1A092AD300F538BD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EEBCC9D819CC627D0083B827;
-			remoteInfo = Snappy;
-		};
-		E4D6BEAE1A092AD300F538BD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EEBCC9E219CC627E0083B827;
-			remoteInfo = SnappyTests;
-		};
-		E4D6BEB31A092D5700F538BD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = EEBCC9D719CC627D0083B827;
-			remoteInfo = Snappy;
-		};
 		F84B21D41A090F8100AAB793 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -378,9 +371,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				D38B2CED1A8D94D20040E6B5 /* Snap.framework in Copy Frameworks */,
 				D31FC24C1A8D923000BAF7EC /* Alamofire.framework in Copy Frameworks */,
 				D3C38C701A6F20D9005C702A /* Storage.framework in Copy Frameworks */,
-				E4D6BEB21A092D5700F538BD /* Snappy.framework in Copy Frameworks */,
 				28CE83DB1A1D1E7C00576538 /* FxA.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -461,6 +454,7 @@
 		D34F86DA1A1AC35B00331EC4 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		D34F86E61A1AC7DD00331EC4 /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		D34F86E81A1ACD1200331EC4 /* ImageTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTextField.swift; sourceTree = "<group>"; };
+		D38B2CD81A8D94CA0040E6B5 /* Snap.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Snap.xcodeproj; path = Carthage/Checkouts/Snap/Snap.xcodeproj; sourceTree = "<group>"; };
 		D3968F241A38FE8500CEFD3B /* TabManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabManager.swift; sourceTree = "<group>"; };
 		D39FA1431A83DFBF00EE869C /* KIF.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = KIF.xcodeproj; path = ThirdParty/KIF/KIF.xcodeproj; sourceTree = "<group>"; };
 		D39FA15F1A83E0EC00EE869C /* UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -529,7 +523,6 @@
 		E4CD9F5A1A71506C00318571 /* Reader.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = Reader.css; sourceTree = "<group>"; };
 		E4CD9F6C1A77DD2800318571 /* ReaderModeStyleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleViewController.swift; sourceTree = "<group>"; };
 		E4D6BEA51A092A4700F538BD /* Login.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Login.xcassets; sourceTree = "<group>"; };
-		E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Snappy.xcodeproj; path = ThirdParty/Snappy/Snappy.xcodeproj; sourceTree = "<group>"; };
 		E4D6BEB51A092E0300F538BD /* Fennec.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Fennec.entitlements; sourceTree = "<group>"; };
 		E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		E4F21AA51A13C4A300B0FAAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -595,8 +588,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D38B2CEE1A8D95020040E6B5 /* Snap.framework in Frameworks */,
 				285CEE4F1A69EAFD00CC1228 /* Storage.framework in Frameworks */,
-				E42CCDF01A23C8FC00B794D3 /* Snappy.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -731,6 +724,15 @@
 			path = Providers;
 			sourceTree = "<group>";
 		};
+		D38B2CD91A8D94CA0040E6B5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D38B2CE81A8D94CA0040E6B5 /* Snap.framework */,
+				D38B2CEA1A8D94CA0040E6B5 /* SnapTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		D39FA1441A83DFBF00EE869C /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -854,15 +856,6 @@
 			path = Responses;
 			sourceTree = "<group>";
 		};
-		E4D6BEA81A092AD300F538BD /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E4D6BEAD1A092AD300F538BD /* Snappy.framework */,
-				E4D6BEAF1A092AD300F538BD /* SnappyTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
@@ -873,7 +866,7 @@
 				D31FC2291A8D908800BAF7EC /* Alamofire.xcodeproj */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				D39FA1431A83DFBF00EE869C /* KIF.xcodeproj */,
-				E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */,
+				D38B2CD81A8D94CA0040E6B5 /* Snap.xcodeproj */,
 				282DA4B11A699E0300A406E2 /* Storage.xcodeproj */,
 				F84B21C01A090F8100AAB793 /* Client */,
 				F84B21D61A090F8100AAB793 /* ClientTests */,
@@ -1104,7 +1097,6 @@
 			dependencies = (
 				F84B22521A0920C600AAB793 /* PBXTargetDependency */,
 				F84B22651A09210A00AAB793 /* PBXTargetDependency */,
-				E4D6BEB41A092D5700F538BD /* PBXTargetDependency */,
 				28CE83DD1A1D1E7C00576538 /* PBXTargetDependency */,
 				D31FC2481A8D910E00BAF7EC /* PBXTargetDependency */,
 			);
@@ -1242,8 +1234,8 @@
 					ProjectRef = D39FA1431A83DFBF00EE869C /* KIF.xcodeproj */;
 				},
 				{
-					ProductGroup = E4D6BEA81A092AD300F538BD /* Products */;
-					ProjectRef = E4D6BEA71A092AD300F538BD /* Snappy.xcodeproj */;
+					ProductGroup = D38B2CD91A8D94CA0040E6B5 /* Products */;
+					ProjectRef = D38B2CD81A8D94CA0040E6B5 /* Snap.xcodeproj */;
 				},
 				{
 					ProductGroup = 282DA4B21A699E0300A406E2 /* Products */;
@@ -1318,6 +1310,20 @@
 			remoteRef = D31FC2361A8D908900BAF7EC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		D38B2CE81A8D94CA0040E6B5 /* Snap.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Snap.framework;
+			remoteRef = D38B2CE71A8D94CA0040E6B5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D38B2CEA1A8D94CA0040E6B5 /* SnapTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = SnapTests.xctest;
+			remoteRef = D38B2CE91A8D94CA0040E6B5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		D39FA14F1A83DFBF00EE869C /* libKIF.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1351,20 +1357,6 @@
 			fileType = wrapper.cfbundle;
 			path = "KIF Tests-OCUnit.octest";
 			remoteRef = D39FA1561A83DFBF00EE869C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E4D6BEAD1A092AD300F538BD /* Snappy.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Snappy.framework;
-			remoteRef = E4D6BEAC1A092AD300F538BD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E4D6BEAF1A092AD300F538BD /* SnappyTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = SnappyTests.xctest;
-			remoteRef = E4D6BEAE1A092AD300F538BD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1649,11 +1641,6 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = D39FA1651A83E0EC00EE869C /* PBXContainerItemProxy */;
-		};
-		E4D6BEB41A092D5700F538BD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Snappy;
-			targetProxy = E4D6BEB31A092D5700F538BD /* PBXContainerItemProxy */;
 		};
 		F84B21D51A090F8100AAB793 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
