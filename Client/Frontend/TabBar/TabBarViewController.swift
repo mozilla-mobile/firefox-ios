@@ -58,8 +58,10 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
         }
 
         set (newButtonIndex) {
-            let currentButton = buttons[_selectedButtonIndex]
-            currentButton.selected = false
+            if _selectedButtonIndex < buttons.count {
+                let currentButton = buttons[_selectedButtonIndex]
+                currentButton.selected = false
+            }
 
             let newButton = buttons[newButtonIndex]
             newButton.selected = true
@@ -133,34 +135,37 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
     }
 
     private func updateButtons() {
-        for index in 0...panels.count-1 {
-            let item = panels[index]
-            // If we have a button, we'll just reuse it
-            if (index < buttons.count) {
-                let button = buttons[index]
-                // TODO: Write a better equality check here.
-                if (item.title == button.item.title) {
-                    continue
-                }
+        var selectedPanel: ToolbarItem?
+        if selectedButtonIndex < buttons.count {
+            selectedPanel = buttons[selectedButtonIndex].item
+        }
 
-                button.item = item
+        // Update any existing buttons we've got
+        for (index, button) in enumerate(buttons) {
+            if index < panels.count {
+                let panel = panels[index]
+                button.item = panel
+                // TODO: Write a better equality check here.
+                if panel.title == selectedPanel?.title {
+                    selectedButtonIndex = index
+                }
             } else {
-                // Otherwise create one
-                let toolbarButton = ToolbarButton(toolbarItem: item)
-                buttonContainerView.addSubview(toolbarButton)
-                toolbarButton.addTarget(self, action: "tappedButton:", forControlEvents: UIControlEvents.TouchUpInside)
-                buttons.append(toolbarButton)
+                buttons.removeAtIndex(index)
+                button.removeFromSuperview()
             }
         }
 
-        // Now remove any extra buttons we find
-        // Note, since we modify index in the loop, we have to use the old for-loop syntax here.
-        // XXX - There's probably a better way to do this
-        for (var index = panels.count; index < buttons.count; index++) {
-            let button = buttons[index]
-            button.removeFromSuperview()
-            buttons.removeAtIndex(index)
-            index--
+        // Now add any new buttons we need
+        for index in buttons.count..<panels.count {
+            let panel = panels[index]
+            let button = ToolbarButton(toolbarItem: panel)
+            button.addTarget(self, action: "tappedButton:", forControlEvents: UIControlEvents.TouchUpInside)
+            buttonContainerView.addSubview(button)
+            buttons.append(button)
+            // TODO: Write a better equality check here.
+            if panel.title == selectedPanel?.title {
+                selectedButtonIndex = index
+            }
         }
     }
     
