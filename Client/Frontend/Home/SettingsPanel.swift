@@ -3,15 +3,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Snappy
 
 class SettingsPanel: UIViewController, ToolbarViewProtocol,
         UITableViewDataSource, UITableViewDelegate, FxASignInViewControllerDelegate
 {
-    @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var emailLabel: UILabel!
-    @IBOutlet weak var settingsTableView: UITableView!
-    @IBOutlet weak var signOutButton: UIButton!
+    var avatarImageView: UIImageView!
+    var nameLabel: UILabel!
+    var emailLabel: UILabel!
+    var settingsTableView: UITableView!
+    var signOutButton: UIButton!
 
     var profile: Profile!
 
@@ -19,32 +20,111 @@ class SettingsPanel: UIViewController, ToolbarViewProtocol,
 
     lazy var panels: Panels = {
         return Panels(profile: self.profile)
-    }()
+    } ()
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
 
     override func viewDidLoad() {
+        view.backgroundColor = UIColor(red: 0.22, green: 0.22, blue: 0.22, alpha: 1)
+
+        let userContainer = UIView()
+        view.addSubview(userContainer)
+        userContainer.snp_makeConstraints { make in
+            make.top.equalTo(self.view).offset(64)
+            make.centerX.equalTo(self.view)
+        }
+
+        // User image
+        let madhavaImage = UIImage(named: "Madhava")
+        avatarImageView = UIImageView(image: madhavaImage)
         avatarImageView.layer.cornerRadius = 50
         avatarImageView.layer.masksToBounds = true
         avatarImageView.isAccessibilityElement = true
         avatarImageView.accessibilityLabel = NSLocalizedString("Avatar", comment: "")
+        userContainer.addSubview(avatarImageView)
+        avatarImageView.snp_makeConstraints { make in
+            make.top.bottom.leading.equalTo(userContainer)
+            make.width.height.equalTo(100)
+        }
 
+        // Name label
+        let labelName = UILabel()
+        labelName.textColor = UIColor.whiteColor()
+        labelName.font = UIFont(name: "FiraSans-SemiBold", size: 20)
+        labelName.text = "ROLLO TOMASI"
+        userContainer.addSubview(labelName)
+        labelName.snp_makeConstraints { make in
+            make.leading.equalTo(self.avatarImageView.snp_trailing)
+            make.top.trailing.equalTo(userContainer)
+        }
+
+        // Email label
+        let labelEmail = UILabel()
+        labelEmail.textColor = UIColor.whiteColor()
+        labelEmail.font = UIFont(name: "FiraSans-UltraLight", size: 13)
+        labelEmail.text = "rollo.tomasi@email.org"
+        userContainer.addSubview(labelEmail)
+        labelEmail.snp_makeConstraints { make in
+            make.leading.equalTo(self.avatarImageView.snp_right)
+            make.top.equalTo(labelName.snp_bottom)
+        }
+
+        // Settings table
+        settingsTableView = UITableView()
         settingsTableView.delegate = self
         settingsTableView.dataSource = self
         settingsTableView.separatorStyle = UITableViewCellSeparatorStyle.None
         settingsTableView.separatorInset = UIEdgeInsetsZero
         settingsTableView.editing = true
         settingsTableView.allowsSelectionDuringEditing = true
-
-        settingsTableView.backgroundColor = view.backgroundColor
         settingsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: SETTING_CELL_ID)
+        settingsTableView.scrollEnabled = false
+        view.addSubview(settingsTableView)
+        settingsTableView.snp_makeConstraints { make in
+            make.top.equalTo(userContainer.snp_bottom).offset(64)
+            make.left.right.equalTo(self.view).offset(8)
+            make.height.equalTo(190)
+        }
 
+        // Sign out button
+        signOutButton = UIButton()
+        signOutButton.setTitle("Sign Out", forState: UIControlState.Normal)
+signOutButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        signOutButton.titleLabel!.font = UIFont(name: "FiraSans-Light", size: 15)
         signOutButton.layer.borderColor = UIColor.whiteColor().CGColor
         signOutButton.layer.borderWidth = 1.0
         signOutButton.layer.cornerRadius = 6.0
-        signOutButton.addTarget(self, action: "didClickLogout", forControlEvents: UIControlEvents.TouchUpInside)
+        signOutButton.contentEdgeInsets = UIEdgeInsetsMake(4, 6, 4, 6)
+        signOutButton.addTarget(self, action: "SELdidClickLogout", forControlEvents: UIControlEvents.TouchUpInside)
+        view.addSubview(signOutButton)
+        signOutButton.snp_makeConstraints { make in
+            make.top.equalTo(self.settingsTableView.snp_bottom).offset(64)
+            make.centerX.equalTo(self.view)
+        }
+
+        // Copyright
+        let copyrightLabel = UILabel()
+        copyrightLabel.textColor = UIColor.whiteColor()
+        copyrightLabel.font = UIFont(name: "FiraSans-Light", size: 11)
+        copyrightLabel.text = "© 2014 Mozilla"
+        view.addSubview(copyrightLabel)
+        copyrightLabel.snp_makeConstraints { make in
+            make.leading.bottom.equalTo(self.view)
+            return
+        }
+
+        // Project
+        let projectLabel = UILabel()
+        projectLabel.textColor = UIColor.whiteColor()
+        projectLabel.font = UIFont(name: "FiraSans-Light", size: 11)
+        projectLabel.text = "Project 105, v0.01a"
+        view.addSubview(projectLabel)
+        projectLabel.snp_makeConstraints { make in
+            make.trailing.bottom.equalTo(self.view)
+            return
+        }
     }
 
     func signInViewControllerDidCancel(vc: FxASignInViewController) {
@@ -57,9 +137,8 @@ class SettingsPanel: UIViewController, ToolbarViewProtocol,
         emailLabel.text = data["email"].asString
     }
 
-    // Referenced as button selector. Temporarily, we show the Firefox
-    // Accounts sign in view.
-    func didClickLogout() {
+    // Temporarily, we show the Firefox Accounts sign in view.
+    func SELdidClickLogout() {
         let vc = FxASignInViewController()
         vc.signInDelegate = self
         presentViewController(vc, animated: true, completion: nil)

@@ -59,7 +59,6 @@
 		2F834D211A8062D1006A0B7B /* json.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE842F1A1E571900576538 /* json.swift */; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
 		59A680D1116F5BF6CCC9ED6F /* HistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6825233896FC846499289 /* HistoryPanel.swift */; };
-		59A681AE8894F61B158ED656 /* SettingsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59A688D11BC6411033F56127 /* SettingsPanel.xib */; };
 		59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68CCB63E2A565CB03F832 /* SearchViewController.swift */; };
 		59A684F3A0E745546D07BDA9 /* TabsViewControllerHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59A68EC516B0FE3C9B913AB9 /* TabsViewControllerHeader.xib */; };
 		59A6868C3BCA749912920318 /* HistoryPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59A68AA73D3728405385DB68 /* HistoryPanel.xib */; };
@@ -429,7 +428,6 @@
 		59A683E3C04DD83502EF1EC7 /* TabsPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsPanel.swift; sourceTree = "<group>"; };
 		59A68480808F0CFC2E6B79DD /* Panels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Panels.swift; sourceTree = "<group>"; };
 		59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderPanel.swift; sourceTree = "<group>"; };
-		59A688D11BC6411033F56127 /* SettingsPanel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsPanel.xib; sourceTree = "<group>"; };
 		59A689D371070ACA1E4EDA15 /* BookmarksPanel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BookmarksPanel.xib; sourceTree = "<group>"; };
 		59A68AA73D3728405385DB68 /* HistoryPanel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HistoryPanel.xib; sourceTree = "<group>"; };
 		59A68CCB63E2A565CB03F832 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -983,7 +981,6 @@
 				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
 				59A68DAED41E25264BD4563C /* Settings.xcassets */,
 				59A680EDBF3EFB9A384FAB42 /* SettingsPanel.swift */,
-				59A688D11BC6411033F56127 /* SettingsPanel.xib */,
 				59A683E3C04DD83502EF1EC7 /* TabsPanel.swift */,
 				59A6825A052939641CD175AE /* TabsViewControllerFooter.xib */,
 				59A68EC516B0FE3C9B913AB9 /* TabsViewControllerHeader.xib */,
@@ -1377,7 +1374,6 @@
 				59A6868C3BCA749912920318 /* HistoryPanel.xib in Resources */,
 				59A68D3A5B42036301ECDB47 /* BookmarksPanel.xib in Resources */,
 				59A68955352404CEFEEAD273 /* Settings.xcassets in Resources */,
-				59A681AE8894F61B158ED656 /* SettingsPanel.xib in Resources */,
 				59A68F654D877DCA9FE43C9D /* TabsViewControllerFooter.xib in Resources */,
 				59A684F3A0E745546D07BDA9 /* TabsViewControllerHeader.xib in Resources */,
 			);
