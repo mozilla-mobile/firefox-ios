@@ -20,6 +20,11 @@ class BrowserViewController: UIViewController {
     private var urlbar: URLBarView!
     private var toolbar: BrowserToolbar!
     private var tabManager: TabManager!
+    private var homePager: TabBarViewController?
+    private var searchController: SearchViewController?
+    private var webViewContainer: UIView!
+    private let uriFixup = URIFixup()
+
     var profile: Profile!
 
     required init(coder aDecoder: NSCoder) {
@@ -52,7 +57,78 @@ class BrowserViewController: UIViewController {
         return effect
     }
 
+    private func showHomePager() {
+        if homePager != nil {
+            return
+        }
+
+        homePager = TabBarViewController()
+        homePager!.profile = profile
+        homePager!.delegate = self
+        homePager!.url = tabManager.selectedTab?.url
+
+        view.addSubview(homePager!.view)
+
+        homePager!.view.snp_makeConstraints { make in
+            make.top.equalTo(self.urlbar.snp_bottom)
+            make.left.right.bottom.equalTo(self.view)
+            return
+        }
+
+        addChildViewController(homePager!)
+    }
+
+    private func hideHomePager() {
+        if let homePager = homePager {
+            homePager.view.removeFromSuperview()
+            homePager.removeFromParentViewController()
+            self.homePager = nil
+        }
+    }
+
+    private func showSearchController() {
+        if searchController != nil {
+            return
+        }
+
+        assert(homePager != nil)
+
+        searchController = SearchViewController()
+        searchController!.searchEngines = profile.searchEngines
+        searchController!.delegate = self
+
+        view.addSubview(searchController!.view)
+        searchController!.view.snp_makeConstraints { make in
+            make.top.equalTo(self.urlbar.snp_bottom)
+            make.left.right.bottom.equalTo(self.view)
+            return
+        }
+
+        addChildViewController(searchController!)
+    }
+
+    private func hideSearchController() {
+        if let searchController = searchController {
+            searchController.view.removeFromSuperview()
+            searchController.removeFromParentViewController()
+            self.searchController = nil
+        }
+    }
+
+    private func finishEditingAndSubmit(url: NSURL) {
+        urlbar.updateURL(url)
+        urlbar.finishEditing()
+        tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url))
+    }
+
     override func viewDidLoad() {
+        webViewContainer = UIView()
+        view.addSubview(webViewContainer)
+        webViewContainer.snp_makeConstraints { make in
+            make.edges.equalTo(self.view)
+            return
+        }
+
         urlbar = URLBarView()
         let URLBarEffect = wrapInEffect(urlbar)
         URLBarEffect.snp_makeConstraints { make in
@@ -92,19 +168,6 @@ class BrowserViewController: UIViewController {
 }
 
 extension BrowserViewController: UrlBarDelegate {
-    func didBeginEditing() {
-        if tabManager.selectedTab == nil {
-            return
-        }
-
-        let controller = TabBarViewController()
-        controller.profile = profile
-        controller.delegate = self
-        controller.url = tabManager.selectedTab?.url
-        controller.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
-        presentViewController(controller, animated: true, completion: nil)
-    }
-
     override func accessibilityPerformEscape() -> Bool {
         if let selectedTab = tabManager.selectedTab? {
             if selectedTab.canGoBack {
@@ -181,12 +244,48 @@ extension BrowserViewController: UrlBarDelegate {
             }
         }
     }
+
+    func didEnterText(text: String) {
+        if text.isEmpty {
+            hideSearchController()
+        } else {
+            showSearchController()
+            searchController!.searchQuery = text
+        }
+    }
+
+    func didSubmitText(text: String) {
+        var url = uriFixup.getURL(text)
+
+        // If we can't make a valid URL, do a search query.
+        if url == nil {
+            url = profile.searchEngines.defaultEngine.searchURLForQuery(text)
+        }
+
+        // If we still don't have a valid URL, something is broken. Give up.
+        if url == nil {
+            println("Error handling URL entry: " + text)
+            return
+        }
+
+        finishEditingAndSubmit(url!)
+    }
+
+    func didBeginEditing() {
+        showHomePager()
+    }
+
+    func didEndEditing() {
+        hideHomePager()
+        hideSearchController()
+    }
 }
 
 extension BrowserViewController: BrowserToolbarDelegate {
     func didClickBack() {
         tabManager.selectedTab?.goBack()
     }
+
     func didLongPressBack() {
         let controller = BackForwardListViewController()
         controller.listData = tabManager.selectedTab?.backList
@@ -218,8 +317,13 @@ extension BrowserViewController: BrowserToolbarDelegate {
 
 extension BrowserViewController: TabBarViewControllerDelegate {
     func didEnterURL(url: NSURL) {
-        urlbar.updateURL(url)
-        tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url))
+        finishEditingAndSubmit(url)
+    }
+}
+
+extension BrowserViewController: SearchViewControllerDelegate {
+    func didClickUrl(url: NSURL) {
+        finishEditingAndSubmit(url)
     }
 }
 
@@ -269,7 +373,7 @@ extension BrowserViewController: TabManagerDelegate {
         urlbar.updateTabCount(tabManager.count)
 
         tab.webView.hidden = true
-        view.insertSubview(tab.webView, atIndex: 0)
+        webViewContainer.insertSubview(tab.webView, atIndex: 0)
         tab.webView.scrollView.contentInset = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
         tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
         tab.webView.snp_makeConstraints { make in
@@ -290,7 +394,6 @@ extension BrowserViewController: TabManagerDelegate {
     }
 }
 
-
 extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
@@ -298,7 +401,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // (orange color) as soon as the page has loaded.
         if let absoluteString = webView.URL?.absoluteString {
             // TODO String comparison here because NSURL cannot parse about:reader URLs (1123509)
-            if absoluteString.hasPrefix("about:reader") == false {
+            if !absoluteString.hasPrefix("about:reader") {
                 urlbar.updateReaderModeState(ReaderModeState.Unavailable)
             }
         }

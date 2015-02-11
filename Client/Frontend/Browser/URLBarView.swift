@@ -7,23 +7,28 @@ import UIKit
 import Snappy
 
 protocol UrlBarDelegate {
-    func didBeginEditing()
     func didClickAddTab()
     func didClickReaderMode()
     func didClickStop()
     func didClickReload()
+    func didBeginEditing()
+    func didEndEditing()
+    func didEnterText(text: String)
+    func didSubmitText(text: String)
 }
 
-class URLBarView: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
+class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     var delegate: UrlBarDelegate?
 
     private var locationView: BrowserLocationView!
+    private var editTextField: ToolbarTextField!
     private var tabsButton: UIButton!
     private var progressBar: UIProgressView!
+    private var cancelButton: UIButton!
 
     override init() {
+        // super.init() calls init(frame: CGRect)
         super.init()
-        initViews()
     }
 
     override init(frame: CGRect) {
@@ -41,6 +46,18 @@ class URLBarView: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         locationView.readerModeState = ReaderModeState.Unavailable
         locationView.delegate = self
         addSubview(locationView)
+
+        editTextField = ToolbarTextField()
+        editTextField.keyboardType = UIKeyboardType.WebSearch
+        editTextField.autocorrectionType = UITextAutocorrectionType.No
+        editTextField.autocapitalizationType = UITextAutocapitalizationType.None
+        editTextField.returnKeyType = UIReturnKeyType.Go
+        editTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
+        editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
+        editTextField.layer.cornerRadius = 3
+        editTextField.delegate = self
+        editTextField.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
 
         progressBar = UIProgressView()
         self.progressBar.trackTintColor = self.backgroundColor
@@ -60,6 +77,14 @@ class URLBarView: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         tabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(tabsButton)
 
+        cancelButton = UIButton()
+        cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
+        cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
+        cancelButton.hidden = true
+        self.addSubview(cancelButton)
+
         self.locationView.snp_remakeConstraints { make in
             make.left.equalTo(self.snp_left).offset(DefaultPadding)
             make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
@@ -75,6 +100,11 @@ class URLBarView: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
         self.progressBar.snp_remakeConstraints { make in
             make.centerY.equalTo(self.snp_bottom)
             make.width.equalTo(self)
+        }
+
+        cancelButton.snp_makeConstraints { make in
+            make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
+            make.right.equalTo(self).offset(-8)
         }
     }
 
@@ -118,6 +148,16 @@ class URLBarView: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
 
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
         delegate?.didBeginEditing()
+
+        insertSubview(editTextField, aboveSubview: locationView)
+        editTextField.snp_remakeConstraints { make in
+            make.edges.equalTo(self.locationView)
+            return
+        }
+        editTextField.text = locationView.url?.absoluteString
+        editTextField.becomeFirstResponder()
+
+        updateVisibleViews(editing: true)
     }
 
     func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView) {
@@ -126,5 +166,62 @@ class URLBarView: UIView, UITextFieldDelegate, BrowserLocationViewDelegate {
     
     func browserLocationViewDidTapStop(browserLocationView: BrowserLocationView) {
         delegate?.didClickStop()
+    }
+
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        delegate?.didSubmitText(editTextField.text)
+        return true
+    }
+
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        let text = textField.text as NSString
+        let fullText = text.stringByReplacingCharactersInRange(range, withString: string)
+        delegate?.didEnterText(fullText)
+
+        return true
+    }
+
+    func textFieldDidBeginEditing(textField: UITextField) {
+        textField.selectAll(nil)
+    }
+
+    func textFieldShouldClear(textField: UITextField) -> Bool {
+        delegate?.didEnterText("")
+        return true
+    }
+
+    func finishEditing() {
+        editTextField.resignFirstResponder()
+        updateVisibleViews(editing: false)
+        delegate?.didEndEditing()
+    }
+
+    private func updateVisibleViews(#editing: Bool) {
+        locationView.hidden = editing
+        tabsButton.hidden = editing
+        progressBar.hidden = editing
+        editTextField.hidden = !editing
+        cancelButton.hidden = !editing
+    }
+
+    func SELdidClickCancel() {
+        finishEditing()
+    }
+
+    override func accessibilityPerformEscape() -> Bool {
+        self.SELdidClickCancel()
+        return true
+    }
+}
+
+private class ToolbarTextField: UITextField {
+    override func textRectForBounds(bounds: CGRect) -> CGRect {
+        let rect = super.textRectForBounds(bounds)
+        return rect.rectByInsetting(dx: 5, dy: 5)
+    }
+
+    override func editingRectForBounds(bounds: CGRect) -> CGRect {
+        let rect = super.editingRectForBounds(bounds)
+        return rect.rectByInsetting(dx: 5, dy: 5)
     }
 }

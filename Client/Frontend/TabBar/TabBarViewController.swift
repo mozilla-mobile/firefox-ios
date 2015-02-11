@@ -31,6 +31,11 @@ protocol UrlViewController: class {
     var delegate: UrlViewControllerDelegate? { get set }
 }
 
+@objc
+protocol UrlViewControllerDelegate: class {
+    func didClickUrl(url: NSURL)
+}
+
 class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewControllerDelegate {
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
@@ -40,12 +45,7 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
 
     private var buttonContainerView: ToolbarContainerView!
     private var controllerContainerView: UIView!
-    private var toolbarTextField: UITextField!
-    private var cancelButton: UIButton!
     private var buttons: [ToolbarButton] = []
-    private var searchController: SearchViewController?
-    private let uriFixup = URIFixup()
-    private var didInitialLayout = false
     
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(notificationToken)
@@ -79,7 +79,6 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
         if let vc = childViewControllers.first? as? UIViewController {
             vc.view.removeFromSuperview()
             vc.removeFromParentViewController()
-            toolbarTextField.resignFirstResponder()
         }
     }
     
@@ -91,32 +90,6 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
         }
 
         addChildViewController(vc)
-    }
-
-    private func showSearchController() {
-        if searchController != nil {
-            return
-        }
-
-        searchController = SearchViewController()
-        searchController!.searchEngines = profile.searchEngines
-        searchController!.delegate = self
-
-        view.addSubview(searchController!.view)
-        searchController!.view.snp_makeConstraints { make in
-            make.top.equalTo(self.toolbarTextField.snp_bottom).offset(10)
-            make.left.right.bottom.equalTo(self.view)
-        }
-
-        addChildViewController(searchController!)
-    }
-
-    private func hideSearchController() {
-        if let searchController = searchController {
-            searchController.view.removeFromSuperview()
-            searchController.removeFromParentViewController()
-            self.searchController = nil
-        }
     }
     
     func tappedButton(sender: UIButton!) {
@@ -174,47 +147,8 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
         controllerContainerView = UIView()
         view.addSubview(controllerContainerView)
 
-        toolbarTextField = ToolbarTextField()
-        toolbarTextField.keyboardType = UIKeyboardType.WebSearch
-        toolbarTextField.autocorrectionType = UITextAutocorrectionType.No
-        toolbarTextField.autocapitalizationType = UITextAutocapitalizationType.None
-        toolbarTextField.returnKeyType = UIReturnKeyType.Go
-        toolbarTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
-        toolbarTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
-        toolbarTextField.layer.cornerRadius = 8
-        toolbarTextField.delegate = self
-        toolbarTextField.text = url?.absoluteString
-        toolbarTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
-        toolbarTextField.font = UIFont(name: "HelveticaNeue-Light", size: 14)
-        view.addSubview(toolbarTextField)
-
-        cancelButton = UIButton()
-        cancelButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
-        cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 14)
-        cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
-        view.addSubview(cancelButton)
-
-        // Since the cancel button is next to toolbarTextField, and toolbarTextField can expand to the full width,
-        // give the cancel button a higher compression resistance priority to prevent it from being hidden.g
-        cancelButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
-
-        toolbarTextField.snp_makeConstraints { make in
-            // 28.5 matches the position of the URL bar in BrowserViewController. If we want this to be
-            // less fragile, we could pass the offset as a parameter to this view controller.
-            make.top.equalTo(self.view).offset(28.5)
-            make.left.equalTo(self.view).offset(8)
-        }
-
-        cancelButton.snp_makeConstraints { make in
-            make.left.equalTo(self.toolbarTextField.snp_right).offset(8)
-            make.centerY.equalTo(self.toolbarTextField)
-            make.right.equalTo(self.view).offset(-8)
-        }
-
         buttonContainerView.snp_makeConstraints { make in
-            make.top.equalTo(self.toolbarTextField.snp_bottom)
-            make.left.right.equalTo(self.view)
+            make.top.left.right.equalTo(self.view)
             make.height.equalTo(90)
         }
 
@@ -235,73 +169,9 @@ class TabBarViewController: UIViewController, UITextFieldDelegate, UrlViewContro
         }
     }
 
-    override func viewDidLayoutSubviews() {
-        // Due to an apparent bug on the iPhone 6 Plus (bug 1124310), calling textField.selectAll
-        // too early can cause a crash (which we do in response to making it the first responder).
-        // As a workaround, wait until the view layout has happened. Since this method is called
-        // for layout changes, we need to use a boolean flag to make sure we only handle it once.
-        // We could move this to viewDidAppear, but that results in a noticeable delay before the
-        // keyboard appears.
-        if !didInitialLayout {
-            didInitialLayout = true
-            toolbarTextField.becomeFirstResponder()
-        }
-    }
-
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        let text = textField.text as NSString
-        let searchText = text.stringByReplacingCharactersInRange(range, withString: string)
-        if searchText.isEmpty {
-            hideSearchController()
-        } else {
-            showSearchController()
-            searchController!.searchQuery = searchText
-        }
-
-        return true
-    }
-
-    func textFieldDidBeginEditing(textField: UITextField) {
-        textField.selectAll(nil)
-    }
-
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        let text = toolbarTextField.text
-        var url = uriFixup.getURL(text)
-
-        // If we can't make a valid URL, do a search query.
-        if url == nil {
-            url = profile.searchEngines.defaultEngine.searchURLForQuery(text)
-        }
-
-        // If we still don't have a valid URL, something is broken. Give up.
-        if url == nil {
-            println("Error handling URL entry: " + text)
-            return false
-        }
-
-        delegate?.didEnterURL(url!)
-        dismissViewControllerAnimated(true, completion: nil)
-        return false
-    }
-
-    func textFieldShouldClear(textField: UITextField) -> Bool {
-        hideSearchController()
-        return true
-    }
-
     func didClickUrl(url: NSURL) {
         delegate?.didEnterURL(url)
         dismissViewControllerAnimated(true, completion: nil)
-    }
-
-    func SELdidClickCancel() {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-
-    override func accessibilityPerformEscape() -> Bool {
-        self.SELdidClickCancel()
-        return true
     }
 }
 
@@ -375,17 +245,5 @@ private class ToolbarContainerView: UIView {
             view.frame = CGRect(origin: origin, size: view.frame.size)
             origin.x += ButtonSize.width
         }
-    }
-}
-
-private class ToolbarTextField: UITextField {
-    override func textRectForBounds(bounds: CGRect) -> CGRect {
-        let rect = super.textRectForBounds(bounds)
-        return rect.rectByInsetting(dx: 5, dy: 5)
-    }
-
-    override func editingRectForBounds(bounds: CGRect) -> CGRect {
-        let rect = super.editingRectForBounds(bounds)
-        return rect.rectByInsetting(dx: 5, dy: 5)
     }
 }
