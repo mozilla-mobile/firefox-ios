@@ -1,3 +1,4 @@
 github "Alamofire/Alamofire" "1.1.4"
 github "swisspol/GCDWebServer" "3.2.2"
+github "kif-framework/KIF" "v3.1.2"
 github "Masonry/Snap" "0.0.6"
