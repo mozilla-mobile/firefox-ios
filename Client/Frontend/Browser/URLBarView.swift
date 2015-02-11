@@ -7,14 +7,14 @@ import UIKit
 import Snappy
 
 protocol UrlBarDelegate {
-    func didEnterText(text: String)
-    func didSubmitText(text: String)
     func didClickAddTab()
     func didClickReaderMode()
     func didClickStop()
     func didClickReload()
     func didBeginEditing()
     func didEndEditing()
+    func didEnterText(text: String)
+    func didSubmitText(text: String)
 }
 
 class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
@@ -24,10 +24,11 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     private var editTextField: ToolbarTextField!
     private var tabsButton: UIButton!
     private var progressBar: UIProgressView!
+    private var cancelButton: UIButton!
 
     override init() {
+        // super.init() calls init(frame: CGRect)
         super.init()
-        initViews()
     }
 
     override init(frame: CGRect) {
@@ -57,7 +58,6 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         editTextField.delegate = self
         editTextField.font = UIFont(name: "HelveticaNeue-Light", size: 14)
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
-        insertSubview(editTextField, belowSubview: locationView)
 
         progressBar = UIProgressView()
         self.progressBar.trackTintColor = self.backgroundColor
@@ -77,14 +77,17 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         tabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(tabsButton)
 
+        cancelButton = UIButton()
+        cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
+        cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
+        cancelButton.hidden = true
+        self.addSubview(cancelButton)
+
         self.locationView.snp_remakeConstraints { make in
             make.left.equalTo(self.snp_left).offset(DefaultPadding)
             make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
-        }
-
-        self.editTextField.snp_remakeConstraints { make in
-            make.edges.equalTo(self.locationView)
-            return
         }
 
         self.tabsButton.snp_remakeConstraints { make in
@@ -97,6 +100,11 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         self.progressBar.snp_remakeConstraints { make in
             make.centerY.equalTo(self.snp_bottom)
             make.width.equalTo(self)
+        }
+
+        cancelButton.snp_makeConstraints { make in
+            make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
+            make.right.equalTo(self).offset(-8)
         }
     }
 
@@ -140,9 +148,16 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
 
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
         delegate?.didBeginEditing()
+
         insertSubview(editTextField, aboveSubview: locationView)
+        editTextField.snp_remakeConstraints { make in
+            make.edges.equalTo(self.locationView)
+            return
+        }
         editTextField.text = locationView.url?.absoluteString
-        editTextField.selectAll(nil)
+        editTextField.becomeFirstResponder()
+
+        updateVisibleViews(editing: true)
     }
 
     func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView) {
@@ -166,6 +181,10 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         return true
     }
 
+    func textFieldDidBeginEditing(textField: UITextField) {
+        textField.selectAll(nil)
+    }
+
     func textFieldShouldClear(textField: UITextField) -> Bool {
         delegate?.didEnterText("")
         return true
@@ -173,8 +192,25 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
 
     func finishEditing() {
         editTextField.resignFirstResponder()
-        insertSubview(editTextField, belowSubview: locationView)
+        updateVisibleViews(editing: false)
         delegate?.didEndEditing()
+    }
+
+    private func updateVisibleViews(#editing: Bool) {
+        locationView.hidden = editing
+        tabsButton.hidden = editing
+        progressBar.hidden = editing
+        editTextField.hidden = !editing
+        cancelButton.hidden = !editing
+    }
+
+    func SELdidClickCancel() {
+        finishEditing()
+    }
+
+    override func accessibilityPerformEscape() -> Bool {
+        self.SELdidClickCancel()
+        return true
     }
 }
 
