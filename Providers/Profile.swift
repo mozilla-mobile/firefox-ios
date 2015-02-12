@@ -83,6 +83,7 @@ protocol Profile {
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
     var history: History { get }
+    var favicons: Favicons { get }
     var readingList: ReadingList { get }
 
     // Because we can't test for whether this is an AccountProfile.
