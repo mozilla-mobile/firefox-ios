@@ -25,8 +25,6 @@
 		0BCFBBB41A7769A30087E26D /* JoinedHistoryVisitsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BCB8D38CE6E6F5F5F2DE /* JoinedHistoryVisitsTable.swift */; };
 		0BCFBBB51A7769B70087E26D /* VisitsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59B22E909B6CAC95DBE879 /* VisitsTable.swift */; };
 		0BCFBBB81A776A200087E26D /* MockFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCFBBB71A776A200087E26D /* MockFiles.swift */; };
-		0BF42D471A7C558000889E28 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA497811A7B094B004C8E17 /* Visit.swift */; };
-		0BF42D481A7C55D200889E28 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4D61A69A28000A406E2 /* Site.swift */; };
 		0BF42D3E1A7C148F00889E28 /* Favicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D3D1A7C148F00889E28 /* Favicons.swift */; };
 		0BF42D401A7C18CD00889E28 /* SQLFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D3F1A7C18CD00889E28 /* SQLFavicons.swift */; };
 		0BF42D421A7C31E300889E28 /* JoinedFaviconsHistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D411A7C31E300889E28 /* JoinedFaviconsHistoryTable.swift */; };
@@ -473,7 +471,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -501,6 +500,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -572,6 +572,83 @@
 			};
 			name = FennecAurora;
 		};
+		E4D438F51A8D3197003FCF55 /* FennecNightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/modules";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = FennecNightly;
+		};
+		E4D438F61A8D3197003FCF55 /* FennecNightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/rnewman/moz/git/firefox-ios/SQLite/build/Debug-iphoneos",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Client-fhgufntxvuxtwfbmkckrmnagytst/Build/Products/Debug-iphoneos",
+				);
+				INFOPLIST_FILE = Storage/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/modules";
+			};
+			name = FennecNightly;
+		};
+		E4D438F71A8D3197003FCF55 /* FennecNightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = StorageTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = FennecNightly;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -580,6 +657,7 @@
 			buildConfigurations = (
 				282DA4A91A699E0300A406E2 /* Debug */,
 				282DA4AA1A699E0300A406E2 /* FennecAurora */,
+				E4D438F51A8D3197003FCF55 /* FennecNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = FennecAurora;
@@ -589,6 +667,7 @@
 			buildConfigurations = (
 				282DA4AC1A699E0300A406E2 /* Debug */,
 				282DA4AD1A699E0300A406E2 /* FennecAurora */,
+				E4D438F61A8D3197003FCF55 /* FennecNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = FennecAurora;
@@ -598,6 +677,7 @@
 			buildConfigurations = (
 				282DA4AF1A699E0300A406E2 /* Debug */,
 				282DA4B01A699E0300A406E2 /* FennecAurora */,
+				E4D438F71A8D3197003FCF55 /* FennecNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = FennecAurora;
