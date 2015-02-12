@@ -9,10 +9,14 @@ import Storage
 class TestBookmarks : AccountTest {
     func testBookmarks() {
         withTestAccount { account -> Void in
-            let expectation = self.expectationWithDescription("asynchronous request")
+            for i in 0...10 {
+                let bookmark = ShareItem(url: "http://www.example.com/\(i)", title: "Example \(i)")
+                account.bookmarks.shareItem(bookmark)
+            }
 
-            MockAccountProfile().bookmarks.modelForFolder("mobile", success: { (model: BookmarksModel) in
-                XCTAssert(model.current.count == 11, "We create 11 stub bookmarks.")
+            let expectation = self.expectationWithDescription("asynchronous request")
+            account.bookmarks.modelForRoot({ (model: BookmarksModel) in
+                XCTAssertEqual(model.current.count, 11, "We create \(model.current.count) stub bookmarks.")
                 let bookmark = model.current[0]
                 XCTAssertTrue(bookmark is BookmarkItem)
                 XCTAssertEqual((bookmark as BookmarkItem).url, "http://www.example.com/0", "Example URL found.")

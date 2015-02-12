@@ -5,9 +5,6 @@
 import Foundation
 import UIKit
 
-let documentsFolder = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-let path = documentsFolder.stringByAppendingPathComponent("test.sqlite")
-
 /*
  * This protocol is used for instantiating new tab panels. It ensures...
  */
@@ -31,27 +28,27 @@ struct ToolbarItem {
  */
 private var Controllers: Protector<[ToolbarItem]> = Protector(name: "Controllers", item: [
     ToolbarItem(title: "Tabs", imageName: "tabs", generator: { (profile: Profile) -> UIViewController in
-        let controller = TabsViewController(nibName: nil, bundle: nil)
+        let controller = TabsPanel(nibName: nil, bundle: nil)
         controller.profile = profile
         return controller
     }, enabled: true),
     ToolbarItem(title: "Bookmarks", imageName: "bookmarks", generator: { (profile: Profile) -> UIViewController in
-        let controller = BookmarksViewController(nibName: nil, bundle: nil)
+        let controller = BookmarksPanel(nibName: nil, bundle: nil)
         controller.profile = profile
         return controller
     }, enabled: true),
     ToolbarItem(title: "History", imageName: "history", generator: { (profile: Profile) -> UIViewController in
-        var controller = HistoryViewController(nibName: nil, bundle: nil)
+        var controller = HistoryPanel(nibName: nil, bundle: nil)
         controller.profile = profile
         return controller
     }, enabled: true),
     ToolbarItem(title: "Reader", imageName: "reader", generator: { (profile: Profile) -> UIViewController in
-        let controller = SiteTableViewController(nibName: nil, bundle: nil)
+        let controller = ReaderPanel(nibName: nil, bundle: nil)
         controller.profile = profile
         return controller
     }, enabled: true),
     ToolbarItem(title: "Settings", imageName: "settings",  generator: { (profile: Profile) -> UIViewController in
-        let controller = SettingsViewController(nibName: "SettingsViewController", bundle: nil)
+        let controller = SettingsPanel(nibName: "SettingsPanel", bundle: nil)
         controller.profile = profile
         return controller
     }, enabled: true),
@@ -80,15 +77,15 @@ class Panels : SequenceType {
     private var profile: Profile
     private var PanelsOrderKey : String = "PANELS_ORDER"
     private var PanelsEnabledKey : String = "PANELS_ENABLED"
-    
+
     init(profile : Profile) {
         self.profile = profile;
-        
+
         // Prefs are stored in a static cache, so we only want to do this setup
         // the first time a Panels object is created
         if (!setup) {
             let prefs = profile.prefs
-            
+
             if var enabled = prefs.arrayForKey(PanelsEnabledKey) as? [Bool] {
                 if var order = prefs.stringArrayForKey(PanelsOrderKey) as? [String] {
                     // Now we loop through the panels and sort them based on the order stored
@@ -108,7 +105,7 @@ class Panels : SequenceType {
             setup = true;
         }
     }
-    
+
     /*
      * Returns a list of enabled items. This list isn't live. If you're using it,
      * you should also register for notifications of changes so that you can obtain a more
@@ -126,7 +123,7 @@ class Panels : SequenceType {
         return res
     }
 
-    /* 
+    /*
      * Moves an item in the list..
      */
     func moveItem(from: Int, to: Int) {
@@ -145,7 +142,7 @@ class Panels : SequenceType {
         let notif = NSNotification(name: PanelsNotificationName, object: nil);
         NSNotificationCenter.defaultCenter().postNotification(notif)
     }
-    
+
     /*
      * Enables or disables the panel at an index
      * TODO: This would be nicer if just calling panel.enabled = X; did the same thing
@@ -191,7 +188,7 @@ class Panels : SequenceType {
         }
         return count
     }
-    
+
     subscript(index: Int) -> ToolbarItem? {
         var item : ToolbarItem?
         Controllers.withReadLock { protected in

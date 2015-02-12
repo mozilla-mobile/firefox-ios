@@ -6,7 +6,6 @@ import Foundation
 import WebKit
 
 protocol BrowserHelper {
-    init?(browser: Browser)
     class func name() -> String
     func scriptMessageHandlerName() -> String?
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
@@ -34,6 +33,10 @@ class Browser: NSObject, WKScriptMessageHandler {
 
     var url: NSURL? {
         return webView.URL?
+    }
+
+    var title: String? {
+        return webView.title
     }
 
     var canGoBack: Bool {

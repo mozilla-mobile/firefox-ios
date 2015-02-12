@@ -4,7 +4,7 @@
 
 import Foundation
 
-let TableNameHistory = "history"
+private let TableNameHistory = "history"
 
 // NOTE: If you add a new Table, make sure you update the version number in BrowserDB.swift!
 
@@ -55,10 +55,34 @@ class HistoryTable<T>: GenericTable<Site> {
 
     override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
-        if let filter = options?.filter {
+        if let filter: AnyObject = options?.filter {
             args.append("%\(filter)%")
             return ("SELECT id, guid, url, title FROM \(TableNameHistory) WHERE url LIKE ?", args)
         }
         return ("SELECT id, guid, url, title FROM \(TableNameHistory)", args)
+    }
+
+    func getIDFor(db: SQLiteDBConnection, obj: Site) -> Int? {
+        let opts = QueryOptions()
+        opts.filter = obj.url
+
+        let cursor = query(db, options: opts)
+        if (cursor.count != 1) {
+            return nil
+        }
+        return (cursor[0] as Site).id
+    }
+
+    func insertOrUpdate(db: SQLiteDBConnection, obj: Site) {
+        var err: NSError? = nil
+        let id = self.insert(db, item: obj, err: &err)
+        if id >= 0 {
+            obj.id = id
+            return
+        }
+
+        if obj.id == nil {
+            obj.id = getIDFor(db, obj: obj)
+        }
     }
 }

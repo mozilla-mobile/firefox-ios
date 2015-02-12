@@ -4,7 +4,7 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController, ToolbarViewProtocol,
+class SettingsPanel: UIViewController, ToolbarViewProtocol,
         UITableViewDataSource, UITableViewDelegate, FxASignInViewControllerDelegate
 {
     @IBOutlet weak var avatarImageView: UIImageView!
@@ -20,27 +20,27 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol,
     lazy var panels: Panels = {
         return Panels(profile: self.profile)
     }()
-    
+
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
     }
-    
+
     override func viewDidLoad() {
         avatarImageView.layer.cornerRadius = 50
         avatarImageView.layer.masksToBounds = true
         avatarImageView.isAccessibilityElement = true
         avatarImageView.accessibilityLabel = NSLocalizedString("Avatar", comment: "")
-        
+
         settingsTableView.delegate = self
         settingsTableView.dataSource = self
         settingsTableView.separatorStyle = UITableViewCellSeparatorStyle.None
         settingsTableView.separatorInset = UIEdgeInsetsZero
         settingsTableView.editing = true
         settingsTableView.allowsSelectionDuringEditing = true
-        
+
         settingsTableView.backgroundColor = view.backgroundColor
         settingsTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: SETTING_CELL_ID)
-        
+
         signOutButton.layer.borderColor = UIColor.whiteColor().CGColor
         signOutButton.layer.borderWidth = 1.0
         signOutButton.layer.cornerRadius = 6.0
@@ -78,7 +78,7 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol,
 
         return indexPath;
     }
-    
+
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Subtract one so that we don't show our own panel
         return panels.count - 1;
@@ -86,7 +86,7 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol,
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(SETTING_CELL_ID, forIndexPath: indexPath) as UITableViewCell
-        
+
         if var item = panels[indexPath.item] {
             cell.textLabel?.text = item.title
             cell.textLabel?.font = UIFont(name: "FiraSans-Light", size: cell.textLabel?.font.pointSize ?? 0)
@@ -94,18 +94,18 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol,
             cell.backgroundColor = self.view.backgroundColor
             cell.separatorInset = UIEdgeInsetsZero
             cell.selectionStyle = UITableViewCellSelectionStyle.None
-            
+
             let toggle: UISwitch = UISwitch()
             toggle.on = item.enabled;
             cell.editingAccessoryView = toggle
         }
         return cell
     }
-    
+
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
-    
+
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
@@ -114,15 +114,15 @@ class SettingsViewController: UIViewController, ToolbarViewProtocol,
         panels.moveItem(sourceIndexPath.item, to: destinationIndexPath.item)
         settingsTableView.setNeedsDisplay();
     }
-    
+
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
         return UITableViewCellEditingStyle.None
     }
-    
+
     func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return false
     }
-    
+
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if cell.editing {
             for v in cell.subviews as [UIView] {

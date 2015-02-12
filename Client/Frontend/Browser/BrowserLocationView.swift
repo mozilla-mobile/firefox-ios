@@ -27,7 +27,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.whiteColor()
-        self.layer.cornerRadius = 5
+        self.layer.cornerRadius = 3
 
         lockImageView = UIImageView(image: UIImage(named: "lock_verified.png"))
         lockImageView.hidden = false
@@ -127,14 +127,16 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     var url: NSURL? {
         didSet {
             lockImageView.hidden = (url?.scheme != "https")
-            if let t = url?.absoluteString {
-                if t.hasPrefix("http://") {
-                    locationLabel.text = t.substringFromIndex(advance(t.startIndex, 7))
-                } else if t.hasPrefix("https://") {
-                    locationLabel.text = t.substringFromIndex(advance(t.startIndex, 8))
-                } else {
-                    locationLabel.text = t
-                }
+            let t = url?.absoluteString
+            if t?.hasPrefix("http://") ?? false {
+                locationLabel.text = t!.substringFromIndex(advance(t!.startIndex, 7))
+            } else if t?.hasPrefix("https://") ?? false {
+                locationLabel.text = t!.substringFromIndex(advance(t!.startIndex, 8))
+            } else if t == "about:home" {
+                let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
+                locationLabel.attributedText = NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+            } else {
+                locationLabel.text = t
             }
             makeConstraints()
         }

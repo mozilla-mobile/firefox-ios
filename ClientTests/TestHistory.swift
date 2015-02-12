@@ -94,7 +94,6 @@ class TestHistory : AccountTest {
             self.checkVisits(h, url: "url1")
             self.checkVisits(h, url: "url2")
             self.clear(h)
-            account.files.remove("browser.db")
         }
     }
 
@@ -113,7 +112,6 @@ class TestHistory : AccountTest {
                 }
                 self.clear(h)
             })
-            account.files.remove("browser.db")
         }
     }
 
@@ -136,7 +134,6 @@ class TestHistory : AccountTest {
             })
 
             self.clear(h)
-            account.files.remove("browser.db")
         }
     }
 
@@ -159,8 +156,6 @@ class TestHistory : AccountTest {
                 })
             }
             self.waitForExpectationsWithTimeout(10, handler: nil)
-
-            account.files.remove("browser.db")
         }
     }
 
@@ -181,8 +176,6 @@ class TestHistory : AccountTest {
                 })
             }
             self.waitForExpectationsWithTimeout(10, handler: nil)
-
-            account.files.remove("browser.db")
         }
     }
 

@@ -13,10 +13,7 @@ class ProfileFileAccessor : FileAccessor {
         self.profile = profile
     }
 
-    private func getDir() -> String? {
-        let basePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0] as String
-        let path = basePath.stringByAppendingPathComponent("profile.\(profile.localName())")
-
+    private func createDir(path: String) -> String? {
         if !NSFileManager.defaultManager().fileExistsAtPath(path) {
             var err: NSError? = nil
             if !NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil, error: &err) {
@@ -24,13 +21,26 @@ class ProfileFileAccessor : FileAccessor {
                 return nil
             }
         }
-
         return path
     }
 
-    func move(src: String, dest: String) -> Bool {
-        if let f = get(src) {
-            if let f2 = get(dest) {
+    func getDir(name: String?, basePath: String? = nil) -> String? {
+        var path = basePath
+        if path == nil {
+        	path = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0] as? String
+            path = createDir(path!.stringByAppendingPathComponent(profileDirName))
+
+        }
+
+        if let name = name {
+            path = createDir(path!.stringByAppendingPathComponent(name))
+        }
+        return path!
+    }
+
+    func move(src: String, srcBasePath: String? = nil, dest: String, destBasePath: String? = nil) -> Bool {
+        if let f = self.get(src, basePath: nil) {
+            if let f2 = self.get(dest) {
                 return NSFileManager.defaultManager().moveItemAtPath(f, toPath: f2, error: nil)
             }
         }
@@ -38,19 +48,24 @@ class ProfileFileAccessor : FileAccessor {
         return false
     }
 
-    func get(filename: String) -> String? {
-        return getDir()?.stringByAppendingPathComponent(filename)
+    private var profileDirName: String {
+        return "profile.\(profile.localName())"
     }
 
-    func remove(filename: String) {
+    func get(filename: String, basePath: String? = nil) -> String? {
+        return getDir(nil, basePath: basePath)?.stringByAppendingPathComponent(filename)
+    }
+
+
+    func remove(filename: String, basePath: String? = nil) {
         let fileManager = NSFileManager.defaultManager()
-        if var file = get(filename) {
+        if var file = self.get(filename) {
             fileManager.removeItemAtPath(file, error: nil)
         }
     }
 
-    func exists(filename: String) -> Bool {
-        if var file = get(filename) {
+    func exists(filename: String, basePath: String? = nil) -> Bool {
+        if var file = self.get(filename, basePath: basePath) {
             return NSFileManager.defaultManager().fileExistsAtPath(file)
         }
         return false
@@ -101,7 +116,7 @@ public class MockAccountProfile: Profile, AccountProfile {
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
-        return MockMemoryBookmarksStore()
+        return BookmarksSqliteFactory(files: self.files)
     } ()
 
     lazy var clients: Clients = {
@@ -130,6 +145,10 @@ public class MockAccountProfile: Profile, AccountProfile {
 
     func logout() {
     }
+
+    lazy var favicons: Favicons = {
+        return SQLiteFavicons(files: self.files)
+    }()
 
     lazy var history: History = {
         return SQLiteHistory(files: self.files)
@@ -210,15 +229,9 @@ public class RESTAccountProfile: Profile, AccountProfile {
         logoutCallback(profile: self)
     }
 
-    var _bookmarks: protocol<BookmarksModelFactory, ShareToDestination>? = nil
-    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> {
-        if (_bookmarks == nil) {
-            // Stubbed out to populate data from server.
-            // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
-            _bookmarks = BookmarksRESTModelFactory(profile: self)
-        }
-        return _bookmarks!
-    }
+    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
+        return BookmarksSqliteFactory(files: self.files)
+    }()
 
     lazy var searchEngines: SearchEngines = {
         return SearchEngines()
@@ -235,6 +248,10 @@ public class RESTAccountProfile: Profile, AccountProfile {
         }
         return _clients!
     }
+
+    lazy var favicons: Favicons = {
+        return SQLiteFavicons(files: self.files)
+    }()
 
     // lazy var ReadingList readingList
 

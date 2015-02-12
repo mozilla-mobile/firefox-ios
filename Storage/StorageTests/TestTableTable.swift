@@ -5,7 +5,7 @@
 import UIKit
 import XCTest
 
-class TestTableTable: XCTestCase {
+class TestSchemaTable: XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testTable() {
         let files = MockFiles()
@@ -17,7 +17,7 @@ class TestTableTable: XCTestCase {
 
         // Now make sure the item is in the table-table
         var err: NSError? = nil
-        let table = TableTable<TableInfo>()
+        let table = SchemaTable<TableInfo>()
         var cursor = db.query(&err, callback: { (connection, err) -> Cursor in
             return table.query(connection, options: QueryOptions(filter: testTable.name))
         })

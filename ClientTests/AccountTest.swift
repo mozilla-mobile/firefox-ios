@@ -66,4 +66,10 @@ class AccountTest: XCTestCase {
         callback(profile: prof)
         prof.logout()
     }
+
+    override func tearDown() {
+        withTestAccount { account -> Void in
+            account.files.remove("browser.db", basePath: nil)
+        }
+    }
 }

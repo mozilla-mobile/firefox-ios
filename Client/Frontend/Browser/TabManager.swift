@@ -5,15 +5,15 @@
 import Foundation
 import WebKit
 
-protocol TabManagerDelegate {
-    func didSelectedTabChange(selected: Browser?, previous: Browser?)
-    func didCreateTab(tab: Browser)
-    func didAddTab(tab: Browser)
-    func didRemoveTab(tab: Browser)
+protocol TabManagerDelegate: class {
+    func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?)
+    func tabManager(tabManager: TabManager, didCreateTab tab: Browser)
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser)
+    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser)
 }
 
 class TabManager {
-    var delegate: TabManagerDelegate? = nil
+    weak var delegate: TabManagerDelegate? = nil
 
     private var tabs: [Browser] = []
     private var selectedIndex = -1
@@ -56,7 +56,7 @@ class TabManager {
 
         assert(tab === selectedTab, "Expected tab is selected")
 
-        delegate?.didSelectedTabChange(tab, previous: previous)
+        delegate?.tabManager(self, didSelectedTabChange: tab, previous: previous)
     }
 
     func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration = WKWebViewConfiguration()) -> Browser {
@@ -65,9 +65,9 @@ class TabManager {
         }
 
         let tab = Browser(configuration: configuration)
-        delegate?.didCreateTab(tab)
+        delegate?.tabManager(self, didCreateTab: tab)
         tabs.append(tab)
-        delegate?.didAddTab(tab)
+        delegate?.tabManager(self, didAddTab: tab)
         tab.loadRequest(request)
         selectTab(tab)
         return tab
@@ -96,7 +96,7 @@ class TabManager {
         }
         assert(count == prevCount - 1, "Tab removed")
 
-        delegate?.didRemoveTab(tab)
+        delegate?.tabManager(self, didRemoveTab: tab)
     }
 
     private func getIndex(tab: Browser) -> Int {

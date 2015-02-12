@@ -5,8 +5,9 @@
 import Foundation
 
 public protocol FileAccessor {
-    func get(filename: String) -> String?
-    func remove(filename: String)
-    func move(src: String, dest: String) -> Bool
-    func exists(filename: String) -> Bool
+    func getDir(name: String?, basePath: String?) -> String?
+    func get(path: String, basePath: String?) -> String?
+    func remove(filename: String, basePath: String?)
+    func move(src: String, srcBasePath: String?, dest: String, destBasePath: String?) -> Bool
+    func exists(filename: String, basePath: String?) -> Bool
 }

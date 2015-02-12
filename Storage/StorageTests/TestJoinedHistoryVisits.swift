@@ -94,8 +94,8 @@ class TestJoinedHistoryVisits : XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testJoinedHistoryVisitsTable() {
         let files = MockFiles()
-        self.db = SwiftData(filename: files.get("test.db")!)
-        let h = JoinedHistoryVisitsTable()
+        self.db = SwiftData(filename: files.get("test.db", basePath: nil)!)
+        let h = JoinedHistoryVisitsTable(files: files)
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
             h.create(db, version: 2)
@@ -120,7 +120,6 @@ class TestJoinedHistoryVisits : XCTestCase {
         self.addSite(h, url: "url1", title: "title1 alt")
         self.checkSites(h, options: nil, urls: ["url1": "title1 alt", "url2": "title2"])
 
-        
         // Adding an visit with an existing site should update the title
         let site2 = Site(url: site.url, title: "title1 second alt")
         let visit = self.addVisit(h, site: site2)
@@ -143,6 +142,6 @@ class TestJoinedHistoryVisits : XCTestCase {
         self.clear(h)
         self.checkSites(h, options: nil, urls: [String: String]())
         
-        files.remove("test.db")
+        files.remove("test.db", basePath: nil)
     }
 }

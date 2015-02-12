@@ -6,15 +6,17 @@ import Foundation
 import UIKit
 import Snappy
 
-protocol BrowserToolbarDelegate {
-    func didClickBack()
-    func didClickForward()
-    func didLongPressBack()
-    func didLongPressForward()
+protocol BrowserToolbarDelegate: class {
+    func browserToolbarDidPressBack(browserToolbar: BrowserToolbar)
+    func browserToolbarDidPressForward(browserToolbar: BrowserToolbar)
+    func browserToolbarDidLongPressBack(browserToolbar: BrowserToolbar)
+    func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbar)
+    func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbar)
+    func browserToolbarDidPressShare(browserToolbar: BrowserToolbar)
 }
 
 class BrowserToolbar: UIView {
-    var browserToolbarDelegate: BrowserToolbarDelegate?
+    weak var browserToolbarDelegate: BrowserToolbarDelegate?
 
     private let shareButton: UIButton
     private let bookmarkButton: UIButton
@@ -46,10 +48,10 @@ class BrowserToolbar: UIView {
         forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
 
         shareButton.setImage(UIImage(named: "send"), forState: .Normal)
-        shareButton.enabled = false
+        shareButton.addTarget(self, action: "SELdidClickShare", forControlEvents: UIControlEvents.TouchUpInside)
 
         bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
-        bookmarkButton.enabled = false
+        bookmarkButton.addTarget(self, action: "SELdidClickBookmark", forControlEvents: UIControlEvents.TouchUpInside)
 
         addButtons(backButton, forwardButton, shareButton, bookmarkButton)
     }
@@ -106,23 +108,39 @@ class BrowserToolbar: UIView {
         forwardButton.enabled = canGoForward
     }
 
+    func updateBookmarkStatus(isBookmarked: Bool) {
+        if isBookmarked {
+            bookmarkButton.imageView?.image = UIImage(named: "bookmarked")
+        } else {
+            bookmarkButton.imageView?.image = UIImage(named: "bookmark")
+        }
+    }
+
     func SELdidClickBack() {
-        browserToolbarDelegate?.didClickBack()
+        browserToolbarDelegate?.browserToolbarDidPressBack(self)
     }
 
     func SELdidLongPressBack(recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.Began {
-            browserToolbarDelegate?.didLongPressBack()
+            browserToolbarDelegate?.browserToolbarDidLongPressBack(self)
         }
     }
 
+    func SELdidClickShare() {
+        browserToolbarDelegate?.browserToolbarDidPressShare(self)
+    }
+
     func SELdidClickForward() {
-        browserToolbarDelegate?.didClickForward()
+        browserToolbarDelegate?.browserToolbarDidPressForward(self)
     }
 
     func SELdidLongPressForward(recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.Began {
-            browserToolbarDelegate?.didLongPressForward()
+            browserToolbarDelegate?.browserToolbarDidLongPressForward(self)
         }
+    }
+
+    func SELdidClickBookmark() {
+        browserToolbarDelegate?.browserToolbarDidPressBookmark(self)
     }
 }

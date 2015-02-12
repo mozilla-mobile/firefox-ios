@@ -1,16 +1,16 @@
 import Foundation
 import XCTest
 
-class TestFavcionsTable : XCTestCase {
+class TestJoinedFaviconsTable : XCTestCase {
     var db: SwiftData!
 
-    private func addIcon(favicons: FaviconsTable<Favicon>, url: String, s: Bool = true) -> Favicon {
+    private func addIcon(favicons: JoinedFaviconsHistoryTable<(Site, Favicon)>, site: Site, url: String, s: Bool = true) -> Favicon {
         var inserted = -1;
         var icon: Favicon!
         db.withConnection(.ReadWrite) { connection -> NSError? in
             icon = Favicon(url: url, type: IconType.Icon)
             var err: NSError? = nil
-            inserted = favicons.insert(connection, item: icon, err: &err)
+            inserted = favicons.insert(connection, item: (site, icon), err: &err)
             return err
         }
         if s {
@@ -21,17 +21,17 @@ class TestFavcionsTable : XCTestCase {
         return icon
     }
 
-    private func checkIcons(favicons: FaviconsTable<Favicon>, options: QueryOptions?, urls: [String], s: Bool = true) {
+    private func checkIcons(favicons: JoinedFaviconsHistoryTable<(Site, Favicon)>, options: QueryOptions?, urls: [String], s: Bool = true) {
         db.withConnection(.ReadOnly) { connection -> NSError? in
             var cursor = favicons.query(connection, options: options)
             XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
             XCTAssertEqual(cursor.count, urls.count, "cursor has right num of entries")
 
             for index in 0..<cursor.count {
-                if let s = cursor[index] as? Favicon {
+                if let (site, favicon) = cursor[index] as? (Site, Favicon) {
                     XCTAssertNotNil(s, "cursor has an icon for entry")
-                    let index = find(urls, s.url)
-                    XCTAssert(index > -1, "Found right url")
+                    let index = find(urls, favicon.url)
+                    XCTAssert(index > -1, "Found right url \(favicon.url)")
                 } else {
                     XCTAssertFalse(true, "Should not be nil...")
                 }
@@ -40,7 +40,7 @@ class TestFavcionsTable : XCTestCase {
         }
     }
 
-    private func clear(favicons: FaviconsTable<Favicon>, icon: Favicon? = nil, s: Bool = true) {
+    private func clear(favicons: JoinedFaviconsHistoryTable<(Site, Favicon)>, icon: (Site?, Favicon?)? = nil, s: Bool = true) {
         var deleted = -1;
         db.withConnection(.ReadWrite) { connection -> NSError? in
             var err: NSError? = nil
@@ -55,30 +55,33 @@ class TestFavcionsTable : XCTestCase {
     }
 
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
-    func testFaviconsTable() {
+    func testJoinedFaviconsTable() {
         let files = MockFiles()
         self.db = SwiftData(filename: files.get("test.db", basePath: nil)!)
-        let f = FaviconsTable<Favicon>(files: files)
+        let f = JoinedFaviconsHistoryTable<(Site, Favicon)>(files: files)
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
             f.create(db, version: 1)
             return nil
         })
 
-        let icon = self.addIcon(f, url: "url1")
-        self.addIcon(f, url: "url1", s: false)
-        self.addIcon(f, url: "url2")
-        self.addIcon(f, url: "url2", s: false)
+        let site1 = Site(url: "site1", title: "title1")
+        let site2 = Site(url: "site2", title: "title2")
+        let icon = self.addIcon(f, site: site1, url: "url1-1")
+        self.addIcon(f, site: site1, url: "url1-2")
+        self.addIcon(f, site: site2, url: "url2-1")
+        self.addIcon(f, site: site2, url: "url2-2")
 
-        self.checkIcons(f, options: nil, urls: ["url1", "url2"])
+        self.checkIcons(f, options: nil, urls: ["url1-1", "url1-2", "url2-1", "url2-2"])
 
         let options = QueryOptions()
-        options.filter = "url2"
-        self.checkIcons(f, options: options, urls: ["url2"])
+        options.filter = "site1"
+        self.checkIcons(f, options: options, urls: ["url1-1", "url1-2"])
 
-        var site = Favicon(url: "url1", type: IconType.Icon)
-        self.clear(f, icon: icon, s: true)
-        self.checkIcons(f, options: nil, urls: ["url2"])
+        self.clear(f, icon: (nil, icon), s: true)
+        self.checkIcons(f, options: options, urls: ["url1-2"])
+        self.clear(f, icon: (site1, nil), s: true)
+        self.checkIcons(f, options: options, urls: [String]())
         self.clear(f)
         self.checkIcons(f, options: nil, urls: [String]())
         

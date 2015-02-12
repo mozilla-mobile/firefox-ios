@@ -41,8 +41,11 @@ class GenericTable<T>: Table {
     }
 
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
-        let err = db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (\(rows))")
-        return err == nil
+        if let err = db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (\(rows))") {
+            println("Error creating \(name) - \(err)")
+            return false
+        }
+        return true
     }
 
     func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
@@ -57,7 +60,7 @@ class GenericTable<T>: Table {
 
     func drop(db: SQLiteDBConnection) -> Bool {
         let sqlStr = "DROP TABLE IF EXISTS ?"
-        let args: [AnyObject] = [name]
+        let args: [AnyObject?] = [name]
         let err = db.executeChange(sqlStr, withArgs: args)
         return err == nil
     }
@@ -71,6 +74,7 @@ class GenericTable<T>: Table {
                     return -1
                 }
 
+                debug("Insert \(query) \(args) = \(db.lastInsertedRowID)")
                 return db.lastInsertedRowID
             }
         }

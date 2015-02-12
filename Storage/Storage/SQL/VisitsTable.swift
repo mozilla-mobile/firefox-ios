@@ -4,7 +4,7 @@
 
 import Foundation
 
-let TableNameVisits = "visits"
+private let TableNameVisits = "visits"
 
 // NOTE: If you add a new Table, make sure you update the version number in BrowserDB.swift!
 // This is our default visits store.

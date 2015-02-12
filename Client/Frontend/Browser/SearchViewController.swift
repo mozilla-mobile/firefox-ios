@@ -8,15 +8,13 @@ import UIKit
 private let ReuseIdentifier = "cell"
 private let SuggestionsLimitCount = 3
 
-// A delegate to support clicking on rows in the view controller
-// This needs to be accessible to objc for UIViewControllers to call it
 @objc
-protocol UrlViewControllerDelegate: class {
-    func didClickUrl(url: NSURL)
+protocol SearchViewControllerDelegate: class {
+    func searchViewController(searchViewController: SearchViewController, didSubmitURL url: NSURL)
 }
 
 class SearchViewController: UIViewController {
-    weak var delegate: UrlViewControllerDelegate?
+    weak var delegate: SearchViewControllerDelegate?
     private var tableView = UITableView()
     private var sortedEngines = [OpenSearchEngine]()
     private var suggestClient: SearchSuggestClient?
@@ -161,7 +159,7 @@ extension SearchViewController: UITableViewDelegate {
         }
 
         if let url = url {
-            delegate?.didClickUrl(url)
+            delegate?.searchViewController(self, didSubmitURL: url)
         }
     }
 }

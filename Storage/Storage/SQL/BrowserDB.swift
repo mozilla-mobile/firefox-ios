@@ -9,6 +9,10 @@ public enum QuerySort {
 }
 
 public enum FilterType {
+    case ExactUrl
+    case Url
+    case Guid
+    case Id
     case None
 }
 
@@ -48,7 +52,7 @@ class BrowserDB {
 
     init?(files: FileAccessor) {
         self.files = files
-        db = SwiftData(filename: files.get(FileName)!)
+        db = SwiftData(filename: files.get(FileName, basePath: nil)!)
         self.schemaTable = SchemaTable()
         self.createOrUpdate(self.schemaTable)
     }
@@ -122,10 +126,9 @@ class BrowserDB {
             // attached and expecting a working DB, but at least we should be able to restart
             if !success {
                 println("Couldn't create or update \(table.name)")
-                self.files.move(self.FileName, dest: "\(self.FileName).bak")
+                self.files.move(self.FileName, srcBasePath: nil, dest: "\(self.FileName).bak", destBasePath: nil)
                 success = self.createTable(connection, table: table)
             }
-
             return success
         })
 
