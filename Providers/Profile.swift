@@ -68,6 +68,7 @@ protocol Profile {
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
     var history: History { get }
+    var readingList: ReadingList { get }
 
     // Because we can't test for whether this is an AccountProfile.
     // TODO: probably Profile should own an Account.
@@ -134,6 +135,9 @@ public class MockAccountProfile: Profile, AccountProfile {
         return SQLiteHistory(files: self.files)
     } ()
 
+    lazy var readingList: ReadingList = {
+        return SQLiteReadingList(files: self.files)
+    }()
 }
 
 public class RESTAccountProfile: Profile, AccountProfile {
@@ -242,4 +246,7 @@ public class RESTAccountProfile: Profile, AccountProfile {
         return SQLiteHistory(files: self.files)
     }()
 
+    lazy var readingList: ReadingList = {
+        return SQLiteReadingList(files: self.files)
+    }()
 }

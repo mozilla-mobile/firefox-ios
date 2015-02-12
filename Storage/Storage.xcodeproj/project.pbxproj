@@ -42,6 +42,14 @@
 		4A59BF0BBF50FC218A6D1143 /* BrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF61F0D956D2A1BDAE29 /* BrowserDB.swift */; };
 		4A59BF2F408CDEF8D50AF9D3 /* TestVisitsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BE48DBF43989C51D3F98 /* TestVisitsTable.swift */; };
 		4A59BFF7C37812C7955B9E79 /* HistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BB07A2812FE4B516FD30 /* HistoryTable.swift */; };
+		E47726181A8A794B00FC058B /* ReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47726171A8A794B00FC058B /* ReadingList.swift */; };
+		E47726191A8A794B00FC058B /* ReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47726171A8A794B00FC058B /* ReadingList.swift */; };
+		E477261B1A8A7DE500FC058B /* SQLiteReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E477261A1A8A7DE500FC058B /* SQLiteReadingList.swift */; };
+		E477261C1A8A7DE500FC058B /* SQLiteReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E477261A1A8A7DE500FC058B /* SQLiteReadingList.swift */; };
+		E477261E1A8A7EDA00FC058B /* ReadingListTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E477261D1A8A7EDA00FC058B /* ReadingListTable.swift */; };
+		E477261F1A8A7EDA00FC058B /* ReadingListTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E477261D1A8A7EDA00FC058B /* ReadingListTable.swift */; };
+		E47726211A8A87F400FC058B /* TestReadingListTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47726201A8A87F400FC058B /* TestReadingListTable.swift */; };
+		E4F43AC21A8CF9A200ACAC05 /* TestSQLiteReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F43AC11A8CF9A200ACAC05 /* TestSQLiteReadingList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +90,11 @@
 		4A59BCB8D38CE6E6F5F5F2DE /* JoinedHistoryVisitsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JoinedHistoryVisitsTable.swift; path = SQL/JoinedHistoryVisitsTable.swift; sourceTree = "<group>"; };
 		4A59BE48DBF43989C51D3F98 /* TestVisitsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestVisitsTable.swift; sourceTree = "<group>"; };
 		4A59BF61F0D956D2A1BDAE29 /* BrowserDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BrowserDB.swift; path = SQL/BrowserDB.swift; sourceTree = "<group>"; };
+		E47726171A8A794B00FC058B /* ReadingList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingList.swift; sourceTree = "<group>"; };
+		E477261A1A8A7DE500FC058B /* SQLiteReadingList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteReadingList.swift; path = SQL/SQLiteReadingList.swift; sourceTree = "<group>"; };
+		E477261D1A8A7EDA00FC058B /* ReadingListTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListTable.swift; sourceTree = "<group>"; };
+		E47726201A8A87F400FC058B /* TestReadingListTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestReadingListTable.swift; sourceTree = "<group>"; };
+		E4F43AC11A8CF9A200ACAC05 /* TestSQLiteReadingList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteReadingList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				0BA497801A7B094B004C8E17 /* Bookmarks.swift */,
+				E47726171A8A794B00FC058B /* ReadingList.swift */,
 				0BA497811A7B094B004C8E17 /* Visit.swift */,
 				282DA4D91A69A2C400A406E2 /* SQL */,
 				282DA4D01A69A14500A406E2 /* FileAccessor.swift */,
@@ -159,6 +173,8 @@
 				4A59BE48DBF43989C51D3F98 /* TestVisitsTable.swift */,
 				0BCFBBB71A776A200087E26D /* MockFiles.swift */,
 				0BAE69581A7EEF8E00B3609D /* TestTableTable.swift */,
+				E47726201A8A87F400FC058B /* TestReadingListTable.swift */,
+				E4F43AC11A8CF9A200ACAC05 /* TestSQLiteReadingList.swift */,
 			);
 			path = StorageTests;
 			sourceTree = "<group>";
@@ -185,10 +201,12 @@
 				0BA4977A1A7B0941004C8E17 /* SQLiteHistory.swift */,
 				4A59BF61F0D956D2A1BDAE29 /* BrowserDB.swift */,
 				4A59BB07A2812FE4B516FD30 /* HistoryTable.swift */,
+				E477261D1A8A7EDA00FC058B /* ReadingListTable.swift */,
 				4A59B22E909B6CAC95DBE879 /* VisitsTable.swift */,
 				4A59B3F1AAD619686DB9450C /* GenericTable.swift */,
 				4A59BCB8D38CE6E6F5F5F2DE /* JoinedHistoryVisitsTable.swift */,
 				0BAE69551A7E1FD100B3609D /* SchemaTable.swift */,
+				E477261A1A8A7DE500FC058B /* SQLiteReadingList.swift */,
 			);
 			name = SQL;
 			sourceTree = "<group>";
@@ -310,6 +328,8 @@
 			files = (
 				0BA497821A7B094B004C8E17 /* Bookmarks.swift in Sources */,
 				282DA4C51A699F8A00A406E2 /* SwiftData.swift in Sources */,
+				E47726181A8A794B00FC058B /* ReadingList.swift in Sources */,
+				E477261E1A8A7EDA00FC058B /* ReadingListTable.swift in Sources */,
 				0BA4977E1A7B0941004C8E17 /* SQLiteHistory.swift in Sources */,
 				282DA5211A69BCB700A406E2 /* module.modulemap in Sources */,
 				0BA4978C1A7B0E44004C8E17 /* Cursor.swift in Sources */,
@@ -318,6 +338,7 @@
 				0BA497831A7B094B004C8E17 /* Visit.swift in Sources */,
 				0BAE69561A7E1FD100B3609D /* SchemaTable.swift in Sources */,
 				4A59BB4F36A20F30229034C6 /* VisitsTable.swift in Sources */,
+				E477261B1A8A7DE500FC058B /* SQLiteReadingList.swift in Sources */,
 				4A59B21913DCFA81C7CD9C91 /* GenericTable.swift in Sources */,
 				0BA4978D1A7B0E55004C8E17 /* FileAccessor.swift in Sources */,
 				4A59BD24F6210866F59EF0F6 /* JoinedHistoryVisitsTable.swift in Sources */,
@@ -332,17 +353,22 @@
 			files = (
 				282DA4D21A69A14500A406E2 /* FileAccessor.swift in Sources */,
 				0BCFBBB81A776A200087E26D /* MockFiles.swift in Sources */,
+				E4F43AC21A8CF9A200ACAC05 /* TestSQLiteReadingList.swift in Sources */,
 				0BCFBBB51A7769B70087E26D /* VisitsTable.swift in Sources */,
 				282DA4A81A699E0300A406E2 /* StorageTests.swift in Sources */,
 				0BCFBBB41A7769A30087E26D /* JoinedHistoryVisitsTable.swift in Sources */,
 				0BCFBBAF1A77650E0087E26D /* GenericTable.swift in Sources */,
+				E477261C1A8A7DE500FC058B /* SQLiteReadingList.swift in Sources */,
 				282DA4C61A699F8A00A406E2 /* SwiftData.swift in Sources */,
 				0BF42D471A7C558000889E28 /* Visit.swift in Sources */,
+				E47726191A8A794B00FC058B /* ReadingList.swift in Sources */,
+				E47726211A8A87F400FC058B /* TestReadingListTable.swift in Sources */,
 				282DA4C21A699EF200A406E2 /* Cursor.swift in Sources */,
 				0BF42D481A7C55D200889E28 /* Site.swift in Sources */,
 				4A59BA1E93D5603E198EDCB9 /* HistoryTable.swift in Sources */,
 				0BAE69571A7E209200B3609D /* SchemaTable.swift in Sources */,
 				4A59BF0BBF50FC218A6D1143 /* BrowserDB.swift in Sources */,
+				E477261F1A8A7EDA00FC058B /* ReadingListTable.swift in Sources */,
 				4A59B334A243792894D6E614 /* TestHistoryTable.swift in Sources */,
 				4A59BC6033BD93D1DC36E18F /* TestJoinedHistoryVisits.swift in Sources */,
 				4A59BF2F408CDEF8D50AF9D3 /* TestVisitsTable.swift in Sources */,
