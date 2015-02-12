@@ -26,7 +26,7 @@ public class QueryOptions {
     // The way to sort the query
     public var sort: QuerySort = .None
 
-    public init(filter: String? = nil, filterType: FilterType = .None, sort: QuerySort = .None) {
+    public init(filter: AnyObject? = nil, filterType: FilterType = .None, sort: QuerySort = .None) {
         self.filter = filter
         self.filterType = filterType
         self.sort = sort
@@ -39,10 +39,11 @@ let DBCouldNotOpenErrorCode = 200
 // Version 1 - Basic history table
 // Version 2 - Added a visits table, refactored the history table to be a GenericTable
 // Version 3 - Added a favicons table
+// Version 4 - Added a readinglist table
 class BrowserDB {
     private let db: SwiftData
     // XXX: Increasing this should blow away old history, since we currently dont' support any upgrades
-    private let Version: Int = 3
+    private let Version: Int = 4
     private let FileName = "browser.db"
     private let files: FileAccessor
     private let schemaTable: SchemaTable<TableInfo>
