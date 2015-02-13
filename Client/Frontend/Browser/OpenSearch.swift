@@ -75,42 +75,42 @@ class OpenSearchParser {
         }
 
         let rootName = pluginMode ? "SearchPlugin" : "OpenSearchDescription"
-        let docElement: XMLElement! = SWXMLHash.parse(data!)[rootName][0].element
+        let docIndexer: XMLIndexer! = SWXMLHash.parse(data!)[rootName][0]
 
-        if docElement == nil {
+        if docIndexer.element == nil {
             println("Invalid XML document")
             return nil
         }
 
-        let shortNameElement = docElement.elements["ShortName"]
-        if shortNameElement?.count != 1 {
+        let shortNameIndexer = docIndexer["ShortName"]
+        if shortNameIndexer.all.count != 1 {
             println("ShortName must appear exactly once")
             return nil
         }
 
-        let shortName = shortNameElement![0].text
+        let shortName = shortNameIndexer.element?.text
         if shortName == nil {
             println("ShortName must contain text")
             return nil
         }
 
-        let descriptionElement = docElement.elements["Description"]
-        if !pluginMode && descriptionElement?.count != 1 {
+        let descriptionIndexer = docIndexer["Description"]
+        if !pluginMode && descriptionIndexer.all.count != 1 {
             println("Description must appear exactly once")
             return nil
         }
-        let description = descriptionElement?[0].text
+        let description = descriptionIndexer.element?.text
 
-        var urls = docElement.elements["Url"]
-        if urls == nil {
+        var urlIndexers = docIndexer["Url"].all
+        if urlIndexers.isEmpty {
             println("Url must appear at least once")
             return nil
         }
 
         var searchTemplate: String!
         var suggestTemplate: String?
-        for url in urls! {
-            let type = url.attributes["type"]
+        for urlIndexer in urlIndexers {
+            let type = urlIndexer.element?.attributes["type"]
             if type == nil {
                 println("Url element requires a type attribute")
                 return nil
@@ -121,27 +121,27 @@ class OpenSearchParser {
                 continue
             }
 
-            var template = url.attributes["template"]
+            var template = urlIndexer.element?.attributes["template"]
             if template == nil {
                 println("Url element requires a template attribute")
                 return nil
             }
 
             if pluginMode {
-                var params = url.elements["Param"]
+                var paramIndexers = urlIndexer["Param"].all
 
-                if params != nil {
+                if !paramIndexers.isEmpty {
                     template! += "?"
                     var firstAdded = false
-                    for param in params! {
+                    for paramIndexer in paramIndexers {
                         if firstAdded {
                             template! += "&"
                         } else {
                             firstAdded = true
                         }
 
-                        let name = param.attributes["name"]
-                        let value = param.attributes["value"]
+                        let name = paramIndexer.element?.attributes["name"]
+                        let value = paramIndexer.element?.attributes["value"]
                         if name == nil || value == nil {
                             println("Param element must have name and value attributes")
                             return nil
@@ -164,21 +164,21 @@ class OpenSearchParser {
         }
 
         var uiImage: UIImage?
-        var images = docElement.elements["Image"]
+        var imageIndexers = docIndexer["Image"].all
 
-        for imageDict in images! {
+        for imageIndexer in imageIndexers {
             // TODO: For now, we only look for 16x16 search icons.
-            let imageWidth = imageDict.attributes["width"]
-            let imageHeight = imageDict.attributes["height"]
+            let imageWidth = imageIndexer.element?.attributes["width"]
+            let imageHeight = imageIndexer.element?.attributes["height"]
             if imageWidth?.toInt() != 16 || imageHeight?.toInt() != 16 {
                 continue
             }
 
-            if imageDict.text == nil {
+            if imageIndexer.element?.text == nil {
                 continue
             }
 
-            let imageURL = NSURL(string: imageDict.text!)
+            let imageURL = NSURL(string: imageIndexer.element!.text!)
             if let imageURL = imageURL {
                 let imageData = NSData(contentsOfURL: imageURL)
                 if let imageData = imageData {
