@@ -48,7 +48,7 @@ private var Controllers: Protector<[ToolbarItem]> = Protector(name: "Controllers
         return controller
     }, enabled: true),
     ToolbarItem(title: "Settings", imageName: "settings",  generator: { (profile: Profile) -> UIViewController in
-        let controller = SettingsPanel(nibName: "SettingsPanel", bundle: nil)
+        let controller = SettingsPanel(nibName: nil, bundle: nil)
         controller.profile = profile
         return controller
     }, enabled: true),
