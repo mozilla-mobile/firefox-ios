@@ -23,6 +23,10 @@ class Browser: NSObject, WKScriptMessageHandler {
         super.init()
     }
 
+    var loading: Bool {
+        return webView.loading
+    }
+
     var backList: [WKBackForwardListItem]? {
         return webView.backForwardList.backList as? [WKBackForwardListItem]
     }
