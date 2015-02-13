@@ -39,6 +39,29 @@ class TabManager {
         return tabs[index]
     }
 
+    func selectTab(webView: WKWebView) {
+        if selectedTab?.webView === webView {
+            return
+        }
+
+        let previous = selectedTab
+
+        selectedIndex = -1
+        for i in 0..<count {
+            if tabs[i].webView === webView {
+                selectedIndex = i
+                break
+            }
+        }
+        if selectedIndex == -1 {
+            return
+        }
+        
+        assert(webView === selectedTab?.webView, "Expected tab is selected")
+
+        delegate?.tabManager(self, didSelectedTabChange: tabs[selectedIndex], previous: previous)
+    }
+
     func selectTab(tab: Browser?) {
         if selectedTab === tab {
             return
