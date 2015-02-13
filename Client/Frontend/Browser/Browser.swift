@@ -35,12 +35,15 @@ class Browser: NSObject, WKScriptMessageHandler {
         return webView.backForwardList.forwardList as? [WKBackForwardListItem]
     }
 
-    var url: NSURL? {
-        return webView.URL?
+    var title: String? {
+        if let title = webView.title {
+        	return title
+        }
+        return webView.URL?.absoluteString
     }
 
-    var title: String? {
-        return webView.title
+    var url: NSURL? {
+        return webView.URL?
     }
 
     var canGoBack: Bool {
@@ -105,6 +108,28 @@ class Browser: NSObject, WKScriptMessageHandler {
     func getHelper(#name: String) -> BrowserHelper? {
         return helpers[name]
     }
+
+    func screenshot(size: CGSize? = nil) -> UIImage? {
+        // TODO: We should adjust this if the inset is offscreen
+        let top = -webView.scrollView.contentInset.top
+
+        if let size = size {
+            UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.mainScreen().scale)
+        } else {
+            UIGraphicsBeginImageContextWithOptions(webView.frame.size, false, UIScreen.mainScreen().scale)
+        }
+
+        webView.drawViewHierarchyInRect(CGRect(x: 0,
+            y: top,
+            width: webView.frame.width,
+            height: webView.frame.height),
+            afterScreenUpdates: false)
+
+        var img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return img
+    }
 }
 
 extension WKWebView {
@@ -131,5 +156,3 @@ extension WKWebView {
         }
     }
 }
-
-

@@ -6,5 +6,6 @@
 #import "sqlite3.h"
 #import "GCDWebServer.h"
 #import "GCDWebServerDataResponse.h"
+#import "ThirdParty/UIImageViewAligned/UIImageViewAligned/UIImageViewAligned.h"
 
 #endif
