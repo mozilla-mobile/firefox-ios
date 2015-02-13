@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 import WebKit
 import Storage
+import Snappy
 
 public let StatusBarHeight: CGFloat = 20 // TODO: Can't assume this is correct. Status bar height is dynamic.
 public let ToolbarHeight: CGFloat = 44
@@ -26,6 +27,11 @@ class BrowserViewController: UIViewController {
     private let uriFixup = URIFixup()
 
     var profile: Profile!
+
+    // These views wrap the urlbar and toolbar to provide background effects on them
+    private var header: UIView!
+    private var footer: UIView!
+    private var previousScroll: CGPoint? = nil
 
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -52,8 +58,8 @@ class BrowserViewController: UIViewController {
         }
 
         urlBar = URLBarView()
-        let URLBarEffect = wrapInEffect(urlBar)
-        URLBarEffect.snp_makeConstraints { make in
+        header = wrapInEffect(urlBar)
+        header.snp_makeConstraints { make in
             make.top.equalTo(self.view.snp_top)
             make.height.equalTo(ToolbarHeight + StatusBarHeight)
             make.leading.trailing.equalTo(self.view)
@@ -62,8 +68,8 @@ class BrowserViewController: UIViewController {
         tabManager.delegate = self
 
         toolbar = BrowserToolbar()
-        let toolbarEffect = wrapInEffect(toolbar)
-        toolbarEffect.snp_makeConstraints { make in
+        footer = wrapInEffect(toolbar)
+        footer.snp_makeConstraints { make in
             make.bottom.equalTo(self.view.snp_bottom)
             make.height.equalTo(ToolbarHeight)
             make.leading.trailing.equalTo(self.view)
@@ -329,14 +335,116 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 }
 
+extension BrowserViewController: UIScrollViewDelegate {
+    private func clamp(y: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
+        // Clamp the scroll position
+        if y >= max {
+            return max
+        } else if y <= min {
+            return min
+        }
+        return y
+    }
+
+    private func scrollUrlBar(dy: CGFloat) {
+        let newY = clamp(header.transform.ty + dy, min: -header.frame.height, max: 0)
+        header.transform = CGAffineTransformMakeTranslation(0, newY)
+    }
+
+    private func scrollToobar(dy: CGFloat) {
+        let newY = clamp(footer.transform.ty - dy, min: 0, max: footer.frame.height)
+        footer.transform = CGAffineTransformMakeTranslation(0, newY)
+    }
+
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        previousScroll = scrollView.contentOffset
+    }
+
+    // Careful! This method can be called multiple times concurrently.
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if var prev = previousScroll {
+            if let tab = tabManager.selectedTab {
+                if tab.loading {
+                    return
+                }
+
+                let offset = scrollView.contentOffset
+                var delta = CGPoint(x: prev.x - offset.x, y: prev.y - offset.y)
+                previousScroll = offset
+
+                if let tab = self.tabManager.selectedTab {
+                    let inset = tab.webView.scrollView.contentInset
+                    let newInset = clamp(inset.top + delta.y, min: 0, max: ToolbarHeight + StatusBarHeight)
+
+                    tab.webView.scrollView.contentInset = UIEdgeInsetsMake(newInset, 0, clamp(newInset, min: 0, max: ToolbarHeight), 0)
+                    tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(newInset, 0, clamp(newInset, min: 0, max: ToolbarHeight), 0)
+
+                    // Adjusting the contentInset will change the scroll position of the page. We account for that by also adjusting the previousScroll position
+                    prev.y += inset.top - newInset
+                }
+
+                scrollUrlBar(delta.y)
+                scrollToobar(delta.y)
+            }
+
+            previousScroll = prev
+        }
+    }
+
+    func scrollViewWillEndDragging(scrollView: UIScrollView,
+            withVelocity velocity: CGPoint,
+            targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        previousScroll = nil
+        if tabManager.selectedTab?.loading ?? false {
+            return
+        }
+
+        let offset = scrollView.contentOffset
+        // If we're moving up, or the header is half onscreen, hide the toolbars
+        if velocity.y < 0 || self.header.transform.ty > -self.header.frame.height / 2 {
+            showToolbars(true)
+        } else {
+            hideToolbars(true)
+        }
+    }
+
+    private func hideToolbars(animated: Bool) {
+        UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
+            self.header.transform = CGAffineTransformMakeTranslation(0, -self.header.frame.height)
+            self.footer.transform = CGAffineTransformMakeTranslation(0, self.footer.frame.height)
+            // Reset the insets so that clicking works on the edges of the screen
+            if let tab = self.tabManager.selectedTab {
+                tab.webView.scrollView.contentInset = UIEdgeInsetsZero
+                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero
+            }
+        })
+    }
+
+    private func showToolbars(animated: Bool) {
+        UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
+            self.header.transform = CGAffineTransformIdentity
+            self.footer.transform = CGAffineTransformIdentity
+            // Reset the insets so that clicking works on the edges of the screen
+            if let tab = self.tabManager.selectedTab {
+                tab.webView.scrollView.contentInset = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
+                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
+            }
+        })
+    }
+}
+
 extension BrowserViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?) {
         previous?.webView.hidden = true
         selected?.webView.hidden = false
 
         previous?.webView.navigationDelegate = nil
+        previous?.webView.scrollView.delegate = nil
         selected?.webView.navigationDelegate = self
+        selected?.webView.scrollView.delegate = self
         urlBar.updateURL(selected?.url)
+        showToolbars(false)
+
         toolbar.updateBackStatus(selected?.canGoBack ?? false)
         toolbar.updateFowardStatus(selected?.canGoForward ?? false)
         urlBar.updateProgressBar(Float(selected?.webView.estimatedProgress ?? 0))
@@ -413,6 +521,7 @@ extension BrowserViewController: WKNavigationDelegate {
         urlBar.updateURL(webView.URL);
         toolbar.updateBackStatus(webView.canGoBack)
         toolbar.updateFowardStatus(webView.canGoForward)
+        showToolbars(false)
 
         if let url = webView.URL?.absoluteString {
             profile.bookmarks.isBookmarked(url, success: { bookmarked in

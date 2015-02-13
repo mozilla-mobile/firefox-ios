@@ -65,6 +65,9 @@ class BrowserToolbar: UIView {
         bookmarkButton = UIButton()
 
         super.init(frame: frame)
+
+        longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack:")
+        longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward:")
     }
 
     required init(coder aDecoder: NSCoder) {
