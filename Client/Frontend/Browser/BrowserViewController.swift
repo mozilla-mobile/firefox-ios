@@ -212,7 +212,10 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
         let controller = TabTrayController()
+        controller.profile = profile
         controller.tabManager = tabManager
+        controller.transitioningDelegate = self
+        controller.modalPresentationStyle = .Custom
         presentViewController(controller, animated: true, completion: nil)
     }
 
@@ -435,8 +438,9 @@ extension BrowserViewController: UIScrollViewDelegate {
 
 extension BrowserViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?) {
-        previous?.webView.hidden = true
-        selected?.webView.hidden = false
+        if let wv = selected?.webView {
+            webViewContainer.addSubview(wv)
+        }
 
         previous?.webView.navigationDelegate = nil
         previous?.webView.scrollView.delegate = nil
@@ -482,7 +486,6 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didAddTab tab: Browser) {
         urlBar.updateTabCount(tabManager.count)
 
-        tab.webView.hidden = true
         webViewContainer.insertSubview(tab.webView, atIndex: 0)
         tab.webView.scrollView.contentInset = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
         tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
@@ -676,5 +679,47 @@ extension BrowserViewController: LongPressGestureDelegate {
         var cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, nil)
         actionSheetController.addAction(cancelAction)
         self.presentViewController(actionSheetController, animated: true, completion: nil)
+    }
+}
+
+extension BrowserViewController : UIViewControllerTransitioningDelegate {
+    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return TransitionManager(show: false)
+    }
+
+    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return TransitionManager(show: true)
+    }
+}
+
+extension BrowserViewController : Transitionable {
+    func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
+        view.transform = CGAffineTransformIdentity
+        view.alpha = 1
+        // Move all the webview's off screen
+        for i in 0..<tabManager.count {
+            let tab = tabManager.getTab(i)
+            tab.webView.frame = CGRect(x: tab.webView.frame.width, y: 0, width: tab.webView.frame.width, height: tab.webView.frame.height)
+        }
+    }
+
+    func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {
+        if let cell = options.moving {
+            view.transform = CGAffineTransformMakeTranslation(0, cell.frame.origin.y - toolbar.frame.height)
+        }
+        view.alpha = 0
+        // Move all the webview's off screen
+        for i in 0..<tabManager.count {
+            let tab = tabManager.getTab(i)
+            tab.webView.frame = CGRect(x: tab.webView.frame.width, y: 0, width: tab.webView.frame.width, height: tab.webView.frame.height)
+        }
+    }
+
+    func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
+        // Move all the webview's back on screen
+        for i in 0..<tabManager.count {
+            let tab = tabManager.getTab(i)
+            tab.webView.frame = CGRect(x: 0, y: 0, width: tab.webView.frame.width, height: tab.webView.frame.height)
+        }
     }
 }

@@ -1,0 +1,58 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@objc
+class TransitionOptions {
+    var container: UIView? = nil
+    var moving: UIView? = nil
+}
+
+@objc
+protocol Transitionable : class {
+    func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions)
+    func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions)
+    func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions)
+}
+
+@objc
+class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning  {
+    private let show: Bool
+    init(show: Bool) {
+        self.show = show
+    }
+
+    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
+        let fromView = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!
+        let toView = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!
+
+        let container = transitionContext.containerView()
+        if show {
+            container.insertSubview(toView.view, aboveSubview: fromView.view)
+        }
+
+        var options = TransitionOptions()
+        options.container = container
+
+        if let to = toView as? Transitionable {
+            if let from = fromView as? Transitionable {
+                to.transitionableWillHide(to, options: options)
+                from.transitionableWillShow(from, options: options)
+
+                let duration = self.transitionDuration(transitionContext)
+                UIView.animateWithDuration(duration, animations: {
+                    to.transitionableWillShow(to, options: options)
+                    from.transitionableWillHide(from, options: options)
+                    }, completion: { finished in
+                        transitionContext.completeTransition(true)
+                        to.transitionableWillComplete(to, options: options)
+                        from.transitionableWillComplete(from, options: options)
+                })
+            }
+        }
+    }
+
+    func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
+        return 0.5
+    }
+}

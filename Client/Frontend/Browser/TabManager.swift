@@ -16,7 +16,8 @@ class TabManager {
     weak var delegate: TabManagerDelegate? = nil
 
     private var tabs: [Browser] = []
-    private var selectedIndex = -1
+    private var _selectedIndex = -1
+    var selectedIndex: Int { return _selectedIndex }
     private let defaultNewTabRequest: NSURLRequest
 
     init(defaultNewTabRequest: NSURLRequest) {
@@ -28,11 +29,11 @@ class TabManager {
     }
 
     var selectedTab: Browser? {
-        if !(0..<count ~= selectedIndex) {
+        if !(0..<count ~= _selectedIndex) {
             return nil
         }
 
-        return tabs[selectedIndex]
+        return tabs[_selectedIndex]
     }
 
     func getTab(index: Int) -> Browser {
@@ -46,10 +47,10 @@ class TabManager {
 
         let previous = selectedTab
 
-        selectedIndex = -1
+        _selectedIndex = -1
         for i in 0..<count {
             if tabs[i] === tab {
-                selectedIndex = i
+                _selectedIndex = i
                 break
             }
         }
