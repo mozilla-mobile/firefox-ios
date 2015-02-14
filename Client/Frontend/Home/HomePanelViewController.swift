@@ -41,6 +41,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     var url: NSURL?
     weak var delegate: HomePanelViewControllerDelegate?
 
+    private var toolbarScrollView: ToolbarScrollView!
     private var buttonContainerView: ToolbarContainerView!
     private var controllerContainerView: UIView!
     private var buttons: [ToolbarButton] = []
@@ -85,7 +86,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     private func showPanel(panel: UIViewController) {
         controllerContainerView.addSubview(panel.view)
         panel.view.snp_makeConstraints { make in
-            make.top.equalTo(self.buttonContainerView.snp_bottom)
+            make.top.equalTo(self.toolbarScrollView.snp_bottom)
             make.left.right.bottom.equalTo(self.view)
         }
 
@@ -138,28 +139,40 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         view.backgroundColor = BackgroundColor
 
-        buttonContainerView = ToolbarContainerView()
-        buttonContainerView.backgroundColor = BackgroundColor
-        view.addSubview(buttonContainerView)
-
-        controllerContainerView = UIView()
-        view.addSubview(controllerContainerView)
-
-        buttonContainerView.snp_makeConstraints { make in
+        toolbarScrollView = ToolbarScrollView()
+        toolbarScrollView.backgroundColor = BackgroundColor
+        toolbarScrollView.showsHorizontalScrollIndicator = false
+        toolbarScrollView.showsVerticalScrollIndicator = false
+        view.addSubview(toolbarScrollView)
+        toolbarScrollView.snp_makeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(90)
         }
+        
+        buttonContainerView = ToolbarContainerView()
+        toolbarScrollView.addSubview(buttonContainerView)
+        buttonContainerView.setTranslatesAutoresizingMaskIntoConstraints(true)
+        buttonContainerView.autoresizingMask = .FlexibleWidth | .FlexibleHeight
 
+        controllerContainerView = UIView()
+        view.addSubview(controllerContainerView)
         controllerContainerView.snp_makeConstraints { make in
-            make.top.equalTo(self.buttonContainerView.snp_bottom)
+            make.top.equalTo(self.toolbarScrollView.snp_bottom)
             make.left.right.bottom.equalTo(self.view)
         }
 
         self.panels = Panels(profile: self.profile).enabledItems
         updateButtons()
         selectedButtonIndex = 0
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        toolbarScrollView.contentSize = buttonContainerView.bounds.size
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -226,14 +239,6 @@ private class ToolbarButton: UIButton {
 }
 
 private class ToolbarContainerView: UIView {
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
-
-        let context = UIGraphicsGetCurrentContext()
-        CGContextSetFillColorWithColor(context, DividerColor.CGColor)
-        CGContextFillRect(context, CGRect(x: 0, y: frame.height-DividerHeight, width: frame.width, height: DividerHeight))
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -245,5 +250,15 @@ private class ToolbarContainerView: UIView {
             view.frame = CGRect(origin: origin, size: view.frame.size)
             origin.x += ButtonSize.width
         }
+    }
+}
+
+private class ToolbarScrollView: UIScrollView {
+    override func drawRect(rect: CGRect) {
+        super.drawRect(rect)
+
+        let context = UIGraphicsGetCurrentContext()
+        CGContextSetFillColorWithColor(context, DividerColor.CGColor)
+        CGContextFillRect(context, CGRect(x: 0, y: frame.height-DividerHeight, width: frame.width, height: DividerHeight))
     }
 }
