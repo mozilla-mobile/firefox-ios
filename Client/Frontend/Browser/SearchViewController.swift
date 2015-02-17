@@ -40,7 +40,7 @@ class SearchViewController: UIViewController {
     private var searchSuggestions = [String]()
     var profile: Profile!
     private var history: Cursor?
-    
+
     var searchEngines: SearchEngines? {
         didSet {
             suggestClient?.cancelPendingRequest()
@@ -84,7 +84,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.registerClass(SearchTableViewCell.self, forCellReuseIdentifier: ReuseIdentifier)
+        tableView.registerClass(TwoLineCell.self, forCellReuseIdentifier: ReuseIdentifier)
 
         // Make the row separators span the width of the entire table.
         tableView.layoutMargins = UIEdgeInsetsZero
@@ -160,12 +160,13 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath) as SearchTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath) as TwoLineCell
 
         if let currentSection = SearchListSection(rawValue: indexPath.section) {
             switch currentSection {
             case .SuggestedSites:
                 cell.textLabel?.text = searchSuggestions[indexPath.row]
+                cell.detailTextLabel?.text = nil
                 cell.imageView?.image = nil
                 cell.isAccessibilityElement = false
                 cell.accessibilityLabel = nil
@@ -174,10 +175,11 @@ extension SearchViewController: UITableViewDataSource {
                     if let site = hasHistory[indexPath.row] as? Site {
                         cell.textLabel?.text = site.title
                         cell.detailTextLabel?.text = site.url
-                        if let img = site.icon?.getImage(profile.files) {
-                            cell.imageView?.image = HistoryPanel.createSizedFavicon(img)
+                        if let img = site.icon? {
+                            let imgUrl = NSURL(string: img.url)
+                            cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
                         } else {
-                            cell.imageView?.image = UIImage(named: "defaultFavicon")
+                            cell.imageView?.image = self.profile.favicons.defaultIcon
                         }
                         cell.isAccessibilityElement = false
                         cell.accessibilityLabel = nil
@@ -186,6 +188,7 @@ extension SearchViewController: UITableViewDataSource {
             case .Search:
                 let searchEngine = sortedEngines[indexPath.row]
                 cell.textLabel?.text = searchQuery
+                cell.detailTextLabel?.text = nil
                 cell.imageView?.image = searchEngine.image
                 cell.isAccessibilityElement = true
                 cell.accessibilityLabel = NSString(format: NSLocalizedString("%@ search for %@", comment: "E.g. \"Google search for Mars\". Please keep the first \"%@\" (which contains the search engine name) as close to the beginning of the translated phrase as possible (it is best to have it as the very first word). This is because the phrase is an accessibility label and VoiceOver users need to hear the search engine name first as that is the key information in the whole phrase (they know the search term because they typed it and from previous rows of the table)."), searchEngine.shortName, searchQuery)

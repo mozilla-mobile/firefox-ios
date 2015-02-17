@@ -26,14 +26,8 @@ class FaviconsTable<T>: GenericTable<Favicon> {
     override func getInsertAndArgs(inout item: Favicon) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         args.append(item.url)
-        // XXX - This will force the download of the icon.
-        if let img = item.getImage(files) {
-            args.append(img.size.width)
-            args.append(img.size.height)
-        } else {
-            args.append(-1)
-            args.append(-1)
-        }
+        args.append(item.width)
+        args.append(item.height)
         args.append(item.date)
         args.append(item.type.rawValue)
         return ("INSERT INTO \(TableNameFavicons) (url, width, height, date, type) VALUES (?,?,?,?,?)", args)
@@ -41,13 +35,8 @@ class FaviconsTable<T>: GenericTable<Favicon> {
 
     override func getUpdateAndArgs(inout item: Favicon) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
-        if let img = item.getImage(files) {
-            args.append(img.size.width)
-            args.append(img.size.height)
-        } else {
-            args.append(-1)
-            args.append(-1)
-        }
+        args.append(item.width)
+        args.append(item.height)
         args.append(item.date)
         args.append(item.type.rawValue)
         args.append(item.url)

@@ -6,7 +6,9 @@
 public protocol Favicons {
     init(files: FileAccessor)
 
-    func clear(options: QueryOptions?, complete: (success: Bool) -> Void)
+    var defaultIcon: UIImage { get }
+
+    func clear(options: QueryOptions?, complete: ((success: Bool) -> Void)?)
     func get(options: QueryOptions?, complete: (data: Cursor) -> Void)
-    func add(icon: Favicon, site: Site, complete: (success: Bool) -> Void)
+    func add(icon: Favicon, site: Site, complete: ((success: Bool) -> Void)?)
 }
