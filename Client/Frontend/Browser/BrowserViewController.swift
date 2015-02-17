@@ -340,7 +340,6 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
 extension BrowserViewController: UIScrollViewDelegate {
     private func clamp(y: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
-        // Clamp the scroll position
         if y >= max {
             return max
         } else if y <= min {
@@ -382,15 +381,14 @@ extension BrowserViewController: UIScrollViewDelegate {
                     tab.webView.scrollView.contentInset = UIEdgeInsetsMake(newInset, 0, clamp(newInset, min: 0, max: ToolbarHeight), 0)
                     tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(newInset, 0, clamp(newInset, min: 0, max: ToolbarHeight), 0)
 
-                    // Adjusting the contentInset will change the scroll position of the page. We account for that by also adjusting the previousScroll position
-                    prev.y += inset.top - newInset
+                    // Adjusting the contentInset will change the scroll position of the page.
+                    // We account for that by also adjusting the previousScroll position
+                    delta.y += inset.top - newInset
                 }
 
                 scrollUrlBar(delta.y)
                 scrollToobar(delta.y)
             }
-
-            previousScroll = prev
         }
     }
 
