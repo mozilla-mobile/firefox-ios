@@ -37,7 +37,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
 
         locationLabel = UILabel()
         locationLabel.font = UIFont(name: "HelveticaNeue-Light", size: 14)
-        locationLabel.lineBreakMode = NSLineBreakMode.ByClipping
+        locationLabel.lineBreakMode = .ByClipping
         locationLabel.userInteractionEnabled = true
         // TODO: This label isn't useful for people. We probably want this to be the page title or URL (see Safari).
         locationLabel.accessibilityLabel = NSLocalizedString("URL", comment: "Accessibility label")
@@ -47,13 +47,13 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         locationLabel.addGestureRecognizer(tapGestureRecognizer)
 
         stopReloadButton = UIButton()
-        stopReloadButton.setImage(ImageReload, forState: UIControlState.Normal)
-        stopReloadButton.addTarget(self, action: "SELtapStopReload", forControlEvents: UIControlEvents.TouchUpInside)
+        stopReloadButton.setImage(ImageReload, forState: .Normal)
+        stopReloadButton.addTarget(self, action: "SELtapStopReload", forControlEvents: .TouchUpInside)
         addSubview(stopReloadButton)
 
         readerModeButton = ReaderModeButton(frame: CGRectZero)
         readerModeButton.hidden = true
-        readerModeButton.addTarget(self, action: "SELtapReaderModeButton", forControlEvents: UIControlEvents.TouchUpInside)
+        readerModeButton.addTarget(self, action: "SELtapReaderModeButton", forControlEvents: .TouchUpInside)
         addSubview(readerModeButton)
 
         makeConstraints()
@@ -174,22 +174,14 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     }
 
     override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
-        if let hitView = super.hitTest(point, withEvent: event) {
-            return hitView
-        }
-
-        // If the hit test failed, offset it by moving it up and try again.
-        var fuzzPoint = point
-        fuzzPoint.y -= 20
-        if let hitView = super.hitTest(fuzzPoint, withEvent: event) {
-            return hitView
-        }
-
-        // If the hit test failed, offset it by moving it down and try again.
-        fuzzPoint = point
-        fuzzPoint.y += 20
-        if let hitView = super.hitTest(fuzzPoint, withEvent: event) {
-            return hitView
+        // We only care about the horizontal position of this touch. Find the first
+        // subview that takes up that space and return it.
+        for view in subviews {
+            let x1 = view.frame.origin.x
+            let x2 = x1 + view.frame.width
+            if point.x >= x1 && point.x <= x2 {
+                return view as? UIView
+            }
         }
 
         return nil

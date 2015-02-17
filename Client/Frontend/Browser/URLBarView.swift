@@ -137,7 +137,6 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         }
     }
 
-
     func updateReaderModeState(state: ReaderModeState) {
         locationView.readerModeState = state
     }
