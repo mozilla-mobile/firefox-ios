@@ -12,6 +12,7 @@ protocol BrowserToolbarDelegate: class {
     func browserToolbarDidLongPressBack(browserToolbar: BrowserToolbar)
     func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbar)
     func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbar)
+    func browserToolbarDidLongPressBookmark(browserToolbar: BrowserToolbar)
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbar)
 }
 
@@ -24,6 +25,7 @@ class BrowserToolbar: UIView {
     private let backButton: UIButton
     private let longPressGestureBackButton: UILongPressGestureRecognizer!
     private let longPressGestureForwardButton: UILongPressGestureRecognizer!
+    private let longPressGestureBookmarkButton: UILongPressGestureRecognizer!
 
     override init() {
         backButton = UIButton()
@@ -51,6 +53,8 @@ class BrowserToolbar: UIView {
         shareButton.addTarget(self, action: "SELdidClickShare", forControlEvents: UIControlEvents.TouchUpInside)
 
         bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
+        longPressGestureBookmarkButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBookmark:")
+        bookmarkButton.addGestureRecognizer(longPressGestureBookmarkButton)
         bookmarkButton.addTarget(self, action: "SELdidClickBookmark", forControlEvents: UIControlEvents.TouchUpInside)
 
         addButtons(backButton, forwardButton, shareButton, bookmarkButton)
@@ -145,5 +149,11 @@ class BrowserToolbar: UIView {
 
     func SELdidClickBookmark() {
         browserToolbarDelegate?.browserToolbarDidPressBookmark(self)
+    }
+
+    func SELdidLongPressBookmark(recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == UIGestureRecognizerState.Began {
+            browserToolbarDelegate?.browserToolbarDidLongPressBookmark(self)
+        }
     }
 }

@@ -149,10 +149,25 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func finishEditingAndSubmit(url: NSURL) {
+    private func finishEditingAndSubmit(var url: NSURL) {
         urlBar.updateURL(url)
         urlBar.finishEditing()
-        tabManager.selectedTab?.loadRequest(NSURLRequest(URL: url))
+
+        if let tab = tabManager.selectedTab {
+            if ReaderMode.isReaderModeURL(url) {
+                if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
+                    // Switch to reader mode immediately when we detect it can be activated. The reader mode will still
+                    // call its delegate to let us know its state changed so that we can update the UI.
+                    readerMode.activateImmediately = true
+                    // We don't show the initial page when opening a reader: url. This will probably change to some overlay on top of the webview.
+                    tab.hideContent(animated: false)
+                    if let originalURL = ReaderMode.decodeURL(url) {
+                        url = originalURL
+                    }
+                }
+            }
+            tab.loadRequest(NSURLRequest(URL: url))
+        }
     }
 
     private func addBookmark(url: String, title: String?) {
@@ -312,6 +327,17 @@ extension BrowserViewController: BrowserToolbarDelegate {
             }
         } else {
             println("Bookmark error: No tab is selected")
+        }
+    }
+
+    // TODO: This is temporary way to add items to your reading list until we have actual buttons
+    func browserToolbarDidLongPressBookmark(browserToolbar: BrowserToolbar) {
+        if let tab = tabManager.selectedTab? {
+            if let url = tab.url?.absoluteString {
+                profile.readingList.add(item: ReadingListItem(url: url, title: tab.title)) { (success) -> Void in
+                    // Nothing to do here
+                }
+            }
         }
     }
 
@@ -609,6 +635,10 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
             println("DEBUG: New readerModeState: \(state.rawValue)")
             urlBar.updateReaderModeState(state)
         }
+    }
+
+    func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForBrowser browser: Browser) {
+        browser.showContent(animated: true)
     }
 
     func SELshowReaderModeStyle(recognizer: UITapGestureRecognizer) {
