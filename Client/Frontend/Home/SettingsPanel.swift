@@ -20,7 +20,7 @@ class SettingsPanel: UIViewController, ToolbarViewProtocol,
 
     lazy var panels: Panels = {
         return Panels(profile: self.profile)
-    } ()
+    }()
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
@@ -50,25 +50,25 @@ class SettingsPanel: UIViewController, ToolbarViewProtocol,
         }
 
         // Name label
-        let labelName = UILabel()
-        labelName.textColor = UIColor.whiteColor()
-        labelName.font = UIFont(name: "FiraSans-SemiBold", size: 20)
-        labelName.text = "ROLLO TOMASI (3)"
-        userContainer.addSubview(labelName)
-        labelName.snp_makeConstraints { make in
+        nameLabel = UILabel()
+        nameLabel.textColor = UIColor.whiteColor()
+        nameLabel.font = UIFont(name: "FiraSans-SemiBold", size: 20)
+        nameLabel.text = "ROLLO TOMASI"
+        userContainer.addSubview(nameLabel)
+        nameLabel.snp_makeConstraints { make in
             make.leading.equalTo(self.avatarImageView.snp_trailing)
             make.top.trailing.equalTo(userContainer)
         }
 
         // Email label
-        let labelEmail = UILabel()
-        labelEmail.textColor = UIColor.whiteColor()
-        labelEmail.font = UIFont(name: "FiraSans-UltraLight", size: 13)
-        labelEmail.text = "rollo.tomasi@email.org"
-        userContainer.addSubview(labelEmail)
-        labelEmail.snp_makeConstraints { make in
+        emailLabel = UILabel()
+        emailLabel.textColor = UIColor.whiteColor()
+        emailLabel.font = UIFont(name: "FiraSans-UltraLight", size: 13)
+        emailLabel.text = "rollo.tomasi@email.org"
+        userContainer.addSubview(emailLabel)
+        emailLabel.snp_makeConstraints { make in
             make.leading.equalTo(self.avatarImageView.snp_right)
-            make.top.equalTo(labelName.snp_bottom)
+            make.top.equalTo(self.nameLabel.snp_bottom)
         }
 
         // Settings table
