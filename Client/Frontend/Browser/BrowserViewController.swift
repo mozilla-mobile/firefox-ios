@@ -130,6 +130,7 @@ class BrowserViewController: UIViewController {
         searchController = SearchViewController()
         searchController!.searchEngines = profile.searchEngines
         searchController!.delegate = self
+        searchController!.profile = self.profile
 
         view.addSubview(searchController!.view)
         searchController!.view.snp_makeConstraints { make in
