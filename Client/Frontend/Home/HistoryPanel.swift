@@ -71,7 +71,7 @@ class HistoryPanel: UITableViewController, HomePanel {
         }
     }
 
-    func createSizedFavicon(icon: UIImage) -> UIImage {
+    class func createSizedFavicon(icon: UIImage) -> UIImage {
         let size = CGSize(width: 30, height: 30)
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
         var context = UIGraphicsGetCurrentContext()
@@ -92,7 +92,7 @@ class HistoryPanel: UITableViewController, HomePanel {
                 cell.textLabel?.text = site.title
                 cell.detailTextLabel?.text = site.url
                 if let img = site.icon?.getImage(profile.files) {
-                    cell.imageView?.image = createSizedFavicon(img)
+                    cell.imageView?.image = HistoryPanel.createSizedFavicon(img)
                 } else {
                     cell.imageView?.image = UIImage(named: "defaultFavicon")
                 }
