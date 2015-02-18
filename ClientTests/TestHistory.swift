@@ -2,7 +2,7 @@ import Foundation
 import XCTest
 import Storage
 
-class TestHistory : AccountTest {
+class TestHistory : ProfileTest {
 
     private func innerAddSite(history: History, url: String, title: String, callback: (success: Bool) -> Void) {
         // Add an entry
@@ -83,8 +83,8 @@ class TestHistory : AccountTest {
 
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testHistory() {
-        withTestAccount { account -> Void in
-            let h = account.history
+        withTestProfile { profile -> Void in
+            let h = profile.history
             self.addSite(h, url: "url1", title: "title")
             self.addSite(h, url: "url1", title: "title")
             self.addSite(h, url: "url1", title: "title 2")
@@ -101,8 +101,8 @@ class TestHistory : AccountTest {
     let NumCmds = 10
 
     func testInsertPerformance() {
-        withTestAccount { account -> Void in
-            let h = account.history
+        withTestProfile { profile -> Void in
+            let h = profile.history
             var j = 0
 
             self.measureBlock({ () -> Void in
@@ -116,8 +116,8 @@ class TestHistory : AccountTest {
     }
 
     func testGetPerformance() {
-        withTestAccount { account -> Void in
-            let h = account.history
+        withTestProfile { profile -> Void in
+            let h = profile.history
             var j = 0
             var urls = [String: String]()
 
@@ -140,14 +140,14 @@ class TestHistory : AccountTest {
     // Fuzzing tests. These fire random insert/query/clear commands into the history database from threads. The don't check
     // the results. Just look for crashes.
     func testRandomThreading() {
-        withTestAccount { account -> Void in
+        withTestProfile { profile -> Void in
             var queue = dispatch_queue_create("My Queue", DISPATCH_QUEUE_CONCURRENT)
             var done = [Bool]()
             var counter = 0
 
             let expectation = self.expectationWithDescription("Wait for history")
             for i in 0..<self.NumThreads {
-                var history = account.history
+                var history = profile.history
                 self.runRandom(&history, queue: queue, cb: { () -> Void in
                     counter++
                     if counter == self.NumThreads {
@@ -161,9 +161,9 @@ class TestHistory : AccountTest {
 
     // Same as testRandomThreading, but uses one history connection for all threads
     func testRandomThreading2() {
-        withTestAccount { account -> Void in
+        withTestProfile { profile -> Void in
             var queue = dispatch_queue_create("My Queue", DISPATCH_QUEUE_CONCURRENT)
-            var history = account.history
+            var history = profile.history
             var counter = 0
 
             let expectation = self.expectationWithDescription("Wait for history")

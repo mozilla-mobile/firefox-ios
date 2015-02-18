@@ -4,6 +4,8 @@
 
 import Foundation
 
+let SuiteName = "group.org.allizom.Client"
+
 public protocol ProfilePrefs {
     func setObject(value: AnyObject?, forKey defaultName: String)
     func stringArrayForKey(defaultName: String) -> [AnyObject]?

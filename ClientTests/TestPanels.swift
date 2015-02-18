@@ -5,9 +5,9 @@
 import UIKit
 import XCTest
 
-class TestPanels: AccountTest {
+class TestPanels: ProfileTest {
     func testPanels() {
-        withTestAccount { profile -> Void in
+        withTestProfile { profile -> Void in
             self.validatePrefs(profile, expectOrder: nil, expectEnabled: nil);
             
             var panels = Panels(profile: profile)
