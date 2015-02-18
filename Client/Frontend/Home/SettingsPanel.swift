@@ -53,7 +53,7 @@ class SettingsPanel: UIViewController, ToolbarViewProtocol,
         let labelName = UILabel()
         labelName.textColor = UIColor.whiteColor()
         labelName.font = UIFont(name: "FiraSans-SemiBold", size: 20)
-        labelName.text = "ROLLO TOMASI"
+        labelName.text = "ROLLO TOMASI (3)"
         userContainer.addSubview(labelName)
         labelName.snp_makeConstraints { make in
             make.leading.equalTo(self.avatarImageView.snp_trailing)
