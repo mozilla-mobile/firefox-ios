@@ -130,6 +130,28 @@ class Browser: NSObject, WKScriptMessageHandler {
 
         return img
     }
+
+    func hideContent(animated: Bool = false) {
+        webView.userInteractionEnabled = false
+        if animated {
+            UIView.animateWithDuration(0.25, animations: { () -> Void in
+                self.webView.alpha = 0.0
+            })
+        } else {
+            webView.alpha = 0.0
+        }
+    }
+
+    func showContent(animated: Bool = false) {
+        webView.userInteractionEnabled = true
+        if animated {
+            UIView.animateWithDuration(0.25, animations: { () -> Void in
+                self.webView.alpha = 1.0
+            })
+        } else {
+            webView.alpha = 1.0
+        }
+    }
 }
 
 extension WKWebView {

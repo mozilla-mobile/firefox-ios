@@ -5,28 +5,28 @@
 import Foundation
 
 public class ReadingListItem {
-    var id: Int? = nil
-    var guid: String?
-    var contentStatus: Int = 0
-    var clientLastModified: Int
-    var lastModified: Int?
-    var storedOn: Int?
-    var addedOn: Int?
-    var markedRead_on: Int?
-    var isDeleted: Bool = false
-    var isArchived: Bool = false
-    var isUnread: Bool = true
-    var isArticle: Bool = false
-    var isFavorite: Bool = false
-    var url: String
-    var title: String?
-    var resolvedUrl: String?
-    var resolvedTitle: String?
-    var excerpt: String?
-    var addedBy: String?
-    var markedReadBy: String?
-    var wordCount: Int = 0
-    var readPosition: Int = 0
+    public var id: Int? = nil
+    public var guid: String?
+    public var contentStatus: Int = 0
+    public var clientLastModified: Int
+    public var lastModified: Int?
+    public var storedOn: Int?
+    public var addedOn: Int?
+    public var markedRead_on: Int?
+    public var isDeleted: Bool = false
+    public var isArchived: Bool = false
+    public var isUnread: Bool = true
+    public var isArticle: Bool = false
+    public var isFavorite: Bool = false
+    public var url: String
+    public var title: String?
+    public var resolvedUrl: String?
+    public var resolvedTitle: String?
+    public var excerpt: String?
+    public var addedBy: String?
+    public var markedReadBy: String?
+    public var wordCount: Int = 0
+    public var readPosition: Int = 0
 
     public init(url: String, title: String?, resolvedUrl: String? = nil, resolvedTitle: String? = nil) {
         self.url = url

@@ -14,7 +14,8 @@ var _firefox_ReaderMode = {
             // Short circuit in case we already ran Readability. This mostly happens when going
             // back/forward: the page will be cached and the result will still be there.
             if (_firefox_ReaderMode.readabilityResult && _firefox_ReaderMode.readabilityResult.content) {
-                webkit.messageHandlers.readerModeMessageHandler.postMessage("Available");
+                console.log({Type: "ReaderModeStateChange", Value: "Available"});
+                webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Available"});
             } else {
                 var uri = {
                     spec: document.location.href,
@@ -30,12 +31,15 @@ var _firefox_ReaderMode = {
                 var doc = new DOMParser().parseFromString(docStr, "text/html");
                 var readability = new Readability(uri, doc);
                 _firefox_ReaderMode.readabilityResult = readability.parse();
-                webkit.messageHandlers.readerModeMessageHandler.postMessage(_firefox_ReaderMode.readabilityResult !== null ? "Available" : "Unavailable");
+                console.log({Type: "ReaderModeStateChange", Value: _firefox_ReaderMode.readabilityResult !== null ? "Available" : "Unavailable"});
+                webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: _firefox_ReaderMode.readabilityResult !== null ? "Available" : "Unavailable"});
             }
         } else if (document.location.protocol === "about:" && document.location.pathname === "reader") {
-            webkit.messageHandlers.readerModeMessageHandler.postMessage("Active");
+            console.log({Type: "ReaderModeStateChange", Value: "Active"});
+            webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Active"});
         } else {
-            webkit.messageHandlers.readerModeMessageHandler.postMessage("Unavailable");
+            console.log({Type: "ReaderModeStateChange", Value: "StatusUnavailable"});
+            webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "StatusUnavailable"});
         }
     },
 

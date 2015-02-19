@@ -5,6 +5,15 @@
 import Foundation
 import WebKit
 
+enum ReaderModeMessageType: String {
+    case StateChange = "ReaderModeStateChange"
+    case PageEvent = "ReaderPageEvent"
+}
+
+enum ReaderPageEvent: String {
+    case PageShow = "PageShow"
+}
+
 enum ReaderModeState: String {
     case Available = "Available"
     case Unavailable = "Unavailable"
@@ -89,6 +98,7 @@ struct ReadabilityResult {
 /// Delegate that contains callbacks that we have added on top of the built-in WKWebViewDelegate
 protocol ReaderModeDelegate {
     func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forBrowser browser: Browser)
+    func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForBrowser browser: Browser)
 }
 
 private let ReaderModeNamespace = "_firefox_ReaderMode"
@@ -99,6 +109,8 @@ class ReaderMode: BrowserHelper, ReaderModeStyleViewControllerDelegate {
     private weak var browser: Browser?
     var state: ReaderModeState = ReaderModeState.Unavailable
     private var originalURL: NSURL?
+
+    var activateImmediately: Bool = false
 
     class func name() -> String {
         return "ReaderMode"
@@ -128,23 +140,41 @@ class ReaderMode: BrowserHelper, ReaderModeStyleViewControllerDelegate {
         return "readerModeMessageHandler"
     }
 
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        println("DEBUG: readerModeMessageHandler message: \(message.body)")
-        if let state = ReaderModeState(rawValue: message.body as String) {
-            self.state = state
-            delegate?.readerMode(self, didChangeReaderModeState: state, forBrowser: browser!)
+    private func handleReaderPageEvent(readerPageEvent: ReaderPageEvent) {
+        switch readerPageEvent {
+            case .PageShow:
+                delegate?.readerMode(self, didDisplayReaderizedContentForBrowser: browser!)
         }
     }
 
-    private func constructAboutReaderURL(originalURL: NSURL?) -> NSURL {
-        if let url = originalURL?.absoluteString {
-            if let encoded = url.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
-                if let aboutReaderURL = NSURL(string: "about:reader?url=\(encoded)") {
-                    return aboutReaderURL
+    private func handleReaderModeStateChange(state: ReaderModeState) {
+        self.state = state
+        delegate?.readerMode(self, didChangeReaderModeState: state, forBrowser: browser!)
+
+        if activateImmediately && state == ReaderModeState.Available {
+            enableReaderMode()
+            activateImmediately = false
+        }
+    }
+
+    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        println("DEBUG: readerModeMessageHandler message: \(message.body)")
+        if let msg = message.body as? Dictionary<String,String> {
+            if let messageType = ReaderModeMessageType(rawValue: msg["Type"] ?? "") {
+                switch messageType {
+                    case .PageEvent:
+                        if let readerPageEvent = ReaderPageEvent(rawValue: msg["Value"] ?? "Invalid") {
+                            handleReaderPageEvent(readerPageEvent)
+                        }
+                        break
+                    case .StateChange:
+                        if let readerModeState = ReaderModeState(rawValue: msg["Value"] ?? "Invalid") {
+                            handleReaderModeStateChange(readerModeState)
+                        }
+                        break
                 }
             }
         }
-        return NSURL(string: "about:reader")!
     }
 
     func enableReaderMode() {
@@ -156,7 +186,9 @@ class ReaderMode: BrowserHelper, ReaderModeStyleViewControllerDelegate {
                         if let html = self.generateReaderContent(readabilityResult, initialStyle: self.style) {
                             self.state = ReaderModeState.Active
                             self.originalURL = self.browser!.webView.URL
-                            self.browser!.webView.loadHTMLString(html, baseURL: self.constructAboutReaderURL(self.browser!.webView.URL))
+                            if let readerModeURL = ReaderMode.encodeURL(self.browser!.webView.URL) {
+                                self.browser!.webView.loadHTMLString(html, baseURL: readerModeURL)
+                            }
                             return
                         }
                     }
@@ -224,5 +256,35 @@ class ReaderMode: BrowserHelper, ReaderModeStyleViewControllerDelegate {
 
     func readerModeStyleViewController(readerModeStyleViewController: ReaderModeStyleViewController, didConfigureStyle style: ReaderModeStyle) {
         self.style = style
+    }
+
+    class func isReaderModeURL(url: NSURL) -> Bool {
+        if let absoluteString = url.absoluteString {
+            return absoluteString.hasPrefix("about:reader?url=")
+        }
+        return false
+    }
+
+    class func decodeURL(url: NSURL) -> NSURL? {
+        if let absoluteString = url.absoluteString {
+            if absoluteString.hasPrefix("about:reader?url=") {
+                let encodedURL = absoluteString.substringFromIndex(advance(absoluteString.startIndex, 17))
+                if let decodedURL = encodedURL.stringByRemovingPercentEncoding {
+                    return NSURL(string: decodedURL)
+                }
+            }
+        }
+        return nil
+    }
+
+    class func encodeURL(url: NSURL?) -> NSURL? {
+        if let absoluteString = url?.absoluteString {
+            if let encodedURL = absoluteString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
+                if let aboutReaderURL = NSURL(string: "about:reader?url=\(encodedURL)") {
+                    return aboutReaderURL
+                }
+            }
+        }
+        return nil
     }
 }
