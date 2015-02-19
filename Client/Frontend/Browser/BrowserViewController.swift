@@ -350,8 +350,9 @@ extension BrowserViewController: UIScrollViewDelegate {
     }
 
     private func scrollUrlBar(dy: CGFloat) {
-        let newY = clamp(header.transform.ty + dy, min: -header.frame.height, max: 0)
+        let newY = clamp(header.transform.ty + dy, min: -ToolbarHeight, max: 0)
         header.transform = CGAffineTransformMakeTranslation(0, newY)
+        urlBar.alpha = (1 - newY / -ToolbarHeight)
     }
 
     private func scrollToobar(dy: CGFloat) {
@@ -377,10 +378,10 @@ extension BrowserViewController: UIScrollViewDelegate {
 
                 if let tab = self.tabManager.selectedTab {
                     let inset = tab.webView.scrollView.contentInset
-                    let newInset = clamp(inset.top + delta.y, min: 0, max: ToolbarHeight + StatusBarHeight)
+                    let newInset = clamp(inset.top + delta.y, min: StatusBarHeight, max: ToolbarHeight + StatusBarHeight)
 
-                    tab.webView.scrollView.contentInset = UIEdgeInsetsMake(newInset, 0, clamp(newInset, min: 0, max: ToolbarHeight), 0)
-                    tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(newInset, 0, clamp(newInset, min: 0, max: ToolbarHeight), 0)
+                    tab.webView.scrollView.contentInset = UIEdgeInsetsMake(newInset, 0, clamp(newInset - StatusBarHeight, min: 0, max: ToolbarHeight), 0)
+                    tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(newInset - StatusBarHeight, 0, clamp(newInset, min: 0, max: ToolbarHeight), 0)
 
                     // Adjusting the contentInset will change the scroll position of the page.
                     // We account for that by also adjusting the previousScroll position
@@ -412,12 +413,13 @@ extension BrowserViewController: UIScrollViewDelegate {
 
     private func hideToolbars(animated: Bool) {
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
-            self.header.transform = CGAffineTransformMakeTranslation(0, -self.header.frame.height)
+            self.header.transform = CGAffineTransformMakeTranslation(0, -ToolbarHeight)
+            self.urlBar.alpha = 0
             self.footer.transform = CGAffineTransformMakeTranslation(0, self.footer.frame.height)
             // Reset the insets so that clicking works on the edges of the screen
             if let tab = self.tabManager.selectedTab {
-                tab.webView.scrollView.contentInset = UIEdgeInsetsZero
-                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero
+                tab.webView.scrollView.contentInset = UIEdgeInsets(top: StatusBarHeight, left: 0, bottom: 0, right: 0)
+                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: StatusBarHeight, left: 0, bottom: 0, right: 0)
             }
         })
     }
@@ -425,6 +427,7 @@ extension BrowserViewController: UIScrollViewDelegate {
     private func showToolbars(animated: Bool) {
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
             self.header.transform = CGAffineTransformIdentity
+            self.urlBar.alpha = 1
             self.footer.transform = CGAffineTransformIdentity
             // Reset the insets so that clicking works on the edges of the screen
             if let tab = self.tabManager.selectedTab {
