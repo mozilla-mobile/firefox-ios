@@ -3,7 +3,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCrypto.h>
-#import "sqlite3.h"
+#import <SWXMLHash/SWXMLHash.h>
 #import "GCDWebServer.h"
 #import "GCDWebServerDataResponse.h"
 #import "ThirdParty/UIImageViewAligned/UIImageViewAligned/UIImageViewAligned.h"

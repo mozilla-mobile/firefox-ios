@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Snappy
+import Snap
 import UIKit
 
 // This is the bounding box of the button. The image is aligned to the top of the box, the text label to the bottom.
