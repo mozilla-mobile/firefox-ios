@@ -1,5 +1,7 @@
 osx_image: xcode611
 language: objective-c
 script:
+  - brew install carthage
+  - carthage update --no-build
   - xctool -project Client.xcodeproj -scheme Travis -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
   - xctool test -freshSimulator -project Client.xcodeproj -scheme Travis -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
