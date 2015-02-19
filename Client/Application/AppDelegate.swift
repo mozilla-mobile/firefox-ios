@@ -31,13 +31,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, applicationWillTerminate app: UIApplication) {
     }
-
+#if MOZ_CHANNEL_AURORA
     var naggedAboutAuroraUpdate = false
     func applicationDidBecomeActive(application: UIApplication) {
         if !naggedAboutAuroraUpdate {
             checkForAuroraUpdate()
         }
     }
+#endif
 
     private func setupWebServer() {
         let server = WebServer.sharedInstance
@@ -49,6 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+#if MOZ_CHANNEL_AURORA
 private let AuroraBundleIdentifier = "org.mozilla.ios.FennecAurora"
 private let AuroraPropertyListURL = "https://pvtbuilds.mozilla.org/ios/FennecAurora.plist"
 private let AuroraDownloadPageURL = "https://pvtbuilds.mozilla.org/ios/index.html"
@@ -102,3 +104,4 @@ extension AppDelegate: UIAlertViewDelegate {
         }
     }
 }
+#endif
