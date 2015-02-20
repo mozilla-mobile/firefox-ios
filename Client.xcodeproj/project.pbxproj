@@ -108,7 +108,6 @@
 		D38B2D3A1A8D96D00040E6B5 /* GCDWebServerResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D1B1A8D96D00040E6B5 /* GCDWebServerResponse.m */; };
 		D38B2D3B1A8D96D00040E6B5 /* GCDWebServerResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D1B1A8D96D00040E6B5 /* GCDWebServerResponse.m */; };
 		D38B2D3C1A8D96D00040E6B5 /* GCDWebServerResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D1B1A8D96D00040E6B5 /* GCDWebServerResponse.m */; };
-		D38B2D3D1A8D96D00040E6B5 /* GCDWebServerDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D1E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m */; };
 		D38B2D3E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D1E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m */; };
 		D38B2D3F1A8D96D00040E6B5 /* GCDWebServerDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D1E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m */; };
 		D38B2D401A8D96D00040E6B5 /* GCDWebServerFileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D201A8D96D00040E6B5 /* GCDWebServerFileRequest.m */; };
@@ -170,6 +169,7 @@
 		E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E42CCE031A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
+		E43A4E551A96B88100E25676 /* GCDWebServerDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D1E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m */; };
 		E4A888161A95679500CDC337 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
 		E4A888171A95679500CDC337 /* FxA.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4AAE2B91A956304006F8740 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D31FC2311A8D908900BAF7EC /* Alamofire.framework */; };
@@ -1569,6 +1569,7 @@
 				D38B2D311A8D96D00040E6B5 /* GCDWebServerConnection.m in Sources */,
 				D38B2D401A8D96D00040E6B5 /* GCDWebServerFileRequest.m in Sources */,
 				D38B2D4F1A8D96D00040E6B5 /* GCDWebServerFileResponse.m in Sources */,
+				E43A4E551A96B88100E25676 /* GCDWebServerDataRequest.m in Sources */,
 				28CE83C91A1D1D3200576538 /* TokenServerClient.swift in Sources */,
 				9B9AE2241A48B9A600AF2C23 /* LongPressGestureRecognizer.swift in Sources */,
 				28CE83C71A1D1D3200576538 /* Records.swift in Sources */,
