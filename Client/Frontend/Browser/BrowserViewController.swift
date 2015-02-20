@@ -507,8 +507,10 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         let favicons = FaviconManager(browser: tab, profile: profile)
-        favicons.profile = profile
         tab.addHelper(favicons, name: FaviconManager.name())
+
+        let pm = PasswordManager(browser: tab, profile: profile)
+        tab.addHelper(pm, name: PasswordManager.name())
     }
 
     func tabManager(tabManager: TabManager, didAddTab tab: Browser) {

@@ -11,6 +11,8 @@
 		0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */; };
 		0B6544D31A96C5F0000DD202 /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B6544C21A96C59E000DD202 /* libSDWebImage.a */; };
 		0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B8E0FF31A932BD500161DC3 /* ImageIO.framework */; };
+		0B305FB91A7F4F040085B8BC /* Passwords.js in Resources */ = {isa = PBXBuildFile; fileRef = 0B305FB81A7F4F040085B8BC /* Passwords.js */; };
+		0B305FC01A7FDD830085B8BC /* PasswordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B305FBF1A7FDD830085B8BC /* PasswordManager.swift */; };
 		0B9E3DE71A23FBD1008A7877 /* TestPanels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */; };
 		0BA2E43C1A69EDAB000581FA /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
 		0BA8964B1A250E6500C1010C /* AccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA896491A250E6500C1010C /* AccountTest.swift */; };
@@ -451,6 +453,9 @@
 		0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
 		0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = Carthage/Checkouts/SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
 		0B8E0FF31A932BD500161DC3 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		0B305FB81A7F4F040085B8BC /* Passwords.js */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.javascript; path = Passwords.js; sourceTree = "<group>"; tabWidth = 1; };
+		0B305FBF1A7FDD830085B8BC /* PasswordManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordManager.swift; sourceTree = "<group>"; };
+		0B9E3DD91A23FBBC008A7877 /* Panels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Panels.swift; sourceTree = "<group>"; };
 		0B9E3DE31A23FBD1008A7877 /* TestPanels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPanels.swift; sourceTree = "<group>"; };
 		0BA896491A250E6500C1010C /* AccountTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountTest.swift; sourceTree = "<group>"; };
 		0BA8964A1A250E6500C1010C /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
@@ -924,6 +929,7 @@
 				0BF42D361A7C0B8E00889E28 /* FaviconManager.swift */,
 				59A68CCB63E2A565CB03F832 /* SearchViewController.swift */,
 				0BF0DBBF1A8598D50039F300 /* TransitionManager.swift */,
+				0B305FBF1A7FDD830085B8BC /* PasswordManager.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -1035,6 +1041,7 @@
 				F84B22391A0914A300AAB793 /* Fonts */,
 				F84B21EF1A0910F600AAB793 /* Images.xcassets */,
 				0BF42D381A7C0E8900889E28 /* Favicons.js */,
+				0B305FB81A7F4F040085B8BC /* Passwords.js */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -1535,6 +1542,9 @@
 				E4D6BEA61A092A4700F538BD /* Login.xcassets in Resources */,
 				F84B22271A09127C00AAB793 /* Home.xcassets in Resources */,
 				E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */,
+				0B305FB91A7F4F040085B8BC /* Passwords.js in Resources */,
+				F84B22271A09127C00AAB793 /* TabBar.xcassets in Resources */,
+				F84B220E1A0910F600AAB793 /* ReaderViewController.xib in Resources */,
 				E4B7B7791A793CF20022C5E0 /* FiraSans-Light.ttf in Resources */,
 				9B64C2A81A6451A800473AE3 /* LongPress.js in Resources */,
 				E4CD9E9A1A68980A00318571 /* ReaderMode.js in Resources */,
@@ -1622,6 +1632,9 @@
 				D38B2D371A8D96D00040E6B5 /* GCDWebServerRequest.m in Sources */,
 				28CE83C61A1D1D3200576538 /* KeysPayload.swift in Sources */,
 				D34DC8541A16C40C00D49B7B /* AccountManager.swift in Sources */,
+				E4CD9EFE1A6D9B0900318571 /* GCDWebServerConnection.m in Sources */,
+				0BD19A631A2530740084FBA7 /* Panels.swift in Sources */,
+				0B305FC01A7FDD830085B8BC /* PasswordManager.swift in Sources */,
 				E4CD9F2D1A6DC91200318571 /* BrowserLocationView.swift in Sources */,
 				D38B2D461A8D96D00040E6B5 /* GCDWebServerURLEncodedFormRequest.m in Sources */,
 				D38B2D4C1A8D96D00040E6B5 /* GCDWebServerErrorResponse.m in Sources */,

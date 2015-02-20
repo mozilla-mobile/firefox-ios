@@ -85,6 +85,7 @@ protocol Profile {
     var history: History { get }
     var favicons: Favicons { get }
     var readingList: ReadingList { get }
+    var passwords: Passwords { get }
 
     // Because we can't test for whether this is an AccountProfile.
     // TODO: probably Profile should own an Account.
@@ -157,6 +158,10 @@ public class MockAccountProfile: Profile, AccountProfile {
 
     lazy var readingList: ReadingList = {
         return SQLiteReadingList(files: self.files)
+    }()
+
+    lazy var passwords: Passwords = {
+        return MockPasswords(files: self.files)
     }()
 }
 
@@ -266,5 +271,9 @@ public class RESTAccountProfile: Profile, AccountProfile {
 
     lazy var readingList: ReadingList = {
         return SQLiteReadingList(files: self.files)
+    }()
+
+    lazy var passwords: Passwords = {
+        return SQLitePasswords(files: self.files)
     }()
 }
