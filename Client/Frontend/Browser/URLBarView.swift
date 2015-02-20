@@ -64,8 +64,8 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         self.addSubview(progressBar)
 
         tabsButton = UIButton()
-        tabsButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        tabsButton.titleLabel?.layer.borderColor = UIColor.blackColor().CGColor
+        tabsButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        tabsButton.titleLabel?.layer.borderColor = UIColor.whiteColor().CGColor
         tabsButton.titleLabel?.layer.cornerRadius = 4
         tabsButton.titleLabel?.layer.borderWidth = 1
         tabsButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 12)
@@ -78,7 +78,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         self.addSubview(tabsButton)
 
         cancelButton = UIButton()
-        cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        cancelButton.setTitleColor(UIColor.blackColor   (), forState: UIControlState.Normal)
         cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
         cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 14)
         cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
@@ -91,10 +91,10 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         }
 
         self.tabsButton.snp_remakeConstraints { make in
-            make.left.equalTo(self.locationView.snp_right)
+            make.left.equalTo(self.locationView.snp_right).offset(8)
             make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
             make.width.height.equalTo(ToolbarHeight)
-            make.right.equalTo(self).offset(-8)
+            make.right.equalTo(self)
         }
 
         self.progressBar.snp_remakeConstraints { make in
@@ -104,7 +104,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
 
         cancelButton.snp_makeConstraints { make in
             make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
-            make.right.equalTo(self).offset(-8)
+            make.right.equalTo(self).offset(-2)
         }
     }
 
@@ -202,6 +202,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         progressBar.hidden = editing
         editTextField.hidden = !editing
         cancelButton.hidden = !editing
+        setNeedsLayout()
     }
 
     func SELdidClickCancel() {
@@ -212,6 +213,73 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         self.SELdidClickCancel()
         return true
     }
+}
+
+/* Code for drawing the urlbar curve */
+// Curve's aspect ratio
+private let ASPECT_RATIO = 0.729
+
+// Width multipliers
+private let W_M1 = 0.343
+private let W_M2 = 0.514
+private let W_M3 = 0.49
+private let W_M4 = 0.545
+private let W_M5 = 0.723
+
+// Height multipliers
+private let H_M1 = 0.25
+private let H_M2 = 0.5
+private let H_M3 = 0.72
+private let H_M4 = 0.961
+extension URLBarView {
+    func getWidthForHeight(height: Double) -> Double {
+        return height * ASPECT_RATIO
+    }
+
+    func drawFromTop(path: UIBezierPath) {
+        let height: Double = Double(ToolbarHeight)
+        let width = getWidthForHeight(height)
+        var from: (Double, Double) = (0, 0)
+
+        if cancelButton.hidden {
+            from = (Double(self.tabsButton.frame.origin.x) - width/2, Double(StatusBarHeight))
+        } else {
+            from = (Double(self.cancelButton.frame.origin.x + self.cancelButton.frame.width), Double(StatusBarHeight))
+        }
+
+        path.moveToPoint(CGPoint(x: from.0, y: from.1))
+        path.addCurveToPoint(CGPoint(x: from.0 + width * W_M2, y: from.1 + height * H_M2),
+            controlPoint1: CGPoint(x: from.0 + width * W_M1, y: from.1),
+            controlPoint2: CGPoint(x: from.0 + width * W_M3, y: from.1 + height * H_M1))
+
+        path.addCurveToPoint(CGPoint(x: from.0 + width,        y: from.1 + height),
+            controlPoint1: CGPoint(x: from.0 + width * W_M4, y: from.1 + height * H_M3),
+            controlPoint2: CGPoint(x: from.0 + width * W_M5, y: from.1 + height * H_M4))
+    }
+
+    private func getPath() -> UIBezierPath {
+        let path = UIBezierPath()
+        self.drawFromTop(path)
+        path.addLineToPoint(CGPoint(x: self.frame.width, y: self.frame.height))
+        path.addLineToPoint(CGPoint(x: self.frame.width, y: 0))
+        path.addLineToPoint(CGPoint(x: 0, y: 0))
+        path.addLineToPoint(CGPoint(x: 0, y: StatusBarHeight))
+        path.closePath()
+        return path
+    }
+
+    override class func layerClass() -> AnyClass {
+        return CAShapeLayer.self
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if let layer = layer as? CAShapeLayer {
+            layer.path = self.getPath().CGPath
+            layer.fillColor = UIColor.darkGrayColor().CGColor
+        }
+    }
+
 }
 
 private class ToolbarTextField: UITextField {
