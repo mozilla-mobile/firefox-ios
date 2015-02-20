@@ -19,6 +19,7 @@ class Browser: NSObject, WKScriptMessageHandler {
         webView = WKWebView(frame: CGRectZero, configuration: configuration)
         webView.allowsBackForwardNavigationGestures = true
         webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
+        webView.backgroundColor = UIColor.lightGrayColor()
 
         super.init()
     }
