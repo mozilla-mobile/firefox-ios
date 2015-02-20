@@ -12,6 +12,10 @@ public class SQLiteFavicons : Favicons {
     let db: BrowserDB
     let table: JoinedFaviconsHistoryTable<(Site, Favicon)>
 
+    lazy public var defaultIcon: UIImage = {
+        return UIImage(named: "defaultFavicon")!
+    }()
+
     required public init(files: FileAccessor) {
         self.files = files
         self.db = BrowserDB(files: files)!
@@ -19,7 +23,7 @@ public class SQLiteFavicons : Favicons {
         db.createOrUpdate(table)
     }
 
-    public func clear(options: QueryOptions?, complete: (success: Bool) -> Void) {
+    public func clear(options: QueryOptions?, complete: ((success: Bool) -> Void)?) {
         var err: NSError? = nil
         let res = db.delete(&err) { connection, err in
             return self.table.delete(connection, item: nil, err: &err)
@@ -28,7 +32,8 @@ public class SQLiteFavicons : Favicons {
         files.remove("favicons", basePath: nil)
 
         dispatch_async(dispatch_get_main_queue()) {
-            complete(success: err == nil)
+            complete?(success: err == nil)
+            return
         }
     }
 
@@ -43,14 +48,15 @@ public class SQLiteFavicons : Favicons {
         }
     }
 
-    public func add(icon: Favicon, site: Site, complete: (success: Bool) -> Void) {
+    public func add(icon: Favicon, site: Site, complete: ((success: Bool) -> Void)?) {
         var err: NSError? = nil
         let res = db.insert(&err) { connection, err in
             return self.table.insert(connection, item: (icon: icon, site: site), err: &err)
         }
 
         dispatch_async(dispatch_get_main_queue()) {
-            complete(success: err == nil)
+            complete?(success: err == nil)
+            return
         }
     }
 

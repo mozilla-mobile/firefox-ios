@@ -39,7 +39,7 @@ class HistoryPanel: UITableViewController, HomePanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerClass(CustomCell.self, forCellReuseIdentifier: CELL_IDENTIFIER)
+        tableView.registerClass(TwoLineCell.self, forCellReuseIdentifier: CELL_IDENTIFIER)
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,37 +53,6 @@ class HistoryPanel: UITableViewController, HomePanel {
         return 0
     }
 
-    // UITableViewController doesn't let us specify a style for recycling views. We override the default style here.
-    private class CustomCell : UITableViewCell {
-        override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-            // ignore the style argument, use our own to override
-            super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
-            textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
-            textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
-            indentationWidth = 0
-
-            detailTextLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
-            imageView?.frame = CGRectMake(0, 0, 24, 24)
-        }
-
-        required init(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-    }
-
-    class func createSizedFavicon(icon: UIImage) -> UIImage {
-        let size = CGSize(width: 30, height: 30)
-        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-        var context = UIGraphicsGetCurrentContext()
-
-        icon.drawInRect(CGRectInset(CGRect(origin: CGPointZero, size: size), 1.0, 1.0))
-
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
-    }
-
-    private let FAVICON_SIZE = 32
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(CELL_IDENTIFIER) as UITableViewCell
 
@@ -91,13 +60,12 @@ class HistoryPanel: UITableViewController, HomePanel {
             if let site = hist[indexPath.row] as? Site {
                 cell.textLabel?.text = site.title
                 cell.detailTextLabel?.text = site.url
-                if let img = site.icon?.getImage(profile.files) {
-                    cell.imageView?.image = HistoryPanel.createSizedFavicon(img)
+                if let img = site.icon? {
+                    let imgURL = NSURL(string: img.url)
+                    cell.imageView?.sd_setImageWithURL(imgURL, placeholderImage: self.profile.favicons.defaultIcon)
                 } else {
-                    cell.imageView?.image = UIImage(named: "defaultFavicon")
+                    cell.imageView?.image = self.profile.favicons.defaultIcon
                 }
-                let opts = QueryOptions()
-                opts.filter = site.url
             }
         }
 

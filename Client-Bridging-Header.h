@@ -7,5 +7,6 @@
 #import "GCDWebServer.h"
 #import "GCDWebServerDataResponse.h"
 #import "ThirdParty/UIImageViewAligned/UIImageViewAligned/UIImageViewAligned.h"
+#import "Carthage/Checkouts/SDWebImage/SDWebImage/UIImageView+WebCache.h"
 
 #endif
