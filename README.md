@@ -19,10 +19,18 @@ Building the code
 -----------------
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
+1. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage).
 1. Clone the repository:
 
   ```
   git clone https://github.com/mozilla/firefox-ios
+  ```
+
+1. Pull in the project dependencies:
+
+  ```
+  cd firefox-ios
+  carthage update --no-build
   ```
 
 1. Open `Client.xcodeproj` in Xcode.

@@ -4,7 +4,7 @@
 
 import Foundation
 import UIKit
-import Snappy
+import Snap
 
 protocol BrowserToolbarDelegate: class {
     func browserToolbarDidPressBack(browserToolbar: BrowserToolbar)

@@ -1,3 +1,0 @@
-[submodule "swift-json"]
-	path = ThirdParty/swift-json
-	url = https://github.com/dankogai/swift-json.git

@@ -1,6 +1,0 @@
-language: objective-c
-osx_image: xcode61
-sudo: false
-
-script:
-- xcodebuild -scheme KIF -destination 'platform=iOS Simulator,name=iPhone Retina (4-inch),OS=7.1' -destination 'platform=iOS Simulator,name=iPhone 6,OS=8.1' test

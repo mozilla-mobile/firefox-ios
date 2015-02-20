@@ -1,5 +1,12 @@
 osx_image: xcode611
 language: objective-c
 script:
-  - xctool -project Client.xcodeproj -scheme Travis -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
-  - xctool test -freshSimulator -project Client.xcodeproj -scheme Travis -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+  - brew update
+  - brew upgrade xctool
+  - brew install carthage
+  - carthage update --no-build
+  - xcodebuild -project Client.xcodeproj -scheme FennecNightly -sdk iphonesimulator8.1 -jobs 1 PLATFORM_NAME=iphonesimulator build
+
+# This stopped working
+#  - xctool -project Client.xcodeproj -scheme Travis -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+#  - xctool test -freshSimulator -project Client.xcodeproj -scheme Travis -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO

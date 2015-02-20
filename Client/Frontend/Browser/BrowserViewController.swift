@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import WebKit
 import Storage
-import Snappy
+import Snap
 
 public let StatusBarHeight: CGFloat = 20 // TODO: Can't assume this is correct. Status bar height is dynamic.
 public let ToolbarHeight: CGFloat = 44
