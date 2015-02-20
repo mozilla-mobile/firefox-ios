@@ -181,8 +181,11 @@ extension SearchViewController: UITableViewDelegate {
             case .SearchSuggestions:
                 let suggestion = searchSuggestions[indexPath.row]
 
-                // Assume that only the default search engine can provide search suggestions.
-                url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
+                url = URIFixup().getURL(suggestion)
+                if url == nil {
+                    // Assume that only the default search engine can provide search suggestions.
+                    url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
+                }
             case .BookmarksAndHistory:
                 if let site = data[indexPath.row] as? Site {
                     url = NSURL(string: site.url)
