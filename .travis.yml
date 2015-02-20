@@ -5,7 +5,7 @@ script:
   - brew upgrade xctool
   - brew install carthage
   - carthage update --no-build
-  - xcodebuild -project Client.xcodeproj -scheme FennecNightly -sdk iphonesimulator8.1 -jobs 1 PLATFORM_NAME=iphonesimulator build
+  - xcodebuild -project Client.xcodeproj -scheme Travis -configuration Debug -destination "platform=iOS Simulator,OS=8.1,name=iPhone 6" clean test
 
 # This stopped working
 #  - xctool -project Client.xcodeproj -scheme Travis -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
