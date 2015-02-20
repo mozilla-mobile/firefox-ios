@@ -30,7 +30,7 @@ Building the code
 
   ```
   cd firefox-ios
-  carthage update --no-build
+  carthage checkout
   ```
 
 1. Open `Client.xcodeproj` in Xcode.
