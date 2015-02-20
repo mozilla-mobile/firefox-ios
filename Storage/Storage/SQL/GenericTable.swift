@@ -126,7 +126,7 @@ class GenericTable<T>: Table {
         if var (query, args) = getQueryAndArgs(options) {
             if let factory = self.factory {
                 let c =  db.executeQuery(query, factory: factory, withArgs: args)
-                debug("Insert \(query) \(args) = \(c)")
+                debug("Query \(query) \(args) = \(c)")
                 return c
             }
         }

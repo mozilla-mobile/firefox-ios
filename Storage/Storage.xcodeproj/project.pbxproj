@@ -13,6 +13,8 @@
 		0B2770491A893C9500CE7692 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA497801A7B094B004C8E17 /* Bookmarks.swift */; };
 		0B2770DD1A8AD83200CE7692 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B2770DC1A8AD83200CE7692 /* Bytes.swift */; };
 		0B2770E91A8AD85000CE7692 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B2770DC1A8AD83200CE7692 /* Bytes.swift */; };
+		0B30602F1A80338F0085B8BC /* Passwords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B30602E1A80338F0085B8BC /* Passwords.swift */; };
+		0B3060311A8151B70085B8BC /* SQLitePasswords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3060301A8151B70085B8BC /* SQLitePasswords.swift */; };
 		0BA4977E1A7B0941004C8E17 /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA4977A1A7B0941004C8E17 /* SQLiteHistory.swift */; };
 		0BA497821A7B094B004C8E17 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA497801A7B094B004C8E17 /* Bookmarks.swift */; };
 		0BA497831A7B094B004C8E17 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA497811A7B094B004C8E17 /* Visit.swift */; };
@@ -80,6 +82,8 @@
 		0B2770441A89276900CE7692 /* BookmarksSqlite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksSqlite.swift; sourceTree = "<group>"; };
 		0B2770461A893C2C00CE7692 /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
 		0B2770DC1A8AD83200CE7692 /* Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Bytes.swift; path = ../../Sync/Bytes.swift; sourceTree = "<group>"; };
+		0B30602E1A80338F0085B8BC /* Passwords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Passwords.swift; sourceTree = "<group>"; };
+		0B3060301A8151B70085B8BC /* SQLitePasswords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLitePasswords.swift; sourceTree = "<group>"; };
 		0BA4977A1A7B0941004C8E17 /* SQLiteHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteHistory.swift; path = SQL/SQLiteHistory.swift; sourceTree = "<group>"; };
 		0BA497801A7B094B004C8E17 /* Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
 		0BA497811A7B094B004C8E17 /* Visit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Visit.swift; sourceTree = "<group>"; };
@@ -176,6 +180,7 @@
 				282DA49A1A699E0300A406E2 /* Storage.h */,
 				282DA4981A699E0300A406E2 /* Supporting Files */,
 				0BF42D3D1A7C148F00889E28 /* Favicons.swift */,
+				0B30602E1A80338F0085B8BC /* Passwords.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -239,6 +244,8 @@
 				0BF42D431A7C31EE00889E28 /* FaviconsTable.swift */,
 				0B2770441A89276900CE7692 /* BookmarksSqlite.swift */,
 				E477261A1A8A7DE500FC058B /* SQLiteReadingList.swift */,
+				0BAE69551A7E1FD100B3609D /* TableTable.swift */,
+				0B3060301A8151B70085B8BC /* SQLitePasswords.swift */,
 			);
 			name = SQL;
 			sourceTree = "<group>";
@@ -358,6 +365,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B30602F1A80338F0085B8BC /* Passwords.swift in Sources */,
 				0BA497821A7B094B004C8E17 /* Bookmarks.swift in Sources */,
 				282DA4C51A699F8A00A406E2 /* SwiftData.swift in Sources */,
 				E47726181A8A794B00FC058B /* ReadingList.swift in Sources */,
@@ -380,6 +388,7 @@
 				0BF42D3E1A7C148F00889E28 /* Favicons.swift in Sources */,
 				0BA4978D1A7B0E55004C8E17 /* FileAccessor.swift in Sources */,
 				4A59BD24F6210866F59EF0F6 /* JoinedHistoryVisitsTable.swift in Sources */,
+				0B3060311A8151B70085B8BC /* SQLitePasswords.swift in Sources */,
 				4A59BFF7C37812C7955B9E79 /* HistoryTable.swift in Sources */,
 				4A59BAEB154EA6E1B621E067 /* BrowserDB.swift in Sources */,
 			);

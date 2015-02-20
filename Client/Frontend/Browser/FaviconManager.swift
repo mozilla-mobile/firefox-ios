@@ -7,7 +7,7 @@ import WebKit
 import Storage
 
 class FaviconManager : BrowserHelper {
-    var profile: Profile!
+    let profile: Profile!
     weak var browser: Browser?
 
     init(browser: Browser, profile: Profile) {
