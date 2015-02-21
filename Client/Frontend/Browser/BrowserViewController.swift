@@ -144,7 +144,7 @@ class BrowserViewController: UIViewController {
 
         searchController = SearchViewController()
         searchController!.searchEngines = profile.searchEngines
-        searchController!.delegate = self
+        searchController!.homePanelDelegate = self
         searchController!.profile = self.profile
 
         view.addSubview(searchController!.view)

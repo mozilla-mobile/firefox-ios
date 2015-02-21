@@ -197,7 +197,7 @@ extension SearchViewController: UITableViewDelegate {
         }
 
         if let url = url {
-            delegate?.homePanel(didSubmitURL: url)
+            homePanelDelegate?.homePanel(didSubmitURL: url)
         }
     }
 }
