@@ -14,9 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Setup a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setupWebServer()
 
-        profile = RESTAccountProfile(localName: "profile", credential: NSURLCredential(), logoutCallback: { (profile) -> () in
-            // Nothing to do
-        })
+        profile = BrowserProfile(localName: "profile")
 
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window.backgroundColor = UIColor.whiteColor()
