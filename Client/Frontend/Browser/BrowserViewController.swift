@@ -431,13 +431,13 @@ extension BrowserViewController: UIScrollViewDelegate {
         let offset = scrollView.contentOffset
         // If we're moving up, or the header is half onscreen, hide the toolbars
         if velocity.y < 0 || self.header.transform.ty > -self.header.frame.height / 2 {
-            showToolbars(true)
+            showToolbars(animated: true)
         } else {
-            hideToolbars(true)
+            hideToolbars(animated: true)
         }
     }
 
-    private func hideToolbars(animated: Bool) {
+    private func hideToolbars(#animated: Bool) {
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
             self.header.transform = CGAffineTransformMakeTranslation(0, -ToolbarHeight)
             self.urlBar.alpha = 0
@@ -450,7 +450,7 @@ extension BrowserViewController: UIScrollViewDelegate {
         })
     }
 
-    private func showToolbars(animated: Bool) {
+    private func showToolbars(#animated: Bool) {
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
             self.header.transform = CGAffineTransformIdentity
             self.urlBar.alpha = 1
@@ -475,7 +475,7 @@ extension BrowserViewController: TabManagerDelegate {
         selected?.webView.navigationDelegate = self
         selected?.webView.scrollView.delegate = self
         urlBar.updateURL(selected?.url)
-        showToolbars(false)
+        showToolbars(animated: false)
 
         toolbar.updateBackStatus(selected?.canGoBack ?? false)
         toolbar.updateFowardStatus(selected?.canGoForward ?? false)
@@ -554,7 +554,7 @@ extension BrowserViewController: WKNavigationDelegate {
         urlBar.updateURL(webView.URL);
         toolbar.updateBackStatus(webView.canGoBack)
         toolbar.updateFowardStatus(webView.canGoForward)
-        showToolbars(false)
+        showToolbars(animated: false)
 
         if let url = webView.URL?.absoluteString {
             profile.bookmarks.isBookmarked(url, success: { bookmarked in
