@@ -44,8 +44,12 @@ class FaviconManager : BrowserHelper {
                                 date: NSDate(),
                                 type: IconType(rawValue: icon.1)!)
 
-                            fav.width = Int(img.size.width)
-                            fav.height = Int(img.size.height)
+                            if let img = img {
+                                fav.width = Int(img.size.width)
+                                fav.height = Int(img.size.height)
+                            } else {
+                                return
+                            }
 
                             self.profile.favicons.add(fav, site: site, complete: nil)
                         })
