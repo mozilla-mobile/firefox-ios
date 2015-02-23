@@ -594,6 +594,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
+        self.tabManager.selectTab(self.tabManager.getTab(webView))
         // Show JavaScript alerts.
         let title = frame.request.URL.host
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
@@ -604,6 +605,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (Bool) -> Void) {
+        self.tabManager.selectTab(self.tabManager.getTab(webView))
         // Show JavaScript confirm dialogs.
         let title = frame.request.URL.host
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
@@ -617,6 +619,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: (String!) -> Void) {
+        self.tabManager.selectTab(self.tabManager.getTab(webView))
         // Show JavaScript input dialogs.
         let title = frame.request.URL.host
         let alertController = UIAlertController(title: title, message: prompt, preferredStyle: UIAlertControllerStyle.Alert)
