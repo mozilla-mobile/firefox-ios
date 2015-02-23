@@ -538,6 +538,24 @@ extension BrowserViewController: TabManagerDelegate {
 }
 
 extension BrowserViewController: WKNavigationDelegate {
+    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
+        // TODO When we have more special cases we can introduce a nicer way to catch scheme/host combinations
+        if let scheme = navigationAction.request.URL.scheme {
+            if scheme == "http" || scheme == "https" {
+                // Catch navigation actions to the App Store and let the OS open them
+                if let host = navigationAction.request.URL.host {
+                    if host == "itunes.apple.com" {
+                        UIApplication.sharedApplication().openURL(navigationAction.request.URL)
+                        decisionHandler(WKNavigationActionPolicy.Cancel)
+                        return
+                    }
+                }
+            }
+        }
+        // Default to Allow, even in case of errors or missing data. Otherwise the WKWebView will raise an exception.
+        decisionHandler(WKNavigationActionPolicy.Allow)
+    }
+
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
         // are going to a about:reader page. Then we keep it on screen: it will change status
