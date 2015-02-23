@@ -49,6 +49,10 @@ class BrowserViewController: UIViewController {
         tabManager = TabManager(defaultNewTabRequest: defaultRequest)
     }
 
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+
     override func viewDidLoad() {
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
@@ -378,10 +382,12 @@ extension BrowserViewController: UIScrollViewDelegate {
     private func scrollUrlBar(dy: CGFloat) {
         let newY = clamp(header.transform.ty + dy, min: -ToolbarHeight, max: 0)
         header.transform = CGAffineTransformMakeTranslation(0, newY)
-        urlBar.alpha = (1 - newY / -ToolbarHeight)
+
+        let percent = 1 - newY / -ToolbarHeight
+        urlBar.alpha = percent
     }
 
-    private func scrollToobar(dy: CGFloat) {
+    private func scrollToolbar(dy: CGFloat) {
         let newY = clamp(footer.transform.ty - dy, min: 0, max: footer.frame.height)
         footer.transform = CGAffineTransformMakeTranslation(0, newY)
     }
@@ -415,7 +421,7 @@ extension BrowserViewController: UIScrollViewDelegate {
                 }
 
                 scrollUrlBar(delta.y)
-                scrollToobar(delta.y)
+                scrollToolbar(delta.y)
             }
         }
     }
@@ -439,9 +445,8 @@ extension BrowserViewController: UIScrollViewDelegate {
 
     private func hideToolbars(#animated: Bool) {
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
-            self.header.transform = CGAffineTransformMakeTranslation(0, -ToolbarHeight)
-            self.urlBar.alpha = 0
-            self.footer.transform = CGAffineTransformMakeTranslation(0, self.footer.frame.height)
+            self.scrollUrlBar(CGFloat(-1*MAXFLOAT))
+            self.scrollToolbar(CGFloat(-1*MAXFLOAT))
             // Reset the insets so that clicking works on the edges of the screen
             if let tab = self.tabManager.selectedTab {
                 tab.webView.scrollView.contentInset = UIEdgeInsets(top: StatusBarHeight, left: 0, bottom: 0, right: 0)
@@ -452,9 +457,8 @@ extension BrowserViewController: UIScrollViewDelegate {
 
     private func showToolbars(#animated: Bool) {
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
-            self.header.transform = CGAffineTransformIdentity
-            self.urlBar.alpha = 1
-            self.footer.transform = CGAffineTransformIdentity
+            self.scrollUrlBar(CGFloat(MAXFLOAT))
+            self.scrollToolbar(CGFloat(MAXFLOAT))
             // Reset the insets so that clicking works on the edges of the screen
             if let tab = self.tabManager.selectedTab {
                 tab.webView.scrollView.contentInset = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
