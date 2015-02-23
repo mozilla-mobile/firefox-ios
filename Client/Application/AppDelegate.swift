@@ -24,13 +24,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window.rootViewController = controller
         self.window.makeKeyAndVisible()
 
-        checkForAuroraUpdate()
-
         return true
     }
 
     func application(application: UIApplication, applicationWillTerminate app: UIApplication) {
     }
+#if MOZ_CHANNEL_AURORA
+    var naggedAboutAuroraUpdate = false
+    func applicationDidBecomeActive(application: UIApplication) {
+        if !naggedAboutAuroraUpdate {
+            checkForAuroraUpdate()
+        }
+    }
+#endif
 
     private func setupWebServer() {
         let server = WebServer.sharedInstance
@@ -42,9 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-/// Everything below is for the Aurora version check. There is no conditional compilation in Swift so this code is only
-/// executed when our bundle identifier is FennecAurora.
-
+#if MOZ_CHANNEL_AURORA
 private let AuroraBundleIdentifier = "org.mozilla.ios.FennecAurora"
 private let AuroraPropertyListURL = "https://pvtbuilds.mozilla.org/ios/FennecAurora.plist"
 private let AuroraDownloadPageURL = "https://pvtbuilds.mozilla.org/ios/index.html"
@@ -56,6 +60,7 @@ extension AppDelegate: UIAlertViewDelegate {
                 fetchLatestAuroraVersion() { version in
                     if let remoteVersion = version {
                         if localVersion.compare(remoteVersion, options: NSStringCompareOptions.NumericSearch) == NSComparisonResult.OrderedAscending {
+                            self.naggedAboutAuroraUpdate = true
                             let alert = UIAlertView(title: "New version available", message: "There is a new version available of Firefox Aurora. Tap OK to go to the download page.", delegate: self, cancelButtonTitle: "Not Now", otherButtonTitles: "OK")
                             alert.show()
                         }
@@ -97,3 +102,4 @@ extension AppDelegate: UIAlertViewDelegate {
         }
     }
 }
+#endif
