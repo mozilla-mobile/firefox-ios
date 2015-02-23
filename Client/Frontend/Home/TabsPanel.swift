@@ -6,28 +6,10 @@ import UIKit
 import Alamofire
 import Storage
 
-class TabsPanel: UITableViewController {
-    private var TABS_HEADER_IDENTIFIER = "TABS_HEADER"
-    private var TABS_CELL_IDENTIFIER = "TABS_CELL"
-
-    var profile: Profile!
+class TabsPanel: SiteTableViewController {
     private var tabsResponse: TabsResponse?
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        tableView.sectionFooterHeight = 0
-        //tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: TABS_CELL_IDENTIFIER);
-
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
-
-        let nib = UINib(nibName: "TabsViewControllerHeader", bundle: nil);
-        tableView.registerNib(nib, forHeaderFooterViewReuseIdentifier: TABS_HEADER_IDENTIFIER)
-    }
-
-    func reloadData() {
+    override func reloadData() {
         Alamofire.request(.GET, "https://syncapi-dev.sateh.com/1.0/tabs")
             .authenticate(user: "sarentz+syncapi@mozilla.com", password: "q1w2e3r4") // TODO: Get rid of test account and use AccountManager and TabProvider to obtain tabs.
             .responseJSON { (request, response, data, error) in
@@ -37,14 +19,6 @@ class TabsPanel: UITableViewController {
                     self.tableView.reloadData()
                 }
         }
-    }
-
-    func refresh() {
-        reloadData()
-    }
-
-    override func viewDidAppear(animated: Bool) {
-        reloadData()
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -64,7 +38,7 @@ class TabsPanel: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell : UITableViewCell = tableView.dequeueReusableCellWithIdentifier(TABS_CELL_IDENTIFIER, forIndexPath: indexPath) as UITableViewCell
+        let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
 
         if let tab = tabsResponse?.clients[indexPath.section].tabs[indexPath.row] {
             // TODO: We need better async image loading here
@@ -79,16 +53,8 @@ class TabsPanel: UITableViewController {
         return cell
     }
 
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 42
-    }
-
-    override func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
-    }
-
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(TABS_HEADER_IDENTIFIER) as? UIView
+        let view = super.tableView(tableView, viewForHeaderInSection: section)
 
         if let label = view?.viewWithTag(1) as? UILabel {
             if let response = tabsResponse {
@@ -99,16 +65,6 @@ class TabsPanel: UITableViewController {
 
         return view
     }
-
-//    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//        let objects = UINib(nibName: "TabsViewControllerHeader", bundle: nil).instantiateWithOwner(nil, options: nil)
-//        if let view = objects[0] as? UIView {
-//            if let label = view.viewWithTag(1) as? UILabel {
-//                // TODO: More button
-//            }
-//        }
-//        return view
-//    }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)

@@ -5,50 +5,35 @@
 import UIKit
 import Storage
 
-class ReaderPanel: UITableViewController, HomePanel {
-
-    var readingListItemsCursor: Cursor? = nil
-    weak var delegate: HomePanelDelegate? = nil
-
-    var profile: Profile! {
-        didSet {
-            profile.readingList.get { (cursor) -> Void in
-                self.readingListItemsCursor = (cursor.status == .Success) ? cursor : nil
-                self.tableView.reloadData()
-            }
+class ReaderPanel: SiteTableViewController {
+    override func reloadData() {
+        profile.readingList.get { (cursor) -> Void in
+            self.refreshControl?.endRefreshing()
+            self.data = cursor
+            self.tableView.reloadData()
         }
-    }
-
-    // MARK: UITableViewDataSourceDelegate
-
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let cursor = self.readingListItemsCursor {
-            return cursor.count
-        }
-        return 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "ReadingListCell")
-        if let cursor = self.readingListItemsCursor {
-            if let readingListItem = cursor[indexPath.row] as? ReadingListItem {
-                cell.textLabel?.text = readingListItem.title
-            }
+        let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+        if let readingListItem = data[indexPath.row] as? ReadingListItem {
+            cell.textLabel?.text = readingListItem.title
+            cell.detailTextLabel?.text = readingListItem.excerpt
         }
         return cell
     }
 
-    // MARK: UITableViewDelegate
-
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let cursor = self.readingListItemsCursor {
-            if let readingListItem = cursor[indexPath.row] as? ReadingListItem {
-                if let encodedURL = readingListItem.url.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
-                    if let aboutReaderURL = NSURL(string: "about:reader?url=\(encodedURL)") {
-                        delegate?.homePanel(didSubmitURL: aboutReaderURL)
-                    }
+        if let readingListItem = data[indexPath.row] as? ReadingListItem {
+            if let encodedURL = readingListItem.url.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
+                if let aboutReaderURL = NSURL(string: "about:reader?url=\(encodedURL)") {
+                    delegate?.homePanel(didSubmitURL: aboutReaderURL)
                 }
             }
         }
+    }
+
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
     }
 }

@@ -363,8 +363,8 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     }
 }
 
-extension BrowserViewController: SearchViewControllerDelegate {
-    func searchViewController(searchViewController: SearchViewController, didSubmitURL url: NSURL) {
+extension BrowserViewController: HomePanelDelegate {
+    func homePanel(didSubmitURL url: NSURL) {
         finishEditingAndSubmit(url)
     }
 }

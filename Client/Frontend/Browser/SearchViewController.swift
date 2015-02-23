@@ -25,21 +25,10 @@ private enum SearchListSection: Int{
     }
 }
 
-// A delegate to support clicking on rows in the view controller
-// This needs to be accessible to objc for UIViewControllers to call it
-@objc
-protocol SearchViewControllerDelegate: class {
-    func searchViewController(searchViewController: SearchViewController, didSubmitURL url: NSURL)
-}
-
-class SearchViewController: UIViewController {
-    weak var delegate: SearchViewControllerDelegate?
-    private var tableView = UITableView()
+class SearchViewController: SiteTableViewController {
     private var sortedEngines = [OpenSearchEngine]()
     private var suggestClient: SearchSuggestClient?
     private var searchSuggestions = [String]()
-    var profile: Profile!
-    private var history: Cursor?
 
     var searchEngines: SearchEngines? {
         didSet {
@@ -63,38 +52,15 @@ class SearchViewController: UIViewController {
 
     var searchQuery: String = "" {
         didSet {
-            querySuggestClient()
-            queryHistoryClient()
-            
             // Reload the tableView to show the updated text in each engine.
-            tableView.reloadData()
+            reloadData()
         }
     }
 
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    override init() {
-        // The empty initializer of UIViewController creates the class twice (?!),
-        // so override it here to avoid calling it.
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    override func viewDidLoad() {
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.registerClass(TwoLineCell.self, forCellReuseIdentifier: ReuseIdentifier)
-
-        // Make the row separators span the width of the entire table.
-        tableView.layoutMargins = UIEdgeInsetsZero
-        tableView.separatorInset = UIEdgeInsetsZero
-
-        view.addSubview(tableView)
-        tableView.snp_makeConstraints { make in
-            make.edges.equalTo(self.view)
-            return
-        }
+    override func reloadData() {
+        querySuggestClient()
+        queryHistoryClient()
+        tableView.reloadData()
     }
 
     private func querySuggestClient() {
@@ -136,9 +102,8 @@ class SearchViewController: UIViewController {
     }
 
     private func queryHistoryClient() {
-
         if searchQuery.isEmpty {
-            history = nil
+            data = Cursor(status: .Success, msg: "Empty query")
             return
         }
 
@@ -147,11 +112,9 @@ class SearchViewController: UIViewController {
         opts.filter = searchQuery
 
         profile.history.get(opts, complete: { (data: Cursor) -> Void in
+            self.data = data
             if data.status != .Success {
                 println("Err: \(data.statusMessage)")
-                self.history = nil
-            } else {
-                self.history = data
             }
             self.tableView.reloadData()
         })
@@ -159,8 +122,8 @@ class SearchViewController: UIViewController {
 }
 
 extension SearchViewController: UITableViewDataSource {
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath) as TwoLineCell
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
 
         if let currentSection = SearchListSection(rawValue: indexPath.section) {
             switch currentSection {
@@ -171,19 +134,17 @@ extension SearchViewController: UITableViewDataSource {
                 cell.isAccessibilityElement = false
                 cell.accessibilityLabel = nil
             case .BookmarksAndHistory:
-                if let hasHistory = self.history {
-                    if let site = hasHistory[indexPath.row] as? Site {
-                        cell.textLabel?.text = site.title
-                        cell.detailTextLabel?.text = site.url
-                        if let img = site.icon? {
-                            let imgUrl = NSURL(string: img.url)
-                            cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
-                        } else {
-                            cell.imageView?.image = self.profile.favicons.defaultIcon
-                        }
-                        cell.isAccessibilityElement = false
-                        cell.accessibilityLabel = nil
+                if let site = data[indexPath.row] as? Site {
+                    cell.textLabel?.text = site.title
+                    cell.detailTextLabel?.text = site.url
+                    if let img = site.icon? {
+                        let imgUrl = NSURL(string: img.url)
+                        cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
+                    } else {
+                        cell.imageView?.image = self.profile.favicons.defaultIcon
                     }
+                    cell.isAccessibilityElement = false
+                    cell.accessibilityLabel = nil
                 }
             case .Search:
                 let searchEngine = sortedEngines[indexPath.row]
@@ -201,7 +162,7 @@ extension SearchViewController: UITableViewDataSource {
         return cell
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let currentSection = SearchListSection(rawValue: section) {
             switch(currentSection) {
             case .SuggestedSites:
@@ -209,31 +170,27 @@ extension SearchViewController: UITableViewDataSource {
             case .Search:
                 return sortedEngines.count
             case .BookmarksAndHistory:
-                if let hasHistory = history {
-                    return hasHistory.count
-                } else {
-                    return 0
-                }
+                return data.count
             }
         }
         return 0
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return SearchListSection(rawValue: section)?.description
     }
 
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 3
     }
 }
 
 extension SearchViewController: UITableViewDelegate {
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var url: NSURL?
         if let currentSection = SearchListSection(rawValue: indexPath.section) {
             switch currentSection {
@@ -243,10 +200,8 @@ extension SearchViewController: UITableViewDelegate {
                 // Assume that only the default search engine can provide search suggestions.
                 url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
             case .BookmarksAndHistory:
-                if var hasHistory = history {
-                    if let site = hasHistory[indexPath.row] as? Site {
-                        url = NSURL(string: site.url)
-                    }
+                if let site = data[indexPath.row] as? Site {
+                    url = NSURL(string: site.url)
                 }
             case .Search:
                 let engine = sortedEngines[indexPath.row - searchSuggestions.count]
@@ -255,7 +210,7 @@ extension SearchViewController: UITableViewDelegate {
         }
 
         if let url = url {
-            delegate?.searchViewController(self, didSubmitURL: url)
+            delegate?.homePanel(didSubmitURL: url)
         }
     }
 }

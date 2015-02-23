@@ -29,7 +29,7 @@ public class Cursor: SequenceType {
         self.statusMessage = err.description
     }
 
-    init(status: CursorStatus = CursorStatus.Success, msg: String = "") {
+    public init(status: CursorStatus = CursorStatus.Success, msg: String = "") {
         self.status = status
         self.statusMessage = msg
     }
