@@ -58,6 +58,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         editTextField.delegate = self
         editTextField.font = UIFont(name: "HelveticaNeue-Light", size: 14)
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
+        editTextField.hidden = true
 
         progressBar = UIProgressView()
         self.progressBar.trackTintColor = self.backgroundColor
@@ -105,6 +106,12 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         cancelButton.snp_makeConstraints { make in
             make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
             make.right.equalTo(self).offset(-2)
+        }
+    }
+
+    var isEditing: Bool {
+        get {
+            return !editTextField.hidden
         }
     }
 

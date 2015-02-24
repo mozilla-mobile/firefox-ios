@@ -17,6 +17,8 @@ private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
 private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
 
+private let HomeURL = "about:home"
+
 class BrowserViewController: UIViewController {
     private var urlBar: URLBarView!
     private var toolbar: BrowserToolbar!
@@ -44,7 +46,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func didInit() {
-        let defaultURL = NSURL(string: "http://www.mozilla.org")!
+        let defaultURL = NSURL(string: HomeURL)!
         let defaultRequest = NSURLRequest(URL: defaultURL)
         tabManager = TabManager(defaultNewTabRequest: defaultRequest)
     }
@@ -97,25 +99,24 @@ class BrowserViewController: UIViewController {
         return effect
     }
 
-    private func showHomePanelController() {
-        if homePanelController != nil {
-            return
+    private func showHomePanelController(#inline: Bool) {
+        if homePanelController == nil {
+            homePanelController = HomePanelViewController()
+            homePanelController!.profile = profile
+            homePanelController!.delegate = self
+            homePanelController!.url = tabManager.selectedTab?.url
+
+            view.addSubview(homePanelController!.view)
+            addChildViewController(homePanelController!)
         }
 
-        homePanelController = HomePanelViewController()
-        homePanelController!.profile = profile
-        homePanelController!.delegate = self
-        homePanelController!.url = tabManager.selectedTab?.url
-
-        view.addSubview(homePanelController!.view)
-
-        homePanelController!.view.snp_makeConstraints { make in
+        // Remake constraints even if we're already showing the home controller.
+        // The home controller may change sizes if we tap the URL bar while on about:home.
+        homePanelController!.view.snp_remakeConstraints { make in
             make.top.equalTo(self.urlBar.snp_bottom)
-            make.left.right.bottom.equalTo(self.view)
-            return
+            make.left.right.equalTo(self.view)
+            make.bottom.equalTo(inline ? self.toolbar.snp_top : self.view.snp_bottom)
         }
-
-        addChildViewController(homePanelController!)
     }
 
     private func hideHomePanelController() {
@@ -123,6 +124,16 @@ class BrowserViewController: UIViewController {
             controller.view.removeFromSuperview()
             controller.removeFromParentViewController()
             homePanelController = nil
+        }
+    }
+
+    private func updateInContentHomePanel(url: NSURL?) {
+        if !urlBar.isEditing {
+            if url?.absoluteString == HomeURL {
+                showHomePanelController(inline: true)
+            } else {
+                hideHomePanelController()
+            }
         }
     }
 
@@ -280,12 +291,12 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidBeginEditing(urlBar: URLBarView) {
-        showHomePanelController()
+        showHomePanelController(inline: false)
     }
 
     func urlBarDidEndEditing(urlBar: URLBarView) {
         hideSearchController()
-        hideHomePanelController()
+        updateInContentHomePanel(tabManager.selectedTab?.url)
     }
 }
 
@@ -491,6 +502,8 @@ extension BrowserViewController: TabManagerDelegate {
         } else {
             urlBar.updateReaderModeState(ReaderModeState.Unavailable)
         }
+
+        updateInContentHomePanel(selected?.url)
     }
 
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
@@ -567,6 +580,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 println("Error getting bookmark status: \(err)")
             })
         }
+
+        updateInContentHomePanel(webView.URL)
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
