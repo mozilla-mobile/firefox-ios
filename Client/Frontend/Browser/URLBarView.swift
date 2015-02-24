@@ -188,7 +188,11 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     }
 
     func textFieldDidBeginEditing(textField: UITextField) {
-        textField.selectAll(nil)
+        // Without the async dispatch below, text selection doesn't work
+        // intermittently and crashes on the iPhone 6 Plus (bug 1124310).
+        dispatch_async(dispatch_get_main_queue(), {
+            textField.selectedTextRange = textField.textRangeFromPosition(textField.beginningOfDocument, toPosition: textField.endOfDocument)
+        })
     }
 
     func textFieldShouldClear(textField: UITextField) -> Bool {
