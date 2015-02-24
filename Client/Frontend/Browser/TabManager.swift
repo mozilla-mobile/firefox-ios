@@ -40,6 +40,16 @@ class TabManager {
         return tabs[index]
     }
 
+    func getTab(webView: WKWebView) -> Browser? {
+        for tab in tabs {
+            if tab.webView === webView {
+                return tab
+            }
+        }
+
+        return nil
+    }
+
     func selectTab(tab: Browser?) {
         if selectedTab === tab {
             return
