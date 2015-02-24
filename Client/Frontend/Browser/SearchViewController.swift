@@ -5,24 +5,12 @@
 import UIKit
 import Storage
 
-private let ReuseIdentifier = "cell"
 private let SuggestionsLimitCount = 3
 
-private enum SearchListSection: Int{
-    case SuggestedSites = 0
+private enum SearchListSection: Int {
+    case SearchSuggestions
     case BookmarksAndHistory
     case Search
-
-    var description: String {
-        switch self {
-        case .SuggestedSites:
-            return "Suggested Sites"
-        case .BookmarksAndHistory:
-            return "Bookmarks&History"
-        case .Search:
-            return "Search"
-        }
-    }
 }
 
 class SearchViewController: SiteTableViewController {
@@ -107,11 +95,11 @@ class SearchViewController: SiteTableViewController {
             return
         }
 
-        let opts = QueryOptions()
-        opts.sort = .LastVisit
-        opts.filter = searchQuery
+        let options = QueryOptions()
+        options.sort = .LastVisit
+        options.filter = searchQuery
 
-        profile.history.get(opts, complete: { (data: Cursor) -> Void in
+        profile.history.get(options, complete: { (data: Cursor) -> Void in
             self.data = data
             if data.status != .Success {
                 println("Err: \(data.statusMessage)")
@@ -127,7 +115,7 @@ extension SearchViewController: UITableViewDataSource {
 
         if let currentSection = SearchListSection(rawValue: indexPath.section) {
             switch currentSection {
-            case .SuggestedSites:
+            case .SearchSuggestions:
                 cell.textLabel?.text = searchSuggestions[indexPath.row]
                 cell.detailTextLabel?.text = nil
                 cell.imageView?.image = nil
@@ -155,7 +143,7 @@ extension SearchViewController: UITableViewDataSource {
                 cell.accessibilityLabel = NSString(format: NSLocalizedString("%@ search for %@", comment: "E.g. \"Google search for Mars\". Please keep the first \"%@\" (which contains the search engine name) as close to the beginning of the translated phrase as possible (it is best to have it as the very first word). This is because the phrase is an accessibility label and VoiceOver users need to hear the search engine name first as that is the key information in the whole phrase (they know the search term because they typed it and from previous rows of the table)."), searchEngine.shortName, searchQuery)
             }
         }
-        
+
         // Make the row separators span the width of the entire table.
         cell.layoutMargins = UIEdgeInsetsZero
 
@@ -165,7 +153,7 @@ extension SearchViewController: UITableViewDataSource {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let currentSection = SearchListSection(rawValue: section) {
             switch(currentSection) {
-            case .SuggestedSites:
+            case .SearchSuggestions:
                 return searchSuggestions.count
             case .Search:
                 return sortedEngines.count
@@ -175,15 +163,11 @@ extension SearchViewController: UITableViewDataSource {
         }
         return 0
     }
-    
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return SearchListSection(rawValue: section)?.description
-    }
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
-    
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 3
     }
@@ -194,11 +178,14 @@ extension SearchViewController: UITableViewDelegate {
         var url: NSURL?
         if let currentSection = SearchListSection(rawValue: indexPath.section) {
             switch currentSection {
-            case .SuggestedSites:
+            case .SearchSuggestions:
                 let suggestion = searchSuggestions[indexPath.row]
 
-                // Assume that only the default search engine can provide search suggestions.
-                url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
+                url = URIFixup().getURL(suggestion)
+                if url == nil {
+                    // Assume that only the default search engine can provide search suggestions.
+                    url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
+                }
             case .BookmarksAndHistory:
                 if let site = data[indexPath.row] as? Site {
                     url = NSURL(string: site.url)
@@ -212,12 +199,5 @@ extension SearchViewController: UITableViewDelegate {
         if let url = url {
             delegate?.homePanel(didSubmitURL: url)
         }
-    }
-}
-
-private class SearchTableViewCell: UITableViewCell {
-    private override func layoutSubviews() {
-        super.layoutSubviews()
-        self.imageView?.bounds = CGRectMake(0, 0, 24, 24)
     }
 }
