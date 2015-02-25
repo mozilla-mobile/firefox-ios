@@ -123,6 +123,8 @@ class JoinedHistoryVisitsTable: Table {
         let visit = Visit(site: site, date: d, type: type!)
         visit.id = result["visitId"] as? Int
 
+        site.latestVisit = visit
+
         if let iconurl = result["iconUrl"] as? String {
             let icon = Favicon(url: iconurl, date: NSDate(timeIntervalSince1970: result["iconDate"] as Double), type: IconType(rawValue: result["iconType"] as Int)!)
             icon.id = result["faviconId"] as? Int

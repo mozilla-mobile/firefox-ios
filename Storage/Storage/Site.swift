@@ -40,6 +40,7 @@ public class Site : Identifiable {
     public let title: String
      // Sites may have multiple favicons. We'll return the largest.
     public var icon: Favicon?
+    public var latestVisit: Visit?
 
     public init(url: String, title: String) {
         self.url = url

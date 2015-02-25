@@ -8,6 +8,50 @@ import Storage
 /** Provides some base shared functionality for home view panels for shared
  * row and header types.
  */
+public class SiteTableViewHeader : UITableViewHeaderFooterView {
+    // I can't get drawRect to play nicely with the glass background. As a fallback
+    // we just use view's for the top and bottom borders.
+    let topBorder = UIView()
+    let bottomBorder = UIView()
+    override init() {
+        super.init()
+        didLoad()
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        didLoad()
+    }
+
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        didLoad()
+    }
+
+    private func didLoad() {
+        addSubview(topBorder)
+        addSubview(bottomBorder)
+        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+    }
+
+    required public init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    public override func layoutSubviews() {
+        topBorder.frame = CGRect(x: 0, y: 0, width: frame.width, height: 1)
+        bottomBorder.frame = CGRect(x: 0, y: frame.height - 1, width: frame.width, height: 1)
+        topBorder.backgroundColor = UIColor.lightGrayColor()
+        bottomBorder.backgroundColor = UIColor.lightGrayColor()
+        super.layoutSubviews()
+
+        textLabel.font = UIFont(name: "FiraSans-SemiBold", size: 13)
+        textLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkTextColor()
+        textLabel.textAlignment = .Center
+        contentView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.05)
+    }
+}
+
 class SiteTableViewController: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     private let CellIdentifier = "CellIdentifier"
@@ -23,8 +67,7 @@ class SiteTableViewController: UITableViewController, HomePanel {
         super.viewDidLoad()
 
         tableView.registerClass(TwoLineCell.self, forCellReuseIdentifier: CellIdentifier)
-        let nib = UINib(nibName: "TabsViewControllerHeader", bundle: nil)
-        tableView.registerNib(nib, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
+        tableView.registerClass(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
 
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag
 
@@ -56,6 +99,6 @@ class SiteTableViewController: UITableViewController, HomePanel {
     }
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 44
+        return 25
     }
 }
