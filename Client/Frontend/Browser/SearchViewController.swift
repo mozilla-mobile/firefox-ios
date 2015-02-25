@@ -13,10 +13,15 @@ private enum SearchListSection: Int {
     case Search
 }
 
+protocol SearchViewControllerDelegate: class {
+    func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL)
+}
+
 class SearchViewController: SiteTableViewController {
     private var sortedEngines = [OpenSearchEngine]()
     private var suggestClient: SearchSuggestClient?
     private var searchSuggestions = [String]()
+    var searchDelegate: SearchViewControllerDelegate?
 
     var searchEngines: SearchEngines? {
         didSet {
@@ -197,7 +202,7 @@ extension SearchViewController: UITableViewDelegate {
         }
 
         if let url = url {
-            homePanelDelegate?.homePanel(didSubmitURL: url)
+            searchDelegate?.searchViewController(self, didSelectURL: url)
         }
     }
 }

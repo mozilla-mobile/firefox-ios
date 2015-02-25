@@ -6,7 +6,8 @@ import UIKit
 import Alamofire
 import Storage
 
-class TabsPanel: SiteTableViewController {
+class TabsPanel: SiteTableViewController, HomePanel {
+    weak var homePanelDelegate: HomePanelDelegate? = nil
     private var tabsResponse: TabsResponse?
 
     override func reloadData() {

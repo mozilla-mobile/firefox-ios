@@ -5,7 +5,8 @@
 import UIKit
 import Storage
 
-class BookmarksPanel: SiteTableViewController {
+class BookmarksPanel: SiteTableViewController, HomePanel {
+    weak var homePanelDelegate: HomePanelDelegate? = nil
     var source: BookmarksModel?
 
     override var profile: Profile! {
@@ -30,10 +31,6 @@ class BookmarksPanel: SiteTableViewController {
         self.source?.reloadData(self.onNewModel, self.onModelFailure)
     }
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let source = source {
             return source.current.count
@@ -53,7 +50,7 @@ class BookmarksPanel: SiteTableViewController {
     }
 
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Recent Bookmarks"
+        return NSLocalizedString("Recent Bookmarks", comment: "Header for bookmarks list")
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -63,7 +60,7 @@ class BookmarksPanel: SiteTableViewController {
 
             switch (bookmark) {
             case let item as BookmarkItem:
-                homePanelDelegate?.homePanel(didSubmitURL: NSURL(string: item.url)!)
+                homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: item.url)!)
                 break
 
             case let folder as BookmarkFolder:

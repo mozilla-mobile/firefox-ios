@@ -1,14 +1,11 @@
-/** This Source Code Form is subject to the terms of the Mozilla Public
+/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
 import Storage
 
-/** Provides some base shared functionality for home view panels for shared
- * row and header types.
- */
-class SiteTableViewHeader : UITableViewHeaderFooterView {
+private class SiteTableViewHeader : UITableViewHeaderFooterView {
     // I can't get drawRect to play nicely with the glass background. As a fallback
     // we just use views for the top and bottom borders.
     let topBorder = UIView()
@@ -51,8 +48,10 @@ class SiteTableViewHeader : UITableViewHeaderFooterView {
     }
 }
 
-class SiteTableViewController: UITableViewController, HomePanel {
-    weak var homePanelDelegate: HomePanelDelegate? = nil
+/**
+ * Provides base shared functionality for site rows and headers.
+ */
+class SiteTableViewController: UITableViewController {
     private let CellIdentifier = "CellIdentifier"
     private let HeaderIdentifier = "HeaderIdentifier"
     var profile: Profile! {

@@ -12,7 +12,7 @@ private let SelectedIconColor = UIColor(red: 62.0 / 255, green: 136.0 / 255, blu
 private let ContainerHeight = 40
 
 protocol HomePanelViewControllerDelegate: class {
-    func homePanelViewController(homePanelViewController: HomePanelViewController, didSubmitURL url: NSURL)
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL)
 }
 
 @objc
@@ -22,7 +22,7 @@ protocol HomePanel: class {
 
 @objc
 protocol HomePanelDelegate: class {
-    func homePanel(didSubmitURL url: NSURL)
+    func homePanel(homePanel: HomePanel, didSelectURL url: NSURL)
 }
 
 class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
@@ -162,8 +162,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         return overlayedImage
     }
 
-    func homePanel(didSubmitURL url: NSURL) {
-        delegate?.homePanelViewController(self, didSubmitURL: url)
+    func homePanel(homePanel: HomePanel, didSelectURL url: NSURL) {
+        delegate?.homePanelViewController(self, didSelectURL: url)
         dismissViewControllerAnimated(true, completion: nil)
     }
 }
