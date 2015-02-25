@@ -52,10 +52,8 @@ class BookmarksPanel: SiteTableViewController {
         return cell
     }
 
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = super.tableView(tableView, viewForHeaderInSection: section) as SiteTableViewHeader
-        cell.textLabel.text = "Recent Bookmarks"
-        return cell
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Recent Bookmarks"
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
