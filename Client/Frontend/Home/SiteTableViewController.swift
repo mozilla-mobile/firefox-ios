@@ -8,14 +8,13 @@ import Storage
 /** Provides some base shared functionality for home view panels for shared
  * row and header types.
  */
-public class SiteTableViewHeader : UITableViewHeaderFooterView {
+class SiteTableViewHeader : UITableViewHeaderFooterView {
     // I can't get drawRect to play nicely with the glass background. As a fallback
-    // we just use view's for the top and bottom borders.
+    // we just use views for the top and bottom borders.
     let topBorder = UIView()
     let bottomBorder = UIView()
     override init() {
         super.init()
-        didLoad()
     }
 
     override init(frame: CGRect) {
@@ -25,20 +24,20 @@ public class SiteTableViewHeader : UITableViewHeaderFooterView {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        didLoad()
     }
 
     private func didLoad() {
+        println("Did load \(self)")
         addSubview(topBorder)
         addSubview(bottomBorder)
         backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
     }
 
-    required public init(coder aDecoder: NSCoder) {
+    required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public override func layoutSubviews() {
+    override func layoutSubviews() {
         topBorder.frame = CGRect(x: 0, y: 0, width: frame.width, height: 1)
         bottomBorder.frame = CGRect(x: 0, y: frame.height - 1, width: frame.width, height: 1)
         topBorder.backgroundColor = UIColor.lightGrayColor()
