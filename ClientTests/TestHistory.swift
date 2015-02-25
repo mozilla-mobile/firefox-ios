@@ -21,19 +21,22 @@ class TestHistory : ProfileTest {
         }
     }
 
-    private func innerCheckSites(history: History, callback: (cursor: Cursor) -> Void) {
+    private func innerCheckSites(history: History, filter: String? = nil, callback: (cursor: Cursor) -> Void) {
         // Retrieve the entry
-        history.get(nil, complete: { cursor in
+        var options: QueryOptions? = nil
+        if let filter = filter {
+            options = QueryOptions(filter: filter, filterType: FilterType.Url, sort: QuerySort.LastVisit)
+        }
+        history.get(options, complete: { cursor in
             callback(cursor: cursor)
         })
     }
 
-
-    private func checkSites(history: History, urls: [String: String], s: Bool = true) {
+    private func checkSites(history: History, urls: [String: String], s: Bool = true, filter: String? = nil) {
         let expectation = self.expectationWithDescription("Wait for history")
 
         // Retrieve the entry
-        innerCheckSites(history) { cursor in
+        innerCheckSites(history, filter: filter) { cursor in
             XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
             XCTAssertEqual(cursor.count, urls.count, "cursor has \(urls.count) entries")
 
@@ -98,39 +101,68 @@ class TestHistory : ProfileTest {
     }
 
     let NumThreads = 5
-    let NumCmds = 10
+    let NumCmds = 10000
 
     func testInsertPerformance() {
         withTestProfile { profile -> Void in
             let h = profile.history
-            var j = 0
+            var urls = [String: String]()
 
             self.measureBlock({ () -> Void in
                 for i in 0...self.NumCmds {
-                    self.addSite(h, url: "url \(j)", title: "title \(j)")
-                    j++
+                    let id = rand() % 1000
+                    urls["url \(id)"] = "title \(id)"
+                    self.addSite(h, url: "url \(id)", title: "title \(id)")
                 }
-                self.clear(h)
             })
+
+            self.checkSites(h, urls: urls)
+            self.clear(h)
+        }
+    }
+
+    func testGetAllPerformance() {
+        withTestProfile { profile -> Void in
+            let h = profile.history
+            var urls = [String: String]()
+
+            self.clear(h)
+            for i in 0...self.NumCmds {
+                let id = rand() % 1000
+                urls["url \(id)"] = "title \(id)"
+                self.addSite(h, url: "url \(id)", title: "title \(id)")
+            }
+
+            self.measureBlock({ () -> Void in
+                let expectation = self.expectationWithDescription("Wait for history")
+                self.innerCheckSites(h, filter: nil) { data in
+                    expectation.fulfill()
+                }
+                self.waitForExpectationsWithTimeout(100, handler: nil)
+            })
+
+            self.clear(h)
         }
     }
 
     func testGetPerformance() {
         withTestProfile { profile -> Void in
             let h = profile.history
-            var j = 0
             var urls = [String: String]()
 
             self.clear(h)
             for i in 0...self.NumCmds {
-                self.addSite(h, url: "url \(j)", title: "title \(j)")
-                urls["url \(j)"] = "title \(j)"
-                j++
+                let id = rand() % 1000
+                urls["url \(id)"] = "title \(id)"
+                self.addSite(h, url: "url \(id)", title: "title \(id)")
             }
 
             self.measureBlock({ () -> Void in
-                self.checkSites(h, urls: urls)
-                return
+                let expectation = self.expectationWithDescription("Wait for history")
+                self.innerCheckSites(h, filter: "url 1") { data in
+                    expectation.fulfill()
+                }
+                self.waitForExpectationsWithTimeout(100, handler: nil)
             })
 
             self.clear(h)
@@ -193,7 +225,7 @@ class TestHistory : ProfileTest {
             let title = "title \(rand() % 100)"
             innerAddSite(history, url: url, title: title) { success in cb() }
         case 2...3:
-            innerCheckSites(history) { cursor in
+            innerCheckSites(history, filter: nil) { cursor in
                 for site in cursor {
                     let s = site as Site
                 }

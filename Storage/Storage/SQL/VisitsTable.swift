@@ -23,11 +23,18 @@ class VisitsTable<T>: GenericTable<Visit> {
 
         // We assume that if you're using this, you've gotten a site from somewhere that has an ID
         // If you don't know if you have an ID, use JoinedHistoryVisitsTable.swift instead.
-        args.append(item.site.id!)
-
         args.append(item.date.timeIntervalSince1970)
         args.append(item.type.rawValue)
-        return ("INSERT INTO \(TableNameVisits) (siteId, date, type) VALUES (?,?,?)", args)
+
+        // If we have an id, we can do a simple insert
+        if let id = item.site.id {
+            args.append(item.site.id)
+            return ("INSERT INTO \(TableNameVisits) (date, type, siteId) VALUES (?,?,?)", args)
+        }
+
+        // Otherwise, we do a lookup
+        args.append(item.site.url)
+        return ("INSERT INTO visits (date, type, siteId) SELECT ? as date, ? as type, id FROM history WHERE url = ?", args)
     }
 
     override func getUpdateAndArgs(inout item: Visit) -> (String, [AnyObject?])? {

@@ -8,11 +8,22 @@ public enum QuerySort {
     case None, LastVisit, Frecency
 }
 
+public class DateRange {
+    let start: NSTimeInterval?
+    let end: NSTimeInterval?
+
+    public init(start: NSTimeInterval?, end: NSTimeInterval?) {
+        self.start = start
+        self.end = end
+    }
+}
+
 public enum FilterType {
     case ExactUrl
     case Url
     case Guid
     case Id
+    case DateRange
     case None
 }
 
@@ -52,6 +63,7 @@ class BrowserDB {
 
     init?(files: FileAccessor) {
         self.files = files
+        println("File \(files.get(FileName, basePath: nil)!)")
         db = SwiftData(filename: files.get(FileName, basePath: nil)!)
         self.schemaTable = SchemaTable()
         self.createOrUpdate(self.schemaTable)
