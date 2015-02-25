@@ -30,7 +30,7 @@ Building the code
 
   ```
   cd firefox-ios
-  carthage checkout
+  carthage checkout --no-use-binaries
   ```
 
 1. Open `Client.xcodeproj` in Xcode.
