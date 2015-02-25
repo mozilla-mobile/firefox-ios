@@ -173,13 +173,13 @@ extension SearchViewController: UITableViewDataSource {
         return 0
     }
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 3
     }
 }
 
 extension SearchViewController: UITableViewDelegate {
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var url: NSURL?
         if let currentSection = SearchListSection(rawValue: indexPath.section) {
             switch currentSection {

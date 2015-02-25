@@ -27,7 +27,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         let opts = QueryOptions()
         opts.sort = .LastVisit
         profile.history.get(opts, complete: { (data: Cursor) -> Void in
-            self.refreshControl?.endRefreshing()
             self.sectionOffsets = [Int: Int]()
             self.data = data
             self.tableView.reloadData()
@@ -51,7 +50,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return cell
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let offset = sectionOffsets[indexPath.section]!
         if let site = data[indexPath.row + offset] as? Site {
             if let url = NSURL(string: site.url) {
@@ -63,11 +62,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     // Functions that deal with showing header rows
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return NumSections
     }
 
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0: return NSLocalizedString("Today", comment: "")
         case 1: return NSLocalizedString("Yesterday", comment: "")

@@ -51,7 +51,7 @@ private class SiteTableViewHeader : UITableViewHeaderFooterView {
 /**
  * Provides base shared functionality for site rows and headers.
  */
-class SiteTableViewController: UITableViewController {
+class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     private let CellIdentifier = "CellIdentifier"
     private let HeaderIdentifier = "HeaderIdentifier"
     var profile: Profile! {
@@ -60,17 +60,23 @@ class SiteTableViewController: UITableViewController {
         }
     }
     var data: Cursor = Cursor(status: .Success, msg: "No data set")
+    var tableView = UITableView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.addSubview(tableView)
+        tableView.snp_makeConstraints { make in
+            make.edges.equalTo(self.view)
+            return
+        }
+
+        tableView.delegate = self
+        tableView.dataSource = self
         tableView.registerClass(TwoLineCell.self, forCellReuseIdentifier: CellIdentifier)
         tableView.registerClass(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
 
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag
-
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: "reloadData", forControlEvents: UIControlEvents.ValueChanged)
     }
 
     func reloadData() {
@@ -79,24 +85,23 @@ class SiteTableViewController: UITableViewController {
         } else {
             self.tableView.reloadData()
         }
-        refreshControl?.endRefreshing()
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         return tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as UITableViewCell
         // Callers should override this to fill in the cell returned here
     }
 
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return tableView.dequeueReusableHeaderFooterViewWithIdentifier(HeaderIdentifier) as? UIView
         // Callers should override this to fill in the cell returned here
     }
 
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 25
     }
 }
