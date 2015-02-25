@@ -59,7 +59,7 @@ public class BookmarkItem: Bookmark {
         if (self._icon != nil) {
             return self._icon!
         }
-        return UIImage(named: "leaf")!
+        return UIImage(named: "defaultFavicon")!
     }
 
     public init(guid: String, title: String, url: String) {
