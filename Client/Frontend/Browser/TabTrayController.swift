@@ -129,11 +129,10 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
         toolbar.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
         view.addSubview(toolbar)
 
+        let settingsItem = UIBarButtonItem(title: "\u{2699}", style: .Plain, target: self, action: "SELdidClickSettingsItem")
         let signinItem = UIBarButtonItem(title: "Sign in", style: .Plain, target: self, action: "SELdidClickDone")
         signinItem.enabled = false
         let addTabItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "SELdidClickAddTab")
-        let settingsItem = UIBarButtonItem(image: UIImage(named: "nav-settings-off.png"), style: .Plain, target: self, action: "SELdidClickSettingsItem")
-        settingsItem.enabled = false
         let spacer = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
         toolbar.setItems([settingsItem, spacer, signinItem, spacer, addTabItem], animated: true)
 
@@ -162,7 +161,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
     }
 
     func SELdidClickSettingsItem() {
-        let controller = SettingsPanel(nibName: "SettingsPanel", bundle: nil)
+        let controller = SettingsNavigationController()
         controller.profile = profile
         presentViewController(controller, animated: true, completion: nil)
     }
