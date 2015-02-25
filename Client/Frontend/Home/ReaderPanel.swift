@@ -10,7 +10,6 @@ class ReaderPanel: SiteTableViewController, HomePanel {
 
     override func reloadData() {
         profile.readingList.get { (cursor) -> Void in
-            self.refreshControl?.endRefreshing()
             self.data = cursor
             self.tableView.reloadData()
         }
@@ -25,7 +24,7 @@ class ReaderPanel: SiteTableViewController, HomePanel {
         return cell
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if let readingListItem = data[indexPath.row] as? ReadingListItem {
             if let encodedURL = readingListItem.url.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
                 if let aboutReaderURL = NSURL(string: "about:reader?url=\(encodedURL)") {

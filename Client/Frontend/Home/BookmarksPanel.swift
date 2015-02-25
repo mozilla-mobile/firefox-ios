@@ -18,13 +18,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     private func onNewModel(model: BookmarksModel) {
         self.source = model
         dispatch_async(dispatch_get_main_queue()) {
-            self.refreshControl?.endRefreshing()
             self.tableView.reloadData()
         }
     }
 
     private func onModelFailure(e: Any) {
-        self.refreshControl?.endRefreshing()
+        println("Error: failed to get data: \(e)")
     }
 
     override func reloadData() {
@@ -49,11 +48,11 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return cell
     }
 
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return NSLocalizedString("Recent Bookmarks", comment: "Header for bookmarks list")
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
         if let source = source {
             let bookmark = source.current[indexPath.row]
