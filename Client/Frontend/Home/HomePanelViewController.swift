@@ -17,7 +17,7 @@ protocol HomePanelViewControllerDelegate: class {
 
 @objc
 protocol HomePanel: class {
-    weak var delegate: HomePanelDelegate? { get set }
+    weak var homePanelDelegate: HomePanelDelegate? { get set }
 }
 
 @objc
@@ -86,7 +86,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
             // TODO: Temporary workaround until all panels implement the HomePanel protocol.
             if let v = panel as? HomePanel {
-                v.delegate = self
+                v.homePanelDelegate = self
             }
         }
     }

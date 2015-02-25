@@ -27,7 +27,7 @@ class ReaderPanel: SiteTableViewController {
         if let readingListItem = data[indexPath.row] as? ReadingListItem {
             if let encodedURL = readingListItem.url.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
                 if let aboutReaderURL = NSURL(string: "about:reader?url=\(encodedURL)") {
-                    delegate?.homePanel(didSubmitURL: aboutReaderURL)
+                    homePanelDelegate?.homePanel(didSubmitURL: aboutReaderURL)
                 }
             }
         }

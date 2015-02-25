@@ -9,7 +9,7 @@ import Storage
  * row and header types.
  */
 class SiteTableViewController: UITableViewController, HomePanel {
-    weak var delegate: HomePanelDelegate? = nil
+    weak var homePanelDelegate: HomePanelDelegate? = nil
     private let CellIdentifier = "CellIdentifier"
     private let HeaderIdentifier = "HeaderIdentifier"
     var profile: Profile! {

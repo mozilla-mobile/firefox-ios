@@ -36,7 +36,7 @@ class HistoryPanel: SiteTableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if let site = data[indexPath.row] as? Site {
             if let url = NSURL(string: site.url) {
-                delegate?.homePanel(didSubmitURL: url)
+                homePanelDelegate?.homePanel(didSubmitURL: url)
                 return
             }
         }
