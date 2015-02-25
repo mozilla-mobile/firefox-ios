@@ -100,12 +100,9 @@
 		59A687B4A05CC772FE7E5A09 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68CCB63E2A565CB03F832 /* SearchViewController.swift */; };
 		59A688AEC01E5F62C5C52966 /* TabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A683E3C04DD83502EF1EC7 /* TabsPanel.swift */; };
 		59A688CAC8E49FD4007BFDC4 /* TabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A683E3C04DD83502EF1EC7 /* TabsPanel.swift */; };
-		59A688DE62EFDDEE342FE4C6 /* SettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A680EDBF3EFB9A384FAB42 /* SettingsPanel.swift */; };
-		59A68955352404CEFEEAD273 /* Settings.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59A68DAED41E25264BD4563C /* Settings.xcassets */; };
 		59A68ACAB9DB4B3E04E5D1B7 /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
 		59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6825233896FC846499289 /* HistoryPanel.swift */; };
 		59A68BE25C476E8AD5B63E78 /* Panels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68480808F0CFC2E6B79DD /* Panels.swift */; };
-		59A68D945BFAEA6CB2CBE773 /* SettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A680EDBF3EFB9A384FAB42 /* SettingsPanel.swift */; };
 		59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */; };
 		59A68FD3B3367729CDF00D31 /* Panels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68480808F0CFC2E6B79DD /* Panels.swift */; };
 		59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
@@ -554,14 +551,12 @@
 		2F834D121A80629A006A0B7B /* FxASignInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxASignInViewController.swift; path = Frontend/SignIn/FxASignInViewController.swift; sourceTree = "<group>"; };
 		2F834D131A80629A006A0B7B /* FxASignInWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxASignInWebViewController.swift; path = Frontend/SignIn/FxASignInWebViewController.swift; sourceTree = "<group>"; };
 		4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
-		59A680EDBF3EFB9A384FAB42 /* SettingsPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPanel.swift; sourceTree = "<group>"; };
 		59A6825233896FC846499289 /* HistoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPanel.swift; sourceTree = "<group>"; };
 		59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksPanel.swift; sourceTree = "<group>"; };
 		59A683E3C04DD83502EF1EC7 /* TabsPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsPanel.swift; sourceTree = "<group>"; };
 		59A68480808F0CFC2E6B79DD /* Panels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Panels.swift; sourceTree = "<group>"; };
 		59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderPanel.swift; sourceTree = "<group>"; };
 		59A68CCB63E2A565CB03F832 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
-		59A68DAED41E25264BD4563C /* Settings.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Settings.xcassets; sourceTree = "<group>"; };
 		59A68EC516B0FE3C9B913AB9 /* TabsViewControllerHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabsViewControllerHeader.xib; sourceTree = "<group>"; };
 		9B64C2A71A6451A800473AE3 /* LongPress.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = LongPress.js; path = JavaScripts/LongPress.js; sourceTree = "<group>"; };
 		9B9AE2231A48B9A500AF2C23 /* LongPressGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LongPressGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -1185,8 +1180,6 @@
 				0BF48B5D1A96A77400A730CF /* TwoLineCell.swift */,
 				0B6545751A97E07C000DD202 /* SiteTableViewController.swift */,
 				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
-				59A68DAED41E25264BD4563C /* Settings.xcassets */,
-				59A680EDBF3EFB9A384FAB42 /* SettingsPanel.swift */,
 				59A683E3C04DD83502EF1EC7 /* TabsPanel.swift */,
 				59A68EC516B0FE3C9B913AB9 /* TabsViewControllerHeader.xib */,
 			);
@@ -1686,7 +1679,6 @@
 				0BF42D391A7C0E8900889E28 /* Favicons.js in Resources */,
 				E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */,
 				2F44FB2D1A9D5D8500FD20CC /* FiraSans-BoldItalic.ttf in Resources */,
-				59A68955352404CEFEEAD273 /* Settings.xcassets in Resources */,
 				59A684F3A0E745546D07BDA9 /* TabsViewControllerHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1810,7 +1802,6 @@
 				D38B2D491A8D96D00040E6B5 /* GCDWebServerDataResponse.m in Sources */,
 				D38B2D521A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
-				59A688DE62EFDDEE342FE4C6 /* SettingsPanel.swift in Sources */,
 				59A688CAC8E49FD4007BFDC4 /* TabsPanel.swift in Sources */,
 				2F834D181A80629A006A0B7B /* FxASignInViewController.swift in Sources */,
 				E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
@@ -1872,7 +1863,6 @@
 				59A68BE25C476E8AD5B63E78 /* Panels.swift in Sources */,
 				59A687335CF58A8004B23508 /* BookmarksPanel.swift in Sources */,
 				59A68ACAB9DB4B3E04E5D1B7 /* ReaderPanel.swift in Sources */,
-				59A68D945BFAEA6CB2CBE773 /* SettingsPanel.swift in Sources */,
 				2F44FA191A9D425700FD20CC /* HashExtensions.swift in Sources */,
 				59A688AEC01E5F62C5C52966 /* TabsPanel.swift in Sources */,
 				2F1BDFA21A85240400213B54 /* FirefoxAccountState.swift in Sources */,
