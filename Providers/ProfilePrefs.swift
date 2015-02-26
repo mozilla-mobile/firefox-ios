@@ -6,7 +6,8 @@ import Foundation
 
 public protocol ProfilePrefs {
     func setObject(value: AnyObject?, forKey defaultName: String)
-    func stringArrayForKey(defaultName: String) -> [AnyObject]?
+    func stringForKey(defaultName: String) -> String?
+    func stringArrayForKey(defaultName: String) -> [String]?
     func arrayForKey(defaultName: String) -> [AnyObject]?
     func dictionaryForKey(defaultName: String) -> [NSObject : AnyObject]?
     func removeObjectForKey(defaultName: String)
@@ -19,8 +20,12 @@ public class MockProfilePrefs : ProfilePrefs {
         things[defaultName] = value
     }
 
-    public func stringArrayForKey(defaultName: String) -> [AnyObject]? {
-        return self.arrayForKey(defaultName)
+    public func stringForKey(defaultName: String) -> String? {
+        return things[defaultName] as? String
+    }
+
+    public func stringArrayForKey(defaultName: String) -> [String]? {
+        return self.arrayForKey(defaultName) as [String]?
     }
 
     public func arrayForKey(defaultName: String) -> [AnyObject]? {
@@ -64,8 +69,13 @@ public class NSUserDefaultsProfilePrefs : ProfilePrefs {
         userDefaults.setObject(value, forKey: qualifyKey(defaultName))
     }
 
-    public func stringArrayForKey(defaultName: String) -> [AnyObject]? {
-        return userDefaults.stringArrayForKey(qualifyKey(defaultName))
+    public func stringForKey(defaultName: String) -> String? {
+        // stringForKey converts numbers to strings, which is almost always a bug.
+        return userDefaults.objectForKey(qualifyKey(defaultName)) as? String
+    }
+
+    public func stringArrayForKey(defaultName: String) -> [String]? {
+        return userDefaults.stringArrayForKey(qualifyKey(defaultName)) as [String]?
     }
 
     public func arrayForKey(defaultName: String) -> [AnyObject]? {
