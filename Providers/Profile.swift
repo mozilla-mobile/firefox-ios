@@ -110,7 +110,7 @@ public class MockProfile: Profile {
     } ()
 
     lazy var searchEngines: SearchEngines = {
-        return SearchEngines()
+        return SearchEngines(prefs: self.prefs)
     } ()
 
     lazy var prefs: ProfilePrefs = {
@@ -190,7 +190,7 @@ public class BrowserProfile: Profile {
     }()
 
     lazy var searchEngines: SearchEngines = {
-        return SearchEngines()
+        return SearchEngines(prefs: self.prefs)
     } ()
 
     func makePrefs() -> ProfilePrefs {

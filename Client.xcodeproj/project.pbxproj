@@ -81,6 +81,7 @@
 		2F44FB2D1A9D5D8500FD20CC /* FiraSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7421A793CF20022C5E0 /* FiraSans-BoldItalic.ttf */; };
 		2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FC711A9E840300FD20CC /* SettingsNavigationController.swift */; };
 		2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FCC41A9E85E900FD20CC /* SettingsTableViewController.swift */; };
+		2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */; };
 		2F834D141A80629A006A0B7B /* FxAGetStartedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F834D101A80629A006A0B7B /* FxAGetStartedViewController.swift */; };
 		2F834D151A80629A006A0B7B /* FxAGetStartedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F834D101A80629A006A0B7B /* FxAGetStartedViewController.swift */; };
 		2F834D161A80629A006A0B7B /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = 2F834D111A80629A006A0B7B /* FxASignIn.js */; };
@@ -118,11 +119,11 @@
 				CodeSignOnCopy,RemoveHeadersOnCopy,
 				); }; };
 		D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
-		D34DC8581A16C40C00D49B7B /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8521A16C40C00D49B7B /* RestAPI.swift */; };
 		D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */; };
 		D38A1BEF1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */; };
 		D38A1BF01A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */; };
 		D38A1BF11A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */; };
+		D34DC8581A16C40C00D49B7B /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8521A16C40C00D49B7B /* RestAPI.swift */; };
 		D3589EF71A8D930000F28118 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E4CD9F191A6D9B7B00318571 /* libz.dylib */; };
 		D38B2CED1A8D94D20040E6B5 /* Snap.framework in None */ = {isa = PBXBuildFile; fileRef = D38B2CE81A8D94CA0040E6B5 /* Snap.framework */; settings = {ATTRIBUTES = (
 				CodeSignOnCopy,RemoveHeadersOnCopy,
@@ -563,6 +564,7 @@
 		2F44FA1C1A9D460500FD20CC /* HexExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexExtensions.swift; sourceTree = "<group>"; };
 		2F44FC711A9E840300FD20CC /* SettingsNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsNavigationController.swift; sourceTree = "<group>"; };
 		2F44FCC41A9E85E900FD20CC /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEnginesTests.swift; sourceTree = "<group>"; };
 		2F834D101A80629A006A0B7B /* FxAGetStartedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxAGetStartedViewController.swift; path = Frontend/SignIn/FxAGetStartedViewController.swift; sourceTree = "<group>"; };
 		2F834D111A80629A006A0B7B /* FxASignIn.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = FxASignIn.js; path = Frontend/SignIn/FxASignIn.js; sourceTree = "<group>"; };
 		2F834D121A80629A006A0B7B /* FxASignInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxASignInViewController.swift; path = Frontend/SignIn/FxASignInViewController.swift; sourceTree = "<group>"; };
@@ -580,10 +582,10 @@
 		D301AAED1A3A55B70078DD1D /* TabTrayController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayController.swift; sourceTree = "<group>"; };
 		D308E4E31A5306F500842685 /* SearchEngines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngines.swift; sourceTree = "<group>"; };
 		D314E7F51A37B98700426A76 /* BrowserToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserToolbar.swift; sourceTree = "<group>"; };
-		D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSuggestClient.swift; sourceTree = "<group>"; };
-		D31FC2291A8D908800BAF7EC /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Carthage/Checkouts/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewController.swift; sourceTree = "<group>"; };
 		D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SiteTableViewControllerHeader.xib; sourceTree = "<group>"; };
+		D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSuggestClient.swift; sourceTree = "<group>"; };
+		D31FC2291A8D908800BAF7EC /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Carthage/Checkouts/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		D34DC84D1A16C40C00D49B7B /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		D34DC8521A16C40C00D49B7B /* RestAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestAPI.swift; sourceTree = "<group>"; };
 		D38B2CD81A8D94CA0040E6B5 /* Snap.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Snap.xcodeproj; path = Carthage/Checkouts/Snap/Snap.xcodeproj; sourceTree = "<group>"; };
@@ -877,6 +879,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D38A1BEB1A9FA2CA00F6A386 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */,
+				D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
 		2F44FC551A9E83E200FD20CC /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -892,15 +903,6 @@
 				9B64C2A71A6451A800473AE3 /* LongPress.js */,
 			);
 			name = JavaScripts;
-			sourceTree = "<group>";
-		};
-		D38A1BEB1A9FA2CA00F6A386 /* Widgets */ = {
-			isa = PBXGroup;
-			children = (
-				D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */,
-				D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */,
-			);
-			path = Widgets;
 			sourceTree = "<group>";
 		};
 		D31FC22A1A8D908800BAF7EC /* Products */ = {
@@ -1141,6 +1143,7 @@
 				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
 				2F44FA1A1A9D426A00FD20CC /* TestHashExtensions.swift */,
 				2FDB10921A9FBEC5006CF312 /* ProfilePrefsTests.swift */,
+				2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -1845,6 +1848,7 @@
 				E4CD9F1D1A6D9C2800318571 /* WebServerTests.swift in Sources */,
 				0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
+				2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */,
 				2F44FA1D1A9D460500FD20CC /* HexExtensions.swift in Sources */,
 				E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */,
 				2F44FA1B1A9D426A00FD20CC /* TestHashExtensions.swift in Sources */,
@@ -1877,8 +1881,8 @@
 				0BD19A681A2530A40084FBA7 /* ProfilePrefs.swift in Sources */,
 				D308E4EC1A530A8B00842685 /* SearchEngines.swift in Sources */,
 				0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */,
-				D38B2D381A8D96D00040E6B5 /* GCDWebServerRequest.m in Sources */,
 				D38A1BEF1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
+				D38B2D381A8D96D00040E6B5 /* GCDWebServerRequest.m in Sources */,
 				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
 				D38B2D321A8D96D00040E6B5 /* GCDWebServerConnection.m in Sources */,
 				0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */,
