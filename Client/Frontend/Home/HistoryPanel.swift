@@ -6,17 +6,18 @@ import UIKit
 
 import Storage
 
-private func getDate(offset: Int, from: NSDate = NSDate()) -> NSDate {
-    var calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)!
-    let nowComponents = calendar.components(NSCalendarUnit.YearCalendarUnit | NSCalendarUnit.MonthCalendarUnit | NSCalendarUnit.DayCalendarUnit, fromDate: from)
-    return calendar.dateFromComponents(nowComponents)!
+private func getDate(#dayOffset: Int) -> NSDate {
+    let calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)!
+    let nowComponents = calendar.components(NSCalendarUnit.YearCalendarUnit | NSCalendarUnit.MonthCalendarUnit | NSCalendarUnit.DayCalendarUnit, fromDate: NSDate())
+    let today = calendar.dateFromComponents(nowComponents)!
+    return calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitDay, value: dayOffset, toDate: today, options: nil)!
 }
 
 class HistoryPanel: SiteTableViewController {
     private let NumSections = 4
-    private var Today = getDate(0)
-    private var Yesterday = getDate(-1)
-    private var ThisWeek = getDate(-7)
+    private var Today = getDate(dayOffset: 0)
+    private var Yesterday = getDate(dayOffset: -1)
+    private var ThisWeek = getDate(dayOffset: -7)
 
     private var sectionOffsets = [Int: Int]()
 
