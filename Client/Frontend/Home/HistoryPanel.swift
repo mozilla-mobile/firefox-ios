@@ -35,6 +35,7 @@ class HistoryPanel: SiteTableViewController {
         }
 
         // Prefill sections with some empty data
+        sections.removeAll(keepCapacity: true)
         for i in 0..<4 {
             sections.append(Cursor(status: .Success, msg: "Loading"))
         }
