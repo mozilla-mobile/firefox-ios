@@ -37,8 +37,20 @@ class SearchSettingsTableViewController: UITableViewController {
             cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
         } else {
             engine = model.orderedEngines[indexPath.item]
+            let isDefault = model.isEngineDefault(engine)
+
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
             cell.showsReorderControl = true
+
+            let toggle = UISwitch()
+            toggle.tag = indexPath.item // An easy way to get from the toggle control to the corresponding indexPath.
+            toggle.addTarget(self, action: "SELdidToggleEngine:", forControlEvents: UIControlEvents.ValueChanged)
+            // The default engine is always enabled.
+            toggle.on = isDefault || model.isEngineEnabled(engine)
+            // The user can't disable the default engine.
+            toggle.enabled = !isDefault
+
+            cell.editingAccessoryView = toggle
         }
 
         // So that the seperator line goes all the way to the left edge.
@@ -143,6 +155,15 @@ class SearchSettingsTableViewController: UITableViewController {
 
 
         return proposedDestinationIndexPath
+    }
+
+    func SELdidToggleEngine(toggle: UISwitch) {
+        let engine = model.orderedEngines[toggle.tag]
+        if toggle.on {
+            model.enableEngine(engine)
+        } else {
+            model.disableEngine(engine)
+        }
     }
 
     func SELcancel() {
