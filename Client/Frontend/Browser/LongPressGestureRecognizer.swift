@@ -18,6 +18,8 @@ protocol LongPressGestureDelegate: class {
 class LongPressGestureRecognizer: UILongPressGestureRecognizer, UIGestureRecognizerDelegate {
     private weak var webView: WKWebView!
     weak var longPressGestureDelegate: LongPressGestureDelegate?
+    private let URLCharacterSet =
+        NSCharacterSet(charactersInString: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%")
 
     override init(target: AnyObject, action: Selector) {
         super.init(target: target, action: action)
@@ -71,14 +73,16 @@ class LongPressGestureRecognizer: UILongPressGestureRecognizer, UIGestureRecogni
         var elements = [LongPressElementType: NSURL]()
         if let hrefElement = elementsDict["hrefElement"] as? [String: String] {
             if let hrefStr: String = hrefElement["hrefLink"] {
-                if let linkURL = NSURL(string: hrefStr) {
+                let encodedString = hrefStr.stringByAddingPercentEncodingWithAllowedCharacters(URLCharacterSet)
+                if let linkURL = NSURL(string: encodedString!) {
                     elements[LongPressElementType.Link] = linkURL
                 }
             }
         }
         if let imageElement = elementsDict["imageElement"] as? [String: String] {
             if let imageSrcStr: String = imageElement["imageSrc"] {
-                if let imageURL = NSURL(string: imageSrcStr) {
+                let encodedString = imageSrcStr.stringByAddingPercentEncodingWithAllowedCharacters(URLCharacterSet)
+                if let imageURL = NSURL(string: encodedString!) {
                     elements[LongPressElementType.Image] = imageURL
                 }
             }
