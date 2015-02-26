@@ -67,6 +67,7 @@ class HistoryPanel: SiteTableViewController {
                 cell.detailTextLabel?.text = site.url
             } else {
                 cell.textLabel?.text = site.url
+                cell.detailTextLabel?.text = ""
             }
             if let img = site.icon? {
                 let imgURL = NSURL(string: img.url)
