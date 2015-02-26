@@ -27,7 +27,6 @@ class SiteTableViewHeader : UITableViewHeaderFooterView {
     }
 
     private func didLoad() {
-        println("Did load \(self)")
         addSubview(topBorder)
         addSubview(bottomBorder)
         backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))

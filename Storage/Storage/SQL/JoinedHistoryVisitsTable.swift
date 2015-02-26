@@ -27,17 +27,6 @@ class JoinedHistoryVisitsTable: Table {
         faviconSites = JoinedFaviconsHistoryTable<(Site, Favicon)>(files: files)
     }
 
-    private func getIDFor(db: SQLiteDBConnection, site: Site) -> Int? {
-        let opts = QueryOptions()
-        opts.filter = site.url
-
-        let cursor = history.query(db, options: opts)
-        if (cursor.count != 1) {
-            return nil
-        }
-        return (cursor[0] as Site).id
-    }
-
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
         return history.create(db, version: version) && visits.create(db, version: version) && faviconSites.create(db, version: version)
     }
@@ -55,17 +44,14 @@ class JoinedHistoryVisitsTable: Table {
     }
 
     private func updateSite(db: SQLiteDBConnection, site: Site, inout err: NSError?) -> Int {
-        // If our site doesn't have an id, we need to find one
+        // If our site doesn't have an id, we need to make sure its in the db
         if site.id == nil {
-            if let id = getIDFor(db, site: site) {
-                site.id = id
-                // Update the page title
-                return history.update(db, item: site, err: &err)
-            } else {
-                // Make sure we have a site in the table first
-                site.id = history.insert(db, item: site, err: &err)
+            let inserted = history.insert(db, item: site, err: &err)
+            if inserted > -1 {
+                site.id = inserted
                 return 1
             }
+            return 0
         }
 
         // Update the page title
@@ -75,14 +61,14 @@ class JoinedHistoryVisitsTable: Table {
     func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int {
         if let visit = item?.visit {
             if updateSite(db, site: visit.site, err: &err) < 0 {
-                return -1;
+                return -1
             }
 
             // Now add a visit
             return visits.insert(db, item: visit, err: &err)
         } else if let site = item?.site {
             if updateSite(db, site: site, err: &err) < 0 {
-                return -1;
+                return -1
             }
 
             // Now add a visit
@@ -136,18 +122,22 @@ class JoinedHistoryVisitsTable: Table {
 
     func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor {
         var args = [AnyObject?]()
-        var sql = "SELECT \(history.name).id as historyId, \(history.name).url as siteUrl, title, guid, \(visits.name).id as visitId, \(visits.name).date as visitDate, \(visits.name).type as visitType, " +
-                  "\(favicons.name).id as faviconId, \(favicons.name).url as iconUrl, \(favicons.name).date as iconDate, \(favicons.name).type as iconType FROM \(visits.name) " +
+        var sql = "SELECT \(history.name).id as historyId, \(history.name).url as siteUrl, title, guid, \(visits.name).id as visitId, max(\(visits.name).date) as visitDate, \(visits.name).type as visitType, " +
+                  "\(favicons.name).id as faviconId, \(favicons.name).url as iconUrl, \(favicons.name).date as iconDate, max(\(favicons.name).width) as iconWidth, \(favicons.name).type as iconType FROM \(visits.name) " +
                   "INNER JOIN \(history.name) ON \(history.name).id = \(visits.name).siteId " +
                   "LEFT JOIN \(faviconSites.name) ON \(faviconSites.name).siteId = \(history.name).id LEFT JOIN \(favicons.name) ON \(faviconSites.name).faviconId = \(favicons.name).id ";
 
+        var dateQuery = false
         if let filter: AnyObject = options?.filter {
-            sql += "WHERE siteUrl LIKE ? "
-            args.append("%\(filter)%")
+            if options?.filterType != FilterType.DateRange {
+                sql += "WHERE siteUrl LIKE ? "
+                args.append("%\(filter)%")
+            } else {
+                dateQuery = true
+            }
         }
 
-        sql += "GROUP BY historyId";
-
+        sql += "GROUP BY historyId"
         // Trying to do this in one line (i.e. options?.sort == .LastVisit) breaks the Swift compiler
         if let sort = options?.sort {
             if sort == .LastVisit {
@@ -155,7 +145,32 @@ class JoinedHistoryVisitsTable: Table {
             }
         }
 
-        // println("Query \(sql) \(args)")
+        // If the filter is a date type,
+        if dateQuery {
+            if let dateRange = options?.filter as? DateRange {
+                var addedWhere = false
+
+                // If we're querying with a date range, we want to do the filter after sites are grouped. We use
+                // a sub query for that.
+                if let start = dateRange.start {
+                    sql = "SELECT * FROM (" + sql + ") WHERE visitDate < ?"
+                    args.append(start)
+                    addedWhere = true
+                }
+
+                if let end = dateRange.end {
+                    if addedWhere {
+                        sql += " AND visitDate > ?"
+                    } else {
+                        sql = "SELECT * FROM (" + sql + ") WHERE visitDate > ?"
+                    }
+                    args.append(end)
+                }
+            } else {
+                println("date range query must pass a DateRange object")
+            }
+        }
+
         return db.executeQuery(sql, factory: factory, withArgs: args)
     }
 }

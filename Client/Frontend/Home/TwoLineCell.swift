@@ -10,24 +10,27 @@ class TwoLineCell : UITableViewCell {
         // ignore the style argument, use our own to override
         super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
 
-        textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
+        let font = UIFont(name: "FiraSans-SemiBold", size: 12)
+        textLabel?.font = font
         textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
         indentationWidth = 0
 
+        detailTextLabel?.font = font
         detailTextLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
 
         imageView?.contentMode = .ScaleAspectFill
     }
 
-    private let imgMargin: CGFloat = 5
+    private let imgMargin: CGFloat = 10
 
     override func layoutSubviews() {
         super.layoutSubviews()
         if let img = self.imageView {
             let height = self.frame.height
             let imgSize = height - 2 * imgMargin
+            separatorInset = UIEdgeInsets(top: 0, left: height, bottom: 0, right: 0)
             img.frame = CGRectMake(imgMargin, imgMargin, imgSize, imgSize)
-            textLabel?.frame    = CGRectMake(height, textLabel!.frame.origin.y,
+            textLabel?.frame = CGRectMake(height, textLabel!.frame.origin.y,
                 self.frame.width - height, textLabel!.frame.height)
             detailTextLabel?.frame = CGRectMake(height, detailTextLabel!.frame.origin.y,
                 self.frame.width - height, textLabel!.frame.height)
