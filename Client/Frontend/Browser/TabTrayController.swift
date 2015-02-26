@@ -5,23 +5,36 @@
 import Foundation
 import UIKit
 
-private let TextBoxHeight = CGFloat(25.0)
-private let Margin = CGFloat(10)
-private let CellHeight = TextBoxHeight * 4
+private struct TabTrayControllerUX {
+    static let CornerRadius = CGFloat(4.0)
+    static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
+    static let TextBoxHeight = CGFloat(32.0)
+    static let CellHeight = TextBoxHeight * 5
+    static let Margin = CGFloat(15)
+    // This color has been manually adjusted to match background layer with iOS translucency effect.
+    static let ToolbarBarTintColor = UIColor(red: 0.35, green: 0.37, blue: 0.39, alpha: 0)
+}
 
 // UITableViewController doesn't let us specify a style for recycling views. We override the default style here.
-private class CustomCell : UITableViewCell {
+private class CustomCell: UITableViewCell {
     let backgroundHolder: UIView
     let background: UIImageViewAligned
-    let title: UITextView
-    var margin = Margin
+    let titleText: TabLabel
+    let titleBlur: UIVisualEffectView
+    let title: UIView
+    let innerStroke: InnerStrokedView
+    let favicon: UIImageView
+
+    var margin = TabTrayControllerUX.Margin
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         self.backgroundHolder = UIView()
         self.backgroundHolder.layer.shadowColor = UIColor.blackColor().CGColor
-        self.backgroundHolder.layer.shadowOffset = CGSizeMake(0,0)
-        self.backgroundHolder.layer.shadowOpacity = 0.25
-        self.backgroundHolder.layer.shadowRadius = 2.0
+        self.backgroundHolder.layer.shadowOffset = CGSizeMake(0,2.0)
+        self.backgroundHolder.layer.shadowOpacity = 0.95
+        self.backgroundHolder.layer.shadowRadius = 1.0
+        self.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
+        self.backgroundHolder.clipsToBounds = true
 
         self.background = UIImageViewAligned()
         self.background.contentMode = UIViewContentMode.ScaleAspectFill
@@ -30,20 +43,38 @@ private class CustomCell : UITableViewCell {
         self.background.alignLeft = true
         self.background.alignTop = true
 
-        self.title = UITextView()
-        self.title.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.75)
-        self.title.textColor = UIColor.whiteColor()
-        self.title.textAlignment = NSTextAlignment.Left
-        self.title.userInteractionEnabled = false
+        self.favicon = UIImageView(image: UIImage(named: "defaultFavicon")!)
+        self.favicon.backgroundColor = UIColor.clearColor()
+
+        self.title = UIView()
+        self.title.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.55)
+
+        var blur = UIBlurEffect(style: .Light)
+        self.titleBlur = UIVisualEffectView(effect: blur)
+        self.titleBlur.layer.shadowOpacity = 0.2
+        self.titleBlur.layer.shadowColor = UIColor.blackColor().CGColor
+        self.titleBlur.layer.shadowRadius = 1
+        self.titleBlur.layer.shadowOffset = CGSize(width: 0, height: 1)
+
+        self.titleText = TabLabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+
+        self.title.addSubview(self.titleBlur)
+        self.title.addSubview(self.titleText)
+        self.title.addSubview(self.favicon)
+
+        self.innerStroke = InnerStrokedView(frame: self.backgroundHolder.frame)
+        self.innerStroke.layer.backgroundColor = UIColor.clearColor().CGColor
 
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundHolder.addSubview(self.background)
         addSubview(backgroundHolder)
-        addSubview(self.title)
-        backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
+        backgroundHolder.addSubview(self.title)
+        backgroundHolder.addSubview(innerStroke)
+
+        backgroundColor = UIColor.clearColor()
 
         selectionStyle = .None
-        self.title.addObserver(self, forKeyPath: "contentSize", options: .New, context: nil)
+        self.titleText.addObserver(self, forKeyPath: "contentSize", options: .New, context: nil)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -51,18 +82,18 @@ private class CustomCell : UITableViewCell {
     }
 
     deinit {
-        self.title.removeObserver(self, forKeyPath: "contentSize")
+        self.titleText.removeObserver(self, forKeyPath: "contentSize")
     }
 
-    private override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        let tv = object as UITextView
+    private override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject: AnyObject], context: UnsafeMutablePointer<Void>) {
+        let tv = object as UILabel
         verticalCenter(tv)
     }
 
-    private func verticalCenter(text: UITextView) {
-        var  top = (TextBoxHeight - text.contentSize.height) * text.zoomScale / 2.0
+    private func verticalCenter(text: UILabel) {
+        var top = (TabTrayControllerUX.TextBoxHeight - text.bounds.height) / 2.0
         top = top < 0.0 ? 0.0 : top
-        text.contentOffset = CGPoint(x: 0, y: -top)
+        text.frame.origin = CGPoint(x: 0, y: top)
     }
 
     func showFullscreen(container: UIView, table: UITableView) {
@@ -77,12 +108,12 @@ private class CustomCell : UITableViewCell {
     }
 
     func showAt(offsetY: Int, container: UIView, table: UITableView) {
-        margin = Margin
+        margin = TabTrayControllerUX.Margin
         container.insertSubview(self, atIndex: container.subviews.count)
         frame = CGRect(x: 0,
-            y: ToolbarHeight + StatusBarHeight + CGFloat(offsetY) * CellHeight - table.contentOffset.y,
+            y: ToolbarHeight + StatusBarHeight + CGFloat(offsetY) * TabTrayControllerUX.CellHeight,
             width: container.frame.width,
-            height: CellHeight)
+            height: TabTrayControllerUX.CellHeight)
         title.alpha = 1
         setNeedsLayout()
     }
@@ -90,7 +121,7 @@ private class CustomCell : UITableViewCell {
     var tab: Browser? {
         didSet {
             background.image = tab?.screenshot()
-            title.text = tab?.title
+            titleText.text = tab?.title
         }
     }
 
@@ -106,12 +137,22 @@ private class CustomCell : UITableViewCell {
             height: h)
         background.frame = CGRect(origin: CGPointMake(0,0), size: backgroundHolder.frame.size)
 
-        title.frame = CGRect(x: 0 + margin,
-            y: 0 + frame.height - TextBoxHeight,
-            width: frame.width - 2 * margin,
-            height: TextBoxHeight)
+        title.frame = CGRect(x: 0,
+            y: 0,
+            width: backgroundHolder.frame.width,
+            height: TabTrayControllerUX.TextBoxHeight)
 
-        verticalCenter(title)
+        favicon.frame = CGRect(x: 6, y: (TabTrayControllerUX.TextBoxHeight - 16)/2, width: 16, height: 16)
+
+        titleText.frame = CGRect(x: 0,
+            y: 0,
+            width: title.frame.width - margin * 2,
+            height: title.frame.height)
+
+        titleBlur.frame = title.frame
+        innerStroke.frame = background.frame
+
+        verticalCenter(titleText)
     }
 }
 
@@ -129,14 +170,22 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
 
         toolbar = UIToolbar()
         toolbar.backgroundImageForToolbarPosition(.Top, barMetrics: UIBarMetrics.Compact)
-        toolbar.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
-        view.addSubview(toolbar)
+        toolbar.frame.origin = CGPoint(x: TabTrayControllerUX.Margin, y: StatusBarHeight)
+
+        toolbar.barTintColor = TabTrayControllerUX.ToolbarBarTintColor
+        toolbar.tintColor = UIColor.whiteColor()
+
+        toolbar.layer.shadowColor = UIColor.blackColor().CGColor
+        toolbar.layer.shadowOffset = CGSize(width: 0, height: 1.0)
+        toolbar.layer.shadowRadius = 2.0
+        toolbar.layer.shadowOpacity = 0.25
 
         let settingsItem = UIBarButtonItem(title: "\u{2699}", style: .Plain, target: self, action: "SELdidClickSettingsItem")
         settingsItem.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
         let signinItem = UIBarButtonItem(title: NSLocalizedString("Sign in", comment: "Button that leads to Sign in section of the Settings sheet."),
             style: .Plain, target: self, action: "SELdidClickDone")
         signinItem.enabled = false
+        // TODO: Vertically center the add button.  Right now, it's too high in the containing bar.
         let addTabItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "SELdidClickAddTab")
         let spacer = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
         toolbar.setItems([settingsItem, spacer, signinItem, spacer, addTabItem], animated: true)
@@ -146,17 +195,21 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
         tableView.delegate = self
         tableView.separatorStyle = .None
         tableView.registerClass(CustomCell.self, forCellReuseIdentifier: CellIdentifier)
-        tableView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
+        tableView.contentInset = UIEdgeInsets(top: StatusBarHeight + ToolbarHeight, left: 0, bottom: 0, right: 0)
+        tableView.backgroundColor = TabTrayControllerUX.BackgroundColor
+
         view.addSubview(tableView)
+        view.addSubview(toolbar)
 
         toolbar.snp_makeConstraints { make in
-            make.top.equalTo(self.view).offset(StatusBarHeight)
+            make.top.equalTo(self.view)
+            make.height.equalTo(StatusBarHeight + ToolbarHeight)
             make.left.right.equalTo(self.view)
             return
         }
 
         tableView.snp_makeConstraints { make in
-            make.top.equalTo(self.toolbar.snp_bottom)
+            make.top.equalTo(self.view)
             make.left.right.bottom.equalTo(self.view)
         }
     }
@@ -190,14 +243,14 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return CellHeight
+        return TabTrayControllerUX.CellHeight
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let tab = tabManager.getTab(indexPath.item)
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as CustomCell
-        cell.title.text = tab.title
-        cell.background.image = tab.screenshot(size: CGSize(width: tableView.frame.width, height: CellHeight))
+        cell.titleText.text = tab.title
+        cell.background.image = tab.screenshot(size: CGSize(width: tableView.frame.width, height: TabTrayControllerUX.CellHeight))
         return cell
     }
 
@@ -208,7 +261,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
     }
 }
 
-extension TabTrayController : Transitionable {
+extension TabTrayController: Transitionable {
     private func getTransitionCell(options: TransitionOptions, browser: Browser?) -> CustomCell {
         if let cell = options.moving as? CustomCell {
             cell.tab = browser
@@ -225,24 +278,32 @@ extension TabTrayController : Transitionable {
         // Create a fake cell that is shown fullscreen
         if let container = options.container {
             let cell = getTransitionCell(options, browser: tabManager.selectedTab)
+            // TODO: Smoothly animate the corner radius.  Right now, the radius pops at the beginning of the animation.
+            cell.backgroundHolder.layer.cornerRadius = 0
             cell.showFullscreen(container, table: tableView)
         }
 
         // Scroll the toolbar off the top
         toolbar.alpha = 0
         toolbar.transform = CGAffineTransformMakeTranslation(0, -ToolbarHeight)
+
+        tableView.backgroundColor = UIColor.clearColor()
     }
 
     func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
         if let container = options.container {
             // Create a fake cell that is at the selected index
             let cell = getTransitionCell(options, browser: tabManager.selectedTab)
+            // TODO: Smoothly animate the corner radius.  Right now, the radius pops at the beginning of the animation.
+            cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
             cell.showAt(tabManager.selectedIndex, container: container, table: tableView)
         }
 
         // Scroll the toolbar on from the top
         toolbar.alpha = 1
         toolbar.transform = CGAffineTransformIdentity
+
+        tableView.backgroundColor = TabTrayControllerUX.BackgroundColor
     }
 
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
@@ -252,3 +313,48 @@ extension TabTrayController : Transitionable {
     }
 }
 
+private class TabLabel: UILabel {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        textColor = UIColor.blackColor()
+        backgroundColor = UIColor.clearColor()
+        textAlignment = NSTextAlignment.Left
+        userInteractionEnabled = false
+        numberOfLines = 1
+        font = UIFont(name: "HelveticaNeue-Bold", size: 11)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private override func drawTextInRect(rect: CGRect) {
+        super.drawTextInRect(UIEdgeInsetsInsetRect(rect, UIEdgeInsets(top: 0, left: 26, bottom: 0, right: 10)))
+    }
+}
+
+private class InnerStrokedView: UIView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.backgroundColor = UIColor.clearColor()
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func drawRect(rect: CGRect) {
+        let strokeWidth = 1.0 as CGFloat
+        let halfWidth = strokeWidth/2 as CGFloat
+
+        let path = UIBezierPath(roundedRect: CGRect(x: halfWidth,
+            y: halfWidth,
+            width: rect.width - strokeWidth,
+            height: rect.height - strokeWidth),
+            cornerRadius: 3.0)
+
+        path.lineWidth = strokeWidth
+        UIColor.whiteColor().colorWithAlphaComponent(0.2).setStroke()
+        path.stroke()
+    }
+}
