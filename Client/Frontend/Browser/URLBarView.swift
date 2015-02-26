@@ -323,7 +323,7 @@ extension URLBarView {
         super.layoutSubviews()
         if let layer = layer as? CAShapeLayer {
             layer.path = self.getPath().CGPath
-            layer.fillColor = UIColor.darkGrayColor().CGColor
+            layer.fillColor = UIColor(red:0.21, green:0.23, blue:0.25, alpha:1).CGColor
         }
     }
 
