@@ -123,7 +123,7 @@ class JoinedHistoryVisitsTable: Table {
     func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor {
         var args = [AnyObject?]()
         var sql = "SELECT \(history.name).id as historyId, \(history.name).url as siteUrl, title, guid, \(visits.name).id as visitId, max(\(visits.name).date) as visitDate, \(visits.name).type as visitType, " +
-                  "\(favicons.name).id as faviconId, \(favicons.name).url as iconUrl, \(favicons.name).date as iconDate, \(favicons.name).type as iconType FROM \(visits.name) " +
+                  "\(favicons.name).id as faviconId, \(favicons.name).url as iconUrl, \(favicons.name).date as iconDate, max(\(favicons.name).width) as iconWidth, \(favicons.name).type as iconType FROM \(visits.name) " +
                   "INNER JOIN \(history.name) ON \(history.name).id = \(visits.name).siteId " +
                   "LEFT JOIN \(faviconSites.name) ON \(faviconSites.name).siteId = \(history.name).id LEFT JOIN \(favicons.name) ON \(faviconSites.name).faviconId = \(favicons.name).id ";
 
