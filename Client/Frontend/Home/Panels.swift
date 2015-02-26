@@ -47,11 +47,6 @@ private var Controllers: Protector<[ToolbarItem]> = Protector(name: "Controllers
         controller.profile = profile
         return controller
     }, enabled: true),
-    ToolbarItem(title: "Settings", imageName: "settings",  generator: { (profile: Profile) -> UIViewController in
-        let controller = SettingsPanel(nibName: nil, bundle: nil)
-        controller.profile = profile
-        return controller
-    }, enabled: true),
 ])
 
 private var setup: Bool = false // True if we've already loaded the order/enabled prefs once and the Controllers array has been updated

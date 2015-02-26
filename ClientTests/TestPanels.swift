@@ -11,7 +11,7 @@ class TestPanels: ProfileTest {
             self.validatePrefs(profile, expectOrder: nil, expectEnabled: nil);
             
             var panels = Panels(profile: profile)
-            XCTAssertEqual(panels.count, 5, "Right number of panels found");
+            XCTAssertEqual(panels.count, 4, "Right number of panels found");
             
             // Test moving an item
             var a = panels[0];
@@ -19,7 +19,7 @@ class TestPanels: ProfileTest {
             self.expectNotification("Moving an item should notify us") { () -> Void in
                 panels.moveItem(1, to: 0);
             }
-            self.validatePrefs(profile, expectOrder: ["Bookmarks", "Tabs", "History", "Reader", "Settings"],
+            self.validatePrefs(profile, expectOrder: ["Bookmarks", "Tabs", "History", "Reader"],
                 expectEnabled: [true, true, true, true, true]);
             
             XCTAssertNotEqual(a!.title, panels[0]!.title, "Original panel is not in place any more")
@@ -28,26 +28,26 @@ class TestPanels: ProfileTest {
             self.expectNotification("Moving an item should notify us") { () -> Void in
                 panels.moveItem(1, to: 0);
             }
-            self.validatePrefs(profile, expectOrder: ["Tabs", "Bookmarks", "History", "Reader", "Settings"],
+            self.validatePrefs(profile, expectOrder: ["Tabs", "Bookmarks", "History", "Reader"],
                 expectEnabled: [true, true, true, true, true]);
             
             // Tests enabling/disabling items
             var enabledPanels = panels.enabledItems;
-            XCTAssertEqual(enabledPanels.count, 5, "Right number of enabled panels found");
+            XCTAssertEqual(enabledPanels.count, 4, "Right number of enabled panels found");
             self.expectNotification("Disabling a panel should fire a notification") { () -> Void in
                 panels.enablePanelAt(false, position: 0);
             }
-            self.validatePrefs(profile, expectOrder: ["Tabs", "Bookmarks", "History", "Reader", "Settings"],
+            self.validatePrefs(profile, expectOrder: ["Tabs", "Bookmarks", "History", "Reader"],
                 expectEnabled: [false, true, true, true, true]);
             
-            XCTAssertEqual(enabledPanels.count, 5, "Right number of enabled panels found"); // Still holding a old reference
+            XCTAssertEqual(enabledPanels.count, 4, "Right number of enabled panels found"); // Still holding a old reference
             enabledPanels = panels.enabledItems;
-            XCTAssertEqual(enabledPanels.count, 4, "Right number of enabled panels found");
-            XCTAssertEqual(panels.count, 5, "Total panels shouldn't change");
+            XCTAssertEqual(enabledPanels.count, 3, "Right number of enabled panels found");
+            XCTAssertEqual(panels.count, 4, "Total panels shouldn't change");
             self.expectNotification("Enabling a panel should fire a notification") { () -> Void in
                 panels.enablePanelAt(true, position: 0);
             }
-            self.validatePrefs(profile, expectOrder: ["Tabs", "Bookmarks", "History", "Reader", "Settings"],
+            self.validatePrefs(profile, expectOrder: ["Tabs", "Bookmarks", "History", "Reader"],
                 expectEnabled: [true, true, true, true, true]);
         }
     }
