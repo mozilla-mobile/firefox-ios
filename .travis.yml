@@ -7,6 +7,15 @@ script:
   - carthage checkout --no-use-binaries
   - xcodebuild -project Client.xcodeproj -scheme FennecNightly -sdk iphonesimulator8.1 -jobs 1 PLATFORM_NAME=iphonesimulator build
 
+
+notifications:
+  email: false
+  irc:
+    channels:
+      - "irc.mozilla.org#firefoxios"
+    on_success: change
+    on_failure: always
+
 # This stopped working
 #  - xctool -project Client.xcodeproj -scheme Travis -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
 #  - xctool test -freshSimulator -project Client.xcodeproj -scheme Travis -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
