@@ -24,7 +24,7 @@ protocol SearchViewControllerDelegate: class {
     func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL)
 }
 
-class SearchViewController: SiteTableViewController {
+class SearchViewController: SiteTableViewController, KeyboardHelperDelegate {
     var searchDelegate: SearchViewControllerDelegate?
 
     private var suggestClient: SearchSuggestClient?
@@ -38,6 +38,8 @@ class SearchViewController: SiteTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        KeyboardHelper.defaultHelper.addDelegate(self)
+
         searchEngineScrollView.layer.backgroundColor = tableView.backgroundColor?.CGColor
         searchEngineScrollView.decelerationRate = UIScrollViewDecelerationRateFast
         view.addSubview(searchEngineScrollView)
@@ -50,16 +52,22 @@ class SearchViewController: SiteTableViewController {
             make.bottom.equalTo(self.searchEngineScrollView.snp_top)
         }
 
-        searchEngineScrollView.snp_makeConstraints { make in
-            make.left.right.bottom.equalTo(self.view)
-            return
-        }
+        layoutSearchEngineScrollView()
 
         searchEngineScrollViewContent.snp_makeConstraints { make in
             make.center.equalTo(self.searchEngineScrollView).priorityLow()
             make.left.greaterThanOrEqualTo(self.searchEngineScrollView).priorityHigh()
             make.right.lessThanOrEqualTo(self.searchEngineScrollView).priorityHigh()
             make.top.bottom.equalTo(self.searchEngineScrollView)
+        }
+    }
+
+    private func layoutSearchEngineScrollView() {
+        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.height ?? 0
+
+        searchEngineScrollView.snp_remakeConstraints { make in
+            make.left.right.equalTo(self.view)
+            make.bottom.equalTo(self.view).offset(-keyboardHeight)
         }
     }
 
@@ -126,6 +134,23 @@ class SearchViewController: SiteTableViewController {
                 }
             }
         }
+    }
+
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        animateSearchEnginesWithKeyboard(state)
+    }
+
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        animateSearchEnginesWithKeyboard(state)
+    }
+
+    private func animateSearchEnginesWithKeyboard(keyboardState: KeyboardState) {
+        layoutSearchEngineScrollView()
+
+        UIView.animateWithDuration(keyboardState.animationDuration, animations: {
+            UIView.setAnimationCurve(keyboardState.animationCurve)
+            self.view.layoutIfNeeded()
+        })
     }
 
     private func querySuggestClient() {
