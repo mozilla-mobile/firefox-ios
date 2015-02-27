@@ -7,10 +7,17 @@ import Storage
 
 private let SuggestionsLimitCount = 3
 
+// searchEngineScrollViewContent is the button container. It has a gray background color,
+// so with insets applied to its buttons, the background becomes the button border.
+private let EngineButtonInsets = UIEdgeInsetsMake(0.5, 0.5, 0.5, 0.5)
+
+// TODO: This should use ToolbarHeight in BVC. Fix this when we create a shared theming file.
+private let EngineButtonHeight: Float = 44
+private let EngineButtonWidth = EngineButtonHeight * 1.5
+
 private enum SearchListSection: Int {
     case SearchSuggestions
     case BookmarksAndHistory
-    case Search
 }
 
 protocol SearchViewControllerDelegate: class {
@@ -18,28 +25,56 @@ protocol SearchViewControllerDelegate: class {
 }
 
 class SearchViewController: SiteTableViewController {
-    private var sortedEngines = [OpenSearchEngine]()
-    private var suggestClient: SearchSuggestClient?
-    private var searchSuggestions = [String]()
     var searchDelegate: SearchViewControllerDelegate?
 
-    var searchEngines: SearchEngines? {
+    private var suggestClient: SearchSuggestClient?
+    private var searchSuggestions = [String]()
+
+    // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
+    // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
+    private let searchEngineScrollView = ButtonScrollView()
+    private let searchEngineScrollViewContent = UIView()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        searchEngineScrollView.layer.backgroundColor = tableView.backgroundColor?.CGColor
+        searchEngineScrollView.decelerationRate = UIScrollViewDecelerationRateFast
+        view.addSubview(searchEngineScrollView)
+
+        searchEngineScrollViewContent.layer.backgroundColor = tableView.separatorColor.CGColor
+        searchEngineScrollView.addSubview(searchEngineScrollViewContent)
+
+        tableView.snp_remakeConstraints { make in
+            make.top.left.right.equalTo(self.view)
+            make.bottom.equalTo(self.searchEngineScrollView.snp_top)
+        }
+
+        searchEngineScrollView.snp_makeConstraints { make in
+            make.left.right.bottom.equalTo(self.view)
+            return
+        }
+
+        searchEngineScrollViewContent.snp_makeConstraints { make in
+            make.center.equalTo(self.searchEngineScrollView).priorityLow()
+            make.left.greaterThanOrEqualTo(self.searchEngineScrollView).priorityHigh()
+            make.right.lessThanOrEqualTo(self.searchEngineScrollView).priorityHigh()
+            make.top.bottom.equalTo(self.searchEngineScrollView)
+        }
+    }
+
+    var searchEngines: SearchEngines! {
         didSet {
             suggestClient?.cancelPendingRequest()
 
-            if let searchEngines = searchEngines {
-                // Show the default search engine first.
-                sortedEngines = searchEngines.enabledEngines
-                suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine)
-            } else {
-                sortedEngines = []
-                suggestClient = nil
-            }
-
+            // Query and reload the table with new search suggestions.
             querySuggestClient()
 
-            // Reload the tableView to show the new list of search engines.
-            tableView.reloadData()
+            // Show the default search engine first.
+            suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine)
+
+            // Reload the footer list of search engines.
+            reloadSearchEngines()
         }
     }
 
@@ -54,6 +89,43 @@ class SearchViewController: SiteTableViewController {
         querySuggestClient()
         queryHistoryClient()
         tableView.reloadData()
+    }
+
+    private func reloadSearchEngines() {
+        searchEngineScrollViewContent.subviews.map({ $0.removeFromSuperview() })
+
+        var leftEdge = searchEngineScrollViewContent.snp_left
+        for engine in searchEngines.enabledEngines {
+            let engineButton = UIButton()
+            engineButton.setImage(engine.image, forState: UIControlState.Normal)
+            engineButton.layer.backgroundColor = UIColor.whiteColor().CGColor
+            engineButton.addTarget(self, action: "SELdidSelectEngine:", forControlEvents: UIControlEvents.TouchUpInside)
+            engineButton.accessibilityLabel = NSString(format: NSLocalizedString("%@ search for %@", comment: "E.g. \"Google search for Mars\". Please keep the first \"%@\" (which contains the search engine name) as close to the beginning of the translated phrase as possible (it is best to have it as the very first word). This is because the phrase is an accessibility label and VoiceOver users need to hear the search engine name first as that is the key information in the whole phrase (they know the search term because they typed it and from previous rows of the table)."), engine.shortName, searchQuery)
+
+            searchEngineScrollViewContent.addSubview(engineButton)
+            engineButton.snp_makeConstraints { make in
+                make.width.equalTo(EngineButtonWidth)
+                make.height.equalTo(EngineButtonHeight)
+                make.left.equalTo(leftEdge).offset(EngineButtonInsets.left)
+                make.top.bottom.equalTo(self.searchEngineScrollViewContent).insets(EngineButtonInsets)
+                if engine === self.searchEngines.enabledEngines.last {
+                    make.right.equalTo(self.searchEngineScrollViewContent).offset(-EngineButtonInsets.right)
+                }
+            }
+            leftEdge = engineButton.snp_right
+        }
+    }
+
+    func SELdidSelectEngine(sender: UIButton) {
+        // The UIButtons are the same cardinality and order as the enabledEngines array.
+        for i in 0..<searchEngineScrollViewContent.subviews.count {
+            let button = searchEngineScrollViewContent.subviews[i] as UIButton
+            if button === sender {
+                if let url = searchEngines.enabledEngines[i].searchURLForQuery(searchQuery) {
+                    searchDelegate?.searchViewController(self, didSelectURL: url)
+                }
+            }
+        }
     }
 
     private func querySuggestClient() {
@@ -139,13 +211,6 @@ extension SearchViewController: UITableViewDataSource {
                     cell.isAccessibilityElement = false
                     cell.accessibilityLabel = nil
                 }
-            case .Search:
-                let searchEngine = sortedEngines[indexPath.row]
-                cell.textLabel?.text = searchQuery
-                cell.detailTextLabel?.text = nil
-                cell.imageView?.image = searchEngine.image
-                cell.isAccessibilityElement = true
-                cell.accessibilityLabel = NSString(format: NSLocalizedString("%@ search for %@", comment: "E.g. \"Google search for Mars\". Please keep the first \"%@\" (which contains the search engine name) as close to the beginning of the translated phrase as possible (it is best to have it as the very first word). This is because the phrase is an accessibility label and VoiceOver users need to hear the search engine name first as that is the key information in the whole phrase (they know the search term because they typed it and from previous rows of the table)."), searchEngine.shortName, searchQuery)
             }
         }
 
@@ -160,8 +225,6 @@ extension SearchViewController: UITableViewDataSource {
             switch(currentSection) {
             case .SearchSuggestions:
                 return searchSuggestions.count
-            case .Search:
-                return sortedEngines.count
             case .BookmarksAndHistory:
                 return data.count
             }
@@ -174,7 +237,7 @@ extension SearchViewController: UITableViewDataSource {
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 3
+        return 2
     }
 }
 
@@ -195,14 +258,20 @@ extension SearchViewController: UITableViewDelegate {
                 if let site = data[indexPath.row] as? Site {
                     url = NSURL(string: site.url)
                 }
-            case .Search:
-                let engine = sortedEngines[indexPath.row]
-                url = engine.searchURLForQuery(searchQuery)
             }
         }
 
         if let url = url {
             searchDelegate?.searchViewController(self, didSelectURL: url)
         }
+    }
+}
+
+/**
+ * UIScrollView that prevents buttons from interfering with scroll.
+ */
+private class ButtonScrollView: UIScrollView {
+    private override func touchesShouldCancelInContentView(view: UIView!) -> Bool {
+        return true
     }
 }
