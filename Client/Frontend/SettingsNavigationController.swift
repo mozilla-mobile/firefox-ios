@@ -10,8 +10,9 @@ class SettingsNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let settingsTableViewController = SettingsTableViewController()
-        self.pushViewController(settingsTableViewController, animated: false)
+        let rootViewController = SearchSettingsTableViewController()
+        rootViewController.model = profile.searchEngines
+        self.pushViewController(rootViewController, animated: false)
     }
 
     func SELdone() {

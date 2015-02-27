@@ -7,8 +7,6 @@ import Foundation
 import UIKit
 import XCTest
 
-let ExpectedEngines = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "Twitter", "Wikipedia", "Yahoo"]
-
 class SearchTests: XCTestCase {
     private let uriFixup = URIFixup()
 
@@ -24,16 +22,6 @@ class SearchTests: XCTestCase {
 
         // Test search suggestion queries.
         XCTAssertEqual(engine.suggestURLForQuery("foobar")!.absoluteString!, "https://www.google.com/complete/search?client=firefox&q=foobar")
-    }
-
-    func testSearchEngines() {
-        let engines = SearchEngines().list
-        XCTAssertEqual(engines.count, ExpectedEngines.count)
-
-        for i in 0 ..< engines.count {
-            let engine = engines[i]
-            XCTAssertEqual(engine.shortName, ExpectedEngines[i])
-        }
     }
 
     func testURIFixup() {

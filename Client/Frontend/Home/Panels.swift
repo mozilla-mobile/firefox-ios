@@ -82,7 +82,7 @@ class Panels : SequenceType {
             let prefs = profile.prefs
 
             if var enabled = prefs.arrayForKey(PanelsEnabledKey) as? [Bool] {
-                if var order = prefs.stringArrayForKey(PanelsOrderKey) as? [String] {
+                if var order = prefs.stringArrayForKey(PanelsOrderKey) {
                     // Now we loop through the panels and sort them based on the order stored
                     // in PanelsOrderKey. We also disable them based on PanelsEnabledKey.
                     Controllers.withWriteLock { protected -> Void in

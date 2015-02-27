@@ -29,7 +29,7 @@ class SearchViewController: SiteTableViewController {
 
             if let searchEngines = searchEngines {
                 // Show the default search engine first.
-                sortedEngines = searchEngines.list.sorted { engine, _ in engine === searchEngines.defaultEngine }
+                sortedEngines = searchEngines.enabledEngines
                 suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine)
             } else {
                 sortedEngines = []
