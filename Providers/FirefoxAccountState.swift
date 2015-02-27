@@ -5,12 +5,19 @@
 import Foundation
 import FxA
 
-public enum FirefoxAccountStateLabel : String {
+public enum FirefoxAccountStateLabel: String {
     case Engaged = "engaged"
     case Cohabiting = "cohabiting"
     case Married = "married"
     case Separated = "separated"
     case Doghouse = "doghouse"
+}
+
+public enum FirefoxAccountActionNeeded {
+    case None
+    case NeedsVerification
+    case NeedsPassword
+    case NeedsUpgrade
 }
 
 public class FirefoxAccountState {
@@ -31,9 +38,17 @@ public class FirefoxAccountState {
         return dict
     }
 
+    func getActionNeeded() -> FirefoxAccountActionNeeded {
+        return .NeedsUpgrade
+    }
+
     public class Separated: FirefoxAccountState {
         public init() {
-            super.init(label: .Engaged, verified: false)
+            super.init(label: .Separated, verified: false)
+        }
+
+        override func getActionNeeded() -> FirefoxAccountActionNeeded {
+            return .NeedsPassword
         }
     }
 
@@ -56,6 +71,14 @@ public class FirefoxAccountState {
             d["keyFetchToken"] = keyFetchToken.base16EncodedStringWithOptions(NSDataBase16EncodingOptions.LowerCase)
             d["unwrapkB"] = unwrapkB.base16EncodedStringWithOptions(NSDataBase16EncodingOptions.LowerCase)
             return d
+        }
+
+        override func getActionNeeded() -> FirefoxAccountActionNeeded {
+            if verified {
+                return .None
+            } else {
+                return .NeedsVerification
+            }
         }
     }
 
@@ -81,6 +104,10 @@ public class FirefoxAccountState {
             d["kB"] = kB.base16EncodedStringWithOptions(NSDataBase16EncodingOptions.LowerCase)
             // TODO: persist key pair.
             return d
+        }
+
+        override func getActionNeeded() -> FirefoxAccountActionNeeded {
+            return .None
         }
     }
 
@@ -109,6 +136,10 @@ public class FirefoxAccountState {
     public class Doghouse: FirefoxAccountState {
         public init() {
             super.init(label: .Doghouse, verified: false)
+        }
+
+        override func getActionNeeded() -> FirefoxAccountActionNeeded {
+            return .NeedsUpgrade
         }
     }
 
