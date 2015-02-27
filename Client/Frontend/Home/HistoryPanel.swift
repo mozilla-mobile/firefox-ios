@@ -13,11 +13,13 @@ private func getDate(#dayOffset: Int) -> NSDate {
     return calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitDay, value: dayOffset, toDate: today, options: nil)!
 }
 
-class HistoryPanel: SiteTableViewController {
+class HistoryPanel: SiteTableViewController, HomePanel {
+    weak var homePanelDelegate: HomePanelDelegate? = nil
+
     private let NumSections = 4
-    private var Today = getDate(dayOffset: 0)
-    private var Yesterday = getDate(dayOffset: -1)
-    private var ThisWeek = getDate(dayOffset: -7)
+    private let Today = getDate(dayOffset: 0)
+    private let Yesterday = getDate(dayOffset: -1)
+    private let ThisWeek = getDate(dayOffset: -7)
 
     private var sectionOffsets = [Int: Int]()
 
@@ -53,7 +55,7 @@ class HistoryPanel: SiteTableViewController {
         let offset = sectionOffsets[indexPath.section]!
         if let site = data[indexPath.row + offset] as? Site {
             if let url = NSURL(string: site.url) {
-                homePanelDelegate?.homePanel(didSubmitURL: url)
+                homePanelDelegate?.homePanel(self, didSelectURL: url)
                 return
             }
         }

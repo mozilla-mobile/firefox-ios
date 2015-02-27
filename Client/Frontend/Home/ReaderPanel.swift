@@ -5,7 +5,9 @@
 import UIKit
 import Storage
 
-class ReaderPanel: SiteTableViewController {
+class ReaderPanel: SiteTableViewController, HomePanel {
+    weak var homePanelDelegate: HomePanelDelegate? = nil
+
     override func reloadData() {
         profile.readingList.get { (cursor) -> Void in
             self.refreshControl?.endRefreshing()
@@ -27,7 +29,7 @@ class ReaderPanel: SiteTableViewController {
         if let readingListItem = data[indexPath.row] as? ReadingListItem {
             if let encodedURL = readingListItem.url.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
                 if let aboutReaderURL = NSURL(string: "about:reader?url=\(encodedURL)") {
-                    homePanelDelegate?.homePanel(didSubmitURL: aboutReaderURL)
+                    homePanelDelegate?.homePanel(self, didSelectURL: aboutReaderURL)
                 }
             }
         }

@@ -144,7 +144,7 @@ class BrowserViewController: UIViewController {
 
         searchController = SearchViewController()
         searchController!.searchEngines = profile.searchEngines
-        searchController!.homePanelDelegate = self
+        searchController!.searchDelegate = self
         searchController!.profile = self.profile
 
         view.addSubview(searchController!.view)
@@ -369,13 +369,13 @@ extension BrowserViewController: BrowserToolbarDelegate {
 }
 
 extension BrowserViewController: HomePanelViewControllerDelegate {
-    func homePanelViewController(homePanelViewController: HomePanelViewController, didSubmitURL url: NSURL) {
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL) {
         finishEditingAndSubmit(url)
     }
 }
 
-extension BrowserViewController: HomePanelDelegate {
-    func homePanel(didSubmitURL url: NSURL) {
+extension BrowserViewController: SearchViewControllerDelegate {
+    func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL) {
         finishEditingAndSubmit(url)
     }
 }
