@@ -196,7 +196,7 @@ extension SearchViewController: UITableViewDelegate {
                     url = NSURL(string: site.url)
                 }
             case .Search:
-                let engine = sortedEngines[indexPath.row - searchSuggestions.count]
+                let engine = sortedEngines[indexPath.row]
                 url = engine.searchURLForQuery(searchQuery)
             }
         }
