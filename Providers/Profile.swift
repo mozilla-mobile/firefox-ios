@@ -89,6 +89,9 @@ protocol Profile {
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
     func localName() -> String
 
+    // URLs and account configuration.
+    var accountConfiguration: FirefoxAccountConfiguration { get }
+
     func getAccount() -> FirefoxAccount?
     func setAccount(account: FirefoxAccount?)
 }
@@ -137,6 +140,7 @@ public class MockProfile: Profile {
         return MockPasswords(files: self.files)
     }()
 
+    let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
     var account: FirefoxAccount? = nil
 
     func getAccount() -> FirefoxAccount? {
@@ -222,6 +226,8 @@ public class BrowserProfile: Profile {
     lazy var passwords: Passwords = {
         return SQLitePasswords(files: self.files)
     }()
+
+    let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
 
     private lazy var account: FirefoxAccount? = {
         if let dictionary = KeychainWrapper.objectForKey(self.name + ".account") as? [String:AnyObject] {
