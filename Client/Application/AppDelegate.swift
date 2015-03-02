@@ -162,7 +162,7 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
         if (MFMailComposeViewController.canSendMail()) {
             mailComposer.mailComposeDelegate = self
             mailComposer.setSubject("Feedback on iOS client version v\(appVersion) (\(buildNumber))")
-            mailComposer.setToRecipients(["<email here>"])
+            mailComposer.setToRecipients(["ios-feedback@mozilla.com"])
             
             let imageData = UIImagePNGRepresentation(image)
             mailComposer.addAttachmentData(imageData, mimeType: "image/png", fileName: "feedback.png")
