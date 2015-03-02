@@ -25,6 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Setup a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setupWebServer()
 
+        // Start the keyboard helper to monitor and cache keyboard state.
+        KeyboardHelper.defaultHelper.startObserving()
+
         profile = BrowserProfile(localName: "profile")
 
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)

@@ -16,13 +16,12 @@ class TabsPanel: SiteTableViewController, HomePanel {
             .responseJSON { (request, response, data, error) in
                 self.tabsResponse = parseTabsResponse(data)
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.refreshControl?.endRefreshing()
                     self.tableView.reloadData()
                 }
         }
     }
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if let r = tabsResponse {
             return r.clients.count
         } else {
@@ -67,7 +66,7 @@ class TabsPanel: SiteTableViewController, HomePanel {
         return view
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
         if let tab = tabsResponse?.clients[indexPath.section].tabs[indexPath.row] {
             UIApplication.sharedApplication().openURL(NSURL(string: tab.url)!)
