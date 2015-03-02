@@ -5,7 +5,7 @@ script:
   - brew upgrade xctool
   - brew install carthage
   - carthage checkout --no-use-binaries
-  - xcodebuild -project Client.xcodeproj -scheme FennecNightly -sdk iphonesimulator8.1 -jobs 1 PLATFORM_NAME=iphonesimulator build
+  - xcodebuild -project Client.xcodeproj -scheme FennecNightly -sdk iphonesimulator8.1 -jobs 1 PLATFORM_NAME=iphonesimulator -derivedDataPath build clean build
 
 
 notifications:
