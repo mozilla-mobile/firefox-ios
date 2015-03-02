@@ -7,14 +7,14 @@ import Snap
 import UIKit
 import WebKit
 
-protocol FxASignInWebViewControllerDelegate {
-    func signInWebViewControllerDidCancel(vc: FxASignInWebViewController) -> Void
-    func signInWebViewControllerDidLoad(vc: FxASignInWebViewController) -> Void
-    func signInWebViewControllerDidSignIn(vc: FxASignInWebViewController, data: JSON) -> Void
-    func signInWebViewControllerDidFailProvisionalNavigation
-            (vc: FxASignInWebViewController, withError error: NSError!) -> Void
-    func signInWebViewControllerDidFailNavigation
-            (vc: FxASignInWebViewController, withError error: NSError!) -> Void
+protocol FxAContentViewControllerDelegate {
+    func contentViewControllerDidCancel(vc: FxAContentViewController) -> Void
+    func contentViewControllerDidLoad(vc: FxAContentViewController) -> Void
+    func contentViewControllerDidSignIn(vc: FxAContentViewController, data: JSON) -> Void
+    func contentViewControllerDidFailProvisionalNavigation
+            (vc: FxAContentViewController, withError error: NSError!) -> Void
+    func contentViewControllerDidFailNavigation
+            (vc: FxAContentViewController, withError error: NSError!) -> Void
 }
 
 /**
@@ -25,7 +25,7 @@ protocol FxASignInWebViewControllerDelegate {
  * enough.  I reverse engineered it from the Desktop Firefox code and the
  * fxa-content-server git repository.
  */
-class FxASignInWebViewController: UIViewController, WKScriptMessageHandler, WKNavigationDelegate {
+class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavigationDelegate {
     private enum RemoteCommand: String {
         case CanLinkAccount = "can_link_account"
         case Loaded = "loaded"
@@ -34,7 +34,7 @@ class FxASignInWebViewController: UIViewController, WKScriptMessageHandler, WKNa
         case SignOut = "sign_out"
     }
 
-    var delegate: FxASignInWebViewControllerDelegate?
+    var delegate: FxAContentViewControllerDelegate?
 
     var url: NSURL?
 
@@ -95,7 +95,7 @@ class FxASignInWebViewController: UIViewController, WKScriptMessageHandler, WKNa
     }
 
     func SELdidCancel() {
-        delegate?.signInWebViewControllerDidCancel(self)
+        delegate?.contentViewControllerDidCancel(self)
     }
 
     // Send a message to the content server.
@@ -130,12 +130,12 @@ class FxASignInWebViewController: UIViewController, WKScriptMessageHandler, WKNa
     private func onLogin(data: JSON) {
         injectData("message", content: ["status": "login"])
         dismissViewControllerAnimated(true, completion: nil)
-        self.delegate?.signInWebViewControllerDidSignIn(self, data: data)
+        self.delegate?.contentViewControllerDidSignIn(self, data: data)
     }
 
     // The content server page is ready to be shown.
     private func onLoaded(data: JSON) {
-        delegate?.signInWebViewControllerDidLoad(self)
+        delegate?.contentViewControllerDidLoad(self)
     }
 
     // Handle a message coming from the content server.
@@ -176,10 +176,10 @@ class FxASignInWebViewController: UIViewController, WKScriptMessageHandler, WKNa
     }
 
     func webView(webView: WKWebView!, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError!) {
-        delegate?.signInWebViewControllerDidFailProvisionalNavigation(self, withError: error)
+        delegate?.contentViewControllerDidFailProvisionalNavigation(self, withError: error)
     }
 
     func webView(webView: WKWebView!, didFailNavigation navigation: WKNavigation!, withError error: NSError!) {
-        delegate?.signInWebViewControllerDidFailNavigation(self, withError: error)
+        delegate?.contentViewControllerDidFailNavigation(self, withError: error)
     }
 }
