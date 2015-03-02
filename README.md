@@ -75,3 +75,5 @@ If a dependent project is configured to use a Distribution Code Signing Identity
 Most if this is fixable and can be reported upstream.
 
 If you add a new dependency, ping @st3fan and he'll make sure things work correctly on our integration (xcode server) and dogfood builders.
+
+.
