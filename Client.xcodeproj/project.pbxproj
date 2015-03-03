@@ -91,6 +91,7 @@
 		2F998FD61AA516380063E75D /* FirefoxAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F998FD41AA516380063E75D /* FirefoxAccountConfiguration.swift */; };
 		2F998FD71AA516380063E75D /* FirefoxAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F998FD41AA516380063E75D /* FirefoxAccountConfiguration.swift */; };
 		2F998FD81AA516380063E75D /* FirefoxAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F998FD41AA516380063E75D /* FirefoxAccountConfiguration.swift */; };
+		2F9990461AA51F5A0063E75D /* HexExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FA1C1A9D460500FD20CC /* HexExtensions.swift */; };
 		2FC244B31A855E05007CE41D /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
 		2FC244B81A855E0D007CE41D /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
 		2FDB10931A9FBEC5006CF312 /* ProfilePrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB10921A9FBEC5006CF312 /* ProfilePrefsTests.swift */; };
@@ -1775,6 +1776,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F9990461AA51F5A0063E75D /* HexExtensions.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
 				2F1BDFA11A85240400213B54 /* FirefoxAccountState.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,

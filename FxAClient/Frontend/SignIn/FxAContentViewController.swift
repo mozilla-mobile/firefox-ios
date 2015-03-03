@@ -7,14 +7,11 @@ import Snap
 import UIKit
 import WebKit
 
+let FxADefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on load times in the wild.
+
 protocol FxAContentViewControllerDelegate {
-    func contentViewControllerDidCancel(vc: FxAContentViewController) -> Void
-    func contentViewControllerDidLoad(vc: FxAContentViewController) -> Void
-    func contentViewControllerDidSignIn(vc: FxAContentViewController, data: JSON) -> Void
-    func contentViewControllerDidFailProvisionalNavigation
-            (vc: FxAContentViewController, withError error: NSError!) -> Void
-    func contentViewControllerDidFailNavigation
-            (vc: FxAContentViewController, withError error: NSError!) -> Void
+    func contentViewControllerDidSignIn(viewController: FxAContentViewController, data: JSON) -> Void
+    func contentViewControllerDidCancel(viewController: FxAContentViewController)
 }
 
 /**
@@ -34,36 +31,101 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
         case SignOut = "sign_out"
     }
 
+    var url: NSURL!
+
     var delegate: FxAContentViewControllerDelegate?
+    var debug: Bool = false
 
-    var url: NSURL?
-
-    private var webView: WKWebView!
-
-    override func loadView() {
-        super.loadView()
+    private var timer: NSTimer?
+    private var isLoaded: Bool = false {
+        didSet {
+            if isLoaded {
+                 UIView.transitionFromView(interstitialView, toView: webView,
+                    duration: 0.5,
+                    options: UIViewAnimationOptions.TransitionCrossDissolve,
+                    completion: { finished in
+                        self.interstitialView.removeFromSuperview()
+                        self.interstitialSpinnerView.stopAnimating()
+                    })
+            }
+        }
     }
 
-    func startLoad(url: NSURL) {
-        self.url = url
-        loadWebView(url)
+    private var isError: Bool = false {
+        didSet {
+            if isError {
+                interstitialErrorView.hidden = false
+                UIView.transitionFromView(interstitialSpinnerView, toView: interstitialErrorView,
+                    duration: 0.5,
+                    options: UIViewAnimationOptions.TransitionCrossDissolve,
+                    completion: { finished in
+                        self.interstitialSpinnerView.removeFromSuperview()
+                        self.interstitialSpinnerView.stopAnimating()
+                })
+            }
+        }
+    }
+
+    // The view shown while the content is loading in the background web view.
+    private var interstitialView: UIView!
+    private var interstitialSpinnerView: UIActivityIndicatorView!
+    private var interstitialErrorView: UILabel!
+
+    // The web view that displays content from the fxa-content-server.
+    private var webView: WKWebView!
+
+    func startLoading(timeout: Double = FxADefaultTimeoutTimeInterval) {
+        if self.isLoaded {
+            return
+        }
+        if timeout > 0 {
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(timeout, target: self, selector: "SELdidTimeOut", userInfo: nil, repeats: false)
+        } else {
+            self.timer = nil
+        }
+        self.webView.loadRequest(NSURLRequest(URL: url))
+        self.interstitialSpinnerView.startAnimating()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "SELdidCancel")
+        // Don't extend under navigation bar.
+        self.edgesForExtendedLayout = UIRectEdge.None
 
-        view.addSubview(webView!)
+        // This background agrees with the content server background.
+        // Keeping the background constant prevents a pop of mismatched color.
+        view.backgroundColor = UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0)
+
+        self.webView = makeWebView()
+        view.addSubview(webView)
 
         // Web content fills view.
         webView.snp_makeConstraints { make in
             make.edges.equalTo(self.view)
             return
         }
+
+        // Destructuring let causes problems.
+        let ret = makeInterstitialViews()
+        self.interstitialView = ret.0
+        self.interstitialSpinnerView = ret.1
+        self.interstitialErrorView = ret.2
+
+        view.addSubview(interstitialView)
+        interstitialView.snp_makeConstraints { make in
+            make.edges.equalTo(self.view)
+            return
+        }
+        if debug {
+            // This lets you see the underlying webview, but not interact with it.
+            interstitialView.alpha = 0.5
+        }
+
+        startLoading()
     }
 
-    private func loadWebView(url: NSURL) {
+    private func makeWebView() -> WKWebView {
         // Inject  our setup code after the page loads.
         let source = getJS()
         let userScript = WKUserScript(
@@ -83,23 +145,51 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
 
-        webView = WKWebView(
-            frame: CGRectMake(0, 0, 0, 0),
+        let webView = WKWebView(
+            frame: CGRect(x: 0, y: 0, width: 1, height: 1),
             configuration: config
         )
         webView.navigationDelegate = self
-        webView.loadRequest(NSURLRequest(URL: url))
 
         // Don't allow overscrolling.
         webView.scrollView.bounces = false
+        return webView
     }
 
-    func SELdidCancel() {
-        delegate?.contentViewControllerDidCancel(self)
+    private func makeInterstitialViews() -> (UIView, UIActivityIndicatorView, UILabel) {
+        let view = UIView()
+        // Keeping the background constant prevents a pop of mismatched color.
+        view.backgroundColor = UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0)
+
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+        view.addSubview(spinner)
+
+        let error = UILabel()
+        error.text = NSLocalizedString("Could not connect to Firefox Accounts.", comment: "Settings")
+        error.textColor = UIColor.redColor() // Firefox Orange!
+        error.textAlignment = NSTextAlignment.Center
+        error.hidden = true
+        view.addSubview(error)
+
+        spinner.snp_makeConstraints { make in
+            make.center.equalTo(view)
+            return
+        }
+
+        error.snp_makeConstraints { make in
+            make.center.equalTo(view)
+            make.left.equalTo(view.snp_left).offset(20)
+            make.right.equalTo(view.snp_right).offset(-20)
+            make.height.equalTo(44)
+            return
+        }
+
+        return (view, spinner, error)
     }
 
     // Send a message to the content server.
     func injectData(type: String, content: [String: AnyObject]) {
+        NSLog("injectData: " + type)
         let data = [
             "type": type,
             "content": content,
@@ -128,22 +218,33 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
 
     // The user has signed in to a Firefox Account.  We're done!
     private func onLogin(data: JSON) {
+        NSLog("onLogin: " + data.toString())
         injectData("message", content: ["status": "login"])
-        dismissViewControllerAnimated(true, completion: nil)
         self.delegate?.contentViewControllerDidSignIn(self, data: data)
     }
 
     // The content server page is ready to be shown.
-    private func onLoaded(data: JSON) {
-        delegate?.contentViewControllerDidLoad(self)
+    private func onLoaded() {
+        NSLog("Handling loaded remote command.");
+        self.timer?.invalidate()
+        self.timer = nil
+        self.isLoaded = true
     }
 
     // Handle a message coming from the content server.
-    func handleRemoteCommand(command: String, data: JSON) {
-        if let command = RemoteCommand(rawValue: command) {
+    func handleRemoteCommand(rawValue: String, data: JSON) {
+        if let command = RemoteCommand(rawValue: rawValue) {
+            NSLog("Handling remote command '\(rawValue)' .");
+
+            if !isLoaded && command != .Loaded {
+                // Work around https://github.com/mozilla/fxa-content-server/issues/2137
+                NSLog("Synthesizing loaded remote command.")
+                onLoaded()
+            }
+
             switch (command) {
             case .Loaded:
-                onLoaded(data)
+                onLoaded()
             case .Login:
                 onLogin(data)
             case .CanLinkAccount:
@@ -154,7 +255,7 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
                 onSignOut(data)
             }
         } else {
-            NSLog("Unknown remote command '\(command)'; ignoring.");
+            NSLog("Unknown remote command '\(rawValue)'; ignoring.");
         }
     }
 
@@ -170,16 +271,21 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
     }
 
     private func getJS() -> String {
-        let fileRoot = NSBundle.mainBundle().pathForResource("FxASignIn",
-                ofType: "js")
+        let fileRoot = NSBundle.mainBundle().pathForResource("FxASignIn", ofType: "js")
         return NSString(contentsOfFile: fileRoot!, encoding: NSUTF8StringEncoding, error: nil)!
     }
 
     func webView(webView: WKWebView!, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError!) {
-        delegate?.contentViewControllerDidFailProvisionalNavigation(self, withError: error)
+        self.timer = nil
+        self.isError = true
     }
 
     func webView(webView: WKWebView!, didFailNavigation navigation: WKNavigation!, withError error: NSError!) {
-        delegate?.contentViewControllerDidFailNavigation(self, withError: error)
+        // Ignore for now.
+    }
+
+    func SELdidTimeOut() {
+        self.timer = nil
+        self.isError = true
     }
 }
