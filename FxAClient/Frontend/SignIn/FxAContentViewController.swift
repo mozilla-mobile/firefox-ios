@@ -90,6 +90,8 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        KeyboardHelper.defaultHelper.addDelegate(self)
+
         // Don't extend under navigation bar.
         self.edgesForExtendedLayout = UIRectEdge.None
 
@@ -100,12 +102,6 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
         self.webView = makeWebView()
         view.addSubview(webView)
 
-        // Web content fills view.
-        webView.snp_makeConstraints { make in
-            make.edges.equalTo(self.view)
-            return
-        }
-
         // Destructuring let causes problems.
         let ret = makeInterstitialViews()
         self.interstitialView = ret.0
@@ -113,14 +109,12 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
         self.interstitialErrorView = ret.2
 
         view.addSubview(interstitialView)
-        interstitialView.snp_makeConstraints { make in
-            make.edges.equalTo(self.view)
-            return
-        }
         if debug {
             // This lets you see the underlying webview, but not interact with it.
             interstitialView.alpha = 0.5
         }
+
+        layoutInnerViews()
 
         startLoading()
     }
@@ -287,5 +281,40 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
     func SELdidTimeOut() {
         self.timer = nil
         self.isError = true
+    }
+}
+
+extension FxAContentViewController: KeyboardHelperDelegate {
+    private func layoutInnerViews() {
+        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.height ?? 0
+
+        self.webView.snp_remakeConstraints { make in
+            make.left.right.top.equalTo(self.view)
+            make.bottom.equalTo(self.view).offset(-keyboardHeight)
+        }
+        if !isLoaded {
+            // If the page has loaded, the interstitial view will have been removed.
+            self.interstitialView.snp_remakeConstraints { make in
+                make.left.right.top.equalTo(self.view)
+                make.bottom.equalTo(self.view).offset(-keyboardHeight)
+            }
+        }
+    }
+
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        animateInnerViewsWithKeyboard(state)
+    }
+
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        animateInnerViewsWithKeyboard(state)
+    }
+
+    private func animateInnerViewsWithKeyboard(keyboardState: KeyboardState) {
+        layoutInnerViews()
+
+        UIView.animateWithDuration(keyboardState.animationDuration, animations: {
+            UIView.setAnimationCurve(keyboardState.animationCurve)
+            self.view.layoutIfNeeded()
+        })
     }
 }
