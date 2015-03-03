@@ -14,6 +14,8 @@ public enum FirefoxAccountStateLabel : String {
 }
 
 public class FirefoxAccountState {
+    let version = 1
+
     let label: FirefoxAccountStateLabel
     let verified: Bool
 
@@ -23,7 +25,10 @@ public class FirefoxAccountState {
     }
 
     func asDictionary() -> [String: AnyObject] {
-        return ["label": self.label.rawValue]
+        var dict: [String: AnyObject] = [:]
+        dict["version"] = version
+        dict["label"] = self.label.rawValue
+        return dict
     }
 
     public class Separated: FirefoxAccountState {
