@@ -15,12 +15,6 @@ class SearchSettingsTableViewController: UITableViewController {
 
         navigationItem.title = NSLocalizedString("Search", comment: "Settings")
 
-        // Temporary!
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: NSLocalizedString("Done", comment: "Settings"),
-            style: UIBarButtonItemStyle.Done,
-            target: navigationController, action: "SELdone")
-
         // To allow re-ordering the list of search engines at all times.
         tableView.editing = true
         // So that we push the default search engine controller on selection.
