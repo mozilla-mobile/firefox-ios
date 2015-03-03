@@ -5,7 +5,17 @@
 import UIKit
 import Storage
 
-private let SuggestionsLimitCount = 3
+private let SuggestionBackgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
+private let SuggestionBorderColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1)
+private let SuggestionBorderWidth: CGFloat = 0.5
+private let SuggestionCornerRadius: CGFloat = 2
+private let SuggestionFont = UIFont(name: "FiraSans-Regular", size: 12)
+private let SuggestionInsets = UIEdgeInsetsMake(5, 5, 5, 5)
+private let SuggestionMargin: CGFloat = 4
+private let SuggestionCellVerticalPadding: CGFloat = 8
+private let SuggestionCellMaxRows = 2
+
+private let SearchImage = "search"
 
 // searchEngineScrollViewContent is the button container. It has a gray background color,
 // so with insets applied to its buttons, the background becomes the button border.
@@ -18,22 +28,34 @@ private let EngineButtonWidth = EngineButtonHeight * 1.5
 private enum SearchListSection: Int {
     case SearchSuggestions
     case BookmarksAndHistory
+    static let Count = 2
 }
 
 protocol SearchViewControllerDelegate: class {
     func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL)
 }
 
-class SearchViewController: SiteTableViewController, KeyboardHelperDelegate {
+class SearchViewController: SiteTableViewController, UITableViewDelegate, KeyboardHelperDelegate {
     var searchDelegate: SearchViewControllerDelegate?
 
     private var suggestClient: SearchSuggestClient?
-    private var searchSuggestions = [String]()
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
     private let searchEngineScrollView = ButtonScrollView()
     private let searchEngineScrollViewContent = UIView()
+
+    // Cell for the suggestion flow layout. Since heightForHeaderInSection is called *before*
+    // cellForRowAtIndexPath, we create the cell to find its height before it's added to the table.
+    private let suggestionCell = SuggestionCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+
+    convenience override init() {
+        self.init(nibName: nil, bundle: nil)
+    }
+
+    required override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +82,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate {
             make.right.lessThanOrEqualTo(self.searchEngineScrollView).priorityHigh()
             make.top.bottom.equalTo(self.searchEngineScrollView)
         }
+
+        suggestionCell.delegate = self
     }
 
     private func layoutSearchEngineScrollView() {
@@ -96,7 +120,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate {
     override func reloadData() {
         querySuggestClient()
         queryHistoryClient()
-        tableView.reloadData()
     }
 
     private func reloadSearchEngines() {
@@ -157,7 +180,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate {
         suggestClient?.cancelPendingRequest()
 
         if searchQuery.isEmpty {
-            searchSuggestions = []
+            suggestionCell.suggestions = []
             return
         }
 
@@ -178,12 +201,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate {
                     println("Error: \(error.description)")
                 }
 
-                self.searchSuggestions = []
+                self.suggestionCell.suggestions = []
             } else {
-                self.searchSuggestions = suggestions!
-                if self.searchSuggestions.count > SuggestionsLimitCount {
-                    self.searchSuggestions.removeRange(SuggestionsLimitCount..<self.searchSuggestions.count)
-                }
+                self.suggestionCell.suggestions = suggestions!
             }
 
             // Reload the tableView to show the new list of search suggestions.
@@ -213,48 +233,35 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate {
 
 extension SearchViewController: UITableViewDataSource {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+        switch SearchListSection(rawValue: indexPath.section)! {
+        case .SearchSuggestions:
+            suggestionCell.imageView?.image = searchEngines.defaultEngine.image
+            return suggestionCell
 
-        if let currentSection = SearchListSection(rawValue: indexPath.section) {
-            switch currentSection {
-            case .SearchSuggestions:
-                cell.textLabel?.text = searchSuggestions[indexPath.row]
-                cell.detailTextLabel?.text = nil
-                cell.imageView?.image = nil
-                cell.isAccessibilityElement = false
-                cell.accessibilityLabel = nil
-            case .BookmarksAndHistory:
-                if let site = data[indexPath.row] as? Site {
-                    cell.textLabel?.text = site.title
-                    cell.detailTextLabel?.text = site.url
-                    if let img = site.icon? {
-                        let imgUrl = NSURL(string: img.url)
-                        cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
-                    } else {
-                        cell.imageView?.image = self.profile.favicons.defaultIcon
-                    }
-                    cell.isAccessibilityElement = false
-                    cell.accessibilityLabel = nil
+        case .BookmarksAndHistory:
+            let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+            if let site = data[indexPath.row] as? Site {
+                cell.textLabel?.text = site.title
+                cell.detailTextLabel?.text = site.url
+                if let img = site.icon? {
+                    let imgUrl = NSURL(string: img.url)
+                    cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
+                } else {
+                    cell.imageView?.image = self.profile.favicons.defaultIcon
                 }
             }
+            return cell
         }
-
-        // Make the row separators span the width of the entire table.
-        cell.layoutMargins = UIEdgeInsetsZero
-
-        return cell
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let currentSection = SearchListSection(rawValue: section) {
-            switch(currentSection) {
-            case .SearchSuggestions:
-                return searchSuggestions.count
-            case .BookmarksAndHistory:
-                return data.count
-            }
+        switch SearchListSection(rawValue: section)! {
+        case .SearchSuggestions:
+            // Show the suggestions row as long as there's at least one suggestion.
+            return suggestionCell.suggestions.isEmpty ? 0 : 1
+        case .BookmarksAndHistory:
+            return data.count
         }
-        return 0
     }
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -262,28 +269,47 @@ extension SearchViewController: UITableViewDataSource {
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return SearchListSection.Count
     }
-}
 
-extension SearchViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var url: NSURL?
+
+        let section = SearchListSection(rawValue: indexPath.section)!
+        if section == SearchListSection.BookmarksAndHistory {
+            if let site = data[indexPath.row] as? Site {
+                url = NSURL(string: site.url)
+            }
+        }
+
+        if let url = url {
+            searchDelegate?.searchViewController(self, didSelectURL: url)
+        }
+    }
+
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if let currentSection = SearchListSection(rawValue: indexPath.section) {
             switch currentSection {
             case .SearchSuggestions:
-                let suggestion = searchSuggestions[indexPath.row]
-
-                url = URIFixup().getURL(suggestion)
-                if url == nil {
-                    // Assume that only the default search engine can provide search suggestions.
-                    url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
-                }
-            case .BookmarksAndHistory:
-                if let site = data[indexPath.row] as? Site {
-                    url = NSURL(string: site.url)
-                }
+                // heightForRowAtIndexPath is called *before* the cell is created, so to get the height,
+                // force a layout pass first.
+                suggestionCell.layoutIfNeeded()
+                return suggestionCell.frame.height
+            default:
+                return tableView.rowHeight
             }
+        }
+
+        return 0
+    }
+}
+
+extension SearchViewController: SuggestionCellDelegate {
+    private func suggestionCell(suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String) {
+        var url = URIFixup().getURL(suggestion)
+        if url == nil {
+            // Assume that only the default search engine can provide search suggestions.
+            url = searchEngines?.defaultEngine.searchURLForQuery(suggestion)
         }
 
         if let url = url {
@@ -298,5 +324,149 @@ extension SearchViewController: UITableViewDelegate {
 private class ButtonScrollView: UIScrollView {
     private override func touchesShouldCancelInContentView(view: UIView!) -> Bool {
         return true
+    }
+}
+
+private protocol SuggestionCellDelegate: class {
+    func suggestionCell(suggestionCell: SuggestionCell, didSelectSuggestion suggestion: String)
+}
+
+/**
+ * Cell that wraps a list of search suggestion buttons.
+ */
+private class SuggestionCell: TwoLineCell {
+    weak var delegate: SuggestionCellDelegate?
+    let container = UIView()
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        isAccessibilityElement = false
+        accessibilityLabel = nil
+        layoutMargins = UIEdgeInsetsZero
+        separatorInset = UIEdgeInsetsZero
+        selectionStyle = UITableViewCellSelectionStyle.None
+
+        contentView.addSubview(container)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        assertionFailure("Not supported")
+    }
+
+    var suggestions: [String] = [] {
+        didSet {
+            for view in container.subviews {
+                view.removeFromSuperview()
+            }
+
+            for suggestion in suggestions {
+                let button = SuggestionButton()
+                button.setTitle(suggestion, forState: UIControlState.Normal)
+                button.addTarget(self, action: "SELdidSelectSuggestion:", forControlEvents: UIControlEvents.TouchUpInside)
+
+                // If this is the first image, add the search icon.
+                if container.subviews.isEmpty {
+                    let image = UIImage(named: SearchImage)
+                    button.setImage(image, forState: UIControlState.Normal)
+                    button.titleEdgeInsets = UIEdgeInsetsMake(0, 8, 0, 0)
+                }
+
+                container.addSubview(button)
+            }
+
+            setNeedsLayout()
+        }
+    }
+
+    @objc
+    func SELdidSelectSuggestion(sender: UIButton) {
+        delegate?.suggestionCell(self, didSelectSuggestion: sender.titleLabel!.text!)
+    }
+
+    private override func layoutSubviews() {
+        super.layoutSubviews()
+
+        // The left bounds of the suggestions align with where text would be displayed.
+        let textLeft = textLabel!.frame.origin.x
+
+        // The maximum width of the container, after which suggestions will wrap to the next line.
+        let maxWidth = contentView.frame.width
+
+        // The height of the suggestions container (minus margins), used to determine the frame.
+        var height: CGFloat = 0
+
+        var currentLeft = textLeft
+        var currentTop = SuggestionCellVerticalPadding
+        var currentRow = 0
+
+        for view in container.subviews {
+            let button = view as UIButton
+            let buttonSize = button.intrinsicContentSize()
+
+            if height == 0 {
+                height = buttonSize.height
+            }
+
+            let width = currentLeft + buttonSize.width + SuggestionMargin
+            if width > maxWidth {
+                currentRow++
+                if currentRow >= SuggestionCellMaxRows {
+                    break
+                }
+
+                currentLeft = textLeft
+                currentTop += buttonSize.height + SuggestionMargin
+                height += buttonSize.height + SuggestionMargin
+            }
+
+            button.frame = CGRectMake(currentLeft, currentTop, buttonSize.width, buttonSize.height)
+            currentLeft += buttonSize.width + SuggestionMargin
+        }
+
+        frame.size.height = height + 2 * SuggestionCellVerticalPadding
+        contentView.frame = frame
+        container.frame = frame
+    }
+}
+
+/**
+ * Rounded search suggestion button that highlights when selected.
+ */
+private class SuggestionButton: UIButton {
+    override init() {
+        super.init()
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
+        titleLabel?.font = SuggestionFont
+        backgroundColor = SuggestionBackgroundColor
+        layer.borderColor = SuggestionBorderColor.CGColor
+        layer.borderWidth = SuggestionBorderWidth
+        layer.cornerRadius = SuggestionCornerRadius
+        contentEdgeInsets = SuggestionInsets
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        assertionFailure("Not supported")
+    }
+
+    /**
+     * Get the intrinsic size, including the label's left padding.
+     */
+    private override func intrinsicContentSize() -> CGSize {
+        var size = super.intrinsicContentSize()
+        size.width += titleEdgeInsets.left
+        return size
+    }
+
+    @objc
+    override var highlighted: Bool {
+        didSet {
+            backgroundColor = highlighted ? UIColor.grayColor() : SuggestionBackgroundColor
+        }
     }
 }
