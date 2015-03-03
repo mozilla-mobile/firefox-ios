@@ -82,4 +82,8 @@ class FirefoxAccount {
                 authEndpoint: authEndpoint, contentEndpoint: contentEndpoint, oauthEndpoint: oauthEndpoint,
                 state: state)
    }
+
+    func getActionNeeded() -> FirefoxAccountActionNeeded {
+        return state.getActionNeeded()
+    }
 }
