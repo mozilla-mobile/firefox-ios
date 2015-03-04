@@ -410,7 +410,7 @@ extension BrowserViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(scrollView: UIScrollView) {
         if var prev = previousScroll {
             if let tab = tabManager.selectedTab {
-                if tab.loading {
+                if tab.loading || !tabHasContentOutsideOfFrame(tab){
                     return
                 }
 
@@ -418,20 +418,19 @@ extension BrowserViewController: UIScrollViewDelegate {
                 var delta = CGPoint(x: prev.x - offset.x, y: prev.y - offset.y)
                 previousScroll = offset
 
-                if let tab = self.tabManager.selectedTab {
-                    let inset = tab.webView.scrollView.contentInset
-                    let newInset = clamp(inset.top + delta.y, min: StatusBarHeight, max: ToolbarHeight + StatusBarHeight)
+                let inset = tab.webView.scrollView.contentInset
+                let newInset = clamp(inset.top + delta.y, min: StatusBarHeight, max: ToolbarHeight + StatusBarHeight)
 
-                    tab.webView.scrollView.contentInset = UIEdgeInsetsMake(newInset, 0, clamp(newInset - StatusBarHeight, min: 0, max: ToolbarHeight), 0)
-                    tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(newInset - StatusBarHeight, 0, clamp(newInset, min: 0, max: ToolbarHeight), 0)
+                tab.webView.scrollView.contentInset = UIEdgeInsetsMake(newInset, 0, clamp(newInset - StatusBarHeight, min: 0, max: ToolbarHeight), 0)
+                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(newInset, 0, clamp(newInset - StatusBarHeight, min: 0, max: ToolbarHeight), 0)
 
-                    // Adjusting the contentInset will change the scroll position of the page.
-                    // We account for that by also adjusting the previousScroll position
-                    delta.y += inset.top - newInset
-                }
+                // Adjusting the contentInset will change the scroll position of the page.
+                // We account for that by also adjusting the previousScroll position
+                delta.y += inset.top - newInset
 
                 scrollUrlBar(delta.y)
                 scrollToolbar(delta.y)
+                setFullscreenViewConstraintsFor(tab: tab)
             }
         }
     }
@@ -457,11 +456,6 @@ extension BrowserViewController: UIScrollViewDelegate {
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
             self.scrollUrlBar(CGFloat(-1*MAXFLOAT))
             self.scrollToolbar(CGFloat(-1*MAXFLOAT))
-            // Reset the insets so that clicking works on the edges of the screen
-            if let tab = self.tabManager.selectedTab {
-                tab.webView.scrollView.contentInset = UIEdgeInsets(top: StatusBarHeight, left: 0, bottom: 0, right: 0)
-                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: StatusBarHeight, left: 0, bottom: 0, right: 0)
-            }
         })
     }
 
@@ -469,11 +463,31 @@ extension BrowserViewController: UIScrollViewDelegate {
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
             self.scrollUrlBar(CGFloat(MAXFLOAT))
             self.scrollToolbar(CGFloat(MAXFLOAT))
-            // Reset the insets so that clicking works on the edges of the screen
-            if let tab = self.tabManager.selectedTab {
-                tab.webView.scrollView.contentInset = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
-                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
-            }
+        })
+    }
+
+    private func tabHasContentOutsideOfFrame(tab: Browser) -> Bool {
+        return tab.webView.scrollView.contentSize.height > (tab.webView.scrollView.frame.height + ToolbarHeight * 2 + StatusBarHeight)
+    }
+
+    private func setDefaultViewConstraintsFor(#tab: Browser) {
+        tab.webView.scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0)
+        tab.webView.snp_remakeConstraints({ make in
+            make.top.equalTo(self.header.snp_bottom)
+            make.bottom.equalTo(self.footer.snp_top)
+            make.leading.trailing.equalTo(self.view)
+        })
+    }
+
+    private func setFullscreenViewConstraintsFor(#tab: Browser) {
+        if tab.webView.frame.height == webViewContainer.frame.height {
+            return
+        }
+
+        tab.webView.snp_remakeConstraints({ make in
+            make.edges.equalTo(self.view)
+            return
         })
     }
 }
@@ -533,12 +547,9 @@ extension BrowserViewController: TabManagerDelegate {
         urlBar.updateTabCount(tabManager.count)
 
         webViewContainer.insertSubview(tab.webView, atIndex: 0)
-        tab.webView.scrollView.contentInset = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
-        tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
-        tab.webView.snp_makeConstraints { make in
-            make.top.equalTo(self.view.snp_top)
-            make.leading.trailing.bottom.equalTo(self.view)
-        }
+
+        setDefaultViewConstraintsFor(tab: tab)
+
         tab.webView.addObserver(self, forKeyPath: KVOEstimatedProgress, options: .New, context: nil)
         tab.webView.addObserver(self, forKeyPath: KVOLoading, options: .New, context: nil)
         tab.webView.UIDelegate = self
@@ -570,7 +581,10 @@ extension BrowserViewController: WKNavigationDelegate {
         urlBar.updateURL(webView.URL);
         toolbar.updateBackStatus(webView.canGoBack)
         toolbar.updateFowardStatus(webView.canGoForward)
-        showToolbars(animated: false)
+        // A page load has started, reset any view constraints
+        if let tab = tabManager.selectedTab {
+            setDefaultViewConstraintsFor(tab: tab)
+        }
 
         if let url = webView.URL?.absoluteString {
             profile.bookmarks.isBookmarked(url, success: { bookmarked in
@@ -777,7 +791,8 @@ extension BrowserViewController : Transitionable {
         // Move all the webview's back on screen
         for i in 0..<tabManager.count {
             let tab = tabManager.getTab(i)
-            tab.webView.frame = CGRect(x: 0, y: 0, width: tab.webView.frame.width, height: tab.webView.frame.height)
+            let offset = tabHasContentOutsideOfFrame(tab) ? 0 : ToolbarHeight + StatusBarHeight;
+            tab.webView.frame = CGRect(x: 0, y: offset, width: tab.webView.frame.width, height: tab.webView.frame.height)
         }
     }
 }
