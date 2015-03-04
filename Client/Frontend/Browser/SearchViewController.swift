@@ -402,22 +402,32 @@ private class SuggestionCell: TwoLineCell {
 
         for view in container.subviews {
             let button = view as UIButton
-            let buttonSize = button.intrinsicContentSize()
+            var buttonSize = button.intrinsicContentSize()
 
             if height == 0 {
                 height = buttonSize.height
             }
 
-            let width = currentLeft + buttonSize.width + SuggestionMargin
+            var width = currentLeft + buttonSize.width + SuggestionMargin
             if width > maxWidth {
-                currentRow++
-                if currentRow >= SuggestionCellMaxRows {
-                    break
+                // Only move to the next row if there's already a suggestion on this row.
+                // Otherwise, the suggestion is too big to fit and will be resized below.
+                if currentLeft > textLeft {
+                    currentRow++
+                    if currentRow >= SuggestionCellMaxRows {
+                        break
+                    }
+
+                    currentLeft = textLeft
+                    currentTop += buttonSize.height + SuggestionMargin
+                    height += buttonSize.height + SuggestionMargin
+                    width = currentLeft + buttonSize.width + SuggestionMargin
                 }
 
-                currentLeft = textLeft
-                currentTop += buttonSize.height + SuggestionMargin
-                height += buttonSize.height + SuggestionMargin
+                // If the suggestion is too wide to fit on its own row, shrink it.
+                if width > maxWidth {
+                    buttonSize.width = maxWidth - currentLeft - SuggestionMargin
+                }
             }
 
             button.frame = CGRectMake(currentLeft, currentTop, buttonSize.width, buttonSize.height)
