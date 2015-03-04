@@ -206,10 +206,13 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
                 default:
                     println("Error: \(error.description)")
                 }
-
-                self.suggestionCell.suggestions = []
             } else {
                 self.suggestionCell.suggestions = suggestions!
+            }
+
+            // If there are no suggestions, just use whatever the user typed.
+            if suggestions?.isEmpty ?? true {
+                self.suggestionCell.suggestions = [self.searchQuery]
             }
 
             // Reload the tableView to show the new list of search suggestions.
@@ -263,8 +266,7 @@ extension SearchViewController: UITableViewDataSource {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch SearchListSection(rawValue: section)! {
         case .SearchSuggestions:
-            // Show the suggestions row as long as there's at least one suggestion.
-            return suggestionCell.suggestions.isEmpty ? 0 : 1
+            return 1
         case .BookmarksAndHistory:
             return data.count
         }
