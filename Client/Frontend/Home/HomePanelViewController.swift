@@ -9,7 +9,7 @@ import UIKit
 private let BackgroundColor = UIColor(red: 45.0 / 255, green: 52.0 / 255, blue: 66.0 / 255, alpha: 1)
 private let NormalIconColor = UIColor.lightGrayColor()
 private let SelectedIconColor = UIColor(red: 62.0 / 255, green: 136.0 / 255, blue: 255.0 / 255, alpha: 1)
-private let ContainerHeight = 40
+let ContainerHeight = 40
 
 protocol HomePanelViewControllerDelegate: class {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL)
@@ -53,7 +53,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
         controllerContainerView.snp_makeConstraints { make in
             make.top.equalTo(self.buttonContainerView.snp_bottom)
-            make.left.right.bottom.equalTo(self.view)
+            make.bottom.equalTo(self.view.snp_bottom)
+            make.left.right.equalTo(self.view)
         }
 
         self.panels = Panels(profile: self.profile).enabledItems

@@ -27,6 +27,11 @@ struct ToolbarItem {
  * This will be rearranged on startup to make the order stored/enabled-states set in NSUserDefaults.
  */
 private var Controllers: Protector<[ToolbarItem]> = Protector(name: "Controllers", item: [
+    ToolbarItem(title: "TopSites", imageName: "tabs", generator: { (profile: Profile) -> UIViewController in
+        let controller = TopSitesPanel(nibName: nil, bundle: nil)
+        controller.profile = profile
+        return controller
+    }, enabled: true),
     ToolbarItem(title: "Tabs", imageName: "tabs", generator: { (profile: Profile) -> UIViewController in
         let controller = TabsPanel(nibName: nil, bundle: nil)
         controller.profile = profile

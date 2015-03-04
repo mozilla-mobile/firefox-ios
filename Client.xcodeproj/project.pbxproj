@@ -31,6 +31,8 @@
 		0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */; };
 		0BF48B5E1A96A77400A730CF /* TwoLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF48B5D1A96A77400A730CF /* TwoLineCell.swift */; };
 		0BF48B6E1A96A7F300A730CF /* TwoLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF48B5D1A96A77400A730CF /* TwoLineCell.swift */; };
+		0BF648111A9C54E900BA963C /* TopSitesPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF648101A9C54E900BA963C /* TopSitesPanel.swift */; };
+		0BF6483C1A9D003D00BA963C /* TopSitesPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF648101A9C54E900BA963C /* TopSitesPanel.swift */; };
 		0BF9F8BC1A3A82CA0049A0FA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
 		282DA4691A68C13400A406E2 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDE21A23A6F900B794D3 /* Clients.swift */; };
 		282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
@@ -540,6 +542,7 @@
 		0BF42D381A7C0E8900889E28 /* Favicons.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Favicons.js; sourceTree = "<group>"; };
 		0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestFavicons.swift; sourceTree = "<group>"; };
 		0BF48B5D1A96A77400A730CF /* TwoLineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoLineCell.swift; sourceTree = "<group>"; };
+		0BF648101A9C54E900BA963C /* TopSitesPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSitesPanel.swift; sourceTree = "<group>"; };
 		282DA4B11A699E0300A406E2 /* Storage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Storage.xcodeproj; path = Storage/Storage.xcodeproj; sourceTree = "<group>"; };
 		28C077971A3B064000834FE5 /* CryptoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
 		28C077991A3B064F00834FE5 /* FxAClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAClientTests.swift; sourceTree = "<group>"; };
@@ -1210,14 +1213,20 @@
 		F84B22211A09122500AAB793 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				59A6825233896FC846499289 /* HistoryPanel.swift */,
+				0B6545751A97E07C000DD202 /* SiteTableViewController.swift */,
 				F84B22221A09122500AAB793 /* HomePanelViewController.swift */,
 				F84B22261A09127C00AAB793 /* Home.xcassets */,
 				59A6825233896FC846499289 /* HistoryPanel.swift */,
 				59A68480808F0CFC2E6B79DD /* Panels.swift */,
 				59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */,
-				0BF48B5D1A96A77400A730CF /* TwoLineCell.swift */,
 				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
 				59A683E3C04DD83502EF1EC7 /* TabsPanel.swift */,
+				0BF48B5D1A96A77400A730CF /* TwoLineCell.swift */,
+				F84B22261A09127C00AAB793 /* Home.xcassets */,
+				59A68DAED41E25264BD4563C /* Settings.xcassets */,
+				59A68EC516B0FE3C9B913AB9 /* TabsViewControllerHeader.xib */,
+				0BF648101A9C54E900BA963C /* TopSitesPanel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1716,6 +1725,10 @@
 				0BF42D391A7C0E8900889E28 /* Favicons.js in Resources */,
 				E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */,
 				2F44FB2D1A9D5D8500FD20CC /* FiraSans-BoldItalic.ttf in Resources */,
+				E4B7B7691A793CF20022C5E0 /* FiraSans-BoldItalic.ttf in Resources */,
+				59A68955352404CEFEEAD273 /* Settings.xcassets in Resources */,
+				59A684F3A0E745546D07BDA9 /* TabsViewControllerHeader.xib in Resources */,
+				E4B7B7691A793CF20022C5E0 /* FiraSans-BoldItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1798,6 +1811,7 @@
 				0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */,
 				D39999A91AA01D65005AED21 /* KeyboardHelper.swift in Sources */,
 				0BF48B5E1A96A77400A730CF /* TwoLineCell.swift in Sources */,
+				0BF648111A9C54E900BA963C /* TopSitesPanel.swift in Sources */,
 				28CE83C41A1D1D3200576538 /* ClientPayload.swift in Sources */,
 				28CE83C21A1D1D3200576538 /* FxAClient.swift in Sources */,
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,
@@ -1863,7 +1877,9 @@
 				0BA2E43C1A69EDAB000581FA /* Profile.swift in Sources */,
 				D38B2D351A8D96D00040E6B5 /* GCDWebServerFunctions.m in Sources */,
 				2F834D211A8062D1006A0B7B /* json.swift in Sources */,
+				0B6545781A97E102000DD202 /* SiteTableViewController.swift in Sources */,
 				E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
+				0BF6483C1A9D003D00BA963C /* TopSitesPanel.swift in Sources */,
 				D38B2D501A8D96D00040E6B5 /* GCDWebServerFileResponse.m in Sources */,
 				28C0779C1A3B065800834FE5 /* TokenServerClientTests.swift in Sources */,
 				D38B2D3B1A8D96D00040E6B5 /* GCDWebServerResponse.m in Sources */,
