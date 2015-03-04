@@ -127,6 +127,12 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
 
         var leftEdge = searchEngineScrollViewContent.snp_left
         for engine in searchEngines.enabledEngines {
+            // Don't include the default search engine.
+            // It will already be displayed in the list with suggestions.
+            if engine === searchEngines.defaultEngine {
+                continue
+            }
+
             let engineButton = UIButton()
             engineButton.setImage(engine.image, forState: UIControlState.Normal)
             engineButton.layer.backgroundColor = UIColor.whiteColor().CGColor
