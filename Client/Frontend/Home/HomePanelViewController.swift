@@ -30,7 +30,7 @@ protocol HomePanelDelegate: class {
 class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
-    var panels: [ToolbarItem]!
+    var panels: [HomePanelDescriptor]!
     var url: NSURL?
     weak var delegate: HomePanelViewControllerDelegate?
 
@@ -58,20 +58,9 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             make.left.right.bottom.equalTo(self.view)
         }
 
-        self.panels = Panels(profile: self.profile).enabledItems
+        self.panels = HomePanels().enabledPanels
         updateButtons()
         selectedButtonIndex = 0
-    }
-
-    override func viewWillAppear(animated: Bool) {
-        notificationToken = NSNotificationCenter.defaultCenter().addObserverForName(PanelsNotificationName, object: nil, queue: nil) { [unowned self] notif in
-            self.panels = Panels(profile: self.profile).enabledItems
-            self.updateButtons()
-        }
-    }
-
-    override func viewWillDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(notificationToken)
     }
 
     var selectedButtonIndex: Int = 0 {
@@ -82,14 +71,9 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             let newButton = buttons[selectedButtonIndex]
             newButton.selected = true
 
-            hideCurrentPanel()
-            var panel = self.panels[selectedButtonIndex].generator(profile: self.profile)
+            let panel = self.panels[selectedButtonIndex].makeViewController(profile: profile)
+            (panel as HomePanel).homePanelDelegate = self
             self.showPanel(panel)
-
-            // TODO: Temporary workaround until all panels implement the HomePanel protocol.
-            if let v = panel as? HomePanel {
-                v.homePanelDelegate = self
-            }
         }
     }
 
@@ -105,6 +89,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     private func showPanel(panel: UIViewController) {
+        hideCurrentPanel()
+
         controllerContainerView.addSubview(panel.view)
         panel.view.snp_makeConstraints { make in
             make.top.equalTo(self.buttonContainerView.snp_bottom)
