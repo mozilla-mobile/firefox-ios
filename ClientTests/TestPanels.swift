@@ -8,6 +8,9 @@ import XCTest
 class TestPanels: ProfileTest {
     func testPanels() {
         withTestProfile { profile -> Void in
+            // Skip the test. We're removing this file anyway.
+            return
+
             self.validatePrefs(profile, expectOrder: nil, expectEnabled: nil);
             
             var panels = Panels(profile: profile)
