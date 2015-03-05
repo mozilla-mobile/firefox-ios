@@ -17,6 +17,8 @@ protocol URLBarDelegate: class {
     func urlBar(urlBar: URLBarView, didSubmitText text: String)
 }
 
+private let TextFieldBorderColor = UIColor(rgb: 0x6da0db)
+
 class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     weak var delegate: URLBarDelegate?
 
@@ -54,6 +56,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         editTextField.returnKeyType = UIReturnKeyType.Go
         editTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
         editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
+        editTextField.layer.borderColor = TextFieldBorderColor.CGColor
         editTextField.layer.cornerRadius = 3
         editTextField.delegate = self
         editTextField.font = UIFont(name: "HelveticaNeue-Light", size: 14)
@@ -193,6 +196,12 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         dispatch_async(dispatch_get_main_queue(), {
             textField.selectedTextRange = textField.textRangeFromPosition(textField.beginningOfDocument, toPosition: textField.endOfDocument)
         })
+
+        textField.layer.borderWidth = 1
+    }
+
+    func textFieldDidEndEditing(textField: UITextField) {
+        textField.layer.borderWidth = 0
     }
 
     func textFieldShouldClear(textField: UITextField) -> Bool {
