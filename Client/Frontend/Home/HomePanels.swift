@@ -27,15 +27,6 @@ class HomePanels {
 
         HomePanelDescriptor(
             makeViewController: { profile in
-                let controller = TabsPanel()
-                controller.profile = profile
-                return controller
-            },
-            imageName: "tabs",
-            accessibilityLabel: NSLocalizedString("Tabs", comment: "Panel accessibility label")),
-
-        HomePanelDescriptor(
-            makeViewController: { profile in
                 let controller = BookmarksPanel()
                 controller.profile = profile
                 return controller

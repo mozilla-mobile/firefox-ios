@@ -99,8 +99,6 @@
 		59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68CCB63E2A565CB03F832 /* SearchViewController.swift */; };
 		59A687335CF58A8004B23508 /* BookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */; };
 		59A687B4A05CC772FE7E5A09 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68CCB63E2A565CB03F832 /* SearchViewController.swift */; };
-		59A688AEC01E5F62C5C52966 /* TabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A683E3C04DD83502EF1EC7 /* TabsPanel.swift */; };
-		59A688CAC8E49FD4007BFDC4 /* TabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A683E3C04DD83502EF1EC7 /* TabsPanel.swift */; };
 		59A68ACAB9DB4B3E04E5D1B7 /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
 		59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6825233896FC846499289 /* HistoryPanel.swift */; };
 		59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */; };
@@ -563,7 +561,6 @@
 		4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		59A6825233896FC846499289 /* HistoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPanel.swift; sourceTree = "<group>"; };
 		59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksPanel.swift; sourceTree = "<group>"; };
-		59A683E3C04DD83502EF1EC7 /* TabsPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsPanel.swift; sourceTree = "<group>"; };
 		59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderPanel.swift; sourceTree = "<group>"; };
 		59A68CCB63E2A565CB03F832 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		9B64C2A71A6451A800473AE3 /* LongPress.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = LongPress.js; path = JavaScripts/LongPress.js; sourceTree = "<group>"; };
@@ -1203,7 +1200,6 @@
 				D30B101D1AA7F9C600C01CA3 /* HomePanels.swift */,
 				F84B22221A09122500AAB793 /* HomePanelViewController.swift */,
 				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
-				59A683E3C04DD83502EF1EC7 /* TabsPanel.swift */,
 				0BF648101A9C54E900BA963C /* TopSitesPanel.swift */,
 				0BF48B5D1A96A77400A730CF /* TwoLineCell.swift */,
 				F84B22261A09127C00AAB793 /* Home.xcassets */,
@@ -1833,7 +1829,6 @@
 				D38B2D491A8D96D00040E6B5 /* GCDWebServerDataResponse.m in Sources */,
 				D38B2D521A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
-				59A688CAC8E49FD4007BFDC4 /* TabsPanel.swift in Sources */,
 				E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 			);
@@ -1894,7 +1889,6 @@
 				59A687335CF58A8004B23508 /* BookmarksPanel.swift in Sources */,
 				59A68ACAB9DB4B3E04E5D1B7 /* ReaderPanel.swift in Sources */,
 				2F44FA191A9D425700FD20CC /* HashExtensions.swift in Sources */,
-				59A688AEC01E5F62C5C52966 /* TabsPanel.swift in Sources */,
 				2F1BDFA21A85240400213B54 /* FirefoxAccountState.swift in Sources */,
 				D30B101F1AA7F9E000C01CA3 /* HomePanels.swift in Sources */,
 				2FDB10931A9FBEC5006CF312 /* ProfilePrefsTests.swift in Sources */,
