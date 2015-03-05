@@ -30,19 +30,18 @@ class SearchSettingsTableViewController: UITableViewController {
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
             cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
         } else {
-            engine = model.orderedEngines[indexPath.item]
-            let isDefault = model.isEngineDefault(engine)
+            // The default engine is not a quick search engine.
+            let index = indexPath.item + 1
+            engine = model.orderedEngines[index]
 
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
             cell.showsReorderControl = true
 
             let toggle = UISwitch()
-            toggle.tag = indexPath.item // An easy way to get from the toggle control to the corresponding indexPath.
+            // This is an easy way to get from the toggle control to the corresponding index.
+            toggle.tag = index
             toggle.addTarget(self, action: "SELdidToggleEngine:", forControlEvents: UIControlEvents.ValueChanged)
-            // The default engine is always enabled.
-            toggle.on = isDefault || model.isEngineEnabled(engine)
-            // The user can't disable the default engine.
-            toggle.enabled = !isDefault
+            toggle.on = model.isEngineEnabled(engine)
 
             cell.editingAccessoryView = toggle
         }
@@ -64,7 +63,8 @@ class SearchSettingsTableViewController: UITableViewController {
         if section == SectionDefault {
             return 1
         } else {
-            return model.orderedEngines.count
+            // The first engine -- the default engine -- is not shown in the quick search engine list.
+            return model.orderedEngines.count - 1
         }
     }
 
@@ -80,6 +80,7 @@ class SearchSettingsTableViewController: UITableViewController {
         if indexPath.section == SectionDefault {
             let searchEnginePicker = SearchEnginePicker()
             // Order alphabetically, so that picker is always consistently ordered.
+            // Every engine is a valid choice for the default engine, even the current default engine.
             searchEnginePicker.engines = model.orderedEngines.sorted { e, f in e.shortName < f.shortName }
             searchEnginePicker.delegate = self
             navigationController?.pushViewController(searchEnginePicker, animated: true)
@@ -117,8 +118,11 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, moveRowAtIndexPath indexPath: NSIndexPath, toIndexPath newIndexPath: NSIndexPath) {
-        let engine = model.orderedEngines.removeAtIndex(indexPath.item)
-        model.orderedEngines.insert(engine, atIndex: newIndexPath.item)
+        // The first engine (default engine) is not shown in the list, so the indices are off-by-1.
+        let index = indexPath.item + 1
+        let newIndex = newIndexPath.item + 1
+        let engine = model.orderedEngines.removeAtIndex(index)
+        model.orderedEngines.insert(engine, atIndex: newIndex)
         tableView.reloadData()
     }
 
@@ -126,16 +130,6 @@ class SearchSettingsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
         // You can't drag or drop on the default engine.
         if sourceIndexPath.section == SectionDefault || proposedDestinationIndexPath.section == SectionDefault {
-            return sourceIndexPath
-        }
-
-        // The default engine is always the first row and cannot be moved.
-        if sourceIndexPath.section == SectionOrder && sourceIndexPath.item == 0 {
-            return sourceIndexPath
-        }
-
-        // Similarly, you can't displace the default engine from the first row.
-        if proposedDestinationIndexPath.section == SectionOrder && proposedDestinationIndexPath.item == 0 {
             return sourceIndexPath
         }
 
@@ -152,7 +146,7 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     func SELdidToggleEngine(toggle: UISwitch) {
-        let engine = model.orderedEngines[toggle.tag]
+        let engine = model.orderedEngines[toggle.tag] // The tag is 1-based.
         if toggle.on {
             model.enableEngine(engine)
         } else {
