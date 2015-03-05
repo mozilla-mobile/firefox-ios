@@ -59,7 +59,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         editTextField.layer.borderColor = TextFieldBorderColor.CGColor
         editTextField.layer.cornerRadius = 3
         editTextField.delegate = self
-        editTextField.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        editTextField.font = UIFont(name: "HelveticaNeue-Light", size: 12)
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         editTextField.hidden = true
 
@@ -82,9 +82,9 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         self.addSubview(tabsButton)
 
         cancelButton = UIButton()
-        cancelButton.setTitleColor(UIColor.blackColor   (), forState: UIControlState.Normal)
+        cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
-        cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 12)
         cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
         cancelButton.hidden = true
         self.addSubview(cancelButton)
