@@ -18,40 +18,47 @@ protocol ToolbarViewProtocol {
 struct ToolbarItem {
     let title: String    // We use title all over the place as a unique identifier. Be careful not to have duplicates.
     let imageName: String
-    let generator: (profile: Profile) -> UIViewController;
-    var enabled : Bool;
+    let generator: (profile: Profile) -> UIViewController
+    var enabled: Bool
+    let accessibilityLabel: String
 }
+
+private let PanelTopSites = "TopSites"
+private let PanelTabs = "Tabs"
+private let PanelBookmarks = "Bookmarks"
+private let PanelHistory = "History"
+private let PanelReader = "Reader"
 
 /*
  * A list of tabs to show. Order is important here. The order (and enabled state) listed here represent the defaults for the app.
  * This will be rearranged on startup to make the order stored/enabled-states set in NSUserDefaults.
  */
 private var Controllers: Protector<[ToolbarItem]> = Protector(name: "Controllers", item: [
-    ToolbarItem(title: "TopSites", imageName: "tabs", generator: { (profile: Profile) -> UIViewController in
+    ToolbarItem(title: PanelTopSites, imageName: "tabs", generator: { (profile: Profile) -> UIViewController in
         let controller = TopSitesPanel(nibName: nil, bundle: nil)
         controller.profile = profile
         return controller
-    }, enabled: true),
-    ToolbarItem(title: "Tabs", imageName: "tabs", generator: { (profile: Profile) -> UIViewController in
+        }, enabled: true, accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label")),
+    ToolbarItem(title: PanelTabs, imageName: "tabs", generator: { (profile: Profile) -> UIViewController in
         let controller = TabsPanel(nibName: nil, bundle: nil)
         controller.profile = profile
         return controller
-    }, enabled: true),
-    ToolbarItem(title: "Bookmarks", imageName: "bookmarks", generator: { (profile: Profile) -> UIViewController in
+    }, enabled: true, accessibilityLabel: NSLocalizedString("Tabs", comment: "Panel accessibility label")),
+    ToolbarItem(title: PanelBookmarks, imageName: "bookmarks", generator: { (profile: Profile) -> UIViewController in
         let controller = BookmarksPanel(nibName: nil, bundle: nil)
         controller.profile = profile
         return controller
-    }, enabled: true),
-    ToolbarItem(title: "History", imageName: "history", generator: { (profile: Profile) -> UIViewController in
+    }, enabled: true, accessibilityLabel: NSLocalizedString("Bookmarks", comment: "Panel accessibility label")),
+    ToolbarItem(title: PanelHistory, imageName: "history", generator: { (profile: Profile) -> UIViewController in
         var controller = HistoryPanel(nibName: nil, bundle: nil)
         controller.profile = profile
         return controller
-    }, enabled: true),
-    ToolbarItem(title: "Reader", imageName: "reader", generator: { (profile: Profile) -> UIViewController in
+    }, enabled: true, accessibilityLabel: NSLocalizedString("History", comment: "Panel accessibility label")),
+    ToolbarItem(title: PanelReader, imageName: "reader", generator: { (profile: Profile) -> UIViewController in
         let controller = ReaderPanel(nibName: nil, bundle: nil)
         controller.profile = profile
         return controller
-    }, enabled: true),
+    }, enabled: true, accessibilityLabel: NSLocalizedString("Reading list", comment: "Panel accessibility label")),
 ])
 
 private var setup: Bool = false // True if we've already loaded the order/enabled prefs once and the Controllers array has been updated
