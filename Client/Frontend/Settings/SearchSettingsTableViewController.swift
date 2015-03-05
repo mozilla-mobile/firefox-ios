@@ -13,7 +13,7 @@ class SearchSettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = NSLocalizedString("Search", comment: "Settings")
+        navigationItem.title = NSLocalizedString("Search", comment: "Navigation title for search settings.")
 
         // To allow re-ordering the list of search engines at all times.
         tableView.editing = true
@@ -29,6 +29,8 @@ class SearchSettingsTableViewController: UITableViewController {
             engine = model.defaultEngine
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
             cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            cell.accessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
+            cell.accessibilityValue = engine.shortName
         } else {
             // The default engine is not a quick search engine.
             let index = indexPath.item + 1
@@ -70,9 +72,9 @@ class SearchSettingsTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == SectionDefault {
-            return NSLocalizedString("Default", comment: "Search Settings")
+            return NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")
         } else {
-            return NSLocalizedString("Providers", comment: "Search Settings")
+            return NSLocalizedString("Quick-search Engines", comment: "Title for quick-search engines settings section.")
         }
     }
 

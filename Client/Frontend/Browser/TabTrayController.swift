@@ -124,13 +124,18 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
     var toolbar: UIToolbar!
 
     override func viewDidLoad() {
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
+
         toolbar = UIToolbar()
         toolbar.backgroundImageForToolbarPosition(.Top, barMetrics: UIBarMetrics.Compact)
         toolbar.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
         view.addSubview(toolbar)
 
         let settingsItem = UIBarButtonItem(title: "\u{2699}", style: .Plain, target: self, action: "SELdidClickSettingsItem")
-        let signinItem = UIBarButtonItem(title: "Sign in", style: .Plain, target: self, action: "SELdidClickDone")
+        settingsItem.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
+        let signinItem = UIBarButtonItem(title: NSLocalizedString("Sign in", comment: "Button that leads to Sign in section of the Settings sheet."),
+            style: .Plain, target: self, action: "SELdidClickDone")
         signinItem.enabled = false
         let addTabItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "SELdidClickAddTab")
         let spacer = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)

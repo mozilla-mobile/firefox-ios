@@ -78,6 +78,7 @@
 		2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FCC41A9E85E900FD20CC /* SettingsTableViewController.swift */; };
 		2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FCC61A9E8CF500FD20CC /* SearchSettingsTableViewController.swift */; };
 		2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */; };
+		2F642CED1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F642CEC1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift */; };
 		2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */; };
 		2F834D161A80629A006A0B7B /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = 2F834D111A80629A006A0B7B /* FxASignIn.js */; };
 		2F834D171A80629A006A0B7B /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = 2F834D111A80629A006A0B7B /* FxASignIn.js */; };
@@ -554,6 +555,7 @@
 		2F44FCC41A9E85E900FD20CC /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		2F44FCC61A9E8CF500FD20CC /* SearchSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsTableViewController.swift; sourceTree = "<group>"; };
 		2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEnginePicker.swift; sourceTree = "<group>"; };
+		2F642CEC1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSettingsUITests.swift; sourceTree = "<group>"; };
 		2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEnginesTests.swift; sourceTree = "<group>"; };
 		2F834D111A80629A006A0B7B /* FxASignIn.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = FxASignIn.js; path = Frontend/SignIn/FxASignIn.js; sourceTree = "<group>"; };
 		2F834D131A80629A006A0B7B /* FxAContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxAContentViewController.swift; path = Frontend/SignIn/FxAContentViewController.swift; sourceTree = "<group>"; };
@@ -1014,6 +1016,7 @@
 				D39FA1801A83E84900EE869C /* Global.swift */,
 				D39FA1821A83E87900EE869C /* NavigationTests.swift */,
 				D39FA1611A83E0EC00EE869C /* Supporting Files */,
+				2F642CEC1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift */,
 			);
 			path = UITests;
 			sourceTree = "<group>";
@@ -1757,6 +1760,7 @@
 				D38B2D4E1A8D96D00040E6B5 /* GCDWebServerErrorResponse.m in Sources */,
 				D38B2D4B1A8D96D00040E6B5 /* GCDWebServerDataResponse.m in Sources */,
 				D38B2D301A8D96D00040E6B5 /* GCDWebServer.m in Sources */,
+				2F642CED1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift in Sources */,
 				D38B2D451A8D96D00040E6B5 /* GCDWebServerMultiPartFormRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

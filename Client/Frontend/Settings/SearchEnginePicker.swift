@@ -15,7 +15,7 @@ class SearchEnginePicker: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = NSLocalizedString("Search Default", comment: "Settings")
+        navigationItem.title = NSLocalizedString("Default Search Engine", comment: "Title for default search engine picker.")
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "SELcancel")
     }
 
