@@ -226,7 +226,7 @@ private class TopSitesSeparator: UICollectionReusableView {
     }
 
     override init(frame: CGRect) {
-        super.init()
+        super.init(frame: frame)
         self.backgroundColor = UIColor.lightGrayColor()
     }
 
