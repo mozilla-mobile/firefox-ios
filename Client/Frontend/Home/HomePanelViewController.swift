@@ -6,10 +6,12 @@ import Foundation
 import Snap
 import UIKit
 
+/// Height of the top panel switcher button toolbar.
+let HomePanelButtonContainerHeight: CGFloat = 40
+
 private let BackgroundColor = UIColor(red: 45.0 / 255, green: 52.0 / 255, blue: 66.0 / 255, alpha: 1)
 private let NormalIconColor = UIColor.lightGrayColor()
 private let SelectedIconColor = UIColor(red: 62.0 / 255, green: 136.0 / 255, blue: 255.0 / 255, alpha: 1)
-private let ContainerHeight = 40
 
 protocol HomePanelViewControllerDelegate: class {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL)
@@ -48,7 +50,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
         buttonContainerView.snp_makeConstraints { make in
             make.top.left.right.equalTo(self.view)
-            make.height.equalTo(ContainerHeight)
+            make.height.equalTo(HomePanelButtonContainerHeight)
         }
 
         controllerContainerView.snp_makeConstraints { make in
@@ -136,6 +138,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             let image = UIImage(named: "nav-\(panel.imageName).png")!
             button.setImage(getOverlayedImage(image, withColor: NormalIconColor), forState: UIControlState.Normal)
             button.setImage(getOverlayedImage(image, withColor: SelectedIconColor), forState: UIControlState.Selected)
+            button.accessibilityLabel = panel.accessibilityLabel
             buttons.append(button)
 
             button.snp_remakeConstraints { make in
