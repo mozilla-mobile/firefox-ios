@@ -24,6 +24,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
 
     private var locationView: BrowserLocationView!
     private var editTextField: ToolbarTextField!
+    private var locationContainer: UIView!
     private var tabsButton: UIButton!
     private var progressBar: UIProgressView!
     private var cancelButton: UIButton!
@@ -44,10 +45,17 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     }
 
     private func initViews() {
+        locationContainer = UIView()
+        locationContainer.layer.shadowColor = UIColor.blackColor().CGColor
+        locationContainer.layer.shadowOffset = CGSizeMake(0, 1.5)
+        locationContainer.layer.shadowRadius = 0
+        locationContainer.layer.shadowOpacity = 0.05
+        addSubview(locationContainer)
+
         locationView = BrowserLocationView(frame: CGRectZero)
         locationView.readerModeState = ReaderModeState.Unavailable
         locationView.delegate = self
-        addSubview(locationView)
+        locationContainer.addSubview(locationView)
 
         editTextField = ToolbarTextField()
         editTextField.keyboardType = UIKeyboardType.WebSearch
@@ -89,25 +97,30 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         cancelButton.hidden = true
         self.addSubview(cancelButton)
 
-        self.locationView.snp_remakeConstraints { make in
-            make.left.equalTo(self.snp_left).offset(DefaultPadding)
-            make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
+        locationContainer.snp_remakeConstraints { make in
+            make.leading.equalTo(self).offset(DefaultPadding)
+            make.centerY.equalTo(self).offset(StatusBarHeight / 2.0)
         }
 
-        self.tabsButton.snp_remakeConstraints { make in
-            make.left.equalTo(self.locationView.snp_right).offset(8)
-            make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
+        locationView.snp_makeConstraints { make in
+            make.edges.equalTo(self.locationContainer)
+            return
+        }
+
+        tabsButton.snp_remakeConstraints { make in
+            make.leading.equalTo(self.locationContainer.snp_trailing).offset(8)
+            make.trailing.equalTo(self)
+            make.centerY.equalTo(self).offset(StatusBarHeight / 2.0)
             make.width.height.equalTo(ToolbarHeight)
-            make.right.equalTo(self)
         }
 
-        self.progressBar.snp_remakeConstraints { make in
+        progressBar.snp_remakeConstraints { make in
             make.centerY.equalTo(self.snp_bottom)
             make.width.equalTo(self)
         }
 
         cancelButton.snp_makeConstraints { make in
-            make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
+            make.centerY.equalTo(self).offset(StatusBarHeight / 2.0)
             make.right.equalTo(self).offset(-2)
         }
     }
@@ -158,7 +171,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
         delegate?.urlBarDidBeginEditing(self)
 
-        insertSubview(editTextField, aboveSubview: locationView)
+        locationContainer.insertSubview(editTextField, aboveSubview: locationView)
         editTextField.snp_remakeConstraints { make in
             make.edges.equalTo(self.locationView)
             return
@@ -198,10 +211,12 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         })
 
         textField.layer.borderWidth = 1
+        locationContainer.layer.shadowOpacity = 0
     }
 
     func textFieldDidEndEditing(textField: UITextField) {
         textField.layer.borderWidth = 0
+        locationContainer.layer.shadowOpacity = 0.05
     }
 
     func textFieldShouldClear(textField: UITextField) -> Bool {
