@@ -76,14 +76,13 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         self.addSubview(progressBar)
 
         tabsButton = UIButton()
-        tabsButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        tabsButton.titleLabel?.layer.borderColor = UIColor.whiteColor().CGColor
-        tabsButton.titleLabel?.layer.cornerRadius = 4
-        tabsButton.titleLabel?.layer.borderWidth = 1
-        tabsButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 12)
+        tabsButton.setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
+        tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
+        tabsButton.titleLabel?.layer.cornerRadius = 2
+        tabsButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Bold", size: 11)
         tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
         tabsButton.titleLabel?.snp_makeConstraints { make in
-            make.size.equalTo(24)
+            make.size.equalTo(18)
             return
         }
         tabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
