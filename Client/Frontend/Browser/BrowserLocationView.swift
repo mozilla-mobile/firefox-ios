@@ -36,7 +36,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         addSubview(lockImageView)
 
         locationLabel = UILabel()
-        locationLabel.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        locationLabel.font = UIFont(name: "HelveticaNeue-Light", size: 12)
         locationLabel.lineBreakMode = .ByClipping
         locationLabel.userInteractionEnabled = true
         // TODO: This label isn't useful for people. We probably want this to be the page title or URL (see Safari).

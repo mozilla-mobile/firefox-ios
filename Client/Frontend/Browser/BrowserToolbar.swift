@@ -16,6 +16,8 @@ protocol BrowserToolbarDelegate: class {
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbar)
 }
 
+private let ButtonHeight = 24
+
 class BrowserToolbar: UIView {
     weak var browserToolbarDelegate: BrowserToolbarDelegate?
 
@@ -100,7 +102,7 @@ class BrowserToolbar: UIView {
                     prev = view
 
                     make.centerY.equalTo(self)
-                    make.height.equalTo(ToolbarHeight - DefaultPadding * 2)
+                    make.height.equalTo(ButtonHeight)
                     make.width.equalTo(self).dividedBy(self.subviews.count)
                 }
             }

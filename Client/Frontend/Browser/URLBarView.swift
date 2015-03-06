@@ -17,11 +17,15 @@ protocol URLBarDelegate: class {
     func urlBar(urlBar: URLBarView, didSubmitText text: String)
 }
 
+private let TextFieldBorderColor = UIColor(rgb: 0x6da0db)
+private let LocationLeftPadding = 8
+
 class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     weak var delegate: URLBarDelegate?
 
     private var locationView: BrowserLocationView!
     private var editTextField: ToolbarTextField!
+    private var locationContainer: UIView!
     private var tabsButton: UIButton!
     private var progressBar: UIProgressView!
     private var cancelButton: UIButton!
@@ -42,10 +46,17 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     }
 
     private func initViews() {
+        locationContainer = UIView()
+        locationContainer.layer.shadowColor = UIColor.blackColor().CGColor
+        locationContainer.layer.shadowOffset = CGSizeMake(0, 1.5)
+        locationContainer.layer.shadowRadius = 0
+        locationContainer.layer.shadowOpacity = 0.05
+        addSubview(locationContainer)
+
         locationView = BrowserLocationView(frame: CGRectZero)
         locationView.readerModeState = ReaderModeState.Unavailable
         locationView.delegate = self
-        addSubview(locationView)
+        locationContainer.addSubview(locationView)
 
         editTextField = ToolbarTextField()
         editTextField.keyboardType = UIKeyboardType.WebSearch
@@ -54,58 +65,68 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         editTextField.returnKeyType = UIReturnKeyType.Go
         editTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
         editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
+        editTextField.layer.borderColor = TextFieldBorderColor.CGColor
         editTextField.layer.cornerRadius = 3
         editTextField.delegate = self
-        editTextField.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        editTextField.font = UIFont(name: "HelveticaNeue-Light", size: 12)
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
-        editTextField.hidden = true
+        locationContainer.addSubview(editTextField)
 
         progressBar = UIProgressView()
         self.progressBar.trackTintColor = self.backgroundColor
         self.addSubview(progressBar)
 
-        tabsButton = UIButton()
-        tabsButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        tabsButton.titleLabel?.layer.borderColor = UIColor.whiteColor().CGColor
-        tabsButton.titleLabel?.layer.cornerRadius = 4
-        tabsButton.titleLabel?.layer.borderWidth = 1
-        tabsButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 12)
+        tabsButton = InsetButton()
+        tabsButton.setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
+        tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
+        tabsButton.titleLabel?.layer.cornerRadius = 2
+        tabsButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Bold", size: 11)
         tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
         tabsButton.titleLabel?.snp_makeConstraints { make in
-            make.size.equalTo(24)
+            make.size.equalTo(18)
             return
         }
         tabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
+        tabsButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
+        tabsButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
         self.addSubview(tabsButton)
 
-        cancelButton = UIButton()
-        cancelButton.setTitleColor(UIColor.blackColor   (), forState: UIControlState.Normal)
+        cancelButton = InsetButton()
+        cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
-        cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 14)
+        cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 12)
         cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
-        cancelButton.hidden = true
+        cancelButton.titleEdgeInsets = UIEdgeInsetsMake(10, 12, 10, 12)
+        cancelButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
+        cancelButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
         self.addSubview(cancelButton)
 
-        self.locationView.snp_remakeConstraints { make in
-            make.left.equalTo(self.snp_left).offset(DefaultPadding)
-            make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
+        updateLayoutForEditing(editing: false)
+
+        locationView.snp_makeConstraints { make in
+            make.edges.equalTo(self.locationContainer)
+            return
         }
 
-        self.tabsButton.snp_remakeConstraints { make in
-            make.left.equalTo(self.locationView.snp_right).offset(8)
-            make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
-            make.width.height.equalTo(ToolbarHeight)
-            make.right.equalTo(self)
+        editTextField.snp_makeConstraints { make in
+            make.edges.equalTo(self.locationContainer)
+            return
         }
 
-        self.progressBar.snp_remakeConstraints { make in
+        progressBar.snp_makeConstraints { make in
             make.centerY.equalTo(self.snp_bottom)
             make.width.equalTo(self)
         }
 
+        tabsButton.snp_makeConstraints { make in
+            make.centerY.equalTo(self.locationContainer)
+            make.trailing.equalTo(self)
+            make.width.height.equalTo(ToolbarHeight)
+        }
+
         cancelButton.snp_makeConstraints { make in
-            make.centerY.equalTo(self).offset(StatusBarHeight/2.0)
-            make.right.equalTo(self).offset(-2)
+            make.centerY.equalTo(self.locationContainer)
+            make.trailing.equalTo(self)
         }
     }
 
@@ -155,15 +176,10 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
         delegate?.urlBarDidBeginEditing(self)
 
-        insertSubview(editTextField, aboveSubview: locationView)
-        editTextField.snp_remakeConstraints { make in
-            make.edges.equalTo(self.locationView)
-            return
-        }
         editTextField.text = locationView.url?.absoluteString
         editTextField.becomeFirstResponder()
 
-        updateVisibleViews(editing: true)
+        updateLayoutForEditing(editing: true)
     }
 
     func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView) {
@@ -193,6 +209,14 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         dispatch_async(dispatch_get_main_queue(), {
             textField.selectedTextRange = textField.textRangeFromPosition(textField.beginningOfDocument, toPosition: textField.endOfDocument)
         })
+
+        textField.layer.borderWidth = 1
+        locationContainer.layer.shadowOpacity = 0
+    }
+
+    func textFieldDidEndEditing(textField: UITextField) {
+        textField.layer.borderWidth = 0
+        locationContainer.layer.shadowOpacity = 0.05
     }
 
     func textFieldShouldClear(textField: UITextField) -> Bool {
@@ -202,16 +226,29 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
 
     func finishEditing() {
         editTextField.resignFirstResponder()
-        updateVisibleViews(editing: false)
+        updateLayoutForEditing(editing: false)
         delegate?.urlBarDidEndEditing(self)
     }
 
-    private func updateVisibleViews(#editing: Bool) {
+    private func updateLayoutForEditing(#editing: Bool) {
         locationView.hidden = editing
         tabsButton.hidden = editing
         progressBar.hidden = editing
         editTextField.hidden = !editing
         cancelButton.hidden = !editing
+
+        locationContainer.snp_remakeConstraints { make in
+            make.leading.equalTo(self).offset(LocationLeftPadding)
+            make.centerY.equalTo(self).offset(StatusBarHeight / 2)
+
+            if editing {
+                make.trailing.equalTo(self.cancelButton.snp_leading)
+            } else {
+                // Additional offset is needed here to prevent overlapping the curve.
+                make.trailing.equalTo(self.tabsButton.snp_leading).offset(-10)
+            }
+        }
+
         setNeedsLayout()
     }
 
@@ -262,7 +299,7 @@ extension URLBarView {
             controlPoint1: CGPoint(x: from.0 + width * W_M1, y: from.1),
             controlPoint2: CGPoint(x: from.0 + width * W_M3, y: from.1 + height * H_M1))
 
-        path.addCurveToPoint(CGPoint(x: from.0 + width,        y: from.1 + height),
+        path.addCurveToPoint(CGPoint(x: from.0 + width, y: from.1 + height),
             controlPoint1: CGPoint(x: from.0 + width * W_M4, y: from.1 + height * H_M3),
             controlPoint2: CGPoint(x: from.0 + width * W_M5, y: from.1 + height * H_M4))
     }
@@ -301,5 +338,16 @@ private class ToolbarTextField: UITextField {
     override func editingRectForBounds(bounds: CGRect) -> CGRect {
         let rect = super.editingRectForBounds(bounds)
         return rect.rectByInsetting(dx: 5, dy: 5)
+    }
+}
+
+/**
+ * Button whose insets are included in its intrinsic size.
+ */
+private class InsetButton: UIButton {
+    private override func intrinsicContentSize() -> CGSize {
+        let size = super.intrinsicContentSize()
+        return CGSizeMake(size.width + titleEdgeInsets.left + titleEdgeInsets.right,
+            size.height + titleEdgeInsets.top + titleEdgeInsets.bottom)
     }
 }

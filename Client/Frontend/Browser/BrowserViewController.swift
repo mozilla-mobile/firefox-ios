@@ -10,7 +10,6 @@ import Snap
 
 public let StatusBarHeight: CGFloat = 20 // TODO: Can't assume this is correct. Status bar height is dynamic.
 public let ToolbarHeight: CGFloat = 44
-public let DefaultPadding: CGFloat = 10
 private let OKString = NSLocalizedString("OK", comment: "OK button")
 private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
 
