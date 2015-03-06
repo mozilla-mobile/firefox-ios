@@ -34,7 +34,7 @@ class ReadingListTable<T>: GenericTable<ReadingListItem> {
 
     override func getInsertAndArgs(inout item: ReadingListItem) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
-        args.append(item.clientLastModified)
+        args.append(NSNumber(longLong: item.clientLastModified))
         args.append(item.url)
         args.append(item.title)
         args.append(item.resolvedUrl)
@@ -45,7 +45,7 @@ class ReadingListTable<T>: GenericTable<ReadingListItem> {
 
     override func getUpdateAndArgs(inout item: ReadingListItem) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
-        args.append(Int(NSDate().timeIntervalSince1970 * 1000.0))
+        args.append(NSNumber(longLong: Int64(NSDate().timeIntervalSince1970 * 1000.0)))
         args.append(item.url)
         args.append(item.title)
         args.append(item.resolvedUrl)
@@ -68,7 +68,9 @@ class ReadingListTable<T>: GenericTable<ReadingListItem> {
         return { row -> ReadingListItem in
             let item = ReadingListItem(url: row["url"] as String, title: row["title"] as? String)
             item.id = row["id"] as? Int
-            item.clientLastModified = row["client_last_modified"] as Int
+            if let n = row["client_last_modified"] as? NSNumber {
+                item.clientLastModified = n.longLongValue
+            }
             item.guid = row["guid"] as? String
             item.isDeleted = (row["is_deleted"] as Int) != 0
             item.isArchived = (row["is_archived"] as Int) != 0
