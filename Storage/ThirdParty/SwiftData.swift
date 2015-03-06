@@ -312,7 +312,7 @@ public class SDRow : SequenceType {
 
         switch type {
         case SQLITE_NULL, SQLITE_INTEGER:
-            ret = Int(sqlite3_column_int(stmt, i))
+            ret = NSNumber(longLong: sqlite3_column_int64(stmt, i))
         case SQLITE_TEXT:
             let text = UnsafePointer<Int8>(sqlite3_column_text(stmt, i))
             ret = String.fromCString(text)
