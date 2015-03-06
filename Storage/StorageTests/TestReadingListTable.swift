@@ -49,6 +49,7 @@ class TestReadingListTable: XCTestCase {
             for index in 0..<cursor.count {
                 if let item = cursor[index] as? ReadingListItem {
                     XCTAssertEqual(item.id!, insertedItems[countElements(insertedItems)-index-1].id!)
+                    XCTAssertEqual(item.clientLastModified, insertedItems[countElements(insertedItems)-index-1].clientLastModified)
                 } else {
                     XCTFail("Did not get a ReadingListItem back (nil or wrong type)")
                 }

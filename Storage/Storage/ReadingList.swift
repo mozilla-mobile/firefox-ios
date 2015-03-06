@@ -8,11 +8,11 @@ public class ReadingListItem {
     public var id: Int? = nil
     public var guid: String?
     public var contentStatus: Int = 0
-    public var clientLastModified: Int
-    public var lastModified: Int?
-    public var storedOn: Int?
-    public var addedOn: Int?
-    public var markedRead_on: Int?
+    public var clientLastModified: Int64
+    public var lastModified: Int64?
+    public var storedOn: Int64?
+    public var addedOn: Int64?
+    public var markedRead_on: Int64?
     public var isDeleted: Bool = false
     public var isArchived: Bool = false
     public var isUnread: Bool = true
@@ -33,7 +33,7 @@ public class ReadingListItem {
         self.title = title
         self.resolvedUrl = resolvedUrl
         self.resolvedTitle = resolvedTitle
-        self.clientLastModified = Int(NSDate().timeIntervalSince1970 * 1000.0)
+        self.clientLastModified = Int64(NSDate().timeIntervalSince1970 * 1000.0)
     }
 }
 
