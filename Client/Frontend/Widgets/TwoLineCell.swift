@@ -4,6 +4,9 @@
 
 import UIKit
 
+private let IconSize: CGFloat = 28
+private let Margin: CGFloat = 8
+
 // UITableViewController doesn't let us specify a style for recycling views. We override the default style here.
 class TwoLineCell : UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -17,21 +20,22 @@ class TwoLineCell : UITableViewCell {
         detailTextLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
 
         imageView?.contentMode = .ScaleAspectFill
-    }
 
-    private let imgMargin: CGFloat = 5
+        layoutMargins = UIEdgeInsetsZero
+        separatorInset = UIEdgeInsetsMake(0, IconSize + 2 * Margin, 0, 0)
+    }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        if let img = self.imageView {
-            let height = self.frame.height
-            let imgSize = height - 2 * imgMargin
-            img.frame = CGRectMake(imgMargin, imgMargin, imgSize, imgSize)
-            textLabel?.frame    = CGRectMake(height, textLabel!.frame.origin.y,
-                self.frame.width - height, textLabel!.frame.height)
-            detailTextLabel?.frame = CGRectMake(height, detailTextLabel!.frame.origin.y,
-                self.frame.width - height, textLabel!.frame.height)
-        }
+
+        let height: CGFloat = self.frame.height
+        let textLeft = IconSize + 2 * Margin
+
+        imageView?.frame = CGRectMake(Margin, Margin, IconSize, IconSize)
+        textLabel?.frame = CGRectMake(textLeft, textLabel!.frame.origin.y,
+            self.frame.width - textLeft - Margin, textLabel!.frame.height)
+        detailTextLabel?.frame = CGRectMake(textLeft, detailTextLabel!.frame.origin.y,
+            self.frame.width - textLeft - Margin, detailTextLabel!.frame.height)
     }
 
     required init(coder aDecoder: NSCoder) {
