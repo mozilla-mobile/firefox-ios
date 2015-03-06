@@ -598,31 +598,6 @@ extension BrowserViewController: WKNavigationDelegate {
         // forward/backward. Strange, but LayoutChanged fixes that.
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
     }
-    
-    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
-        let url = navigationAction.request.URL
-        var decision:WKNavigationActionPolicy
-        
-        switch url.scheme! {
-        case "about", "http", "https":
-            decision = WKNavigationActionPolicy.Allow
-        default:
-            decision = WKNavigationActionPolicy.Cancel
-        }
-        
-        if let host = url.host {
-            if (host == "itunes.apple.com") {
-                decision = WKNavigationActionPolicy.Cancel
-            }
-        }
-        
-        if decision == WKNavigationActionPolicy.Cancel {
-            if UIApplication.sharedApplication().canOpenURL(url) {
-                UIApplication.sharedApplication().openURL(url)
-            }
-        }
-        decisionHandler(decision)
-    }
 }
 
 extension BrowserViewController: WKUIDelegate {
