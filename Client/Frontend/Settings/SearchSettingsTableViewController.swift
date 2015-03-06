@@ -6,7 +6,11 @@ import UIKit
 
 class SearchSettingsTableViewController: UITableViewController {
     private let SectionDefault = 0
+    private let ItemDefaultEngine = 0
+    private let ItemDefaultSuggestions = 1
+    private let NumberOfItemsInSectionDefault = 2
     private let SectionOrder = 1
+    private let NumberOfSections = 2
 
     var model: SearchEngines!
 
@@ -22,15 +26,32 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: UITableViewCell
-        var engine: OpenSearchEngine
+        var cell: UITableViewCell!
+        var engine: OpenSearchEngine!
 
         if indexPath.section == SectionDefault {
-            engine = model.defaultEngine
-            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-            cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
-            cell.accessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
-            cell.accessibilityValue = engine.shortName
+            switch indexPath.item {
+            case ItemDefaultEngine:
+                engine = model.defaultEngine
+                cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+                cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+                cell.accessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
+                cell.accessibilityValue = engine.shortName
+                cell.textLabel?.text = engine.shortName
+                cell.imageView?.image = engine.image
+
+            case ItemDefaultSuggestions:
+                cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+                cell.textLabel?.text = NSLocalizedString("Show search suggestions", comment: "Label for show search suggestions setting.")
+                let toggle = UISwitch()
+                toggle.addTarget(self, action: "SELdidToggleSearchSuggestions:", forControlEvents: UIControlEvents.ValueChanged)
+                toggle.on = model.shouldShowSearchSuggestions
+                cell.editingAccessoryView = toggle
+
+            default:
+                // Should not happen.
+                break
+            }
         } else {
             // The default engine is not a quick search engine.
             let index = indexPath.item + 1
@@ -46,24 +67,24 @@ class SearchSettingsTableViewController: UITableViewController {
             toggle.on = model.isEngineEnabled(engine)
 
             cell.editingAccessoryView = toggle
+
+            cell.textLabel?.text = engine.shortName
+            cell.imageView?.image = engine.image
         }
 
         // So that the seperator line goes all the way to the left edge.
         cell.separatorInset = UIEdgeInsetsZero
 
-        cell.textLabel?.text = engine.shortName
-        cell.imageView?.image = engine.image
-
         return cell
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return NumberOfSections
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == SectionDefault {
-            return 1
+            return NumberOfItemsInSectionDefault
         } else {
             // The first engine -- the default engine -- is not shown in the quick search engine list.
             return model.orderedEngines.count - 1
@@ -79,7 +100,7 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        if indexPath.section == SectionDefault {
+        if indexPath.section == SectionDefault && indexPath.item == ItemDefaultEngine {
             let searchEnginePicker = SearchEnginePicker()
             // Order alphabetically, so that picker is always consistently ordered.
             // Every engine is a valid choice for the default engine, even the current default engine.
@@ -143,7 +164,6 @@ class SearchSettingsTableViewController: UITableViewController {
             return NSIndexPath(forRow: row, inSection: sourceIndexPath.section)
         }
 
-
         return proposedDestinationIndexPath
     }
 
@@ -154,6 +174,12 @@ class SearchSettingsTableViewController: UITableViewController {
         } else {
             model.disableEngine(engine)
         }
+    }
+
+    func SELdidToggleSearchSuggestions(toggle: UISwitch) {
+        // Setting the value in settings dismisses any opt-in.
+        model.shouldShowSearchSuggestionsOptIn = false
+        model.shouldShowSearchSuggestions = toggle.on
     }
 
     func SELcancel() {

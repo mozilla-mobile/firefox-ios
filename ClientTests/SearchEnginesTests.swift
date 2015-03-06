@@ -108,4 +108,21 @@ class SearchEnginesTests: XCTestCase {
         XCTAssertFalse(engines2.isEngineEnabled(engineSet[1]))
         XCTAssertTrue(engines2.isEngineEnabled(engineSet[0]))
     }
+
+    func testSearchSuggestionSettings() {
+        let prefs = MockProfilePrefs()
+        let engines = SearchEngines(prefs: prefs)
+
+        // By default, you should see an opt-in, and suggestions are disabled.
+        XCTAssertTrue(engines.shouldShowSearchSuggestionsOptIn)
+        XCTAssertFalse(engines.shouldShowSearchSuggestions)
+
+        // Setting should be persisted.
+        engines.shouldShowSearchSuggestionsOptIn = false
+        engines.shouldShowSearchSuggestions = true
+
+        let engines2 = SearchEngines(prefs: prefs)
+        XCTAssertFalse(engines2.shouldShowSearchSuggestionsOptIn)
+        XCTAssertTrue(engines2.shouldShowSearchSuggestions)
+    }
 }
