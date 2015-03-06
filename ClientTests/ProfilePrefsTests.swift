@@ -22,6 +22,23 @@ class TestProfilePrefs: ProfileTest {
         }
     }
 
+    func testBoolForKey() {
+        withTestPrefs { prefs in
+            prefs.setObject(true, forKey: "key")
+            XCTAssertEqual(prefs.boolForKey("key")!, true)
+            prefs.setObject(false, forKey: "key")
+            XCTAssertEqual(prefs.boolForKey("key")!, false)
+            // We would like non-Bool values to return nil, but I can't figure out how to differentiate.
+            // Instead, this documents the undesired behaviour.
+            prefs.setObject(1, forKey: "key")
+            XCTAssertEqual(prefs.boolForKey("key")!, true)
+            prefs.setObject("1", forKey: "key")
+            XCTAssertEqual(prefs.boolForKey("key")!, true)
+            prefs.setObject("x", forKey: "key")
+            XCTAssertEqual(prefs.boolForKey("key")!, false)
+        }
+    }
+
     func testStringArrayForKey() {
         withTestPrefs { prefs in
             prefs.setObject(["value1", "value2"], forKey: "key")
