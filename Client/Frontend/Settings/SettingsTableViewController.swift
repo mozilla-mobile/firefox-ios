@@ -76,7 +76,7 @@ class SettingsTableViewController: UITableViewController {
         if section == SectionAccount {
             return nil
         } else if section == SectionSearch {
-            return NSLocalizedString("Search", comment: "Settings")
+            return NSLocalizedString("Search Settings", comment: "Title for search settings section.")
         } else {
             return nil
         }

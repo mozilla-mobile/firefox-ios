@@ -7,6 +7,7 @@ import Foundation
 public protocol ProfilePrefs {
     func setObject(value: AnyObject?, forKey defaultName: String)
     func stringForKey(defaultName: String) -> String?
+    func boolForKey(defaultName: String) -> Bool?
     func stringArrayForKey(defaultName: String) -> [String]?
     func arrayForKey(defaultName: String) -> [AnyObject]?
     func dictionaryForKey(defaultName: String) -> [NSObject : AnyObject]?
@@ -22,6 +23,10 @@ public class MockProfilePrefs : ProfilePrefs {
 
     public func stringForKey(defaultName: String) -> String? {
         return things[defaultName] as? String
+    }
+
+    public func boolForKey(defaultName: String) -> Bool? {
+        return things[defaultName] as? Bool
     }
 
     public func stringArrayForKey(defaultName: String) -> [String]? {
@@ -72,6 +77,10 @@ public class NSUserDefaultsProfilePrefs : ProfilePrefs {
     public func stringForKey(defaultName: String) -> String? {
         // stringForKey converts numbers to strings, which is almost always a bug.
         return userDefaults.objectForKey(qualifyKey(defaultName)) as? String
+    }
+
+    public func boolForKey(defaultName: String) -> Bool? {
+        return userDefaults.boolForKey(qualifyKey(defaultName))
     }
 
     public func stringArrayForKey(defaultName: String) -> [String]? {

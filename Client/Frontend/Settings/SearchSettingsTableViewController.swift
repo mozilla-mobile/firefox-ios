@@ -6,14 +6,18 @@ import UIKit
 
 class SearchSettingsTableViewController: UITableViewController {
     private let SectionDefault = 0
+    private let ItemDefaultEngine = 0
+    private let ItemDefaultSuggestions = 1
+    private let NumberOfItemsInSectionDefault = 2
     private let SectionOrder = 1
+    private let NumberOfSections = 2
 
     var model: SearchEngines!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = NSLocalizedString("Search", comment: "Settings")
+        navigationItem.title = NSLocalizedString("Search", comment: "Navigation title for search settings.")
 
         // To allow re-ordering the list of search engines at all times.
         tableView.editing = true
@@ -22,64 +26,84 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: UITableViewCell
-        var engine: OpenSearchEngine
+        var cell: UITableViewCell!
+        var engine: OpenSearchEngine!
 
         if indexPath.section == SectionDefault {
-            engine = model.defaultEngine
-            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-            cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+            switch indexPath.item {
+            case ItemDefaultEngine:
+                engine = model.defaultEngine
+                cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+                cell.editingAccessoryType = UITableViewCellAccessoryType.DisclosureIndicator
+                cell.accessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
+                cell.accessibilityValue = engine.shortName
+                cell.textLabel?.text = engine.shortName
+                cell.imageView?.image = engine.image
+
+            case ItemDefaultSuggestions:
+                cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+                cell.textLabel?.text = NSLocalizedString("Show search suggestions", comment: "Label for show search suggestions setting.")
+                let toggle = UISwitch()
+                toggle.addTarget(self, action: "SELdidToggleSearchSuggestions:", forControlEvents: UIControlEvents.ValueChanged)
+                toggle.on = model.shouldShowSearchSuggestions
+                cell.editingAccessoryView = toggle
+
+            default:
+                // Should not happen.
+                break
+            }
         } else {
-            engine = model.orderedEngines[indexPath.item]
-            let isDefault = model.isEngineDefault(engine)
+            // The default engine is not a quick search engine.
+            let index = indexPath.item + 1
+            engine = model.orderedEngines[index]
 
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
             cell.showsReorderControl = true
 
             let toggle = UISwitch()
-            toggle.tag = indexPath.item // An easy way to get from the toggle control to the corresponding indexPath.
+            // This is an easy way to get from the toggle control to the corresponding index.
+            toggle.tag = index
             toggle.addTarget(self, action: "SELdidToggleEngine:", forControlEvents: UIControlEvents.ValueChanged)
-            // The default engine is always enabled.
-            toggle.on = isDefault || model.isEngineEnabled(engine)
-            // The user can't disable the default engine.
-            toggle.enabled = !isDefault
+            toggle.on = model.isEngineEnabled(engine)
 
             cell.editingAccessoryView = toggle
+
+            cell.textLabel?.text = engine.shortName
+            cell.imageView?.image = engine.image
         }
 
         // So that the seperator line goes all the way to the left edge.
         cell.separatorInset = UIEdgeInsetsZero
 
-        cell.textLabel?.text = engine.shortName
-        cell.imageView?.image = engine.image
-
         return cell
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return NumberOfSections
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == SectionDefault {
-            return 1
+            return NumberOfItemsInSectionDefault
         } else {
-            return model.orderedEngines.count
+            // The first engine -- the default engine -- is not shown in the quick search engine list.
+            return model.orderedEngines.count - 1
         }
     }
 
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == SectionDefault {
-            return NSLocalizedString("Default", comment: "Search Settings")
+            return NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")
         } else {
-            return NSLocalizedString("Providers", comment: "Search Settings")
+            return NSLocalizedString("Quick-search Engines", comment: "Title for quick-search engines settings section.")
         }
     }
 
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        if indexPath.section == SectionDefault {
+        if indexPath.section == SectionDefault && indexPath.item == ItemDefaultEngine {
             let searchEnginePicker = SearchEnginePicker()
             // Order alphabetically, so that picker is always consistently ordered.
+            // Every engine is a valid choice for the default engine, even the current default engine.
             searchEnginePicker.engines = model.orderedEngines.sorted { e, f in e.shortName < f.shortName }
             searchEnginePicker.delegate = self
             navigationController?.pushViewController(searchEnginePicker, animated: true)
@@ -117,8 +141,11 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, moveRowAtIndexPath indexPath: NSIndexPath, toIndexPath newIndexPath: NSIndexPath) {
-        let engine = model.orderedEngines.removeAtIndex(indexPath.item)
-        model.orderedEngines.insert(engine, atIndex: newIndexPath.item)
+        // The first engine (default engine) is not shown in the list, so the indices are off-by-1.
+        let index = indexPath.item + 1
+        let newIndex = newIndexPath.item + 1
+        let engine = model.orderedEngines.removeAtIndex(index)
+        model.orderedEngines.insert(engine, atIndex: newIndex)
         tableView.reloadData()
     }
 
@@ -126,16 +153,6 @@ class SearchSettingsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
         // You can't drag or drop on the default engine.
         if sourceIndexPath.section == SectionDefault || proposedDestinationIndexPath.section == SectionDefault {
-            return sourceIndexPath
-        }
-
-        // The default engine is always the first row and cannot be moved.
-        if sourceIndexPath.section == SectionOrder && sourceIndexPath.item == 0 {
-            return sourceIndexPath
-        }
-
-        // Similarly, you can't displace the default engine from the first row.
-        if proposedDestinationIndexPath.section == SectionOrder && proposedDestinationIndexPath.item == 0 {
             return sourceIndexPath
         }
 
@@ -147,17 +164,22 @@ class SearchSettingsTableViewController: UITableViewController {
             return NSIndexPath(forRow: row, inSection: sourceIndexPath.section)
         }
 
-
         return proposedDestinationIndexPath
     }
 
     func SELdidToggleEngine(toggle: UISwitch) {
-        let engine = model.orderedEngines[toggle.tag]
+        let engine = model.orderedEngines[toggle.tag] // The tag is 1-based.
         if toggle.on {
             model.enableEngine(engine)
         } else {
             model.disableEngine(engine)
         }
+    }
+
+    func SELdidToggleSearchSuggestions(toggle: UISwitch) {
+        // Setting the value in settings dismisses any opt-in.
+        model.shouldShowSearchSuggestionsOptIn = false
+        model.shouldShowSearchSuggestions = toggle.on
     }
 
     func SELcancel() {

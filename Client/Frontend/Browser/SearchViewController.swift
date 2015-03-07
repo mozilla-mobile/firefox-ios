@@ -126,13 +126,7 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
         searchEngineScrollViewContent.subviews.map({ $0.removeFromSuperview() })
 
         var leftEdge = searchEngineScrollViewContent.snp_left
-        for engine in searchEngines.enabledEngines {
-            // Don't include the default search engine.
-            // It will already be displayed in the list with suggestions.
-            if engine === searchEngines.defaultEngine {
-                continue
-            }
-
+        for engine in searchEngines.quickSearchEngines {
             let engineButton = UIButton()
             engineButton.setImage(engine.image, forState: UIControlState.Normal)
             engineButton.layer.backgroundColor = UIColor.whiteColor().CGColor
@@ -145,7 +139,7 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
                 make.height.equalTo(EngineButtonHeight)
                 make.left.equalTo(leftEdge).offset(EngineButtonInsets.left)
                 make.top.bottom.equalTo(self.searchEngineScrollViewContent).insets(EngineButtonInsets)
-                if engine === self.searchEngines.enabledEngines.last {
+                if engine === self.searchEngines.quickSearchEngines.last {
                     make.right.equalTo(self.searchEngineScrollViewContent).offset(-EngineButtonInsets.right)
                 }
             }
@@ -154,11 +148,11 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
     }
 
     func SELdidSelectEngine(sender: UIButton) {
-        // The UIButtons are the same cardinality and order as the enabledEngines array.
+        // The UIButtons are the same cardinality and order as the array of quick search engines.
         for i in 0..<searchEngineScrollViewContent.subviews.count {
             let button = searchEngineScrollViewContent.subviews[i] as UIButton
             if button === sender {
-                if let url = searchEngines.enabledEngines[i].searchURLForQuery(searchQuery) {
+                if let url = searchEngines.quickSearchEngines[i].searchURLForQuery(searchQuery) {
                     searchDelegate?.searchViewController(self, didSelectURL: url)
                 }
             }

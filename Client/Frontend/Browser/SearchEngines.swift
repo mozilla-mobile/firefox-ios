@@ -8,17 +8,23 @@ let DefaultSearchEngineName = "Yahoo"
 
 private let OrderedEngineNames = "search.orderedEngineNames"
 private let DisabledEngineNames = "search.disabledEngineNames"
+private let ShowSearchSuggestionsOptIn = "search.suggestions.showOptIn"
+private let ShowSearchSuggestions = "search.suggestions.show"
 
 /**
  * Manage a set of Open Search engines.
  *
  * The search engines are ordered.  Individual search engines can be enabled and disabled.  The
  * first search engine is distinguished and labeled the "default" search engine; it can never be
- * disabled.
+ * disabled.  Search suggestions should always be sourced from the default search engine.
+ *
+ * Two additional bits of information are maintained: whether the user should be shown "opt-in to
+ * search suggestions" UI, and whether search suggestions are enabled.
  *
  * Consumers will almost always use `defaultEngine` if they want a single search engine, and
- * `enabledEngines()` if they want a list of search engines (necessarily non-empty, since the
- * default engine is never disabled and is always the first element of the enabled engines list).
+ * `quickSearchEngines()` if they want a list of enabled quick search engines (possibly empty,
+ * since the default engine is never included in the list of enabled quick search engines, and
+ * it is possible to disable every non-default quick search engine).
  *
  * The search engines are backed by a write-through cache into a ProfilePrefs instance.  This class
  * is not thread-safe -- you should only access it on a single thread (usually, the main thread)!
@@ -27,6 +33,9 @@ class SearchEngines {
     let prefs: ProfilePrefs
     init(prefs: ProfilePrefs) {
         self.prefs = prefs
+        // By default, show search suggestions opt-in and don't show search suggestions automatically.
+        self.shouldShowSearchSuggestionsOptIn = prefs.boolForKey(ShowSearchSuggestionsOptIn) ?? true
+        self.shouldShowSearchSuggestions = prefs.boolForKey(ShowSearchSuggestions) ?? false
         self.disabledEngineNames = getDisabledEngineNames()
         self.orderedEngines = getOrderedEngines()
     }
@@ -63,9 +72,22 @@ class SearchEngines {
         }
     }
 
-    var enabledEngines: [OpenSearchEngine]! {
+    var quickSearchEngines: [OpenSearchEngine]! {
         get {
-            return self.orderedEngines.filter({ (engine) in return self.isEngineEnabled(engine) })
+            return self.orderedEngines.filter({ (engine) in
+                !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
+        }
+    }
+
+    var shouldShowSearchSuggestionsOptIn: Bool {
+        didSet {
+            self.prefs.setObject(shouldShowSearchSuggestionsOptIn, forKey: ShowSearchSuggestionsOptIn)
+        }
+    }
+
+    var shouldShowSearchSuggestions: Bool {
+        didSet {
+            self.prefs.setObject(shouldShowSearchSuggestions, forKey: ShowSearchSuggestions)
         }
     }
 

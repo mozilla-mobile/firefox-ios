@@ -67,7 +67,7 @@ class SearchEnginesTests: XCTestCase {
         XCTAssertEqual(engines2.orderedEngines[2].shortName, engineSet[0].shortName)
     }
 
-    func testEnabledEngines() {
+    func testQuickSearchEngines() {
         let prefs = MockProfilePrefs()
         let engines = SearchEngines(prefs: prefs)
         let engineSet = engines.orderedEngines
@@ -77,14 +77,17 @@ class SearchEnginesTests: XCTestCase {
         engines.disableEngine(engineSet[1])
         XCTAssertTrue(engines.isEngineEnabled(engineSet[1]))
 
+        // The default engine is not included in the quick search engines.
+        XCTAssertEqual(0, engines.quickSearchEngines.filter { engine in engine.shortName == engineSet[1].shortName }.count)
+
         // Enable and disable work.
         engines.enableEngine(engineSet[0])
         XCTAssertTrue(engines.isEngineEnabled(engineSet[0]))
-        XCTAssertEqual(1, engines.enabledEngines.filter { engine in engine.shortName == engineSet[0].shortName }.count)
+        XCTAssertEqual(1, engines.quickSearchEngines.filter { engine in engine.shortName == engineSet[0].shortName }.count)
 
         engines.disableEngine(engineSet[0])
         XCTAssertFalse(engines.isEngineEnabled(engineSet[0]))
-        XCTAssertEqual(0, engines.enabledEngines.filter { engine in engine.shortName == engineSet[0].shortName }.count)
+        XCTAssertEqual(0, engines.quickSearchEngines.filter { engine in engine.shortName == engineSet[0].shortName }.count)
 
         // Setting the default engine enables it.
         engines.defaultEngine = engineSet[0]
@@ -104,5 +107,22 @@ class SearchEnginesTests: XCTestCase {
         XCTAssertTrue(engines2.isEngineEnabled(engineSet[2]))
         XCTAssertFalse(engines2.isEngineEnabled(engineSet[1]))
         XCTAssertTrue(engines2.isEngineEnabled(engineSet[0]))
+    }
+
+    func testSearchSuggestionSettings() {
+        let prefs = MockProfilePrefs()
+        let engines = SearchEngines(prefs: prefs)
+
+        // By default, you should see an opt-in, and suggestions are disabled.
+        XCTAssertTrue(engines.shouldShowSearchSuggestionsOptIn)
+        XCTAssertFalse(engines.shouldShowSearchSuggestions)
+
+        // Setting should be persisted.
+        engines.shouldShowSearchSuggestionsOptIn = false
+        engines.shouldShowSearchSuggestions = true
+
+        let engines2 = SearchEngines(prefs: prefs)
+        XCTAssertFalse(engines2.shouldShowSearchSuggestionsOptIn)
+        XCTAssertTrue(engines2.shouldShowSearchSuggestions)
     }
 }
