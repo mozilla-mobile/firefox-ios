@@ -23,7 +23,7 @@ enum ReaderModeState: String {
 enum ReaderModeTheme: String {
     case Light = "light"
     case Dark = "dark"
-    case Print = "print"
+    case Sepia = "sepia"
 }
 
 enum ReaderModeFontType: String {

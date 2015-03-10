@@ -73,6 +73,11 @@ body {
   color: #eeeeee;
 }
 
+.sepia {
+    background-color: #f0ece7;
+    color: #333333;
+}
+
 .sans-serif {
   font-family: sans-serif;
 }
@@ -234,6 +239,13 @@ body {
 .dark > .content a:hover,
 .dark > .content a:active {
   color: #00acff !important;
+}
+
+.sepia > .content a,
+.sepia > .content a:visited,
+.sepia > .content a:hover,
+.sepia > .content a:active {
+    color: #00acff !important;
 }
 
 .content * {
