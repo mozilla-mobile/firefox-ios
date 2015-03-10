@@ -253,8 +253,12 @@ extension BrowserViewController: URLBarDelegate {
         if let tab = tabManager.selectedTab {
             if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
                 if readerMode.state == .Available {
-                    // TODO: When we persist the style, it can be passed here. This will be part of the UI bug that we already have.
-                    //readerMode.style = getStyleFromProfile()
+                    // Update the style of the reader mode to what was last configured
+                    if let dict = self.profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
+                        if let style = ReaderModeStyle(dict: dict) {
+                            readerMode.style = style
+                        }
+                    }
                     readerMode.enableReaderMode()
                 } else {
                     readerMode.disableReaderMode()
@@ -677,7 +681,7 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
         if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode {
             if readerMode.state == ReaderModeState.Active {
                 let readerModeStyleViewController = ReaderModeStyleViewController()
-                readerModeStyleViewController.delegate = readerMode
+                readerModeStyleViewController.delegate = self
                 readerModeStyleViewController.readerModeStyle = readerMode.style
                 readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
 
@@ -696,6 +700,22 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return UIModalPresentationStyle.None
+    }
+}
+
+extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
+    func readerModeStyleViewController(readerModeStyleViewController: ReaderModeStyleViewController, didConfigureStyle style: ReaderModeStyle) {
+        // Persist the new style to the profile
+        let encodedStyle: [String:AnyObject] = style.encode()
+        profile.prefs.setObject(encodedStyle, forKey: ReaderModeProfileKeyStyle)
+        // Change the reader mode style on all tabs that have reader mode active
+        for tabIndex in 0..<tabManager.count {
+            if let readerMode = tabManager.getTab(tabIndex).getHelper(name: "ReaderMode") as? ReaderMode {
+                if readerMode.state == ReaderModeState.Active {
+                    readerMode.style = style
+                }
+            }
+        }
     }
 }
 
