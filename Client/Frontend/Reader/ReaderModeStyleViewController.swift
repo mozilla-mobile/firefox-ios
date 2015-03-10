@@ -81,7 +81,7 @@ class ReaderModeStyleViewController: UIViewController {
         themeButtons = [
             ThemeButton(theme: ReaderModeTheme.Light),
             ThemeButton(theme: ReaderModeTheme.Dark),
-            ThemeButton(theme: ReaderModeTheme.Print)
+            ThemeButton(theme: ReaderModeTheme.Sepia)
         ]
 
         setupButtons(themeButtons, inRow: themeRow, action: "SELchangeTheme:")
