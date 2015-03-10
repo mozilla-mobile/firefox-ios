@@ -47,7 +47,6 @@
 		282DA4D41A69A24300A406E2 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4D31A69A24300A406E2 /* History.swift */; };
 		282DA4D71A69A28000A406E2 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4D61A69A28000A406E2 /* Site.swift */; };
 		282DA5211A69BCB700A406E2 /* module.modulemap in Sources */ = {isa = PBXBuildFile; fileRef = 282DA51F1A69BCB700A406E2 /* module.modulemap */; };
-		282DA5241A69BCBB00A406E2 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 282DA5231A69BCBB00A406E2 /* libsqlite3.0.dylib */; };
 		4A59B21913DCFA81C7CD9C91 /* GenericTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59B3F1AAD619686DB9450C /* GenericTable.swift */; };
 		4A59B334A243792894D6E614 /* TestHistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59B6E9AB0A08F28227C050 /* TestHistoryTable.swift */; };
 		4A59BA1E93D5603E198EDCB9 /* HistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BB07A2812FE4B516FD30 /* HistoryTable.swift */; };
@@ -58,6 +57,7 @@
 		4A59BF0BBF50FC218A6D1143 /* BrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF61F0D956D2A1BDAE29 /* BrowserDB.swift */; };
 		4A59BF2F408CDEF8D50AF9D3 /* TestVisitsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BE48DBF43989C51D3F98 /* TestVisitsTable.swift */; };
 		4A59BFF7C37812C7955B9E79 /* HistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BB07A2812FE4B516FD30 /* HistoryTable.swift */; };
+		E43099A51AAF2D2100154257 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E43099A41AAF2D2100154257 /* libsqlite3.0.dylib */; };
 		E47726181A8A794B00FC058B /* ReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47726171A8A794B00FC058B /* ReadingList.swift */; };
 		E47726191A8A794B00FC058B /* ReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47726171A8A794B00FC058B /* ReadingList.swift */; };
 		E477261B1A8A7DE500FC058B /* SQLiteReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E477261A1A8A7DE500FC058B /* SQLiteReadingList.swift */; };
@@ -108,7 +108,6 @@
 		282DA4D31A69A24300A406E2 /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		282DA4D61A69A28000A406E2 /* Site.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Site.swift; sourceTree = "<group>"; };
 		282DA51F1A69BCB700A406E2 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
-		282DA5231A69BCBB00A406E2 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/usr/lib/libsqlite3.0.dylib; sourceTree = "<absolute>"; };
 		4A59B22E909B6CAC95DBE879 /* VisitsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VisitsTable.swift; path = SQL/VisitsTable.swift; sourceTree = "<group>"; };
 		4A59B33FF96A39A59CBBBBD7 /* TestJoinedHistoryVisits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestJoinedHistoryVisits.swift; sourceTree = "<group>"; };
 		4A59B3F1AAD619686DB9450C /* GenericTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenericTable.swift; path = SQL/GenericTable.swift; sourceTree = "<group>"; };
@@ -117,6 +116,7 @@
 		4A59BCB8D38CE6E6F5F5F2DE /* JoinedHistoryVisitsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JoinedHistoryVisitsTable.swift; path = SQL/JoinedHistoryVisitsTable.swift; sourceTree = "<group>"; };
 		4A59BE48DBF43989C51D3F98 /* TestVisitsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestVisitsTable.swift; sourceTree = "<group>"; };
 		4A59BF61F0D956D2A1BDAE29 /* BrowserDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BrowserDB.swift; path = SQL/BrowserDB.swift; sourceTree = "<group>"; };
+		E43099A41AAF2D2100154257 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		E47726171A8A794B00FC058B /* ReadingList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingList.swift; sourceTree = "<group>"; };
 		E477261A1A8A7DE500FC058B /* SQLiteReadingList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteReadingList.swift; path = SQL/SQLiteReadingList.swift; sourceTree = "<group>"; };
 		E477261D1A8A7EDA00FC058B /* ReadingListTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListTable.swift; sourceTree = "<group>"; };
@@ -129,7 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				282DA5241A69BCBB00A406E2 /* libsqlite3.0.dylib in Frameworks */,
+				E43099A51AAF2D2100154257 /* libsqlite3.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,7 +147,7 @@
 		282DA48B1A699E0300A406E2 = {
 			isa = PBXGroup;
 			children = (
-				282DA5231A69BCBB00A406E2 /* libsqlite3.0.dylib */,
+				E43099A41AAF2D2100154257 /* libsqlite3.0.dylib */,
 				282DA5201A69BCB700A406E2 /* modules */,
 				282DA4971A699E0300A406E2 /* Storage */,
 				282DA4C31A699F5600A406E2 /* Third-Party Source */,
@@ -238,13 +238,12 @@
 				4A59B22E909B6CAC95DBE879 /* VisitsTable.swift */,
 				4A59B3F1AAD619686DB9450C /* GenericTable.swift */,
 				4A59BCB8D38CE6E6F5F5F2DE /* JoinedHistoryVisitsTable.swift */,
-				0BAE69551A7E1FD100B3609D /* SchemaTable.swift */,
 				0BF42D3F1A7C18CD00889E28 /* SQLFavicons.swift */,
 				0BF42D411A7C31E300889E28 /* JoinedFaviconsHistoryTable.swift */,
 				0BF42D431A7C31EE00889E28 /* FaviconsTable.swift */,
 				0B2770441A89276900CE7692 /* BookmarksSqlite.swift */,
 				E477261A1A8A7DE500FC058B /* SQLiteReadingList.swift */,
-				0BAE69551A7E1FD100B3609D /* TableTable.swift */,
+				0BAE69551A7E1FD100B3609D /* SchemaTable.swift */,
 				0B3060301A8151B70085B8BC /* SQLitePasswords.swift */,
 			);
 			name = SQL;
