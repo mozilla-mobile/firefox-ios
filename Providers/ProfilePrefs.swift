@@ -10,7 +10,7 @@ public protocol ProfilePrefs {
     func boolForKey(defaultName: String) -> Bool?
     func stringArrayForKey(defaultName: String) -> [String]?
     func arrayForKey(defaultName: String) -> [AnyObject]?
-    func dictionaryForKey(defaultName: String) -> [NSObject : AnyObject]?
+    func dictionaryForKey(defaultName: String) -> [String : AnyObject]?
     func removeObjectForKey(defaultName: String)
 }
 
@@ -44,8 +44,8 @@ public class MockProfilePrefs : ProfilePrefs {
         return nil
     }
 
-    public func dictionaryForKey(defaultName: String) -> [NSObject : AnyObject]? {
-        return things.objectForKey(defaultName) as? [NSObject: AnyObject]
+    public func dictionaryForKey(defaultName: String) -> [String : AnyObject]? {
+        return things.objectForKey(defaultName) as? [String: AnyObject]
     }
 
     public func removeObjectForKey(defaultName: String) {
@@ -91,8 +91,8 @@ public class NSUserDefaultsProfilePrefs : ProfilePrefs {
         return userDefaults.arrayForKey(qualifyKey(defaultName))
     }
 
-    public func dictionaryForKey(defaultName: String) -> [NSObject : AnyObject]? {
-        return userDefaults.dictionaryForKey(qualifyKey(defaultName))
+    public func dictionaryForKey(defaultName: String) -> [String : AnyObject]? {
+        return userDefaults.dictionaryForKey(qualifyKey(defaultName)) as? [String:AnyObject]
     }
 
     public func removeObjectForKey(defaultName: String) {

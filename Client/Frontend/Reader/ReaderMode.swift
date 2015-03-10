@@ -5,6 +5,8 @@
 import Foundation
 import WebKit
 
+let ReaderModeProfileKeyStyle = "readermode.style"
+
 enum ReaderModeMessageType: String {
     case StateChange = "ReaderModeStateChange"
     case PageEvent = "ReaderPageEvent"
@@ -43,9 +45,42 @@ struct ReaderModeStyle {
     var theme: ReaderModeTheme
     var fontType: ReaderModeFontType
     var fontSize: ReaderModeFontSize
-    
+
+    /// Encode the style to a JSON dictionary that can be passed to ReaderMode.js
     func encode() -> String {
         return JSON(["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]).toString(pretty: false)
+    }
+
+    /// Encode the style to a dictionary that can be stored in the profile
+    func encode() -> [String:AnyObject] {
+        return ["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]
+    }
+
+    init(theme: ReaderModeTheme, fontType: ReaderModeFontType, fontSize: ReaderModeFontSize) {
+        self.theme = theme
+        self.fontType = fontType
+        self.fontSize = fontSize
+    }
+
+    /// Initialize the style from a dictionary, taken from the profile. Returns nil if the object cannot be decoded.
+    init?(dict: [String:AnyObject]) {
+        let themeRawValue = dict["theme"] as? String
+        let fontTypeRawValue = dict["fontType"] as? String
+        let fontSizeRawValue = dict["fontSize"] as? Int
+        if themeRawValue == nil || fontTypeRawValue == nil || fontSizeRawValue == nil {
+            return nil
+        }
+
+        let theme = ReaderModeTheme(rawValue: themeRawValue!)
+        let fontType = ReaderModeFontType(rawValue: fontTypeRawValue!)
+        let fontSize = ReaderModeFontSize(rawValue: fontSizeRawValue!)
+        if theme == nil || fontType == nil || fontSize == nil {
+            return nil
+        }
+
+        self.theme = theme!
+        self.fontType = fontType!
+        self.fontSize = fontSize!
     }
 }
 
@@ -103,7 +138,7 @@ protocol ReaderModeDelegate {
 
 private let ReaderModeNamespace = "_firefox_ReaderMode"
 
-class ReaderMode: BrowserHelper, ReaderModeStyleViewControllerDelegate {
+class ReaderMode: BrowserHelper {
     var delegate: ReaderModeDelegate?
 
     private weak var browser: Browser?
@@ -252,10 +287,6 @@ class ReaderMode: BrowserHelper, ReaderModeStyleViewControllerDelegate {
             }
         }
         return nil
-    }
-
-    func readerModeStyleViewController(readerModeStyleViewController: ReaderModeStyleViewController, didConfigureStyle style: ReaderModeStyle) {
-        self.style = style
     }
 
     class func isReaderModeURL(url: NSURL) -> Bool {
