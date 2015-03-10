@@ -18,6 +18,8 @@ https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScroll
 Building the code
 -----------------
 
+> __As of March 10, 2015, this project requires Xcode 6.2. Make sure you upgrade, the App Store should offer you 6.2 already.__
+
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage).
 1. Clone the repository:
