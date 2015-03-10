@@ -662,11 +662,15 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
         if tabManager.selectedTab == browser {
             println("DEBUG: New readerModeState: \(state.rawValue)")
             urlBar.updateReaderModeState(state)
+            if state == .Active {
+                hideToolbars(animated: true)
+            }
         }
     }
 
     func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForBrowser browser: Browser) {
         browser.showContent(animated: true)
+        hideToolbars(animated: true)
     }
 
     func SELshowReaderModeStyle(recognizer: UITapGestureRecognizer) {
