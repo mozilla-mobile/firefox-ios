@@ -6,45 +6,47 @@ import Foundation
 
 let ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60;
 
-public class EnvelopeJSON : JSON {
+public class EnvelopeJSON {
+    private let json: JSON
+
     public init(_ jsonString: String) {
-        super.init(JSON.parse(jsonString))
+        self.json = JSON.parse(jsonString)
     }
 
-    override public init(_ json: JSON) {
-        super.init(json)
+    public init(_ json: JSON) {
+        self.json = json
     }
 
     public func isValid() -> Bool {
-        return !isError &&
-               self["id"].isString &&
+        return !self.json.isError &&
+               self.json["id"].isString &&
                //self["collection"].isString &&
-               self["payload"].isString
+               self.json["payload"].isString
     }
 
     public var id: String {
-        return self["id"].asString!
+        return self.json["id"].asString!
     }
     
     public var collection: String {
-        return self["collection"].asString ?? ""
+        return self.json["collection"].asString ?? ""
     }
     
     public var payload: String {
-        return self["payload"].asString!
+        return self.json["payload"].asString!
     }
     
     public var sortindex: Int {
-        return self["sortindex"].asInt ?? 0
+        return self.json["sortindex"].asInt ?? 0
     }
 
     public var modified: UInt64 {
-        if (self["modified"].isInt) {
-            return UInt64(self["modified"].asInt!) * 1000
+        if (self.json["modified"].isInt) {
+            return UInt64(self.json["modified"].asInt!) * 1000
         }
 
-        if (self["modified"].isDouble) {
-            return UInt64(1000 * (self["modified"].asDouble? ?? 0.0))
+        if (self.json["modified"].isDouble) {
+            return UInt64(1000 * (self.json["modified"].asDouble? ?? 0.0))
         }
 
         return 0
