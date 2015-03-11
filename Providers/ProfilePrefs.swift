@@ -80,7 +80,10 @@ public class NSUserDefaultsProfilePrefs : ProfilePrefs {
     }
 
     public func boolForKey(defaultName: String) -> Bool? {
-        return userDefaults.boolForKey(qualifyKey(defaultName))
+        // boolForKey just returns false if the key doesn't exist. We need to
+        // distinguish between false and non-existent keys, so use objectForKey
+        // and cast the result instead.
+        return userDefaults.objectForKey(qualifyKey(defaultName)) as? Bool
     }
 
     public func stringArrayForKey(defaultName: String) -> [String]? {
