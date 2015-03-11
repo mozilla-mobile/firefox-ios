@@ -2,34 +2,53 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import FxA
 import UIKit
 import XCTest
-import FxA
-import Client
-
-let TEST_AUTH_API_ENDPOINT = STAGE_AUTH_SERVER_ENDPOINT
 
 class FxAClient10Tests: XCTestCase {
     func testLoginSuccess() {
-        let client = FxAClient10()
+        let e = self.expectationWithDescription("")
 
-        let email : NSData = "testtestoo@mockmyid.com".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        let email : NSData = "testtestoo@mockmyid.com".utf8EncodedData!
         let password : NSData = email
         let quickStretchedPW : NSData = FxAClient10.quickStretchPW(email, password: password)
 
-        let expectation = expectationWithDescription("login to \(TEST_AUTH_API_ENDPOINT)")
-        client.login(emailUTF8: email, quickStretchedPW: quickStretchedPW, getKeys: true) { (response, error) in
-            XCTAssertNil(error)
-            XCTAssertNotNil(response)
-            XCTAssertNotNil(response!.uid)
-            XCTAssertEqual(response!.verified, true)
-            XCTAssertNotNil(response!.sessionToken)
-            XCTAssertNotNil(response!.keyFetchToken)
-            expectation.fulfill()
+        let client = FxAClient10()
+        let result = client.login(email, quickStretchedPW: quickStretchedPW, getKeys: true)
+        result.upon { result in
+            if let response = result.successValue {
+                XCTAssertNotNil(response.uid)
+                XCTAssertEqual(response.verified, true)
+                XCTAssertNotNil(response.sessionToken)
+                XCTAssertNotNil(response.keyFetchToken)
+            } else {
+                let error = result.failureValue as NSError
+                XCTAssertNil(error)
+            }
+            e.fulfill()
         }
+        self.waitForExpectationsWithTimeout(10, handler: nil)
+    }
 
-        waitForExpectationsWithTimeout(10) { (error) in
-            XCTAssertNil(error, "\(error)")
+    func testLoginFailure() {
+        let e = self.expectationWithDescription("")
+
+        let email : NSData = "testtestoo@mockmyid.com".utf8EncodedData!
+        let password : NSData = "INCORRECT PASSWORD".utf8EncodedData!
+        let quickStretchedPW : NSData = FxAClient10.quickStretchPW(email, password: password)
+
+        let client = FxAClient10()
+        let result = client.login(email, quickStretchedPW: quickStretchedPW, getKeys: true)
+        result.upon { result in
+            if let response = result.successValue {
+                XCTFail("Got response: \(response)")
+            } else {
+                let error = result.failureValue as NSError
+                XCTAssertEqual(error.code, 103) // Incorrect password.
+            }
+            e.fulfill()
         }
+        self.waitForExpectationsWithTimeout(10, handler: nil)
     }
 }

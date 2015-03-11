@@ -50,3 +50,9 @@ extension String {
         return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
     }
 }
+
+extension NSData {
+    public var utf8EncodedString: String? {
+        return NSString(data: self, encoding: NSUTF8StringEncoding)
+    }
+}

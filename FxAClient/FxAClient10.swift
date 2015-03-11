@@ -2,24 +2,25 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import Alamofire
-
+import Deferred
+import Foundation
 import FxA
+import Result
 
 public let PROD_AUTH_SERVER_ENDPOINT = "https://api.accounts.firefox.com/v1";
 public let STAGE_AUTH_SERVER_ENDPOINT = "https://api-accounts.stage.mozaws.net/v1";
 
 public let FxAClientErrorDomain = "org.mozilla.fxa.error"
 
-public class FxALoginResponse {
-    public let remoteEmail : String
-    public let uid : String
-    public let verified : Bool
-    public let sessionToken : NSData
-    public let keyFetchToken: NSData
+struct FxALoginResponse {
+    let remoteEmail : String
+    let uid : String
+    let verified : Bool
+    let sessionToken : NSData
+    let keyFetchToken: NSData
 
-    public init(remoteEmail: String, uid: String, verified: Bool, sessionToken: NSData, keyFetchToken: NSData) {
+    init(remoteEmail: String, uid: String, verified: Bool, sessionToken: NSData, keyFetchToken: NSData) {
         self.remoteEmail = remoteEmail
         self.uid = uid
         self.verified = verified
@@ -28,46 +29,73 @@ public class FxALoginResponse {
     }
 }
 
-public class FxAClient10 {
-    private class var requestManager : Alamofire.Manager {
-    struct Static {
-        static let manager : Alamofire.Manager = Alamofire.Manager(configuration: Alamofire.Manager.sharedInstance.session.configuration)
-        }
-        Static.manager.startRequestsImmediately = false
-        return Static.manager
-    }
+extension NSError: ErrorType {
+}
 
-    public class func quickStretchPW(email: NSData, password: NSData) -> NSData {
+class FxAClient10 {
+    private let KeyLength: Int = 32
+
+    class func quickStretchPW(email: NSData, password: NSData) -> NSData {
         let salt: NSMutableData = NSMutableData(data: "identity.mozilla.com/picl/v1/quickStretch:".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
         salt.appendData(email)
         return password.derivePBKDF2HMACSHA256KeyWithSalt(salt, iterations: 1000, length: 32)
     }
 
-    private class func validateJSON(json : JSON) -> Bool {
-        return
-            json["uid"].isString &&
-            json["verified"].isBool &&
-            json["sessionToken"].isString &&
-            json["keyFetchToken"].isString
+    // fxa-auth-server produces error details like:
+    //        {
+    //            "code": 400, // matches the HTTP status code
+    //            "errno": 107, // stable application-level error number
+    //            "error": "Bad Request", // string description of the error type
+    //            "message": "the value of salt is not allowed to be undefined",
+    //            "info": "https://docs.dev.lcip.og/errors/1234" // link to more info on the error
+    //        }
+    private class func remoteErrorFromJSON(json: JSON) -> NSError? {
+        if json.isError {
+            return nil
+        }
+        if let errno = json["errno"].asInt {
+            var userInfo: [NSObject: AnyObject] = [NSObject: AnyObject]()
+            if let message = json["message"].asString {
+                userInfo[NSLocalizedDescriptionKey] = message
+            }
+            if let code = json["code"].asInt {
+                userInfo["code"] = code
+            }
+            for key in ["error", "info"] {
+                if let value = json[key].asString {
+                    userInfo[key] = value
+                }
+            }
+            return NSError(domain: FxAClientErrorDomain, code: errno, userInfo: userInfo)
+        }
+        return nil
     }
 
-    private class func responseFromJSON(json: JSON) -> FxALoginResponse {
-        let uid = json["uid"].asString!
-        let sessionToken = NSData(base16EncodedString: json["sessionToken"].asString!, options: NSDataBase16DecodingOptions.Default)
-        let keyFetchToken = NSData(base16EncodedString: json["keyFetchToken"].asString!, options: NSDataBase16DecodingOptions.Default)
-        let verified = json["verified"].asBool!
-        return FxALoginResponse(remoteEmail: "", uid: uid, verified: verified, sessionToken: sessionToken, keyFetchToken: keyFetchToken)
+    private class func loginResponseFromJSON(json: JSON) -> FxALoginResponse? {
+        if json.isError {
+            return nil
+        }
+        if let uid = json["uid"].asString {
+            if let verified = json["verified"].asBool {
+                if let sessionToken = json["sessionToken"].asString {
+                    if let keyFetchToken = json["keyFetchToken"].asString {
+                        return FxALoginResponse(remoteEmail: "", uid: uid, verified: verified,
+                            sessionToken: sessionToken.hexDecodedData, keyFetchToken: keyFetchToken.hexDecodedData)
+                    }
+                }
+            }
+        }
+        return nil
     }
 
-    public let url : String
+    let url : String
 
-    public init(endpoint: String? = nil) {
+    init(endpoint: String? = nil) {
         self.url = endpoint ?? PROD_AUTH_SERVER_ENDPOINT
     }
 
-    public func login(queue: dispatch_queue_t? = nil, emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool, callback: (FxALoginResponse?, NSError?) -> Void) {
-        let queue = queue ?? dispatch_get_main_queue()
-
+    func login(emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool) -> Deferred<Result<FxALoginResponse>> {
+        let deferred = Deferred<Result<FxALoginResponse>>()
         let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: "identity.mozilla.com/picl/v1/authPW".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false), length: 32)
 
         let parameters = [
@@ -80,49 +108,34 @@ public class FxAClient10 {
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
         let (r, e) = ParameterEncoding.JSON.encode(mutableURLRequest, parameters: parameters)
-        if e != nil {
-            return dispatch_async(queue, {
-                callback(nil, e)
-            })
+        if let e = e {
+            deferred.fill(Result(failure: e))
+            return deferred
         }
 
-        let manager = FxAClient10.requestManager
-        let request = manager.request(r)
-        request.responseJSON { (request, response, json, error) in
-            if error != nil {
-                return dispatch_async(queue, {
-                    callback(nil, error)
-                })
-            }
+        let request = Alamofire.request(r)
+            .validate(contentType: ["application/json"])
+            .responseJSON { (_, _, data, error) in
+                if let error = error {
+                    deferred.fill(Result(failure: error))
+                    return
+                }
 
-            if response == nil || json == nil {
-                return dispatch_async(queue, {
-                    callback(nil, NSError(domain: FxAClientErrorDomain, code: -1, userInfo: ["message": "malformed JSON response"]))
-                })
-            }
+                if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                    let json = JSON(data)
+                    if let remoteError = FxAClient10.remoteErrorFromJSON(json) {
+                        deferred.fill(Result(failure: remoteError))
+                        return
+                    }
 
-            let json = JSON(json!)
+                    if let response = FxAClient10.loginResponseFromJSON(json) {
+                        deferred.fill(Result(success: response))
+                        return
+                    }
+                }
 
-            let statusCode : Int = response!.statusCode
-            if  statusCode != 200 {
-                return dispatch_async(queue, {
-                    callback(nil, NSError(domain: FxAClientErrorDomain, code: -1, userInfo: ["message": "bad response code", "code": statusCode,
-                        "body": json.toString(pretty: true)]))
-                })
-            }
-
-            if !FxAClient10.validateJSON(json) {
-                return dispatch_async(queue, {
-                    callback(nil, NSError(domain: FxAClientErrorDomain, code: -1, userInfo: ["message": "invalid server response"]))
-                })
-            }
-
-            let response = FxAClient10.responseFromJSON(json)
-            return dispatch_async(queue, {
-                callback(response, nil)
-            })
+                deferred.fill(Result(failure: NSError(domain: FxAClientErrorDomain, code: -1, userInfo: ["message": "invalid server response"])))
         }
-
-        request.resume()
+        return deferred
     }
 }
