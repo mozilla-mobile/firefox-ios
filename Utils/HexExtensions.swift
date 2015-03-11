@@ -16,3 +16,9 @@ extension NSData {
         return base16Encode(self, uppercase: false)
     }
 }
+
+extension NSData {
+    public var base64EncodedString: String {
+        return base64EncodedStringWithOptions(NSDataBase64EncodingOptions.allZeros)
+    }
+}
