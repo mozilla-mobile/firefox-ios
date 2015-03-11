@@ -5,6 +5,7 @@
 import UIKit
 import XCTest
 import Client
+import Storage
 
 class RecordTests: XCTestCase {
     func testGUIDs() {

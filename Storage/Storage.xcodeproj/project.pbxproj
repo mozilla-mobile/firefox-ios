@@ -81,7 +81,7 @@
 /* Begin PBXFileReference section */
 		0B2770441A89276900CE7692 /* BookmarksSqlite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksSqlite.swift; sourceTree = "<group>"; };
 		0B2770461A893C2C00CE7692 /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
-		0B2770DC1A8AD83200CE7692 /* Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Bytes.swift; path = ../../Sync/Bytes.swift; sourceTree = "<group>"; };
+		0B2770DC1A8AD83200CE7692 /* Bytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
 		0B30602E1A80338F0085B8BC /* Passwords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Passwords.swift; sourceTree = "<group>"; };
 		0B3060301A8151B70085B8BC /* SQLitePasswords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLitePasswords.swift; sourceTree = "<group>"; };
 		0BA4977A1A7B0941004C8E17 /* SQLiteHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteHistory.swift; path = SQL/SQLiteHistory.swift; sourceTree = "<group>"; };
