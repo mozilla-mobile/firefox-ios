@@ -6,14 +6,32 @@ import Foundation
 import XCTest
 
 class TestProfilePrefs: ProfileTest {
+    override func setUp() {
+        withTestPrefs { prefs in
+            // TODO: Running these tests clears all of your browser prefs since
+            // we reuse the profile. We need a separate profile for testing.
+            prefs.clearAll()
+        }
+    }
+
     func withTestPrefs(callback: (prefs: ProfilePrefs) -> Void) {
         withTestProfile { profile in
             callback(prefs: NSUserDefaultsProfilePrefs(profile: profile))
         }
     }
 
+    func testClearPrefs() {
+            withTestPrefs { prefs in
+            prefs.setObject("foo", forKey: "bar")
+            XCTAssertEqual(prefs.stringForKey("bar")!, "foo")
+            prefs.clearAll()
+            XCTAssertNil(prefs.stringForKey("bar"))
+        }
+    }
+
     func testStringForKey() {
         withTestPrefs { prefs in
+            XCTAssertNil(prefs.stringForKey("key"))
             prefs.setObject("value", forKey: "key")
             XCTAssertEqual(prefs.stringForKey("key")!, "value")
             // Non-String values return nil.
@@ -24,6 +42,7 @@ class TestProfilePrefs: ProfileTest {
 
     func testBoolForKey() {
         withTestPrefs { prefs in
+            XCTAssertNil(prefs.boolForKey("key"))
             prefs.setObject(true, forKey: "key")
             XCTAssertEqual(prefs.boolForKey("key")!, true)
             prefs.setObject(false, forKey: "key")
@@ -33,14 +52,15 @@ class TestProfilePrefs: ProfileTest {
             prefs.setObject(1, forKey: "key")
             XCTAssertEqual(prefs.boolForKey("key")!, true)
             prefs.setObject("1", forKey: "key")
-            XCTAssertEqual(prefs.boolForKey("key")!, true)
+            XCTAssertNil(prefs.boolForKey("key"))
             prefs.setObject("x", forKey: "key")
-            XCTAssertEqual(prefs.boolForKey("key")!, false)
+            XCTAssertNil(prefs.boolForKey("key"))
         }
     }
 
     func testStringArrayForKey() {
         withTestPrefs { prefs in
+            XCTAssertNil(prefs.stringArrayForKey("key"))
             prefs.setObject(["value1", "value2"], forKey: "key")
             XCTAssertEqual(prefs.stringArrayForKey("key")!, ["value1", "value2"])
             // Non-[String] values return nil.
