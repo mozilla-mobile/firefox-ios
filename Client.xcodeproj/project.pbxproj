@@ -1039,13 +1039,6 @@
 			name = FxATests;
 			sourceTree = "<group>";
 		};
-		28C077961A3B061C00834FE5 /* TokenTests */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = TokenTests;
-			sourceTree = "<group>";
-		};
 		28CE83B71A1D1D3200576538 /* FxAClient */ = {
 			isa = PBXGroup;
 			children = (
@@ -1068,13 +1061,6 @@
 				28CE83BF1A1D1D3200576538 /* SyncMeta.swift */,
 			);
 			path = Sync;
-			sourceTree = "<group>";
-		};
-		28CE83C01A1D1D3200576538 /* Token */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Token;
 			sourceTree = "<group>";
 		};
 		28CE83CB1A1D1D5100576538 /* Products */ = {
@@ -1356,8 +1342,6 @@
 				28CE83B91A1D1D3200576538 /* Sync */,
 				28C077911A3B05C200834FE5 /* SyncTests */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
-				28CE83C01A1D1D3200576538 /* Token */,
-				28C077961A3B061C00834FE5 /* TokenTests */,
 				D39FA1601A83E0EC00EE869C /* UITests */,
 				E42CCDFF1A24C4E300B794D3 /* Utils */,
 			);
