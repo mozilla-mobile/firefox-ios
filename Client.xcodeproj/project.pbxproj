@@ -80,6 +80,7 @@
 		2F3444571AB22A4B00FD9731 /* TimeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3444561AB22A4B00FD9731 /* TimeConstants.swift */; };
 		2F3444581AB22A4B00FD9731 /* TimeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3444561AB22A4B00FD9731 /* TimeConstants.swift */; };
 		2F3444B91AB22E8000FD9731 /* signedInUser.json in Resources */ = {isa = PBXBuildFile; fileRef = 2F3444B81AB22E8000FD9731 /* signedInUser.json */; };
+		2F34452E1AB247A100FD9731 /* TokenServerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83C11A1D1D3200576538 /* TokenServerClient.swift */; };
 		2F3445531AB24EDD00FD9731 /* LiveAccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3445521AB24EDD00FD9731 /* LiveAccountTest.swift */; };
 		2F44FA161A9D41A200FD20CC /* Base32.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2F44F9FD1A9D417600FD20CC /* Base32.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F44FA181A9D425700FD20CC /* HashExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FA171A9D425700FD20CC /* HashExtensions.swift */; };
@@ -2128,6 +2129,7 @@
 				E4CD9F1D1A6D9C2800318571 /* WebServerTests.swift in Sources */,
 				0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
+				2F34452E1AB247A100FD9731 /* TokenServerClient.swift in Sources */,
 				2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */,
 				2F44FA1D1A9D460500FD20CC /* HexExtensions.swift in Sources */,
 				28FEEE1E1AAFF116007FA476 /* EncryptedRecord.swift in Sources */,
