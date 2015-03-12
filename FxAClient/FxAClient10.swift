@@ -28,7 +28,7 @@ public class FxALoginResponse {
     }
 }
 
-public class FxAClient {
+public class FxAClient10 {
     private class var requestManager : Alamofire.Manager {
     struct Static {
         static let manager : Alamofire.Manager = Alamofire.Manager(configuration: Alamofire.Manager.sharedInstance.session.configuration)
@@ -86,7 +86,7 @@ public class FxAClient {
             })
         }
 
-        let manager = FxAClient.requestManager
+        let manager = FxAClient10.requestManager
         let request = manager.request(r)
         request.responseJSON { (request, response, json, error) in
             if error != nil {
@@ -111,13 +111,13 @@ public class FxAClient {
                 })
             }
             
-            if !FxAClient.validateJSON(json) {
+            if !FxAClient10.validateJSON(json) {
                 return dispatch_async(queue, {
                     callback(nil, NSError(domain: FxAClientErrorDomain, code: -1, userInfo: ["message": "invalid server response"]))
                 })
             }
             
-            let response = FxAClient.responseFromJSON(json)
+            let response = FxAClient10.responseFromJSON(json)
             return dispatch_async(queue, {
                 callback(response, nil)
             })
