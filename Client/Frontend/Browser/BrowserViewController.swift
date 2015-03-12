@@ -18,8 +18,112 @@ private let KVOEstimatedProgress = "estimatedProgress"
 
 private let HomeURL = "about:home"
 
+
+
+
+// TODO Move this to its own file or a different file?
+
+// TODO This enum can double as button id and image name for the button
+enum ReaderModeBarButton {
+    case MarkAsRead, MarkAsUnread, Settings, AddToReadingList, RemoveFromReadingList
+}
+
+protocol ReaderModeBarViewDelegate {
+    func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton button: ReaderModeBarButton)
+}
+
+class ReaderModeBarView: UIView {
+    var delegate: ReaderModeBarViewDelegate?
+
+    var readStatusButton: UIButton!
+    var settingsButton: UIButton!
+    var listStatusButton: UIButton!
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        backgroundColor = UIColor.whiteColor()
+
+        readStatusButton = UIButton()
+        addSubview(readStatusButton)
+        readStatusButton.setImage(UIImage(named: "MarkAsRead"), forState: UIControlState.Normal)
+        readStatusButton.addTarget(self, action: "SELtappedReadStatusButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        readStatusButton.snp_makeConstraints { (make) -> () in
+            make.left.equalTo(self)
+            make.height.centerY.equalTo(self)
+            make.width.equalTo(80)
+        }
+
+        settingsButton = UIButton()
+        addSubview(settingsButton)
+        settingsButton.setImage(UIImage(named: "SettingsSerif"), forState: UIControlState.Normal)
+        settingsButton.addTarget(self, action: "SELtappedSettingsButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        settingsButton.snp_makeConstraints { (make) -> () in
+            make.height.centerX.centerY.equalTo(self)
+            make.width.equalTo(80)
+        }
+
+        listStatusButton = UIButton()
+        addSubview(listStatusButton)
+        listStatusButton.setImage(UIImage(named: "AddToReadingList"), forState: UIControlState.Normal)
+        listStatusButton.setImage(UIImage(named: "RemoveFromReadingList"), forState: UIControlState.Selected)
+        listStatusButton.addTarget(self, action: "SELtappedListStatusButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        listStatusButton.snp_makeConstraints { (make) -> () in
+            make.right.equalTo(self)
+            make.height.centerY.equalTo(self)
+            make.width.equalTo(80)
+        }
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func drawRect(rect: CGRect) {
+        super.drawRect(rect)
+        let context = UIGraphicsGetCurrentContext()
+        CGContextSetLineWidth(context, 0.5)
+        CGContextSetRGBStrokeColor(context, 0.1, 0.1, 0.1, 1.0)
+        CGContextSetStrokeColorWithColor(context, UIColor.grayColor().CGColor)
+        CGContextBeginPath(context)
+        CGContextMoveToPoint(context, 0, frame.height)
+        CGContextAddLineToPoint(context, frame.width, frame.height)
+        CGContextStrokePath(context)
+    }
+
+    func SELtappedReadStatusButton(sender: UIButton!) {
+        delegate?.readerModeBar(self, didSelectButton: unread ? .MarkAsRead : .MarkAsUnread)
+    }
+
+    func SELtappedSettingsButton(sender: UIButton!) {
+        delegate?.readerModeBar(self, didSelectButton: .Settings)
+    }
+
+    func SELtappedListStatusButton(sender: UIButton!) {
+        delegate?.readerModeBar(self, didSelectButton: added ? .RemoveFromReadingList : .AddToReadingList)
+    }
+
+    var unread: Bool = true {
+        didSet {
+            println("Changing unread to \(unread)")
+            readStatusButton.setImage(UIImage(named: unread ? "MarkAsRead" : "MarkAsUnread"), forState: UIControlState.Normal)
+        }
+    }
+
+    var added: Bool = false {
+        didSet {
+            println("Changing added to \(added)")
+            listStatusButton.setImage(UIImage(named: added ? "RemoveFromReadingList" : "AddToReadingList"), forState: UIControlState.Normal)
+        }
+    }
+}
+
+
+
+
 class BrowserViewController: UIViewController {
     private var urlBar: URLBarView!
+    private var readerModeBar: ReaderModeBarView!
     private var toolbar: BrowserToolbar!
     private var tabManager: TabManager!
     private var homePanelController: HomePanelViewController?
@@ -62,31 +166,62 @@ class BrowserViewController: UIViewController {
             return
         }
 
+        // Setup a header view that contains both the url bar and the reader mode bar
+
+//        header = UIView(frame: CGRectZero)
+//        view.addSubview(header)
+//
+//        header.snp_makeConstraints { make in
+//            make.top.equalTo(self.view.snp_top)
+//            //make.height.equalTo(StatusBarHeight + ToolbarHeight)
+//            make.leading.trailing.equalTo(self.view)
+//        }
+
+        //
+
         urlBar = URLBarView()
         header = wrapInEffect(urlBar)
+        view.addSubview(header)
+
         header.snp_makeConstraints { make in
-            make.top.equalTo(self.view.snp_top)
-            make.height.equalTo(ToolbarHeight + StatusBarHeight)
+            make.top.equalTo(self.view)
+            make.height.equalTo(StatusBarHeight + ToolbarHeight)
             make.leading.trailing.equalTo(self.view)
         }
-        urlBar.delegate = self
-        tabManager.delegate = self
+
+        // Setup the reader mode control bar. This bar starts not visible with a zero height.
+        readerModeBar = ReaderModeBarView(frame: CGRectZero)
+        view.addSubview(readerModeBar)
+        readerModeBar.hidden = true
+
+        readerModeBar.snp_makeConstraints { make in
+            make.top.equalTo(self.header.snp_bottom)
+            make.height.equalTo(ToolbarHeight)
+            make.leading.trailing.equalTo(self.view)
+        }
+
+        // Setup the bottom toolbar
 
         toolbar = BrowserToolbar()
         footer = wrapInEffect(toolbar)
+        view.addSubview(footer)
+
         footer.snp_makeConstraints { make in
             make.bottom.equalTo(self.view.snp_bottom)
             make.height.equalTo(ToolbarHeight)
             make.leading.trailing.equalTo(self.view)
         }
+
+        urlBar.delegate = self
+        readerModeBar.delegate = self
         toolbar.browserToolbarDelegate = self
 
+        tabManager.delegate = self
         tabManager.addTab()
     }
 
     private func wrapInEffect(view: UIView) -> UIView {
         let effect = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
-        self.view.addSubview(effect);
         view.backgroundColor = UIColor.clearColor()
         effect.addSubview(view)
 
@@ -260,8 +395,14 @@ extension BrowserViewController: URLBarDelegate {
                         }
                     }
                     readerMode.enableReaderMode()
+
+//                    hideToolbars(animated: true, completion: { finished in
+//                        //self.showReaderModeBar(animated: false)
+//                    })
+                    self.showReaderModeBar(animated: true)
                 } else {
                     readerMode.disableReaderMode()
+                    self.hideReaderModeBar(animated: true)
                 }
             }
         }
@@ -349,15 +490,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
         }
     }
 
-    // TODO: This is temporary way to add items to your reading list until we have actual buttons
     func browserToolbarDidLongPressBookmark(browserToolbar: BrowserToolbar) {
-        if let tab = tabManager.selectedTab? {
-            if let url = tab.url?.absoluteString {
-                profile.readingList.add(item: ReadingListItem(url: url, title: tab.title)) { (success) -> Void in
-                    // Nothing to do here
-                }
-            }
-        }
     }
 
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbar) {
@@ -457,7 +590,8 @@ extension BrowserViewController: UIScrollViewDelegate {
         }
     }
 
-    private func hideToolbars(#animated: Bool) {
+    private func hideToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
+        println("hideToolbars - Header height is \(header.frame.height)")
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
             self.scrollUrlBar(CGFloat(-1*MAXFLOAT))
             self.scrollToolbar(CGFloat(-1*MAXFLOAT))
@@ -466,19 +600,20 @@ extension BrowserViewController: UIScrollViewDelegate {
                 tab.webView.scrollView.contentInset = UIEdgeInsets(top: StatusBarHeight, left: 0, bottom: 0, right: 0)
                 tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: StatusBarHeight, left: 0, bottom: 0, right: 0)
             }
-        })
+        }, completion: completion)
     }
 
-    private func showToolbars(#animated: Bool) {
+    private func showToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
+        println("showToolbars - Header height is \(header.frame.height)")
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
             self.scrollUrlBar(CGFloat(MAXFLOAT))
             self.scrollToolbar(CGFloat(MAXFLOAT))
             // Reset the insets so that clicking works on the edges of the screen
             if let tab = self.tabManager.selectedTab {
-                tab.webView.scrollView.contentInset = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
-                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(ToolbarHeight + StatusBarHeight, 0, ToolbarHeight, 0)
+                tab.webView.scrollView.contentInset = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: ToolbarHeight, right: 0)
+                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: ToolbarHeight, right: 0)
             }
-        })
+        }, completion: completion)
     }
 }
 
@@ -489,9 +624,9 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         previous?.webView.navigationDelegate = nil
-        previous?.webView.scrollView.delegate = nil
+        //previous?.webView.scrollView.delegate = nil
         selected?.webView.navigationDelegate = self
-        selected?.webView.scrollView.delegate = self
+        //selected?.webView.scrollView.delegate = self
         urlBar.updateURL(selected?.url)
         showToolbars(animated: false)
 
@@ -666,15 +801,11 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
         if tabManager.selectedTab == browser {
             println("DEBUG: New readerModeState: \(state.rawValue)")
             urlBar.updateReaderModeState(state)
-            if state == .Active {
-                hideToolbars(animated: true)
-            }
         }
     }
 
     func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForBrowser browser: Browser) {
         browser.showContent(animated: true)
-        hideToolbars(animated: true)
     }
 
     func SELshowReaderModeStyle(recognizer: UITapGestureRecognizer) {
@@ -802,6 +933,66 @@ extension BrowserViewController : Transitionable {
         for i in 0..<tabManager.count {
             let tab = tabManager.getTab(i)
             tab.webView.frame = CGRect(x: 0, y: 0, width: tab.webView.frame.width, height: tab.webView.frame.height)
+        }
+    }
+}
+
+extension BrowserViewController {
+    func showReaderModeBar(#animated: Bool) {
+        // TODO This needs to come from the database
+        readerModeBar.unread = true
+        readerModeBar.added = false
+        readerModeBar.hidden = false
+    }
+
+    func hideReaderModeBar(#animated: Bool) {
+        readerModeBar.hidden = true
+    }
+}
+
+extension BrowserViewController: ReaderModeBarViewDelegate {
+    func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton button: ReaderModeBarButton) {
+        switch button {
+        case .Settings:
+            if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode {
+                if readerMode.state == ReaderModeState.Active {
+                    let readerModeStyleViewController = ReaderModeStyleViewController()
+                    readerModeStyleViewController.delegate = self
+                    readerModeStyleViewController.readerModeStyle = readerMode.style
+                    readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
+
+                    let popoverPresentationController = readerModeStyleViewController.popoverPresentationController
+                    popoverPresentationController?.backgroundColor = UIColor.whiteColor()
+                    popoverPresentationController?.delegate = self
+                    popoverPresentationController?.sourceView = readerModeBar
+                    popoverPresentationController?.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: ToolbarHeight, width: 1, height: 1)
+                    popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.Up
+
+                    self.presentViewController(readerModeStyleViewController, animated: true, completion: nil)
+                }
+            }
+
+        case .MarkAsRead:
+            // TODO Persist to database
+            readerModeBar.unread = false
+        case .MarkAsUnread:
+            // TODO Persist to database
+            readerModeBar.unread = true
+
+        case .AddToReadingList:
+//            if let tab = tabManager.selectedTab? {
+//                if let url = tab.url?.absoluteString {
+//                    profile.readingList.addItemWithURL(url, title: tab.title) { (success) -> Void in
+//                        readerModeBar.added = true
+//                    }
+//                }
+//            }
+            break
+        case .RemoveFromReadingList:
+//            profile.readingList.removeItemWithURL(url) { (success) -> Void in
+//                readerModeBar.added = false
+//            }
+            break
         }
     }
 }
