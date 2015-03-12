@@ -8,9 +8,6 @@ import Foundation
 import FxA
 import Result
 
-public let PROD_AUTH_SERVER_ENDPOINT = "https://api.accounts.firefox.com/v1";
-public let STAGE_AUTH_SERVER_ENDPOINT = "https://api-accounts.stage.mozaws.net/v1";
-
 public let FxAClientErrorDomain = "org.mozilla.fxa.error"
 public let FxAClientUnknownError = NSError(domain: FxAClientErrorDomain, code: 999,
     userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
@@ -18,10 +15,10 @@ public let FxAClientUnknownError = NSError(domain: FxAClientErrorDomain, code: 9
 private let KeyLength: Int = 32
 
 struct FxALoginResponse {
-    let remoteEmail : String
-    let uid : String
-    let verified : Bool
-    let sessionToken : NSData
+    let remoteEmail: String
+    let uid: String
+    let verified: Bool
+    let sessionToken: NSData
     let keyFetchToken: NSData
 
     init(remoteEmail: String, uid: String, verified: Bool, sessionToken: NSData, keyFetchToken: NSData) {
@@ -59,6 +56,12 @@ private func KW(kw: String) -> NSData? {
 }
 
 class FxAClient10 {
+    let URL: NSURL
+
+    init(endpoint: NSURL? = nil) {
+        self.URL = endpoint ?? ProductionFirefoxAccountConfiguration().authEndpointURL
+    }
+
     class func quickStretchPW(email: NSData, password: NSData) -> NSData {
         let salt: NSMutableData = NSMutableData(data: KW("quickStretch")!)
         salt.appendData(":".utf8EncodedData!)
@@ -154,12 +157,6 @@ class FxAClient10 {
         return nil
     }
 
-    let url : String
-
-    init(endpoint: String? = nil) {
-        self.url = endpoint ?? PROD_AUTH_SERVER_ENDPOINT
-    }
-
     func login(emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool) -> Deferred<Result<FxALoginResponse>> {
         let deferred = Deferred<Result<FxALoginResponse>>()
         let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: KW("authPW")!, length: 32)
@@ -169,8 +166,13 @@ class FxAClient10 {
             "authPW": authPW.base16EncodedStringWithOptions(NSDataBase16EncodingOptions.LowerCase),
         ]
 
-        let url = NSURL(string: self.url + (getKeys ? "/account/login?keys=true" : "/account/login"))!
-        let mutableURLRequest = NSMutableURLRequest(URL: url)
+        var URL: NSURL = self.URL.URLByAppendingPathComponent("/account/login")
+        if getKeys {
+            let components = NSURLComponents(URL: self.URL.URLByAppendingPathComponent("/account/login"), resolvingAgainstBaseURL: false)!
+            components.query = "keys=true"
+            URL = components.URL!
+        }
+        let mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -213,8 +215,8 @@ class FxAClient10 {
         let keyRequestKey = bytes.subdataWithRange(NSMakeRange(2 * KeyLength, KeyLength))
         let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
 
-        let url = NSURL(string: self.url + "/account/keys")!
-        let mutableURLRequest = NSMutableURLRequest(URL: url)
+        let URL = self.URL.URLByAppendingPathComponent("/account/keys")
+        let mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.HTTPMethod = Method.GET.rawValue
 
         let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
@@ -261,8 +263,8 @@ class FxAClient10 {
         let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
         let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
 
-        let url = NSURL(string: self.url + "/certificate/sign")!
-        let mutableURLRequest = NSMutableURLRequest(URL: url)
+        let URL = self.URL.URLByAppendingPathComponent("/certificate/sign")
+        let mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
