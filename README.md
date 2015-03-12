@@ -32,7 +32,7 @@ Building the code
 
   ```
   cd firefox-ios
-  carthage checkout --no-use-binaries
+  sh ./checkout.sh
   ```
 
 1. Open `Client.xcodeproj` in Xcode.
@@ -78,4 +78,5 @@ Most if this is fixable and can be reported upstream.
 
 If you add a new dependency, ping @st3fan and he'll make sure things work correctly on our integration (xcode server) and dogfood builders.
 
+A command exists to make adding dependencies less painful: `./update.sh`.
 .
