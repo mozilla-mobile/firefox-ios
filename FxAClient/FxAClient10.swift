@@ -12,6 +12,8 @@ public let PROD_AUTH_SERVER_ENDPOINT = "https://api.accounts.firefox.com/v1";
 public let STAGE_AUTH_SERVER_ENDPOINT = "https://api-accounts.stage.mozaws.net/v1";
 
 public let FxAClientErrorDomain = "org.mozilla.fxa.error"
+public let FxAClientUnknownError = NSError(domain: FxAClientErrorDomain, code: 999,
+    userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
 
 private let KeyLength: Int = 32
 
@@ -41,12 +43,25 @@ struct FxAKeysResponse {
     }
 }
 
+struct FxASignResponse {
+    let certificate: String
+
+    init(certificate: String) {
+        self.certificate = certificate
+    }
+}
+
 extension NSError: ErrorType {
+}
+
+private func KW(kw: String) -> NSData? {
+    return ("identity.mozilla.com/picl/v1/" + kw).utf8EncodedData
 }
 
 class FxAClient10 {
     class func quickStretchPW(email: NSData, password: NSData) -> NSData {
-        let salt: NSMutableData = NSMutableData(data: "identity.mozilla.com/picl/v1/quickStretch:".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+        let salt: NSMutableData = NSMutableData(data: KW("quickStretch")!)
+        salt.appendData(":".utf8EncodedData!)
         salt.appendData(email)
         return password.derivePBKDF2HMACSHA256KeyWithSalt(salt, iterations: 1000, length: 32)
     }
@@ -111,7 +126,7 @@ class FxAClient10 {
             let MAC = data.subdataWithRange(NSMakeRange(2 * KeyLength, 1 * KeyLength))
 
             let salt: NSData = NSData()
-            let contextInfo: NSData = "identity.mozilla.com/picl/v1/account/keys".utf8EncodedData!
+            let contextInfo: NSData = KW("account/keys")!
             let bytes = keyRequestKey.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))
             let respHMACKey = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, 1 * KeyLength))
             let respXORKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, 2 * KeyLength))
@@ -129,6 +144,16 @@ class FxAClient10 {
         return nil
     }
 
+    private class func signResponseFromJSON(json: JSON) -> FxASignResponse? {
+        if json.isError {
+            return nil
+        }
+        if let cert = json["cert"].asString {
+            return FxASignResponse(certificate: cert)
+        }
+        return nil
+    }
+
     let url : String
 
     init(endpoint: String? = nil) {
@@ -137,7 +162,7 @@ class FxAClient10 {
 
     func login(emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool) -> Deferred<Result<FxALoginResponse>> {
         let deferred = Deferred<Result<FxALoginResponse>>()
-        let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: "identity.mozilla.com/picl/v1/authPW".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false), length: 32)
+        let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: KW("authPW")!, length: 32)
 
         let parameters = [
             "email": NSString(data: emailUTF8, encoding: NSUTF8StringEncoding)!,
@@ -148,13 +173,10 @@ class FxAClient10 {
         let mutableURLRequest = NSMutableURLRequest(URL: url)
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
-        let (r, e) = ParameterEncoding.JSON.encode(mutableURLRequest, parameters: parameters)
-        if let e = e {
-            deferred.fill(Result(failure: e))
-            return deferred
-        }
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        mutableURLRequest.HTTPBody = JSON(parameters).toString(pretty: false).utf8EncodedData
 
-        let request = Alamofire.request(r)
+        let request = Alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (_, _, data, error) in
                 if let error = error {
@@ -175,7 +197,7 @@ class FxAClient10 {
                     }
                 }
 
-                deferred.fill(Result(failure: NSError(domain: FxAClientErrorDomain, code: -1, userInfo: ["message": "invalid server response"])))
+                deferred.fill(Result(failure: FxAClientUnknownError))
         }
         return deferred
     }
@@ -184,7 +206,7 @@ class FxAClient10 {
         let deferred = Deferred<Result<FxAKeysResponse>>()
 
         let salt: NSData = NSData()
-        let contextInfo: NSData = "identity.mozilla.com/picl/v1/keyFetchToken".utf8EncodedData!
+        let contextInfo: NSData = KW("keyFetchToken")!
         let bytes = keyFetchToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))
         let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
         let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
@@ -219,8 +241,59 @@ class FxAClient10 {
                     }
                 }
 
-                deferred.fill(Result(failure: NSError(domain: FxAClientErrorDomain, code: -1, userInfo: ["message": "invalid server response"])))
+                deferred.fill(Result(failure: FxAClientUnknownError))
             }
+        return deferred
+    }
+
+    func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Result<FxASignResponse>> {
+        let deferred = Deferred<Result<FxASignResponse>>()
+
+        let parameters = [
+            "publicKey": publicKey.JSONRepresentation(),
+            "duration": NSNumber(longLong: OneDayInMilliseconds), // The maximum the server will allow.
+        ]
+
+        let salt: NSData = NSData()
+        let contextInfo: NSData = KW("sessionToken")!
+        let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
+        let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
+        let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
+        let hawkHelper = HawkHelper(id: tokenId.hexEncodedString, key: reqHMACKey)
+
+        let url = NSURL(string: self.url + "/certificate/sign")!
+        let mutableURLRequest = NSMutableURLRequest(URL: url)
+        mutableURLRequest.HTTPMethod = Method.POST.rawValue
+
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        mutableURLRequest.HTTPBody = JSON(parameters).toString(pretty: false).utf8EncodedData
+
+        let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
+        mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
+
+        Alamofire.request(mutableURLRequest)
+            .validate(contentType: ["application/json"])
+            .responseJSON { (request, response, data, error) in
+                if let error = error {
+                    deferred.fill(Result(failure: error))
+                    return
+                }
+
+                if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                    let json = JSON(data)
+                    if let remoteError = FxAClient10.remoteErrorFromJSON(json) {
+                        deferred.fill(Result(failure: remoteError))
+                        return
+                    }
+
+                    if let response = FxAClient10.signResponseFromJSON(json) {
+                        deferred.fill(Result(success: response))
+                        return
+                    }
+                }
+
+                deferred.fill(Result(failure: FxAClientUnknownError))
+        }
         return deferred
     }
 }
