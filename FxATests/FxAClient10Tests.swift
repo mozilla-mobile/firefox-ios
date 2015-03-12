@@ -9,14 +9,14 @@ import Client
 
 let TEST_AUTH_API_ENDPOINT = STAGE_AUTH_SERVER_ENDPOINT
 
-class FxAClientTests: XCTestCase {
+class FxAClient10Tests: XCTestCase {
     func testLoginSuccess() {
-        let client = FxAClient()
+        let client = FxAClient10()
 
         let email : NSData = "testtestoo@mockmyid.com".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
         let password : NSData = email
-        let quickStretchedPW : NSData = FxAClient.quickStretchPW(email, password: password)
-        
+        let quickStretchedPW : NSData = FxAClient10.quickStretchPW(email, password: password)
+
         let expectation = expectationWithDescription("login to \(TEST_AUTH_API_ENDPOINT)")
         client.login(emailUTF8: email, quickStretchedPW: quickStretchedPW, getKeys: true) { (response, error) in
             XCTAssertNil(error)
