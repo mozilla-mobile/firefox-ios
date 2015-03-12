@@ -83,4 +83,36 @@ class FxAClient10Tests: XCTestCase {
         }
         self.waitForExpectationsWithTimeout(10, handler: nil)
     }
+
+    func testSignSuccess() {
+        let e = self.expectationWithDescription("")
+
+        let email : NSData = "testtestoo@mockmyid.com".utf8EncodedData!
+        let password : NSData = email
+        let quickStretchedPW : NSData = FxAClient10.quickStretchPW(email, password: password)
+
+        let client = FxAClient10()
+        let login: Deferred<Result<FxALoginResponse>> = client.login(email, quickStretchedPW: quickStretchedPW, getKeys: true)
+        let sign: Deferred<Result<FxASignResponse>> = login.bind { (result: Result<FxALoginResponse>) in
+            switch result {
+            case let .Failure(error):
+                return Deferred(value: .Failure(error))
+            case let .Success(loginResponse):
+                let keyPair = RSAKeyPair.generateKeyPairWithModulusSize(1024)
+                return client.sign(loginResponse.value.sessionToken, publicKey: keyPair.publicKey)
+            }
+        }
+        sign.upon { result in
+            if let response = result.successValue {
+                XCTAssertNotNil(response.certificate)
+                // A simple test that we got a reasonable certificate back.
+                XCTAssertEqual(3, response.certificate.componentsSeparatedByString(".").count)
+            } else {
+                let error = result.failureValue as NSError
+                XCTAssertNil(error)
+            }
+            e.fulfill()
+        }
+        self.waitForExpectationsWithTimeout(10, handler: nil)
+    }
 }
