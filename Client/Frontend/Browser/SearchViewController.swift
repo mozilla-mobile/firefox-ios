@@ -15,6 +15,13 @@ private let SuggestionMargin: CGFloat = 4
 private let SuggestionCellVerticalPadding: CGFloat = 8
 private let SuggestionCellMaxRows = 2
 
+private let PromptColor = UIColor(rgb: 0xeef0f3)
+private let PromptFont = UIFont(name: "FiraSans-Regular", size: 12)
+private let PromptYesFont = UIFont(name: "FiraSans-Bold", size: 15)
+private let PromptNoFont = UIFont(name: "FiraSans-Regular", size: 15)
+private let PromptInsets = UIEdgeInsetsMake(15, 12, 15, 12)
+private let PromptButtonColor = UIColor(rgb: 0x007aff)
+
 private let SearchImage = "search"
 
 // searchEngineScrollViewContent is the button container. It has a gray background color,
@@ -24,6 +31,10 @@ private let EngineButtonInsets = UIEdgeInsetsMake(0.5, 0.5, 0.5, 0.5)
 // TODO: This should use ToolbarHeight in BVC. Fix this when we create a shared theming file.
 private let EngineButtonHeight: Float = 44
 private let EngineButtonWidth = EngineButtonHeight * 1.5
+
+private let PromptMessage = NSLocalizedString("Turn on search suggestions?", tableName: "search", comment: "Prompt shown before enabling provider search queries")
+private let PromptYes = NSLocalizedString("Yes", tableName: "search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
+private let PromptNo = NSLocalizedString("No", tableName: "search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
 
 private enum SearchListSection: Int {
     case SearchSuggestions
@@ -49,6 +60,8 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
     // cellForRowAtIndexPath, we create the cell to find its height before it's added to the table.
     private let suggestionCell = SuggestionCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
 
+    private var suggestionPrompt: UIView?
+
     convenience override init() {
         self.init(nibName: nil, bundle: nil)
     }
@@ -69,11 +82,7 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
         searchEngineScrollViewContent.layer.backgroundColor = tableView.separatorColor.CGColor
         searchEngineScrollView.addSubview(searchEngineScrollViewContent)
 
-        tableView.snp_remakeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.searchEngineScrollView.snp_top)
-        }
-
+        layoutTable()
         layoutSearchEngineScrollView()
 
         searchEngineScrollViewContent.snp_makeConstraints { make in
@@ -107,7 +116,96 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
 
             // Reload the footer list of search engines.
             reloadSearchEngines()
+
+            layoutSuggestionsOptInPrompt()
         }
+    }
+
+    private func layoutSuggestionsOptInPrompt() {
+        if !(searchEngines?.shouldShowSearchSuggestionsOptIn ?? false) {
+            view.layoutIfNeeded()
+            suggestionPrompt = nil
+            layoutTable()
+            UIView.animateWithDuration(0.2,
+                animations: {
+                    self.view.layoutIfNeeded()
+                },
+                completion: { _ in
+                    self.suggestionPrompt?.removeFromSuperview()
+                    return
+                })
+            return
+        }
+
+        let prompt = UIView()
+        prompt.backgroundColor = PromptColor
+        // Insert behind the tableView so the tableView slides on top of it
+        // when the prompt is dismissed.
+        view.insertSubview(prompt, belowSubview: tableView)
+
+        suggestionPrompt = prompt
+
+        let promptImage = UIImageView()
+        promptImage.image = UIImage(named: SearchImage)
+        prompt.addSubview(promptImage)
+
+        let promptLabel = UILabel()
+        promptLabel.text = PromptMessage
+        promptLabel.font = PromptFont
+        promptLabel.numberOfLines = 0
+        promptLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        prompt.addSubview(promptLabel)
+
+        let promptYesButton = InsetButton()
+        promptYesButton.setTitle(PromptYes, forState: UIControlState.Normal)
+        promptYesButton.setTitleColor(PromptButtonColor, forState: UIControlState.Normal)
+        promptYesButton.titleLabel?.font = PromptYesFont
+        promptYesButton.titleEdgeInsets = PromptInsets
+        // If the prompt message doesn't fit, this prevents it from pushing the buttons
+        // off the row and makes it wrap instead.
+        promptYesButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
+        promptYesButton.addTarget(self, action: "SELdidClickOptInYes", forControlEvents: UIControlEvents.TouchUpInside)
+        prompt.addSubview(promptYesButton)
+
+        let promptNoButton = InsetButton()
+        promptNoButton.setTitle(PromptNo, forState: UIControlState.Normal)
+        promptNoButton.setTitleColor(PromptButtonColor, forState: UIControlState.Normal)
+        promptNoButton.titleLabel?.font = PromptNoFont
+        promptNoButton.titleEdgeInsets = PromptInsets
+        // If the prompt message doesn't fit, this prevents it from pushing the buttons
+        // off the row and makes it wrap instead.
+        promptNoButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
+        promptNoButton.addTarget(self, action: "SELdidClickOptInNo", forControlEvents: UIControlEvents.TouchUpInside)
+        prompt.addSubview(promptNoButton)
+
+        promptImage.snp_makeConstraints { make in
+            make.left.equalTo(prompt).offset(PromptInsets.left)
+            make.centerY.equalTo(prompt)
+        }
+
+        promptLabel.snp_makeConstraints { make in
+            make.left.equalTo(promptImage.snp_right).offset(PromptInsets.left)
+            make.top.bottom.equalTo(prompt).insets(PromptInsets)
+            make.right.lessThanOrEqualTo(promptYesButton.snp_left)
+            return
+        }
+
+        promptNoButton.snp_makeConstraints { make in
+            make.right.equalTo(prompt).insets(PromptInsets)
+            make.centerY.equalTo(prompt)
+        }
+
+        promptYesButton.snp_makeConstraints { make in
+            make.right.equalTo(promptNoButton.snp_leading).insets(PromptInsets)
+            make.centerY.equalTo(prompt)
+        }
+
+        prompt.snp_makeConstraints { make in
+            make.top.leading.trailing.equalTo(self.view)
+            return
+        }
+
+        layoutTable()
     }
 
     var searchQuery: String = "" {
@@ -120,6 +218,14 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
     override func reloadData() {
         querySuggestClient()
         queryHistoryClient()
+    }
+
+    private func layoutTable() {
+        tableView.snp_remakeConstraints { make in
+            make.top.equalTo(self.suggestionPrompt?.snp_bottom ?? self.view.snp_top)
+            make.leading.trailing.equalTo(self.view)
+            make.bottom.equalTo(self.searchEngineScrollView.snp_top)
+        }
     }
 
     private func reloadSearchEngines() {
@@ -159,6 +265,19 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
         }
     }
 
+    func SELdidClickOptInYes() {
+        searchEngines.shouldShowSearchSuggestions = true
+        searchEngines.shouldShowSearchSuggestionsOptIn = false
+        querySuggestClient()
+        layoutSuggestionsOptInPrompt()
+    }
+
+    func SELdidClickOptInNo() {
+        searchEngines.shouldShowSearchSuggestions = false
+        searchEngines.shouldShowSearchSuggestionsOptIn = false
+        layoutSuggestionsOptInPrompt()
+    }
+
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         animateSearchEnginesWithKeyboard(state)
     }
@@ -179,7 +298,7 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
     private func querySuggestClient() {
         suggestClient?.cancelPendingRequest()
 
-        if searchQuery.isEmpty {
+        if searchQuery.isEmpty || !searchEngines.shouldShowSearchSuggestions {
             suggestionCell.suggestions = []
             return
         }
@@ -260,7 +379,7 @@ extension SearchViewController: UITableViewDataSource {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch SearchListSection(rawValue: section)! {
         case .SearchSuggestions:
-            return 1
+            return searchEngines.shouldShowSearchSuggestions ? 1 : 0
         case .BookmarksAndHistory:
             return data.count
         }
@@ -445,7 +564,7 @@ private class SuggestionCell: TwoLineCell {
 /**
  * Rounded search suggestion button that highlights when selected.
  */
-private class SuggestionButton: UIButton {
+private class SuggestionButton: InsetButton {
     override init() {
         super.init()
     }
@@ -456,7 +575,7 @@ private class SuggestionButton: UIButton {
         setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
         titleLabel?.font = SuggestionFont
         backgroundColor = SuggestionBackgroundColor
-        layer.borderColor = SuggestionBorderColor.CGColor
+        layer.borderColor = SuggestionBackgroundColor.CGColor
         layer.borderWidth = SuggestionBorderWidth
         layer.cornerRadius = SuggestionCornerRadius
         contentEdgeInsets = SuggestionInsets
@@ -466,19 +585,34 @@ private class SuggestionButton: UIButton {
         assertionFailure("Not supported")
     }
 
-    /**
-     * Get the intrinsic size, including the label's left padding.
-     */
-    private override func intrinsicContentSize() -> CGSize {
-        var size = super.intrinsicContentSize()
-        size.width += titleEdgeInsets.left
-        return size
-    }
-
     @objc
     override var highlighted: Bool {
         didSet {
             backgroundColor = highlighted ? UIColor.grayColor() : SuggestionBackgroundColor
         }
+    }
+}
+
+/**
+ * Button whose insets are included in its intrinsic size.
+ */
+private class InsetButton: UIButton {
+    override init() {
+        super.init()
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        assertionFailure("Not supported")
+    }
+
+    private override func intrinsicContentSize() -> CGSize {
+        var size = super.intrinsicContentSize()
+        size.width += titleEdgeInsets.left + titleEdgeInsets.right
+        size.height += titleEdgeInsets.top + titleEdgeInsets.bottom
+        return size
     }
 }
