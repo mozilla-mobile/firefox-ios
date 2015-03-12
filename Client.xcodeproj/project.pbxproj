@@ -730,7 +730,7 @@
 		28B8100C1AB0DE9200FF4E02 /* Result.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Result.xcodeproj; path = Carthage/Checkouts/Result/Result.xcodeproj; sourceTree = "<group>"; };
 		28C077971A3B064000834FE5 /* CryptoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
 		28C077991A3B064F00834FE5 /* FxAClient10Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxAClient10Tests.swift; path = FxATests/FxAClient10Tests.swift; sourceTree = "<group>"; };
-		28C0779B1A3B065800834FE5 /* TokenServerClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TokenServerClientTests.swift; path = Token/TokenServerClientTests.swift; sourceTree = "<group>"; };
+		28C0779B1A3B065800834FE5 /* TokenServerClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TokenServerClientTests.swift; path = FxATests/TokenServerClientTests.swift; sourceTree = "<group>"; };
 		28C0779D1A3B066000834FE5 /* RecordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordTests.swift; sourceTree = "<group>"; };
 		28CE83B81A1D1D3200576538 /* FxAClient10.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAClient10.swift; sourceTree = "<group>"; };
 		28CE83BB1A1D1D3200576538 /* ClientPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientPayload.swift; sourceTree = "<group>"; };
@@ -1034,6 +1034,7 @@
 				28C077971A3B064000834FE5 /* CryptoTests.swift */,
 				2FA0AFA21AAFF1E20083E9FA /* HawkHelperTests.swift */,
 				2F3445521AB24EDD00FD9731 /* LiveAccountTest.swift */,
+				28C0779B1A3B065800834FE5 /* TokenServerClientTests.swift */,
 			);
 			name = FxATests;
 			sourceTree = "<group>";
@@ -1041,7 +1042,6 @@
 		28C077961A3B061C00834FE5 /* TokenTests */ = {
 			isa = PBXGroup;
 			children = (
-				28C0779B1A3B065800834FE5 /* TokenServerClientTests.swift */,
 			);
 			name = TokenTests;
 			sourceTree = "<group>";
@@ -1053,6 +1053,7 @@
 				2F834D131A80629A006A0B7B /* FxAContentViewController.swift */,
 				28CE83B81A1D1D3200576538 /* FxAClient10.swift */,
 				2FA0AF801AAFB62E0083E9FA /* HawkHelper.swift */,
+				28CE83C11A1D1D3200576538 /* TokenServerClient.swift */,
 			);
 			path = FxAClient;
 			sourceTree = "<group>";
@@ -1072,7 +1073,6 @@
 		28CE83C01A1D1D3200576538 /* Token */ = {
 			isa = PBXGroup;
 			children = (
-				28CE83C11A1D1D3200576538 /* TokenServerClient.swift */,
 			);
 			path = Token;
 			sourceTree = "<group>";
