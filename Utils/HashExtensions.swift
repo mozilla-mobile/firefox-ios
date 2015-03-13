@@ -50,3 +50,25 @@ extension String {
         return self.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
     }
 }
+
+extension NSData {
+    public var utf8EncodedString: String? {
+        return NSString(data: self, encoding: NSUTF8StringEncoding)
+    }
+}
+
+extension NSData {
+    public func xoredWith(other: NSData) -> NSData? {
+        if self.length != other.length {
+            return nil
+        }
+        var xoredBytes = [UInt8](count: self.length, repeatedValue: 0)
+        let selfBytes = UnsafePointer<UInt8>(self.bytes)
+        let otherBytes = UnsafePointer<UInt8>(other.bytes)
+        for i in 0..<self.length {
+            xoredBytes[i] = selfBytes[i] ^ otherBytes[i]
+        }
+        return NSData(bytes: xoredBytes, length: self.length)
+    }
+
+}
