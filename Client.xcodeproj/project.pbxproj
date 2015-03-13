@@ -106,6 +106,7 @@
 		2FDB10931A9FBEC5006CF312 /* ProfilePrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB10921A9FBEC5006CF312 /* ProfilePrefsTests.swift */; };
 		2FEBAB671AB3621700DB5728 /* Box.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2806145B1AB33B1700903F3D /* Box.framework */; };
 		2FEBAB681AB3621700DB5728 /* Box.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2806145B1AB33B1700903F3D /* Box.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2FEBABAF1AB3659000DB5728 /* ResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBABAE1AB3659000DB5728 /* ResultTests.swift */; };
 		39A362D91AAF5ECE00F47390 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; };
 		39A362DA1AAF5ECE00F47390 /* XCGLogger.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
@@ -717,6 +718,7 @@
 		2F834D131A80629A006A0B7B /* FxAContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxAContentViewController.swift; path = Frontend/SignIn/FxAContentViewController.swift; sourceTree = "<group>"; };
 		2F998FD41AA516380063E75D /* FirefoxAccountConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxAccountConfiguration.swift; sourceTree = "<group>"; };
 		2FDB10921A9FBEC5006CF312 /* ProfilePrefsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePrefsTests.swift; sourceTree = "<group>"; };
+		2FEBABAE1AB3659000DB5728 /* ResultTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultTests.swift; sourceTree = "<group>"; };
 		39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XCGLogger.xcodeproj; path = Carthage/Checkouts/XCGLogger/XCGLogger/Library/XCGLogger.xcodeproj; sourceTree = "<group>"; };
 		4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		59A6825233896FC846499289 /* HistoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPanel.swift; sourceTree = "<group>"; };
@@ -972,6 +974,7 @@
 			children = (
 				28C0779D1A3B066000834FE5 /* RecordTests.swift */,
 				28786E541AB0F5FA009EA9EF /* TestDeferred.swift */,
+				2FEBABAE1AB3659000DB5728 /* ResultTests.swift */,
 			);
 			name = SyncTests;
 			sourceTree = "<group>";
@@ -2229,6 +2232,7 @@
 				D38B2D321A8D96D00040E6B5 /* GCDWebServerConnection.m in Sources */,
 				0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */,
 				D31A0FC81A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
+				2FEBABAF1AB3659000DB5728 /* ResultTests.swift in Sources */,
 				2F1BDF9E1A85240400213B54 /* FirefoxAccount.swift in Sources */,
 				28C0779A1A3B064F00834FE5 /* FxAClientTests.swift in Sources */,
 				2F1BDF911A8523B000213B54 /* KeychainWrapper.swift in Sources */,
