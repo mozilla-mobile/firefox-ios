@@ -197,7 +197,7 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         // Cells for the top site thumbnails.
         if indexPath.item < 6 {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as ThumbnailCell
-            cell.textLabel.text = site.title
+            cell.textLabel.text = site.title.isEmpty ? site.url : site.title
             cell.imageView.image = UIImage(named: DefaultImage)
             cell.imageView.contentMode = UIViewContentMode.Center
             return cell
@@ -205,7 +205,7 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
 
         // Cells for the remainder of the top sites list.
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(RowIdentifier, forIndexPath: indexPath) as TopSitesRow
-        cell.textLabel.text = site.title
+        cell.textLabel.text = site.title.isEmpty ? site.url : site.title
         cell.descriptionLabel.text = site.url
         if let icon = site.icon? {
             cell.imageView.sd_setImageWithURL(NSURL(string: icon.url)!)
