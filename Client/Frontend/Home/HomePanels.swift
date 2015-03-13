@@ -45,7 +45,7 @@ class HomePanels {
 
         HomePanelDescriptor(
             makeViewController: { profile in
-                let controller = ReaderPanel()
+                let controller = ReadingListPanel()
                 controller.profile = profile
                 return controller
             },

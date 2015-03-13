@@ -8,5 +8,6 @@
 #import "GCDWebServerDataResponse.h"
 #import "ThirdParty/UIImageViewAligned/UIImageViewAligned/UIImageViewAligned.h"
 #import "Carthage/Checkouts/SDWebImage/SDWebImage/UIImageView+WebCache.h"
+#import "Carthage/Checkouts/SWTableViewCell/SWTableViewCell/PodFiles/SWTableViewCell.h"
 
 #endif
