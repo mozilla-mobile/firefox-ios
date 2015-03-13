@@ -85,6 +85,7 @@
 		2F3444571AB22A4B00FD9731 /* TimeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3444561AB22A4B00FD9731 /* TimeConstants.swift */; };
 		2F3444581AB22A4B00FD9731 /* TimeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3444561AB22A4B00FD9731 /* TimeConstants.swift */; };
 		2F3444B91AB22E8000FD9731 /* signedInUser.json in Resources */ = {isa = PBXBuildFile; fileRef = 2F3444B81AB22E8000FD9731 /* signedInUser.json */; };
+		2F34452E1AB247A100FD9731 /* TokenServerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83C11A1D1D3200576538 /* TokenServerClient.swift */; };
 		2F3445531AB24EDD00FD9731 /* LiveAccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3445521AB24EDD00FD9731 /* LiveAccountTest.swift */; };
 		2F44FA161A9D41A200FD20CC /* Base32.framework in None */ = {isa = PBXBuildFile; fileRef = 2F44F9FD1A9D417600FD20CC /* Base32.framework */; settings = {ATTRIBUTES = (
 				CodeSignOnCopy,RemoveHeadersOnCopy,
@@ -109,12 +110,12 @@
 		2F998FD51AA516380063E75D /* FirefoxAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F998FD41AA516380063E75D /* FirefoxAccountConfiguration.swift */; };
 		2F998FD61AA516380063E75D /* FirefoxAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F998FD41AA516380063E75D /* FirefoxAccountConfiguration.swift */; };
 		2F998FD71AA516380063E75D /* FirefoxAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F998FD41AA516380063E75D /* FirefoxAccountConfiguration.swift */; };
-		2F998FD81AA516380063E75D /* FirefoxAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F998FD41AA516380063E75D /* FirefoxAccountConfiguration.swift */; };
 		2FEBAB671AB3621700DB5728 /* Box.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2806145B1AB33B1700903F3D /* Box.framework */; };
 		2FEBAB681AB3621700DB5728 /* Box.framework in None */ = {isa = PBXBuildFile; fileRef = 2806145B1AB33B1700903F3D /* Box.framework */; settings = {ATTRIBUTES = (
 				CodeSignOnCopy,RemoveHeadersOnCopy,
 				); }; };
 		2FEBABAF1AB3659000DB5728 /* ResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBABAE1AB3659000DB5728 /* ResultTests.swift */; };
+		2F998FD81AA516380063E75D /* FirefoxAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F998FD41AA516380063E75D /* FirefoxAccountConfiguration.swift */; };
 		2F9990461AA51F5A0063E75D /* HexExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FA1C1A9D460500FD20CC /* HexExtensions.swift */; };
 		2FA0AFA31AAFF1E20083E9FA /* HawkHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA0AFA21AAFF1E20083E9FA /* HawkHelperTests.swift */; };
 		2FA0AFA41AAFF2FB0083E9FA /* HawkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA0AF801AAFB62E0083E9FA /* HawkHelper.swift */; };
@@ -425,19 +426,19 @@
 			remoteGlobalIDString = 52B9AF4519C35F5F0039E5D7;
 			remoteInfo = ResultMacTests;
 		};
-		28B810201AB0E27F00FF4E02 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 28B8100C1AB0DE9200FF4E02 /* Result.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 52B9AE9A19C35B1D0039E5D7;
-			remoteInfo = Result;
-		};
 		2FEBAB691AB3621700DB5728 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 280614471AB33B1700903F3D /* Box.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = F8BB81D21A939B66001AA352;
 			remoteInfo = "Box-iOS";
+		};
+		28B810201AB0E27F00FF4E02 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28B8100C1AB0DE9200FF4E02 /* Result.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 52B9AE9A19C35B1D0039E5D7;
+			remoteInfo = Result;
 		};
 		28B810241AB0E28000FF4E02 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -712,10 +713,10 @@
 		0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = Carthage/Checkouts/SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
 		0B8E0FF31A932BD500161DC3 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		0BA896491A250E6500C1010C /* ProfileTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTest.swift; sourceTree = "<group>"; };
-		0BA8964A1A250E6500C1010C /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
 		280614471AB33B1700903F3D /* Box.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Box.xcodeproj; path = Carthage/Checkouts/Box/Box.xcodeproj; sourceTree = "<group>"; };
-		0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePrefs.swift; sourceTree = "<group>"; };
+		0BA8964A1A250E6500C1010C /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
 		28786E541AB0F5FA009EA9EF /* TestDeferred.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDeferred.swift; sourceTree = "<group>"; };
+		0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePrefs.swift; sourceTree = "<group>"; };
 		0BE108351A1B1EC700D4B712 /* TestLocking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLocking.swift; sourceTree = "<group>"; };
 		0BE108391A1B1ED200D4B712 /* Locking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locking.swift; sourceTree = "<group>"; };
 		0BF0DB931A8545800039F300 /* URLBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLBarView.swift; sourceTree = "<group>"; };
@@ -729,7 +730,7 @@
 		28B8100C1AB0DE9200FF4E02 /* Result.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Result.xcodeproj; path = Carthage/Checkouts/Result/Result.xcodeproj; sourceTree = "<group>"; };
 		28C077971A3B064000834FE5 /* CryptoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
 		28C077991A3B064F00834FE5 /* FxAClient10Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxAClient10Tests.swift; path = FxATests/FxAClient10Tests.swift; sourceTree = "<group>"; };
-		28C0779B1A3B065800834FE5 /* TokenServerClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TokenServerClientTests.swift; path = Token/TokenServerClientTests.swift; sourceTree = "<group>"; };
+		28C0779B1A3B065800834FE5 /* TokenServerClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TokenServerClientTests.swift; path = FxATests/TokenServerClientTests.swift; sourceTree = "<group>"; };
 		28C0779D1A3B066000834FE5 /* RecordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordTests.swift; sourceTree = "<group>"; };
 		28CE83B81A1D1D3200576538 /* FxAClient10.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAClient10.swift; sourceTree = "<group>"; };
 		28CE83BB1A1D1D3200576538 /* ClientPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientPayload.swift; sourceTree = "<group>"; };
@@ -750,8 +751,8 @@
 		2F3444B81AB22E8000FD9731 /* signedInUser.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = signedInUser.json; path = ../signedInUser.json; sourceTree = "<group>"; };
 		2F3445521AB24EDD00FD9731 /* LiveAccountTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LiveAccountTest.swift; path = FxATests/LiveAccountTest.swift; sourceTree = "<group>"; };
 		2F44F9ED1A9D417500FD20CC /* Base32.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Base32.xcodeproj; path = Carthage/Checkouts/Base32/Base32.xcodeproj; sourceTree = "<group>"; };
-		2F44FA171A9D425700FD20CC /* HashExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashExtensions.swift; sourceTree = "<group>"; };
 		2FEBABAE1AB3659000DB5728 /* ResultTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultTests.swift; sourceTree = "<group>"; };
+		2F44FA171A9D425700FD20CC /* HashExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashExtensions.swift; sourceTree = "<group>"; };
 		2F44FA1A1A9D426A00FD20CC /* TestHashExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHashExtensions.swift; sourceTree = "<group>"; };
 		2F44FA1C1A9D460500FD20CC /* HexExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexExtensions.swift; sourceTree = "<group>"; };
 		2F44FC711A9E840300FD20CC /* SettingsNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsNavigationController.swift; sourceTree = "<group>"; };
@@ -1033,16 +1034,9 @@
 				28C077971A3B064000834FE5 /* CryptoTests.swift */,
 				2FA0AFA21AAFF1E20083E9FA /* HawkHelperTests.swift */,
 				2F3445521AB24EDD00FD9731 /* LiveAccountTest.swift */,
-			);
-			name = FxATests;
-			sourceTree = "<group>";
-		};
-		28C077961A3B061C00834FE5 /* TokenTests */ = {
-			isa = PBXGroup;
-			children = (
 				28C0779B1A3B065800834FE5 /* TokenServerClientTests.swift */,
 			);
-			name = TokenTests;
+			name = FxATests;
 			sourceTree = "<group>";
 		};
 		28CE83B71A1D1D3200576538 /* FxAClient */ = {
@@ -1052,6 +1046,7 @@
 				2F834D131A80629A006A0B7B /* FxAContentViewController.swift */,
 				28CE83B81A1D1D3200576538 /* FxAClient10.swift */,
 				2FA0AF801AAFB62E0083E9FA /* HawkHelper.swift */,
+				28CE83C11A1D1D3200576538 /* TokenServerClient.swift */,
 			);
 			path = FxAClient;
 			sourceTree = "<group>";
@@ -1066,14 +1061,6 @@
 				28CE83BF1A1D1D3200576538 /* SyncMeta.swift */,
 			);
 			path = Sync;
-			sourceTree = "<group>";
-		};
-		28CE83C01A1D1D3200576538 /* Token */ = {
-			isa = PBXGroup;
-			children = (
-				28CE83C11A1D1D3200576538 /* TokenServerClient.swift */,
-			);
-			path = Token;
 			sourceTree = "<group>";
 		};
 		28CE83CB1A1D1D5100576538 /* Products */ = {
@@ -1355,8 +1342,6 @@
 				28CE83B91A1D1D3200576538 /* Sync */,
 				28C077911A3B05C200834FE5 /* SyncTests */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
-				28CE83C01A1D1D3200576538 /* Token */,
-				28C077961A3B061C00834FE5 /* TokenTests */,
 				D39FA1601A83E0EC00EE869C /* UITests */,
 				E42CCDFF1A24C4E300B794D3 /* Utils */,
 			);
@@ -2243,6 +2228,7 @@
 				E4CD9F1D1A6D9C2800318571 /* WebServerTests.swift in Sources */,
 				0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
+				2F34452E1AB247A100FD9731 /* TokenServerClient.swift in Sources */,
 				2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */,
 				2F44FA1D1A9D460500FD20CC /* HexExtensions.swift in Sources */,
 				28FEEE1E1AAFF116007FA476 /* EncryptedRecord.swift in Sources */,
@@ -2276,8 +2262,8 @@
 				D3FA77971A43B5390010CD32 /* OpenSearch.swift in Sources */,
 				2FA7EAB41AB0BC6F00CE5347 /* FxAClient10.swift in Sources */,
 				28FEEE1F1AAFF119007FA476 /* KeysPayload.swift in Sources */,
-				D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */,
 				28786E551AB0F5FA009EA9EF /* TestDeferred.swift in Sources */,
+				D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */,
 				D38B2D441A8D96D00040E6B5 /* GCDWebServerMultiPartFormRequest.m in Sources */,
 				2F1BDFA81A85356E00213B54 /* FirefoxAccountTests.swift in Sources */,
 				D3C744CE1A687D6C004CE85D /* URIFixup.swift in Sources */,
@@ -2287,8 +2273,8 @@
 				0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */,
 				D38A1BEF1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				D38B2D381A8D96D00040E6B5 /* GCDWebServerRequest.m in Sources */,
-				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
 				2FEBABAF1AB3659000DB5728 /* ResultTests.swift in Sources */,
+				0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */,
 				2F998FD61AA516380063E75D /* FirefoxAccountConfiguration.swift in Sources */,
 				D38B2D321A8D96D00040E6B5 /* GCDWebServerConnection.m in Sources */,
 				0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */,
