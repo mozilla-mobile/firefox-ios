@@ -457,6 +457,10 @@ extension BrowserViewController: UIScrollViewDelegate {
         }
     }
 
+    func scrollViewDidScrollToTop(scrollView: UIScrollView) {
+        showToolbars(animated: true)
+    }
+
     private func hideToolbars(#animated: Bool) {
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
             self.scrollUrlBar(CGFloat(-1*MAXFLOAT))
