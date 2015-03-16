@@ -1,7 +1,7 @@
 github "Alamofire/Alamofire"
 github "Masonry/Snap"
 github "swisspol/GCDWebServer"
-github "kif-framework/KIF"
+github "kif-framework/KIF" == 3.1.2  # 3.2.0 gives build errors
 github "st3fan/SWXMLHash"
 github "rs/SDWebImage"
 github "norio-nomura/Base32"
