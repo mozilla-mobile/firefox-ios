@@ -5,35 +5,39 @@
 import UIKit
 import Storage
 
+private struct ReadingListPanelUX {
+    static let RowHeight: CGFloat = 86
+}
+
 private struct ReadingListTableViewCellUX {
-    static var ActiveTextColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
-    static var DimmedTextColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.44)
+    static let ActiveTextColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
+    static let DimmedTextColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.44)
 
-    static var ReadIndicatorWidth: CGFloat = 16 + 16 + 16 // padding + image width + padding
-    static var ReadIndicatorHeight: CGFloat = 14 + 16 + 14 // padding + image height + padding
+    static let ReadIndicatorWidth: CGFloat = 16 + 16 + 16 // padding + image width + padding
+    static let ReadIndicatorHeight: CGFloat = 14 + 16 + 14 // padding + image height + padding
 
-    static var TitleLabelFont = UIFont(name: "FiraSans-Medium", size: 15)
-    static var TitleLabelTopOffset: CGFloat = 14 - 4
-    static var TitleLabelLeftOffset: CGFloat = 16 + 16 + 16
-    static var TitleLabelRightOffset: CGFloat = -40
+    static let TitleLabelFont = UIFont(name: "FiraSans-Medium", size: 15)
+    static let TitleLabelTopOffset: CGFloat = 14 - 4
+    static let TitleLabelLeftOffset: CGFloat = 16 + 16 + 16
+    static let TitleLabelRightOffset: CGFloat = -40
 
-    static var HostnameLabelFont = UIFont(name: "FiraSans-Light", size: 14)
-    static var HostnameLabelTopOffset: CGFloat = 11 - 8
+    static let HostnameLabelFont = UIFont(name: "FiraSans-Light", size: 14)
+    static let HostnameLabelBottomOffset: CGFloat = 11
 
-    static var DeleteButtonBackgroundColor = UIColor(rgb: 0xef4035)
-    static var DeleteButtonTitleFont = UIFont(name: "FiraSans-Light", size: 15)
-    static var DeleteButtonTitleColor = UIColor.whiteColor()
-    static var DeleteButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+    static let DeleteButtonBackgroundColor = UIColor(rgb: 0xef4035)
+    static let DeleteButtonTitleFont = UIFont(name: "FiraSans-Light", size: 15)
+    static let DeleteButtonTitleColor = UIColor.whiteColor()
+    static let DeleteButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 
-    static var MarkAsReadButtonBackgroundColor = UIColor(rgb: 0x2193d1)
-    static var MarkAsReadButtonTitleFont = UIFont(name: "FiraSans-Light", size: 15)
-    static var MarkAsReadButtonTitleColor = UIColor.whiteColor()
-    static var MarkAsReadButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+    static let MarkAsReadButtonBackgroundColor = UIColor(rgb: 0x2193d1)
+    static let MarkAsReadButtonTitleFont = UIFont(name: "FiraSans-Light", size: 15)
+    static let MarkAsReadButtonTitleColor = UIColor.whiteColor()
+    static let MarkAsReadButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 
     // Localizable strings
-    static var DeleteButtonTitleText = NSLocalizedString("Remove", comment: "Title for the button that removes a reading list item")
-    static var MarkAsReadButtonTitleText = NSLocalizedString("Mark as Read", comment: "Title for the button that marks a reading list item as read")
-    static var MarkAsUnreadButtonTitleText = NSLocalizedString("Mark as Unread", comment: "Title for the button that marks a reading list item as unread")
+    static let DeleteButtonTitleText = NSLocalizedString("Remove", comment: "Title for the button that removes a reading list item")
+    static let MarkAsReadButtonTitleText = NSLocalizedString("Mark as Read", comment: "Title for the button that marks a reading list item as read")
+    static let MarkAsUnreadButtonTitleText = NSLocalizedString("Mark as Unread", comment: "Title for the button that marks a reading list item as unread")
 }
 
 class ReadingListTableViewCell: SWTableViewCell {
@@ -52,9 +56,9 @@ class ReadingListTableViewCell: SWTableViewCell {
     var unread: Bool = true {
         didSet {
             readStatusImageView.image = UIImage(named: unread ? "MarkAsRead" : "MarkAsUnread")
-            titleLabel.textColor = unread ? ReadingListTableViewCellUX.DimmedTextColor : ReadingListTableViewCellUX.ActiveTextColor
-            hostnameLabel.textColor = unread ? ReadingListTableViewCellUX.DimmedTextColor : ReadingListTableViewCellUX.ActiveTextColor
-            markAsReadButton.setTitle(unread ? ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText, forState: UIControlState.Normal)
+            titleLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
+            hostnameLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
+            markAsReadButton.setTitle(unread ? ReadingListTableViewCellUX.MarkAsReadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText, forState: UIControlState.Normal)
         }
     }
 
@@ -97,7 +101,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         hostnameLabel.numberOfLines = 1
         hostnameLabel.font = ReadingListTableViewCellUX.HostnameLabelFont
         hostnameLabel.snp_makeConstraints { (make) -> () in
-            make.top.equalTo(self.titleLabel.snp_bottom).offset(ReadingListTableViewCellUX.HostnameLabelTopOffset)
+            make.bottom.equalTo(self.contentView).offset(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)
             make.left.right.equalTo(self.titleLabel)
         }
 
@@ -149,7 +153,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = 86
+        tableView.rowHeight = ReadingListPanelUX.RowHeight
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.registerClass(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
