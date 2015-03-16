@@ -47,8 +47,7 @@ class ReaderModeBarView: UIView {
 
         listStatusButton = UIButton()
         addSubview(listStatusButton)
-        listStatusButton.setImage(UIImage(named: "AddToReadingList"), forState: UIControlState.Normal)
-        listStatusButton.setImage(UIImage(named: "RemoveFromReadingList"), forState: UIControlState.Selected)
+        listStatusButton.setImage(UIImage(named: "addToReadingList"), forState: UIControlState.Normal)
         listStatusButton.addTarget(self, action: "SELtappedListStatusButton:", forControlEvents: UIControlEvents.TouchUpInside)
         listStatusButton.snp_makeConstraints { (make) -> () in
             make.right.equalTo(self)
@@ -93,7 +92,7 @@ class ReaderModeBarView: UIView {
 
     var added: Bool = false {
         didSet {
-            listStatusButton.setImage(UIImage(named: added ? "RemoveFromReadingList" : "AddToReadingList"), forState: UIControlState.Normal)
+            listStatusButton.setImage(UIImage(named: added ? "removeFromReadingList" : "addToReadingList"), forState: UIControlState.Normal)
         }
     }
 }
