@@ -213,6 +213,7 @@
 		E42CCE031A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E43A4E551A96B88100E25676 /* GCDWebServerDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D1E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m */; };
+		E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */; };
 		E4A888161A95679500CDC337 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
 		E4A888171A95679500CDC337 /* FxA.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4AAE2B91A956304006F8740 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D31FC2311A8D908900BAF7EC /* Alamofire.framework */; };
@@ -672,6 +673,7 @@
 		E41A7D4A1A1BE04500245963 /* InitialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
 		E42CCDE21A23A6F900B794D3 /* Clients.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clients.swift; sourceTree = "<group>"; };
 		E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUtils.swift; sourceTree = "<group>"; };
+		E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeBarView.swift; sourceTree = "<group>"; };
 		E4988B351A9B82D8008B8B92 /* Fennec.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Fennec.entitlements; sourceTree = "<group>"; };
 		E4988B4C1A9B82E0008B8B92 /* Fennec.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Fennec.entitlements; sourceTree = "<group>"; };
 		E4988B571A9B95FF008B8B92 /* FennecNightly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FennecNightly.entitlements; sourceTree = "<group>"; };
@@ -1103,6 +1105,7 @@
 				59A68CCB63E2A565CB03F832 /* SearchViewController.swift */,
 				0BF0DBBF1A8598D50039F300 /* TransitionManager.swift */,
 				0B305FBF1A7FDD830085B8BC /* PasswordManager.swift */,
+				E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -1896,6 +1899,7 @@
 				F84B22241A09122500AAB793 /* HomePanelViewController.swift in Sources */,
 				D35275161AA8D13B00E9C906 /* ColorUtils.swift in Sources */,
 				28CE83C91A1D1D3200576538 /* TokenServerClient.swift in Sources */,
+				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
 				2F44FA181A9D425700FD20CC /* HashExtensions.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,

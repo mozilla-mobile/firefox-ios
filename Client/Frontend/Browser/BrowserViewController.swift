@@ -18,109 +18,6 @@ private let KVOEstimatedProgress = "estimatedProgress"
 
 private let HomeURL = "about:home"
 
-
-
-
-// TODO Move this to its own file or a different file?
-
-// TODO This enum can double as button id and image name for the button
-enum ReaderModeBarButton {
-    case MarkAsRead, MarkAsUnread, Settings, AddToReadingList, RemoveFromReadingList
-}
-
-protocol ReaderModeBarViewDelegate {
-    func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton button: ReaderModeBarButton)
-}
-
-class ReaderModeBarView: UIView {
-    var delegate: ReaderModeBarViewDelegate?
-
-    var readStatusButton: UIButton!
-    var settingsButton: UIButton!
-    var listStatusButton: UIButton!
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        backgroundColor = UIColor.whiteColor()
-
-        readStatusButton = UIButton()
-        addSubview(readStatusButton)
-        readStatusButton.setImage(UIImage(named: "MarkAsRead"), forState: UIControlState.Normal)
-        readStatusButton.addTarget(self, action: "SELtappedReadStatusButton:", forControlEvents: UIControlEvents.TouchUpInside)
-        readStatusButton.snp_makeConstraints { (make) -> () in
-            make.left.equalTo(self)
-            make.height.centerY.equalTo(self)
-            make.width.equalTo(80)
-        }
-
-        settingsButton = UIButton()
-        addSubview(settingsButton)
-        settingsButton.setImage(UIImage(named: "SettingsSerif"), forState: UIControlState.Normal)
-        settingsButton.addTarget(self, action: "SELtappedSettingsButton:", forControlEvents: UIControlEvents.TouchUpInside)
-        settingsButton.snp_makeConstraints { (make) -> () in
-            make.height.centerX.centerY.equalTo(self)
-            make.width.equalTo(80)
-        }
-
-        listStatusButton = UIButton()
-        addSubview(listStatusButton)
-        listStatusButton.setImage(UIImage(named: "AddToReadingList"), forState: UIControlState.Normal)
-        listStatusButton.setImage(UIImage(named: "RemoveFromReadingList"), forState: UIControlState.Selected)
-        listStatusButton.addTarget(self, action: "SELtappedListStatusButton:", forControlEvents: UIControlEvents.TouchUpInside)
-        listStatusButton.snp_makeConstraints { (make) -> () in
-            make.right.equalTo(self)
-            make.height.centerY.equalTo(self)
-            make.width.equalTo(80)
-        }
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
-        let context = UIGraphicsGetCurrentContext()
-        CGContextSetLineWidth(context, 0.5)
-        CGContextSetRGBStrokeColor(context, 0.1, 0.1, 0.1, 1.0)
-        CGContextSetStrokeColorWithColor(context, UIColor.grayColor().CGColor)
-        CGContextBeginPath(context)
-        CGContextMoveToPoint(context, 0, frame.height)
-        CGContextAddLineToPoint(context, frame.width, frame.height)
-        CGContextStrokePath(context)
-    }
-
-    func SELtappedReadStatusButton(sender: UIButton!) {
-        delegate?.readerModeBar(self, didSelectButton: unread ? .MarkAsRead : .MarkAsUnread)
-    }
-
-    func SELtappedSettingsButton(sender: UIButton!) {
-        delegate?.readerModeBar(self, didSelectButton: .Settings)
-    }
-
-    func SELtappedListStatusButton(sender: UIButton!) {
-        delegate?.readerModeBar(self, didSelectButton: added ? .RemoveFromReadingList : .AddToReadingList)
-    }
-
-    var unread: Bool = true {
-        didSet {
-            println("Changing unread to \(unread)")
-            readStatusButton.setImage(UIImage(named: unread ? "MarkAsRead" : "MarkAsUnread"), forState: UIControlState.Normal)
-        }
-    }
-
-    var added: Bool = false {
-        didSet {
-            println("Changing added to \(added)")
-            listStatusButton.setImage(UIImage(named: added ? "RemoveFromReadingList" : "AddToReadingList"), forState: UIControlState.Normal)
-        }
-    }
-}
-
-
-
-
 class BrowserViewController: UIViewController {
     private var urlBar: URLBarView!
     private var readerModeBar: ReaderModeBarView!
@@ -951,8 +848,8 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: ReaderModeBarViewDelegate {
-    func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton button: ReaderModeBarButton) {
-        switch button {
+    func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType) {
+        switch buttonType {
         case .Settings:
             if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode {
                 if readerMode.state == ReaderModeState.Active {
@@ -980,18 +877,17 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             readerModeBar.unread = true
 
         case .AddToReadingList:
-//            if let tab = tabManager.selectedTab? {
-//                if let url = tab.url?.absoluteString {
-//                    profile.readingList.addItemWithURL(url, title: tab.title) { (success) -> Void in
-//                        readerModeBar.added = true
-//                    }
-//                }
-//            }
+            // TODO Persist to database - The code below needs an update to talk to improved storage layer
+            if let tab = tabManager.selectedTab? {
+                if let url = tab.url?.absoluteString {
+                    profile.readingList.add(item: ReadingListItem(url: url, title: tab.title)) { (success) -> Void in
+                        //readerModeBar.added = true
+                    }
+                }
+            }
             break
         case .RemoveFromReadingList:
-//            profile.readingList.removeItemWithURL(url) { (success) -> Void in
-//                readerModeBar.added = false
-//            }
+            // TODO Persist to database
             break
         }
     }
