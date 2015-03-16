@@ -63,30 +63,20 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        // Setup a header view that contains both the url bar and the reader mode bar
-
-//        header = UIView(frame: CGRectZero)
-//        view.addSubview(header)
-//
-//        header.snp_makeConstraints { make in
-//            make.top.equalTo(self.view.snp_top)
-//            //make.height.equalTo(StatusBarHeight + ToolbarHeight)
-//            make.leading.trailing.equalTo(self.view)
-//        }
-
-        //
+        // Setup the URL bar, wrapped in a view to get transparency effect
 
         urlBar = URLBarView()
         header = wrapInEffect(urlBar)
         view.addSubview(header)
 
         header.snp_makeConstraints { make in
-            make.top.equalTo(self.view)
-            make.height.equalTo(StatusBarHeight + ToolbarHeight)
+            make.top.equalTo(self.view.snp_top)
+            make.height.equalTo(ToolbarHeight + StatusBarHeight)
             make.leading.trailing.equalTo(self.view)
         }
 
         // Setup the reader mode control bar. This bar starts not visible with a zero height.
+
         readerModeBar = ReaderModeBarView(frame: CGRectZero)
         view.addSubview(readerModeBar)
         readerModeBar.hidden = true
@@ -488,7 +478,6 @@ extension BrowserViewController: UIScrollViewDelegate {
     }
 
     private func hideToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
-        println("hideToolbars - Header height is \(header.frame.height)")
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
             self.scrollUrlBar(CGFloat(-1*MAXFLOAT))
             self.scrollToolbar(CGFloat(-1*MAXFLOAT))
@@ -501,7 +490,6 @@ extension BrowserViewController: UIScrollViewDelegate {
     }
 
     private func showToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
-        println("showToolbars - Header height is \(header.frame.height)")
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
             self.scrollUrlBar(CGFloat(MAXFLOAT))
             self.scrollToolbar(CGFloat(MAXFLOAT))
@@ -702,6 +690,7 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
     }
 
     func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForBrowser browser: Browser) {
+        self.showReaderModeBar(animated: true)
         browser.showContent(animated: true)
     }
 
@@ -879,9 +868,15 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
         case .AddToReadingList:
             // TODO Persist to database - The code below needs an update to talk to improved storage layer
             if let tab = tabManager.selectedTab? {
-                if let url = tab.url?.absoluteString {
-                    profile.readingList.add(item: ReadingListItem(url: url, title: tab.title)) { (success) -> Void in
-                        //readerModeBar.added = true
+                if var url = tab.url? {
+                    if ReaderMode.isReaderModeURL(url) {
+                        if let url = ReaderMode.decodeURL(url) {
+                            if let absoluteString = url.absoluteString {
+                                profile.readingList.add(item: ReadingListItem(url: absoluteString, title: tab.title)) { (success) -> Void in
+                                    //readerModeBar.added = true
+                                }
+                            }
+                        }
                     }
                 }
             }
