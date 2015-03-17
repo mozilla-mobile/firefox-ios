@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import SWXMLHash
 
 private let TypeSearch = "text/html"
 private let TypeSuggest = "application/x-suggestions+json"
