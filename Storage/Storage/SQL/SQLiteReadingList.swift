@@ -7,7 +7,6 @@ import Foundation
 /**
  * The SQLite-backed implementation of the ReadingList protocol.
  */
-
 public class SQLiteReadingList: ReadingList {
     let files: FileAccessor
     let db: BrowserDB
