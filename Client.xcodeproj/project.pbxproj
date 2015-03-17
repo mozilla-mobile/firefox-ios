@@ -37,8 +37,8 @@
 		285CEE4B1A69EAF600CC1228 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 282DA4BA1A699E0400A406E2 /* Storage.framework */; };
 		285CEE4F1A69EAFD00CC1228 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 282DA4BA1A699E0400A406E2 /* Storage.framework */; };
 		28786E551AB0F5FA009EA9EF /* DeferredTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28786E541AB0F5FA009EA9EF /* DeferredTests.swift */; };
-		288A2D9D1AB8B3260023ABC3 /* ThirdParty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* ThirdParty.framework */; };
-		288A2D9E1AB8B3260023ABC3 /* ThirdParty.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* ThirdParty.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
+		288A2D9E1AB8B3260023ABC3 /* Shared.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		288A2DAA1AB8B3700023ABC3 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DA71AB8B3700023ABC3 /* Box.swift */; };
 		288A2DAB1AB8B3700023ABC3 /* BoxType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DA81AB8B3700023ABC3 /* BoxType.swift */; };
 		288A2DAC1AB8B3700023ABC3 /* MutableBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DA91AB8B3700023ABC3 /* MutableBox.swift */; };
@@ -348,7 +348,7 @@
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
-			remoteInfo = ThirdParty;
+			remoteInfo = Shared;
 		};
 		28CE83CF1A1D1D5100576538 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -582,7 +582,7 @@
 				2F44FA161A9D41A200FD20CC /* Base32.framework in Copy Frameworks */,
 				D38B2D881A8D98700040E6B5 /* SWXMLHash.framework in Copy Frameworks */,
 				D38B2CED1A8D94D20040E6B5 /* Snap.framework in Copy Frameworks */,
-				288A2D9E1AB8B3260023ABC3 /* ThirdParty.framework in Copy Frameworks */,
+				288A2D9E1AB8B3260023ABC3 /* Shared.framework in Copy Frameworks */,
 				39A362DA1AAF5ECE00F47390 /* XCGLogger.framework in Copy Frameworks */,
 				E4A888171A95679500CDC337 /* FxA.framework in Copy Frameworks */,
 				D31FC24C1A8D923000BAF7EC /* Alamofire.framework in Copy Frameworks */,
@@ -626,7 +626,7 @@
 		0BF648101A9C54E900BA963C /* TopSitesPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSitesPanel.swift; sourceTree = "<group>"; };
 		282DA4B11A699E0300A406E2 /* Storage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Storage.xcodeproj; path = Storage/Storage.xcodeproj; sourceTree = "<group>"; };
 		28786E541AB0F5FA009EA9EF /* DeferredTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeferredTests.swift; path = SyncTests/DeferredTests.swift; sourceTree = "<group>"; };
-		288A2D861AB8B3260023ABC3 /* ThirdParty.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ThirdParty.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		288A2D861AB8B3260023ABC3 /* Shared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Shared.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		288A2D891AB8B3260023ABC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		288A2DA71AB8B3700023ABC3 /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Box.swift; path = ThirdParty/Box/Box.swift; sourceTree = "<group>"; };
 		288A2DA81AB8B3700023ABC3 /* BoxType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BoxType.swift; path = ThirdParty/Box/BoxType.swift; sourceTree = "<group>"; };
@@ -821,7 +821,7 @@
 			files = (
 				0B6544D31A96C5F0000DD202 /* libSDWebImage.a in Frameworks */,
 				D3589EF71A8D930000F28118 /* libz.dylib in Frameworks */,
-				288A2D9D1AB8B3260023ABC3 /* ThirdParty.framework in Frameworks */,
+				288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				28E5857A1A69E9DE00ACEB4F /* Storage.framework in Frameworks */,
 				E4A888161A95679500CDC337 /* FxA.framework in Frameworks */,
@@ -1313,7 +1313,7 @@
 				F84B22491A0920C600AAB793 /* ShareTo.appex */,
 				F84B225C1A09210A00AAB793 /* SendTo.appex */,
 				D39FA15F1A83E0EC00EE869C /* UITests.xctest */,
-				288A2D861AB8B3260023ABC3 /* ThirdParty.framework */,
+				288A2D861AB8B3260023ABC3 /* Shared.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1490,9 +1490,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		288A2D851AB8B3260023ABC3 /* ThirdParty */ = {
+		288A2D851AB8B3260023ABC3 /* Shared */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 288A2D9F1AB8B3260023ABC3 /* Build configuration list for PBXNativeTarget "ThirdParty" */;
+			buildConfigurationList = 288A2D9F1AB8B3260023ABC3 /* Build configuration list for PBXNativeTarget "Shared" */;
 			buildPhases = (
 				288A2D811AB8B3260023ABC3 /* Sources */,
 				288A2D821AB8B3260023ABC3 /* Frameworks */,
@@ -1503,9 +1503,9 @@
 			);
 			dependencies = (
 			);
-			name = ThirdParty;
-			productName = ThirdParty;
-			productReference = 288A2D861AB8B3260023ABC3 /* ThirdParty.framework */;
+			name = Shared;
+			productName = Shared;
+			productReference = 288A2D861AB8B3260023ABC3 /* Shared.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		D39FA15E1A83E0EC00EE869C /* UITests */ = {
@@ -1715,7 +1715,7 @@
 				F84B22481A0920C600AAB793 /* ShareTo */,
 				F84B225B1A09210A00AAB793 /* SendTo */,
 				D39FA15E1A83E0EC00EE869C /* UITests */,
-				288A2D851AB8B3260023ABC3 /* ThirdParty */,
+				288A2D851AB8B3260023ABC3 /* Shared */,
 			);
 		};
 /* End PBXProject section */
@@ -2287,7 +2287,7 @@
 /* Begin PBXTargetDependency section */
 		288A2D9C1AB8B3260023ABC3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 288A2D851AB8B3260023ABC3 /* ThirdParty */;
+			target = 288A2D851AB8B3260023ABC3 /* Shared */;
 			targetProxy = 288A2D9B1AB8B3260023ABC3 /* PBXContainerItemProxy */;
 		};
 		39A362DC1AAF5ECE00F47390 /* PBXTargetDependency */ = {
@@ -2344,7 +2344,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = ThirdParty/Info.plist;
+				INFOPLIST_FILE = Shared/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2391,7 +2391,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = ThirdParty/Info.plist;
+				INFOPLIST_FILE = Shared/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2441,7 +2441,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = ThirdParty/Info.plist;
+				INFOPLIST_FILE = Shared/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -2923,7 +2923,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		288A2D9F1AB8B3260023ABC3 /* Build configuration list for PBXNativeTarget "ThirdParty" */ = {
+		288A2D9F1AB8B3260023ABC3 /* Build configuration list for PBXNativeTarget "Shared" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				288A2DA01AB8B3260023ABC3 /* Debug */,
