@@ -4,41 +4,97 @@
 
 import UIKit
 
-private let IconSize: CGFloat = 28
-private let Margin: CGFloat = 8
+private let ImageSize: CGFloat = 24
+private let ImageMargin: CGFloat = 10
+private let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x333333)
+private let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.grayColor()
 
-// UITableViewController doesn't let us specify a style for recycling views. We override the default style here.
-class TwoLineCell : UITableViewCell {
+class TwoLineTableViewCell: UITableViewCell {
+    private let twoLineHelper: TwoLineCellHelper!
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        // ignore the style argument, use our own to override
         super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
 
-        textLabel?.font = UIFont(name: "FiraSans-SemiBold", size: 13)
-        textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
+        twoLineHelper = TwoLineCellHelper(container: self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
+
         indentationWidth = 0
-
-        detailTextLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.lightGrayColor()
-
-        imageView?.contentMode = .ScaleAspectFill
-
         layoutMargins = UIEdgeInsetsZero
-        separatorInset = UIEdgeInsetsMake(0, IconSize + 2 * Margin, 0, 0)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        let height: CGFloat = self.frame.height
-        let textLeft = IconSize + 2 * Margin
-
-        imageView?.frame = CGRectMake(Margin, Margin, IconSize, IconSize)
-        textLabel?.frame = CGRectMake(textLeft, textLabel!.frame.origin.y,
-            self.frame.width - textLeft - Margin, textLabel!.frame.height)
-        detailTextLabel?.frame = CGRectMake(textLeft, detailTextLabel!.frame.origin.y,
-            self.frame.width - textLeft - Margin, detailTextLabel!.frame.height)
+        separatorInset = UIEdgeInsetsMake(0, ImageSize + 2 * ImageMargin, 0, 0)
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        twoLineHelper.layoutSubviews()
+    }
+}
+
+class TwoLineCollectionViewCell: UICollectionViewCell {
+    private let twoLineHelper: TwoLineCellHelper!
+    let textLabel = UILabel()
+    let detailTextLabel = UILabel()
+    let imageView = UIImageView()
+
+    override init() {
+        super.init()
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        contentView.addSubview(textLabel)
+        contentView.addSubview(detailTextLabel)
+        contentView.addSubview(imageView)
+
+        twoLineHelper = TwoLineCellHelper(container: self, textLabel: textLabel, detailTextLabel: detailTextLabel, imageView: imageView)
+
+        layoutMargins = UIEdgeInsetsZero
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        twoLineHelper.layoutSubviews()
+    }
+}
+
+private class TwoLineCellHelper {
+    private let container: UIView
+    let textLabel: UILabel
+    let detailTextLabel: UILabel
+    let imageView: UIImageView
+
+    init(container: UIView, textLabel: UILabel, detailTextLabel: UILabel, imageView: UIImageView) {
+        self.container = container
+        self.textLabel = textLabel
+        self.detailTextLabel = detailTextLabel
+        self.imageView = imageView
+
+        textLabel.font = UIFont(name: "FiraSans-Regular", size: 13)
+        textLabel.textColor = TextColor
+
+        detailTextLabel.font = UIFont(name: "FiraSans-Regular", size: 10)
+        detailTextLabel.textColor = DetailTextColor
+
+        imageView.contentMode = .ScaleAspectFill
+    }
+
+    func layoutSubviews() {
+        let height = container.frame.height
+        let textLeft = ImageSize + 2 * ImageMargin
+        let textLabelHeight = textLabel.intrinsicContentSize().height
+        let detailTextLabelHeight = detailTextLabel.intrinsicContentSize().height
+        let contentHeight = textLabelHeight + detailTextLabelHeight + 1
+        imageView.frame = CGRectMake(ImageMargin, (height - ImageSize) / 2, ImageSize, ImageSize)
+        textLabel.frame = CGRectMake(textLeft, (height - contentHeight) / 2,
+            container.frame.width - textLeft - ImageMargin, textLabelHeight)
+        detailTextLabel.frame = CGRectMake(textLeft, textLabel.frame.maxY + 1,
+            container.frame.width - textLeft - ImageMargin, detailTextLabelHeight)
     }
 }

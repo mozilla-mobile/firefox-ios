@@ -408,7 +408,7 @@ extension SearchViewController: UITableViewDataSource {
         }
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if let currentSection = SearchListSection(rawValue: indexPath.section) {
             switch currentSection {
             case .SearchSuggestions:
@@ -417,7 +417,7 @@ extension SearchViewController: UITableViewDataSource {
                 suggestionCell.layoutIfNeeded()
                 return suggestionCell.frame.height
             default:
-                return tableView.rowHeight
+                return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
             }
         }
 
@@ -455,7 +455,7 @@ private protocol SuggestionCellDelegate: class {
 /**
  * Cell that wraps a list of search suggestion buttons.
  */
-private class SuggestionCell: TwoLineCell {
+private class SuggestionCell: UITableViewCell {
     weak var delegate: SuggestionCellDelegate?
     let container = UIView()
 
@@ -509,7 +509,7 @@ private class SuggestionCell: TwoLineCell {
         super.layoutSubviews()
 
         // The left bounds of the suggestions align with where text would be displayed.
-        let textLeft = textLabel!.frame.origin.x
+        let textLeft: CGFloat = 44
 
         // The maximum width of the container, after which suggestions will wrap to the next line.
         let maxWidth = contentView.frame.width
@@ -558,6 +558,9 @@ private class SuggestionCell: TwoLineCell {
         frame.size.height = height + 2 * SuggestionCellVerticalPadding
         contentView.frame = frame
         container.frame = frame
+
+        let imageY = (frame.size.height - 24) / 2
+        imageView!.frame = CGRectMake(10, imageY, 24, 24)
     }
 }
 
