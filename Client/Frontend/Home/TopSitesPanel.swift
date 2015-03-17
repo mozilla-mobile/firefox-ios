@@ -10,6 +10,9 @@ private let ThumbnailIdentifier = "Thumbnail"
 private let RowIdentifier = "Row"
 private let SeparatorKind = "separator"
 private let SeparatorIdentifier = "separator"
+
+private let ThumbnailSectionPadding: CGFloat = 8
+private let SeparatorColor = UIColor(rgb: 0xcccccc)
 private let DefaultImage = "defaultFavicon"
 
 class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
@@ -64,12 +67,13 @@ private class TopSitesLayout: UICollectionViewLayout {
     private let ToolbarHeight: CGFloat = 44
     private let StatusBarHeight: CGFloat = 20
     private let RowHeight: CGFloat = 58
-    private let AspectRatio: CGFloat = 0.7
+    private let AspectRatio: CGFloat = 0.8
 
-    private var numRows: CGFloat = 3
-    private var numCols: CGFloat = 2
+    private var thumbnailRows = 3
+    private var thumbnailCols = 2
+    private var thumbnailCount: Int { return thumbnailRows * thumbnailCols }
     private var width: CGFloat { return self.collectionView?.frame.width ?? 0 }
-    private var thumbnailWidth: CGFloat { return CGFloat(width / numCols) }
+    private var thumbnailWidth: CGFloat { return width / CGFloat(thumbnailCols) - (ThumbnailSectionPadding * 2) / CGFloat(thumbnailCols) }
     private var thumbnailHeight: CGFloat { return thumbnailWidth * AspectRatio }
 
     private var count: Int {
@@ -77,6 +81,11 @@ private class TopSitesLayout: UICollectionViewLayout {
             return dataSource.data.count
         }
         return 0
+    }
+
+    private var topSectionHeight: CGFloat {
+        let rows = min(count / thumbnailCols, thumbnailRows)
+        return thumbnailHeight * CGFloat(rows) + ThumbnailSectionPadding * 2
     }
 
     override init() {
@@ -90,35 +99,30 @@ private class TopSitesLayout: UICollectionViewLayout {
 
     private func setupForOrientation(orientation: UIInterfaceOrientation) {
         if orientation.isLandscape {
-            numRows = 2
-            numCols = 3
+            thumbnailRows = 2
+            thumbnailCols = 3
         } else {
-            numRows = 3
-            numCols = 2
+            thumbnailRows = 3
+            thumbnailCols = 2
         }
     }
 
     private func getIndexAtPosition(#y: CGFloat) -> Int {
-        let thumbnailSectionHeight: CGFloat = thumbnailWidth * numRows
-
-        if y < thumbnailSectionHeight {
+        if y < topSectionHeight {
             let row = Int(y / thumbnailHeight)
-            return min(count - 1, max(0, row * Int(numCols)))
+            return min(count - 1, max(0, row * thumbnailCols))
         }
-        return min(count - 1, max(0, Int((y - thumbnailSectionHeight) / RowHeight + numRows * numCols)))
+        return min(count - 1, max(0, Int((y - topSectionHeight) / RowHeight + CGFloat(thumbnailCount))))
     }
 
     override func collectionViewContentSize() -> CGSize {
-        let c = CGFloat(count)
-        let offset: CGFloat = ToolbarHeight + StatusBarHeight + HomePanelButtonContainerHeight
-
-        if c <= numRows * numCols {
-            let row = floor(Double(c / numCols))
-            return CGSize(width: width, height: CGFloat(row) * thumbnailHeight + offset)
+        if count <= thumbnailCount {
+            let row = floor(Double(count / thumbnailCols))
+            return CGSize(width: width, height: topSectionHeight)
         }
 
-        let h = (c - numRows * numCols) * RowHeight
-        return CGSize(width: width, height: numRows * thumbnailHeight + h + offset)
+        let bottomSectionHeight = CGFloat(count - thumbnailCount) * RowHeight
+        return CGSize(width: width, height: topSectionHeight + bottomSectionHeight)
     }
 
     override func layoutAttributesForElementsInRect(rect: CGRect) -> [AnyObject]? {
@@ -135,7 +139,7 @@ private class TopSitesLayout: UICollectionViewLayout {
             let attr = layoutAttributesForItemAtIndexPath(indexPath)
             attrs.append(attr)
 
-            if CGFloat(i) >= (numRows * numCols) - 1 {
+            if i >= thumbnailCount - 1 {
                 let decoration = layoutAttributesForDecorationViewOfKind(SeparatorKind, atIndexPath: indexPath)
                 attrs.append(decoration)
             }
@@ -143,34 +147,32 @@ private class TopSitesLayout: UICollectionViewLayout {
         return attrs
     }
 
+    // Set the frames for the row separators.
     override func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
         let decoration = UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
-
-        let h = ((CGFloat(indexPath.item + 1)) - numRows * numCols) * RowHeight
-        decoration.frame = CGRect(x: 0,
-            y: CGFloat(thumbnailHeight * numRows + h),
-            width: width,
-            height: 1)
+        let rowIndex = indexPath.item - thumbnailCount + 1
+        let rowYOffset = CGFloat(rowIndex) * RowHeight
+        let y = topSectionHeight + rowYOffset
+        decoration.frame = CGRectMake(0, y, width, 0.5)
         return decoration
     }
 
     override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
         let attr = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
 
-        let i = CGFloat(indexPath.item)
-        if i < numRows * numCols {
-            let row = floor(Double(i / numCols))
-            let col = i % numCols
-            attr.frame = CGRect(x: CGFloat(thumbnailWidth * col),
-                y: CGFloat(row) * thumbnailHeight,
-                width: thumbnailWidth,
-                height: thumbnailHeight)
+        let i = indexPath.item
+        if i < thumbnailCount {
+            // Set the top thumbnail frames.
+            let row = floor(Double(i / thumbnailCols))
+            let col = i % thumbnailCols
+            let x = CGFloat(thumbnailWidth * CGFloat(col)) + ThumbnailSectionPadding
+            let y = CGFloat(row) * thumbnailHeight + ThumbnailSectionPadding
+            attr.frame = CGRectMake(x, y, thumbnailWidth, thumbnailHeight)
         } else {
-            let h = CGFloat(i - numRows * numCols) * RowHeight
-            attr.frame = CGRect(x: 0,
-                y: CGFloat(thumbnailHeight * numRows + h),
-                width: width,
-                height: RowHeight)
+            // Set the bottom row frames.
+            let rowYOffset = CGFloat(i - thumbnailCount) * RowHeight
+            let y = CGFloat(topSectionHeight + rowYOffset)
+            attr.frame = CGRectMake(0, y, width, RowHeight)
         }
 
         return attr
