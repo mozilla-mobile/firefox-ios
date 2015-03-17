@@ -43,7 +43,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
         collection.delegate = self
         collection.dataSource = dataSource
         collection.registerClass(ThumbnailCell.self, forCellWithReuseIdentifier: ThumbnailIdentifier)
-        collection.registerClass(TopSitesRow.self, forCellWithReuseIdentifier: RowIdentifier)
+        collection.registerClass(TwoLineCollectionViewCell.self, forCellWithReuseIdentifier: RowIdentifier)
         collection.keyboardDismissMode = .OnDrag
         view.addSubview(collection)
         collection.snp_makeConstraints { make in
@@ -62,7 +62,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 class TopSitesLayout: UICollectionViewLayout {
     let ToolbarHeight: CGFloat = 44
     let StatusBarHeight: CGFloat = 20
-    let RowHeight: CGFloat = 70
+    let RowHeight: CGFloat = 58
     let AspectRatio: CGFloat = 0.7
 
     var numRows: CGFloat = 3
@@ -204,9 +204,9 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         }
 
         // Cells for the remainder of the top sites list.
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(RowIdentifier, forIndexPath: indexPath) as TopSitesRow
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(RowIdentifier, forIndexPath: indexPath) as TwoLineCollectionViewCell
         cell.textLabel.text = site.title.isEmpty ? site.url : site.title
-        cell.descriptionLabel.text = site.url
+        cell.detailTextLabel.text = site.url
         if let icon = site.icon? {
             cell.imageView.sd_setImageWithURL(NSURL(string: icon.url)!)
         } else {
@@ -227,60 +227,10 @@ private class TopSitesSeparator: UICollectionReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.lightGrayColor()
+        self.backgroundColor = SeparatorColor
     }
 
     required init(coder aDecoder: NSCoder) {
         assertionFailure("Not implemented")
-    }
-}
-
-// TODO: This should reuse TwoLineCell somehow. Maybe change TwoLineCell to a generic
-// UIView, then set it as the contentView so it can be used with any cell type.
-private class TopSitesRow: UICollectionViewCell {
-    let textLabel = UILabel()
-    let descriptionLabel = UILabel()
-    let imageView = UIImageView()
-    let margin = 10
-
-    override init() {
-        super.init()
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        contentView.addSubview(textLabel)
-        contentView.addSubview(descriptionLabel)
-        contentView.addSubview(imageView)
-
-        imageView.contentMode = .ScaleAspectFill
-        imageView.image = UIImage(named: "defaultFavicon")
-        imageView.snp_makeConstraints({ make in
-            make.top.left.equalTo(self.contentView).offset(self.margin)
-            make.bottom.equalTo(self.contentView).offset(-self.margin)
-            make.width.equalTo(self.contentView.snp_height).offset(-2*self.margin)
-        })
-
-        textLabel.font = UIFont(name: "FiraSans-SemiBold", size: 13)
-        textLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
-        textLabel.snp_makeConstraints({ make in
-            make.top.equalTo(self.imageView.snp_top)
-            make.right.equalTo(self.contentView).offset(-self.margin)
-            make.left.equalTo(self.imageView.snp_right).offset(self.margin)
-        })
-
-        descriptionLabel.font = UIFont(name: "FiraSans-SemiBold", size: 13)
-        descriptionLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.lightTextColor() : UIColor.lightGrayColor()
-        descriptionLabel.snp_makeConstraints({ make in
-            make.top.equalTo(self.textLabel.snp_bottom)
-            make.right.equalTo(self.contentView).offset(-self.margin)
-            make.left.equalTo(self.imageView.snp_right).offset(self.margin)
-        })
-
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

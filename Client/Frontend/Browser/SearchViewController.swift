@@ -408,7 +408,7 @@ extension SearchViewController: UITableViewDataSource {
         }
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if let currentSection = SearchListSection(rawValue: indexPath.section) {
             switch currentSection {
             case .SearchSuggestions:
@@ -417,7 +417,7 @@ extension SearchViewController: UITableViewDataSource {
                 suggestionCell.layoutIfNeeded()
                 return suggestionCell.frame.height
             default:
-                return tableView.rowHeight
+                return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
             }
         }
 
