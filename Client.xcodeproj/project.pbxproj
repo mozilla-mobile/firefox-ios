@@ -627,7 +627,6 @@
 		282DA4B11A699E0300A406E2 /* Storage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Storage.xcodeproj; path = Storage/Storage.xcodeproj; sourceTree = "<group>"; };
 		28786E541AB0F5FA009EA9EF /* DeferredTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeferredTests.swift; path = SyncTests/DeferredTests.swift; sourceTree = "<group>"; };
 		288A2D861AB8B3260023ABC3 /* Shared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Shared.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		288A2D891AB8B3260023ABC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		288A2DA71AB8B3700023ABC3 /* Box.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Box.swift; path = ThirdParty/Box/Box.swift; sourceTree = "<group>"; };
 		288A2DA81AB8B3700023ABC3 /* BoxType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BoxType.swift; path = ThirdParty/Box/BoxType.swift; sourceTree = "<group>"; };
 		288A2DA91AB8B3700023ABC3 /* MutableBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MutableBox.swift; path = ThirdParty/Box/MutableBox.swift; sourceTree = "<group>"; };
@@ -937,22 +936,6 @@
 				288A2DAF1AB8B37E0023ABC3 /* ReadWriteLock.swift */,
 			);
 			name = Deferred;
-			sourceTree = "<group>";
-		};
-		288A2D871AB8B3260023ABC3 /* ThirdParty */ = {
-			isa = PBXGroup;
-			children = (
-				288A2D881AB8B3260023ABC3 /* Supporting Files */,
-			);
-			path = ThirdParty;
-			sourceTree = "<group>";
-		};
-		288A2D881AB8B3260023ABC3 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				288A2D891AB8B3260023ABC3 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		28C077911A3B05C200834FE5 /* SyncTests */ = {
@@ -1294,7 +1277,6 @@
 				F8708D1E1A0970990051AB07 /* Extensions */,
 				28CE83B71A1D1D3200576538 /* FxAClient */,
 				28C077951A3B060E00834FE5 /* FxATests */,
-				288A2D871AB8B3260023ABC3 /* ThirdParty */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,
 				28CE83B91A1D1D3200576538 /* Sync */,
