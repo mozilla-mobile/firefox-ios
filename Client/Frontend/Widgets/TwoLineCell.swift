@@ -64,6 +64,58 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
     }
 }
 
+class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
+    private let twoLineHelper: TwoLineCellHelper!
+
+    // UITableViewHeaderFooterView includes textLabel and detailTextLabel, so we can't override
+    // them.  Unfortunately, they're also used in ways that interfere with us just using them: I get
+    // hard crashes in layout if I just use them; it seems there's a battle over adding to the
+    // contentView.  So we add our own members, and cover up the other ones.
+    let _textLabel = UILabel()
+    let _detailTextLabel = UILabel()
+
+    let imageView = UIImageView()
+
+    // Yes, this is strange.
+    override var textLabel: UILabel {
+        return _textLabel
+    }
+
+    // Yes, this is strange.
+    override var detailTextLabel: UILabel {
+        return _detailTextLabel
+    }
+
+    override init() {
+        super.init()
+    }
+
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        contentView.addSubview(_textLabel)
+        contentView.addSubview(_detailTextLabel)
+        contentView.addSubview(imageView)
+
+        twoLineHelper = TwoLineCellHelper(container: self, textLabel: _textLabel, detailTextLabel: _detailTextLabel, imageView: imageView)
+
+        layoutMargins = UIEdgeInsetsZero
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        twoLineHelper.layoutSubviews()
+    }
+}
+
 private class TwoLineCellHelper {
     private let container: UIView
     let textLabel: UILabel

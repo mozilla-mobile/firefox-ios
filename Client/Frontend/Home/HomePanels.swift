@@ -45,6 +45,15 @@ class HomePanels {
 
         HomePanelDescriptor(
             makeViewController: { profile in
+                let controller = RemoteTabsPanel()
+                controller.profile = profile
+                return controller
+            },
+            imageName: "tabs",
+            accessibilityLabel: NSLocalizedString("Synced tabs", comment: "Panel accessibility label")),
+
+        HomePanelDescriptor(
+            makeViewController: { profile in
                 let controller = ReadingListPanel()
                 controller.profile = profile
                 return controller
