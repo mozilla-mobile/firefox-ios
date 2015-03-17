@@ -8,6 +8,12 @@ import UIKit
 import XCTest
 
 class FxAClient10Tests: LiveAccountTest {
+    func testClientState() {
+        let kB = "fd5c747806c07ce0b9d69dcfea144663e630b65ec4963596a22f24910d7dd15d".hexDecodedData
+        let clientState = FxAClient10.computeClientState(kB)!
+        XCTAssertEqual(clientState, "6ae94683571c7a7c54dab4700aa3995f")
+    }
+
     func testLoginSuccess() {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
             let e = self.expectationWithDescription("")

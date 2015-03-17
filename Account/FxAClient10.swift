@@ -61,6 +61,18 @@ class FxAClient10 {
         self.URL = endpoint ?? ProductionFirefoxAccountConfiguration().authEndpointURL
     }
 
+    /**
+     * The token server accepts an X-Client-State header, which is the
+     * lowercase-hex-encoded first 16 bytes of the SHA-256 hash of the
+     * bytes of kB.
+     */
+    class func computeClientState(kB: NSData) -> String? {
+        if kB.length != 32 {
+            return nil
+        }
+        return kB.sha256.subdataWithRange(NSRange(location: 0, length: 16)).hexEncodedString
+    }
+
     class func quickStretchPW(email: NSData, password: NSData) -> NSData {
         let salt: NSMutableData = NSMutableData(data: KW("quickStretch")!)
         salt.appendData(":".utf8EncodedData!)
