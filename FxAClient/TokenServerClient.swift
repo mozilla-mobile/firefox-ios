@@ -3,9 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Alamofire
-import Deferred
+import Shared
 import Foundation
-import Result
 
 let TokenServerClientErrorDomain = "org.mozilla.token.error"
 let TokenServerClientUnknownError = NSError(domain: TokenServerClientErrorDomain, code: 999,
