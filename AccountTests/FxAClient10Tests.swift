@@ -8,6 +8,12 @@ import UIKit
 import XCTest
 
 class FxAClient10Tests: LiveAccountTest {
+    func testUnwrapKey() {
+        let stretchedPW = "e4e8889bd8bd61ad6de6b95c059d56e7b50dacdaf62bd84644af7e2add84345d".hexDecodedData
+        let unwrapKey = FxAClient10.computeUnwrapKey(stretchedPW)
+        XCTAssertEqual(unwrapKey.hexEncodedString, "de6a2648b78284fcb9ffa81ba95803309cfba7af583c01a8a1a63e567234dd28")
+    }
+
     func testClientState() {
         let kB = "fd5c747806c07ce0b9d69dcfea144663e630b65ec4963596a22f24910d7dd15d".hexDecodedData
         let clientState = FxAClient10.computeClientState(kB)!

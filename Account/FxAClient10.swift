@@ -80,6 +80,13 @@ class FxAClient10 {
         return password.derivePBKDF2HMACSHA256KeyWithSalt(salt, iterations: 1000, length: 32)
     }
 
+    class func computeUnwrapKey(stretchedPW: NSData) -> NSData {
+        let salt: NSData = NSData()
+        let contextInfo: NSData = KW("unwrapBkey")!
+        let bytes = stretchedPW.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(KeyLength))
+        return bytes
+    }
+
     // fxa-auth-server produces error details like:
     //        {
     //            "code": 400, // matches the HTTP status code
