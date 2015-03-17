@@ -14,9 +14,10 @@ private let DefaultImage = "defaultFavicon"
 
 class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
-    var collection: UICollectionView!
-    var dataSource: TopSitesDataSource!
-    let layout = TopSitesLayout()
+
+    private var collection: UICollectionView!
+    private var dataSource: TopSitesDataSource!
+    private let layout = TopSitesLayout()
 
     var profile: Profile! {
         didSet {
@@ -59,19 +60,19 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
     }
 }
 
-class TopSitesLayout: UICollectionViewLayout {
-    let ToolbarHeight: CGFloat = 44
-    let StatusBarHeight: CGFloat = 20
-    let RowHeight: CGFloat = 58
-    let AspectRatio: CGFloat = 0.7
+private class TopSitesLayout: UICollectionViewLayout {
+    private let ToolbarHeight: CGFloat = 44
+    private let StatusBarHeight: CGFloat = 20
+    private let RowHeight: CGFloat = 58
+    private let AspectRatio: CGFloat = 0.7
 
-    var numRows: CGFloat = 3
-    var numCols: CGFloat = 2
-    var width: CGFloat { return self.collectionView?.frame.width ?? 0 }
-    var thumbnailWidth: CGFloat { return CGFloat(width / numCols) }
-    var thumbnailHeight: CGFloat { return thumbnailWidth * AspectRatio }
+    private var numRows: CGFloat = 3
+    private var numCols: CGFloat = 2
+    private var width: CGFloat { return self.collectionView?.frame.width ?? 0 }
+    private var thumbnailWidth: CGFloat { return CGFloat(width / numCols) }
+    private var thumbnailHeight: CGFloat { return thumbnailWidth * AspectRatio }
 
-    var count: Int {
+    private var count: Int {
         if let dataSource = self.collectionView?.dataSource as? TopSitesDataSource {
             return dataSource.data.count
         }
@@ -87,7 +88,7 @@ class TopSitesLayout: UICollectionViewLayout {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setupForOrientation(orientation: UIInterfaceOrientation) {
+    private func setupForOrientation(orientation: UIInterfaceOrientation) {
         if orientation.isLandscape {
             numRows = 2
             numCols = 3
@@ -180,7 +181,7 @@ class TopSitesLayout: UICollectionViewLayout {
     }
 }
 
-class TopSitesDataSource: NSObject, UICollectionViewDataSource {
+private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var data: Cursor
 
     init(data: Cursor) {
