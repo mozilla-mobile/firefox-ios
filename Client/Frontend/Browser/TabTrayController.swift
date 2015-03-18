@@ -20,7 +20,6 @@ private class CustomCell: UITableViewCell {
     let backgroundHolder: UIView
     let background: UIImageViewAligned
     let titleText: TabLabel
-    let titleBlur: UIVisualEffectView
     let title: UIView
     let innerStroke: InnerStrokedView
     let favicon: UIImageView
@@ -47,18 +46,10 @@ private class CustomCell: UITableViewCell {
         self.favicon.backgroundColor = UIColor.clearColor()
 
         self.title = UIView()
-        self.title.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.55)
-
-        var blur = UIBlurEffect(style: .Light)
-        self.titleBlur = UIVisualEffectView(effect: blur)
-        self.titleBlur.layer.shadowOpacity = 0.2
-        self.titleBlur.layer.shadowColor = UIColor.blackColor().CGColor
-        self.titleBlur.layer.shadowRadius = 1
-        self.titleBlur.layer.shadowOffset = CGSize(width: 0, height: 1)
+        self.title.backgroundColor = UIColor.whiteColor()
 
         self.titleText = TabLabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 
-        self.title.addSubview(self.titleBlur)
         self.title.addSubview(self.titleText)
         self.title.addSubview(self.favicon)
 
@@ -149,7 +140,6 @@ private class CustomCell: UITableViewCell {
             width: title.frame.width - margin * 2,
             height: title.frame.height)
 
-        titleBlur.frame = title.frame
         innerStroke.frame = background.frame
 
         verticalCenter(titleText)
@@ -278,8 +268,8 @@ extension TabTrayController: Transitionable {
         // Create a fake cell that is shown fullscreen
         if let container = options.container {
             let cell = getTransitionCell(options, browser: tabManager.selectedTab)
-            // TODO: Smoothly animate the corner radius.  Right now, the radius pops at the beginning of the animation.
-            cell.backgroundHolder.layer.cornerRadius = 0
+            // TODO: Smoothly animate the corner radius to 0.
+            cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
             cell.showFullscreen(container, table: tableView)
         }
 
@@ -294,7 +284,6 @@ extension TabTrayController: Transitionable {
         if let container = options.container {
             // Create a fake cell that is at the selected index
             let cell = getTransitionCell(options, browser: tabManager.selectedTab)
-            // TODO: Smoothly animate the corner radius.  Right now, the radius pops at the beginning of the animation.
             cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
             cell.showAt(tabManager.selectedIndex, container: container, table: tableView)
         }
