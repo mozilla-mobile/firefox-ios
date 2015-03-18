@@ -280,6 +280,7 @@
 		D3C744CE1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
 		D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
 		D3C744D01A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
+		D3D247321ABCEA1700771C7E /* ThumbnailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D247311ABCEA1700771C7E /* ThumbnailTests.swift */; };
 		D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */; };
 		D3E171C01A83FB6300AB44CD /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E4CD9F191A6D9B7B00318571 /* libz.dylib */; };
 		D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = D3E171C11A841EAD00AB44CD /* KIFHelper.js */; };
@@ -1024,6 +1025,7 @@
 		D3A994951A3686BD008AD1AC /* BrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		D3A994961A3686BD008AD1AC /* Browser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		D3C744CC1A687D6C004CE85D /* URIFixup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URIFixup.swift; sourceTree = "<group>"; };
+		D3D247311ABCEA1700771C7E /* ThumbnailTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailTests.swift; sourceTree = "<group>"; };
 		D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileAccessorTests.swift; sourceTree = "<group>"; };
 		D3E171C11A841EAD00AB44CD /* KIFHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = KIFHelper.js; sourceTree = "<group>"; };
 		D3FA777A1A43B2990010CD32 /* SearchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
@@ -1795,19 +1797,20 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
-				0BA896491A250E6500C1010C /* ProfileTest.swift */,
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
+				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
+				2FDB10921A9FBEC5006CF312 /* ProfilePrefsTests.swift */,
+				0BA896491A250E6500C1010C /* ProfileTest.swift */,
+				2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */,
 				D3FA777A1A43B2990010CD32 /* SearchTests.swift */,
 				0BA8964A1A250E6500C1010C /* TestBookmarks.swift */,
+				0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */,
+				2F44FA1A1A9D426A00FD20CC /* TestHashExtensions.swift */,
+				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
 				0BE108351A1B1EC700D4B712 /* TestLocking.swift */,
+				D3D247311ABCEA1700771C7E /* ThumbnailTests.swift */,
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
 				F84B21D71A090F8100AAB793 /* Supporting Files */,
-				0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */,
-				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
-				2F44FA1A1A9D426A00FD20CC /* TestHashExtensions.swift */,
-				2FDB10921A9FBEC5006CF312 /* ProfilePrefsTests.swift */,
-				2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */,
-				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -2986,6 +2989,7 @@
 				E42475DD1AB73B9B00B23D33 /* SWCellScrollView.m in Sources */,
 				D3C744CE1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				D38B2D3E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m in Sources */,
+				D3D247321ABCEA1700771C7E /* ThumbnailTests.swift in Sources */,
 				0BD19A681A2530A40084FBA7 /* ProfilePrefs.swift in Sources */,
 				D308E4EC1A530A8B00842685 /* SearchEngines.swift in Sources */,
 				0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */,
