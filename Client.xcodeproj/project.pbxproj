@@ -199,9 +199,12 @@
 		D39FA1831A83E87900EE869C /* NavigationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39FA1821A83E87900EE869C /* NavigationTests.swift */; };
 		D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A994951A3686BD008AD1AC /* BrowserViewController.swift */; };
 		D3A9949D1A3686BD008AD1AC /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A994961A3686BD008AD1AC /* Browser.swift */; };
+		D3AC40191ABA2EF2001CAAC1 /* ThumbnailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AC40181ABA2EF2001CAAC1 /* ThumbnailTests.swift */; };
 		D3AC40371ABA3090001CAAC1 /* FileThumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B79A491AB902AD00AFEB8B /* FileThumbnails.swift */; };
 		D3AC40381ABA3091001CAAC1 /* FileThumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B79A491AB902AD00AFEB8B /* FileThumbnails.swift */; };
 		D3AC40391ABA3092001CAAC1 /* FileThumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B79A491AB902AD00AFEB8B /* FileThumbnails.swift */; };
+		D3AC403A1ABA30C0001CAAC1 /* HashExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FA171A9D425700FD20CC /* HashExtensions.swift */; };
+		D3AC403B1ABA30C0001CAAC1 /* HashExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F44FA171A9D425700FD20CC /* HashExtensions.swift */; };
 		D3B79A4A1AB902AD00AFEB8B /* FileThumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B79A491AB902AD00AFEB8B /* FileThumbnails.swift */; };
 		D3C38C701A6F20D9005C702A /* Storage.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 282DA4BA1A699E0400A406E2 /* Storage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
@@ -739,6 +742,7 @@
 		D39FA1821A83E87900EE869C /* NavigationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationTests.swift; sourceTree = "<group>"; };
 		D3A994951A3686BD008AD1AC /* BrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		D3A994961A3686BD008AD1AC /* Browser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
+		D3AC40181ABA2EF2001CAAC1 /* ThumbnailTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailTests.swift; sourceTree = "<group>"; };
 		D3B79A491AB902AD00AFEB8B /* FileThumbnails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileThumbnails.swift; sourceTree = "<group>"; };
 		D3C744CC1A687D6C004CE85D /* URIFixup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URIFixup.swift; sourceTree = "<group>"; };
 		D3E171C11A841EAD00AB44CD /* KIFHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = KIFHelper.js; sourceTree = "<group>"; };
@@ -1323,6 +1327,7 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				D3AC40181ABA2EF2001CAAC1 /* ThumbnailTests.swift */,
 				2F1BDFA71A85356E00213B54 /* FirefoxAccountTests.swift */,
 				0BA896491A250E6500C1010C /* ProfileTest.swift */,
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
@@ -2205,6 +2210,7 @@
 				2F1BDF911A8523B000213B54 /* KeychainWrapper.swift in Sources */,
 				28C077981A3B064000834FE5 /* CryptoTests.swift in Sources */,
 				59A687B4A05CC772FE7E5A09 /* SearchViewController.swift in Sources */,
+				D3AC40191ABA2EF2001CAAC1 /* ThumbnailTests.swift in Sources */,
 				59A680D1116F5BF6CCC9ED6F /* HistoryPanel.swift in Sources */,
 				59A687335CF58A8004B23508 /* BookmarksPanel.swift in Sources */,
 				59A68ACAB9DB4B3E04E5D1B7 /* ReaderPanel.swift in Sources */,
@@ -2231,6 +2237,7 @@
 				D38B2D8A1A8D98D00040E6B5 /* SearchEngines.swift in Sources */,
 				D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				0BD2C61D1A643B6000BB4BB9 /* Locking.swift in Sources */,
+				D3AC403A1ABA30C0001CAAC1 /* HashExtensions.swift in Sources */,
 				E418D0DC1A251B3200CAE47A /* Clients.swift in Sources */,
 				2F1BDF9F1A85240400213B54 /* FirefoxAccount.swift in Sources */,
 				D38B2D8C1A8D98D90040E6B5 /* OpenSearch.swift in Sources */,
@@ -2252,6 +2259,7 @@
 				2F26574D1A85775F0057F2DE /* KeychainWrapper.swift in Sources */,
 				282DA4691A68C13400A406E2 /* Clients.swift in Sources */,
 				2F1BDFA01A85240400213B54 /* FirefoxAccount.swift in Sources */,
+				D3AC403B1ABA30C0001CAAC1 /* HashExtensions.swift in Sources */,
 				D38B2D8B1A8D98D10040E6B5 /* SearchEngines.swift in Sources */,
 				D3C744D01A687D6C004CE85D /* URIFixup.swift in Sources */,
 				E42CCDEA1A23A74400B794D3 /* RestAPI.swift in Sources */,
