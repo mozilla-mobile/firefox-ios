@@ -211,6 +211,12 @@
 		D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */; };
 		D31A0FC81A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */; };
 		D31FC24C1A8D923000BAF7EC /* Alamofire.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D31FC2311A8D908900BAF7EC /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D33D02151ABCECF400B9D667 /* FileThumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D02141ABCECF400B9D667 /* FileThumbnails.swift */; };
+		D33D02161ABCECF400B9D667 /* FileThumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D02141ABCECF400B9D667 /* FileThumbnails.swift */; };
+		D33D02311ABCECFB00B9D667 /* FileThumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D02141ABCECF400B9D667 /* FileThumbnails.swift */; };
+		D33D02321ABCECFC00B9D667 /* FileThumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D02141ABCECF400B9D667 /* FileThumbnails.swift */; };
+		D33D6BC81ABCE8F60089DAB2 /* Thumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D6BC71ABCE8F60089DAB2 /* Thumbnails.swift */; };
+		D33D6BC91ABCE8F60089DAB2 /* Thumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D6BC71ABCE8F60089DAB2 /* Thumbnails.swift */; };
 		D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
 		D34DC8581A16C40C00D49B7B /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8521A16C40C00D49B7B /* RestAPI.swift */; };
 		D3589EF71A8D930000F28118 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E4CD9F191A6D9B7B00318571 /* libz.dylib */; };
@@ -969,6 +975,8 @@
 		D314E7F51A37B98700426A76 /* BrowserToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserToolbar.swift; sourceTree = "<group>"; };
 		D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSuggestClient.swift; sourceTree = "<group>"; };
 		D31FC2291A8D908800BAF7EC /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Carthage/Checkouts/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
+		D33D02141ABCECF400B9D667 /* FileThumbnails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileThumbnails.swift; sourceTree = "<group>"; };
+		D33D6BC71ABCE8F60089DAB2 /* Thumbnails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Thumbnails.swift; path = Storage/Thumbnails.swift; sourceTree = "<group>"; };
 		D34DC84D1A16C40C00D49B7B /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		D34DC8521A16C40C00D49B7B /* RestAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestAPI.swift; sourceTree = "<group>"; };
 		D35275151AA8D13B00E9C906 /* ColorUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
@@ -1425,10 +1433,11 @@
 				2FCAE2461ABB531100877008 /* ReadingList.swift */,
 				2FCAE2471ABB531100877008 /* RemoteTabs.swift */,
 				2FCAE2481ABB531100877008 /* Site.swift */,
+				D33D6BC71ABCE8F60089DAB2 /* Thumbnails.swift */,
 				2FCAE25C1ABB531100877008 /* Visit.swift */,
 				2FCAE2491ABB531100877008 /* SQL */,
-				2FCAE25A1ABB531100877008 /* ThirdParty */,
 				2FCAE21C1ABB51F800877008 /* Supporting Files */,
+				2FCAE25A1ABB531100877008 /* ThirdParty */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -1531,11 +1540,12 @@
 		D34DC84C1A16C40C00D49B7B /* Providers */ = {
 			isa = PBXGroup;
 			children = (
-				0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */,
-				D34DC84D1A16C40C00D49B7B /* Profile.swift */,
 				E42CCDE21A23A6F900B794D3 /* Clients.swift */,
-				D34DC8521A16C40C00D49B7B /* RestAPI.swift */,
+				D33D02141ABCECF400B9D667 /* FileThumbnails.swift */,
 				0BE108391A1B1ED200D4B712 /* Locking.swift */,
+				D34DC84D1A16C40C00D49B7B /* Profile.swift */,
+				0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */,
+				D34DC8521A16C40C00D49B7B /* RestAPI.swift */,
 			);
 			path = Providers;
 			sourceTree = "<group>";
@@ -2762,6 +2772,7 @@
 			files = (
 				2FCAE2671ABB531100877008 /* BookmarksSqlite.swift in Sources */,
 				2FCAE2621ABB531100877008 /* History.swift in Sources */,
+				D33D6BC81ABCE8F60089DAB2 /* Thumbnails.swift in Sources */,
 				2FCAE2721ABB531100877008 /* SQLiteHistory.swift in Sources */,
 				2FCAE2631ABB531100877008 /* Passwords.swift in Sources */,
 				2FCAE2731ABB531100877008 /* SQLitePasswords.swift in Sources */,
@@ -2832,6 +2843,7 @@
 				2FA435111ABB6829008031D1 /* Bookmarks.swift in Sources */,
 				2FA4351D1ABB6831008031D1 /* FaviconsTable.swift in Sources */,
 				2FA4352B1ABB6836008031D1 /* SwiftData.swift in Sources */,
+				D33D6BC91ABCE8F60089DAB2 /* Thumbnails.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2868,12 +2880,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
-				2F1BDFA11A85240400213B54 /* FirefoxAccountState.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				E42475E51AB73B9B00B23D33 /* SWUtilityButtonTapGestureRecognizer.m in Sources */,
+				D33D02151ABCECF400B9D667 /* FileThumbnails.swift in Sources */,
 				D38B2D2E1A8D96D00040E6B5 /* GCDWebServer.m in Sources */,
 				E42475E81AB73B9B00B23D33 /* SWUtilityButtonView.m in Sources */,
 				D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */,
@@ -2947,7 +2959,6 @@
 				D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */,
 				0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
-				2F34452E1AB247A100FD9731 /* TokenServerClient.swift in Sources */,
 				E4B423DE1ABA0436007E66C8 /* ReaderModeCache.swift in Sources */,
 				2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */,
 				E42CCDEE1A23C2C600B794D3 /* Clients.swift in Sources */,
@@ -2985,6 +2996,7 @@
 				D38B2D321A8D96D00040E6B5 /* GCDWebServerConnection.m in Sources */,
 				0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */,
 				D31A0FC81A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
+				D33D02161ABCECF400B9D667 /* FileThumbnails.swift in Sources */,
 				E4ECCDC41AB1EADF0005E717 /* Browser.swift in Sources */,
 				2F1BDF911A8523B000213B54 /* KeychainWrapper.swift in Sources */,
 				59A687B4A05CC772FE7E5A09 /* SearchViewController.swift in Sources */,
@@ -3010,6 +3022,7 @@
 				2F2657531A85776A0057F2DE /* KeychainWrapper.swift in Sources */,
 				D38B2D8A1A8D98D00040E6B5 /* SearchEngines.swift in Sources */,
 				D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */,
+				D33D02311ABCECFB00B9D667 /* FileThumbnails.swift in Sources */,
 				0BD2C61D1A643B6000BB4BB9 /* Locking.swift in Sources */,
 				E418D0DC1A251B3200CAE47A /* Clients.swift in Sources */,
 				D38B2D8C1A8D98D90040E6B5 /* OpenSearch.swift in Sources */,
@@ -3034,6 +3047,7 @@
 				D38B2D8D1A8D98DA0040E6B5 /* OpenSearch.swift in Sources */,
 				E42CCDE81A23A73D00B794D3 /* Profile.swift in Sources */,
 				E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
+				D33D02321ABCECFC00B9D667 /* FileThumbnails.swift in Sources */,
 				F8708D2A1A0970B40051AB07 /* ActionViewController.swift in Sources */,
 				28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */,
 			);
