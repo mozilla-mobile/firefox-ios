@@ -594,6 +594,50 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
+        let url = navigationAction.request.URL
+        
+        var openExternally = false
+        
+        if let scheme = url.scheme {
+            switch scheme {
+            case "about", "http", "https":
+                openExternally = false
+            case "mailto", "tel", "facetime", "sms":
+                openExternally = true
+            default:
+                // Filter out everything we can't open.
+                decisionHandler(WKNavigationActionPolicy.Cancel)
+                return
+            }
+        }
+        
+        if openExternally {
+            if UIApplication.sharedApplication().canOpenURL(url) {
+                // Ask the user if it's okay to open the url with UIApplication.
+                let alert = UIAlertController(
+                    title: String(format: NSLocalizedString("Opening %@", comment:"Opening an external URL"), url),
+                    message: NSLocalizedString("This will open in another application", comment: "Opening an external app"),
+                    preferredStyle: UIAlertControllerStyle.Alert
+                )
+                
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Cancel"), style: UIAlertActionStyle.Cancel, handler: { (action: UIAlertAction!) in
+                    // NOP
+                }))
+                
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment:"OK"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
+                    UIApplication.sharedApplication().openURL(url)
+                    return
+                }))
+
+                presentViewController(alert, animated: true, completion: nil)
+            }
+            decisionHandler(WKNavigationActionPolicy.Cancel)
+        } else {
+            decisionHandler(WKNavigationActionPolicy.Allow)
+        }
+    }
+    
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         urlBar.updateURL(webView.URL);
         toolbar.updateBackStatus(webView.canGoBack)
