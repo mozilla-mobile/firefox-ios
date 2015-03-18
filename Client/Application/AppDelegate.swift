@@ -68,11 +68,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UIApplicationUserDidTakeScreenshotNotification,
             object: nil,
             queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
-                // Render the entire screen into a snapshot to attach to the email
-                let mainScreen = UIScreen.mainScreen()
-                let snapshot = mainScreen.snapshotViewAfterScreenUpdates(true)
-                UIGraphicsBeginImageContext(mainScreen.bounds.size)
-                snapshot.layer.renderInContext(UIGraphicsGetCurrentContext())
+                UIGraphicsBeginImageContext(self.window.bounds.size)
+                self.window.drawViewHierarchyInRect(self.window.bounds, afterScreenUpdates: true)
                 let image = UIGraphicsGetImageFromCurrentImageContext()
                 UIGraphicsEndImageContext()
                 
