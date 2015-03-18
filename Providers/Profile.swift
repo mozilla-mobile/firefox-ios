@@ -27,6 +27,7 @@ protocol Profile {
     var favicons: Favicons { get }
     var readingList: ReadingList { get }
     var passwords: Passwords { get }
+    var thumbnails: Thumbnails { get }
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
@@ -81,6 +82,10 @@ public class MockProfile: Profile {
 
     lazy var passwords: Passwords = {
         return MockPasswords(files: self.files)
+    }()
+
+    lazy var thumbnails: Thumbnails = {
+        return FileThumbnails(files: self.files)
     }()
 
     let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
@@ -168,6 +173,10 @@ public class BrowserProfile: Profile {
 
     lazy var passwords: Passwords = {
         return SQLitePasswords(files: self.files)
+    }()
+
+    lazy var thumbnails: Thumbnails = {
+        return FileThumbnails(files: self.files)
     }()
 
     let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
