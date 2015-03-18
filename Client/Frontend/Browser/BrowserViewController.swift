@@ -18,7 +18,7 @@ private let KVOEstimatedProgress = "estimatedProgress"
 
 private let HomeURL = "about:home"
 
-class BrowserViewController: UIViewController {
+class BrowserViewController: UIViewController, UIGestureRecognizerDelegate {
     private var urlBar: URLBarView!
     private var toolbar: BrowserToolbar!
     private var tabManager: TabManager!
@@ -82,6 +82,30 @@ class BrowserViewController: UIViewController {
         toolbar.browserToolbarDelegate = self
 
         tabManager.addTab()
+
+        let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: "handleDismissKeyboardGestureRecognizer:")
+        dismissKeyboardGestureRecognizer.delegate = self
+        dismissKeyboardGestureRecognizer.cancelsTouchesInView = false
+        view.addGestureRecognizer(dismissKeyboardGestureRecognizer)
+    }
+
+    func handleDismissKeyboardGestureRecognizer(gestureRecognizer: UITapGestureRecognizer) {
+        urlBar.dismissKeyboard()
+    }
+
+    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Don't fire if the URL text field is not first responder (no keyboard on screen)
+        if (urlBar.isURLTextFieldFirstResponder() == false) {
+            return false
+        }
+        else {
+            // Prevents firing when the urlBar itself is tapped
+            var point = gestureRecognizer.locationInView(self.view)
+            if point.y < (urlBar.frame.origin.y + urlBar.frame.size.height) {
+                return false
+            }
+        }
+        return true
     }
 
     private func wrapInEffect(view: UIView) -> UIView {

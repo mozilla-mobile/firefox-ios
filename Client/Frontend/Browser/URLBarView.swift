@@ -230,6 +230,14 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         delegate?.urlBarDidEndEditing(self)
     }
 
+    func dismissKeyboard() {
+        editTextField.resignFirstResponder()
+    }
+
+    func isURLTextFieldFirstResponder() -> Bool {
+        return editTextField.isFirstResponder()
+    }
+
     private func updateLayoutForEditing(#editing: Bool) {
         locationView.hidden = editing
         tabsButton.hidden = editing
