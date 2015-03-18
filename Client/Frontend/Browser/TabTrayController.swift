@@ -13,23 +13,26 @@ private struct TabTrayControllerUX {
     static let Margin = CGFloat(15)
     // This color has been manually adjusted to match background layer with iOS translucency effect.
     static let ToolbarBarTintColor = UIColor(red: 0.35, green: 0.37, blue: 0.39, alpha: 0)
+    static let TabTitleTextColor = UIColor.blackColor()
+    static let TabTitleTextFont = UIFont(name: "HelveticaNeue-Bold", size: 11)
 }
 
 // UITableViewController doesn't let us specify a style for recycling views. We override the default style here.
 private class CustomCell: UITableViewCell {
     let backgroundHolder: UIView
     let background: UIImageViewAligned
-    let titleText: TabLabel
+    let titleText: UILabel
     let title: UIView
     let innerStroke: InnerStrokedView
     let favicon: UIImageView
 
+    // Changes depending on whether we're full-screen or not.
     var margin = TabTrayControllerUX.Margin
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         self.backgroundHolder = UIView()
         self.backgroundHolder.layer.shadowColor = UIColor.blackColor().CGColor
-        self.backgroundHolder.layer.shadowOffset = CGSizeMake(0,2.0)
+        self.backgroundHolder.layer.shadowOffset = CGSizeMake(0, 2.0)
         self.backgroundHolder.layer.shadowOpacity = 0.95
         self.backgroundHolder.layer.shadowRadius = 1.0
         self.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
@@ -48,7 +51,13 @@ private class CustomCell: UITableViewCell {
         self.title = UIView()
         self.title.backgroundColor = UIColor.whiteColor()
 
-        self.titleText = TabLabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        self.titleText = UILabel()
+        self.titleText.textColor = TabTrayControllerUX.TabTitleTextColor
+        self.titleText.backgroundColor = UIColor.clearColor()
+        self.titleText.textAlignment = NSTextAlignment.Left
+        self.titleText.userInteractionEnabled = false
+        self.titleText.numberOfLines = 1
+        self.titleText.font = TabTrayControllerUX.TabTitleTextFont
 
         self.title.addSubview(self.titleText)
         self.title.addSubview(self.favicon)
@@ -84,7 +93,7 @@ private class CustomCell: UITableViewCell {
     private func verticalCenter(text: UILabel) {
         var top = (TabTrayControllerUX.TextBoxHeight - text.bounds.height) / 2.0
         top = top < 0.0 ? 0.0 : top
-        text.frame.origin = CGPoint(x: 0, y: top)
+        text.frame.origin = CGPoint(x: text.frame.origin.x, y: top)
     }
 
     func showFullscreen(container: UIView, table: UITableView) {
@@ -126,7 +135,7 @@ private class CustomCell: UITableViewCell {
             y: margin,
             width: w,
             height: h)
-        background.frame = CGRect(origin: CGPointMake(0,0), size: backgroundHolder.frame.size)
+        background.frame = CGRect(origin: CGPointMake(0, 0), size: backgroundHolder.frame.size)
 
         title.frame = CGRect(x: 0,
             y: 0,
@@ -135,9 +144,10 @@ private class CustomCell: UITableViewCell {
 
         favicon.frame = CGRect(x: 6, y: (TabTrayControllerUX.TextBoxHeight - 16)/2, width: 16, height: 16)
 
-        titleText.frame = CGRect(x: 0,
+        let titleTextLeft = favicon.frame.origin.x + favicon.frame.width + 6
+        titleText.frame = CGRect(x: titleTextLeft,
             y: 0,
-            width: title.frame.width - margin * 2,
+            width: title.frame.width - titleTextLeft - margin,
             height: title.frame.height)
 
         innerStroke.frame = background.frame
@@ -302,26 +312,8 @@ extension TabTrayController: Transitionable {
     }
 }
 
-private class TabLabel: UILabel {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        textColor = UIColor.blackColor()
-        backgroundColor = UIColor.clearColor()
-        textAlignment = NSTextAlignment.Left
-        userInteractionEnabled = false
-        numberOfLines = 1
-        font = UIFont(name: "HelveticaNeue-Bold", size: 11)
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private override func drawTextInRect(rect: CGRect) {
-        super.drawTextInRect(UIEdgeInsetsInsetRect(rect, UIEdgeInsets(top: 0, left: 26, bottom: 0, right: 10)))
-    }
-}
-
+// A transparent view with a rectangular border with rounded corners, stroked
+// with a semi-transparent white border.
 private class InnerStrokedView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -340,7 +332,7 @@ private class InnerStrokedView: UIView {
             y: halfWidth,
             width: rect.width - strokeWidth,
             height: rect.height - strokeWidth),
-            cornerRadius: 3.0)
+            cornerRadius: TabTrayControllerUX.CornerRadius)
 
         path.lineWidth = strokeWidth
         UIColor.whiteColor().colorWithAlphaComponent(0.2).setStroke()
