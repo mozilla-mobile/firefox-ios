@@ -33,6 +33,27 @@ public class FileAccessor {
     }
 
     /**
+     * Removes the contents of the directory without removing the directory itself.
+     */
+    public func removeFilesInDir(relativePath: String, error: NSErrorPointer) -> Bool {
+        var success = true
+        let fileManager = NSFileManager.defaultManager()
+        let path = rootPath.stringByAppendingPathComponent(relativePath)
+        let files = fileManager.contentsOfDirectoryAtPath(path, error: error)
+
+        if files == nil {
+            return false
+        }
+
+        for file in files! {
+            let filename = file as String
+            success &= remove(relativePath.stringByAppendingPathComponent(filename), error: error)
+        }
+
+        return success
+    }
+
+    /**
      * Moves the file or directory to the given destination, with both paths relative to the root.
      * The destination directory is created if it does not exist.
      */
