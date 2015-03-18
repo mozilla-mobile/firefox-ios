@@ -7,9 +7,19 @@ import Shared
 import Storage // Needed for Bytes library
 import FxA
 
-public class KeyBundle : Equatable {
-    let encKey: NSData;
-    let hmacKey: NSData;
+public class KeyBundle: Equatable {
+    let encKey: NSData
+    let hmacKey: NSData
+
+    private let KeyLength = 32
+
+    public class func fromKB(kB: NSData) -> KeyBundle {
+        let salt = NSData()
+        let contextInfo = FxAClient10.KW("oldsync")
+        let derived = kB.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: KeyLength + KeyLength)
+        return KeyBundle(encKey: derived.subdataWithRange(NSRange(location: 0, length: KeyLength)),
+                         hmacKey: derived.subdataWithRange(NSRange(location: KeyLength, length: KeyLength)))
+    }
 
     public class func random() -> KeyBundle {
         // Bytes.generateRandomBytes uses SecRandomCopyBytes, which hits /dev/random, which

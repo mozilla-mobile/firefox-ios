@@ -15,10 +15,11 @@ import Shared
     }
     
     var defaultKeys: KeyBundle? {
-        let pair: [JSON] = self["default"].asArray!
-        if let encKey = pair[0].asString {
-            if let hmacKey = pair[1].asString {
-                return KeyBundle(encKeyB64: encKey, hmacKeyB64: hmacKey)
+        if let pair: [JSON] = self["default"].asArray {
+            if let encKey = pair[0].asString {
+                if let hmacKey = pair[1].asString {
+                    return KeyBundle(encKeyB64: encKey, hmacKeyB64: hmacKey)
+                }
             }
         }
         return nil

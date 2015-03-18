@@ -12,15 +12,15 @@ public class Bytes {
         let data: NSMutableData! = NSMutableData(length: Int(len))
         let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
         let result: Int32 = SecRandomCopyBytes(kSecRandomDefault, len, bytes)
-        
+
         assert(result == 0, "Random byte generation failed.");
         return data
     }
-    
+
     public class func generateGUID() -> String {
         return generateRandomBytes(9).base64EncodedStringWithOptions(NSDataBase64EncodingOptions.allZeros)
     }
-    
+
     public class func decodeBase64(b64: String) -> NSData {
         return NSData(base64EncodedString: b64,
                       options: NSDataBase64DecodingOptions.allZeros)!
@@ -33,7 +33,7 @@ public class Bytes {
     public class func dataFromBase64(b64: String) -> NSData? {
         return b64.dataUsingEncoding(NSASCIIStringEncoding, allowLossyConversion: false)
     }
-    
+
     func fromHex(str: String) -> NSData {
        // TODO
         return NSData()
