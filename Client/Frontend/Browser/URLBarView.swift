@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Shared
 import Snap
 
 private struct URLBarViewUX {

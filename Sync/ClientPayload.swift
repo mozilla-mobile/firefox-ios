@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-
+import Shared
 
 @objc public class ClientPayload : CleartextPayloadJSON {
     override public func isValid() -> Bool {

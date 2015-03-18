@@ -4,6 +4,7 @@
 
 import Foundation
 import FxA
+import Shared
 
 class HawkHelper {
     private let NonceLengthInBytes: UInt = 8

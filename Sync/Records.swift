@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 let ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60;
 

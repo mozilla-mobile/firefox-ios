@@ -4,7 +4,7 @@
 
 import Foundation
 
-let OneMonthInMilliseconds = 30 * OneDayInMilliseconds
-let OneWeekInMilliseconds = 7 * OneDayInMilliseconds
-let OneDayInMilliseconds = 24 * OneHourInMilliseconds
-let OneHourInMilliseconds: Int64 = 60 * 60 * 1000
+public let OneMonthInMilliseconds = 30 * OneDayInMilliseconds
+public let OneWeekInMilliseconds = 7 * OneDayInMilliseconds
+public let OneDayInMilliseconds = 24 * OneHourInMilliseconds
+public let OneHourInMilliseconds: Int64 = 60 * 60 * 1000
