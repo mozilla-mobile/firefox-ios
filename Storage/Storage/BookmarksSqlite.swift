@@ -165,11 +165,7 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
         var err: NSError? = nil
         let inserted = db.insert(&err, callback: { (connection, err) -> Int in
             var bookmark: BookmarkItem!
-            if let title = item.title {
-                bookmark = BookmarkItem(guid: Bytes.generateGUID(), title: title, url: item.url)
-            } else {
-                bookmark = BookmarkItem(guid: Bytes.generateGUID(), title: item.url, url: item.url)
-            }
+            bookmark = BookmarkItem(guid: Bytes.generateGUID(), title: item.title ?? "", url: item.url)
 
             return self.table.insert(connection, item: bookmark, err: &err)
         })

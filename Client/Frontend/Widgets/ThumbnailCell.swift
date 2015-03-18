@@ -4,10 +4,15 @@
 
 import UIKit
 
+private let BorderColor = UIColor(rgb: 0xeeeeee)
+private let LabelFont = UIFont(name: "FiraSans-Regular", size: 11)
+private let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
+private let CellInsets = UIEdgeInsetsMake(8, 8, 8, 8)
+private let TextMargin = 5
+
 class ThumbnailCell: UICollectionViewCell {
     let textLabel = UILabel()
     let imageView = UIImageView()
-    let margin = 10
 
     override init() {
         super.init()
@@ -19,20 +24,20 @@ class ThumbnailCell: UICollectionViewCell {
         contentView.addSubview(textLabel)
         contentView.addSubview(imageView)
 
-        textLabel.font = UIFont(name: "FiraSans-SemiBold", size: 13)
-        textLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
-        textLabel.snp_makeConstraints({ make in
-            make.bottom.right.equalTo(self.contentView).offset(-self.margin)
-            make.left.equalTo(self.contentView).offset(self.margin)
-            make.height.equalTo(26)
+        imageView.layer.borderColor = BorderColor.CGColor
+        imageView.layer.borderWidth = 2
+        imageView.layer.cornerRadius = 3
+        imageView.snp_makeConstraints({ make in
+            make.top.left.right.equalTo(self.contentView).insets(CellInsets)
+            return
         })
 
-        imageView.layer.borderColor = UIColor.lightGrayColor().CGColor
-        imageView.layer.borderWidth = 1
-        imageView.snp_makeConstraints({ make in
-            make.top.equalTo(self.contentView).offset(self.margin)
-            make.left.right.equalTo(self.textLabel)
-            make.bottom.equalTo(self.textLabel.snp_top)
+        textLabel.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
+        textLabel.font = LabelFont
+        textLabel.textColor = LabelColor
+        textLabel.snp_makeConstraints({ make in
+            make.top.equalTo(self.imageView.snp_bottom).offset(TextMargin)
+            make.left.right.bottom.equalTo(self.contentView).insets(CellInsets)
         })
     }
 

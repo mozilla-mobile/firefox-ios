@@ -73,7 +73,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.registerClass(TwoLineCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.registerClass(TwoLineTableViewCell.self, forCellReuseIdentifier: CellIdentifier)
         tableView.registerClass(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag
@@ -103,5 +103,9 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 25
+    }
+
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 58
     }
 }

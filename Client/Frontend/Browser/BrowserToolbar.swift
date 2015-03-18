@@ -52,6 +52,7 @@ class BrowserToolbar: UIView {
         forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
 
         shareButton.setImage(UIImage(named: "send"), forState: .Normal)
+        shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "")
         shareButton.addTarget(self, action: "SELdidClickShare", forControlEvents: UIControlEvents.TouchUpInside)
 
         bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
