@@ -6,6 +6,13 @@ import Foundation
 import UIKit
 import Snap
 
+private struct URLBarViewUX {
+    // The color shown behind the tabs count button, and underneath the (mostly transparent) status bar.
+    static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
+    static let TextFieldBorderColor = UIColor(rgb: 0x6da0db)
+    static let LocationLeftPadding = 8
+}
+
 protocol URLBarDelegate: class {
     func urlBarDidPressTabs(urlBar: URLBarView)
     func urlBarDidPressReaderMode(urlBar: URLBarView)
@@ -16,9 +23,6 @@ protocol URLBarDelegate: class {
     func urlBar(urlBar: URLBarView, didEnterText text: String)
     func urlBar(urlBar: URLBarView, didSubmitText text: String)
 }
-
-private let TextFieldBorderColor = UIColor(rgb: 0x6da0db)
-private let LocationLeftPadding = 8
 
 class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     weak var delegate: URLBarDelegate?
@@ -65,7 +69,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         editTextField.returnKeyType = UIReturnKeyType.Go
         editTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
         editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
-        editTextField.layer.borderColor = TextFieldBorderColor.CGColor
+        editTextField.layer.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
         editTextField.layer.cornerRadius = 3
         editTextField.delegate = self
         editTextField.font = UIFont(name: "HelveticaNeue-Light", size: 12)
@@ -238,7 +242,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         cancelButton.hidden = !editing
 
         locationContainer.snp_remakeConstraints { make in
-            make.leading.equalTo(self).offset(LocationLeftPadding)
+            make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
             make.centerY.equalTo(self).offset(StatusBarHeight / 2)
 
             if editing {
@@ -323,10 +327,9 @@ extension URLBarView {
         super.layoutSubviews()
         if let layer = layer as? CAShapeLayer {
             layer.path = self.getPath().CGPath
-            layer.fillColor = UIColor.darkGrayColor().CGColor
+            layer.fillColor = URLBarViewUX.BackgroundColor.CGColor
         }
     }
-
 }
 
 private class ToolbarTextField: UITextField {
