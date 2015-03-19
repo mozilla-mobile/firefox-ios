@@ -12,7 +12,8 @@ class SettingsTableViewController: UITableViewController {
     let ItemAccountStatus = 0
     let ItemAccountDisconnect = 1
     let SectionSearch = 1
-    let NumberOfSections = 2
+    let SectionAbout = 2
+    let NumberOfSections = 3
 
     var profile: Profile!
 
@@ -44,6 +45,14 @@ class SettingsTableViewController: UITableViewController {
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
             cell.textLabel?.text = NSLocalizedString("Search", comment: "Settings")
+        } else if indexPath.section == SectionAbout {
+            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+            // Keep this in agreement with AppDelegate.
+            let appVersion = NSBundle.mainBundle()
+                .objectForInfoDictionaryKey("CFBundleShortVersionString") as String
+            let buildNumber = NSBundle.mainBundle()
+                .objectForInfoDictionaryKey(kCFBundleVersionKey) as String
+            cell.textLabel?.text = "Version v\(appVersion) (\(buildNumber))"
         } else {
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
         }
@@ -69,6 +78,8 @@ class SettingsTableViewController: UITableViewController {
             }
         } else if section == SectionSearch {
             return 1
+        } else if section == SectionAbout {
+            return 1
         } else {
             return 0
         }
@@ -79,6 +90,8 @@ class SettingsTableViewController: UITableViewController {
             return nil
         } else if section == SectionSearch {
             return NSLocalizedString("Search Settings", comment: "Title for search settings section.")
+        } else if section == SectionAbout {
+            return NSLocalizedString("About", comment: "Title for about section.")
         } else {
             return nil
         }
