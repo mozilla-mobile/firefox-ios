@@ -92,7 +92,7 @@ public class CleartextPayloadJSON : JSON {
  *
  * Deletedness is a property of the payload.
  */
-@objc public class Record<T : CleartextPayloadJSON> {
+public class Record<T : CleartextPayloadJSON> {
     public let id: String
     public let payload: T
 
