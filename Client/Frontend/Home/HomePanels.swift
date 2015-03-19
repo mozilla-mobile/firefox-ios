@@ -22,7 +22,7 @@ class HomePanels {
                 controller.profile = profile
                 return controller
             },
-            imageName: "tabs",
+            imageName: "TopSites",
             accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label")),
 
         HomePanelDescriptor(
@@ -31,7 +31,7 @@ class HomePanels {
                 controller.profile = profile
                 return controller
             },
-            imageName: "bookmarks",
+            imageName: "Bookmarks",
             accessibilityLabel: NSLocalizedString("Bookmarks", comment: "Panel accessibility label")),
 
         HomePanelDescriptor(
@@ -40,7 +40,7 @@ class HomePanels {
                 controller.profile = profile
                 return controller
             },
-            imageName: "history",
+            imageName: "History",
             accessibilityLabel: NSLocalizedString("History", comment: "Panel accessibility label")),
 
         HomePanelDescriptor(
@@ -49,7 +49,7 @@ class HomePanels {
                 controller.profile = profile
                 return controller
             },
-            imageName: "tabs",
+            imageName: "SyncedTabs",
             accessibilityLabel: NSLocalizedString("Synced tabs", comment: "Panel accessibility label")),
 
         HomePanelDescriptor(
@@ -58,7 +58,7 @@ class HomePanels {
                 controller.profile = profile
                 return controller
             },
-            imageName: "reader",
+            imageName: "ReadingList",
             accessibilityLabel: NSLocalizedString("Reading list", comment: "Panel accessibility label")),
     ]
 }
