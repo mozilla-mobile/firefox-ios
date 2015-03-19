@@ -9,7 +9,7 @@ import UIKit
 private struct HomePanelViewControllerUX {
     // Height of the top panel switcher button toolbar.
     static let ButtonContainerHeight: CGFloat = 40
-    // TODO: Unify this color with other background colors, or name it as a special color.
+    static let ButtonContainerBorderColor = UIColor(rgb: 0xcccccc)
     static let BackgroundColor = UIColor.whiteColor()
 }
 
@@ -35,6 +35,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     weak var delegate: HomePanelViewControllerDelegate?
 
     private var buttonContainerView: UIView!
+    private var buttonContainerBottomBorderView: UIView!
     private var controllerContainerView: UIView!
     private var buttons: [UIButton] = []
 
@@ -45,12 +46,21 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView.backgroundColor = HomePanelViewControllerUX.BackgroundColor
         view.addSubview(buttonContainerView)
 
+        self.buttonContainerBottomBorderView = UIView()
+        buttonContainerView.addSubview(buttonContainerBottomBorderView)
+        buttonContainerBottomBorderView.backgroundColor = HomePanelViewControllerUX.ButtonContainerBorderColor
+
         controllerContainerView = UIView()
         view.addSubview(controllerContainerView)
 
         buttonContainerView.snp_makeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(HomePanelViewControllerUX.ButtonContainerHeight)
+        }
+
+        buttonContainerBottomBorderView.snp_makeConstraints { make in
+            make.top.equalTo(self.buttonContainerView.snp_bottom).offset(-1)
+            make.left.right.bottom.equalTo(self.buttonContainerView)
         }
 
         controllerContainerView.snp_makeConstraints { make in
