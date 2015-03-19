@@ -40,10 +40,11 @@ let DBCouldNotOpenErrorCode = 200
 // Version 2 - Added a visits table, refactored the history table to be a GenericTable
 // Version 3 - Added a favicons table
 // Version 4 - Added a readinglist table
+// Version 5 - Added the clients and the tabs tables.
 class BrowserDB {
     private let db: SwiftData
     // XXX: Increasing this should blow away old history, since we currently dont' support any upgrades
-    private let Version: Int = 4
+    private let Version: Int = 5
     private let FileName = "browser.db"
     private let files: FileAccessor
     private let schemaTable: SchemaTable<TableInfo>
@@ -176,6 +177,13 @@ class BrowserDB {
             return err
         }
         return c
+    }
+
+    func transaction(inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> Bool) {
+        db.transaction { connection in
+            var err: NSError? = nil
+            return callback(connection: connection, err: &err)
+        }
     }
 
     private let debug_enabled = false

@@ -7,4 +7,5 @@ import Foundation
 public let OneMonthInMilliseconds = 30 * OneDayInMilliseconds
 public let OneWeekInMilliseconds = 7 * OneDayInMilliseconds
 public let OneDayInMilliseconds = 24 * OneHourInMilliseconds
-public let OneHourInMilliseconds: Int64 = 60 * 60 * 1000
+public let OneHourInMilliseconds = 60 * OneMinuteInMilliseconds
+public let OneMinuteInMilliseconds: Int64 = 60 * 1000

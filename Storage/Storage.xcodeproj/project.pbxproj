@@ -52,6 +52,12 @@
 		2F7CEBAD1ABB419A00D2CABB /* ReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47726171A8A794B00FC058B /* ReadingList.swift */; };
 		2F7CEBAE1ABB419A00D2CABB /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282DA4D61A69A28000A406E2 /* Site.swift */; };
 		2F7CEBAF1ABB419A00D2CABB /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA497811A7B094B004C8E17 /* Visit.swift */; };
+		2F7CEBB21ABB43B300D2CABB /* RemoteTabsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7CEBB01ABB43B300D2CABB /* RemoteTabsTable.swift */; };
+		2F7CEBB31ABB43B300D2CABB /* RemoteTabsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7CEBB01ABB43B300D2CABB /* RemoteTabsTable.swift */; };
+		2F7CEBB41ABB43B300D2CABB /* SQLiteRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7CEBB11ABB43B300D2CABB /* SQLiteRemoteClientsAndTabs.swift */; };
+		2F7CEBB51ABB43B300D2CABB /* SQLiteRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7CEBB11ABB43B300D2CABB /* SQLiteRemoteClientsAndTabs.swift */; };
+		2F7CEBB71ABB43BE00D2CABB /* RemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7CEBB61ABB43BE00D2CABB /* RemoteTabs.swift */; };
+		2F7CEBB81ABB43BE00D2CABB /* RemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7CEBB61ABB43BE00D2CABB /* RemoteTabs.swift */; };
 		4A59B21913DCFA81C7CD9C91 /* GenericTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59B3F1AAD619686DB9450C /* GenericTable.swift */; };
 		4A59B334A243792894D6E614 /* TestHistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59B6E9AB0A08F28227C050 /* TestHistoryTable.swift */; };
 		4A59BAEB154EA6E1B621E067 /* BrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF61F0D956D2A1BDAE29 /* BrowserDB.swift */; };
@@ -108,6 +114,9 @@
 		282DA4D31A69A24300A406E2 /* History.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
 		282DA4D61A69A28000A406E2 /* Site.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Site.swift; sourceTree = "<group>"; };
 		282DA51F1A69BCB700A406E2 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		2F7CEBB01ABB43B300D2CABB /* RemoteTabsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RemoteTabsTable.swift; path = SQL/RemoteTabsTable.swift; sourceTree = "<group>"; };
+		2F7CEBB11ABB43B300D2CABB /* SQLiteRemoteClientsAndTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteRemoteClientsAndTabs.swift; path = SQL/SQLiteRemoteClientsAndTabs.swift; sourceTree = "<group>"; };
+		2F7CEBB61ABB43BE00D2CABB /* RemoteTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteTabs.swift; sourceTree = "<group>"; };
 		4A59B22E909B6CAC95DBE879 /* VisitsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VisitsTable.swift; path = SQL/VisitsTable.swift; sourceTree = "<group>"; };
 		4A59B33FF96A39A59CBBBBD7 /* TestJoinedHistoryVisits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestJoinedHistoryVisits.swift; sourceTree = "<group>"; };
 		4A59B3F1AAD619686DB9450C /* GenericTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenericTable.swift; path = SQL/GenericTable.swift; sourceTree = "<group>"; };
@@ -183,6 +192,7 @@
 				282DA4D31A69A24300A406E2 /* History.swift */,
 				0B30602E1A80338F0085B8BC /* Passwords.swift */,
 				E47726171A8A794B00FC058B /* ReadingList.swift */,
+				2F7CEBB61ABB43BE00D2CABB /* RemoteTabs.swift */,
 				282DA4D61A69A28000A406E2 /* Site.swift */,
 				0BA497811A7B094B004C8E17 /* Visit.swift */,
 				282DA4D91A69A2C400A406E2 /* SQL */,
@@ -245,11 +255,13 @@
 				D3D2FB3D1AB89433003061D8 /* JoinedFaviconsHistoryTable.swift */,
 				4A59BCB8D38CE6E6F5F5F2DE /* JoinedHistoryVisitsTable.swift */,
 				D3D2FB3E1AB89433003061D8 /* ReadingListTable.swift */,
+				2F7CEBB01ABB43B300D2CABB /* RemoteTabsTable.swift */,
 				D3D2FB3F1AB89433003061D8 /* SchemaTable.swift */,
 				D3D2FB401AB89433003061D8 /* SQLFavicons.swift */,
 				0BA4977A1A7B0941004C8E17 /* SQLiteHistory.swift */,
 				D3D2FB411AB89433003061D8 /* SQLitePasswords.swift */,
 				E477261A1A8A7DE500FC058B /* SQLiteReadingList.swift */,
+				2F7CEBB11ABB43B300D2CABB /* SQLiteRemoteClientsAndTabs.swift */,
 				4A59B22E909B6CAC95DBE879 /* VisitsTable.swift */,
 			);
 			name = SQL;
@@ -378,6 +390,7 @@
 				0BA4977E1A7B0941004C8E17 /* SQLiteHistory.swift in Sources */,
 				282DA5211A69BCB700A406E2 /* module.modulemap in Sources */,
 				0BA4978C1A7B0E44004C8E17 /* Cursor.swift in Sources */,
+				2F7CEBB41ABB43B300D2CABB /* SQLiteRemoteClientsAndTabs.swift in Sources */,
 				282DA4D71A69A28000A406E2 /* Site.swift in Sources */,
 				D3D2FB431AB89433003061D8 /* FaviconsTable.swift in Sources */,
 				0B2770DD1A8AD83200CE7692 /* Bytes.swift in Sources */,
@@ -386,6 +399,7 @@
 				D3D2FB461AB89433003061D8 /* SchemaTable.swift in Sources */,
 				D3D2FB481AB89433003061D8 /* SQLitePasswords.swift in Sources */,
 				D3D2FB451AB89433003061D8 /* ReadingListTable.swift in Sources */,
+				2F7CEBB21ABB43B300D2CABB /* RemoteTabsTable.swift in Sources */,
 				4A59BB4F36A20F30229034C6 /* VisitsTable.swift in Sources */,
 				D3D2FB471AB89433003061D8 /* SQLFavicons.swift in Sources */,
 				E477261B1A8A7DE500FC058B /* SQLiteReadingList.swift in Sources */,
@@ -393,6 +407,7 @@
 				0BF42D3E1A7C148F00889E28 /* Favicons.swift in Sources */,
 				D3D2FB421AB89433003061D8 /* BookmarksSqlite.swift in Sources */,
 				0BA4978D1A7B0E55004C8E17 /* FileAccessor.swift in Sources */,
+				2F7CEBB71ABB43BE00D2CABB /* RemoteTabs.swift in Sources */,
 				4A59BD24F6210866F59EF0F6 /* JoinedHistoryVisitsTable.swift in Sources */,
 				4A59BFF7C37812C7955B9E79 /* HistoryTable.swift in Sources */,
 				4A59BAEB154EA6E1B621E067 /* BrowserDB.swift in Sources */,
@@ -406,9 +421,11 @@
 				2F7CEB9A1ABB419200D2CABB /* JoinedFaviconsHistoryTable.swift in Sources */,
 				0BCFBBB81A776A200087E26D /* MockFiles.swift in Sources */,
 				2F7CEBA61ABB419A00D2CABB /* Bookmarks.swift in Sources */,
+				2F7CEBB81ABB43BE00D2CABB /* RemoteTabs.swift in Sources */,
 				E4F43AC21A8CF9A200ACAC05 /* TestSQLiteReadingList.swift in Sources */,
 				282DA4A81A699E0300A406E2 /* StorageTests.swift in Sources */,
 				2F7CEBA81ABB419A00D2CABB /* Cursor.swift in Sources */,
+				2F7CEBB51ABB43B300D2CABB /* SQLiteRemoteClientsAndTabs.swift in Sources */,
 				2F7CEBAC1ABB419A00D2CABB /* Passwords.swift in Sources */,
 				0BF42D461A7C52C800889E28 /* TestFaviconsTable.swift in Sources */,
 				282DA4C61A699F8A00A406E2 /* SwiftData.swift in Sources */,
@@ -431,6 +448,7 @@
 				4A59B334A243792894D6E614 /* TestHistoryTable.swift in Sources */,
 				2F7CEB951ABB419200D2CABB /* BookmarksSqlite.swift in Sources */,
 				2F7CEB9B1ABB419200D2CABB /* JoinedHistoryVisitsTable.swift in Sources */,
+				2F7CEBB31ABB43B300D2CABB /* RemoteTabsTable.swift in Sources */,
 				2F7CEB9C1ABB419200D2CABB /* ReadingListTable.swift in Sources */,
 				2F7CEBA11ABB419200D2CABB /* SQLiteReadingList.swift in Sources */,
 				2F7CEBAB1ABB419A00D2CABB /* History.swift in Sources */,
