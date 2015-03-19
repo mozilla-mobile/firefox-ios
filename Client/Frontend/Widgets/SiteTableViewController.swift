@@ -5,6 +5,11 @@
 import UIKit
 import Storage
 
+struct SiteTableViewControllerUX {
+    static let HeaderHeight = CGFloat(25)
+    static let RowHeight = CGFloat(58)
+}
+
 private class SiteTableViewHeader : UITableViewHeaderFooterView {
     // I can't get drawRect to play nicely with the glass background. As a fallback
     // we just use views for the top and bottom borders.
@@ -102,10 +107,10 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 25
+        return SiteTableViewControllerUX.HeaderHeight
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 58
+        return SiteTableViewControllerUX.RowHeight
     }
 }
