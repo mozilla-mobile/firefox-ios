@@ -12,16 +12,16 @@ import Foundation
 ///
 /// Non-sensitive but persistent data should be maintained outside of
 /// the account itself.
-class FirefoxAccount {
+public class FirefoxAccount {
     let version = 1
 
     /// The email address identifying the account.  A Firefox Account is uniquely identified on a particular server
     /// (auth endpoint) by its email address.
-    let email: String
+    public let email: String
 
     /// The auth endpoint user identifier identifying the account.  A Firefox Account is uniquely identified on a
     /// particular server (auth endpoint) by its assigned uid.
-    let uid: String
+    public let uid: String
 
     /// A Firefox Account exists on a particular server.  The auth endpoint should speak the protocol documented at
     /// https://github.com/mozilla/fxa-auth-server/blob/02f88502700b0c5ef5a4768a8adf332f062ad9bf/docs/api.md
@@ -37,7 +37,7 @@ class FirefoxAccount {
 
     private var state: FirefoxAccountState
 
-    init(email: String, uid: String, authEndpoint: NSURL, contentEndpoint: NSURL, oauthEndpoint: NSURL, state: FirefoxAccountState) {
+    public init(email: String, uid: String, authEndpoint: NSURL, contentEndpoint: NSURL, oauthEndpoint: NSURL, state: FirefoxAccountState) {
         self.email = email
         self.uid = uid
         self.authEndpoint = authEndpoint
@@ -48,7 +48,7 @@ class FirefoxAccount {
         self.state = state
     }
 
-    func asDictionary() -> [String: AnyObject] {
+    public func asDictionary() -> [String: AnyObject] {
         var dict: [String: AnyObject] = [:]
         dict["version"] = version
         dict["email"] = email
@@ -60,7 +60,7 @@ class FirefoxAccount {
         return dict
     }
 
-    class func fromDictionary(dictionary: [String: AnyObject]) -> FirefoxAccount? {
+    public class func fromDictionary(dictionary: [String: AnyObject]) -> FirefoxAccount? {
         if let version = dictionary["version"] as? Int {
             if version == 1 {
                 return FirefoxAccount.fromDictionaryV1(dictionary)
@@ -83,7 +83,7 @@ class FirefoxAccount {
                 state: state)
    }
 
-    func getActionNeeded() -> FirefoxAccountActionNeeded {
+    public func getActionNeeded() -> FirefoxAccountActionNeeded {
         return state.getActionNeeded()
     }
 }
