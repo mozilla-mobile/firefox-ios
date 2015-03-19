@@ -53,7 +53,7 @@ class BrowserDB {
 
     init?(files: FileAccessor) {
         self.files = files
-        db = SwiftData(filename: files.get(FileName, basePath: nil)!)
+        db = SwiftData(filename: files.getAndCreateAbsoluteDir(error: nil)!.stringByAppendingPathComponent(FileName))
         self.schemaTable = SchemaTable()
         self.createOrUpdate(self.schemaTable)
     }
@@ -127,7 +127,7 @@ class BrowserDB {
             // attached and expecting a working DB, but at least we should be able to restart
             if !success {
                 println("Couldn't create or update \(table.name)")
-                self.files.move(self.FileName, srcBasePath: nil, dest: "\(self.FileName).bak", destBasePath: nil)
+                self.files.move(self.FileName, toRelativePath: "\(self.FileName).bak", error: nil)
                 success = self.createTable(connection, table: table)
             }
             return success
