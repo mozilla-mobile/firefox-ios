@@ -27,7 +27,7 @@ class FirefoxAccountTests: XCTestCase {
                 authEndpoint: NSURL(string: d["authEndpoint"] as String)!,
                 contentEndpoint: NSURL(string: d["contentEndpoint"] as String)!,
                 oauthEndpoint: NSURL(string: d["oauthEndpoint"] as String)!,
-                state: FirefoxAccountState.Separated())
+                state: SeparatedState())
         let d1 = account1.asDictionary()
 
         let account2 = FirefoxAccount.fromDictionary(d1)

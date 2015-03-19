@@ -11,7 +11,7 @@ public let FxAClientErrorDomain = "org.mozilla.fxa.error"
 public let FxAClientUnknownError = NSError(domain: FxAClientErrorDomain, code: 999,
     userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
 
-private let KeyLength: Int = 32
+let KeyLength: Int = 32
 
 public struct FxALoginResponse {
     public let remoteEmail: String
