@@ -83,6 +83,7 @@ protocol Profile {
     var history: History { get }
     var favicons: Favicons { get }
     var readingList: ReadingList { get }
+    var remoteClientsAndTabs: RemoteClientsAndTabs { get }
     var passwords: Passwords { get }
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
@@ -134,6 +135,10 @@ public class MockProfile: Profile {
 
     lazy var readingList: ReadingList = {
         return SQLiteReadingList(files: self.files)
+    }()
+
+    lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
+        return SQLiteRemoteClientsAndTabs(files: self.files)
     }()
 
     lazy var passwords: Passwords = {
@@ -221,6 +226,10 @@ public class BrowserProfile: Profile {
 
     lazy var readingList: ReadingList = {
         return SQLiteReadingList(files: self.files)
+    }()
+
+    lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
+        return MockRemoteClientsAndTabs()
     }()
 
     lazy var passwords: Passwords = {

@@ -113,6 +113,8 @@
 		2FDE87521ABA3EA0005317B1 /* TimeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3444561AB22A4B00FD9731 /* TimeConstants.swift */; };
 		2FDE87531ABA3EB4005317B1 /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35275151AA8D13B00E9C906 /* ColorUtils.swift */; };
 		2FDE87541ABA3EBB005317B1 /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39999A81AA01D65005AED21 /* KeyboardHelper.swift */; };
+		2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */; };
+		2FDE881B1ABB3921005317B1 /* RemoteTabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */; };
 		2FEBABAF1AB3659000DB5728 /* ResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBABAE1AB3659000DB5728 /* ResultTests.swift */; };
 		39A362D91AAF5ECE00F47390 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; };
 		39A362DA1AAF5ECE00F47390 /* XCGLogger.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -672,6 +674,7 @@
 		2FA0AF801AAFB62E0083E9FA /* HawkHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HawkHelper.swift; sourceTree = "<group>"; };
 		2FA0AFA21AAFF1E20083E9FA /* HawkHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HawkHelperTests.swift; path = FxATests/HawkHelperTests.swift; sourceTree = "<group>"; };
 		2FDB10921A9FBEC5006CF312 /* ProfilePrefsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePrefsTests.swift; sourceTree = "<group>"; };
+		2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanel.swift; sourceTree = "<group>"; };
 		2FEBABAE1AB3659000DB5728 /* ResultTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResultTests.swift; path = SyncTests/ResultTests.swift; sourceTree = "<group>"; };
 		39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XCGLogger.xcodeproj; path = Carthage/Checkouts/XCGLogger/XCGLogger/Library/XCGLogger.xcodeproj; sourceTree = "<group>"; };
 		4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
@@ -1393,13 +1396,14 @@
 		F84B22211A09122500AAB793 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				F84B22221A09122500AAB793 /* HomePanelViewController.swift */,
 				F84B22261A09127C00AAB793 /* Home.xcassets */,
+				F84B22221A09122500AAB793 /* HomePanelViewController.swift */,
 				D30B101D1AA7F9C600C01CA3 /* HomePanels.swift */,
 				59A6825233896FC846499289 /* HistoryPanel.swift */,
 				59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */,
 				0BF648101A9C54E900BA963C /* TopSitesPanel.swift */,
 				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
+				2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2091,6 +2095,7 @@
 				E42CCDE31A23A6F900B794D3 /* Clients.swift in Sources */,
 				D30B101E1AA7F9C600C01CA3 /* HomePanels.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,
+				2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */,
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				D38B2D311A8D96D00040E6B5 /* GCDWebServerConnection.m in Sources */,
 				D38B2D401A8D96D00040E6B5 /* GCDWebServerFileRequest.m in Sources */,
@@ -2172,6 +2177,7 @@
 				2F834D1B1A80629A006A0B7B /* FxAContentViewController.swift in Sources */,
 				D3FA77971A43B5390010CD32 /* OpenSearch.swift in Sources */,
 				2FA7EAB41AB0BC6F00CE5347 /* FxAClient10.swift in Sources */,
+				2FDE881B1ABB3921005317B1 /* RemoteTabsPanel.swift in Sources */,
 				28786E551AB0F5FA009EA9EF /* DeferredTests.swift in Sources */,
 				D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */,
 				D38B2D441A8D96D00040E6B5 /* GCDWebServerMultiPartFormRequest.m in Sources */,
