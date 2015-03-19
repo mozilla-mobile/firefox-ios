@@ -156,10 +156,12 @@ public class Keys {
     public init(downloaded: EnvelopeJSON, master: KeyBundle) {
         let keysRecord = Record<KeysPayload>.fromEnvelope(downloaded, payloadFactory: master.factory())
         if let payload: KeysPayload = keysRecord?.payload {
-            if payload.isValid() && payload.defaultKeys != nil {
-                self.defaultBundle = payload.defaultKeys!
-                self.valid = true
-                return
+            if payload.isValid() {
+                if let keys = payload.defaultKeys {
+                    self.defaultBundle = keys
+                    self.valid = true
+                    return
+                }
             }
 
             self.defaultBundle = KeyBundle.invalid
