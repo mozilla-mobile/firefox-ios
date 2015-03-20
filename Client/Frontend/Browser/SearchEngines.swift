@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 let DefaultSearchEngineName = "Yahoo"
 
@@ -30,8 +31,8 @@ private let ShowSearchSuggestions = "search.suggestions.show"
  * is not thread-safe -- you should only access it on a single thread (usually, the main thread)!
  */
 class SearchEngines {
-    let prefs: ProfilePrefs
-    init(prefs: ProfilePrefs) {
+    let prefs: Prefs
+    init(prefs: Prefs) {
         self.prefs = prefs
         // By default, show search suggestions opt-in and don't show search suggestions automatically.
         self.shouldShowSearchSuggestionsOptIn = prefs.boolForKey(ShowSearchSuggestionsOptIn) ?? true
