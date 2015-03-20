@@ -47,6 +47,13 @@ class Browser: NSObject, WKScriptMessageHandler {
         return webView.URL?
     }
 
+    var displayURL: NSURL? {
+        if let url = webView.URL {
+            return ReaderModeUtils.isReaderModeURL(url) ? ReaderModeUtils.decodeURL(url) : url
+        }
+        return nil
+    }
+
     var canGoBack: Bool {
         return webView.canGoBack
     }
