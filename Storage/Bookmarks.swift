@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Shared
 
 public struct ShareItem {
     public let url: String
