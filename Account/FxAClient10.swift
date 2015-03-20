@@ -50,15 +50,16 @@ struct FxASignResponse {
 extension NSError: ErrorType {
 }
 
-private func KW(kw: String) -> NSData? {
-    return ("identity.mozilla.com/picl/v1/" + kw).utf8EncodedData
-}
 
-class FxAClient10 {
+public class FxAClient10 {
     let URL: NSURL
 
     init(endpoint: NSURL? = nil) {
         self.URL = endpoint ?? ProductionFirefoxAccountConfiguration().authEndpointURL
+    }
+
+    public class func KW(kw: String) -> NSData? {
+        return ("identity.mozilla.com/picl/v1/" + kw).utf8EncodedData
     }
 
     /**
@@ -177,7 +178,7 @@ class FxAClient10 {
 
     func login(emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool) -> Deferred<Result<FxALoginResponse>> {
         let deferred = Deferred<Result<FxALoginResponse>>()
-        let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: KW("authPW")!, length: 32)
+        let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: FxAClient10.KW("authPW")!, length: 32)
 
         let parameters = [
             "email": NSString(data: emailUTF8, encoding: NSUTF8StringEncoding)!,
@@ -226,7 +227,7 @@ class FxAClient10 {
         let deferred = Deferred<Result<FxAKeysResponse>>()
 
         let salt: NSData = NSData()
-        let contextInfo: NSData = KW("keyFetchToken")!
+        let contextInfo: NSData = FxAClient10.KW("keyFetchToken")!
         let bytes = keyFetchToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))
         let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
         let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))
@@ -275,7 +276,7 @@ class FxAClient10 {
         ]
 
         let salt: NSData = NSData()
-        let contextInfo: NSData = KW("sessionToken")!
+        let contextInfo: NSData = FxAClient10.KW("sessionToken")!
         let bytes = sessionToken.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))
         let tokenId = bytes.subdataWithRange(NSMakeRange(0 * KeyLength, KeyLength))
         let reqHMACKey = bytes.subdataWithRange(NSMakeRange(1 * KeyLength, KeyLength))

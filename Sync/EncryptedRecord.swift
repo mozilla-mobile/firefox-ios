@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import FxA
+import Account
 
 private let KeyLength = 32
 
@@ -12,14 +13,9 @@ public class KeyBundle: Equatable {
     let encKey: NSData
     let hmacKey: NSData
 
-    // Borrowed from FxAClient10.
-    private class func KW(kw: String) -> NSData? {
-        return ("identity.mozilla.com/picl/v1/" + kw).utf8EncodedData
-    }
-
     public class func fromKB(kB: NSData) -> KeyBundle {
         let salt = NSData()
-        let contextInfo = KW("oldsync")
+        let contextInfo = FxAClient10.KW("oldsync")
         let len: UInt = 64               // KeyLength + KeyLength, without type nonsense.
         let derived = kB.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: len)
         return KeyBundle(encKey: derived.subdataWithRange(NSRange(location: 0, length: KeyLength)),
