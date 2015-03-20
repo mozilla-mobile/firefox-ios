@@ -136,8 +136,22 @@ public class KeyBundle: Equatable {
         let computedHMAC = self.hmac(ciphertextB64)
         return expectedHMAC.isEqualToData(computedHMAC)
     }
-    
-    public func factory<T : CleartextPayloadJSON>() -> (String) -> T? {
+
+    /**
+     * Swift can't do functional factories. I would like to have one of the following
+     * approaches be viable:
+     *
+     * 1. Derive the constructor from the consumer of the factory.
+     * 2. Accept a type as input.
+     *
+     * Neither of these are viable, so we instead pass an explicit constructor closure.
+     *
+     * Most of these approaches produce either odd compiler errors, or -- worse --
+     * compile and then yield runtime EXC_BAD_ACCESS (see Radar 20230159).
+     *
+     * For this reason, be careful trying to simplify or improve this code.
+     */
+    public func factory<T : CleartextPayloadJSON>(f: (JSON) -> T) -> (String) -> T? {
         return { (payload: String) -> T? in
             let potential = EncryptedJSON(json: payload, keyBundle: self)
             if !(potential.isValid()) {
@@ -148,7 +162,7 @@ public class KeyBundle: Equatable {
             if (cleartext == nil) {
                 return nil
             }
-            return T(cleartext!)
+            return f(cleartext!)
         }
     }
 }
@@ -169,7 +183,11 @@ public class Keys {
     }
 
     public init(downloaded: EnvelopeJSON, master: KeyBundle) {
-        let keysRecord = Record<KeysPayload>.fromEnvelope(downloaded, payloadFactory: master.factory())
+        let f = {
+            (j: JSON) -> KeysPayload in
+            return KeysPayload(j)
+        }
+        let keysRecord = Record<KeysPayload>.fromEnvelope(downloaded, payloadFactory: master.factory(f))
         if let payload: KeysPayload = keysRecord?.payload {
             if payload.isValid() {
                 if let keys = payload.defaultKeys {
@@ -195,9 +213,9 @@ public class Keys {
         return defaultBundle
     }
 
-    public func factory<T : CleartextPayloadJSON>(collection: String) -> (String) -> T? {
+    public func factory<T : CleartextPayloadJSON>(collection: String, f: (JSON) -> T) -> (String) -> T? {
         let bundle = forCollection(collection)
-        return bundle.factory()
+        return bundle.factory(f)
     }
 }
 
