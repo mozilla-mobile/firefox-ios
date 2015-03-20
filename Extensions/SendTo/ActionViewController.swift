@@ -26,7 +26,7 @@ class ClientPickerViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("Send To Device", comment: "")
+        title = NSLocalizedString("Send To Device", comment: "Title of the dialog that allows you to send a tab to a different device")
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
@@ -48,7 +48,7 @@ class ClientPickerViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.textLabel?.font = UIFont(name: "FiraSans-Regular", size: 17)
-        cell.textLabel?.text = NSLocalizedString("Send to ", comment: "") + clients[indexPath.row].name // TODO This needs a localized format string
+        cell.textLabel?.text = String(format: NSLocalizedString("Send to %@", comment: "Text in a table view row that lets the user pick a device to which to send a tab to"), clients[indexPath.row].name)
         return cell
     }
     

@@ -68,10 +68,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 0: return NSLocalizedString("Today", comment: "")
-        case 1: return NSLocalizedString("Yesterday", comment: "")
-        case 2: return NSLocalizedString("Last week", comment: "")
-        case 3: return NSLocalizedString("Last month", comment: "")
+        case 0: return NSLocalizedString("Today", comment: "History tableview section header")
+        case 1: return NSLocalizedString("Yesterday", comment: "History tableview section header")
+        case 2: return NSLocalizedString("Last week", comment: "History tableview section header")
+        case 3: return NSLocalizedString("Last month", comment: "History tableview section header")
         default:
             assertionFailure("Invalid history section \(section)")
         }
