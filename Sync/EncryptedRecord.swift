@@ -21,6 +21,14 @@ public class KeyBundle: Equatable {
                          hmacKey: derived.subdataWithRange(NSRange(location: KeyLength, length: KeyLength)))
     }
 
+    public class func fromKB(kB: NSData) -> KeyBundle {
+        let salt = NSData()
+        let contextInfo = FxAClient10.KW("oldsync")
+        let derived = kB.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: 64)
+        return KeyBundle(encKey: derived.subdataWithRange(NSRange(location: 0, length: 32)),
+                         hmacKey: derived.subdataWithRange(NSRange(location: 32, length: 32)))
+    }
+
     public class func random() -> KeyBundle {
         // Bytes.generateRandomBytes uses SecRandomCopyBytes, which hits /dev/random, which
         // on iOS is populated by the OS from kernel-level sources of entropy.
