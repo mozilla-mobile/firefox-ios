@@ -49,6 +49,7 @@
 		282DA4691A68C13400A406E2 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCDE21A23A6F900B794D3 /* Clients.swift */; };
 		282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
 		282DA4811A697EB100A406E2 /* RestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC8521A16C40C00D49B7B /* RestAPI.swift */; };
+		285D37E31ABCA69E000E1CF9 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C077971A3B064000834FE5 /* CryptoTests.swift */; };
 		288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		288A2D9E1AB8B3260023ABC3 /* Shared.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		288A2DAA1AB8B3700023ABC3 /* Box.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DA71AB8B3700023ABC3 /* Box.swift */; };
@@ -59,7 +60,6 @@
 		288A2DB21AB8B37E0023ABC3 /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DAF1AB8B37E0023ABC3 /* ReadWriteLock.swift */; };
 		288A2DB51AB8B38D0023ABC3 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DB31AB8B38D0023ABC3 /* Error.swift */; };
 		288A2DB61AB8B38D0023ABC3 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DB41AB8B38D0023ABC3 /* Result.swift */; };
-		28C077981A3B064000834FE5 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C077971A3B064000834FE5 /* CryptoTests.swift */; };
 		28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		2F14E13A1ABB890800FF98DB /* Account-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */; };
@@ -843,7 +843,7 @@
 		288A2DAF1AB8B37E0023ABC3 /* ReadWriteLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReadWriteLock.swift; path = Carthage/Checkouts/Deferred/Deferred/ReadWriteLock.swift; sourceTree = "<group>"; };
 		288A2DB31AB8B38D0023ABC3 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = ThirdParty/Result/Error.swift; sourceTree = "<group>"; };
 		288A2DB41AB8B38D0023ABC3 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Result.swift; path = ThirdParty/Result/Result.swift; sourceTree = "<group>"; };
-		28C077971A3B064000834FE5 /* CryptoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoTests.swift; sourceTree = "<group>"; };
+		28C077971A3B064000834FE5 /* CryptoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CryptoTests.swift; path = SyncTests/CryptoTests.swift; sourceTree = "<group>"; };
 		28C0779D1A3B066000834FE5 /* RecordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordTests.swift; path = SyncTests/RecordTests.swift; sourceTree = "<group>"; };
 		28CE83BB1A1D1D3200576538 /* ClientPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientPayload.swift; sourceTree = "<group>"; };
 		28CE83BC1A1D1D3200576538 /* EncryptedRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptedRecord.swift; sourceTree = "<group>"; };
@@ -1256,18 +1256,11 @@
 			children = (
 				2827316F1ABC9BE700AA1954 /* Supporting Files */,
 				28C0779D1A3B066000834FE5 /* RecordTests.swift */,
+				28C077971A3B064000834FE5 /* CryptoTests.swift */,
 				28786E541AB0F5FA009EA9EF /* DeferredTests.swift */,
 				2FEBABAE1AB3659000DB5728 /* ResultTests.swift */,
 			);
 			name = SyncTests;
-			sourceTree = "<group>";
-		};
-		28C077951A3B060E00834FE5 /* FxATests */ = {
-			isa = PBXGroup;
-			children = (
-				28C077971A3B064000834FE5 /* CryptoTests.swift */,
-			);
-			name = FxATests;
 			sourceTree = "<group>";
 		};
 		28CE83B71A1D1D3200576538 /* FxAClient */ = {
@@ -1717,7 +1710,6 @@
 				F84B21D61A090F8100AAB793 /* ClientTests */,
 				F8708D1E1A0970990051AB07 /* Extensions */,
 				28CE83B71A1D1D3200576538 /* FxAClient */,
-				28C077951A3B060E00834FE5 /* FxATests */,
 				2FCAE21B1ABB51F800877008 /* Storage */,
 				2FCAE22A1ABB51F800877008 /* StorageTests */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
@@ -2672,6 +2664,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				285D37E31ABCA69E000E1CF9 /* CryptoTests.swift in Sources */,
 				282731A01ABC9C5900AA1954 /* ResultTests.swift in Sources */,
 				2827319F1ABC9C5900AA1954 /* DeferredTests.swift in Sources */,
 				2827319E1ABC9C5900AA1954 /* RecordTests.swift in Sources */,
@@ -2956,7 +2949,6 @@
 				D31A0FC81A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				E4ECCDC41AB1EADF0005E717 /* Browser.swift in Sources */,
 				2F1BDF911A8523B000213B54 /* KeychainWrapper.swift in Sources */,
-				28C077981A3B064000834FE5 /* CryptoTests.swift in Sources */,
 				59A687B4A05CC772FE7E5A09 /* SearchViewController.swift in Sources */,
 				59A680D1116F5BF6CCC9ED6F /* HistoryPanel.swift in Sources */,
 				59A687335CF58A8004B23508 /* BookmarksPanel.swift in Sources */,

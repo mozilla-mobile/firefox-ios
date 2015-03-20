@@ -5,7 +5,6 @@
 import UIKit
 import Storage
 import XCTest
-import Client
 import Shared
 import Sync
 
