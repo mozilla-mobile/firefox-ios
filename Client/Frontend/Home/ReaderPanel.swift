@@ -210,7 +210,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
         // TODO Hook up data store
         if let item = data?[indexPath.row] as? ReadingListItem {
-            if let encodedURL = ReaderMode.encodeURL(NSURL(string: item.url)!) {
+            if let encodedURL = ReaderModeUtils.encodeURL(NSURL(string: item.url)!) {
                 homePanelDelegate?.homePanel(self, didSelectURL: encodedURL)
             }
         }

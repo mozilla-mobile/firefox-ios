@@ -4,48 +4,48 @@
 
 @font-face {
     font-family: sans-serif;
-    src: url('FiraSans-Regular.ttf');
+    src: url('/reader-mode/fonts/FiraSans-Regular.ttf');
 }
 
 @font-face {
     font-family: sans-serif;
-    src: url('FiraSans-Bold.ttf');
+    src: url('/reader-mode/fonts/FiraSans-Bold.ttf');
     font-weight: bold;
 }
 
 @font-face {
     font-family: sans-serif;
-    src: url('FiraSans-Italic.ttf');
+    src: url('/reader-mode/fonts/FiraSans-Italic.ttf');
     font-style: italic;
 }
 
 @font-face {
     font-family: sans-serif;
-    src: url('FiraSans-BoldItalic.ttf');
+    src: url('/reader-mode/fonts/FiraSans-BoldItalic.ttf');
     font-weight: bold;
     font-style: italic;
 }
 
 @font-face {
     font-family: serif;
-    src: url('CharisSILR.ttf');
+    src: url('/reader-mode/fonts/CharisSILR.ttf');
 }
 
 @font-face {
     font-family: serif;
-    src: url('CharisSILB.ttf');
+    src: url('/reader-mode/fonts/CharisSILB.ttf');
     font-weight: bold;
 }
 
 @font-face {
     font-family: serif;
-    src: url('CharisSILI.ttf');
+    src: url('/reader-mode/fonts/CharisSILI.ttf');
     font-style: italic;
 }
 
 @font-face {
     font-family: serif;
-    src: url('CharisSILBI.ttf');
+    src: url('/reader-mode/fonts/CharisSILBI.ttf');
     font-weight: bold;
     font-style: italic;
 }

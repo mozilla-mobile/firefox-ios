@@ -86,17 +86,6 @@ struct ReaderModeStyle {
 
 let DefaultReaderModeStyle = ReaderModeStyle(theme: .Light, fontType: .SansSerif, fontSize: .Normal)
 
-let domainPrefixes = ["www.", "mobile.", "m."]
-
-private func simplifyDomain(domain: String) -> String {
-    for prefix in domainPrefixes {
-        if domain.hasPrefix(prefix) {
-            return domain.substringFromIndex(advance(domain.startIndex, countElements(prefix)))
-        }
-    }
-    return domain
-}
-
 /// This struct captures the response from the Readability.js code.
 struct ReadabilityResult {
     var domain = ""
@@ -128,6 +117,36 @@ struct ReadabilityResult {
             return nil
         }
     }
+
+    /// Initialize from a JSON encoded string
+    init?(string: String) {
+        let object = JSON(string: string)
+        let domain = object["domain"].asString
+        let url = object["url"].asString
+        let content = object["content"].asString
+        let title = object["title"].asString
+        let credits = object["credits"].asString
+
+        if domain == nil || url == nil || content == nil || title == nil || credits == nil {
+            return nil
+        }
+
+        self.domain = domain!
+        self.url = url!
+        self.content = content!
+        self.title = title!
+        self.credits = credits!
+    }
+
+    /// Encode to a dictionary, which can then for example be json encoded
+    func encode() -> [String:AnyObject] {
+        return ["domain": domain, "url": url, "content": content, "title": title, "credits": credits]
+    }
+
+    /// Encode to a JSON encoded string
+    func encode() -> String {
+        return JSON(encode() as [String:AnyObject]).toString(pretty: false)
+    }
 }
 
 /// Delegate that contains callbacks that we have added on top of the built-in WKWebViewDelegate
@@ -136,7 +155,7 @@ protocol ReaderModeDelegate {
     func readerMode(readerMode: ReaderMode, didDisplayReaderizedContentForBrowser browser: Browser)
 }
 
-private let ReaderModeNamespace = "_firefox_ReaderMode"
+let ReaderModeNamespace = "_firefox_ReaderMode"
 
 class ReaderMode: BrowserHelper {
     var delegate: ReaderModeDelegate?
@@ -144,8 +163,6 @@ class ReaderMode: BrowserHelper {
     private weak var browser: Browser?
     var state: ReaderModeState = ReaderModeState.Unavailable
     private var originalURL: NSURL?
-
-    var activateImmediately: Bool = false
 
     class func name() -> String {
         return "ReaderMode"
@@ -185,11 +202,6 @@ class ReaderMode: BrowserHelper {
     private func handleReaderModeStateChange(state: ReaderModeState) {
         self.state = state
         delegate?.readerMode(self, didChangeReaderModeState: state, forBrowser: browser!)
-
-        if activateImmediately && state == ReaderModeState.Available {
-            enableReaderMode()
-            activateImmediately = false
-        }
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
@@ -212,35 +224,6 @@ class ReaderMode: BrowserHelper {
         }
     }
 
-    func enableReaderMode() {
-        if state == ReaderModeState.Available {
-            browser!.webView.evaluateJavaScript("\(ReaderModeNamespace).readerize()", completionHandler: { (object, error) -> Void in
-                println("DEBUG: mozReaderize object=\(object != nil) error=\(error)")
-                if error == nil && object != nil {
-                    if let readabilityResult = ReadabilityResult(object: object) {
-                        if let html = self.generateReaderContent(readabilityResult, initialStyle: self.style) {
-                            self.state = ReaderModeState.Active
-                            self.originalURL = self.browser!.webView.URL
-                            if let readerModeURL = ReaderMode.encodeURL(self.browser!.webView.URL) {
-                                self.browser!.webView.loadHTMLString(html, baseURL: readerModeURL)
-                            }
-                            return
-                        }
-                    }
-                }
-                // TODO What do we do in case of errors? At this point we actually did show the button, so the user does expect some feedback I think.
-            })
-        }
-    }
-
-    func disableReaderMode() {
-        if state == ReaderModeState.Active {
-            state = ReaderModeState.Available
-            self.browser!.webView.loadRequest(NSURLRequest(URL: originalURL!))
-            originalURL = nil
-        }
-    }
-    
     var style: ReaderModeStyle = DefaultReaderModeStyle {
         didSet {
             if state == ReaderModeState.Active {
@@ -250,72 +233,5 @@ class ReaderMode: BrowserHelper {
                 })
             }
         }
-    }
-
-    private func generateReaderContent(readabilityResult: ReadabilityResult, initialStyle: ReaderModeStyle) -> String? {
-        if let stylePath = NSBundle.mainBundle().pathForResource("Reader", ofType: "css") {
-            if let css = NSString(contentsOfFile: stylePath, encoding: NSUTF8StringEncoding, error: nil) {
-                if let tmplPath = NSBundle.mainBundle().pathForResource("Reader", ofType: "html") {
-                    if let tmpl = NSMutableString(contentsOfFile: tmplPath, encoding: NSUTF8StringEncoding, error: nil) {
-                        tmpl.replaceOccurrencesOfString("%READER-CSS%", withString: css,
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
-
-                        tmpl.replaceOccurrencesOfString("%READER-STYLE%", withString: initialStyle.encode(),
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
-
-                        tmpl.replaceOccurrencesOfString("%READER-DOMAIN%", withString: simplifyDomain(readabilityResult.domain),
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
-
-                        tmpl.replaceOccurrencesOfString("%READER-URL%", withString: readabilityResult.url,
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
-
-                        tmpl.replaceOccurrencesOfString("%READER-TITLE%", withString: readabilityResult.title,
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
-
-                        tmpl.replaceOccurrencesOfString("%READER-CREDITS%", withString: readabilityResult.credits,
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
-
-                        tmpl.replaceOccurrencesOfString("%READER-CONTENT%", withString: readabilityResult.content,
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
-
-                        tmpl.replaceOccurrencesOfString("%WEBSERVER-BASE%", withString: WebServer.sharedInstance.base,
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
-
-                        return tmpl
-                    }
-                }
-            }
-        }
-        return nil
-    }
-
-    class func isReaderModeURL(url: NSURL) -> Bool {
-        if let absoluteString = url.absoluteString {
-            return absoluteString.hasPrefix("about:reader?url=")
-        }
-        return false
-    }
-
-    class func decodeURL(url: NSURL) -> NSURL? {
-        if let absoluteString = url.absoluteString {
-            if absoluteString.hasPrefix("about:reader?url=") {
-                let encodedURL = absoluteString.substringFromIndex(advance(absoluteString.startIndex, 17))
-                if let decodedURL = encodedURL.stringByRemovingPercentEncoding {
-                    return NSURL(string: decodedURL)
-                }
-            }
-        }
-        return nil
-    }
-
-    class func encodeURL(url: NSURL?) -> NSURL? {
-        if let absoluteString = url?.absoluteString {
-            if let encodedURL = absoluteString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) {
-                if let aboutReaderURL = NSURL(string: "about:reader?url=\(encodedURL)") {
-                    return aboutReaderURL
-                }
-            }
-        }
-        return nil
     }
 }

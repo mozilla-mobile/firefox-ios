@@ -252,7 +252,12 @@
 		E483C0541AB7716C004A79A7 /* KeysPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BD1A1D1D3200576538 /* KeysPayload.swift */; };
 		E4A888161A95679500CDC337 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
 		E4A888171A95679500CDC337 /* FxA.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */; };
+		E4A960241ABB9D500069AD6F /* ReaderModeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */; };
 		E4AAE2B91A956304006F8740 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D31FC2311A8D908900BAF7EC /* Alamofire.framework */; };
+		E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B423BD1AB9FE6A007E66C8 /* ReaderModeCache.swift */; };
+		E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B423DC1ABA0318007E66C8 /* ReaderModeHandlers.swift */; };
+		E4B423DE1ABA0436007E66C8 /* ReaderModeCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B423BD1AB9FE6A007E66C8 /* ReaderModeCache.swift */; };
 		E4B7B7611A793CF20022C5E0 /* CharisSILB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B73A1A793CF20022C5E0 /* CharisSILB.ttf */; };
 		E4B7B7621A793CF20022C5E0 /* CharisSILBI.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B73B1A793CF20022C5E0 /* CharisSILBI.ttf */; };
 		E4B7B7631A793CF20022C5E0 /* CharisSILI.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B73C1A793CF20022C5E0 /* CharisSILI.ttf */; };
@@ -762,6 +767,9 @@
 		E4988B571A9B95FF008B8B92 /* FennecNightly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FennecNightly.entitlements; sourceTree = "<group>"; };
 		E4988B6E1A9B964B008B8B92 /* FennecNightly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FennecNightly.entitlements; sourceTree = "<group>"; };
 		E4988B6F1A9B965A008B8B92 /* FennecNightly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FennecNightly.entitlements; sourceTree = "<group>"; };
+		E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeUtils.swift; sourceTree = "<group>"; };
+		E4B423BD1AB9FE6A007E66C8 /* ReaderModeCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeCache.swift; sourceTree = "<group>"; };
+		E4B423DC1ABA0318007E66C8 /* ReaderModeHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeHandlers.swift; sourceTree = "<group>"; };
 		E4B7B73A1A793CF20022C5E0 /* CharisSILB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CharisSILB.ttf; sourceTree = "<group>"; };
 		E4B7B73B1A793CF20022C5E0 /* CharisSILBI.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CharisSILBI.ttf; sourceTree = "<group>"; };
 		E4B7B73C1A793CF20022C5E0 /* CharisSILI.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CharisSILI.ttf; sourceTree = "<group>"; };
@@ -1382,6 +1390,9 @@
 			children = (
 				F84B21F61A0910F600AAB793 /* Readability.js */,
 				E4CD9E901A6897FB00318571 /* ReaderMode.swift */,
+				E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */,
+				E4B423BD1AB9FE6A007E66C8 /* ReaderModeCache.swift */,
+				E4B423DC1ABA0318007E66C8 /* ReaderModeHandlers.swift */,
 				E4CD9E991A68980A00318571 /* ReaderMode.js */,
 				E4CD9F531A71506400318571 /* Reader.html */,
 				E4CD9F5A1A71506C00318571 /* Reader.css */,
@@ -2054,6 +2065,8 @@
 				2F9990461AA51F5A0063E75D /* HexExtensions.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
 				2F1BDFA11A85240400213B54 /* FirefoxAccountState.swift in Sources */,
+				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
+				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
 				28CE83C51A1D1D3200576538 /* EncryptedRecord.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
@@ -2079,6 +2092,7 @@
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,
 				D34DC8581A16C40C00D49B7B /* RestAPI.swift in Sources */,
 				0BD19A651A2530840084FBA7 /* Locking.swift in Sources */,
+				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
 				0BF42D371A7C0B8E00889E28 /* FaviconManager.swift in Sources */,
@@ -2140,9 +2154,11 @@
 				E42475E31AB73B9B00B23D33 /* SWTableViewCell.m in Sources */,
 				E4CD9F1D1A6D9C2800318571 /* WebServerTests.swift in Sources */,
 				E483C0541AB7716C004A79A7 /* KeysPayload.swift in Sources */,
+				E4A960241ABB9D500069AD6F /* ReaderModeUtils.swift in Sources */,
 				0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */,
 				F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */,
 				2F34452E1AB247A100FD9731 /* TokenServerClient.swift in Sources */,
+				E4B423DE1ABA0436007E66C8 /* ReaderModeCache.swift in Sources */,
 				2F697F7E1A9FD22D009E03AE /* SearchEnginesTests.swift in Sources */,
 				2F44FA1D1A9D460500FD20CC /* HexExtensions.swift in Sources */,
 				28FEEE1E1AAFF116007FA476 /* EncryptedRecord.swift in Sources */,
