@@ -13,12 +13,12 @@ public let FxAClientUnknownError = NSError(domain: FxAClientErrorDomain, code: 9
 
 private let KeyLength: Int = 32
 
-struct FxALoginResponse {
-    let remoteEmail: String
-    let uid: String
-    let verified: Bool
-    let sessionToken: NSData
-    let keyFetchToken: NSData
+public struct FxALoginResponse {
+    public let remoteEmail: String
+    public let uid: String
+    public let verified: Bool
+    public let sessionToken: NSData
+    public let keyFetchToken: NSData
 
     init(remoteEmail: String, uid: String, verified: Bool, sessionToken: NSData, keyFetchToken: NSData) {
         self.remoteEmail = remoteEmail
@@ -29,7 +29,7 @@ struct FxALoginResponse {
     }
 }
 
-struct FxAKeysResponse {
+public struct FxAKeysResponse {
     let kA: NSData
     let wrapkB: NSData
 
@@ -39,8 +39,8 @@ struct FxAKeysResponse {
     }
 }
 
-struct FxASignResponse {
-    let certificate: String
+public struct FxASignResponse {
+    public let certificate: String
 
     init(certificate: String) {
         self.certificate = certificate
@@ -54,7 +54,7 @@ extension NSError: ErrorType {
 public class FxAClient10 {
     let URL: NSURL
 
-    init(endpoint: NSURL? = nil) {
+    public init(endpoint: NSURL? = nil) {
         self.URL = endpoint ?? ProductionFirefoxAccountConfiguration().authEndpointURL
     }
 
@@ -67,21 +67,21 @@ public class FxAClient10 {
      * lowercase-hex-encoded first 16 bytes of the SHA-256 hash of the
      * bytes of kB.
      */
-    class func computeClientState(kB: NSData) -> String? {
+    public class func computeClientState(kB: NSData) -> String? {
         if kB.length != 32 {
             return nil
         }
         return kB.sha256.subdataWithRange(NSRange(location: 0, length: 16)).hexEncodedString
     }
 
-    class func quickStretchPW(email: NSData, password: NSData) -> NSData {
+    public class func quickStretchPW(email: NSData, password: NSData) -> NSData {
         let salt: NSMutableData = NSMutableData(data: KW("quickStretch")!)
         salt.appendData(":".utf8EncodedData!)
         salt.appendData(email)
         return password.derivePBKDF2HMACSHA256KeyWithSalt(salt, iterations: 1000, length: 32)
     }
 
-    class func computeUnwrapKey(stretchedPW: NSData) -> NSData {
+    public class func computeUnwrapKey(stretchedPW: NSData) -> NSData {
         let salt: NSData = NSData()
         let contextInfo: NSData = KW("unwrapBkey")!
         let bytes = stretchedPW.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: UInt(KeyLength))
@@ -176,7 +176,7 @@ public class FxAClient10 {
         return nil
     }
 
-    func login(emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool) -> Deferred<Result<FxALoginResponse>> {
+    public func login(emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool) -> Deferred<Result<FxALoginResponse>> {
         let deferred = Deferred<Result<FxALoginResponse>>()
         let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: FxAClient10.KW("authPW")!, length: 32)
 
@@ -223,7 +223,7 @@ public class FxAClient10 {
         return deferred
     }
 
-    func keys(keyFetchToken: NSData) -> Deferred<Result<FxAKeysResponse>> {
+    public func keys(keyFetchToken: NSData) -> Deferred<Result<FxAKeysResponse>> {
         let deferred = Deferred<Result<FxAKeysResponse>>()
 
         let salt: NSData = NSData()
@@ -267,7 +267,7 @@ public class FxAClient10 {
         return deferred
     }
 
-    func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Result<FxASignResponse>> {
+    public func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Result<FxASignResponse>> {
         let deferred = Deferred<Result<FxASignResponse>>()
 
         let parameters = [

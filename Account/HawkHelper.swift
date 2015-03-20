@@ -6,19 +6,19 @@ import Foundation
 import FxA
 import Shared
 
-class HawkHelper {
+public class HawkHelper {
     private let NonceLengthInBytes: UInt = 8
 
     let id: String
     let key: NSData
 
-    init(id: String, key: NSData) {
+    public init(id: String, key: NSData) {
         self.id = id
         self.key = key
     }
 
     // Produce a HAWK value suitable for an "Authorization: value" header, timestamped now.
-    func getAuthorizationValueFor(request: NSURLRequest) -> String {
+    public func getAuthorizationValueFor(request: NSURLRequest) -> String {
         let timestampInSeconds: Int64 = Int64(NSDate().timeIntervalSince1970)
         return getAuthorizationValueFor(request, at: timestampInSeconds)
     }

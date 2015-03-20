@@ -10,12 +10,12 @@ let TokenServerClientErrorDomain = "org.mozilla.token.error"
 let TokenServerClientUnknownError = NSError(domain: TokenServerClientErrorDomain, code: 999,
     userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
 
-struct TokenServerToken {
-    let id: String
-    let key: String
-    let api_endpoint: String
-    let uid: Int64
-    let durationInSeconds: Int64
+public struct TokenServerToken {
+    public let id: String
+    public let key: String
+    public let api_endpoint: String
+    public let uid: Int64
+    public let durationInSeconds: Int64
 
     init(id: String, key: String, api_endpoint: String, uid: Int64, durationInSeconds: Int64) {
         self.id = id
@@ -26,14 +26,14 @@ struct TokenServerToken {
     }
 }
 
-class TokenServerClient {
+public class TokenServerClient {
     let URL: NSURL
 
-    init(URL: NSURL? = nil) {
+    public init(URL: NSURL? = nil) {
         self.URL = URL ?? ProductionSync15Configuration().tokenServerEndpointURL
     }
 
-    class func getAudienceForURL(URL: NSURL) -> String {
+    public class func getAudienceForURL(URL: NSURL) -> String {
         if let port = URL.port {
             return "\(URL.scheme!)://\(URL.host!):\(port)"
         } else {
@@ -71,7 +71,7 @@ class TokenServerClient {
         return nil
     }
 
-    func token(assertion: String, clientState: String? = nil) -> Deferred<Result<TokenServerToken>> {
+    public func token(assertion: String, clientState: String? = nil) -> Deferred<Result<TokenServerToken>> {
         let deferred = Deferred<Result<TokenServerToken>>()
 
         var mutableURLRequest = NSMutableURLRequest(URL: URL)
