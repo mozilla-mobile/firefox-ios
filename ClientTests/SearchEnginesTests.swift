@@ -4,6 +4,7 @@
 
 import Foundation
 import XCTest
+import Shared
 
 private let ExpectedEngineNames = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "Twitter", "Wikipedia", "Yahoo"]
 
