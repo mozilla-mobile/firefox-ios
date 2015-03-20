@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 let ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60;
 
@@ -91,7 +92,7 @@ public class CleartextPayloadJSON : JSON {
  *
  * Deletedness is a property of the payload.
  */
-@objc public class Record<T : CleartextPayloadJSON> {
+public class Record<T : CleartextPayloadJSON> {
     public let id: String
     public let payload: T
 

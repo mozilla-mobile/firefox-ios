@@ -3,8 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
-@objc public class KeysPayload : CleartextPayloadJSON {
+public class KeysPayload : CleartextPayloadJSON {
     override public func isValid() -> Bool {
         // We should also call super.isValid(), but that'll fail:
         // Global is external, but doesn't have external or weak linkage!
@@ -14,10 +15,11 @@ import Foundation
     }
     
     var defaultKeys: KeyBundle? {
-        let pair: [JSON] = self["default"].asArray!
-        if let encKey = pair[0].asString {
-            if let hmacKey = pair[1].asString {
-                return KeyBundle(encKeyB64: encKey, hmacKeyB64: hmacKey)
+        if let pair: [JSON] = self["default"].asArray {
+            if let encKey = pair[0].asString {
+                if let hmacKey = pair[1].asString {
+                    return KeyBundle(encKeyB64: encKey, hmacKeyB64: hmacKey)
+                }
             }
         }
         return nil

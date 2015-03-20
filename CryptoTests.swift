@@ -6,6 +6,7 @@ import UIKit
 import Storage
 import XCTest
 import Client
+import Shared
 
 class CryptoTests: XCTestCase {
     let hmacB16 = "b1e6c18ac30deb70236bc0d65a46f7a4dce3b8b0e02cf92182b914e3afa5eebc"

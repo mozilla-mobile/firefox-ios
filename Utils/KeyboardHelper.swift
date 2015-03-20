@@ -8,10 +8,10 @@ import Foundation
 /**
  * The keyboard state at the time of notification.
  */
-struct KeyboardState {
-    let height: CGFloat
-    let animationDuration: Double
-    let animationCurve: UIViewAnimationCurve
+public struct KeyboardState {
+    public let height: CGFloat
+    public let animationDuration: Double
+    public let animationCurve: UIViewAnimationCurve
 
     private init(_ userInfo: [NSObject: AnyObject], height: CGFloat) {
         self.height = height
@@ -26,7 +26,7 @@ struct KeyboardState {
     }
 }
 
-protocol KeyboardHelperDelegate: class {
+public protocol KeyboardHelperDelegate: class {
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState)
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState)
 }
@@ -34,12 +34,12 @@ protocol KeyboardHelperDelegate: class {
 /**
  * Convenience class for observing keyboard state.
  */
-class KeyboardHelper: NSObject {
-    var currentState: KeyboardState?
+public class KeyboardHelper: NSObject {
+    public var currentState: KeyboardState?
 
     private var delegates = [WeakKeyboardDelegate]()
 
-    class var defaultHelper: KeyboardHelper {
+    public class var defaultHelper: KeyboardHelper {
         struct Singleton {
             static let instance = KeyboardHelper()
         }
@@ -49,7 +49,7 @@ class KeyboardHelper: NSObject {
     /**
      * Starts monitoring the keyboard state.
      */
-    func startObserving() {
+    public func startObserving() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELkeyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELkeyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
 
@@ -63,7 +63,7 @@ class KeyboardHelper: NSObject {
      * Adds a delegate to the helper.
      * Delegates are weakly held.
      */
-    func addDelegate(delegate: KeyboardHelperDelegate) {
+    public func addDelegate(delegate: KeyboardHelperDelegate) {
         for weakDelegate in delegates {
             // Reuse any existing slots that have been deallocated.
             if weakDelegate.delegate == nil {

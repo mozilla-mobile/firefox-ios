@@ -6,12 +6,12 @@ import Foundation
 import Snap
 import UIKit
 
-/// Height of the top panel switcher button toolbar.
-let HomePanelButtonContainerHeight: CGFloat = 40
-
-private let BackgroundColor = UIColor(red: 45.0 / 255, green: 52.0 / 255, blue: 66.0 / 255, alpha: 1)
-private let NormalIconColor = UIColor.lightGrayColor()
-private let SelectedIconColor = UIColor(red: 62.0 / 255, green: 136.0 / 255, blue: 255.0 / 255, alpha: 1)
+private struct HomePanelViewControllerUX {
+    // Height of the top panel switcher button toolbar.
+    static let ButtonContainerHeight: CGFloat = 40
+    static let ButtonContainerBorderColor = UIColor(rgb: 0xcccccc)
+    static let BackgroundColor = UIColor.whiteColor()
+}
 
 protocol HomePanelViewControllerDelegate: class {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL)
@@ -35,22 +35,32 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     weak var delegate: HomePanelViewControllerDelegate?
 
     private var buttonContainerView: UIView!
+    private var buttonContainerBottomBorderView: UIView!
     private var controllerContainerView: UIView!
     private var buttons: [UIButton] = []
 
     override func viewDidLoad() {
-        view.backgroundColor = BackgroundColor
+        view.backgroundColor = HomePanelViewControllerUX.BackgroundColor
 
         buttonContainerView = UIView()
-        buttonContainerView.backgroundColor = BackgroundColor
+        buttonContainerView.backgroundColor = HomePanelViewControllerUX.BackgroundColor
         view.addSubview(buttonContainerView)
+
+        self.buttonContainerBottomBorderView = UIView()
+        buttonContainerView.addSubview(buttonContainerBottomBorderView)
+        buttonContainerBottomBorderView.backgroundColor = HomePanelViewControllerUX.ButtonContainerBorderColor
 
         controllerContainerView = UIView()
         view.addSubview(controllerContainerView)
 
         buttonContainerView.snp_makeConstraints { make in
             make.top.left.right.equalTo(self.view)
-            make.height.equalTo(HomePanelButtonContainerHeight)
+            make.height.equalTo(HomePanelViewControllerUX.ButtonContainerHeight)
+        }
+
+        buttonContainerBottomBorderView.snp_makeConstraints { make in
+            make.top.equalTo(self.buttonContainerView.snp_bottom).offset(-1)
+            make.left.right.bottom.equalTo(self.buttonContainerView)
         }
 
         controllerContainerView.snp_makeConstraints { make in
@@ -121,9 +131,12 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             let button = UIButton()
             buttonContainerView.addSubview(button)
             button.addTarget(self, action: "SELtappedButton:", forControlEvents: UIControlEvents.TouchUpInside)
-            let image = UIImage(named: "nav-\(panel.imageName).png")!
-            button.setImage(getOverlayedImage(image, withColor: NormalIconColor), forState: UIControlState.Normal)
-            button.setImage(getOverlayedImage(image, withColor: SelectedIconColor), forState: UIControlState.Selected)
+            if let image = UIImage(named: "panelIcon\(panel.imageName)") {
+                button.setImage(image, forState: UIControlState.Normal)
+            }
+            if let image = UIImage(named: "panelIcon\(panel.imageName)Selected") {
+                button.setImage(image, forState: UIControlState.Selected)
+            }
             button.accessibilityLabel = panel.accessibilityLabel
             buttons.append(button)
 
@@ -136,19 +149,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
             prev = button
         }
-    }
-
-    private func getOverlayedImage(image: UIImage, withColor color: UIColor) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
-        let context = UIGraphicsGetCurrentContext()
-        color.setFill()
-        CGContextTranslateCTM(context, 0, image.size.height)
-        CGContextScaleCTM(context, 1.0, -1.0)
-        CGContextClipToMask(context, CGRectMake(0, 0, image.size.width, image.size.height), image.CGImage)
-        CGContextFillRect(context, CGRectMake(0, 0, image.size.width, image.size.height))
-        let overlayedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return overlayedImage
     }
 
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL) {

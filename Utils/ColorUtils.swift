@@ -3,12 +3,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import UIKit
 
 extension UIColor {
     /**
      * Initializes and returns a color object for the given RGB hex integer.
      */
-    convenience init(rgb: Int) {
+    public convenience init(rgb: Int) {
         self.init(
             red:   CGFloat((rgb & 0xFF0000) >> 16) / 255.0,
             green: CGFloat((rgb & 0x00FF00) >> 8)  / 255.0,

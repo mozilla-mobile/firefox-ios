@@ -2,7 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Account
 import Base32
+import Shared
 import UIKit
 
 class SettingsTableViewController: UITableViewController {
@@ -10,7 +12,8 @@ class SettingsTableViewController: UITableViewController {
     let ItemAccountStatus = 0
     let ItemAccountDisconnect = 1
     let SectionSearch = 1
-    let NumberOfSections = 2
+    let SectionAbout = 2
+    let NumberOfSections = 3
 
     var profile: Profile!
 
@@ -19,7 +22,7 @@ class SettingsTableViewController: UITableViewController {
 
         navigationItem.title = NSLocalizedString("Settings", comment: "Settings")
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: NSLocalizedString("Done", comment: "Settings"),
+            title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
             style: UIBarButtonItemStyle.Done,
             target: navigationController, action: "SELdone")
     }
@@ -34,14 +37,22 @@ class SettingsTableViewController: UITableViewController {
                 updateCell(cell, toReflectAccount: profile.getAccount())
             } else if indexPath.item == ItemAccountDisconnect {
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-                cell.textLabel?.text = NSLocalizedString("Disconnect", comment: "Settings")
+                cell.textLabel?.text = NSLocalizedString("Disconnect", comment: "Button in settings screen to disconnect from your account")
             } else {
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
             }
         } else if indexPath.section == SectionSearch {
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
             cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
-            cell.textLabel?.text = NSLocalizedString("Search", comment: "Settings")
+            cell.textLabel?.text = NSLocalizedString("Search", comment: "Table row in settings to go to the Search settings")
+        } else if indexPath.section == SectionAbout {
+            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+            // Keep this in agreement with AppDelegate.
+            let appVersion = NSBundle.mainBundle()
+                .objectForInfoDictionaryKey("CFBundleShortVersionString") as String
+            let buildNumber = NSBundle.mainBundle()
+                .objectForInfoDictionaryKey(kCFBundleVersionKey) as String
+            cell.textLabel?.text = String(format: NSLocalizedString("Version %@ (%@)", comment: "Table row in settings that contains the application version and build"), appVersion, buildNumber)
         } else {
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
         }
@@ -67,6 +78,8 @@ class SettingsTableViewController: UITableViewController {
             }
         } else if section == SectionSearch {
             return 1
+        } else if section == SectionAbout {
+            return 1
         } else {
             return 0
         }
@@ -77,6 +90,8 @@ class SettingsTableViewController: UITableViewController {
             return nil
         } else if section == SectionSearch {
             return NSLocalizedString("Search Settings", comment: "Title for search settings section.")
+        } else if section == SectionAbout {
+            return NSLocalizedString("About", comment: "Title for about section.")
         } else {
             return nil
         }
@@ -130,32 +145,32 @@ class SettingsTableViewController: UITableViewController {
             case .None:
                 break
             case .NeedsVerification:
-                cell.detailTextLabel?.text = NSLocalizedString("Verify your email address.", comment: "Settings")
+                cell.detailTextLabel?.text = NSLocalizedString("Verify your email address.", comment: "Text message in the settings table view")
             case .NeedsPassword:
                 // This assumes we never recycle cells.
                 cell.detailTextLabel?.textColor = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1) // Firefox orange!
-                cell.detailTextLabel?.text = NSLocalizedString("Enter your password to connect.", comment: "Settings")
+                cell.detailTextLabel?.text = NSLocalizedString("Enter your password to connect.", comment: "Text message in the settings table view")
             case .NeedsUpgrade:
                 cell.detailTextLabel?.textColor = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1) // Firefox orange!
-                cell.detailTextLabel?.text = NSLocalizedString("Upgrade Firefox to connect.", comment: "Settings")
+                cell.detailTextLabel?.text = NSLocalizedString("Upgrade Firefox to connect.", comment: "Text message in the settings table view")
                 cell.accessoryType = UITableViewCellAccessoryType.None
             }
         } else {
-            cell.textLabel?.text = NSLocalizedString("Sign in", comment: "Settings")
+            cell.textLabel?.text = NSLocalizedString("Sign in", comment: "Text message / button in the settings table view")
         }
     }
 
     func maybeDisconnectAccount() {
         let alertController = UIAlertController(
-            title: NSLocalizedString("Disconnect Firefox Account?", comment: "Settings"),
-            message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Settings"),
+            title: NSLocalizedString("Disconnect Firefox Account?", comment: "Title of the 'disconnect firefox account' alert"),
+            message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'disconnect firefox account' alert"),
             preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(
-            UIAlertAction(title: NSLocalizedString("Cancel", comment: "Settings"), style: .Cancel) { (action) in
+            UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel button in the 'disconnect firefox account' alert"), style: .Cancel) { (action) in
                 // Do nothing.
             })
         alertController.addAction(
-            UIAlertAction(title: NSLocalizedString("Disconnect", comment: "Settings"), style: .Destructive) { (action) in
+            UIAlertAction(title: NSLocalizedString("Disconnect", comment: "Disconnect button in the 'disconnect firefox account' alert"), style: .Destructive) { (action) in
                 self.profile.setAccount(nil)
                 self.tableView.reloadData()
             })

@@ -3,8 +3,9 @@
  g* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
+import Shared
 import Storage
+import WebKit
 
 class PasswordManager: BrowserHelper {
     private weak var browser: Browser?

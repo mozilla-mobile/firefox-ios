@@ -5,6 +5,7 @@
 import UIKit
 import Alamofire
 import MessageUI
+import Shared
 
 #if MOZ_CHANNEL_AURORA
 /*

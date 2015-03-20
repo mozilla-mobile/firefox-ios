@@ -3,12 +3,24 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Storage // Needed for Bytes library
+import Shared
 import FxA
+import Account
 
-public class KeyBundle : Equatable {
-    let encKey: NSData;
-    let hmacKey: NSData;
+private let KeyLength = 32
+
+public class KeyBundle: Equatable {
+    let encKey: NSData
+    let hmacKey: NSData
+
+    public class func fromKB(kB: NSData) -> KeyBundle {
+        let salt = NSData()
+        let contextInfo = FxAClient10.KW("oldsync")
+        let len: UInt = 64               // KeyLength + KeyLength, without type nonsense.
+        let derived = kB.deriveHKDFSHA256KeyWithSalt(salt, contextInfo: contextInfo, length: len)
+        return KeyBundle(encKey: derived.subdataWithRange(NSRange(location: 0, length: KeyLength)),
+                         hmacKey: derived.subdataWithRange(NSRange(location: KeyLength, length: KeyLength)))
+    }
 
     public class func random() -> KeyBundle {
         // Bytes.generateRandomBytes uses SecRandomCopyBytes, which hits /dev/random, which
@@ -120,8 +132,22 @@ public class KeyBundle : Equatable {
         let computedHMAC = self.hmac(ciphertextB64)
         return expectedHMAC.isEqualToData(computedHMAC)
     }
-    
-    public func factory<T : CleartextPayloadJSON>() -> (String) -> T? {
+
+    /**
+     * Swift can't do functional factories. I would like to have one of the following
+     * approaches be viable:
+     *
+     * 1. Derive the constructor from the consumer of the factory.
+     * 2. Accept a type as input.
+     *
+     * Neither of these are viable, so we instead pass an explicit constructor closure.
+     *
+     * Most of these approaches produce either odd compiler errors, or -- worse --
+     * compile and then yield runtime EXC_BAD_ACCESS (see Radar 20230159).
+     *
+     * For this reason, be careful trying to simplify or improve this code.
+     */
+    public func factory<T : CleartextPayloadJSON>(f: (JSON) -> T) -> (String) -> T? {
         return { (payload: String) -> T? in
             let potential = EncryptedJSON(json: payload, keyBundle: self)
             if !(potential.isValid()) {
@@ -132,7 +158,7 @@ public class KeyBundle : Equatable {
             if (cleartext == nil) {
                 return nil
             }
-            return T(cleartext!)
+            return f(cleartext!)
         }
     }
 }
@@ -153,12 +179,18 @@ public class Keys {
     }
 
     public init(downloaded: EnvelopeJSON, master: KeyBundle) {
-        let keysRecord = Record<KeysPayload>.fromEnvelope(downloaded, payloadFactory: master.factory())
+        let f = {
+            (j: JSON) -> KeysPayload in
+            return KeysPayload(j)
+        }
+        let keysRecord = Record<KeysPayload>.fromEnvelope(downloaded, payloadFactory: master.factory(f))
         if let payload: KeysPayload = keysRecord?.payload {
-            if payload.isValid() && payload.defaultKeys != nil {
-                self.defaultBundle = payload.defaultKeys!
-                self.valid = true
-                return
+            if payload.isValid() {
+                if let keys = payload.defaultKeys {
+                    self.defaultBundle = keys
+                    self.valid = true
+                    return
+                }
             }
 
             self.defaultBundle = KeyBundle.invalid
@@ -177,9 +209,9 @@ public class Keys {
         return defaultBundle
     }
 
-    public func factory<T : CleartextPayloadJSON>(collection: String) -> (String) -> T? {
+    public func factory<T : CleartextPayloadJSON>(collection: String, f: (JSON) -> T) -> (String) -> T? {
         let bundle = forCollection(collection)
-        return bundle.factory()
+        return bundle.factory(f)
     }
 }
 
