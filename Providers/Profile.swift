@@ -36,6 +36,7 @@ protocol Profile {
     var remoteClientsAndTabs: RemoteClientsAndTabs { get }
     var passwords: Passwords { get }
     var thumbnails: Thumbnails { get }
+    var openTabs: OpenTabs { get }
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
@@ -99,6 +100,10 @@ public class MockProfile: Profile {
     lazy var thumbnails: Thumbnails = {
         return SDWebThumbnails(files: self.files)
     }()
+    
+    lazy var openTabs: OpenTabs = {
+        return FileOpenTabs(files: self.files)
+    }()
 
     let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
     var account: FirefoxAccount? = nil
@@ -121,6 +126,7 @@ public class BrowserProfile: Profile {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
         notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: "LocationChange", object: nil)
+        notificationCenter.addObserver(self, selector: Selector("onApplicationWillTerminate:"), name: "ApplicationWillTerminate", object: nil)
     }
 
     @objc
@@ -137,6 +143,11 @@ public class BrowserProfile: Profile {
         }
     }
 
+    @objc
+    func onApplicationWillTerminate(notification: NSNotification) {
+        self.openTabs.persist()
+    }
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
@@ -193,6 +204,10 @@ public class BrowserProfile: Profile {
 
     lazy var thumbnails: Thumbnails = {
         return SDWebThumbnails(files: self.files)
+    }()
+    
+    lazy var openTabs: OpenTabs = {
+        return FileOpenTabs(files: self.files)
     }()
 
     let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
