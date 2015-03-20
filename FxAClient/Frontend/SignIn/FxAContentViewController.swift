@@ -160,7 +160,7 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
         view.addSubview(spinner)
 
         let error = UILabel()
-        error.text = NSLocalizedString("Could not connect to Firefox Accounts.", comment: "Settings")
+        error.text = NSLocalizedString("Could not connect to Firefox Accounts.", comment: "Error message that is shown in settings when there was a problem connecting to Firefox Accounts")
         error.textColor = UIColor.redColor() // Firefox Orange!
         error.textAlignment = NSTextAlignment.Center
         error.hidden = true

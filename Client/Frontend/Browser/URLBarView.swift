@@ -148,7 +148,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     func updateTabCount(count: Int) {
         tabsButton.setTitle(count.description, forState: UIControlState.Normal)
         tabsButton.accessibilityValue = count.description
-        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "")
+        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
     }
 
     func updateLoading(loading: Bool) {

@@ -32,7 +32,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         lockImageView = UIImageView(image: UIImage(named: "lock_verified.png"))
         lockImageView.hidden = false
         lockImageView.isAccessibilityElement = true
-        lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "")
+        lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")
         addSubview(lockImageView)
 
         locationLabel = UILabel()
@@ -40,7 +40,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         locationLabel.lineBreakMode = .ByClipping
         locationLabel.userInteractionEnabled = true
         // TODO: This label isn't useful for people. We probably want this to be the page title or URL (see Safari).
-        locationLabel.accessibilityLabel = NSLocalizedString("URL", comment: "Accessibility label")
+        locationLabel.accessibilityLabel = NSLocalizedString("URL", comment: "Accessibility label for the URL location label")
         addSubview(locationLabel)
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocationLabel:")

@@ -38,24 +38,25 @@ class BrowserToolbar: UIView {
         super.init()
 
         backButton.setImage(UIImage(named: "back"), forState: .Normal)
-        backButton.accessibilityLabel = NSLocalizedString("Back", comment: "")
+        backButton.accessibilityLabel = NSLocalizedString("Back", comment: "Accessibility Label for the browser toolbar Back button")
         backButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
         longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack:")
         backButton.addGestureRecognizer(longPressGestureBackButton)
         backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
 
         forwardButton.setImage(UIImage(named: "forward"), forState: .Normal)
-        forwardButton.accessibilityLabel = NSLocalizedString("Forward", comment: "")
+        forwardButton.accessibilityLabel = NSLocalizedString("Forward", comment: "Accessibility Label for the browser toolbar Forward button")
         forwardButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
         longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward:")
         forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
 
         shareButton.setImage(UIImage(named: "send"), forState: .Normal)
-        shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "")
+        shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Accessibility Label for the browser toolbar Share button")
         shareButton.addTarget(self, action: "SELdidClickShare", forControlEvents: UIControlEvents.TouchUpInside)
 
         bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
+        bookmarkButton.accessibilityLabel = NSLocalizedString("Share", comment: "Accessibility Label for the browser toolbar Bookmark button")
         longPressGestureBookmarkButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBookmark:")
         bookmarkButton.addGestureRecognizer(longPressGestureBookmarkButton)
         bookmarkButton.addTarget(self, action: "SELdidClickBookmark", forControlEvents: UIControlEvents.TouchUpInside)

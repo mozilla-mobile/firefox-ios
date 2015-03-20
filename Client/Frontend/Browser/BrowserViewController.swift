@@ -620,12 +620,12 @@ extension BrowserViewController: WKNavigationDelegate {
                     message: NSLocalizedString("This will open in another application", comment: "Opening an external app"),
                     preferredStyle: UIAlertControllerStyle.Alert
                 )
-                
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Cancel"), style: UIAlertActionStyle.Cancel, handler: { (action: UIAlertAction!) in
+
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Alert Cancel Button"), style: UIAlertActionStyle.Cancel, handler: { (action: UIAlertAction!) in
                     // NOP
                 }))
                 
-                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment:"OK"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment:"Alert OK Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
                     UIApplication.sharedApplication().openURL(url)
                     return
                 }))

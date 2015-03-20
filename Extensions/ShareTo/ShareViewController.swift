@@ -16,8 +16,8 @@ let ShareDestinationBookmarks: NSString = "Bookmarks"
 let ShareDestinationReadingList: NSString = "ReadingList"
 
 let ShareDestinations = [
-    ShareDestination(code: ShareDestinationBookmarks, name: NSLocalizedString("Add to Bookmarks",    comment: ""), image: "bookmarkStar"),
-    ShareDestination(code: ShareDestinationReadingList, name: NSLocalizedString("Add to Reading List", comment: ""), image: "readingList")
+    ShareDestination(code: ShareDestinationBookmarks, name: NSLocalizedString("Add to Bookmarks",    comment: "On/off toggle to select adding this url to your bookmarks"), image: "bookmarkStar"),
+    ShareDestination(code: ShareDestinationReadingList, name: NSLocalizedString("Add to Reading List", comment: "On/off toggle to select adding this url to your reading list"), image: "readingList")
 ]
 
 protocol ShareControllerDelegate {
