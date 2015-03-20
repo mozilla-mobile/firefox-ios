@@ -21,6 +21,11 @@ class WebServer {
         return server.running || server.startWithPort(0, bonjourName: nil)
     }
 
+    /// Convenience method to register a dynamic handler. Will be mounted at $base/$module/$resource
+    func registerHandlerForMethod(method: String, module: String, resource: String, handler: (request: GCDWebServerRequest!) -> GCDWebServerResponse!) {
+        server.addHandlerForMethod(method, path: "/\(module)/\(resource)", requestClass: GCDWebServerRequest.self, processBlock: handler)
+    }
+
     /// Convenience method to register a resource in the main bundle. Will be mounted at $base/$module/$resource
     func registerMainBundleResource(resource: String, module: String) {
         if let path = NSBundle.mainBundle().pathForResource(resource, ofType: nil) {

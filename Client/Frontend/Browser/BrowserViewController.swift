@@ -191,18 +191,6 @@ class BrowserViewController: UIViewController {
         urlBar.finishEditing()
 
         if let tab = tabManager.selectedTab {
-            if ReaderMode.isReaderModeURL(url) {
-                if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
-                    // Switch to reader mode immediately when we detect it can be activated. The reader mode will still
-                    // call its delegate to let us know its state changed so that we can update the UI.
-                    readerMode.activateImmediately = true
-                    // We don't show the initial page when opening a reader: url. This will probably change to some overlay on top of the webview.
-                    tab.hideContent(animated: false)
-                    if let originalURL = ReaderMode.decodeURL(url) {
-                        url = originalURL
-                    }
-                }
-            }
             tab.loadRequest(NSURLRequest(URL: url))
         }
     }
@@ -274,22 +262,13 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressReaderMode(urlBar: URLBarView) {
         if let tab = tabManager.selectedTab {
             if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
-                if readerMode.state == .Available {
-                    // Update the style of the reader mode to what was last configured
-                    if let dict = self.profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
-                        if let style = ReaderModeStyle(dict: dict) {
-                            readerMode.style = style
-                        }
-                    }
-                    readerMode.enableReaderMode()
-
-//                    hideToolbars(animated: true, completion: { finished in
-//                        //self.showReaderModeBar(animated: false)
-//                    })
-                    self.showReaderModeBar(animated: true)
-                } else {
-                    readerMode.disableReaderMode()
-                    self.hideReaderModeBar(animated: true)
+                switch readerMode.state {
+                case .Available:
+                    enableReaderMode()
+                case .Active:
+                    disableReaderMode()
+                case .Unavailable:
+                    break
                 }
             }
         }
@@ -882,6 +861,60 @@ extension BrowserViewController {
     func hideReaderModeBar(#animated: Bool) {
         readerModeBar.hidden = true
     }
+
+    /// There are two ways we can enable reader mode. In the simplest case we open a URL to our internal reader mode
+    /// and be done with it. In the more complicated case, reader mode was already open for this page and we simply
+    /// navigated away from it. So we look to the left and right in the BackForwardList to see if a readerized version
+    /// of the current page is there. And if so, we go there.
+
+    func enableReaderMode() {
+        if let webView = tabManager.selectedTab?.webView {
+            let backList = webView.backForwardList.backList as [WKBackForwardListItem]
+            let forwardList = webView.backForwardList.forwardList as [WKBackForwardListItem]
+
+            if let currentURL = webView.backForwardList.currentItem?.URL {
+                if let readerModeURL = ReaderModeUtils.encodeURL(currentURL) {
+                    if backList.count > 1 && backList.last?.URL == readerModeURL {
+                        webView.goToBackForwardListItem(backList.last!)
+                    } else if forwardList.count > 0 && forwardList.first?.URL == readerModeURL {
+                        webView.goToBackForwardListItem(forwardList.first!)
+                    } else {
+                        // Store the readability result in the cache and load it. This will later move to the ReadabilityHelper.
+                        webView.evaluateJavaScript("\(ReaderModeNamespace).readerize()", completionHandler: { (object, error) -> Void in
+                            if let readabilityResult = ReadabilityResult(object: object) {
+                                ReaderModeCache.sharedInstance.put(currentURL, readabilityResult, error: nil)
+                                webView.loadRequest(NSURLRequest(URL: readerModeURL))
+                            }
+                        })
+                    }
+                }
+            }
+        }
+    }
+
+    /// Disabling reader mode can mean two things. In the simplest case we were opened from the reading list, which
+    /// means that there is nothing in the BackForwardList except the internal url for the reader mode page. In that
+    /// case we simply open a new page with the original url. In the more complicated page, the non-readerized version
+    /// of the page is either to the left or right in the BackForwardList. If that is the case, we navigate there.
+
+    func disableReaderMode() {
+        if let webView = tabManager.selectedTab?.webView {
+            let backList = webView.backForwardList.backList as [WKBackForwardListItem]
+            let forwardList = webView.backForwardList.forwardList as [WKBackForwardListItem]
+
+            if let currentURL = webView.backForwardList.currentItem?.URL {
+                if let originalURL = ReaderModeUtils.decodeURL(currentURL) {
+                    if backList.count > 1 && backList.last?.URL == originalURL {
+                        webView.goToBackForwardListItem(backList.last!)
+                    } else if forwardList.count > 0 && forwardList.first?.URL == originalURL {
+                        webView.goToBackForwardListItem(forwardList.first!)
+                    } else {
+                        webView.loadRequest(NSURLRequest(URL: originalURL))
+                    }
+                }
+            }
+        }
+    }
 }
 
 extension BrowserViewController: ReaderModeBarViewDelegate {
@@ -917,8 +950,8 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             // TODO Persist to database - The code below needs an update to talk to improved storage layer
             if let tab = tabManager.selectedTab? {
                 if var url = tab.url? {
-                    if ReaderMode.isReaderModeURL(url) {
-                        if let url = ReaderMode.decodeURL(url) {
+                    if ReaderModeUtils.isReaderModeURL(url) {
+                        if let url = ReaderModeUtils.decodeURL(url) {
                             if let absoluteString = url.absoluteString {
                                 profile.readingList.add(item: ReadingListItem(url: absoluteString, title: tab.title)) { (success) -> Void in
                                     //readerModeBar.added = true

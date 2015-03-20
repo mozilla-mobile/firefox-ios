@@ -85,10 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func setupWebServer() {
         let server = WebServer.sharedInstance
-        // Register our fonts, which we want to expose to web content that we present in the WebView
-        server.registerMainBundleResourcesOfType("ttf", module: "fonts")
-        // TODO: In the future let other modules register specific resources here. Unfortunately you cannot add
-        // more handlers after start() has been called, so we need to organize it all here at app startup time.
+        ReaderModeHandlers.register(server)
         server.start()
     }
 }
