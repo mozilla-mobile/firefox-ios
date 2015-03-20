@@ -5,9 +5,11 @@
 import Foundation
 
 public protocol ProfilePrefs {
+    func setLong(value: Int64, forKey defaultName: String)
     func setObject(value: AnyObject?, forKey defaultName: String)
     func stringForKey(defaultName: String) -> String?
     func boolForKey(defaultName: String) -> Bool?
+    func longForKey(defaultName: String) -> Int64?
     func stringArrayForKey(defaultName: String) -> [String]?
     func arrayForKey(defaultName: String) -> [AnyObject]?
     func dictionaryForKey(defaultName: String) -> [String : AnyObject]?
@@ -17,6 +19,10 @@ public protocol ProfilePrefs {
 
 public class MockProfilePrefs : ProfilePrefs {
     var things: NSMutableDictionary = NSMutableDictionary()
+
+    public func setLong(value: Int64, forKey defaultName: String) {
+        setObject(NSNumber(longLong: value), forKey: defaultName)
+    }
 
     public func setObject(value: AnyObject?, forKey defaultName: String) {
         things[defaultName] = value
@@ -28,6 +34,14 @@ public class MockProfilePrefs : ProfilePrefs {
 
     public func boolForKey(defaultName: String) -> Bool? {
         return things[defaultName] as? Bool
+    }
+
+    public func longForKey(defaultName: String) -> Int64? {
+        let num = things[defaultName] as? NSNumber
+        if let num = num {
+            return num.longLongValue
+        }
+        return nil
     }
 
     public func stringArrayForKey(defaultName: String) -> [String]? {
@@ -75,6 +89,10 @@ public class NSUserDefaultsProfilePrefs : ProfilePrefs {
         return self.prefix + key
     }
 
+    public func setLong(value: Int64, forKey defaultName: String) {
+        setObject(NSNumber(longLong: value), forKey: defaultName)
+    }
+
     public func setObject(value: AnyObject?, forKey defaultName: String) {
         userDefaults.setObject(value, forKey: qualifyKey(defaultName))
     }
@@ -89,6 +107,14 @@ public class NSUserDefaultsProfilePrefs : ProfilePrefs {
         // distinguish between false and non-existent keys, so use objectForKey
         // and cast the result instead.
         return userDefaults.objectForKey(qualifyKey(defaultName)) as? Bool
+    }
+
+    public func longForKey(defaultName: String) -> Int64? {
+        let num = userDefaults.objectForKey(qualifyKey(defaultName)) as? NSNumber
+        if let num = num {
+            return num.longLongValue
+        }
+        return nil
     }
 
     public func stringArrayForKey(defaultName: String) -> [String]? {
