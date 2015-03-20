@@ -7,68 +7,12 @@ import Foundation
 import Storage
 import Shared
 
-class ProfileFileAccessor : FileAccessor {
-    let profile: Profile
+class ProfileFileAccessor: FileAccessor {
     init(profile: Profile) {
-        self.profile = profile
-    }
-
-    private func createDir(path: String) -> String? {
-        if !NSFileManager.defaultManager().fileExistsAtPath(path) {
-            var err: NSError? = nil
-            if !NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil, error: &err) {
-                println("Error creating profile folder at \(path): \(err?.localizedDescription)")
-                return nil
-            }
-        }
-        return path
-    }
-
-    func getDir(name: String?, basePath: String? = nil) -> String? {
-        var path = basePath
-        if path == nil {
-        	path = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0] as? String
-            path = createDir(path!.stringByAppendingPathComponent(profileDirName))
-
-        }
-
-        if let name = name {
-            path = createDir(path!.stringByAppendingPathComponent(name))
-        }
-        return path!
-    }
-
-    func move(src: String, srcBasePath: String? = nil, dest: String, destBasePath: String? = nil) -> Bool {
-        if let f = self.get(src, basePath: nil) {
-            if let f2 = self.get(dest) {
-                return NSFileManager.defaultManager().moveItemAtPath(f, toPath: f2, error: nil)
-            }
-        }
-
-        return false
-    }
-
-    private var profileDirName: String {
-        return "profile.\(profile.localName())"
-    }
-
-    func get(filename: String, basePath: String? = nil) -> String? {
-        return getDir(nil, basePath: basePath)?.stringByAppendingPathComponent(filename)
-    }
-
-
-    func remove(filename: String, basePath: String? = nil) {
-        let fileManager = NSFileManager.defaultManager()
-        if var file = self.get(filename) {
-            fileManager.removeItemAtPath(file, error: nil)
-        }
-    }
-
-    func exists(filename: String, basePath: String? = nil) -> Bool {
-        if var file = self.get(filename, basePath: basePath) {
-            return NSFileManager.defaultManager().fileExistsAtPath(file)
-        }
-        return false
+        let profileDirName = "profile.\(profile.localName())"
+        let basePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0] as? String
+        let profilePath = basePath!.stringByAppendingPathComponent(profileDirName)
+        super.init(rootPath: profilePath)
     }
 }
 

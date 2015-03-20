@@ -30,7 +30,7 @@ public class SQLiteFavicons : Favicons {
             return self.table.delete(connection, item: nil, err: &err)
         }
 
-        files.remove("favicons", basePath: nil)
+        files.remove("favicons")
 
         dispatch_async(dispatch_get_main_queue()) {
             complete?(success: err == nil)
