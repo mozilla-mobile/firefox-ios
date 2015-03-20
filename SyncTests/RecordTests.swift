@@ -4,9 +4,9 @@
 
 import UIKit
 import XCTest
-import Client
 import Shared
 import Storage
+import Sync
 
 class RecordTests: XCTestCase {
     func testGUIDs() {
