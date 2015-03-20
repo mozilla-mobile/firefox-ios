@@ -4,6 +4,7 @@
 
 import Foundation
 import XCTest
+import Shared
 
 class TestProfilePrefs: ProfileTest {
     override func setUp() {
@@ -14,7 +15,7 @@ class TestProfilePrefs: ProfileTest {
         }
     }
 
-    func withTestPrefs(callback: (prefs: ProfilePrefs) -> Void) {
+    func withTestPrefs(callback: (prefs: Prefs) -> Void) {
         withTestProfile { profile in
             callback(prefs: NSUserDefaultsProfilePrefs(profile: profile))
         }
