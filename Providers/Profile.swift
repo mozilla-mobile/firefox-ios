@@ -5,6 +5,7 @@
 import Account
 import Foundation
 import Storage
+import Shared
 
 class ProfileFileAccessor : FileAccessor {
     let profile: Profile
@@ -78,7 +79,7 @@ protocol Profile {
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
     // var favicons: Favicons { get }
     var clients: Clients { get }
-    var prefs: ProfilePrefs { get }
+    var prefs: Prefs { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
     var history: History { get }
@@ -118,7 +119,7 @@ public class MockProfile: Profile {
         return SearchEngines(prefs: self.prefs)
     } ()
 
-    lazy var prefs: ProfilePrefs = {
+    lazy var prefs: Prefs = {
         return MockProfilePrefs()
     } ()
 
@@ -203,7 +204,7 @@ public class BrowserProfile: Profile {
         return SearchEngines(prefs: self.prefs)
     } ()
 
-    func makePrefs() -> ProfilePrefs {
+    func makePrefs() -> Prefs {
         return NSUserDefaultsProfilePrefs(profile: self)
     }
 
@@ -217,7 +218,7 @@ public class BrowserProfile: Profile {
 
     // lazy var ReadingList readingList
 
-    lazy var prefs: ProfilePrefs = {
+    lazy var prefs: Prefs = {
         return self.makePrefs()
     }()
 
