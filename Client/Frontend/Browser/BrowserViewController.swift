@@ -400,6 +400,14 @@ extension BrowserViewController: UIScrollViewDelegate {
         urlBar.alpha = percent
     }
 
+    private func scrollReaderModeBar(dy: CGFloat) {
+        let newY = clamp(readerModeBar.transform.ty + dy, min: -ToolbarHeight, max: 0)
+        readerModeBar.transform = CGAffineTransformMakeTranslation(0, newY)
+
+        let percent = 1 - newY / -ToolbarHeight
+        readerModeBar.alpha = percent
+    }
+
     private func scrollToolbar(dy: CGFloat) {
         let newY = clamp(footer.transform.ty - dy, min: 0, max: footer.frame.height)
         footer.transform = CGAffineTransformMakeTranslation(0, newY)
@@ -434,6 +442,7 @@ extension BrowserViewController: UIScrollViewDelegate {
                 }
 
                 scrollUrlBar(delta.y)
+                scrollReaderModeBar(delta.y)
                 scrollToolbar(delta.y)
             }
         }
@@ -492,9 +501,9 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         previous?.webView.navigationDelegate = nil
-        //previous?.webView.scrollView.delegate = nil
+        previous?.webView.scrollView.delegate = nil
         selected?.webView.navigationDelegate = self
-        //selected?.webView.scrollView.delegate = self
+        selected?.webView.scrollView.delegate = self
         urlBar.updateURL(selected?.displayURL)
         showToolbars(animated: false)
 
