@@ -125,7 +125,7 @@ class BrowserViewController: UIViewController {
             homePanelController = HomePanelViewController()
             homePanelController!.profile = profile
             homePanelController!.delegate = self
-            homePanelController!.url = tabManager.selectedTab?.url
+            homePanelController!.url = tabManager.selectedTab?.displayURL
 
             view.addSubview(homePanelController!.view)
             addChildViewController(homePanelController!)
@@ -335,7 +335,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
 
     func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbar) {
         if let tab = tabManager.selectedTab? {
-            if let url = tab.url?.absoluteString {
+            if let url = tab.displayURL?.absoluteString {
                 profile.bookmarks.isBookmarked(url,
                     success: { isBookmarked in
                         if isBookmarked {
@@ -361,7 +361,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
 
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbar) {
         if let selected = tabManager.selectedTab {
-            if let url = selected.url {
+            if let url = selected.displayURL {
                 var shareController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
                 shareController.modalTransitionStyle = .CoverVertical
                 presentViewController(shareController, animated: true, completion: nil)
@@ -495,7 +495,7 @@ extension BrowserViewController: TabManagerDelegate {
         //previous?.webView.scrollView.delegate = nil
         selected?.webView.navigationDelegate = self
         //selected?.webView.scrollView.delegate = self
-        urlBar.updateURL(selected?.url)
+        urlBar.updateURL(selected?.displayURL)
         showToolbars(animated: false)
 
         toolbar.updateBackStatus(selected?.canGoBack ?? false)
@@ -509,7 +509,7 @@ extension BrowserViewController: TabManagerDelegate {
             urlBar.updateReaderModeState(ReaderModeState.Unavailable)
         }
 
-        updateInContentHomePanel(selected?.url)
+        updateInContentHomePanel(selected?.displayURL)
     }
 
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
@@ -565,9 +565,8 @@ extension BrowserViewController: WKNavigationDelegate {
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
         // are going to a about:reader page. Then we keep it on screen: it will change status
         // (orange color) as soon as the page has loaded.
-        if let absoluteString = webView.URL?.absoluteString {
-            // TODO String comparison here because NSURL cannot parse about:reader URLs (1123509)
-            if !absoluteString.hasPrefix("about:reader") {
+        if let url = webView.URL {
+            if !ReaderModeUtils.isReaderModeURL(url) {
                 urlBar.updateReaderModeState(ReaderModeState.Unavailable)
             }
         }
@@ -618,35 +617,43 @@ extension BrowserViewController: WKNavigationDelegate {
     }
     
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
-        urlBar.updateURL(webView.URL);
-        toolbar.updateBackStatus(webView.canGoBack)
-        toolbar.updateFowardStatus(webView.canGoForward)
-        showToolbars(animated: false)
+        if let tab = tabManager.selectedTab {
+            if tab.webView == webView {
+                urlBar.updateURL(tab.displayURL);
+                toolbar.updateBackStatus(webView.canGoBack)
+                toolbar.updateFowardStatus(webView.canGoForward)
+                showToolbars(animated: false)
 
-        if let url = webView.URL?.absoluteString {
-            profile.bookmarks.isBookmarked(url, success: { bookmarked in
-                self.toolbar.updateBookmarkStatus(bookmarked)
-            }, failure: { err in
-                println("Error getting bookmark status: \(err)")
-            })
+                if let url = tab.displayURL?.absoluteString {
+                    profile.bookmarks.isBookmarked(url, success: { bookmarked in
+                        self.toolbar.updateBookmarkStatus(bookmarked)
+                    }, failure: { err in
+                        println("Error getting bookmark status: \(err)")
+                    })
+                }
+
+                updateInContentHomePanel(tab.displayURL)
+            }
         }
-
-        updateInContentHomePanel(webView.URL)
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        var info = [NSObject: AnyObject]()
-        info["url"] = webView.URL
-        info["title"] = webView.title
-        notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
+        if let tab = tabManager.selectedTab {
+            let notificationCenter = NSNotificationCenter.defaultCenter()
+            var info = [NSObject: AnyObject]()
+            info["url"] = tab.displayURL
+            info["title"] = tab.title
+            notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
 
-        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
-        // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
-        // cursor land on the correct initial element, but if not followed by LayoutChanged,
-        // VoiceOver will sometimes be stuck on the element, not allowing user to move
-        // forward/backward. Strange, but LayoutChanged fixes that.
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+            if tab.webView == webView {
+                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+                // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
+                // cursor land on the correct initial element, but if not followed by LayoutChanged,
+                // VoiceOver will sometimes be stuck on the element, not allowing user to move
+                // forward/backward. Strange, but LayoutChanged fixes that.
+                UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+            }
+        }
     }
 }
 
