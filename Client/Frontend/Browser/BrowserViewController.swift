@@ -930,9 +930,16 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
         case .Settings:
             if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode {
                 if readerMode.state == ReaderModeState.Active {
+                    var readerModeStyle = DefaultReaderModeStyle
+                    if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
+                        if let style = ReaderModeStyle(dict: dict) {
+                            readerModeStyle = style
+                        }
+                    }
+
                     let readerModeStyleViewController = ReaderModeStyleViewController()
                     readerModeStyleViewController.delegate = self
-                    readerModeStyleViewController.readerModeStyle = readerMode.style
+                    readerModeStyleViewController.readerModeStyle = readerModeStyle
                     readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
 
                     let popoverPresentationController = readerModeStyleViewController.popoverPresentationController
