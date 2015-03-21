@@ -47,9 +47,55 @@ public struct FxASignResponse {
     }
 }
 
-extension NSError: ErrorType {
+// fxa-auth-server produces error details like:
+//        {
+//            "code": 400, // matches the HTTP status code
+//            "errno": 107, // stable application-level error number
+//            "error": "Bad Request", // string description of the error type
+//            "message": "the value of salt is not allowed to be undefined",
+//            "info": "https://docs.dev.lcip.og/errors/1234" // link to more info on the error
+//        }
+
+enum FxAClientError {
+    case Remote(RemoteError)
+    case Local(NSError)
 }
 
+extension FxAClientError: Printable, ErrorType {
+    var description: String {
+        switch self {
+        case let .Remote(error):
+            let errorString = error.error ?? "Missing error"
+            let messageString = error.message ?? "Missing message"
+            return "<FxAClientError.Remote \(error.code)/\(error.errno): \(errorString) (\(messageString))>"
+        case let .Local(error):
+            return "<FxAClientError.Local \(error.description)>"
+        }
+    }
+}
+
+struct RemoteError {
+    let code: Int32
+    let errno: Int32
+    let error: String?
+    let message: String?
+    let info: String?
+
+    var isUpgradeRequired: Bool {
+        return errno == 116 // ENDPOINT_IS_NO_LONGER_SUPPORTED
+            || errno == 117 // INCORRECT_LOGIN_METHOD_FOR_THIS_ACCOUNT
+            || errno == 118 // INCORRECT_KEY_RETRIEVAL_METHOD_FOR_THIS_ACCOUNT
+            || errno == 119 // INCORRECT_API_VERSION_FOR_THIS_ACCOUNT
+    }
+
+    var isInvalidAuthentication: Bool {
+        return code == 401
+    }
+
+    var isUnverified: Bool {
+        return errno == 104 // ATTEMPT_TO_OPERATE_ON_AN_UNVERIFIED_ACCOUNT
+    }
+}
 
 public class FxAClient10 {
     let URL: NSURL
@@ -88,32 +134,17 @@ public class FxAClient10 {
         return bytes
     }
 
-    // fxa-auth-server produces error details like:
-    //        {
-    //            "code": 400, // matches the HTTP status code
-    //            "errno": 107, // stable application-level error number
-    //            "error": "Bad Request", // string description of the error type
-    //            "message": "the value of salt is not allowed to be undefined",
-    //            "info": "https://docs.dev.lcip.og/errors/1234" // link to more info on the error
-    //        }
-    private class func remoteErrorFromJSON(json: JSON) -> NSError? {
+    private class func remoteErrorFromJSON(json: JSON) -> RemoteError? {
         if json.isError {
             return nil
         }
-        if let errno = json["errno"].asInt {
-            var userInfo: [NSObject: AnyObject] = [NSObject: AnyObject]()
-            if let message = json["message"].asString {
-                userInfo[NSLocalizedDescriptionKey] = message
+        if let code = json["code"].asInt32 {
+            if let errno = json["errno"].asInt32 {
+                return RemoteError(code: code, errno: errno,
+                    error: json["error"].asString?,
+                    message: json["message"].asString?,
+                    info: json["info"].asString?)
             }
-            if let code = json["code"].asInt {
-                userInfo["code"] = code
-            }
-            for key in ["error", "info"] {
-                if let value = json[key].asString {
-                    userInfo[key] = value
-                }
-            }
-            return NSError(domain: FxAClientErrorDomain, code: errno, userInfo: userInfo)
         }
         return nil
     }
@@ -201,14 +232,14 @@ public class FxAClient10 {
             .validate(contentType: ["application/json"])
             .responseJSON { (_, _, data, error) in
                 if let error = error {
-                    deferred.fill(Result(failure: error))
+                    deferred.fill(Result(failure: FxAClientError.Local(error)))
                     return
                 }
 
                 if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
                     let json = JSON(data)
                     if let remoteError = FxAClient10.remoteErrorFromJSON(json) {
-                        deferred.fill(Result(failure: remoteError))
+                        deferred.fill(Result(failure: FxAClientError.Remote(remoteError)))
                         return
                     }
 
@@ -218,7 +249,7 @@ public class FxAClient10 {
                     }
                 }
 
-                deferred.fill(Result(failure: FxAClientUnknownError))
+                deferred.fill(Result(failure: FxAClientError.Local(FxAClientUnknownError)))
         }
         return deferred
     }
@@ -245,14 +276,14 @@ public class FxAClient10 {
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, data, error) in
                 if let error = error {
-                    deferred.fill(Result(failure: error))
+                    deferred.fill(Result(failure: FxAClientError.Local(error)))
                     return
                 }
 
                 if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
                     let json = JSON(data)
                     if let remoteError = FxAClient10.remoteErrorFromJSON(json) {
-                        deferred.fill(Result(failure: remoteError))
+                        deferred.fill(Result(failure: FxAClientError.Remote(remoteError)))
                         return
                     }
 
@@ -262,7 +293,7 @@ public class FxAClient10 {
                     }
                 }
 
-                deferred.fill(Result(failure: FxAClientUnknownError))
+                deferred.fill(Result(failure: FxAClientError.Local(FxAClientUnknownError)))
             }
         return deferred
     }
@@ -296,14 +327,14 @@ public class FxAClient10 {
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, data, error) in
                 if let error = error {
-                    deferred.fill(Result(failure: error))
+                    deferred.fill(Result(failure: FxAClientError.Local(error)))
                     return
                 }
 
                 if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
                     let json = JSON(data)
                     if let remoteError = FxAClient10.remoteErrorFromJSON(json) {
-                        deferred.fill(Result(failure: remoteError))
+                        deferred.fill(Result(failure: FxAClientError.Remote(remoteError)))
                         return
                     }
 
@@ -313,7 +344,7 @@ public class FxAClient10 {
                     }
                 }
 
-                deferred.fill(Result(failure: FxAClientUnknownError))
+                deferred.fill(Result(failure: FxAClientError.Local(FxAClientUnknownError)))
         }
         return deferred
     }

@@ -20,6 +20,20 @@ class FxAClient10Tests: LiveAccountTest {
         XCTAssertEqual(clientState, "6ae94683571c7a7c54dab4700aa3995f")
     }
 
+    func testErrorOutput() {
+        // Make sure we don't hide error details.
+        let error = NSError(domain: "test", code: 123, userInfo: nil)
+        let localError = FxAClientError.Local(error)
+        XCTAssertEqual(
+            localError.description,
+            "<FxAClientError.Local Error Domain=test Code=123 \"The operation couldn’t be completed. (test error 123.)\">")
+        let remoteError = FxAClientError.Remote(RemoteError(code: 401, errno: 104,
+            error: "error", message: "message", info: "info"))
+        XCTAssertEqual(
+            remoteError.description,
+            "<FxAClientError.Remote 401/104: error (message)>")
+    }
+
     func testLoginSuccess() {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
             let e = self.expectationWithDescription("")
@@ -33,8 +47,7 @@ class FxAClient10Tests: LiveAccountTest {
                     XCTAssertNotNil(response.sessionToken)
                     XCTAssertNotNil(response.keyFetchToken)
                 } else {
-                    let error = result.failureValue as NSError
-                    XCTAssertNil(error)
+                    XCTAssertEqual(result.failureValue!.description, "")
                 }
                 e.fulfill()
             }
@@ -54,8 +67,17 @@ class FxAClient10Tests: LiveAccountTest {
                 if let response = result.successValue {
                     XCTFail("Got response: \(response)")
                 } else {
-                    let error = result.failureValue as NSError
-                    XCTAssertEqual(error.code, 103) // Incorrect password.
+                    if let error = result.failureValue as? FxAClientError {
+                        switch error {
+                        case let .Remote(remoteError):
+                            XCTAssertEqual(remoteError.code, Int32(401)) // Bad auth.
+                            XCTAssertEqual(remoteError.errno, Int32(103)) // Incorrect password.
+                        case let .Local(error):
+                            XCTAssertEqual(error.description, "")
+                        }
+                    } else {
+                        XCTAssertEqual(result.failureValue!.description, "")
+                    }
                 }
                 e.fulfill()
             }
@@ -82,8 +104,7 @@ class FxAClient10Tests: LiveAccountTest {
                     XCTAssertEqual(32, response.kA.length)
                     XCTAssertEqual(32, response.wrapkB.length)
                 } else {
-                    let error = result.failureValue as NSError
-                    XCTAssertNil(error)
+                    XCTAssertEqual(result.failureValue!.description, "")
                 }
                 e.fulfill()
             }
@@ -112,8 +133,7 @@ class FxAClient10Tests: LiveAccountTest {
                     // A simple test that we got a reasonable certificate back.
                     XCTAssertEqual(3, response.certificate.componentsSeparatedByString(".").count)
                 } else {
-                    let error = result.failureValue as NSError
-                    XCTAssertNil(error)
+                    XCTAssertEqual(result.failureValue!.description, "")
                 }
                 e.fulfill()
             }
