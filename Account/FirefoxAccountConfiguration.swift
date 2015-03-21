@@ -24,7 +24,7 @@ public struct LatestDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
     public init() {
     }
 
-    public let authEndpointURL = NSURL(string: "https://latest.dev.lcip.org/auth")!
+    public let authEndpointURL = NSURL(string: "https://latest.dev.lcip.org/auth/v1")!
     public let oauthEndpointURL = NSURL(string: "https://oauth-latest.dev.lcip.org")!
     public let profileEndpointURL = NSURL(string: "https://latest.dev.lcip.org/profile")!
 
