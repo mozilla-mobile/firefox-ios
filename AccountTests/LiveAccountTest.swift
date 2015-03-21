@@ -68,8 +68,7 @@ class LiveAccountTest: XCTestCase {
                     XCTAssertNotNil(response.certificate)
                     completion(expectation, emailUTF8, keyPair, response.certificate)
                 } else {
-                    let error = result.failureValue as NSError
-                    XCTAssertNil(error)
+                    XCTAssertEqual(result.failureValue!.description, "")
                     expectation.fulfill()
                 }
             }

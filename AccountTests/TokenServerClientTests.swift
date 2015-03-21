@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Foundation
 import FxA
 import UIKit
 import XCTest
@@ -11,6 +12,14 @@ import XCTest
 // The rule is: if you turn up with a never-before-seen client state; you win.  If you turn up with
 // a seen-before client state, you lose.
 class TokenServerClientTests: LiveAccountTest {
+    func testErrorOutput() {
+        // Make sure we don't hide error details.
+        let error = NSError(domain: "test", code: 123, userInfo: nil)
+        XCTAssertEqual(
+            "<TokenServerError.Local Error Domain=test Code=123 \"The operation couldn’t be completed. (test error 123.)\">",
+            TokenServerError.Local(error).description)
+    }
+
     func testAudienceForEndpoint() {
         func audienceFor(endpoint: String) -> String {
             return TokenServerClient.getAudienceForURL(NSURL(string: endpoint)!)
@@ -54,8 +63,7 @@ class TokenServerClientTests: LiveAccountTest {
                     XCTAssertTrue(token.uid >= 0)
                     XCTAssertTrue(token.api_endpoint.hasSuffix(String(token.uid)))
                 } else {
-                    let error = result.failureValue as NSError
-                    XCTAssertNil(error)
+                    XCTAssertEqual(result.failureValue!.description, "")
                 }
                 expectation.fulfill()
             }
@@ -75,9 +83,17 @@ class TokenServerClientTests: LiveAccountTest {
                 if let token = result.successValue {
                     XCTFail("Got token: \(token)")
                 } else {
-                    let error = result.failureValue as NSError
-                    XCTAssertEqual(error.code, 401) // Bad auth.
-                    XCTAssertEqual(error.userInfo!["status"] as String, "error")
+                    if let error = result.failureValue as? TokenServerError {
+                        switch error {
+                        case let .Remote(code: code, status: status):
+                            XCTAssertEqual(code, Int32(401)) // Bad auth.
+                            XCTAssertEqual(status!, "error")
+                        case let .Local(error):
+                            XCTAssertNil(error)
+                        }
+                    } else {
+                        XCTFail("Expected TokenServerError")
+                    }
                 }
                 e.fulfill()
             }
