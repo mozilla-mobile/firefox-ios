@@ -505,6 +505,11 @@ extension BrowserViewController: TabManagerDelegate {
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
             urlBar.updateReaderModeState(readerMode.state)
+            if readerMode.state == .Active {
+                showReaderModeBar(animated: false)
+            } else {
+                hideReaderModeBar(animated: false)
+            }
         } else {
             urlBar.updateReaderModeState(ReaderModeState.Unavailable)
         }
@@ -624,6 +629,14 @@ extension BrowserViewController: WKNavigationDelegate {
                     }, failure: { err in
                         println("Error getting bookmark status: \(err)")
                     })
+                }
+
+                if let url = tab.url {
+                    if ReaderModeUtils.isReaderModeURL(url) {
+                        showReaderModeBar(animated: false)
+                    } else {
+                        hideReaderModeBar(animated: false)
+                    }
                 }
 
                 updateInContentHomePanel(tab.displayURL)
@@ -833,15 +846,24 @@ extension BrowserViewController : Transitionable {
 }
 
 extension BrowserViewController {
+    private func updateScrollbarInsets() {
+        if let tab = self.tabManager.selectedTab {
+            tab.webView.scrollView.contentInset = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: ToolbarHeight, right: 0)
+            tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: ToolbarHeight, right: 0)
+        }
+    }
+
     func showReaderModeBar(#animated: Bool) {
         // TODO This needs to come from the database
         readerModeBar.unread = true
         readerModeBar.added = false
         readerModeBar.hidden = false
+        updateScrollbarInsets()
     }
 
     func hideReaderModeBar(#animated: Bool) {
         readerModeBar.hidden = true
+        updateScrollbarInsets()
     }
 
     /// There are two ways we can enable reader mode. In the simplest case we open a URL to our internal reader mode
