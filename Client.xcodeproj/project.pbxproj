@@ -60,6 +60,7 @@
 		288A2DB21AB8B37E0023ABC3 /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DAF1AB8B37E0023ABC3 /* ReadWriteLock.swift */; };
 		288A2DB51AB8B38D0023ABC3 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DB31AB8B38D0023ABC3 /* Error.swift */; };
 		288A2DB61AB8B38D0023ABC3 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DB41AB8B38D0023ABC3 /* Result.swift */; };
+		28A6CE8A1AC082E200C1A2D4 /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */; };
 		28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28F657EA1ABFCA7A00A608BD /* LiveAccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA4363B1ABB8448008031D1 /* LiveAccountTest.swift */; };
@@ -875,6 +876,7 @@
 		288A2DAF1AB8B37E0023ABC3 /* ReadWriteLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReadWriteLock.swift; path = Carthage/Checkouts/Deferred/Deferred/ReadWriteLock.swift; sourceTree = "<group>"; };
 		288A2DB31AB8B38D0023ABC3 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = ThirdParty/Result/Error.swift; sourceTree = "<group>"; };
 		288A2DB41AB8B38D0023ABC3 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Result.swift; path = ThirdParty/Result/Result.swift; sourceTree = "<group>"; };
+		28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UtilsTests.swift; path = SyncTests/UtilsTests.swift; sourceTree = "<group>"; };
 		28C077971A3B064000834FE5 /* CryptoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CryptoTests.swift; path = SyncTests/CryptoTests.swift; sourceTree = "<group>"; };
 		28C0779D1A3B066000834FE5 /* RecordTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RecordTests.swift; path = SyncTests/RecordTests.swift; sourceTree = "<group>"; };
 		28CE83BB1A1D1D3200576538 /* ClientPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientPayload.swift; sourceTree = "<group>"; };
@@ -1301,6 +1303,7 @@
 				28C077971A3B064000834FE5 /* CryptoTests.swift */,
 				28786E541AB0F5FA009EA9EF /* DeferredTests.swift */,
 				2FEBABAE1AB3659000DB5728 /* ResultTests.swift */,
+				28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */,
 			);
 			name = SyncTests;
 			sourceTree = "<group>";
@@ -2723,6 +2726,7 @@
 				2827319F1ABC9C5900AA1954 /* DeferredTests.swift in Sources */,
 				28F657EA1ABFCA7A00A608BD /* LiveAccountTest.swift in Sources */,
 				2827319E1ABC9C5900AA1954 /* RecordTests.swift in Sources */,
+				28A6CE8A1AC082E200C1A2D4 /* UtilsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
