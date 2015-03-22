@@ -64,6 +64,9 @@
 		28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		2F14E13A1ABB890800FF98DB /* Account-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */; };
 		2F14E2521ABC8D2B00FF98DB /* signedInUser.json in Resources */ = {isa = PBXBuildFile; fileRef = 2F3444B81AB22E8000FD9731 /* signedInUser.json */; };
+		2F1A3DE11ABE3C90002F1E15 /* FxALoginStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */; };
+		2F1A3DE21ABE3C90002F1E15 /* FxALoginStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */; };
+		2F1A3DFE1ABE3C9C002F1E15 /* FxALoginStateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A3DFD1ABE3C9C002F1E15 /* FxALoginStateMachineTests.swift */; };
 		2F1BDF901A8523B000213B54 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8D1A8523B000213B54 /* KeychainWrapper.swift */; };
 		2F1BDF911A8523B000213B54 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8D1A8523B000213B54 /* KeychainWrapper.swift */; };
 		2F1BDF921A8523B000213B54 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8E1A8523B000213B54 /* LICENSE */; };
@@ -118,8 +121,6 @@
 		2FA4362A1ABB8436008031D1 /* FirefoxAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436221ABB8436008031D1 /* FirefoxAccount.swift */; };
 		2FA4362B1ABB8436008031D1 /* FirefoxAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436231ABB8436008031D1 /* FirefoxAccountConfiguration.swift */; };
 		2FA4362C1ABB8436008031D1 /* FirefoxAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436231ABB8436008031D1 /* FirefoxAccountConfiguration.swift */; };
-		2FA4362D1ABB8436008031D1 /* FirefoxAccountState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436241ABB8436008031D1 /* FirefoxAccountState.swift */; };
-		2FA4362E1ABB8436008031D1 /* FirefoxAccountState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436241ABB8436008031D1 /* FirefoxAccountState.swift */; };
 		2FA4362F1ABB8436008031D1 /* FxAClient10.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436251ABB8436008031D1 /* FxAClient10.swift */; };
 		2FA436301ABB8436008031D1 /* FxAClient10.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436251ABB8436008031D1 /* FxAClient10.swift */; };
 		2FA436331ABB8436008031D1 /* HawkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436271ABB8436008031D1 /* HawkHelper.swift */; };
@@ -185,6 +186,9 @@
 		2FDE87541ABA3EBB005317B1 /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39999A81AA01D65005AED21 /* KeyboardHelper.swift */; };
 		2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */; };
 		2FDE881B1ABB3921005317B1 /* RemoteTabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */; };
+		2FFC4D1B1ABE3C360081D675 /* FxAState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFC4D1A1ABE3C360081D675 /* FxAState.swift */; };
+		2FFC4D1C1ABE3C360081D675 /* FxAState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFC4D1A1ABE3C360081D675 /* FxAState.swift */; };
+		2FFC4D381ABE3C420081D675 /* FxAStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFC4D371ABE3C420081D675 /* FxAStateTests.swift */; };
 		39A362D91AAF5ECE00F47390 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; };
 		39A362DA1AAF5ECE00F47390 /* XCGLogger.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
@@ -881,6 +885,8 @@
 		28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Client-Bridging-Header.h"; sourceTree = "<group>"; };
 		28CE842F1A1E571900576538 /* json.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = json.swift; path = ThirdParty/json.swift; sourceTree = "<group>"; };
 		2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Account-Bridging-Header.h"; sourceTree = "<group>"; };
+		2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxALoginStateMachine.swift; sourceTree = "<group>"; };
+		2F1A3DFD1ABE3C9C002F1E15 /* FxALoginStateMachineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxALoginStateMachineTests.swift; sourceTree = "<group>"; };
 		2F1BDF8D1A8523B000213B54 /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 		2F1BDF8E1A8523B000213B54 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		2F3444561AB22A4B00FD9731 /* TimeConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeConstants.swift; sourceTree = "<group>"; };
@@ -903,7 +909,6 @@
 		2FA4360D1ABB83B4008031D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FA436221ABB8436008031D1 /* FirefoxAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxAccount.swift; sourceTree = "<group>"; };
 		2FA436231ABB8436008031D1 /* FirefoxAccountConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxAccountConfiguration.swift; sourceTree = "<group>"; };
-		2FA436241ABB8436008031D1 /* FirefoxAccountState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxAccountState.swift; sourceTree = "<group>"; };
 		2FA436251ABB8436008031D1 /* FxAClient10.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAClient10.swift; sourceTree = "<group>"; };
 		2FA436271ABB8436008031D1 /* HawkHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HawkHelper.swift; sourceTree = "<group>"; };
 		2FA436281ABB8436008031D1 /* TokenServerClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenServerClient.swift; sourceTree = "<group>"; };
@@ -960,6 +965,8 @@
 		2FDB10921A9FBEC5006CF312 /* ProfilePrefsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePrefsTests.swift; sourceTree = "<group>"; };
 		2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanel.swift; sourceTree = "<group>"; };
 		2FEBABAE1AB3659000DB5728 /* ResultTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResultTests.swift; path = SyncTests/ResultTests.swift; sourceTree = "<group>"; };
+		2FFC4D1A1ABE3C360081D675 /* FxAState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAState.swift; sourceTree = "<group>"; };
+		2FFC4D371ABE3C420081D675 /* FxAStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAStateTests.swift; sourceTree = "<group>"; };
 		39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XCGLogger.xcodeproj; path = Carthage/Checkouts/XCGLogger/XCGLogger/Library/XCGLogger.xcodeproj; sourceTree = "<group>"; };
 		4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		59A6825233896FC846499289 /* HistoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryPanel.swift; sourceTree = "<group>"; };
@@ -1380,11 +1387,12 @@
 		2FA435FC1ABB83B4008031D1 /* Account */ = {
 			isa = PBXGroup;
 			children = (
+				2FFC4D1A1ABE3C360081D675 /* FxAState.swift */,
 				2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */,
 				2FA436221ABB8436008031D1 /* FirefoxAccount.swift */,
 				2FA436231ABB8436008031D1 /* FirefoxAccountConfiguration.swift */,
-				2FA436241ABB8436008031D1 /* FirefoxAccountState.swift */,
 				2FA436251ABB8436008031D1 /* FxAClient10.swift */,
+				2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */,
 				2FA436271ABB8436008031D1 /* HawkHelper.swift */,
 				2FA436281ABB8436008031D1 /* TokenServerClient.swift */,
 				2FA435FD1ABB83B4008031D1 /* Supporting Files */,
@@ -1405,6 +1413,8 @@
 			children = (
 				2FA436371ABB8448008031D1 /* FirefoxAccountTests.swift */,
 				2FA436381ABB8448008031D1 /* FxAClient10Tests.swift */,
+				2F1A3DFD1ABE3C9C002F1E15 /* FxALoginStateMachineTests.swift */,
+				2FFC4D371ABE3C420081D675 /* FxAStateTests.swift */,
 				2FA4363A1ABB8448008031D1 /* HawkHelperTests.swift */,
 				2FA4363B1ABB8448008031D1 /* LiveAccountTest.swift */,
 				2FA4363C1ABB8448008031D1 /* TokenServerClientTests.swift */,
@@ -2742,9 +2752,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FA4362D1ABB8436008031D1 /* FirefoxAccountState.swift in Sources */,
 				2FA4362B1ABB8436008031D1 /* FirefoxAccountConfiguration.swift in Sources */,
+				2F1A3DE11ABE3C90002F1E15 /* FxALoginStateMachine.swift in Sources */,
 				2FA436291ABB8436008031D1 /* FirefoxAccount.swift in Sources */,
+				2FFC4D1B1ABE3C360081D675 /* FxAState.swift in Sources */,
 				2FA436351ABB8436008031D1 /* TokenServerClient.swift in Sources */,
 				2FA436331ABB8436008031D1 /* HawkHelper.swift in Sources */,
 				2FA4362F1ABB8436008031D1 /* FxAClient10.swift in Sources */,
@@ -2755,13 +2766,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FA4362E1ABB8436008031D1 /* FirefoxAccountState.swift in Sources */,
 				2FA4363E1ABB8448008031D1 /* FxAClient10Tests.swift in Sources */,
 				2FA4362C1ABB8436008031D1 /* FirefoxAccountConfiguration.swift in Sources */,
 				2FA4362A1ABB8436008031D1 /* FirefoxAccount.swift in Sources */,
 				2FA436421ABB8448008031D1 /* TokenServerClientTests.swift in Sources */,
+				2F1A3DE21ABE3C90002F1E15 /* FxALoginStateMachine.swift in Sources */,
+				2FFC4D1C1ABE3C360081D675 /* FxAState.swift in Sources */,
+				2FFC4D381ABE3C420081D675 /* FxAStateTests.swift in Sources */,
 				2FA436411ABB8448008031D1 /* LiveAccountTest.swift in Sources */,
 				2FA436361ABB8436008031D1 /* TokenServerClient.swift in Sources */,
+				2F1A3DFE1ABE3C9C002F1E15 /* FxALoginStateMachineTests.swift in Sources */,
 				2FA436341ABB8436008031D1 /* HawkHelper.swift in Sources */,
 				2FA436301ABB8436008031D1 /* FxAClient10.swift in Sources */,
 				2FA4363D1ABB8448008031D1 /* FirefoxAccountTests.swift in Sources */,

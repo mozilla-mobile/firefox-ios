@@ -104,7 +104,7 @@ class SettingsTableViewController: UITableViewController {
                 let viewController = FxAContentViewController()
                 viewController.delegate = self
                 if let account = profile.getAccount() {
-                    switch account.getActionNeeded() {
+                    switch account.actionNeeded {
                     case .None, .NeedsVerification:
                         let cs = NSURLComponents(URL: profile.accountConfiguration.settingsURL, resolvingAgainstBaseURL: false)
                         cs?.queryItems?.append(NSURLQueryItem(name: "email", value: account.email))
@@ -141,7 +141,7 @@ class SettingsTableViewController: UITableViewController {
             cell.textLabel?.text = account.email
             cell.detailTextLabel?.text = nil
 
-            switch account.getActionNeeded() {
+            switch account.actionNeeded {
             case .None:
                 break
             case .NeedsVerification:
@@ -187,12 +187,23 @@ extension SettingsTableViewController: FxAContentViewControllerDelegate {
         }
 
         // TODO: Error handling.
-        let state = FirefoxAccountState.Engaged(
-            verified: data["verified"].asBool ?? false,
-            sessionToken: data["sessionToken"].asString!.hexDecodedData,
-            keyFetchToken: data["keyFetchToken"].asString!.hexDecodedData,
-            unwrapkB: data["unwrapBKey"].asString!.hexDecodedData
-        )
+        let verified = data["verified"].asBool ?? false
+        var state: FxAState! = nil
+        if !verified {
+            let now: Int64 = Int64(NSDate().timeIntervalSince1970 * 1000)
+            state = EngagedBeforeVerifiedState(knownUnverifiedAt: now,
+                lastNotifiedUserAt: now,
+                sessionToken: data["sessionToken"].asString!.hexDecodedData,
+                keyFetchToken: data["keyFetchToken"].asString!.hexDecodedData,
+                unwrapkB: data["unwrapBKey"].asString!.hexDecodedData
+            )
+        } else {
+            state = EngagedAfterVerifiedState(
+                sessionToken: data["sessionToken"].asString!.hexDecodedData,
+                keyFetchToken: data["keyFetchToken"].asString!.hexDecodedData,
+                unwrapkB: data["unwrapBKey"].asString!.hexDecodedData
+            )
+        }
 
         let account = FirefoxAccount(
             email: data["email"].asString!,

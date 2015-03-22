@@ -7,8 +7,9 @@ import Shared
 import Foundation
 
 let TokenServerClientErrorDomain = "org.mozilla.token.error"
-let TokenServerClientUnknownError = NSError(domain: TokenServerClientErrorDomain, code: 999,
-    userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
+let TokenServerClientUnknownError = TokenServerError.Local(
+    NSError(domain: TokenServerClientErrorDomain, code: 999,
+    userInfo: [NSLocalizedDescriptionKey: "Invalid server response"]))
 
 public struct TokenServerToken {
     public let id: String
@@ -23,6 +24,26 @@ public struct TokenServerToken {
         self.api_endpoint = api_endpoint
         self.uid = uid
         self.durationInSeconds = durationInSeconds
+    }
+}
+
+enum TokenServerError {
+    case Remote(code: Int32, status: String?)
+    case Local(NSError)
+}
+
+extension TokenServerError: Printable, ErrorType {
+    var description: String {
+        switch self {
+        case let Remote(code: code, status: status):
+            if let status = status {
+                return "<TokenServerError.Remote \(code): \(status)>"
+            } else {
+                return "<TokenServerError.Remote \(code)>"
+            }
+        case let .Local(error):
+            return "<TokenServerError.Local \(error.description)>"
+        }
     }
 }
 
@@ -41,15 +62,11 @@ public class TokenServerClient {
         }
     }
 
-    private class func remoteErrorFromJSON(json: JSON, statusCode: Int) -> NSError? {
+    private class func remoteErrorFromJSON(json: JSON, statusCode: Int) -> TokenServerError? {
         if json.isError {
             return nil
         }
-        if let status = json["status"].asString {
-            let userInfo = [NSLocalizedDescriptionKey: status, "status": status]
-            return NSError(domain: FxAClientErrorDomain, code: statusCode, userInfo: userInfo)
-        }
-        return nil
+        return TokenServerError.Remote(code: Int32(statusCode), status: json["status"].asString?)
     }
 
     private class func tokenFromJSON(json: JSON) -> TokenServerToken? {
@@ -84,7 +101,7 @@ public class TokenServerClient {
             .validate(contentType: ["application/json"])
             .responseJSON { (_, response, data, error) in
                 if let error = error {
-                    deferred.fill(Result(failure: error))
+                    deferred.fill(Result(failure: TokenServerError.Local(error)))
                     return
                 }
 
