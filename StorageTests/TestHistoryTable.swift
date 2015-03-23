@@ -73,7 +73,7 @@ class TestHistoryTable : XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testHistoryTable() {
         let files = MockFiles()
-        self.db = SwiftData(filename: files.get("test.db", basePath: nil)!)
+        self.db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent("test.db"))
         let h = HistoryTable<Site>()
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
@@ -99,6 +99,6 @@ class TestHistoryTable : XCTestCase {
         self.clear(h)
         self.checkSites(h, options: nil, urls: [String: String]())
 
-        files.remove("test.db", basePath: nil)
+        files.remove("test.db")
     }
 }
