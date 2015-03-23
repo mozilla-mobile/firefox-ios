@@ -53,7 +53,7 @@ class ReaderModeCache {
         if let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true) as? [String] {
             if paths.count > 0 {
                 if let hashedPath = hashedPathForURL(url) {
-                    return NSString.pathWithComponents([paths[0], hashedPath])
+                    return NSString.pathWithComponents([paths[0], "ReaderView", hashedPath])
                 }
             }
         }
