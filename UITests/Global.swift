@@ -72,15 +72,24 @@ class SimplePageServer {
     class func start() -> String {
         let webServer: GCDWebServer = GCDWebServer()
 
+        webServer.addHandlerForMethod("GET", path: "/image.png", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            let img = UIImagePNGRepresentation(UIImage(named: "back"))
+            return GCDWebServerDataResponse(data: img, contentType: "image/png")
+        }
+
         webServer.addHandlerForMethod("GET", path: "/", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             let page = (request.query["page"] as String).toInt()!
-            return GCDWebServerDataResponse(HTML: "<html><body><div>Page \(page)</div></body></html>")
+            var pageDataPath = NSBundle(forClass: self).pathForResource("baseFile", ofType: "html")!
+            var pageData = NSString(contentsOfFile: pageDataPath, encoding: NSUTF8StringEncoding, error: nil)!
+            pageData = pageData.stringByReplacingOccurrencesOfString("{page}", withString: page.description)
+            return GCDWebServerDataResponse(HTML: pageData)
         }
 
         if !webServer.startWithPort(0, bonjourName: nil) {
             XCTFail("Can't start the GCDWebServer")
         }
 
-        return "http://localhost:\(webServer.port)"
+        let webRoot = "http://localhost:\(webServer.port)"
+        return webRoot
     }
 }

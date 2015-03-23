@@ -95,6 +95,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
 
         tabsButton = InsetButton()
         tabsButton.setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
+        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the urlbar tabs button")
         tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
         tabsButton.titleLabel?.layer.cornerRadius = 2
         tabsButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Bold", size: 11)

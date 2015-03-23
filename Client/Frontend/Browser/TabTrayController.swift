@@ -181,6 +181,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
         signinItem.enabled = false
         // TODO: Vertically center the add button.  Right now, it's too high in the containing bar.
         let addTabItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "SELdidClickAddTab")
+        addTabItem.accessibilityLabel = NSLocalizedString("Add tab", comment: "Open the tabs tray")
         let spacer = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
         toolbar.setItems([settingsItem, spacer, signinItem, spacer, addTabItem], animated: true)
 

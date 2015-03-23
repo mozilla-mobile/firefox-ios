@@ -10,6 +10,7 @@
 		0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */; };
 		0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */; };
 		0B6544D31A96C5F0000DD202 /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B6544C21A96C59E000DD202 /* libSDWebImage.a */; };
+		0B6FBAB21AC1F830007EC669 /* baseFile.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B6FBAB11AC1F830007EC669 /* baseFile.html */; };
 		0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B8E0FF31A932BD500161DC3 /* ImageIO.framework */; };
 		0BA2E43C1A69EDAB000581FA /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
 		0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA896491A250E6500C1010C /* ProfileTest.swift */; };
@@ -22,11 +23,13 @@
 		0BB5B2D71AC0ABA40052877D /* UIImage+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B2BB1AC0AB9F0052877D /* UIImage+Utils.swift */; };
 		0BB5B3091AC0AD150052877D /* PasswordHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 0BB5B3081AC0AD150052877D /* PasswordHelper.js */; };
 		0BB5B30B1AC0AD1F0052877D /* PasswordHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B30A1AC0AD1F0052877D /* PasswordHelper.swift */; };
+		0BB5B3601AC0D6360052877D /* BookmarkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */; };
 		0BD19A5F1A2530320084FBA7 /* HomePanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22221A09122500AAB793 /* HomePanelViewController.swift */; };
 		0BD19A651A2530840084FBA7 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		0BD19A671A25309B0084FBA7 /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		0BD19A681A2530A40084FBA7 /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		0BD2C61D1A643B6000BB4BB9 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
+		0BD4EE461AC1DB25008E465D /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8D1A8523B000213B54 /* KeychainWrapper.swift */; };
 		0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108351A1B1EC700D4B712 /* TestLocking.swift */; };
 		0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0DB931A8545800039F300 /* URLBarView.swift */; };
@@ -891,6 +894,7 @@
 		0B1C05D51A798B1F004C78B0 /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
 		0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
 		0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = Carthage/Checkouts/SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
+		0B6FBAB11AC1F830007EC669 /* baseFile.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = baseFile.html; sourceTree = "<group>"; };
 		0B8E0FF31A932BD500161DC3 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		0BA896491A250E6500C1010C /* ProfileTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTest.swift; sourceTree = "<group>"; };
 		0BA8964A1A250E6500C1010C /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
@@ -899,6 +903,7 @@
 		0BB5B2BB1AC0AB9F0052877D /* UIImage+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Utils.swift"; sourceTree = "<group>"; };
 		0BB5B3081AC0AD150052877D /* PasswordHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = PasswordHelper.js; path = Assets/PasswordHelper.js; sourceTree = "<group>"; };
 		0BB5B30A1AC0AD1F0052877D /* PasswordHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordHelper.swift; sourceTree = "<group>"; };
+		0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkingTests.swift; sourceTree = "<group>"; };
 		0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePrefs.swift; sourceTree = "<group>"; };
 		0BE108351A1B1EC700D4B712 /* TestLocking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLocking.swift; sourceTree = "<group>"; };
 		0BE108391A1B1ED200D4B712 /* Locking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locking.swift; sourceTree = "<group>"; };
@@ -1770,6 +1775,8 @@
 				D39FA1821A83E87900EE869C /* NavigationTests.swift */,
 				D39FA1611A83E0EC00EE869C /* Supporting Files */,
 				2F642CEC1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift */,
+				0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */,
+				0B6FBAB11AC1F830007EC669 /* baseFile.html */,
 			);
 			path = UITests;
 			sourceTree = "<group>";
@@ -2745,6 +2752,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B6FBAB21AC1F830007EC669 /* baseFile.html in Resources */,
 				D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3018,6 +3026,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BB5B3601AC0D6360052877D /* BookmarkingTests.swift in Sources */,
 				D39FA1811A83E84900EE869C /* Global.swift in Sources */,
 				E42475E71AB73B9B00B23D33 /* SWUtilityButtonTapGestureRecognizer.m in Sources */,
 				E42475E41AB73B9B00B23D33 /* SWTableViewCell.m in Sources */,
@@ -3025,6 +3034,7 @@
 				D38B2D3F1A8D96D00040E6B5 /* GCDWebServerDataRequest.m in Sources */,
 				E42475DE1AB73B9B00B23D33 /* SWCellScrollView.m in Sources */,
 				D38B2D541A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */,
+				0BD4EE461AC1DB25008E465D /* KeychainWrapper.swift in Sources */,
 				D38B2D511A8D96D00040E6B5 /* GCDWebServerFileResponse.m in Sources */,
 				D39FA1831A83E87900EE869C /* NavigationTests.swift in Sources */,
 				E42475EA1AB73B9B00B23D33 /* SWUtilityButtonView.m in Sources */,

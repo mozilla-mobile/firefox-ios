@@ -62,7 +62,8 @@ class BrowserToolbar: Toolbar {
         shareButton.contentEdgeInsets = ButtonInset
 
         bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
-        bookmarkButton.accessibilityLabel = NSLocalizedString("Share", comment: "Accessibility Label for the browser toolbar Bookmark button")
+        bookmarkButton.setImage(UIImage(named: "bookmarked"), forState: UIControlState.Selected)
+        bookmarkButton.accessibilityLabel = NSLocalizedString("Bookmark", comment: "Accessibility Label for the browser toolbar Bookmark button")
         longPressGestureBookmarkButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBookmark:")
         bookmarkButton.addGestureRecognizer(longPressGestureBookmarkButton)
         bookmarkButton.addTarget(self, action: "SELdidClickBookmark", forControlEvents: UIControlEvents.TouchUpInside)
@@ -98,11 +99,7 @@ class BrowserToolbar: Toolbar {
     }
 
     func updateBookmarkStatus(isBookmarked: Bool) {
-        if isBookmarked {
-            bookmarkButton.imageView?.image = UIImage(named: "bookmarked")
-        } else {
-            bookmarkButton.imageView?.image = UIImage(named: "bookmark")
-        }
+        bookmarkButton.selected = isBookmarked
     }
 
     func SELdidClickBack() {
