@@ -18,7 +18,8 @@ extension String {
         if other.isEmpty {
             return true
         }
-        if let range = self.rangeOfString(other) {
+        if let range = self.rangeOfString(other,
+                options: NSStringCompareOptions.AnchoredSearch) {
             return range.startIndex == self.startIndex
         }
         return false
@@ -29,7 +30,8 @@ extension String {
         if other.isEmpty {
             return true
         }
-        if let range = self.rangeOfString(other) {
+        if let range = self.rangeOfString(other,
+                options: NSStringCompareOptions.AnchoredSearch | NSStringCompareOptions.BackwardsSearch) {
             return range.endIndex == self.endIndex
         }
         return false
