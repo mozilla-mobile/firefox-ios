@@ -18,7 +18,7 @@ class UtilsTests: XCTestCase {
 
         let o = mapValues(m, f)
         XCTAssertEqual(2, o.count)
-        XCTAssertTrue(o["foo"] == nil)
+        XCTAssertTrue(o["foo"]! == nil)
         XCTAssertTrue(o["bar"]! == 999)
 
         let filtered = optFilter(o)
