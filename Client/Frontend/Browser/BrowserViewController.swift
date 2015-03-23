@@ -640,6 +640,13 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?) {
         if let wv = selected?.webView {
             webViewContainer.addSubview(wv)
+            if let url = wv.URL?.absoluteString {
+                profile.bookmarks.isBookmarked(url, success: { bookmarked in
+                    self.toolbar.updateBookmarkStatus(bookmarked)
+                }, failure: { err in
+                    println("Error getting bookmark status: \(err)")
+                })
+            }
         }
 
         removeAllBars()
