@@ -70,7 +70,7 @@ class FxAClient10Tests: LiveAccountTest {
                     if let error = result.failureValue as? FxAClientError {
                         switch error {
                         case let .Remote(remoteError):
-                            XCTAssertEqual(remoteError.code, Int32(401)) // Bad auth.
+                            XCTAssertEqual(remoteError.code, Int32(400)) // Bad auth.
                             XCTAssertEqual(remoteError.errno, Int32(103)) // Incorrect password.
                         case let .Local(error):
                             XCTAssertEqual(error.description, "")

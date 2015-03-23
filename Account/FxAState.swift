@@ -327,9 +327,13 @@ public class MarriedState: TokenKeysAndKeyPair {
         return newState
     }
 
-    public func generateAssertionForAudience(audience: String) -> String {
+    public func generateAssertionForAudience(audience: String, now: Int64) -> String {
         let assertion = JSONWebTokenUtils.createAssertionWithPrivateKeyToSignWith(keyPair.privateKey,
-            certificate: certificate, audience: audience)
+            certificate: certificate,
+            audience: audience,
+            issuer: "127.0.0.1",
+            issuedAt: UInt64(now),
+            duration: UInt64(OneHourInMilliseconds))
         return assertion
     }
 }
