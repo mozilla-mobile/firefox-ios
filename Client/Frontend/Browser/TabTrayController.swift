@@ -185,9 +185,13 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
         let signinItem = UIBarButtonItem(title: NSLocalizedString("Sign in", comment: "Button that leads to Sign in section of the Settings sheet."),
             style: .Plain, target: self, action: "SELdidClickDone")
         signinItem.enabled = false
-        // TODO: Vertically center the add button.  Right now, it's too high in the containing bar.
+
         let addTabItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "SELdidClickAddTab")
+        
+        let topInset:CGFloat = 10.0;
+        addTabItem.imageInsets = UIEdgeInsetsMake(topInset, 0.0, -topInset, 0.0);
         let spacer = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
+        
         toolbar.setItems([settingsItem, spacer, signinItem, spacer, addTabItem], animated: true)
 
         tableView = UITableView()
