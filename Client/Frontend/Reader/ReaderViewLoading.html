@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+ - License, v. 2.0. If a copy of the MPL was not distributed with this
+ - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<html>
+
+    <body>
+        <h1 id="message">TODO Loading Interstitial</h1>
+    </body>
+
+    <script>
+        var numberOfChecks = 10;
+
+        function triggerCheck() {
+            if (numberOfChecks--) {
+                setTimeout(function() { checkIfContentIsAvailable(); }, 1000);
+            } else {
+                var e = document.getElementById("message")
+                if (e != null) {
+                    e.innerText = "There was a problem loading the content. Click here to load the original page.";
+                }
+            }
+        }
+
+        function checkIfContentIsAvailable() {
+            var request = new XMLHttpRequest();
+            request.open("GET", "/reader-mode/page-exists" + document.location.search, true);
+            request.onload = function() {
+                if (request.status == 200) {
+                    location.reload(true);
+                } else {
+                    triggerCheck();
+                }
+            };
+            request.onerror = function() {
+                triggerCheck();
+            };
+            request.send();
+        }
+
+        triggerCheck();
+    </script>
+
+</html>
