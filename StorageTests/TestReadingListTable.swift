@@ -12,7 +12,7 @@ class TestReadingListTable: XCTestCase {
     override func setUp() {
         let files = MockFiles()
         files.remove("TestReadingListTable.db")
-        db = SwiftData(filename: files.get("TestReadingListTable.db")!)
+        db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent("TestReadingListTable.db"))
 
         readingListTable = ReadingListTable<ReadingListItem>()
         db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in

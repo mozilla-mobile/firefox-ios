@@ -57,7 +57,7 @@ class TestJoinedFaviconsTable : XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testJoinedFaviconsTable() {
         let files = MockFiles()
-        self.db = SwiftData(filename: files.get("test.db", basePath: nil)!)
+        self.db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent("test.db"))
         let f = JoinedFaviconsHistoryTable<(Site, Favicon)>(files: files)
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
@@ -85,6 +85,6 @@ class TestJoinedFaviconsTable : XCTestCase {
         self.clear(f)
         self.checkIcons(f, options: nil, urls: [String]())
         
-        files.remove("test.db", basePath: nil)
+        files.remove("test.db")
     }
 }

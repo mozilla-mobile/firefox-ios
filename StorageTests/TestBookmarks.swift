@@ -89,7 +89,7 @@ class TestBookmarks : XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testBookmarksTable() {
         let files = MockFiles()
-        self.db = SwiftData(filename: files.get("test.db")!)
+        self.db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent("test.db"))
         let bookmarks = BookmarkTable<BookmarkNode>()
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
