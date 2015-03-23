@@ -16,9 +16,9 @@ protocol BrowserToolbarDelegate: class {
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbar)
 }
 
-private let ButtonHeight = 24
+private let ButtonInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
-class BrowserToolbar: UIView {
+class BrowserToolbar: Toolbar {
     weak var browserToolbarDelegate: BrowserToolbarDelegate?
 
     private let shareButton: UIButton
@@ -42,6 +42,7 @@ class BrowserToolbar: UIView {
         backButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
         longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack:")
         backButton.addGestureRecognizer(longPressGestureBackButton)
+        backButton.contentEdgeInsets = ButtonInset
         backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
 
         forwardButton.setImage(UIImage(named: "forward"), forState: .Normal)
@@ -50,22 +51,25 @@ class BrowserToolbar: UIView {
         longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward:")
         forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
+        forwardButton.contentEdgeInsets = ButtonInset
 
         shareButton.setImage(UIImage(named: "send"), forState: .Normal)
         shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Accessibility Label for the browser toolbar Share button")
         shareButton.addTarget(self, action: "SELdidClickShare", forControlEvents: UIControlEvents.TouchUpInside)
+        shareButton.contentEdgeInsets = ButtonInset
 
         bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
         bookmarkButton.accessibilityLabel = NSLocalizedString("Share", comment: "Accessibility Label for the browser toolbar Bookmark button")
         longPressGestureBookmarkButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBookmark:")
         bookmarkButton.addGestureRecognizer(longPressGestureBookmarkButton)
         bookmarkButton.addTarget(self, action: "SELdidClickBookmark", forControlEvents: UIControlEvents.TouchUpInside)
+        bookmarkButton.contentEdgeInsets = ButtonInset
 
         addButtons(backButton, forwardButton, shareButton, bookmarkButton)
     }
 
     // This has to be here since init() calls it
-    override private init(frame: CGRect) {
+    private override init(frame: CGRect) {
         // And these have to be initialized in here or the compiler will get angry
         backButton = UIButton()
         forwardButton = UIButton()
@@ -80,35 +84,6 @@ class BrowserToolbar: UIView {
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    private func addButtons(buttons: UIButton...) {
-        for button in buttons {
-            button.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-            button.setTitleColor(UIColor.grayColor(), forState: UIControlState.Disabled)
-            button.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
-            addSubview(button)
-        }
-    }
-
-    override func layoutSubviews() {
-        var prev: UIView? = nil
-        for view in self.subviews {
-            if let view = view as? UIView {
-                view.snp_remakeConstraints { make in
-                    if let prev = prev {
-                        make.left.equalTo(prev.snp_right)
-                    } else {
-                        make.left.equalTo(self)
-                    }
-                    prev = view
-
-                    make.centerY.equalTo(self)
-                    make.height.equalTo(ButtonHeight)
-                    make.width.equalTo(self).dividedBy(self.subviews.count)
-                }
-            }
-        }
     }
 
     func updateBackStatus(canGoBack: Bool) {
