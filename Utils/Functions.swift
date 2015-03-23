@@ -11,8 +11,6 @@ public func optFilter<T>(a: [T?]) -> [T] {
 
 /**
  * Return a new map with only key-value pairs that have a non-nil value.
- * for which the function returns non-nil. Works seamlessly with a
- * function that has a non-optional type signature, too.
  */
 public func optFilter<K, V>(source: [K: V?]) -> [K: V] {
     var m = [K: V]()
