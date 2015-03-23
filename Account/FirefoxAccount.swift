@@ -53,6 +53,62 @@ public class FirefoxAccount {
         self.state = state
     }
 
+    public class func fromConfigurationAndJSON(configuration: FirefoxAccountConfiguration, data: JSON) -> FirefoxAccount? {
+        if let email = data["email"].asString {
+            if let uid = data["uid"].asString {
+                if let sessionToken = data["sessionToken"].asString?.hexDecodedData {
+                    if let keyFetchToken = data["keyFetchToken"].asString?.hexDecodedData {
+                        if let unwrapkB = data["unwrapBKey"].asString?.hexDecodedData {
+                            let verified = data["verified"].asBool ?? false
+                            return FirefoxAccount.fromConfigurationAndParameters(configuration,
+                                email: email, uid: uid, verified: verified,
+                                sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
+                        }
+                    }
+                }
+            }
+        }
+        return nil
+    }
+
+    public class func fromConfigurationAndLoginResponse(configuration: FirefoxAccountConfiguration,
+            response: FxALoginResponse, unwrapkB: NSData) -> FirefoxAccount {
+        return FirefoxAccount.fromConfigurationAndParameters(configuration,
+            email: response.remoteEmail, uid: response.uid, verified: response.verified,
+            sessionToken: response.sessionToken, keyFetchToken: response.keyFetchToken, unwrapkB: unwrapkB)
+    }
+
+    private class func fromConfigurationAndParameters(configuration: FirefoxAccountConfiguration,
+            email: String, uid: String, verified: Bool,
+            sessionToken: NSData, keyFetchToken: NSData, unwrapkB: NSData) -> FirefoxAccount {
+        var state: FxAState! = nil
+        if !verified {
+            let now = Int64(NSDate().timeIntervalSince1970 * 1000)
+            state = EngagedBeforeVerifiedState(knownUnverifiedAt: now,
+                lastNotifiedUserAt: now,
+                sessionToken: sessionToken,
+                keyFetchToken: keyFetchToken,
+                unwrapkB: unwrapkB
+            )
+        } else {
+            state = EngagedAfterVerifiedState(
+                sessionToken: sessionToken,
+                keyFetchToken: keyFetchToken,
+                unwrapkB: unwrapkB
+            )
+        }
+
+        let account = FirefoxAccount(
+            email: email,
+            uid: uid,
+            authEndpoint: configuration.authEndpointURL,
+            contentEndpoint: configuration.profileEndpointURL,
+            oauthEndpoint: configuration.oauthEndpointURL,
+            state: state
+        )
+        return account
+    }
+
     public func asDictionary() -> [String: AnyObject] {
         var dict: [String: AnyObject] = [:]
         dict["version"] = AccountSchemaVersion
