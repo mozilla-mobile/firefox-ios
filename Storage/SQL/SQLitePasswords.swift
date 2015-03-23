@@ -51,7 +51,8 @@ private class PasswordsTable<T>: GenericTable<Password> {
         args.append(item.password)
         args.append(item.hostname)
         args.append(item.username)
-        return ("UPDATE \(name) SET httpRealm = ?, formSubmitUrl = ?, usernameField = ?, passwordField = ?, timeCreated = ?, timeLastUsed = ?, timePasswordChanged = ?, password = ?) WHERE hostname = ? AND username = ?", args)
+
+        return ("UPDATE \(name) SET httpRealm = ?, formSubmitUrl = ?, usernameField = ?, passwordField = ?, timeCreated = ?, timeLastUsed = ?, timePasswordChanged = ?, password = ? WHERE hostname = ? AND username = ?", args)
     }
 
     override func getDeleteAndArgs(inout item: Password?) -> (String, [AnyObject?])? {
@@ -113,12 +114,27 @@ public class SQLitePasswords : Passwords {
 
     public func add(password: Password, complete: (success: Bool) -> Void) {
         var err: NSError? = nil
-        let inserted = db.insert(&err, callback: { (connection, err) -> Int in
-            return self.table.insert(connection, item: password, err: &err)
+        var success = false
+        let updated = db.update(&err, callback: { (connection, err) -> Int in
+            return self.table.update(connection, item: password, err: &err)
         })
+        println("Updated \(updated)")
+
+        if updated == 0 {
+            let inserted = db.insert(&err, callback: { (connection, err) -> Int in
+                return self.table.insert(connection, item: password, err: &err)
+            })
+            println("Inserted \(inserted)")
+
+            if inserted > -1 {
+                success = true
+            }
+        } else {
+            success = true
+        }
 
         dispatch_async(dispatch_get_main_queue()) { _ in
-            complete(success: inserted > -1)
+            complete(success: success)
             return
         }
     }

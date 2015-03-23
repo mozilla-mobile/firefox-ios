@@ -11,8 +11,15 @@ protocol BrowserHelper {
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
 }
 
+protocol BrowserDelegate {
+    func browser(browser: Browser, didAddSnackbar bar: SnackBar)
+    func browser(browser: Browser, didRemoveSnackbar bar: SnackBar)
+}
+
 class Browser: NSObject, WKScriptMessageHandler {
     let webView: WKWebView
+    var browserDelegate: BrowserDelegate? = nil
+    var bars = [SnackBar]()
 
     init(configuration: WKWebViewConfiguration) {
         configuration.userContentController = WKUserContentController()
@@ -160,10 +167,39 @@ class Browser: NSObject, WKScriptMessageHandler {
             webView.alpha = 1.0
         }
     }
+
+    func addSnackbar(bar: SnackBar) {
+        bars.append(bar)
+        browserDelegate?.browser(self, didAddSnackbar: bar)
+    }
+
+    func removeSnackbar(bar: SnackBar) {
+        if let index = find(bars, bar) {
+            bars.removeAtIndex(index)
+            browserDelegate?.browser(self, didRemoveSnackbar: bar)
+        }
+    }
+
+    func removeAllSnackbars() {
+        // Enumerate backwards here because we'll remove items from the list as we go.
+        for var i = bars.count-1; i >= 0; i-- {
+            let bar = bars[i]
+            removeSnackbar(bar)
+        }
+    }
+
+    func expireSnackbars() {
+        // Enumerate backwards here because we may remove items from the list as we go.
+        for var i = bars.count-1; i >= 0; i-- {
+            let bar = bars[i]
+            if !bar.shouldPersist(self) {
+                removeSnackbar(bar)
+            }
+        }
+    }
 }
 
 extension WKWebView {
-
     func runScriptFunction(function: String, fromScript: String, callback: (AnyObject?) -> Void) {
         if let path = NSBundle.mainBundle().pathForResource(fromScript, ofType: "js") {
             if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) {

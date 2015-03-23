@@ -8,8 +8,6 @@ import WebKit
 import Storage
 import Snap
 
-public let StatusBarHeight: CGFloat = 20 // TODO: Can't assume this is correct. Status bar height is dynamic.
-public let ToolbarHeight: CGFloat = 44
 private let OKString = NSLocalizedString("OK", comment: "OK button")
 private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
 
@@ -33,6 +31,7 @@ class BrowserViewController: UIViewController {
     // These views wrap the urlbar and toolbar to provide background effects on them
     private var header: UIView!
     private var footer: UIView!
+    private var footerBackground: UIView!
     private var previousScroll: CGPoint? = nil
 
     required init(coder aDecoder: NSCoder) {
@@ -66,9 +65,7 @@ class BrowserViewController: UIViewController {
         // Setup the URL bar, wrapped in a view to get transparency effect
 
         urlBar = URLBarView()
-        header = wrapInEffect(urlBar)
-        view.addSubview(header)
-
+        header = wrapInEffect(urlBar, parent: view)
         header.snp_makeConstraints { make in
             make.top.equalTo(self.view.snp_top)
             make.height.equalTo(ToolbarHeight + StatusBarHeight)
@@ -90,12 +87,21 @@ class BrowserViewController: UIViewController {
         // Setup the bottom toolbar
 
         toolbar = BrowserToolbar()
-        footer = wrapInEffect(toolbar)
-        view.addSubview(footer)
+        footer = UIView()
+        self.view.addSubview(footer)
 
+        footerBackground = wrapInEffect(toolbar, parent: footer)
+        toolbar.snp_makeConstraints { make in
+            make.height.equalTo(ToolbarHeight)
+            return
+        }
+        footerBackground.snp_makeConstraints { make in
+            make.bottom.left.right.equalTo(self.footer)
+            make.height.equalTo(ToolbarHeight)
+        }
         footer.snp_makeConstraints { make in
             make.bottom.equalTo(self.view.snp_bottom)
-            make.height.equalTo(ToolbarHeight)
+            make.top.equalTo(self.footerBackground.snp_top)
             make.leading.trailing.equalTo(self.view)
         }
 
@@ -107,8 +113,9 @@ class BrowserViewController: UIViewController {
         tabManager.addTab()
     }
 
-    private func wrapInEffect(view: UIView) -> UIView {
+    private func wrapInEffect(view: UIView, parent: UIView) -> UIView {
         let effect = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
+        parent.addSubview(effect);
         view.backgroundColor = UIColor.clearColor()
         effect.addSubview(view)
 
@@ -370,6 +377,131 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 }
 
+
+extension BrowserViewController: BrowserDelegate {
+    private func findSnackbar(bars: [AnyObject], barToFind: SnackBar) -> Int? {
+        for (index, bar) in enumerate(bars) {
+            if bar === barToFind {
+                return index
+            }
+        }
+        return nil
+    }
+
+    private func adjustFooterSize(top: UIView? = nil) {
+        footer.snp_remakeConstraints { make in
+            let bars = self.footer.subviews
+            make.bottom.equalTo(self.view.snp_bottom)
+            if let top = top {
+                make.top.equalTo(top.snp_top)
+            } else if bars.count > 0 {
+                if let bar = bars[bars.count-1] as? SnackBar {
+                    make.top.equalTo(bar.snp_top)
+                }
+            }
+            make.leading.trailing.equalTo(self.view)
+        }
+    }
+
+    // This removes the bar from its superview and updates constraints appropriately
+    private func finishRemovingBar(bar: SnackBar) {
+        // If there was a bar above this one, we need to remake its constraints so that it doesn't
+        // try to sit about "this" bar anymore.
+        let bars = footer.subviews
+        if let index = findSnackbar(bars, barToFind: bar) {
+            if index < bars.count-1 {
+                if var nextbar = bars[index+1] as? SnackBar {
+                    nextbar.snp_remakeConstraints { make in
+                        if index > 1 {
+                            if let bar = bars[index-1] as? SnackBar {
+                                make.bottom.equalTo(bar.snp_top)
+                            }
+                        } else {
+                            make.bottom.equalTo(self.toolbar.snp_top)
+                        }
+                        make.left.width.equalTo(self.footer)
+                    }
+                    nextbar.setNeedsUpdateConstraints()
+                }
+            }
+        }
+
+        // Really remove the bar
+        bar.removeFromSuperview()
+    }
+
+    private func finishAddingBar(bar: SnackBar) {
+        footer.addSubview(bar)
+        bar.snp_makeConstraints({ make in
+            // If there are already bars showing, add this on top of them
+            let bars = self.footer.subviews
+            if bars.count > 1 {
+                if let view = bars[bars.count - 2] as? UIView {
+                    make.bottom.equalTo(view.snp_top)
+                }
+            }
+            make.left.width.equalTo(self.footer)
+        })
+    }
+
+    func showBar(bar: SnackBar, animated: Bool) {
+        finishAddingBar(bar)
+        adjustFooterSize(top: bar)
+
+        bar.hide()
+        UIView.animateWithDuration(animated ? 0.25 : 0, animations: { () -> Void in
+            bar.show()
+        })
+    }
+
+    func removeBar(bar: SnackBar, animated: Bool) {
+        bar.show()
+
+        let bars = footer.subviews
+        let index = findSnackbar(bars, barToFind: bar)!
+        UIView.animateWithDuration(animated ? 0.25 : 0, animations: { () -> Void in
+            bar.hide()
+            // Make sure all the bars above it slide down as well
+            for i in index..<bars.count {
+                if let sibling = bars[i] as? SnackBar {
+                    sibling.transform = CGAffineTransformMakeTranslation(0, bar.frame.height)
+                }
+            }
+        }) { success in
+            // Undo all the animation transforms
+            for i in index..<bars.count {
+                if let bar = bars[i] as? SnackBar {
+                    bar.transform = CGAffineTransformIdentity
+                }
+            }
+
+            // Really remove the bar
+            self.finishRemovingBar(bar)
+
+            // Adjust the footer size to only contain the bars
+            self.adjustFooterSize()
+        }
+    }
+
+    func removeAllBars() {
+        let bars = footer.subviews
+        for bar in bars {
+            if let bar = bar as? SnackBar {
+                bar.removeFromSuperview()
+            }
+        }
+        self.adjustFooterSize()
+    }
+
+    func browser(browser: Browser, didAddSnackbar bar: SnackBar) {
+        showBar(bar, animated: true)
+    }
+
+    func browser(browser: Browser, didRemoveSnackbar bar: SnackBar) {
+        removeBar(bar, animated: true)
+    }
+}
+
 extension BrowserViewController: HomePanelViewControllerDelegate {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL) {
         finishEditingAndSubmit(url)
@@ -409,7 +541,7 @@ extension BrowserViewController: UIScrollViewDelegate {
     }
 
     private func scrollToolbar(dy: CGFloat) {
-        let newY = clamp(footer.transform.ty - dy, min: 0, max: footer.frame.height)
+        let newY = clamp(footer.transform.ty - dy, min: 0, max: toolbar.frame.height)
         footer.transform = CGAffineTransformMakeTranslation(0, newY)
     }
 
@@ -473,6 +605,9 @@ extension BrowserViewController: UIScrollViewDelegate {
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
             self.scrollUrlBar(CGFloat(-1*MAXFLOAT))
             self.scrollToolbar(CGFloat(-1*MAXFLOAT))
+
+            self.header.transform = CGAffineTransformMakeTranslation(0, -self.urlBar.frame.height)
+            self.footer.transform = CGAffineTransformMakeTranslation(0, self.toolbar.frame.height)
             // Reset the insets so that clicking works on the edges of the screen
             if let tab = self.tabManager.selectedTab {
                 tab.webView.scrollView.contentInset = UIEdgeInsets(top: StatusBarHeight, left: 0, bottom: 0, right: 0)
@@ -485,6 +620,9 @@ extension BrowserViewController: UIScrollViewDelegate {
         UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
             self.scrollUrlBar(CGFloat(MAXFLOAT))
             self.scrollToolbar(CGFloat(MAXFLOAT))
+
+            self.header.transform = CGAffineTransformIdentity
+            self.footer.transform = CGAffineTransformIdentity
             // Reset the insets so that clicking works on the edges of the screen
             if let tab = self.tabManager.selectedTab {
                 tab.webView.scrollView.contentInset = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: ToolbarHeight, right: 0)
@@ -502,9 +640,15 @@ extension BrowserViewController: TabManagerDelegate {
 
         previous?.webView.navigationDelegate = nil
         previous?.webView.scrollView.delegate = nil
+        removeAllBars()
         selected?.webView.navigationDelegate = self
         selected?.webView.scrollView.delegate = self
         urlBar.updateURL(selected?.displayURL)
+        if let bars = selected?.bars {
+            for bar in bars {
+                showBar(bar, animated: true)
+            }
+        }
         showToolbars(animated: false)
 
         toolbar.updateBackStatus(selected?.canGoBack ?? false)
@@ -557,6 +701,7 @@ extension BrowserViewController: TabManagerDelegate {
         tab.webView.addObserver(self, forKeyPath: KVOEstimatedProgress, options: .New, context: nil)
         tab.webView.addObserver(self, forKeyPath: KVOLoading, options: .New, context: nil)
         tab.webView.UIDelegate = self
+        tab.browserDelegate = self
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser) {
@@ -622,6 +767,14 @@ extension BrowserViewController: WKNavigationDelegate {
         } else {
             decisionHandler(WKNavigationActionPolicy.Allow)
         }
+
+        if let url = webView.URL?.absoluteString {
+            profile.bookmarks.isBookmarked(url, success: { bookmarked in
+                self.toolbar.updateBookmarkStatus(bookmarked)
+            }, failure: { err in
+                println("Error getting bookmark status: \(err)")
+            })
+        }
     }
     
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
@@ -654,22 +807,22 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        if let tab = tabManager.selectedTab {
-            let notificationCenter = NSNotificationCenter.defaultCenter()
-            var info = [NSObject: AnyObject]()
-            info["url"] = tab.displayURL
-            info["title"] = tab.title
-            notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        var info = [NSObject: AnyObject]()
+        info["url"] = webView.URL
+        info["title"] = webView.title
+        notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
 
-            if tab.webView == webView {
-                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
-                // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
-                // cursor land on the correct initial element, but if not followed by LayoutChanged,
-                // VoiceOver will sometimes be stuck on the element, not allowing user to move
-                // forward/backward. Strange, but LayoutChanged fixes that.
-                UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
-            }
+        if let tab = tabManager.getTab(webView) {
+            tab.expireSnackbars()
         }
+
+        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+        // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
+        // cursor land on the correct initial element, but if not followed by LayoutChanged,
+        // VoiceOver will sometimes be stuck on the element, not allowing user to move
+        // forward/backward. Strange, but LayoutChanged fixes that.
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
     }
 }
 

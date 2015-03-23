@@ -1,6 +1,9 @@
 import Foundation
 import Snap
 
+public let StatusBarHeight: CGFloat = 20 // TODO: Can't assume this is correct. Status bar height is dynamic.
+public let ToolbarHeight: CGFloat = 44
+
 class Toolbar : UIView {
     var drawTopBorder = false
     var drawBottomBorder = false
@@ -64,7 +67,7 @@ class Toolbar : UIView {
         }
     }
 
-    override func layoutSubviews() {
+    override func updateConstraints() {
         var prev: UIView? = nil
         for view in self.subviews {
             if let view = view as? UIView {
@@ -82,5 +85,6 @@ class Toolbar : UIView {
                 }
             }
         }
+        super.updateConstraints()
     }
 }
