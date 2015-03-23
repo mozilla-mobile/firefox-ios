@@ -70,6 +70,8 @@
 		28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28F657EA1ABFCA7A00A608BD /* LiveAccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA4363B1ABB8448008031D1 /* LiveAccountTest.swift */; };
+		2F13E77F1AC0BFF200D75081 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */; };
+		2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */; };
 		2F14E13A1ABB890800FF98DB /* Account-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */; };
 		2F14E2521ABC8D2B00FF98DB /* signedInUser.json in Resources */ = {isa = PBXBuildFile; fileRef = 2F3444B81AB22E8000FD9731 /* signedInUser.json */; };
 		2F1A3DE11ABE3C90002F1E15 /* FxALoginStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */; };
@@ -896,6 +898,8 @@
 		28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FxA.xcodeproj; path = FxA/FxA.xcodeproj; sourceTree = "<group>"; };
 		28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Client-Bridging-Header.h"; sourceTree = "<group>"; };
 		28CE842F1A1E571900576538 /* json.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = json.swift; path = ThirdParty/json.swift; sourceTree = "<group>"; };
+		2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensionsTests.swift; sourceTree = "<group>"; };
 		2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Account-Bridging-Header.h"; sourceTree = "<group>"; };
 		2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxALoginStateMachine.swift; sourceTree = "<group>"; };
 		2F1A3DFD1ABE3C9C002F1E15 /* FxALoginStateMachineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxALoginStateMachineTests.swift; sourceTree = "<group>"; };
@@ -1738,16 +1742,17 @@
 		E42CCDFF1A24C4E300B794D3 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				0BB5B2BB1AC0AB9F0052877D /* UIImage+Utils.swift */,
 				2FCAE2401ABB531100877008 /* Bytes.swift */,
+				D35275151AA8D13B00E9C906 /* ColorUtils.swift */,
 				E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */,
+				283306E81AB3BB87008999AC /* Functions.swift */,
 				2F44FA171A9D425700FD20CC /* HashExtensions.swift */,
 				2F44FA1C1A9D460500FD20CC /* HexExtensions.swift */,
 				D39999A81AA01D65005AED21 /* KeyboardHelper.swift */,
-				D35275151AA8D13B00E9C906 /* ColorUtils.swift */,
-				2F3444561AB22A4B00FD9731 /* TimeConstants.swift */,
-				283306E81AB3BB87008999AC /* Functions.swift */,
 				282731A11ABC9D2600AA1954 /* Prefs.swift */,
+				2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */,
+				2F3444561AB22A4B00FD9731 /* TimeConstants.swift */,
+				0BB5B2BB1AC0AB9F0052877D /* UIImage+Utils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1830,6 +1835,7 @@
 				0BA896491A250E6500C1010C /* ProfileTest.swift */,
 				2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */,
 				D3FA777A1A43B2990010CD32 /* SearchTests.swift */,
+				2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */,
 				0BA8964A1A250E6500C1010C /* TestBookmarks.swift */,
 				0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */,
 				2F44FA1A1A9D426A00FD20CC /* TestHashExtensions.swift */,
@@ -2758,6 +2764,7 @@
 				288A2DB11AB8B37E0023ABC3 /* LockProtected.swift in Sources */,
 				2FDE87511ABA3E9A005317B1 /* HashExtensions.swift in Sources */,
 				282731A21ABC9D2600AA1954 /* Prefs.swift in Sources */,
+				2F13E77F1AC0BFF200D75081 /* StringExtensions.swift in Sources */,
 				288A2DB01AB8B37E0023ABC3 /* Deferred.swift in Sources */,
 				288A2DB51AB8B38D0023ABC3 /* Error.swift in Sources */,
 				288A2DB61AB8B38D0023ABC3 /* Result.swift in Sources */,
@@ -3039,6 +3046,7 @@
 				0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */,
 				D31A0FC81A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				D33D02161ABCECF400B9D667 /* FileThumbnails.swift in Sources */,
+				2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */,
 				E4ECCDC41AB1EADF0005E717 /* Browser.swift in Sources */,
 				2F1BDF911A8523B000213B54 /* KeychainWrapper.swift in Sources */,
 				59A687B4A05CC772FE7E5A09 /* SearchViewController.swift in Sources */,
