@@ -56,13 +56,13 @@ public struct FxASignResponse {
 //            "info": "https://docs.dev.lcip.og/errors/1234" // link to more info on the error
 //        }
 
-enum FxAClientError {
+public enum FxAClientError {
     case Remote(RemoteError)
     case Local(NSError)
 }
 
 extension FxAClientError: Printable, ErrorType {
-    var description: String {
+    public var description: String {
         switch self {
         case let .Remote(error):
             let errorString = error.error ?? "Missing error"
@@ -74,7 +74,7 @@ extension FxAClientError: Printable, ErrorType {
     }
 }
 
-struct RemoteError {
+public struct RemoteError {
     let code: Int32
     let errno: Int32
     let error: String?
