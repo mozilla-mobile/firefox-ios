@@ -4,6 +4,9 @@
 
 import Foundation
 
+// The version of the account schema we persist.
+let AccountSchemaVersion = 1
+
 /// A FirefoxAccount mediates access to identity attached services.
 ///
 /// All data maintained as part of the account or its state should be
@@ -13,8 +16,6 @@ import Foundation
 /// Non-sensitive but persistent data should be maintained outside of
 /// the account itself.
 public class FirefoxAccount {
-    let version = 1
-
     /// The email address identifying the account.  A Firefox Account is uniquely identified on a particular server
     /// (auth endpoint) by its email address.
     public let email: String
@@ -35,9 +36,13 @@ public class FirefoxAccount {
     /// https://github.com/mozilla/fxa-oauth-server/blob/6cc91e285fc51045a365dbacb3617ef29093dbc3/docs/api.md
     let oauthEndpoint: NSURL
 
-    private var state: FirefoxAccountState
+    private var state: FxAState
 
-    public init(email: String, uid: String, authEndpoint: NSURL, contentEndpoint: NSURL, oauthEndpoint: NSURL, state: FirefoxAccountState) {
+    public var actionNeeded: FxAActionNeeded {
+        return state.actionNeeded
+    }
+
+    public init(email: String, uid: String, authEndpoint: NSURL, contentEndpoint: NSURL, oauthEndpoint: NSURL, state: FxAState) {
         self.email = email
         self.uid = uid
         self.authEndpoint = authEndpoint
@@ -50,7 +55,7 @@ public class FirefoxAccount {
 
     public func asDictionary() -> [String: AnyObject] {
         var dict: [String: AnyObject] = [:]
-        dict["version"] = version
+        dict["version"] = AccountSchemaVersion
         dict["email"] = email
         dict["uid"] = uid
         dict["authEndpoint"] = authEndpoint.absoluteString!
@@ -62,7 +67,7 @@ public class FirefoxAccount {
 
     public class func fromDictionary(dictionary: [String: AnyObject]) -> FirefoxAccount? {
         if let version = dictionary["version"] as? Int {
-            if version == 1 {
+            if version == AccountSchemaVersion {
                 return FirefoxAccount.fromDictionaryV1(dictionary)
             }
         }
@@ -76,14 +81,10 @@ public class FirefoxAccount {
         let authEndpoint = NSURL(string: dictionary["authEndpoint"] as String)!
         let contentEndpoint = NSURL(string: dictionary["contentEndpoint"] as String)!
         let oauthEndpoint = NSURL(string: dictionary["oauthEndpoint"] as String)!
-        let state = FirefoxAccountState.fromDictionary(dictionary["state"] as [String: AnyObject])
-            ?? FirefoxAccountState.Separated()
+        let state = stateFromDictionary(dictionary["state"] as [String: AnyObject])
+            ?? SeparatedState()
         return FirefoxAccount(email: email, uid: uid,
                 authEndpoint: authEndpoint, contentEndpoint: contentEndpoint, oauthEndpoint: oauthEndpoint,
                 state: state)
-   }
-
-    public func getActionNeeded() -> FirefoxAccountActionNeeded {
-        return state.getActionNeeded()
     }
 }
