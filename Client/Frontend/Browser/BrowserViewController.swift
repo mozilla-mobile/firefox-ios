@@ -85,7 +85,6 @@ class BrowserViewController: UIViewController {
         }
 
         // Setup the bottom toolbar
-
         toolbar = BrowserToolbar()
         footer = UIView()
         self.view.addSubview(footer)
@@ -99,11 +98,7 @@ class BrowserViewController: UIViewController {
             make.bottom.left.right.equalTo(self.footer)
             make.height.equalTo(ToolbarHeight)
         }
-        footer.snp_makeConstraints { make in
-            make.bottom.equalTo(self.view.snp_bottom)
-            make.top.equalTo(self.footerBackground.snp_top)
-            make.leading.trailing.equalTo(self.view)
-        }
+        adjustFooterSize()
 
         urlBar.delegate = self
         readerModeBar.delegate = self
@@ -397,6 +392,8 @@ extension BrowserViewController: BrowserDelegate {
             } else if bars.count > 0 {
                 if let bar = bars[bars.count-1] as? SnackBar {
                     make.top.equalTo(bar.snp_top)
+                } else {
+                    make.top.equalTo(self.toolbar.snp_top)
                 }
             }
             make.leading.trailing.equalTo(self.view)
@@ -766,14 +763,6 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(WKNavigationActionPolicy.Cancel)
         } else {
             decisionHandler(WKNavigationActionPolicy.Allow)
-        }
-
-        if let url = webView.URL?.absoluteString {
-            profile.bookmarks.isBookmarked(url, success: { bookmarked in
-                self.toolbar.updateBookmarkStatus(bookmarked)
-            }, failure: { err in
-                println("Error getting bookmark status: \(err)")
-            })
         }
     }
     
