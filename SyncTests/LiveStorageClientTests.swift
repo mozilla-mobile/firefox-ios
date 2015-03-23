@@ -20,7 +20,7 @@ class LiveStorageClientTests : LiveAccountTest {
         let clientState = FxAClient10.computeClientState(state.kB)
         let client = TokenServerClient()
         println("Fetching token.")
-        return client.token(state.generateAssertionForAudience(audience), clientState: clientState)
+        return client.token(state.generateAssertionForAudience(audience, now: NSDate.now()), clientState: clientState)
     }
 
     func getKeys(married: MarriedState, token: TokenServerToken) -> Deferred<Result<Record<KeysPayload>>> {
