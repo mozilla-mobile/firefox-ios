@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 // The version of the account schema we persist.
 let AccountSchemaVersion = 1
@@ -142,5 +143,34 @@ public class FirefoxAccount {
         return FirefoxAccount(email: email, uid: uid,
                 authEndpoint: authEndpoint, contentEndpoint: contentEndpoint, oauthEndpoint: oauthEndpoint,
                 state: state)
+    }
+
+    public enum AccountError: Printable, ErrorType {
+        case NotMarried
+
+        public var description: String {
+            switch self {
+            case NotMarried: return "Not married."
+            }
+        }
+    }
+
+    public func marriedState() -> Deferred<Result<MarriedState>> {
+        let client = FxAClient10(endpoint: authEndpoint)
+        let stateMachine = FxALoginStateMachine(client: client)
+        let now = Int64(NSDate().timeIntervalSince1970 * 1000)
+        return stateMachine.advanceFromState(state, now: now).map { newState in
+            self.state = newState
+            if newState.label == FxAStateLabel.Married {
+                if let married = newState as? MarriedState {
+                    return Result(success: married)
+                }
+            }
+            return Result(failure: AccountError.NotMarried)
+        }
+    }
+
+    public func syncAuthState(tokenServerURL: NSURL) -> SyncAuthState {
+        return SyncAuthState(account: self, tokenServerURL: tokenServerURL)
     }
 }
