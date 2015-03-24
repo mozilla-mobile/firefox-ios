@@ -124,43 +124,6 @@ class Browser: NSObject, WKScriptMessageHandler {
         return helpers[name]
     }
 
-    func screenshot(size: CGSize? = nil, quality: Float = 1) -> UIImage? {
-        assert(quality <= 1)
-
-        // TODO: We should adjust this if the inset is offscreen
-        let top = -webView.scrollView.contentInset.top
-
-        let size = size ?? webView.frame.size
-        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.mainScreen().scale * CGFloat(quality))
-
-        webView.drawViewHierarchyInRect(CGRect(x: 0,
-            y: top,
-            width: webView.frame.width,
-            height: webView.frame.height),
-            afterScreenUpdates: false)
-
-        var img = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        return img
-    }
-
-    func screenshot(#aspectRatio: Float, quality: Float = 1) -> UIImage? {
-        let aspectRatio = CGFloat(aspectRatio)
-        var size = CGSize()
-        let webViewAspectRatio = webView.frame.width / webView.frame.height
-
-        if webViewAspectRatio > aspectRatio {
-            size.height = webView.frame.height
-            size.width = size.height * aspectRatio
-        } else {
-            size.width = webView.frame.width
-            size.height = size.width / aspectRatio
-        }
-
-        return screenshot(size: size, quality: quality)
-    }
-
     func hideContent(animated: Bool = false) {
         webView.userInteractionEnabled = false
         if animated {
