@@ -354,6 +354,8 @@
 		E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E43A4E551A96B88100E25676 /* GCDWebServerDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D1E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m */; };
 		E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */; };
+		E487B2331AC1C64300F3E86F /* FiraSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7561A793CF20022C5E0 /* FiraSans-Regular.ttf */; };
+		E487B24E1AC1C66400F3E86F /* FiraSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7571A793CF20022C5E0 /* FiraSans-SemiBold.ttf */; };
 		E4A888161A95679500CDC337 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
 		E4A888171A95679500CDC337 /* FxA.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */; };
@@ -2779,7 +2781,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E487B2331AC1C64300F3E86F /* FiraSans-Regular.ttf in Resources */,
 				F8708D2E1A0970B70051AB07 /* Images.xcassets in Resources */,
+				E487B24E1AC1C66400F3E86F /* FiraSans-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
