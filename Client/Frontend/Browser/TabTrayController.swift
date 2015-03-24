@@ -129,7 +129,7 @@ private class CustomCell: UITableViewCell {
         super.layoutSubviews()
 
         let w = frame.width - 2 * margin
-        let h = frame.height - margin
+        let h = frame.height - 2 * margin
 
         backgroundHolder.frame = CGRect(x: margin,
             y: margin,
