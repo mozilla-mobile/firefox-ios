@@ -73,22 +73,23 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         selectedButtonIndex = 0
     }
 
-    var selectedButtonIndex: Int = 0 {
+    var selectedButtonIndex: Int? = nil {
         didSet {
-            if oldValue == selectedButtonIndex {
-                // Prevent flicker, allocations, and disk access: avoid duplicate view controllers.
-                return
+            if let index = oldValue {
+                let currentButton = buttons[index]
+                currentButton.selected = false
             }
 
-            let currentButton = buttons[oldValue]
-            currentButton.selected = false
+            hideCurrentPanel()
 
-            let newButton = buttons[selectedButtonIndex]
-            newButton.selected = true
+            if let index = selectedButtonIndex {
+                let newButton = buttons[index]
+                newButton.selected = true
 
-            let panel = self.panels[selectedButtonIndex].makeViewController(profile: profile)
-            (panel as HomePanel).homePanelDelegate = self
-            self.showPanel(panel)
+                let panel = self.panels[index].makeViewController(profile: profile)
+                (panel as HomePanel).homePanelDelegate = self
+                self.showPanel(panel)
+            }
         }
     }
 
@@ -104,8 +105,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     private func showPanel(panel: UIViewController) {
-        hideCurrentPanel()
-
         controllerContainerView.addSubview(panel.view)
         panel.view.snp_makeConstraints { make in
             make.top.equalTo(self.buttonContainerView.snp_bottom)
