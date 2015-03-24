@@ -6,7 +6,7 @@ import Base32
 import Foundation
 import XCTest
 
-class TestStringExtensions: XCTestCase {
+class TestHashExtensions: XCTestCase {
     func testSha1() {
         XCTAssertEqual("test1test2".sha1.hexEncodedString, "dff964f6e3c1761b6288f5c75c319d36fb09b2b9")
         XCTAssertEqual("test2test3".sha1.hexEncodedString, "66cdfcbbf4ad73f40ae06140460ff9bb0aabaf5c")

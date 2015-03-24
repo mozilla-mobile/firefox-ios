@@ -49,6 +49,14 @@ class ReaderModeCache {
         }
     }
 
+    func contains(url: NSURL, error: NSErrorPointer) -> Bool {
+        if let cacheDirectoryPath = cacheDirectoryForURL(url) {
+            let contentFilePath = cacheDirectoryPath.stringByAppendingPathComponent("content.json")
+            return NSFileManager.defaultManager().fileExistsAtPath(contentFilePath)
+        }
+        return false
+    }
+
     private func cacheDirectoryForURL(url: NSURL) -> NSString? {
         if let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true) as? [String] {
             if paths.count > 0 {

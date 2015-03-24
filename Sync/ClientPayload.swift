@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-@objc public class ClientPayload : CleartextPayloadJSON {
+public class ClientPayload: CleartextPayloadJSON {
     override public func isValid() -> Bool {
         // We should also call super.isValid(), but that'll fail:
         // Global is external, but doesn't have external or weak linkage!

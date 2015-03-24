@@ -240,8 +240,8 @@ public class EngagedAfterVerifiedState: ReadyForKeys {
 // Not an externally facing state!
 public class TokenAndKeys: WithLabel {
     let sessionToken: NSData
-    let kA: NSData
-    let kB: NSData
+    public let kA: NSData
+    public let kB: NSData
 
     init(sessionToken: NSData, kA: NSData, kB: NSData) {
         self.sessionToken = sessionToken
