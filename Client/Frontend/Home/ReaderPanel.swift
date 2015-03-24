@@ -114,7 +114,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         deleteButton.setTitle(ReadingListTableViewCellUX.DeleteButtonTitleText, forState: UIControlState.Normal)
         deleteButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         deleteButton.titleEdgeInsets = ReadingListTableViewCellUX.DeleteButtonTitleEdgeInsets
-        rightUtilityButtons = [deleteButton]
+        //rightUtilityButtons = [deleteButton]
 
         markAsReadButton = UIButton()
         markAsReadButton.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
@@ -125,7 +125,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         markAsReadButton.setTitle(ReadingListTableViewCellUX.MarkAsReadButtonTitleText, forState: UIControlState.Normal)
         markAsReadButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         markAsReadButton.titleEdgeInsets = ReadingListTableViewCellUX.MarkAsReadButtonTitleEdgeInsets
-        leftUtilityButtons = [markAsReadButton]
+        //leftUtilityButtons = [markAsReadButton]
     }
 
     required init(coder aDecoder: NSCoder) {
