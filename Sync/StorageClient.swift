@@ -26,7 +26,8 @@ public class RequestError: ErrorType {
     }
 
     public var description: String {
-        return "Request error."
+        let str = self.error?.localizedDescription ?? "No description"
+        return "Request error: \(str)."
     }
 }
 
