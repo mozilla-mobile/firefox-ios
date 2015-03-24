@@ -85,7 +85,8 @@ private class TopSitesLayout: UICollectionViewLayout {
     }
 
     private var topSectionHeight: CGFloat {
-        let rows = min(count / thumbnailCols, thumbnailRows)
+        let maxRows = ceil(Float(count) / Float(thumbnailCols))
+        let rows = min(Int(maxRows), thumbnailRows)
         return thumbnailHeight * CGFloat(rows) + ThumbnailSectionPadding * 2
     }
 
