@@ -11,6 +11,7 @@ public class SQLiteHistory : History {
     let files: FileAccessor
     let db: BrowserDB
     private let table = JoinedHistoryVisitsTable()
+    private var ignoredSchemes = ["about"]
 
     required public init(files: FileAccessor) {
         self.files = files
@@ -68,8 +69,29 @@ public class SQLiteHistory : History {
         }
     }
 
+    private func shouldAdd(url: String) -> Bool {
+        if let url = NSURL(string: url) {
+            if let scheme = url.scheme {
+                if let index = find(ignoredSchemes, scheme) {
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
+
     public func addVisit(visit: Visit, complete: (success: Bool) -> Void) {
         var err: NSError? = nil
+
+        // Don't store visits to sites with about: protocols
+        if !shouldAdd(visit.site.url) {
+            dispatch_async(dispatch_get_main_queue()) {
+                complete(success: false)
+            }
+            return
+        }
+
         let inserted = db.insert(&err) { connection, err in
             return self.table.insert(connection, item: (site: visit.site, visit: visit), err: &err)
         }
