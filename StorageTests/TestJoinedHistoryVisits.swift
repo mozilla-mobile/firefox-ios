@@ -95,7 +95,7 @@ class TestJoinedHistoryVisits : XCTestCase {
     func testJoinedHistoryVisitsTable() {
         let files = MockFiles()
         self.db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent("test.db"))
-        let h = JoinedHistoryVisitsTable(files: files)
+        let h = JoinedHistoryVisitsTable()
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
             h.create(db, version: 2)

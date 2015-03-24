@@ -13,6 +13,7 @@ public enum IconType: Int {
     case AppleIcon = 1
     case AppleIconPrecomposed = 2
     case Guess = 3
+    case Local = 4
 }
 
 public class Favicon : Identifiable {

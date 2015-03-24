@@ -10,7 +10,6 @@ private let TableNameFavicons = "favicons"
 
 // This is our default favicons store.
 class FaviconsTable<T>: GenericTable<Favicon> {
-    private var files: FileAccessor
     override var name: String { return TableNameFavicons }
     override var rows: String { return "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                        "url TEXT NOT NULL UNIQUE, " +
@@ -18,10 +17,6 @@ class FaviconsTable<T>: GenericTable<Favicon> {
                        "height INTEGER, " +
                        "type INTEGER NOT NULL, " +
                        "date REAL NOT NULL" }
-
-    init(files: FileAccessor) {
-        self.files = files
-    }
 
     override func getInsertAndArgs(inout item: Favicon) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()

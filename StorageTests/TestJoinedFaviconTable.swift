@@ -58,7 +58,7 @@ class TestJoinedFaviconsTable : XCTestCase {
     func testJoinedFaviconsTable() {
         let files = MockFiles()
         self.db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent("test.db"))
-        let f = JoinedFaviconsHistoryTable<(Site, Favicon)>(files: files)
+        let f = JoinedFaviconsHistoryTable<(Site, Favicon)>()
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
             f.create(db, version: 1)

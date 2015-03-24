@@ -10,7 +10,7 @@ class TestBookmarks : ProfileTest {
     func testBookmarks() {
         withTestProfile { profile -> Void in
             for i in 0...10 {
-                let bookmark = ShareItem(url: "http://www.example.com/\(i)", title: "Example \(i)")
+                let bookmark = ShareItem(url: "http://www.example.com/\(i)", title: "Example \(i)", favicon: nil)
                 profile.bookmarks.shareItem(bookmark)
             }
 

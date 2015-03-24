@@ -10,12 +10,11 @@ import Foundation
 public class SQLiteHistory : History {
     let files: FileAccessor
     let db: BrowserDB
-    let table: JoinedHistoryVisitsTable
+    private let table = JoinedHistoryVisitsTable()
 
     required public init(files: FileAccessor) {
         self.files = files
         self.db = BrowserDB(files: files)!
-        self.table = JoinedHistoryVisitsTable(files: files)
         db.createOrUpdate(table)
     }
 
