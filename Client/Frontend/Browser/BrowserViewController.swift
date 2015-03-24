@@ -635,11 +635,7 @@ extension BrowserViewController: TabManagerDelegate {
             webViewContainer.addSubview(wv)
         }
 
-        previous?.webView.navigationDelegate = nil
-        previous?.webView.scrollView.delegate = nil
         removeAllBars()
-        selected?.webView.navigationDelegate = self
-        selected?.webView.scrollView.delegate = self
         urlBar.updateURL(selected?.displayURL)
         if let bars = selected?.bars {
             for bar in bars {
@@ -695,10 +691,15 @@ extension BrowserViewController: TabManagerDelegate {
             make.top.equalTo(self.view.snp_top)
             make.leading.trailing.bottom.equalTo(self.view)
         }
+
+        // Observers that live as long as the tab. Make sure these are all cleared
+        // in didRemoveTab below!
         tab.webView.addObserver(self, forKeyPath: KVOEstimatedProgress, options: .New, context: nil)
         tab.webView.addObserver(self, forKeyPath: KVOLoading, options: .New, context: nil)
         tab.webView.UIDelegate = self
         tab.browserDelegate = self
+        tab.webView.navigationDelegate = self
+        tab.webView.scrollView.delegate = self
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser) {
@@ -706,12 +707,21 @@ extension BrowserViewController: TabManagerDelegate {
 
         tab.webView.removeObserver(self, forKeyPath: KVOEstimatedProgress)
         tab.webView.removeObserver(self, forKeyPath: KVOLoading)
+        tab.webView.UIDelegate = nil
+        tab.browserDelegate = nil
+        tab.webView.navigationDelegate = nil
+        tab.webView.scrollView.delegate = nil
+
         tab.webView.removeFromSuperview()
     }
 }
 
 extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        if tabManager.selectedTab?.webView !== webView {
+            return
+        }
+
         // If we are going to navigate to a new page, hide the reader mode button. Unless we
         // are going to a about:reader page. Then we keep it on screen: it will change status
         // (orange color) as soon as the page has loaded.
@@ -796,22 +806,42 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+        let tab: Browser! = tabManager.getTab(webView)
+
+        tab.expireSnackbars()
+
         let notificationCenter = NSNotificationCenter.defaultCenter()
         var info = [NSObject: AnyObject]()
-        info["url"] = webView.URL
-        info["title"] = webView.title
+        info["url"] = tab.displayURL
+        info["title"] = tab.title
         notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
 
-        if let tab = tabManager.getTab(webView) {
-            tab.expireSnackbars()
+        if let url = webView.URL {
+            // The screenshot immediately after didFinishNavigation is actually a screenshot of the
+            // previous page, presumably due to some iOS bug. Adding a small delay seems to fix this,
+            // and the current page gets captured as expected.
+            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(100 * NSEC_PER_MSEC))
+            dispatch_after(time, dispatch_get_main_queue()) {
+                if webView.URL != url {
+                    // The page changed during the delay, so we missed our chance to get a thumbnail.
+                    return
+                }
+
+                if let screenshot = tab.screenshot(aspectRatio: ThumbnailCellUX.ImageAspectRatio, quality: 0.5) {
+                    let thumbnail = Thumbnail(image: screenshot)
+                    self.profile.thumbnails.set(url, thumbnail: thumbnail, complete: nil)
+                }
+            }
         }
 
-        UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
-        // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
-        // cursor land on the correct initial element, but if not followed by LayoutChanged,
-        // VoiceOver will sometimes be stuck on the element, not allowing user to move
-        // forward/backward. Strange, but LayoutChanged fixes that.
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+        if tab == tabManager.selectedTab {
+            UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+            // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
+            // cursor land on the correct initial element, but if not followed by LayoutChanged,
+            // VoiceOver will sometimes be stuck on the element, not allowing user to move
+            // forward/backward. Strange, but LayoutChanged fixes that.
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+        }
     }
 }
 
