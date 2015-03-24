@@ -364,8 +364,7 @@ extension SearchViewController: UITableViewDataSource {
         case .BookmarksAndHistory:
             let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
             if let site = data[indexPath.row] as? Site {
-                cell.textLabel?.text = site.title
-                cell.detailTextLabel?.text = site.url
+                (cell as TwoLineTableViewCell).setLines(site.title, detailText: site.url)
                 if let img = site.icon? {
                     let imgUrl = NSURL(string: img.url)
                     cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)

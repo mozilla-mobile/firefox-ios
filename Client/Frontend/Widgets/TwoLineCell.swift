@@ -30,6 +30,10 @@ class TwoLineTableViewCell: UITableViewCell {
         super.layoutSubviews()
         twoLineHelper.layoutSubviews()
     }
+
+    func setLines(text: String?, detailText: String?) {
+        twoLineHelper.setLines(text, detailText: detailText)
+    }
 }
 
 class TwoLineCollectionViewCell: UICollectionViewCell {
@@ -61,6 +65,10 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         twoLineHelper.layoutSubviews()
+    }
+
+    func setLines(text: String?, detailText: String?) {
+        twoLineHelper.setLines(text, detailText: detailText)
     }
 }
 
@@ -148,5 +156,15 @@ private class TwoLineCellHelper {
             container.frame.width - textLeft - ImageMargin, textLabelHeight)
         detailTextLabel.frame = CGRectMake(textLeft, textLabel.frame.maxY + 5,
             container.frame.width - textLeft - ImageMargin, detailTextLabelHeight)
+    }
+
+    func setLines(text: String?, detailText: String?) {
+        if text?.isEmpty ?? true {
+            textLabel.text = detailText
+            detailTextLabel.text = nil
+        } else {
+            textLabel.text = text
+            detailTextLabel.text = detailText
+        }
     }
 }

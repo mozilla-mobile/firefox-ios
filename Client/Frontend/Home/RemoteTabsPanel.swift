@@ -107,16 +107,9 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(RemoteTabIdentifier, forIndexPath: indexPath) as TwoLineTableViewCell
-        if let tab = tabAtIndexPath(indexPath) {
-            // TODO: Populate image with cached favicons.
-            if let title = tab.title {
-                cell.textLabel?.text = title
-                cell.detailTextLabel?.text = tab.URL.absoluteString
-            } else {
-                cell.textLabel?.text = tab.URL.absoluteString
-                cell.detailTextLabel?.text = nil
-            }
-        }
+        let tab = tabAtIndexPath(indexPath)
+        cell.setLines(tab?.title, detailText: tab?.URL.absoluteString)
+        // TODO: Populate image with cached favicons.
         return cell
     }
 
