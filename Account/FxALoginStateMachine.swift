@@ -102,16 +102,16 @@ class FxALoginStateMachine {
                         switch error {
                         case let .Remote(remoteError):
                             if remoteError.isUpgradeRequired {
-                                log.error("Upgrade required!  Transitioning to Doghouse.")
+                                log.error("Upgrade required: \(error.description)!  Transitioning to Doghouse.")
                                 return doghouse
                             } else if remoteError.isInvalidAuthentication {
-                                log.error("Invalid authentication!  Transitioning to Separated.")
+                                log.error("Invalid authentication: \(error.description)!  Transitioning to Separated.")
                                 return separated
                             } else if remoteError.code < 200 || remoteError.code >= 300 {
-                                log.error("Unsuccessful HTTP request!  Assuming error is transient and not transitioning.")
+                                log.error("Unsuccessful HTTP request: \(error.description)!  Assuming error is transient and not transitioning.")
                                 return same
                             } else {
-                                log.error("Unknown error: \(remoteError).  Transitioning to Separated.")
+                                log.error("Unknown error: \(error.description).  Transitioning to Separated.")
                                 return separated
                             }
                         default:
@@ -139,22 +139,23 @@ class FxALoginStateMachine {
                     }
                 } else {
                     if let error = result.failureValue as? FxAClientError {
+                        log.error("Error \(error.description) \(error.description)")
                         switch error {
                         case let .Remote(remoteError):
                             if remoteError.isUpgradeRequired {
-                                log.error("Upgrade required!  Transitioning to Doghouse.")
+                                log.error("Upgrade required: \(error.description)!  Transitioning to Doghouse.")
                                 return doghouse
                             } else if remoteError.isInvalidAuthentication {
-                                log.error("Invalid authentication!  Transitioning to Separated in order to fetch new initial datum.")
+                                log.error("Invalid authentication: \(error.description)!  Transitioning to Separated in order to fetch new initial datum.")
                                 return separated
                             } else if remoteError.isUnverified {
                                 log.warning("Account is not yet verified; not transitioning.")
                                 return same
                             } else if remoteError.code < 200 || remoteError.code >= 300 {
-                                log.error("Unsuccessful HTTP request!  Assuming error is transient and not transitioning.")
+                                log.error("Unsuccessful HTTP request: \(error.description)!  Assuming error is transient and not transitioning.")
                                 return same
                             } else {
-                                log.error("Unknown error: \(remoteError).  Transitioning to Separated.")
+                                log.error("Unknown error: \(error.description).  Transitioning to Separated.")
                                 return separated
                             }
                         default:
