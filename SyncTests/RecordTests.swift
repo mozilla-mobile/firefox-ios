@@ -93,4 +93,39 @@ class RecordTests: XCTestCase {
             XCTFail("No record.")
         }
     }
+
+    func testMeta() {
+        let fullRecord = "{\"id\":\"global\"," +
+            "\"payload\":" +
+            "\"{\\\"syncID\\\":\\\"zPSQTm7WBVWB\\\"," +
+            "\\\"declined\\\":[\\\"bookmarks\\\"]," +
+            "\\\"storageVersion\\\":5," +
+            "\\\"engines\\\":{" +
+            "\\\"clients\\\":{\\\"version\\\":1,\\\"syncID\\\":\\\"fDg0MS5bDtV7\\\"}," +
+            "\\\"forms\\\":{\\\"version\\\":1,\\\"syncID\\\":\\\"GXF29AFprnvc\\\"}," +
+            "\\\"history\\\":{\\\"version\\\":1,\\\"syncID\\\":\\\"av75g4vm-_rp\\\"}," +
+            "\\\"passwords\\\":{\\\"version\\\":1,\\\"syncID\\\":\\\"LT_ACGpuKZ6a\\\"}," +
+            "\\\"prefs\\\":{\\\"version\\\":2,\\\"syncID\\\":\\\"-3nsksP9wSAs\\\"}," +
+            "\\\"tabs\\\":{\\\"version\\\":1,\\\"syncID\\\":\\\"W4H5lOMChkYA\\\"}}}\"," +
+            "\"username\":\"5817483\"," +
+            "\"modified\":1.32046073744E9}"
+
+        let record = GlobalEnvelope(fullRecord)
+        XCTAssertTrue(record.isValid())
+
+        let global = MetaGlobal.fromPayload(JSON.parse(record.payload))
+        XCTAssertTrue(global != nil)
+
+        if let global = global {
+            XCTAssertTrue(global.declined != nil)
+            XCTAssertTrue(global.engines != nil)
+            XCTAssertEqual(["bookmarks"], global.declined!)
+            XCTAssertEqual(5, global.storageVersion)
+            let modified = record.modified
+            XCTAssertTrue(1320460737440 == modified)
+            let forms = global.engines!["forms"]
+            let syncID = forms!.syncID
+            XCTAssertEqual("GXF29AFprnvc", syncID)
+        }
+    }
 }
