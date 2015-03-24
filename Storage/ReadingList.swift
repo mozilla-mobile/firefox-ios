@@ -43,4 +43,6 @@ public protocol ReadingList {
     func clear(complete: (success: Bool) -> Void)
     func get(complete: (data: Cursor) -> Void)
     func add(#item: ReadingListItem, complete: (success: Bool) -> Void)
+
+    func shareItem(item: ShareItem)
 }
