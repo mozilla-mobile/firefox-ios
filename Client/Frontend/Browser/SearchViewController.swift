@@ -537,7 +537,9 @@ private class SuggestionCell: UITableViewCell {
                 if currentLeft > textLeft {
                     currentRow++
                     if currentRow >= SuggestionCellMaxRows {
-                        break
+                        // Don't draw this button if it doesn't fit on the row.
+                        button.frame = CGRectZero
+                        continue
                     }
 
                     currentLeft = textLeft
