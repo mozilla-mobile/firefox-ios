@@ -10,8 +10,8 @@ import Shared
 class ProfileFileAccessor: FileAccessor {
     init(profile: Profile) {
         let profileDirName = "profile.\(profile.localName())"
-        let basePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0] as? String
-        let profilePath = basePath!.stringByAppendingPathComponent(profileDirName)
+        let url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(ExtensionUtils.sharedContainerIdentifier())!
+        let profilePath = url.path!.stringByAppendingPathComponent(profileDirName)
         super.init(rootPath: profilePath)
     }
 }

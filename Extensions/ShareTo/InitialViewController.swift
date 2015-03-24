@@ -10,7 +10,10 @@ private let LastUsedShareDestinationsKey = "LastUsedShareDestinations"
 @objc(InitialViewController)
 class InitialViewController: UIViewController, ShareControllerDelegate {
     var shareDialogController: ShareDialogController!
-    var profile: Profile?
+
+    lazy var profile: Profile = {
+        return BrowserProfile(localName: "profile")
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,12 +123,10 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     //
     
     func shareToReadingList(item: ShareItem) {
-        // TODO: Discuss how to share to the (local) reading list
+        profile.readingList.shareItem(item)
     }
     
     func shareToBookmarks(item: ShareItem) {
-        if profile != nil { // TODO: We need to properly deal with this.
-            profile!.bookmarks.shareItem(item)
-        }
+        profile.bookmarks.shareItem(item)
     }
 }

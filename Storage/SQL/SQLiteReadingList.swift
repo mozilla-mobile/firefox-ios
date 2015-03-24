@@ -57,6 +57,12 @@ public class SQLiteReadingList: ReadingList {
         }
     }
 
+    public func shareItem(item: ShareItem) {
+        add(item: ReadingListItem(url: item.url, title: item.title)) { (success) -> Void in
+            // Nothing we can do here when items are added from an extension.
+        }
+    }
+
     private let debug_enabled = false
     private func debug(msg: String) {
         if debug_enabled {
