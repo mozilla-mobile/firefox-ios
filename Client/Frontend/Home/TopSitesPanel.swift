@@ -26,6 +26,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
         didSet {
             profile.history.get(nil, complete: { (data) -> Void in
                 self.dataSource.data = data
+                self.dataSource.profile = self.profile
                 self.collection.reloadData()
             })
         }
@@ -38,7 +39,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        dataSource = TopSitesDataSource(data: Cursor(status: .Failure, msg: "Nothing loaded yet"))
+        dataSource = TopSitesDataSource(profile: profile, data: Cursor(status: .Failure, msg: "Nothing loaded yet"))
 
         layout.registerClass(TopSitesSeparator.self, forDecorationViewOfKind: SeparatorKind)
 
@@ -67,14 +68,14 @@ private class TopSitesLayout: UICollectionViewLayout {
     private let ToolbarHeight: CGFloat = 44
     private let StatusBarHeight: CGFloat = 20
     private let RowHeight: CGFloat = 58
-    private let AspectRatio: CGFloat = 0.8
+    private let AspectRatio: CGFloat = 1.25 // Ratio of width:height.
 
     private var thumbnailRows = 3
     private var thumbnailCols = 2
     private var thumbnailCount: Int { return thumbnailRows * thumbnailCols }
     private var width: CGFloat { return self.collectionView?.frame.width ?? 0 }
     private var thumbnailWidth: CGFloat { return width / CGFloat(thumbnailCols) - (ThumbnailSectionPadding * 2) / CGFloat(thumbnailCols) }
-    private var thumbnailHeight: CGFloat { return thumbnailWidth * AspectRatio }
+    private var thumbnailHeight: CGFloat { return thumbnailWidth / AspectRatio }
 
     private var count: Int {
         if let dataSource = self.collectionView?.dataSource as? TopSitesDataSource {
@@ -185,9 +186,11 @@ private class TopSitesLayout: UICollectionViewLayout {
 
 private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var data: Cursor
+    var profile: Profile
 
-    init(data: Cursor) {
+    init(profile: Profile, data: Cursor) {
         self.data = data
+        self.profile = profile
     }
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -201,8 +204,15 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         if indexPath.item < 6 {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as ThumbnailCell
             cell.textLabel.text = site.title.isEmpty ? site.url : site.title
-            cell.imageView.image = UIImage(named: DefaultImage)
-            cell.imageView.contentMode = UIViewContentMode.Center
+            cell.image = nil
+
+            if let url = NSURL(string: site.url) {
+                profile.thumbnails.get(url) { (thumbnail: Thumbnail?) in
+                    if let thumbnail = thumbnail {
+                        cell.image = thumbnail.image
+                    }
+                }
+            }
             return cell
         }
 

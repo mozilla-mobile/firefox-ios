@@ -816,6 +816,24 @@ extension BrowserViewController: WKNavigationDelegate {
         info["title"] = tab.title
         notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
 
+        if let url = webView.URL {
+            // The screenshot immediately after didFinishNavigation is actually a screenshot of the
+            // previous page, presumably due to some iOS bug. Adding a small delay seems to fix this,
+            // and the current page gets captured as expected.
+            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(100 * NSEC_PER_MSEC))
+            dispatch_after(time, dispatch_get_main_queue()) {
+                if webView.URL != url {
+                    // The page changed during the delay, so we missed our chance to get a thumbnail.
+                    return
+                }
+
+                if let screenshot = tab.screenshot(aspectRatio: ThumbnailCellUX.ImageAspectRatio, quality: 0.5) {
+                    let thumbnail = Thumbnail(image: screenshot)
+                    self.profile.thumbnails.set(url, thumbnail: thumbnail, complete: nil)
+                }
+            }
+        }
+
         if tab == tabManager.selectedTab {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
