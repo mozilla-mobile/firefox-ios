@@ -18,7 +18,7 @@ private let DefaultImage = "defaultFavicon"
 class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
 
-    private var collection: UICollectionView!
+    private var collection: TopSitesCollectionView!
     private var dataSource: TopSitesDataSource!
     private let layout = TopSitesLayout()
 
@@ -43,7 +43,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 
         layout.registerClass(TopSitesSeparator.self, forDecorationViewOfKind: SeparatorKind)
 
-        collection = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
+        collection = TopSitesCollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collection.backgroundColor = UIColor.whiteColor()
         collection.delegate = self
         collection.dataSource = dataSource
@@ -61,6 +61,14 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
         if let site = dataSource?.data[indexPath.item] as? Site {
             homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!)
         }
+    }
+}
+
+private class TopSitesCollectionView: UICollectionView {
+    private override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        // Hide the keyboard if this view is touched.
+        window?.rootViewController?.view.endEditing(true)
+        super.touchesBegan(touches, withEvent: event)
     }
 }
 
@@ -85,7 +93,8 @@ private class TopSitesLayout: UICollectionViewLayout {
     }
 
     private var topSectionHeight: CGFloat {
-        let rows = min(count / thumbnailCols, thumbnailRows)
+        let maxRows = ceil(Float(count) / Float(thumbnailCols))
+        let rows = min(Int(maxRows), thumbnailRows)
         return thumbnailHeight * CGFloat(rows) + ThumbnailSectionPadding * 2
     }
 
