@@ -61,6 +61,7 @@ public enum FxAClientError {
     case Local(NSError)
 }
 
+// Be aware that string interpolation doesn't work: rdar://17318018, much good that it will do.
 extension FxAClientError: Printable, ErrorType {
     public var description: String {
         switch self {
