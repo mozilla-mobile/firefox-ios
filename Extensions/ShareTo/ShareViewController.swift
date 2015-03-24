@@ -25,8 +25,7 @@ protocol ShareControllerDelegate {
     func shareController(shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet) -> Void
 }
 
-class ShareDialogController: UIViewController, UITableViewDataSource, UITableViewDelegate
-{
+class ShareDialogController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var delegate: ShareControllerDelegate!
     var item: ShareItem!
     var initialShareDestinations: NSSet = NSSet(object: ShareDestinationBookmarks)

@@ -5,11 +5,10 @@
 import UIKit
 import Storage
 
-let LastUsedShareDestinationsKey = "LastUsedShareDestinations"
+private let LastUsedShareDestinationsKey = "LastUsedShareDestinations"
 
 @objc(InitialViewController)
-class InitialViewController: UIViewController, ShareControllerDelegate
-{
+class InitialViewController: UIViewController, ShareControllerDelegate {
     var shareDialogController: ShareDialogController!
     var profile: Profile?
     
@@ -18,8 +17,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate
         self.view.backgroundColor = UIColor(white: 0.75, alpha: 0.65) // TODO: Is the correct color documented somewhere?
     }
     
-    override func viewDidAppear(animated: Bool)
-    {
+    override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
         ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
@@ -35,8 +33,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     
     //
     
-    func shareControllerDidCancel(shareController: ShareDialogController)
-    {
+    func shareControllerDidCancel(shareController: ShareDialogController) {
         UIView.animateWithDuration(0.25, animations: { () -> Void in
             self.shareDialogController.view.alpha = 0.0
         }, completion: { (Bool) -> Void in
@@ -45,8 +42,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate
         })
     }
 
-    func shareController(shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet)
-    {
+    func shareController(shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet) {
         setLastUsedShareDestinations(destinations)
         
         UIView.animateWithDuration(0.25, animations: { () -> Void in
