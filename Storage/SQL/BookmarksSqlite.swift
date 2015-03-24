@@ -6,41 +6,87 @@ import Foundation
 import Shared
 
 class BookmarkTable<T> : GenericTable<BookmarkNode> {
+    private let favicons = FaviconsTable<Favicon>()
+    private let joinedFavicons = JoinedFaviconsHistoryTable<(Site, Favicon)>()
     override var name: String { return "bookmarks" }
-    override var version: Int { return 1 }
+    override var version: Int { return 2 }
     override var rows: String { return "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
         "guid TEXT NOT NULL UNIQUE, " +
         "url TEXT, " +
         "parent INTEGER, " +
+        "faviconId INTEGER, " +
         "title TEXT" }
+
+
+    override func create(db: SQLiteDBConnection, version: Int) -> Bool {
+        return super.create(db, version: version) && favicons.create(db, version: version) && joinedFavicons.create(db, version: version)
+    }
+
+    override func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
+        return super.updateTable(db, from: from, to: to) && favicons.updateTable(db, from: from, to: to) && updateTable(db, from: from, to: to)
+    }
+
+    private func setupFavicon(db: SQLiteDBConnection, item: Type?) {
+        // If this has an icon attached, try to use it
+        if let favicon = item?.favicon {
+            if favicon.id == nil {
+                favicons.insertOrUpdate(db, obj: favicon)
+            }
+        } else {
+            // Otherwise, lets go look one up for this URL
+            if let bookmark = item as? BookmarkItem {
+                let options = QueryOptions(filter: bookmark.url, filterType: FilterType.ExactUrl)
+                let favicons = joinedFavicons.query(db, options: options)
+                if favicons.count > 0 {
+                    if let (site, favicon) = favicons[0] as? (Site, Favicon) {
+                        bookmark.favicon = favicon
+                    }
+                }
+            }
+        }
+    }
+
+    override func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int {
+        setupFavicon(db, item: item)
+        return super.insert(db, item: item, err: &err)
+    }
+
+    override func update(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int {
+        setupFavicon(db, item: item)
+        return super.update(db, item: item, err: &err)
+    }
 
     override func getInsertAndArgs(inout item: BookmarkNode) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         args.append(item.guid)
-        if let bookmark = item as? Bookmark {
+        if let bookmark = item as? BookmarkItem {
             args.append(bookmark.url)
         } else {
             args.append(nil)
         }
+
         args.append(item.title)
-        return ("INSERT INTO \(name) (guid, url, title) VALUES (?,?,?)", args)
+        args.append(item.favicon?.id)
+
+        return ("INSERT INTO \(name) (guid, url, title, faviconId) VALUES (?,?,?,?)", args)
     }
 
     override func getUpdateAndArgs(inout item: BookmarkNode) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
-        if let bookmark = item as? Bookmark {
+        if let bookmark = item as? BookmarkItem {
             args.append(bookmark.url)
         } else {
             args.append(nil)
         }
         args.append(item.title)
+        args.append(item.favicon?.id)
         args.append(item.guid)
-        return ("UPDATE \(name) SET url = ?, title = ? WHERE guid = ?", args)
+        return ("UPDATE \(name) SET url = ?, title = ?, faviconId = ? WHERE guid = ?", args)
     }
 
     override func getDeleteAndArgs(inout item: BookmarkNode?) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
-        if let bookmark = item as? Bookmark {
+        if let bookmark = item as? BookmarkItem {
             if bookmark.guid != "" {
                 // If there's a guid, we'll delete entries with it
                 args.append(bookmark.guid)
@@ -61,7 +107,16 @@ class BookmarkTable<T> : GenericTable<BookmarkNode> {
         return { row -> BookmarkNode in
             let bookmark = BookmarkItem(guid: row["guid"] as String,
                 title: row["title"] as String,
-                url: row["url"] as String)
+                url: row["bookmarkUrl"] as String)
+            bookmark.id = row["bookmarkId"] as? Int
+
+            if let faviconUrl = row["faviconUrl"] as? String {
+                let favicon = Favicon(url: faviconUrl,
+                    date: NSDate(timeIntervalSince1970: row["faviconDate"] as Double),
+                    type: IconType(rawValue: row["faviconType"] as Int)!)
+
+                bookmark.favicon = favicon
+            }
             return bookmark
         }
     }
@@ -70,14 +125,15 @@ class BookmarkTable<T> : GenericTable<BookmarkNode> {
         var args = [AnyObject?]()
         // XXX - This should support querying for a particular bookmark, querying by name/url, and querying
         //       for everything in a folder. Right now it doesn't do any of that :(
-        var sql = "SELECT id, guid, url, title FROM \(name)"
+        var sql = "SELECT \(name).id as bookmarkId, guid, \(name).url as bookmarkUrl, title, \(favicons.name).url as faviconUrl, date as faviconDate, type as faviconType FROM \(name)" +
+                  " LEFT OUTER JOIN \(favicons.name) ON \(favicons.name).id = \(name).faviconId"
 
         if let filter: AnyObject = options?.filter {
             if let type = options?.filterType {
                 switch(type) {
                 case .ExactUrl:
                         args.append(filter)
-                        return ("\(sql) WHERE url = ?", args)
+                        return ("\(sql) WHERE bookmarkUrl = ?", args)
                 default:
                     break
                 }
@@ -92,14 +148,13 @@ class BookmarkTable<T> : GenericTable<BookmarkNode> {
     }
 }
 
-@objc
-class SqliteBookmarkFolder: BookmarkItem, BookmarkFolder {
+class SqliteBookmarkFolder: BookmarkFolder {
     private let cursor: Cursor
-    var count: Int {
+    override var count: Int {
         return cursor.count
     }
 
-    subscript(index: Int) -> BookmarkNode {
+    override subscript(index: Int) -> BookmarkNode {
         let bookmark = cursor[index]
         if let item = bookmark as? BookmarkItem {
             return item
@@ -109,17 +164,16 @@ class SqliteBookmarkFolder: BookmarkItem, BookmarkFolder {
 
     init(guid: String, title: String, children: Cursor) {
         self.cursor = children
-        super.init(guid: guid, title: title, url: "")
+        super.init(guid: guid, title: title)
     }
 }
 
 public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination {
     let db: BrowserDB
-    let table: BookmarkTable<BookmarkNode>
+    let table = BookmarkTable<BookmarkNode>()
 
     public init(files: FileAccessor) {
         db = BrowserDB(files: files)!
-        table = BookmarkTable<BookmarkNode>()
         db.createOrUpdate(table)
     }
 
@@ -167,9 +221,8 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
     public func shareItem(item: ShareItem) {
         var err: NSError? = nil
         let inserted = db.insert(&err, callback: { (connection, err) -> Int in
-            var bookmark: BookmarkItem!
-            bookmark = BookmarkItem(guid: Bytes.generateGUID(), title: item.title ?? "", url: item.url)
-
+            var bookmark = BookmarkItem(guid: Bytes.generateGUID(), title: item.title ?? "", url: item.url)
+            bookmark.favicon = item.favicon
             return self.table.insert(connection, item: bookmark, err: &err)
         })
     }

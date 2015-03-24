@@ -41,8 +41,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         if let source = source {
             let bookmark = source.current[indexPath.row]
-            cell.imageView?.image = bookmark.icon
-            cell.textLabel?.text = bookmark.title
+            if let favicon = bookmark?.favicon {
+                cell.imageView?.sd_setImageWithURL(NSURL(string: favicon.url)!, placeholderImage: profile.favicons.defaultIcon)
+            }
+            cell.textLabel?.text = bookmark?.title
         }
 
         return cell

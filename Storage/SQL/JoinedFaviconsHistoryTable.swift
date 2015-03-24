@@ -13,13 +13,8 @@ private let FaviconVisits = "faviconSiteMapping"
 // 2.) Adding a visit here will ensure that a site exists for the visit
 // 3.) Updates currently only update site information.
 class JoinedFaviconsHistoryTable<T>: GenericTable<(site: Site?, icon: Favicon?)> {
-    private let favicons: FaviconsTable<Favicon>
-    private let history: HistoryTable<Site>
-
-    init(files: FileAccessor) {
-        self.favicons = FaviconsTable<Favicon>(files: files)
-        self.history = HistoryTable<Site>()
-    }
+    private let favicons = FaviconsTable<Favicon>()
+    private let history = HistoryTable<Site>()
 
     override var name: String { return FaviconVisits }
     override var rows: String { return "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -135,7 +130,9 @@ class JoinedFaviconsHistoryTable<T>: GenericTable<(site: Site?, icon: Favicon?)>
             args.append("%\(filter)%")
         }
 
-        println("\(sql) \(args)")
+        // For now we always look for the biggest one
+        sql += " ORDER BY \(favicons.name).width DESC"
+
         return db.executeQuery(sql, factory: factory, withArgs: args)
     }
 }

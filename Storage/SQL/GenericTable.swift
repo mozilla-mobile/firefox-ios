@@ -6,6 +6,7 @@ import Foundation
 
 class GenericTable<T>: Table {
     typealias Type = T
+
     // Implementors need override these methods
     let debug_enabled = false
     var name: String { return "" }
@@ -33,7 +34,6 @@ class GenericTable<T>: Table {
         return nil
     }
 
-    // Here's the real implementation
     func debug(msg: String) {
         if debug_enabled {
             println("GenericTable: \(msg)")
@@ -59,9 +59,12 @@ class GenericTable<T>: Table {
     }
 
     func drop(db: SQLiteDBConnection) -> Bool {
-        let sqlStr = "DROP TABLE IF EXISTS ?"
-        let args: [AnyObject?] = [name]
+        let sqlStr = "DROP TABLE IF EXISTS \(name)"
+        let args =  [AnyObject?]()
         let err = db.executeChange(sqlStr, withArgs: args)
+        if err != nil {
+            println("Err dropping \(err)")
+        }
         return err == nil
     }
 

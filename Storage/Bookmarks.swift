@@ -9,10 +9,12 @@ import Shared
 public struct ShareItem {
     public let url: String
     public let title: String?
+    public let favicon: Favicon?
 
-    public init(url: String, title: String?) {
+    public init(url: String, title: String?, favicon: Favicon?) {
         self.url = url
         self.title = title
+        self.favicon = favicon
     }
 }
 
@@ -35,14 +37,16 @@ public struct BookmarkRoots {
 /**
  * The immutable base interface for bookmarks and folders.
  */
-@objc public protocol BookmarkNode {
-    var guid: String { get }
-    var title: String { get }
-    var icon: UIImage { get }
-}
+public class BookmarkNode {
+    public var id: Int? = nil
+    public var guid: String
+    public var title: String
+    public var favicon: Favicon? = nil
 
-@objc public protocol Bookmark : BookmarkNode {
-    var url: String! { get }
+    init(guid: String, title: String) {
+        self.guid = guid
+        self.title = title
+    }
 }
 
 /**
@@ -50,22 +54,11 @@ public struct BookmarkRoots {
  *
  * To modify this, issue changes against the backing store and get an updated model.
  */
-public class BookmarkItem: Bookmark {
-    public let guid: String
+public class BookmarkItem: BookmarkNode {
     public let url: String!
-    public let title: String
-
-    var _icon: UIImage?
-    public var icon: UIImage {
-        if (self._icon != nil) {
-            return self._icon!
-        }
-        return UIImage(named: "defaultFavicon")!
-    }
 
     public init(guid: String, title: String, url: String) {
-        self.guid = guid
-        self.title = title
+        super.init(guid: guid, title: title)
         self.url = url
     }
 }
@@ -74,9 +67,9 @@ public class BookmarkItem: Bookmark {
  * A folder is an immutable abstraction over a named
  * thing that can return its child nodes by index.
  */
-@objc public protocol BookmarkFolder: BookmarkNode {
-    var count: Int { get }
-    subscript(index: Int) -> BookmarkNode { get }
+public class BookmarkFolder: BookmarkNode {
+    public var count: Int { return 0 }
+    public subscript(index: Int) -> BookmarkNode? { return nil }
 }
 
 /**
@@ -145,14 +138,11 @@ public protocol BookmarksModelFactory {
  * A folder that contains an array of children.
  */
 public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
-    public let guid: String
-    public let title: String
     let children: [BookmarkNode]
 
     public init(guid: String, title: String, children: [BookmarkNode]) {
-        self.guid = guid
-        self.title = title
         self.children = children
+        super.init(guid: guid, title: title)
     }
 
     public struct BookmarkNodeGenerator: GeneratorType {
@@ -169,15 +159,24 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
         }
     }
 
-    public var icon: UIImage {
-        return UIImage(named: "bookmark_folder_closed")!
+    override public var favicon: Favicon? {
+        get {
+            if let path = NSBundle.mainBundle().pathForResource("bookmark_folder_closed", ofType: "png") {
+                if let url = NSURL(fileURLWithPath: path) {
+                    return Favicon(url: url.absoluteString!, date: NSDate(), type: IconType.Local)
+                }
+            }
+            return nil
+        }
+        set {
+        }
     }
 
-    public var count: Int {
+    override public var count: Int {
         return children.count
     }
 
-    public subscript(index: Int) -> BookmarkNode {
+    override public subscript(index: Int) -> BookmarkNode {
         get {
             return children[index]
         }

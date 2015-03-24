@@ -19,13 +19,8 @@ class JoinedHistoryVisitsTable: Table {
 
     private let visits = VisitsTable<Visit>()
     private let history = HistoryTable<Site>()
-    private let favicons: FaviconsTable<Favicon>
-    private let faviconSites: JoinedFaviconsHistoryTable<(Site, Favicon)>
-
-    init(files: FileAccessor) {
-        favicons = FaviconsTable<Favicon>(files: files)
-        faviconSites = JoinedFaviconsHistoryTable<(Site, Favicon)>(files: files)
-    }
+    private let favicons = FaviconsTable<Favicon>()
+    private let faviconSites = JoinedFaviconsHistoryTable<(Site, Favicon)>()
 
     private func getIDFor(db: SQLiteDBConnection, site: Site) -> Int? {
         let opts = QueryOptions()
@@ -39,11 +34,17 @@ class JoinedHistoryVisitsTable: Table {
     }
 
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
-        return history.create(db, version: version) && visits.create(db, version: version) && faviconSites.create(db, version: version)
+        return history.create(db, version: version) &&
+            visits.create(db, version: version) &&
+            favicons.create(db, version: version) &&
+            faviconSites.create(db, version: version)
     }
 
     func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
-        return history.updateTable(db, from: from, to: to) && visits.updateTable(db, from: from, to: to)
+        return history.updateTable(db, from: from, to: to) &&
+            visits.updateTable(db, from: from, to: to) &&
+            favicons.updateTable(db, from: from, to: to) &&
+            faviconSites.updateTable(db, from: from, to: to)
     }
 
     func exists(db: SQLiteDBConnection) -> Bool {

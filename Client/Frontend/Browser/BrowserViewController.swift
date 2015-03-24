@@ -198,7 +198,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func addBookmark(url: String, title: String?) {
-        let shareItem = ShareItem(url: url, title: title)
+        let shareItem = ShareItem(url: url, title: title, favicon: nil)
         profile.bookmarks.shareItem(shareItem)
 
         // Dispatch to the main thread to update the UI

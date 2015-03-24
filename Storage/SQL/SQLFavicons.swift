@@ -11,7 +11,7 @@ import UIKit
 public class SQLiteFavicons : Favicons {
     let files: FileAccessor
     let db: BrowserDB
-    let table: JoinedFaviconsHistoryTable<(Site, Favicon)>
+    let table = JoinedFaviconsHistoryTable<(Site, Favicon)>()
 
     lazy public var defaultIcon: UIImage = {
         return UIImage(named: "defaultFavicon")!
@@ -20,7 +20,6 @@ public class SQLiteFavicons : Favicons {
     required public init(files: FileAccessor) {
         self.files = files
         self.db = BrowserDB(files: files)!
-        self.table = JoinedFaviconsHistoryTable<(Site, Favicon)>(files: files)
         db.createOrUpdate(table)
     }
 

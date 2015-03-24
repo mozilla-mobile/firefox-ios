@@ -58,7 +58,7 @@ class TestFavcionsTable : XCTestCase {
     func testFaviconsTable() {
         let files = MockFiles()
         self.db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent("test.db"))
-        let f = FaviconsTable<Favicon>(files: files)
+        let f = FaviconsTable<Favicon>()
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
             f.create(db, version: 1)

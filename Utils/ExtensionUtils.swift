@@ -26,7 +26,7 @@ struct ExtensionUtils {
                                     } else {
                                         let title = inputItem.attributedContentText?.string as String?
                                         let url = obj as NSURL
-                                        completionHandler(ShareItem(url: url.absoluteString!, title: title), nil)
+                                        completionHandler(ShareItem(url: url.absoluteString!, title: title, favicon: nil), nil)
                                     }
                                 })
                                 return
