@@ -10,8 +10,11 @@ import Snap
 private struct URLBarViewUX {
     // The color shown behind the tabs count button, and underneath the (mostly transparent) status bar.
     static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
-    static let TextFieldBorderColor = UIColor(rgb: 0x6da0db)
+    static let TextFieldBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.05)
+    static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
     static let LocationLeftPadding = 8
+    static let TextFieldCornerRadius: CGFloat = 3
+    static let TextFieldBorderWidth: CGFloat = 1
 }
 
 protocol URLBarDelegate: class {
@@ -52,10 +55,10 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
 
     private func initViews() {
         locationContainer = UIView()
-        locationContainer.layer.shadowColor = UIColor.blackColor().CGColor
-        locationContainer.layer.shadowOffset = CGSizeMake(0, 1.5)
-        locationContainer.layer.shadowRadius = 0
-        locationContainer.layer.shadowOpacity = 0.05
+
+        locationContainer.layer.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
+        locationContainer.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
+        locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
         addSubview(locationContainer)
 
         locationView = BrowserLocationView(frame: CGRectZero)
@@ -70,10 +73,10 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         editTextField.returnKeyType = UIReturnKeyType.Go
         editTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
         editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
-        editTextField.layer.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
-        editTextField.layer.cornerRadius = 3
         editTextField.delegate = self
-        editTextField.font = UIFont(name: "HelveticaNeue-Light", size: 12)
+        editTextField.font = UIFont(name: "HelveticaNeue", size: 13)
+        editTextField.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
+        editTextField.layer.borderColor = URLBarViewUX.TextFieldActiveBorderColor.CGColor
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         locationContainer.addSubview(editTextField)
 
@@ -109,7 +112,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         updateLayoutForEditing(editing: false)
 
         locationView.snp_makeConstraints { make in
-            make.edges.equalTo(self.locationContainer)
+            make.edges.equalTo(self.locationContainer).insets(EdgeInsetsMake(URLBarViewUX.TextFieldBorderWidth, URLBarViewUX.TextFieldBorderWidth, URLBarViewUX.TextFieldBorderWidth, URLBarViewUX.TextFieldBorderWidth))
             return
         }
 
@@ -220,8 +223,8 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     }
 
     func textFieldDidEndEditing(textField: UITextField) {
-        textField.layer.borderWidth = 0
         locationContainer.layer.shadowOpacity = 0.05
+        textField.layer.borderWidth = 0
     }
 
     func textFieldShouldClear(textField: UITextField) -> Bool {

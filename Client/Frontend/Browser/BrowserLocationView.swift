@@ -27,7 +27,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.whiteColor()
-        self.layer.cornerRadius = 3
+        self.layer.cornerRadius = 2
 
         lockImageView = UIImageView(image: UIImage(named: "lock_verified.png"))
         lockImageView.hidden = false
@@ -36,7 +36,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         addSubview(lockImageView)
 
         locationLabel = UILabel()
-        locationLabel.font = UIFont(name: "HelveticaNeue-Light", size: 12)
+        locationLabel.font = UIFont(name: "HelveticaNeue", size: 13)
         locationLabel.lineBreakMode = .ByClipping
         locationLabel.userInteractionEnabled = true
         // TODO: This label isn't useful for people. We probably want this to be the page title or URL (see Safari).
