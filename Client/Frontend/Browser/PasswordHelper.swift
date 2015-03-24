@@ -64,11 +64,11 @@ class PasswordManager: BrowserHelper {
         }
 
         var attributes = [NSObject: AnyObject]()
-        attributes[NSFontAttributeName] = UIFont(name: "HelveticaNeue", size: 13)
+        attributes[NSFontAttributeName] = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 13)
         attributes[NSForegroundColorAttributeName] = UIColor.darkGrayColor()
         var attr = NSMutableAttributedString(string: string, attributes: attributes)
         for (index, range) in enumerate(ranges) {
-            attr.addAttribute(NSFontAttributeName, value: UIFont(name: "HelveticaNeue-Medium", size: 13)!, range: range)
+            attr.addAttribute(NSFontAttributeName, value: UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Bold" : "HelveticaNeue-Medium", size: 13)!, range: range)
         }
         return attr
     }

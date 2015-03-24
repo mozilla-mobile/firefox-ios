@@ -10,16 +10,16 @@ private let SuggestionBackgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.
 private let SuggestionBorderColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1)
 private let SuggestionBorderWidth: CGFloat = 0.5
 private let SuggestionCornerRadius: CGFloat = 2
-private let SuggestionFont = UIFont(name: "HelveticaNeue", size: 12)
+private let SuggestionFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 12)
 private let SuggestionInsets = UIEdgeInsetsMake(5, 5, 5, 5)
 private let SuggestionMargin: CGFloat = 4
 private let SuggestionCellVerticalPadding: CGFloat = 8
 private let SuggestionCellMaxRows = 2
 
 private let PromptColor = UIColor(rgb: 0xeef0f3)
-private let PromptFont = UIFont(name: "HelveticaNeue", size: 12)
+private let PromptFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 12)
 private let PromptYesFont = UIFont(name: "HelveticaNeue-Bold", size: 15)
-private let PromptNoFont = UIFont(name: "HelveticaNeue", size: 15)
+private let PromptNoFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 15)
 private let PromptInsets = UIEdgeInsetsMake(15, 12, 15, 12)
 private let PromptButtonColor = UIColor(rgb: 0x007aff)
 
