@@ -97,6 +97,14 @@ class TestHistory : ProfileTest {
         }
     }
 
+    func testAboutUrls() {
+        withTestProfile { (profile) -> Void in
+            let h = profile.history
+            self.addSite(h, url: "about:home", title: "About Home", s: false)
+            self.clear(h)
+        }
+    }
+
     let NumThreads = 5
     let NumCmds = 10
 
