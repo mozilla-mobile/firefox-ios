@@ -980,6 +980,13 @@ extension BrowserViewController: LongPressGestureDelegate {
         actionSheetController.title = dialogTitleURL!.absoluteString
         var cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, nil)
         actionSheetController.addAction(cancelAction)
+
+        if let popoverPresentationController = actionSheetController.popoverPresentationController {
+            popoverPresentationController.sourceView = self.view
+            popoverPresentationController.sourceRect = CGRectInset(CGRect(origin: longPressRecognizer.locationInView(self.view), size: CGSizeZero), -8, -8)
+            popoverPresentationController.permittedArrowDirections = .Any
+        }
+        
         self.presentViewController(actionSheetController, animated: true, completion: nil)
     }
 }
