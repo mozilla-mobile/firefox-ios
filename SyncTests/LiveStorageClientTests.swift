@@ -104,4 +104,27 @@ class LiveStorageClientTests : LiveAccountTest {
             XCTAssertNil(error, "\(error)")
         }
     }
+
+    func testStateMachine() {
+        let expectation = expectationWithDescription("Waiting on value.")
+        let authState = self.getAuthState(NSDate.now())
+
+        let d = chainDeferred(authState, SyncStateMachine.toReady)
+
+        d.upon { result in
+            if let ready = result.successValue {
+                XCTAssertTrue(ready.collectionKeys.defaultBundle.encKey.length == 32)
+                XCTAssertTrue(ready.scratchpad.global != nil)
+                if let clients = ready.scratchpad.global?.engines?["clients"] {
+                    XCTAssertTrue(countElements(clients.syncID) == 12)
+                }
+            }
+            XCTAssertEqual(result.failureValue!.description, "")
+            expectation.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(20) { (error) in
+            XCTAssertNil(error, "\(error)")
+        }
+    }
 }
