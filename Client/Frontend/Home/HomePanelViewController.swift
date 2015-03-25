@@ -75,6 +75,11 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     var selectedButtonIndex: Int? = nil {
         didSet {
+            if oldValue == selectedButtonIndex {
+                // Prevent flicker, allocations, and disk access: avoid duplicate view controllers.
+                return
+            }
+
             if let index = oldValue {
                 let currentButton = buttons[index]
                 currentButton.selected = false
