@@ -8,8 +8,9 @@ import Foundation
  * Status results for a Cursor
  */
 public enum CursorStatus {
-    case Success;
-    case Failure;
+    case Success
+    case Failure
+    case Closed
 }
 
 /**
@@ -21,8 +22,8 @@ public class Cursor: SequenceType {
     }
 
     // Extra status information
-    public let status: CursorStatus
-    public let statusMessage: String
+    public var status: CursorStatus
+    public var statusMessage: String
 
     init(err: NSError) {
         self.status = .Failure
@@ -49,16 +50,21 @@ public class Cursor: SequenceType {
             return self[nextIndex++]
         }
     }
+
+    public func close() {
+        status = .Closed
+        statusMessage = "Closed"
+    }
 }
 
 /*
  * A cursor implementation that wraps an array.
  */
 public class ArrayCursor<T : Any> : Cursor {
-    private let data : [T];
+    private var data : [T]
 
     public override var count : Int {
-        if (status != CursorStatus.Success) {
+        if (status != .Success) {
             return 0;
         }
         return data.count;
@@ -75,10 +81,15 @@ public class ArrayCursor<T : Any> : Cursor {
 
     public override subscript(index: Int) -> Any? {
         get {
-            if (index >= data.count || index < 0 || status != CursorStatus.Success) {
+            if (index >= data.count || index < 0 || status != .Success) {
                 return nil;
             }
             return data[index];
         }
+    }
+
+    override public func close() {
+        data = [T]()
+        super.close()
     }
 }

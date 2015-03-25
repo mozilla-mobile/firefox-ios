@@ -490,7 +490,12 @@ public class SDCursor<T> : Cursor {
     //       we can't override the Cursor getter for count with a stored property.
     private let _count: Int
     override public var count: Int {
-        get { return _count }
+        get {
+            if status != .Success {
+                return 0
+            }
+            return _count
+        }
     }
 
     private var _position = -1
@@ -554,11 +559,17 @@ public class SDCursor<T> : Cursor {
     // Finalize the statement when we're destroyed. This will also release our reference
     // to the database, which will hopefully close it as well.
     deinit {
-        sqlite3_finalize(self.stmt)
+        if status == .Success {
+            sqlite3_finalize(self.stmt)
+        }
     }
 
     override public subscript(index: Int) -> Any? {
         get {
+            if status != .Success {
+                return nil
+            }
+
             if let row = cache[index] {
                 return row
             }
@@ -571,10 +582,14 @@ public class SDCursor<T> : Cursor {
             let row = SDRow(connection: db, stmt: self.stmt, columns: self.columns)
             let res = self.factory(row)
             self.cache[index] = res
-            sqlite3_reset(self.stmt)
-            self._position = -1
 
             return res
         }
+    }
+
+    override public func close() {
+        sqlite3_finalize(self.stmt)
+        cache.removeAll(keepCapacity: false)
+        super.close()
     }
 }
