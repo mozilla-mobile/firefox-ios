@@ -7,13 +7,13 @@ import UIKit
 import Snap
 
 protocol BrowserToolbarDelegate: class {
-    func browserToolbarDidPressBack(browserToolbar: BrowserToolbar)
-    func browserToolbarDidPressForward(browserToolbar: BrowserToolbar)
-    func browserToolbarDidLongPressBack(browserToolbar: BrowserToolbar)
-    func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbar)
-    func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbar)
-    func browserToolbarDidLongPressBookmark(browserToolbar: BrowserToolbar)
-    func browserToolbarDidPressShare(browserToolbar: BrowserToolbar)
+    func browserToolbarDidPressBack(browserToolbar: BrowserToolbar, button: UIButton)
+    func browserToolbarDidPressForward(browserToolbar: BrowserToolbar, button: UIButton)
+    func browserToolbarDidLongPressBack(browserToolbar: BrowserToolbar, button: UIButton)
+    func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbar, button: UIButton)
+    func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbar, button: UIButton)
+    func browserToolbarDidLongPressBookmark(browserToolbar: BrowserToolbar, button: UIButton)
+    func browserToolbarDidPressShare(browserToolbar: BrowserToolbar, button: UIButton)
 }
 
 private let ButtonInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
@@ -103,36 +103,36 @@ class BrowserToolbar: Toolbar {
     }
 
     func SELdidClickBack() {
-        browserToolbarDelegate?.browserToolbarDidPressBack(self)
+        browserToolbarDelegate?.browserToolbarDidPressBack(self, button: backButton)
     }
 
     func SELdidLongPressBack(recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.Began {
-            browserToolbarDelegate?.browserToolbarDidLongPressBack(self)
+            browserToolbarDelegate?.browserToolbarDidLongPressBack(self, button: backButton)
         }
     }
 
     func SELdidClickShare() {
-        browserToolbarDelegate?.browserToolbarDidPressShare(self)
+        browserToolbarDelegate?.browserToolbarDidPressShare(self, button: shareButton)
     }
 
     func SELdidClickForward() {
-        browserToolbarDelegate?.browserToolbarDidPressForward(self)
+        browserToolbarDelegate?.browserToolbarDidPressForward(self, button: forwardButton)
     }
 
     func SELdidLongPressForward(recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.Began {
-            browserToolbarDelegate?.browserToolbarDidLongPressForward(self)
+            browserToolbarDelegate?.browserToolbarDidLongPressForward(self, button: forwardButton)
         }
     }
 
     func SELdidClickBookmark() {
-        browserToolbarDelegate?.browserToolbarDidPressBookmark(self)
+        browserToolbarDelegate?.browserToolbarDidPressBookmark(self, button: bookmarkButton)
     }
 
     func SELdidLongPressBookmark(recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.Began {
-            browserToolbarDelegate?.browserToolbarDidLongPressBookmark(self)
+            browserToolbarDelegate?.browserToolbarDidLongPressBookmark(self, button: bookmarkButton)
         }
     }
 }
