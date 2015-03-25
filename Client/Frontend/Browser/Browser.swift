@@ -44,10 +44,16 @@ class Browser: NSObject, WKScriptMessageHandler {
     }
 
     var title: String? {
+        return webView.title
+    }
+
+    var displayTitle: String {
         if let title = webView.title {
-        	return title
+            if !title.isEmpty {
+                return title
+            }
         }
-        return webView.URL?.absoluteString
+        return displayURL?.absoluteString ?? ""
     }
 
     var url: NSURL? {
