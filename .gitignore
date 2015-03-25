@@ -21,6 +21,7 @@ DerivedData
 
 # Vim
 *~
+.*.sw*
 
 # IDEA
 .idea
