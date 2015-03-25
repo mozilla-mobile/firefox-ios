@@ -178,28 +178,25 @@ public class Keys {
         self.valid = true
     }
 
-    public init(downloaded: EnvelopeJSON, master: KeyBundle) {
-        let f = {
-            (j: JSON) -> KeysPayload in
-            return KeysPayload(j)
-        }
-        let keysRecord = Record<KeysPayload>.fromEnvelope(downloaded, payloadFactory: master.factory(f))
-        if let payload: KeysPayload = keysRecord?.payload {
-            if payload.isValid() {
-                if let keys = payload.defaultKeys {
-                    self.defaultBundle = keys
-                    self.valid = true
-                    return
-                }
+    public init(payload: KeysPayload?) {
+        if let payload = payload {
+        if payload.isValid() {
+            if let keys = payload.defaultKeys {
+                self.defaultBundle = keys
+                self.valid = true
+                return
             }
-
-            self.defaultBundle = KeyBundle.invalid
-            self.valid = false
-            return
+            // TODO: collection keys.
         }
-
+        }
         self.defaultBundle = KeyBundle.invalid
-        self.valid = true
+        self.valid = false
+    }
+
+    public convenience init(downloaded: EnvelopeJSON, master: KeyBundle) {
+        let f: (JSON) -> KeysPayload = { KeysPayload($0) }
+        let keysRecord = Record<KeysPayload>.fromEnvelope(downloaded, payloadFactory: master.factory(f))
+        self.init(payload: keysRecord?.payload)
     }
 
     public func forCollection(collection: String) -> KeyBundle {
