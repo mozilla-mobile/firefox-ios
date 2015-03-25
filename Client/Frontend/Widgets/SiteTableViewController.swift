@@ -8,6 +8,9 @@ import Storage
 struct SiteTableViewControllerUX {
     static let HeaderHeight = CGFloat(25)
     static let RowHeight = CGFloat(58)
+    static let HeaderBorderColor = UIColor(rgb: 0x979797).colorWithAlphaComponent(0.5)
+    static let HeaderTextColor = UIColor(rgb: 0x565656)
+    static let HeaderBackgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.4)
 }
 
 private class SiteTableViewHeader : UITableViewHeaderFooterView {
@@ -39,16 +42,16 @@ private class SiteTableViewHeader : UITableViewHeaderFooterView {
     }
 
     override func layoutSubviews() {
-        topBorder.frame = CGRect(x: 0, y: 0, width: frame.width, height: 1)
-        bottomBorder.frame = CGRect(x: 0, y: frame.height - 1, width: frame.width, height: 1)
-        topBorder.backgroundColor = UIColor.lightGrayColor()
-        bottomBorder.backgroundColor = UIColor.lightGrayColor()
+        topBorder.frame = CGRect(x: 0, y: -0.5, width: frame.width, height: 0.5)
+        bottomBorder.frame = CGRect(x: 0, y: frame.height, width: frame.width, height: 0.5)
+        topBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+        bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
         super.layoutSubviews()
 
-        textLabel.font = UIFont(name: "FiraSans-SemiBold", size: 13)
-        textLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkTextColor()
+        textLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 11)
+        textLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : SiteTableViewControllerUX.HeaderTextColor
         textLabel.textAlignment = .Center
-        contentView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.05)
+        contentView.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
     }
 }
 

@@ -5,7 +5,7 @@
 import UIKit
 
 private let ImageSize: CGFloat = 24
-private let ImageMargin: CGFloat = 10
+private let ImageMargin: CGFloat = 20
 private let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x333333)
 private let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.grayColor()
 
@@ -128,10 +128,10 @@ private class TwoLineCellHelper {
         self.detailTextLabel = detailTextLabel
         self.imageView = imageView
 
-        textLabel.font = UIFont(name: "FiraSans-Regular", size: 13)
+        textLabel.font = UIFont(name: "HelveticaNeue", size: 14)
         textLabel.textColor = TextColor
 
-        detailTextLabel.font = UIFont(name: "FiraSans-Regular", size: 10)
+        detailTextLabel.font = UIFont(name: "HelveticaNeue", size: 10)
         detailTextLabel.textColor = DetailTextColor
 
         imageView.contentMode = .ScaleAspectFill
@@ -146,7 +146,7 @@ private class TwoLineCellHelper {
         imageView.frame = CGRectMake(ImageMargin, (height - ImageSize) / 2, ImageSize, ImageSize)
         textLabel.frame = CGRectMake(textLeft, (height - contentHeight) / 2,
             container.frame.width - textLeft - ImageMargin, textLabelHeight)
-        detailTextLabel.frame = CGRectMake(textLeft, textLabel.frame.maxY + 1,
+        detailTextLabel.frame = CGRectMake(textLeft, textLabel.frame.maxY + 5,
             container.frame.width - textLeft - ImageMargin, detailTextLabelHeight)
     }
 }

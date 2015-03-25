@@ -102,7 +102,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         cancelButton = InsetButton()
         cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
-        cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 12)
+        cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 12)
         cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
         cancelButton.titleEdgeInsets = UIEdgeInsetsMake(10, 12, 10, 12)
         cancelButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
