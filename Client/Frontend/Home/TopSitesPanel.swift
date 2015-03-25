@@ -65,7 +65,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 
 private class TopSitesLayout: UICollectionViewLayout {
     private let ToolbarHeight: CGFloat = 44
-    private let StatusBarHeight: CGFloat = 20
+    private let StatusBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
     private let RowHeight: CGFloat = 58
     private let AspectRatio: CGFloat = 0.8
 
