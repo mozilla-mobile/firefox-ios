@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 // The version of the account schema we persist.
 let AccountSchemaVersion = 1
@@ -53,6 +54,62 @@ public class FirefoxAccount {
         self.state = state
     }
 
+    public class func fromConfigurationAndJSON(configuration: FirefoxAccountConfiguration, data: JSON) -> FirefoxAccount? {
+        if let email = data["email"].asString {
+            if let uid = data["uid"].asString {
+                if let sessionToken = data["sessionToken"].asString?.hexDecodedData {
+                    if let keyFetchToken = data["keyFetchToken"].asString?.hexDecodedData {
+                        if let unwrapkB = data["unwrapBKey"].asString?.hexDecodedData {
+                            let verified = data["verified"].asBool ?? false
+                            return FirefoxAccount.fromConfigurationAndParameters(configuration,
+                                email: email, uid: uid, verified: verified,
+                                sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
+                        }
+                    }
+                }
+            }
+        }
+        return nil
+    }
+
+    public class func fromConfigurationAndLoginResponse(configuration: FirefoxAccountConfiguration,
+            response: FxALoginResponse, unwrapkB: NSData) -> FirefoxAccount {
+        return FirefoxAccount.fromConfigurationAndParameters(configuration,
+            email: response.remoteEmail, uid: response.uid, verified: response.verified,
+            sessionToken: response.sessionToken, keyFetchToken: response.keyFetchToken, unwrapkB: unwrapkB)
+    }
+
+    private class func fromConfigurationAndParameters(configuration: FirefoxAccountConfiguration,
+            email: String, uid: String, verified: Bool,
+            sessionToken: NSData, keyFetchToken: NSData, unwrapkB: NSData) -> FirefoxAccount {
+        var state: FxAState! = nil
+        if !verified {
+            let now = Int64(NSDate().timeIntervalSince1970 * 1000)
+            state = EngagedBeforeVerifiedState(knownUnverifiedAt: now,
+                lastNotifiedUserAt: now,
+                sessionToken: sessionToken,
+                keyFetchToken: keyFetchToken,
+                unwrapkB: unwrapkB
+            )
+        } else {
+            state = EngagedAfterVerifiedState(
+                sessionToken: sessionToken,
+                keyFetchToken: keyFetchToken,
+                unwrapkB: unwrapkB
+            )
+        }
+
+        let account = FirefoxAccount(
+            email: email,
+            uid: uid,
+            authEndpoint: configuration.authEndpointURL,
+            contentEndpoint: configuration.profileEndpointURL,
+            oauthEndpoint: configuration.oauthEndpointURL,
+            state: state
+        )
+        return account
+    }
+
     public func asDictionary() -> [String: AnyObject] {
         var dict: [String: AnyObject] = [:]
         dict["version"] = AccountSchemaVersion
@@ -86,5 +143,34 @@ public class FirefoxAccount {
         return FirefoxAccount(email: email, uid: uid,
                 authEndpoint: authEndpoint, contentEndpoint: contentEndpoint, oauthEndpoint: oauthEndpoint,
                 state: state)
+    }
+
+    public enum AccountError: Printable, ErrorType {
+        case NotMarried
+
+        public var description: String {
+            switch self {
+            case NotMarried: return "Not married."
+            }
+        }
+    }
+
+    public func marriedState() -> Deferred<Result<MarriedState>> {
+        let client = FxAClient10(endpoint: authEndpoint)
+        let stateMachine = FxALoginStateMachine(client: client)
+        let now = Int64(NSDate().timeIntervalSince1970 * 1000)
+        return stateMachine.advanceFromState(state, now: now).map { newState in
+            self.state = newState
+            if newState.label == FxAStateLabel.Married {
+                if let married = newState as? MarriedState {
+                    return Result(success: married)
+                }
+            }
+            return Result(failure: AccountError.NotMarried)
+        }
+    }
+
+    public func syncAuthState(tokenServerURL: NSURL) -> SyncAuthState {
+        return SyncAuthState(account: self, tokenServerURL: tokenServerURL)
     }
 }

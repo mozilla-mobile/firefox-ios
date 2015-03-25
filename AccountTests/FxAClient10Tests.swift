@@ -27,10 +27,18 @@ class FxAClient10Tests: LiveAccountTest {
         XCTAssertEqual(
             localError.description,
             "<FxAClientError.Local Error Domain=test Code=123 \"The operation couldn’t be completed. (test error 123.)\">")
+        // The Swift compiler is a pile of crap: the following should be equal.  rdar://17318018, much good that it will do.
+        XCTAssertNotEqual(
+            "\(localError)",
+            "<FxAClientError.Local Error Domain=test Code=123 \"The operation couldn’t be completed. (test error 123.)\">")
         let remoteError = FxAClientError.Remote(RemoteError(code: 401, errno: 104,
             error: "error", message: "message", info: "info"))
         XCTAssertEqual(
             remoteError.description,
+            "<FxAClientError.Remote 401/104: error (message)>")
+        // The Swift compiler is a pile of crap: the following should be equal.  rdar://17318018, much good that it will do.
+        XCTAssertNotEqual(
+            "\(remoteError)",
             "<FxAClientError.Remote 401/104: error (message)>")
     }
 
@@ -70,7 +78,7 @@ class FxAClient10Tests: LiveAccountTest {
                     if let error = result.failureValue as? FxAClientError {
                         switch error {
                         case let .Remote(remoteError):
-                            XCTAssertEqual(remoteError.code, Int32(401)) // Bad auth.
+                            XCTAssertEqual(remoteError.code, Int32(400)) // Bad auth.
                             XCTAssertEqual(remoteError.errno, Int32(103)) // Incorrect password.
                         case let .Local(error):
                             XCTAssertEqual(error.description, "")

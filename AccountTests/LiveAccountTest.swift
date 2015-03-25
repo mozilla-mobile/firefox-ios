@@ -11,7 +11,26 @@ import XCTest
 /*
  * A base test type for tests that need a live Firefox Account.
  */
-class LiveAccountTest: XCTestCase {
+public class LiveAccountTest: XCTestCase {
+    lazy var signedInUser: JSON? = {
+        if let path = NSBundle(forClass: self.dynamicType).pathForResource("signedInUser.json", ofType: nil) {
+            if let contents = String(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) {
+                let json = JSON.parse(contents)
+                if json.isError {
+                    return nil
+                }
+                if let email = json["email"].asString {
+                    return json
+                }  else {
+                    // This is the standard case: signedInUser.json is {}.
+                    return nil
+                }
+            }
+        }
+        XCTFail("Expected to read signedInUser.json!")
+        return nil
+    }()
+
     // It's not easy to have an optional resource, so we always include signedInUser.json in the test bundle.
     // If signedInUser.json contains an email address, we use that email address.
     // Since there's no way to get the corresponding password (from any client!), we assume that any
@@ -20,27 +39,18 @@ class LiveAccountTest: XCTestCase {
         // If we don't create at least one expectation, waitForExpectations fails.
         // So we unconditionally create one, even though the callback may not execute.
         self.expectationWithDescription("withExistingAccount").fulfill()
-
-        if let path = NSBundle(forClass: self.dynamicType).pathForResource("signedInUser.json", ofType: nil) {
-            if let contents = String(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) {
-                let json = JSON.parse(contents)
-                XCTAssertFalse(json.isError)
-                if let email = json["accountData"]["email"].asString {
-                    if mustBeVerified {
-                        XCTAssertTrue(json["accountData"]["verified"].asBool!)
-                    }
-                    let emailUTF8 = email.utf8EncodedData!
-                    let password = email.utf8EncodedData!
-                    let stretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: password)
-                    completion(emailUTF8, stretchedPW)
-                    return
-                } else {
-                    // This is the standard case: signedInUser.json is {}.
-                    NSLog("Skipping test because signedInUser.json does not include email address.")
-                }
+        if let json = self.signedInUser {
+            if mustBeVerified {
+                XCTAssertTrue(json["verified"].asBool ?? false)
             }
+            let email = json["email"].asString!
+            let emailUTF8 = email.utf8EncodedData!
+            let password = email.utf8EncodedData!
+            let stretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: password)
+            completion(emailUTF8, stretchedPW)
         } else {
-            XCTFail("Expected to read signedInUser.json!")
+            // This is the standard case: signedInUser.json is {}.
+            NSLog("Skipping test because signedInUser.json does not include email address.")
         }
     }
 
@@ -73,6 +83,65 @@ class LiveAccountTest: XCTestCase {
                     expectation.fulfill()
                 }
             }
+        }
+    }
+
+    public enum AccountError: Printable, ErrorType {
+        case BadParameters
+        case NoSignedInUser
+        case UnverifiedSignedInUser
+
+        public var description: String {
+            switch self {
+            case BadParameters: return "Bad account parameters (email, password, or a derivative thereof)."
+            case NoSignedInUser: return "No signedInUser.json (missing, no email, etc)."
+            case UnverifiedSignedInUser: return "signedInUser.json describes an unverified account."
+            }
+        }
+    }
+
+    // Internal helper.
+    func account(email: String, password: String, configuration: FirefoxAccountConfiguration) -> Deferred<Result<FirefoxAccount>> {
+        let client = FxAClient10(endpoint: configuration.authEndpointURL)
+        if let emailUTF8 = email.utf8EncodedData {
+            if let passwordUTF8 = email.utf8EncodedData {
+                let quickStretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: passwordUTF8)
+                let login = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
+                return login.bind { result in
+                    if let response = result.successValue {
+                        let unwrapkB = FxAClient10.computeUnwrapKey(quickStretchedPW)
+                        return Deferred(value: Result(success: FirefoxAccount.fromConfigurationAndLoginResponse(configuration, response: response, unwrapkB: unwrapkB)))
+                    } else {
+                        return Deferred(value: Result(failure: result.failureValue!))
+                    }
+                }
+            }
+        }
+        return Deferred(value: Result(failure: AccountError.BadParameters))
+    }
+
+    // Override this to configure test account.
+    public func account() -> Deferred<Result<FirefoxAccount>> {
+        if self.signedInUser == nil {
+            return Deferred(value: Result(failure: AccountError.NoSignedInUser))
+        }
+        if !(self.signedInUser?["verified"].asBool ?? false) {
+            return Deferred(value: Result(failure: AccountError.UnverifiedSignedInUser))
+        }
+        return self.account("testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
+            configuration: ProductionFirefoxAccountConfiguration())
+    }
+
+    public func syncAuthState(now: Int64) -> Deferred<Result<(token: TokenServerToken, forKey: NSData)>> {
+        // TODO: Use signedInUser.json here.  It's hard to include the same resource file in two Xcode targets.
+        let account = self.account("testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
+            configuration: ProductionFirefoxAccountConfiguration())
+        return account.bind { result in
+            if let account = result.successValue {
+                let authState = account.syncAuthState((ProductionSync15Configuration().tokenServerEndpointURL))
+                return authState.token(now, canBeExpired: false)
+            }
+            return Deferred(value: Result(failure: result.failureValue!))
         }
     }
 }

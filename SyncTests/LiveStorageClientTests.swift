@@ -15,15 +15,7 @@ private class KeyFetchError: ErrorType {
 }
 
 class LiveStorageClientTests : LiveAccountTest {
-    func getToken(state: MarriedState) -> Deferred<Result<TokenServerToken>> {
-        let audience = TokenServerClient.getAudienceForURL(ProductionSync15Configuration().tokenServerEndpointURL)
-        let clientState = FxAClient10.computeClientState(state.kB)
-        let client = TokenServerClient()
-        println("Fetching token.")
-        return client.token(state.generateAssertionForAudience(audience), clientState: clientState)
-    }
-
-    func getKeys(married: MarriedState, token: TokenServerToken) -> Deferred<Result<Record<KeysPayload>>> {
+    func getKeys(kB: NSData, token: TokenServerToken) -> Deferred<Result<Record<KeysPayload>>> {
         let endpoint = token.api_endpoint
         XCTAssertTrue(endpoint.rangeOfString("services.mozilla.com") != nil, "We got a Sync server.")
 
@@ -35,7 +27,7 @@ class LiveStorageClientTests : LiveAccountTest {
             return r
         }
 
-        let keyBundle: KeyBundle = KeyBundle.fromKB(married.kB)
+        let keyBundle: KeyBundle = KeyBundle.fromKB(kB)
         let f: (JSON) -> KeysPayload = {
             j in
             return KeysPayload(j)
@@ -64,31 +56,14 @@ class LiveStorageClientTests : LiveAccountTest {
     }
 
     func getTokenAndDefaultKeys() -> Deferred<Result<(TokenServerToken, KeyBundle)>> {
-        let user = "holygoat+permatest@gmail.com"
-        let state = getState(user, password: user)
+        let authState = self.syncAuthState(NSDate.now())
 
-        println("Got state.")
-        let token = state.bind {
-            (stateResult: Result<FxAState>) -> Deferred<Result<TokenServerToken>> in
-
-            println("Got state bound.")
-            if let s = stateResult.successValue as? MarriedState {
-
-                println("Got state: \(s)")
-                return self.getToken(s)
-            } else {
-                println("State wasn't successful. \(stateResult.failureValue)")
-            }
-            return Deferred(value: Result(failure: stateResult.failureValue!))
-        }
-
-        let keysPayload: Deferred<Result<Record<KeysPayload>>> = token.bind {
+        let keysPayload: Deferred<Result<Record<KeysPayload>>> = authState.bind {
             tokenResult in
-            if let married = state.value.successValue as? MarriedState {
-                if let token = tokenResult.successValue {
-                    return self.getKeys(married, token: token)
-                }
+            if let (token, forKey) = tokenResult.successValue {
+                return self.getKeys(forKey, token: token)
             }
+            XCTAssertEqual(tokenResult.failureValue!.description, "")
             return Deferred(value: Result(failure: KeyFetchError()))
         }
 
@@ -103,7 +78,8 @@ class LiveStorageClientTests : LiveAccountTest {
                 XCTAssert(rec.id == "keys", "GUID inside is correct.")
                 let arr = payload["default"].asArray![0].asString
                 if let keys = payload.defaultKeys {
-                    result.fill(Result(success: (token.value.successValue!, keys)))
+                    // Extracting the token like this is not great, but...
+                    result.fill(Result(success: (authState.value.successValue!.token, keys)))
                     return
                 }
             }
@@ -118,13 +94,11 @@ class LiveStorageClientTests : LiveAccountTest {
         let deferred = getTokenAndDefaultKeys()
         deferred.upon {
             res in
-            /*
             if let (token, keyBundle) = res.successValue {
                 println("Yay")
             } else {
-                XCTFail("Couldn't get keys etc.")
+                XCTAssertEqual(res.failureValue!.description, "")
             }
-            */
             expectation.fulfill()
         }
 

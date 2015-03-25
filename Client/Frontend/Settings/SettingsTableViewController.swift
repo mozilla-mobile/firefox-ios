@@ -187,34 +187,9 @@ extension SettingsTableViewController: FxAContentViewControllerDelegate {
         }
 
         // TODO: Error handling.
-        let verified = data["verified"].asBool ?? false
-        var state: FxAState! = nil
-        if !verified {
-            let now: Int64 = Int64(NSDate().timeIntervalSince1970 * 1000)
-            state = EngagedBeforeVerifiedState(knownUnverifiedAt: now,
-                lastNotifiedUserAt: now,
-                sessionToken: data["sessionToken"].asString!.hexDecodedData,
-                keyFetchToken: data["keyFetchToken"].asString!.hexDecodedData,
-                unwrapkB: data["unwrapBKey"].asString!.hexDecodedData
-            )
-        } else {
-            state = EngagedAfterVerifiedState(
-                sessionToken: data["sessionToken"].asString!.hexDecodedData,
-                keyFetchToken: data["keyFetchToken"].asString!.hexDecodedData,
-                unwrapkB: data["unwrapBKey"].asString!.hexDecodedData
-            )
-        }
-
-        let account = FirefoxAccount(
-            email: data["email"].asString!,
-            uid: data["uid"].asString!,
-            authEndpoint: profile.accountConfiguration.authEndpointURL,
-            contentEndpoint: profile.accountConfiguration.profileEndpointURL,
-            oauthEndpoint: profile.accountConfiguration.oauthEndpointURL,
-            state: state
-        )
-
+        let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
         profile.setAccount(account)
+
         tableView.reloadData()
         navigationController?.popToRootViewControllerAnimated(true)
     }

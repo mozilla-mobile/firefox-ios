@@ -37,7 +37,7 @@ public struct StableDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
     public init() {
     }
 
-    public let authEndpointURL = NSURL(string: "https://stable.dev.lcip.org/auth")!
+    public let authEndpointURL = NSURL(string: "https://stable.dev.lcip.org/auth/v1")!
     public let oauthEndpointURL = NSURL(string: "https://oauth-stable.dev.lcip.org")!
     public let profileEndpointURL = NSURL(string: "https://stable.dev.lcip.org/profile")!
 

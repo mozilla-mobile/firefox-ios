@@ -61,6 +61,7 @@ public enum FxAClientError {
     case Local(NSError)
 }
 
+// Be aware that string interpolation doesn't work: rdar://17318018, much good that it will do.
 extension FxAClientError: Printable, ErrorType {
     public var description: String {
         switch self {
@@ -134,8 +135,12 @@ public class FxAClient10 {
         return bytes
     }
 
-    private class func remoteErrorFromJSON(json: JSON) -> RemoteError? {
+    private class func remoteErrorFromJSON(json: JSON, statusCode: Int) -> RemoteError? {
         if json.isError {
+            return nil
+
+        }
+        if 200 <= statusCode && statusCode <= 299 {
             return nil
         }
         if let code = json["code"].asInt32 {
@@ -230,7 +235,7 @@ public class FxAClient10 {
 
         let request = Alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
-            .responseJSON { (_, _, data, error) in
+            .responseJSON { (request, response, data, error) in
                 if let error = error {
                     deferred.fill(Result(failure: FxAClientError.Local(error)))
                     return
@@ -238,7 +243,7 @@ public class FxAClient10 {
 
                 if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
                     let json = JSON(data)
-                    if let remoteError = FxAClient10.remoteErrorFromJSON(json) {
+                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
                         deferred.fill(Result(failure: FxAClientError.Remote(remoteError)))
                         return
                     }
@@ -282,7 +287,7 @@ public class FxAClient10 {
 
                 if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
                     let json = JSON(data)
-                    if let remoteError = FxAClient10.remoteErrorFromJSON(json) {
+                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
                         deferred.fill(Result(failure: FxAClientError.Remote(remoteError)))
                         return
                     }
@@ -333,7 +338,7 @@ public class FxAClient10 {
 
                 if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
                     let json = JSON(data)
-                    if let remoteError = FxAClient10.remoteErrorFromJSON(json) {
+                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
                         deferred.fill(Result(failure: FxAClientError.Remote(remoteError)))
                         return
                     }
