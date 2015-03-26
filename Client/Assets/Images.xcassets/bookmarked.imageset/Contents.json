@@ -3,15 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "overlay_bookmarked_already_icon.png"
+      "filename" : "Bookmark-star (on).png"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "Bookmark-star (on)@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "Bookmark-star (on)@3x.png"
     }
   ],
   "info" : {

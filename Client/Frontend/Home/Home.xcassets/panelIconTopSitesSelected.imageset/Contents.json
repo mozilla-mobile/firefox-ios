@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "panelIconTopSitesSelected.png"
+      "filename" : "Top sites (pressed).png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "panelIconTopSitesSelected@2x.png"
+      "filename" : "Top sites (pressed)@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "panelIconTopSitesSelected@3x.png"
+      "filename" : "Top sites (pressed)@3x.png"
     }
   ],
   "info" : {

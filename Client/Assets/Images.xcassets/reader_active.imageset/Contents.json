@@ -2,16 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "Reader View (On).png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "reader_active@2x.png"
+      "filename" : "Reader View (On)@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "Reader View (On)@3x.png"
     }
   ],
   "info" : {
