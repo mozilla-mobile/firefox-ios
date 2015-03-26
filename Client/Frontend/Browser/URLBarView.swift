@@ -15,6 +15,10 @@ private struct URLBarViewUX {
     static let LocationLeftPadding = 8
     static let TextFieldCornerRadius: CGFloat = 3
     static let TextFieldBorderWidth: CGFloat = 1
+    // offset from edge of tabs button
+    static let URLBarCurveOffset: CGFloat = 14
+    // buffer so we dont see edges when animation overshoots with spring
+    static let URLBarCurveBounceBuffer: CGFloat = 8
 }
 
 protocol URLBarDelegate: class {
@@ -37,6 +41,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     private var tabsButton: UIButton!
     private var progressBar: UIProgressView!
     private var cancelButton: UIButton!
+    private var curveShape: CurveView!
 
     override init() {
         // super.init() calls init(frame: CGRect)
@@ -54,6 +59,10 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     }
 
     private func initViews() {
+
+        curveShape = CurveView()
+        self.addSubview(curveShape);
+
         locationContainer = UIView()
 
         locationContainer.layer.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
@@ -109,15 +118,8 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         cancelButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
         self.addSubview(cancelButton)
 
-        updateLayoutForEditing(editing: false)
-
         locationView.snp_makeConstraints { make in
             make.edges.equalTo(self.locationContainer).insets(EdgeInsetsMake(URLBarViewUX.TextFieldBorderWidth, URLBarViewUX.TextFieldBorderWidth, URLBarViewUX.TextFieldBorderWidth, URLBarViewUX.TextFieldBorderWidth))
-            return
-        }
-
-        editTextField.snp_makeConstraints { make in
-            make.edges.equalTo(self.locationContainer)
             return
         }
 
@@ -132,10 +134,29 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
             make.width.height.equalTo(ToolbarHeight)
         }
 
+        locationContainer.snp_makeConstraints { make in
+            make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
+            make.centerY.equalTo(self).offset(StatusBarHeight / 2)
+            make.trailing.equalTo(self.tabsButton.snp_leading).offset(-13)
+        }
+
+        editTextField.snp_makeConstraints { make in
+            make.edges.equalTo(self.locationContainer)
+            return
+        }
+
         cancelButton.snp_makeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
             make.trailing.equalTo(self)
         }
+
+        curveShape.snp_makeConstraints { make in
+            make.edges.equalTo(self)
+            return
+        }
+
+        updateLayoutForEditing(editing: false, animated: false)
+
     }
 
     var isEditing: Bool {
@@ -238,26 +259,59 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         delegate?.urlBarDidEndEditing(self)
     }
 
-    private func updateLayoutForEditing(#editing: Bool) {
-        locationView.hidden = editing
-        tabsButton.hidden = editing
-        progressBar.hidden = editing
-        editTextField.hidden = !editing
-        cancelButton.hidden = !editing
+    private func updateLayoutForEditing(#editing: Bool, animated: Bool = true) {
 
-        locationContainer.snp_remakeConstraints { make in
-            make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
-            make.centerY.equalTo(self).offset(StatusBarHeight / 2)
+        self.progressBar.hidden = editing
+        self.editTextField.hidden = !editing
 
-            if editing {
+        if editing {
+            self.locationContainer.snp_remakeConstraints { make in
+                make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
                 make.trailing.equalTo(self.cancelButton.snp_leading)
-            } else {
-                // Additional offset is needed here to prevent overlapping the curve.
+                make.centerY.equalTo(self).offset(StatusBarHeight / 2)
+            }
+        } else {
+            self.locationContainer.snp_remakeConstraints { make in
+                make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
                 make.trailing.equalTo(self.tabsButton.snp_leading).offset(-10)
+                make.centerY.equalTo(self).offset(StatusBarHeight / 2)
             }
         }
 
-        setNeedsLayout()
+        // show both buttons during transition
+        self.tabsButton.hidden = false
+        self.cancelButton.hidden = false
+
+        // add offset to left for slide animation, and a bit of extra offset for spring bounces
+        let leftOffset = self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer
+        self.curveShape.snp_updateConstraints { make in
+            make.edges.equalTo(self).offset(EdgeInsetsMake(0, -leftOffset, 0, -URLBarViewUX.URLBarCurveBounceBuffer))
+            return
+        }
+
+        if animated {
+            UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: nil, animations: { _ in
+                if editing {
+                    self.cancelButton.alpha = 1
+                    self.cancelButton.transform = CGAffineTransformIdentity
+                    self.tabsButton.transform = CGAffineTransformMakeTranslation(self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset, 0)
+                    self.curveShape.transform = CGAffineTransformMakeTranslation(self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer, 0)
+
+                } else {
+                    self.cancelButton.alpha = 0
+                    self.tabsButton.transform = CGAffineTransformIdentity
+                    self.cancelButton.transform = CGAffineTransformMakeTranslation(self.cancelButton.frame.width, 0)
+                    self.curveShape.transform = CGAffineTransformIdentity
+                }
+                self.layoutIfNeeded()
+                }, completion: { _ in
+                    self.tabsButton.hidden = editing
+                    self.cancelButton.hidden = !editing
+            })
+        } else {
+            self.tabsButton.hidden = editing
+            self.cancelButton.hidden = !editing
+        }
     }
 
     func SELdidClickCancel() {
@@ -286,7 +340,9 @@ private let H_M1 = 0.25
 private let H_M2 = 0.5
 private let H_M3 = 0.72
 private let H_M4 = 0.961
-extension URLBarView {
+
+private class CurveView: UIView {
+
     func getWidthForHeight(height: Double) -> Double {
         return height * ASPECT_RATIO
     }
@@ -296,11 +352,7 @@ extension URLBarView {
         let width = getWidthForHeight(height)
         var from: (Double, Double) = (0, 0)
 
-        if cancelButton.hidden {
-            from = (Double(self.tabsButton.frame.origin.x) - width/2, Double(StatusBarHeight))
-        } else {
-            from = (Double(self.cancelButton.frame.origin.x + self.cancelButton.frame.width), Double(StatusBarHeight))
-        }
+        from = (Double(self.frame.width) - width * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(StatusBarHeight))
 
         path.moveToPoint(CGPoint(x: from.0, y: from.1))
         path.addCurveToPoint(CGPoint(x: from.0 + width * W_M2, y: from.1 + height * H_M2),
@@ -315,7 +367,7 @@ extension URLBarView {
     private func getPath() -> UIBezierPath {
         let path = UIBezierPath()
         self.drawFromTop(path)
-        path.addLineToPoint(CGPoint(x: self.frame.width, y: self.frame.height))
+        path.addLineToPoint(CGPoint(x: self.frame.width, y: ToolbarHeight + StatusBarHeight))
         path.addLineToPoint(CGPoint(x: self.frame.width, y: 0))
         path.addLineToPoint(CGPoint(x: 0, y: 0))
         path.addLineToPoint(CGPoint(x: 0, y: StatusBarHeight))

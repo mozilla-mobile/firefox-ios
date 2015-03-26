@@ -54,7 +54,6 @@ class BrowserToolbar: Toolbar {
         forwardButton.contentEdgeInsets = ButtonInset
 
         shareButton.setImage(UIImage(named: "send"), forState: .Normal)
-        shareButton.setImage(UIImage(named: "sendHighlighted"), forState: UIControlState.Highlighted)
         shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Accessibility Label for the browser toolbar Share button")
         shareButton.addTarget(self, action: "SELdidClickShare", forControlEvents: UIControlEvents.TouchUpInside)
         shareButton.contentEdgeInsets = ButtonInset
