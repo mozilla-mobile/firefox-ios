@@ -243,7 +243,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let tab = tabManager.getTab(indexPath.item)
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as CustomCell
-        cell.titleText.text = tab.title
+        cell.titleText.text = tab.displayTitle
         let screenshotAspectRatio = tableView.frame.width / TabTrayControllerUX.CellHeight
         cell.background.image = screenshotHelper.takeScreenshot(tab, aspectRatio: screenshotAspectRatio, quality: 1)
         return cell
