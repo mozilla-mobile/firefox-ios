@@ -28,11 +28,8 @@ class LiveStorageClientTests : LiveAccountTest {
         }
 
         let keyBundle: KeyBundle = KeyBundle.fromKB(kB)
-        let f: (JSON) -> KeysPayload = {
-            j in
-            return KeysPayload(j)
-        }
-        let keysFactory: (String) -> KeysPayload? = Keys(defaultBundle: keyBundle).factory("keys", f)
+        let f: (JSON) -> KeysPayload = { return KeysPayload($0) }
+        let keysFactory: (String) -> KeysPayload? = Keys(defaultBundle: keyBundle).factory("crypto", f)
 
         let workQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
         let resultQueue = dispatch_get_main_queue()
@@ -103,6 +100,29 @@ class LiveStorageClientTests : LiveAccountTest {
         }
 
         // client: mgWl22CIzHiE
+        waitForExpectationsWithTimeout(20) { (error) in
+            XCTAssertNil(error, "\(error)")
+        }
+    }
+
+    func testStateMachine() {
+        let expectation = expectationWithDescription("Waiting on value.")
+        let authState = self.getAuthState(NSDate.now())
+
+        let d = chainDeferred(authState, SyncStateMachine.toReady)
+
+        d.upon { result in
+            if let ready = result.successValue {
+                XCTAssertTrue(ready.collectionKeys.defaultBundle.encKey.length == 32)
+                XCTAssertTrue(ready.scratchpad.global != nil)
+                if let clients = ready.scratchpad.global?.engines?["clients"] {
+                    XCTAssertTrue(countElements(clients.syncID) == 12)
+                }
+            }
+            XCTAssertEqual(result.failureValue!.description, "")
+            expectation.fulfill()
+        }
+
         waitForExpectationsWithTimeout(20) { (error) in
             XCTAssertNil(error, "\(error)")
         }
