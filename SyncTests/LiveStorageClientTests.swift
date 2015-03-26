@@ -119,7 +119,7 @@ class LiveStorageClientTests : LiveAccountTest {
                     XCTAssertTrue(countElements(clients.syncID) == 12)
                 }
             }
-            XCTAssertEqual(result.failureValue!.description, "")
+            XCTAssertTrue(result.isSuccess)
             expectation.fulfill()
         }
 
