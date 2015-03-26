@@ -313,29 +313,29 @@ extension BrowserViewController: URLBarDelegate {
 }
 
 extension BrowserViewController: BrowserToolbarDelegate {
-    func browserToolbarDidPressBack(browserToolbar: BrowserToolbar) {
+    func browserToolbarDidPressBack(browserToolbar: BrowserToolbar, button: UIButton) {
         tabManager.selectedTab?.goBack()
     }
 
-    func browserToolbarDidLongPressBack(browserToolbar: BrowserToolbar) {
+    func browserToolbarDidLongPressBack(browserToolbar: BrowserToolbar, button: UIButton) {
         let controller = BackForwardListViewController()
         controller.listData = tabManager.selectedTab?.backList
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
     }
 
-    func browserToolbarDidPressForward(browserToolbar: BrowserToolbar) {
+    func browserToolbarDidPressForward(browserToolbar: BrowserToolbar, button: UIButton) {
         tabManager.selectedTab?.goForward()
     }
 
-    func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbar) {
+    func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbar, button: UIButton) {
         let controller = BackForwardListViewController()
         controller.listData = tabManager.selectedTab?.forwardList
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
     }
 
-    func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbar) {
+    func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbar, button: UIButton) {
         if let tab = tabManager.selectedTab? {
             if let url = tab.displayURL?.absoluteString {
                 profile.bookmarks.isBookmarked(url,
@@ -358,15 +358,19 @@ extension BrowserViewController: BrowserToolbarDelegate {
         }
     }
 
-    func browserToolbarDidLongPressBookmark(browserToolbar: BrowserToolbar) {
+    func browserToolbarDidLongPressBookmark(browserToolbar: BrowserToolbar, button: UIButton) {
     }
 
-    func browserToolbarDidPressShare(browserToolbar: BrowserToolbar) {
+    func browserToolbarDidPressShare(browserToolbar: BrowserToolbar, button: UIButton) {
         if let selected = tabManager.selectedTab {
             if let url = selected.displayURL {
-                var shareController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
-                shareController.modalTransitionStyle = .CoverVertical
-                presentViewController(shareController, animated: true, completion: nil)
+                var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
+                if let popoverPresentationController = activityViewController.popoverPresentationController {
+                    popoverPresentationController.sourceView = browserToolbar
+                    popoverPresentationController.sourceRect = button.frame
+                    popoverPresentationController.permittedArrowDirections = .Any
+                }
+                presentViewController(activityViewController, animated: true, completion: nil)
             }
         }
     }
