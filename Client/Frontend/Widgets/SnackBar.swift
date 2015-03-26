@@ -8,7 +8,7 @@ import Snap
 private let DefaultPadding = CGFloat(10)
 
 /// Default font used for text in the snackbar and buttons on the snackbar
-private let defaultFont = UIFont(name: "FiraSans-Regular", size: 13)
+private let defaultFont = UIFont(name: "HelveticaNeue", size: 13)
 
 /**
 A specialized version of UIButton for use in SnackBars. These are displayed evenly spaced in the bottom of the bar. The main convenience of these is that you can pass in a callback in the constructor (although these also style themselves appropriately).

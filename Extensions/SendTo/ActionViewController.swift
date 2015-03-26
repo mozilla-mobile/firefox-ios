@@ -47,7 +47,7 @@ class ClientPickerViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.font = UIFont(name: "FiraSans-Regular", size: 17)
+        cell.textLabel?.font = UIFont(name: "HelveticaNeue", size: 17)
         cell.textLabel?.text = String(format: NSLocalizedString("Send to %@", comment: "Text in a table view row that lets the user pick a device to which to send a tab to"), clients[indexPath.row].name)
         return cell
     }
