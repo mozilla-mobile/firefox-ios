@@ -132,13 +132,25 @@ public class LiveAccountTest: XCTestCase {
             configuration: ProductionFirefoxAccountConfiguration())
     }
 
-    public func syncAuthState(now: Int64) -> Deferred<Result<(token: TokenServerToken, forKey: NSData)>> {
+    func getTestAccount() -> Deferred<Result<FirefoxAccount>> {
         // TODO: Use signedInUser.json here.  It's hard to include the same resource file in two Xcode targets.
-        let account = self.account("testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
+        return self.account("testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
             configuration: ProductionFirefoxAccountConfiguration())
-        return account.bind { result in
+    }
+
+    public func getAuthState(now: Int64) -> Deferred<Result<SyncAuthState>> {
+        let account = self.getTestAccount()
+        return account.map { result in
             if let account = result.successValue {
-                let authState = account.syncAuthState((ProductionSync15Configuration().tokenServerEndpointURL))
+                return Result(success: account.syncAuthState((ProductionSync15Configuration().tokenServerEndpointURL)))
+            }
+            return Result(failure: result.failureValue!)
+        }
+    }
+
+    public func syncAuthState(now: Int64) -> Deferred<Result<(token: TokenServerToken, forKey: NSData)>> {
+        return getAuthState(now).bind { result in
+            if let authState = result.successValue {
                 return authState.token(now, canBeExpired: false)
             }
             return Deferred(value: Result(failure: result.failureValue!))

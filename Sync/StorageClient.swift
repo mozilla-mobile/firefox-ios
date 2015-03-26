@@ -5,6 +5,7 @@
 import Foundation
 import Alamofire
 import Shared
+import Account
 
 public class ServerResponseError<T>: ErrorType {
     public let response: StorageResponse<T>
@@ -196,6 +197,20 @@ public class Sync15StorageClient {
 
     let workQueue: dispatch_queue_t
     let resultQueue: dispatch_queue_t
+
+    public init(token: TokenServerToken, workQueue: dispatch_queue_t, resultQueue: dispatch_queue_t) {
+        self.workQueue = workQueue
+        self.resultQueue = resultQueue
+
+        // This is a potentially dangerous assumption, but failable initializers up the stack are a giant pain.
+        self.serverURI = NSURL(string: token.api_endpoint + "/storage/")!
+        self.authorizer = {
+            (r: NSMutableURLRequest) -> NSMutableURLRequest in
+            let helper = HawkHelper(id: token.id, key: token.key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
+            r.addValue(helper.getAuthorizationValueFor(r), forHTTPHeaderField: "Authorization")
+            return r
+        }
+    }
 
     public init(serverURI: NSURL, authorizer: Authorizer, workQueue: dispatch_queue_t, resultQueue: dispatch_queue_t) {
         self.serverURI = serverURI

@@ -45,3 +45,26 @@ public func jsonsToStrings(arr: [JSON]?) -> [String]? {
     }
     return nil
 }
+
+
+public func chainDeferred<T, U>(a: Deferred<Result<T>>, f: T -> Deferred<Result<U>>) -> Deferred<Result<U>> {
+    return a.bind { res in
+        if let v = res.successValue {
+            return f(v)
+        }
+        return Deferred(value: Result<U>(failure: res.failureValue!))
+    }
+}
+
+public func chainResult<T, U>(a: Deferred<Result<T>>, f: T -> Result<U>) -> Deferred<Result<U>> {
+    return a.map { res in
+        if let v = res.successValue {
+            return f(v)
+        }
+        return Result<U>(failure: res.failureValue!)
+    }
+}
+
+public func chain<T, U>(a: Deferred<Result<T>>, f: T -> U) -> Deferred<Result<U>> {
+    return chainResult(a, { Result<U>(success: f($0)) })
+}
