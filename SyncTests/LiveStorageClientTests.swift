@@ -115,7 +115,7 @@ class LiveStorageClientTests : LiveAccountTest {
             if let ready = result.successValue {
                 XCTAssertTrue(ready.collectionKeys.defaultBundle.encKey.length == 32)
                 XCTAssertTrue(ready.scratchpad.global != nil)
-                if let clients = ready.scratchpad.global?.engines?["clients"] {
+                if let clients = ready.scratchpad.global?.value.engines?["clients"] {
                     XCTAssertTrue(countElements(clients.syncID) == 12)
                 }
             }
