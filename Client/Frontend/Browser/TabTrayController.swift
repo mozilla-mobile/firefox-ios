@@ -118,13 +118,6 @@ private class CustomCell: UITableViewCell {
         setNeedsLayout()
     }
 
-    var tab: Browser? {
-        didSet {
-            background.image = tab?.screenshot()
-            titleText.text = tab?.title
-        }
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -161,6 +154,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
     private let CellIdentifier = "CellIdentifier"
     var tableView: UITableView!
     var profile: Profile!
+    var screenshotHelper: ScreenshotHelper!
 
     var toolbar: UIToolbar!
 
@@ -250,7 +244,8 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
         let tab = tabManager.getTab(indexPath.item)
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as CustomCell
         cell.titleText.text = tab.title
-        cell.background.image = tab.screenshot(size: CGSize(width: tableView.frame.width, height: TabTrayControllerUX.CellHeight))
+        let screenshotAspectRatio = tableView.frame.width / TabTrayControllerUX.CellHeight
+        cell.background.image = screenshotHelper.takeScreenshot(tab, aspectRatio: screenshotAspectRatio, quality: 1)
         return cell
     }
 
@@ -263,15 +258,22 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
 
 extension TabTrayController: Transitionable {
     private func getTransitionCell(options: TransitionOptions, browser: Browser?) -> CustomCell {
+        var transitionCell: CustomCell
         if let cell = options.moving as? CustomCell {
-            cell.tab = browser
-            return cell
+            transitionCell = cell
         } else {
-            let cell = CustomCell(style: UITableViewCellStyle.Default, reuseIdentifier: "id")
-            cell.tab = browser
-            options.moving = cell
-            return cell
+            transitionCell = CustomCell(style: UITableViewCellStyle.Default, reuseIdentifier: "id")
+            options.moving = transitionCell
         }
+
+        if let browser = browser {
+            transitionCell.background.image = screenshotHelper.takeScreenshot(browser, aspectRatio: 0, quality: 1)
+        } else {
+            transitionCell.background.image = nil
+        }
+        transitionCell.titleText.text = browser?.displayTitle
+
+        return transitionCell
     }
 
     func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {

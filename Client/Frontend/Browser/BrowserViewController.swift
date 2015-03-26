@@ -25,6 +25,7 @@ class BrowserViewController: UIViewController {
     private var searchController: SearchViewController?
     private var webViewContainer: UIView!
     private let uriFixup = URIFixup()
+    private var screenshotHelper: ScreenshotHelper!
 
     var profile: Profile!
 
@@ -48,6 +49,7 @@ class BrowserViewController: UIViewController {
         let defaultURL = NSURL(string: HomeURL)!
         let defaultRequest = NSURLRequest(URL: defaultURL)
         tabManager = TabManager(defaultNewTabRequest: defaultRequest)
+        screenshotHelper = BrowserScreenshotHelper(controller: self)
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -258,6 +260,7 @@ extension BrowserViewController: URLBarDelegate {
         controller.tabManager = tabManager
         controller.transitioningDelegate = self
         controller.modalPresentationStyle = .Custom
+        controller.screenshotHelper = screenshotHelper
         presentViewController(controller, animated: true, completion: nil)
     }
 
@@ -831,7 +834,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     return
                 }
 
-                if let screenshot = tab.screenshot(aspectRatio: ThumbnailCellUX.ImageAspectRatio, quality: 0.5) {
+                if let screenshot = self.screenshotHelper.takeScreenshot(tab, aspectRatio: CGFloat(ThumbnailCellUX.ImageAspectRatio), quality: 0.5) {
                     let thumbnail = Thumbnail(image: screenshot)
                     self.profile.thumbnails.set(url, thumbnail: thumbnail, complete: nil)
                 }
@@ -1169,5 +1172,28 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             // TODO Persist to database
             break
         }
+    }
+}
+
+private class BrowserScreenshotHelper: ScreenshotHelper {
+    private weak var controller: BrowserViewController?
+
+    init(controller: BrowserViewController) {
+        self.controller = controller
+    }
+
+    func takeScreenshot(tab: Browser, aspectRatio: CGFloat, quality: CGFloat) -> UIImage? {
+        if let url = tab.url {
+            if url.absoluteString == "about:home" {
+                if let homePanel = controller?.homePanelController {
+                    return homePanel.view.screenshot(aspectRatio, quality: quality)
+                }
+            } else {
+                let offset = CGPointMake(0, -tab.webView.scrollView.contentInset.top)
+                return tab.webView.screenshot(aspectRatio, offset: offset, quality: quality)
+            }
+        }
+
+        return nil
     }
 }
