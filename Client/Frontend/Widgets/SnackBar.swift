@@ -5,10 +5,6 @@
 import Foundation
 import Snap
 
-private let DefaultPadding = CGFloat(10)
-
-/// Default font used for text in the snackbar and buttons on the snackbar
-private let defaultFont = UIFont(name: "HelveticaNeue", size: 13)
 
 /**
 A specialized version of UIButton for use in SnackBars. These are displayed evenly spaced in the bottom of the bar. The main convenience of these is that you can pass in a callback in the constructor (although these also style themselves appropriately).
@@ -24,7 +20,7 @@ class SnackButton : UIButton {
     */
     lazy var highlightImg: UIImage = {
         let size = CGSize(width: 1, height: 1)
-        return UIImage.createWithColor(size, color: UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9))
+        return UIImage.createWithColor(size, color: AppConstants.HighlightColor)
     }()
 
     init(title: String, callback: (bar: SnackBar) -> Void) {
@@ -35,9 +31,9 @@ class SnackButton : UIButton {
         self.callback = callback
 
         setTitle(title, forState: .Normal)
-        titleLabel?.font = defaultFont
+        titleLabel?.font = AppConstants.DefaultMediumFont
         setBackgroundImage(highlightImg, forState: .Highlighted)
-        setTitleColor(UIColor(red: 42/255, green: 121/255, blue: 213/255, alpha: 1.0), forState: .Highlighted)
+        setTitleColor(AppConstants.HighlightText, forState: .Highlighted)
 
         addTarget(self, action: "onClick", forControlEvents: .TouchUpInside)
     }
@@ -78,7 +74,7 @@ class SnackBar: UIView {
 
     convenience init(text: String, img: UIImage?, buttons: [SnackButton]?) {
         var attributes = [NSObject: AnyObject]()
-        attributes[NSFontAttributeName] = defaultFont
+        attributes[NSFontAttributeName] = AppConstants.DefaultMediumFont
         attributes[NSBackgroundColorAttributeName] = UIColor.clearColor()
         let attrText = NSAttributedString(string: text, attributes: attributes)
         self.init(attrText: attrText, img: img, buttons: buttons)
@@ -147,8 +143,8 @@ class SnackBar: UIView {
 
         if let img = imageView.image {
             imageView.snp_remakeConstraints({ make in
-                make.left.equalTo(self).offset(DefaultPadding)
-                make.top.equalTo(self).offset(DefaultPadding)
+                make.left.equalTo(self).offset(AppConstants.DefaultPadding)
+                make.top.equalTo(self).offset(AppConstants.DefaultPadding)
                 make.width.equalTo(img.size.width)
                 make.height.equalTo(img.size.height)
             })
@@ -156,7 +152,7 @@ class SnackBar: UIView {
             imageView.snp_remakeConstraints({ make in
                 make.width.equalTo(0)
                 make.height.equalTo(0)
-                make.top.left.equalTo(self).offset(DefaultPadding)
+                make.top.left.equalTo(self).offset(AppConstants.DefaultPadding)
             })
         }
 
@@ -174,7 +170,7 @@ class SnackBar: UIView {
             make.bottom.equalTo(self)
             make.left.right.equalTo(self)
             if self.buttonsView.subviews.count > 0 {
-            	make.height.equalTo(ToolbarHeight)
+            	make.height.equalTo(AppConstants.ToolbarHeight)
             } else {
                 make.height.equalTo(0)
             }
@@ -183,12 +179,12 @@ class SnackBar: UIView {
         self.snp_makeConstraints({ make in
             var h = labelSize.height
             if let img = self.imageView.image {
-                h = DefaultPadding + max(img.size.height, labelSize.height)
+                h = AppConstants.DefaultPadding + max(img.size.height, labelSize.height)
             }
 
             let constraint = make.height.equalTo(h)
             if (self.buttonsView.subviews.count > 0) {
-                constraint.offset(ToolbarHeight)
+                constraint.offset(AppConstants.ToolbarHeight)
             }
         })
     }
@@ -208,7 +204,7 @@ class SnackBar: UIView {
         alpha = 0
         var h = frame.height
         if h == 0 {
-            h = ToolbarHeight
+            h = AppConstants.ToolbarHeight
         }
         transform = CGAffineTransformMakeTranslation(0, h)
     }

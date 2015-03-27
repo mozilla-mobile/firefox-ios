@@ -14,7 +14,7 @@ private struct TabTrayControllerUX {
     // This color has been manually adjusted to match background layer with iOS translucency effect.
     static let ToolbarBarTintColor = UIColor(red: 0.35, green: 0.37, blue: 0.39, alpha: 0)
     static let TabTitleTextColor = UIColor.blackColor()
-    static let TabTitleTextFont = UIFont(name: "HelveticaNeue-Bold", size: 11)
+    static let TabTitleTextFont = AppConstants.DefaultSmallFont
 }
 
 // UITableViewController doesn't let us specify a style for recycling views. We override the default style here.
@@ -100,9 +100,9 @@ private class CustomCell: UITableViewCell {
         margin = 0
         container.insertSubview(self, atIndex: container.subviews.count)
         frame = CGRect(x: container.frame.origin.x,
-            y: container.frame.origin.y + ToolbarHeight + StatusBarHeight,
+            y: container.frame.origin.y + AppConstants.ToolbarHeight + AppConstants.StatusBarHeight,
             width: container.frame.width,
-            height: container.frame.height - ToolbarHeight - ToolbarHeight - StatusBarHeight) // Don't let our cell overlap either of the toolbars
+            height: container.frame.height - 2 * AppConstants.ToolbarHeight - AppConstants.StatusBarHeight) // Don't let our cell overlap either of the toolbars
         title.alpha = 0
         setNeedsLayout()
     }
@@ -111,7 +111,7 @@ private class CustomCell: UITableViewCell {
         margin = TabTrayControllerUX.Margin
         container.insertSubview(self, atIndex: container.subviews.count)
         frame = CGRect(x: 0,
-            y: ToolbarHeight + StatusBarHeight + CGFloat(offsetY) * TabTrayControllerUX.CellHeight,
+            y: AppConstants.ToolbarHeight + AppConstants.StatusBarHeight + CGFloat(offsetY) * TabTrayControllerUX.CellHeight,
             width: container.frame.width,
             height: TabTrayControllerUX.CellHeight)
         title.alpha = 1
@@ -164,7 +164,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
 
         toolbar = UIToolbar()
         toolbar.backgroundImageForToolbarPosition(.Top, barMetrics: UIBarMetrics.Compact)
-        toolbar.frame.origin = CGPoint(x: TabTrayControllerUX.Margin, y: StatusBarHeight)
+        toolbar.frame.origin = CGPoint(x: TabTrayControllerUX.Margin, y: AppConstants.StatusBarHeight)
 
         toolbar.barTintColor = TabTrayControllerUX.ToolbarBarTintColor
         toolbar.tintColor = UIColor.whiteColor()
@@ -189,7 +189,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
         tableView.delegate = self
         tableView.separatorStyle = .None
         tableView.registerClass(CustomCell.self, forCellReuseIdentifier: CellIdentifier)
-        tableView.contentInset = UIEdgeInsets(top: StatusBarHeight + ToolbarHeight, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: AppConstants.StatusBarHeight + AppConstants.ToolbarHeight, left: 0, bottom: 0, right: 0)
         tableView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
         view.addSubview(tableView)
@@ -197,7 +197,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
 
         toolbar.snp_makeConstraints { make in
             make.top.equalTo(self.view)
-            make.height.equalTo(StatusBarHeight + ToolbarHeight)
+            make.height.equalTo(AppConstants.StatusBarHeight + AppConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
             return
         }
@@ -287,7 +287,7 @@ extension TabTrayController: Transitionable {
 
         // Scroll the toolbar off the top
         toolbar.alpha = 0
-        toolbar.transform = CGAffineTransformMakeTranslation(0, -ToolbarHeight)
+        toolbar.transform = CGAffineTransformMakeTranslation(0, -AppConstants.ToolbarHeight)
 
         tableView.backgroundColor = UIColor.clearColor()
     }
