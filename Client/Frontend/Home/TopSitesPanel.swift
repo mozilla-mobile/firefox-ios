@@ -24,7 +24,8 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 
     var profile: Profile! {
         didSet {
-            profile.history.get(nil, complete: { (data) -> Void in
+            let options = QueryOptions(filter: nil, filterType: .None, sort: .Frecency)
+            profile.history.get(options, complete: { (data) -> Void in
                 self.dataSource.data = data
                 self.dataSource.profile = self.profile
                 self.collection.reloadData()
