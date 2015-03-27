@@ -22,6 +22,9 @@ class TestSchemaTable: XCTestCase {
             return table.query(connection, options: QueryOptions(filter: testTable.name))
         })
         verifyTable(cursor, table: testTable)
+        // We have to close this cursor to ensure we don't get results from a sqlite memory cache below when
+        // we requery the table.
+        cursor.close()
 
         // Now test updating the table
         testTable = getUpgradeTable()
@@ -30,6 +33,9 @@ class TestSchemaTable: XCTestCase {
             return table.query(connection, options: QueryOptions(filter: testTable.name))
         })
         verifyTable(cursor, table: testTable)
+        // We have to close this cursor to ensure we don't get results from a sqlite memory cache below when
+        // we requery the table.
+        cursor.close()
 
         // Now try updating it again to the same version. This shouldn't call create or upgrade
         testTable = getNoOpTable()
