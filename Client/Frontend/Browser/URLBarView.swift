@@ -59,18 +59,18 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     }
 
     private func initViews() {
-
         curveShape = CurveView()
         self.addSubview(curveShape);
 
         locationContainer = UIView()
-
+        locationContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
         locationContainer.layer.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
         locationContainer.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
         addSubview(locationContainer)
 
         locationView = BrowserLocationView(frame: CGRectZero)
+        locationView.setTranslatesAutoresizingMaskIntoConstraints(false)
         locationView.readerModeState = ReaderModeState.Unavailable
         locationView.delegate = self
         locationContainer.addSubview(locationView)
@@ -83,22 +83,25 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         editTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
         editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
         editTextField.delegate = self
-        editTextField.font = UIFont(name: "HelveticaNeue", size: 13)
+        editTextField.font = AppConstants.DefaultMediumFont
         editTextField.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         editTextField.layer.borderColor = URLBarViewUX.TextFieldActiveBorderColor.CGColor
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         locationContainer.addSubview(editTextField)
 
-        progressBar = UIProgressView()
+        self.progressBar = UIProgressView()
         self.progressBar.trackTintColor = self.backgroundColor
+        self.progressBar.alpha = 0
+        self.progressBar.hidden = true
         self.addSubview(progressBar)
 
         tabsButton = InsetButton()
+        tabsButton.setTranslatesAutoresizingMaskIntoConstraints(false)
         tabsButton.setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
         tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the urlbar tabs button")
         tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
         tabsButton.titleLabel?.layer.cornerRadius = 2
-        tabsButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Bold", size: 11)
+        tabsButton.titleLabel?.font = AppConstants.DefaultSmallFont
         tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
         tabsButton.titleLabel?.snp_makeConstraints { make in
             make.size.equalTo(18)
@@ -112,52 +115,46 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
         cancelButton = InsetButton()
         cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
-        cancelButton.titleLabel?.font = UIFont(name: "HelveticaNeue", size: 12)
+        cancelButton.titleLabel?.font = AppConstants.DefaultMediumFont
         cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
         cancelButton.titleEdgeInsets = UIEdgeInsetsMake(10, 12, 10, 12)
         cancelButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
         cancelButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
         self.addSubview(cancelButton)
+    }
 
-        locationView.snp_makeConstraints { make in
-            make.edges.equalTo(self.locationContainer).insets(EdgeInsetsMake(URLBarViewUX.TextFieldBorderWidth, URLBarViewUX.TextFieldBorderWidth, URLBarViewUX.TextFieldBorderWidth, URLBarViewUX.TextFieldBorderWidth))
-            return
-        }
-
-        progressBar.snp_makeConstraints { make in
+    override func updateConstraints() {
+        progressBar.snp_remakeConstraints { make in
             make.centerY.equalTo(self.snp_bottom)
             make.width.equalTo(self)
         }
 
-        tabsButton.snp_makeConstraints { make in
+        locationView.snp_remakeConstraints { make in
+            make.edges.equalTo(self.locationContainer).insets(EdgeInsetsMake(URLBarViewUX.TextFieldBorderWidth,
+                URLBarViewUX.TextFieldBorderWidth,
+                URLBarViewUX.TextFieldBorderWidth,
+                URLBarViewUX.TextFieldBorderWidth))
+            return
+        }
+
+        tabsButton.snp_remakeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
             make.trailing.equalTo(self)
-            make.width.height.equalTo(ToolbarHeight)
+            make.width.height.equalTo(AppConstants.ToolbarHeight)
         }
 
-        locationContainer.snp_makeConstraints { make in
-            make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
-            make.centerY.equalTo(self).offset(StatusBarHeight / 2)
-            make.trailing.equalTo(self.tabsButton.snp_leading).offset(-13)
-        }
-
-        editTextField.snp_makeConstraints { make in
+        editTextField.snp_remakeConstraints { make in
             make.edges.equalTo(self.locationContainer)
             return
         }
 
-        cancelButton.snp_makeConstraints { make in
+        cancelButton.snp_remakeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
             make.trailing.equalTo(self)
         }
 
-        curveShape.snp_makeConstraints { make in
-            make.edges.equalTo(self)
-            return
-        }
-
         updateLayoutForEditing(editing: false, animated: false)
-
+        super.updateConstraints()
     }
 
     var isEditing: Bool {
@@ -187,8 +184,11 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     func updateProgressBar(progress: Float) {
         if progress == 1.0 {
             self.progressBar.setProgress(progress, animated: true)
-            UIView.animateWithDuration(1.5, animations: {self.progressBar.alpha = 0.0},
-                completion: {_ in self.progressBar.setProgress(0.0, animated: false)})
+            UIView.animateWithDuration(1.5, animations: {
+                self.progressBar.alpha = 0.0
+            }, completion: { _ in
+                self.progressBar.setProgress(0.0, animated: false)
+            })
         } else {
             self.progressBar.alpha = 1.0
             self.progressBar.setProgress(progress, animated: (progress > progressBar.progress))
@@ -261,7 +261,6 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
     }
 
     private func updateLayoutForEditing(#editing: Bool, animated: Bool = true) {
-
         self.progressBar.hidden = editing
         self.editTextField.hidden = !editing
 
@@ -269,13 +268,13 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
             self.locationContainer.snp_remakeConstraints { make in
                 make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
                 make.trailing.equalTo(self.cancelButton.snp_leading)
-                make.centerY.equalTo(self).offset(StatusBarHeight / 2)
+                make.centerY.equalTo(self).offset(AppConstants.StatusBarHeight / 2)
             }
         } else {
             self.locationContainer.snp_remakeConstraints { make in
                 make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
                 make.trailing.equalTo(self.tabsButton.snp_leading).offset(-10)
-                make.centerY.equalTo(self).offset(StatusBarHeight / 2)
+                make.centerY.equalTo(self).offset(AppConstants.StatusBarHeight / 2)
             }
         }
 
@@ -285,7 +284,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
 
         // add offset to left for slide animation, and a bit of extra offset for spring bounces
         let leftOffset = self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer
-        self.curveShape.snp_updateConstraints { make in
+        self.curveShape.snp_remakeConstraints { make in
             make.edges.equalTo(self).offset(EdgeInsetsMake(0, -leftOffset, 0, -URLBarViewUX.URLBarCurveBounceBuffer))
             return
         }
@@ -313,6 +312,8 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
             self.tabsButton.hidden = editing
             self.cancelButton.hidden = !editing
         }
+
+        curveShape.setNeedsLayout()
     }
 
     func SELdidClickCancel() {
@@ -349,29 +350,27 @@ private class CurveView: UIView {
     }
 
     func drawFromTop(path: UIBezierPath) {
-        let height: Double = Double(ToolbarHeight)
+        let height: Double = Double(AppConstants.ToolbarHeight)
         let width = getWidthForHeight(height)
-        var from: (Double, Double) = (0, 0)
-
-        from = (Double(self.frame.width) - width * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(StatusBarHeight))
+        let from = (Double(self.frame.width) - width * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(AppConstants.StatusBarHeight))
 
         path.moveToPoint(CGPoint(x: from.0, y: from.1))
         path.addCurveToPoint(CGPoint(x: from.0 + width * W_M2, y: from.1 + height * H_M2),
-            controlPoint1: CGPoint(x: from.0 + width * W_M1, y: from.1),
-            controlPoint2: CGPoint(x: from.0 + width * W_M3, y: from.1 + height * H_M1))
+              controlPoint1: CGPoint(x: from.0 + width * W_M1, y: from.1),
+              controlPoint2: CGPoint(x: from.0 + width * W_M3, y: from.1 + height * H_M1))
 
-        path.addCurveToPoint(CGPoint(x: from.0 + width, y: from.1 + height),
-            controlPoint1: CGPoint(x: from.0 + width * W_M4, y: from.1 + height * H_M3),
-            controlPoint2: CGPoint(x: from.0 + width * W_M5, y: from.1 + height * H_M4))
+        path.addCurveToPoint(CGPoint(x: from.0 + width,        y: from.1 + height),
+              controlPoint1: CGPoint(x: from.0 + width * W_M4, y: from.1 + height * H_M3),
+              controlPoint2: CGPoint(x: from.0 + width * W_M5, y: from.1 + height * H_M4))
     }
 
     private func getPath() -> UIBezierPath {
         let path = UIBezierPath()
         self.drawFromTop(path)
-        path.addLineToPoint(CGPoint(x: self.frame.width, y: ToolbarHeight + StatusBarHeight))
+        path.addLineToPoint(CGPoint(x: self.frame.width, y: AppConstants.ToolbarHeight + AppConstants.StatusBarHeight))
         path.addLineToPoint(CGPoint(x: self.frame.width, y: 0))
         path.addLineToPoint(CGPoint(x: 0, y: 0))
-        path.addLineToPoint(CGPoint(x: 0, y: StatusBarHeight))
+        path.addLineToPoint(CGPoint(x: 0, y: AppConstants.StatusBarHeight))
         path.closePath()
         return path
     }

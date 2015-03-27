@@ -36,9 +36,10 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         addSubview(lockImageView)
 
         locationLabel = UILabel()
-        locationLabel.font = UIFont(name: "HelveticaNeue", size: 13)
+        locationLabel.font = AppConstants.DefaultMediumFont
         locationLabel.lineBreakMode = .ByClipping
         locationLabel.userInteractionEnabled = true
+        locationLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         // TODO: This label isn't useful for people. We probably want this to be the page title or URL (see Safari).
         locationLabel.accessibilityLabel = NSLocalizedString("URL", comment: "Accessibility label for the URL location label")
         addSubview(locationLabel)
@@ -55,11 +56,11 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         readerModeButton.hidden = true
         readerModeButton.addTarget(self, action: "SELtapReaderModeButton", forControlEvents: .TouchUpInside)
         addSubview(readerModeButton)
-
-        makeConstraints()
     }
 
-    private func makeConstraints() {
+    override func updateConstraints() {
+        super.updateConstraints()
+
         let container = self
 
         lockImageView.snp_remakeConstraints { make in
@@ -75,6 +76,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
             } else {
                 make.leading.equalTo(container).with.offset(8)
             }
+
             if self.readerModeButton.readerModeState == ReaderModeState.Unavailable {
                 make.trailing.equalTo(self.stopReloadButton.snp_leading).with.offset(-8)
             } else {
@@ -138,7 +140,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
             } else {
                 locationLabel.text = t
             }
-            makeConstraints()
+            setNeedsUpdateConstraints()
         }
     }
 
@@ -159,7 +161,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         set (newReaderModeState) {
             if newReaderModeState != self.readerModeButton.readerModeState {
                 self.readerModeButton.readerModeState = newReaderModeState
-                makeConstraints()
+                setNeedsUpdateConstraints()
                 readerModeButton.hidden = (newReaderModeState == ReaderModeState.Unavailable)
                 UIView.animateWithDuration(0.1, animations: { () -> Void in
                     if newReaderModeState == ReaderModeState.Unavailable {

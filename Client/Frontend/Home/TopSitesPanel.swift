@@ -73,9 +73,6 @@ private class TopSitesCollectionView: UICollectionView {
 }
 
 private class TopSitesLayout: UICollectionViewLayout {
-    private let ToolbarHeight: CGFloat = 44
-    private let StatusBarHeight: CGFloat = 20
-    private let RowHeight: CGFloat = 58
     private let AspectRatio: CGFloat = 1.25 // Ratio of width:height.
 
     private var thumbnailRows = 3
@@ -122,7 +119,7 @@ private class TopSitesLayout: UICollectionViewLayout {
             let row = Int(y / thumbnailHeight)
             return min(count - 1, max(0, row * thumbnailCols))
         }
-        return min(count - 1, max(0, Int((y - topSectionHeight) / RowHeight + CGFloat(thumbnailCount))))
+        return min(count - 1, max(0, Int((y - topSectionHeight) / AppConstants.DefaultRowHeight + CGFloat(thumbnailCount))))
     }
 
     override func collectionViewContentSize() -> CGSize {
@@ -131,7 +128,7 @@ private class TopSitesLayout: UICollectionViewLayout {
             return CGSize(width: width, height: topSectionHeight)
         }
 
-        let bottomSectionHeight = CGFloat(count - thumbnailCount) * RowHeight
+        let bottomSectionHeight = CGFloat(count - thumbnailCount) * AppConstants.DefaultRowHeight
         return CGSize(width: width, height: topSectionHeight + bottomSectionHeight)
     }
 
@@ -161,7 +158,7 @@ private class TopSitesLayout: UICollectionViewLayout {
     override func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
         let decoration = UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
         let rowIndex = indexPath.item - thumbnailCount + 1
-        let rowYOffset = CGFloat(rowIndex) * RowHeight
+        let rowYOffset = CGFloat(rowIndex) * AppConstants.DefaultRowHeight
         let y = topSectionHeight + rowYOffset
         decoration.frame = CGRectMake(0, y, width, 0.5)
         return decoration
@@ -180,9 +177,9 @@ private class TopSitesLayout: UICollectionViewLayout {
             attr.frame = CGRectMake(x, y, thumbnailWidth, thumbnailHeight)
         } else {
             // Set the bottom row frames.
-            let rowYOffset = CGFloat(i - thumbnailCount) * RowHeight
+            let rowYOffset = CGFloat(i - thumbnailCount) * AppConstants.DefaultRowHeight
             let y = CGFloat(topSectionHeight + rowYOffset)
-            attr.frame = CGRectMake(0, y, width, RowHeight)
+            attr.frame = CGRectMake(0, y, width, AppConstants.DefaultRowHeight)
         }
 
         return attr

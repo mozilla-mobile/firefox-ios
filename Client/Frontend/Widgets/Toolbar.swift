@@ -1,9 +1,6 @@
 import Foundation
 import Snap
 
-public let StatusBarHeight: CGFloat = 20 // TODO: Can't assume this is correct. Status bar height is dynamic.
-public let ToolbarHeight: CGFloat = 44
-
 class Toolbar : UIView {
     var drawTopBorder = false
     var drawBottomBorder = false
@@ -80,7 +77,7 @@ class Toolbar : UIView {
                     prev = view
 
                     make.centerY.equalTo(self)
-                    make.height.equalTo(ToolbarHeight)
+                    make.height.equalTo(AppConstants.ToolbarHeight)
                     make.width.equalTo(self).dividedBy(self.subviews.count)
                 }
             }
