@@ -38,6 +38,7 @@ class BrowserToolbar: Toolbar {
         super.init()
 
         backButton.setImage(UIImage(named: "back"), forState: .Normal)
+        backButton.setImage(UIImage(named: "backPressed"), forState: .Highlighted)
         backButton.accessibilityLabel = NSLocalizedString("Back", comment: "Accessibility Label for the browser toolbar Back button")
         backButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
         longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack:")
@@ -46,6 +47,7 @@ class BrowserToolbar: Toolbar {
         backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
 
         forwardButton.setImage(UIImage(named: "forward"), forState: .Normal)
+        forwardButton.setImage(UIImage(named: "forwardPressed"), forState: .Highlighted)
         forwardButton.accessibilityLabel = NSLocalizedString("Forward", comment: "Accessibility Label for the browser toolbar Forward button")
         forwardButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
         longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward:")
@@ -54,6 +56,7 @@ class BrowserToolbar: Toolbar {
         forwardButton.contentEdgeInsets = ButtonInset
 
         shareButton.setImage(UIImage(named: "send"), forState: .Normal)
+        shareButton.setImage(UIImage(named: "sendPressed"), forState: .Highlighted)
         shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Accessibility Label for the browser toolbar Share button")
         shareButton.addTarget(self, action: "SELdidClickShare", forControlEvents: UIControlEvents.TouchUpInside)
         shareButton.contentEdgeInsets = ButtonInset
