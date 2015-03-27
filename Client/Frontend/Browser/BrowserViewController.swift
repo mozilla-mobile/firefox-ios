@@ -638,8 +638,22 @@ extension BrowserViewController: UIScrollViewDelegate {
 
 extension BrowserViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?) {
+        // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
+        // and having multiple views with the same label confuses tests.
+        if let wv = previous?.webView {
+            wv.accessibilityLabel = nil
+        }
+
         if let wv = selected?.webView {
+            wv.accessibilityLabel = "Web content"
             webViewContainer.addSubview(wv)
+            if let url = wv.URL?.absoluteString {
+                profile.bookmarks.isBookmarked(url, success: { bookmarked in
+                    self.toolbar.updateBookmarkStatus(bookmarked)
+                }, failure: { err in
+                    println("Error getting bookmark status: \(err)")
+                })
+            }
         }
 
         removeAllBars()
