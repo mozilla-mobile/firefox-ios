@@ -24,6 +24,8 @@ This state falls into three categories:
 
 * Cached data to avoid repeating operations. The client can cache info/collections for the duration of a sync, and meta/global and crypto/keys until they change.
 
+For more on this, see "Persistence", below.
+
 Starting from that "initial assigned" state, we will always fetch info/collections.
 
 If we have local meta/global and crypto/keys caches, and nothing is indicated as changed in i/c, we can move directly to Ready.
@@ -53,7 +55,22 @@ The last is encapsulated in a datatype-specific synchronizer and a `Sync15Collec
 
 The process of synchronizing is driven by info/collections (indicating remote changes), by meta/global (a change to syncID implies a reset), and by local change indicators.
 
+
 ## Invalidation
 
 At any point we might get a 401 in response to a storage request. At this point our token is invalidated; we abort this sync, fetch a new token, and continue. That token might itself point to a new Sync server, which might result in a fresh-start sync.
 
+
+## Persistence
+
+So what do we need to persist? Quite apart from the actual datatype-specific stuff:
+
+* We need to store the syncID and last fetch timestamp for each collection. If the syncID changes, we need to throw away the timestamp.
+* We need to store the list of enabled engines, and keep it in lockstep with meta/global. The same for declined.
+* We need to store our own client ID, and use that when uploading our client record.
+* We need to pay attention to kB; if it changes, e.g., via a password change, then any in-memory copy of the Sync Key should be discarded.
+* We ought to cache meta/global.
+* We ought to cache bulk keys. If i/c changes for crypto, we should redownload and compare. If any collection key changes, then we should act as if the syncID changed. (TODO: should we change the syncID for that collection? Probably.)
+  (If we can't decrypt your bulk keys, probably our kB is now invalid. If it's not, the server is corrupt.)
+* We ought to remember the last info/collections.
+* We should store the last info/collections timestamp, so that an i/c fetch can return 304.
