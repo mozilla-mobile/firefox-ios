@@ -156,33 +156,39 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
     var profile: Profile!
     var screenshotHelper: ScreenshotHelper!
 
-    var toolbar: UIToolbar!
+    var navBar: UINavigationBar!
 
     override func viewDidLoad() {
         view.isAccessibilityElement = true
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
 
-        toolbar = UIToolbar()
-        toolbar.backgroundImageForToolbarPosition(.Top, barMetrics: UIBarMetrics.Compact)
-        toolbar.frame.origin = CGPoint(x: TabTrayControllerUX.Margin, y: StatusBarHeight)
+        navBar = UINavigationBar()
 
-        toolbar.barTintColor = TabTrayControllerUX.ToolbarBarTintColor
-        toolbar.tintColor = UIColor.whiteColor()
+        navBar.barTintColor = TabTrayControllerUX.ToolbarBarTintColor
+        navBar.tintColor = UIColor.whiteColor()
+        navBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
 
-        toolbar.layer.shadowColor = UIColor.blackColor().CGColor
-        toolbar.layer.shadowOffset = CGSize(width: 0, height: 1.0)
-        toolbar.layer.shadowRadius = 2.0
-        toolbar.layer.shadowOpacity = 0.25
+        navBar.layer.shadowColor = UIColor.blackColor().CGColor
+        navBar.layer.shadowOffset = CGSize(width: 0, height: 1.0)
+        navBar.layer.shadowRadius = 2.0
+        navBar.layer.shadowOpacity = 0.25
+        
+        
+        let signInButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+        signInButton.addTarget(self, action: "SELdidClickDone", forControlEvents: UIControlEvents.TouchUpInside)
+        signInButton.setTitle(NSLocalizedString("Sign in", comment: "Button that leads to Sign in section of the Settings sheet."), forState: UIControlState.Normal)
+        signInButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        
+        let navItem = UINavigationItem()
+        // TODO: need to change the image from search to settings after adding assets
+        navItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "search"), style: .Plain, target: self, action: "SELdidClickSettingsItem")
+        navItem.leftBarButtonItem?.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
+        navItem.titleView = signInButton
+        // TODO: need to change the image from search to settings after adding assets
+        navItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "search"), style: .Plain, target: self, action: "SELdidClickAddTab")
+        
+        navBar.pushNavigationItem(navItem, animated: false)
 
-        let settingsItem = UIBarButtonItem(title: "\u{2699}", style: .Plain, target: self, action: "SELdidClickSettingsItem")
-        settingsItem.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
-        let signinItem = UIBarButtonItem(title: NSLocalizedString("Sign in", comment: "Button that leads to Sign in section of the Settings sheet."),
-            style: .Plain, target: self, action: "SELdidClickDone")
-        signinItem.enabled = false
-        // TODO: Vertically center the add button.  Right now, it's too high in the containing bar.
-        let addTabItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "SELdidClickAddTab")
-        let spacer = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
-        toolbar.setItems([settingsItem, spacer, signinItem, spacer, addTabItem], animated: true)
 
         tableView = UITableView()
         tableView.dataSource = self
@@ -193,9 +199,9 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
         tableView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
         view.addSubview(tableView)
-        view.addSubview(toolbar)
+        view.addSubview(navBar)
 
-        toolbar.snp_makeConstraints { make in
+        navBar.snp_makeConstraints { make in
             make.top.equalTo(self.view)
             make.height.equalTo(StatusBarHeight + ToolbarHeight)
             make.left.right.equalTo(self.view)
@@ -286,8 +292,8 @@ extension TabTrayController: Transitionable {
         }
 
         // Scroll the toolbar off the top
-        toolbar.alpha = 0
-        toolbar.transform = CGAffineTransformMakeTranslation(0, -ToolbarHeight)
+        navBar.alpha = 0
+        navBar.transform = CGAffineTransformMakeTranslation(0, -ToolbarHeight)
 
         tableView.backgroundColor = UIColor.clearColor()
     }
@@ -301,8 +307,8 @@ extension TabTrayController: Transitionable {
         }
 
         // Scroll the toolbar on from the top
-        toolbar.alpha = 1
-        toolbar.transform = CGAffineTransformIdentity
+        navBar.alpha = 1
+        navBar.transform = CGAffineTransformIdentity
 
         tableView.backgroundColor = TabTrayControllerUX.BackgroundColor
     }
