@@ -62,7 +62,7 @@ class BrowserViewController: UIViewController {
         return UIStatusBarStyle.Default
     }
 
-    private func shouldShowToolbar() -> Bool {
+    func shouldShowToolbar() -> Bool {
         return traitCollection.verticalSizeClass != .Compact && traitCollection.horizontalSizeClass != .Regular
     }
 
@@ -1163,33 +1163,38 @@ extension BrowserViewController : UIViewControllerTransitioningDelegate {
 }
 
 extension BrowserViewController : Transitionable {
-    func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
-        view.transform = CGAffineTransformIdentity
-        view.alpha = 1
+
+    func transitionablePreHide(transitionable: Transitionable, options: TransitionOptions) {
         // Move all the webview's off screen
         for i in 0..<tabManager.count {
             let tab = tabManager.getTab(i)
-            tab.webView.frame = CGRect(x: tab.webView.frame.width, y: 0, width: tab.webView.frame.width, height: tab.webView.frame.height)
+            tab.webView.hidden = true
         }
     }
 
-    func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {
-        if let cell = options.moving {
-            view.transform = CGAffineTransformMakeTranslation(0, cell.frame.origin.y - (toolbar?.frame.height ?? 0))
-        }
-        view.alpha = 0
+    func transitionablePreShow(transitionable: Transitionable, options: TransitionOptions) {
         // Move all the webview's off screen
         for i in 0..<tabManager.count {
             let tab = tabManager.getTab(i)
-            tab.webView.frame = CGRect(x: tab.webView.frame.width, y: 0, width: tab.webView.frame.width, height: tab.webView.frame.height)
+            tab.webView.hidden = true
         }
+    }
+
+    func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
+        view.alpha = 1
+        footer.transform = CGAffineTransformIdentity
+    }
+
+    func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {
+        view.alpha = 0
+        footer.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, footer.frame.height)
     }
 
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
         // Move all the webview's back on screen
         for i in 0..<tabManager.count {
             let tab = tabManager.getTab(i)
-            tab.webView.frame = CGRect(x: 0, y: 0, width: tab.webView.frame.width, height: tab.webView.frame.height)
+            tab.webView.hidden = false
         }
     }
 }
