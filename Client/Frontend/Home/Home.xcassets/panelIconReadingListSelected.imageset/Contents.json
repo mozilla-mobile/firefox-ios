@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "panelIconReadingListSelected.png"
+      "filename" : "Reading List (selected).png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "panelIconReadingListSelected@2x.png"
+      "filename" : "Reading List (selected)@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "panelIconReadingListSelected@3x.png"
+      "filename" : "Reading List (selected)@3x.png"
     }
   ],
   "info" : {

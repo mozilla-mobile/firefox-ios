@@ -8,9 +8,9 @@ import Storage
 struct SiteTableViewControllerUX {
     static let HeaderHeight = CGFloat(25)
     static let RowHeight = CGFloat(58)
-    static let HeaderBorderColor = UIColor(rgb: 0x979797).colorWithAlphaComponent(0.5)
+    static let HeaderBorderColor = UIColor(rgb: 0xCFD5D9).colorWithAlphaComponent(0.8)
     static let HeaderTextColor = UIColor(rgb: 0x565656)
-    static let HeaderBackgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.4)
+    static let HeaderBackgroundColor = UIColor(rgb: 0xECF0F3).colorWithAlphaComponent(0.7)
 }
 
 private class SiteTableViewHeader : UITableViewHeaderFooterView {

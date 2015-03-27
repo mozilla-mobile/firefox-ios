@@ -136,7 +136,7 @@ private class TwoLineCellHelper {
         self.detailTextLabel = detailTextLabel
         self.imageView = imageView
 
-        textLabel.font = UIFont(name: "HelveticaNeue", size: 14)
+        textLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 14)
         textLabel.textColor = TextColor
 
         detailTextLabel.font = UIFont(name: "HelveticaNeue", size: 10)
