@@ -20,11 +20,11 @@ class TabManager {
     private var _selectedIndex = -1
     var selectedIndex: Int { return _selectedIndex }
     private let defaultNewTabRequest: NSURLRequest
-
+    
     init(defaultNewTabRequest: NSURLRequest) {
         self.defaultNewTabRequest = defaultNewTabRequest
     }
-
+    
     var count: Int {
         return tabs.count
     }
@@ -64,17 +64,21 @@ class TabManager {
 
         let previous = selectedTab
 
-        _selectedIndex = -1
+        var _selectedIndex = -1
         for i in 0..<count {
             if tabs[i] === tab {
-                _selectedIndex = i
+                selectTab(i)
                 break
             }
         }
 
         assert(tab === selectedTab, "Expected tab is selected")
-
-        delegate?.tabManager(self, didSelectedTabChange: tab, previous: previous)
+    }
+    
+    private func selectTab(index: Int) {
+        let previous = selectedTab
+        _selectedIndex = index
+        delegate?.tabManager(self, didSelectedTabChange: tabs[index], previous: previous)
     }
 
     func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration = WKWebViewConfiguration()) -> Browser {
@@ -149,7 +153,21 @@ class TabManager {
                 openTabs.writeToDisk(model)
             }
             openTabs.persistenceTask = persistFunction
+            
+            if let model = openTabs.readFromDisk() {
+                let tabJson = model["tabs"] as Array<NSDictionary>
+                for t in tabJson {
+                    let urlString = t["url"] as String
+                    println("Restoring \(urlString)")
+                    let url = NSURL(string: urlString)!
+                    let request = NSURLRequest(URL: url)
+                    addTab(request: request)
+                }
+            
+                if let tabIndex = model["selectedIndex"] as? Int {
+                    selectTab(tabIndex)
+                }
+            }
         }
-
     }
 }
