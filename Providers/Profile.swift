@@ -10,8 +10,12 @@ import Shared
 class ProfileFileAccessor: FileAccessor {
     init(profile: Profile) {
         let profileDirName = "profile.\(profile.localName())"
-        let url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(ExtensionUtils.sharedContainerIdentifier())!
-        let profilePath = url.path!.stringByAppendingPathComponent(profileDirName)
+        let manager = NSFileManager.defaultManager()
+        // Bug 1147262: First option is for device, second is for simulator.
+        let url =
+            manager.containerURLForSecurityApplicationGroupIdentifier(ExtensionUtils.sharedContainerIdentifier()) ??
+            manager .URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as? NSURL
+        let profilePath = url!.path!.stringByAppendingPathComponent(profileDirName)
         super.init(rootPath: profilePath)
     }
 }
