@@ -50,6 +50,8 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         stopReloadButton = UIButton()
         stopReloadButton.setImage(ImageReload, forState: .Normal)
         stopReloadButton.addTarget(self, action: "SELtapStopReload", forControlEvents: .TouchUpInside)
+        stopReloadButton.isAccessibilityElement = true
+        stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility label for the reload button")
         addSubview(stopReloadButton)
 
         readerModeButton = ReaderModeButton(frame: CGRectZero)
