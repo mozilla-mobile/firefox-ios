@@ -53,7 +53,13 @@ class BrowserViewController: UIViewController {
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+        if header == nil {
+            return UIStatusBarStyle.LightContent
+        }
+        if header.transform.ty == 0 {
+            return UIStatusBarStyle.LightContent
+        }
+        return UIStatusBarStyle.Default
     }
 
     override func viewDidLoad() {
@@ -546,6 +552,7 @@ extension BrowserViewController: UIScrollViewDelegate {
 
         let percent = 1 - newY / -AppConstants.ToolbarHeight
         urlBar.alpha = percent
+        self.setNeedsStatusBarAppearanceUpdate()
     }
 
     private func scrollReaderModeBar(dy: CGFloat) {
@@ -622,13 +629,14 @@ extension BrowserViewController: UIScrollViewDelegate {
             self.scrollUrlBar(CGFloat(-1*MAXFLOAT))
             self.scrollToolbar(CGFloat(-1*MAXFLOAT))
 
-            self.header.transform = CGAffineTransformMakeTranslation(0, -self.urlBar.frame.height)
+            self.header.transform = CGAffineTransformMakeTranslation(0, -self.urlBar.frame.height + AppConstants.StatusBarHeight)
             self.footer.transform = CGAffineTransformMakeTranslation(0, self.toolbar.frame.height)
             // Reset the insets so that clicking works on the edges of the screen
             if let tab = self.tabManager.selectedTab {
                 tab.webView.scrollView.contentInset = UIEdgeInsets(top: AppConstants.StatusBarHeight, left: 0, bottom: 0, right: 0)
                 tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: AppConstants.StatusBarHeight, left: 0, bottom: 0, right: 0)
             }
+            self.setNeedsStatusBarAppearanceUpdate()
         }, completion: completion)
     }
 
@@ -644,6 +652,7 @@ extension BrowserViewController: UIScrollViewDelegate {
                 tab.webView.scrollView.contentInset = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: AppConstants.ToolbarHeight, right: 0)
                 tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: AppConstants.ToolbarHeight, right: 0)
             }
+            self.setNeedsStatusBarAppearanceUpdate()
         }, completion: completion)
     }
 }
