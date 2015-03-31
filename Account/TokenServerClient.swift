@@ -25,6 +25,14 @@ public struct TokenServerToken {
         self.uid = uid
         self.durationInSeconds = durationInSeconds
     }
+
+    /**
+     * Return true if this token points to the same place as the other token.
+     */
+    public func sameDestination(other: TokenServerToken) -> Bool {
+        return self.uid == other.uid &&
+               self.api_endpoint == other.api_endpoint
+    }
 }
 
 enum TokenServerError {
