@@ -19,12 +19,12 @@ private struct TabTrayControllerUX {
 
 private struct TabCellUX {
     // Properties for panning animation
-    static let deleteThreshold = 140
-    static let totalRotationInDegrees = 10.0
-    static let totalScale = CGFloat(0.9)
-    static let totalAlpha = CGFloat(0.7)
-    static let minExitVelocity = 800.0
-    static let recenterAnimationDuration = 0.15
+    static let TotalRotationInDegrees = 10.0
+    static let DeleteThreshold = CGFloat(140)
+    static let TotalScale = CGFloat(0.9)
+    static let TotalAlpha = CGFloat(0.7)
+    static let MinExitVelocity = CGFloat(800.0)
+    static let RecenterAnimationDuration = NSTimeInterval(0.15)
 }
 
 private protocol TabCellDelegate {
@@ -179,7 +179,7 @@ private class TabCell: UITableViewCell {
         switch (recognizer.state) {
         case .Began:
             self.startLocation = self.backgroundHolder.center;
-            break
+            
         case .Changed:
             let translation = recognizer.translationInView(self)
             let newLocation =
@@ -187,15 +187,15 @@ private class TabCell: UITableViewCell {
             self.backgroundHolder.center = newLocation
             
             // Calculate values to determine the amount we need to scale/rotate with
-            let distanceFromCenter = CGFloat(abs(self.originalCenter.x - self.backgroundHolder.center.x))
-            let halfWidth = self.frame.size.width / CGFloat(2)
-            let totalRotationInRadians = CGFloat(TabCellUX.totalRotationInDegrees / 180.0 * M_PI)
+            let distanceFromCenter = abs(self.originalCenter.x - self.backgroundHolder.center.x)
+            let halfWidth = self.frame.size.width / 2
+            let totalRotationInRadians = CGFloat(TabCellUX.TotalRotationInDegrees / 180.0 * M_PI)
             
             // Determine rotation / scaling amounts by the distance to the edge
             var rotation = (distanceFromCenter / halfWidth) * totalRotationInRadians
             rotation *= self.originalCenter.x - self.backgroundHolder.center.x > 0 ? -1 : 1
-            var scale = 1 - (distanceFromCenter / halfWidth) * (1 - TabCellUX.totalScale)
-            let alpha = 1 - (distanceFromCenter / halfWidth) * (1 - TabCellUX.totalAlpha)
+            var scale = 1 - (distanceFromCenter / halfWidth) * (1 - TabCellUX.TotalScale)
+            let alpha = 1 - (distanceFromCenter / halfWidth) * (1 - TabCellUX.TotalAlpha)
             
             let rotationTransform = CGAffineTransformMakeRotation(rotation)
             let scaleTransform = CGAffineTransformMakeScale(scale, scale)
@@ -203,28 +203,26 @@ private class TabCell: UITableViewCell {
             
             self.backgroundHolder.transform = combinedTransform
             self.backgroundHolder.alpha = alpha
-            break
             
         case .Cancelled:
             self.backgroundHolder.center = self.originalCenter
             self.backgroundHolder.transform = CGAffineTransformIdentity
             self.backgroundHolder.alpha = 1
-            break
             
         case .Ended:
-            if (abs((Int)(self.backgroundHolder.center.x - self.center.x)) > TabCellUX.deleteThreshold) {
+            if (abs(self.backgroundHolder.center.x - self.center.x) > TabCellUX.DeleteThreshold) {
                 let velocity = recognizer.velocityInView(self)
-                let actualVelocity = max(Double(abs(velocity.x)), TabCellUX.minExitVelocity)
+                let actualVelocity = max(abs(velocity.x), TabCellUX.MinExitVelocity)
                 
                 // Calculate the edge to calculate distance from
                 let edgeX = velocity.x > 0 ? CGRectGetMaxX(self.frame) : CGRectGetMinX(self.frame)
                 var distance
-                    = CGFloat((self.backgroundHolder.frame.size.width / 2) + abs(self.backgroundHolder.center.x - edgeX))
+                    = (self.backgroundHolder.frame.size.width / 2) + abs(self.backgroundHolder.center.x - edgeX)
                 
                 // Determine which way we need to travel
                 distance *= velocity.x > 0 ? 1 : -1
                 
-                let timeStep: NSTimeInterval = Double(abs(distance)) / actualVelocity
+                let timeStep = NSTimeInterval(abs(distance) / actualVelocity)
                 UIView.animateWithDuration(timeStep, animations: {
                     let animatedPosition
                         = CGPoint(x: self.backgroundHolder.center.x + distance, y: self.backgroundHolder.center.y)
@@ -236,13 +234,12 @@ private class TabCell: UITableViewCell {
                     }
                 })
             } else {
-                UIView.animateWithDuration(TabCellUX.recenterAnimationDuration, animations: {
+                UIView.animateWithDuration(TabCellUX.RecenterAnimationDuration, animations: {
                     self.backgroundHolder.transform = CGAffineTransformIdentity
                     self.backgroundHolder.center = self.originalCenter
                     self.backgroundHolder.alpha = 1
                 })
             }
-            break
             
         default:
             break
