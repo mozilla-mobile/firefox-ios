@@ -14,8 +14,8 @@ public struct AppConstants {
 
     static let DefaultPadding: CGFloat = 10
 
-    static let DefaultMediumFont = UIFont(name: "HelveticaNeue", size: 13)
-    static let DefaultSmallFont = UIFont(name: "HelveticaNeue", size: 11)
+    static let DefaultMediumFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 13)
+    static let DefaultSmallFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 11)
 
     // These highlight colors are currently only used on Snackbar buttons when they're pressed
     static let HighlightColor = UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9)

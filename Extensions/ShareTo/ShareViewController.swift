@@ -56,11 +56,13 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         
         navItem = UINavigationItem()
         navItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
-        navItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 17.0)!], forState: UIControlState.Normal)
+        let leftFontName = UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue"
+        navItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: leftFontName, size: 17.0)!], forState: UIControlState.Normal)
         
         navItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: UIBarButtonItemStyle.Done, target: self, action: "add")
-        navItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "HelveticaNeue-Medium", size: 17.0)!], forState: UIControlState.Normal)
-        
+        let rightFontName = UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Bold" : "HelveticaNeue-Medium"
+        navItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: UIFont(name: rightFontName, size: 17.0)!], forState: UIControlState.Normal)
+
         let size = 44.0 * 0.7
         let logo = UIImageView(frame: CGRect(x: 0, y: 0, width: size, height: size))
         logo.image = UIImage(named: "flat-logo")
@@ -76,7 +78,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         titleView.numberOfLines = 3
         titleView.lineBreakMode = NSLineBreakMode.ByWordWrapping
         titleView.text = item.title
-        titleView.font = UIFont(name: "HelveticaNeue-Medium", size: 12)
+        titleView.font = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Bold" : "HelveticaNeue-Medium", size: 12)
         view.addSubview(titleView)
         
         // Setup the link view
@@ -86,7 +88,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         linkView.numberOfLines = 3
         linkView.lineBreakMode = NSLineBreakMode.ByWordWrapping
         linkView.text = item.url
-        linkView.font = UIFont(name: "HelveticaNeue", size: 10)
+        linkView.font = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 10)
         view.addSubview(linkView)
         
         // Setup the icon
@@ -186,7 +188,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor(red:0.733, green:0.729, blue:0.757, alpha:1.000)
-        cell.textLabel?.font = UIFont(name: "HelveticaNeue", size: 17)
+        cell.textLabel?.font = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 17)
         cell.imageView?.transform = CGAffineTransformMakeScale(0.5, 0.5)
         cell.accessoryType = selectedShareDestinations.containsObject(ShareDestinations[indexPath.row].code) ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
         cell.tintColor = UIColor(red:0.427, green:0.800, blue:0.102, alpha:1.0)
