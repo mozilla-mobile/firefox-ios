@@ -6,6 +6,13 @@ import Foundation
 
 let HistoryVisits = "history-visits"
 
+// Helper function for sorting by frecency
+func getFrecency() -> String {
+    let now = NSDate().timeIntervalSince1970
+    let age = "(\(now) - visitDate) / 86400"
+    return "visits * MAX(1, 100 * 225 / (\(age) * \(age) + 225))"
+}
+
 // This isn't a real table. Its an abstraction around the history and visits table
 // to simpify queries that should join both tables. It also handles making sure that
 // inserts/updates/delete update both tables appropriately. i.e.
@@ -120,8 +127,8 @@ class JoinedHistoryVisitsTable: Table {
         site.id = result["historyId"] as? Int
 
         let d = NSDate(timeIntervalSince1970: result["visitDate"] as Double)
-        let type = VisitType(rawValue: result["visitType"] as Int)
-        let visit = Visit(site: site, date: d, type: type!)
+        // This visit is a combination of multiple visits. Type is meaningless.
+        let visit = Visit(site: site, date: d, type: VisitType.Unknown)
         visit.id = result["visitId"] as? Int
 
         site.latestVisit = visit
@@ -132,12 +139,15 @@ class JoinedHistoryVisitsTable: Table {
             site.icon = icon
         }
 
+        let dt2 = (NSDate().timeIntervalSince1970 - visit.date.timeIntervalSince1970) / 86400
+        println("DT \(site.url): \(dt2)")
+
         return (site, visit)
     }
 
     func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor {
         var args = [AnyObject?]()
-        var sql = "SELECT \(history.name).id as historyId, \(history.name).url as siteUrl, title, guid, \(visits.name).id as visitId, \(visits.name).date as visitDate, \(visits.name).type as visitType, " +
+        var sql = "SELECT \(history.name).id as historyId, \(history.name).url as siteUrl, title, guid, max(\(visits.name).date) as visitDate, count(\(visits.name).id) as visits, " +
                   "\(favicons.name).id as faviconId, \(favicons.name).url as iconUrl, \(favicons.name).date as iconDate, \(favicons.name).type as iconType FROM \(visits.name) " +
                   "INNER JOIN \(history.name) ON \(history.name).id = \(visits.name).siteId " +
                   "LEFT JOIN \(faviconSites.name) ON \(faviconSites.name).siteId = \(history.name).id LEFT JOIN \(favicons.name) ON \(faviconSites.name).faviconId = \(favicons.name).id ";
@@ -150,13 +160,15 @@ class JoinedHistoryVisitsTable: Table {
         sql += "GROUP BY historyId";
 
         // Trying to do this in one line (i.e. options?.sort == .LastVisit) breaks the Swift compiler
+        println("Sort: \(options?.sort)")
         if let sort = options?.sort {
             if sort == .LastVisit {
                 sql += " ORDER BY visitDate DESC"
+            } else if sort == .Frecency {
+                sql += " ORDER BY \(getFrecency()) DESC"
             }
         }
 
-        // println("Query \(sql) \(args)")
         return db.executeQuery(sql, factory: factory, withArgs: args)
     }
 }
