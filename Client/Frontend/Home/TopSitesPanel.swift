@@ -204,6 +204,11 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         return data.count
     }
 
+    private func setDefaultThumbnailBackground(cell: ThumbnailCell) {
+        cell.imageView.image = UIImage(named: "defaultFavicon")!
+        cell.imageView.contentMode = UIViewContentMode.Center
+    }
+
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let site = data[indexPath.item] as Site
 
@@ -211,14 +216,15 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         if indexPath.item < 6 {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as ThumbnailCell
             cell.textLabel.text = site.title.isEmpty ? site.url : site.title
-            cell.image = nil
-
-            if let url = NSURL(string: site.url) {
-                profile.thumbnails.get(url) { (thumbnail: Thumbnail?) in
-                    if let thumbnail = thumbnail {
-                        cell.image = thumbnail.image
+            if let thumbs = profile.thumbnails as? SDWebThumbnails {
+                cell.imageView.moz_getImageFromCache(site.url, cache: thumbs.cache, completed: { (img, err, type, url) -> Void in
+                    if img != nil {
+                        return
                     }
-                }
+                    self.setDefaultThumbnailBackground(cell)
+                })
+            } else {
+                setDefaultThumbnailBackground(cell)
             }
             return cell
         }

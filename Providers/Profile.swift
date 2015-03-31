@@ -97,7 +97,7 @@ public class MockProfile: Profile {
     }()
 
     lazy var thumbnails: Thumbnails = {
-        return FileThumbnails(files: self.files)
+        return SDWebThumbnails(files: self.files)
     }()
 
     let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
@@ -192,7 +192,7 @@ public class BrowserProfile: Profile {
     }()
 
     lazy var thumbnails: Thumbnails = {
-        return FileThumbnails(files: self.files)
+        return SDWebThumbnails(files: self.files)
     }()
 
     let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()

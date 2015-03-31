@@ -18,7 +18,7 @@ struct ThumbnailCellUX {
 
 class ThumbnailCell: UICollectionViewCell {
     let textLabel = UILabel()
-    private let imageView = UIImageViewAligned()
+    let imageView = UIImageViewAligned()
 
     override init() {
         super.init()
