@@ -13,11 +13,15 @@ import Shared
  * See docs/sync.md for details on what exactly we need to persist.
  */
 
+public struct Fetched<T> {
+    let value: T
+    let timestamp: UInt64
+}
+
 /**
  * The scratchpad consists of the following:
  *
- * 1. Cached records. For example, we typically fetch info/collections only once,
- *    caching it during a sync. We cache meta/global until it changes.
+ * 1. Cached records. We cache meta/global and crypto/keys until they change.
  * 2. Metadata like timestamps.
  *
  * Note that the scratchpad itself is immutable, but is a class passed by reference.
@@ -28,28 +32,44 @@ public class Scratchpad {
     let syncKeyBundle: KeyBundle
 
     // Cached records.
-    let global: MetaGlobal?
-    let infoCollections: InfoCollections?
+    let global: Fetched<MetaGlobal>?
+    let keys: Fetched<Keys>?
+
+    // Collection timestamps.
+    let modified: [String: UInt64]
 
     init(b: KeyBundle) {
         self.syncKeyBundle = b
+        self.modified = [String: UInt64]()
     }
 
-    init(b: KeyBundle, m: MetaGlobal?, i: InfoCollections?) {
+    init(b: KeyBundle, m: Fetched<MetaGlobal>?, k: Fetched<Keys>?, modified: [String: UInt64]) {
         self.syncKeyBundle = b
+        self.keys = k
         self.global = m
-        self.infoCollections = i
+        self.modified = modified
     }
 
-    convenience init(b: KeyBundle, m: GlobalEnvelope?, i: InfoCollections?) {
-        self.init(b: b, m: m?.global, i: i)
+    convenience init(b: KeyBundle, m: Fetched<MetaGlobal>?, k: Fetched<Keys>?) {
+        self.init(b: b, m: m, k: k, modified: [String: UInt64]())
+    }
+
+    convenience init(b: KeyBundle, m: GlobalEnvelope?, k: Fetched<Keys>?, modified: [String: UInt64]) {
+        var fetchedGlobal: Fetched<MetaGlobal>? = nil
+        if let m = m {
+            if let global = m.global {
+                fetchedGlobal = Fetched<MetaGlobal>(value: global, timestamp: m.modified)
+            }
+        }
+        self.init(b: b, m: fetchedGlobal, k: k, modified: modified)
     }
 
     func withGlobal(m: GlobalEnvelope) -> Scratchpad {
-        return Scratchpad(b: self.syncKeyBundle, m: m, i: self.infoCollections)
+        return Scratchpad(b: self.syncKeyBundle, m: m, k: self.keys, modified: self.modified)
     }
 
-    func withInfo(i: InfoCollections) -> Scratchpad {
-        return Scratchpad(b: self.syncKeyBundle, m: self.global, i: i)
+    func withKeys(k: Keys, t: UInt64) -> Scratchpad {
+        let f = Fetched(value: k, timestamp: t)
+        return Scratchpad(b: self.syncKeyBundle, m: self.global, k: f, modified: self.modified)
     }
 }
