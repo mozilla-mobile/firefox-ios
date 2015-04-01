@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import UIKit
@@ -17,24 +17,24 @@ let ImageStop = UIImage(named: "toolbar_stop.png")
 
 class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     var delegate: BrowserLocationViewDelegate?
-    
+
     private var lockImageView: UIImageView!
     private var locationLabel: UILabel!
     private var stopReloadButton: UIButton!
     private var readerModeButton: ReaderModeButton!
     var readerModeButtonWidthConstraint: NSLayoutConstraint?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.whiteColor()
         self.layer.cornerRadius = 2
-        
+
         lockImageView = UIImageView(image: UIImage(named: "lock_verified.png"))
         lockImageView.hidden = false
         lockImageView.isAccessibilityElement = true
         lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")
         addSubview(lockImageView)
-        
+
         locationLabel = UILabel()
         locationLabel.font = AppConstants.DefaultMediumFont
         locationLabel.lineBreakMode = .ByClipping
@@ -43,34 +43,34 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         // TODO: This label isn't useful for people. We probably want this to be the page title or URL (see Safari).
         locationLabel.accessibilityLabel = NSLocalizedString("URL", comment: "Accessibility label for the URL location label")
         addSubview(locationLabel)
-        
+
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocationLabel:")
         locationLabel.addGestureRecognizer(tapGestureRecognizer)
-        
+
         stopReloadButton = UIButton()
         stopReloadButton.setImage(ImageReload, forState: .Normal)
         stopReloadButton.addTarget(self, action: "SELtapStopReload", forControlEvents: .TouchUpInside)
+        stopReloadButton.isAccessibilityElement = true
+        stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility label for the reload button")
         addSubview(stopReloadButton)
-        
+
         readerModeButton = ReaderModeButton(frame: CGRectZero)
         readerModeButton.hidden = true
         readerModeButton.addTarget(self, action: "SELtapReaderModeButton", forControlEvents: .TouchUpInside)
         addSubview(readerModeButton)
-        readerModeButton.isAccessibilityElement = true
-        readerModeButton.accessibilityLabel = NSLocalizedString("Reader Mode", comment: "Accessibility label for the reader mode button")
     }
-    
+
     override func updateConstraints() {
         super.updateConstraints()
-        
+
         let container = self
-        
+
         lockImageView.snp_remakeConstraints { make in
             make.centerY.equalTo(container).centerY
             make.leading.equalTo(container).with.offset(8)
             make.width.equalTo(self.lockImageView.intrinsicContentSize().width)
         }
-        
+
         locationLabel.snp_remakeConstraints { make in
             make.centerY.equalTo(container.snp_centerY)
             if self.url?.scheme == "https" {
@@ -78,24 +78,24 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
             } else {
                 make.leading.equalTo(container).with.offset(8)
             }
-            
+
             if self.readerModeButton.readerModeState == ReaderModeState.Unavailable {
                 make.trailing.equalTo(self.stopReloadButton.snp_leading).with.offset(-8)
             } else {
                 make.trailing.equalTo(self.readerModeButton.snp_leading).with.offset(-8)
             }
         }
-        
+
         stopReloadButton.snp_remakeConstraints { make in
             make.centerY.equalTo(container).centerY
             make.trailing.equalTo(container).with.offset(-4)
             make.size.equalTo(20)
         }
-        
+
         readerModeButton.snp_remakeConstraints { make in
             make.centerY.equalTo(container).centerY
             make.trailing.equalTo(self.stopReloadButton.snp_leading).offset(-4)
-            
+
             // We fix the width of the button (to the height of the view) to prevent content
             // compression when the locationLabel has more text contents than will fit. It
             // would be nice to do this with a content compression priority but that does
@@ -103,23 +103,23 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
             make.width.equalTo(container.snp_height)
         }
     }
-    
+
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func intrinsicContentSize() -> CGSize {
         return CGSize(width: 200, height: 28)
     }
-    
+
     func SELtapLocationLabel(recognizer: UITapGestureRecognizer) {
         delegate?.browserLocationViewDidTapLocation(self)
     }
-    
+
     func SELtapReaderModeButton() {
         delegate?.browserLocationViewDidTapReaderMode(self)
     }
-    
+
     func SELtapStopReload() {
         if loading {
             delegate?.browserLocationViewDidTapStop(self)
@@ -127,7 +127,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
             delegate?.browserLocationViewDidTapReload(self)
         }
     }
-    
+
     var url: NSURL? {
         didSet {
             lockImageView.hidden = (url?.scheme != "https")
@@ -145,21 +145,17 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
             setNeedsUpdateConstraints()
         }
     }
-    
+
     var loading: Bool = false {
         didSet {
             if loading {
                 stopReloadButton.setImage(ImageStop, forState: .Normal)
-                stopReloadButton.isAccessibilityElement = true
-                stopReloadButton.accessibilityLabel = NSLocalizedString("Stop", comment: "Accessibility label for the stop button")
             } else {
                 stopReloadButton.setImage(ImageReload, forState: .Normal)
-                stopReloadButton.isAccessibilityElement = true
-                stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility label for the reload button")
             }
         }
     }
-    
+
     var readerModeState: ReaderModeState {
         get {
             return readerModeButton.readerModeState
@@ -180,7 +176,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
             }
         }
     }
-    
+
     override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
         // We only care about the horizontal position of this touch. Find the first
         // subview that takes up that space and return it.
@@ -191,7 +187,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
                 return view as? UIView
             }
         }
-        
+
         return nil
     }
 }
