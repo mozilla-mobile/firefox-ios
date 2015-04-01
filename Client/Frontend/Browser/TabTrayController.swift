@@ -17,19 +17,22 @@ private struct TabTrayControllerUX {
     static let TabTitleTextFont = AppConstants.DefaultSmallFont
 }
 
+
 // UITableViewController doesn't let us specify a style for recycling views. We override the default style here.
-private class CustomCell: UITableViewCell {
+private class TabCell: UITableViewCell {
     let backgroundHolder: UIView
     let background: UIImageViewAligned
     let titleText: UILabel
     let title: UIView
     let innerStroke: InnerStrokedView
     let favicon: UIImageView
-
+    
     // Changes depending on whether we're full-screen or not.
     var margin = TabTrayControllerUX.Margin
-
+    var animator: SwipeAnimator!
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        
         self.backgroundHolder = UIView()
         self.backgroundHolder.layer.shadowColor = UIColor.blackColor().CGColor
         self.backgroundHolder.layer.shadowOffset = CGSizeMake(0, 2.0)
@@ -64,19 +67,55 @@ private class CustomCell: UITableViewCell {
 
         self.innerStroke = InnerStrokedView(frame: self.backgroundHolder.frame)
         self.innerStroke.layer.backgroundColor = UIColor.clearColor().CGColor
-
+        
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        self.animator = SwipeAnimator(animatingView: self.backgroundHolder,
+            containerView: self, ux: SwipeAnimatorUX())
+        
         backgroundHolder.addSubview(self.background)
         addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.title)
         backgroundHolder.addSubview(innerStroke)
-
+        
         backgroundColor = UIColor.clearColor()
 
         selectionStyle = .None
         self.titleText.addObserver(self, forKeyPath: "contentSize", options: .New, context: nil)
+        setupFrames()
+        
+        self.animator.originalCenter = CGPoint(x: UIScreen.mainScreen().bounds.width / 2, y: TabTrayControllerUX.CellHeight / 2)
     }
+    
+    func setupFrames() {
+        // Will need to be updated when moving to collection view using collection view's sizeForItem
+        let w = UIScreen.mainScreen().bounds.width - (2 * margin)
+        let h = TabTrayControllerUX.CellHeight - margin
+        
+        backgroundHolder.frame = CGRect(x: margin,
+            y: margin,
+            width: w,
+            height: h)
+        background.frame = CGRect(origin: CGPointMake(0, 0), size: backgroundHolder.frame.size)
+        
+        title.frame = CGRect(x: 0,
+            y: 0,
+            width: backgroundHolder.frame.width,
+            height: TabTrayControllerUX.TextBoxHeight)
 
+        favicon.frame = CGRect(x: 6, y: (TabTrayControllerUX.TextBoxHeight - 16)/2, width: 16, height: 16)
+
+        let titleTextLeft = favicon.frame.origin.x + favicon.frame.width + 6
+        titleText.frame = CGRect(x: titleTextLeft,
+            y: 0,
+            width: title.frame.width - titleTextLeft - margin,
+            height: title.frame.height)
+
+        innerStroke.frame = background.frame
+        
+        verticalCenter(titleText)
+    }
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -117,35 +156,127 @@ private class CustomCell: UITableViewCell {
         title.alpha = 1
         setNeedsLayout()
     }
+    
+    var tab: Browser? {
+        didSet {
+            titleText.text = tab?.title
+        }
+    }
+}
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+struct SwipeAnimatorUX {
+    let totalRotationInDegrees = 10.0
+    let deleteThreshold = CGFloat(140)
+    let totalScale = CGFloat(0.9)
+    let totalAlpha = CGFloat(0.7)
+    let minExitVelocity = CGFloat(800.0)
+    let recenterAnimationDuration = NSTimeInterval(0.15)
+}
 
-        let w = frame.width - 2 * margin
-        let h = frame.height - 2 * margin
+private protocol SwipeAnimatorDelegate {
+    func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView)
+}
 
-        backgroundHolder.frame = CGRect(x: margin,
-            y: margin,
-            width: w,
-            height: h)
-        background.frame = CGRect(origin: CGPointMake(0, 0), size: backgroundHolder.frame.size)
+private class SwipeAnimator: NSObject {
+    let animatingView: UIView
+    let container: UIView
+    let ux: SwipeAnimatorUX
+    
+    var originalCenter: CGPoint!
+    var startLocation: CGPoint!
+    var delegate: SwipeAnimatorDelegate?
+    
+    init(animatingView view: UIView, containerView: UIView, ux swipeUX: SwipeAnimatorUX) {
+        animatingView = view
+        container = containerView
+        ux = swipeUX
+        
+        super.init()
+        
+        let panGesture = UIPanGestureRecognizer(target: self, action: Selector("SELdidPan:"))
+        container.addGestureRecognizer(panGesture)
+        panGesture.delegate = self
+    }
+    
+    @objc func SELdidPan(recognizer: UIPanGestureRecognizer!) {
+        switch (recognizer.state) {
+        case .Began:
+            self.startLocation = self.animatingView.center;
+            
+        case .Changed:
+            let translation = recognizer.translationInView(self.container)
+            let newLocation =
+                CGPoint(x: self.startLocation.x + translation.x, y: self.animatingView.center.y)
+            self.animatingView.center = newLocation
+            
+            // Calculate values to determine the amount we need to scale/rotate with
+            let distanceFromCenter = abs(self.originalCenter.x - self.animatingView.center.x)
+            let halfWidth = self.container.frame.size.width / 2
+            let totalRotationInRadians = CGFloat(self.ux.totalRotationInDegrees / 180.0 * M_PI)
+            
+            // Determine rotation / scaling amounts by the distance to the edge
+            var rotation = (distanceFromCenter / halfWidth) * totalRotationInRadians
+            rotation *= self.originalCenter.x - self.animatingView.center.x > 0 ? -1 : 1
+            var scale = 1 - (distanceFromCenter / halfWidth) * (1 - self.ux.totalScale)
+            let alpha = 1 - (distanceFromCenter / halfWidth) * (1 - self.ux.totalAlpha)
+            
+            let rotationTransform = CGAffineTransformMakeRotation(rotation)
+            let scaleTransform = CGAffineTransformMakeScale(scale, scale)
+            let combinedTransform = CGAffineTransformConcat(rotationTransform, scaleTransform)
+            
+            self.animatingView.transform = combinedTransform
+            self.animatingView.alpha = alpha
+            
+        case .Cancelled:
+            self.animatingView.center = self.originalCenter
+            self.animatingView.transform = CGAffineTransformIdentity
+            self.animatingView.alpha = 1
+            
+        case .Ended:
+            if (abs(self.animatingView.center.x - self.container.center.x) > self.ux.deleteThreshold) {
+                let velocity = recognizer.velocityInView(self.container)
+                let actualVelocity = max(abs(velocity.x), self.ux.minExitVelocity)
+                
+                // Calculate the edge to calculate distance from
+                let edgeX = velocity.x > 0 ? CGRectGetMaxX(self.container.frame) :
+                    CGRectGetMinX(self.container.frame)
+                var distance
+                    = (self.animatingView.frame.size.width / 2) + abs(self.animatingView.center.x - edgeX)
+                
+                // Determine which way we need to travel
+                distance *= velocity.x > 0 ? 1 : -1
+                
+                let timeStep = NSTimeInterval(abs(distance) / actualVelocity)
+                UIView.animateWithDuration(timeStep, animations: {
+                    let animatedPosition
+                        = CGPoint(x: self.animatingView.center.x + distance, y: self.animatingView.center.y)
+                    self.animatingView.center = animatedPosition
+                }, completion: { finished in
+                    if finished {
+                        self.animatingView.hidden = true
+                        self.delegate?.swipeAnimator(self, viewDidExitContainerBounds: self.animatingView)
+                    }
+                })
+            } else {
+                UIView.animateWithDuration(self.ux.recenterAnimationDuration, animations: {
+                    self.animatingView.transform = CGAffineTransformIdentity
+                    self.animatingView.center = self.originalCenter
+                    self.animatingView.alpha = 1
+                })
+            }
+            
+        default:
+            break
+        }
+    }
+}
 
-        title.frame = CGRect(x: 0,
-            y: 0,
-            width: backgroundHolder.frame.width,
-            height: TabTrayControllerUX.TextBoxHeight)
-
-        favicon.frame = CGRect(x: 6, y: (TabTrayControllerUX.TextBoxHeight - 16)/2, width: 16, height: 16)
-
-        let titleTextLeft = favicon.frame.origin.x + favicon.frame.width + 6
-        titleText.frame = CGRect(x: titleTextLeft,
-            y: 0,
-            width: title.frame.width - titleTextLeft - margin,
-            height: title.frame.height)
-
-        innerStroke.frame = background.frame
-
-        verticalCenter(titleText)
+extension SwipeAnimator: UIGestureRecognizerDelegate {
+    private func gestureRecognizerShouldBegin(recognizer: UIGestureRecognizer) -> Bool {
+        let cellView = recognizer.view as UIView!
+        let panGesture = recognizer as UIPanGestureRecognizer
+        let translation = panGesture.translationInView(cellView.superview!)
+        return fabs(translation.x) > fabs(translation.y)
     }
 }
 
@@ -189,7 +320,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .None
-        tableView.registerClass(CustomCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.registerClass(TabCell.self, forCellReuseIdentifier: CellIdentifier)
         tableView.contentInset = UIEdgeInsets(top: AppConstants.StatusBarHeight + AppConstants.ToolbarHeight, left: 0, bottom: 0, right: 0)
         tableView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
@@ -243,27 +374,27 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let tab = tabManager.getTab(indexPath.item)
-        let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as CustomCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as TabCell
+        cell.animator.delegate = self
         cell.titleText.text = tab.displayTitle
+
         let screenshotAspectRatio = tableView.frame.width / TabTrayControllerUX.CellHeight
         cell.background.image = screenshotHelper.takeScreenshot(tab, aspectRatio: screenshotAspectRatio, quality: 1)
         return cell
     }
-
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        let tab = tabManager.getTab(indexPath.item)
-        tabManager.removeTab(tab)
-        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+    
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return .None
     }
 }
 
 extension TabTrayController: Transitionable {
-    private func getTransitionCell(options: TransitionOptions, browser: Browser?) -> CustomCell {
-        var transitionCell: CustomCell
-        if let cell = options.moving as? CustomCell {
+    private func getTransitionCell(options: TransitionOptions, browser: Browser?) -> TabCell {
+        var transitionCell: TabCell
+        if let cell = options.moving as? TabCell {
             transitionCell = cell
         } else {
-            transitionCell = CustomCell(style: UITableViewCellStyle.Default, reuseIdentifier: "id")
+            transitionCell = TabCell(style: UITableViewCellStyle.Default, reuseIdentifier: "id")
             options.moving = transitionCell
         }
 
@@ -311,6 +442,17 @@ extension TabTrayController: Transitionable {
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
         if let cell = options.moving {
             cell.removeFromSuperview()
+        }
+    }
+}
+
+extension TabTrayController: SwipeAnimatorDelegate {
+    private func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView) {
+        let tabCell = animator.container as UITableViewCell
+        if let indexPath = self.tableView.indexPathForCell(tabCell) {
+            let tab = tabManager.getTab(indexPath.item)
+            tabManager.removeTab(tab)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
         }
     }
 }
