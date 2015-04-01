@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-public class NSUserDefaultsProfilePrefs : Prefs {
+public class NSUserDefaultsProfilePrefs: Prefs {
     private let profile: Profile
     private let prefix: String
     private let userDefaults: NSUserDefaults
@@ -20,6 +20,10 @@ public class NSUserDefaultsProfilePrefs : Prefs {
     // Connecting a profile to a Firefox Account, or changing to another, won't alter this.
     private func qualifyKey(key: String) -> String {
         return self.prefix + key
+    }
+
+    public func setLong(value: UInt64, forKey defaultName: String) {
+        setObject(NSNumber(unsignedLongLong: value), forKey: defaultName)
     }
 
     public func setLong(value: Int64, forKey defaultName: String) {
@@ -42,12 +46,16 @@ public class NSUserDefaultsProfilePrefs : Prefs {
         return userDefaults.objectForKey(qualifyKey(defaultName)) as? Bool
     }
 
+    private func nsNumberForKey(defaultName: String) -> NSNumber? {
+        return userDefaults.objectForKey(qualifyKey(defaultName)) as? NSNumber
+    }
+
+    public func unsignedLongForKey(defaultName: String) -> UInt64? {
+        return nsNumberForKey(defaultName)?.unsignedLongLongValue
+    }
+
     public func longForKey(defaultName: String) -> Int64? {
-        let num = userDefaults.objectForKey(qualifyKey(defaultName)) as? NSNumber
-        if let num = num {
-            return num.longLongValue
-        }
-        return nil
+        return nsNumberForKey(defaultName)?.longLongValue
     }
 
     public func stringArrayForKey(defaultName: String) -> [String]? {

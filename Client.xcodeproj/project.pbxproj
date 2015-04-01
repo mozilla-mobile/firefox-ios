@@ -93,6 +93,7 @@
 		28A6CE8A1AC082E200C1A2D4 /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */; };
 		28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
+		28F596A11ACA13CA0071DDCC /* InfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F596A01ACA13CA0071DDCC /* InfoTests.swift */; };
 		28F657C01ABFC97D00A608BD /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BE1A1D1D3200576538 /* Record.swift */; };
 		28F657DB1ABFC98300A608BD /* ClientPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BB1A1D1D3200576538 /* ClientPayload.swift */; };
 		28F657DC1ABFC98300A608BD /* KeyBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BC1A1D1D3200576538 /* KeyBundle.swift */; };
@@ -957,6 +958,7 @@
 		28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FxA.xcodeproj; path = FxA/FxA.xcodeproj; sourceTree = "<group>"; };
 		28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Client-Bridging-Header.h"; sourceTree = "<group>"; };
 		28CE842F1A1E571900576538 /* json.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = json.swift; path = ThirdParty/json.swift; sourceTree = "<group>"; };
+		28F596A01ACA13CA0071DDCC /* InfoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoTests.swift; path = SyncTests/InfoTests.swift; sourceTree = "<group>"; };
 		2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensionsTests.swift; sourceTree = "<group>"; };
 		2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Account-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -1417,6 +1419,7 @@
 				2FEBABAE1AB3659000DB5728 /* ResultTests.swift */,
 				28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */,
 				2F3724C51ABF3C01007607FA /* StorageClientTests.swift */,
+				28F596A01ACA13CA0071DDCC /* InfoTests.swift */,
 				2827316F1ABC9BE700AA1954 /* Supporting Files */,
 			);
 			name = SyncTests;
@@ -2876,6 +2879,8 @@
 				285D37E31ABCA69E000E1CF9 /* CryptoTests.swift in Sources */,
 				28F657DD1ABFC98300A608BD /* KeysPayload.swift in Sources */,
 				28F657DC1ABFC98300A608BD /* KeyBundle.swift in Sources */,
+				28F596A11ACA13CA0071DDCC /* InfoTests.swift in Sources */,
+				28F596851ACA059F0071DDCC /* State.swift in Sources */,
 				28926B3B1AC0F128009C0B1D /* CleartextPayloadJSON.swift in Sources */,
 				282731A01ABC9C5900AA1954 /* ResultTests.swift in Sources */,
 				2F3724E81ABF3C19007607FA /* StorageClient.swift in Sources */,

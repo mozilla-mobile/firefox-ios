@@ -5,11 +5,13 @@
 import Foundation
 
 public protocol Prefs {
+    func setLong(value: UInt64, forKey defaultName: String)
     func setLong(value: Int64, forKey defaultName: String)
     func setObject(value: AnyObject?, forKey defaultName: String)
     func stringForKey(defaultName: String) -> String?
     func boolForKey(defaultName: String) -> Bool?
     func longForKey(defaultName: String) -> Int64?
+    func unsignedLongForKey(defaultName: String) -> UInt64?
     func stringArrayForKey(defaultName: String) -> [String]?
     func arrayForKey(defaultName: String) -> [AnyObject]?
     func dictionaryForKey(defaultName: String) -> [String : AnyObject]?
@@ -21,6 +23,10 @@ public class MockProfilePrefs : Prefs {
     var things: NSMutableDictionary = NSMutableDictionary()
 
     public init() {
+    }
+
+    public func setLong(value: UInt64, forKey defaultName: String) {
+        setObject(NSNumber(unsignedLongLong: value), forKey: defaultName)
     }
 
     public func setLong(value: Int64, forKey defaultName: String) {
@@ -37,6 +43,14 @@ public class MockProfilePrefs : Prefs {
 
     public func boolForKey(defaultName: String) -> Bool? {
         return things[defaultName] as? Bool
+    }
+
+    public func unsignedLongForKey(defaultName: String) -> UInt64? {
+        let num = things[defaultName] as? NSNumber
+        if let num = num {
+            return num.unsignedLongLongValue
+        }
+        return nil
     }
 
     public func longForKey(defaultName: String) -> Int64? {

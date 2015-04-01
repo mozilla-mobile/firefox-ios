@@ -32,7 +32,7 @@ public class ClientsSynchronizer: Synchronizer {
     }
 
     public func synchronize() {
-        if let last = prefs.longForKey(self.prefix + "last") {
+        if let last = prefs.unsignedLongForKey(self.prefix + "last") {
             if last == info.modified(self.collection) {
                 // Nothing to do.
                 return;
