@@ -143,7 +143,7 @@ public class BaseSyncStateWithInfo: BaseSyncState {
 /*
  * Error types.
  */
-public protocol SyncError {}
+public protocol SyncError: ErrorType {}
 
 public class CouldNotFetchMetaGlobalError: SyncError, ErrorType {
     public var description: String {
