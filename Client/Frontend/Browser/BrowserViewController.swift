@@ -13,26 +13,26 @@ private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
 
 private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
-
 private let HomeURL = "about:home"
 
 class BrowserViewController: UIViewController {
     private var urlBar: URLBarView!
     private var readerModeBar: ReaderModeBarView!
-    private var toolbar: BrowserToolbar!
+    private var toolbar: BrowserToolbar?
     private var tabManager: TabManager!
     private var homePanelController: HomePanelViewController?
     private var searchController: SearchViewController?
     private var webViewContainer: UIView!
     private let uriFixup = URIFixup()
     private var screenshotHelper: ScreenshotHelper!
+    private var homePanelIsInline: Bool = false
 
     var profile: Profile!
 
     // These views wrap the urlbar and toolbar to provide background effects on them
     private var header: UIView!
     private var footer: UIView!
-    private var footerBackground: UIView!
+    private var footerBackground: UIView?
     private var previousScroll: CGPoint? = nil
 
     required init(coder aDecoder: NSCoder) {
@@ -62,16 +62,51 @@ class BrowserViewController: UIViewController {
         return UIStatusBarStyle.Default
     }
 
+    private func shouldShowToolbar() -> Bool {
+        return traitCollection.verticalSizeClass != .Compact && traitCollection.horizontalSizeClass != .Regular
+    }
+
+    private func updateToolbarState() {
+        let showToolbar = shouldShowToolbar()
+
+        urlBar.setShowToolbar(!showToolbar)
+        toolbar?.removeFromSuperview()
+        toolbar?.browserToolbarDelegate = nil
+        footerBackground?.removeFromSuperview()
+        footerBackground = nil
+        toolbar = nil
+
+        if showToolbar {
+            toolbar = BrowserToolbar()
+            toolbar?.browserToolbarDelegate = self
+            footerBackground = wrapInEffect(toolbar!, parent: footer)
+        }
+
+        view.setNeedsUpdateConstraints()
+        if let home = homePanelController {
+            home.view.setNeedsUpdateConstraints()
+        }
+
+        if let tab = tabManager.selectedTab {
+            tab.webView.scrollView.contentInset = UIEdgeInsetsMake(AppConstants.ToolbarHeight + AppConstants.StatusBarHeight, 0, toolbar?.frame.height ?? 0, 0)
+        }
+    }
+
+    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
+        updateToolbarState()
+        super.traitCollectionDidChange(previousTraitCollection)
+    }
+
     override func viewDidLoad() {
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
-
 
         // Setup the URL bar, wrapped in a view to get transparency effect
         urlBar = URLBarView()
         urlBar.setTranslatesAutoresizingMaskIntoConstraints(false)
         urlBar.delegate = self
         header = wrapInEffect(urlBar, parent: view)
+        urlBar.browserToolbarDelegate = self
 
         // Setup the reader mode control bar. This bar starts not visible with a zero height.
         readerModeBar = ReaderModeBarView(frame: CGRectZero)
@@ -81,9 +116,6 @@ class BrowserViewController: UIViewController {
 
         footer = UIView()
         self.view.addSubview(footer)
-        toolbar = BrowserToolbar()
-        toolbar.browserToolbarDelegate = self
-        footerBackground = wrapInEffect(toolbar, parent: footer)
 
         tabManager.delegate = self
         tabManager.addTab()
@@ -115,32 +147,48 @@ class BrowserViewController: UIViewController {
         }
 
         // Setup the bottom toolbar
-        toolbar.snp_remakeConstraints { make in
-            make.edges.equalTo(self.footerBackground)
+        toolbar?.snp_remakeConstraints { make in
+            make.edges.equalTo(self.footerBackground!)
             make.height.equalTo(AppConstants.ToolbarHeight)
-            return
         }
 
         adjustFooterSize()
-        footerBackground.snp_remakeConstraints { make in
+        footerBackground?.snp_remakeConstraints { make in
             make.bottom.left.right.equalTo(self.footer)
             make.height.equalTo(AppConstants.ToolbarHeight)
         }
         urlBar.setNeedsUpdateConstraints()
+
+        // Remake constraints even if we're already showing the home controller.
+        // The home controller may change sizes if we tap the URL bar while on about:home.
+        homePanelController?.view.snp_remakeConstraints { make in
+            make.top.equalTo(self.urlBar.snp_bottom)
+            make.left.right.equalTo(self.view)
+            let url = self.tabManager.selectedTab?.url
+            if url?.absoluteString == HomeURL && self.homePanelIsInline {
+                make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
+            } else {
+                make.bottom.equalTo(self.view.snp_bottom)
+            }
+        }
+
         super.updateViewConstraints()
     }
 
     private func wrapInEffect(view: UIView, parent: UIView) -> UIView {
         let effect = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
         effect.setTranslatesAutoresizingMaskIntoConstraints(false)
-        parent.addSubview(effect);
+
         view.backgroundColor = UIColor.clearColor()
         effect.addSubview(view)
 
+        parent.addSubview(effect)
         return effect
     }
 
     private func showHomePanelController(#inline: Bool) {
+        homePanelIsInline = inline
+
         if homePanelController == nil {
             homePanelController = HomePanelViewController()
             homePanelController!.profile = profile
@@ -150,14 +198,7 @@ class BrowserViewController: UIViewController {
             view.addSubview(homePanelController!.view)
             addChildViewController(homePanelController!)
         }
-
-        // Remake constraints even if we're already showing the home controller.
-        // The home controller may change sizes if we tap the URL bar while on about:home.
-        homePanelController!.view.snp_remakeConstraints { make in
-            make.top.equalTo(self.urlBar.snp_bottom)
-            make.left.right.equalTo(self.view)
-            make.bottom.equalTo(inline ? self.toolbar.snp_top : self.view.snp_bottom)
-        }
+        view.setNeedsUpdateConstraints()
     }
 
     private func hideHomePanelController() {
@@ -221,15 +262,17 @@ class BrowserViewController: UIViewController {
 
         // Dispatch to the main thread to update the UI
         dispatch_async(dispatch_get_main_queue()) { _ in
-            self.toolbar.updateBookmarkStatus(true)
+            self.toolbar?.updateBookmarkStatus(true)
+            self.urlBar.updateBookmarkStatus(true)
         }
     }
 
     private func removeBookmark(url: String) {
         var bookmark = BookmarkItem(guid: "", title: "", url: url)
         profile.bookmarks.remove(bookmark, success: { success in
-            self.toolbar.updateBookmarkStatus(!success)
-            }, failure: { err in
+            self.toolbar?.updateBookmarkStatus(!success)
+            self.urlBar.updateBookmarkStatus(!success)
+        }, failure: { err in
                 println("Err removing bookmark \(err)")
         })
     }
@@ -332,29 +375,29 @@ extension BrowserViewController: URLBarDelegate {
 }
 
 extension BrowserViewController: BrowserToolbarDelegate {
-    func browserToolbarDidPressBack(browserToolbar: BrowserToolbar, button: UIButton) {
+    func browserToolbarDidPressBack(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         tabManager.selectedTab?.goBack()
     }
 
-    func browserToolbarDidLongPressBack(browserToolbar: BrowserToolbar, button: UIButton) {
+    func browserToolbarDidLongPressBack(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         let controller = BackForwardListViewController()
         controller.listData = tabManager.selectedTab?.backList
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
     }
 
-    func browserToolbarDidPressForward(browserToolbar: BrowserToolbar, button: UIButton) {
+    func browserToolbarDidPressForward(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         tabManager.selectedTab?.goForward()
     }
 
-    func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbar, button: UIButton) {
+    func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         let controller = BackForwardListViewController()
         controller.listData = tabManager.selectedTab?.forwardList
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
     }
 
-    func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbar, button: UIButton) {
+    func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         if let tab = tabManager.selectedTab? {
             if let url = tab.displayURL?.absoluteString {
                 profile.bookmarks.isBookmarked(url,
@@ -377,17 +420,18 @@ extension BrowserViewController: BrowserToolbarDelegate {
         }
     }
 
-    func browserToolbarDidLongPressBookmark(browserToolbar: BrowserToolbar, button: UIButton) {
+    func browserToolbarDidLongPressBookmark(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
     }
 
-    func browserToolbarDidPressShare(browserToolbar: BrowserToolbar, button: UIButton) {
+    func browserToolbarDidPressShare(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         if let selected = tabManager.selectedTab {
             if let url = selected.displayURL {
                 var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
                 if let popoverPresentationController = activityViewController.popoverPresentationController {
-                    popoverPresentationController.sourceView = browserToolbar
-                    popoverPresentationController.sourceRect = button.frame
-                    popoverPresentationController.permittedArrowDirections = .Any
+                    // Using the button for the sourceView here results in this not showing on iPads.
+                    popoverPresentationController.sourceView = toolbar ?? urlBar
+                    popoverPresentationController.sourceRect = button.frame ?? button.frame
+                    popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
                 }
                 presentViewController(activityViewController, animated: true, completion: nil)
             }
@@ -417,7 +461,7 @@ extension BrowserViewController: BrowserDelegate {
                 if let bar = bars[bars.count-1] as? SnackBar {
                     make.top.equalTo(bar.snp_top)
                 } else {
-                    make.top.equalTo(self.toolbar.snp_top)
+                    make.top.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
                 }
             }
 
@@ -439,7 +483,7 @@ extension BrowserViewController: BrowserDelegate {
                                 make.bottom.equalTo(bar.snp_top)
                             }
                         } else {
-                            make.bottom.equalTo(self.toolbar.snp_top)
+                            make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
                         }
                         make.left.width.equalTo(self.footer)
                     }
@@ -564,7 +608,7 @@ extension BrowserViewController: UIScrollViewDelegate {
     }
 
     private func scrollToolbar(dy: CGFloat) {
-        let newY = clamp(footer.transform.ty - dy, min: 0, max: toolbar.frame.height)
+        let newY = clamp(footer.transform.ty - dy, min: 0, max: toolbar?.frame.height ?? 0)
         footer.transform = CGAffineTransformMakeTranslation(0, newY)
     }
 
@@ -588,8 +632,11 @@ extension BrowserViewController: UIScrollViewDelegate {
                     let inset = tab.webView.scrollView.contentInset
                     let newInset = clamp(inset.top + delta.y, min: AppConstants.StatusBarHeight, max: AppConstants.ToolbarHeight + AppConstants.StatusBarHeight)
 
-                    tab.webView.scrollView.contentInset = UIEdgeInsetsMake(newInset, 0, clamp(newInset - AppConstants.StatusBarHeight, min: 0, max: AppConstants.ToolbarHeight), 0)
-                    tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(newInset - AppConstants.StatusBarHeight, 0, clamp(newInset, min: 0, max: AppConstants.ToolbarHeight), 0)
+                    tab.webView.scrollView.contentInset = UIEdgeInsetsMake(newInset,
+                        0,
+                        clamp(newInset - AppConstants.StatusBarHeight, min: 0, max: toolbar?.frame.height ?? 0),
+                        0)
+                    tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(newInset - AppConstants.StatusBarHeight, 0, clamp(newInset, min: 0, max: toolbar?.frame.height ?? 0), 0)
 
                     // Adjusting the contentInset will change the scroll position of the page.
                     // We account for that by also adjusting the previousScroll position
@@ -630,7 +677,8 @@ extension BrowserViewController: UIScrollViewDelegate {
             self.scrollToolbar(CGFloat(-1*MAXFLOAT))
 
             self.header.transform = CGAffineTransformMakeTranslation(0, -self.urlBar.frame.height + AppConstants.StatusBarHeight)
-            self.footer.transform = CGAffineTransformMakeTranslation(0, self.toolbar.frame.height)
+            self.footer.transform = CGAffineTransformMakeTranslation(0, self.toolbar?.frame.height ?? 0)
+
             // Reset the insets so that clicking works on the edges of the screen
             if let tab = self.tabManager.selectedTab {
                 tab.webView.scrollView.contentInset = UIEdgeInsets(top: AppConstants.StatusBarHeight, left: 0, bottom: 0, right: 0)
@@ -649,8 +697,8 @@ extension BrowserViewController: UIScrollViewDelegate {
             self.footer.transform = CGAffineTransformIdentity
             // Reset the insets so that clicking works on the edges of the screen
             if let tab = self.tabManager.selectedTab {
-                tab.webView.scrollView.contentInset = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: AppConstants.ToolbarHeight, right: 0)
-                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: AppConstants.ToolbarHeight, right: 0)
+                tab.webView.scrollView.contentInset = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: self.toolbar?.frame.height ?? 0, right: 0)
+                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: self.toolbar?.frame.height ?? 0, right: 0)
             }
             self.setNeedsStatusBarAppearanceUpdate()
         }, completion: completion)
@@ -670,7 +718,8 @@ extension BrowserViewController: TabManagerDelegate {
             webViewContainer.addSubview(wv)
             if let url = wv.URL?.absoluteString {
                 profile.bookmarks.isBookmarked(url, success: { bookmarked in
-                    self.toolbar.updateBookmarkStatus(bookmarked)
+                    self.toolbar?.updateBookmarkStatus(bookmarked)
+                    self.urlBar.updateBookmarkStatus(bookmarked)
                 }, failure: { err in
                     println("Error getting bookmark status: \(err)")
                 })
@@ -686,10 +735,12 @@ extension BrowserViewController: TabManagerDelegate {
         }
         showToolbars(animated: false)
 
-        toolbar.updateBackStatus(selected?.canGoBack ?? false)
-        toolbar.updateFowardStatus(selected?.canGoForward ?? false)
-        urlBar.updateProgressBar(Float(selected?.webView.estimatedProgress ?? 0))
-        urlBar.updateLoading(selected?.webView.loading ?? false)
+        toolbar?.updateBackStatus(selected?.canGoBack ?? false)
+        toolbar?.updateFowardStatus(selected?.canGoForward ?? false)
+        self.urlBar.updateBackStatus(selected?.canGoBack ?? false)
+        self.urlBar.updateFowardStatus(selected?.canGoForward ?? false)
+        self.urlBar.updateProgressBar(Float(selected?.webView.estimatedProgress ?? 0))
+        self.urlBar.updateLoading(selected?.webView.loading ?? false)
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
             urlBar.updateReaderModeState(readerMode.state)
@@ -727,8 +778,8 @@ extension BrowserViewController: TabManagerDelegate {
         urlBar.updateTabCount(tabManager.count)
 
         webViewContainer.insertSubview(tab.webView, atIndex: 0)
-        tab.webView.scrollView.contentInset = UIEdgeInsetsMake(AppConstants.ToolbarHeight + AppConstants.StatusBarHeight, 0, AppConstants.ToolbarHeight, 0)
-        tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(AppConstants.ToolbarHeight + AppConstants.StatusBarHeight, 0, AppConstants.ToolbarHeight, 0)
+        tab.webView.scrollView.contentInset = UIEdgeInsetsMake(AppConstants.ToolbarHeight + AppConstants.StatusBarHeight, 0, toolbar?.frame.height ?? 0, 0)
+        tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(AppConstants.ToolbarHeight + AppConstants.StatusBarHeight, 0, toolbar?.frame.height ?? 0, 0)
         tab.webView.snp_makeConstraints { make in
             make.top.equalTo(self.view.snp_top)
             make.leading.trailing.bottom.equalTo(self.view)
@@ -822,13 +873,16 @@ extension BrowserViewController: WKNavigationDelegate {
         if let tab = tabManager.selectedTab {
             if tab.webView == webView {
                 urlBar.updateURL(tab.displayURL);
-                toolbar.updateBackStatus(webView.canGoBack)
-                toolbar.updateFowardStatus(webView.canGoForward)
+                toolbar?.updateBackStatus(webView.canGoBack)
+                toolbar?.updateFowardStatus(webView.canGoForward)
+                urlBar.updateBackStatus(webView.canGoBack)
+                urlBar.updateFowardStatus(webView.canGoForward)
                 showToolbars(animated: false)
 
                 if let url = tab.displayURL?.absoluteString {
                     profile.bookmarks.isBookmarked(url, success: { bookmarked in
-                        self.toolbar.updateBookmarkStatus(bookmarked)
+                        self.toolbar?.updateBookmarkStatus(bookmarked)
+                        self.urlBar.updateBookmarkStatus(bookmarked)
                     }, failure: { err in
                         println("Error getting bookmark status: \(err)")
                     })
@@ -1056,7 +1110,7 @@ extension BrowserViewController : Transitionable {
 
     func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {
         if let cell = options.moving {
-            view.transform = CGAffineTransformMakeTranslation(0, cell.frame.origin.y - toolbar.frame.height)
+            view.transform = CGAffineTransformMakeTranslation(0, cell.frame.origin.y - (toolbar?.frame.height ?? 0))
         }
         view.alpha = 0
         // Move all the webview's off screen
@@ -1078,8 +1132,8 @@ extension BrowserViewController : Transitionable {
 extension BrowserViewController {
     private func updateScrollbarInsets() {
         if let tab = self.tabManager.selectedTab {
-            tab.webView.scrollView.contentInset = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: AppConstants.ToolbarHeight, right: 0)
-            tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: AppConstants.ToolbarHeight, right: 0)
+            tab.webView.scrollView.contentInset = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: toolbar?.frame.height ?? 0, right: 0)
+            tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: toolbar?.frame.height ?? 0, right: 0)
         }
     }
 
@@ -1219,7 +1273,7 @@ private class BrowserScreenshotHelper: ScreenshotHelper {
 
     func takeScreenshot(tab: Browser, aspectRatio: CGFloat, quality: CGFloat) -> UIImage? {
         if let url = tab.url {
-            if url.absoluteString == "about:home" {
+            if url.absoluteString == HomeURL {
                 if let homePanel = controller?.homePanelController {
                     return homePanel.view.screenshot(aspectRatio, quality: quality)
                 }

@@ -586,7 +586,7 @@ private class SuggestionButton: InsetButton {
         contentEdgeInsets = SuggestionInsets
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required override init(coder aDecoder: NSCoder) {
         assertionFailure("Not supported")
     }
 
@@ -595,29 +595,5 @@ private class SuggestionButton: InsetButton {
         didSet {
             backgroundColor = highlighted ? UIColor.grayColor() : SuggestionBackgroundColor
         }
-    }
-}
-
-/**
- * Button whose insets are included in its intrinsic size.
- */
-private class InsetButton: UIButton {
-    override init() {
-        super.init()
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        assertionFailure("Not supported")
-    }
-
-    private override func intrinsicContentSize() -> CGSize {
-        var size = super.intrinsicContentSize()
-        size.width += titleEdgeInsets.left + titleEdgeInsets.right
-        size.height += titleEdgeInsets.top + titleEdgeInsets.bottom
-        return size
     }
 }
