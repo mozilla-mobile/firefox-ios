@@ -17,19 +17,6 @@ private struct TabTrayControllerUX {
     static let TabTitleTextFont = AppConstants.DefaultSmallFont
 }
 
-private struct TabCellUX {
-    // Properties for panning animation
-    static let TotalRotationInDegrees = 10.0
-    static let DeleteThreshold = CGFloat(140)
-    static let TotalScale = CGFloat(0.9)
-    static let TotalAlpha = CGFloat(0.7)
-    static let MinExitVelocity = CGFloat(800.0)
-    static let RecenterAnimationDuration = NSTimeInterval(0.15)
-}
-
-private protocol TabCellDelegate {
-     func tabCellDidSwipeToDelete(tabCell: TabCell)
-}
 
 // UITableViewController doesn't let us specify a style for recycling views. We override the default style here.
 private class TabCell: UITableViewCell {
@@ -39,15 +26,11 @@ private class TabCell: UITableViewCell {
     let title: UIView
     let innerStroke: InnerStrokedView
     let favicon: UIImageView
-    var tabDelegate: TabCellDelegate?
-    
-    let panGesture: UIPanGestureRecognizer!
-    var originalCenter: CGPoint!
-    var startLocation: CGPoint!
     
     // Changes depending on whether we're full-screen or not.
     var margin = TabTrayControllerUX.Margin
-
+    var animator: SwipeAnimator!
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         
         self.backgroundHolder = UIView()
@@ -87,22 +70,21 @@ private class TabCell: UITableViewCell {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.panGesture = UIPanGestureRecognizer(target: self, action: Selector("SELdidPan:"))
-        self.panGesture.delegate = self
+        self.animator = SwipeAnimator(animatingView: self.backgroundHolder,
+            containerView: self, ux: SwipeAnimatorUX())
         
         backgroundHolder.addSubview(self.background)
         addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.title)
         backgroundHolder.addSubview(innerStroke)
-        self.addGestureRecognizer(self.panGesture)
         
         backgroundColor = UIColor.clearColor()
 
         selectionStyle = .None
         self.titleText.addObserver(self, forKeyPath: "contentSize", options: .New, context: nil)
-        
         setupFrames()
-        self.originalCenter = CGPoint(x: UIScreen.mainScreen().bounds.width / 2, y: TabTrayControllerUX.CellHeight / 2)
+        
+        self.animator.originalCenter = CGPoint(x: UIScreen.mainScreen().bounds.width / 2, y: TabTrayControllerUX.CellHeight / 2)
     }
     
     func setupFrames() {
@@ -175,77 +157,6 @@ private class TabCell: UITableViewCell {
         setNeedsLayout()
     }
     
-    @objc func SELdidPan(recognizer: UIPanGestureRecognizer!) {
-        switch (recognizer.state) {
-        case .Began:
-            self.startLocation = self.backgroundHolder.center;
-            
-        case .Changed:
-            let translation = recognizer.translationInView(self)
-            let newLocation =
-                CGPoint(x: self.startLocation.x + translation.x, y: self.backgroundHolder.center.y)
-            self.backgroundHolder.center = newLocation
-            
-            // Calculate values to determine the amount we need to scale/rotate with
-            let distanceFromCenter = abs(self.originalCenter.x - self.backgroundHolder.center.x)
-            let halfWidth = self.frame.size.width / 2
-            let totalRotationInRadians = CGFloat(TabCellUX.TotalRotationInDegrees / 180.0 * M_PI)
-            
-            // Determine rotation / scaling amounts by the distance to the edge
-            var rotation = (distanceFromCenter / halfWidth) * totalRotationInRadians
-            rotation *= self.originalCenter.x - self.backgroundHolder.center.x > 0 ? -1 : 1
-            var scale = 1 - (distanceFromCenter / halfWidth) * (1 - TabCellUX.TotalScale)
-            let alpha = 1 - (distanceFromCenter / halfWidth) * (1 - TabCellUX.TotalAlpha)
-            
-            let rotationTransform = CGAffineTransformMakeRotation(rotation)
-            let scaleTransform = CGAffineTransformMakeScale(scale, scale)
-            let combinedTransform = CGAffineTransformConcat(rotationTransform, scaleTransform)
-            
-            self.backgroundHolder.transform = combinedTransform
-            self.backgroundHolder.alpha = alpha
-            
-        case .Cancelled:
-            self.backgroundHolder.center = self.originalCenter
-            self.backgroundHolder.transform = CGAffineTransformIdentity
-            self.backgroundHolder.alpha = 1
-            
-        case .Ended:
-            if (abs(self.backgroundHolder.center.x - self.center.x) > TabCellUX.DeleteThreshold) {
-                let velocity = recognizer.velocityInView(self)
-                let actualVelocity = max(abs(velocity.x), TabCellUX.MinExitVelocity)
-                
-                // Calculate the edge to calculate distance from
-                let edgeX = velocity.x > 0 ? CGRectGetMaxX(self.frame) : CGRectGetMinX(self.frame)
-                var distance
-                    = (self.backgroundHolder.frame.size.width / 2) + abs(self.backgroundHolder.center.x - edgeX)
-                
-                // Determine which way we need to travel
-                distance *= velocity.x > 0 ? 1 : -1
-                
-                let timeStep = NSTimeInterval(abs(distance) / actualVelocity)
-                UIView.animateWithDuration(timeStep, animations: {
-                    let animatedPosition
-                        = CGPoint(x: self.backgroundHolder.center.x + distance, y: self.backgroundHolder.center.y)
-                    self.backgroundHolder.center = animatedPosition
-                }, completion: { finished in
-                    if finished {
-                        self.backgroundHolder.hidden = true
-                        self.tabDelegate?.tabCellDidSwipeToDelete(self)
-                    }
-                })
-            } else {
-                UIView.animateWithDuration(TabCellUX.RecenterAnimationDuration, animations: {
-                    self.backgroundHolder.transform = CGAffineTransformIdentity
-                    self.backgroundHolder.center = self.originalCenter
-                    self.backgroundHolder.alpha = 1
-                })
-            }
-            
-        default:
-            break
-        }
-    }
-            
     var tab: Browser? {
         didSet {
             titleText.text = tab?.title
@@ -253,8 +164,115 @@ private class TabCell: UITableViewCell {
     }
 }
 
-extension TabCell: UIGestureRecognizerDelegate {
-    @objc private override func gestureRecognizerShouldBegin(recognizer: UIGestureRecognizer) -> Bool {
+struct SwipeAnimatorUX {
+    let totalRotationInDegrees = 10.0
+    let deleteThreshold = CGFloat(140)
+    let totalScale = CGFloat(0.9)
+    let totalAlpha = CGFloat(0.7)
+    let minExitVelocity = CGFloat(800.0)
+    let recenterAnimationDuration = NSTimeInterval(0.15)
+}
+
+private protocol SwipeAnimatorDelegate {
+    func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView)
+}
+
+private class SwipeAnimator: NSObject {
+    let animatingView: UIView
+    let container: UIView
+    let ux: SwipeAnimatorUX
+    
+    var originalCenter: CGPoint!
+    var startLocation: CGPoint!
+    var delegate: SwipeAnimatorDelegate?
+    
+    init(animatingView view: UIView, containerView: UIView, ux swipeUX: SwipeAnimatorUX) {
+        animatingView = view
+        container = containerView
+        ux = swipeUX
+        
+        super.init()
+        
+        let panGesture = UIPanGestureRecognizer(target: self, action: Selector("SELdidPan:"))
+        container.addGestureRecognizer(panGesture)
+        panGesture.delegate = self
+    }
+    
+    @objc func SELdidPan(recognizer: UIPanGestureRecognizer!) {
+        switch (recognizer.state) {
+        case .Began:
+            self.startLocation = self.animatingView.center;
+            
+        case .Changed:
+            let translation = recognizer.translationInView(self.container)
+            let newLocation =
+                CGPoint(x: self.startLocation.x + translation.x, y: self.animatingView.center.y)
+            self.animatingView.center = newLocation
+            
+            // Calculate values to determine the amount we need to scale/rotate with
+            let distanceFromCenter = abs(self.originalCenter.x - self.animatingView.center.x)
+            let halfWidth = self.container.frame.size.width / 2
+            let totalRotationInRadians = CGFloat(self.ux.totalRotationInDegrees / 180.0 * M_PI)
+            
+            // Determine rotation / scaling amounts by the distance to the edge
+            var rotation = (distanceFromCenter / halfWidth) * totalRotationInRadians
+            rotation *= self.originalCenter.x - self.animatingView.center.x > 0 ? -1 : 1
+            var scale = 1 - (distanceFromCenter / halfWidth) * (1 - self.ux.totalScale)
+            let alpha = 1 - (distanceFromCenter / halfWidth) * (1 - self.ux.totalAlpha)
+            
+            let rotationTransform = CGAffineTransformMakeRotation(rotation)
+            let scaleTransform = CGAffineTransformMakeScale(scale, scale)
+            let combinedTransform = CGAffineTransformConcat(rotationTransform, scaleTransform)
+            
+            self.animatingView.transform = combinedTransform
+            self.animatingView.alpha = alpha
+            
+        case .Cancelled:
+            self.animatingView.center = self.originalCenter
+            self.animatingView.transform = CGAffineTransformIdentity
+            self.animatingView.alpha = 1
+            
+        case .Ended:
+            if (abs(self.animatingView.center.x - self.container.center.x) > self.ux.deleteThreshold) {
+                let velocity = recognizer.velocityInView(self.container)
+                let actualVelocity = max(abs(velocity.x), self.ux.minExitVelocity)
+                
+                // Calculate the edge to calculate distance from
+                let edgeX = velocity.x > 0 ? CGRectGetMaxX(self.container.frame) :
+                    CGRectGetMinX(self.container.frame)
+                var distance
+                    = (self.animatingView.frame.size.width / 2) + abs(self.animatingView.center.x - edgeX)
+                
+                // Determine which way we need to travel
+                distance *= velocity.x > 0 ? 1 : -1
+                
+                let timeStep = NSTimeInterval(abs(distance) / actualVelocity)
+                UIView.animateWithDuration(timeStep, animations: {
+                    let animatedPosition
+                        = CGPoint(x: self.animatingView.center.x + distance, y: self.animatingView.center.y)
+                    self.animatingView.center = animatedPosition
+                }, completion: { finished in
+                    if finished {
+                        self.animatingView.hidden = true
+                        self.delegate?.swipeAnimator(self, viewDidExitContainerBounds: self.animatingView)
+                    }
+                })
+            } else {
+                UIView.animateWithDuration(self.ux.recenterAnimationDuration, animations: {
+                    self.animatingView.transform = CGAffineTransformIdentity
+                    self.animatingView.center = self.originalCenter
+                    self.animatingView.alpha = 1
+                })
+            }
+            
+        default:
+            break
+        }
+    }
+}
+
+extension SwipeAnimator: UIGestureRecognizerDelegate {
+    private func gestureRecognizerShouldBegin(recognizer: UIGestureRecognizer) -> Bool {
         let cellView = recognizer.view as UIView!
         let panGesture = recognizer as UIPanGestureRecognizer
         let translation = panGesture.translationInView(cellView.superview!)
@@ -357,7 +375,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let tab = tabManager.getTab(indexPath.item)
         let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as TabCell
-        cell.tabDelegate = self
+        cell.animator.delegate = self
         cell.titleText.text = tab.displayTitle
 
         let screenshotAspectRatio = tableView.frame.width / TabTrayControllerUX.CellHeight
@@ -428,8 +446,9 @@ extension TabTrayController: Transitionable {
     }
 }
 
-extension TabTrayController: TabCellDelegate {
-    private func tabCellDidSwipeToDelete(tabCell: TabCell) {
+extension TabTrayController: SwipeAnimatorDelegate {
+    private func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView) {
+        let tabCell = animator.container as UITableViewCell
         if let indexPath = self.tableView.indexPathForCell(tabCell) {
             let tab = tabManager.getTab(indexPath.item)
             tabManager.removeTab(tab)
