@@ -425,7 +425,7 @@ extension TabTrayController: Transitionable {
 
         // Scroll the toolbar off the top
         navBar.alpha = 0
-        navBar.transform = CGAffineTransformMakeTranslation(0, -ToolbarHeight)
+        navBar.transform = CGAffineTransformMakeTranslation(0, -AppConstants.ToolbarHeight)
 
         tableView.backgroundColor = UIColor.clearColor()
     }
