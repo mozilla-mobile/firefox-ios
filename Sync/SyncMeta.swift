@@ -5,6 +5,33 @@
 import Foundation
 import Shared
 
+// Our engine choices need to persist across server changes.
+public class EngineConfigurations {
+    let enabled: [String]
+    let declined: [String]
+    public init(enabled: [String], declined: [String]) {
+        self.enabled = enabled
+        self.declined = declined
+    }
+
+    public class func fromJSON(json: JSON) -> EngineConfigurations? {
+        if let enabled = jsonsToStrings(json["enabled"].asArray) {
+            if let declined = jsonsToStrings(json["declined"].asArray) {
+                return EngineConfigurations(enabled: enabled, declined: declined)
+            }
+        }
+        return nil
+    }
+
+    public func reconcile(meta: [String: EngineMeta]) -> EngineConfigurations {
+        // TODO: when we get a changed meta/global, we need to be able
+        // to reflect its changes into our configuration.
+        // Note that sometimes we also need to make changes to the meta/global
+        // itself -- e.g., missing declined. That should be a method on MetaGlobal.
+        return self
+    }
+}
+
 // Equivalent to Android Sync's EngineSettings, but here
 // we use them for meta/global itself.
 public struct EngineMeta {
