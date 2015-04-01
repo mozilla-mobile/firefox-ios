@@ -5,78 +5,123 @@
 import Foundation
 import UIKit
 
+private struct ReaderModeStyleViewControllerUX {
+    static let RowHeight = 50
+
+    static let Width = 270
+    static let Height = 4 * RowHeight
+
+    static let FontTypeRowBackground = UIColor(rgb: 0xfbfbfb)
+    static let FontTypeTitleFontSansSerif = UIFont(name: "FiraSans", size: 16)
+    static let FontTypeTitleFontSerif = UIFont(name: "Charis SIL", size: 16)
+
+    static let FontTypeTitleSelectedColor = UIColor(rgb: 0x333333)
+    static let FontTypeTitleNormalColor = UIColor.lightGrayColor() // TODO THis needs to be 44% of 0x333333
+
+    static let FontSizeRowBackground = UIColor(rgb: 0xf4f4f4)
+    static let FontSizeLabelFontSansSerif = UIFont(name: "FiraSans-Book", size: 22)
+    static let FontSizeLabelFontSerif = UIFont(name: "Charis SIL", size: 22)
+    static let FontSizeLabelColor = UIColor(rgb: 0x333333)
+    static let FontSizeButtonTextColorEnabled = UIColor(rgb: 0x333333)
+    static let FontSizeButtonTextColorDisabled = UIColor.lightGrayColor() // TODO THis needs to be 44% of 0x333333
+    static let FontSizeButtonTextFont = UIFont(name: "FiraSans-Book", size: 22)
+
+    static let ThemeRowBackgroundColor = UIColor.whiteColor()
+    static let ThemeTitleFontSansSerif = UIFont(name: "FiraSans-Light", size: 15)
+    static let ThemeTitleFontSerif = UIFont(name: "Charis SIL", size: 15)
+    static let ThemeTitleColorLight = UIColor(rgb: 0x333333)
+    static let ThemeTitleColorDark = UIColor.whiteColor()
+    static let ThemeTitleColorSepia = UIColor(rgb: 0x333333)
+    static let ThemeBackgroundColorLight = UIColor.whiteColor()
+    static let ThemeBackgroundColorDark = UIColor.blackColor()
+    static let ThemeBackgroundColorSepia = UIColor(rgb: 0xf0ece7)
+
+    static let BrightnessRowBackground = UIColor(rgb: 0xf4f4f4)
+    static let BrightnessSliderTintColor = UIColor(rgb: 0xe66000)
+    static let BrightnessSliderWidth = 140
+    static let BrightnessIconOffset = 10
+}
+
+// MARK: -
+
 protocol ReaderModeStyleViewControllerDelegate {
     func readerModeStyleViewController(readerModeStyleViewController: ReaderModeStyleViewController, didConfigureStyle style: ReaderModeStyle)
 }
+
+// MARK: -
 
 class ReaderModeStyleViewController: UIViewController {
     var delegate: ReaderModeStyleViewControllerDelegate?
     var readerModeStyle: ReaderModeStyle = DefaultReaderModeStyle
 
-    private let rowHeights = [72, 44, 44, 52]
-    private let width = 260
-
-    private var rows: [UIView] = []
     private var fontTypeButtons: [FontTypeButton]!
+    private var fontSizeLabel: FontSizeLabel!
     private var fontSizeButtons: [FontSizeButton]!
     private var themeButtons: [ThemeButton]!
 
     override func viewDidLoad() {
-        view.backgroundColor = UIColor.grayColor()
-
         // Our preferred content size has a fixed width and height based on the rows + padding
 
-        let height = rowHeights.reduce(0, combine: +) + (rowHeights.count - 1)
-        preferredContentSize = CGSize(width: width, height: height)
+        preferredContentSize = CGSize(width: ReaderModeStyleViewControllerUX.Width, height: ReaderModeStyleViewControllerUX.Height)
 
-        // Setup the rows. It is easier to setup a layout like this when we organize the buttons into rows.
+        popoverPresentationController?.backgroundColor = ReaderModeStyleViewControllerUX.FontTypeRowBackground
 
-        let fontTypeRow = UIView(), fontSizeRow = UIView(), themeRow = UIView(), sliderRow = UIView()
-        rows = [fontTypeRow, fontSizeRow, themeRow, sliderRow]
+        // Font type row
 
-        for (idx, row) in enumerate(rows) {
-            view.addSubview(row)
+        let fontTypeRow = UIView()
+        view.addSubview(fontTypeRow)
+        fontTypeRow.backgroundColor = ReaderModeStyleViewControllerUX.FontTypeRowBackground
 
-            // The only row with a full white background is the one with the slider. The others are the default
-            // clear color so that the gray dividers are visible between buttons in a row.
-            if row == sliderRow {
-                row.backgroundColor = UIColor.whiteColor()
-            }
-
-            row.snp_makeConstraints { make in
-                make.left.equalTo(self.view.snp_left)
-                make.right.equalTo(self.view.snp_right)
-                if idx == 0 {
-                    make.top.equalTo(self.view.snp_top)
-                } else {
-                    make.top.equalTo(self.rows[idx - 1].snp_bottom).offset(1)
-                }
-                make.height.equalTo(self.rowHeights[idx])
-            }
+        fontTypeRow.snp_makeConstraints { (make) -> () in
+            make.top.equalTo(self.view)
+            make.left.right.equalTo(self.view)
+            make.height.equalTo(ReaderModeStyleViewControllerUX.RowHeight)
         }
-
-        // Setup the font type buttons
 
         fontTypeButtons = [
             FontTypeButton(fontType: ReaderModeFontType.SansSerif),
             FontTypeButton(fontType: ReaderModeFontType.Serif)
         ]
-        
+
         setupButtons(fontTypeButtons, inRow: fontTypeRow, action: "SELchangeFontType:")
 
-        // Setup the font size buttons
+        // Font size row
+
+        let fontSizeRow = UIView()
+        view.addSubview(fontSizeRow)
+        fontSizeRow.backgroundColor = ReaderModeStyleViewControllerUX.FontSizeRowBackground
+
+        fontSizeRow.snp_makeConstraints { (make) -> () in
+            make.top.equalTo(fontTypeRow.snp_bottom)
+            make.left.right.equalTo(self.view)
+            make.height.equalTo(ReaderModeStyleViewControllerUX.RowHeight)
+        }
+
+        fontSizeLabel = FontSizeLabel()
+        fontSizeRow.addSubview(fontSizeLabel)
+
+        fontSizeLabel.snp_makeConstraints { (make) -> () in
+            make.center.equalTo(fontSizeRow)
+            return
+        }
 
         fontSizeButtons = [
-            FontSizeButton(fontSize: ReaderModeFontSize.Smallest),
-            FontSizeButton(fontSize: ReaderModeFontSize.Small),
-            FontSizeButton(fontSize: ReaderModeFontSize.Normal),
-            FontSizeButton(fontSize: ReaderModeFontSize.Large),
-            FontSizeButton(fontSize: ReaderModeFontSize.Largest),
+            FontSizeButton(fontSizeAction: FontSizeAction.Smaller),
+            FontSizeButton(fontSizeAction: FontSizeAction.Bigger)
         ]
 
         setupButtons(fontSizeButtons, inRow: fontSizeRow, action: "SELchangeFontSize:")
 
-        // Setup the theme buttons
+        // Theme row
+
+        let themeRow = UIView()
+        view.addSubview(themeRow)
+
+        themeRow.snp_makeConstraints { (make) -> () in
+            make.top.equalTo(fontSizeRow.snp_bottom)
+            make.left.right.equalTo(self.view)
+            make.height.equalTo(ReaderModeStyleViewControllerUX.RowHeight)
+        }
 
         themeButtons = [
             ThemeButton(theme: ReaderModeTheme.Light),
@@ -86,22 +131,46 @@ class ReaderModeStyleViewController: UIViewController {
 
         setupButtons(themeButtons, inRow: themeRow, action: "SELchangeTheme:")
 
-        // Setup the brightness slider
+        // Brightness row
+
+        let brightnessRow = UIView()
+        view.addSubview(brightnessRow)
+        brightnessRow.backgroundColor = ReaderModeStyleViewControllerUX.BrightnessRowBackground
+
+        brightnessRow.snp_makeConstraints { (make) -> () in
+            make.top.equalTo(themeRow.snp_bottom)
+            make.left.right.equalTo(self.view)
+            make.height.equalTo(ReaderModeStyleViewControllerUX.RowHeight)
+        }
 
         let slider = UISlider()
-        slider.tintColor = UIColor.orangeColor()
-        sliderRow.addSubview(slider)
+        brightnessRow.addSubview(slider)
+        slider.tintColor = ReaderModeStyleViewControllerUX.BrightnessSliderTintColor
         slider.addTarget(self, action: "SELchangeBrightness:", forControlEvents: UIControlEvents.ValueChanged)
 
         slider.snp_makeConstraints { make in
-            make.center.equalTo(sliderRow.center)
-            make.width.equalTo(180)
+            make.center.equalTo(brightnessRow.center)
+            make.width.equalTo(ReaderModeStyleViewControllerUX.BrightnessSliderWidth)
         }
 
-        // Setup initial values
+        let brightnessMinImageView = UIImageView(image: UIImage(named: "brightnessMin"))
+        brightnessRow.addSubview(brightnessMinImageView)
+
+        brightnessMinImageView.snp_makeConstraints { (make) -> () in
+            make.centerY.equalTo(slider)
+            make.right.equalTo(slider.snp_left).offset(-ReaderModeStyleViewControllerUX.BrightnessIconOffset)
+        }
+
+        let brightnessMaxImageView = UIImageView(image: UIImage(named: "brightnessMax"))
+        brightnessRow.addSubview(brightnessMaxImageView)
+
+        brightnessMaxImageView.snp_makeConstraints { (make) -> () in
+            make.centerY.equalTo(slider)
+            make.left.equalTo(slider.snp_right).offset(ReaderModeStyleViewControllerUX.BrightnessIconOffset)
+        }
 
         selectFontType(readerModeStyle.fontType)
-        selectFontSize(readerModeStyle.fontSize)
+        updateFontSizeButtons()
         selectTheme(readerModeStyle.theme)
         slider.value = Float(UIScreen.mainScreen().brightness)
     }
@@ -116,7 +185,7 @@ class ReaderModeStyleViewController: UIViewController {
                 if idx == 0 {
                     make.left.equalTo(row.snp_left)
                 } else {
-                    make.left.equalTo(buttons[idx - 1].snp_right).offset(1)
+                    make.left.equalTo(buttons[idx - 1].snp_right)
                 }
                 make.bottom.equalTo(row.snp_bottom)
                 make.width.equalTo(self.preferredContentSize.width / CGFloat(buttons.count))
@@ -134,17 +203,33 @@ class ReaderModeStyleViewController: UIViewController {
         for button in fontTypeButtons {
             button.selected = (button.fontType == fontType)
         }
+        for button in themeButtons {
+            button.fontType = fontType
+        }
+        fontSizeLabel.fontType = fontType
     }
 
     func SELchangeFontSize(button: FontSizeButton) {
-        selectFontSize(button.fontSize)
+        switch button.fontSizeAction {
+        case .Smaller:
+            readerModeStyle.fontSize = readerModeStyle.fontSize.smaller()
+        case .Bigger:
+            readerModeStyle.fontSize = readerModeStyle.fontSize.bigger()
+        }
+        updateFontSizeButtons()
         delegate?.readerModeStyleViewController(self, didConfigureStyle: readerModeStyle)
     }
 
-    private func selectFontSize(fontSize: ReaderModeFontSize) {
-        readerModeStyle.fontSize = fontSize
+    private func updateFontSizeButtons() {
         for button in fontSizeButtons {
-            button.selected = (button.fontSize == fontSize)
+            switch button.fontSizeAction {
+            case .Bigger:
+                button.enabled = !readerModeStyle.fontSize.isLargest()
+                break
+            case .Smaller:
+                button.enabled = !readerModeStyle.fontSize.isSmallest()
+                break
+            }
         }
     }
 
@@ -155,9 +240,6 @@ class ReaderModeStyleViewController: UIViewController {
 
     private func selectTheme(theme: ReaderModeTheme) {
         readerModeStyle.theme = theme
-        for button in themeButtons {
-            button.selected = (button.theme == theme)
-        }
     }
 
     func SELchangeBrightness(slider: UISlider) {
@@ -165,71 +247,114 @@ class ReaderModeStyleViewController: UIViewController {
     }
 }
 
-/// Custom button that knows how to show the right image and selection style for a ReaderModeFontType
-/// value. Very generic now, which will change when we have more final UX assets.
+// MARK: -
+
 class FontTypeButton: UIButton {
-    var fontType: ReaderModeFontType!
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    var fontType: ReaderModeFontType = .SansSerif
 
     convenience init(fontType: ReaderModeFontType) {
         self.init(frame: CGRectZero)
         self.fontType = fontType
-        setTitle(fontType.rawValue, forState: UIControlState.Normal)
-        setTitleColor(UIColor.blackColor(), forState: UIControlState.Selected)
-        setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-        backgroundColor = UIColor.whiteColor()
+        setTitleColor(ReaderModeStyleViewControllerUX.FontTypeTitleSelectedColor, forState: UIControlState.Selected)
+        setTitleColor(ReaderModeStyleViewControllerUX.FontTypeTitleNormalColor, forState: UIControlState.Normal)
+        backgroundColor = ReaderModeStyleViewControllerUX.FontTypeRowBackground
+        switch fontType {
+        case .SansSerif:
+            setTitle(NSLocalizedString("Sans-serif", comment: "Font type setting in the reading view settings"), forState: UIControlState.Normal)
+            let f = ReaderModeStyleViewControllerUX.ThemeTitleFontSansSerif
+            titleLabel?.font = f
+        case .Serif:
+            setTitle(NSLocalizedString("Serif", comment: "Font type setting in the reading view settings"), forState: UIControlState.Normal)
+            let f = ReaderModeStyleViewControllerUX.ThemeTitleFontSerif
+            titleLabel?.font = f
+        }
     }
 }
 
-/// Custom button that knows how to show the right image and selection style for a ReaderModeFontSize
-/// value. Very generic now, which will change when we have more final UX assets.
+// MARK: -
+
+enum FontSizeAction {
+    case Smaller
+    case Bigger
+}
+
 class FontSizeButton: UIButton {
-    var fontSize: ReaderModeFontSize!
+    var fontSizeAction: FontSizeAction = .Bigger
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    convenience init(fontSize: ReaderModeFontSize) {
+    convenience init(fontSizeAction: FontSizeAction) {
         self.init(frame: CGRectZero)
-        self.fontSize = fontSize
-        setTitle("\(fontSize.rawValue)", forState: UIControlState.Normal)
-        setTitleColor(UIColor.blackColor(), forState: UIControlState.Selected)
-        setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-        backgroundColor = UIColor.whiteColor()
+        self.fontSizeAction = fontSizeAction
+
+        setTitleColor(ReaderModeStyleViewControllerUX.FontSizeButtonTextColorEnabled, forState: UIControlState.Normal)
+        setTitleColor(ReaderModeStyleViewControllerUX.FontSizeButtonTextColorDisabled, forState: UIControlState.Disabled)
+
+        switch fontSizeAction {
+        case .Smaller:
+            setTitle("-", forState: .Normal)
+        case .Bigger:
+            setTitle("+", forState: .Normal)
+        }
+
+        // TODO Does this need to change with the selected font type? Not sure if makes sense for just +/-
+        titleLabel?.font = ReaderModeStyleViewControllerUX.FontSizeButtonTextFont
     }
 }
 
-/// Custom button that knows how to show the right image and selection style for a ReaderModeTheme
-/// value. Very generic now, which will change when we have more final UX assets.
+// MARK: -
+
+class FontSizeLabel: UILabel {
+    override convenience init() {
+        self.init(frame: CGRectZero)
+        text = "Aa"
+    }
+
+    var fontType: ReaderModeFontType = .SansSerif {
+        didSet {
+            switch fontType {
+            case .SansSerif:
+                font = ReaderModeStyleViewControllerUX.FontSizeLabelFontSansSerif
+            case .Serif:
+                font = ReaderModeStyleViewControllerUX.FontSizeLabelFontSerif
+            }
+        }
+    }
+}
+
+// MARK: -
+
 class ThemeButton: UIButton {
     var theme: ReaderModeTheme!
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     convenience init(theme: ReaderModeTheme) {
         self.init(frame: CGRectZero)
         self.theme = theme
+
         setTitle(theme.rawValue, forState: UIControlState.Normal)
-        setTitleColor(UIColor.blackColor(), forState: UIControlState.Selected)
-        setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Normal)
-        backgroundColor = UIColor.whiteColor()
+
+        switch theme {
+        case .Light:
+            setTitle(NSLocalizedString("Light", comment: "Light theme setting in Reading View settings"), forState: .Normal)
+            setTitleColor(ReaderModeStyleViewControllerUX.ThemeTitleColorLight, forState: UIControlState.Normal)
+            backgroundColor = ReaderModeStyleViewControllerUX.ThemeBackgroundColorLight
+        case .Dark:
+            setTitle(NSLocalizedString("Dark", comment: "Dark theme setting in Reading View settings"), forState: .Normal)
+            setTitleColor(ReaderModeStyleViewControllerUX.ThemeTitleColorDark, forState: UIControlState.Normal)
+            backgroundColor = ReaderModeStyleViewControllerUX.ThemeBackgroundColorDark
+        case .Sepia:
+            setTitle(NSLocalizedString("Sepia", comment: "Sepia theme setting in Reading View settings"), forState: .Normal)
+            setTitleColor(ReaderModeStyleViewControllerUX.ThemeTitleColorSepia, forState: UIControlState.Normal)
+            backgroundColor = ReaderModeStyleViewControllerUX.ThemeBackgroundColorSepia
+        }
+    }
+
+    var fontType: ReaderModeFontType = .SansSerif {
+        didSet {
+            switch fontType {
+            case .SansSerif:
+                titleLabel?.font = ReaderModeStyleViewControllerUX.ThemeTitleFontSansSerif
+            case .Serif:
+                titleLabel?.font = ReaderModeStyleViewControllerUX.ThemeTitleFontSerif
+            }
+        }
     }
 }

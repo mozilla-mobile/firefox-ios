@@ -36,10 +36,48 @@ enum ReaderModeFontType: String {
 
 enum ReaderModeFontSize: Int {
     case Smallest = 1
-    case Small
+    case Small = 2
     case Normal = 3
     case Large = 4
     case Largest = 5
+
+    func isSmallest() -> Bool {
+        return self == Smallest
+    }
+
+    func smaller() -> ReaderModeFontSize {
+        switch self {
+        case Smallest:
+            return Smallest
+        case Small:
+            return Smallest
+        case Normal:
+            return Small
+        case Large:
+            return Normal
+        case Largest:
+            return Large
+        }
+    }
+
+    func isLargest() -> Bool {
+        return self == Largest
+    }
+
+    func bigger() -> ReaderModeFontSize {
+        switch self {
+        case Smallest:
+            return Small
+        case Small:
+            return Normal
+        case Normal:
+            return Large
+        case Large:
+            return Largest
+        case Largest:
+            return Largest
+        }
+    }
 }
 
 struct ReaderModeStyle {
