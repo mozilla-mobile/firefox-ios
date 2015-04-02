@@ -7,9 +7,10 @@ import Shared
 import Storage
 import WebKit
 
-class PasswordManager: BrowserHelper {
+class PasswordHelper: BrowserHelper {
     private weak var browser: Browser?
     private let profile: Profile
+    private var snackBar: SnackBar?
 
     class func name() -> String {
         return "PasswordHelper"
@@ -19,7 +20,7 @@ class PasswordManager: BrowserHelper {
         self.browser = browser
         self.profile = profile
 
-        if let path = NSBundle.mainBundle().pathForResource("Passwords", ofType: "js") {
+        if let path = NSBundle.mainBundle().pathForResource("PasswordHelper", ofType: "js") {
             if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) {
                 var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
                 browser.webView.configuration.userContentController.addUserScript(userScript)
@@ -97,21 +98,27 @@ class PasswordManager: BrowserHelper {
             keys: [ "{username}", "{hostname}" ],
             replacements: [ password.username, password.hostname ])
 
-        let bar = CountdownSnackBar(attrText: attrString,
+        if snackBar != nil {
+            browser?.removeSnackbar(snackBar!)
+        }
+
+        snackBar = CountdownSnackBar(attrText: attrString,
             img: UIImage(named: "lock_verified"),
             buttons: [
                 SnackButton(title: "Save", callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
+                    self.snackBar = nil
                     self.profile.passwords.add(password) { success in
-                        println("Add password \(success)")
+                        // println("Add password \(success)")
                     }
                 }),
                 SnackButton(title: "Not now", callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
+                    self.snackBar = nil
                     return
                 })
             ])
-        browser?.addSnackbar(bar)
+        browser?.addSnackbar(snackBar!)
     }
 
     private func promptUpdate(password: Password) {
@@ -120,21 +127,27 @@ class PasswordManager: BrowserHelper {
             keys: [ "{username}", "{hostname}" ],
             replacements: [ password.username, password.hostname ])
 
-        let bar = CountdownSnackBar(attrText: attrString,
+        if snackBar != nil {
+            browser?.removeSnackbar(snackBar!)
+        }
+
+        snackBar = CountdownSnackBar(attrText: attrString,
             img: UIImage(named: "lock_verified"),
             buttons: [
                 SnackButton(title: "Update", callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
+                    self.snackBar = nil
                     self.profile.passwords.add(password) { success in
-                        println("Add password \(success)")
+                        // println("Add password \(success)")
                     }
                 }),
                 SnackButton(title: "Not now", callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
+                    self.snackBar = nil
                     return
                 })
             ])
-        browser?.addSnackbar(bar)
+        browser?.addSnackbar(snackBar!)
     }
 
     private func requestPasswords(password: Password, requestId: String) {
