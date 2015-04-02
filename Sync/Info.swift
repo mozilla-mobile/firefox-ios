@@ -6,18 +6,18 @@ import Foundation
 import Shared
 
 public class InfoCollections {
-    private let collections: [String: UInt64]
+    private let collections: [String: Timestamp]
 
-    init(collections: [String: UInt64]) {
+    init(collections: [String: Timestamp]) {
         self.collections = collections
     }
 
     public class func fromJSON(json: JSON) -> InfoCollections? {
         if let dict = json.asDictionary {
-            var coll = [String: UInt64]()
+            var coll = [String: Timestamp]()
             for (key, value) in dict {
                 if let value = value.asDouble {
-                    coll[key] = UInt64(value * 1000)
+                    coll[key] = Timestamp(value * 1000)
                 } else {
                     return nil       // Invalid, so bail out.
                 }
@@ -31,7 +31,7 @@ public class InfoCollections {
         return self.collections.keys.array
     }
 
-    public func modified(collection: String) -> UInt64? {
+    public func modified(collection: String) -> Timestamp? {
         return self.collections[collection]
     }
 
