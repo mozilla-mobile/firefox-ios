@@ -1800,8 +1800,8 @@
 				D39FA1611A83E0EC00EE869C /* Supporting Files */,
 				2F642CEC1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift */,
 				0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */,
-                0B6FBAB11AC1F830007EC669 /* baseFile.html */,
-                4F3705211AC5B32D004E378B /* HistoryTests.swift */,
+				0B6FBAB11AC1F830007EC669 /* baseFile.html */,
+				4F3705211AC5B32D004E378B /* HistoryTests.swift */,
 			);
 			path = UITests;
 			sourceTree = "<group>";
