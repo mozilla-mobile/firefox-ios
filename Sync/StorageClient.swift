@@ -203,7 +203,7 @@ public class Sync15StorageClient {
         self.resultQueue = resultQueue
 
         // This is a potentially dangerous assumption, but failable initializers up the stack are a giant pain.
-        self.serverURI = NSURL(string: token.api_endpoint + "/storage/")!
+        self.serverURI = NSURL(string: token.api_endpoint)!
         self.authorizer = {
             (r: NSMutableURLRequest) -> NSMutableURLRequest in
             let helper = HawkHelper(id: token.id, key: token.key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
@@ -269,7 +269,7 @@ public class Sync15StorageClient {
     }
 
     func getMetaGlobal() -> Deferred<Result<StorageResponse<GlobalEnvelope>>> {
-        return getResource("meta/global", { GlobalEnvelope($0) })
+        return getResource("storage/meta/global", { GlobalEnvelope($0) })
     }
 
     func wipeStorage() -> Deferred<Result<StorageResponse<JSON>>> {
@@ -281,7 +281,8 @@ public class Sync15StorageClient {
     // but of course we need to use a different set of keys to fetch crypto/keys
     // itself.
     func collectionClient<T: CleartextPayloadJSON>(collection: String, factory: (String) -> T?) -> Sync15CollectionClient<T> {
-        return Sync15CollectionClient(client: self, serverURI: self.serverURI, collection: collection, factory: factory)
+        let storage = self.serverURI.URLByAppendingPathComponent("storage", isDirectory: true)
+        return Sync15CollectionClient(client: self, serverURI: storage, collection: collection, factory: factory)
     }
 }
 

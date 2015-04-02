@@ -19,7 +19,7 @@ class LiveStorageClientTests : LiveAccountTest {
         let endpoint = token.api_endpoint
         XCTAssertTrue(endpoint.rangeOfString("services.mozilla.com") != nil, "We got a Sync server.")
 
-        let cryptoURI = NSURL(string: endpoint + "/storage/")
+        let cryptoURI = NSURL(string: endpoint)
         let authorizer: Authorizer = {
             (r: NSMutableURLRequest) -> NSMutableURLRequest in
             let helper = HawkHelper(id: token.id, key: token.key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
