@@ -172,7 +172,7 @@ public func == (lhs: KeyBundle, rhs: KeyBundle) -> Bool {
            lhs.hmacKey.isEqualToData(rhs.hmacKey)
 }
 
-public class Keys {
+public class Keys: Equatable {
     let valid: Bool
     let defaultBundle: KeyBundle
     var collectionKeys: [String: KeyBundle] = [String: KeyBundle]()
@@ -223,4 +223,10 @@ public class Keys {
         ])
         return KeysPayload(json)
     }
+}
+
+public func ==(lhs: Keys, rhs: Keys) -> Bool {
+    return lhs.valid == rhs.valid &&
+           lhs.defaultBundle == rhs.defaultBundle &&
+           lhs.collectionKeys == rhs.collectionKeys
 }
