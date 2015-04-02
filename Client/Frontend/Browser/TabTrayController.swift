@@ -15,6 +15,9 @@ private struct TabTrayControllerUX {
     static let ToolbarBarTintColor = UIColor(red: 0.35, green: 0.37, blue: 0.39, alpha: 0)
     static let TabTitleTextColor = UIColor.blackColor()
     static let TabTitleTextFont = AppConstants.DefaultSmallFont
+    static let CloseButtonSize = CGFloat(18.0)
+    static let CloseButtonMargin = CGFloat(6.0)
+    static let CloseButtonEdgeInset = CGFloat(3.0)
 }
 
 
@@ -26,6 +29,8 @@ private class TabCell: UITableViewCell {
     let title: UIView
     let innerStroke: InnerStrokedView
     let favicon: UIImageView
+    let closeTab: UIButton
+
 
     // Changes depending on whether we're full-screen or not.
     var margin = TabTrayControllerUX.Margin
@@ -68,15 +73,21 @@ private class TabCell: UITableViewCell {
         self.innerStroke = InnerStrokedView(frame: self.backgroundHolder.frame)
         self.innerStroke.layer.backgroundColor = UIColor.clearColor().CGColor
 
+        self.closeTab = UIButton()
+
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         self.animator = SwipeAnimator(animatingView: self.backgroundHolder,
             containerView: self, ux: SwipeAnimatorUX())
 
+        self.closeTab.setImage(UIImage(named: "toolbar_stop.png"), forState: UIControlState.Normal)
+        self.closeTab.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
+
         backgroundHolder.addSubview(self.background)
         addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.title)
         backgroundHolder.addSubview(innerStroke)
+        backgroundHolder.addSubview(self.closeTab)
 
         backgroundColor = UIColor.clearColor()
 
@@ -112,6 +123,8 @@ private class TabCell: UITableViewCell {
             height: title.frame.height)
 
         innerStroke.frame = background.frame
+
+        closeTab.frame = CGRect(x: backgroundHolder.frame.width - TabTrayControllerUX.CloseButtonSize - TabTrayControllerUX.CloseButtonMargin, y: TabTrayControllerUX.CloseButtonMargin, width: TabTrayControllerUX.CloseButtonSize, height: TabTrayControllerUX.CloseButtonSize)
 
         verticalCenter(titleText)
     }
@@ -390,11 +403,21 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
 
         let screenshotAspectRatio = tableView.frame.width / TabTrayControllerUX.CellHeight
         cell.background.image = screenshotHelper.takeScreenshot(tab, aspectRatio: screenshotAspectRatio, quality: 1)
+        cell.closeTab.tag = indexPath.row
+        cell.closeTab.addTarget(self, action: "SELdidPressClose:", forControlEvents: UIControlEvents.TouchDown)
+
         return cell
     }
 
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
         return .None
+    }
+
+    func SELdidPressClose(sender: UIButton) {
+        let indexPath:NSIndexPath = NSIndexPath(forRow: sender.tag, inSection: 0)
+        let tab = tabManager.getTab(indexPath.item)
+        tabManager.removeTab(tab)
+        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
     }
 }
 
