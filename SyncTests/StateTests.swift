@@ -20,7 +20,7 @@ func compareScratchpads(lhs: Scratchpad, rhs: Scratchpad) {
 func roundtrip(s: Scratchpad) -> (Scratchpad, Scratchpad) {
     let prefs = MockProfilePrefs()
     s.pickle(prefs)
-    return (s, Scratchpad.unpickle(s.syncKeyBundle, prefs: prefs)!)
+    return (s, Scratchpad.restoreFromPrefs(prefs, syncKeyBundle: s.syncKeyBundle)!)
 }
 
 class StateTests: XCTestCase {
@@ -29,10 +29,14 @@ class StateTests: XCTestCase {
         return Fetched(value: g, timestamp: NSDate.now())
     }
 
-    func testPickling() {
+    func baseScratchpad() -> Scratchpad {
         let syncKeyBundle = KeyBundle.fromKB(Bytes.generateRandomBytes(32))
+        return Scratchpad(b: syncKeyBundle, persistingTo: MockProfilePrefs())
+    }
 
-        compareScratchpads(roundtrip(Scratchpad(b: syncKeyBundle)))
-        compareScratchpads(roundtrip(Scratchpad(b: syncKeyBundle).evolve().setGlobal(getGlobal()).build()))
+    func testPickling() {
+
+        compareScratchpads(roundtrip(baseScratchpad()))
+        compareScratchpads(roundtrip(baseScratchpad().evolve().setGlobal(getGlobal()).build()))
     }
 }
