@@ -47,7 +47,7 @@ protocol SearchViewControllerDelegate: class {
     func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL)
 }
 
-class SearchViewController: SiteTableViewController, UITableViewDelegate, KeyboardHelperDelegate {
+class SearchViewController: SiteTableViewController, KeyboardHelperDelegate {
     var searchDelegate: SearchViewControllerDelegate?
 
     private var suggestClient: SearchSuggestClient?
@@ -359,6 +359,39 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
     }
 }
 
+extension SearchViewController: UITableViewDelegate {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let section = SearchListSection(rawValue: indexPath.section)!
+        if section == SearchListSection.BookmarksAndHistory {
+            if let site = data[indexPath.row] as? Site {
+                if let url = NSURL(string: site.url) {
+                    searchDelegate?.searchViewController(self, didSelectURL: url)
+                }
+            }
+        }
+    }
+
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if let currentSection = SearchListSection(rawValue: indexPath.section) {
+            switch currentSection {
+            case .SearchSuggestions:
+                // heightForRowAtIndexPath is called *before* the cell is created, so to get the height,
+                // force a layout pass first.
+                suggestionCell.layoutIfNeeded()
+                return suggestionCell.frame.height
+            default:
+                return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
+            }
+        }
+
+        return 0
+    }
+
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
+    }
+}
+
 extension SearchViewController: UITableViewDataSource {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch SearchListSection(rawValue: indexPath.section)! {
@@ -392,43 +425,8 @@ extension SearchViewController: UITableViewDataSource {
         }
     }
 
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
-    }
-
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return SearchListSection.Count
-    }
-
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var url: NSURL?
-
-        let section = SearchListSection(rawValue: indexPath.section)!
-        if section == SearchListSection.BookmarksAndHistory {
-            if let site = data[indexPath.row] as? Site {
-                url = NSURL(string: site.url)
-            }
-        }
-
-        if let url = url {
-            searchDelegate?.searchViewController(self, didSelectURL: url)
-        }
-    }
-
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if let currentSection = SearchListSection(rawValue: indexPath.section) {
-            switch currentSection {
-            case .SearchSuggestions:
-                // heightForRowAtIndexPath is called *before* the cell is created, so to get the height,
-                // force a layout pass first.
-                suggestionCell.layoutIfNeeded()
-                return suggestionCell.frame.height
-            default:
-                return super.tableView(tableView, heightForRowAtIndexPath: indexPath)
-            }
-        }
-
-        return 0
     }
 }
 
