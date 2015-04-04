@@ -7,9 +7,12 @@ import Foundation
 public protocol Prefs {
     func setLong(value: UInt64, forKey defaultName: String)
     func setLong(value: Int64, forKey defaultName: String)
+    func setInt(value: Int32, forKey defaultName: String)
+    func setString(value: String, forKey defaultName: String)
     func setObject(value: AnyObject?, forKey defaultName: String)
     func stringForKey(defaultName: String) -> String?
     func boolForKey(defaultName: String) -> Bool?
+    func intForKey(defaultName: String) -> Int32?
     func longForKey(defaultName: String) -> Int64?
     func unsignedLongForKey(defaultName: String) -> UInt64?
     func stringArrayForKey(defaultName: String) -> [String]?
@@ -31,6 +34,14 @@ public class MockProfilePrefs : Prefs {
 
     public func setLong(value: Int64, forKey defaultName: String) {
         setObject(NSNumber(longLong: value), forKey: defaultName)
+    }
+
+    public func setInt(value: Int32, forKey defaultName: String) {
+        things[defaultName] = NSNumber(int: value)
+    }
+
+    public func setString(value: String, forKey defaultName: String) {
+        things[defaultName] = value
     }
 
     public func setObject(value: AnyObject?, forKey defaultName: String) {
@@ -57,6 +68,14 @@ public class MockProfilePrefs : Prefs {
         let num = things[defaultName] as? NSNumber
         if let num = num {
             return num.longLongValue
+        }
+        return nil
+    }
+
+    public func intForKey(defaultName: String) -> Int32? {
+        let num = things[defaultName] as? NSNumber
+        if let num = num {
+            return num.intValue
         }
         return nil
     }
