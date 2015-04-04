@@ -365,7 +365,7 @@ extension SearchViewController: UITableViewDelegate {
 
         let section = SearchListSection(rawValue: indexPath.section)!
         if section == SearchListSection.BookmarksAndHistory {
-            if let site = data[indexPath.row] as? Site {
+            if let site = data?[indexPath.row] as? Site {
                 url = NSURL(string: site.url)
             }
         }
@@ -405,7 +405,7 @@ extension SearchViewController: UITableViewDataSource {
 
         case .BookmarksAndHistory:
             let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
-            if let site = data[indexPath.row] as? Site {
+            if let site = data?[indexPath.row] as? Site {
                 if let cell = cell as? TwoLineTableViewCell {
                     cell.setLines(site.title, detailText: site.url)
                     if let img = site.icon {
@@ -425,7 +425,7 @@ extension SearchViewController: UITableViewDataSource {
         case .SearchSuggestions:
             return searchEngines.shouldShowSearchSuggestions ? 1 : 0
         case .BookmarksAndHistory:
-            return data.count
+            return data?.count ?? 0
         }
     }
 

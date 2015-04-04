@@ -36,7 +36,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         let offset = sectionOffsets[indexPath.section]!
-        if let site = data[indexPath.row + offset] as? Site {
+        if let site = data?[indexPath.row + offset] as? Site {
             if let cell = cell as? TwoLineTableViewCell {
                 cell.setLines(site.title, detailText: site.url)
                 if let img = site.icon {
@@ -53,7 +53,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let offset = sectionOffsets[indexPath.section]!
-        if let site = data[indexPath.row + offset] as? Site {
+        if let site = data?[indexPath.row + offset] as? Site {
             if let url = NSURL(string: site.url) {
                 homePanelDelegate?.homePanel(self, didSelectURL: url)
                 return
@@ -124,15 +124,17 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         sectionOffsets[searchingSection] = 0
 
         // Loop over all the data. Record the start of each "section" of our list.
-        for i in 0..<data.count {
-            if let site = data[i] as? Site {
-                if !isInSection(site.latestVisit!.date, section: searchingSection) {
-                    searchingSection++
-                    sectionOffsets[searchingSection] = i
-                }
+        if let data = data {
+            for i in 0..<data.count {
+                if let site = data[i] as? Site {
+                    if !isInSection(site.latestVisit!.date, section: searchingSection) {
+                        searchingSection++
+                        sectionOffsets[searchingSection] = i
+                    }
 
-                if searchingSection == NumSections {
-                    break
+                    if searchingSection == NumSections {
+                        break
+                    }
                 }
             }
         }
@@ -142,7 +144,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         // of a section easier.
         searchingSection++
         for i in searchingSection...NumSections {
-            sectionOffsets[i] = data.count
+            sectionOffsets[i] = data?.count ?? 0
         }
 
         // This function wants the size of a section, so return the distance between two adjacent ones
