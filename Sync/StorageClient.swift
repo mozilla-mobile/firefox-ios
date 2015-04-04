@@ -7,7 +7,9 @@ import Alamofire
 import Shared
 import Account
 
-public class ServerResponseError<T>: ErrorType {
+// Not an error that indicates a server problem, but merely an
+// error that encloses a StorageResponse.
+public class StorageResponseError<T>: ErrorType {
     public let response: StorageResponse<T>
 
     public init(_ response: StorageResponse<T>) {
@@ -32,7 +34,7 @@ public class RequestError: ErrorType {
     }
 }
 
-public class BadRequestError<T>: ServerResponseError<T> {
+public class BadRequestError<T>: StorageResponseError<T> {
     public let request: NSURLRequest
 
     public init(request: NSURLRequest, response: StorageResponse<T>) {
@@ -45,7 +47,7 @@ public class BadRequestError<T>: ServerResponseError<T> {
     }
 }
 
-public class ServerError<T>: ServerResponseError<T> {
+public class ServerError<T>: StorageResponseError<T> {
     override public var description: String {
         return "Server error."
     }
@@ -55,32 +57,48 @@ public class ServerError<T>: ServerResponseError<T> {
     }
 }
 
-public class RecordParseError : ErrorType {
+public class NotFound<T>: StorageResponseError<T> {
+    override public var description: String {
+        return "Not found."
+    }
+
+    override public init(_ response: StorageResponse<T>) {
+        super.init(response)
+    }
+}
+
+public class RecordParseError: ErrorType {
     public var description: String {
         return "Failed to parse record."
     }
 }
 
+public class MalformedMetaGlobalError: ErrorType {
+    public var description: String {
+        return "Supplied meta/global for upload did not serialize to valid JSON."
+    }
+}
+
 // Returns milliseconds. Handles decimals.
-private func optionalSecondsHeader(input: AnyObject?) -> Int64? {
+private func optionalSecondsHeader(input: AnyObject?) -> UInt64? {
     if input == nil {
         return nil
     }
 
     if let val = input as? String {
         if let double = NSScanner(string: val).scanDouble() {
-            return Int64(double * 1000)
+            return UInt64(double * 1000)
         }
     }
 
     if let seconds: Double = input as? Double {
         // Oh for a BigDecimal library.
-        return Int64(seconds * 1000)
+        return UInt64(seconds * 1000)
     }
 
     if let seconds: NSNumber = input as? NSNumber {
         // Who knows.
-        return seconds.longLongValue * 1000
+        return seconds.unsignedLongLongValue * 1000
     }
 
     return nil
@@ -108,15 +126,42 @@ private func optionalIntegerHeader(input: AnyObject?) -> Int64? {
     return nil
 }
 
+private func optionalUIntegerHeader(input: AnyObject?) -> UInt64? {
+    if input == nil {
+        return nil
+    }
+
+    if let val = input as? String {
+        return NSScanner(string: val).scanUnsignedLongLong()
+    }
+
+    if let val: Double = input as? Double {
+        // Oh for a BigDecimal library.
+        return UInt64(val)
+    }
+
+    if let val: NSNumber = input as? NSNumber {
+        // Who knows.
+        return val.unsignedLongLongValue
+    }
+
+    return nil
+}
+
+func millisecondsToDecimalSeconds(input: UInt64) -> String {
+    let val: Double = Double(input) / 1000
+    return String(format: "%.2F", val)
+}
+
 public struct ResponseMetadata {
     public let alert: String?
     public let nextOffset: String?
-    public let records: Int64?
+    public let records: UInt64?
     public let quotaRemaining: Int64?
-    public let timestampMilliseconds: Int64                    // Non-optional.
-    public let lastModifiedMilliseconds: Int64?                // Included for all success responses.
-    public let backoffMilliseconds: Int64?
-    public let retryAfterMilliseconds: Int64?
+    public let timestampMilliseconds: UInt64         // Non-optional. Server timestamp when handling request.
+    public let lastModifiedMilliseconds: UInt64?     // Included for all success responses. Collection or record timestamp.
+    public let backoffMilliseconds: UInt64?
+    public let retryAfterMilliseconds: UInt64?
 
     public init(response: NSHTTPURLResponse) {
         self.init(headers: response.allHeaderFields)
@@ -125,9 +170,9 @@ public struct ResponseMetadata {
     public init(headers: [NSObject : AnyObject]) {
         alert = headers["X-Weave-Alert"] as? String
         nextOffset = headers["X-Weave-Next-Offset"] as? String
-        records = optionalIntegerHeader(headers["X-Weave-Records"])
+        records = optionalUIntegerHeader(headers["X-Weave-Records"])
         quotaRemaining = optionalIntegerHeader(headers["X-Weave-Quota-Remaining"])
-        timestampMilliseconds = optionalSecondsHeader(headers["X-Weave-Timestamp"]) ?? -1
+        timestampMilliseconds = optionalSecondsHeader(headers["X-Weave-Timestamp"]) ?? 0
         lastModifiedMilliseconds = optionalSecondsHeader(headers["X-Last-Modified"])
         backoffMilliseconds = optionalSecondsHeader(headers["X-Weave-Backoff"]) ??
                               optionalSecondsHeader(headers["X-Backoff"])
@@ -172,15 +217,21 @@ private func errorWrap<T>(deferred: Deferred<Result<T>>, handler: ResponseHandle
         }
 
         println("Status code: \(response!.statusCode)")
+        let err = StorageResponse(value: response!, metadata: ResponseMetadata(response: response!))
+
         if response!.statusCode >= 500 {
-            let err = StorageResponse(value: response!, metadata: ResponseMetadata(response: response!))
             let result = Result<T>(failure: ServerError(err))
             deferred.fill(result)
             return
         }
 
+        if response!.statusCode == 404 {
+            let result = Result<T>(failure: NotFound(err))
+            deferred.fill(result)
+            return
+        }
+
         if response!.statusCode >= 400 {
-            let err = StorageResponse(value: response!, metadata: ResponseMetadata(response: response!))
             let result = Result<T>(failure: BadRequestError(request: request, response: err))
             deferred.fill(result)
             return
@@ -256,6 +307,26 @@ public class Sync15StorageClient {
         return deferred
     }
 
+    private func putResource<T>(path: String, body: JSON, ifUnmodifiedSince: UInt64?, f: (JSON) -> T?) -> Deferred<Result<StorageResponse<T>>> {
+        func requestPUT(url: NSURL) -> Request {
+            let req = NSMutableURLRequest(URL: url)
+            req.HTTPMethod = Method.PUT.rawValue
+            req.addValue("application/json", forHTTPHeaderField: "Accept")
+            let authorized: NSMutableURLRequest = self.authorizer(req)
+
+            if let ifUnmodifiedSince = ifUnmodifiedSince {
+                req.addValue(millisecondsToDecimalSeconds(ifUnmodifiedSince), forHTTPHeaderField: "X-If-Unmodified-Since")
+            }
+
+            req.HTTPBody = body.toString().dataUsingEncoding(NSUTF8StringEncoding)!
+
+            return Alamofire.request(authorized)
+            .validate(contentType: ["application/json"])
+        }
+
+        return doOp(requestPUT, path: path, f)
+    }
+
     private func getResource<T>(path: String, f: (JSON) -> T?) -> Deferred<Result<StorageResponse<T>>> {
         return doOp(self.requestGET, path: path, f)
     }
@@ -270,6 +341,17 @@ public class Sync15StorageClient {
 
     func getMetaGlobal() -> Deferred<Result<StorageResponse<GlobalEnvelope>>> {
         return getResource("storage/meta/global", { GlobalEnvelope($0) })
+    }
+
+    func uploadMetaGlobal(metaGlobal: MetaGlobal, ifUnmodifiedSince: UInt64?) -> Deferred<Result<StorageResponse<JSON>>> {
+        let payload = metaGlobal.toPayload()
+        if payload.isError {
+            return Deferred(value: Result(failure: MalformedMetaGlobalError()))
+        }
+
+        // TODO finish this!
+        let record: JSON = JSON(["payload": payload, "id": "global"])
+        return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, f: { $0 })
     }
 
     func wipeStorage() -> Deferred<Result<StorageResponse<JSON>>> {

@@ -13,6 +13,8 @@ class StorageClientTests: XCTestCase {
             "X-Last-Modified": "2174380461.12",
         ])
         XCTAssertTrue(m.lastModifiedMilliseconds == 2174380461120)
+
+        XCTAssertEqual("2174380461.12", millisecondsToDecimalSeconds(2174380461120))
     }
 
     // Trivial test for struct semantics that we might want to pay attention to if they change,
