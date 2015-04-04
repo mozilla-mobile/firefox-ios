@@ -22,12 +22,25 @@ public class NSUserDefaultsProfilePrefs: Prefs {
         return self.prefix + key
     }
 
+    public func setInt(value: Int32, forKey defaultName: String) {
+        // Why aren't you using userDefaults.setInteger?
+        // Because userDefaults.getInteger returns a non-optional; it's impossible
+        // to tell whether there's a value set, and you thus can't distinguish
+        // between "not present" and zero.
+        // Yeah, NSUserDefaults is meant to be used for storing "defaults", not data.
+        setObject(NSNumber(int: value), forKey: defaultName)
+    }
+
     public func setLong(value: UInt64, forKey defaultName: String) {
         setObject(NSNumber(unsignedLongLong: value), forKey: defaultName)
     }
 
     public func setLong(value: Int64, forKey defaultName: String) {
         setObject(NSNumber(longLong: value), forKey: defaultName)
+    }
+
+    public func setString(value: String, forKey defaultName: String) {
+        setObject(value, forKey: defaultName)
     }
 
     public func setObject(value: AnyObject?, forKey defaultName: String) {
@@ -56,6 +69,10 @@ public class NSUserDefaultsProfilePrefs: Prefs {
 
     public func longForKey(defaultName: String) -> Int64? {
         return nsNumberForKey(defaultName)?.longLongValue
+    }
+
+    public func intForKey(defaultName: String) -> Int32? {
+        return nsNumberForKey(defaultName)?.intValue
     }
 
     public func stringArrayForKey(defaultName: String) -> [String]? {
