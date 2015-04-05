@@ -82,8 +82,6 @@ class BrowserViewController: UIViewController {
         toolbar.browserToolbarDelegate = self
 
         tabManager.addTab()
-
-
     }
 
     private func wrapInEffect(view: UIView) -> UIView {
