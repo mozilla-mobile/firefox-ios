@@ -337,7 +337,6 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     var navBar: UINavigationBar!
 
     override func viewDidLoad() {
-        view.isAccessibilityElement = true
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
 
 
