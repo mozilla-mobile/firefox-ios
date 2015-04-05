@@ -360,6 +360,12 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         signInButton.addTarget(self, action: "SELdidClickDone", forControlEvents: UIControlEvents.TouchUpInside)
         signInButton.setTitle(NSLocalizedString("Sign in", comment: "Button that leads to Sign in section of the Settings sheet."), forState: UIControlState.Normal)
         signInButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        // workaround for VoiceOver bug - if we create the button with UIButton.buttonWithType,
+        // it gets initial frame with height 0 and accessibility somehow does not update the height
+        // later and thus the button becomes completely unavailable to VoiceOver unless we
+        // explicitly set the height to some (reasonable) non-zero value.
+        // Also note that setting accessibilityFrame instead of frame has no effect.
+        signInButton.frame.size.height = signInButton.intrinsicContentSize().height
         
         let navItem = UINavigationItem()
         navItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), style: .Plain, target: self, action: "SELdidClickSettingsItem")
