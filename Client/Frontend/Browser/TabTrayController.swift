@@ -97,6 +97,10 @@ private class CustomCell: UICollectionViewCell {
         setupFrames()
 
         self.animator.originalCenter = CGPoint(x: self.frame.width / 2, y: self.frame.height / 2)
+
+        self.accessibilityCustomActions = [
+            UIAccessibilityCustomAction(name: NSLocalizedString("Close", comment: "Accessibility label for action denoting closing a tab in tab list (tray)"), target: self.animator, selector: "SELcloseWithoutGesture")
+        ]
     }
 
     func setupFrames() {
@@ -316,6 +320,11 @@ private class SwipeAnimator: NSObject {
                 self.delegate?.swipeAnimator(self, viewDidExitContainerBounds: self.animatingView)
             }
         })
+    }
+
+    @objc func SELcloseWithoutGesture() -> Bool {
+        close(velocity: CGPointMake(-self.ux.minExitVelocity, 0), actualVelocity: self.ux.minExitVelocity)
+        return true
     }
 }
 
