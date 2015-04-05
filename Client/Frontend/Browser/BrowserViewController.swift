@@ -18,7 +18,7 @@ private let KVOEstimatedProgress = "estimatedProgress"
 
 private let HomeURL = "about:home"
 
-class BrowserViewController: UIViewController, UIGestureRecognizerDelegate {
+class BrowserViewController: UIViewController {
     private var urlBar: URLBarView!
     private var toolbar: BrowserToolbar!
     private var tabManager: TabManager!
@@ -83,29 +83,7 @@ class BrowserViewController: UIViewController, UIGestureRecognizerDelegate {
 
         tabManager.addTab()
 
-        let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: "handleDismissKeyboardGestureRecognizer:")
-        dismissKeyboardGestureRecognizer.delegate = self
-        dismissKeyboardGestureRecognizer.cancelsTouchesInView = false
-        view.addGestureRecognizer(dismissKeyboardGestureRecognizer)
-    }
 
-    func handleDismissKeyboardGestureRecognizer(gestureRecognizer: UITapGestureRecognizer) {
-        urlBar.dismissKeyboard()
-    }
-
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
-        // Don't fire if the URL text field is not first responder (no keyboard on screen)
-        if (urlBar.isURLTextFieldFirstResponder() == false) {
-            return false
-        }
-        else {
-            // Prevents firing when the urlBar itself is tapped
-            var point = gestureRecognizer.locationInView(self.view)
-            if point.y < (urlBar.frame.origin.y + urlBar.frame.size.height) {
-                return false
-            }
-        }
-        return true
     }
 
     private func wrapInEffect(view: UIView) -> UIView {
@@ -398,6 +376,12 @@ extension BrowserViewController: BrowserToolbarDelegate {
 extension BrowserViewController: HomePanelViewControllerDelegate {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL) {
         finishEditingAndSubmit(url)
+    }
+    func homePanelViewControllerHandleDismissKeyboard(homePanelViewController: HomePanelViewController) {
+        // Only fire if the URL text field is first responder (keyboard on screen)
+        if (urlBar.isURLTextFieldFirstResponder() == true) {
+            urlBar.dismissKeyboard()
+        }
     }
 }
 
