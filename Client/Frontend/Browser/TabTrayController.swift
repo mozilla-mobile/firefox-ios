@@ -290,31 +290,32 @@ private class SwipeAnimator: NSObject {
             }
 
             // Otherwise we are good and we can get rid of the view
-
-            // Calculate the edge to calculate distance from
-            let edgeX = velocity.x > 0 ? CGRectGetMaxX(self.container.frame) :
-                CGRectGetMinX(self.container.frame)
-            var distance
-            = (self.animatingView.center.x / 2) + abs(self.animatingView.center.x - edgeX)
-
-            // Determine which way we need to travel
-            distance *= velocity.x > 0 ? 1 : -1
-
-            let timeStep = NSTimeInterval(abs(distance) / actualVelocity)
-            UIView.animateWithDuration(timeStep, animations: {
-                let animatedPosition
-                = CGPoint(x: self.animatingView.center.x + distance, y: self.animatingView.center.y)
-                self.animatingView.center = animatedPosition
-                }, completion: { finished in
-                    if finished {
-                        self.animatingView.hidden = true
-                        self.delegate?.swipeAnimator(self, viewDidExitContainerBounds: self.animatingView)
-                    }
-            })
+            close(velocity: velocity, actualVelocity: actualVelocity)
 
         default:
             break
         }
+    }
+
+    func close(#velocity: CGPoint, actualVelocity: CGFloat) {
+        // Calculate the edge to calculate distance from
+        let edgeX = velocity.x > 0 ? CGRectGetMaxX(self.container.frame) : CGRectGetMinX(self.container.frame)
+        var distance = (self.animatingView.center.x / 2) + abs(self.animatingView.center.x - edgeX)
+
+        // Determine which way we need to travel
+        distance *= velocity.x > 0 ? 1 : -1
+
+        let timeStep = NSTimeInterval(abs(distance) / actualVelocity)
+        UIView.animateWithDuration(timeStep, animations: {
+            let animatedPosition
+            = CGPoint(x: self.animatingView.center.x + distance, y: self.animatingView.center.y)
+            self.animatingView.center = animatedPosition
+        }, completion: { finished in
+            if finished {
+                self.animatingView.hidden = true
+                self.delegate?.swipeAnimator(self, viewDidExitContainerBounds: self.animatingView)
+            }
+        })
     }
 }
 
