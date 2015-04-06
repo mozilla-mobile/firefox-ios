@@ -2,6 +2,36 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+
+// Why not simply provide an override for ==? Well, that's scary, and can accidentally recurse.
+// This is enough to catch arrays, which Swift will delegate to element-==.
+public func optArrayEqual<T: Equatable>(lhs: [T]?, rhs: [T]?) -> Bool {
+    switch (lhs, rhs) {
+    case (.None, .None):
+        return true
+    case (.None, _):
+        return false
+    case (_, .None):
+        return false
+    default:
+        // This delegates to Swift's own array '==', which calls T's == on each element.
+        return lhs! == rhs!
+    }
+}
+
+public func optDictionaryEqual<K: Equatable, V: Equatable>(lhs: [K: V]?, rhs: [K: V]?) -> Bool {
+    switch (lhs, rhs) {
+    case (.None, .None):
+        return true
+    case (.None, _):
+        return false
+    case (_, .None):
+        return false
+    default:
+        return lhs! == rhs!
+    }
+}
+
 /**
  * Return members of `a` that aren't nil, changing the type of the sequence accordingly.
  */

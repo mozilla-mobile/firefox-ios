@@ -32,4 +32,17 @@ class UtilsTests: XCTestCase {
         XCTAssertEqual(4, b.count)
         XCTAssertEqual([1, 2, 3, 4], b)
     }
+
+    func testOptArrayEqual() {
+        let x: [String] = ["a", "b", "c"]
+        let y: [String]? = ["a", "b", "c"]
+        let z: [String]? = nil
+
+        XCTAssertTrue(optArrayEqual(x, y))
+        XCTAssertTrue(optArrayEqual(x, x))
+        XCTAssertTrue(optArrayEqual(y, y))
+        XCTAssertTrue(optArrayEqual(z, z))
+        XCTAssertFalse(optArrayEqual(x, z))
+        XCTAssertFalse(optArrayEqual(z, y))
+    }
 }
