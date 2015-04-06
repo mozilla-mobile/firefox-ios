@@ -138,7 +138,7 @@ public class LiveAccountTest: XCTestCase {
             configuration: ProductionFirefoxAccountConfiguration())
     }
 
-    public func getAuthState(now: Int64) -> Deferred<Result<SyncAuthState>> {
+    public func getAuthState(now: Timestamp) -> Deferred<Result<SyncAuthState>> {
         let account = self.getTestAccount()
         return account.map { result in
             if let account = result.successValue {
@@ -148,7 +148,7 @@ public class LiveAccountTest: XCTestCase {
         }
     }
 
-    public func syncAuthState(now: Int64) -> Deferred<Result<(token: TokenServerToken, forKey: NSData)>> {
+    public func syncAuthState(now: Timestamp) -> Deferred<Result<(token: TokenServerToken, forKey: NSData)>> {
         return getAuthState(now).bind { result in
             if let authState = result.successValue {
                 return authState.token(now, canBeExpired: false)

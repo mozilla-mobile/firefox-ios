@@ -60,7 +60,7 @@ func stateFromDictionaryV1(dictionary: [String: AnyObject]) -> FxAState? {
                             if let knownUnverifiedAt = dictionary["knownUnverifiedAt"] as? NSNumber {
                                 if let lastNotifiedUserAt = dictionary["lastNotifiedUserAt"] as? NSNumber {
                                         return EngagedBeforeVerifiedState(
-                                            knownUnverifiedAt: knownUnverifiedAt.longLongValue, lastNotifiedUserAt: lastNotifiedUserAt.longLongValue,
+                                            knownUnverifiedAt: knownUnverifiedAt.unsignedLongLongValue, lastNotifiedUserAt: lastNotifiedUserAt.unsignedLongLongValue,
                                             sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
                                 }
                             }
@@ -94,7 +94,7 @@ func stateFromDictionaryV1(dictionary: [String: AnyObject]) -> FxAState? {
                                 if let keyPair = RSAKeyPair(JSONRepresentation: keyPairJSON) {
                                     if let keyPairExpiresAt = dictionary["keyPairExpiresAt"] as? NSNumber {
                                         return CohabitingAfterKeyPairState(sessionToken: sessionToken, kA: kA, kB: kB,
-                                            keyPair: keyPair, keyPairExpiresAt: keyPairExpiresAt.longLongValue)
+                                            keyPair: keyPair, keyPairExpiresAt: keyPairExpiresAt.unsignedLongLongValue)
                                     }
                                 }
                             }
@@ -112,8 +112,8 @@ func stateFromDictionaryV1(dictionary: [String: AnyObject]) -> FxAState? {
                                         if let certificate = dictionary["certificate"] as? String {
                                             if let certificateExpiresAt = dictionary["certificateExpiresAt"] as? NSNumber {
                                                 return MarriedState(sessionToken: sessionToken, kA: kA, kB: kB,
-                                                    keyPair: keyPair, keyPairExpiresAt: keyPairExpiresAt.longLongValue,
-                                                    certificate: certificate, certificateExpiresAt: certificateExpiresAt.longLongValue)
+                                                    keyPair: keyPair, keyPairExpiresAt: keyPairExpiresAt.unsignedLongLongValue,
+                                                    certificate: certificate, certificateExpiresAt: certificateExpiresAt.unsignedLongLongValue)
                                             }
                                         }
                                     }
@@ -202,10 +202,10 @@ public class EngagedBeforeVerifiedState: ReadyForKeys {
 
     // Timestamp, in milliseconds after the epoch, when we first knew the account was unverified.
     // Use this to avoid nagging the user to verify her account immediately after connecting.
-    let knownUnverifiedAt: Int64
-    let lastNotifiedUserAt: Int64
+    let knownUnverifiedAt: Timestamp
+    let lastNotifiedUserAt: Timestamp
 
-    public init(knownUnverifiedAt: Int64, lastNotifiedUserAt: Int64, sessionToken: NSData, keyFetchToken: NSData, unwrapkB: NSData) {
+    public init(knownUnverifiedAt: Timestamp, lastNotifiedUserAt: Timestamp, sessionToken: NSData, keyFetchToken: NSData, unwrapkB: NSData) {
         self.knownUnverifiedAt = knownUnverifiedAt
         self.lastNotifiedUserAt = lastNotifiedUserAt
         super.init(sessionToken: sessionToken, keyFetchToken: keyFetchToken, unwrapkB: unwrapkB)
@@ -213,8 +213,8 @@ public class EngagedBeforeVerifiedState: ReadyForKeys {
 
     public override func asDictionary() -> [String: AnyObject] {
         var d = super.asDictionary()
-        d["knownUnverifiedAt"] = NSNumber(longLong: knownUnverifiedAt)
-        d["lastNotifiedUserAt"] = NSNumber(longLong: lastNotifiedUserAt)
+        d["knownUnverifiedAt"] = NSNumber(unsignedLongLong: knownUnverifiedAt)
+        d["lastNotifiedUserAt"] = NSNumber(unsignedLongLong: lastNotifiedUserAt)
         return d
     }
 
@@ -267,9 +267,9 @@ public class CohabitingBeforeKeyPairState: TokenAndKeys {
 public class TokenKeysAndKeyPair: TokenAndKeys {
     let keyPair: KeyPair
     // Timestamp, in milliseconds after the epoch, when keyPair expires.  After this time, generate a new keyPair.
-    let keyPairExpiresAt: Int64
+    let keyPairExpiresAt: Timestamp
 
-    init(sessionToken: NSData, kA: NSData, kB: NSData, keyPair: KeyPair, keyPairExpiresAt: Int64) {
+    init(sessionToken: NSData, kA: NSData, kB: NSData, keyPair: KeyPair, keyPairExpiresAt: Timestamp) {
         self.keyPair = keyPair
         self.keyPairExpiresAt = keyPairExpiresAt
         super.init(sessionToken: sessionToken, kA: kA, kB: kB)
@@ -278,11 +278,11 @@ public class TokenKeysAndKeyPair: TokenAndKeys {
     public override func asDictionary() -> [String: AnyObject] {
         var d = super.asDictionary()
         d["keyPair"] = keyPair.JSONRepresentation()
-        d["keyPairExpiresAt"] = NSNumber(longLong: keyPairExpiresAt)
+        d["keyPairExpiresAt"] = NSNumber(unsignedLongLong: keyPairExpiresAt)
         return d
     }
 
-    func isKeyPairExpired(now: Int64) -> Bool {
+    func isKeyPairExpired(now: Timestamp) -> Bool {
         return keyPairExpiresAt < now
     }
 }
@@ -295,9 +295,9 @@ public class MarriedState: TokenKeysAndKeyPair {
     override public var label: FxAStateLabel { return FxAStateLabel.Married }
 
     let certificate: String
-    let certificateExpiresAt: Int64
+    let certificateExpiresAt: Timestamp
 
-    init(sessionToken: NSData, kA: NSData, kB: NSData, keyPair: KeyPair, keyPairExpiresAt: Int64, certificate: String, certificateExpiresAt: Int64) {
+    init(sessionToken: NSData, kA: NSData, kB: NSData, keyPair: KeyPair, keyPairExpiresAt: Timestamp, certificate: String, certificateExpiresAt: Timestamp) {
         self.certificate = certificate
         self.certificateExpiresAt = certificateExpiresAt
         super.init(sessionToken: sessionToken, kA: kA, kB: kB, keyPair: keyPair, keyPairExpiresAt: keyPairExpiresAt)
@@ -306,11 +306,11 @@ public class MarriedState: TokenKeysAndKeyPair {
     public override func asDictionary() -> [String: AnyObject] {
         var d = super.asDictionary()
         d["certificate"] = certificate
-        d["certificateExpiresAt"] = NSNumber(longLong: certificateExpiresAt)
+        d["certificateExpiresAt"] = NSNumber(unsignedLongLong: certificateExpiresAt)
         return d
     }
 
-    func isCertificateExpired(now: Int64) -> Bool {
+    func isCertificateExpired(now: Timestamp) -> Bool {
         return certificateExpiresAt < now
     }
 
@@ -327,13 +327,13 @@ public class MarriedState: TokenKeysAndKeyPair {
         return newState
     }
 
-    public func generateAssertionForAudience(audience: String, now: Int64) -> String {
+    public func generateAssertionForAudience(audience: String, now: Timestamp) -> String {
         let assertion = JSONWebTokenUtils.createAssertionWithPrivateKeyToSignWith(keyPair.privateKey,
             certificate: certificate,
             audience: audience,
             issuer: "127.0.0.1",
-            issuedAt: UInt64(now),
-            duration: UInt64(OneHourInMilliseconds))
+            issuedAt: now,
+            duration: OneHourInMilliseconds)
         return assertion
     }
 }

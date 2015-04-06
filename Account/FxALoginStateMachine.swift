@@ -36,7 +36,7 @@ class FxALoginStateMachine {
         self.client = client
     }
 
-    func advanceFromState(state: FxAState, now: Int64) -> Deferred<FxAState> {
+    func advanceFromState(state: FxAState, now: Timestamp) -> Deferred<FxAState> {
         stateLabelsSeen.updateValue(true, forKey: state.label)
         return self.advanceOneState(state, now: now).bind { (newState: FxAState) in
             let labelAlreadySeen = self.stateLabelsSeen.updateValue(true, forKey: newState.label) != nil
@@ -48,7 +48,7 @@ class FxALoginStateMachine {
         }
     }
 
-    private func advanceOneState(state: FxAState, now: Int64) -> Deferred<FxAState> {
+    private func advanceOneState(state: FxAState, now: Timestamp) -> Deferred<FxAState> {
         // For convenience.  Without type annotation, Swift complains about types not being exact.
         let separated: Deferred<FxAState> = Deferred(value: SeparatedState())
         let doghouse: Deferred<FxAState> = Deferred(value: DoghouseState())

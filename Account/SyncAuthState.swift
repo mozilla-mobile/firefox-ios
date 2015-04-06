@@ -13,7 +13,7 @@ public class SyncAuthState {
     private let account: FirefoxAccount
     private let tokenServerURL: NSURL
 
-    typealias Cache = (token: TokenServerToken, forKey: NSData, expiresAt: Int64)
+    typealias Cache = (token: TokenServerToken, forKey: NSData, expiresAt: Timestamp)
     private var cache: Cache? = nil
 
     init(account: FirefoxAccount, tokenServerURL: NSURL) {
@@ -26,7 +26,7 @@ public class SyncAuthState {
         self.cache = nil
     }
 
-    public func token(now: Int64, canBeExpired: Bool) -> Deferred<Result<(token: TokenServerToken, forKey: NSData)>> {
+    public func token(now: Timestamp, canBeExpired: Bool) -> Deferred<Result<(token: TokenServerToken, forKey: NSData)>> {
         if let (token, forKey, expiresAt) = cache {
             // Give ourselves some room to do work.
             let isExpired = expiresAt < now + 5 * OneMinuteInMilliseconds
