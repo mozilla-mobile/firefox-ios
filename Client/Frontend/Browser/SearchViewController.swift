@@ -47,7 +47,7 @@ protocol SearchViewControllerDelegate: class {
     func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL)
 }
 
-class SearchViewController: SiteTableViewController, KeyboardHelperDelegate {
+class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
     var searchDelegate: SearchViewControllerDelegate?
 
     private var suggestClient: SearchSuggestClient?
@@ -222,7 +222,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate {
 
     override func reloadData() {
         querySuggestClient()
-        queryHistoryClient()
     }
 
     private func layoutTable() {
@@ -339,23 +338,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate {
         })
     }
 
-    private func queryHistoryClient() {
-        if searchQuery.isEmpty {
-            data = Cursor(status: .Success, msg: "Empty query")
-            return
-        }
-
-        let options = QueryOptions()
-        options.sort = .LastVisit
-        options.filter = searchQuery
-
-        profile.history.get(options, complete: { (data: Cursor) -> Void in
-            self.data = data
-            if data.status != .Success {
-                println("Err: \(data.statusMessage)")
-            }
-            self.tableView.reloadData()
-        })
+    func loader(dataLoaded data: Cursor) {
+        self.data = data
+        tableView.reloadData()
     }
 }
 
