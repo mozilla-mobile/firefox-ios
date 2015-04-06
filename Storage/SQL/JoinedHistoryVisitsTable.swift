@@ -139,9 +139,6 @@ class JoinedHistoryVisitsTable: Table {
             site.icon = icon
         }
 
-        let dt2 = (NSDate().timeIntervalSince1970 - visit.date.timeIntervalSince1970) / 86400
-        println("DT \(site.url): \(dt2)")
-
         return (site, visit)
     }
 
@@ -160,7 +157,6 @@ class JoinedHistoryVisitsTable: Table {
         sql += "GROUP BY historyId";
 
         // Trying to do this in one line (i.e. options?.sort == .LastVisit) breaks the Swift compiler
-        println("Sort: \(options?.sort)")
         if let sort = options?.sort {
             if sort == .LastVisit {
                 sql += " ORDER BY visitDate DESC"

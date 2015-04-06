@@ -4,14 +4,14 @@
 
 public struct AppConstants {
     static var StatusBarHeight: CGFloat {
-        if UIApplication.sharedApplication().statusBarHidden {
+        if UIScreen.mainScreen().traitCollection.verticalSizeClass == .Compact {
             return 0
         }
         return 20
     }
+
     static let ToolbarHeight: CGFloat = 44
     static let DefaultRowHeight: CGFloat = 58
-
     static let DefaultPadding: CGFloat = 10
 
     static let DefaultMediumFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 13)
