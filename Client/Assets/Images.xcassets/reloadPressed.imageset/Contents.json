@@ -2,16 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "Refresh (Pressed).png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "stop.png"
+      "filename" : "Refresh (Pressed)@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "Refresh (Pressed)@3x.png"
     }
   ],
   "info" : {

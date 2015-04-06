@@ -12,7 +12,8 @@ private struct URLBarViewUX {
     static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
     static let TextFieldBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.05)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
-    static let LocationLeftPadding = 8
+    static let LocationLeftPadding = 5
+    static let LocationHeight = 30
     static let TextFieldCornerRadius: CGFloat = 3
     static let TextFieldBorderWidth: CGFloat = 1
     // offset from edge of tabs button
@@ -50,6 +51,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
     let bookmarkButton = UIButton()
     let forwardButton = UIButton()
     let backButton = UIButton()
+    let stopReloadButton = UIButton()
     var helper: BrowserToolbarHelper?
     var toolbarIsShowing = false
 
@@ -137,6 +139,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
         addSubview(self.bookmarkButton)
         addSubview(self.forwardButton)
         addSubview(self.backButton)
+        addSubview(self.stopReloadButton)
 
         self.helper = BrowserToolbarHelper(toolbar: self)
 
@@ -154,6 +157,13 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
 
             forwardButton.snp_remakeConstraints { (make) -> () in
                 make.left.equalTo(self.backButton.snp_right)
+                make.bottom.equalTo(self)
+                make.height.equalTo(AppConstants.ToolbarHeight)
+                make.width.equalTo(AppConstants.ToolbarHeight)
+            }
+
+            stopReloadButton.snp_remakeConstraints { (make) -> () in
+                make.left.equalTo(self.forwardButton.snp_right)
                 make.bottom.equalTo(self)
                 make.height.equalTo(AppConstants.ToolbarHeight)
                 make.width.equalTo(AppConstants.ToolbarHeight)
@@ -240,10 +250,6 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
         tabsButton.setTitle(count.description, forState: UIControlState.Normal)
         tabsButton.accessibilityValue = count.description
         tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
-    }
-
-    func updateLoading(loading: Bool) {
-        locationView.loading = loading
     }
 
     func SELdidClickAddTab() {
@@ -341,6 +347,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
         self.cancelButton.hidden = false
         self.forwardButton.hidden = !self.toolbarIsShowing
         self.backButton.hidden = !self.toolbarIsShowing
+        self.stopReloadButton.hidden = !self.toolbarIsShowing
         self.shareButton.hidden = !self.toolbarIsShowing
         self.bookmarkButton.hidden = !self.toolbarIsShowing
 
@@ -351,19 +358,23 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
             self.locationContainer.snp_remakeConstraints { make in
                 make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
                 make.trailing.equalTo(self.cancelButton.snp_leading)
+                make.height.equalTo(URLBarViewUX.LocationHeight)
                 make.centerY.equalTo(self).offset(AppConstants.StatusBarHeight / 2)
             }
         } else {
             self.locationContainer.snp_remakeConstraints { make in
                 if self.toolbarIsShowing {
                     // If we are showing a toolbar, show the text field next to the forward button
-                    make.left.equalTo(self.forwardButton.snp_right)
+                    make.left.equalTo(self.stopReloadButton.snp_right)
                     make.right.equalTo(self.shareButton.snp_left)
                 } else {
                     // Otherwise, left align the location view
                     make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
-                    make.trailing.equalTo(self.tabsButton.snp_leading).offset(-10)
+                    make.trailing.equalTo(self.tabsButton.snp_leading).offset(-14)
                 }
+
+                make.height.equalTo(URLBarViewUX.LocationHeight)
+
                 make.centerY.equalTo(self).offset(AppConstants.StatusBarHeight / 2)
             }
         }
@@ -439,6 +450,16 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
 
     func updateBookmarkStatus(isBookmarked: Bool) {
         bookmarkButton.selected = isBookmarked
+    }
+
+    func updateReloadStatus(isLoading: Bool) {
+        if isLoading {
+            stopReloadButton.setImage(helper?.ImageStop, forState: .Normal)
+            stopReloadButton.setImage(helper?.ImageStopPressed, forState: .Highlighted)
+        } else {
+            stopReloadButton.setImage(helper?.ImageReload, forState: .Normal)
+            stopReloadButton.setImage(helper?.ImageReloadPressed, forState: .Highlighted)
+        }
     }
 }
 
