@@ -7,6 +7,7 @@ import UIKit
 
 protocol BrowserLocationViewDelegate {
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView)
+    func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView)
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView)
     func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView)
 }
@@ -41,6 +42,10 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocationLabel:")
         locationLabel.addGestureRecognizer(tapGestureRecognizer)
+
+        // Long press gesture recognizer (for URL bar copying/pasting without entering editing mode)
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "SELlongPressLocationLabel:")
+        locationLabel.addGestureRecognizer(longPressGestureRecognizer)
 
         readerModeButton = ReaderModeButton(frame: CGRectZero)
         readerModeButton.hidden = true
@@ -99,6 +104,12 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
 
     func SELtapLocationLabel(recognizer: UITapGestureRecognizer) {
         delegate?.browserLocationViewDidTapLocation(self)
+    }
+
+    func SELlongPressLocationLabel(recognizer: UILongPressGestureRecognizer) {
+        if (recognizer.state == UIGestureRecognizerState.Began) {
+            delegate?.browserLocationViewDidLongPressLocation(self)
+        }
     }
 
     func SELtapReaderModeButton() {
