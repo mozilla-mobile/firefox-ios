@@ -28,7 +28,7 @@ protocol HomePanelDelegate: class {
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL)
 }
 
-class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate, UIGestureRecognizerDelegate {
+class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [HomePanelDescriptor]!
@@ -65,7 +65,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
         // Gesture recognizer to dismiss the keyboard in the URLBarView when the buttonContainerView is tapped
         let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: "handleDismissKeyboardGestureRecognizer:")
-        dismissKeyboardGestureRecognizer.delegate = self
         dismissKeyboardGestureRecognizer.cancelsTouchesInView = false
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
     }
