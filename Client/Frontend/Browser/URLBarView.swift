@@ -24,6 +24,7 @@ private struct URLBarViewUX {
 protocol URLBarDelegate: class {
     func urlBarDidPressTabs(urlBar: URLBarView)
     func urlBarDidPressReaderMode(urlBar: URLBarView)
+    func urlBarDidLongPressReaderMode(urlBar: URLBarView)
     func urlBarDidPressStop(urlBar: URLBarView)
     func urlBarDidPressReload(urlBar: URLBarView)
     func urlBarDidBeginEditing(urlBar: URLBarView)
@@ -201,6 +202,10 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate {
 
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView) {
         delegate?.urlBarDidPressReaderMode(self)
+    }
+
+    func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView) {
+        delegate?.urlBarDidLongPressReaderMode(self)
     }
 
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
