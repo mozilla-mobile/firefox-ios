@@ -9,7 +9,7 @@ import XCTest
 class FxAStateTests: XCTestCase {
     class func stateForLabel(label: FxAStateLabel) -> FxAState {
         let keyLength = UInt(KeyLength) // Ah, Swift.
-        let now = Int64(NSDate().timeIntervalSince1970 * 1000)
+        let now = NSDate.now()
 
         switch label {
         case .EngagedBeforeVerified:

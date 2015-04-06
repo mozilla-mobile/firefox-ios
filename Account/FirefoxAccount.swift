@@ -84,7 +84,7 @@ public class FirefoxAccount {
             sessionToken: NSData, keyFetchToken: NSData, unwrapkB: NSData) -> FirefoxAccount {
         var state: FxAState! = nil
         if !verified {
-            let now = Int64(NSDate().timeIntervalSince1970 * 1000)
+            let now = NSDate.now()
             state = EngagedBeforeVerifiedState(knownUnverifiedAt: now,
                 lastNotifiedUserAt: now,
                 sessionToken: sessionToken,
@@ -158,7 +158,7 @@ public class FirefoxAccount {
     public func marriedState() -> Deferred<Result<MarriedState>> {
         let client = FxAClient10(endpoint: authEndpoint)
         let stateMachine = FxALoginStateMachine(client: client)
-        let now = Int64(NSDate().timeIntervalSince1970 * 1000)
+        let now = NSDate.now()
         return stateMachine.advanceFromState(state, now: now).map { newState in
             self.state = newState
             if newState.label == FxAStateLabel.Married {
