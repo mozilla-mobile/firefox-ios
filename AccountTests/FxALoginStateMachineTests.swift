@@ -86,7 +86,7 @@ class FxALoginStateMachineTests: XCTestCase {
             let e = expectationWithDescription("Wait for login state machine.")
             let state = FxAStateTests.stateForLabel(stateLabel)
             withMachineAndClient { stateMachine, _ in
-                stateMachine.advanceFromState(state, now: Int64(0)).upon { newState in
+                stateMachine.advanceFromState(state, now: 0).upon { newState in
                     XCTAssertEqual(newState.label, stateLabel)
                     e.fulfill()
                 }
