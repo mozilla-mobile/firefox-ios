@@ -240,6 +240,8 @@ class BrowserViewController: UIViewController {
             return
         }
 
+        homePanelController?.view?.hidden = true
+
         addChildViewController(searchController!)
     }
 
@@ -248,6 +250,7 @@ class BrowserViewController: UIViewController {
             searchController.view.removeFromSuperview()
             searchController.removeFromParentViewController()
             self.searchController = nil
+            homePanelController?.view?.hidden = false
         }
     }
 
