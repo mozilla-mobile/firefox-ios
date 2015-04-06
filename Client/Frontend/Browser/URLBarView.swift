@@ -363,6 +363,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
     func prepareEditingAnimation(editing: Bool) {
         // Make sure everything is showing during the transition (we'll hide it afterwards).
         self.progressBar.hidden = editing
+        self.locationView.hidden = editing
         self.editTextField.hidden = !editing
         self.tabsButton.hidden = false
         self.cancelButton.hidden = false
