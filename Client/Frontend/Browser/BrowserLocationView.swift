@@ -8,6 +8,7 @@ import UIKit
 protocol BrowserLocationViewDelegate {
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView)
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView)
+    func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView)
     func browserLocationViewDidTapStop(browserLocationView: BrowserLocationView)
     func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView)
 }
@@ -55,6 +56,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         readerModeButton = ReaderModeButton(frame: CGRectZero)
         readerModeButton.hidden = true
         readerModeButton.addTarget(self, action: "SELtapReaderModeButton", forControlEvents: .TouchUpInside)
+        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "SELlongPressReaderModeButton:"))
         addSubview(readerModeButton)
     }
 
@@ -116,6 +118,12 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
 
     func SELtapReaderModeButton() {
         delegate?.browserLocationViewDidTapReaderMode(self)
+    }
+
+    func SELlongPressReaderModeButton(recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == UIGestureRecognizerState.Began {
+            delegate?.browserLocationViewDidLongPressReaderMode(self)
+        }
     }
 
     func SELtapStopReload() {

@@ -295,6 +295,20 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
+    func urlBarDidLongPressReaderMode(urlBar: URLBarView) {
+        if let tab = tabManager.selectedTab {
+            if var url = tab.displayURL? {
+                if let absoluteString = url.absoluteString {
+                    profile.readingList.add(item: ReadingListItem(url: absoluteString, title: tab.title)) { (success) -> Void in
+                        if success {
+                            // TODO Update reading view bar when that has been hooked up
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     func urlBar(urlBar: URLBarView, didEnterText text: String) {
         if text.isEmpty {
             hideSearchController()
