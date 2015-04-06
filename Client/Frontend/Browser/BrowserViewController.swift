@@ -109,7 +109,7 @@ class BrowserViewController: UIViewController {
         header = wrapInEffect(urlBar, parent: view)
         urlBar.browserToolbarDelegate = self
 
-        searchLoader = SearchLoader(history: profile.history)
+        searchLoader = SearchLoader(history: profile.history, urlBar: urlBar)
 
         // Setup the reader mode control bar. This bar starts not visible with a zero height.
         readerModeBar = ReaderModeBarView(frame: CGRectZero)
