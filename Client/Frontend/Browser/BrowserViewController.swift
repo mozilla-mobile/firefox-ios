@@ -198,6 +198,8 @@ class BrowserViewController: UIViewController {
             view.addSubview(homePanelController!.view)
             addChildViewController(homePanelController!)
         }
+        webViewContainer.hidden = true
+        toolbar?.hidden = !inline
         view.setNeedsUpdateConstraints()
     }
 
@@ -206,6 +208,8 @@ class BrowserViewController: UIViewController {
             controller.view.removeFromSuperview()
             controller.removeFromParentViewController()
             homePanelController = nil
+            webViewContainer.hidden = false
+            toolbar?.hidden = false
         }
     }
 
