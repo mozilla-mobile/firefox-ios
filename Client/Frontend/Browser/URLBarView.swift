@@ -114,7 +114,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
         tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the urlbar tabs button")
         tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
         tabsButton.titleLabel?.layer.cornerRadius = 2
-        tabsButton.titleLabel?.font = AppConstants.DefaultSmallFont
+        tabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
         tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
         tabsButton.titleLabel?.snp_makeConstraints { make in
             make.size.equalTo(18)
