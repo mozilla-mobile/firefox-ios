@@ -60,7 +60,9 @@ struct ReaderModeHandlers {
                     }
                 }
             }
-            return GCDWebServerDataResponse(HTML: "There was an error converting the page") // TODO Needs a proper error page
+
+            let errorString = NSLocalizedString("There was an error converting the page", comment: "Error displayed when reader mode cannot be enabled")
+            return GCDWebServerDataResponse(HTML: errorString) // TODO Needs a proper error page
         }
     }
 }

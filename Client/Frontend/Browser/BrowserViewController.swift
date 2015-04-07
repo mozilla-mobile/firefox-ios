@@ -737,7 +737,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         if let wv = selected?.webView {
-            wv.accessibilityLabel = "Web content"
+            wv.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the web view")
             webViewContainer.addSubview(wv)
             if let url = wv.URL?.absoluteString {
                 profile.bookmarks.isBookmarked(url, success: { bookmarked in
@@ -1064,13 +1064,15 @@ extension BrowserViewController: LongPressGestureDelegate {
         var dialogTitleURL: NSURL?
         if let linkURL = elements[LongPressElementType.Link] {
             dialogTitleURL = linkURL
-            var openNewTabAction =  UIAlertAction(title: "Open In New Tab", style: UIAlertActionStyle.Default) { (action: UIAlertAction!) in
+            let newTabTitle = NSLocalizedString("Open In New Tab", comment: "Context menu option")
+            var openNewTabAction = UIAlertAction(title: newTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) in
                 let request =  NSURLRequest(URL: linkURL)
                 let tab = self.tabManager.addTab(request: request)
             }
             actionSheetController.addAction(openNewTabAction)
 
-            var copyAction = UIAlertAction(title: "Copy", style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
+            let copyTitle = NSLocalizedString("Copy", comment: "Context menu option")
+            var copyAction = UIAlertAction(title: copyTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
                 var pasteBoard = UIPasteboard.generalPasteboard()
                 pasteBoard.string = linkURL.absoluteString
             }
@@ -1080,7 +1082,9 @@ extension BrowserViewController: LongPressGestureDelegate {
             if dialogTitleURL == nil {
                 dialogTitleURL = imageURL
             }
-            var saveImageAction = UIAlertAction(title: "Save Image", style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
+
+            let saveImageTitle = NSLocalizedString("Save Image", comment: "Context menu option")
+            var saveImageAction = UIAlertAction(title: saveImageTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
                     var imageData = NSData(contentsOfURL: imageURL)
                     if imageData != nil {
@@ -1090,14 +1094,16 @@ extension BrowserViewController: LongPressGestureDelegate {
             }
             actionSheetController.addAction(saveImageAction)
 
-            var copyAction = UIAlertAction(title: "Copy Image URL", style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
+            let copyImageTitle = NSLocalizedString("Copy Image URL", comment: "Context menu option")
+            var copyAction = UIAlertAction(title: copyImageTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
                 var pasteBoard = UIPasteboard.generalPasteboard()
                 pasteBoard.string = imageURL.absoluteString
             }
             actionSheetController.addAction(copyAction)
         }
+
         actionSheetController.title = dialogTitleURL!.absoluteString
-        var cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, nil)
+        var cancelAction = UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, nil)
         actionSheetController.addAction(cancelAction)
 
         if let popoverPresentationController = actionSheetController.popoverPresentationController {

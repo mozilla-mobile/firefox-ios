@@ -127,7 +127,8 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
 
         cancelButton = InsetButton()
         cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
+        let cancelTitle = NSLocalizedString("Cancel", comment: "Button label to cancel entering a URL or search query")
+        cancelButton.setTitle(cancelTitle, forState: UIControlState.Normal)
         cancelButton.titleLabel?.font = AppConstants.DefaultMediumFont
         cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
         cancelButton.titleEdgeInsets = UIEdgeInsetsMake(10, 12, 10, 12)

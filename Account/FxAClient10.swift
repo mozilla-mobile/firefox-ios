@@ -66,8 +66,8 @@ extension FxAClientError: Printable, ErrorType {
     public var description: String {
         switch self {
         case let .Remote(error):
-            let errorString = error.error ?? "Missing error"
-            let messageString = error.message ?? "Missing message"
+            let errorString = error.error ?? NSLocalizedString("Missing error", comment: "Error for a missing remote error number")
+            let messageString = error.message ?? NSLocalizedString("Missing message", comment: "Error for a missing remote error message")
             return "<FxAClientError.Remote \(error.code)/\(error.errno): \(errorString) (\(messageString))>"
         case let .Local(error):
             return "<FxAClientError.Local \(error.description)>"

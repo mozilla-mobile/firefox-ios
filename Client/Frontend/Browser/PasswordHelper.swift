@@ -7,6 +7,10 @@ import Shared
 import Storage
 import WebKit
 
+private let SaveButtonTitle = NSLocalizedString("Save", comment: "Button to save the user's password")
+private let NotNowButtonTitle = NSLocalizedString("Not now", comment: "Button to not save the user's password")
+private let UpdateButtonTitle = NSLocalizedString("Update", comment: "Button to update the user's password")
+
 class PasswordHelper: BrowserHelper {
     private weak var browser: Browser?
     private let profile: Profile
@@ -93,26 +97,25 @@ class PasswordHelper: BrowserHelper {
     }
 
     private func promptSave(password: Password) {
-        let localized = NSLocalizedString("Do you want to save the password for {username} on {hostname}?", comment: "")
-        let attrString = replace(NSString(string: localized),
-            keys: [ "{username}", "{hostname}" ],
-            replacements: [ password.username, password.hostname ])
+        let promptStringFormat = NSLocalizedString("Do you want to save the password for %@ on %@?", comment: "Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
+        let promptMessage = NSAttributedString(string: String(format: promptStringFormat, password.username, password.hostname))
 
         if snackBar != nil {
             browser?.removeSnackbar(snackBar!)
         }
 
-        snackBar = CountdownSnackBar(attrText: attrString,
+        snackBar = CountdownSnackBar(attrText: promptMessage,
             img: UIImage(named: "lock_verified"),
             buttons: [
-                SnackButton(title: "Save", callback: { (bar: SnackBar) -> Void in
+                SnackButton(title: SaveButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.passwords.add(password) { success in
                         // println("Add password \(success)")
                     }
                 }),
-                SnackButton(title: "Not now", callback: { (bar: SnackBar) -> Void in
+
+                SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     return
@@ -122,26 +125,24 @@ class PasswordHelper: BrowserHelper {
     }
 
     private func promptUpdate(password: Password) {
-        let localized = NSLocalizedString("Do you want to update the password for {username} on {hostname}?", comment: "")
-        let attrString = replace(NSString(string: localized),
-            keys: [ "{username}", "{hostname}" ],
-            replacements: [ password.username, password.hostname ])
+        let promptStringFormat = NSLocalizedString("Do you want to update the password for %@ on %@?", comment: "Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
+        let promptMessage = NSAttributedString(string: String(format: promptStringFormat, password.username, password.hostname))
 
         if snackBar != nil {
             browser?.removeSnackbar(snackBar!)
         }
 
-        snackBar = CountdownSnackBar(attrText: attrString,
+        snackBar = CountdownSnackBar(attrText: promptMessage,
             img: UIImage(named: "lock_verified"),
             buttons: [
-                SnackButton(title: "Update", callback: { (bar: SnackBar) -> Void in
+                SnackButton(title: UpdateButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.passwords.add(password) { success in
                         // println("Add password \(success)")
                     }
                 }),
-                SnackButton(title: "Not now", callback: { (bar: SnackBar) -> Void in
+                SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     return
