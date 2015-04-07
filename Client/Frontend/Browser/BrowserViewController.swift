@@ -296,7 +296,8 @@ class BrowserViewController: UIViewController {
         case KVOEstimatedProgress:
             urlBar.updateProgressBar(change[NSKeyValueChangeNewKey] as Float)
         case KVOLoading:
-            urlBar.updateLoading(change[NSKeyValueChangeNewKey] as Bool)
+            toolbar?.updateReloadStatus(change[NSKeyValueChangeNewKey] as Bool)
+            urlBar.updateReloadStatus(change[NSKeyValueChangeNewKey] as Bool)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath)")
         }
@@ -398,6 +399,14 @@ extension BrowserViewController: BrowserToolbarDelegate {
         controller.listData = tabManager.selectedTab?.backList
         controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
+    }
+
+    func browserToolbarDidPressReload(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
+        tabManager.selectedTab?.reload()
+    }
+
+    func browserToolbarDidPressStop(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
+        tabManager.selectedTab?.stop()
     }
 
     func browserToolbarDidPressForward(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
@@ -751,10 +760,10 @@ extension BrowserViewController: TabManagerDelegate {
 
         toolbar?.updateBackStatus(selected?.canGoBack ?? false)
         toolbar?.updateFowardStatus(selected?.canGoForward ?? false)
+        toolbar?.updateReloadStatus(selected?.webView.loading ?? false)
         self.urlBar.updateBackStatus(selected?.canGoBack ?? false)
         self.urlBar.updateFowardStatus(selected?.canGoForward ?? false)
         self.urlBar.updateProgressBar(Float(selected?.webView.estimatedProgress ?? 0))
-        self.urlBar.updateLoading(selected?.webView.loading ?? false)
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
             urlBar.updateReaderModeState(readerMode.state)
