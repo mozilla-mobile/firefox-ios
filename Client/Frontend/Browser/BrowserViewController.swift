@@ -823,7 +823,46 @@ extension BrowserViewController: TabManagerDelegate {
     }
 }
 
+/// List of URL schemes that should be handled by the system. This is currently a short list with only iTunes Store schemes.
+///
+/// I think that the WKWebView automatically (internally) resolves http links to the app store to these new schemes so that
+/// we don't have to rely on fixed hostnames. But we should really verify that.
+private let URLSchemesHandledBySystem = [
+    "itms",                         // iTunes Store
+    "itms-apps", "itms-appss",      // iTunes App Store
+    "itms-books", "itms-bookss",    // iTunes Book Store
+]
+
+/// Check if the URL should be handled by the system. The URL is checked against a list of schemes that we maintain. We
+/// do not default to UIApplication.canOpenURL() because that can potentially expose personal data to random
+/// applications.
+private func systemShouldHandleURL(url: NSURL) -> Bool {
+//    if let absoluteString = url.absoluteString {
+//        if absoluteString.hasPrefix("http://itunes") || absoluteString.hasPrefix("https://itunes") {
+//            return true
+//        }
+//    }
+
+    if let scheme = url.scheme {
+        for s in URLSchemesHandledBySystem {
+            if s == scheme {
+                return true
+            }
+        }
+    }
+    return false
+}
+
 extension BrowserViewController: WKNavigationDelegate {
+    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
+        if systemShouldHandleURL(navigationAction.request.URL) {
+            UIApplication.sharedApplication().openURL(navigationAction.request.URL)
+            decisionHandler(WKNavigationActionPolicy.Cancel)
+            return
+        }
+        decisionHandler(WKNavigationActionPolicy.Allow)
+    }
+
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         if tabManager.selectedTab?.webView !== webView {
             return
