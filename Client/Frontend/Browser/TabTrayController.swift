@@ -315,11 +315,15 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
         signInButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         
         let navItem = UINavigationItem()
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "\u{2699}", style: .Plain, target: self, action: "SELdidClickSettingsItem") // TODO Needs proper icon
+        navItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), style: .Plain, target: self, action: "SELdidClickSettingsItem")
         navItem.leftBarButtonItem?.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
+
         navItem.titleView = signInButton
-        navItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "SELdidClickAddTab") // TODO Maybe needs proper icon
-        
+        signInButton.hidden = true //hiding sign in button until we decide on UX
+
+        navItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "add"), style: .Plain, target: self, action: "SELdidClickAddTab")
+
+
         navBar.pushNavigationItem(navItem, animated: false)
 
         tableView = UITableView()
