@@ -161,6 +161,10 @@ public class KeyBundle: Equatable {
             return f(cleartext!)
         }
     }
+
+    public func asPair() -> [String] {
+        return [self.encKey.base64EncodedString, self.hmacKey.base64EncodedString]
+    }
 }
 
 public func == (lhs: KeyBundle, rhs: KeyBundle) -> Bool {
@@ -180,14 +184,14 @@ public class Keys {
 
     public init(payload: KeysPayload?) {
         if let payload = payload {
-        if payload.isValid() {
-            if let keys = payload.defaultKeys {
-                self.defaultBundle = keys
-                self.valid = true
-                return
+            if payload.isValid() {
+                if let keys = payload.defaultKeys {
+                    self.defaultBundle = keys
+                    self.valid = true
+                    return
+                }
+                self.collectionKeys = payload.collectionKeys
             }
-            // TODO: collection keys.
-        }
         }
         self.defaultBundle = KeyBundle.invalid
         self.valid = false
@@ -209,5 +213,14 @@ public class Keys {
     public func factory<T : CleartextPayloadJSON>(collection: String, f: (JSON) -> T) -> (String) -> T? {
         let bundle = forCollection(collection)
         return bundle.factory(f)
+    }
+
+    public func asPayload() -> KeysPayload {
+        let json: JSON = JSON([
+            "collection": "crypto",
+            "default": self.defaultBundle.asPair(),
+            "collections": mapValues(self.collectionKeys, { $0.asPair() })
+        ])
+        return KeysPayload(json)
     }
 }
