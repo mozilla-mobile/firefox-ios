@@ -8,7 +8,7 @@ import Snap
 
 protocol ClientPickerViewControllerDelegate {
     func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) -> Void
-    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [Client]) -> Void
+    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) -> Void
 }
 
 /*!
@@ -22,7 +22,7 @@ class ClientPickerViewController: UITableViewController {
     var profile: Profile?
     var clientPickerDelegate: ClientPickerViewControllerDelegate?
     
-    var clients: [Client] = []
+    var clients: [RemoteClient] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,19 +58,13 @@ class ClientPickerViewController: UITableViewController {
     }
     
     private func reloadClients() {
-        profile?.clients.getAll(
-            { response in
-                self.clients = response
+        profile?.clients.getAll().upon({
+                self.clients = $0
                 dispatch_async(dispatch_get_main_queue()) {
                     self.refreshControl?.endRefreshing()
                     self.tableView.reloadData()
                 }
-            },
-            error: { err in
-                // TODO: Figure out a good way to handle this.
-                print("Error: could not load clients: ")
-                println(err)
-        })
+            })
     }
     
     func refresh() {
@@ -118,8 +112,9 @@ class ActionViewController: UINavigationController, ClientPickerViewControllerDe
         self.extensionContext!.completeRequestReturningItems(nil, completionHandler: nil)
     }
 
-    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [Client]) {
-        profile?.clients.sendItem(self.sharedItem!, toClients: clients)
+    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
+        // TODO: hook up Send Tab via Sync.
+        // profile?.clients.sendItem(self.sharedItem!, toClients: clients)
         finish()
     }
     
