@@ -12,9 +12,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow!
     var profile: Profile!
 
+    private let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as String
+
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Setup a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setupWebServer()
+
+        // Set the Firefox UA for browsing.
+        setUserAgent()
 
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
@@ -78,6 +83,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ReaderModeHandlers.register(server)
         server.start()
     }
+
+    private func setUserAgent() {
+        let webView = UIWebView()
+        let userAgent = webView.stringByEvaluatingJavaScriptFromString("navigator.userAgent")!
+
+        // Extract the WebKit version and use it as the Safari version.
+        let webKitVersionRegex = NSRegularExpression(pattern: "AppleWebKit/([^ ]+) ", options: nil, error: nil)!
+        let match = webKitVersionRegex.firstMatchInString(userAgent, options: nil, range: NSRange(location: 0, length: countElements(userAgent)))
+        if match == nil {
+            println("Error: Unable to determine WebKit version")
+            return
+        }
+        let webKitVersion = (userAgent as NSString).substringWithRange(match!.rangeAtIndex(1))
+
+        // Insert "FxiOS/<version>" before the Mobile/ section.
+        let mobileRange = (userAgent as NSString).rangeOfString("Mobile/")
+        if mobileRange.location == NSNotFound {
+            println("Error: Unable to find Mobile section")
+            return
+        }
+
+        let mutableUA = NSMutableString(string: userAgent)
+        mutableUA.insertString("FxiOS/\(appVersion) ", atIndex: mobileRange.location)
+        let firefoxUA = "\(mutableUA) Safari/\(webKitVersion)"
+        NSUserDefaults.standardUserDefaults().registerDefaults(["UserAgent": firefoxUA])
+    }
 }
 
 
@@ -139,7 +170,6 @@ extension AppDelegate: UIAlertViewDelegate {
 extension AppDelegate: MFMailComposeViewControllerDelegate {
     func sendFeedbackMailWithImage(image: UIImage) {
         if (MFMailComposeViewController.canSendMail()) {
-            let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as String
             let buildNumber = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey) as String
 
             let mailComposeViewController = MFMailComposeViewController()
