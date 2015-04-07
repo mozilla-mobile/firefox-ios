@@ -1231,10 +1231,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B6544D31A96C5F0000DD202 /* libSDWebImage.a in Frameworks */,
+				288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */,
 				2FCAE2311ABB51F800877008 /* Storage.framework in Frameworks */,
 				2FA436121ABB83B4008031D1 /* Account.framework in Frameworks */,
 				D3589EF71A8D930000F28118 /* libz.dylib in Frameworks */,
-				288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				E4A888161A95679500CDC337 /* FxA.framework in Frameworks */,
 				39A362D91AAF5ECE00F47390 /* XCGLogger.framework in Frameworks */,
