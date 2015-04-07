@@ -2,16 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "desktop.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "sync_desktop.png"
+      "filename" : "desktop@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "desktop@3x.png"
     }
   ],
   "info" : {
