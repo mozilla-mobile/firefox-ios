@@ -58,6 +58,8 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         readerModeButton.addTarget(self, action: "SELtapReaderModeButton", forControlEvents: .TouchUpInside)
         readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "SELlongPressReaderModeButton:"))
         addSubview(readerModeButton)
+        readerModeButton.isAccessibilityElement = true
+        readerModeButton.accessibilityLabel = NSLocalizedString("Reader Mode", comment: "Accessibility label for the reader mode button")
     }
 
     override func updateConstraints() {
@@ -156,8 +158,12 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         didSet {
             if loading {
                 stopReloadButton.setImage(ImageStop, forState: .Normal)
+                stopReloadButton.isAccessibilityElement = true
+                stopReloadButton.accessibilityLabel = NSLocalizedString("Stop", comment: "Accessibility label for the stop button")
             } else {
                 stopReloadButton.setImage(ImageReload, forState: .Normal)
+                stopReloadButton.isAccessibilityElement = true
+                stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility label for the reload button")
             }
         }
     }
