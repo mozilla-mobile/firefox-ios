@@ -35,7 +35,6 @@
 		0BD19A671A25309B0084FBA7 /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		0BD19A681A2530A40084FBA7 /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		0BD2C61D1A643B6000BB4BB9 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
-		0BD4EE461AC1DB25008E465D /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8D1A8523B000213B54 /* KeychainWrapper.swift */; };
 		0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108351A1B1EC700D4B712 /* TestLocking.swift */; };
 		0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		0BEFED8C1AC21C1E002E0A0C /* SDWebThumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEFED8B1AC21C1E002E0A0C /* SDWebThumbnails.swift */; };
@@ -94,6 +93,7 @@
 		28926B3A1AC0F128009C0B1D /* CleartextPayloadJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28926B391AC0F128009C0B1D /* CleartextPayloadJSON.swift */; };
 		28926B3B1AC0F128009C0B1D /* CleartextPayloadJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28926B391AC0F128009C0B1D /* CleartextPayloadJSON.swift */; };
 		28A6CE8A1AC082E200C1A2D4 /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */; };
+		28C328021AD387E00005149C /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8D1A8523B000213B54 /* KeychainWrapper.swift */; };
 		28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28E23C121AC5A5EE00F5AC85 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E23C111AC5A5EE00F5AC85 /* State.swift */; };
@@ -111,12 +111,8 @@
 		2F1A3DE11ABE3C90002F1E15 /* FxALoginStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */; };
 		2F1A3DE21ABE3C90002F1E15 /* FxALoginStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */; };
 		2F1A3DFE1ABE3C9C002F1E15 /* FxALoginStateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A3DFD1ABE3C9C002F1E15 /* FxALoginStateMachineTests.swift */; };
-		2F1BDF901A8523B000213B54 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8D1A8523B000213B54 /* KeychainWrapper.swift */; };
-		2F1BDF911A8523B000213B54 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8D1A8523B000213B54 /* KeychainWrapper.swift */; };
 		2F1BDF921A8523B000213B54 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8E1A8523B000213B54 /* LICENSE */; };
 		2F1BDF931A8523B000213B54 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8E1A8523B000213B54 /* LICENSE */; };
-		2F26574D1A85775F0057F2DE /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8D1A8523B000213B54 /* KeychainWrapper.swift */; };
-		2F2657531A85776A0057F2DE /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8D1A8523B000213B54 /* KeychainWrapper.swift */; };
 		2F3724C61ABF3C01007607FA /* LiveStorageClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3724C41ABF3C01007607FA /* LiveStorageClientTests.swift */; };
 		2F3724C71ABF3C01007607FA /* StorageClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3724C51ABF3C01007607FA /* StorageClientTests.swift */; };
 		2F3724E51ABF3C19007607FA /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3724E21ABF3C19007607FA /* Info.swift */; };
@@ -2932,6 +2928,7 @@
 				2FDE87521ABA3EA0005317B1 /* TimeConstants.swift in Sources */,
 				2FDE87321ABA3E87005317B1 /* json.swift in Sources */,
 				288A2DAB1AB8B3700023ABC3 /* BoxType.swift in Sources */,
+				28C328021AD387E00005149C /* KeychainWrapper.swift in Sources */,
 				28158BAC1ABC7C0E00C56FC8 /* Bytes.swift in Sources */,
 				288A2DB11AB8B37E0023ABC3 /* LockProtected.swift in Sources */,
 				2FDE87511ABA3E9A005317B1 /* HashExtensions.swift in Sources */,
@@ -3077,7 +3074,6 @@
 				D38B2D3F1A8D96D00040E6B5 /* GCDWebServerDataRequest.m in Sources */,
 				E42475DE1AB73B9B00B23D33 /* SWCellScrollView.m in Sources */,
 				D38B2D541A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */,
-				0BD4EE461AC1DB25008E465D /* KeychainWrapper.swift in Sources */,
 				D38B2D511A8D96D00040E6B5 /* GCDWebServerFileResponse.m in Sources */,
 				D39FA1831A83E87900EE869C /* NavigationTests.swift in Sources */,
 				E42475EA1AB73B9B00B23D33 /* SWUtilityButtonView.m in Sources */,
@@ -3154,7 +3150,6 @@
 				2F834D1A1A80629A006A0B7B /* FxAContentViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				D38B2D3A1A8D96D00040E6B5 /* GCDWebServerResponse.m in Sources */,
-				2F1BDF901A8523B000213B54 /* KeychainWrapper.swift in Sources */,
 				0BD19A671A25309B0084FBA7 /* ProfilePrefs.swift in Sources */,
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
 				0BB5B2BC1AC0AB9F0052877D /* UIImage+Utils.swift in Sources */,
@@ -3235,7 +3230,6 @@
 				D31A0FC81A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */,
 				E4ECCDC41AB1EADF0005E717 /* Browser.swift in Sources */,
-				2F1BDF911A8523B000213B54 /* KeychainWrapper.swift in Sources */,
 				59A687B4A05CC772FE7E5A09 /* SearchViewController.swift in Sources */,
 				59A680D1116F5BF6CCC9ED6F /* HistoryPanel.swift in Sources */,
 				59A687335CF58A8004B23508 /* BookmarksPanel.swift in Sources */,
@@ -3256,7 +3250,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F2657531A85776A0057F2DE /* KeychainWrapper.swift in Sources */,
 				D38B2D8A1A8D98D00040E6B5 /* SearchEngines.swift in Sources */,
 				D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				0BD2C61D1A643B6000BB4BB9 /* Locking.swift in Sources */,
@@ -3276,7 +3269,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F26574D1A85775F0057F2DE /* KeychainWrapper.swift in Sources */,
 				282DA4691A68C13400A406E2 /* Clients.swift in Sources */,
 				D38B2D8B1A8D98D10040E6B5 /* SearchEngines.swift in Sources */,
 				D3C744D01A687D6C004CE85D /* URIFixup.swift in Sources */,
