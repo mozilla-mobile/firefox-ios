@@ -6,6 +6,7 @@ import UIKit
 import XCTest
 
 import Storage
+import WebKit
 
 class ClientTests: XCTestCase {
     func testFavicons() {
@@ -79,5 +80,25 @@ class ClientTests: XCTestCase {
             ran = true;
         }
         XCTAssertFalse(ran, "for...in didn't run for failed cursor");
+    }
+
+    // Simple test to make sure the WKWebView UA matches the expected FxiOS pattern.
+    func testUserAgent() {
+        let expectation = expectationWithDescription("Found Firefox user agent")
+
+        let webView = WKWebView()
+        webView.evaluateJavaScript("navigator.userAgent") { result, error in
+            let userAgent = result as String
+            let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as String
+            let range = userAgent.rangeOfString("^Mozilla/5\\.0 \\(.+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\) FxiOS/\(appVersion) Mobile/[A-Z0-9]+ Safari/[0-9\\.]+$", options: NSStringCompareOptions.RegularExpressionSearch)
+
+            if range != nil {
+                expectation.fulfill()
+            } else {
+                XCTFail("User agent did not match expected pattern! \(userAgent)")
+            }
+        }
+
+        waitForExpectationsWithTimeout(5, handler: nil)
     }
 }
