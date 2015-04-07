@@ -92,8 +92,9 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
             let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(RemoteClientIdentifier) as TwoLineHeaderFooterView
             view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
             view.textLabel.text = client.name
-            // TODO: allow localization; convert timestamp to relative timestring.
-            view.detailTextLabel.text = "Last synced: \(String(client.lastModified))"
+            // TODO: Convert timestamp to locale-relative timestring.
+            let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time")
+            view.detailTextLabel.text = String(format: label, client.lastModified)
             if client.type == "desktop" {
                 view.imageView.image = UIImage(named: "deviceTypeDesktop")
             } else {
