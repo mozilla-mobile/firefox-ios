@@ -93,7 +93,9 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
             view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
             view.textLabel.text = client.name
             // TODO: allow localization; convert timestamp to relative timestring.
-            view.detailTextLabel.text = "Last synced: \(String(client.lastModified))"
+            // TODO: note that this is very likely to be wrong; it'll show the last time the other device
+            // uploaded a record, *or another device sent that device a command*.
+            view.detailTextLabel.text = "Last synced: \(String(client.modified))"
             if client.type == "desktop" {
                 view.imageView.image = UIImage(named: "deviceTypeDesktop")
             } else {

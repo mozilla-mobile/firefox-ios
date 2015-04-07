@@ -50,7 +50,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             }
             // Delete any existing tabs.
             let deleteQuery = "DELETE FROM \(self.tabs.name) WHERE client_guid = ?"
-            let deleteArgs: [AnyObject?] = [client.GUID] // Swift crashes without the type annotation.
+            let deleteArgs: [AnyObject?] = [client.guid] // Swift crashes without the type annotation.
             if let error = connection.executeChange(deleteQuery, withArgs: deleteArgs) {
                 err = error
                 return false
@@ -102,11 +102,11 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 for client in clients {
                     if let client = client as? RemoteClient {
                         // It's possible a client exists with no tabs at all, so handle that case.
-                        let tabs = D[client.GUID] ?? []
+                        let tabs = D[client.guid] ?? []
                         res.append(client.withTabs(tabs.sorted { $0.position < $1.position }))
                     }
                 }
-                res.sort { $0.lastModified < $1.lastModified }
+                res.sort { $0.modified < $1.modified }
             }
         }
 

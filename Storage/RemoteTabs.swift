@@ -10,42 +10,64 @@ public protocol RemoteClientsAndTabs {
 }
 
 public struct RemoteClient: Equatable {
-    public let GUID: String
+    public let guid: String
+    public let modified: UInt64
+
     public let name: String
-    public let lastModified: Int64
     public let type: String?
-    public let formFactor: String?
-    public let operatingSystem: String?
+
+    let version: String?
+    let protocols: [String]?
+
+    let os: String?
+    let appPackage: String?
+    let application: String?
+    let formfactor: String?
+    let device: String?
+
     public let tabs: [RemoteTab]
 
-    public init(GUID: String, name: String, lastModified: Int64, type: String?, formFactor: String?, operatingSystem: String?, tabs: [RemoteTab]) {
-        self.GUID = GUID
+    // Requires a valid ClientPayload (: CleartextPayloadJSON: JSON).
+    public init(json: JSON, modified: UInt64) {
+        self.guid = json["id"].asString!
+        self.modified = modified
+        self.name = json["name"].asString!
+        self.type = json["type"].asString
+
+        self.tabs = []
+
+        // TODO more
+    }
+
+    public init(guid: String, name: String, modified: UInt64, type: String?, formfactor: String?, os: String?, tabs: [RemoteTab]) {
+        self.guid = guid
         self.name = name
-        self.lastModified = lastModified
+        self.modified = modified
         self.type = type
-        self.formFactor = formFactor
-        self.operatingSystem = operatingSystem
+        self.formfactor = formfactor
+        self.os = os
         self.tabs = tabs
     }
 
     public func withTabs(tabs: [RemoteTab]) -> RemoteClient {
-        return RemoteClient(GUID: GUID, name: name, lastModified: lastModified, type: type, formFactor: formFactor, operatingSystem: operatingSystem, tabs: tabs)
+        return RemoteClient(guid: self.guid, name: self.name, modified: self.modified, type: self.type, formfactor: self.formfactor, os: self.os, tabs: tabs)
     }
 }
 
+// TODO: should this really compare tabs?
 public func ==(lhs: RemoteClient, rhs: RemoteClient) -> Bool {
-    return lhs.GUID == rhs.GUID &&
-        lhs.name == rhs.name &&
-        lhs.lastModified == rhs.lastModified &&
-        lhs.type == rhs.type &&
-        lhs.formFactor == rhs.formFactor &&
-        lhs.operatingSystem == rhs.operatingSystem &&
-        lhs.tabs == rhs.tabs
+    return lhs.guid == rhs.guid &&
+           lhs.name == rhs.name &&
+           lhs.modified == rhs.modified &&
+           lhs.type == rhs.type &&
+           lhs.formfactor == rhs.formfactor &&
+           lhs.os == rhs.os &&
+           lhs.tabs == rhs.tabs
 }
 
 extension RemoteClient: Printable {
     public var description: String {
-        return "<RemoteClient GUID: \(GUID), name: \(name), lastModified: \(lastModified), type: \(type), formFactor: \(formFactor), OS: \(operatingSystem), with \(tabs.count) tabs>"
+        return "<RemoteClient GUID: \(guid), name: \(name), modified: \(modified), type: \(type), formfactor: \(formfactor), OS: \(os), with \(tabs.count) tabs>"
     }
 }
 
@@ -54,10 +76,10 @@ public struct RemoteTab: Equatable {
     public let URL: NSURL
     public let title: String?
     public let history: [NSURL]
-    public let lastUsed: Int64
+    public let lastUsed: UInt64
     public let position: Int32
 
-    public init(clientGUID: String, URL: NSURL, title: String?, history: [NSURL], lastUsed: Int64, position: Int32) {
+    public init(clientGUID: String, URL: NSURL, title: String?, history: [NSURL], lastUsed: UInt64, position: Int32) {
         self.clientGUID = clientGUID
         self.URL = URL
         self.title = title
@@ -86,32 +108,25 @@ extension RemoteTab: Printable {
     }
 }
 
-// We have a Shared target but it's not accessible from Storage.  Eventually Storage will be a
-// target within the main Client project, at which point we can kill these.
-private let OneMonthInMilliseconds = 30 * OneDayInMilliseconds
-private let OneWeekInMilliseconds = 7 * OneDayInMilliseconds
-private let OneDayInMilliseconds = 24 * OneHourInMilliseconds
-private let OneHourInMilliseconds: Int64 = 60 * OneMinuteInMilliseconds
-private let OneMinuteInMilliseconds: Int64 = 60 * 1000
-
 public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
     // This makes the var read-only to a public consumer.
     public lazy var clients: [RemoteClient] = {
-        let now = Int64(NSDate().timeIntervalSince1970 * 1000.0)
+        let now = NSDate.now()
         let client1GUID = Bytes.generateGUID()
         let client2GUID = Bytes.generateGUID()
-        let tab11 = RemoteTab(clientGUID: client1GUID,
-            URL: NSURL(string: "http://test.com/test1")!, title: "Test 1", history: [], lastUsed: now + OneMinuteInMilliseconds, position: 0)
-        let tab12 = RemoteTab(clientGUID: client1GUID,
-            URL: NSURL(string: "http://test.com/test2")!, title: "Test 2", history: [], lastUsed: now + OneHourInMilliseconds, position: 1)
+        let u11 = NSURL(string: "http://test.com/test1")!
+        let tab11 = RemoteTab(clientGUID: client1GUID, URL: u11, title: "Test 1", history: [], lastUsed: (now + OneMinuteInMilliseconds), position: 0)
 
-        let tab21 = RemoteTab(clientGUID: client2GUID,
-            URL: NSURL(string: "http://test.com/test1")!, title: "Test 1", history: [], lastUsed: now + OneDayInMilliseconds, position: 0)
-        let tab22 = RemoteTab(clientGUID: client2GUID,
-            URL: NSURL(string: "http://different.com/test2")!, title: "Different Test 2", history: [], lastUsed: now + OneHourInMilliseconds, position: 1)
+        let u12 = NSURL(string: "http://test.com/test2")!
+        let tab12 = RemoteTab(clientGUID: client1GUID, URL: u12, title: "Test 2", history: [], lastUsed: (now + OneHourInMilliseconds), position: 1)
 
-        let client1 = RemoteClient(GUID: client1GUID, name: "Test client 1", lastModified: Int64(now + OneMinuteInMilliseconds), type: "mobile", formFactor: "largetablet", operatingSystem: "iOS", tabs: [tab11, tab12])
-        let client2 = RemoteClient(GUID: client2GUID, name: "Test client 2", lastModified: Int64(now + OneHourInMilliseconds), type: "desktop", formFactor: "laptop", operatingSystem: "Darwin", tabs: [tab21, tab22])
+        let tab21 = RemoteTab(clientGUID: client2GUID, URL: u11, title: "Test 1", history: [], lastUsed: now + OneDayInMilliseconds, position: 0)
+
+        let u22 = NSURL(string: "http://different.com/test2")!
+        let tab22 = RemoteTab(clientGUID: client2GUID, URL: u22, title: "Different Test 2", history: [], lastUsed: now + OneHourInMilliseconds, position: 1)
+
+        let client1 = RemoteClient(guid: client1GUID, name: "Test client 1", modified: (now + OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS", tabs: [tab11, tab12])
+        let client2 = RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now + OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin", tabs: [tab21, tab22])
         return [client1, client2]
     }()
 
