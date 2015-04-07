@@ -362,7 +362,7 @@ public class Sync15StorageClient {
     // TODO: it would be convenient to have the storage client manage Keys,
     // but of course we need to use a different set of keys to fetch crypto/keys
     // itself.
-    func collectionClient<T: CleartextPayloadJSON>(collection: String, factory: (String) -> T?) -> Sync15CollectionClient<T> {
+    func clientForCollection<T: CleartextPayloadJSON>(collection: String, factory: (String) -> T?) -> Sync15CollectionClient<T> {
         let storage = self.serverURI.URLByAppendingPathComponent("storage", isDirectory: true)
         return Sync15CollectionClient(client: self, serverURI: storage, collection: collection, factory: factory)
     }
@@ -417,7 +417,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
      * multiple requests. The others use application/newlines. We don't want to write
      * another Serializer, and we're loading everything into memory anyway.
      */
-    public func getSince(since: Int64) -> Deferred<Result<StorageResponse<[Record<T>]>>> {
+    public func getSince(since: UInt64) -> Deferred<Result<StorageResponse<[Record<T>]>>> {
         let deferred = Deferred<Result<StorageResponse<[Record<T>]>>>(defaultQueue: client.resultQueue)
 
         let req = client.requestGET(self.collectionURI)
