@@ -154,6 +154,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
                 make.height.equalTo(AppConstants.ToolbarHeight)
                 make.width.equalTo(AppConstants.ToolbarHeight)
             }
+            backButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
             forwardButton.snp_remakeConstraints { (make) -> () in
                 make.left.equalTo(self.backButton.snp_right)
@@ -161,6 +162,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
                 make.height.equalTo(AppConstants.ToolbarHeight)
                 make.width.equalTo(AppConstants.ToolbarHeight)
             }
+            forwardButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
             stopReloadButton.snp_remakeConstraints { (make) -> () in
                 make.left.equalTo(self.forwardButton.snp_right)
@@ -168,6 +170,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
                 make.height.equalTo(AppConstants.ToolbarHeight)
                 make.width.equalTo(AppConstants.ToolbarHeight)
             }
+            stopReloadButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
             shareButton.snp_remakeConstraints { (make) -> () in
                 make.right.equalTo(self.bookmarkButton.snp_left)
@@ -175,6 +178,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
                 make.height.equalTo(AppConstants.ToolbarHeight)
                 make.width.equalTo(AppConstants.ToolbarHeight)
             }
+            shareButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
             bookmarkButton.snp_remakeConstraints { (make) -> () in
                 make.right.equalTo(self.tabsButton.snp_left)
@@ -182,6 +186,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
                 make.height.equalTo(AppConstants.ToolbarHeight)
                 make.width.equalTo(AppConstants.ToolbarHeight)
             }
+            bookmarkButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         }
     }
 
@@ -391,8 +396,9 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
             self.curveShape.transform = CGAffineTransformMakeTranslation(self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer, 0)
 
             if self.toolbarIsShowing {
-                self.forwardButton.transform = CGAffineTransformMakeTranslation(-2 * AppConstants.ToolbarHeight, 0)
-                self.backButton.transform = CGAffineTransformMakeTranslation(-2 * AppConstants.ToolbarHeight, 0)
+                self.forwardButton.transform = CGAffineTransformMakeTranslation(-3 * AppConstants.ToolbarHeight, 0)
+                self.backButton.transform = CGAffineTransformMakeTranslation(-3 * AppConstants.ToolbarHeight, 0)
+                self.stopReloadButton.transform = CGAffineTransformMakeTranslation(-3 * AppConstants.ToolbarHeight, 0)
             }
         } else {
             self.tabsButton.transform = CGAffineTransformIdentity
@@ -402,6 +408,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
             if self.toolbarIsShowing {
                 self.forwardButton.transform = CGAffineTransformIdentity
                 self.backButton.transform = CGAffineTransformIdentity
+                self.stopReloadButton.transform = CGAffineTransformIdentity
             }
         }
     }
@@ -413,6 +420,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
         self.backButton.hidden = !self.toolbarIsShowing || editing
         self.shareButton.hidden = !self.toolbarIsShowing || editing
         self.bookmarkButton.hidden = !self.toolbarIsShowing || editing
+        self.stopReloadButton.hidden = !self.toolbarIsShowing || editing
     }
 
     func updateLayoutForEditing(#editing: Bool, animated: Bool = true) {
