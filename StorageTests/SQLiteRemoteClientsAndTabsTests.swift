@@ -38,7 +38,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
 
         // Update the test data with a client with new tabs, and one with no tabs.
         let clientsWithNewTabs = [
-            clients[0].withTabs(clients[1].tabs.map { $0.withClientGUID(self.clients[0].GUID) }),
+            clients[0].withTabs(clients[1].tabs.map { $0.withClientGUID(self.clients[0].guid) }),
             clients[1].withTabs([])
         ]
 

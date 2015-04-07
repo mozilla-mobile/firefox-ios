@@ -12,38 +12,39 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
     override var rows: String { return join(",", [
             "guid TEXT PRIMARY KEY",
             "name TEXT NOT NULL",
-            "last_modified INTEGER NOT NULL",
-            "device_type TEXT",
-            "form_factor TEXT",
+            "modified INTEGER NOT NULL",
+            "type TEXT",
+            "formfactor TEXT",
             "os TEXT",
         ])
     }
 
+    // TODO: this won't work correctly with NULL fields.
     override func getInsertAndArgs(inout item: RemoteClient) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
-        args.append(item.GUID)
+        args.append(item.guid)
         args.append(item.name)
-        args.append(NSNumber(longLong: item.lastModified))
+        args.append(NSNumber(unsignedLongLong: item.modified))
         args.append(item.type)
-        args.append(item.formFactor)
-        args.append(item.operatingSystem)
-        return ("INSERT INTO \(name) (guid, name, last_modified, device_type, form_factor, os) VALUES (?, ?, ?, ?, ?, ?)", args)
+        args.append(item.formfactor)
+        args.append(item.os)
+        return ("INSERT INTO \(name) (guid, name, modified, type, formfactor, os) VALUES (?, ?, ?, ?, ?, ?)", args)
     }
 
     override func getUpdateAndArgs(inout item: RemoteClient) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         args.append(item.name)
-        args.append(NSNumber(longLong: item.lastModified))
+        args.append(NSNumber(unsignedLongLong: item.modified))
         args.append(item.type)
-        args.append(item.formFactor)
-        args.append(item.operatingSystem)
-        args.append(item.GUID)
-        return ("UPDATE \(name) SET name = ?, last_modified = ?, device_type = ?, form_factor = ?, os = ? WHERE guid = ?", args)
+        args.append(item.formfactor)
+        args.append(item.os)
+        args.append(item.guid)
+        return ("UPDATE \(name) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ? WHERE guid = ?", args)
     }
 
     override func getDeleteAndArgs(inout item: RemoteClient?) -> (String, [AnyObject?])? {
         if let item = item {
-            return ("DELETE FROM \(name) WHERE guid = ?", [item.GUID])
+            return ("DELETE FROM \(name) WHERE guid = ?", [item.guid])
         } else {
             return ("DELETE FROM \(name)", [])
         }
@@ -51,19 +52,17 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
 
     override var factory: ((row: SDRow) -> RemoteClient)? {
         return { row -> RemoteClient in
-            let item = RemoteClient(GUID: row["guid"] as! String,
-                name: row["name"] as! String,
-                lastModified: (row["last_modified"] as! NSNumber).longLongValue,
-                type: row["device_type"] as? String,
-                formFactor: row["form_factor"] as? String,
-                operatingSystem: row["os"] as? String,
-                tabs: [])
-            return item
+            return RemoteClient(guid: row["guid"] as! String,
+                                name: row["name"] as! String,
+                                modified: (row["modified"] as! NSNumber).unsignedLongLongValue,
+                                type: row["type"] as? String,
+                                formfactor: row["formfactor"] as? String,
+                                os: row["os"] as? String)
         }
     }
 
     override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
-        return ("SELECT * FROM \(name) ORDER BY last_modified DESC", [])
+        return ("SELECT * FROM \(name) ORDER BY modified DESC", [])
     }
 }
 
@@ -79,7 +78,6 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
             "title TEXT", // TODO: NOT NULL throughout.
             "history TEXT",
             "last_used INTEGER",
-            "position INTEGER",
         ])
     }
 
@@ -89,21 +87,20 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         args.append(item.URL.absoluteString!)
         args.append(item.title)
         args.append(nil) // TODO: persist history.
-        args.append(NSNumber(longLong: item.lastUsed))
-        args.append(NSNumber(int: item.position))
-        return ("INSERT INTO \(name) (client_guid, url, title, history, last_used, position) VALUES (?, ?, ?, ?, ?, ?)", args)
+        args.append(NSNumber(unsignedLongLong: item.lastUsed))
+        return ("INSERT INTO \(name) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", args)
     }
 
     override func getUpdateAndArgs(inout item: RemoteTab) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         args.append(item.title)
         args.append(nil) // TODO: persist history.
-        args.append(NSNumber(longLong: item.lastUsed))
-        args.append(NSNumber(int: item.position))
+        args.append(NSNumber(unsignedLongLong: item.lastUsed))
+
         // Key by (client_guid, url) rather than (transient) id.
         args.append(item.clientGUID)
         args.append(item.URL.absoluteString!)
-        return ("UPDATE \(name) SET title = ?, history = ?, last_used = ?, position = ? WHERE client_guid = ? AND url = ?", args)
+        return ("UPDATE \(name) SET title = ?, history = ?, last_used = ? WHERE client_guid = ? AND url = ?", args)
     }
 
     override func getDeleteAndArgs(inout item: RemoteTab?) -> (String, [AnyObject?])? {
@@ -116,20 +113,18 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
 
     override var factory: ((row: SDRow) -> RemoteTab)? {
         return { row -> RemoteTab in
-            let item = RemoteTab(
+            return RemoteTab(
                 clientGUID: row["client_guid"] as! String,
                 URL: NSURL(string: row["url"] as! String)!, // TODO: find a way to make this less dangerous.
                 title: row["title"] as? String,
                 history: [], // TODO: extract history.
-                lastUsed: Int64((row["last_used"] as! NSNumber).longLongValue),
-                position: Int32((row["position"] as! NSNumber).intValue)
+                lastUsed: (row["last_used"] as! NSNumber).unsignedLongLongValue
             )
-            return item
         }
     }
 
     override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
         // Per-client chunks, each chunk in client-order.
-        return ("SELECT * FROM \(name) ORDER BY client_guid DESC, position ASC", [])
+        return ("SELECT * FROM \(name) ORDER BY client_guid DESC, last_used DESC", [])
     }
 }

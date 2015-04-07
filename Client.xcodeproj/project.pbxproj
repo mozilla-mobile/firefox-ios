@@ -67,6 +67,9 @@
 		282731A01ABC9C5900AA1954 /* ResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBABAE1AB3659000DB5728 /* ResultTests.swift */; };
 		282731A21ABC9D2600AA1954 /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282731A11ABC9D2600AA1954 /* Prefs.swift */; };
 		282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
+		284AA3AB1AD4C13A009041C5 /* SyncRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284AA3AA1AD4C13A009041C5 /* SyncRemoteClientsAndTabs.swift */; };
+		284AA3AC1AD4C13A009041C5 /* SyncRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284AA3AA1AD4C13A009041C5 /* SyncRemoteClientsAndTabs.swift */; };
+		284AA3AD1AD4C386009041C5 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C4AB711AD42D4300D9ACE3 /* Clients.swift */; };
 		285D37E31ABCA69E000E1CF9 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C077971A3B064000834FE5 /* CryptoTests.swift */; };
 		288501DE1AC0F61D00E7F670 /* RequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */; };
 		288501F91AC0F62200E7F670 /* RequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */; };
@@ -3087,6 +3090,7 @@
 				2FCAE2881ABB533A00877008 /* TestHistoryTable.swift in Sources */,
 				2FA4351F1ABB6831008031D1 /* HistoryTable.swift in Sources */,
 				2FA435191ABB6829008031D1 /* RemoteTabs.swift in Sources */,
+				284AA3AD1AD4C386009041C5 /* Clients.swift in Sources */,
 				2FA4352A1ABB6831008031D1 /* VisitsTable.swift in Sources */,
 				2FA435111ABB6829008031D1 /* Bookmarks.swift in Sources */,
 				2FA4351D1ABB6831008031D1 /* FaviconsTable.swift in Sources */,
