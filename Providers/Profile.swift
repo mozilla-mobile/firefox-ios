@@ -61,7 +61,7 @@ public class MockProfile: Profile {
     } ()
 
     lazy var clients: Clients = {
-        return MockClients(profile: self)
+        return MockClients(files: self.files)
     } ()
 
     lazy var searchEngines: SearchEngines = {
@@ -162,7 +162,7 @@ public class BrowserProfile: Profile {
     }
 
     lazy var clients: Clients = {
-        return MockClients(profile: self)
+        return MockClients(files: self.files)
     } ()
 
     lazy var favicons: Favicons = {
