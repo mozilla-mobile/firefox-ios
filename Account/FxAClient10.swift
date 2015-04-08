@@ -308,7 +308,7 @@ public class FxAClient10 {
 
         let parameters = [
             "publicKey": publicKey.JSONRepresentation(),
-            "duration": NSNumber(longLong: OneDayInMilliseconds), // The maximum the server will allow.
+            "duration": NSNumber(unsignedLongLong: OneDayInMilliseconds), // The maximum the server will allow.
         ]
 
         let salt: NSData = NSData()

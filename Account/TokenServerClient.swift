@@ -15,10 +15,10 @@ public struct TokenServerToken {
     public let id: String
     public let key: String
     public let api_endpoint: String
-    public let uid: Int64
-    public let durationInSeconds: Int64
+    public let uid: UInt64
+    public let durationInSeconds: UInt64
 
-    init(id: String, key: String, api_endpoint: String, uid: Int64, durationInSeconds: Int64) {
+    init(id: String, key: String, api_endpoint: String, uid: UInt64, durationInSeconds: UInt64) {
         self.id = id
         self.key = key
         self.api_endpoint = api_endpoint
@@ -89,8 +89,10 @@ public class TokenServerClient {
                 if let api_endpoint = json["api_endpoint"].asString {
                     if let uid = json["uid"].asInt {
                         if let durationInSeconds = json["duration"].asInt64 {
-                            return TokenServerToken(id: id, key: key, api_endpoint: api_endpoint, uid: Int64(uid),
-                                durationInSeconds: durationInSeconds)
+                            if durationInSeconds > 0 {
+                                return TokenServerToken(id: id, key: key, api_endpoint: api_endpoint, uid: UInt64(uid),
+                                        durationInSeconds: UInt64(durationInSeconds))
+                            }
                         }
                     }
                 }
