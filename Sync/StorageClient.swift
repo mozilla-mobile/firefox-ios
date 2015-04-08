@@ -80,20 +80,20 @@ public class MalformedMetaGlobalError: ErrorType {
 }
 
 // Returns milliseconds. Handles decimals.
-private func optionalSecondsHeader(input: AnyObject?) -> UInt64? {
+private func optionalSecondsHeader(input: AnyObject?) -> Timestamp? {
     if input == nil {
         return nil
     }
 
     if let val = input as? String {
         if let double = NSScanner(string: val).scanDouble() {
-            return UInt64(double * 1000)
+            return Timestamp(double * 1000)
         }
     }
 
     if let seconds: Double = input as? Double {
         // Oh for a BigDecimal library.
-        return UInt64(seconds * 1000)
+        return Timestamp(seconds * 1000)
     }
 
     if let seconds: NSNumber = input as? NSNumber {
@@ -126,7 +126,7 @@ private func optionalIntegerHeader(input: AnyObject?) -> Int64? {
     return nil
 }
 
-private func optionalUIntegerHeader(input: AnyObject?) -> UInt64? {
+private func optionalUIntegerHeader(input: AnyObject?) -> Timestamp? {
     if input == nil {
         return nil
     }
@@ -137,7 +137,7 @@ private func optionalUIntegerHeader(input: AnyObject?) -> UInt64? {
 
     if let val: Double = input as? Double {
         // Oh for a BigDecimal library.
-        return UInt64(val)
+        return Timestamp(val)
     }
 
     if let val: NSNumber = input as? NSNumber {
@@ -148,7 +148,7 @@ private func optionalUIntegerHeader(input: AnyObject?) -> UInt64? {
     return nil
 }
 
-func millisecondsToDecimalSeconds(input: UInt64) -> String {
+func millisecondsToDecimalSeconds(input: Timestamp) -> String {
     let val: Double = Double(input) / 1000
     return String(format: "%.2F", val)
 }
@@ -158,8 +158,8 @@ public struct ResponseMetadata {
     public let nextOffset: String?
     public let records: UInt64?
     public let quotaRemaining: Int64?
-    public let timestampMilliseconds: UInt64         // Non-optional. Server timestamp when handling request.
-    public let lastModifiedMilliseconds: UInt64?     // Included for all success responses. Collection or record timestamp.
+    public let timestampMilliseconds: Timestamp         // Non-optional. Server timestamp when handling request.
+    public let lastModifiedMilliseconds: Timestamp?     // Included for all success responses. Collection or record timestamp.
     public let backoffMilliseconds: UInt64?
     public let retryAfterMilliseconds: UInt64?
 
@@ -307,7 +307,7 @@ public class Sync15StorageClient {
         return deferred
     }
 
-    private func putResource<T>(path: String, body: JSON, ifUnmodifiedSince: UInt64?, f: (JSON) -> T?) -> Deferred<Result<StorageResponse<T>>> {
+    private func putResource<T>(path: String, body: JSON, ifUnmodifiedSince: Timestamp?, f: (JSON) -> T?) -> Deferred<Result<StorageResponse<T>>> {
         func requestPUT(url: NSURL) -> Request {
             let req = NSMutableURLRequest(URL: url)
             req.HTTPMethod = Method.PUT.rawValue
@@ -343,7 +343,7 @@ public class Sync15StorageClient {
         return getResource("storage/meta/global", { GlobalEnvelope($0) })
     }
 
-    func uploadMetaGlobal(metaGlobal: MetaGlobal, ifUnmodifiedSince: UInt64?) -> Deferred<Result<StorageResponse<JSON>>> {
+    func uploadMetaGlobal(metaGlobal: MetaGlobal, ifUnmodifiedSince: Timestamp?) -> Deferred<Result<StorageResponse<JSON>>> {
         let payload = metaGlobal.toPayload()
         if payload.isError {
             return Deferred(value: Result(failure: MalformedMetaGlobalError()))
@@ -417,7 +417,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
      * multiple requests. The others use application/newlines. We don't want to write
      * another Serializer, and we're loading everything into memory anyway.
      */
-    public func getSince(since: UInt64) -> Deferred<Result<StorageResponse<[Record<T>]>>> {
+    public func getSince(since: Timestamp) -> Deferred<Result<StorageResponse<[Record<T>]>>> {
         let deferred = Deferred<Result<StorageResponse<[Record<T>]>>>(defaultQueue: client.resultQueue)
 
         let req = client.requestGET(self.collectionURI)
