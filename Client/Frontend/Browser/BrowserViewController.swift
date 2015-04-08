@@ -375,12 +375,6 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL) {
         finishEditingAndSubmit(url)
     }
-    func homePanelViewControllerHandleDismissKeyboard(homePanelViewController: HomePanelViewController) {
-        // Only fire if the URL text field is first responder (keyboard on screen)
-        if (urlBar.isURLTextFieldFirstResponder() == true) {
-            urlBar.dismissKeyboard()
-        }
-    }
 }
 
 extension BrowserViewController: SearchViewControllerDelegate {

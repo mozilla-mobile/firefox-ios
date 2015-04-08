@@ -15,7 +15,6 @@ private let SelectedIconColor = UIColor(red: 62.0 / 255, green: 136.0 / 255, blu
 
 protocol HomePanelViewControllerDelegate: class {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL)
-    func homePanelViewControllerHandleDismissKeyboard(homePanelViewController: HomePanelViewController)
 }
 
 @objc
@@ -70,8 +69,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     func handleDismissKeyboardGestureRecognizer(gestureRecognizer: UITapGestureRecognizer) {
-        // Call a method in the delegate (which should be the BrowserViewController) since we don't have a reference to the URLBarView from here
-        delegate?.homePanelViewControllerHandleDismissKeyboard(self)
+        view.window?.rootViewController?.view.endEditing(true)
     }
 
     var selectedButtonIndex: Int = 0 {
