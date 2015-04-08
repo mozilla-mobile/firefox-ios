@@ -10,10 +10,21 @@ public class NSUserDefaultsProfilePrefs: Prefs {
     private let prefix: String
     private let userDefaults: NSUserDefaults
 
+    init(profile: Profile, prefix: String, userDefaults: NSUserDefaults) {
+        self.profile = profile
+        self.prefix = prefix
+        self.userDefaults = userDefaults
+    }
+
     init(profile: Profile) {
         self.profile = profile
         self.prefix = profile.localName() + "."
         self.userDefaults = NSUserDefaults(suiteName: ExtensionUtils.sharedContainerIdentifier())!
+    }
+
+    public func branch(branch: String) -> Prefs {
+        let prefix = self.prefix + branch + "."
+        return NSUserDefaultsProfilePrefs(profile: self.profile, prefix: prefix, userDefaults: self.userDefaults)
     }
 
     // Preferences are qualified by the profile's local name.
