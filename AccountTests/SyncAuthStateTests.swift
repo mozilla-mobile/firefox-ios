@@ -13,7 +13,7 @@ class SyncAuthStateTests: LiveAccountTest {
         let e = self.expectationWithDescription("Wait for token.")
         syncAuthState(NSDate.now()).upon { result in
             if let (token, forKey) = result.successValue {
-                let uidString = NSNumber(longLong: token.uid).stringValue
+                let uidString = NSNumber(unsignedLongLong: token.uid).stringValue
                 XCTAssertTrue(token.api_endpoint.endsWith(uidString))
                 XCTAssertNotNil(forKey)
             } else {
