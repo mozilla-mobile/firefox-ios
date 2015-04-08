@@ -30,10 +30,10 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
 
-    private var clients: [RemoteClient]?
+    private var clientTabs: [ClientAndTabs]?
 
     private func tabAtIndexPath(indexPath: NSIndexPath) -> RemoteTab? {
-        return clients?[indexPath.section].tabs[indexPath.item]
+        return clientTabs?[indexPath.section].tabs[indexPath.item]
     }
 
     override func viewDidLoad() {
@@ -54,33 +54,36 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     @objc private func SELrefresh() {
         self.refreshControl?.beginRefreshing()
-        profile.remoteClientsAndTabs.getClientsAndTabs { clients in
-            self.refreshControl?.endRefreshing()
-            self.clients = clients
-            // Maybe show a background view.
-            let tableView = self.tableView
-            if self.clients == nil || self.clients!.isEmpty {
-                tableView.backgroundView = UIView()
-                tableView.backgroundView?.frame = tableView.frame
-                // TODO: Populate background view with UX-approved content.
-                tableView.backgroundView?.backgroundColor = UIColor.redColor()
-                // Hide dividing lines.
-                tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-            } else {
-                tableView.backgroundView = nil
-                // Show dividing lines.
-                tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+        profile.remoteClientsAndTabs.getClientsAndTabs().upon({ tabs in
+            if let tabs = tabs.successValue {
+                self.refreshControl?.endRefreshing()
+                self.clientTabs = tabs
+
+                // Maybe show a background view.
+                let tableView = self.tableView
+                if tabs.isEmpty {
+                    tableView.backgroundView = UIView()
+                    tableView.backgroundView?.frame = tableView.frame
+                    // TODO: Populate background view with UX-approved content.
+                    tableView.backgroundView?.backgroundColor = UIColor.redColor()
+                    // Hide dividing lines.
+                    tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+                } else {
+                    tableView.backgroundView = nil
+                    // Show dividing lines.
+                    tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+                }
+                tableView.reloadData()
             }
-            tableView.reloadData()
-        }
+        })
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return clients?.count ?? 0
+        return clientTabs?.count ?? 0
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return clients?[section].tabs.count ?? 0
+        return clientTabs?[section].tabs.count ?? 0
     }
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -88,11 +91,14 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if let client = clients?[section] {
+        if let clientTabs = clientTabs?[section] {
+            let client = clientTabs.client
             let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(RemoteClientIdentifier) as! TwoLineHeaderFooterView
             view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
             view.textLabel.text = client.name
             // TODO: Convert timestamp to locale-relative timestring.
+            // TODO: note that this is very likely to be wrong; it'll show the last time the other device
+            // uploaded a record, *or another device sent that device a command*.
             let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time")
             view.detailTextLabel.text = String(format: label, String(client.modified))
             if client.type == "desktop" {
@@ -101,9 +107,9 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
                 view.imageView.image = UIImage(named: "deviceTypeMobile")
             }
             return view
-        } else {
-            return nil
         }
+
+        return nil
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
