@@ -40,6 +40,24 @@ public class Cursor: SequenceType {
         get { return nil }
     }
 
+    public func mapAsType<T, U>(type: T.Type, f: (T) -> U) -> [U] {
+        var acc = [U]()
+        for row in self {
+            if let v = row as? T {
+                acc.append(f(v))
+            }
+        }
+        return acc
+    }
+
+    public func map<T>(f: (Any?) -> T?) -> [T?] {
+        var acc = [T?]()
+        for row in self {
+            acc.append(f(row))
+        }
+        return acc
+    }
+
     public func generate() -> GeneratorOf<Any> {
         var nextIndex = 0;
         return GeneratorOf<Any>() {
