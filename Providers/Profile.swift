@@ -184,7 +184,8 @@ public class BrowserProfile: Profile {
     }()
 
     lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
-        return MockRemoteClientsAndTabs()
+        // TODO: Sync!
+        return SQLiteRemoteClientsAndTabs(files: self.files)
     }()
 
     lazy var passwords: Passwords = {
