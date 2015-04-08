@@ -117,6 +117,13 @@ private let AuroraBundleIdentifier = "org.mozilla.ios.FennecAurora"
 private let AuroraPropertyListURL = "https://pvtbuilds.mozilla.org/ios/FennecAurora.plist"
 private let AuroraDownloadPageURL = "https://pvtbuilds.mozilla.org/ios/index.html"
 
+private let AppUpdateTitle = NSLocalizedString("New version available", comment: "Prompt title for application update")
+private let AppUpdateMessage = NSLocalizedString("There is a new version available of Firefox Aurora. Tap OK to go to the download page.", comment: "Prompt message for application update")
+private let AppUpdateCancel = NSLocalizedString("Not Now", comment: "Cancel button for application update prompt")
+private let AppUpdateOK = NSLocalizedString("OK", comment: "OK button for application update prompt")
+
+private let FeedbackSubject = NSLocalizedString("Feedback on iOS client version v%@ (%@)", comment: "E-mail subject for beta testing feedback. The first parameter is the application version. The second parameter is the build number.")
+
 extension AppDelegate: UIAlertViewDelegate {
     private func checkForAuroraUpdate() {
         if isAuroraChannel() {
@@ -125,7 +132,8 @@ extension AppDelegate: UIAlertViewDelegate {
                     if let remoteVersion = version {
                         if localVersion.compare(remoteVersion, options: NSStringCompareOptions.NumericSearch) == NSComparisonResult.OrderedAscending {
                             self.naggedAboutAuroraUpdate = true
-                            let alert = UIAlertView(title: "New version available", message: "There is a new version available of Firefox Aurora. Tap OK to go to the download page.", delegate: self, cancelButtonTitle: "Not Now", otherButtonTitles: "OK")
+
+                            let alert = UIAlertView(title: AppUpdateTitle, message: AppUpdateMessage, delegate: self, cancelButtonTitle: AppUpdateCancel, otherButtonTitles: AppUpdateOK)
                             alert.show()
                         }
                     }
@@ -174,7 +182,8 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
 
             let mailComposeViewController = MFMailComposeViewController()
             mailComposeViewController.mailComposeDelegate = self
-            mailComposeViewController.setSubject("Feedback on iOS client version v\(appVersion) (\(buildNumber))")
+            let subject = String(format: FeedbackSubject, appVersion, buildNumber)
+            mailComposeViewController.setSubject(subject)
             mailComposeViewController.setToRecipients(["ios-feedback@mozilla.com"])
             
             let imageData = UIImagePNGRepresentation(image)

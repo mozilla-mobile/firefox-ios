@@ -290,9 +290,11 @@ class FontSizeButton: UIButton {
 
         switch fontSizeAction {
         case .Smaller:
-            setTitle("-", forState: .Normal)
+            let smallerFontLabel = NSLocalizedString("-", comment: "Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar.")
+            setTitle(smallerFontLabel, forState: .Normal)
         case .Bigger:
-            setTitle("+", forState: .Normal)
+            let largerFontLabel = NSLocalizedString("+", comment: "Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar.")
+            setTitle(largerFontLabel, forState: .Normal)
         }
 
         // TODO Does this need to change with the selected font type? Not sure if makes sense for just +/-
@@ -305,7 +307,8 @@ class FontSizeButton: UIButton {
 class FontSizeLabel: UILabel {
     override convenience init() {
         self.init(frame: CGRectZero)
-        text = "Aa"
+        let fontSizeLabel = NSLocalizedString("Aa", comment: "Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar.")
+        text = fontSizeLabel
     }
 
     var fontType: ReaderModeFontType = .SansSerif {
