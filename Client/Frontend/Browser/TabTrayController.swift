@@ -124,7 +124,7 @@ private class TabCell: UITableViewCell {
 
         innerStroke.frame = background.frame
 
-        closeTab.frame = CGRect(x: backgroundHolder.frame.width - TabTrayControllerUX.CloseButtonSize/2 - TabTrayControllerUX.Margin, y: TabTrayControllerUX.CloseButtonMargin, width: TabTrayControllerUX.CloseButtonSize, height: TabTrayControllerUX.CloseButtonSize)
+        closeTab.frame = CGRect(x: backgroundHolder.frame.width - TabTrayControllerUX.CloseButtonSize - TabTrayControllerUX.CloseButtonMargin, y: TabTrayControllerUX.CloseButtonMargin, width: TabTrayControllerUX.CloseButtonSize, height: TabTrayControllerUX.CloseButtonSize)
 
         verticalCenter(titleText)
     }
@@ -409,7 +409,8 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
     }
 
     func SELdidPressClose(sender: UIButton) {
-        let indexPath:NSIndexPath = NSIndexPath(forRow: sender.tag, inSection: 0)
+        let indexPath:NSIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+        println(sender.tag)
         let tab = tabManager.getTab(indexPath.item)
         tabManager.removeTab(tab)
         tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
