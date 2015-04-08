@@ -94,7 +94,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
             view.textLabel.text = client.name
             // TODO: Convert timestamp to locale-relative timestring.
             let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time")
-            view.detailTextLabel.text = String(format: label, client.lastModified)
+            view.detailTextLabel.text = String(format: label, String(client.lastModified))
             if client.type == "desktop" {
                 view.imageView.image = UIImage(named: "deviceTypeDesktop")
             } else {
