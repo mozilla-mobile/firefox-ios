@@ -17,7 +17,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor(white: 0.75, alpha: 0.65) // TODO: Is the correct color documented somewhere?
+        self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.66) // TODO: Is the correct color documented somewhere?
     }
     
     override func viewDidAppear(animated: Bool) {
