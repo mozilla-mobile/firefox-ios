@@ -399,6 +399,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
 
         let screenshotAspectRatio = tableView.frame.width / TabTrayControllerUX.CellHeight
         cell.background.image = screenshotHelper.takeScreenshot(tab, aspectRatio: screenshotAspectRatio, quality: 1)
+        cell.closeTab.tag = indexPath.row
         cell.closeTab.addTarget(self, action: "SELdidPressClose:", forControlEvents: UIControlEvents.TouchDown)
 
         return cell
@@ -409,8 +410,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
     }
 
     func SELdidPressClose(sender: UIButton) {
-        let indexPath:NSIndexPath = NSIndexPath(forRow: 0, inSection: 0)
-        println(sender.tag)
+        let indexPath:NSIndexPath = NSIndexPath(forRow: sender.tag, inSection: 0)
         let tab = tabManager.getTab(indexPath.item)
         tabManager.removeTab(tab)
         tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
