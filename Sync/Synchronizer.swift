@@ -42,7 +42,7 @@ public class FatalError: SyncError {
     }
 }
 
-public class ClientsSynchronizer: Synchronizer {
+public final class ClientsSynchronizer: Synchronizer {
     private let scratchpad: Scratchpad
 
     private let prefix = "clients"
@@ -51,6 +51,7 @@ public class ClientsSynchronizer: Synchronizer {
     required public init(scratchpad: Scratchpad) {
         self.scratchpad = scratchpad
     }
+
 
     private func clientRecordToLocalClientEntry(record: Record<ClientPayload>) -> RemoteClient {
         let modified = record.modified

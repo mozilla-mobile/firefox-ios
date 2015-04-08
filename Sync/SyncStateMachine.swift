@@ -161,7 +161,7 @@ public class BaseSyncState: SyncState {
 }
 
 public class BaseSyncStateWithInfo: BaseSyncState {
-    let info: InfoCollections
+    public let info: InfoCollections
 
     init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections) {
         self.info = info
@@ -714,6 +714,18 @@ public class Ready: BaseSyncStateWithInfo {
         self.collectionKeys = keys
         super.init(client: client, scratchpad: scratchpad, token: token, info: info)
     }
+
+    // This is all wrong!
+    /*
+
+    public func synchronizer<T: Synchronizer>(synchronizerClass: T.Type) -> T {
+        return T(scratchpad: self.scratchpad)
+    }
+
+    public func storageClient<T: CleartextPayloadJSON>(collection: String, factory: (String) -> T) -> Sync15CollectionClient<T> {
+        return self.client.clientForCollection(collection, factory: factory)
+    }
+*/
 }
 
 
