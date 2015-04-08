@@ -20,7 +20,7 @@ public class Record<T: CleartextPayloadJSON> {
     public let id: String
     public let payload: T
 
-    public let modified: UInt64
+    public let modified: Timestamp
     public let sortindex: Int
     public let ttl: Int              // Seconds.
 
@@ -70,7 +70,7 @@ public class Record<T: CleartextPayloadJSON> {
         self.init(id: envelope.id, payload: payload, modified: envelope.modified, sortindex: envelope.sortindex)
     }
 
-    init(id: String, payload: T, modified: UInt64 = UInt64(time(nil)), sortindex: Int = 0, ttl: Int = ONE_YEAR_IN_SECONDS) {
+    init(id: String, payload: T, modified: Timestamp = Timestamp(time(nil)), sortindex: Int = 0, ttl: Int = ONE_YEAR_IN_SECONDS) {
         self.id = id
 
         self.payload = payload;
