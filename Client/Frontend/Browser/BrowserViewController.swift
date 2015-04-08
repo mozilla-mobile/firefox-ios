@@ -450,6 +450,8 @@ extension BrowserViewController: BrowserToolbarDelegate {
         if let selected = tabManager.selectedTab {
             if let url = selected.displayURL {
                 var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
+                // Hide 'Add to Reading List' which currently uses Safari
+                activityViewController.excludedActivityTypes = [UIActivityTypeAddToReadingList]
                 if let popoverPresentationController = activityViewController.popoverPresentationController {
                     // Using the button for the sourceView here results in this not showing on iPads.
                     popoverPresentationController.sourceView = toolbar ?? urlBar
