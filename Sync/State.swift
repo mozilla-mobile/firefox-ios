@@ -18,7 +18,7 @@ private let log = XCGLogger.defaultInstance()
 
 public struct Fetched<T: Equatable>: Equatable {
     let value: T
-    let timestamp: UInt64
+    let timestamp: Timestamp
 }
 
 public func ==<T: Equatable>(lhs: Fetched<T>, rhs: Fetched<T>) -> Bool {
@@ -62,9 +62,9 @@ public class Scratchpad {
         private var global: Fetched<MetaGlobal>?
         private var keys: Fetched<Keys>?
         private var keyLabel: String
-        var collectionLastFetched: [String: UInt64]
+        var collectionLastFetched: [String: Timestamp]
         var engineConfiguration: EngineConfiguration?
-        var clientRecordLastUpload: UInt64 = 0
+        var clientRecordLastUpload: Timestamp = 0
         var clientName: String
         var prefs: Prefs
 
@@ -150,13 +150,13 @@ public class Scratchpad {
     let keyLabel: String
 
     // Collection timestamps.
-    var collectionLastFetched: [String: UInt64]
+    var collectionLastFetched: [String: Timestamp]
 
     // Enablement states.
     let engineConfiguration: EngineConfiguration?
 
     // When did we last upload our client record?
-    let clientRecordLastUpload: UInt64
+    let clientRecordLastUpload: Timestamp
 
     // What's our client name?
     let clientName: String
@@ -172,9 +172,9 @@ public class Scratchpad {
          m: Fetched<MetaGlobal>?,
          k: Fetched<Keys>?,
          keyLabel: String,
-         fetches: [String: UInt64],
+         fetches: [String: Timestamp],
          engines: EngineConfiguration?,
-         clientUpload: UInt64,
+         clientUpload: Timestamp,
          clientName: String,
          persistingTo prefs: Prefs
         ) {
@@ -197,7 +197,7 @@ public class Scratchpad {
         self.keys = nil
         self.keyLabel = Bytes.generateGUID()
         self.global = nil
-        self.collectionLastFetched = [String: UInt64]()
+        self.collectionLastFetched = [String: Timestamp]()
         self.clientRecordLastUpload = 0
         self.clientName = Scratchpad.defaultClientName()
     }
