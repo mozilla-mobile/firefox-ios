@@ -13,7 +13,7 @@ public class InfoCollections {
     }
 
     public class func fromJSON(json: JSON) -> InfoCollections? {
-        if let dict = json.asDictionary? {
+        if let dict = json.asDictionary {
             var coll = [String: UInt64]()
             for (key, value) in dict {
                 if let value = value.asDouble {
@@ -54,7 +54,7 @@ public class InfoCollections {
 extension Array {
     // Laughably inefficient, but good enough for a handful of items.
     func sameElements(arr: [T], f: (T, T) -> Bool) -> Bool {
-        return self.count == arr.count && every { arr.contains($0, f) }
+        return self.count == arr.count && every { arr.contains($0, f: f) }
     }
 
     func contains(x: T, f: (T, T) -> Bool) -> Bool {

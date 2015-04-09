@@ -379,7 +379,7 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
         // TODO: detect when the keys have changed, and scream and run away if so.
         // TODO: upload keys if necessary, then go to Restart.
         let syncKey = Keys(defaultBundle: self.scratchpad.syncKeyBundle)
-        let keysFactory: (String) -> KeysPayload? = syncKey.factory("keys", { KeysPayload($0) })
+        let keysFactory: (String) -> KeysPayload? = syncKey.factory("keys", f: { KeysPayload($0) })
         let client = self.client.collectionClient("crypto", factory: keysFactory)
         return client.get("keys").map { result in
             if let resp = result.successValue?.value {

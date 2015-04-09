@@ -49,7 +49,7 @@ class RecordTests: XCTestCase {
             return ClientPayload(j)
         }
 
-        let ciphertextClientsFactory: (String) -> ClientPayload? = Keys(defaultBundle: KeyBundle.random()).factory("clients", f)
+        let ciphertextClientsFactory: (String) -> ClientPayload? = Keys(defaultBundle: KeyBundle.random()).factory("clients", f: f)
 
         let clearFactory: (String) -> CleartextPayloadJSON? = {
             (s: String) -> CleartextPayloadJSON? in

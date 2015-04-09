@@ -48,7 +48,7 @@ public class KeyBundle: Equatable {
         let hmacAlgorithm = CCHmacAlgorithm(kCCHmacAlgSHA256)
         let digestLen: Int = Int(CC_SHA256_DIGEST_LENGTH)
         let result = UnsafeMutablePointer<CUnsignedChar>.alloc(digestLen)
-        CCHmac(hmacAlgorithm, hmacKey.bytes, UInt(hmacKey.length), ciphertext.bytes, UInt(ciphertext.length), result)
+        CCHmac(hmacAlgorithm, hmacKey.bytes, hmacKey.length, ciphertext.bytes, ciphertext.length, result)
         return (result, digestLen)
     }
 
@@ -97,7 +97,7 @@ public class KeyBundle: Equatable {
             let d = NSData(bytesNoCopy: b, length: Int(copied))
             let s = NSString(data: d, encoding: NSUTF8StringEncoding)
             b.destroy()
-            return s
+            return s as String?
         }
 
         b.destroy()
@@ -105,22 +105,22 @@ public class KeyBundle: Equatable {
     }
 
 
-    private func crypt(input: NSData, iv: NSData, op: CCOperation) -> (status: CCCryptorStatus, buffer: UnsafeMutablePointer<CUnsignedChar>, count: UInt) {
+    private func crypt(input: NSData, iv: NSData, op: CCOperation) -> (status: CCCryptorStatus, buffer: UnsafeMutablePointer<Void>, count: Int) {
         let resultSize = input.length + kCCBlockSizeAES128
-        let result = UnsafeMutablePointer<CUnsignedChar>.alloc(resultSize)
-        var copied: UInt = 0
+        let result = UnsafeMutablePointer<Void>.alloc(resultSize)
+        var copied: Int = 0
 
         let success: CCCryptorStatus =
         CCCrypt(op,
                 CCHmacAlgorithm(kCCAlgorithmAES128),
                 CCOptions(kCCOptionPKCS7Padding),
                 encKey.bytes,
-                UInt(kCCKeySizeAES256),
+                kCCKeySizeAES256,
                 iv.bytes,
                 input.bytes,
-                UInt(input.length),
+                input.length,
                 result,
-                UInt(resultSize),
+                resultSize,
                 &copied
         );
 
