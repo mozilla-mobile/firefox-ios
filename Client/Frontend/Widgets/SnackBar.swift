@@ -26,9 +26,7 @@ class SnackButton : UIButton {
     init(title: String, callback: (bar: SnackBar) -> Void) {
         self.callback = callback
 
-        super.init()
-
-        self.callback = callback
+        super.init(frame: CGRectZero)
 
         setTitle(title, forState: .Normal)
         titleLabel?.font = AppConstants.DefaultMediumFont
@@ -86,7 +84,7 @@ class SnackBar: UIView {
         buttonsView = Toolbar()
         backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
 
-        super.init()
+        super.init(frame: CGRectZero)
 
         imageView.image = img
         textView.attributedText = attrText
