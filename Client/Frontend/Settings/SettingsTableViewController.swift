@@ -51,7 +51,7 @@ class SettingsTableViewController: UITableViewController {
             let appVersion = NSBundle.mainBundle()
                 .objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
             let buildNumber = NSBundle.mainBundle()
-                .objectForInfoDictionaryKey(kCFBundleVersionKey) as! String
+                .objectForInfoDictionaryKey(kCFBundleVersionKey as String) as! String
             cell.textLabel?.text = String(format: NSLocalizedString("Version %@ (%@)", comment: "Table row in settings that contains the application version and build"), appVersion, buildNumber)
         } else {
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)

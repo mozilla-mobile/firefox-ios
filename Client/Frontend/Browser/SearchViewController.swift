@@ -242,7 +242,7 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
             engineButton.setImage(engine.image, forState: UIControlState.Normal)
             engineButton.layer.backgroundColor = UIColor.whiteColor().CGColor
             engineButton.addTarget(self, action: "SELdidSelectEngine:", forControlEvents: UIControlEvents.TouchUpInside)
-            engineButton.accessibilityLabel = NSString(format: NSLocalizedString("%@ search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
+            engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
 
             searchEngineScrollViewContent.addSubview(engineButton)
             engineButton.snp_makeConstraints { make in
@@ -261,10 +261,11 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
     func SELdidSelectEngine(sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         for i in 0..<searchEngineScrollViewContent.subviews.count {
-            let button = searchEngineScrollViewContent.subviews[i] as UIButton
-            if button === sender {
-                if let url = searchEngines.quickSearchEngines[i].searchURLForQuery(searchQuery) {
-                    searchDelegate?.searchViewController(self, didSelectURL: url)
+            if let button = searchEngineScrollViewContent.subviews[i] as? UIButton {
+                if button === sender {
+                    if let url = searchEngines.quickSearchEngines[i].searchURLForQuery(searchQuery) {
+                        searchDelegate?.searchViewController(self, didSelectURL: url)
+                    }
                 }
             }
         }
@@ -368,12 +369,14 @@ extension SearchViewController: UITableViewDataSource {
         case .BookmarksAndHistory:
             let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
             if let site = data[indexPath.row] as? Site {
-                (cell as TwoLineTableViewCell).setLines(site.title, detailText: site.url)
-                if let img = site.icon? {
-                    let imgUrl = NSURL(string: img.url)
-                    cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
-                } else {
-                    cell.imageView?.image = self.profile.favicons.defaultIcon
+                if let cell = cell as? TwoLineTableViewCell {
+                    cell.setLines(site.title, detailText: site.url)
+                    if let img = site.icon {
+                        let imgUrl = NSURL(string: img.url)
+                        cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
+                    } else {
+                        cell.imageView?.image = self.profile.favicons.defaultIcon
+                    }
                 }
             }
             return cell
@@ -476,7 +479,7 @@ private class SuggestionCell: UITableViewCell {
     }
 
     required init(coder aDecoder: NSCoder) {
-        assertionFailure("Not supported")
+        fatalError("init(coder:) has not been implemented")
     }
 
     var suggestions: [String] = [] {
@@ -586,8 +589,8 @@ private class SuggestionButton: InsetButton {
         contentEdgeInsets = SuggestionInsets
     }
 
-    required override init(coder aDecoder: NSCoder) {
-        assertionFailure("Not supported")
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     @objc
