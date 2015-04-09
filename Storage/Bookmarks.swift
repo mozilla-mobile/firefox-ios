@@ -58,8 +58,8 @@ public class BookmarkItem: BookmarkNode {
     public let url: String!
 
     public init(guid: String, title: String, url: String) {
-        super.init(guid: guid, title: title)
         self.url = url
+        super.init(guid: guid, title: title)
     }
 }
 
@@ -243,7 +243,7 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
     }
 
     public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
-        self.modelForFolder(folder.guid, success, failure)
+        self.modelForFolder(folder.guid, success: success, failure: failure)
     }
 
     public  func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
