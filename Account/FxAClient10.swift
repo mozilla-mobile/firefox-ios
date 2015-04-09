@@ -146,9 +146,9 @@ public class FxAClient10 {
         if let code = json["code"].asInt32 {
             if let errno = json["errno"].asInt32 {
                 return RemoteError(code: code, errno: errno,
-                    error: json["error"].asString?,
-                    message: json["message"].asString?,
-                    info: json["info"].asString?)
+                                   error: json["error"].asString,
+                                   message: json["message"].asString,
+                                   info: json["info"].asString)
             }
         }
         return nil

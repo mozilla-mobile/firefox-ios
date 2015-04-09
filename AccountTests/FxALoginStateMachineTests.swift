@@ -60,7 +60,7 @@ class MockFxALoginClientDuringOutage: MockFxALoginClient {
 }
 
 class FxALoginStateMachineTests: XCTestCase {
-    let marriedState = FxAStateTests.stateForLabel(FxAStateLabel.Married) as MarriedState
+    let marriedState = FxAStateTests.stateForLabel(FxAStateLabel.Married) as! MarriedState
 
     override func setUp() {
         super.setUp()
@@ -98,7 +98,7 @@ class FxALoginStateMachineTests: XCTestCase {
     func testAdvanceFromEngagedBeforeVerified() {
         // Advancing from engaged before verified stays put.
         let e = self.expectationWithDescription("Wait for login state machine.")
-        let engagedState = (FxAStateTests.stateForLabel(.EngagedBeforeVerified) as EngagedBeforeVerifiedState)
+        let engagedState = (FxAStateTests.stateForLabel(.EngagedBeforeVerified) as! EngagedBeforeVerifiedState)
         withMachine(MockFxALoginClientBeforeVerification()) { stateMachine in
             stateMachine.advanceFromState(engagedState, now: engagedState.knownUnverifiedAt).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, engagedState.label.rawValue)
@@ -113,7 +113,7 @@ class FxALoginStateMachineTests: XCTestCase {
         withMachineAndClient { stateMachine, client in
             // let unwrapkB = Bytes.generateRandomBytes(UInt(KeyLength))
             let unwrapkB = client.wrapkB // This way we get all 0s, which is easy to test.
-            let engagedState = (FxAStateTests.stateForLabel(.EngagedAfterVerified) as EngagedAfterVerifiedState).withUnwrapKey(unwrapkB)
+            let engagedState = (FxAStateTests.stateForLabel(.EngagedAfterVerified) as! EngagedAfterVerifiedState).withUnwrapKey(unwrapkB)
 
             let e = self.expectationWithDescription("Wait for login state machine.")
             stateMachine.advanceFromState(engagedState, now: 0).upon { newState in
@@ -133,7 +133,7 @@ class FxALoginStateMachineTests: XCTestCase {
     func testAdvanceFromCohabitingAfterVerifiedDuringOutage() {
         // Advancing from engaged after verified, but during outage, stays put.
         let e = self.expectationWithDescription("Wait for login state machine.")
-        let state = (FxAStateTests.stateForLabel(.CohabitingAfterKeyPair) as CohabitingAfterKeyPairState)
+        let state = (FxAStateTests.stateForLabel(.CohabitingAfterKeyPair) as! CohabitingAfterKeyPairState)
         withMachine(MockFxALoginClientDuringOutage()) { stateMachine in
             stateMachine.advanceFromState(state, now: 0).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, state.label.rawValue)
