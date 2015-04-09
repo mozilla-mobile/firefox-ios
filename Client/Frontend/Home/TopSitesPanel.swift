@@ -191,7 +191,7 @@ private class TopSitesLayout: UICollectionViewLayout {
     }
 }
 
-private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
+class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var data: Cursor
     var profile: Profile
 
@@ -200,7 +200,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         self.profile = profile
     }
 
-    @objc func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return data.count
     }
 
@@ -208,7 +208,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.imageView.image = UIImage(named: "defaultFavicon")!
         cell.imageView.contentMode = UIViewContentMode.Center
     }
-
+    
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let site = data[indexPath.item] as! Site
 
@@ -244,7 +244,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         }
         return cell
     }
-
+    
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         return collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: SeparatorIdentifier, forIndexPath: indexPath) as! UICollectionReusableView
     }
@@ -257,6 +257,6 @@ private class TopSitesSeparator: UICollectionReusableView {
     }
 
     required init(coder aDecoder: NSCoder) {
-        assertionFailure("Not implemented")
+        fatalError("init(coder:) has not been implemented")
     }
 }
