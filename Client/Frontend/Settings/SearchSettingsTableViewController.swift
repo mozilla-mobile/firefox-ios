@@ -124,7 +124,7 @@ class SearchSettingsTableViewController: UITableViewController {
     // Hide a thin vertical line that iOS renders between the accessoryView and the reordering control.
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if cell.editing {
-            for v in cell.subviews as [UIView] {
+            for v in cell.subviews as! [UIView] {
                 if v.frame.width == 1.0 {
                     v.backgroundColor = UIColor.clearColor()
                 }
