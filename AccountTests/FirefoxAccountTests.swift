@@ -22,11 +22,11 @@ class FirefoxAccountTests: XCTestCase {
         ]
 
         let account1 = FirefoxAccount(
-                email: d["email"] as String,
-                uid: d["uid"] as String,
-                authEndpoint: NSURL(string: d["authEndpoint"] as String)!,
-                contentEndpoint: NSURL(string: d["contentEndpoint"] as String)!,
-                oauthEndpoint: NSURL(string: d["oauthEndpoint"] as String)!,
+                email: d["email"] as! String,
+                uid: d["uid"] as! String,
+                authEndpoint: NSURL(string: d["authEndpoint"] as! String)!,
+                contentEndpoint: NSURL(string: d["contentEndpoint"] as! String)!,
+                oauthEndpoint: NSURL(string: d["oauthEndpoint"] as! String)!,
                 state: SeparatedState())
         let d1 = account1.asDictionary()
 
@@ -37,8 +37,8 @@ class FirefoxAccountTests: XCTestCase {
         for (k, v) in d {
             // Skip version, which is an Int.
             if let s = v as? String {
-                XCTAssertEqual(s, d1[k] as String, "Value for '\(k)' does not agree for manually created account.")
-                XCTAssertEqual(s, d2[k] as String, "Value for '\(k)' does not agree for deserialized account.")
+                XCTAssertEqual(s, d1[k] as! String, "Value for '\(k)' does not agree for manually created account.")
+                XCTAssertEqual(s, d2[k] as! String, "Value for '\(k)' does not agree for deserialized account.")
             }
         }
     }
