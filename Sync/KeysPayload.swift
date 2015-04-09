@@ -34,7 +34,7 @@ public class KeysPayload: CleartextPayloadJSON {
             return false;
         }
         
-        let p = obj as KeysPayload
+        let p = obj as! KeysPayload
         if p.defaultKeys != self.defaultKeys {
             return false
         }

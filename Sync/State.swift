@@ -41,6 +41,8 @@ public class Scratchpad {
     init(b: KeyBundle) {
         self.syncKeyBundle = b
         self.modified = [String: UInt64]()
+        self.keys = nil
+        self.global = nil
     }
 
     init(b: KeyBundle, m: Fetched<MetaGlobal>?, k: Fetched<Keys>?, modified: [String: UInt64]) {
