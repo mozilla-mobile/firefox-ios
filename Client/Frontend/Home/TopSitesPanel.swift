@@ -66,7 +66,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 }
 
 private class TopSitesCollectionView: UICollectionView {
-    private override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    private override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         // Hide the keyboard if this view is touched.
         window?.rootViewController?.view.endEditing(true)
         super.touchesBegan(touches, withEvent: event)
@@ -200,7 +200,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         self.profile = profile
     }
 
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    @objc func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return data.count
     }
 
@@ -210,11 +210,11 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let site = data[indexPath.item] as Site
+        let site = data[indexPath.item] as! Site
 
         // Cells for the top site thumbnails.
         if indexPath.item < 6 {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as ThumbnailCell
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as! ThumbnailCell
             cell.textLabel.text = site.title.isEmpty ? site.url : site.title
             if let thumbs = profile.thumbnails as? SDWebThumbnails {
                 cell.imageView.moz_getImageFromCache(site.url, cache: thumbs.cache, completed: { (img, err, type, url) -> Void in
@@ -232,12 +232,12 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         }
 
         // Cells for the remainder of the top sites list.
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(RowIdentifier, forIndexPath: indexPath) as TwoLineCollectionViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(RowIdentifier, forIndexPath: indexPath) as! TwoLineCollectionViewCell
         cell.textLabel.text = site.title.isEmpty ? site.url : site.title
         cell.detailTextLabel.text = site.url
         cell.isAccessibilityElement = true
         cell.accessibilityLabel = "\(cell.textLabel.text!), \(cell.detailTextLabel.text!)"
-        if let icon = site.icon? {
+        if let icon = site.icon {
             cell.imageView.sd_setImageWithURL(NSURL(string: icon.url)!)
         } else {
             cell.imageView.image = UIImage(named: DefaultImage)
@@ -246,15 +246,11 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-        return collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: SeparatorIdentifier, forIndexPath: indexPath) as UICollectionReusableView
+        return collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: SeparatorIdentifier, forIndexPath: indexPath) as! UICollectionReusableView
     }
 }
 
 private class TopSitesSeparator: UICollectionReusableView {
-    override init() {
-        super.init()
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = SeparatorColor
