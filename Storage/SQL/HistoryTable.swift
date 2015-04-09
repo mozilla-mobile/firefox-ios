@@ -46,7 +46,7 @@ class HistoryTable<T>: GenericTable<Site> {
 
     override var factory: ((row: SDRow) -> Site)? {
         return { row -> Site in
-            let site = Site(url: row["url"] as String, title: row["title"] as String)
+            let site = Site(url: row["url"] as! String, title: row["title"] as? String ?? "")
             site.id = row["id"] as? Int
             site.guid = row["guid"] as? String
             return site
@@ -70,7 +70,7 @@ class HistoryTable<T>: GenericTable<Site> {
         if (cursor.count != 1) {
             return nil
         }
-        return (cursor[0] as Site).id
+        return (cursor[0] as! Site).id
     }
 
     func insertOrUpdate(db: SQLiteDBConnection, obj: Site) {

@@ -46,9 +46,9 @@ class VisitsTable<T>: GenericTable<Visit> {
             let site = Site(url: "", title: "")
             site.id = row["siteId"] as? Int
 
-            let dt = row["date"] as NSTimeInterval
+            let dt = row["date"] as! NSTimeInterval
             let date = NSDate(timeIntervalSince1970: dt)
-            var type = VisitType(rawValue: row["type"] as Int)
+            var type = VisitType(rawValue: row["type"] as! Int)
             if type == nil {
                 type = VisitType.Unknown
             }
