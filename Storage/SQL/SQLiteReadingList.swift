@@ -20,8 +20,8 @@ public class SQLiteReadingList: ReadingList {
 
     public func clear(complete: (success: Bool) -> Void) {
         var err: NSError? = nil
-        db.delete(&err) { connection, err in
-            return self.table.delete(connection, item: nil, err: &err)
+        db.delete(&err) { (conn, inout err: NSError?) -> Int in
+            return self.table.delete(conn, item: nil, err: &err)
         }
         dispatch_async(dispatch_get_main_queue()) {
             if err != nil {
@@ -35,8 +35,8 @@ public class SQLiteReadingList: ReadingList {
 
     public func get(complete: (data: Cursor) -> Void) {
         var err: NSError? = nil
-        let res = db.query(&err) { connection, err in
-            return self.table.query(connection, options: nil)
+        let res = db.query(&err) { (conn: SQLiteDBConnection, inout err: NSError?) -> Cursor in
+            return self.table.query(conn, options: nil)
         }
         dispatch_async(dispatch_get_main_queue()) {
             complete(data: res)
@@ -45,8 +45,8 @@ public class SQLiteReadingList: ReadingList {
 
     public func add(#item: ReadingListItem, complete: (success: Bool) -> Void) {
         var err: NSError? = nil
-        let inserted = db.insert(&err) { connection, err in
-            return self.table.insert(connection, item: item, err: &err)
+        let inserted = db.insert(&err) {  (conn, inout err: NSError?) -> Int in
+            return self.table.insert(conn, item: item, err: &err)
         }
 
         dispatch_async(dispatch_get_main_queue()) {

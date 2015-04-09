@@ -105,17 +105,19 @@ class BookmarkTable<T> : GenericTable<BookmarkNode> {
 
     override var factory: ((row: SDRow) -> BookmarkNode)? {
         return { row -> BookmarkNode in
-            let bookmark = BookmarkItem(guid: row["guid"] as String,
-                title: row["title"] as String,
-                url: row["bookmarkUrl"] as String)
+            let url = row["bookmarkUrl"] as! String
+            let guid = row["guid"] as! String
+            let bookmark = BookmarkItem(guid: guid,
+                                        title: row["title"] as? String ?? url,
+                                        url: url)
             bookmark.id = row["bookmarkId"] as? Int
 
-            if let faviconUrl = row["faviconUrl"] as? String {
-                let favicon = Favicon(url: faviconUrl,
-                    date: NSDate(timeIntervalSince1970: row["faviconDate"] as Double),
-                    type: IconType(rawValue: row["faviconType"] as Int)!)
-
-                bookmark.favicon = favicon
+            if let faviconUrl = row["faviconUrl"] as? String,
+               let date = row["faviconDate"] as? Double,
+               let faviconType = row["faviconType"] as? Int {
+                bookmark.favicon = Favicon(url: faviconUrl,
+                                           date: NSDate(timeIntervalSince1970: date),
+                                           type: IconType(rawValue: faviconType)!)
             }
             return bookmark
         }
@@ -159,7 +161,9 @@ class SqliteBookmarkFolder: BookmarkFolder {
         if let item = bookmark as? BookmarkItem {
             return item
         }
-        return bookmark as SqliteBookmarkFolder
+
+        // TODO: this is fragile.
+        return bookmark as! SqliteBookmarkFolder
     }
 
     init(guid: String, title: String, children: Cursor) {
@@ -247,18 +251,19 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
         }, failure: failure)
     }
 
+    // Why does this function look so strangely worded? Segfault in the compiler.
     public func remove(bookmark: BookmarkNode, success: (Bool) -> (), failure: (Any) -> ()) {
         var err: NSError? = nil
-        let numDeleted = self.db.delete(&err) { (connection, err) -> Int in
-            return self.table.delete(connection, item: bookmark, err: &err)
+        let numDeleted = self.db.delete(&err) { (conn, inout err: NSError?) -> Int in
+            return self.table.delete(conn, item: bookmark, err: &err)
         }
 
-        if let err = err {
-            failure(err)
+        if err == nil {
+            success(numDeleted > 0)
             return
         }
 
-        success(numDeleted > 0)
+        failure(err!)
     }
 }
 
