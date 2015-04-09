@@ -80,7 +80,7 @@ private class TabCell: UITableViewCell {
         self.animator = SwipeAnimator(animatingView: self.backgroundHolder,
             containerView: self, ux: SwipeAnimatorUX())
 
-        self.closeTab.setImage(UIImage(named: "toolbar_stop.png"), forState: UIControlState.Normal)
+        self.closeTab.setImage(UIImage(named: "stop"), forState: UIControlState.Normal)
         self.closeTab.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
 
         backgroundHolder.addSubview(self.background)
@@ -403,7 +403,6 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
 
         let screenshotAspectRatio = tableView.frame.width / TabTrayControllerUX.CellHeight
         cell.background.image = screenshotHelper.takeScreenshot(tab, aspectRatio: screenshotAspectRatio, quality: 1)
-        cell.closeTab.tag = indexPath.row
         cell.closeTab.addTarget(self, action: "SELdidPressClose:", forControlEvents: UIControlEvents.TouchDown)
 
         return cell
@@ -414,7 +413,8 @@ class TabTrayController: UIViewController, UITabBarDelegate, UITableViewDelegate
     }
 
     func SELdidPressClose(sender: UIButton) {
-        let indexPath:NSIndexPath = NSIndexPath(forRow: sender.tag, inSection: 0)
+        var closeButtonPosition = sender.convertPoint(CGPointZero, toView: self.tableView)
+        let indexPath:NSIndexPath = self.tableView.indexPathForRowAtPoint(closeButtonPosition)!
         let tab = tabManager.getTab(indexPath.item)
         tabManager.removeTab(tab)
         tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
