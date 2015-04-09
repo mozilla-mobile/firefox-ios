@@ -6,10 +6,14 @@
 class TransitionOptions {
     var container: UIView? = nil
     var moving: UIView? = nil
+    var fromView: UIViewController? = nil
+    var toView: UIViewController? = nil
 }
 
 @objc
 protocol Transitionable : class {
+    func transitionablePreShow(transitionable: Transitionable, options: TransitionOptions)
+    func transitionablePreHide(transitionable: Transitionable, options: TransitionOptions)
     func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions)
     func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions)
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions)
@@ -33,6 +37,8 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning  {
 
         var options = TransitionOptions()
         options.container = container
+        options.fromView = fromView
+        options.toView = toView
 
         if let to = toView as? Transitionable {
             if let from = fromView as? Transitionable {
@@ -40,19 +46,24 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning  {
                 from.transitionableWillShow(from, options: options)
 
                 let duration = self.transitionDuration(transitionContext)
-                UIView.animateWithDuration(duration, animations: {
-                    to.transitionableWillShow(to, options: options)
-                    from.transitionableWillHide(from, options: options)
+
+                to.transitionablePreShow(to, options: options)
+                from.transitionablePreHide(from, options: options)
+
+                UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 0.95, initialSpringVelocity: 0, options: nil, animations: { () -> Void in
+                        to.transitionableWillShow(to, options: options)
+                        from.transitionableWillHide(from, options: options)
                     }, completion: { finished in
-                        transitionContext.completeTransition(true)
                         to.transitionableWillComplete(to, options: options)
                         from.transitionableWillComplete(from, options: options)
+                        transitionContext.completeTransition(true)
                 })
+
             }
         }
     }
 
     func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
-        return 0.2
+        return 0.35
     }
 }

@@ -32,6 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let controller = BrowserViewController()
         controller.profile = profile
         self.window.rootViewController = controller
+        self.window.backgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
         self.window.makeKeyAndVisible()
 
 #if MOZ_CHANNEL_AURORA
