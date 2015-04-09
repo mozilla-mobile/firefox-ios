@@ -305,10 +305,15 @@ class FontSizeButton: UIButton {
 // MARK: -
 
 class FontSizeLabel: UILabel {
-    override convenience init() {
-        self.init(frame: CGRectZero)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         let fontSizeLabel = NSLocalizedString("Aa", comment: "Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar.")
         text = fontSizeLabel
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        // TODO
+        fatalError("init(coder:) has not been implemented")
     }
 
     var fontType: ReaderModeFontType = .SansSerif {

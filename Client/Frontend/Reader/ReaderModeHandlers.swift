@@ -54,7 +54,7 @@ struct ReaderModeHandlers {
                         ReadabilityService.sharedInstance.process(url)
                         if let readerViewLoadingPath = NSBundle.mainBundle().pathForResource("ReaderViewLoading", ofType: "html") {
                             if let readerViewLoading = NSMutableString(contentsOfFile: readerViewLoadingPath, encoding: NSUTF8StringEncoding, error: nil) {
-                                return GCDWebServerDataResponse(HTML: readerViewLoading)
+                                return GCDWebServerDataResponse(HTML: readerViewLoading as String)
                             }
                         }
                     }
