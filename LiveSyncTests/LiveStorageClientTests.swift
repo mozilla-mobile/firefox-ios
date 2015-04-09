@@ -3,9 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Account
 import FxA
 import Shared
-import Account
+import Sync
 import XCTest
 
 private class KeyFetchError: ErrorType {

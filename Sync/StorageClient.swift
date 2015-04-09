@@ -139,7 +139,7 @@ public struct StorageResponse<T> {
     public let value: T
     public let metadata: ResponseMetadata
 
-    init(value: T, metadata: ResponseMetadata) {
+    public init(value: T, metadata: ResponseMetadata) {
         self.value = value
         self.metadata = metadata
     }

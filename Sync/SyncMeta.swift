@@ -35,8 +35,8 @@ public class EngineConfigurations {
 // Equivalent to Android Sync's EngineSettings, but here
 // we use them for meta/global itself.
 public struct EngineMeta {
-    let version: Int
-    let syncID: String
+    public let version: Int
+    public let syncID: String
 
     public static func fromJSON(json: JSON) -> EngineMeta? {
         if let syncID = json["syncID"].asString {
@@ -56,10 +56,10 @@ public struct EngineMeta {
 }
 
 public struct MetaGlobal {
-    let syncID: String
-    let storageVersion: Int
-    let engines: [String: EngineMeta]?      // Is this really optional?
-    let declined: [String]?
+    public let syncID: String
+    public let storageVersion: Int
+    public let engines: [String: EngineMeta]?      // Is this really optional?
+    public let declined: [String]?
 
     public static func fromPayload(string: String) -> MetaGlobal? {
         return fromPayload(JSON(string: string))
