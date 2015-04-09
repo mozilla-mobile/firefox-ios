@@ -89,7 +89,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if let client = clients?[section] {
-            let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(RemoteClientIdentifier) as TwoLineHeaderFooterView
+            let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(RemoteClientIdentifier) as! TwoLineHeaderFooterView
             view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
             view.textLabel.text = client.name
             // TODO: Convert timestamp to locale-relative timestring.
@@ -107,7 +107,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(RemoteTabIdentifier, forIndexPath: indexPath) as TwoLineTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(RemoteTabIdentifier, forIndexPath: indexPath) as! TwoLineTableViewCell
         let tab = tabAtIndexPath(indexPath)
         cell.setLines(tab?.title, detailText: tab?.URL.absoluteString)
         // TODO: Populate image with cached favicons.
