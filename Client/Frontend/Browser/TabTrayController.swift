@@ -9,12 +9,12 @@ private struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
     static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
     static let TextBoxHeight = CGFloat(32.0)
-    static let CellHeight = TextBoxHeight * 6
+    static let CellHeight = TextBoxHeight * 5
     static let Margin = CGFloat(15)
     // This color has been manually adjusted to match background layer with iOS translucency effect.
     static let ToolbarBarTintColor = UIColor(red: 0.16, green: 0.18, blue: 0.20, alpha: 1)
     static let TabTitleTextColor = UIColor.blackColor()
-    static let TabTitleTextFont = AppConstants.DefaultSmallFont
+    static let TabTitleTextFont = AppConstants.DefaultSmallFontBold
     static let CloseButtonSize = CGFloat(18.0)
     static let CloseButtonMargin = CGFloat(6.0)
     static let CloseButtonEdgeInset = CGFloat(3.0)
@@ -27,7 +27,7 @@ private class CustomCell: UICollectionViewCell {
     let backgroundHolder: UIView
     let background: UIImageViewAligned
     let titleText: UILabel
-    let title: UIView
+    let title: UIVisualEffectView
     let innerStroke: InnerStrokedView
     let favicon: UIImageView
     let closeTab: UIButton
@@ -54,13 +54,11 @@ private class CustomCell: UICollectionViewCell {
         self.favicon = UIImageView(image: UIImage(named: "defaultFavicon")!)
         self.favicon.backgroundColor = UIColor.clearColor()
 
-        self.title = UIView()
-        self.title.backgroundColor = UIColor.whiteColor()
+        self.title = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
         self.title.layer.shadowColor = UIColor.blackColor().CGColor
-        self.title.layer.shadowOpacity = 0.25
+        self.title.layer.shadowOpacity = 0.2
         self.title.layer.shadowOffset = CGSize(width: 0, height: 0.5)
-        self.title.layer.shadowRadius = 0.5
-        self.title.layer.shadowPath = UIBezierPath(rect: self.title.bounds).CGPath
+        self.title.layer.shadowRadius = 0
 
         self.titleText = UILabel()
         self.titleText.textColor = TabTrayControllerUX.TabTitleTextColor
@@ -70,26 +68,27 @@ private class CustomCell: UICollectionViewCell {
         self.titleText.numberOfLines = 1
         self.titleText.font = TabTrayControllerUX.TabTitleTextFont
 
+        self.closeTab = UIButton()
+        self.closeTab.setImage(UIImage(named: "stop"), forState: UIControlState.Normal)
+        self.closeTab.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
+
+        self.title.addSubview(self.closeTab)
         self.title.addSubview(self.titleText)
         self.title.addSubview(self.favicon)
 
         self.innerStroke = InnerStrokedView(frame: self.backgroundHolder.frame)
         self.innerStroke.layer.backgroundColor = UIColor.clearColor().CGColor
-        self.closeTab = UIButton()
 
         super.init(frame: frame)
 
         self.animator = SwipeAnimator(animatingView: self.backgroundHolder,
             containerView: self, ux: SwipeAnimatorUX())
 
-        self.closeTab.setImage(UIImage(named: "stop"), forState: UIControlState.Normal)
-        self.closeTab.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
-
         backgroundHolder.addSubview(self.background)
         addSubview(backgroundHolder)
-        backgroundHolder.addSubview(self.title)
         backgroundHolder.addSubview(innerStroke)
-        backgroundHolder.addSubview(self.closeTab)
+        backgroundHolder.addSubview(self.title)
+
 
         self.titleText.addObserver(self, forKeyPath: "contentSize", options: .New, context: nil)
         setupFrames()
@@ -118,12 +117,15 @@ private class CustomCell: UICollectionViewCell {
         let titleTextLeft = favicon.frame.origin.x + favicon.frame.width + 6
         titleText.frame = CGRect(x: titleTextLeft,
             y: 0,
-            width: title.frame.width - titleTextLeft - margin,
+            width: title.frame.width - titleTextLeft - margin  - TabTrayControllerUX.CloseButtonSize - TabTrayControllerUX.CloseButtonMargin * 2,
             height: title.frame.height)
 
         innerStroke.frame = background.frame
 
-        closeTab.frame = CGRect(x: backgroundHolder.frame.width - TabTrayControllerUX.CloseButtonSize - TabTrayControllerUX.CloseButtonMargin, y: (TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.CloseButtonSize) / 2, width: TabTrayControllerUX.CloseButtonSize, height: TabTrayControllerUX.CloseButtonSize)
+        closeTab.frame = CGRect(x: backgroundHolder.frame.width - TabTrayControllerUX.CloseButtonSize - TabTrayControllerUX.CloseButtonMargin,
+            y: (TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.CloseButtonSize) / 2,
+            width: TabTrayControllerUX.CloseButtonSize,
+            height: TabTrayControllerUX.CloseButtonSize)
 
         verticalCenter(titleText)
 
