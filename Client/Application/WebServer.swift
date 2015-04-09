@@ -35,7 +35,7 @@ class WebServer {
 
     /// Convenience method to register all resources in the main bundle of a specific type. Will be mounted at $base/$module/$resource
     func registerMainBundleResourcesOfType(type: String, module: String) {
-        for path in NSBundle.pathsForResourcesOfType(type, inDirectory: NSBundle.mainBundle().bundlePath) as [String] {
+        for path in NSBundle.pathsForResourcesOfType(type, inDirectory: NSBundle.mainBundle().bundlePath) as! [String] {
             let resource = path.lastPathComponent
             server.addGETHandlerForPath("/\(module)/\(resource)", filePath: path, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
         }
