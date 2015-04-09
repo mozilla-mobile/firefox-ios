@@ -141,7 +141,7 @@ class SearchEngines {
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)
         for file in directory! {
-            let fullPath = path!.stringByAppendingPathComponent(file as String)
+            let fullPath = path!.stringByAppendingPathComponent(file as! String)
             let engine = parser.parse(fullPath)
             engines.append(engine!)
         }
