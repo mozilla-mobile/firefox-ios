@@ -6,11 +6,6 @@ class Toolbar : UIView {
     var drawBottomBorder = false
     var drawSeperators = false
 
-    override init() {
-        super.init()
-        self.backgroundColor = UIColor.clearColor()
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()

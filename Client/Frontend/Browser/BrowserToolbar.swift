@@ -166,21 +166,6 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
 
     var helper: BrowserToolbarHelper?
 
-    override init() {
-        backButton = UIButton()
-        forwardButton = UIButton()
-        stopReloadButton = UIButton()
-        shareButton = UIButton()
-        bookmarkButton = UIButton()
-
-        super.init()
-
-        self.helper = BrowserToolbarHelper(toolbar: self)
-
-        addButtons(backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton)
-
-    }
-
     // This has to be here since init() calls it
     private override init(frame: CGRect) {
         // And these have to be initialized in here or the compiler will get angry
@@ -191,6 +176,11 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
         bookmarkButton = UIButton()
 
         super.init(frame: frame)
+
+        self.helper = BrowserToolbarHelper(toolbar: self)
+
+        addButtons(backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton)
+
     }
 
     required init(coder aDecoder: NSCoder) {
