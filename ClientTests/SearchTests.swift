@@ -92,7 +92,7 @@ class SearchTests: XCTestCase {
 
         webServer.addHandlerForMethod("GET", path: "/", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var suggestions: [String]!
-            let query = request.query["q"] as String
+            let query = request.query["q"] as! String
             switch query {
             case "foo":
                 suggestions = ["foo", "foo2", "foo you"]

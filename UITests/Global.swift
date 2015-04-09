@@ -23,7 +23,7 @@ extension KIFUITestActor {
      * elements with the given textContent or title.
      */
     func waitForWebViewElementWithAccessibilityLabel(text: String) {
-        let webView = waitForViewWithAccessibilityLabel("Web content") as WKWebView
+        let webView = waitForViewWithAccessibilityLabel("Web content") as! WKWebView
 
         // Wait for the webView to stop loading.
         runBlock({ _ in
@@ -36,7 +36,7 @@ extension KIFUITestActor {
 
         let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
         webView.evaluateJavaScript("KIFHelper.selectElementWithAccessibilityLabel(\"\(escaped)\");", completionHandler: { (result: AnyObject!, error: NSError!) in
-            stepResult = result as Bool ? KIFTestStepResult.Success : KIFTestStepResult.Failure
+            stepResult = result as! Bool ? KIFTestStepResult.Success : KIFTestStepResult.Failure
         })
 
         runBlock({ (error: NSErrorPointer) in
@@ -51,11 +51,11 @@ extension KIFUITestActor {
         var stepResult = KIFTestStepResult.Wait
 
         webView.evaluateJavaScript("typeof KIFHelper;", completionHandler: { (result: AnyObject!, error: NSError!) in
-            if result as String == "undefined" {
+            if result as! String == "undefined" {
                 let bundle = NSBundle(forClass: NavigationTests.self)
                 let path = bundle.pathForResource("KIFHelper", ofType: "js")!
                 let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil)!
-                webView.evaluateJavaScript(source, completionHandler: nil)
+                webView.evaluateJavaScript(source as String, completionHandler: nil)
             }
             stepResult = KIFTestStepResult.Success
         })
@@ -78,11 +78,11 @@ class SimplePageServer {
         }
 
         webServer.addHandlerForMethod("GET", path: "/", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-            let page = (request.query["page"] as String).toInt()!
+            let page = (request.query["page"] as! String).toInt()!
             var pageDataPath = NSBundle(forClass: self).pathForResource("baseFile", ofType: "html")!
             var pageData = NSString(contentsOfFile: pageDataPath, encoding: NSUTF8StringEncoding, error: nil)!
             pageData = pageData.stringByReplacingOccurrencesOfString("{page}", withString: page.description)
-            return GCDWebServerDataResponse(HTML: pageData)
+            return GCDWebServerDataResponse(HTML: pageData as String)
         }
 
         if !webServer.startWithPort(0, bonjourName: nil) {

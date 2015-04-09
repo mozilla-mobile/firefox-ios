@@ -31,9 +31,9 @@ class HistoryTests: KIFTestCase {
         // Check that both appear in the history home panel
         tester().tapViewWithAccessibilityLabel("URL")
         tester().tapViewWithAccessibilityLabel("History")
-        let firstHistoryRow = tester().waitForViewWithAccessibilityLabel(url1) as UITableViewCell
+        let firstHistoryRow = tester().waitForViewWithAccessibilityLabel(url1) as! UITableViewCell
         XCTAssertNotNil(firstHistoryRow.imageView?.image)
-        let secondHistoryRow = tester().waitForViewWithAccessibilityLabel(url2) as UITableViewCell
+        let secondHistoryRow = tester().waitForViewWithAccessibilityLabel(url2) as! UITableViewCell
         XCTAssertNotNil(secondHistoryRow.imageView?.image)
 
         tester().tapViewWithAccessibilityLabel("Cancel")
