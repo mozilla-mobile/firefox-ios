@@ -61,7 +61,7 @@ class OpenSearchEngine {
  * OpenSearch spec: http://www.opensearch.org/Specifications/OpenSearch/1.1
  */
 class OpenSearchParser {
-    private let pluginMode = false
+    private let pluginMode: Bool
 
     init(pluginMode: Bool) {
         self.pluginMode = pluginMode

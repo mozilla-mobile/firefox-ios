@@ -56,11 +56,6 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
     var helper: BrowserToolbarHelper?
     var toolbarIsShowing = false
 
-    override init() {
-        // super.init() calls init(frame: CGRect)
-        super.init()
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         initViews()

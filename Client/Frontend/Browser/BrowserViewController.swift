@@ -35,13 +35,13 @@ class BrowserViewController: UIViewController {
     private var footerBackground: UIView?
     private var previousScroll: CGPoint? = nil
 
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    init() {
+        super.init(nibName: nil, bundle: nil)
         didInit()
     }
 
-    override init() {
-        super.init(nibName: nil, bundle: nil)
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         didInit()
     }
 
@@ -278,10 +278,10 @@ class BrowserViewController: UIViewController {
     }
 
     override func accessibilityPerformEscape() -> Bool {
-        if let selectedTab = tabManager.selectedTab? {
+        if let selectedTab = tabManager.selectedTab {
             if selectedTab.canGoBack {
                 tabManager.selectedTab?.goBack()
-                return true
+               return true
             }
         }
         return false
@@ -294,10 +294,10 @@ class BrowserViewController: UIViewController {
 
         switch keyPath {
         case KVOEstimatedProgress:
-            urlBar.updateProgressBar(change[NSKeyValueChangeNewKey] as Float)
+            urlBar.updateProgressBar(change[NSKeyValueChangeNewKey] as! Float)
         case KVOLoading:
-            toolbar?.updateReloadStatus(change[NSKeyValueChangeNewKey] as Bool)
-            urlBar.updateReloadStatus(change[NSKeyValueChangeNewKey] as Bool)
+            toolbar?.updateReloadStatus(change[NSKeyValueChangeNewKey] as! Bool)
+            urlBar.updateReloadStatus(change[NSKeyValueChangeNewKey] as! Bool)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath)")
         }
@@ -341,7 +341,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidLongPressReaderMode(urlBar: URLBarView) {
         if let tab = tabManager.selectedTab {
-            if var url = tab.displayURL? {
+            if var url = tab.displayURL {
                 if let absoluteString = url.absoluteString {
                     profile.readingList.add(item: ReadingListItem(url: absoluteString, title: tab.title)) { (success) -> Void in
                         if success {
@@ -455,25 +455,22 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 
     func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
-        if let tab = tabManager.selectedTab? {
-            if let url = tab.displayURL?.absoluteString {
-                profile.bookmarks.isBookmarked(url,
-                    success: { isBookmarked in
-                        if isBookmarked {
-                            self.removeBookmark(url)
-                        } else {
-                            self.addBookmark(url, title: tab.title)
-                        }
-                    },
-                    failure: { err in
-                        println("Bookmark error: \(err)")
+        if let tab = tabManager.selectedTab,
+           let url = tab.displayURL?.absoluteString {
+            profile.bookmarks.isBookmarked(url,
+                success: { isBookmarked in
+                    if isBookmarked {
+                        self.removeBookmark(url)
+                    } else {
+                        self.addBookmark(url, title: tab.title)
                     }
-                )
-            } else {
-                println("Bookmark error: Couldn't find a URL for this tab")
-            }
+                },
+                failure: { err in
+                    println("Bookmark error: \(err)")
+                }
+            )
         } else {
-            println("Bookmark error: No tab is selected")
+            println("Bookmark error: No tab is selected, or no URL in tab.")
         }
     }
 
@@ -886,10 +883,13 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
         let url = navigationAction.request.URL
-        
+        if url == nil {
+            return
+        }
+
         var openExternally = false
         
-        if let scheme = url.scheme {
+        if let scheme = url!.scheme {
             switch scheme {
             case "about", "http", "https":
                 openExternally = false
@@ -903,10 +903,10 @@ extension BrowserViewController: WKNavigationDelegate {
         }
         
         if openExternally {
-            if UIApplication.sharedApplication().canOpenURL(url) {
+            if UIApplication.sharedApplication().canOpenURL(url!) {
                 // Ask the user if it's okay to open the url with UIApplication.
                 let alert = UIAlertController(
-                    title: String(format: NSLocalizedString("Opening %@", comment:"Opening an external URL"), url),
+                    title: String(format: NSLocalizedString("Opening %@", comment:"Opening an external URL"), url!),
                     message: NSLocalizedString("This will open in another application", comment: "Opening an external app"),
                     preferredStyle: UIAlertControllerStyle.Alert
                 )
@@ -916,7 +916,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 }))
                 
                 alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment:"Alert OK Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
-                    UIApplication.sharedApplication().openURL(url)
+                    UIApplication.sharedApplication().openURL(url!)
                     return
                 }))
 
@@ -1012,7 +1012,7 @@ extension BrowserViewController: WKUIDelegate {
         tabManager.selectTab(tabManager.getTab(webView))
 
         // Show JavaScript alerts.
-        let title = frame.request.URL.host
+        let title = frame.request.URL!.host
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
             completionHandler()
@@ -1024,7 +1024,7 @@ extension BrowserViewController: WKUIDelegate {
         tabManager.selectTab(tabManager.getTab(webView))
 
         // Show JavaScript confirm dialogs.
-        let title = frame.request.URL.host
+        let title = frame.request.URL!.host
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
             completionHandler(true)
@@ -1039,7 +1039,7 @@ extension BrowserViewController: WKUIDelegate {
         tabManager.selectTab(tabManager.getTab(webView))
 
         // Show JavaScript input dialogs.
-        let title = frame.request.URL.host
+        let title = frame.request.URL!.host
         let alertController = UIAlertController(title: title, message: prompt, preferredStyle: UIAlertControllerStyle.Alert)
         var input: UITextField!
         alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField!) in
@@ -1139,7 +1139,7 @@ extension BrowserViewController: LongPressGestureDelegate {
         }
 
         actionSheetController.title = dialogTitleURL!.absoluteString
-        var cancelAction = UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, nil)
+        var cancelAction = UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: nil)
         actionSheetController.addAction(cancelAction)
 
         if let popoverPresentationController = actionSheetController.popoverPresentationController {
@@ -1227,8 +1227,8 @@ extension BrowserViewController {
 
     func enableReaderMode() {
         if let webView = tabManager.selectedTab?.webView {
-            let backList = webView.backForwardList.backList as [WKBackForwardListItem]
-            let forwardList = webView.backForwardList.forwardList as [WKBackForwardListItem]
+            let backList = webView.backForwardList.backList as! [WKBackForwardListItem]
+            let forwardList = webView.backForwardList.forwardList as! [WKBackForwardListItem]
 
             if let currentURL = webView.backForwardList.currentItem?.URL {
                 if let readerModeURL = ReaderModeUtils.encodeURL(currentURL) {
@@ -1257,8 +1257,8 @@ extension BrowserViewController {
 
     func disableReaderMode() {
         if let webView = tabManager.selectedTab?.webView {
-            let backList = webView.backForwardList.backList as [WKBackForwardListItem]
-            let forwardList = webView.backForwardList.forwardList as [WKBackForwardListItem]
+            let backList = webView.backForwardList.backList as! [WKBackForwardListItem]
+            let forwardList = webView.backForwardList.forwardList as! [WKBackForwardListItem]
 
             if let currentURL = webView.backForwardList.currentItem?.URL {
                 if let originalURL = ReaderModeUtils.decodeURL(currentURL) {
@@ -1279,29 +1279,27 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
     func readerModeBar(readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType) {
         switch buttonType {
         case .Settings:
-            if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode {
-                if readerMode.state == ReaderModeState.Active {
-                    var readerModeStyle = DefaultReaderModeStyle
-                    if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
-                        if let style = ReaderModeStyle(dict: dict) {
-                            readerModeStyle = style
-                        }
+            if let readerMode = tabManager.selectedTab?.getHelper(name: "ReaderMode") as? ReaderMode where readerMode.state == ReaderModeState.Active {
+                var readerModeStyle = DefaultReaderModeStyle
+                if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
+                    if let style = ReaderModeStyle(dict: dict) {
+                        readerModeStyle = style
                     }
-
-                    let readerModeStyleViewController = ReaderModeStyleViewController()
-                    readerModeStyleViewController.delegate = self
-                    readerModeStyleViewController.readerModeStyle = readerModeStyle
-                    readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
-
-                    let popoverPresentationController = readerModeStyleViewController.popoverPresentationController
-                    popoverPresentationController?.backgroundColor = UIColor.whiteColor()
-                    popoverPresentationController?.delegate = self
-                    popoverPresentationController?.sourceView = readerModeBar
-                    popoverPresentationController?.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: AppConstants.ToolbarHeight, width: 1, height: 1)
-                    popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.Up
-
-                    self.presentViewController(readerModeStyleViewController, animated: true, completion: nil)
                 }
+                
+                let readerModeStyleViewController = ReaderModeStyleViewController()
+                readerModeStyleViewController.delegate = self
+                readerModeStyleViewController.readerModeStyle = readerModeStyle
+                readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
+                
+                let popoverPresentationController = readerModeStyleViewController.popoverPresentationController
+                popoverPresentationController?.backgroundColor = UIColor.whiteColor()
+                popoverPresentationController?.delegate = self
+                popoverPresentationController?.sourceView = readerModeBar
+                popoverPresentationController?.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: AppConstants.ToolbarHeight, width: 1, height: 1)
+                popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.Up
+                
+                self.presentViewController(readerModeStyleViewController, animated: true, completion: nil)
             }
 
         case .MarkAsRead:
@@ -1313,20 +1311,17 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
 
         case .AddToReadingList:
             // TODO Persist to database - The code below needs an update to talk to improved storage layer
-            if let tab = tabManager.selectedTab? {
-                if var url = tab.url? {
-                    if ReaderModeUtils.isReaderModeURL(url) {
-                        if let url = ReaderModeUtils.decodeURL(url) {
-                            if let absoluteString = url.absoluteString {
-                                profile.readingList.add(item: ReadingListItem(url: absoluteString, title: tab.title)) { (success) -> Void in
-                                    //readerModeBar.added = true
-                                }
-                            }
-                        }
+            if let tab = tabManager.selectedTab,
+               let url = tab.url where ReaderModeUtils.isReaderModeURL(url) {
+                if let url = ReaderModeUtils.decodeURL(url),
+                   let absoluteString = url.absoluteString {
+                    profile.readingList.add(item: ReadingListItem(url: absoluteString, title: tab.title)) { (success) -> Void in
+                        //readerModeBar.added = true
                     }
                 }
             }
             break
+
         case .RemoveFromReadingList:
             // TODO Persist to database
             break

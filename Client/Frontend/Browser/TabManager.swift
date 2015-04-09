@@ -118,5 +118,6 @@ class TabManager {
         }
         
         assertionFailure("Tab not in tabs list")
+        return -1
     }
 }
