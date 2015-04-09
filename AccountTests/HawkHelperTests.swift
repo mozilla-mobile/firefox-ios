@@ -60,7 +60,7 @@ class HawkHelperTests: XCTestCase {
         let req = Alamofire.request(.POST, NSURL(string: "http://example.com:8000/resource/1?b=1&a=2")!,
             parameters: [:], encoding: .Custom({ convertible, params in
                 // This just makes a POST with a body string.
-                var mutableRequest = convertible.URLRequest.copy() as NSMutableURLRequest
+                var mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
                 mutableRequest.HTTPBody = body.utf8EncodedData
                 return (mutableRequest, nil)
             }))

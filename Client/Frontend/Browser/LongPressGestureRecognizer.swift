@@ -32,7 +32,7 @@ class LongPressGestureRecognizer: UILongPressGestureRecognizer, UIGestureRecogni
         self.addTarget(self, action: "SELdidLongPress:")
 
         if let path = NSBundle.mainBundle().pathForResource("LongPress", ofType: "js") {
-            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) {
+            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) as? String {
                 var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentStart, forMainFrameOnly: false)
                 self.webView.configuration.userContentController.addUserScript(userScript)
             }
@@ -63,7 +63,7 @@ class LongPressGestureRecognizer: UILongPressGestureRecognizer, UIGestureRecogni
                 if error != nil {
                     println("Long press gesture recognizer error: \(error.description)")
                 } else {
-                    self.handleTouchResult(response as [String: AnyObject])
+                    self.handleTouchResult(response as! [String: AnyObject])
                 }
             }
         }

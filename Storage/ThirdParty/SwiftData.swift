@@ -109,12 +109,8 @@ public class SQLiteDBConnection {
 
     public var version: Int {
         get {
-            var version = 0
             let res = executeQuery("PRAGMA user_version", factory: IntFactory)
-            if let v = res[0] {
-                version = v as Int
-            }
-            return version
+            return res[0] as? Int ?? 0
         }
 
         set {
@@ -248,20 +244,20 @@ public class SQLiteDBConnection {
 
             // Double's also pass obj is Int, so order is important here
             if obj is Double {
-                status = sqlite3_bind_double(stmt, Int32(index+1), obj as Double)
+                status = sqlite3_bind_double(stmt, Int32(index+1), obj as! Double)
             } else if obj is Int {
-                status = sqlite3_bind_int(stmt, Int32(index+1), Int32(obj as Int))
+                status = sqlite3_bind_int(stmt, Int32(index+1), Int32(obj as! Int))
             } else if obj is Bool {
-                status = sqlite3_bind_int(stmt, Int32(index+1), (obj as Bool) ? 1 : 0)
+                status = sqlite3_bind_int(stmt, Int32(index+1), (obj as! Bool) ? 1 : 0)
             } else if obj is String {
                 let negativeOne = UnsafeMutablePointer<Int>(bitPattern: -1)
                 let opaquePointer = COpaquePointer(negativeOne)
                 let transient = CFunctionPointer<((UnsafeMutablePointer<()>) -> Void)>(opaquePointer)
-                status = sqlite3_bind_text(stmt, Int32(index+1), (obj as String).cStringUsingEncoding(NSUTF8StringEncoding)!, -1, transient)
+                status = sqlite3_bind_text(stmt, Int32(index+1), (obj as! String).cStringUsingEncoding(NSUTF8StringEncoding)!, -1, transient)
             } else if obj is NSData {
-                status = sqlite3_bind_blob(stmt, Int32(index+1), (obj as NSData).bytes, -1, nil)
+                status = sqlite3_bind_blob(stmt, Int32(index+1), (obj as! NSData).bytes, -1, nil)
             } else if obj is NSDate {
-                var timestamp = (obj as NSDate).timeIntervalSince1970
+                var timestamp = (obj as! NSDate).timeIntervalSince1970
                 status = sqlite3_bind_double(stmt, Int32(index+1), timestamp)
             } else if obj === nil {
                 status = sqlite3_bind_null(stmt, Int32(index+1))
@@ -278,22 +274,24 @@ public class SQLiteDBConnection {
 
 // Helper for queries that return a single integer result
 func IntFactory(row: SDRow) -> Int {
-    return row[0] as Int
+    return row[0] as! Int
 }
 
 // Helper for queries that return a single String result
 func StringFactory(row: SDRow) -> String {
-    return row[0] as String
+    return row[0] as! String
 }
 
 // Wrapper around a statment for getting data from a row. This provides accessors for subscript indexing
 // and a generator for iterating over columns.
 public class SDRow : SequenceType {
-    // The sqlite statement this row came from
+    // The sqlite statement this row came from.
     private let stmt: COpaquePointer
-    // The columns of this database. The indicies of these are assumed to match the indicies
+
+    // The columns of this database. The indices of these are assumed to match the indices
     // of the statement.
-    private let columnNames = [String]()
+    private let columnNames: [String]
+
     // We hold a reference to the connection to keep it from being closed.
     private let db: SQLiteDBConnection
 

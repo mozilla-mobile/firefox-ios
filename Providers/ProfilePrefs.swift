@@ -87,7 +87,11 @@ public class NSUserDefaultsProfilePrefs: Prefs {
     }
 
     public func stringArrayForKey(defaultName: String) -> [String]? {
-        return userDefaults.stringArrayForKey(qualifyKey(defaultName)) as [String]?
+        let objects = userDefaults.stringArrayForKey(qualifyKey(defaultName))
+        if let strings = objects as? [String] {
+            return strings
+        }
+        return nil
     }
 
     public func arrayForKey(defaultName: String) -> [AnyObject]? {
@@ -106,7 +110,7 @@ public class NSUserDefaultsProfilePrefs: Prefs {
         // TODO: userDefaults.removePersistentDomainForName() has no effect for app group suites.
         // iOS Bug? Iterate and remove each manually for now.
         for key in userDefaults.dictionaryRepresentation().keys {
-            userDefaults.removeObjectForKey(key as NSString)
+            userDefaults.removeObjectForKey(key as! String)
         }
     }
 }

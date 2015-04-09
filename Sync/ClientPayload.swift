@@ -37,7 +37,7 @@ public class ClientPayload: CleartextPayloadJSON {
             return false;
         }
 
-        let p = obj as ClientPayload
+        let p = obj as! ClientPayload
         if p.name != self.name {
             return false
         }

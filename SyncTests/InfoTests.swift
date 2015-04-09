@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Sync
 import XCTest
 
 class InfoTests: XCTestCase {

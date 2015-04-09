@@ -25,7 +25,7 @@ class PasswordHelper: BrowserHelper {
         self.profile = profile
 
         if let path = NSBundle.mainBundle().pathForResource("PasswordHelper", ofType: "js") {
-            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) {
+            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) as? String {
                 var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
                 browser.webView.configuration.userContentController.addUserScript(userScript)
             }
@@ -38,7 +38,7 @@ class PasswordHelper: BrowserHelper {
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         // println("DEBUG: passwordsManagerMessageHandler message: \(message.body)")
-        var res = message.body as [String: String]
+        var res = message.body as! [String: String]
         let type = res["type"]
         if let url = browser?.url {
             if type == "request" {
@@ -64,7 +64,7 @@ class PasswordHelper: BrowserHelper {
                 locale: nil)!
             string.replaceRange(range, with: replace)
             let nsRange = NSMakeRange(distance(string.startIndex, range.startIndex),
-                countElements(replace))
+                count(replace))
             ranges.append(nsRange)
         }
 
@@ -81,7 +81,7 @@ class PasswordHelper: BrowserHelper {
     private func setPassword(password: Password) {
         profile.passwords.get(QueryOptions(filter: password.hostname), complete: { data in
             for i in 0..<data.count {
-                let savedPassword = data[i] as Password
+                let savedPassword = data[i] as! Password
                 if savedPassword.username == password.username {
                     if savedPassword.password == password.password {
                         return
@@ -155,7 +155,7 @@ class PasswordHelper: BrowserHelper {
         profile.passwords.get(QueryOptions(filter: password.hostname), complete: { (cursor) -> Void in
             var logins = [[String: String]]()
             for i in 0..<cursor.count {
-                let password = cursor[i] as Password
+                let password = cursor[i] as! Password
                 logins.append(password.toDict())
             }
 

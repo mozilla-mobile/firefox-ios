@@ -27,7 +27,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     override func reloadData() {
-        self.source?.reloadData(self.onNewModel, self.onModelFailure)
+        self.source?.reloadData(self.onNewModel, failure: self.onModelFailure)
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

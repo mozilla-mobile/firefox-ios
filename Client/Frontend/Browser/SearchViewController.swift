@@ -63,12 +63,17 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
 
     private var suggestionPrompt: UIView?
 
-    convenience override init() {
+    convenience init() {
         self.init(nibName: nil, bundle: nil)
     }
 
     required override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        // TODO:
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -522,7 +527,7 @@ private class SuggestionCell: UITableViewCell {
         var currentRow = 0
 
         for view in container.subviews {
-            let button = view as UIButton
+            let button = view as! UIButton
             var buttonSize = button.intrinsicContentSize()
 
             if height == 0 {
@@ -570,10 +575,6 @@ private class SuggestionCell: UITableViewCell {
  * Rounded search suggestion button that highlights when selected.
  */
 private class SuggestionButton: InsetButton {
-    override init() {
-        super.init()
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -586,7 +587,7 @@ private class SuggestionButton: InsetButton {
         contentEdgeInsets = SuggestionInsets
     }
 
-    required override init(coder aDecoder: NSCoder) {
+    required init(coder aDecoder: NSCoder) {
         assertionFailure("Not supported")
     }
 

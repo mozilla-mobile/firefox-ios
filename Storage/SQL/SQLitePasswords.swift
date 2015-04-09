@@ -67,16 +67,18 @@ private class PasswordsTable<T>: GenericTable<Password> {
 
     override var factory: ((row: SDRow) -> Password)? {
         return { row -> Password in
-            let site = Site(url: row["hostname"] as String, title: "")
-            let pw = Password(site: site, username: row["username"] as String, password: row["password"] as String)
-            pw.httpRealm = row["httpRealm"] as String
-            pw.formSubmitUrl = row["formSubmitUrl"] as String
-            pw.usernameField = row["usernameField"] as String
-            pw.passwordField = row["passwordField"] as String
+            let site = Site(url: row["hostname"] as? String ?? "", title: "")
+            let pw = Password(site: site, username: row["username"] as? String ?? "", password: row["password"] as? String ?? "")
+
+            pw.httpRealm = row["httpRealm"] as? String ?? ""
+            pw.formSubmitUrl = row["formSubmitUrl"] as? String ?? ""
+            pw.usernameField = row["usernameField"] as? String ?? ""
+            pw.passwordField = row["passwordField"] as? String ?? ""
             pw.guid = row["guid"] as? String
-            pw.timeCreated = NSDate(timeIntervalSince1970: row["timeCreated"] as Double)
-            pw.timeLastUsed = NSDate(timeIntervalSince1970: row["timeLastUsed"] as Double)
-            pw.timePasswordChanged = NSDate(timeIntervalSince1970: row["timePasswordChanged"] as Double)
+            pw.timeCreated = NSDate(timeIntervalSince1970: row["timeCreated"] as? Double ?? 0)
+            pw.timeLastUsed = NSDate(timeIntervalSince1970: row["timeLastUsed"] as? Double ?? 0)
+            pw.timePasswordChanged = NSDate(timeIntervalSince1970: row["timePasswordChanged"] as? Double ?? 0)
+
             return pw
         }
     }
@@ -115,15 +117,15 @@ public class SQLitePasswords : Passwords {
     public func add(password: Password, complete: (success: Bool) -> Void) {
         var err: NSError? = nil
         var success = false
-        let updated = db.update(&err, callback: { (connection, err) -> Int in
+        let updated = db.update(&err) { (connection, inout err: NSError?) -> Int in
             return self.table.update(connection, item: password, err: &err)
-        })
+        }
         println("Updated \(updated)")
 
         if updated == 0 {
-            let inserted = db.insert(&err, callback: { (connection, err) -> Int in
+            let inserted = db.insert(&err) { (connection, inout err: NSError?) -> Int in
                 return self.table.insert(connection, item: password, err: &err)
-            })
+            }
             println("Inserted \(inserted)")
 
             if inserted > -1 {
@@ -141,9 +143,9 @@ public class SQLitePasswords : Passwords {
 
     public func remove(password: Password, complete: (success: Bool) -> Void) {
         var err: NSError? = nil
-        let deleted = db.delete(&err, callback: { (connection, err) -> Int in
-            return self.table.delete(connection, item: password, err: &err)
-        })
+        let deleted = db.delete(&err) { (conn, inout err: NSError?) -> Int in
+            return self.table.delete(conn, item: password, err: &err)
+        }
 
         dispatch_async(dispatch_get_main_queue()) { _ in
             complete(success: deleted > -1)
@@ -152,9 +154,9 @@ public class SQLitePasswords : Passwords {
 
     public func removeAll(complete: (success: Bool) -> Void) {
         var err: NSError? = nil
-        let deleted = db.delete(&err, callback: { (connection, err) -> Int in
-            return self.table.delete(connection, item: nil, err: &err)
-        })
+        let deleted = db.delete(&err) { (conn, inout err: NSError?) -> Int in
+            return self.table.delete(conn, item: nil, err: &err)
+        }
 
         dispatch_async(dispatch_get_main_queue()) { _ in
             complete(success: deleted > -1)

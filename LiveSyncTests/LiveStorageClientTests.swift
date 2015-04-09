@@ -3,9 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Account
 import FxA
 import Shared
-import Account
+import Sync
 import XCTest
 
 private class KeyFetchError: ErrorType {
@@ -29,7 +30,7 @@ class LiveStorageClientTests : LiveAccountTest {
 
         let keyBundle: KeyBundle = KeyBundle.fromKB(kB)
         let f: (JSON) -> KeysPayload = { return KeysPayload($0) }
-        let keysFactory: (String) -> KeysPayload? = Keys(defaultBundle: keyBundle).factory("crypto", f)
+        let keysFactory: (String) -> KeysPayload? = Keys(defaultBundle: keyBundle).factory("crypto", f: f)
 
         let workQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
         let resultQueue = dispatch_get_main_queue()
@@ -116,7 +117,7 @@ class LiveStorageClientTests : LiveAccountTest {
                 XCTAssertTrue(ready.collectionKeys.defaultBundle.encKey.length == 32)
                 XCTAssertTrue(ready.scratchpad.global != nil)
                 if let clients = ready.scratchpad.global?.value.engines?["clients"] {
-                    XCTAssertTrue(countElements(clients.syncID) == 12)
+                    XCTAssertTrue(count(clients.syncID) == 12)
                 }
             }
             XCTAssertTrue(result.isSuccess)

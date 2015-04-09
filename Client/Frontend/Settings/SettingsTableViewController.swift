@@ -49,9 +49,9 @@ class SettingsTableViewController: UITableViewController {
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
             // Keep this in agreement with AppDelegate.
             let appVersion = NSBundle.mainBundle()
-                .objectForInfoDictionaryKey("CFBundleShortVersionString") as String
+                .objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
             let buildNumber = NSBundle.mainBundle()
-                .objectForInfoDictionaryKey(kCFBundleVersionKey) as String
+                .objectForInfoDictionaryKey(kCFBundleVersionKey) as! String
             cell.textLabel?.text = String(format: NSLocalizedString("Version %@ (%@)", comment: "Table row in settings that contains the application version and build"), appVersion, buildNumber)
         } else {
             cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
@@ -180,7 +180,7 @@ class SettingsTableViewController: UITableViewController {
 
 extension SettingsTableViewController: FxAContentViewControllerDelegate {
     func contentViewControllerDidSignIn(viewController: FxAContentViewController, data: JSON) {
-        if data["keyFetchToken"].asString? == nil || data["unwrapBKey"].asString? == nil {
+        if data["keyFetchToken"].asString == nil || data["unwrapBKey"].asString == nil {
             // The /settings endpoint sends a partial "login"; ignore it entirely.
             NSLog("Ignoring didSignIn with keyFetchToken or unwrapBKey missing.")
             return

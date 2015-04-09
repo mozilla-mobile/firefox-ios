@@ -69,13 +69,18 @@ class ReadingListTableViewCell: SWTableViewCell {
     let markAsReadButton: UIButton!
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        readStatusImageView = UIImageView()
+        titleLabel = UILabel()
+        hostnameLabel = UILabel()
+        deleteButton = UIButton()
+        markAsReadButton = UIButton()
+
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         separatorInset = UIEdgeInsetsZero
         layoutMargins = UIEdgeInsetsZero
         preservesSuperviewLayoutMargins = false
 
-        readStatusImageView = UIImageView()
         contentView.addSubview(readStatusImageView)
         readStatusImageView.contentMode = UIViewContentMode.Center
         readStatusImageView.snp_makeConstraints { (make) -> () in
@@ -84,7 +89,6 @@ class ReadingListTableViewCell: SWTableViewCell {
             make.height.equalTo(ReadingListTableViewCellUX.ReadIndicatorHeight)
         }
 
-        titleLabel = UILabel()
         contentView.addSubview(titleLabel)
         titleLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
         titleLabel.numberOfLines = 2
@@ -95,7 +99,6 @@ class ReadingListTableViewCell: SWTableViewCell {
             make.right.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelRightOffset) // TODO Not clear from ux spec
         }
 
-        hostnameLabel = UILabel()
         contentView.addSubview(hostnameLabel)
         hostnameLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
         hostnameLabel.numberOfLines = 1
@@ -105,7 +108,6 @@ class ReadingListTableViewCell: SWTableViewCell {
             make.left.right.equalTo(self.titleLabel)
         }
 
-        deleteButton = UIButton()
         deleteButton.backgroundColor = ReadingListTableViewCellUX.DeleteButtonBackgroundColor
         deleteButton.titleLabel?.font = ReadingListTableViewCellUX.DeleteButtonTitleFont
         deleteButton.titleLabel?.textColor = ReadingListTableViewCellUX.DeleteButtonTitleColor
@@ -116,7 +118,6 @@ class ReadingListTableViewCell: SWTableViewCell {
         deleteButton.titleEdgeInsets = ReadingListTableViewCellUX.DeleteButtonTitleEdgeInsets
         //rightUtilityButtons = [deleteButton]
 
-        markAsReadButton = UIButton()
         markAsReadButton.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
         markAsReadButton.titleLabel?.font = ReadingListTableViewCellUX.MarkAsReadButtonTitleFont
         markAsReadButton.titleLabel?.textColor = ReadingListTableViewCellUX.MarkAsReadButtonTitleColor
@@ -138,7 +139,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         let hostname = url.host ?? ""
         for prefix in prefixesToSimplify {
             if hostname.hasPrefix(prefix) {
-                return hostname.substringFromIndex(advance(hostname.startIndex, countElements(prefix)))
+                return hostname.substringFromIndex(advance(hostname.startIndex, count(prefix)))
             }
         }
         return hostname
@@ -175,7 +176,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ReadingListTableViewCell", forIndexPath: indexPath) as ReadingListTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("ReadingListTableViewCell", forIndexPath: indexPath) as! ReadingListTableViewCell
         cell.delegate = self
         if let item = data?[indexPath.row] as? ReadingListItem {
             cell.title = item.title!

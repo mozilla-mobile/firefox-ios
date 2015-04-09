@@ -77,7 +77,7 @@ public class TokenServerClient {
         if 200 <= statusCode && statusCode <= 299 {
             return nil
         }
-        return TokenServerError.Remote(code: Int32(statusCode), status: json["status"].asString?)
+        return TokenServerError.Remote(code: Int32(statusCode), status: json["status"].asString)
     }
 
     private class func tokenFromJSON(json: JSON) -> TokenServerToken? {

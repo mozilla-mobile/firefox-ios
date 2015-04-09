@@ -18,9 +18,6 @@ private class SiteTableViewHeader : UITableViewHeaderFooterView {
     // we just use views for the top and bottom borders.
     let topBorder = UIView()
     let bottomBorder = UIView()
-    override init() {
-        super.init()
-    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -99,7 +96,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as UITableViewCell
+        return tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as! UITableViewCell
         // Callers should override this to fill in the cell returned here
     }
 

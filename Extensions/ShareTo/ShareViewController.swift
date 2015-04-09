@@ -12,8 +12,8 @@ struct ShareDestination {
 }
 
 // TODO: See if we can do this with an Enum instead. Previous attempts failed because for example NSSet does not take (string) enum values.
-let ShareDestinationBookmarks: NSString = "Bookmarks"
-let ShareDestinationReadingList: NSString = "ReadingList"
+let ShareDestinationBookmarks: String = "Bookmarks"
+let ShareDestinationReadingList: String = "ReadingList"
 
 let ShareDestinations = [
     ShareDestination(code: ShareDestinationReadingList, name: NSLocalizedString("Add to Reading List", comment: "On/off toggle to select adding this url to your reading list"), image: "AddToReadingList"),
