@@ -30,6 +30,7 @@ protocol URLBarDelegate: class {
     func urlBarDidPressReload(urlBar: URLBarView)
     func urlBarDidBeginEditing(urlBar: URLBarView)
     func urlBarDidEndEditing(urlBar: URLBarView)
+    func urlBarDidLongPressLocation(urlBar: URLBarView)
     func urlBar(urlBar: URLBarView, didEnterText text: String)
     func urlBar(urlBar: URLBarView, didSubmitText text: String)
 }
@@ -252,6 +253,21 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
         setNeedsUpdateConstraints()
     }
 
+    func currentURL() -> NSURL {
+        return locationView.url!
+    }
+
+    func updateURLBarText(text: String) {
+        delegate?.urlBarDidBeginEditing(self)
+
+        editTextField.text = text
+        editTextField.becomeFirstResponder()
+
+        updateLayoutForEditing(editing: true)
+
+        delegate?.urlBar(self, didEnterText: text)
+    }
+
     func updateTabCount(count: Int) {
         tabsButton.setTitle(count.description, forState: UIControlState.Normal)
         tabsButton.accessibilityValue = count.description
@@ -295,6 +311,10 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
         editTextField.becomeFirstResponder()
 
         updateLayoutForEditing(editing: true)
+    }
+
+    func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView) {
+        delegate?.urlBarDidLongPressLocation(self)
     }
 
     func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView) {

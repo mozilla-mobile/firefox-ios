@@ -353,6 +353,40 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
+    func urlBarDidLongPressLocation(urlBar: URLBarView) {
+        let longPressAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+
+        let pasteboardContents = UIPasteboard.generalPasteboard().string
+
+        // Check if anything is on the pasteboard
+        if pasteboardContents != nil {
+            let pasteAndGoAction = UIAlertAction(title: NSLocalizedString("Paste & Go", comment: "Paste the URL into the location bar and visit"), style: .Default, handler: { (alert: UIAlertAction!) -> Void in
+                self.urlBar(urlBar, didSubmitText: pasteboardContents!)
+            })
+            longPressAlertController.addAction(pasteAndGoAction)
+
+            let pasteAction = UIAlertAction(title: NSLocalizedString("Paste", comment: "Paste the URL into the location bar"), style: .Default, handler: { (alert: UIAlertAction!) -> Void in
+                urlBar.updateURLBarText(pasteboardContents!)
+            })
+            longPressAlertController.addAction(pasteAction)
+        }
+
+        let copyAddressAction = UIAlertAction(title: NSLocalizedString("Copy Address", comment: "Copy the URL from the location bar"), style: .Default, handler: { (alert: UIAlertAction!) -> Void in
+            UIPasteboard.generalPasteboard().string = urlBar.currentURL().absoluteString
+        })
+        longPressAlertController.addAction(copyAddressAction)
+
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel alert view"), style: .Cancel, handler: nil)
+        longPressAlertController.addAction(cancelAction)
+
+        if let popoverPresentationController = longPressAlertController.popoverPresentationController {
+            popoverPresentationController.sourceView = urlBar
+            popoverPresentationController.sourceRect = urlBar.frame
+            popoverPresentationController.permittedArrowDirections = .Any
+        }
+        self.presentViewController(longPressAlertController, animated: true, completion: nil)
+    }
+
     func urlBar(urlBar: URLBarView, didEnterText text: String) {
         if text.isEmpty {
             hideSearchController()
