@@ -19,7 +19,7 @@ class TestBookmarks : ProfileTest {
                 XCTAssertEqual(model.current.count, 11, "We create \(model.current.count) stub bookmarks.")
                 let bookmark = model.current[0]
                 XCTAssertTrue(bookmark is BookmarkItem)
-                XCTAssertEqual((bookmark as BookmarkItem).url, "http://www.example.com/0", "Example URL found.")
+                XCTAssertEqual((bookmark as! BookmarkItem).url, "http://www.example.com/0", "Example URL found.")
                 expectation.fulfill()
             }, failure: { (Any) -> () in
                 XCTFail("Should not have failed to get mock bookmarks.")
