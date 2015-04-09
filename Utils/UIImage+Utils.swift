@@ -27,7 +27,7 @@ private class ThumbnailOperation : NSObject, SDWebImageOperation {
         return false
     }
 
-    func cancel() {
+    @objc func cancel() {
         if let cacheOperation = cacheOperation {
             cacheOperation.cancel()
         }
