@@ -42,10 +42,6 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
     let detailTextLabel = UILabel()
     let imageView = UIImageView()
 
-    override init() {
-        super.init()
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -92,10 +88,6 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
     // Yes, this is strange.
     override var detailTextLabel: UILabel {
         return _detailTextLabel
-    }
-
-    override init() {
-        super.init()
     }
 
     override init(reuseIdentifier: String?) {
