@@ -20,7 +20,7 @@ class ReaderModeCache {
 
     func put(url: NSURL, _ readabilityResult: ReadabilityResult, error: NSErrorPointer) -> Bool {
         if let cacheDirectoryPath = cacheDirectoryForURL(url) {
-            if NSFileManager.defaultManager().createDirectoryAtPath(cacheDirectoryPath, withIntermediateDirectories: true, attributes: nil, error: error) {
+            if NSFileManager.defaultManager().createDirectoryAtPath(cacheDirectoryPath as String, withIntermediateDirectories: true, attributes: nil, error: error) {
                 let contentFilePath = cacheDirectoryPath.stringByAppendingPathComponent("content.json")
                 let string: NSString = readabilityResult.encode()
                 return string.writeToFile(contentFilePath, atomically: true, encoding: NSUTF8StringEncoding, error: error)
@@ -34,7 +34,7 @@ class ReaderModeCache {
             let contentFilePath = cacheDirectoryPath.stringByAppendingPathComponent("content.json")
             if NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
                 if let string = NSString(contentsOfFile: contentFilePath, encoding: NSUTF8StringEncoding, error: error) {
-                    return ReadabilityResult(string: string)
+                    return ReadabilityResult(string: string as String)
                 }
             }
         }
@@ -57,20 +57,20 @@ class ReaderModeCache {
         return false
     }
 
-    private func cacheDirectoryForURL(url: NSURL) -> NSString? {
+    private func cacheDirectoryForURL(url: NSURL) -> String? {
         if let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true) as? [String] {
             if paths.count > 0 {
                 if let hashedPath = hashedPathForURL(url) {
-                    return NSString.pathWithComponents([paths[0], "ReaderView", hashedPath])
+                   return NSString.pathWithComponents([paths[0], "ReaderView", hashedPath]) as String
                 }
             }
         }
         return nil
     }
 
-    private func hashedPathForURL(url: NSURL) -> NSString? {
+    private func hashedPathForURL(url: NSURL) -> String? {
         if let hash = hashForURL(url) {
-            return NSString.pathWithComponents([hash.substringWithRange(NSMakeRange(0, 2)), hash.substringWithRange(NSMakeRange(2, 2)), hash.substringFromIndex(4)])
+            return NSString.pathWithComponents([hash.substringWithRange(NSMakeRange(0, 2)), hash.substringWithRange(NSMakeRange(2, 2)), hash.substringFromIndex(4)]) as String
         }
         return nil
     }

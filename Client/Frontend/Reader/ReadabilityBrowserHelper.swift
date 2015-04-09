@@ -17,16 +17,13 @@ class ReadabilityBrowserHelper: BrowserHelper {
     }
 
     init?(browser: Browser) {
-        if let readabilityPath = NSBundle.mainBundle().pathForResource("Readability", ofType: "js") {
-            if let readabilitySource = NSMutableString(contentsOfFile: readabilityPath, encoding: NSUTF8StringEncoding, error: nil) {
-                if let readabilityBrowserHelperPath = NSBundle.mainBundle().pathForResource("ReadabilityBrowserHelper", ofType: "js") {
-                    if let readabilityBrowserHelperSource = NSMutableString(contentsOfFile: readabilityBrowserHelperPath, encoding: NSUTF8StringEncoding, error: nil) {
-                        readabilityBrowserHelperSource.replaceOccurrencesOfString("%READABILITYJS%", withString: readabilitySource, options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readabilityBrowserHelperSource.length))
-                        var userScript = WKUserScript(source: readabilityBrowserHelperSource, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
-                        browser.webView.configuration.userContentController.addUserScript(userScript)
-                    }
-                }
-            }
+        if let readabilityPath = NSBundle.mainBundle().pathForResource("Readability", ofType: "js"),
+           let readabilitySource = NSMutableString(contentsOfFile: readabilityPath, encoding: NSUTF8StringEncoding, error: nil),
+           let readabilityBrowserHelperPath = NSBundle.mainBundle().pathForResource("ReadabilityBrowserHelper", ofType: "js"),
+           let readabilityBrowserHelperSource = NSMutableString(contentsOfFile: readabilityBrowserHelperPath, encoding: NSUTF8StringEncoding, error: nil) {
+            readabilityBrowserHelperSource.replaceOccurrencesOfString("%READABILITYJS%", withString: readabilitySource as String, options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readabilityBrowserHelperSource.length))
+            var userScript = WKUserScript(source: readabilityBrowserHelperSource as String, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+            browser.webView.configuration.userContentController.addUserScript(userScript)
         }
     }
 
