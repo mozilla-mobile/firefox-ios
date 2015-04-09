@@ -36,10 +36,10 @@ extension String {
 extension NSData {
     public func hmacSha256WithKey(key: NSData) -> NSData {
         let len = Int(CC_SHA256_DIGEST_LENGTH)
-        var digest = UnsafeMutablePointer<UInt8>.alloc(len)
+        var digest = UnsafeMutablePointer<Void>.alloc(len)
         CCHmac(CCHmacAlgorithm(kCCHmacAlgSHA256),
-            key.bytes, UInt(key.length),
-            self.bytes, UInt(self.length),
+            key.bytes, Int(key.length),
+            self.bytes, Int(self.length),
             digest)
         return NSData(bytes: UnsafePointer<Void>(digest), length: len)
     }
@@ -53,7 +53,7 @@ extension String {
 
 extension NSData {
     public var utf8EncodedString: String? {
-        return NSString(data: self, encoding: NSUTF8StringEncoding)
+        return NSString(data: self, encoding: NSUTF8StringEncoding) as String?
     }
 }
 
