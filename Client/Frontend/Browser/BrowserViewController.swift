@@ -813,11 +813,6 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
-        if let longPressGestureRecognizer = LongPressGestureRecognizer(webView: tab.webView) {
-            tab.webView.addGestureRecognizer(longPressGestureRecognizer)
-            longPressGestureRecognizer.longPressGestureDelegate = self
-        }
-
         if let readerMode = ReaderMode(browser: tab) {
             readerMode.delegate = self
             tab.addHelper(readerMode, name: ReaderMode.name())
@@ -828,6 +823,10 @@ extension BrowserViewController: TabManagerDelegate {
 
         let pm = PasswordHelper(browser: tab, profile: profile)
         tab.addHelper(pm, name: PasswordHelper.name())
+        
+        let longPressBrowserHelper = LongPressBrowserHelper(browser: tab)
+        longPressBrowserHelper.delegate = self
+        tab.addHelper(longPressBrowserHelper, name: LongPressBrowserHelper.name())
     }
 
     func tabManager(tabManager: TabManager, didAddTab tab: Browser) {
@@ -1094,8 +1093,8 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
     }
 }
 
-extension BrowserViewController: LongPressGestureDelegate {
-    func longPressRecognizer(longPressRecognizer: LongPressGestureRecognizer, didLongPressElements elements: [LongPressElementType: NSURL]) {
+extension BrowserViewController: LongPressDelegate {
+    func longPressBrowserHelper(longPressBrowserHelper: LongPressBrowserHelper, didLongPressElements elements: [LongPressElementType : NSURL]) {
         var actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         var dialogTitleURL: NSURL?
         if let linkURL = elements[LongPressElementType.Link] {
@@ -1144,7 +1143,7 @@ extension BrowserViewController: LongPressGestureDelegate {
 
         if let popoverPresentationController = actionSheetController.popoverPresentationController {
             popoverPresentationController.sourceView = self.view
-            popoverPresentationController.sourceRect = CGRectInset(CGRect(origin: longPressRecognizer.locationInView(self.view), size: CGSizeZero), -8, -8)
+            popoverPresentationController.sourceRect = CGRectInset(CGRect(origin: longPressBrowserHelper.longPressGestureRecognizer.locationInView(self.view), size: CGSizeZero), -8, -8)
             popoverPresentationController.permittedArrowDirections = .Any
         }
         

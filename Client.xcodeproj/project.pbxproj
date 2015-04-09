@@ -258,7 +258,6 @@
 		59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */; };
 		59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
 		9B64C2A81A6451A800473AE3 /* LongPress.js in Resources */ = {isa = PBXBuildFile; fileRef = 9B64C2A71A6451A800473AE3 /* LongPress.js */; };
-		9B9AE2241A48B9A600AF2C23 /* LongPressGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B9AE2231A48B9A500AF2C23 /* LongPressGestureRecognizer.swift */; };
 		D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D301AAED1A3A55B70078DD1D /* TabTrayController.swift */; };
 		D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D308E4EC1A530A8B00842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
@@ -417,6 +416,7 @@
 		E4F21AA61A13C4A300B0FAAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F21AA51A13C4A300B0FAAA /* Images.xcassets */; };
 		E4F480F51A954660003C0444 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */; };
 		E4F481041A95466A003C0444 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */; };
+		F835F3EB1AD6EBA900F894C8 /* LongPressBrowserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F835F3EA1AD6EBA900F894C8 /* LongPressBrowserHelper.swift */; };
 		F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21D91A090F8100AAB793 /* ClientTests.swift */; };
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
@@ -1077,7 +1077,6 @@
 		59A68B1F857A8638598A63A0 /* TwoLineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoLineCell.swift; sourceTree = "<group>"; };
 		59A68CCB63E2A565CB03F832 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		9B64C2A71A6451A800473AE3 /* LongPress.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = LongPress.js; path = JavaScripts/LongPress.js; sourceTree = "<group>"; };
-		9B9AE2231A48B9A500AF2C23 /* LongPressGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LongPressGestureRecognizer.swift; sourceTree = "<group>"; };
 		D301AAED1A3A55B70078DD1D /* TabTrayController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayController.swift; sourceTree = "<group>"; };
 		D308E4E31A5306F500842685 /* SearchEngines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngines.swift; sourceTree = "<group>"; };
 		D30B0F2F1AA7D66300C01CA3 /* ThumbnailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailCell.swift; sourceTree = "<group>"; };
@@ -1195,6 +1194,7 @@
 		E4ECCD8C1AB091470005E717 /* Reader.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Reader.xcassets; sourceTree = "<group>"; };
 		E4ECCDAD1AB131770005E717 /* FiraSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Medium.ttf"; sourceTree = "<group>"; };
 		E4F21AA51A13C4A300B0FAAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		F835F3EA1AD6EBA900F894C8 /* LongPressBrowserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LongPressBrowserHelper.swift; sourceTree = "<group>"; };
 		F84B21BE1A090F8100AAB793 /* Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D31A090F8100AAB793 /* FennecAurora.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FennecAurora.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D81A090F8100AAB793 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1848,7 +1848,7 @@
 				D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				D301AAED1A3A55B70078DD1D /* TabTrayController.swift */,
-				9B9AE2231A48B9A500AF2C23 /* LongPressGestureRecognizer.swift */,
+				F835F3EA1AD6EBA900F894C8 /* LongPressBrowserHelper.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
 				0BF0DB931A8545800039F300 /* URLBarView.swift */,
 				0BF42D361A7C0B8E00889E28 /* FaviconManager.swift */,
@@ -3169,6 +3169,7 @@
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				D38B2D311A8D96D00040E6B5 /* GCDWebServerConnection.m in Sources */,
 				D38B2D401A8D96D00040E6B5 /* GCDWebServerFileRequest.m in Sources */,
+				F835F3EB1AD6EBA900F894C8 /* LongPressBrowserHelper.swift in Sources */,
 				D38B2D4F1A8D96D00040E6B5 /* GCDWebServerFileResponse.m in Sources */,
 				E43A4E551A96B88100E25676 /* GCDWebServerDataRequest.m in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
@@ -3177,7 +3178,6 @@
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
-				9B9AE2241A48B9A600AF2C23 /* LongPressGestureRecognizer.swift in Sources */,
 				0BF0DBC01A8598D50039F300 /* TransitionManager.swift in Sources */,
 				2F834D1A1A80629A006A0B7B /* FxAContentViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
@@ -4443,6 +4443,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Client-Bridging-Header.h";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = FennecNightly;
@@ -4638,6 +4639,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Client-Bridging-Header.h";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4666,6 +4668,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Client-Bridging-Header.h";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = FennecAurora;
