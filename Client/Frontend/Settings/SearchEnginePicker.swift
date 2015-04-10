@@ -11,6 +11,7 @@ protocol SearchEnginePickerDelegate {
 class SearchEnginePicker: UITableViewController {
     var delegate: SearchEnginePickerDelegate?
     var engines: [OpenSearchEngine]!
+    var selectedSearchEngineName: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,12 +29,20 @@ class SearchEnginePicker: UITableViewController {
         let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
         cell.textLabel?.text = engine.shortName
         cell.imageView?.image = engine.image
+        if engine.shortName == selectedSearchEngineName {
+            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+        }
         return cell
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let engine = engines[indexPath.item]
         delegate?.searchEnginePicker(self, didSelectSearchEngine: engine)
+        tableView.cellForRowAtIndexPath(indexPath)?.accessoryType = UITableViewCellAccessoryType.Checkmark
+    }
+
+    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.cellForRowAtIndexPath(indexPath)?.accessoryType = UITableViewCellAccessoryType.None
     }
 
     func SELcancel() {
