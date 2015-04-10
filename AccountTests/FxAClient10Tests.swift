@@ -23,21 +23,21 @@ class FxAClient10Tests: LiveAccountTest {
     func testErrorOutput() {
         // Make sure we don't hide error details.
         let error = NSError(domain: "test", code: 123, userInfo: nil)
+
         let localError = FxAClientError.Local(error)
         XCTAssertEqual(
             localError.description,
             "<FxAClientError.Local Error Domain=test Code=123 \"The operation couldn’t be completed. (test error 123.)\">")
-        // The Swift compiler is a pile of crap: the following should be equal.  rdar://17318018, much good that it will do.
-        XCTAssertNotEqual(
+        XCTAssertEqual(
             "\(localError)",
             "<FxAClientError.Local Error Domain=test Code=123 \"The operation couldn’t be completed. (test error 123.)\">")
+
         let remoteError = FxAClientError.Remote(RemoteError(code: 401, errno: 104,
             error: "error", message: "message", info: "info"))
         XCTAssertEqual(
             remoteError.description,
             "<FxAClientError.Remote 401/104: error (message)>")
-        // The Swift compiler is a pile of crap: the following should be equal.  rdar://17318018, much good that it will do.
-        XCTAssertNotEqual(
+        XCTAssertEqual(
             "\(remoteError)",
             "<FxAClientError.Remote 401/104: error (message)>")
     }
