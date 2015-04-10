@@ -3,9 +3,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Account
 import Alamofire
 import MessageUI
 import Shared
+import Sync
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,6 +27,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         KeyboardHelper.defaultHelper.startObserving()
 
         profile = BrowserProfile(localName: "profile")
+
+        if let account = profile.getAccount() {
+            let url = ProductionSync15Configuration().tokenServerEndpointURL
+            let authState = account.syncAuthState(url)
+            let ready = SyncStateMachine.toReady(authState, prefs: profile.prefs.branch("sync"))
+            ready.upon { result in
+                if let ready = result.successValue {
+                    /*
+                    let storageClient = ready.storageClient("clients")
+                    let info = ready.info
+                    ready.synchronizer(ClientsSynchronizer)
+                         .synchronizeLocalClients(profile.clients, withServer: storageClient, info: info)
+                    // TODO: sync here.
+//                    ClientsSynchronizer(scratchpad: ready.scratchpad)
+*/
+                } else {
+                    // Uh oh!
+                }
+            }
+        }
 
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
@@ -54,7 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, applicationWillTerminate app: UIApplication) {
         unregisterFeedbackNotification()
     }
-    
+
     func applicationWillResignActive(application: UIApplication) {
         unregisterFeedbackNotification()
     }
@@ -68,11 +90,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.window.drawViewHierarchyInRect(self.window.bounds, afterScreenUpdates: true)
                 let image = UIGraphicsGetImageFromCurrentImageContext()
                 UIGraphicsEndImageContext()
-                
+
                 self.sendFeedbackMailWithImage(image)
         }
     }
-    
+
     private func unregisterFeedbackNotification() {
         NSNotificationCenter.defaultCenter().removeObserver(self,
             name: UIApplicationUserDidTakeScreenshotNotification, object: nil)
@@ -173,7 +195,7 @@ extension AppDelegate: UIAlertViewDelegate {
         }
     }
 }
-    
+
 extension AppDelegate: MFMailComposeViewControllerDelegate {
     func sendFeedbackMailWithImage(image: UIImage) {
         if (MFMailComposeViewController.canSendMail()) {
@@ -183,13 +205,13 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
             mailComposeViewController.mailComposeDelegate = self
             mailComposeViewController.setSubject("Feedback on iOS client version v\(appVersion) (\(buildNumber))")
             mailComposeViewController.setToRecipients(["ios-feedback@mozilla.com"])
-            
+
             let imageData = UIImagePNGRepresentation(image)
             mailComposeViewController.addAttachmentData(imageData, mimeType: "image/png", fileName: "feedback.png")
             self.window.rootViewController?.presentViewController(mailComposeViewController, animated: true, completion: nil)
         }
     }
-    
+
     func mailComposeController(mailComposeViewController: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
         mailComposeViewController.dismissViewControllerAnimated(true, completion: nil)
     }
