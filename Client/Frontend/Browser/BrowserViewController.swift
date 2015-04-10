@@ -26,8 +26,7 @@ class BrowserViewController: UIViewController {
     private let uriFixup = URIFixup()
     private var screenshotHelper: ScreenshotHelper!
     private var homePanelIsInline: Bool = false
-
-    var profile: Profile!
+    let profile: Profile
 
     // These views wrap the urlbar and toolbar to provide background effects on them
     private var header: UIView!
@@ -35,14 +34,14 @@ class BrowserViewController: UIViewController {
     private var footerBackground: UIView?
     private var previousScroll: CGPoint? = nil
 
-    init() {
+    init(profile: Profile) {
+        self.profile = profile
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
 
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        didInit()
+        fatalError("init(coder:) has not been implemented")
     }
 
     private func didInit() {
@@ -117,7 +116,7 @@ class BrowserViewController: UIViewController {
         footer = UIView()
         self.view.addSubview(footer)
 
-        tabManager.delegate = self
+        tabManager.addDelegate(self)
         tabManager.addTab()
         super.viewDidLoad()
     }

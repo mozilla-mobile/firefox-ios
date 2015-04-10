@@ -29,8 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
 
-        let controller = BrowserViewController()
-        controller.profile = profile
+        let controller = BrowserViewController(profile: profile)
         self.window!.rootViewController = controller
         self.window!.backgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
         self.window!.makeKeyAndVisible()

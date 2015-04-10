@@ -6,12 +6,14 @@ import UIKit
 
 class SettingsNavigationController: UINavigationController {
     var profile: Profile!
+    var tabManager: TabManager!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let rootViewController = SettingsTableViewController()
         rootViewController.profile = profile
+        rootViewController.tabManager = tabManager
         self.pushViewController(rootViewController, animated: false)
     }
 
