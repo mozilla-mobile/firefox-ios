@@ -11,7 +11,7 @@ struct ReaderModeUtils {
     static func simplifyDomain(domain: String) -> String {
         for prefix in DomainPrefixesToSimplify {
             if domain.hasPrefix(prefix) {
-                return domain.substringFromIndex(advance(domain.startIndex, countElements(prefix)))
+                return domain.substringFromIndex(advance(domain.startIndex, count(prefix)))
             }
         }
         return domain
@@ -22,7 +22,7 @@ struct ReaderModeUtils {
             if let css = NSString(contentsOfFile: stylePath, encoding: NSUTF8StringEncoding, error: nil) {
                 if let tmplPath = NSBundle.mainBundle().pathForResource("Reader", ofType: "html") {
                     if let tmpl = NSMutableString(contentsOfFile: tmplPath, encoding: NSUTF8StringEncoding, error: nil) {
-                        tmpl.replaceOccurrencesOfString("%READER-CSS%", withString: css,
+                        tmpl.replaceOccurrencesOfString("%READER-CSS%", withString: css as String,
                             options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
 
                         tmpl.replaceOccurrencesOfString("%READER-STYLE%", withString: initialStyle.encode(),
@@ -46,7 +46,7 @@ struct ReaderModeUtils {
                         tmpl.replaceOccurrencesOfString("%WEBSERVER-BASE%", withString: WebServer.sharedInstance.base,
                             options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
 
-                        return tmpl
+                        return tmpl as String
                     }
                 }
             }

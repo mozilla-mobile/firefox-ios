@@ -9,10 +9,10 @@ import Shared
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow!
+    var window: UIWindow?
     var profile: Profile!
 
-    private let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as String
+    private let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Setup a web server that serves us static content. Do this early so that it is ready when the UI is presented.
@@ -27,13 +27,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         profile = BrowserProfile(localName: "profile")
 
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        self.window.backgroundColor = UIColor.whiteColor()
+        self.window!.backgroundColor = UIColor.whiteColor()
 
         let controller = BrowserViewController()
         controller.profile = profile
-        self.window.rootViewController = controller
-        self.window.backgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
-        self.window.makeKeyAndVisible()
+        self.window!.rootViewController = controller
+        self.window!.backgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
+        self.window!.makeKeyAndVisible()
 
 #if MOZ_CHANNEL_AURORA
         checkForAuroraUpdate()
@@ -91,7 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Extract the WebKit version and use it as the Safari version.
         let webKitVersionRegex = NSRegularExpression(pattern: "AppleWebKit/([^ ]+) ", options: nil, error: nil)!
-        let match = webKitVersionRegex.firstMatchInString(userAgent, options: nil, range: NSRange(location: 0, length: countElements(userAgent)))
+        let match = webKitVersionRegex.firstMatchInString(userAgent, options: nil, range: NSRange(location: 0, length: count(userAgent)))
         if match == nil {
             println("Error: Unable to determine WebKit version")
             return

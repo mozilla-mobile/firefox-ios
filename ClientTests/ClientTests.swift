@@ -44,9 +44,9 @@ class ClientTests: XCTestCase {
         
         // Test subscript access
         XCTAssertNil(t[-1] as? String, "Subscript -1 returns nil");
-        XCTAssertEqual(t[0]! as String, "One", "Subscript zero returns the correct data");
-        XCTAssertEqual(t[1]! as String, "Two", "Subscript one returns the correct data");
-        XCTAssertEqual(t[2]! as String, "Three", "Subscript two returns the correct data");
+        XCTAssertEqual(t[0]! as! String, "One", "Subscript zero returns the correct data");
+        XCTAssertEqual(t[1]! as! String, "Two", "Subscript one returns the correct data");
+        XCTAssertEqual(t[2]! as! String, "Three", "Subscript two returns the correct data");
         XCTAssertNil(t[3] as? String, "Subscript three returns nil");
 
         // Test status data with default initializer
@@ -57,7 +57,7 @@ class ClientTests: XCTestCase {
         // Test generator access
         var i = 0;
         for s in t {
-            XCTAssertEqual(s as String, data[i], "Subscript zero returns the correct data");
+            XCTAssertEqual(s as! String, data[i], "Subscript zero returns the correct data");
             i++;
         }
 
@@ -88,8 +88,8 @@ class ClientTests: XCTestCase {
 
         let webView = WKWebView()
         webView.evaluateJavaScript("navigator.userAgent") { result, error in
-            let userAgent = result as String
-            let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as String
+            let userAgent = result as! String
+            let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
             let range = userAgent.rangeOfString("^Mozilla/5\\.0 \\(.+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\) FxiOS/\(appVersion) Mobile/[A-Z0-9]+ Safari/[0-9\\.]+$", options: NSStringCompareOptions.RegularExpressionSearch)
 
             if range != nil {

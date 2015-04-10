@@ -67,7 +67,7 @@ class TestSchemaTable: XCTestCase {
         // Called if the table is upgraded
         let updateCallback: (from: Int, to: Int) -> Bool
 
-        let dropCallback: (() -> Void)? = nil
+        let dropCallback: (() -> Void)?
 
         init(version: Int,
                 createCallback: () -> Bool,

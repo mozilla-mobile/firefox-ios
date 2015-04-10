@@ -98,7 +98,13 @@ public class MockProfilePrefs : Prefs {
     }
 
     public func stringArrayForKey(defaultName: String) -> [String]? {
-        return self.arrayForKey(defaultName) as [String]?
+        if let arr = self.arrayForKey(defaultName) {
+            if let arr = arr as? [String] {
+                return arr
+            }
+        }
+
+        return nil
     }
 
     public func arrayForKey(defaultName: String) -> [AnyObject]? {

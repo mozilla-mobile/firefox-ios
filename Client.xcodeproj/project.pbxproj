@@ -92,11 +92,11 @@
 		28926B3B1AC0F128009C0B1D /* CleartextPayloadJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28926B391AC0F128009C0B1D /* CleartextPayloadJSON.swift */; };
 		28A6CE8A1AC082E200C1A2D4 /* UtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */; };
 		28C328021AD387E00005149C /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1BDF8D1A8523B000213B54 /* KeychainWrapper.swift */; };
+		28C4AB721AD42D4300D9ACE3 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C4AB711AD42D4300D9ACE3 /* Clients.swift */; };
 		28C8D11D1AD4CE8900F62011 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
 		28C8D1391AD4CE9100F62011 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		28C8D13B1AD4CEB100F62011 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		28C8D13C1AD4CEB400F62011 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
-		28C4AB721AD42D4300D9ACE3 /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C4AB711AD42D4300D9ACE3 /* Clients.swift */; };
 		28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28E23C121AC5A5EE00F5AC85 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E23C111AC5A5EE00F5AC85 /* State.swift */; };
@@ -258,7 +258,6 @@
 		59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */; };
 		59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
 		9B64C2A81A6451A800473AE3 /* LongPress.js in Resources */ = {isa = PBXBuildFile; fileRef = 9B64C2A71A6451A800473AE3 /* LongPress.js */; };
-		9B9AE2241A48B9A600AF2C23 /* LongPressGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B9AE2231A48B9A500AF2C23 /* LongPressGestureRecognizer.swift */; };
 		D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D301AAED1A3A55B70078DD1D /* TabTrayController.swift */; };
 		D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D308E4EC1A530A8B00842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
@@ -274,6 +273,7 @@
 		D33D6BC91ABCE8F60089DAB2 /* Thumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D6BC71ABCE8F60089DAB2 /* Thumbnails.swift */; };
 		D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
 		D3589EF71A8D930000F28118 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E4CD9F191A6D9B7B00318571 /* libz.dylib */; };
+		D36998891AD70A0A00650C6C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D36998881AD70A0A00650C6C /* IOKit.framework */; };
 		D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */; };
 		D38A1BEF1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */; };
 		D38A1BF01A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */; };
@@ -416,6 +416,7 @@
 		E4F21AA61A13C4A300B0FAAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F21AA51A13C4A300B0FAAA /* Images.xcassets */; };
 		E4F480F51A954660003C0444 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */; };
 		E4F481041A95466A003C0444 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */; };
+		F835F3EB1AD6EBA900F894C8 /* LongPressBrowserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F835F3EA1AD6EBA900F894C8 /* LongPressBrowserHelper.swift */; };
 		F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21D91A090F8100AAB793 /* ClientTests.swift */; };
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
@@ -464,6 +465,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = EEBCC9E219CC627E0083B827;
 			remoteInfo = SnapTests;
+		};
+		281F47421AD63D03002647A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D38B2CD81A8D94CA0040E6B5 /* Snap.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EECDB37A1AC0C9D4006BBC11;
+			remoteInfo = "Snap OSX";
+		};
+		281F47441AD63D03002647A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D38B2CD81A8D94CA0040E6B5 /* Snap.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EECDB3841AC0C9D4006BBC11;
+			remoteInfo = "Snap OSX Tests";
 		};
 		2827316A1ABC9BE700AA1954 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1062,7 +1077,6 @@
 		59A68B1F857A8638598A63A0 /* TwoLineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoLineCell.swift; sourceTree = "<group>"; };
 		59A68CCB63E2A565CB03F832 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		9B64C2A71A6451A800473AE3 /* LongPress.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = LongPress.js; path = JavaScripts/LongPress.js; sourceTree = "<group>"; };
-		9B9AE2231A48B9A500AF2C23 /* LongPressGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LongPressGestureRecognizer.swift; sourceTree = "<group>"; };
 		D301AAED1A3A55B70078DD1D /* TabTrayController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayController.swift; sourceTree = "<group>"; };
 		D308E4E31A5306F500842685 /* SearchEngines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngines.swift; sourceTree = "<group>"; };
 		D30B0F2F1AA7D66300C01CA3 /* ThumbnailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailCell.swift; sourceTree = "<group>"; };
@@ -1074,6 +1088,7 @@
 		D33D6BC71ABCE8F60089DAB2 /* Thumbnails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Thumbnails.swift; path = Storage/Thumbnails.swift; sourceTree = "<group>"; };
 		D34DC84D1A16C40C00D49B7B /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		D35275151AA8D13B00E9C906 /* ColorUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
+		D36998881AD70A0A00650C6C /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteTableViewController.swift; sourceTree = "<group>"; };
 		D38A1BED1A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SiteTableViewControllerHeader.xib; sourceTree = "<group>"; };
 		D38B2CD81A8D94CA0040E6B5 /* Snap.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Snap.xcodeproj; path = Carthage/Checkouts/Snap/Snap.xcodeproj; sourceTree = "<group>"; };
@@ -1179,6 +1194,7 @@
 		E4ECCD8C1AB091470005E717 /* Reader.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Reader.xcassets; sourceTree = "<group>"; };
 		E4ECCDAD1AB131770005E717 /* FiraSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Medium.ttf"; sourceTree = "<group>"; };
 		E4F21AA51A13C4A300B0FAAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		F835F3EA1AD6EBA900F894C8 /* LongPressBrowserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LongPressBrowserHelper.swift; sourceTree = "<group>"; };
 		F84B21BE1A090F8100AAB793 /* Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D31A090F8100AAB793 /* FennecAurora.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FennecAurora.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D81A090F8100AAB793 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1273,6 +1289,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D36998891AD70A0A00650C6C /* IOKit.framework in Frameworks */,
 				D38B2D751A8D97A40040E6B5 /* libKIF.a in Frameworks */,
 				D3E171C01A83FB6300AB44CD /* libz.dylib in Frameworks */,
 				D39FA16C1A83E17800EE869C /* CoreGraphics.framework in Frameworks */,
@@ -1332,7 +1349,9 @@
 			isa = PBXGroup;
 			children = (
 				0B6544CA1A96C59E000DD202 /* Snap.framework */,
-				0B6544CC1A96C59E000DD202 /* SnapTests.xctest */,
+				281F47431AD63D03002647A1 /* Snap.framework */,
+				0B6544CC1A96C59E000DD202 /* Snap iOS Tests.xctest */,
+				281F47451AD63D03002647A1 /* Snap OSX Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1829,7 +1848,7 @@
 				D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				D301AAED1A3A55B70078DD1D /* TabTrayController.swift */,
-				9B9AE2231A48B9A500AF2C23 /* LongPressGestureRecognizer.swift */,
+				F835F3EA1AD6EBA900F894C8 /* LongPressBrowserHelper.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
 				0BF0DB931A8545800039F300 /* URLBarView.swift */,
 				0BF42D361A7C0B8E00889E28 /* FaviconManager.swift */,
@@ -1882,6 +1901,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				D36998881AD70A0A00650C6C /* IOKit.framework */,
 				D3FA77C31A44F9A80010CD32 /* Locales */,
 				2FCAE28F1ABB53AA00877008 /* libsqlite3.dylib */,
 				E4CD9F191A6D9B7B00318571 /* libz.dylib */,
@@ -2552,11 +2572,25 @@
 			remoteRef = 0B6544C91A96C59E000DD202 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		0B6544CC1A96C59E000DD202 /* SnapTests.xctest */ = {
+		0B6544CC1A96C59E000DD202 /* Snap iOS Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = SnapTests.xctest;
+			path = "Snap iOS Tests.xctest";
 			remoteRef = 0B6544CB1A96C59E000DD202 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		281F47431AD63D03002647A1 /* Snap.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Snap.framework;
+			remoteRef = 281F47421AD63D03002647A1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		281F47451AD63D03002647A1 /* Snap OSX Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Snap OSX Tests.xctest";
+			remoteRef = 281F47441AD63D03002647A1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		28CE83D01A1D1D5100576538 /* FxA.framework */ = {
@@ -3135,6 +3169,7 @@
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				D38B2D311A8D96D00040E6B5 /* GCDWebServerConnection.m in Sources */,
 				D38B2D401A8D96D00040E6B5 /* GCDWebServerFileRequest.m in Sources */,
+				F835F3EB1AD6EBA900F894C8 /* LongPressBrowserHelper.swift in Sources */,
 				D38B2D4F1A8D96D00040E6B5 /* GCDWebServerFileResponse.m in Sources */,
 				E43A4E551A96B88100E25676 /* GCDWebServerDataRequest.m in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
@@ -3143,7 +3178,6 @@
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
-				9B9AE2241A48B9A600AF2C23 /* LongPressGestureRecognizer.swift in Sources */,
 				0BF0DBC01A8598D50039F300 /* TransitionManager.swift in Sources */,
 				2F834D1A1A80629A006A0B7B /* FxAContentViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
@@ -3468,7 +3502,7 @@
 				);
 				INFOPLIST_FILE = Sync/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3515,7 +3549,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Sync/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3566,7 +3600,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Sync/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3834,7 +3868,7 @@
 				);
 				INFOPLIST_FILE = Account/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3881,7 +3915,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Account/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3932,7 +3966,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Account/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4069,7 +4103,7 @@
 				);
 				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4116,7 +4150,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4167,7 +4201,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Storage/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4290,6 +4324,8 @@
 		D349D7381A85977700229905 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = UITests;
 			};
 			name = FennecAurora;
@@ -4309,6 +4345,7 @@
 				INFOPLIST_FILE = UITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/UITests/UITests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
@@ -4326,6 +4363,7 @@
 				INFOPLIST_FILE = UITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/UITests/UITests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
@@ -4377,6 +4415,7 @@
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4405,6 +4444,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Client-Bridging-Header.h";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = FennecNightly;
@@ -4466,6 +4506,8 @@
 		E421F2901A8D2BF300971276 /* FennecNightly */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = UITests;
 			};
 			name = FennecNightly;
@@ -4520,6 +4562,7 @@
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4569,6 +4612,7 @@
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -4598,6 +4642,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Client-Bridging-Header.h";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4626,6 +4671,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "Client-Bridging-Header.h";
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = FennecAurora;

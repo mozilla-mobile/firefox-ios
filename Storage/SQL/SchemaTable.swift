@@ -72,7 +72,7 @@ class SchemaTable<T>: GenericTable<TableInfo> {
 
     override var factory: ((row: SDRow) -> TableInfo)? {
         return { row -> TableInfo in
-            return TableInfoWrapper(name: row["name"] as String, version: row["version"] as Int)
+            return TableInfoWrapper(name: row["name"] as! String, version: row["version"] as! Int)
         }
     }
 

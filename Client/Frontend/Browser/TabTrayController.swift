@@ -140,7 +140,7 @@ private class CustomCell: UICollectionViewCell {
     }
 
     private override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject: AnyObject], context: UnsafeMutablePointer<Void>) {
-        let tv = object as UILabel
+        let tv = object as! UILabel
         verticalCenter(tv)
     }
 
@@ -312,7 +312,7 @@ private class SwipeAnimator: NSObject {
 extension SwipeAnimator: UIGestureRecognizerDelegate {
     private func gestureRecognizerShouldBegin(recognizer: UIGestureRecognizer) -> Bool {
         let cellView = recognizer.view as UIView!
-        let panGesture = recognizer as UIPanGestureRecognizer
+        let panGesture = recognizer as! UIPanGestureRecognizer
         let translation = panGesture.translationInView(cellView.superview!)
         return fabs(translation.x) > fabs(translation.y)
     }
@@ -344,7 +344,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         navBar.layer.shadowRadius = 2.0
         navBar.layer.shadowOpacity = 0.25
         
-        let signInButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+        let signInButton = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
         signInButton.addTarget(self, action: "SELdidClickDone", forControlEvents: UIControlEvents.TouchUpInside)
         signInButton.setTitle(NSLocalizedString("Sign in", comment: "Button that leads to Sign in section of the Settings sheet."), forState: UIControlState.Normal)
         signInButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
@@ -424,7 +424,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let tab = tabManager.getTab(indexPath.item)
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(CellIdentifier, forIndexPath: indexPath) as CustomCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(CellIdentifier, forIndexPath: indexPath) as! CustomCell
         cell.animator.delegate = self
         cell.delegate = self
 
@@ -555,7 +555,7 @@ extension TabTrayController: Transitionable {
 
 extension TabTrayController: SwipeAnimatorDelegate {
     private func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView) {
-        let tabCell = animator.container as CustomCell
+        let tabCell = animator.container as! CustomCell
         if let indexPath = self.collectionView.indexPathForCell(tabCell) {
             let tab = tabManager.getTab(indexPath.item)
             tabManager.removeTab(tab)

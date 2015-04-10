@@ -51,9 +51,9 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
 
     override var factory: ((row: SDRow) -> RemoteClient)? {
         return { row -> RemoteClient in
-            let item = RemoteClient(GUID: row["guid"] as String,
-                name: row["name"] as String,
-                lastModified: (row["last_modified"] as NSNumber).longLongValue,
+            let item = RemoteClient(GUID: row["guid"] as! String,
+                name: row["name"] as! String,
+                lastModified: (row["last_modified"] as! NSNumber).longLongValue,
                 type: row["device_type"] as? String,
                 formFactor: row["form_factor"] as? String,
                 operatingSystem: row["os"] as? String,
@@ -117,12 +117,12 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
     override var factory: ((row: SDRow) -> RemoteTab)? {
         return { row -> RemoteTab in
             let item = RemoteTab(
-                clientGUID: row["client_guid"] as String,
-                URL: NSURL(string: row["url"] as String)!, // TODO: find a way to make this less dangerous.
+                clientGUID: row["client_guid"] as! String,
+                URL: NSURL(string: row["url"] as! String)!, // TODO: find a way to make this less dangerous.
                 title: row["title"] as? String,
                 history: [], // TODO: extract history.
-                lastUsed: Int64((row["last_used"] as NSNumber).longLongValue),
-                position: Int32((row["position"] as NSNumber).intValue)
+                lastUsed: Int64((row["last_used"] as! NSNumber).longLongValue),
+                position: Int32((row["position"] as! NSNumber).intValue)
             )
             return item
         }

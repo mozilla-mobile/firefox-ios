@@ -38,7 +38,7 @@ class TestHistory : ProfileTest {
             XCTAssertEqual(cursor.count, urls.count, "cursor has \(urls.count) entries")
 
             for index in 0..<cursor.count {
-                let s = cursor[index] as Site
+                let s = cursor[index] as! Site
                 XCTAssertNotNil(s, "cursor has a site for entry")
                 let title = urls[s.url]
                 XCTAssertNotNil(title, "Found right url")
@@ -203,7 +203,7 @@ class TestHistory : ProfileTest {
         case 2...3:
             innerCheckSites(history) { cursor in
                 for site in cursor {
-                    let s = site as Site
+                    let s = site as! Site
                 }
             }
             cb()

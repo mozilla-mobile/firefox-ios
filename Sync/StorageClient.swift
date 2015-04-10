@@ -257,24 +257,24 @@ public class Sync15StorageClient {
     }
 
     private func getResource<T>(path: String, f: (JSON) -> T?) -> Deferred<Result<StorageResponse<T>>> {
-        return doOp(self.requestGET, path: path, f)
+        return doOp(self.requestGET, path: path, f: f)
     }
 
     private func deleteResource<T>(path: String, f: (JSON) -> T?) -> Deferred<Result<StorageResponse<T>>> {
-        return doOp(self.requestDELETE, path: path, f)
+        return doOp(self.requestDELETE, path: path, f: f)
     }
 
     func getInfoCollections() -> Deferred<Result<StorageResponse<InfoCollections>>> {
-        return getResource("info/collections", InfoCollections.fromJSON)
+        return getResource("info/collections", f: InfoCollections.fromJSON)
     }
 
     func getMetaGlobal() -> Deferred<Result<StorageResponse<GlobalEnvelope>>> {
-        return getResource("storage/meta/global", { GlobalEnvelope($0) })
+        return getResource("storage/meta/global", f: { GlobalEnvelope($0) })
     }
 
     func wipeStorage() -> Deferred<Result<StorageResponse<JSON>>> {
         // In Sync 1.5 it's preferred that we delete the root, not /storage.
-        return deleteResource("", { $0 })
+        return deleteResource("", f: { $0 })
     }
 
     // TODO: it would be convenient to have the storage client manage Keys,
@@ -345,7 +345,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
                     let envelope = EnvelopeJSON(json)
                     return Record<T>.fromEnvelope(envelope, payloadFactory: self.factory)
                 }
-                if let arr = json.asArray? {
+                if let arr = json.asArray {
                     let response = StorageResponse(value: optFilter(arr.map(recordify)), response: response!)
                     deferred.fill(Result(success: response))
                     return
