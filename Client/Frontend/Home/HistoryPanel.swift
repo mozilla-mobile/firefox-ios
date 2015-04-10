@@ -7,8 +7,8 @@ import UIKit
 import Storage
 
 private func getDate(#dayOffset: Int) -> NSDate {
-    let calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)!
-    let nowComponents = calendar.components(NSCalendarUnit.YearCalendarUnit | NSCalendarUnit.MonthCalendarUnit | NSCalendarUnit.DayCalendarUnit, fromDate: NSDate())
+    let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+    let nowComponents = calendar.components(NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay, fromDate: NSDate())
     let today = calendar.dateFromComponents(nowComponents)!
     return calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitDay, value: dayOffset, toDate: today, options: nil)!
 }
