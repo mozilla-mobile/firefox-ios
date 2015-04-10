@@ -891,39 +891,31 @@ extension BrowserViewController: WKNavigationDelegate {
         if let scheme = url!.scheme {
             switch scheme {
             case "about", "http", "https":
-                openExternally = false
-            case "mailto", "tel", "facetime", "sms":
-                openExternally = true
-            default:
-                // Filter out everything we can't open.
-                decisionHandler(WKNavigationActionPolicy.Cancel)
+                // TODO: Check for urls that we want to special case.
+                decisionHandler(WKNavigationActionPolicy.Allow)
                 return
-            }
-        }
-        
-        if openExternally {
-            if UIApplication.sharedApplication().canOpenURL(url!) {
-                // Ask the user if it's okay to open the url with UIApplication.
-                let alert = UIAlertController(
-                    title: String(format: NSLocalizedString("Opening %@", comment:"Opening an external URL"), url!),
-                    message: NSLocalizedString("This will open in another application", comment: "Opening an external app"),
-                    preferredStyle: UIAlertControllerStyle.Alert
-                )
+            default:
+                if UIApplication.sharedApplication().canOpenURL(url!) {
+                    // Ask the user if it's okay to open the url with UIApplication.
+                    let alert = UIAlertController(
+                        title: String(format: NSLocalizedString("Opening %@", comment:"Opening an external URL"), url!),
+                        message: NSLocalizedString("This will open in another application", comment: "Opening an external app"),
+                        preferredStyle: UIAlertControllerStyle.Alert
+                    )
 
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Alert Cancel Button"), style: UIAlertActionStyle.Cancel, handler: { (action: UIAlertAction!) in
-                    // NOP
-                }))
-                
-                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment:"Alert OK Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
-                    UIApplication.sharedApplication().openURL(url!)
-                    return
-                }))
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Alert Cancel Button"), style: UIAlertActionStyle.Cancel, handler: { (action: UIAlertAction!) in
+                        // NOP
+                    }))
+                    
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment:"Alert OK Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
+                        UIApplication.sharedApplication().openURL(url!)
+                        return
+                    }))
 
-                presentViewController(alert, animated: true, completion: nil)
+                    presentViewController(alert, animated: true, completion: nil)
+                }
+                decisionHandler(WKNavigationActionPolicy.Cancel)
             }
-            decisionHandler(WKNavigationActionPolicy.Cancel)
-        } else {
-            decisionHandler(WKNavigationActionPolicy.Allow)
         }
     }
     
