@@ -12,8 +12,36 @@ protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser)
 }
 
+struct WeakTabManagerDelegate {
+    var value : TabManagerDelegate?
+
+    init (value: TabManagerDelegate) {
+        self.value = value
+    }
+
+    func get() -> TabManagerDelegate? {
+        return value
+    }
+}
+
 class TabManager {
-    weak var delegate: TabManagerDelegate? = nil
+    private var delegates = [WeakTabManagerDelegate]()
+
+    func addDelegate(delegate: TabManagerDelegate) {
+        println("Append \(delegate)")
+        delegates.append(WeakTabManagerDelegate(value: delegate))
+    }
+
+    func removeDelegate(delegate: TabManagerDelegate) {
+        println("Delegates \(delegates)")
+        for var i = 0; i < delegates.count; i++ {
+            var del = delegates[i]
+            if delegate === del.get() {
+                delegates.removeAtIndex(i)
+                return
+            }
+        }
+    }
 
     private var tabs: [Browser] = []
     private var _selectedIndex = -1
@@ -67,7 +95,10 @@ class TabManager {
 
         assert(tab === selectedTab, "Expected tab is selected")
 
-        delegate?.tabManager(self, didSelectedTabChange: tab, previous: previous)
+        for var i = 0; i < delegates.count; i++ {
+            var delegate = delegates[i]
+            delegate.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous)
+        }
     }
 
     func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration = WKWebViewConfiguration()) -> Browser {
@@ -76,9 +107,15 @@ class TabManager {
         }
 
         let tab = Browser(configuration: configuration)
-        delegate?.tabManager(self, didCreateTab: tab)
+        for var i = 0; i < delegates.count; i++ {
+            var delegate = delegates[i]
+            delegate.get()?.tabManager(self, didCreateTab: tab)
+        }
         tabs.append(tab)
-        delegate?.tabManager(self, didAddTab: tab)
+        for var i = 0; i < delegates.count; i++ {
+            var delegate = delegates[i]
+            delegate.get()?.tabManager(self, didAddTab: tab)
+        }
         tab.loadRequest(request)
         selectTab(tab)
         return tab
@@ -99,18 +136,30 @@ class TabManager {
         }
 
         let prevCount = count
+        var index = -1
         for i in 0..<count {
             if tabs[i] === tab {
                 tabs.removeAtIndex(i)
+                index = i
                 break
             }
         }
         assert(count == prevCount - 1, "Tab removed")
 
-        delegate?.tabManager(self, didRemoveTab: tab)
+        for var i = 0; i < delegates.count; i++ {
+            var delegate = delegates[i]
+            delegate.get()?.tabManager(self, didRemoveTab: tab)
+        }
     }
 
-    private func getIndex(tab: Browser) -> Int {
+    func removeAll() {
+        let tabs = self.tabs
+        for tab in tabs {
+            removeTab(tab)
+        }
+    }
+
+    func getIndex(tab: Browser) -> Int {
         for i in 0..<count {
             if tabs[i] === tab {
                 return i
