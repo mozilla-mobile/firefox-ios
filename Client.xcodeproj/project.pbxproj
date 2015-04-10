@@ -1901,12 +1901,12 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
-				D36998881AD70A0A00650C6C /* IOKit.framework */,
 				D3FA77C31A44F9A80010CD32 /* Locales */,
 				2FCAE28F1ABB53AA00877008 /* libsqlite3.dylib */,
 				E4CD9F191A6D9B7B00318571 /* libz.dylib */,
 				D39FA16B1A83E17800EE869C /* CoreGraphics.framework */,
 				0B8E0FF31A932BD500161DC3 /* ImageIO.framework */,
+				D36998881AD70A0A00650C6C /* IOKit.framework */,
 				28CE83E81A1D206D00576538 /* Client-Bridging-Header.h */,
 				D31FC2291A8D908800BAF7EC /* Alamofire.xcodeproj */,
 				2F44F9ED1A9D417500FD20CC /* Base32.xcodeproj */,
