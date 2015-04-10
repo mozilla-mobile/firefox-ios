@@ -35,7 +35,7 @@ class LiveStorageClientTests : LiveAccountTest {
         let resultQueue = dispatch_get_main_queue()
 
         let storageClient = Sync15StorageClient(serverURI: cryptoURI!, authorizer: authorizer, workQueue: workQueue, resultQueue: resultQueue)
-        let keysFetcher = storageClient.collectionClient("crypto", factory: keysFactory)
+        let keysFetcher = storageClient.clientForCollection("crypto", factory: keysFactory)
 
         return keysFetcher.get("keys").map({
             // Unwrap the response.
@@ -109,7 +109,7 @@ class LiveStorageClientTests : LiveAccountTest {
         let expectation = expectationWithDescription("Waiting on value.")
         let authState = self.getAuthState(NSDate.now())
 
-        let d = chainDeferred(authState, SyncStateMachine.toReady)
+        let d = chainDeferred(authState, { SyncStateMachine.toReady($0, prefs: MockProfilePrefs()) })
 
         d.upon { result in
             if let ready = result.successValue {
