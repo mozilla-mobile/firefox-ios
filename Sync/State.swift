@@ -305,6 +305,9 @@ public class Scratchpad {
 
     /**
      * Persist our current state to our origin prefs.
+     * Note that calling this from multiple threads with either mutated or evolved
+     * scratchpads will cause sadness — individual writes are thread-safe, but the
+     * overall pseudo-transaction is not atomic.
      */
     public func checkpoint() -> Scratchpad {
         return pickle(self.prefs)
