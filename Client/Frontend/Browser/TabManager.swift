@@ -76,12 +76,16 @@ class TabManager {
         }
 
         let tab = Browser(configuration: configuration)
-        delegate?.tabManager(self, didCreateTab: tab)
-        tabs.append(tab)
-        delegate?.tabManager(self, didAddTab: tab)
+        addTab(tab)
         tab.loadRequest(request)
         selectTab(tab)
         return tab
+    }
+
+    private func addTab(tab: Browser) {
+        delegate?.tabManager(self, didCreateTab: tab)
+        tabs.append(tab)
+        delegate?.tabManager(self, didAddTab: tab)
     }
 
     func removeTab(tab: Browser) {
@@ -119,5 +123,26 @@ class TabManager {
         
         assertionFailure("Tab not in tabs list")
         return -1
+    }
+}
+
+extension TabManager {
+    func encodeRestorableStateWithCoder(coder: NSCoder) {
+        coder.encodeInteger(count, forKey: "tabCount")
+        coder.encodeInteger(selectedIndex, forKey: "selectedIndex")
+        for i in 0..<count {
+            let tab = tabs[i]
+            coder.encodeObject(tab.url!, forKey: "tab-\(i)-url")
+        }
+    }
+
+    func decodeRestorableStateWithCoder(coder: NSCoder) {
+        let count: Int = coder.decodeIntegerForKey("tabCount")
+        for i in 0..<count {
+            let url = coder.decodeObjectForKey("tab-\(i)-url") as! NSURL
+            addTab(request: NSURLRequest(URL: url))
+        }
+        let selectedIndex: Int = coder.decodeIntegerForKey("selectedIndex")
+        self.selectTab(tabs[selectedIndex])
     }
 }
