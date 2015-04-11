@@ -104,15 +104,4 @@ public class FileAccessor {
         }
         return false
     }
-    
-    /**
-     * Read a file with the given path into an NSData object.
-     */
-    public func read(relativePath: String, error: NSErrorPointer = nil) -> NSData? {
-        if (!exists(relativePath)) {
-            return .None
-        }
-        let absolutePath = rootPath.stringByAppendingPathComponent(relativePath)
-        return NSData(contentsOfFile: absolutePath)
-    }
 }
