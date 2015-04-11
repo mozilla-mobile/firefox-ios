@@ -59,7 +59,7 @@ extension RemoteTab: Printable {
 }
 
 public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
-    public let clients: [ClientAndTabs]
+    public let clientsAndTabs: [ClientAndTabs]
 
     public init() {
         let now = NSDate.now()
@@ -80,11 +80,11 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         let client2 = RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now - OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin")
 
         // Tabs are ordered most-recent-first.
-        self.clients = [ClientAndTabs(client: client1, tabs: [tab11, tab12]), ClientAndTabs(client: client2, tabs: [tab22, tab21])]
+        self.clientsAndTabs = [ClientAndTabs(client: client1, tabs: [tab11, tab12]), ClientAndTabs(client: client2, tabs: [tab22, tab21])]
     }
 
 
     public func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
-        return Deferred(value: Result(success: self.clients))
+        return Deferred(value: Result(success: self.clientsAndTabs))
     }
 }

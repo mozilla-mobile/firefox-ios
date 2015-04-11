@@ -8,7 +8,16 @@ import XCGLogger
 
 private let log = XCGLogger.defaultInstance()
 
-extension NSError: ErrorType {
+public class DatabaseError: ErrorType {
+    let err: NSError?
+
+    public var description: String {
+        return err?.localizedDescription ?? "Unknown database error."
+    }
+
+    init(err: NSError?) {
+        self.err = err
+    }
 }
 
 public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
@@ -32,8 +41,9 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             self.tabs.delete(connection, item: nil, err: &err)
             self.clients.delete(connection, item: nil, err: &err)
             if let err = err {
-                log.debug("Clear failed: \(err.localizedDescription)")
-                deferred.fill(Result(failure: err))
+                let databaseError = DatabaseError(err: err)
+                log.debug("Clear failed: \(databaseError)")
+                deferred.fill(Result(failure: databaseError))
             } else {
                 deferred.fill(Result(success: ()))
             }
@@ -54,7 +64,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         db.transaction(&err) { connection, _ in
             // Delete any existing tabs.
             if let error = connection.executeChange(deleteQuery, withArgs: deleteArgs) {
-                deferred.fill(Result(failure: error))
+                deferred.fill(Result(failure: DatabaseError(err: err)))
                 return false
             }
 
@@ -66,7 +76,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
                 inserted += self.tabs.insert(connection, item: tab, err: &err)
                 if let err = err {
-                    deferred.fill(Result(failure: err))
+                    deferred.fill(Result(failure: DatabaseError(err: err)))
                     return false
                 }
             }
@@ -90,8 +100,9 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             }
 
             if let err = err {
-                log.debug("insertOrUpdateClient failed: \(err.localizedDescription)")
-                deferred.fill(Result(failure: err))
+                let databaseError = DatabaseError(err: err)
+                log.debug("insertOrUpdateClient failed: \(databaseError)")
+                deferred.fill(Result(failure: databaseError))
                 return false
             }
 
@@ -109,7 +120,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
 
         if let err = err {
-            return Deferred(value: Result(failure: err))
+            return Deferred(value: Result(failure: DatabaseError(err: err)))
         }
 
         let tabs = db.query(&err) { connection, _ in
@@ -117,21 +128,21 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
 
         if let err = err {
-            return Deferred(value: Result(failure: err))
+            return Deferred(value: Result(failure: DatabaseError(err: err)))
         }
 
         let deferred = Deferred<Result<[ClientAndTabs]>>(defaultQueue: dispatch_get_main_queue())
 
         // Aggregate clientGUID -> RemoteTab.
         var acc = [String: [RemoteTab]]()
-                for tab in tabs {
-                    if let tab = tab as? RemoteTab {
-                        if acc[tab.clientGUID] == nil {
-                            acc[tab.clientGUID] = []
-                        }
-                        acc[tab.clientGUID]!.append(tab)
-                    }
+        for tab in tabs {
+            if let tab = tab as? RemoteTab {
+                if acc[tab.clientGUID] == nil {
+                    acc[tab.clientGUID] = []
                 }
+                acc[tab.clientGUID]!.append(tab)
+            }
+        }
 
         // Most recent first.
         let sort: (RemoteTab, RemoteTab) -> Bool = { $0.lastUsed > $1.lastUsed }

@@ -12,7 +12,7 @@ func byGUID(a: ClientAndTabs, b: ClientAndTabs) -> Bool {
 class SQLRemoteClientsAndTabsTests: XCTestCase {
     var clientsAndTabs: SQLiteRemoteClientsAndTabs!
 
-    lazy var clients: [ClientAndTabs] = MockRemoteClientsAndTabs().clients
+    lazy var clients: [ClientAndTabs] = MockRemoteClientsAndTabs().clientsAndTabs
 
     override func setUp() {
         let files = MockFiles()
