@@ -28,6 +28,10 @@ public func ==<T: Equatable>(lhs: Fetched<T>, rhs: Fetched<T>) -> Bool {
 
 /*
  * Persistence pref names.
+ * Note that syncKeyBundle isn't persisted by us.
+ *
+ * Note also that fetched keys aren't kept in prefs: we keep the timestamp ("PrefKeysTS"),
+ * and we keep a 'label'. This label is used to find the real fetched keys in the Keychain.
  */
 
 private let PrefVersion = "_v"
@@ -143,9 +147,18 @@ public class Scratchpad {
     // synced with this server before, and we'll do a fresh sync.
     let global: Fetched<MetaGlobal>?
 
-    // We don't store your keys in Prefs. Instead, we store a key, which is seeded when
-    // you first create a Scratchpad. This key is used to retrieve the real keys from
-    // your Keychain.
+    // We don't store these keys (so-called "collection keys" or "bulk keys") in Prefs.
+    // Instead, we store a label, which is seeded when you first create a Scratchpad.
+    // This label is used to retrieve the real keys from your Keychain.
+    //
+    // Note that we also don't store the syncKeyBundle here. That's always created from kB,
+    // provided by the Firefox Account.
+    //
+    // Why don't we derive the label from your Sync Key? Firstly, we'd like to be able to
+    // clean up without having your key. Secondly, we don't want to accidentally load keys
+    // from the Keychain just because the Sync Key is the same -- e.g., after a node
+    // reassignment. Randomly generating a label offers all of the benefits with none of the
+    // problems, with only the cost of persisting that label alongside the rest of the state.
     let keys: Fetched<Keys>?
     let keyLabel: String
 
