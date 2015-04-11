@@ -216,22 +216,24 @@ private func errorWrap<T>(deferred: Deferred<Result<T>>, handler: ResponseHandle
             return
         }
 
-        println("Status code: \(response!.statusCode)")
-        let err = StorageResponse(value: response!, metadata: ResponseMetadata(response: response!))
+        let response = response!
 
-        if response!.statusCode >= 500 {
+        println("Status code: \(response.statusCode)")
+        let err = StorageResponse(value: response, metadata: ResponseMetadata(response: response))
+
+        if response.statusCode >= 500 {
             let result = Result<T>(failure: ServerError(err))
             deferred.fill(result)
             return
         }
 
-        if response!.statusCode == 404 {
+        if response.statusCode == 404 {
             let result = Result<T>(failure: NotFound(err))
             deferred.fill(result)
             return
         }
 
-        if response!.statusCode >= 400 {
+        if response.statusCode >= 400 {
             let result = Result<T>(failure: BadRequestError(request: request, response: err))
             deferred.fill(result)
             return
