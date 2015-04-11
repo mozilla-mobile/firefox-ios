@@ -88,20 +88,4 @@ public class FileAccessor {
     private func createDir(absolutePath: String, error: NSErrorPointer = nil) -> Bool {
         return NSFileManager.defaultManager().createDirectoryAtPath(absolutePath, withIntermediateDirectories: true, attributes: nil, error: error)
     }
-
-    /**
-    * Writes the given data to a file at the given path. If the directory doesn't exist, 
-    * then create it.
-    */
-    public func write(relativePath: String, data: NSData?, error: NSErrorPointer = nil) -> Bool {
-        let absolutePath = rootPath.stringByAppendingPathComponent(relativePath)
-        let directory = absolutePath.stringByDeletingLastPathComponent
-        if (!self.createDir(directory, error: error)) {
-            return false
-        }
-        if let success = data?.writeToFile(absolutePath, atomically: true) {
-            return success
-        }
-        return false
-    }
 }

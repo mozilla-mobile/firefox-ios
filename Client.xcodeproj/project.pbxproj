@@ -243,8 +243,6 @@
 		2FFC4D1B1ABE3C360081D675 /* FxAState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFC4D1A1ABE3C360081D675 /* FxAState.swift */; };
 		2FFC4D1C1ABE3C360081D675 /* FxAState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFC4D1A1ABE3C360081D675 /* FxAState.swift */; };
 		2FFC4D381ABE3C420081D675 /* FxAStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFC4D371ABE3C420081D675 /* FxAStateTests.swift */; };
-		392F00571AC1AFE2002293C3 /* OpenTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392F00561AC1AFE2002293C3 /* OpenTabs.swift */; };
-		392F00731AC1B7AC002293C3 /* TestOpenTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392F00721AC1B7AC002293C3 /* TestOpenTabs.swift */; };
 		39A362D91AAF5ECE00F47390 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; };
 		39A362DA1AAF5ECE00F47390 /* XCGLogger.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
@@ -1070,8 +1068,6 @@
 		2FEBABAE1AB3659000DB5728 /* ResultTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ResultTests.swift; path = SyncTests/ResultTests.swift; sourceTree = "<group>"; };
 		2FFC4D1A1ABE3C360081D675 /* FxAState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAState.swift; sourceTree = "<group>"; };
 		2FFC4D371ABE3C420081D675 /* FxAStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAStateTests.swift; sourceTree = "<group>"; };
-		392F00561AC1AFE2002293C3 /* OpenTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OpenTabs.swift; path = Storage/OpenTabs.swift; sourceTree = "<group>"; };
-		392F00721AC1B7AC002293C3 /* TestOpenTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestOpenTabs.swift; sourceTree = "<group>"; };
 		39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XCGLogger.xcodeproj; path = Carthage/Checkouts/XCGLogger/XCGLogger/Library/XCGLogger.xcodeproj; sourceTree = "<group>"; };
 		4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
@@ -1597,7 +1593,6 @@
 				2FCAE2421ABB531100877008 /* Favicons.swift */,
 				2FCAE2431ABB531100877008 /* FileAccessor.swift */,
 				2FCAE2441ABB531100877008 /* History.swift */,
-				392F00561AC1AFE2002293C3 /* OpenTabs.swift */,
 				2FCAE2451ABB531100877008 /* Passwords.swift */,
 				2FCAE2461ABB531100877008 /* ReadingList.swift */,
 				2FCAE2471ABB531100877008 /* RemoteTabs.swift */,
@@ -1629,7 +1624,6 @@
 				2FCAE27D1ABB533A00877008 /* TestHistoryTable.swift */,
 				2FCAE27E1ABB533A00877008 /* TestJoinedFaviconTable.swift */,
 				2FCAE27F1ABB533A00877008 /* TestJoinedHistoryVisits.swift */,
-				392F00721AC1B7AC002293C3 /* TestOpenTabs.swift */,
 				2FCAE2801ABB533A00877008 /* TestReadingListTable.swift */,
 				2FCAE2811ABB533A00877008 /* TestSQLiteReadingList.swift */,
 				2FCAE2821ABB533A00877008 /* TestTableTable.swift */,
@@ -3047,7 +3041,6 @@
 				2FCAE2681ABB531100877008 /* BrowserDB.swift in Sources */,
 				2FCAE2741ABB531100877008 /* SQLiteReadingList.swift in Sources */,
 				2FCAE2651ABB531100877008 /* RemoteTabs.swift in Sources */,
-				392F00571AC1AFE2002293C3 /* OpenTabs.swift in Sources */,
 				2FCAE2601ABB531100877008 /* Favicons.swift in Sources */,
 				2FCAE2711ABB531100877008 /* SQLFavicons.swift in Sources */,
 				2FCAE26C1ABB531100877008 /* JoinedFaviconsHistoryTable.swift in Sources */,
@@ -3085,7 +3078,6 @@
 				2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */,
 				2FCAE2871ABB533A00877008 /* TestFaviconsTable.swift in Sources */,
 				2FA435281ABB6831008031D1 /* SQLiteReadingList.swift in Sources */,
-				392F00731AC1B7AC002293C3 /* TestOpenTabs.swift in Sources */,
 				2FA435131ABB6829008031D1 /* Cursor.swift in Sources */,
 				2FA435251ABB6831008031D1 /* SQLFavicons.swift in Sources */,
 				2FA435171ABB6829008031D1 /* Passwords.swift in Sources */,

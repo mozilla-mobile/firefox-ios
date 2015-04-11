@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Storage
 import WebKit
 
 protocol TabManagerDelegate: class {
@@ -37,12 +36,6 @@ class TabManager {
         return tabs[_selectedIndex]
     }
 
-    var openTabs: OpenTabs? {
-        didSet {
-            didInitOpenTabs(openTabs)
-        }
-    }
-    
     func getTab(index: Int) -> Browser {
         return tabs[index]
     }
@@ -126,69 +119,5 @@ class TabManager {
         
         assertionFailure("Tab not in tabs list")
         return -1
-    }
-    
-    private func didInitOpenTabs(openTabs: OpenTabs?) -> Void {
-        // XXX This is to limit the egregious hackery to a single place.
-        // As more data is required to be persisted, openTabs is going
-        // to have to talk to History, TabManager, and possibly the Browser history stack. 
-        // Suggest tabs have ids as well as indices so we can put it all in the Visits table.
-        if let openTabs = openTabs as? FileOpenTabs {
-            func persistFunction () -> Void {
-                var tabJson = Array<AnyObject>()
-                for browser in tabs {
-                    if let url = browser.url {
-                        tabJson.append([
-                            "url": url.absoluteString!
-                            ])
-                    }
-                }
-                var model = NSMutableDictionary()
-                model["selectedIndex"] = selectedIndex
-                model["tabs"] = tabJson
-                openTabs.writeToDisk(model)
-            }
-            openTabs.persistenceTask = persistFunction
-        }
-
-    }
-    
-    private func didInitOpenTabs(openTabs: OpenTabs?) -> Void {
-        // XXX This is to limit the egregious hackery to a single place.
-        // As more data is required to be persisted, openTabs is going
-        // to have to talk to History, TabManager, and possibly the Browser history stack. 
-        // Suggest tabs have ids as well as indices so we can put it all in the Visits table.
-        if let openTabs = openTabs as? FileOpenTabs {
-            func persistFunction () -> Void {
-                var tabJson = Array<AnyObject>()
-                for browser in tabs {
-                    if let url = browser.url {
-                        tabJson.append([
-                            "url": url.absoluteString!
-                            ])
-                    }
-                }
-                var model = NSMutableDictionary()
-                model["selectedIndex"] = selectedIndex
-                model["tabs"] = tabJson
-                openTabs.writeToDisk(model)
-            }
-            openTabs.persistenceTask = persistFunction
-            
-            if let model = openTabs.readFromDisk() {
-                let tabJson = model["tabs"] as Array<NSDictionary>
-                for t in tabJson {
-                    let urlString = t["url"] as String
-                    println("Restoring \(urlString)")
-                    let url = NSURL(string: urlString)!
-                    let request = NSURLRequest(URL: url)
-                    addTab(request: request)
-                }
-            
-                if let tabIndex = model["selectedIndex"] as? Int {
-                    selectTab(tabIndex)
-                }
-            }
-        }
     }
 }

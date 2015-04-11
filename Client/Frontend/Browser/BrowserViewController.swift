@@ -27,11 +27,7 @@ class BrowserViewController: UIViewController {
     private var screenshotHelper: ScreenshotHelper!
     private var homePanelIsInline: Bool = false
 
-    var profile: Profile! {
-        didSet {
-           self.didInitWithProfile()
-        }
-    }
+    var profile: Profile!
 
     // These views wrap the urlbar and toolbar to provide background effects on them
     private var header: UIView!
@@ -54,13 +50,6 @@ class BrowserViewController: UIViewController {
         let defaultRequest = NSURLRequest(URL: defaultURL)
         tabManager = TabManager(defaultNewTabRequest: defaultRequest)
         screenshotHelper = BrowserScreenshotHelper(controller: self)
-    }
-    
-    private func didInitWithProfile() {
-        if (profile == nil) {
-            return
-        }
-        tabManager.openTabs = profile.openTabs
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {

@@ -195,11 +195,3 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
     }
 }
 #endif
-
-extension AppDelegate: UIApplicationDelegate {
-    func applicationDidEnterBackground(application: UIApplication) {
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        var info = [NSObject: AnyObject]()
-        notificationCenter.postNotificationName("ApplicationWillTerminate", object: self, userInfo: info)
-    }
-}
