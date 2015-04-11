@@ -14,7 +14,7 @@ public class KeysPayload: CleartextPayloadJSON {
                self["default"].isArray
     }
     
-    private func pairToKeyBundle(input: JSON) -> KeyBundle? {
+    private func keyBundleFromPair(input: JSON) -> KeyBundle? {
         if let pair: [JSON] = input.asArray {
             if let encKey = pair[0].asString {
                 if let hmacKey = pair[1].asString {
@@ -26,12 +26,12 @@ public class KeysPayload: CleartextPayloadJSON {
     }
 
     var defaultKeys: KeyBundle? {
-        return pairToKeyBundle(self["default"])
+        return self.keyBundleFromPair(self["default"])
     }
 
     var collectionKeys: [String: KeyBundle] {
         if let collections: [String: JSON] = self["collections"].asDictionary {
-            return optFilter(mapValues(collections, self.pairToKeyBundle))
+            return optFilter(mapValues(collections, self.keyBundleFromPair))
         }
         return [:]
     }
