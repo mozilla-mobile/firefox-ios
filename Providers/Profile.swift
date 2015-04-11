@@ -104,6 +104,10 @@ public class MockProfile: Profile {
     lazy var openTabs: OpenTabs = {
         return FileOpenTabs(files: self.files)
     }()
+    
+    lazy var openTabs: OpenTabs = {
+        return FileOpenTabs(files: self.files)
+    }()
 
     let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
     var account: FirefoxAccount? = nil
@@ -204,6 +208,10 @@ public class BrowserProfile: Profile {
 
     lazy var thumbnails: Thumbnails = {
         return SDWebThumbnails(files: self.files)
+    }()
+    
+    lazy var openTabs: OpenTabs = {
+        return FileOpenTabs(files: self.files)
     }()
     
     lazy var openTabs: OpenTabs = {
