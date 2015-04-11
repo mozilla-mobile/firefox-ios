@@ -39,13 +39,13 @@ public class EnvelopeJSON {
         return self.json["sortindex"].asInt ?? 0
     }
 
-    public var modified: UInt64 {
+    public var modified: Timestamp {
         if (self.json["modified"].isInt) {
-            return UInt64(self.json["modified"].asInt!) * 1000
+            return Timestamp(self.json["modified"].asInt!) * 1000
         }
 
         if (self.json["modified"].isDouble) {
-            return UInt64(1000 * (self.json["modified"].asDouble ?? 0.0))
+            return Timestamp(1000 * (self.json["modified"].asDouble ?? 0.0))
         }
 
         return 0

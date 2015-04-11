@@ -6,7 +6,10 @@ import Foundation
 import Shared
 
 // Our engine choices need to persist across server changes.
-public class EngineConfigurations {
+// Note that EngineConfiguration is not enough to evolve an existing meta/global:
+// a meta/global generated from this will have different syncIDs and will
+// always use this device's engine versions.
+public class EngineConfiguration {
     let enabled: [String]
     let declined: [String]
     public init(enabled: [String], declined: [String]) {
@@ -14,16 +17,16 @@ public class EngineConfigurations {
         self.declined = declined
     }
 
-    public class func fromJSON(json: JSON) -> EngineConfigurations? {
+    public class func fromJSON(json: JSON) -> EngineConfiguration? {
         if let enabled = jsonsToStrings(json["enabled"].asArray) {
             if let declined = jsonsToStrings(json["declined"].asArray) {
-                return EngineConfigurations(enabled: enabled, declined: declined)
+                return EngineConfiguration(enabled: enabled, declined: declined)
             }
         }
         return nil
     }
 
-    public func reconcile(meta: [String: EngineMeta]) -> EngineConfigurations {
+    public func reconcile(meta: [String: EngineMeta]) -> EngineConfiguration {
         // TODO: when we get a changed meta/global, we need to be able
         // to reflect its changes into our configuration.
         // Note that sometimes we also need to make changes to the meta/global
@@ -34,7 +37,7 @@ public class EngineConfigurations {
 
 // Equivalent to Android Sync's EngineSettings, but here
 // we use them for meta/global itself.
-public struct EngineMeta {
+public struct EngineMeta: Equatable {
     let version: Int
     let syncID: String
 
@@ -53,9 +56,18 @@ public struct EngineMeta {
         }
         return nil
     }
+
+    public func toJSON() -> JSON {
+        let json: [String: AnyObject] = ["version": self.version, "syncID": self.syncID]
+        return JSON(json)
+    }
 }
 
-public struct MetaGlobal {
+public func ==(lhs: EngineMeta, rhs: EngineMeta) -> Bool {
+    return (lhs.version == rhs.version) && (lhs.syncID == rhs.syncID)
+}
+
+public struct MetaGlobal: Equatable {
     let syncID: String
     let storageVersion: Int
     let engines: [String: EngineMeta]?      // Is this really optional?
@@ -83,12 +95,43 @@ public struct MetaGlobal {
         }
         return nil
     }
+
+    public func enginesPayload() -> JSON {
+        if let engines = engines {
+            return JSON(mapValues(engines, { $0.toJSON() }))
+        }
+        return JSON([:])
+    }
+
+    // TODO: make a whole record JSON for this.
+    public func toPayload() -> JSON {
+        return JSON([
+            "syncID": self.syncID,
+            "storageVersion": self.storageVersion,
+            "engines": enginesPayload(),
+            "declined": JSON(self.declined ?? [])
+        ])
+    }
+}
+
+public func ==(lhs: MetaGlobal, rhs: MetaGlobal) -> Bool {
+    return (lhs.syncID == rhs.syncID) &&
+           (lhs.storageVersion == rhs.storageVersion) &&
+           optArrayEqual(lhs.declined, rhs.declined) &&
+           optDictionaryEqual(lhs.engines, rhs.engines)
 }
 
 public class GlobalEnvelope: EnvelopeJSON {
     public lazy var global: MetaGlobal? = {
         return MetaGlobal.fromPayload(self.payload)
     }()
+
+    public func toFetched() -> Fetched<MetaGlobal>? {
+        if let g = global {
+            return Fetched(value: g, timestamp: self.modified)
+        }
+        return nil
+    }
 }
 
 /**
