@@ -449,6 +449,8 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         cell.delegate = self
 
         cell.titleText.text = tab.displayTitle
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = tab.displayTitle
 
         if let favIcon = tab.displayFavicon {
             cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
