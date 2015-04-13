@@ -223,7 +223,7 @@
 		2FCAE2771ABB531100877008 /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25B1ABB531100877008 /* SwiftData.swift */; };
 		2FCAE2781ABB531100877008 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25C1ABB531100877008 /* Visit.swift */; };
 		2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2791ABB533A00877008 /* MockFiles.swift */; };
-		2FCAE2851ABB533A00877008 /* SQLiteRemoteClientsAndTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27A1ABB533A00877008 /* SQLiteRemoteClientsAndTabsTests.swift */; };
+		2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */; };
 		2FCAE2861ABB533A00877008 /* TestBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27B1ABB533A00877008 /* TestBookmarks.swift */; };
 		2FCAE2871ABB533A00877008 /* TestFaviconsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */; };
 		2FCAE2881ABB533A00877008 /* TestHistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27D1ABB533A00877008 /* TestHistoryTable.swift */; };
@@ -1060,7 +1060,7 @@
 		2FCAE25B1ABB531100877008 /* SwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftData.swift; sourceTree = "<group>"; };
 		2FCAE25C1ABB531100877008 /* Visit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Visit.swift; sourceTree = "<group>"; };
 		2FCAE2791ABB533A00877008 /* MockFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFiles.swift; sourceTree = "<group>"; };
-		2FCAE27A1ABB533A00877008 /* SQLiteRemoteClientsAndTabsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteRemoteClientsAndTabsTests.swift; sourceTree = "<group>"; };
+		2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteRemoteClientsAndTabs.swift; sourceTree = "<group>"; };
 		2FCAE27B1ABB533A00877008 /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
 		2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestFaviconsTable.swift; sourceTree = "<group>"; };
 		2FCAE27D1ABB533A00877008 /* TestHistoryTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistoryTable.swift; sourceTree = "<group>"; };
@@ -1641,7 +1641,7 @@
 			isa = PBXGroup;
 			children = (
 				2FCAE2791ABB533A00877008 /* MockFiles.swift */,
-				2FCAE27A1ABB533A00877008 /* SQLiteRemoteClientsAndTabsTests.swift */,
+				2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */,
 				2FCAE27B1ABB533A00877008 /* TestBookmarks.swift */,
 				2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */,
 				2FCAE27D1ABB533A00877008 /* TestHistoryTable.swift */,
@@ -3088,7 +3088,7 @@
 				2FA435261ABB6831008031D1 /* SQLiteHistory.swift in Sources */,
 				2FCAE2861ABB533A00877008 /* TestBookmarks.swift in Sources */,
 				2FCAE28D1ABB533A00877008 /* TestTableTable.swift in Sources */,
-				2FCAE2851ABB533A00877008 /* SQLiteRemoteClientsAndTabsTests.swift in Sources */,
+				2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */,
 				2FA4351C1ABB6831008031D1 /* BrowserDB.swift in Sources */,
 				2FA435181ABB6829008031D1 /* ReadingList.swift in Sources */,
 				2FCAE2891ABB533A00877008 /* TestJoinedFaviconTable.swift in Sources */,
