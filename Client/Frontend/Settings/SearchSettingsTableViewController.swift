@@ -106,6 +106,7 @@ class SearchSettingsTableViewController: UITableViewController {
             // Every engine is a valid choice for the default engine, even the current default engine.
             searchEnginePicker.engines = model.orderedEngines.sorted { e, f in e.shortName < f.shortName }
             searchEnginePicker.delegate = self
+            searchEnginePicker.selectedSearchEngineName = model.defaultEngine.shortName
             navigationController?.pushViewController(searchEnginePicker, animated: true)
         }
         return nil
