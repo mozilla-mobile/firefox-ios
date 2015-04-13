@@ -58,13 +58,15 @@ class ClientPickerViewController: UITableViewController {
     }
     
     private func reloadClients() {
-        profile?.clients.getAll().upon({
-                self.clients = $0
+        profile?.remoteClientsAndTabs.getClients().upon({ result in
+            self.refreshControl?.endRefreshing()
+            if let c = result.successValue {
+                self.clients = c
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.refreshControl?.endRefreshing()
                     self.tableView.reloadData()
                 }
-            })
+            }
+        })
     }
     
     func refresh() {

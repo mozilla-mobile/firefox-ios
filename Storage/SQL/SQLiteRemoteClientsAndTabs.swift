@@ -92,11 +92,15 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let deferred = Deferred<Result<()>>(defaultQueue: dispatch_get_main_queue())
 
         var err: NSError?
+        // TODO: insert multiple clients in a single transaction, and a single-query.
+        // ORM systems are foolish.
         db.transaction(&err) { connection, _ in
             // Update or insert client record.
             let updated = self.clients.update(connection, item: client, err: &err)
+            log.info("Updated clients: \(updated)")
             if updated == 0 {
                 let inserted = self.clients.insert(connection, item: client, err: &err)
+                log.info("Inserted clients: \(inserted)")
             }
 
             if let err = err {
@@ -113,21 +117,50 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferred
     }
 
-    public func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
+    public func getClients() -> Deferred<Result<[RemoteClient]>> {
         var err: NSError?
-        let clients = db.query(&err) { connection, _ in
+
+        let clientCursor = db.query(&err) { connection, _ in
             return self.clients.query(connection, options: nil)
         }
 
         if let err = err {
+            clientCursor.close()
             return Deferred(value: Result(failure: DatabaseError(err: err)))
         }
 
-        let tabs = db.query(&err) { connection, _ in
-            return self.tabs.query(connection, options: nil)
+        let clients = clientCursor.mapAsType(RemoteClient.self, f: { $0 })
+        clientCursor.close()
+
+        return Deferred(value: Result(success: clients))
+    }
+
+    public func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
+        var err: NSError?
+
+        // Now find the clients.
+        let clientCursor = db.query(&err) { connection, _ in
+            return self.clients.query(connection, options: nil)
         }
 
         if let err = err {
+            clientCursor.close()
+            return Deferred(value: Result(failure: DatabaseError(err: err)))
+        }
+
+        let clients = clientCursor.mapAsType(RemoteClient.self, f: { $0 })
+        clientCursor.close()
+
+        log.info("Found \(clients.count) clients in the DB.")
+
+        let tabCursor = db.query(&err) { connection, _ in
+            return self.tabs.query(connection, options: nil)
+        }
+
+        log.info("Found \(tabCursor.count) raw tabs in the DB.")
+
+        if let err = err {
+            tabCursor.close()
             return Deferred(value: Result(failure: DatabaseError(err: err)))
         }
 
@@ -135,14 +168,20 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         // Aggregate clientGUID -> RemoteTab.
         var acc = [String: [RemoteTab]]()
-        for tab in tabs {
+        for tab in tabCursor {
             if let tab = tab as? RemoteTab {
                 if acc[tab.clientGUID] == nil {
-                    acc[tab.clientGUID] = []
+                    acc[tab.clientGUID] = [tab]
+                } else {
+                    acc[tab.clientGUID]!.append(tab)
                 }
-                acc[tab.clientGUID]!.append(tab)
+            } else {
+                log.error("Couldn't cast tab \(tab) to RemoteTab.")
             }
         }
+
+        tabCursor.close()
+        log.info("Accumulated tabs with client GUIDs \(acc.keys).")
 
         // Most recent first.
         let sort: (RemoteTab, RemoteTab) -> Bool = { $0.lastUsed > $1.lastUsed }
@@ -153,7 +192,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
 
         // Why is this whole function synchronous?
-        deferred.fill(Result(success: clients.mapAsType(RemoteClient.self, f: f)))
+        deferred.fill(Result(success: clients.map(f)))
         return deferred
     }
 
