@@ -54,6 +54,7 @@ class FxALoginStateMachine {
         let doghouse: Deferred<FxAState> = Deferred(value: DoghouseState())
         let same: Deferred<FxAState> = Deferred(value: state)
 
+        log.info("Advancing from state: \(state.label.rawValue)")
         switch state.label {
         case .Married:
             let state = state as! MarriedState
