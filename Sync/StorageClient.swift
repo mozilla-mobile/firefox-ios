@@ -86,8 +86,8 @@ private func optionalSecondsHeader(input: AnyObject?) -> Timestamp? {
     }
 
     if let val = input as? String {
-        if let double = NSScanner(string: val).scanDouble() {
-            return Timestamp(double * 1000)
+        if let timestamp = decimalSecondsStringToTimestamp(val) {
+            return timestamp
         }
     }
 
@@ -146,11 +146,6 @@ private func optionalUIntegerHeader(input: AnyObject?) -> Timestamp? {
     }
 
     return nil
-}
-
-func millisecondsToDecimalSeconds(input: Timestamp) -> String {
-    let val: Double = Double(input) / 1000
-    return String(format: "%.2F", val)
 }
 
 public struct ResponseMetadata {
