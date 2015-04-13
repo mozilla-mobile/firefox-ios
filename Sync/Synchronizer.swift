@@ -114,25 +114,26 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
                 // If this is a fresh start, do a wipe.
                 // N.B., we don't wipe outgoing commands! (TODO: check this when we implement commands!)
                 // N.B., but perhaps we should discard outgoing wipe/reset commands!
-                if (self.lastFetched == 0) {
-                    //localClients.wipe()
-                }
+                let onward: Deferred<Result<()>> = (self.lastFetched == 0) ? localClients.wipeClients() : Deferred(value: Result(success: ()))
 
-                // TODO: batching.
-                for (record) in records {
-                    if record.id == ourGUID {
-                        // Skip. TODO: process commands.
-                        continue
+                return chainDeferred(onward, {
+
+                    // TODO: batching.
+                    for (record) in records {
+                        if record.id == ourGUID {
+                            // Skip. TODO: process commands.
+                            continue
+                        }
+
+                        let rec = self.clientRecordToLocalClientEntry(record)
+                        log.info("Storing client \(rec).")
+                        localClients.insertOrUpdateClient(rec)
                     }
 
-                    let rec = self.clientRecordToLocalClientEntry(record)
-                    log.info("Storing client \(rec).")
-                    localClients.insertOrUpdateClient(rec)
-                }
-
-                // TODO: don't force-unwrap?
-                self.lastFetched = responseTimestamp!
-                return Deferred(value: Result(success: ()))
+                    // TODO: don't force-unwrap?
+                    self.lastFetched = responseTimestamp!
+                    return Deferred(value: Result(success: ()))
+                })
             })
         } else {
             log.error("Couldn't make clients factory.")
@@ -163,26 +164,26 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
                 let responseTimestamp = $0.metadata.lastModifiedMilliseconds
 
                 // If this is a fresh start, do a wipe.
-                if (self.lastFetched == 0) {
-                    //localTabs.wipe()
-                }
+                let onward: Deferred<Result<()>> = (self.lastFetched == 0) ? localTabs.wipeTabs() : Deferred(value: Result(success: ()))
 
-                log.debug("Got \(records.count) tab records.")
+                return chainDeferred(onward, {
+                    log.debug("Got \(records.count) tab records.")
 
-                // TODO: batching.
-                for (record) in records {
-                    if record.id == ourGUID {
-                        // Skip. TODO: process commands.
-                        continue
+                    // TODO: batching.
+                    for (record) in records {
+                        if record.id == ourGUID {
+                            // Skip. TODO: process commands.
+                            continue
+                        }
+
+                        let remotes = record.payload.remoteTabs
+                        log.info("Inserting \(remotes.count) tabs for client \(record.id).")
+                        localTabs.insertOrUpdateTabsForClient(record.id, tabs: remotes)
                     }
 
-                    let remotes = record.payload.remoteTabs
-                    log.info("Inserting \(remotes.count) tabs for client \(record.id).")
-                    localTabs.insertOrUpdateTabsForClient(record.id, tabs: remotes)
-                }
-
-                self.lastFetched = responseTimestamp!
-                return Deferred(value: Result(success: ()))
+                    self.lastFetched = responseTimestamp!
+                    return Deferred(value: Result(success: ()))
+                })
             })
         } else {
             log.error("Couldn't make tabs factory.")
