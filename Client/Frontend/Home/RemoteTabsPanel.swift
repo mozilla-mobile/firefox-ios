@@ -3,8 +3,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Account
+import Shared
 import Snap
 import Storage
+import Sync
+import XCGLogger
+
+// TODO: same comment as for SyncAuthState.swift!
+private let log = XCGLogger.defaultInstance()
+
 
 private struct RemoteTabsPanelUX {
     static let HeaderHeight: CGFloat = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
@@ -52,11 +60,24 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         self.SELrefresh()
     }
 
+    // TODO: force or not.
+    func doTabSync() -> Deferred<Result<[ClientAndTabs]>> {
+        if let account = self.profile.getAccount() {
+            let syncPrefs = profile.prefs.branch("sync")
+            return Sync.fetchSyncedTabsToStorage(profile.remoteClientsAndTabs, account: account, syncPrefs: syncPrefs)
+        } else {
+            // Do what we can.
+            // TODO: we also want to do this if a sync fails for some reason, rather than returning a Deferred failure result.
+            return profile.remoteClientsAndTabs.getClientsAndTabs()
+        }
+    }
+
     @objc private func SELrefresh() {
         self.refreshControl?.beginRefreshing()
-        profile.remoteClientsAndTabs.getClientsAndTabs().upon({ tabs in
+
+        self.doTabSync().upon({ tabs in
             if let tabs = tabs.successValue {
-                self.refreshControl?.endRefreshing()
+                log.info("\(tabs.count) tabs fetched.")
                 self.clientAndTabs = tabs
 
                 // Maybe show a background view.
@@ -74,15 +95,21 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
                     tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
                 }
                 tableView.reloadData()
+            } else {
+                log.error("Failed to fetch tabs.")
             }
+            // Always end refreshing, even if we failed!
+            self.refreshControl?.endRefreshing()
         })
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        log.debug("We have \(self.clientAndTabs?.count) sections.")
         return self.clientAndTabs?.count ?? 0
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        log.debug("Section \(section) has \(self.clientAndTabs?[section].tabs.count) tabs.")
         return self.clientAndTabs?[section].tabs.count ?? 0
     }
 
