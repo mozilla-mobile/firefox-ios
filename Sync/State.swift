@@ -174,6 +174,8 @@ public class Scratchpad {
     // What's our client name?
     let clientName: String
 
+    let clientGUID: String = "TODOTODOTODO"
+
     // Where do we persist when told?
     let prefs: Prefs
 
