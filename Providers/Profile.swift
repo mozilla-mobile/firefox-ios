@@ -26,7 +26,6 @@ class ProfileFileAccessor: FileAccessor {
 protocol Profile {
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
     // var favicons: Favicons { get }
-    var clients: Clients { get }
     var prefs: Prefs { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
@@ -58,10 +57,6 @@ public class MockProfile: Profile {
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
         return BookmarksSqliteFactory(files: self.files)
-    } ()
-
-    lazy var clients: Clients = {
-        return MockClients(files: self.files)
     } ()
 
     lazy var searchEngines: SearchEngines = {
@@ -160,10 +155,6 @@ public class BrowserProfile: Profile {
     func makePrefs() -> Prefs {
         return NSUserDefaultsProfilePrefs(profile: self)
     }
-
-    lazy var clients: Clients = {
-        return MockClients(files: self.files)
-    } ()
 
     lazy var favicons: Favicons = {
         return SQLiteFavicons(files: self.files)
