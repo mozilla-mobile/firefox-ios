@@ -198,6 +198,8 @@ class BrowserViewController: UIViewController {
             view.addSubview(homePanelController!.view)
             addChildViewController(homePanelController!)
         }
+        webViewContainer.hidden = true
+        toolbar?.hidden = !inline
         view.setNeedsUpdateConstraints()
     }
 
@@ -206,6 +208,8 @@ class BrowserViewController: UIViewController {
             controller.view.removeFromSuperview()
             controller.removeFromParentViewController()
             homePanelController = nil
+            webViewContainer.hidden = false
+            toolbar?.hidden = false
         }
     }
 
@@ -236,6 +240,8 @@ class BrowserViewController: UIViewController {
             return
         }
 
+        homePanelController?.view?.hidden = true
+
         addChildViewController(searchController!)
     }
 
@@ -244,6 +250,7 @@ class BrowserViewController: UIViewController {
             searchController.view.removeFromSuperview()
             searchController.removeFromParentViewController()
             self.searchController = nil
+            homePanelController?.view?.hidden = false
         }
     }
 
