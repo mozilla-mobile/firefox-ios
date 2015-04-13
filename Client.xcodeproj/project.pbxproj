@@ -66,6 +66,7 @@
 		2827319F1ABC9C5900AA1954 /* DeferredTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28786E541AB0F5FA009EA9EF /* DeferredTests.swift */; };
 		282731A01ABC9C5900AA1954 /* ResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBABAE1AB3659000DB5728 /* ResultTests.swift */; };
 		282731A21ABC9D2600AA1954 /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282731A11ABC9D2600AA1954 /* Prefs.swift */; };
+		282CA2731ADC2B8300D57139 /* Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282CA2721ADC2B8300D57139 /* Sync.swift */; };
 		282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
 		284AA3AB1AD4C13A009041C5 /* SyncRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284AA3AA1AD4C13A009041C5 /* SyncRemoteClientsAndTabs.swift */; };
 		284AA3AC1AD4C13A009041C5 /* SyncRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284AA3AA1AD4C13A009041C5 /* SyncRemoteClientsAndTabs.swift */; };
@@ -952,6 +953,7 @@
 		282731681ABC9BE700AA1954 /* SyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		282731701ABC9BE700AA1954 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		282731A11ABC9D2600AA1954 /* Prefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefs.swift; sourceTree = "<group>"; };
+		282CA2721ADC2B8300D57139 /* Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Sync.swift; path = Interfaces/Sync.swift; sourceTree = "<group>"; };
 		283306E81AB3BB87008999AC /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		2853C5401AD84C6800C4F31D /* TabsPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsPayload.swift; sourceTree = "<group>"; };
 		28786E541AB0F5FA009EA9EF /* DeferredTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeferredTests.swift; path = SyncTests/DeferredTests.swift; sourceTree = "<group>"; };
@@ -1391,6 +1393,15 @@
 			);
 			name = "Supporting Files";
 			path = SyncTests;
+			sourceTree = "<group>";
+		};
+		284AA38F1AD4C115009041C5 /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				284AA3AA1AD4C13A009041C5 /* SyncRemoteClientsAndTabs.swift */,
+				282CA2721ADC2B8300D57139 /* Sync.swift */,
+			);
+			name = Interfaces;
 			sourceTree = "<group>";
 		};
 		288A2D7E1AB8B2AD0023ABC3 /* Result */ = {
@@ -2921,6 +2932,7 @@
 				28E23C121AC5A5EE00F5AC85 /* State.swift in Sources */,
 				2F3724E71ABF3C19007607FA /* StorageClient.swift in Sources */,
 				28926B1A1AC0F074009C0B1D /* EncryptedJSON.swift in Sources */,
+				282CA2731ADC2B8300D57139 /* Sync.swift in Sources */,
 				2885023F1AC117A500E7F670 /* SyncStateMachine.swift in Sources */,
 				2F3724E91ABF3C19007607FA /* Synchronizer.swift in Sources */,
 				28926B371AC0F0DD009C0B1D /* EnvelopeJSON.swift in Sources */,
