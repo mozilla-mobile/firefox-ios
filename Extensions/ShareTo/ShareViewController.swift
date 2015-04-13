@@ -16,8 +16,8 @@ let ShareDestinationBookmarks: String = "Bookmarks"
 let ShareDestinationReadingList: String = "ReadingList"
 
 let ShareDestinations = [
-    ShareDestination(code: ShareDestinationReadingList, name: NSLocalizedString("Add to Reading List", comment: "On/off toggle to select adding this url to your reading list"), image: "AddToReadingList"),
-    ShareDestination(code: ShareDestinationBookmarks, name: NSLocalizedString("Add to Bookmarks",    comment: "On/off toggle to select adding this url to your bookmarks"), image: "AddToBookmarks")
+    ShareDestination(code: ShareDestinationReadingList, name: NSLocalizedString("Add to Reading List", tableName: "ShareTo", comment: "On/off toggle to select adding this url to your reading list"), image: "AddToReadingList"),
+    ShareDestination(code: ShareDestinationBookmarks, name: NSLocalizedString("Add to Bookmarks", tableName: "ShareTo", comment: "On/off toggle to select adding this url to your bookmarks"), image: "AddToBookmarks")
 ]
 
 protocol ShareControllerDelegate {
@@ -89,7 +89,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         navItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
         navItem.leftBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarCancelButtonFont], forState: UIControlState.Normal)
 
-        navItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Add", comment: "Add button in the share dialog"), style: UIBarButtonItemStyle.Done, target: self, action: "add")
+        navItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Add", tableName: "ShareTo", comment: "Add button in the share dialog"), style: UIBarButtonItemStyle.Done, target: self, action: "add")
         navItem.rightBarButtonItem?.setTitleTextAttributes([NSFontAttributeName: ShareDialogControllerUX.NavigationBarAddButtonFont], forState: UIControlState.Normal)
 
         let logo = UIImageView(frame: CGRect(x: 0, y: 0, width: ShareDialogControllerUX.NavigationBarIconSize, height: ShareDialogControllerUX.NavigationBarIconSize))
