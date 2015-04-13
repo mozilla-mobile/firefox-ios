@@ -693,7 +693,7 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
                 // other records in that collection, even if there are we don't care about them.
                 let fetched = Fetched(value: collectionKeys, timestamp: resp.value.modified)
                 let s = self.scratchpad.evolve().setKeys(fetched).build().checkpoint()
-                let ready = Ready(client: self.client, scratchpad: self.scratchpad, token: self.token, info: self.info, keys: collectionKeys)
+                let ready = Ready(client: self.client, scratchpad: s, token: self.token, info: self.info, keys: collectionKeys)
 
                 log.info("Arrived in Ready state.")
                 return Deferred(value: Result(success: ready))
