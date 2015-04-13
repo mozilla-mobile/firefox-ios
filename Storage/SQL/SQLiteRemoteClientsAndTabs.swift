@@ -33,16 +33,15 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         db.createOrUpdate(tabs)
     }
 
-    public func clear() -> Deferred<Result<()>> {
+    private func doWipe(f: (conn: SQLiteDBConnection, inout err: NSError?) -> ()) -> Deferred<Result<()>> {
         let deferred = Deferred<Result<()>>(defaultQueue: dispatch_get_main_queue())
 
         var err: NSError?
         db.transaction(&err) { connection, _ in
-            self.tabs.delete(connection, item: nil, err: &err)
-            self.clients.delete(connection, item: nil, err: &err)
+            f(conn: connection, err: &err)
             if let err = err {
                 let databaseError = DatabaseError(err: err)
-                log.debug("Clear failed: \(databaseError)")
+                log.debug("Wipe failed: \(databaseError)")
                 deferred.fill(Result(failure: databaseError))
             } else {
                 deferred.fill(Result(success: ()))
@@ -51,6 +50,25 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
 
         return deferred
+    }
+
+    public func wipeClients() -> Deferred<Result<()>> {
+        return self.doWipe { (conn, inout err: NSError?) -> () in
+            self.clients.delete(conn, item: nil, err: &err)
+        }
+    }
+
+    public func wipeTabs() -> Deferred<Result<()>> {
+        return self.doWipe { (conn, inout err: NSError?) -> () in
+            self.tabs.delete(conn, item: nil, err: &err)
+        }
+    }
+
+    public func clear() -> Deferred<Result<()>> {
+        return self.doWipe { (conn, inout err: NSError?) -> () in
+            self.tabs.delete(conn, item: nil, err: &err)
+            self.clients.delete(conn, item: nil, err: &err)
+        }
     }
 
     public func insertOrUpdateTabsForClient(client: String, tabs: [RemoteTab]) -> Deferred<Result<Int>> {
