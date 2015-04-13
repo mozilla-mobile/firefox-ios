@@ -95,7 +95,7 @@ public class MockProfile: Profile {
         return SDWebThumbnails(files: self.files)
     }()
 
-    let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
+    let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
     var account: FirefoxAccount? = nil
 
     func getAccount() -> FirefoxAccount? {
@@ -187,7 +187,7 @@ public class BrowserProfile: Profile {
         return SDWebThumbnails(files: self.files)
     }()
 
-    let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
+    let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
 
     private lazy var account: FirefoxAccount? = {
         if let dictionary = KeychainWrapper.objectForKey(self.name + ".account") as? [String: AnyObject] {
