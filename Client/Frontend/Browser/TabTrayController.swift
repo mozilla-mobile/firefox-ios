@@ -310,7 +310,7 @@ private class SwipeAnimator: NSObject {
 }
 
 extension SwipeAnimator: UIGestureRecognizerDelegate {
-    private func gestureRecognizerShouldBegin(recognizer: UIGestureRecognizer) -> Bool {
+    @objc private func gestureRecognizerShouldBegin(recognizer: UIGestureRecognizer) -> Bool {
         let cellView = recognizer.view as UIView!
         let panGesture = recognizer as! UIPanGestureRecognizer
         let translation = panGesture.translationInView(cellView.superview!)
