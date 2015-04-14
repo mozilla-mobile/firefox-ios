@@ -47,7 +47,7 @@ protocol SearchViewControllerDelegate: class {
     func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL)
 }
 
-class SearchViewController: SiteTableViewController, UITableViewDelegate, KeyboardHelperDelegate {
+class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
     var searchDelegate: SearchViewControllerDelegate?
 
     private var suggestClient: SearchSuggestClient?
@@ -222,7 +222,6 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
 
     override func reloadData() {
         querySuggestClient()
-        queryHistoryClient()
     }
 
     private func layoutTable() {
@@ -339,73 +338,19 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
         })
     }
 
-    private func queryHistoryClient() {
-        if searchQuery.isEmpty {
-            data = Cursor(status: .Success, msg: "Empty query")
-            return
-        }
-
-        let options = QueryOptions()
-        options.sort = .LastVisit
-        options.filter = searchQuery
-
-        profile.history.get(options, complete: { (data: Cursor) -> Void in
-            self.data = data
-            if data.status != .Success {
-                println("Err: \(data.statusMessage)")
-            }
-            self.tableView.reloadData()
-        })
+    func loader(dataLoaded data: Cursor) {
+        self.data = data
+        tableView.reloadData()
     }
 }
 
-extension SearchViewController: UITableViewDataSource {
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch SearchListSection(rawValue: indexPath.section)! {
-        case .SearchSuggestions:
-            suggestionCell.imageView?.image = searchEngines.defaultEngine.image
-            return suggestionCell
-
-        case .BookmarksAndHistory:
-            let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
-            if let site = data[indexPath.row] as? Site {
-                if let cell = cell as? TwoLineTableViewCell {
-                    cell.setLines(site.title, detailText: site.url)
-                    if let img = site.icon {
-                        let imgUrl = NSURL(string: img.url)
-                        cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
-                    } else {
-                        cell.imageView?.image = self.profile.favicons.defaultIcon
-                    }
-                }
-            }
-            return cell
-        }
-    }
-
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch SearchListSection(rawValue: section)! {
-        case .SearchSuggestions:
-            return searchEngines.shouldShowSearchSuggestions ? 1 : 0
-        case .BookmarksAndHistory:
-            return data.count
-        }
-    }
-
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
-    }
-
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return SearchListSection.Count
-    }
-
+extension SearchViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var url: NSURL?
 
         let section = SearchListSection(rawValue: indexPath.section)!
         if section == SearchListSection.BookmarksAndHistory {
-            if let site = data[indexPath.row] as? Site {
+            if let site = data?[indexPath.row] as? Site {
                 url = NSURL(string: site.url)
             }
         }
@@ -429,6 +374,48 @@ extension SearchViewController: UITableViewDataSource {
         }
 
         return 0
+    }
+
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
+    }
+}
+
+extension SearchViewController: UITableViewDataSource {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        switch SearchListSection(rawValue: indexPath.section)! {
+        case .SearchSuggestions:
+            suggestionCell.imageView?.image = searchEngines.defaultEngine.image
+            return suggestionCell
+
+        case .BookmarksAndHistory:
+            let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+            if let site = data?[indexPath.row] as? Site {
+                if let cell = cell as? TwoLineTableViewCell {
+                    cell.setLines(site.title, detailText: site.url)
+                    if let img = site.icon {
+                        let imgUrl = NSURL(string: img.url)
+                        cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
+                    } else {
+                        cell.imageView?.image = self.profile.favicons.defaultIcon
+                    }
+                }
+            }
+            return cell
+        }
+    }
+
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch SearchListSection(rawValue: section)! {
+        case .SearchSuggestions:
+            return searchEngines.shouldShowSearchSuggestions ? 1 : 0
+        case .BookmarksAndHistory:
+            return data?.count ?? 0
+        }
+    }
+
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return SearchListSection.Count
     }
 }
 

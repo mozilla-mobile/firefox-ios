@@ -35,7 +35,7 @@ protocol URLBarDelegate: class {
     func urlBar(urlBar: URLBarView, didSubmitText text: String)
 }
 
-class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, BrowserToolbarProtocol {
+class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDelegate, BrowserToolbarProtocol {
     weak var delegate: URLBarDelegate?
 
     private var locationView: BrowserLocationView!
@@ -90,7 +90,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
         editTextField.returnKeyType = UIReturnKeyType.Go
         editTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
         editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
-        editTextField.delegate = self
+        editTextField.autocompleteDelegate = self
         editTextField.font = AppConstants.DefaultMediumFont
         editTextField.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         editTextField.layer.borderColor = URLBarViewUX.TextFieldActiveBorderColor.CGColor
@@ -320,38 +320,38 @@ class URLBarView: UIView, BrowserLocationViewDelegate, UITextFieldDelegate, Brow
         delegate?.urlBarDidPressStop(self)
     }
 
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func autocompleteTextFieldShouldReturn(autocompleteTextField: AutocompleteTextField) -> Bool {
         delegate?.urlBar(self, didSubmitText: editTextField.text)
         return true
     }
 
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        let text = textField.text as NSString
-        let fullText = text.stringByReplacingCharactersInRange(range, withString: string)
-        delegate?.urlBar(self, didEnterText: fullText)
-
-        return true
+    func autocompleteTextField(autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
+        delegate?.urlBar(self, didEnterText: text)
     }
 
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func autocompleteTextFieldDidBeginEditing(autocompleteTextField: AutocompleteTextField) {
         // Without the async dispatch below, text selection doesn't work
         // intermittently and crashes on the iPhone 6 Plus (bug 1124310).
         dispatch_async(dispatch_get_main_queue(), {
-            textField.selectedTextRange = textField.textRangeFromPosition(textField.beginningOfDocument, toPosition: textField.endOfDocument)
+            autocompleteTextField.selectedTextRange = autocompleteTextField.textRangeFromPosition(autocompleteTextField.beginningOfDocument, toPosition: autocompleteTextField.endOfDocument)
         })
 
-        textField.layer.borderWidth = 1
+        autocompleteTextField.layer.borderWidth = 1
         locationContainer.layer.shadowOpacity = 0
     }
 
-    func textFieldDidEndEditing(textField: UITextField) {
+    func autocompleteTextFieldDidEndEditing(autocompleteTextField: AutocompleteTextField) {
         locationContainer.layer.shadowOpacity = 0.05
-        textField.layer.borderWidth = 0
+        autocompleteTextField.layer.borderWidth = 0
     }
 
-    func textFieldShouldClear(textField: UITextField) -> Bool {
+    func autocompleteTextFieldShouldClear(autocompleteTextField: AutocompleteTextField) -> Bool {
         delegate?.urlBar(self, didEnterText: "")
         return true
+    }
+
+    func setAutocompleteSuggestion(suggestion: String?) {
+        editTextField.setAutocompleteSuggestion(suggestion)
     }
 
     func finishEditing() {
@@ -551,7 +551,7 @@ private class CurveView: UIView {
     }
 }
 
-private class ToolbarTextField: UITextField {
+private class ToolbarTextField: AutocompleteTextField {
     override func textRectForBounds(bounds: CGRect) -> CGRect {
         let rect = super.textRectForBounds(bounds)
         return rect.rectByInsetting(dx: 5, dy: 5)
