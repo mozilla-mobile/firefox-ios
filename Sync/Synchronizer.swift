@@ -91,6 +91,44 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
     }
 
     public func synchronizeLocalClients(localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Deferred<Result<()>> {
+        func onResponseReceived(response: StorageResponse<[Record<ClientPayload>]>) -> Deferred<Result<()>> {
+            func afterWipe() -> Deferred<Result<()>> {
+                // TODO: process incoming records: both others and our own.
+                // TODO: decide whether to upload ours.
+                let ourGUID = self.scratchpad.clientGUID
+
+                let records = response.value
+                let responseTimestamp = response.metadata.lastModifiedMilliseconds
+
+                log.debug("Got \(records.count) client records.")
+
+                // TODO: batching.
+                for (record) in records {
+                    if record.id == ourGUID {
+                        // Skip. TODO: process commands.
+                        continue
+                    }
+
+                    let rec = self.clientRecordToLocalClientEntry(record)
+                    log.info("Storing client \(rec).")
+                    localClients.insertOrUpdateClient(rec)
+                }
+
+                // TODO: don't force-unwrap?
+                self.lastFetched = responseTimestamp!
+                return Deferred(value: Result(success: ()))
+
+            }
+
+            // If this is a fresh start, do a wipe.
+            // N.B., we don't wipe outgoing commands! (TODO: check this when we implement commands!)
+            // N.B., but perhaps we should discard outgoing wipe/reset commands!
+            if self.lastFetched == 0 {
+                return chainDeferred(localClients.wipeClients(), afterWipe)
+            }
+            return afterWipe()
+        }
+
         if !self.remoteHasChanges(info) {
             // Nothing to do.
             // TODO: upload local client if necessary.
@@ -101,40 +139,7 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
 
         if let factory: (String) -> ClientPayload? = self.scratchpad.keys?.value.factory(self.collection, f: { ClientPayload($0) }) {
             let clientsClient = storageClient.clientForCollection(self.collection, factory: factory)
-
-            return chainDeferred(clientsClient.getSince(self.lastFetched), {
-                // TODO: process incoming records: both others and our own.
-                // TODO: decide whether to upload ours.
-                let ourGUID = self.scratchpad.clientGUID
-                let records = $0.value
-                let responseTimestamp = $0.metadata.lastModifiedMilliseconds
-
-                log.debug("Got \(records.count) client records.")
-
-                // If this is a fresh start, do a wipe.
-                // N.B., we don't wipe outgoing commands! (TODO: check this when we implement commands!)
-                // N.B., but perhaps we should discard outgoing wipe/reset commands!
-                let onward: Deferred<Result<()>> = (self.lastFetched == 0) ? localClients.wipeClients() : Deferred(value: Result(success: ()))
-
-                return chainDeferred(onward, {
-
-                    // TODO: batching.
-                    for (record) in records {
-                        if record.id == ourGUID {
-                            // Skip. TODO: process commands.
-                            continue
-                        }
-
-                        let rec = self.clientRecordToLocalClientEntry(record)
-                        log.info("Storing client \(rec).")
-                        localClients.insertOrUpdateClient(rec)
-                    }
-
-                    // TODO: don't force-unwrap?
-                    self.lastFetched = responseTimestamp!
-                    return Deferred(value: Result(success: ()))
-                })
-            })
+            return chainDeferred(clientsClient.getSince(self.lastFetched), onResponseReceived)
         } else {
             log.error("Couldn't make clients factory.")
             return Deferred(value: Result(failure: FatalError(message: "Couldn't make clients factory.")))
