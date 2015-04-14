@@ -152,7 +152,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
                 func doInsert(record: Record<TabsPayload>) -> Deferred<Result<(Int)>> {
                     let remotes = record.payload.remoteTabs
                     log.info("Inserting \(remotes.count) tabs for client \(record.id).")
-                    return localTabs.insertOrUpdateTabsForClient(record.id, tabs: remotes)
+                    return localTabs.insertOrUpdateTabsForClientGUID(record.id, tabs: remotes)
                 }
 
                 // TODO: decide whether to upload ours.
