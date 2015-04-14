@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Sync
 import XCTest
 
 func compareScratchpads(lhs: Scratchpad, rhs: Scratchpad) {
@@ -13,6 +14,16 @@ func compareScratchpads(lhs: Scratchpad, rhs: Scratchpad) {
     XCTAssertEqual(lhs.collectionLastFetched, rhs.collectionLastFetched)
     XCTAssertEqual(lhs.clientName, rhs.clientName)
     XCTAssertEqual(lhs.clientRecordLastUpload, rhs.clientRecordLastUpload)
+    if let lkeys = lhs.keys {
+        if let rkeys = rhs.keys {
+            XCTAssertEqual(lkeys.timestamp, rkeys.timestamp)
+            XCTAssertEqual(lkeys.value, rkeys.value)
+        } else {
+            XCTAssertTrue(rhs.keys != nil)
+        }
+    } else {
+        XCTAssertTrue(rhs.keys == nil)
+    }
 
     XCTAssertTrue(lhs.global == rhs.global)
 }
@@ -31,11 +42,11 @@ class StateTests: XCTestCase {
 
     func baseScratchpad() -> Scratchpad {
         let syncKeyBundle = KeyBundle.fromKB(Bytes.generateRandomBytes(32))
-        return Scratchpad(b: syncKeyBundle, persistingTo: MockProfilePrefs())
+        let keys = Fetched(value: Keys(defaultBundle: syncKeyBundle), timestamp: 1001)
+        return Scratchpad(b: syncKeyBundle, persistingTo: MockProfilePrefs()).evolve().setKeys(keys).build()
     }
 
     func testPickling() {
-
         compareScratchpads(roundtrip(baseScratchpad()))
         compareScratchpads(roundtrip(baseScratchpad().evolve().setGlobal(getGlobal()).build()))
     }
