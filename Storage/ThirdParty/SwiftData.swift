@@ -36,14 +36,11 @@ import Foundation
 import UIKit
 import sqlite3
 
-/// All database operations actually occur serially on this queue. Careful not to deadlock it!
-private let queue = dispatch_queue_create("swiftdata queue", DISPATCH_QUEUE_SERIAL)
-
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
 
 /**
- * The public interface for the database.
- * This handles dispatching calls synchronously on the correct thread.
+ * Handle to a SQLite database.
+ * Each instance holds a single connection that is shared across all queries.
  */
 public class SwiftData {
     let filename: String
@@ -51,12 +48,35 @@ public class SwiftData {
     /// Used for testing.
     static var EnableWAL = true
 
+    /// Used for testing.
+    static var ReuseConnections = true
+
+    /// For thread-safe access to the shared connection.
+    private let sharedConnectionQueue: dispatch_queue_t
+
+    /// Shared connection to this database.
+    private var sharedConnection: SQLiteDBConnection?
+
     init(filename: String) {
         self.filename = filename
+        self.sharedConnectionQueue = dispatch_queue_create("SwiftData queue: \(filename)", DISPATCH_QUEUE_SERIAL)
 
         // Ensure that multi-thread mode is enabled by default.
         // See https://www.sqlite.org/threadsafe.html
         assert(sqlite3_threadsafe() == 2)
+    }
+
+    private func getSharedConnection(inout error: NSError?) -> SQLiteDBConnection? {
+        var connection: SQLiteDBConnection?
+
+        dispatch_sync(sharedConnectionQueue) {
+            if self.sharedConnection == nil {
+                self.sharedConnection = SQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.ReadWriteCreate.toSQL(), error: &error)
+            }
+            connection = self.sharedConnection
+        }
+
+        return connection
     }
 
     /**
@@ -65,13 +85,20 @@ public class SwiftData {
      */
     public func withConnection(flags: SwiftData.Flags, cb: (db: SQLiteDBConnection) -> NSError?) -> NSError? {
         var error: NSError? = nil
-        let task: () -> Void = {
-            if let db = SQLiteDBConnection(filename: self.filename, flags: flags.toSQL(), error: &error) {
-                error = cb(db: db)
+        var connection: SQLiteDBConnection?
+
+        if SwiftData.ReuseConnections {
+            connection = getSharedConnection(&error)
+        } else {
+            connection = SQLiteDBConnection(filename: filename, flags: flags.toSQL(), error: &error)
+        }
+
+        if let connection = connection {
+            dispatch_sync(connection.queue) {
+                error = cb(db: connection)
             }
         }
 
-        dispatch_sync(queue) { task() }
         return error
     }
 
@@ -122,6 +149,7 @@ public class SQLiteDBConnection {
     private var sqliteDB: COpaquePointer = nil
     private let filename: String
     private let debug_enabled = false
+    private let queue: dispatch_queue_t
 
     public var version: Int {
         get {
@@ -136,6 +164,7 @@ public class SQLiteDBConnection {
 
     init?(filename: String, flags: Int32, inout error: NSError?) {
         self.filename = filename
+        self.queue = dispatch_queue_create("SQLite connection: \(filename)", DISPATCH_QUEUE_SERIAL)
         if let err = openWithFlags(flags) {
             error = err
             return nil
