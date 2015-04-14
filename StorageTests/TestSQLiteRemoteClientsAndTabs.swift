@@ -43,7 +43,7 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return Deferred(value: Result(success: ()))
     }
 
-    public func insertOrUpdateTabsForClient(client: String, tabs: [RemoteTab]) -> Deferred<Result<Int>> {
+    public func insertOrUpdateTabsForClientGUID(clientGUID: String, tabs: [RemoteTab]) -> Deferred<Result<Int>> {
         return Deferred(value: Result(success: -1))
     }
 
