@@ -118,7 +118,7 @@ public class FirefoxAccount {
         dict["authEndpoint"] = authEndpoint.absoluteString!
         dict["contentEndpoint"] = contentEndpoint.absoluteString!
         dict["oauthEndpoint"] = oauthEndpoint.absoluteString!
-        dict["state"] = state.asDictionary()
+        dict["state"] = state.asJSON().toString(pretty: false)
         return dict
     }
 
@@ -138,11 +138,9 @@ public class FirefoxAccount {
         let authEndpoint = NSURL(string: dictionary["authEndpoint"] as! String)!
         let contentEndpoint = NSURL(string: dictionary["contentEndpoint"] as! String)!
         let oauthEndpoint = NSURL(string: dictionary["oauthEndpoint"] as! String)!
-        let state: FxAState
-        if let s = dictionary["state"] as? [String: AnyObject] {
-            state = stateFromDictionary(s) ?? SeparatedState()
-        } else {
-            state = SeparatedState()
+        var state: FxAState = SeparatedState()
+        if let s = dictionary["state"] as? String, t = stateFromJSON(JSON(s)) {
+            state = t
         }
 
         return FirefoxAccount(email: email, uid: uid,
