@@ -51,15 +51,28 @@ class FxAStateTests: XCTestCase {
     }
 
     func testSerialization() {
+        // Journal of Negative Results: make sure we aren't *always* succeeding.
+        // This Married state will have an earlier timestamp than the one generated after the loop.
+        let state1 = FxAStateTests.stateForLabel(.Married) as! MarriedState
+
         for stateLabel in FxAStateLabel.allValues {
             let state = FxAStateTests.stateForLabel(stateLabel)
-            let d = state.asDictionary()
-            if let e = stateFromDictionary(d)?.asDictionary() {
+            let d = state.asJSON()
+            if let e = stateFromJSON(d)?.asJSON() {
                 // We can't compare arbitrary Swift Dictionary instances directly, but the following appears to work.
-                XCTAssertEqual(NSDictionary(dictionary: d), NSDictionary(dictionary: e))
+                XCTAssertEqual(
+                    NSDictionary(dictionary: JSON.unwrap(d) as! [String: AnyObject]),
+                    NSDictionary(dictionary: JSON.unwrap(e) as! [String: AnyObject]))
             } else {
                 XCTFail("Expected to create state.")
             }
         }
+
+        // This Married state will have a later timestamp than the one generated before the loop.
+        let state2 = FxAStateTests.stateForLabel(.Married) as! MarriedState
+        // We can't compare arbitrary Swift Dictionary instances directly, but the following appears to work.
+        XCTAssertNotEqual(
+            NSDictionary(dictionary: JSON.unwrap(state1.asJSON()) as! [String: AnyObject]),
+            NSDictionary(dictionary: JSON.unwrap(state2.asJSON()) as! [String: AnyObject]))
     }
 }
