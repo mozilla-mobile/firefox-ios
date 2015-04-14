@@ -13,6 +13,7 @@ private struct TabTrayControllerUX {
     static let Margin = CGFloat(15)
     // This color has been manually adjusted to match background layer with iOS translucency effect.
     static let ToolbarBarTintColor = UIColor(red: 0.16, green: 0.18, blue: 0.20, alpha: 1)
+    static let ToolbarButtonOffset = CGFloat(5.0)
     static let TabTitleTextColor = UIColor.blackColor()
     static let TabTitleTextFont = AppConstants.DefaultSmallFontBold
     static let CloseButtonSize = CGFloat(18.0)
@@ -352,11 +353,13 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         let navItem = UINavigationItem()
         navItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), style: .Plain, target: self, action: "SELdidClickSettingsItem")
         navItem.leftBarButtonItem?.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
+        navItem.leftBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: -TabTrayControllerUX.ToolbarButtonOffset, bottom: 0, right: 0)
 
         navItem.titleView = signInButton
         signInButton.hidden = true //hiding sign in button until we decide on UX
 
         navItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "add"), style: .Plain, target: self, action: "SELdidClickAddTab")
+        navItem.rightBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: -TabTrayControllerUX.ToolbarButtonOffset, bottom: 0, right: TabTrayControllerUX.ToolbarButtonOffset)
 
 
         navBar.pushNavigationItem(navItem, animated: false)
