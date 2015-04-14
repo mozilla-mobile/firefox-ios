@@ -55,7 +55,6 @@ if __name__ == "__main__":
                 original = file_node.get('original')
                 if original and original.endswith('Info.plist'):
                     trans_unit_nodes = file_node.xpath("x:body/x:trans-unit", namespaces=NS)
-                    print original, len(trans_unit_nodes)
                     if len(trans_unit_nodes) == 0:
                         file_node.getparent().remove(file_node)
         # Write it back to the same file
