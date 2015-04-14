@@ -102,21 +102,12 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
 
                 log.debug("Got \(records.count) client records.")
 
-                // TODO: batching.
-                for (record) in records {
-                    if record.id == ourGUID {
-                        // Skip. TODO: process commands.
-                        continue
-                    }
-
-                    let rec = self.clientRecordToLocalClientEntry(record)
-                    log.info("Storing client \(rec).")
-                    localClients.insertOrUpdateClient(rec)
-                }
-
-                // TODO: don't force-unwrap?
-                self.lastFetched = responseTimestamp!
-                return Deferred(value: Result(success: ()))
+                let toInsert = records.filter({ $0.id != ourGUID }).map(self.clientRecordToLocalClientEntry)
+                return chainDeferred(localClients.insertOrUpdateClients(toInsert), {
+                    // TODO: don't force-unwrap?
+                    self.lastFetched = responseTimestamp!
+                    return Deferred(value: Result(success: ()))
+                })
 
             }
 
@@ -126,6 +117,7 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             if self.lastFetched == 0 {
                 return chainDeferred(localClients.wipeClients(), afterWipe)
             }
+
             return afterWipe()
         }
 
@@ -153,6 +145,41 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
     }
 
     public func synchronizeLocalTabs(localTabs: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Deferred<Result<()>> {
+        func onResponseReceived(response: StorageResponse<[Record<TabsPayload>]>) -> Deferred<Result<()>> {
+
+            func afterWipe() -> Deferred<Result<()>> {
+
+                func doInsert(record: Record<TabsPayload>) -> Deferred<Result<(Int)>> {
+                    let remotes = record.payload.remoteTabs
+                    log.info("Inserting \(remotes.count) tabs for client \(record.id).")
+                    return localTabs.insertOrUpdateTabsForClient(record.id, tabs: remotes)
+                }
+
+                // TODO: decide whether to upload ours.
+                let ourGUID = self.scratchpad.clientGUID
+                let records = response.value
+                let responseTimestamp = response.metadata.lastModifiedMilliseconds
+
+                log.debug("Got \(records.count) tab records.")
+
+                let allDone = all(records.filter({ $0.id != ourGUID }).map(doInsert))
+                return allDone.bind { (results) -> Deferred<Result<()>> in
+                    if let failure = find(results, { $0.isFailure }) {
+                        return Deferred(value: Result(failure: failure.failureValue!))
+                    }
+                    self.lastFetched = responseTimestamp!
+                    return Deferred(value: Result(success: ()))
+                }
+            }
+
+            // If this is a fresh start, do a wipe.
+            if self.lastFetched == 0 {
+                return chainDeferred(localTabs.wipeTabs(), afterWipe)
+            }
+
+            return afterWipe()
+        }
+
         if !self.remoteHasChanges(info) {
             // Nothing to do.
             // TODO: upload local tabs if they've changed or we're in a fresh start.
@@ -162,34 +189,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
         if let factory: (String) -> TabsPayload? = self.scratchpad.keys?.value.factory(self.collection, f: { TabsPayload($0) }) {
             let tabsClient = storageClient.clientForCollection(self.collection, factory: factory)
 
-            return chainDeferred(tabsClient.getSince(self.lastFetched), {
-                // TODO: decide whether to upload ours.
-                let ourGUID = self.scratchpad.clientGUID
-                let records = $0.value
-                let responseTimestamp = $0.metadata.lastModifiedMilliseconds
-
-                // If this is a fresh start, do a wipe.
-                let onward: Deferred<Result<()>> = (self.lastFetched == 0) ? localTabs.wipeTabs() : Deferred(value: Result(success: ()))
-
-                return chainDeferred(onward, {
-                    log.debug("Got \(records.count) tab records.")
-
-                    // TODO: batching.
-                    for (record) in records {
-                        if record.id == ourGUID {
-                            // Skip. TODO: process commands.
-                            continue
-                        }
-
-                        let remotes = record.payload.remoteTabs
-                        log.info("Inserting \(remotes.count) tabs for client \(record.id).")
-                        localTabs.insertOrUpdateTabsForClient(record.id, tabs: remotes)
-                    }
-
-                    self.lastFetched = responseTimestamp!
-                    return Deferred(value: Result(success: ()))
-                })
-            })
+            return chainDeferred(tabsClient.getSince(self.lastFetched), onResponseReceived)
         } else {
             log.error("Couldn't make tabs factory.")
             return Deferred(value: Result(failure: FatalError(message: "Couldn't make tabs factory.")))
