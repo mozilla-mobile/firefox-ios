@@ -116,9 +116,10 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
             return RemoteTab(
                 clientGUID: row["client_guid"] as! String,
                 URL: NSURL(string: row["url"] as! String)!, // TODO: find a way to make this less dangerous.
-                title: row["title"] as? String,
+                title: row["title"] as! String,
                 history: [], // TODO: extract history.
-                lastUsed: (row["last_used"] as! NSNumber).unsignedLongLongValue
+                lastUsed: (row["last_used"] as! NSNumber).unsignedLongLongValue,
+                icon: nil      // TODO
             )
         }
     }

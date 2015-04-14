@@ -26,7 +26,6 @@ class ProfileFileAccessor: FileAccessor {
 protocol Profile {
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
     // var favicons: Favicons { get }
-    var clients: Clients { get }
     var prefs: Prefs { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
@@ -58,10 +57,6 @@ public class MockProfile: Profile {
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
         return BookmarksSqliteFactory(files: self.files)
-    } ()
-
-    lazy var clients: Clients = {
-        return MockClients(files: self.files)
     } ()
 
     lazy var searchEngines: SearchEngines = {
@@ -100,7 +95,7 @@ public class MockProfile: Profile {
         return SDWebThumbnails(files: self.files)
     }()
 
-    let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
+    let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
     var account: FirefoxAccount? = nil
 
     func getAccount() -> FirefoxAccount? {
@@ -161,10 +156,6 @@ public class BrowserProfile: Profile {
         return NSUserDefaultsProfilePrefs(profile: self)
     }
 
-    lazy var clients: Clients = {
-        return MockClients(files: self.files)
-    } ()
-
     lazy var favicons: Favicons = {
         return SQLiteFavicons(files: self.files)
     }()
@@ -196,7 +187,7 @@ public class BrowserProfile: Profile {
         return SDWebThumbnails(files: self.files)
     }()
 
-    let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
+    let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
 
     private lazy var account: FirefoxAccount? = {
         if let dictionary = KeychainWrapper.objectForKey(self.name + ".account") as? [String:AnyObject] {

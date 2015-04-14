@@ -1,7 +1,7 @@
 import Foundation
 import XCTest
 
-class TestFavcionsTable : XCTestCase {
+class TestFaviconsTable : XCTestCase {
     var db: SwiftData!
 
     private func addIcon(favicons: FaviconsTable<Favicon>, url: String, s: Bool = true) -> Favicon {

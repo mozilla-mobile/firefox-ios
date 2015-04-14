@@ -63,7 +63,6 @@ public class EncryptedJSON : JSON {
 
     func fromBase64(str: String) -> NSData {
         let b = Bytes.decodeBase64(str)
-        println("Base64 \(str) yielded \(b)")
         return b
     }
 

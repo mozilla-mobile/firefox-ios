@@ -86,8 +86,8 @@ private func optionalSecondsHeader(input: AnyObject?) -> Timestamp? {
     }
 
     if let val = input as? String {
-        if let double = NSScanner(string: val).scanDouble() {
-            return Timestamp(double * 1000)
+        if let timestamp = decimalSecondsStringToTimestamp(val) {
+            return timestamp
         }
     }
 
@@ -146,11 +146,6 @@ private func optionalUIntegerHeader(input: AnyObject?) -> Timestamp? {
     }
 
     return nil
-}
-
-func millisecondsToDecimalSeconds(input: Timestamp) -> String {
-    let val: Double = Double(input) / 1000
-    return String(format: "%.2F", val)
 }
 
 public struct ResponseMetadata {
@@ -382,7 +377,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     init(client: Sync15StorageClient, serverURI: NSURL, collection: String, factory: (String) -> T?) {
         self.client = client
         self.factory = factory
-        self.collectionURI = serverURI.URLByAppendingPathComponent(collection, isDirectory: true)
+        self.collectionURI = serverURI.URLByAppendingPathComponent(collection, isDirectory: false)
     }
 
     private func uriForRecord(guid: String) -> NSURL {
@@ -422,7 +417,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     public func getSince(since: Timestamp) -> Deferred<Result<StorageResponse<[Record<T>]>>> {
         let deferred = Deferred<Result<StorageResponse<[Record<T>]>>>(defaultQueue: client.resultQueue)
 
-        let req = client.requestGET(self.collectionURI)
+        let req = client.requestGET(self.collectionURI.withQueryParam("full", value: "1"))
         req.responseParsedJSON(errorWrap(deferred, { (_, response, data, error) in
             if let json: JSON = data as? JSON {
                 func recordify(json: JSON) -> Record<T>? {

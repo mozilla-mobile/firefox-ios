@@ -140,7 +140,9 @@ public class LiveAccountTest: XCTestCase {
 
     public func getAuthState(now: Timestamp) -> Deferred<Result<SyncAuthState>> {
         let account = self.getTestAccount()
+        println("Got test account.")
         return account.map { result in
+            println("Result was successful? \(result.isSuccess)")
             if let account = result.successValue {
                 return Result(success: account.syncAuthState((ProductionSync15Configuration().tokenServerEndpointURL)))
             }
