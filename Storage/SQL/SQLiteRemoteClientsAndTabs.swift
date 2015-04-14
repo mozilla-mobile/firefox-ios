@@ -106,26 +106,31 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferred
     }
 
-    public func insertOrUpdateClient(client: RemoteClient) -> Deferred<Result<()>> {
+    public func insertOrUpdateClients(clients: [RemoteClient]) -> Deferred<Result<()>> {
         let deferred = Deferred<Result<()>>(defaultQueue: dispatch_get_main_queue())
 
         var err: NSError?
-        // TODO: insert multiple clients in a single transaction, and a single-query.
+
+        // TODO: insert multiple clients in a single query.
         // ORM systems are foolish.
         db.transaction(&err) { connection, _ in
-            // Update or insert client record.
-            let updated = self.clients.update(connection, item: client, err: &err)
-            log.info("Updated clients: \(updated)")
-            if updated == 0 {
-                let inserted = self.clients.insert(connection, item: client, err: &err)
-                log.info("Inserted clients: \(inserted)")
-            }
+            // Update or insert client records.
+            for client in clients {
 
-            if let err = err {
-                let databaseError = DatabaseError(err: err)
-                log.debug("insertOrUpdateClient failed: \(databaseError)")
-                deferred.fill(Result(failure: databaseError))
-                return false
+                let updated = self.clients.update(connection, item: client, err: &err)
+                log.info("Updated clients: \(updated)")
+
+                if err == nil && updated == 0 {
+                    let inserted = self.clients.insert(connection, item: client, err: &err)
+                    log.info("Inserted clients: \(inserted)")
+                }
+
+                if let err = err {
+                    let databaseError = DatabaseError(err: err)
+                    log.debug("insertOrUpdateClients failed: \(databaseError)")
+                    deferred.fill(Result(failure: databaseError))
+                    return false
+                }
             }
 
             deferred.fill(Result(success: ()))
@@ -133,6 +138,10 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
 
         return deferred
+    }
+
+    public func insertOrUpdateClient(client: RemoteClient) -> Deferred<Result<()>> {
+        return insertOrUpdateClients([client])
     }
 
     public func getClients() -> Deferred<Result<[RemoteClient]>> {
