@@ -4,6 +4,10 @@
 
 import Foundation
 import Shared
+import XCGLogger
+
+// TODO: same comment as for SyncAuthState.swift!
+private let log = XCGLogger.defaultInstance()
 
 // The version of the account schema we persist.
 let AccountSchemaVersion = 1
@@ -37,13 +41,18 @@ public class FirefoxAccount {
     /// https://github.com/mozilla/fxa-oauth-server/blob/6cc91e285fc51045a365dbacb3617ef29093dbc3/docs/api.md
     let oauthEndpoint: NSURL
 
-    private var state: FxAState
+    private let stateKeyLabel: String
+    private var state: FxAState {
+        didSet {
+            checkpointState()
+        }
+    }
 
     public var actionNeeded: FxAActionNeeded {
         return state.actionNeeded
     }
 
-    public init(email: String, uid: String, authEndpoint: NSURL, contentEndpoint: NSURL, oauthEndpoint: NSURL, state: FxAState) {
+    public init(email: String, uid: String, authEndpoint: NSURL, contentEndpoint: NSURL, oauthEndpoint: NSURL, stateKeyLabel: String, state: FxAState) {
         self.email = email
         self.uid = uid
         self.authEndpoint = authEndpoint
@@ -51,7 +60,9 @@ public class FirefoxAccount {
         self.oauthEndpoint = oauthEndpoint
         // TODO: It would be nice to fail if any endpoint is not https://, but it's not clear how to do that in a
         // constructor!
+        self.stateKeyLabel = stateKeyLabel
         self.state = state
+        checkpointState()
     }
 
     public class func fromConfigurationAndJSON(configuration: FirefoxAccountConfiguration, data: JSON) -> FirefoxAccount? {
@@ -105,6 +116,7 @@ public class FirefoxAccount {
             authEndpoint: configuration.authEndpointURL,
             contentEndpoint: configuration.profileEndpointURL,
             oauthEndpoint: configuration.oauthEndpointURL,
+            stateKeyLabel: Bytes.generateGUID(),
             state: state
         )
         return account
@@ -118,7 +130,7 @@ public class FirefoxAccount {
         dict["authEndpoint"] = authEndpoint.absoluteString!
         dict["contentEndpoint"] = contentEndpoint.absoluteString!
         dict["oauthEndpoint"] = oauthEndpoint.absoluteString!
-        dict["state"] = state.asJSON().toString(pretty: false)
+        dict["stateKeyLabel"] = stateKeyLabel
         return dict
     }
 
@@ -131,6 +143,26 @@ public class FirefoxAccount {
         return nil
     }
 
+    private class func labelAndStateFromKeychain(label: String?) -> (String, FxAState) {
+        if let l = label {
+            if let s = KeychainWrapper.stringForKey("account.state." + l) {
+                if let t = stateFromJSON(JSON.parse(s)) {
+                    log.info("Read Account State from Keychain with label account.state.\(l)")
+                    return (l, t)
+                } else {
+                    log.warning("Found Account State in Keychain with label account.state.\(l), but could not parse it.")
+                }
+            } else {
+                log.warning("Did not find Account State in Keychain with label account.state.\(l).")
+            }
+        } else {
+            log.warning("Did not find Account State label in Keychain.")
+        }
+        // Fall through to Separated.
+        log.warning("Failed to read Account State from Keychain; moving account to Separated.")
+        return (Bytes.generateGUID(), SeparatedState())
+    }
+
     private class func fromDictionaryV1(dictionary: [String: AnyObject]) -> FirefoxAccount? {
         // TODO: throughout, even a semblance of error checking and input validation.
         let email = dictionary["email"] as! String
@@ -138,14 +170,22 @@ public class FirefoxAccount {
         let authEndpoint = NSURL(string: dictionary["authEndpoint"] as! String)!
         let contentEndpoint = NSURL(string: dictionary["contentEndpoint"] as! String)!
         let oauthEndpoint = NSURL(string: dictionary["oauthEndpoint"] as! String)!
-        var state: FxAState = SeparatedState()
-        if let s = dictionary["state"] as? String, t = stateFromJSON(JSON(s)) {
-            state = t
-        }
+
+        let stateKeyLabel: String
+        let state: FxAState
+        (stateKeyLabel, state) = labelAndStateFromKeychain(dictionary["stateKeyLabel"] as? String)
 
         return FirefoxAccount(email: email, uid: uid,
                 authEndpoint: authEndpoint, contentEndpoint: contentEndpoint, oauthEndpoint: oauthEndpoint,
+                stateKeyLabel: stateKeyLabel,
                 state: state)
+    }
+
+    public func checkpointState() {
+        log.info("Storing Account State in Keychain with label account.state.\(stateKeyLabel)")
+        // TODO: PII logging.
+        let jsonString = state.asJSON().toString(pretty: false)
+        KeychainWrapper.setString(jsonString, forKey: "account.state." + stateKeyLabel)
     }
 
     public enum AccountError: Printable, ErrorType {
@@ -158,12 +198,18 @@ public class FirefoxAccount {
         }
     }
 
-    public func marriedState() -> Deferred<Result<MarriedState>> {
+    func advance() -> Deferred<FxAState> {
         let client = FxAClient10(endpoint: authEndpoint)
         let stateMachine = FxALoginStateMachine(client: client)
         let now = NSDate.now()
         return stateMachine.advanceFromState(state, now: now).map { newState in
             self.state = newState
+            return newState
+        }
+    }
+
+    public func marriedState() -> Deferred<Result<MarriedState>> {
+        return advance().map { newState in
             if newState.label == FxAStateLabel.Married {
                 if let married = newState as? MarriedState {
                     return Result(success: married)
