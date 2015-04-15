@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Shared
 import UIKit
 import XCTest
 
@@ -27,6 +28,7 @@ class FirefoxAccountTests: XCTestCase {
                 authEndpoint: NSURL(string: d["authEndpoint"] as! String)!,
                 contentEndpoint: NSURL(string: d["contentEndpoint"] as! String)!,
                 oauthEndpoint: NSURL(string: d["oauthEndpoint"] as! String)!,
+                stateKeyLabel: Bytes.generateGUID(),
                 state: SeparatedState())
         let d1 = account1.asDictionary()
 

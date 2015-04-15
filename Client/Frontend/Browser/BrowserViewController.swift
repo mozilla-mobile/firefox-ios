@@ -25,7 +25,8 @@ class BrowserViewController: UIViewController {
     private var webViewContainer: UIView!
     private let uriFixup = URIFixup()
     private var screenshotHelper: ScreenshotHelper!
-    private var homePanelIsInline: Bool = false
+    private var homePanelIsInline = false
+    private var searchLoader: SearchLoader!
 
     var profile: Profile!
 
@@ -107,6 +108,8 @@ class BrowserViewController: UIViewController {
         urlBar.delegate = self
         header = wrapInEffect(urlBar, parent: view)
         urlBar.browserToolbarDelegate = self
+
+        searchLoader = SearchLoader(history: profile.history, urlBar: urlBar)
 
         // Setup the reader mode control bar. This bar starts not visible with a zero height.
         readerModeBar = ReaderModeBarView(frame: CGRectZero)
@@ -232,6 +235,8 @@ class BrowserViewController: UIViewController {
         searchController!.searchEngines = profile.searchEngines
         searchController!.searchDelegate = self
         searchController!.profile = self.profile
+
+        searchLoader.addListener(searchController!)
 
         view.addSubview(searchController!.view)
         searchController!.view.snp_makeConstraints { make in
@@ -395,6 +400,8 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(urlBar: URLBarView, didEnterText text: String) {
+        searchLoader.query = text
+
         if text.isEmpty {
             hideSearchController()
         } else {

@@ -17,3 +17,15 @@ extension NSDate {
         return UInt64(1000 * NSDate().timeIntervalSince1970)
     }
 }
+
+public func decimalSecondsStringToTimestamp(input: String) -> Timestamp? {
+    if let double = NSScanner(string: input).scanDouble() {
+        return Timestamp(double * 1000)
+    }
+    return nil
+}
+
+public func millisecondsToDecimalSeconds(input: Timestamp) -> String {
+    let val: Double = Double(input) / 1000
+    return String(format: "%.2F", val)
+}

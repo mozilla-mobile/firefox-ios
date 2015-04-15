@@ -64,6 +64,19 @@ public func mapValues<K, T, U>(source: [K: T], f: (T -> U)) -> [K: U] {
 }
 
 /**
+ * Find the first matching item in the array and return it.
+ * Unlike map/filter approaches, this is lazy.
+ */
+public func find<T>(arr: [T], f: (T) -> Bool) -> T? {
+    for (x) in arr {
+        if f(x) {
+            return x
+        }
+    }
+    return nil
+}
+
+/**
  * Take a JSON array, returning the String elements as an array.
  * It's usually convenient for this to accept an optional.
  */

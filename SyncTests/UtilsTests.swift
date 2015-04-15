@@ -45,4 +45,16 @@ class UtilsTests: XCTestCase {
         XCTAssertFalse(optArrayEqual(x, z))
         XCTAssertFalse(optArrayEqual(z, y))
     }
+
+    func testWithQueryParam() {
+        let urlA = NSURL(string: "http://foo.com/bar/")!
+        let urlB = NSURL(string: "http://bar.com/noo")!
+        let urlC = urlA.withQueryParam("ppp", value: "123")
+        let urlD = urlB.withQueryParam("qqq", value: "123")
+        let urlE = urlC.withQueryParam("rrr", value: "aaa")
+
+        XCTAssertEqual("http://foo.com/bar/?ppp=123", urlC.absoluteString!)
+        XCTAssertEqual("http://bar.com/noo?qqq=123", urlD.absoluteString!)
+        XCTAssertEqual("http://foo.com/bar/?ppp=123&rrr=aaa", urlE.absoluteString!)
+    }
 }

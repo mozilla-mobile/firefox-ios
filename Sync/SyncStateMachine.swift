@@ -32,13 +32,17 @@ public typealias ReadyDeferred = Deferred<Result<Ready>>
 // some state from the last.
 // The resultant 'Ready' will be able to provide a suitably initialized storage client.
 public class SyncStateMachine {
+    private class func scratchpadPrefs(prefs: Prefs) -> Prefs {
+        return prefs.branch("scratchpad")
+    }
+
     public class func getInfoCollections(authState: SyncAuthState, prefs: Prefs) -> Deferred<Result<InfoCollections>> {
         log.debug("Fetching info/collections in state machine.")
         let token = authState.token(NSDate.now(), canBeExpired: true)
         return chainDeferred(token, { (token, kB) in
             // TODO: the token might not be expired! Check and selectively advance.
             log.debug("Got token from auth state. Advancing to InitialWithExpiredToken.")
-            let state = InitialWithExpiredToken(scratchpad: Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: prefs), token: token)
+            let state = InitialWithExpiredToken(scratchpad: Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: self.scratchpadPrefs(prefs)), token: token)
             return state.getInfoCollections()
         })
     }
@@ -47,11 +51,12 @@ public class SyncStateMachine {
         let token = authState.token(NSDate.now(), canBeExpired: false)
         return chainDeferred(token, { (token, kB) in
             log.debug("Got token from auth state. Server is \(token.api_endpoint).")
-            let prior = Scratchpad.restoreFromPrefs(prefs, syncKeyBundle: KeyBundle.fromKB(kB))
+            let scratchpadPrefs = self.scratchpadPrefs(prefs)
+            let prior = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKB(kB))
             if prior == nil {
                 log.info("No persisted Sync state. Starting over.")
             }
-            let scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: prefs)
+            let scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: scratchpadPrefs)
 
             log.info("Advancing to InitialWithLiveToken.")
             let state = InitialWithLiveToken(scratchpad: scratchpad, token: token)
@@ -130,7 +135,7 @@ public protocol SyncState {
 public class BaseSyncState: SyncState {
     public var label: SyncStateLabel { return SyncStateLabel.Stub }
 
-    let client: Sync15StorageClient!
+    public let client: Sync15StorageClient!
     let token: TokenServerToken    // Maybe expired.
     var scratchpad: Scratchpad
 
@@ -148,6 +153,10 @@ public class BaseSyncState: SyncState {
         log.info("Inited \(self.label.rawValue)")
     }
 
+    public func synchronizer<T: Synchronizer>(synchronizerClass: T.Type, prefs: Prefs) -> T {
+        return T(scratchpad: self.scratchpad, basePrefs: prefs)
+    }
+
     // This isn't a convenience initializer 'cos subclasses can't call convenience initializers.
     public init(scratchpad: Scratchpad, token: TokenServerToken) {
         let workQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
@@ -161,7 +170,7 @@ public class BaseSyncState: SyncState {
 }
 
 public class BaseSyncStateWithInfo: BaseSyncState {
-    let info: InfoCollections
+    public let info: InfoCollections
 
     init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections) {
         self.info = info
@@ -592,6 +601,7 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
                 // later than the collection timestamp. All we care about here is if the
                 // server might have a newer record.
                 if global.timestamp >= metaModified {
+                    log.info("Using cached meta/global.")
                     // Strictly speaking we can avoid fetching if this condition is not true,
                     // but if meta/ is modified for a different reason -- store timestamps
                     // for the last collection fetch. This will do for now.
@@ -693,7 +703,7 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
                 // other records in that collection, even if there are we don't care about them.
                 let fetched = Fetched(value: collectionKeys, timestamp: resp.value.modified)
                 let s = self.scratchpad.evolve().setKeys(fetched).build().checkpoint()
-                let ready = Ready(client: self.client, scratchpad: self.scratchpad, token: self.token, info: self.info, keys: collectionKeys)
+                let ready = Ready(client: self.client, scratchpad: s, token: self.token, info: self.info, keys: collectionKeys)
 
                 log.info("Arrived in Ready state.")
                 return Deferred(value: Result(success: ready))
