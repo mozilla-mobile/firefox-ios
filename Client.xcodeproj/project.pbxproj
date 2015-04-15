@@ -2027,14 +2027,14 @@
 			isa = PBXGroup;
 			children = (
 				D39FA16F1A83E62600EE869C /* UITests-Bridging-Header.h */,
-				D3E171C11A841EAD00AB44CD /* KIFHelper.js */,
-				D39FA1801A83E84900EE869C /* Global.swift */,
-				D39FA1821A83E87900EE869C /* NavigationTests.swift */,
-				D39FA1611A83E0EC00EE869C /* Supporting Files */,
-				2F642CEC1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift */,
-				0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */,
 				0B6FBAB11AC1F830007EC669 /* baseFile.html */,
+				D3E171C11A841EAD00AB44CD /* KIFHelper.js */,
+				0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */,
+				D39FA1801A83E84900EE869C /* Global.swift */,
 				4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */,
+				D39FA1821A83E87900EE869C /* NavigationTests.swift */,
+				2F642CEC1AA8FFAF004F8BE8 /* SearchSettingsUITests.swift */,
+				D39FA1611A83E0EC00EE869C /* Supporting Files */,
 			);
 			path = UITests;
 			sourceTree = "<group>";
