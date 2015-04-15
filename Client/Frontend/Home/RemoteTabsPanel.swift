@@ -68,7 +68,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         } else {
             // Do what we can.
             // TODO: we also want to do this if a sync fails for some reason, rather than returning a Deferred failure result.
-            return profile.remoteClientsAndTabs.getClientsAndTabs()
+            return Deferred(value: Result(success: []))
         }
     }
 
