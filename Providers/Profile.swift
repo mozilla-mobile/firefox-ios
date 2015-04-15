@@ -190,7 +190,7 @@ public class BrowserProfile: Profile {
     let accountConfiguration: FirefoxAccountConfiguration = LatestDevFirefoxAccountConfiguration()
 
     private lazy var account: FirefoxAccount? = {
-        if let dictionary = KeychainWrapper.objectForKey(self.name + ".account") as? [String:AnyObject] {
+        if let dictionary = KeychainWrapper.objectForKey(self.name + ".account") as? [String: AnyObject] {
             return FirefoxAccount.fromDictionary(dictionary)
         }
         return nil

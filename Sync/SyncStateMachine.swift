@@ -601,6 +601,7 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
                 // later than the collection timestamp. All we care about here is if the
                 // server might have a newer record.
                 if global.timestamp >= metaModified {
+                    log.info("Using cached meta/global.")
                     // Strictly speaking we can avoid fetching if this condition is not true,
                     // but if meta/ is modified for a different reason -- store timestamps
                     // for the last collection fetch. This will do for now.
