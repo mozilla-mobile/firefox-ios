@@ -9,35 +9,6 @@ import Storage
 import WebKit
 
 class ClientTests: XCTestCase {
-    func testFavicons() {
-        /* CoreData tests don't really work yet. Enable this if we ever fix them
-        var fav : Favicons = BasicFavicons()
-        var url = NSURL(string: "http://www.example.com")
-        var url2 = NSURL(string: "http://www.example.com/2")
-
-        var expectation = expectationWithDescription("asynchronous request")
-        fav.getForUrl(url!, options: nil, callback: { (data: Favicon) -> Void in
-            XCTAssertEqual(data.url!, FaviconConsts.DefaultFaviconUrl, "Favicon url is correct");
-            expectation.fulfill()
-        });
-        waitForExpectationsWithTimeout(10.0, handler:nil)
-
-        expectation = expectationWithDescription("asynchronous request")
-        var urls = [url!, url2!, url!];
-        fav.getForUrls(urls, options: nil, callback: { data in
-            XCTAssertEqual(data.count, 2, "At least one favicon was returned for each url requested");
-
-            var favicons = data[url!.absoluteString!]
-            XCTAssertTrue(favicons!.count > 0, "At least one favicon was returned for each url requested");
-            XCTAssertEqual(favicons![0].url!, FaviconConsts.DefaultFaviconUrl, "Favicon url is correct")
-            XCTAssertNotNil(favicons![0].image, "Favicon image is not null")
-
-            expectation.fulfill()
-        });
-        waitForExpectationsWithTimeout(10.0, handler:nil)
-        */
-    }
-    
     func testArrayCursor() {
         let data = ["One", "Two", "Three"];
         let t = ArrayCursor<String>(data: data);
