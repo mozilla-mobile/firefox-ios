@@ -35,15 +35,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.backgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
         self.window!.makeKeyAndVisible()
 
-//#if MOZ_CHANNEL_AURORA
+#if MOZ_CHANNEL_AURORA
         checkForAuroraUpdate()
         registerFeedbackNotification()
-//#endif
+#endif
 
         return true
     }
 
-//#if MOZ_CHANNEL_AURORA
+#if MOZ_CHANNEL_AURORA
     var naggedAboutAuroraUpdate = false
     func applicationDidBecomeActive(application: UIApplication) {
         if !naggedAboutAuroraUpdate {
@@ -78,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSNotificationCenter.defaultCenter().removeObserver(self,
             name: UIApplicationUserDidTakeScreenshotNotification, object: nil)
     }
-//#endif
+#endif
 
     private func setupWebServer() {
         let server = WebServer.sharedInstance
@@ -114,7 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 
-//#if MOZ_CHANNEL_AURORA
+#if MOZ_CHANNEL_AURORA
 private let AuroraBundleIdentifier = "org.mozilla.ios.FennecAurora"
 private let AuroraPropertyListURL = "https://pvtbuilds.mozilla.org/ios/FennecAurora.plist"
 private let AuroraDownloadPageURL = "https://pvtbuilds.mozilla.org/ios/index.html"
@@ -195,4 +195,4 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
         mailComposeViewController.dismissViewControllerAnimated(true, completion: nil)
     }
 }
-//#endif
+#endif
