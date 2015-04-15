@@ -35,15 +35,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.backgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
         self.window!.makeKeyAndVisible()
 
-#if MOZ_CHANNEL_AURORA
+//#if MOZ_CHANNEL_AURORA
         checkForAuroraUpdate()
         registerFeedbackNotification()
-#endif
+//#endif
 
         return true
     }
 
-#if MOZ_CHANNEL_AURORA
+//#if MOZ_CHANNEL_AURORA
     var naggedAboutAuroraUpdate = false
     func applicationDidBecomeActive(application: UIApplication) {
         if !naggedAboutAuroraUpdate {
@@ -64,12 +64,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UIApplicationUserDidTakeScreenshotNotification,
             object: nil,
             queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
-                UIGraphicsBeginImageContext(self.window.bounds.size)
-                self.window.drawViewHierarchyInRect(self.window.bounds, afterScreenUpdates: true)
-                let image = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
-                
-                self.sendFeedbackMailWithImage(image)
+                if let window = self.window {
+                    UIGraphicsBeginImageContext(window.bounds.size)
+                    window.drawViewHierarchyInRect(window.bounds, afterScreenUpdates: true)
+                    let image = UIGraphicsGetImageFromCurrentImageContext()
+                    UIGraphicsEndImageContext()
+                    self.sendFeedbackMailWithImage(image)
+                }
         }
     }
     
@@ -77,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSNotificationCenter.defaultCenter().removeObserver(self,
             name: UIApplicationUserDidTakeScreenshotNotification, object: nil)
     }
-#endif
+//#endif
 
     private func setupWebServer() {
         let server = WebServer.sharedInstance
@@ -113,7 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 
-#if MOZ_CHANNEL_AURORA
+//#if MOZ_CHANNEL_AURORA
 private let AuroraBundleIdentifier = "org.mozilla.ios.FennecAurora"
 private let AuroraPropertyListURL = "https://pvtbuilds.mozilla.org/ios/FennecAurora.plist"
 private let AuroraDownloadPageURL = "https://pvtbuilds.mozilla.org/ios/index.html"
@@ -129,7 +130,7 @@ extension AppDelegate: UIAlertViewDelegate {
             if let localVersion = localVersion() {
                 fetchLatestAuroraVersion() { version in
                     if let remoteVersion = version {
-                        if localVersion.compare(remoteVersion, options: NSStringCompareOptions.NumericSearch) == NSComparisonResult.OrderedAscending {
+                        if localVersion.compare(remoteVersion as String, options: NSStringCompareOptions.NumericSearch) == NSComparisonResult.OrderedAscending {
                             self.naggedAboutAuroraUpdate = true
 
                             let alert = UIAlertView(title: AppUpdateTitle, message: AppUpdateMessage, delegate: self, cancelButtonTitle: AppUpdateCancel, otherButtonTitles: AppUpdateOK)
@@ -146,11 +147,11 @@ extension AppDelegate: UIAlertViewDelegate {
     }
 
     private func localVersion() -> NSString? {
-        return NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey) as? String
+        return NSBundle.mainBundle().objectForInfoDictionaryKey(String(kCFBundleVersionKey)) as? NSString
     }
 
     private func fetchLatestAuroraVersion(completionHandler: NSString? -> Void) {
-        Alamofire.request(.GET, AuroraPropertyListURL).responsePropertyList({ (_, _, object, _) -> Void in
+        Alamofire.request(.GET, AuroraPropertyListURL).responsePropertyList(options: NSPropertyListReadOptions.allZeros, completionHandler: { (_, _, object, _) -> Void in
             if let plist = object as? NSDictionary {
                 if let items = plist["items"] as? NSArray {
                     if let item = items[0] as? NSDictionary {
@@ -177,16 +178,16 @@ extension AppDelegate: UIAlertViewDelegate {
 extension AppDelegate: MFMailComposeViewControllerDelegate {
     func sendFeedbackMailWithImage(image: UIImage) {
         if (MFMailComposeViewController.canSendMail()) {
-            let buildNumber = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey) as String
-
-            let mailComposeViewController = MFMailComposeViewController()
-            mailComposeViewController.mailComposeDelegate = self
-            mailComposeViewController.setSubject("Feedback on iOS client version v\(appVersion) (\(buildNumber))")
-            mailComposeViewController.setToRecipients(["ios-feedback@mozilla.com"])
-            
-            let imageData = UIImagePNGRepresentation(image)
-            mailComposeViewController.addAttachmentData(imageData, mimeType: "image/png", fileName: "feedback.png")
-            self.window.rootViewController?.presentViewController(mailComposeViewController, animated: true, completion: nil)
+            if let buildNumber = NSBundle.mainBundle().objectForInfoDictionaryKey(String(kCFBundleVersionKey)) as? NSString {
+                let mailComposeViewController = MFMailComposeViewController()
+                mailComposeViewController.mailComposeDelegate = self
+                mailComposeViewController.setSubject("Feedback on iOS client version v\(appVersion) (\(buildNumber))")
+                mailComposeViewController.setToRecipients(["ios-feedback@mozilla.com"])
+                
+                let imageData = UIImagePNGRepresentation(image)
+                mailComposeViewController.addAttachmentData(imageData, mimeType: "image/png", fileName: "feedback.png")
+                window?.rootViewController?.presentViewController(mailComposeViewController, animated: true, completion: nil)
+            }
         }
     }
     
@@ -194,4 +195,4 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
         mailComposeViewController.dismissViewControllerAnimated(true, completion: nil)
     }
 }
-#endif
+//#endif
