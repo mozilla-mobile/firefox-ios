@@ -382,6 +382,7 @@
 		E43A4E551A96B88100E25676 /* GCDWebServerDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D1E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m */; };
 		E4424B201AC6EBE100F44C38 /* ReaderSettings.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4424B1F1AC6EBE100F44C38 /* ReaderSettings.xcassets */; };
 		E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4424B3B1AC71FB400F44C38 /* FiraSans-Book.ttf */; };
+		E4483B5A1ADED63300B485A7 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */; };
 		E487B2331AC1C64300F3E86F /* FiraSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7561A793CF20022C5E0 /* FiraSans-Regular.ttf */; };
 		E487B24E1AC1C66400F3E86F /* FiraSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7571A793CF20022C5E0 /* FiraSans-SemiBold.ttf */; };
@@ -417,6 +418,62 @@
 		E4CD9F541A71506400318571 /* Reader.html in Resources */ = {isa = PBXBuildFile; fileRef = E4CD9F531A71506400318571 /* Reader.html */; };
 		E4CD9F5B1A71506C00318571 /* Reader.css in Resources */ = {isa = PBXBuildFile; fileRef = E4CD9F5A1A71506C00318571 /* Reader.css */; };
 		E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9F6C1A77DD2800318571 /* ReaderModeStyleViewController.swift */; };
+		E4D5671D1ADECE2700F1EFE7 /* ReadingList.h in Headers */ = {isa = PBXBuildFile; fileRef = E4D5671C1ADECE2700F1EFE7 /* ReadingList.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E4D567231ADECE2700F1EFE7 /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
+		E4D5672F1ADECE2800F1EFE7 /* ReadingList.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; };
+		E4D567301ADECE2800F1EFE7 /* ReadingList.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E4D5676A1ADECE8100F1EFE7 /* ReadingListAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567551ADECE8100F1EFE7 /* ReadingListAuthenticator.swift */; };
+		E4D5676B1ADECE8100F1EFE7 /* ReadingListAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567551ADECE8100F1EFE7 /* ReadingListAuthenticator.swift */; };
+		E4D5676C1ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567561ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift */; };
+		E4D5676D1ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567561ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift */; };
+		E4D5676E1ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567571ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift */; };
+		E4D5676F1ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567571ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift */; };
+		E4D567701ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567581ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift */; };
+		E4D567711ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567581ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift */; };
+		E4D567721ADECE8100F1EFE7 /* ReadingListClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567591ADECE8100F1EFE7 /* ReadingListClient.swift */; };
+		E4D567731ADECE8100F1EFE7 /* ReadingListClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567591ADECE8100F1EFE7 /* ReadingListClient.swift */; };
+		E4D567741ADECE8100F1EFE7 /* ReadingListClientMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675A1ADECE8100F1EFE7 /* ReadingListClientMetadata.swift */; };
+		E4D567751ADECE8100F1EFE7 /* ReadingListClientMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675A1ADECE8100F1EFE7 /* ReadingListClientMetadata.swift */; };
+		E4D567761ADECE8100F1EFE7 /* ReadingListClientRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675B1ADECE8100F1EFE7 /* ReadingListClientRecord.swift */; };
+		E4D567771ADECE8100F1EFE7 /* ReadingListClientRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675B1ADECE8100F1EFE7 /* ReadingListClientRecord.swift */; };
+		E4D5677A1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675D1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift */; };
+		E4D5677B1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675D1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift */; };
+		E4D5677C1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675E1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift */; };
+		E4D5677D1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675E1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift */; };
+		E4D5677E1ADECE8100F1EFE7 /* ReadingListRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675F1ADECE8100F1EFE7 /* ReadingListRecord.swift */; };
+		E4D5677F1ADECE8100F1EFE7 /* ReadingListRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5675F1ADECE8100F1EFE7 /* ReadingListRecord.swift */; };
+		E4D567801ADECE8100F1EFE7 /* ReadingListRecordResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567601ADECE8100F1EFE7 /* ReadingListRecordResponse.swift */; };
+		E4D567811ADECE8100F1EFE7 /* ReadingListRecordResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567601ADECE8100F1EFE7 /* ReadingListRecordResponse.swift */; };
+		E4D567821ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567611ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift */; };
+		E4D567831ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567611ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift */; };
+		E4D567841ADECE8100F1EFE7 /* ReadingListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567621ADECE8100F1EFE7 /* ReadingListResponse.swift */; };
+		E4D567851ADECE8100F1EFE7 /* ReadingListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567621ADECE8100F1EFE7 /* ReadingListResponse.swift */; };
+		E4D567861ADECE8100F1EFE7 /* ReadingListServerMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567631ADECE8100F1EFE7 /* ReadingListServerMetadata.swift */; };
+		E4D567871ADECE8100F1EFE7 /* ReadingListServerMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567631ADECE8100F1EFE7 /* ReadingListServerMetadata.swift */; };
+		E4D567881ADECE8100F1EFE7 /* ReadingListServerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567641ADECE8100F1EFE7 /* ReadingListServerRecord.swift */; };
+		E4D567891ADECE8100F1EFE7 /* ReadingListServerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567641ADECE8100F1EFE7 /* ReadingListServerRecord.swift */; };
+		E4D5678A1ADECE8100F1EFE7 /* ReadingListSQLStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567651ADECE8100F1EFE7 /* ReadingListSQLStorage.swift */; };
+		E4D5678B1ADECE8100F1EFE7 /* ReadingListSQLStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567651ADECE8100F1EFE7 /* ReadingListSQLStorage.swift */; };
+		E4D5678C1ADECE8100F1EFE7 /* ReadingListStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567661ADECE8100F1EFE7 /* ReadingListStorage.swift */; };
+		E4D5678D1ADECE8100F1EFE7 /* ReadingListStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567661ADECE8100F1EFE7 /* ReadingListStorage.swift */; };
+		E4D5678E1ADECE8100F1EFE7 /* ReadingListSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567671ADECE8100F1EFE7 /* ReadingListSynchronizer.swift */; };
+		E4D5678F1ADECE8100F1EFE7 /* ReadingListSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567671ADECE8100F1EFE7 /* ReadingListSynchronizer.swift */; };
+		E4D567901ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567681ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift */; };
+		E4D567911ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567681ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift */; };
+		E4D567921ADECE8100F1EFE7 /* ReadingListUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567691ADECE8100F1EFE7 /* ReadingListUtils.swift */; };
+		E4D567931ADECE8100F1EFE7 /* ReadingListUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567691ADECE8100F1EFE7 /* ReadingListUtils.swift */; };
+		E4D5679E1ADECEB800F1EFE7 /* ReadingListBatchRecordResponseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567941ADECEB800F1EFE7 /* ReadingListBatchRecordResponseTestCase.swift */; };
+		E4D5679F1ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567951ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift */; };
+		E4D567A01ADECEB800F1EFE7 /* ReadingListClientTestCase.json in Resources */ = {isa = PBXBuildFile; fileRef = E4D567961ADECEB800F1EFE7 /* ReadingListClientTestCase.json */; };
+		E4D567A11ADECEB800F1EFE7 /* ReadingListClientTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567971ADECEB800F1EFE7 /* ReadingListClientTestCase.swift */; };
+		E4D567A31ADECEB800F1EFE7 /* ReadingListFetchSpecTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567991ADECEB800F1EFE7 /* ReadingListFetchSpecTestCase.swift */; };
+		E4D567A41ADECEB800F1EFE7 /* ReadingListOAuthAuthenticatorTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5679A1ADECEB800F1EFE7 /* ReadingListOAuthAuthenticatorTestCase.swift */; };
+		E4D567A51ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5679B1ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift */; };
+		E4D567A61ADECEB800F1EFE7 /* ReadingListSynchronizerTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5679C1ADECEB800F1EFE7 /* ReadingListSynchronizerTestCase.swift */; };
+		E4D567A71ADECEB800F1EFE7 /* ReadingListTestCaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5679D1ADECEB800F1EFE7 /* ReadingListTestCaseUtils.swift */; };
+		E4D567BD1ADED48700F1EFE7 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567B41ADED44A00F1EFE7 /* SQLite.framework */; };
+		E4D567BE1ADED4BB00F1EFE7 /* SQLite.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567B41ADED44A00F1EFE7 /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E4D567BF1ADED4DE00F1EFE7 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567B41ADED44A00F1EFE7 /* SQLite.framework */; };
 		E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */; };
 		E4D8F3B01ACDD5150005A2E4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E4D8F3B21ACDD5150005A2E4 /* InfoPlist.strings */; };
 		E4ECCD8D1AB091470005E717 /* Reader.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4ECCD8C1AB091470005E717 /* Reader.xcassets */; };
@@ -855,6 +912,62 @@
 			remoteGlobalIDString = 28F951FA19D0F9FA00DCE892;
 			remoteInfo = FxA;
 		};
+		E4D567241ADECE2700F1EFE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4D567171ADECE2700F1EFE7;
+			remoteInfo = ReadingList;
+		};
+		E4D567261ADECE2800F1EFE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
+			remoteInfo = Client;
+		};
+		E4D5672D1ADECE2800F1EFE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4D567171ADECE2700F1EFE7;
+			remoteInfo = ReadingList;
+		};
+		E4D567B31ADED44A00F1EFE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DC3773F319C8CBB3004FCF85;
+			remoteInfo = SQLite;
+		};
+		E4D567B51ADED44A00F1EFE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DC3773FE19C8CBB3004FCF85;
+			remoteInfo = "SQLite Tests";
+		};
+		E4D567B71ADED44A00F1EFE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DCC6B3801A9191C300734B78;
+			remoteInfo = SQLiteCipher;
+		};
+		E4D567B91ADED44A00F1EFE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DCC6B3921A9191D100734B78;
+			remoteInfo = "SQLiteCipher Tests";
+		};
+		E4D567BB1ADED44A00F1EFE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DCAE4D151ABE0B3300EFCE7A;
+			remoteInfo = sqlite3;
+		};
 		F84B21D41A090F8100AAB793 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -895,6 +1008,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				E4D567BE1ADED4BB00F1EFE7 /* SQLite.framework in Copy Frameworks */,
+				E4D567301ADECE2800F1EFE7 /* ReadingList.framework in Copy Frameworks */,
 				2F44FA161A9D41A200FD20CC /* Base32.framework in Copy Frameworks */,
 				D38B2D881A8D98700040E6B5 /* SWXMLHash.framework in Copy Frameworks */,
 				2FCAE2321ABB51F800877008 /* Storage.framework in Copy Frameworks */,
@@ -1207,6 +1322,41 @@
 		E4CD9F531A71506400318571 /* Reader.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Reader.html; sourceTree = "<group>"; };
 		E4CD9F5A1A71506C00318571 /* Reader.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = Reader.css; sourceTree = "<group>"; };
 		E4CD9F6C1A77DD2800318571 /* ReaderModeStyleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleViewController.swift; sourceTree = "<group>"; };
+		E4D567181ADECE2700F1EFE7 /* ReadingList.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReadingList.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4D5671B1ADECE2700F1EFE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4D5671C1ADECE2700F1EFE7 /* ReadingList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReadingList.h; sourceTree = "<group>"; };
+		E4D567221ADECE2700F1EFE7 /* ReadingListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReadingListTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4D5672A1ADECE2800F1EFE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4D567551ADECE8100F1EFE7 /* ReadingListAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListAuthenticator.swift; sourceTree = "<group>"; };
+		E4D567561ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListBasicAuthAuthenticator.swift; sourceTree = "<group>"; };
+		E4D567571ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListBatchRecordResponse.swift; sourceTree = "<group>"; };
+		E4D567581ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListChangeAccumulator.swift; sourceTree = "<group>"; };
+		E4D567591ADECE8100F1EFE7 /* ReadingListClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListClient.swift; sourceTree = "<group>"; };
+		E4D5675A1ADECE8100F1EFE7 /* ReadingListClientMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListClientMetadata.swift; sourceTree = "<group>"; };
+		E4D5675B1ADECE8100F1EFE7 /* ReadingListClientRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListClientRecord.swift; sourceTree = "<group>"; };
+		E4D5675D1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListFetchSpec.swift; sourceTree = "<group>"; };
+		E4D5675E1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListOAuthAuthenticator.swift; sourceTree = "<group>"; };
+		E4D5675F1ADECE8100F1EFE7 /* ReadingListRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListRecord.swift; sourceTree = "<group>"; };
+		E4D567601ADECE8100F1EFE7 /* ReadingListRecordResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListRecordResponse.swift; sourceTree = "<group>"; };
+		E4D567611ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListRecordsResponse.swift; sourceTree = "<group>"; };
+		E4D567621ADECE8100F1EFE7 /* ReadingListResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListResponse.swift; sourceTree = "<group>"; };
+		E4D567631ADECE8100F1EFE7 /* ReadingListServerMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListServerMetadata.swift; sourceTree = "<group>"; };
+		E4D567641ADECE8100F1EFE7 /* ReadingListServerRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListServerRecord.swift; sourceTree = "<group>"; };
+		E4D567651ADECE8100F1EFE7 /* ReadingListSQLStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListSQLStorage.swift; sourceTree = "<group>"; };
+		E4D567661ADECE8100F1EFE7 /* ReadingListStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListStorage.swift; sourceTree = "<group>"; };
+		E4D567671ADECE8100F1EFE7 /* ReadingListSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListSynchronizer.swift; sourceTree = "<group>"; };
+		E4D567681ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListSyncMetadata.swift; sourceTree = "<group>"; };
+		E4D567691ADECE8100F1EFE7 /* ReadingListUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListUtils.swift; sourceTree = "<group>"; };
+		E4D567941ADECEB800F1EFE7 /* ReadingListBatchRecordResponseTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListBatchRecordResponseTestCase.swift; sourceTree = "<group>"; };
+		E4D567951ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListClientRecordTestCase.swift; sourceTree = "<group>"; };
+		E4D567961ADECEB800F1EFE7 /* ReadingListClientTestCase.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ReadingListClientTestCase.json; sourceTree = "<group>"; };
+		E4D567971ADECEB800F1EFE7 /* ReadingListClientTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListClientTestCase.swift; sourceTree = "<group>"; };
+		E4D567991ADECEB800F1EFE7 /* ReadingListFetchSpecTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListFetchSpecTestCase.swift; sourceTree = "<group>"; };
+		E4D5679A1ADECEB800F1EFE7 /* ReadingListOAuthAuthenticatorTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListOAuthAuthenticatorTestCase.swift; sourceTree = "<group>"; };
+		E4D5679B1ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListStorageTestCase.swift; sourceTree = "<group>"; };
+		E4D5679C1ADECEB800F1EFE7 /* ReadingListSynchronizerTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListSynchronizerTestCase.swift; sourceTree = "<group>"; };
+		E4D5679D1ADECEB800F1EFE7 /* ReadingListTestCaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListTestCaseUtils.swift; sourceTree = "<group>"; };
+		E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLite.xcodeproj; path = Carthage/Checkouts/SQLite.swift/SQLite.xcodeproj; sourceTree = "<group>"; };
 		E4D6BEB51A092E0300F538BD /* Fennec.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Fennec.entitlements; sourceTree = "<group>"; };
 		E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		E4D8F3B11ACDD5150005A2E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1261,11 +1411,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4D567BD1ADED48700F1EFE7 /* SQLite.framework in Frameworks */,
 				0B6544D31A96C5F0000DD202 /* libSDWebImage.a in Frameworks */,
 				288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */,
 				2FCAE2311ABB51F800877008 /* Storage.framework in Frameworks */,
 				2FA436121ABB83B4008031D1 /* Account.framework in Frameworks */,
 				D3589EF71A8D930000F28118 /* libz.dylib in Frameworks */,
+				E4D5672F1ADECE2800F1EFE7 /* ReadingList.framework in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
 				E4A888161A95679500CDC337 /* FxA.framework in Frameworks */,
 				39A362D91AAF5ECE00F47390 /* XCGLogger.framework in Frameworks */,
@@ -1312,6 +1464,23 @@
 				D38B2D751A8D97A40040E6B5 /* libKIF.a in Frameworks */,
 				D3E171C01A83FB6300AB44CD /* libz.dylib in Frameworks */,
 				D39FA16C1A83E17800EE869C /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4D567141ADECE2700F1EFE7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4483B5A1ADED63300B485A7 /* Shared.framework in Frameworks */,
+				E4D567BF1ADED4DE00F1EFE7 /* SQLite.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4D5671F1ADECE2700F1EFE7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4D567231ADECE2700F1EFE7 /* ReadingList.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1912,7 +2081,6 @@
 		E42CCDFF1A24C4E300B794D3 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				0BAC7A7F1AC4B135006018CB /* AppConstants.swift */,
 				2FCAE2401ABB531100877008 /* Bytes.swift */,
 				D35275151AA8D13B00E9C906 /* ColorUtils.swift */,
 				E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */,
@@ -1934,6 +2102,80 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		E4D567191ADECE2700F1EFE7 /* ReadingList */ = {
+			isa = PBXGroup;
+			children = (
+				E4D567551ADECE8100F1EFE7 /* ReadingListAuthenticator.swift */,
+				E4D567561ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift */,
+				E4D567571ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift */,
+				E4D567581ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift */,
+				E4D567591ADECE8100F1EFE7 /* ReadingListClient.swift */,
+				E4D5675A1ADECE8100F1EFE7 /* ReadingListClientMetadata.swift */,
+				E4D5675B1ADECE8100F1EFE7 /* ReadingListClientRecord.swift */,
+				E4D5675D1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift */,
+				E4D5675E1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift */,
+				E4D5675F1ADECE8100F1EFE7 /* ReadingListRecord.swift */,
+				E4D567601ADECE8100F1EFE7 /* ReadingListRecordResponse.swift */,
+				E4D567611ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift */,
+				E4D567621ADECE8100F1EFE7 /* ReadingListResponse.swift */,
+				E4D567631ADECE8100F1EFE7 /* ReadingListServerMetadata.swift */,
+				E4D567641ADECE8100F1EFE7 /* ReadingListServerRecord.swift */,
+				E4D567651ADECE8100F1EFE7 /* ReadingListSQLStorage.swift */,
+				E4D567661ADECE8100F1EFE7 /* ReadingListStorage.swift */,
+				E4D567671ADECE8100F1EFE7 /* ReadingListSynchronizer.swift */,
+				E4D567681ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift */,
+				E4D567691ADECE8100F1EFE7 /* ReadingListUtils.swift */,
+				E4D5671C1ADECE2700F1EFE7 /* ReadingList.h */,
+				E4D5671A1ADECE2700F1EFE7 /* Supporting Files */,
+			);
+			path = ReadingList;
+			sourceTree = "<group>";
+		};
+		E4D5671A1ADECE2700F1EFE7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E4D5671B1ADECE2700F1EFE7 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E4D567281ADECE2800F1EFE7 /* ReadingListTests */ = {
+			isa = PBXGroup;
+			children = (
+				E4D567941ADECEB800F1EFE7 /* ReadingListBatchRecordResponseTestCase.swift */,
+				E4D567951ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift */,
+				E4D567961ADECEB800F1EFE7 /* ReadingListClientTestCase.json */,
+				E4D567971ADECEB800F1EFE7 /* ReadingListClientTestCase.swift */,
+				E4D567991ADECEB800F1EFE7 /* ReadingListFetchSpecTestCase.swift */,
+				E4D5679A1ADECEB800F1EFE7 /* ReadingListOAuthAuthenticatorTestCase.swift */,
+				E4D5679B1ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift */,
+				E4D5679C1ADECEB800F1EFE7 /* ReadingListSynchronizerTestCase.swift */,
+				E4D5679D1ADECEB800F1EFE7 /* ReadingListTestCaseUtils.swift */,
+				E4D567291ADECE2800F1EFE7 /* Supporting Files */,
+			);
+			path = ReadingListTests;
+			sourceTree = "<group>";
+		};
+		E4D567291ADECE2800F1EFE7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E4D5672A1ADECE2800F1EFE7 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E4D567AB1ADED44A00F1EFE7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E4D567B41ADED44A00F1EFE7 /* SQLite.framework */,
+				E4D567B61ADED44A00F1EFE7 /* SQLite Tests.xctest */,
+				E4D567B81ADED44A00F1EFE7 /* SQLite.framework */,
+				E4D567BA1ADED44A00F1EFE7 /* SQLiteCipher Tests.xctest */,
+				E4D567BC1ADED44A00F1EFE7 /* sqlite3.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
@@ -1952,12 +2194,15 @@
 				D38B2CD81A8D94CA0040E6B5 /* Snap.xcodeproj */,
 				D38B2D761A8D98380040E6B5 /* SWXMLHash.xcodeproj */,
 				39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */,
+				E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				2FA4360B1ABB83B4008031D1 /* AccountTests */,
 				F84B21C01A090F8100AAB793 /* Client */,
 				F84B21D61A090F8100AAB793 /* ClientTests */,
 				F8708D1E1A0970990051AB07 /* Extensions */,
 				28CE83B71A1D1D3200576538 /* FxAClient */,
+				E4D567191ADECE2700F1EFE7 /* ReadingList */,
+				E4D567281ADECE2800F1EFE7 /* ReadingListTests */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,
 				2FCAE21B1ABB51F800877008 /* Storage */,
@@ -1985,6 +2230,8 @@
 				2FA436051ABB83B4008031D1 /* AccountTests.xctest */,
 				2827315E1ABC9BE600AA1954 /* Sync.framework */,
 				282731681ABC9BE700AA1954 /* SyncTests.xctest */,
+				E4D567181ADECE2700F1EFE7 /* ReadingList.framework */,
+				E4D567221ADECE2700F1EFE7 /* ReadingListTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2193,6 +2440,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4D567151ADECE2700F1EFE7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4D5671D1ADECE2700F1EFE7 /* ReadingList.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -2354,6 +2609,43 @@
 			productReference = D39FA15F1A83E0EC00EE869C /* UITests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		E4D567171ADECE2700F1EFE7 /* ReadingList */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4D567531ADECE2900F1EFE7 /* Build configuration list for PBXNativeTarget "ReadingList" */;
+			buildPhases = (
+				E4D567131ADECE2700F1EFE7 /* Sources */,
+				E4D567141ADECE2700F1EFE7 /* Frameworks */,
+				E4D567151ADECE2700F1EFE7 /* Headers */,
+				E4D567161ADECE2700F1EFE7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ReadingList;
+			productName = ReadingList;
+			productReference = E4D567181ADECE2700F1EFE7 /* ReadingList.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		E4D567211ADECE2700F1EFE7 /* ReadingListTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4D567541ADECE2900F1EFE7 /* Build configuration list for PBXNativeTarget "ReadingListTests" */;
+			buildPhases = (
+				E4D5671E1ADECE2700F1EFE7 /* Sources */,
+				E4D5671F1ADECE2700F1EFE7 /* Frameworks */,
+				E4D567201ADECE2700F1EFE7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E4D567251ADECE2700F1EFE7 /* PBXTargetDependency */,
+				E4D567271ADECE2800F1EFE7 /* PBXTargetDependency */,
+			);
+			name = ReadingListTests;
+			productName = ReadingListTests;
+			productReference = E4D567221ADECE2700F1EFE7 /* ReadingListTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F84B21BD1A090F8100AAB793 /* Client */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F84B21DD1A090F8100AAB793 /* Build configuration list for PBXNativeTarget "Client" */;
@@ -2376,6 +2668,7 @@
 				2FCAE2301ABB51F800877008 /* PBXTargetDependency */,
 				2FA436111ABB83B4008031D1 /* PBXTargetDependency */,
 				282731741ABC9BE700AA1954 /* PBXTargetDependency */,
+				E4D5672E1ADECE2800F1EFE7 /* PBXTargetDependency */,
 			);
 			name = Client;
 			productName = Client;
@@ -2476,6 +2769,13 @@
 						CreatedOnToolsVersion = 6.1.1;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
+					E4D567171ADECE2700F1EFE7 = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					E4D567211ADECE2700F1EFE7 = {
+						CreatedOnToolsVersion = 6.3;
+						TestTargetID = F84B21BD1A090F8100AAB793;
+					};
 					F84B21BD1A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
 						SystemCapabilities = {
@@ -2553,6 +2853,10 @@
 					ProjectRef = D38B2CD81A8D94CA0040E6B5 /* Snap.xcodeproj */;
 				},
 				{
+					ProductGroup = E4D567AB1ADED44A00F1EFE7 /* Products */;
+					ProjectRef = E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */;
+				},
+				{
 					ProductGroup = D38B2D771A8D98380040E6B5 /* Products */;
 					ProjectRef = D38B2D761A8D98380040E6B5 /* SWXMLHash.xcodeproj */;
 				},
@@ -2575,6 +2879,8 @@
 				2FA436041ABB83B4008031D1 /* AccountTests */,
 				2827315D1ABC9BE600AA1954 /* Sync */,
 				282731671ABC9BE700AA1954 /* SyncTests */,
+				E4D567171ADECE2700F1EFE7 /* ReadingList */,
+				E4D567211ADECE2700F1EFE7 /* ReadingListTests */,
 			);
 		};
 /* End PBXProject section */
@@ -2796,6 +3102,41 @@
 			remoteRef = D38B2D861A8D98380040E6B5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		E4D567B41ADED44A00F1EFE7 /* SQLite.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SQLite.framework;
+			remoteRef = E4D567B31ADED44A00F1EFE7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E4D567B61ADED44A00F1EFE7 /* SQLite Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "SQLite Tests.xctest";
+			remoteRef = E4D567B51ADED44A00F1EFE7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E4D567B81ADED44A00F1EFE7 /* SQLite.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SQLite.framework;
+			remoteRef = E4D567B71ADED44A00F1EFE7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E4D567BA1ADED44A00F1EFE7 /* SQLiteCipher Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "SQLiteCipher Tests.xctest";
+			remoteRef = E4D567B91ADED44A00F1EFE7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E4D567BC1ADED44A00F1EFE7 /* sqlite3.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = sqlite3.framework;
+			remoteRef = E4D567BB1ADED44A00F1EFE7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -2855,6 +3196,21 @@
 			files = (
 				0B6FBAB21AC1F830007EC669 /* baseFile.html in Resources */,
 				D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4D567161ADECE2700F1EFE7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4D567201ADECE2700F1EFE7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4D567A01ADECEB800F1EFE7 /* ReadingListClientTestCase.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3171,6 +3527,68 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E4D567131ADECE2700F1EFE7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4D5677C1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift in Sources */,
+				E4D567841ADECE8100F1EFE7 /* ReadingListResponse.swift in Sources */,
+				E4D567921ADECE8100F1EFE7 /* ReadingListUtils.swift in Sources */,
+				E4D567761ADECE8100F1EFE7 /* ReadingListClientRecord.swift in Sources */,
+				E4D5678E1ADECE8100F1EFE7 /* ReadingListSynchronizer.swift in Sources */,
+				E4D567801ADECE8100F1EFE7 /* ReadingListRecordResponse.swift in Sources */,
+				E4D5678A1ADECE8100F1EFE7 /* ReadingListSQLStorage.swift in Sources */,
+				E4D567881ADECE8100F1EFE7 /* ReadingListServerRecord.swift in Sources */,
+				E4D567861ADECE8100F1EFE7 /* ReadingListServerMetadata.swift in Sources */,
+				E4D567901ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift in Sources */,
+				E4D5677A1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift in Sources */,
+				E4D567821ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift in Sources */,
+				E4D567721ADECE8100F1EFE7 /* ReadingListClient.swift in Sources */,
+				E4D5678C1ADECE8100F1EFE7 /* ReadingListStorage.swift in Sources */,
+				E4D5676A1ADECE8100F1EFE7 /* ReadingListAuthenticator.swift in Sources */,
+				E4D567741ADECE8100F1EFE7 /* ReadingListClientMetadata.swift in Sources */,
+				E4D567701ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift in Sources */,
+				E4D5676E1ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift in Sources */,
+				E4D5676C1ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift in Sources */,
+				E4D5677E1ADECE8100F1EFE7 /* ReadingListRecord.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4D5671E1ADECE2700F1EFE7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4D5678F1ADECE8100F1EFE7 /* ReadingListSynchronizer.swift in Sources */,
+				E4D567A71ADECEB800F1EFE7 /* ReadingListTestCaseUtils.swift in Sources */,
+				E4D567751ADECE8100F1EFE7 /* ReadingListClientMetadata.swift in Sources */,
+				E4D567A51ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift in Sources */,
+				E4D5676B1ADECE8100F1EFE7 /* ReadingListAuthenticator.swift in Sources */,
+				E4D5676F1ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift in Sources */,
+				E4D567A61ADECEB800F1EFE7 /* ReadingListSynchronizerTestCase.swift in Sources */,
+				E4D567A31ADECEB800F1EFE7 /* ReadingListFetchSpecTestCase.swift in Sources */,
+				E4D5677B1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift in Sources */,
+				E4D5679E1ADECEB800F1EFE7 /* ReadingListBatchRecordResponseTestCase.swift in Sources */,
+				E4D567811ADECE8100F1EFE7 /* ReadingListRecordResponse.swift in Sources */,
+				E4D567911ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift in Sources */,
+				E4D567931ADECE8100F1EFE7 /* ReadingListUtils.swift in Sources */,
+				E4D567711ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift in Sources */,
+				E4D5677D1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift in Sources */,
+				E4D567871ADECE8100F1EFE7 /* ReadingListServerMetadata.swift in Sources */,
+				E4D5677F1ADECE8100F1EFE7 /* ReadingListRecord.swift in Sources */,
+				E4D567A41ADECEB800F1EFE7 /* ReadingListOAuthAuthenticatorTestCase.swift in Sources */,
+				E4D567771ADECE8100F1EFE7 /* ReadingListClientRecord.swift in Sources */,
+				E4D567831ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift in Sources */,
+				E4D5679F1ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift in Sources */,
+				E4D567731ADECE8100F1EFE7 /* ReadingListClient.swift in Sources */,
+				E4D567891ADECE8100F1EFE7 /* ReadingListServerRecord.swift in Sources */,
+				E4D567A11ADECEB800F1EFE7 /* ReadingListClientTestCase.swift in Sources */,
+				E4D5678B1ADECE8100F1EFE7 /* ReadingListSQLStorage.swift in Sources */,
+				E4D5676D1ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift in Sources */,
+				E4D5678D1ADECE8100F1EFE7 /* ReadingListStorage.swift in Sources */,
+				E4D567851ADECE8100F1EFE7 /* ReadingListResponse.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F84B21BA1A090F8100AAB793 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3308,7 +3726,6 @@
 				D31A0FC81A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */,
 				E4ECCDC41AB1EADF0005E717 /* Browser.swift in Sources */,
-				59A687B4A05CC772FE7E5A09 /* SearchViewController.swift in Sources */,
 				59A680D1116F5BF6CCC9ED6F /* HistoryPanel.swift in Sources */,
 				59A687335CF58A8004B23508 /* BookmarksPanel.swift in Sources */,
 				59A68ACAB9DB4B3E04E5D1B7 /* ReaderPanel.swift in Sources */,
@@ -3503,6 +3920,21 @@
 			isa = PBXTargetDependency;
 			name = FxA;
 			targetProxy = E4A888181A95679500CDC337 /* PBXContainerItemProxy */;
+		};
+		E4D567251ADECE2700F1EFE7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4D567171ADECE2700F1EFE7 /* ReadingList */;
+			targetProxy = E4D567241ADECE2700F1EFE7 /* PBXContainerItemProxy */;
+		};
+		E4D567271ADECE2800F1EFE7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F84B21BD1A090F8100AAB793 /* Client */;
+			targetProxy = E4D567261ADECE2800F1EFE7 /* PBXContainerItemProxy */;
+		};
+		E4D5672E1ADECE2800F1EFE7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4D567171ADECE2700F1EFE7 /* ReadingList */;
+			targetProxy = E4D5672D1ADECE2800F1EFE7 /* PBXContainerItemProxy */;
 		};
 		F84B21D51A090F8100AAB793 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4560,6 +4992,254 @@
 			};
 			name = FennecNightly;
 		};
+		E4D567311ADECE2900F1EFE7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = ReadingList/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E4D567321ADECE2900F1EFE7 /* FennecAurora */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ReadingList/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = FennecAurora;
+		};
+		E4D567331ADECE2900F1EFE7 /* FennecNightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ReadingList/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = FennecNightly;
+		};
+		E4D567341ADECE2900F1EFE7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = ReadingListTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+			};
+			name = Debug;
+		};
+		E4D567351ADECE2900F1EFE7 /* FennecAurora */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ReadingListTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FennecAurora;
+		};
+		E4D567361ADECE2900F1EFE7 /* FennecNightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ReadingListTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FennecNightly;
+		};
 		F84B21DB1A090F8100AAB793 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4931,6 +5611,26 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		E4D567531ADECE2900F1EFE7 /* Build configuration list for PBXNativeTarget "ReadingList" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4D567311ADECE2900F1EFE7 /* Debug */,
+				E4D567321ADECE2900F1EFE7 /* FennecAurora */,
+				E4D567331ADECE2900F1EFE7 /* FennecNightly */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = FennecAurora;
+		};
+		E4D567541ADECE2900F1EFE7 /* Build configuration list for PBXNativeTarget "ReadingListTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4D567341ADECE2900F1EFE7 /* Debug */,
+				E4D567351ADECE2900F1EFE7 /* FennecAurora */,
+				E4D567361ADECE2900F1EFE7 /* FennecNightly */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = FennecAurora;
 		};
 		F84B21B91A090F8100AAB793 /* Build configuration list for PBXProject "Client" */ = {
 			isa = XCConfigurationList;
