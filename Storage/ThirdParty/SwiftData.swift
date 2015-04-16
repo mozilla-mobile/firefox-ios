@@ -47,6 +47,10 @@ public class SwiftData {
     let filename: String
     init(filename: String) {
         self.filename = filename
+
+        // Ensure that multi-thread mode is enabled by default.
+        // See https://www.sqlite.org/threadsafe.html
+        assert(sqlite3_threadsafe() == 2)
     }
 
     /**
