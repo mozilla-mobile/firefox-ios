@@ -62,6 +62,7 @@ class TokenServerClientTests: LiveAccountTest {
                     XCTAssertNotNil(token.api_endpoint)
                     XCTAssertTrue(token.uid >= 0)
                     XCTAssertTrue(token.api_endpoint.hasSuffix(String(token.uid)))
+                    XCTAssertTrue(token.remoteTimestamp >= 1429121686000) // Not a special timestamp; just a sanity check.
                 } else {
                     XCTAssertEqual(result.failureValue!.description, "")
                 }
@@ -85,9 +86,11 @@ class TokenServerClientTests: LiveAccountTest {
                 } else {
                     if let error = result.failureValue as? TokenServerError {
                         switch error {
-                        case let .Remote(code: code, status: status):
+                        case let .Remote(code, status, remoteTimestamp):
                             XCTAssertEqual(code, Int32(401)) // Bad auth.
                             XCTAssertEqual(status!, "error")
+                            XCTAssertFalse(remoteTimestamp == nil)
+                            XCTAssertTrue(remoteTimestamp >= 1429121686000) // Not a special timestamp; just a sanity check.
                         case let .Local(error):
                             XCTAssertNil(error)
                         }
