@@ -127,6 +127,63 @@ public class BrowserProfile: Profile {
         return SQLiteRemoteClientsAndTabs(files: self.files)
     }()
 
+    private class func syncClientsToStorage(storage: RemoteClientsAndTabs, prefs: Prefs, ready: Ready) -> Deferred<Result<Ready>> {
+        let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, prefs: prefs)
+        let success = clientSynchronizer.synchronizeLocalClients(storage, withServer: ready.client, info: ready.info)
+        return success >>== always(ready)
+    }
+
+    public func getClients() -> Deferred<Result<[RemoteClient]>> {
+        if let account = self.account {
+            // TODO: get from the account itself.
+            let url = ProductionSync15Configuration().tokenServerEndpointURL
+            let authState = account.syncAuthState(url)
+
+            let syncPrefs = self.prefs.branch("sync")
+            let storage = self.remoteClientsAndTabs
+
+            let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
+
+            let syncClients = curry(BrowserProfile.syncClientsToStorage)(storage, syncPrefs)
+
+            return ready
+              >>== syncClients
+               >>> { return storage.getClients() }
+        }
+
+        return deferResult(NoAccountError())
+    }
+
+    public func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
+
+        func syncTabsToStorage(storage: RemoteClientsAndTabs, prefs: Prefs, ready: Ready) -> Deferred<Result<RemoteClientsAndTabs>> {
+            let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, prefs: prefs)
+            let success = tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
+            return success >>== always(storage)
+        }
+
+        if let account = self.account {
+            // TODO: get from the account itself.
+            let url = ProductionSync15Configuration().tokenServerEndpointURL
+            let authState = account.syncAuthState(url)
+
+            let syncPrefs = self.prefs.branch("sync")
+            let storage = self.remoteClientsAndTabs
+
+            let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
+
+            let syncClients = curry(BrowserProfile.syncClientsToStorage)(storage, syncPrefs)
+            let syncTabs = curry(syncTabsToStorage)(storage, syncPrefs)
+
+            return ready
+              >>== syncClients
+              >>== syncTabs
+               >>> { return storage.getClientsAndTabs() }
+        }
+
+        return deferResult(NoAccountError())
+    }
+
     lazy var passwords: Passwords = {
         return SQLitePasswords(files: self.files)
     }()

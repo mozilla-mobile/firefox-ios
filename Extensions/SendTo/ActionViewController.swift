@@ -58,7 +58,7 @@ class ClientPickerViewController: UITableViewController {
     }
     
     private func reloadClients() {
-        profile?.remoteClientsAndTabs.getClients().upon({ result in
+        profile?.getClients().upon({ result in
             self.refreshControl?.endRefreshing()
             if let c = result.successValue {
                 self.clients = c
