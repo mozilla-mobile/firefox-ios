@@ -4,6 +4,7 @@
 
 import UIKit
 import Storage
+import ReadingList
 
 private struct ReadingListPanelUX {
     static let RowHeight: CGFloat = 86
@@ -116,7 +117,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         deleteButton.setTitle(ReadingListTableViewCellUX.DeleteButtonTitleText, forState: UIControlState.Normal)
         deleteButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         deleteButton.titleEdgeInsets = ReadingListTableViewCellUX.DeleteButtonTitleEdgeInsets
-        //rightUtilityButtons = [deleteButton]
+        rightUtilityButtons = [deleteButton]
 
         markAsReadButton.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
         markAsReadButton.titleLabel?.font = ReadingListTableViewCellUX.MarkAsReadButtonTitleFont
@@ -126,7 +127,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         markAsReadButton.setTitle(ReadingListTableViewCellUX.MarkAsReadButtonTitleText, forState: UIControlState.Normal)
         markAsReadButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         markAsReadButton.titleEdgeInsets = ReadingListTableViewCellUX.MarkAsReadButtonTitleEdgeInsets
-        //leftUtilityButtons = [markAsReadButton]
+        leftUtilityButtons = [markAsReadButton]
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -150,7 +151,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
 
-    private var data: Cursor?
+    private var records: [ReadingListClientRecord]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -161,9 +162,8 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     }
 
     override func viewWillAppear(animated: Bool) {
-        profile.readingList.get { (cursor) -> Void in
-            self.data = cursor
-            self.tableView.reloadData()
+        if let result = profile.readingList?.getAvailableRecords() where result.isSuccess {
+            records = result.successValue
         }
     }
 
@@ -172,16 +172,16 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data?.count ?? 0
+        return records?.count ?? 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ReadingListTableViewCell", forIndexPath: indexPath) as! ReadingListTableViewCell
         cell.delegate = self
-        if let item = data?[indexPath.row] as? ReadingListItem {
-            cell.title = item.title!
-            cell.url = NSURL(string: item.url)!
-            cell.unread = item.isUnread
+        if let record = records?[indexPath.row] {
+            cell.title = record.title
+            cell.url = NSURL(string: record.url)!
+            cell.unread = record.unread
         }
         return cell
     }
@@ -189,19 +189,22 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     func swipeableTableViewCell(cell: SWTableViewCell!, didTriggerLeftUtilityButtonWithIndex index: Int) {
         if let cell = cell as? ReadingListTableViewCell {
             cell.hideUtilityButtonsAnimated(true)
-            if let indexPath = tableView.indexPathForCell(cell) {
-                // TODO Hook up data store
-                //data[indexPath.row].unread = !data[indexPath.row].unread
-                tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            if let indexPath = tableView.indexPathForCell(cell), record = records?[indexPath.row] {
+                if let result = profile.readingList?.updateRecord(record, unread: !record.unread) where result.isSuccess {
+                    // TODO This is a bit odd because the success value of the update is an optional optional Record
+                    if let successValue = result.successValue, updatedRecord = successValue {
+                        records?[indexPath.row] = updatedRecord
+                        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                    }
+                }
             }
         }
     }
 
     func swipeableTableViewCell(cell: SWTableViewCell!, didTriggerRightUtilityButtonWithIndex index: Int) {
-        if let cell = cell as? ReadingListTableViewCell {
-            if let indexPath = tableView.indexPathForCell(cell) {
-                // TODO Hook up data store
-                //data.removeAtIndex(indexPath.row)
+        if let cell = cell as? ReadingListTableViewCell, indexPath = tableView.indexPathForCell(cell), record = records?[indexPath.row] {
+            if let result = profile.readingList?.deleteRecord(record) where result.isSuccess {
+                records?.removeAtIndex(indexPath.row)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
             }
         }
@@ -209,11 +212,8 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
-        // TODO Hook up data store
-        if let item = data?[indexPath.row] as? ReadingListItem {
-            if let encodedURL = ReaderModeUtils.encodeURL(NSURL(string: item.url)!) {
-                homePanelDelegate?.homePanel(self, didSelectURL: encodedURL)
-            }
+        if let record = records?[indexPath.row], encodedURL = ReaderModeUtils.encodeURL(NSURL(string: record.url)!) {
+            homePanelDelegate?.homePanel(self, didSelectURL: encodedURL)
         }
     }
 }

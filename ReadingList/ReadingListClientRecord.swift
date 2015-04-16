@@ -4,19 +4,19 @@
 
 import Foundation
 
-struct ReadingListClientRecord: Equatable {
-    let clientMetadata: ReadingListClientMetadata
-    let serverMetadata: ReadingListServerMetadata?
+public struct ReadingListClientRecord: Equatable {
+    public let clientMetadata: ReadingListClientMetadata
+    public let serverMetadata: ReadingListServerMetadata?
 
-    let url: String
-    let title: String
-    let addedBy: String
-    let unread: Bool
-    let archived: Bool
-    let favorite: Bool
+    public let url: String
+    public let title: String
+    public let addedBy: String
+    public let unread: Bool
+    public let archived: Bool
+    public let favorite: Bool
 
     /// Initializer for when a record is loaded from a database row
-    init?(row: AnyObject) {
+    public init?(row: AnyObject) {
         let clientMetadata = ReadingListClientMetadata(row: row)
         if clientMetadata == nil {
             return nil
@@ -50,7 +50,7 @@ struct ReadingListClientRecord: Equatable {
         self.favorite = favorite!
     }
 
-    var json: AnyObject {
+    public var json: AnyObject {
         get {
             let json = NSMutableDictionary()
             json["url"] = url
@@ -64,7 +64,7 @@ struct ReadingListClientRecord: Equatable {
     }
 }
 
-func ==(lhs: ReadingListClientRecord, rhs: ReadingListClientRecord) -> Bool {
+public func ==(lhs: ReadingListClientRecord, rhs: ReadingListClientRecord) -> Bool {
     return lhs.clientMetadata == rhs.clientMetadata
         && lhs.serverMetadata == rhs.serverMetadata
         && lhs.url == rhs.url

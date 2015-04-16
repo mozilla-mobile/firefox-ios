@@ -4,6 +4,7 @@
 
 import Foundation
 import Account
+import ReadingList
 import Shared
 import Storage
 import Sync
@@ -38,7 +39,8 @@ protocol Profile {
     var files: FileAccessor { get }
     var history: History { get }
     var favicons: Favicons { get }
-    var readingList: ReadingList { get }
+    var readingList: ReadingListService? { get }
+    var remoteClientsAndTabs: RemoteClientsAndTabs { get }
     var passwords: Passwords { get }
     var thumbnails: Thumbnails { get }
 
@@ -51,9 +53,6 @@ protocol Profile {
 
     func getAccount() -> FirefoxAccount?
     func setAccount(account: FirefoxAccount?)
-
-    func getClients() -> Deferred<Result<[RemoteClient]>>
-    func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
 }
 
 public class BrowserProfile: Profile {
@@ -119,8 +118,8 @@ public class BrowserProfile: Profile {
         return SQLiteHistory(files: self.files)
     }()
 
-    lazy var readingList: ReadingList = {
-        return SQLiteReadingList(files: self.files)
+    lazy var readingList: ReadingListService? = {
+        return ReadingListService(profileStoragePath: self.files.rootPath)
     }()
 
     private lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {

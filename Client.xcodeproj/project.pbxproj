@@ -360,6 +360,10 @@
 		E414F0791A8445A500283322 /* FennecAurora.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = E414F0781A8445A500283322 /* FennecAurora.entitlements */; };
 		E418D0D91A251B3200CAE47A /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
 		E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41A7D4A1A1BE04500245963 /* InitialViewController.swift */; };
+		E41F0D981ADFFB5400FC7387 /* ReadingListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F0D971ADFFB5400FC7387 /* ReadingListService.swift */; };
+		E41F0D991ADFFB5400FC7387 /* ReadingListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F0D971ADFFB5400FC7387 /* ReadingListService.swift */; };
+		E41F0D9B1ADFFC5600FC7387 /* ReadingListError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F0D9A1ADFFC5600FC7387 /* ReadingListError.swift */; };
+		E41F0D9C1ADFFC5600FC7387 /* ReadingListError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41F0D9A1ADFFC5600FC7387 /* ReadingListError.swift */; };
 		E42475DC1AB73B9B00B23D33 /* SWCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = E42475D01AB73B9B00B23D33 /* SWCellScrollView.m */; };
 		E42475DD1AB73B9B00B23D33 /* SWCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = E42475D01AB73B9B00B23D33 /* SWCellScrollView.m */; };
 		E42475DE1AB73B9B00B23D33 /* SWCellScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = E42475D01AB73B9B00B23D33 /* SWCellScrollView.m */; };
@@ -948,20 +952,6 @@
 			remoteGlobalIDString = DC3773FE19C8CBB3004FCF85;
 			remoteInfo = "SQLite Tests";
 		};
-		E4D567B71ADED44A00F1EFE7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DCC6B3801A9191C300734B78;
-			remoteInfo = SQLiteCipher;
-		};
-		E4D567B91ADED44A00F1EFE7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DCC6B3921A9191D100734B78;
-			remoteInfo = "SQLiteCipher Tests";
-		};
 		E4D567BB1ADED44A00F1EFE7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */;
@@ -1279,6 +1269,8 @@
 		E40FAB0B1A7ABB77009CB80D /* WebServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebServer.swift; sourceTree = "<group>"; };
 		E414F0781A8445A500283322 /* FennecAurora.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FennecAurora.entitlements; sourceTree = "<group>"; };
 		E41A7D4A1A1BE04500245963 /* InitialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
+		E41F0D971ADFFB5400FC7387 /* ReadingListService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListService.swift; sourceTree = "<group>"; };
+		E41F0D9A1ADFFC5600FC7387 /* ReadingListError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListError.swift; sourceTree = "<group>"; };
 		E42475CF1AB73B9B00B23D33 /* SWCellScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWCellScrollView.h; path = Carthage/Checkouts/SWTableViewCell/SWTableViewCell/PodFiles/SWCellScrollView.h; sourceTree = "<group>"; };
 		E42475D01AB73B9B00B23D33 /* SWCellScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWCellScrollView.m; path = Carthage/Checkouts/SWTableViewCell/SWTableViewCell/PodFiles/SWCellScrollView.m; sourceTree = "<group>"; };
 		E42475D11AB73B9B00B23D33 /* SWLongPressGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWLongPressGestureRecognizer.h; path = Carthage/Checkouts/SWTableViewCell/SWTableViewCell/PodFiles/SWLongPressGestureRecognizer.h; sourceTree = "<group>"; };
@@ -2124,6 +2116,7 @@
 				E4D567591ADECE8100F1EFE7 /* ReadingListClient.swift */,
 				E4D5675A1ADECE8100F1EFE7 /* ReadingListClientMetadata.swift */,
 				E4D5675B1ADECE8100F1EFE7 /* ReadingListClientRecord.swift */,
+				E41F0D9A1ADFFC5600FC7387 /* ReadingListError.swift */,
 				E4D5675D1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift */,
 				E4D5675E1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift */,
 				E4D5675F1ADECE8100F1EFE7 /* ReadingListRecord.swift */,
@@ -2132,6 +2125,7 @@
 				E4D567621ADECE8100F1EFE7 /* ReadingListResponse.swift */,
 				E4D567631ADECE8100F1EFE7 /* ReadingListServerMetadata.swift */,
 				E4D567641ADECE8100F1EFE7 /* ReadingListServerRecord.swift */,
+				E41F0D971ADFFB5400FC7387 /* ReadingListService.swift */,
 				E4D567651ADECE8100F1EFE7 /* ReadingListSQLStorage.swift */,
 				E4D567661ADECE8100F1EFE7 /* ReadingListStorage.swift */,
 				E4D567671ADECE8100F1EFE7 /* ReadingListSynchronizer.swift */,
@@ -2181,8 +2175,6 @@
 			children = (
 				E4D567B41ADED44A00F1EFE7 /* SQLite.framework */,
 				E4D567B61ADED44A00F1EFE7 /* SQLite Tests.xctest */,
-				E4D567B81ADED44A00F1EFE7 /* SQLite.framework */,
-				E4D567BA1ADED44A00F1EFE7 /* SQLiteCipher Tests.xctest */,
 				E4D567BC1ADED44A00F1EFE7 /* sqlite3.framework */,
 			);
 			name = Products;
@@ -3129,20 +3121,6 @@
 			remoteRef = E4D567B51ADED44A00F1EFE7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		E4D567B81ADED44A00F1EFE7 /* SQLite.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SQLite.framework;
-			remoteRef = E4D567B71ADED44A00F1EFE7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E4D567BA1ADED44A00F1EFE7 /* SQLiteCipher Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "SQLiteCipher Tests.xctest";
-			remoteRef = E4D567B91ADED44A00F1EFE7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		E4D567BC1ADED44A00F1EFE7 /* sqlite3.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -3545,9 +3523,11 @@
 				E4D5677C1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift in Sources */,
 				E4D567841ADECE8100F1EFE7 /* ReadingListResponse.swift in Sources */,
 				E4D567921ADECE8100F1EFE7 /* ReadingListUtils.swift in Sources */,
+				E41F0D9B1ADFFC5600FC7387 /* ReadingListError.swift in Sources */,
 				E4D567761ADECE8100F1EFE7 /* ReadingListClientRecord.swift in Sources */,
 				E4D5678E1ADECE8100F1EFE7 /* ReadingListSynchronizer.swift in Sources */,
 				E4D567801ADECE8100F1EFE7 /* ReadingListRecordResponse.swift in Sources */,
+				E41F0D981ADFFB5400FC7387 /* ReadingListService.swift in Sources */,
 				E4D5678A1ADECE8100F1EFE7 /* ReadingListSQLStorage.swift in Sources */,
 				E4D567881ADECE8100F1EFE7 /* ReadingListServerRecord.swift in Sources */,
 				E4D567861ADECE8100F1EFE7 /* ReadingListServerMetadata.swift in Sources */,
@@ -3577,6 +3557,7 @@
 				E4D5676F1ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift in Sources */,
 				E4D567A61ADECEB800F1EFE7 /* ReadingListSynchronizerTestCase.swift in Sources */,
 				E4D567A31ADECEB800F1EFE7 /* ReadingListFetchSpecTestCase.swift in Sources */,
+				E41F0D991ADFFB5400FC7387 /* ReadingListService.swift in Sources */,
 				E4D5677B1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift in Sources */,
 				E4D5679E1ADECEB800F1EFE7 /* ReadingListBatchRecordResponseTestCase.swift in Sources */,
 				E4D567811ADECE8100F1EFE7 /* ReadingListRecordResponse.swift in Sources */,
@@ -3585,6 +3566,7 @@
 				E4D567711ADECE8100F1EFE7 /* ReadingListChangeAccumulator.swift in Sources */,
 				E4D5677D1ADECE8100F1EFE7 /* ReadingListOAuthAuthenticator.swift in Sources */,
 				E4D567871ADECE8100F1EFE7 /* ReadingListServerMetadata.swift in Sources */,
+				E41F0D9C1ADFFC5600FC7387 /* ReadingListError.swift in Sources */,
 				E4D5677F1ADECE8100F1EFE7 /* ReadingListRecord.swift in Sources */,
 				E4D567A41ADECEB800F1EFE7 /* ReadingListOAuthAuthenticatorTestCase.swift in Sources */,
 				E4D567771ADECE8100F1EFE7 /* ReadingListClientRecord.swift in Sources */,
@@ -5023,7 +5005,7 @@
 				);
 				INFOPLIST_FILE = ReadingList/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5073,7 +5055,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = ReadingList/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -5126,7 +5108,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = ReadingList/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";

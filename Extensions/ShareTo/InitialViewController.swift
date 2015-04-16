@@ -124,7 +124,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     //
     
     func shareToReadingList(item: ShareItem) {
-        profile.readingList.shareItem(item)
+        profile.readingList?.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.currentDevice().name)
     }
     
     func shareToBookmarks(item: ShareItem) {

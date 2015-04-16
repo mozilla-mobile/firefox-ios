@@ -4,13 +4,13 @@
 
 import Foundation
 
-struct ReadingListClientMetadata: Equatable {
+public struct ReadingListClientMetadata: Equatable {
     /// The id of the record in the database
-    var id: Int64
+    public var id: Int64
     /// A client timestamp
-    var lastModified: ReadingListTimestamp
+    public var lastModified: ReadingListTimestamp
 
-    init?(row: AnyObject) {
+    public init?(row: AnyObject) {
         let id = row.valueForKeyPath("client_id") as? NSNumber
         let lastModified = row.valueForKeyPath("client_last_modified") as? NSNumber
         if id == nil || lastModified == nil {
@@ -21,6 +21,6 @@ struct ReadingListClientMetadata: Equatable {
     }
 }
 
-func ==(lhs: ReadingListClientMetadata, rhs: ReadingListClientMetadata) -> Bool {
+public func ==(lhs: ReadingListClientMetadata, rhs: ReadingListClientMetadata) -> Bool {
     return lhs.id == rhs.id && lhs.lastModified == rhs.lastModified
 }

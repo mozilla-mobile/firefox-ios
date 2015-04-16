@@ -355,11 +355,8 @@ extension BrowserViewController: URLBarDelegate {
         if let tab = tabManager.selectedTab {
             if var url = tab.displayURL {
                 if let absoluteString = url.absoluteString {
-                    profile.readingList.add(item: ReadingListItem(url: absoluteString, title: tab.title)) { (success) -> Void in
-                        if success {
-                            // TODO Update reading view bar when that has been hooked up
-                        }
-                    }
+                    let result = profile.readingList?.createRecordWithURL(absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name) // TODO Check result, can this fail?
+                    // TODO Followup bug, provide some form of 'this has been added' feedback?
                 }
             }
         }
@@ -1213,9 +1210,15 @@ extension BrowserViewController {
     }
 
     func showReaderModeBar(#animated: Bool) {
-        // TODO This needs to come from the database
-        readerModeBar.unread = true
-        readerModeBar.added = false
+        if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
+            if let successValue = result.successValue, record = successValue {
+                readerModeBar.unread = record.unread
+                readerModeBar.added = true
+            }
+        } else {
+            readerModeBar.unread = true
+            readerModeBar.added = false
+        }
         readerModeBar.hidden = false
         updateScrollbarInsets()
     }
@@ -1308,28 +1311,37 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             }
 
         case .MarkAsRead:
-            // TODO Persist to database
-            readerModeBar.unread = false
-        case .MarkAsUnread:
-            // TODO Persist to database
-            readerModeBar.unread = true
-
-        case .AddToReadingList:
-            // TODO Persist to database - The code below needs an update to talk to improved storage layer
-            if let tab = tabManager.selectedTab,
-               let url = tab.url where ReaderModeUtils.isReaderModeURL(url) {
-                if let url = ReaderModeUtils.decodeURL(url),
-                   let absoluteString = url.absoluteString {
-                    profile.readingList.add(item: ReadingListItem(url: absoluteString, title: tab.title)) { (success) -> Void in
-                        //readerModeBar.added = true
-                    }
+            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
+                if let successValue = result.successValue, record = successValue {
+                    profile.readingList?.updateRecord(record, unread: false) // TODO Check result, can this fail?
+                    readerModeBar.unread = true
                 }
             }
-            break
+
+        case .MarkAsUnread:
+            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
+                if let successValue = result.successValue, record = successValue {
+                    profile.readingList?.updateRecord(record, unread: true) // TODO Check result, can this fail?
+                    readerModeBar.unread = true
+                }
+            }
+
+        case .AddToReadingList:
+            if let tab = tabManager.selectedTab,
+               let url = tab.url where ReaderModeUtils.isReaderModeURL(url) {
+                if let url = ReaderModeUtils.decodeURL(url), let absoluteString = url.absoluteString {
+                    let result = profile.readingList?.createRecordWithURL(absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name) // TODO Check result, can this fail?
+                    readerModeBar.added = true
+                }
+            }
 
         case .RemoveFromReadingList:
-            // TODO Persist to database
-            break
+            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
+                if let successValue = result.successValue, record = successValue {
+                    profile.readingList?.deleteRecord(record) // TODO Check result, can this fail?
+                    readerModeBar.added = false
+                }
+            }
         }
     }
 }

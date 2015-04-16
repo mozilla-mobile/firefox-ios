@@ -59,6 +59,10 @@ class ReadingListSQLStorage: ReadingListStorage {
         return Result(success: Array(db["items"].filter(ItemColumns.Unread == true)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
     }
 
+    func getAvailableRecords() -> Result<[ReadingListClientRecord]> {
+        return Result(success: Array(db["items"].order(ItemColumns.ClientLastModified.desc)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+    }
+
     func deleteRecord(record: ReadingListClientRecord) -> Result<Void> {
         let items = db["items"]
         println("Trying to delete record with id \(record.clientMetadata.id)")

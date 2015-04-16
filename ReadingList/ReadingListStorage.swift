@@ -23,6 +23,7 @@ protocol ReadingListStorage {
 
     // These are the used by the application
     func getUnreadRecords() -> Result<[ReadingListClientRecord]>
+    func getAvailableRecords() -> Result<[ReadingListClientRecord]>
     func deleteRecord(record: ReadingListClientRecord) -> Result<Void>
     func deleteAllRecords() -> Result<Void>
     func createRecordWithURL(url: String, title: String, addedBy: String) -> Result<ReadingListClientRecord>

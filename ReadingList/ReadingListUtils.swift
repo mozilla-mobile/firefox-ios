@@ -4,8 +4,8 @@
 
 import Foundation
 
-typealias ReadingListRecordId = Int64
-typealias ReadingListTimestamp = Int64
+public typealias ReadingListRecordId = Int64
+public typealias ReadingListTimestamp = Int64
 
 func ReadingListNow() -> ReadingListTimestamp {
     return ReadingListTimestamp(NSDate.timeIntervalSinceReferenceDate() * 1000.0)
