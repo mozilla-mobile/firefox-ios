@@ -45,6 +45,10 @@ private let queue = dispatch_queue_create("swiftdata queue", DISPATCH_QUEUE_SERI
  */
 public class SwiftData {
     let filename: String
+
+    /// Used for testing.
+    static var EnableWAL = true
+
     init(filename: String) {
         self.filename = filename
 
@@ -133,6 +137,11 @@ public class SQLiteDBConnection {
         if let err = openWithFlags(flags) {
             error = err
             return nil
+        }
+
+        if SwiftData.EnableWAL {
+            let cursor = executeQuery("PRAGMA journal_mode=WAL", factory: StringFactory)
+            assert(cursor[0] as! String == "wal", "WAL journal mode set")
         }
     }
 
