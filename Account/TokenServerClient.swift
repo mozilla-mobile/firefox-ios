@@ -17,14 +17,8 @@ public struct TokenServerToken {
     public let api_endpoint: String
     public let uid: UInt64
     public let durationInSeconds: UInt64
-
-    init(id: String, key: String, api_endpoint: String, uid: UInt64, durationInSeconds: UInt64) {
-        self.id = id
-        self.key = key
-        self.api_endpoint = api_endpoint
-        self.uid = uid
-        self.durationInSeconds = durationInSeconds
-    }
+    // A healthy token server reports its timestamp.
+    public let remoteTimestamp: Timestamp
 
     /**
      * Return true if this token points to the same place as the other token.
@@ -36,14 +30,16 @@ public struct TokenServerToken {
 }
 
 enum TokenServerError {
-    case Remote(code: Int32, status: String?)
+    // A Remote error definitely has a status code, but we may not have a well-formed JSON response
+    // with a status; and we could have an unhealthy server that is not reporting its timestamp.
+    case Remote(code: Int32, status: String?, remoteTimestamp: Timestamp?)
     case Local(NSError)
 }
 
 extension TokenServerError: Printable, ErrorType {
     var description: String {
         switch self {
-        case let Remote(code: code, status: status):
+        case let Remote(code: code, status: status, remoteTimestamp: remoteTimestamp):
             if let status = status {
                 return "<TokenServerError.Remote \(code): \(status)>"
             } else {
@@ -70,33 +66,39 @@ public class TokenServerClient {
         }
     }
 
-    private class func remoteErrorFromJSON(json: JSON, statusCode: Int) -> TokenServerError? {
+    private class func parseTimestampHeader(header: String?) -> Timestamp? {
+        if let timestampString = header {
+            return decimalSecondsStringToTimestamp(timestampString)
+        } else {
+            return nil
+        }
+    }
+
+    private class func remoteErrorFromJSON(json: JSON, statusCode: Int, remoteTimestampHeader: String?) -> TokenServerError? {
         if json.isError {
             return nil
         }
         if 200 <= statusCode && statusCode <= 299 {
             return nil
         }
-        return TokenServerError.Remote(code: Int32(statusCode), status: json["status"].asString)
+        return TokenServerError.Remote(code: Int32(statusCode), status: json["status"].asString,
+            remoteTimestamp: parseTimestampHeader(remoteTimestampHeader))
     }
 
-    private class func tokenFromJSON(json: JSON) -> TokenServerToken? {
+    private class func tokenFromJSON(json: JSON, remoteTimestampHeader: String?) -> TokenServerToken? {
         if json.isError {
             return nil
         }
-        if let id = json["id"].asString {
-            if let key = json["key"].asString {
-                if let api_endpoint = json["api_endpoint"].asString {
-                    if let uid = json["uid"].asInt {
-                        if let durationInSeconds = json["duration"].asInt64 {
-                            if durationInSeconds > 0 {
-                                return TokenServerToken(id: id, key: key, api_endpoint: api_endpoint, uid: UInt64(uid),
-                                        durationInSeconds: UInt64(durationInSeconds))
-                            }
-                        }
-                    }
-                }
-            }
+        if let
+            remoteTimestamp = parseTimestampHeader(remoteTimestampHeader), // A token server that is not providing its timestamp is not healthy.
+            id = json["id"].asString,
+            key = json["key"].asString,
+            api_endpoint = json["api_endpoint"].asString,
+            uid = json["uid"].asInt,
+            durationInSeconds = json["duration"].asInt64
+            where durationInSeconds > 0 {
+            return TokenServerToken(id: id, key: key, api_endpoint: api_endpoint, uid: UInt64(uid),
+                durationInSeconds: UInt64(durationInSeconds), remoteTimestamp: remoteTimestamp)
         }
         return nil
     }
@@ -120,12 +122,15 @@ public class TokenServerClient {
 
                 if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
                     let json = JSON(data)
-                    if let remoteError = TokenServerClient.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
+                    let remoteTimestampHeader = response?.allHeaderFields["x-timestamp"] as? String
+
+                    if let remoteError = TokenServerClient.remoteErrorFromJSON(json, statusCode: response!.statusCode,
+                        remoteTimestampHeader: remoteTimestampHeader) {
                         deferred.fill(Result(failure: remoteError))
                         return
                     }
 
-                    if let token = TokenServerClient.tokenFromJSON(json) {
+                    if let token = TokenServerClient.tokenFromJSON(json, remoteTimestampHeader: remoteTimestampHeader) {
                         deferred.fill(Result(success: token))
                         return
                     }
