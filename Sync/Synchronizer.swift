@@ -10,6 +10,12 @@ import XCGLogger
 // TODO: same comment as for SyncAuthState.swift!
 private let log = XCGLogger.defaultInstance()
 
+public typealias Success = Deferred<Result<()>>
+
+private func succeed() -> Success {
+    return deferResult(())
+}
+
 // TODO: return values?
 /**
  * A Synchronizer is (unavoidably) entirely in charge of what it does within a sync.
@@ -91,8 +97,9 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
     }
 
     public func synchronizeLocalClients(localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Deferred<Result<()>> {
-        func onResponseReceived(response: StorageResponse<[Record<ClientPayload>]>) -> Deferred<Result<()>> {
-            func afterWipe() -> Deferred<Result<()>> {
+
+        func onResponseReceived(response: StorageResponse<[Record<ClientPayload>]>) -> Success {
+            func afterWipe() -> Success {
                 // TODO: process incoming records: both others and our own.
                 // TODO: decide whether to upload ours.
                 let ourGUID = self.scratchpad.clientGUID
@@ -100,22 +107,25 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
                 let records = response.value
                 let responseTimestamp = response.metadata.lastModifiedMilliseconds
 
+                func updateMetadata() -> Success {
+                    self.lastFetched = responseTimestamp!
+                    return succeed()
+                }
+
                 log.debug("Got \(records.count) client records.")
 
                 let toInsert = records.filter({ $0.id != ourGUID }).map(self.clientRecordToLocalClientEntry)
-                return chainDeferred(localClients.insertOrUpdateClients(toInsert), {
-                    // TODO: don't force-unwrap?
-                    self.lastFetched = responseTimestamp!
-                    return Deferred(value: Result(success: ()))
-                })
 
+                return localClients.insertOrUpdateClients(toInsert)
+                  >>== updateMetadata
             }
 
             // If this is a fresh start, do a wipe.
             // N.B., we don't wipe outgoing commands! (TODO: check this when we implement commands!)
             // N.B., but perhaps we should discard outgoing wipe/reset commands!
             if self.lastFetched == 0 {
-                return chainDeferred(localClients.wipeClients(), afterWipe)
+                return localClients.wipeClients()
+                  >>== afterWipe
             }
 
             return afterWipe()
@@ -126,16 +136,17 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             // TODO: upload local client if necessary.
             // TODO: move client upload timestamp out of Scratchpad.
             log.debug("No remote changes for clients. (Last fetched \(self.lastFetched).)")
-            return Deferred(value: Result(success: ()))
+            return succeed()
         }
 
         if let factory: (String) -> ClientPayload? = self.scratchpad.keys?.value.factory(self.collection, f: { ClientPayload($0) }) {
             let clientsClient = storageClient.clientForCollection(self.collection, factory: factory)
-            return chainDeferred(clientsClient.getSince(self.lastFetched), onResponseReceived)
-        } else {
-            log.error("Couldn't make clients factory.")
-            return Deferred(value: Result(failure: FatalError(message: "Couldn't make clients factory.")))
+            return clientsClient.getSince(self.lastFetched)
+              >>== onResponseReceived
         }
+
+        log.error("Couldn't make clients factory.")
+        return deferResult(FatalError(message: "Couldn't make clients factory."))
     }
 }
 
@@ -144,10 +155,10 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
         super.init(scratchpad: scratchpad, basePrefs: basePrefs, collection: "tabs")
     }
 
-    public func synchronizeLocalTabs(localTabs: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Deferred<Result<()>> {
-        func onResponseReceived(response: StorageResponse<[Record<TabsPayload>]>) -> Deferred<Result<()>> {
+    public func synchronizeLocalTabs(localTabs: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Success {
+        func onResponseReceived(response: StorageResponse<[Record<TabsPayload>]>) -> Success {
 
-            func afterWipe() -> Deferred<Result<()>> {
+            func afterWipe() -> Success {
 
                 func doInsert(record: Record<TabsPayload>) -> Deferred<Result<(Int)>> {
                     let remotes = record.payload.remoteTabs
@@ -163,18 +174,20 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
                 log.debug("Got \(records.count) tab records.")
 
                 let allDone = all(records.filter({ $0.id != ourGUID }).map(doInsert))
-                return allDone.bind { (results) -> Deferred<Result<()>> in
+                return allDone.bind { (results) -> Success in
                     if let failure = find(results, { $0.isFailure }) {
-                        return Deferred(value: Result(failure: failure.failureValue!))
+                        return deferResult(failure.failureValue!)
                     }
+
                     self.lastFetched = responseTimestamp!
-                    return Deferred(value: Result(success: ()))
+                    return succeed()
                 }
             }
 
             // If this is a fresh start, do a wipe.
             if self.lastFetched == 0 {
-                return chainDeferred(localTabs.wipeTabs(), afterWipe)
+                return localTabs.wipeTabs()
+                  >>== afterWipe
             }
 
             return afterWipe()
@@ -183,16 +196,17 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
         if !self.remoteHasChanges(info) {
             // Nothing to do.
             // TODO: upload local tabs if they've changed or we're in a fresh start.
-            return Deferred(value: Result(success: ()))
+            return succeed()
         }
 
         if let factory: (String) -> TabsPayload? = self.scratchpad.keys?.value.factory(self.collection, f: { TabsPayload($0) }) {
             let tabsClient = storageClient.clientForCollection(self.collection, factory: factory)
 
-            return chainDeferred(tabsClient.getSince(self.lastFetched), onResponseReceived)
-        } else {
-            log.error("Couldn't make tabs factory.")
-            return Deferred(value: Result(failure: FatalError(message: "Couldn't make tabs factory.")))
+            return tabsClient.getSince(self.lastFetched)
+              >>== onResponseReceived
         }
+
+        log.error("Couldn't make tabs factory.")
+        return deferResult(FatalError(message: "Couldn't make tabs factory."))
     }
 }

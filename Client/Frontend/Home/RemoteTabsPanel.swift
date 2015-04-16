@@ -3,8 +3,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Account
+import Shared
 import Snap
 import Storage
+import Sync
+import XCGLogger
+
+// TODO: same comment as for SyncAuthState.swift!
+private let log = XCGLogger.defaultInstance()
+
 
 private struct RemoteTabsPanelUX {
     static let HeaderHeight: CGFloat = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
@@ -54,18 +62,20 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     @objc private func SELrefresh() {
         self.refreshControl?.beginRefreshing()
-        profile.remoteClientsAndTabs.getClientsAndTabs().upon({ tabs in
+
+        self.profile.getClientsAndTabs().upon({ tabs in
             if let tabs = tabs.successValue {
-                self.refreshControl?.endRefreshing()
+                log.info("\(tabs.count) tabs fetched.")
                 self.clientAndTabs = tabs
 
                 // Maybe show a background view.
                 let tableView = self.tableView
                 if tabs.isEmpty {
+                    // TODO: Bug 1144760 - Populate background view with UX-approved content.
                     tableView.backgroundView = UIView()
                     tableView.backgroundView?.frame = tableView.frame
-                    // TODO: Populate background view with UX-approved content.
                     tableView.backgroundView?.backgroundColor = UIColor.redColor()
+
                     // Hide dividing lines.
                     tableView.separatorStyle = UITableViewCellSeparatorStyle.None
                 } else {
@@ -74,15 +84,22 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
                     tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
                 }
                 tableView.reloadData()
+            } else {
+                log.error("Failed to fetch tabs.")
             }
+
+            // Always end refreshing, even if we failed!
+            self.refreshControl?.endRefreshing()
         })
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        log.debug("We have \(self.clientAndTabs?.count) sections.")
         return self.clientAndTabs?.count ?? 0
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        log.debug("Section \(section) has \(self.clientAndTabs?[section].tabs.count) tabs.")
         return self.clientAndTabs?[section].tabs.count ?? 0
     }
 
@@ -97,7 +114,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
             view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
             view.textLabel.text = client.name
 
-            // TODO: Convert timestamp to locale-relative timestring.
+            // TODO: Bug 1154088 - Convert timestamp to locale-relative timestring.
             // TODO: note that this is very likely to be wrong; it'll show the last time the other device
             // uploaded a record, *or another device sent that device a command*.
             let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time")
@@ -117,7 +134,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         let cell = tableView.dequeueReusableCellWithIdentifier(RemoteTabIdentifier, forIndexPath: indexPath) as! TwoLineTableViewCell
         let tab = tabAtIndexPath(indexPath)
         cell.setLines(tab?.title, detailText: tab?.URL.absoluteString)
-        // TODO: Populate image with cached favicons.
+        // TODO: Bug 1144765 - Populate image with cached favicons.
         return cell
     }
 

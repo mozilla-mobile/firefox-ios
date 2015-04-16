@@ -2,6 +2,65 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+// Pipelining.
+infix operator |> { associativity left }
+public func |> <T, U>(x: T, f: T -> U) -> U {
+    return f(x)
+}
+
+// Basic currying.
+public func curry<A, B>(f: (A) -> B) -> A -> B {
+    return { a in
+        return f(a)
+    }
+}
+
+public func curry<A, B, C>(f: (A, B) -> C) -> A -> B -> C {
+    return { a in
+        return { b in
+            return f(a, b)
+        }
+    }
+}
+
+public func curry<A, B, C, D>(f: (A, B, C) -> D) -> A -> B -> C -> D {
+    return { a in
+        return { b in
+            return { c in
+                return f(a, b, c)
+            }
+        }
+    }
+}
+
+public func curry<A, B, C, D>(f: (A, B, C) -> D) -> (A, B) -> C -> D {
+    return { (a, b) in
+        return { c in
+            return f(a, b, c)
+        }
+    }
+}
+
+// Function composition.
+infix operator • {}
+
+public func •<T, U, V>(f: T -> U, g: U -> V) -> T -> V {
+    return { t in
+        return g(f(t))
+    }
+}
+public func •<T, V>(f: T -> (), g: () -> V) -> T -> V {
+    return { t in
+        f(t)
+        return g()
+    }
+}
+public func •<V>(f: () -> (), g: () -> V) -> () -> V {
+    return {
+        f()
+        return g()
+    }
+}
 
 // Why not simply provide an override for ==? Well, that's scary, and can accidentally recurse.
 // This is enough to catch arrays, which Swift will delegate to element-==.
@@ -87,27 +146,4 @@ public func jsonsToStrings(arr: [JSON]?) -> [String]? {
             })
     }
     return nil
-}
-
-
-public func chainDeferred<T, U>(a: Deferred<Result<T>>, f: T -> Deferred<Result<U>>) -> Deferred<Result<U>> {
-    return a.bind { res in
-        if let v = res.successValue {
-            return f(v)
-        }
-        return Deferred(value: Result<U>(failure: res.failureValue!))
-    }
-}
-
-public func chainResult<T, U>(a: Deferred<Result<T>>, f: T -> Result<U>) -> Deferred<Result<U>> {
-    return a.map { res in
-        if let v = res.successValue {
-            return f(v)
-        }
-        return Result<U>(failure: res.failureValue!)
-    }
-}
-
-public func chain<T, U>(a: Deferred<Result<T>>, f: T -> U) -> Deferred<Result<U>> {
-    return chainResult(a, { Result<U>(success: f($0)) })
 }
