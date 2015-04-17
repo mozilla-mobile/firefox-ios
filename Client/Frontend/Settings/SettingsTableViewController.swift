@@ -250,6 +250,64 @@ private class AccountStatusSetting: WithAccountSetting {
     }
 }
 
+// For great debugging!
+private class RequirePasswordDebugSetting: WithAccountSetting {
+    override var hidden: Bool {
+        if let account = profile.getAccount() where account.actionNeeded != FxAActionNeeded.NeedsPassword {
+            return false
+        }
+        return true
+    }
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: require password", comment: "Debug option"))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        profile.getAccount()?.makeSeparated()
+        settings.tableView.reloadData()
+    }
+}
+
+
+// For great debugging!
+private class RequireUpgradeDebugSetting: WithAccountSetting {
+    override var hidden: Bool {
+        if let account = profile.getAccount() where account.actionNeeded != FxAActionNeeded.NeedsUpgrade {
+            return false
+        }
+        return true
+    }
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: require upgrade", comment: "Debug option"))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        profile.getAccount()?.makeDoghouse()
+        settings.tableView.reloadData()
+    }
+}
+
+// For great debugging!
+private class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
+    override var hidden: Bool {
+        if let account = profile.getAccount() {
+            return false
+        }
+        return true
+    }
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        profile.getAccount()?.syncAuthState.invalidate()
+        settings.tableView.reloadData()
+    }
+}
+
 // Show the current version of Firefox
 private class VersionSetting : Setting {
     override var title: NSAttributedString? {
@@ -328,6 +386,10 @@ class SettingsTableViewController: UITableViewController {
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 DisconnectSetting(settings: self),
+                // Debug settings:
+                RequirePasswordDebugSetting(settings: self),
+                RequireUpgradeDebugSetting(settings: self),
+                ForgetSyncAuthStateDebugSetting(settings: self),
             ]),
             SettingSection(title: NSAttributedString(string: privacyTitle), children: [
                 ClearPrivateDataSetting(settings: self)
