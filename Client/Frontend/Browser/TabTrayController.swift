@@ -339,11 +339,6 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         navBar.barTintColor = TabTrayControllerUX.ToolbarBarTintColor
         navBar.tintColor = UIColor.whiteColor()
         navBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-
-        navBar.layer.shadowColor = UIColor.blackColor().CGColor
-        navBar.layer.shadowOffset = CGSize(width: 0, height: 1.0)
-        navBar.layer.shadowRadius = 2.0
-        navBar.layer.shadowOpacity = 0.25
         
         let signInButton = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
         signInButton.addTarget(self, action: "SELdidClickDone", forControlEvents: UIControlEvents.TouchUpInside)
