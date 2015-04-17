@@ -228,7 +228,6 @@ private class AccountStatusSetting: WithAccountSetting {
         }
 
         navigationController?.pushViewController(viewController, animated: true)
-        return true
     }
 }
 
