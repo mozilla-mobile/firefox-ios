@@ -94,8 +94,12 @@ public class BrowserProfile: Profile {
         return ProfileFileAccessor(profile: self)
     }
 
+    lazy var db: BrowserDB = {
+        return BrowserDB(files: self.files)
+    } ()
+
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
-        return BookmarksSqliteFactory(files: self.files)
+        return BookmarksSqliteFactory(db: self.db)
     }()
 
     lazy var searchEngines: SearchEngines = {
@@ -107,7 +111,7 @@ public class BrowserProfile: Profile {
     }
 
     lazy var favicons: Favicons = {
-        return SQLiteFavicons(files: self.files)
+        return SQLiteFavicons(db: self.db)
     }()
 
     // lazy var ReadingList readingList
@@ -117,7 +121,7 @@ public class BrowserProfile: Profile {
     }()
 
     lazy var history: History = {
-        return SQLiteHistory(files: self.files)
+        return SQLiteHistory(db: self.db)
     }()
 
     lazy var readingList: ReadingListService? = {
@@ -125,7 +129,7 @@ public class BrowserProfile: Profile {
     }()
 
     private lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
-        return SQLiteRemoteClientsAndTabs(files: self.files)
+        return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
     private class func syncClientsToStorage(storage: RemoteClientsAndTabs, prefs: Prefs, ready: Ready) -> Deferred<Result<Ready>> {
@@ -180,7 +184,7 @@ public class BrowserProfile: Profile {
     }
 
     lazy var passwords: Passwords = {
-        return SQLitePasswords(files: self.files)
+        return SQLitePasswords(db: self.db)
     }()
 
     lazy var thumbnails: Thumbnails = {

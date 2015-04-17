@@ -97,8 +97,8 @@ public class SQLitePasswords : Passwords {
     private let table = PasswordsTable<Password>()
     private let db: BrowserDB
 
-    public init(files: FileAccessor) {
-        self.db = BrowserDB(files: files)!
+    public init(db: BrowserDB) {
+        self.db = db
         db.createOrUpdate(table)
     }
 

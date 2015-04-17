@@ -176,8 +176,8 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
     let db: BrowserDB
     let table = BookmarkTable<BookmarkNode>()
 
-    public init(files: FileAccessor) {
-        db = BrowserDB(files: files)!
+    public init(db: BrowserDB) {
+        self.db = db
         db.createOrUpdate(table)
     }
 

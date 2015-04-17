@@ -8,14 +8,12 @@ import Foundation
  * The sqlite-backed implementation of the history protocol.
  */
 public class SQLiteHistory : History {
-    let files: FileAccessor
     let db: BrowserDB
     private let table = JoinedHistoryVisitsTable()
     private var ignoredSchemes = ["about"]
 
-    required public init(files: FileAccessor) {
-        self.files = files
-        self.db = BrowserDB(files: files)!
+    required public init(db: BrowserDB) {
+        self.db = db
         db.createOrUpdate(table)
     }
 

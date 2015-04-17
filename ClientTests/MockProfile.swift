@@ -17,9 +17,13 @@ public class MockProfile: Profile {
         return name
     }
 
+    lazy var db: BrowserDB = {
+        return BrowserDB(files: self.files)
+    } ()
+
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         // Eventually this will be a SyncingBookmarksModel or an OfflineBookmarksModel, perhaps.
-        return BookmarksSqliteFactory(files: self.files)
+        return BookmarksSqliteFactory(db: self.db)
         } ()
 
     lazy var searchEngines: SearchEngines = {
@@ -35,11 +39,11 @@ public class MockProfile: Profile {
         } ()
 
     lazy var favicons: Favicons = {
-        return SQLiteFavicons(files: self.files)
+        return SQLiteFavicons(db: self.db)
         }()
 
     lazy var history: History = {
-        return SQLiteHistory(files: self.files)
+        return SQLiteHistory(db: self.db)
         }()
 
     lazy var readingList: ReadingListService? = {
@@ -47,7 +51,7 @@ public class MockProfile: Profile {
         }()
 
     private lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
-        return SQLiteRemoteClientsAndTabs(files: self.files)
+        return SQLiteRemoteClientsAndTabs(db: self.db)
         }()
 
     lazy var passwords: Passwords = {
