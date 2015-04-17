@@ -8,4 +8,4 @@ github "norio-nomura/Base32"
 github "DaveWoodCom/XCGLogger" "swift_1.2"   # Previously: ~> 1.8
 github "bignerdranch/Deferred" "master"
 github "CEWendel/SWTableViewCell"
-github "stephencelis/SQLite.swift" "master"
+github "st3fan/SQLite.swift" "master"
