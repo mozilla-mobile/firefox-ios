@@ -120,13 +120,11 @@ public class SQLitePasswords : Passwords {
         let updated = db.update(&err) { (connection, inout err: NSError?) -> Int in
             return self.table.update(connection, item: password, err: &err)
         }
-        println("Updated \(updated)")
 
         if updated == 0 {
             let inserted = db.insert(&err) { (connection, inout err: NSError?) -> Int in
                 return self.table.insert(connection, item: password, err: &err)
             }
-            println("Inserted \(inserted)")
 
             if inserted > -1 {
                 success = true

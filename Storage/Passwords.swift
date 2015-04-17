@@ -43,6 +43,22 @@ public class Password : Equatable {
         self.password = password
     }
 
+    public init(credential: NSURLCredential?, protectionSpace: NSURLProtectionSpace) {
+        username = credential?.user ?? ""
+        password = credential?.password ?? ""
+        hostname = protectionSpace.host
+        httpRealm = protectionSpace.realm!
+    }
+
+    public var credential: NSURLCredential {
+        return NSURLCredential(user: username, password: password, persistence: .ForSession)
+    }
+
+    public var protectionSpace: NSURLProtectionSpace {
+        let url = NSURL(string: formSubmitUrl)!
+        return NSURLProtectionSpace(host: hostname, port: -1, `protocol`: url.scheme, realm: httpRealm, authenticationMethod: nil)
+    }
+
     public func toDict() -> [String: String] {
         return ["hostname": hostname,
             "formSubmitURL": formSubmitUrl,
