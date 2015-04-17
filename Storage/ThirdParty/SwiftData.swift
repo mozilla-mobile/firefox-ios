@@ -142,6 +142,9 @@ public class SQLiteDBConnection {
         if SwiftData.EnableWAL {
             executeQuery("PRAGMA journal_mode=WAL", factory: StringFactory)
         }
+
+        // Retry queries before returning locked errors.
+        sqlite3_busy_timeout(sqliteDB, 3 * 1000)
     }
 
     deinit {
