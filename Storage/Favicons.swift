@@ -6,8 +6,6 @@ import UIKit
 
 /* The base favicons protocol */
 public protocol Favicons {
-    init(files: FileAccessor)
-
     var defaultIcon: UIImage { get }
 
     func clear(options: QueryOptions?, complete: ((success: Bool) -> Void)?)

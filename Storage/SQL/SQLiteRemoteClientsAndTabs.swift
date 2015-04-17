@@ -21,14 +21,12 @@ public class DatabaseError: ErrorType {
 }
 
 public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
-    let files: FileAccessor
     let db: BrowserDB
     let clients = RemoteClientsTable<RemoteClient>()
     let tabs = RemoteTabsTable<RemoteTab>()
 
-    public init(files: FileAccessor) {
-        self.files = files
-        self.db = BrowserDB(files: files)!
+    public init(db: BrowserDB) {
+        self.db = db
         db.createOrUpdate(clients)
         db.createOrUpdate(tabs)
     }
