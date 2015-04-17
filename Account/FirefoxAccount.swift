@@ -29,17 +29,7 @@ public class FirefoxAccount {
     /// particular server (auth endpoint) by its assigned uid.
     public let uid: String
 
-    /// A Firefox Account exists on a particular server.  The auth endpoint should speak the protocol documented at
-    /// https://github.com/mozilla/fxa-auth-server/blob/02f88502700b0c5ef5a4768a8adf332f062ad9bf/docs/api.md
-    let authEndpoint: NSURL
-
-    /// The associated content server should speak the protocol implemented (but not yet documented) at
-    /// https://github.com/mozilla/fxa-content-server/blob/161bff2d2b50bac86ec46c507e597441c8575189/app/scripts/models/auth_brokers/fx-desktop.js
-    let contentEndpoint: NSURL
-
-    /// The associated oauth server should speak the protocol documented at
-    /// https://github.com/mozilla/fxa-oauth-server/blob/6cc91e285fc51045a365dbacb3617ef29093dbc3/docs/api.md
-    let oauthEndpoint: NSURL
+    public let configuration: FirefoxAccountConfiguration
 
     private let stateKeyLabel: String
     private var state: FxAState {
@@ -52,14 +42,10 @@ public class FirefoxAccount {
         return state.actionNeeded
     }
 
-    public init(email: String, uid: String, authEndpoint: NSURL, contentEndpoint: NSURL, oauthEndpoint: NSURL, stateKeyLabel: String, state: FxAState) {
+    public init(configuration: FirefoxAccountConfiguration, email: String, uid: String, stateKeyLabel: String, state: FxAState) {
         self.email = email
         self.uid = uid
-        self.authEndpoint = authEndpoint
-        self.contentEndpoint = contentEndpoint
-        self.oauthEndpoint = oauthEndpoint
-        // TODO: It would be nice to fail if any endpoint is not https://, but it's not clear how to do that in a
-        // constructor!
+        self.configuration = configuration
         self.stateKeyLabel = stateKeyLabel
         self.state = state
         checkpointState()
@@ -111,11 +97,9 @@ public class FirefoxAccount {
         }
 
         let account = FirefoxAccount(
+            configuration: configuration,
             email: email,
             uid: uid,
-            authEndpoint: configuration.authEndpointURL,
-            contentEndpoint: configuration.profileEndpointURL,
-            oauthEndpoint: configuration.oauthEndpointURL,
             stateKeyLabel: Bytes.generateGUID(),
             state: state
         )
@@ -127,9 +111,7 @@ public class FirefoxAccount {
         dict["version"] = AccountSchemaVersion
         dict["email"] = email
         dict["uid"] = uid
-        dict["authEndpoint"] = authEndpoint.absoluteString!
-        dict["contentEndpoint"] = contentEndpoint.absoluteString!
-        dict["oauthEndpoint"] = oauthEndpoint.absoluteString!
+        dict["configurationLabel"] = configuration.label.rawValue
         dict["stateKeyLabel"] = stateKeyLabel
         return dict
     }
@@ -164,21 +146,22 @@ public class FirefoxAccount {
     }
 
     private class func fromDictionaryV1(dictionary: [String: AnyObject]) -> FirefoxAccount? {
-        // TODO: throughout, even a semblance of error checking and input validation.
-        let email = dictionary["email"] as! String
-        let uid = dictionary["uid"] as! String
-        let authEndpoint = NSURL(string: dictionary["authEndpoint"] as! String)!
-        let contentEndpoint = NSURL(string: dictionary["contentEndpoint"] as! String)!
-        let oauthEndpoint = NSURL(string: dictionary["oauthEndpoint"] as! String)!
-
-        let stateKeyLabel: String
-        let state: FxAState
-        (stateKeyLabel, state) = labelAndStateFromKeychain(dictionary["stateKeyLabel"] as? String)
-
-        return FirefoxAccount(email: email, uid: uid,
-                authEndpoint: authEndpoint, contentEndpoint: contentEndpoint, oauthEndpoint: oauthEndpoint,
-                stateKeyLabel: stateKeyLabel,
-                state: state)
+        var configurationLabel: FirefoxAccountConfigurationLabel? = nil
+        if let rawValue = dictionary["configurationLabel"] as? String {
+            configurationLabel = FirefoxAccountConfigurationLabel(rawValue: rawValue)
+        }
+        if let
+            configurationLabel = configurationLabel,
+            email = dictionary["email"] as? String,
+            uid = dictionary["uid"] as? String {
+                let (stateKeyLabel, state) = labelAndStateFromKeychain(dictionary["stateKeyLabel"] as? String)
+                return FirefoxAccount(
+                    configuration: configurationLabel.toConfiguration(),
+                    email: email, uid: uid,
+                        stateKeyLabel: stateKeyLabel,
+                        state: state)
+        }
+        return nil
     }
 
     public func checkpointState() {
@@ -199,7 +182,7 @@ public class FirefoxAccount {
     }
 
     func advance() -> Deferred<FxAState> {
-        let client = FxAClient10(endpoint: authEndpoint)
+        let client = FxAClient10(endpoint: configuration.authEndpointURL)
         let stateMachine = FxALoginStateMachine(client: client)
         let now = NSDate.now()
         return stateMachine.advanceFromState(state, now: now).map { newState in
@@ -219,7 +202,8 @@ public class FirefoxAccount {
         }
     }
 
-    public func syncAuthState(tokenServerURL: NSURL) -> SyncAuthState {
-        return SyncAuthState(account: self, tokenServerURL: tokenServerURL)
+    public func syncAuthState() -> SyncAuthState {
+        let url = configuration.sync15Configuration.tokenServerEndpointURL
+        return SyncAuthState(account: self, tokenServerURL: url)
     }
 }

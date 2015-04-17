@@ -15,19 +15,15 @@ class FirefoxAccountTests: XCTestCase {
     func testSerialization() {
         let d: [String: AnyObject] = [
             "version": 1,
+            "configurationLabel": FirefoxAccountConfigurationLabel.Production.rawValue,
             "email": "testtest@test.com",
             "uid": "uid",
-            "authEndpoint": "https://test.com/auth",
-            "contentEndpoint": "https://test.com/content",
-            "oauthEndpoint": "https://test.com/oauth"
         ]
 
         let account1 = FirefoxAccount(
+                configuration: FirefoxAccountConfigurationLabel.Production.toConfiguration(),
                 email: d["email"] as! String,
                 uid: d["uid"] as! String,
-                authEndpoint: NSURL(string: d["authEndpoint"] as! String)!,
-                contentEndpoint: NSURL(string: d["contentEndpoint"] as! String)!,
-                oauthEndpoint: NSURL(string: d["oauthEndpoint"] as! String)!,
                 stateKeyLabel: Bytes.generateGUID(),
                 state: SeparatedState())
         let d1 = account1.asDictionary()
