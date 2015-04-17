@@ -39,6 +39,8 @@ import sqlite3
 /// All database operations actually occur serially on this queue. Careful not to deadlock it!
 private let queue = dispatch_queue_create("swiftdata queue", DISPATCH_QUEUE_SERIAL)
 
+private let DatabaseBusyTimeout: Int32 = 3 * 1000
+
 /**
  * The public interface for the database.
  * This handles dispatching calls synchronously on the correct thread.
@@ -143,6 +145,9 @@ public class SQLiteDBConnection {
             let cursor = executeQuery("PRAGMA journal_mode=WAL", factory: StringFactory)
             assert(cursor[0] as! String == "wal", "WAL journal mode set")
         }
+
+        // Retry queries before returning locked errors.
+        sqlite3_busy_timeout(sqliteDB, DatabaseBusyTimeout)
     }
 
     deinit {
