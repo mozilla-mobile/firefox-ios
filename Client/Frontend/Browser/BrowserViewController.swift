@@ -695,24 +695,19 @@ extension BrowserViewController: UIScrollViewDelegate {
                 var delta = CGPoint(x: prev.x - offset.x, y: prev.y - offset.y)
                 previousScroll = offset
 
+                let inset = tab.webView.scrollView.contentInset
                 if let tab = self.tabManager.selectedTab {
-                    let inset = tab.webView.scrollView.contentInset
                     let newInset = clamp(inset.top + delta.y, min: AppConstants.StatusBarHeight, max: AppConstants.ToolbarHeight + AppConstants.StatusBarHeight)
 
-                    tab.webView.scrollView.contentInset = UIEdgeInsetsMake(newInset,
-                        0,
-                        clamp(newInset - AppConstants.StatusBarHeight, min: 0, max: toolbar?.frame.height ?? 0),
-                        0)
-                    tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(newInset - AppConstants.StatusBarHeight, 0, clamp(newInset, min: 0, max: toolbar?.frame.height ?? 0), 0)
-
-                    // Adjusting the contentInset will change the scroll position of the page.
-                    // We account for that by also adjusting the previousScroll position
-                    delta.y += inset.top - newInset
+                    tab.webView.scrollView.contentInset = UIEdgeInsetsMake(newInset, 0,
+                        clamp(newInset - AppConstants.StatusBarHeight, min: 0, max: toolbar?.frame.height ?? 0), 0)
+                    tab.webView.scrollView.scrollIndicatorInsets = tab.webView.scrollView.contentInset
                 }
 
-                scrollUrlBar(delta.y)
-                scrollReaderModeBar(delta.y)
-                scrollToolbar(delta.y)
+                // Adjust the urlbar, reader bar, and toolbar by the change in the contentInset
+                scrollUrlBar(tab.webView.scrollView.contentInset.top - inset.top)
+                scrollReaderModeBar(tab.webView.scrollView.contentInset.top - inset.top)
+                scrollToolbar(tab.webView.scrollView.contentInset.top - inset.top)
             }
         }
     }
