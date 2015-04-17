@@ -145,6 +145,86 @@ public class SwiftData {
     }
 }
 
+/**
+ * Wrapper class for a SQLite statement.
+ * This class helps manage the statement lifecycle. By holding a reference to the SQL connection, we ensure
+ * the connection is never deinitialized while the statement is active. This class is responsible for
+ * finalizing the SQL statement once it goes out of scope.
+ */
+private class SQLiteDBStatement {
+    var pointer: COpaquePointer = nil
+    private let connection: SQLiteDBConnection
+
+    init?(connection: SQLiteDBConnection, query: String, args: [AnyObject?]?, error: NSErrorPointer) {
+        self.connection = connection
+
+        var status = sqlite3_prepare_v2(connection.sqliteDB, query, -1, &pointer, nil)
+        if status != SQLITE_OK {
+            if error != nil {
+                error.memory = connection.createErr("During: SQL Prepare \(query)", status: Int(status))
+            }
+            return nil
+        }
+
+        if let args = args {
+            let bindError = bind(args)
+
+            if bindError != nil {
+                if error != nil {
+                    error.memory = bindError
+                }
+                return nil
+            }
+        }
+    }
+
+    /// Binds arguments to the statement.
+    private func bind(objects: [AnyObject?]) -> NSError? {
+        let count = Int(sqlite3_bind_parameter_count(pointer))
+        if (count < objects.count) {
+            return connection.createErr("During: Bind", status: 202)
+        }
+        if (count > objects.count) {
+            return connection.createErr("During: Bind", status: 201)
+        }
+
+        for (index, obj) in enumerate(objects) {
+            var status: Int32 = SQLITE_OK
+
+            // Doubles also pass obj as Int, so order is important here.
+            if obj is Double {
+                status = sqlite3_bind_double(pointer, Int32(index+1), obj as! Double)
+            } else if obj is Int {
+                status = sqlite3_bind_int(pointer, Int32(index+1), Int32(obj as! Int))
+            } else if obj is Bool {
+                status = sqlite3_bind_int(pointer, Int32(index+1), (obj as! Bool) ? 1 : 0)
+            } else if obj is String {
+                let negativeOne = UnsafeMutablePointer<Int>(bitPattern: -1)
+                let opaquePointer = COpaquePointer(negativeOne)
+                let transient = CFunctionPointer<((UnsafeMutablePointer<()>) -> Void)>(opaquePointer)
+                status = sqlite3_bind_text(pointer, Int32(index+1), (obj as! String).cStringUsingEncoding(NSUTF8StringEncoding)!, -1, transient)
+            } else if obj is NSData {
+                status = sqlite3_bind_blob(pointer, Int32(index+1), (obj as! NSData).bytes, -1, nil)
+            } else if obj is NSDate {
+                var timestamp = (obj as! NSDate).timeIntervalSince1970
+                status = sqlite3_bind_double(pointer, Int32(index+1), timestamp)
+            } else if obj === nil {
+                status = sqlite3_bind_null(pointer, Int32(index+1))
+            }
+
+            if status != SQLITE_OK {
+                return connection.createErr("During: Bind", status: Int(status))
+            }
+        }
+
+        return nil
+    }
+
+    deinit {
+        sqlite3_finalize(pointer)
+    }
+}
+
 public class SQLiteDBConnection {
     private var sqliteDB: COpaquePointer = nil
     private let filename: String
@@ -234,94 +314,31 @@ public class SQLiteDBConnection {
     }
 
     /// Executes a change on the database.
-    func executeChange(sqlStr: String, withArgs: [AnyObject?]? = nil) -> NSError? {
-        var err: NSError? = nil
-        var pStmt: COpaquePointer = nil
-
-        var status = sqlite3_prepare_v2(sqliteDB, sqlStr, -1, &pStmt, nil)
-        if status != SQLITE_OK {
-            let err = createErr("During: SQL Prepare \(sqlStr)", status: Int(status))
-            sqlite3_finalize(pStmt)
-            return err
+    func executeChange(sqlStr: String, withArgs args: [AnyObject?]? = nil) -> NSError? {
+        var error: NSError?
+        let statement = SQLiteDBStatement(connection: self, query: sqlStr, args: args, error: &error)
+        if let error = error {
+            return error
         }
 
-        if let args = withArgs {
-            if let err = bind(args, stmt: pStmt) {
-                sqlite3_finalize(pStmt)
-                return err
-            }
-        }
-
-        status = sqlite3_step(pStmt)
+        let status = sqlite3_step(statement!.pointer)
 
         if status != SQLITE_DONE && status != SQLITE_OK {
-            err = createErr("During: SQL Step \(sqlStr)", status: Int(status))
+            error = createErr("During: SQL Step \(sqlStr)", status: Int(status))
         }
 
-        sqlite3_finalize(pStmt)
-        return err
+        return error
     }
 
     /// Queries the database.
-    func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs: [AnyObject?]? = nil) -> Cursor {
-        var pStmt: COpaquePointer = nil
-
-        let status = sqlite3_prepare_v2(sqliteDB, sqlStr, -1, &pStmt, nil)
-        if status != SQLITE_OK {
-            let err = createErr("During: SQL Prepare \(sqlStr)", status: Int(status))
-            sqlite3_finalize(pStmt)
-            return Cursor(err: err)
+    func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]? = nil) -> Cursor {
+        var error: NSError?
+        let statement = SQLiteDBStatement(connection: self, query: sqlStr, args: args, error: &error)
+        if let error = error {
+            return Cursor(err: error)
         }
 
-        if let args = withArgs {
-            if let err = bind(args, stmt: pStmt) {
-                sqlite3_finalize(pStmt)
-                return Cursor(err: err)
-            }
-        }
-
-        return SDCursor(db: self, stmt: pStmt, factory: factory)
-    }
-
-    // Bind objects to a query
-    private func bind(objects: [AnyObject?], stmt: COpaquePointer) -> NSError? {
-        let count = Int(sqlite3_bind_parameter_count(stmt))
-        if (count < objects.count) {
-            return createErr("During: Bind", status: 202)
-        } else if (count > objects.count) {
-            return createErr("During: Bind", status: 201)
-        }
-
-        for (index, obj) in enumerate(objects) {
-            var status: Int32 = SQLITE_OK
-
-            // Double's also pass obj is Int, so order is important here
-            if obj is Double {
-                status = sqlite3_bind_double(stmt, Int32(index+1), obj as! Double)
-            } else if obj is Int {
-                status = sqlite3_bind_int(stmt, Int32(index+1), Int32(obj as! Int))
-            } else if obj is Bool {
-                status = sqlite3_bind_int(stmt, Int32(index+1), (obj as! Bool) ? 1 : 0)
-            } else if obj is String {
-                let negativeOne = UnsafeMutablePointer<Int>(bitPattern: -1)
-                let opaquePointer = COpaquePointer(negativeOne)
-                let transient = CFunctionPointer<((UnsafeMutablePointer<()>) -> Void)>(opaquePointer)
-                status = sqlite3_bind_text(stmt, Int32(index+1), (obj as! String).cStringUsingEncoding(NSUTF8StringEncoding)!, -1, transient)
-            } else if obj is NSData {
-                status = sqlite3_bind_blob(stmt, Int32(index+1), (obj as! NSData).bytes, -1, nil)
-            } else if obj is NSDate {
-                var timestamp = (obj as! NSDate).timeIntervalSince1970
-                status = sqlite3_bind_double(stmt, Int32(index+1), timestamp)
-            } else if obj === nil {
-                status = sqlite3_bind_null(stmt, Int32(index+1))
-            }
-
-            if status != SQLITE_OK {
-                return createErr("During: Binding", status: Int(status))
-            }
-        }
-
-        return nil
+        return SDCursor(statement: statement!, factory: factory)
     }
 }
 
@@ -339,18 +356,14 @@ func StringFactory(row: SDRow) -> String {
 /// and a generator for iterating over columns.
 class SDRow: SequenceType {
     // The sqlite statement this row came from.
-    private let stmt: COpaquePointer
+    private let statement: SQLiteDBStatement
 
     // The columns of this database. The indices of these are assumed to match the indices
     // of the statement.
     private let columnNames: [String]
 
-    // We hold a reference to the connection to keep it from being closed.
-    private let db: SQLiteDBConnection
-
-    private init(connection: SQLiteDBConnection, stmt: COpaquePointer, columns: [String]) {
-        db = connection
-        self.stmt = stmt
+    private init(statement: SQLiteDBStatement, columns: [String]) {
+        self.statement = statement
         self.columnNames = columns
     }
 
@@ -358,23 +371,23 @@ class SDRow: SequenceType {
     private func getValue(index: Int) -> AnyObject? {
         let i = Int32(index)
 
-        let type = sqlite3_column_type(stmt, i)
+        let type = sqlite3_column_type(statement.pointer, i)
         var ret: AnyObject? = nil
 
         switch type {
         case SQLITE_NULL, SQLITE_INTEGER:
-            ret = NSNumber(longLong: sqlite3_column_int64(stmt, i))
+            ret = NSNumber(longLong: sqlite3_column_int64(statement.pointer, i))
         case SQLITE_TEXT:
-            let text = UnsafePointer<Int8>(sqlite3_column_text(stmt, i))
+            let text = UnsafePointer<Int8>(sqlite3_column_text(statement.pointer, i))
             ret = String.fromCString(text)
         case SQLITE_BLOB:
-            let blob = sqlite3_column_blob(stmt, i)
+            let blob = sqlite3_column_blob(statement.pointer, i)
             if blob != nil {
-                let size = sqlite3_column_bytes(stmt, i)
+                let size = sqlite3_column_bytes(statement.pointer, i)
                 ret = NSData(bytes: blob, length: Int(size))
             }
         case SQLITE_FLOAT:
-            ret = Double(sqlite3_column_double(stmt, i))
+            ret = Double(sqlite3_column_double(statement.pointer, i))
         default:
             println("SwiftData Warning -> Column: \(index) is of an unrecognized type, returning nil")
         }
@@ -527,13 +540,11 @@ private struct SDError {
 /// only fetches items when asked for, and caches (all) old requests. Ideally it will
 /// at somepoint fetch a window of items to keep in memory.
 private class SDCursor<T> : Cursor {
-    private let stmt: COpaquePointer
+    private var statement: SQLiteDBStatement!
     // Function for generating objects of type T from a row.
     private let factory: (SDRow) -> T
     // Status of the previous fetch request.
     private var sqlStatus: Int32 = 0
-    // Hold a reference to the connection so that it isn't closed
-    private let db: SQLiteDBConnection
     // Cache of perviously fetched results (and their row numbers)
     var cache = [Int: T]()
     // Number of rows in the database
@@ -561,32 +572,30 @@ private class SDCursor<T> : Cursor {
             // If we're currently somewhere in the list after this position
             // we'll have to jump back to the start.
             if (position < oldValue) {
-                sqlite3_reset(self.stmt)
+                sqlite3_reset(self.statement.pointer)
                 stepStart = -1
             }
 
             // Now step up through the list to the requested position
             for i in stepStart..<position {
-                sqlStatus = sqlite3_step(self.stmt)
+                sqlStatus = sqlite3_step(self.statement.pointer)
             }
         }
     }
 
-    init(db: SQLiteDBConnection, stmt: COpaquePointer, factory: (SDRow) -> T) {
-        // We will hold the db open until we're thrown away
-        self.db = db
-        self.stmt = stmt
+    init(statement: SQLiteDBStatement, factory: (SDRow) -> T) {
         self.factory = factory
+        self.statement = statement
 
         // The only way I know to get a count. Walk through the entire statement to see how many rows there are.
         var count = 0
-        self.sqlStatus = sqlite3_step(self.stmt)
+        self.sqlStatus = sqlite3_step(statement.pointer)
         while self.sqlStatus != SQLITE_DONE {
             count++
-            self.sqlStatus = sqlite3_step(self.stmt)
+            self.sqlStatus = sqlite3_step(statement.pointer)
         }
 
-        sqlite3_reset(self.stmt)
+        sqlite3_reset(statement.pointer)
         self._count = count
 
         super.init(status: .Success, msg: "success")
@@ -595,22 +604,14 @@ private class SDCursor<T> : Cursor {
     // Helper for finding all the column names in this statement.
     private lazy var columns: [String] = {
         // This untangles all of the columns and values for this row when its created
-        let columnCount = sqlite3_column_count(self.stmt)
+        let columnCount = sqlite3_column_count(self.statement.pointer)
         var columns = [String]()
         for var i: Int32 = 0; i < columnCount; ++i {
-            let columnName = String.fromCString(sqlite3_column_name(self.stmt, i))!
+            let columnName = String.fromCString(sqlite3_column_name(self.statement.pointer, i))!
             columns.append(columnName)
         }
         return columns
     }()
-
-    // Finalize the statement when we're destroyed. This will also release our reference
-    // to the database, which will hopefully close it as well.
-    deinit {
-        if status == .Success {
-            sqlite3_finalize(self.stmt)
-        }
-    }
 
     override subscript(index: Int) -> Any? {
         get {
@@ -627,7 +628,7 @@ private class SDCursor<T> : Cursor {
                 return nil
             }
 
-            let row = SDRow(connection: db, stmt: self.stmt, columns: self.columns)
+            let row = SDRow(statement: statement, columns: self.columns)
             let res = self.factory(row)
             self.cache[index] = res
 
@@ -636,8 +637,8 @@ private class SDCursor<T> : Cursor {
     }
 
     override func close() {
-        sqlite3_finalize(self.stmt)
         cache.removeAll(keepCapacity: false)
+        statement = nil
         super.close()
     }
 }
