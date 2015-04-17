@@ -36,18 +36,23 @@ import Foundation
 import UIKit
 import sqlite3
 
-// All database operations actually occur serially on this queue. Careful not to deadlock it!
+/// All database operations actually occur serially on this queue. Careful not to deadlock it!
 private let queue = dispatch_queue_create("swiftdata queue", DISPATCH_QUEUE_SERIAL)
 
-// The public interface for the database. This handles dispatching calls synchronously on the correct thread
+/**
+ * The public interface for the database.
+ * This handles dispatching calls synchronously on the correct thread.
+ */
 public class SwiftData {
     let filename: String
     init(filename: String) {
         self.filename = filename
     }
 
-    //The real meat of all the execute methods. This is used internally to open and close a database connection and
-    // run a block of code inside it.
+    /**
+     * The real meat of all the execute methods. This is used internally to open and
+     * close a database connection and run a block of code inside it.
+     */
     public func withConnection(flags: SwiftData.Flags, cb: (db: SQLiteDBConnection) -> NSError?) -> NSError? {
         var error: NSError? = nil
         let task: () -> Void = {
@@ -60,8 +65,10 @@ public class SwiftData {
         return error
     }
 
-    // Helper for opening a connection, starting a transaction, and then running a block of code inside it.
-    // The code block can return true if the transaction should be commited. False if we should rollback.
+    /**
+     * Helper for opening a connection, starting a transaction, and then running a block of code inside it.
+     * The code block can return true if the transaction should be commited. False if we should rollback.
+     */
     public func transaction(transactionClosure: (db: SQLiteDBConnection)->Bool) -> NSError? {
         return withConnection(SwiftData.Flags.ReadWriteCreate) { db in
             if let err = db.executeChange("BEGIN EXCLUSIVE") {
@@ -101,7 +108,6 @@ public class SwiftData {
     }
 }
 
-// We open the connection when this is created
 public class SQLiteDBConnection {
     private var sqliteDB: COpaquePointer = nil
     private let filename: String
@@ -138,8 +144,8 @@ public class SQLiteDBConnection {
         return Int(sqlite3_changes(sqliteDB))
     }
 
-    // Creates an error from a sqlite status. Will print to the console if debug_enabled is set.
-    // (i.e. Do not call this unless you're going to return this error)
+    /// Creates an error from a sqlite status. Will print to the console if debug_enabled is set.
+    /// Do not call this unless you're going to return this error.
     private func createErr(description: String, status: Int) -> NSError {
         var msg = SDError.errorMessageFromCode(status)
 
@@ -158,7 +164,7 @@ public class SQLiteDBConnection {
         return NSError(domain: "org.mozilla", code: status, userInfo: [NSLocalizedDescriptionKey: msg])
     }
 
-    // Open the connection. This is called when the db is created. You should not call it yourself
+    /// Open the connection. This is called when the db is created. You should not call it yourself.
     private func openWithFlags(flags: Int32) -> NSError? {
         let status = sqlite3_open_v2(filename.cStringUsingEncoding(NSUTF8StringEncoding)!, &sqliteDB, flags, nil)
         if status != SQLITE_OK {
@@ -167,7 +173,7 @@ public class SQLiteDBConnection {
         return nil
     }
 
-    // Closes a connection This is called a deinit. Do not call this yourself
+    /// Closes a connection. This is called via deinit. Do not call this yourself.
     private func closeCustomConnection() -> NSError? {
         let status = sqlite3_close(sqliteDB)
 
@@ -180,7 +186,7 @@ public class SQLiteDBConnection {
         return nil
     }
 
-    // Executes a change on the datbase
+    /// Executes a change on the database.
     func executeChange(sqlStr: String, withArgs: [AnyObject?]? = nil) -> NSError? {
         var err: NSError? = nil
         var pStmt: COpaquePointer = nil
@@ -209,7 +215,7 @@ public class SQLiteDBConnection {
         return err
     }
 
-    // Execute a query on the database
+    /// Queries the database.
     func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs: [AnyObject?]? = nil) -> Cursor {
         var pStmt: COpaquePointer = nil
 
@@ -272,19 +278,19 @@ public class SQLiteDBConnection {
     }
 }
 
-// Helper for queries that return a single integer result
+/// Helper for queries that return a single integer result.
 func IntFactory(row: SDRow) -> Int {
     return row[0] as! Int
 }
 
-// Helper for queries that return a single String result
+/// Helper for queries that return a single String result.
 func StringFactory(row: SDRow) -> String {
     return row[0] as! String
 }
 
-// Wrapper around a statment for getting data from a row. This provides accessors for subscript indexing
-// and a generator for iterating over columns.
-public class SDRow : SequenceType {
+/// Wrapper around a statement for getting data from a row. This provides accessors for subscript indexing
+/// and a generator for iterating over columns.
+class SDRow: SequenceType {
     // The sqlite statement this row came from.
     private let stmt: COpaquePointer
 
@@ -330,13 +336,13 @@ public class SDRow : SequenceType {
     }
 
     // Accessor getting column 'key' in the row
-    public subscript(key: Int) -> AnyObject? {
+    subscript(key: Int) -> AnyObject? {
         return getValue(key)
     }
 
     // Accessor getting a named column in the row. This (currently) depends on
     // the columns array passed into this Row to find the correct index.
-    public subscript(key: String) -> AnyObject? {
+    subscript(key: String) -> AnyObject? {
         get {
             if let index = find(columnNames, key) {
                 return getValue(index)
@@ -346,7 +352,7 @@ public class SDRow : SequenceType {
     }
 
     // Allow iterating through the row. This is currently broken.
-    public func generate() -> GeneratorOf<Any> {
+    func generate() -> GeneratorOf<Any> {
         var nextIndex = 0
         return GeneratorOf<Any>() {
             // This crashes the compiler. Yay!
@@ -358,7 +364,7 @@ public class SDRow : SequenceType {
     }
 }
 
-// Helper for pretty printing sql (and other custom) error codes
+/// Helper for pretty printing SQL (and other custom) error codes.
 private struct SDError {
     private static func errorMessageFromCode(errorCode: Int) -> String {
         switch errorCode {
@@ -470,10 +476,10 @@ private struct SDError {
     }
 }
 
-// Wrapper around a statement to help with iterating through the results. This currently
-// only fetches items when asked for, and caches (all) old requests. Ideally it will
-// at somepoint fetch a window of items to keep in memory
-public class SDCursor<T> : Cursor {
+/// Wrapper around a statement to help with iterating through the results. This currently
+/// only fetches items when asked for, and caches (all) old requests. Ideally it will
+/// at somepoint fetch a window of items to keep in memory.
+private class SDCursor<T> : Cursor {
     private let stmt: COpaquePointer
     // Function for generating objects of type T from a row.
     private let factory: (SDRow) -> T
@@ -487,7 +493,7 @@ public class SDCursor<T> : Cursor {
     // XXX - When Cursor becomes an interface, this should be a normal property, but right now
     //       we can't override the Cursor getter for count with a stored property.
     private let _count: Int
-    override public var count: Int {
+    override var count: Int {
         get {
             if status != .Success {
                 return 0
@@ -496,33 +502,30 @@ public class SDCursor<T> : Cursor {
         }
     }
 
-    private var _position = -1
-    private var position: Int {
-        get {
-            return _position
-        }
-        set {
+    private var position: Int = -1 {
+        didSet {
             // If we're already there, shortcut out.
-            if (newValue == _position) {
+            if (oldValue == position) {
                 return
             }
 
+            var stepStart = oldValue
+
             // If we're currently somewhere in the list after this position
             // we'll have to jump back to the start.
-            if (newValue < _position) {
+            if (position < oldValue) {
                 sqlite3_reset(self.stmt)
-                _position = -1
+                stepStart = -1
             }
 
             // Now step up through the list to the requested position
-            while (newValue != _position) {
+            for i in stepStart..<position {
                 sqlStatus = sqlite3_step(self.stmt)
-                _position++
             }
         }
     }
 
-    private init(db: SQLiteDBConnection, stmt: COpaquePointer, factory: (SDRow) -> T) {
+    init(db: SQLiteDBConnection, stmt: COpaquePointer, factory: (SDRow) -> T) {
         // We will hold the db open until we're thrown away
         self.db = db
         self.stmt = stmt
@@ -543,7 +546,7 @@ public class SDCursor<T> : Cursor {
     }
 
     // Helper for finding all the column names in this statement.
-    lazy var columns: [String] = {
+    private lazy var columns: [String] = {
         // This untangles all of the columns and values for this row when its created
         let columnCount = sqlite3_column_count(self.stmt)
         var columns = [String]()
@@ -562,7 +565,7 @@ public class SDCursor<T> : Cursor {
         }
     }
 
-    override public subscript(index: Int) -> Any? {
+    override subscript(index: Int) -> Any? {
         get {
             if status != .Success {
                 return nil
@@ -585,7 +588,7 @@ public class SDCursor<T> : Cursor {
         }
     }
 
-    override public func close() {
+    override func close() {
         sqlite3_finalize(self.stmt)
         cache.removeAll(keepCapacity: false)
         super.close()
