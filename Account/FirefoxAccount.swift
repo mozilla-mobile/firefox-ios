@@ -182,7 +182,7 @@ public class FirefoxAccount {
     }
 
     public func checkpointState() {
-        log.info("Storing Account State in Keychain with label account.state.\(stateKeyLabel)")
+        log.info("Storing Account State in Keychain with label account.state.\(self.stateKeyLabel)")
         // TODO: PII logging.
         let jsonString = state.asJSON().toString(pretty: false)
         KeychainWrapper.setString(jsonString, forKey: "account.state." + stateKeyLabel)
