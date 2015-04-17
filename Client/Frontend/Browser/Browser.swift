@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+import Storage
 
 protocol BrowserHelper {
     static func name() -> String
@@ -20,6 +21,7 @@ class Browser: NSObject, WKScriptMessageHandler {
     let webView: WKWebView
     var browserDelegate: BrowserDelegate? = nil
     var bars = [SnackBar]()
+    var favicons = [Favicon]()
 
     init(configuration: WKWebViewConfiguration) {
         configuration.userContentController = WKUserContentController()
@@ -54,6 +56,18 @@ class Browser: NSObject, WKScriptMessageHandler {
             }
         }
         return displayURL?.absoluteString ?? ""
+    }
+
+    var displayFavicon: Favicon? {
+        var width = 0
+        var largest: Favicon?
+        for icon in favicons {
+            if icon.width > width {
+                width = icon.width!
+                largest = icon
+            }
+        }
+        return largest
     }
 
     var url: NSURL? {
