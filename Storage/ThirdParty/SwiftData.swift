@@ -233,7 +233,7 @@ public class SQLiteDBConnection {
 
     public var version: Int {
         get {
-            let res = executeQuery("PRAGMA user_version", factory: IntFactory)
+            let res = executeQueryUnsafe("PRAGMA user_version", factory: IntFactory)
             return res[0] as? Int ?? 0
         }
 
@@ -251,7 +251,7 @@ public class SQLiteDBConnection {
         }
 
         if SwiftData.EnableWAL {
-            let cursor = executeQuery("PRAGMA journal_mode=WAL", factory: StringFactory)
+            let cursor = executeQueryUnsafe("PRAGMA journal_mode=WAL", factory: StringFactory)
             assert(cursor[0] as! String == "wal", "WAL journal mode set")
         }
 
@@ -331,6 +331,7 @@ public class SQLiteDBConnection {
     }
 
     /// Queries the database.
+    /// Returns a cursor pre-filled with the complete result set.
     func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]? = nil) -> Cursor {
         var error: NSError?
         let statement = SQLiteDBStatement(connection: self, query: sqlStr, args: args, error: &error)
@@ -338,7 +339,22 @@ public class SQLiteDBConnection {
             return Cursor(err: error)
         }
 
-        return SDCursor(statement: statement!, factory: factory)
+        return FilledSQLiteCursor(statement: statement!, factory: factory)
+    }
+
+    /**
+     * Queries the database.
+     * Returns a live cursor that holds the query statement and database connection.
+     * Instances of this class *must not* leak outside of the connection queue!
+     */
+    func executeQueryUnsafe<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]? = nil) -> Cursor {
+        var error: NSError?
+        let statement = SQLiteDBStatement(connection: self, query: sqlStr, args: args, error: &error)
+        if let error = error {
+            return Cursor(err: error)
+        }
+
+        return LiveSQLiteCursor(statement: statement!, factory: factory)
     }
 }
 
@@ -536,21 +552,66 @@ private struct SDError {
     }
 }
 
-/// Wrapper around a statement to help with iterating through the results. This currently
-/// only fetches items when asked for, and caches (all) old requests. Ideally it will
-/// at somepoint fetch a window of items to keep in memory.
-private class SDCursor<T> : Cursor {
+/// Provides access to the result set returned by a database query.
+/// The entire result set is cached, so this does not retain a reference
+/// to the statement or the database connection.
+private class FilledSQLiteCursor<T>: ArrayCursor<T> {
+    private init(statement: SQLiteDBStatement, factory: (SDRow) -> T) {
+        var status = CursorStatus.Success
+        let data = FilledSQLiteCursor.getValues(statement, factory: factory, status: &status)
+        super.init(data: data, status: CursorStatus.Success, statusMessage: "Success")
+    }
+
+    /// Return an array with the set of results and release the statement.
+    private class func getValues(statement: SQLiteDBStatement, factory: (SDRow) -> T, inout status: CursorStatus) -> [T] {
+        var rows = [T]()
+        var count = 0
+        status = CursorStatus.Success
+
+        var columns = [String]()
+        let columnCount = sqlite3_column_count(statement.pointer)
+        for i in 0..<columnCount {
+            let columnName = String.fromCString(sqlite3_column_name(statement.pointer, i))!
+            columns.append(columnName)
+        }
+
+        while true {
+            let sqlStatus = sqlite3_step(statement.pointer)
+
+            if sqlStatus != SQLITE_ROW {
+                if sqlStatus != SQLITE_DONE {
+                    status = CursorStatus.Failure
+                }
+                break
+            }
+
+            count++
+
+            let row = SDRow(statement: statement, columns: columns)
+            let result = factory(row)
+            rows.append(result)
+        }
+
+        sqlite3_reset(statement.pointer)
+
+        return rows
+    }
+}
+
+/// Wrapper around a statement to help with iterating through the results.
+private class LiveSQLiteCursor<T>: Cursor {
     private var statement: SQLiteDBStatement!
+
     // Function for generating objects of type T from a row.
     private let factory: (SDRow) -> T
+
     // Status of the previous fetch request.
     private var sqlStatus: Int32 = 0
-    // Cache of perviously fetched results (and their row numbers)
-    var cache = [Int: T]()
+
     // Number of rows in the database
     // XXX - When Cursor becomes an interface, this should be a normal property, but right now
     //       we can't override the Cursor getter for count with a stored property.
-    private let _count: Int
+    private var _count: Int = 0
     override var count: Int {
         get {
             if status != .Success {
@@ -619,25 +680,17 @@ private class SDCursor<T> : Cursor {
                 return nil
             }
 
-            if let row = cache[index] {
-                return row
-            }
-
             self.position = index
             if self.sqlStatus != SQLITE_ROW {
                 return nil
             }
 
             let row = SDRow(statement: statement, columns: self.columns)
-            let res = self.factory(row)
-            self.cache[index] = res
-
-            return res
+            return self.factory(row)
         }
     }
 
     override func close() {
-        cache.removeAll(keepCapacity: false)
         statement = nil
         super.close()
     }
