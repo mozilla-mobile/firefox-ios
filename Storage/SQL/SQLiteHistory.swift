@@ -56,6 +56,10 @@ public class SQLiteHistory : History {
                 return nil
             }
         }
+
+        public override func close() {
+            cursor.close()
+        }
     }
 
     public func get(options: QueryOptions?, complete: (data: Cursor) -> Void) {
