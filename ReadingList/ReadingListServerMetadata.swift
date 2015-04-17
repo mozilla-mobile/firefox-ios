@@ -4,9 +4,9 @@
 
 import Foundation
 
-struct ReadingListServerMetadata: Equatable {
-    var guid: String
-    var lastModified: ReadingListTimestamp
+public struct ReadingListServerMetadata: Equatable {
+    public var guid: String
+    public var lastModified: ReadingListTimestamp
 
     init(guid: String, lastModified: ReadingListTimestamp) {
         self.guid = guid
@@ -35,6 +35,6 @@ struct ReadingListServerMetadata: Equatable {
     }
 }
 
-func ==(lhs: ReadingListServerMetadata, rhs: ReadingListServerMetadata) -> Bool {
+public func ==(lhs: ReadingListServerMetadata, rhs: ReadingListServerMetadata) -> Bool {
     return lhs.guid == rhs.guid && lhs.lastModified == rhs.lastModified
 }
