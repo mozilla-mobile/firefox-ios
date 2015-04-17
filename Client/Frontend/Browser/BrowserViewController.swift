@@ -827,8 +827,8 @@ extension BrowserViewController: TabManagerDelegate {
         let favicons = FaviconManager(browser: tab, profile: profile)
         tab.addHelper(favicons, name: FaviconManager.name())
 
-        let pm = PasswordHelper(browser: tab, profile: profile)
-        tab.addHelper(pm, name: PasswordHelper.name())
+        let passwords = PasswordHelper(browser: tab, profile: profile)
+        tab.addHelper(passwords, name: PasswordHelper.name())
         
         let longPressBrowserHelper = LongPressBrowserHelper(browser: tab)
         longPressBrowserHelper.delegate = self
@@ -955,6 +955,23 @@ extension BrowserViewController: WKNavigationDelegate {
                 updateInContentHomePanel(tab.displayURL)
             }
         }
+    }
+
+    func webView(webView: WKWebView,
+        didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge,
+        completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
+            if challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodClientCertificate {
+                if let tab = tabManager.getTab(webView) {
+                    let helper = tab.getHelper(name: PasswordHelper.name()) as! PasswordHelper
+                    helper.handleAuthRequest(self, challenge: challenge) { password in
+                        if let password = password {
+                            completionHandler(.UseCredential, password.credential)
+                        } else {
+                            completionHandler(NSURLSessionAuthChallengeDisposition.CancelAuthenticationChallenge, nil)
+                        }
+                    }
+                }
+            }
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
