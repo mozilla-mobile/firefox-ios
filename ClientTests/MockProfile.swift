@@ -4,6 +4,7 @@
 
 import Foundation
 import Account
+import ReadingList
 import Shared
 import Storage
 import Sync
@@ -41,8 +42,8 @@ public class MockProfile: Profile {
         return SQLiteHistory(files: self.files)
         }()
 
-    lazy var readingList: ReadingList = {
-        return SQLiteReadingList(files: self.files)
+    lazy var readingList: ReadingListService? = {
+        return ReadingListService(profileStoragePath: self.files.rootPath)
         }()
 
     private lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {

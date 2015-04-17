@@ -40,7 +40,6 @@ protocol Profile {
     var history: History { get }
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
-    var remoteClientsAndTabs: RemoteClientsAndTabs { get }
     var passwords: Passwords { get }
     var thumbnails: Thumbnails { get }
 
@@ -53,6 +52,9 @@ protocol Profile {
 
     func getAccount() -> FirefoxAccount?
     func setAccount(account: FirefoxAccount?)
+
+    func getClients() -> Deferred<Result<[RemoteClient]>>
+    func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
 }
 
 public class BrowserProfile: Profile {
