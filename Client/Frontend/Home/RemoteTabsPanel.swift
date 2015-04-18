@@ -115,10 +115,22 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
             view.textLabel.text = client.name
 
             // TODO: Bug 1154088 - Convert timestamp to locale-relative timestring.
-            // TODO: note that this is very likely to be wrong; it'll show the last time the other device
-            // uploaded a record, *or another device sent that device a command*.
+
+            /*
+             * A note on timestamps.
+             * We have access to two timestamps here: the timestamp of the remote client record,
+             * and the set of timestamps of the client's tabs.
+             * Neither is "last synced". The client record timestamp changes whenever the remote
+             * client uploads its record (i.e., infrequently), but also whenever another device
+             * sends a command to that client -- which can be much later than when that client
+             * last synced.
+             * The client's tabs haven't necessarily changed, but it can still have synced.
+             * Ideally, we should save and use the modified time of the tabs record itself.
+             * This will be the real time that the other client uploaded tabs.
+             */
+            let timestamp = clientTabs.approximateLastSyncTime()
             let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time")
-            view.detailTextLabel.text = String(format: label, String(client.modified))
+            view.detailTextLabel.text = String(format: label, String(timestamp))
             if client.type == "desktop" {
                 view.imageView.image = UIImage(named: "deviceTypeDesktop")
             } else {
