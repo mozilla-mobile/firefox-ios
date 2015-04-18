@@ -33,10 +33,10 @@ public func curry<A, B, C, D>(f: (A, B, C) -> D) -> A -> B -> C -> D {
     }
 }
 
-public func curry<A, B, C, D>(f: (A, B, C) -> D) -> (A, B) -> C -> D {
-    return { (a, b) in
-        return { c in
-            return f(a, b, c)
+public func curry<A, B, C, D, E>(f: (A, B, C, D) -> E) -> (A, B, C) -> D -> E {
+    return { (a, b, c) in
+        return { d in
+            return f(a, b, c, d)
         }
     }
 }
