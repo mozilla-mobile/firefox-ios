@@ -114,8 +114,17 @@ class SnackBar: UIView {
         super.init(frame: frame)
     }
 
+    deinit {
+        if imageView.image == nil {
+            textView.removeObserver(self, forKeyPath: "contentSize")
+        }
+    }
+
     private func setup() {
         textView.backgroundColor = nil
+        if imageView.image == nil {
+            textView.addObserver(self, forKeyPath: "contentSize", options: .New, context: nil)
+        }
 
         insertSubview(backgroundView, atIndex: 0)
         addSubview(imageView)
@@ -277,6 +286,14 @@ class SnackBar: UIView {
         snackButton.bar = self
         buttonsView.addButtons(snackButton)
         buttonsView.setNeedsUpdateConstraints()
+    }
+
+    // TODO: Move this to a textView helper
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        // Center vertical alignment
+        var topCorrect = (textView.bounds.size.height - textView.contentSize.height * textView.zoomScale)/2.0;
+        topCorrect = topCorrect < 0.0 ? 0.0 : topCorrect
+        textView.contentOffset = CGPoint(x: 0, y: -topCorrect)
     }
 }
 
