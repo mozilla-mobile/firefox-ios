@@ -920,6 +920,16 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
     
+    func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
+        if navigationResponse.canShowMIMEType {
+            decisionHandler(WKNavigationResponsePolicy.Allow)
+            return
+        }
+
+        decisionHandler(WKNavigationResponsePolicy.Cancel)
+        Download.promptForDownload(navigationResponse.response.URL!, tab: self.tabManager.getTab(webView)!)
+    }
+
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         if let tab = tabManager.selectedTab {
             if tab.webView == webView {

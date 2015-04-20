@@ -22,7 +22,7 @@ class ProfileFileAccessor: FileAccessor {
         // Bug 1147262: First option is for device, second is for simulator.
         let url =
             manager.containerURLForSecurityApplicationGroupIdentifier(ExtensionUtils.sharedContainerIdentifier()) ??
-            manager .URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as? NSURL
+            manager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as? NSURL
         let profilePath = url!.path!.stringByAppendingPathComponent(profileDirName)
         super.init(rootPath: profilePath)
     }
@@ -71,14 +71,16 @@ public class BrowserProfile: Profile {
     @objc
     func onLocationChange(notification: NSNotification) {
         if let url = notification.userInfo!["url"] as? NSURL {
-            var site: Site!
-            if let title = notification.userInfo!["title"] as? NSString {
-                site = Site(url: url.absoluteString!, title: title as String)
-                let visit = Visit(site: site, date: NSDate())
-                history.addVisit(visit, complete: { (success) -> Void in
-                    // nothing to do
-                })
-            }
+            let title = notification.userInfo!["title"] as? String
+            let site = Site(url: url.absoluteString!, title: title ?? "")
+
+            let rawType = notification.userInfo!["type"] as? Int ?? VisitType.Unknown.rawValue
+            let type = VisitType(rawValue: rawType)
+
+            let visit = Visit(site: site, date: NSDate(), type: type!)
+            history.addVisit(visit, complete: { (success) -> Void in
+                // nothing to do
+            })
         }
     }
 
