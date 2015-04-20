@@ -23,6 +23,7 @@
 		0BA84AE31AE57147009C4D0C /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BA84ADA1AE57095009C4D0C /* SnapKit.framework */; };
 		0BA84AE41AE57147009C4D0C /* SnapKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 0BA84ADA1AE57095009C4D0C /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0BA84AE71AE57172009C4D0C /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BA84ADA1AE57095009C4D0C /* SnapKit.framework */; };
+		0BA84AE91AE574CE009C4D0C /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA84AE81AE574CE009C4D0C /* DownloadManager.swift */; };
 		0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA896491A250E6500C1010C /* ProfileTest.swift */; };
 		0BA8964C1A250E6500C1010C /* TestBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA8964A1A250E6500C1010C /* TestBookmarks.swift */; };
 		0BAC7A801AC4B135006018CB /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAC7A7F1AC4B135006018CB /* AppConstants.swift */; };
@@ -1036,6 +1037,7 @@
 		0B6FBAB11AC1F830007EC669 /* baseFile.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = baseFile.html; sourceTree = "<group>"; };
 		0B8E0FF31A932BD500161DC3 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		0BA84AB61AE5706F009C4D0C /* SnapKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SnapKit.xcodeproj; path = Carthage/Checkouts/Snap/SnapKit.xcodeproj; sourceTree = "<group>"; };
+		0BA84AE81AE574CE009C4D0C /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		0BA896491A250E6500C1010C /* ProfileTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTest.swift; sourceTree = "<group>"; };
 		0BA8964A1A250E6500C1010C /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
 		0BAC7A7F1AC4B135006018CB /* AppConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
@@ -2048,6 +2050,7 @@
 		D3A994941A368691008AD1AC /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				0BA84AE81AE574CE009C4D0C /* DownloadManager.swift */,
 				0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */,
 				D3A994961A3686BD008AD1AC /* Browser.swift */,
 				E4CD9F2C1A6DC91200318571 /* BrowserLocationView.swift */,
@@ -3653,6 +3656,7 @@
 				D38B2D521A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
 				E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
+				0BA84AE91AE574CE009C4D0C /* DownloadManager.swift in Sources */,
 				E42475E21AB73B9B00B23D33 /* SWTableViewCell.m in Sources */,
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineCell.swift in Sources */,

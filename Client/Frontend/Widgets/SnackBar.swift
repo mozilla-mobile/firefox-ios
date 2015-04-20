@@ -69,6 +69,7 @@ class SnackBar: UIView {
     let backgroundView: UIView
     let buttonsView: Toolbar
     private var buttons = [SnackButton]()
+    let progress: UIProgressView
     // The Constraint for the bottom of this snackbar. We use this to transition it
     var bottom: Constraint?
 
@@ -85,6 +86,7 @@ class SnackBar: UIView {
         textView = UITextView()
         buttonsView = Toolbar()
         backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
+        progress = UIProgressView()
 
         super.init(frame: CGRectZero)
 
@@ -103,6 +105,7 @@ class SnackBar: UIView {
         textView = UITextView()
         buttonsView = Toolbar()
         backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
+        progress = UIProgressView()
 
         super.init(frame: frame)
     }
@@ -110,10 +113,13 @@ class SnackBar: UIView {
     private func setup() {
         textView.backgroundColor = nil
 
-        addSubview(backgroundView)
+        insertSubview(backgroundView, atIndex: 0)
         addSubview(imageView)
         addSubview(textView)
         addSubview(buttonsView)
+        addSubview(progress)
+
+        progress.hidden = true
 
         self.backgroundColor = UIColor.clearColor()
         buttonsView.drawTopBorder = true
@@ -123,6 +129,15 @@ class SnackBar: UIView {
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func setProgress(progress: Float, animated: Bool) {
+        if progress < 1.0 {
+            self.progress.hidden = false
+        } else {
+            self.progress.hidden = true
+        }
+        self.progress.setProgress(progress, animated: animated)
     }
 
     /**
