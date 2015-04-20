@@ -31,24 +31,22 @@ public class FirefoxAccount {
 
     public let configuration: FirefoxAccountConfiguration
 
-    private let stateKeyLabel: String
-    private var state: FxAState {
-        didSet {
-            checkpointState()
-        }
-    }
+    public let stateCache: KeychainCache<FxAState>
 
     public var actionNeeded: FxAActionNeeded {
-        return state.actionNeeded
+        return stateCache.value!.actionNeeded
     }
 
-    public init(configuration: FirefoxAccountConfiguration, email: String, uid: String, stateKeyLabel: String, state: FxAState) {
+    public convenience init(configuration: FirefoxAccountConfiguration, email: String, uid: String, stateKeyLabel: String, state: FxAState) {
+        self.init(configuration: configuration, email: email, uid: uid, stateCache: KeychainCache(branch: "account.state", label: stateKeyLabel, value: state))
+    }
+
+    public init(configuration: FirefoxAccountConfiguration, email: String, uid: String, stateCache: KeychainCache<FxAState>) {
         self.email = email
         self.uid = uid
         self.configuration = configuration
-        self.stateKeyLabel = stateKeyLabel
-        self.state = state
-        checkpointState()
+        self.stateCache = stateCache
+        self.stateCache.checkpoint()
     }
 
     public class func fromConfigurationAndJSON(configuration: FirefoxAccountConfiguration, data: JSON) -> FirefoxAccount? {
@@ -112,7 +110,7 @@ public class FirefoxAccount {
         dict["email"] = email
         dict["uid"] = uid
         dict["configurationLabel"] = configuration.label.rawValue
-        dict["stateKeyLabel"] = stateKeyLabel
+        dict["stateKeyLabel"] = stateCache.label
         return dict
     }
 
@@ -125,26 +123,6 @@ public class FirefoxAccount {
         return nil
     }
 
-    private class func labelAndStateFromKeychain(label: String?) -> (String, FxAState) {
-        if let l = label {
-            if let s = KeychainWrapper.stringForKey("account.state." + l) {
-                if let t = stateFromJSON(JSON.parse(s)) {
-                    log.info("Read Account State from Keychain with label account.state.\(l)")
-                    return (l, t)
-                } else {
-                    log.warning("Found Account State in Keychain with label account.state.\(l), but could not parse it.")
-                }
-            } else {
-                log.warning("Did not find Account State in Keychain with label account.state.\(l).")
-            }
-        } else {
-            log.warning("Did not find Account State label in Keychain.")
-        }
-        // Fall through to Separated.
-        log.warning("Failed to read Account State from Keychain; moving account to Separated.")
-        return (Bytes.generateGUID(), SeparatedState())
-    }
-
     private class func fromDictionaryV1(dictionary: [String: AnyObject]) -> FirefoxAccount? {
         var configurationLabel: FirefoxAccountConfigurationLabel? = nil
         if let rawValue = dictionary["configurationLabel"] as? String {
@@ -154,21 +132,13 @@ public class FirefoxAccount {
             configurationLabel = configurationLabel,
             email = dictionary["email"] as? String,
             uid = dictionary["uid"] as? String {
-                let (stateKeyLabel, state) = labelAndStateFromKeychain(dictionary["stateKeyLabel"] as? String)
+                let stateCache = KeychainCache.fromBranch("account.state", withLabel: dictionary["stateKeyLabel"] as? String, withDefault: SeparatedState(), factory: stateFromJSON)
                 return FirefoxAccount(
                     configuration: configurationLabel.toConfiguration(),
                     email: email, uid: uid,
-                        stateKeyLabel: stateKeyLabel,
-                        state: state)
+                    stateCache: stateCache)
         }
         return nil
-    }
-
-    public func checkpointState() {
-        log.info("Storing Account State in Keychain with label account.state.\(stateKeyLabel)")
-        // TODO: PII logging.
-        let jsonString = state.asJSON().toString(pretty: false)
-        KeychainWrapper.setString(jsonString, forKey: "account.state." + stateKeyLabel)
     }
 
     public enum AccountError: Printable, ErrorType {
@@ -185,8 +155,8 @@ public class FirefoxAccount {
         let client = FxAClient10(endpoint: configuration.authEndpointURL)
         let stateMachine = FxALoginStateMachine(client: client)
         let now = NSDate.now()
-        return stateMachine.advanceFromState(state, now: now).map { newState in
-            self.state = newState
+        return stateMachine.advanceFromState(stateCache.value!, now: now).map { newState in
+            self.stateCache.value = newState
             return newState
         }
     }

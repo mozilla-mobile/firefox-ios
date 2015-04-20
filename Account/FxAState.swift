@@ -124,14 +124,8 @@ func stateFromJSONV1(json: JSON) -> FxAState? {
     return nil
 }
 
-public protocol FxAState {
-    var label: FxAStateLabel { get }
-    var actionNeeded: FxAActionNeeded { get }
-    func asJSON() -> JSON
-}
-
 // Not an externally facing state!
-public class WithLabel: FxAState {
+public class FxAState: JSONLiteralConvertible {
     public var label: FxAStateLabel { return FxAStateLabel.Separated } // This is bogus, but we have to do something!
 
     public var actionNeeded: FxAActionNeeded {
@@ -155,7 +149,7 @@ public class WithLabel: FxAState {
     }
 }
 
-public class SeparatedState: WithLabel {
+public class SeparatedState: FxAState {
     override public var label: FxAStateLabel { return FxAStateLabel.Separated }
 
     override public init() {
@@ -164,7 +158,7 @@ public class SeparatedState: WithLabel {
 }
 
 // Not an externally facing state!
-public class ReadyForKeys: WithLabel {
+public class ReadyForKeys: FxAState {
     let sessionToken: NSData
     let keyFetchToken: NSData
     let unwrapkB: NSData
@@ -226,7 +220,7 @@ public class EngagedAfterVerifiedState: ReadyForKeys {
 }
 
 // Not an externally facing state!
-public class TokenAndKeys: WithLabel {
+public class TokenAndKeys: FxAState {
     let sessionToken: NSData
     public let kA: NSData
     public let kB: NSData
@@ -326,7 +320,7 @@ public class MarriedState: TokenKeysAndKeyPair {
     }
 }
 
-public class DoghouseState: WithLabel {
+public class DoghouseState: FxAState {
     override public var label: FxAStateLabel { return FxAStateLabel.Doghouse }
 
     override public init() {
