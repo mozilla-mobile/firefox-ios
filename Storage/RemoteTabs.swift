@@ -12,6 +12,17 @@ public struct ClientAndTabs: Equatable, Printable {
     public var description: String {
         return "<Client \(client.guid), \(tabs.count) tabs.>"
     }
+
+    // See notes in RemoteTabsPanel.swift.
+    public func approximateLastSyncTime() -> Timestamp {
+        if tabs.isEmpty {
+            return client.modified
+        }
+
+        return tabs.reduce(Timestamp(0), combine: { m, tab in
+            return max(m, tab.lastUsed)
+        })
+    }
 }
 
 public func ==(lhs: ClientAndTabs, rhs: ClientAndTabs) -> Bool {
