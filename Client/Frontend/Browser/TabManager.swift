@@ -49,8 +49,14 @@ class TabManager {
     var selectedIndex: Int { return _selectedIndex }
     private let defaultNewTabRequest: NSURLRequest
 
+    private var configuration: WKWebViewConfiguration
+
     init(defaultNewTabRequest: NSURLRequest) {
         self.defaultNewTabRequest = defaultNewTabRequest
+
+        // Create a common webview configuration with a shared process pool.
+        configuration = WKWebViewConfiguration()
+        configuration.processPool = WKProcessPool()
     }
 
     var count: Int {
@@ -103,13 +109,13 @@ class TabManager {
         }
     }
 
-    func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration = WKWebViewConfiguration()) -> Browser {
+    func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Browser {
         assert(NSThread.isMainThread())
         if request == nil {
             request = defaultNewTabRequest
         }
 
-        let tab = Browser(configuration: configuration)
+        let tab = Browser(configuration: configuration ?? self.configuration)
         addTab(tab)
         tab.loadRequest(request)
         selectTab(tab)
