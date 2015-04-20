@@ -23,6 +23,9 @@ class Download : NSObject {
     let url: NSURL
     private var closeWhenDone = false
 
+    // Background task ID. We'll use this to try and keep the download alive even if the user exits.
+    private var taskId: UIBackgroundTaskIdentifier? = nil
+
     // Helper for prompting to start a download
     class func promptForDownload(url: NSURL, tab: Browser) {
         let title = NSLocalizedString("Download the file at %@?", comment: "Prompt for downloading a file. File url will be shown.")
@@ -163,6 +166,15 @@ extension Download : NSURLConnectionDataDelegate {
         self.outputStream?.delegate = self
         self.outputStream?.scheduleInRunLoop(NSRunLoop.currentRunLoop(), forMode: NSDefaultRunLoopMode)
         self.outputStream?.open()
+        self.taskId = UIApplication.sharedApplication().beginBackgroundTaskWithName("Download \(url)", expirationHandler: { () -> Void in
+            self.taskId = nil
+            self.closeStream()
+            self.deleteFile()
+        })
+    }
+
+    func deleteFile() {
+        NSFileManager.defaultManager().removeItemAtPath(self.file, error: nil)
     }
 
     /// Called when the download's progress changes.
@@ -185,6 +197,7 @@ extension Download : NSURLConnectionDataDelegate {
 
 extension Download : NSStreamDelegate {
     func stream(theStream: NSStream, handleEvent streamEvent: NSStreamEvent) {
+        // TODO: Better handle error events in here.
         if streamEvent == NSStreamEvent.HasSpaceAvailable {
             // If we've got data around, try and store it
             if data?.length ?? 0 > 0 {
@@ -205,5 +218,8 @@ extension Download : NSStreamDelegate {
         outputStream = nil
         data = nil
         closeWhenDone = false
+        if let taskId = taskId {
+            UIApplication.sharedApplication().endBackgroundTask(taskId)
+        }
     }
 }
