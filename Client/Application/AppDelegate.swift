@@ -24,7 +24,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
 
-        profile = BrowserProfile(localName: "profile")
+        if NSClassFromString("XCTestCase") == nil {
+            profile = BrowserProfile(localName: "profile")
+        } else {
+            // Use a clean profile for each test session.
+            profile = BrowserProfile(localName: "testProfile")
+            profile.files.removeFilesInDirectory()
+        }
 
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
