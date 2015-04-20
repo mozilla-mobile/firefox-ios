@@ -22,6 +22,7 @@ class Browser: NSObject, WKScriptMessageHandler {
     var browserDelegate: BrowserDelegate? = nil
     var bars = [SnackBar]()
     var favicons = [Favicon]()
+    var screenshot: UIImage?
 
     init(configuration: WKWebViewConfiguration) {
         configuration.userContentController = WKUserContentController()

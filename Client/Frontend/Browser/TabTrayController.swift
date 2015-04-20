@@ -332,7 +332,6 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     private let CellIdentifier = "CellIdentifier"
     var collectionView: UICollectionView!
     var profile: Profile!
-    var screenshotHelper: ScreenshotHelper!
     var numberOfColumns: Int!
 
     var navBar: UINavigationBar!
@@ -443,7 +442,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         }
 
         let screenshotAspectRatio = cell.frame.width / TabTrayControllerUX.CellHeight
-        cell.background.image = screenshotHelper.takeScreenshot(tab, aspectRatio: screenshotAspectRatio, quality: 1)
+        cell.background.image = tab.screenshot
         cell.closeTab.addTarget(cell, action: "SELdidPressClose", forControlEvents: UIControlEvents.TouchUpInside)
 
         // calling setupFrames here fixes reused cells which don't get resized on rotation
@@ -505,10 +504,7 @@ extension TabTrayController: Transitionable {
             options.moving = transitionCell
         }
 
-        if let browser = browser {
-            transitionCell.background.image = screenshotHelper.takeScreenshot(browser, aspectRatio: 0, quality: 1)
-        }
-
+        transitionCell.background.image = browser?.screenshot
         transitionCell.titleText.text = browser?.displayTitle
         if let favIcon = browser?.displayFavicon {
             transitionCell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
