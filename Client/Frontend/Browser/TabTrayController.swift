@@ -478,6 +478,10 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
             }
         }
     }
+
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
 }
 
 extension TabTrayController: Transitionable {
