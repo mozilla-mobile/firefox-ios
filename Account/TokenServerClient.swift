@@ -27,6 +27,32 @@ public struct TokenServerToken {
         return self.uid == other.uid &&
                self.api_endpoint == other.api_endpoint
     }
+
+    public static func fromJSON(json: JSON) -> TokenServerToken? {
+        if let
+            id = json["id"].asString,
+            key = json["key"].asString,
+            api_endpoint = json["api_endpoint"].asString,
+            uid = json["uid"].asInt64,
+            durationInSeconds = json["duration"].asInt64,
+            remoteTimestamp = json["remoteTimestamp"].asInt64 {
+                return TokenServerToken(id: id, key: key, api_endpoint: api_endpoint, uid: UInt64(uid),
+                    durationInSeconds: UInt64(durationInSeconds), remoteTimestamp: Timestamp(remoteTimestamp))
+        }
+        return nil
+    }
+
+    public func asJSON() -> JSON {
+        let D: [String: AnyObject] = [
+            "id": id,
+            "key": key,
+            "api_endpoint": api_endpoint,
+            "uid": NSNumber(unsignedLongLong: uid),
+            "duration": NSNumber(unsignedLongLong: durationInSeconds),
+            "remoteTimestamp": NSNumber(unsignedLongLong: remoteTimestamp),
+        ]
+        return JSON(D)
+    }
 }
 
 enum TokenServerError {

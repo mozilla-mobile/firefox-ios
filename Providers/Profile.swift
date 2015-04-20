@@ -136,7 +136,7 @@ public class BrowserProfile: Profile {
 
     public func getClients() -> Deferred<Result<[RemoteClient]>> {
         if let account = self.account {
-            let authState = account.syncAuthState()
+            let authState = account.syncAuthState
             let syncPrefs = self.prefs.branch("sync")
             let storage = self.remoteClientsAndTabs
 
@@ -161,7 +161,7 @@ public class BrowserProfile: Profile {
         }
 
         if let account = self.account {
-            let authState = account.syncAuthState()
+            let authState = account.syncAuthState
             let syncPrefs = self.prefs.branch("sync")
             let storage = self.remoteClientsAndTabs
 

@@ -32,6 +32,7 @@ public class FirefoxAccount {
     public let configuration: FirefoxAccountConfiguration
 
     public let stateCache: KeychainCache<FxAState>
+    public var syncAuthState: SyncAuthState! // We can't give a reference to self if this is a let.
 
     public var actionNeeded: FxAActionNeeded {
         return stateCache.value!.actionNeeded
@@ -47,6 +48,9 @@ public class FirefoxAccount {
         self.configuration = configuration
         self.stateCache = stateCache
         self.stateCache.checkpoint()
+        self.syncAuthState = SyncAuthState(account: self,
+            cache: KeychainCache.fromBranch("account.syncAuthState", withLabel: self.stateCache.label, factory: syncAuthStateCachefromJSON)
+)
     }
 
     public class func fromConfigurationAndJSON(configuration: FirefoxAccountConfiguration, data: JSON) -> FirefoxAccount? {
@@ -170,10 +174,5 @@ public class FirefoxAccount {
             }
             return Result(failure: AccountError.NotMarried)
         }
-    }
-
-    public func syncAuthState() -> SyncAuthState {
-        let url = configuration.sync15Configuration.tokenServerEndpointURL
-        return SyncAuthState(account: self, tokenServerURL: url)
     }
 }
