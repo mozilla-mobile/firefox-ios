@@ -96,6 +96,20 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         autocompleting = enteredText != suggestion
     }
 
+    /// Select all text in the field using the special autocomplete highlight style.
+    func selectAll() {
+        clearAutocomplete()
+
+        // Create the attributed string with the autocompletion highlight.
+        let attributedString = NSMutableAttributedString(string: self.text)
+        attributedString.addAttribute(NSBackgroundColorAttributeName, value: AutocompleteTextFieldUX.HighlightColor, range: NSMakeRange(0, count(self.text)))
+        attributedText = attributedString
+
+        // Clear the selection, mark the field as being autocompleted so that we can type over it
+        selectedTextRange = nil
+        autocompleting = true
+    }
+
     /// Finalize any highlighted text.
     private func finishAutocomplete() {
         if autocompleting {

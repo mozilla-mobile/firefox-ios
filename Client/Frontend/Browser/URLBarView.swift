@@ -333,7 +333,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         // Without the async dispatch below, text selection doesn't work
         // intermittently and crashes on the iPhone 6 Plus (bug 1124310).
         dispatch_async(dispatch_get_main_queue(), {
-            autocompleteTextField.selectedTextRange = autocompleteTextField.textRangeFromPosition(autocompleteTextField.beginningOfDocument, toPosition: autocompleteTextField.endOfDocument)
+            autocompleteTextField.selectAll()
         })
 
         autocompleteTextField.layer.borderWidth = 1
