@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import WebKit
 import Storage
-import Snap
+import SnapKit
 
 private let OKString = NSLocalizedString("OK", comment: "OK button")
 private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")

@@ -4,7 +4,7 @@
 
 import Foundation
 import UIKit
-import Snap
+import SnapKit
 
 enum ReaderModeBarButtonType {
     case MarkAsRead, MarkAsUnread, Settings, AddToReadingList, RemoveFromReadingList

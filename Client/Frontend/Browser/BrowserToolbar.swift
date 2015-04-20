@@ -4,7 +4,7 @@
 
 import Foundation
 import UIKit
-import Snap
+import SnapKit
 
 @objc
 protocol BrowserToolbarProtocol {
