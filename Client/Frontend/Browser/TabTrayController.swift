@@ -97,6 +97,10 @@ private class CustomCell: UICollectionViewCell {
         setupFrames()
 
         self.animator.originalCenter = CGPoint(x: self.frame.width / 2, y: self.frame.height / 2)
+
+        self.accessibilityCustomActions = [
+            UIAccessibilityCustomAction(name: NSLocalizedString("Close", comment: "Accessibility label for action denoting closing a tab in tab list (tray)"), target: self.animator, selector: "SELcloseWithoutGesture")
+        ]
     }
 
     func setupFrames() {
@@ -290,31 +294,37 @@ private class SwipeAnimator: NSObject {
             }
 
             // Otherwise we are good and we can get rid of the view
-
-            // Calculate the edge to calculate distance from
-            let edgeX = velocity.x > 0 ? CGRectGetMaxX(self.container.frame) :
-                CGRectGetMinX(self.container.frame)
-            var distance
-            = (self.animatingView.center.x / 2) + abs(self.animatingView.center.x - edgeX)
-
-            // Determine which way we need to travel
-            distance *= velocity.x > 0 ? 1 : -1
-
-            let timeStep = NSTimeInterval(abs(distance) / actualVelocity)
-            UIView.animateWithDuration(timeStep, animations: {
-                let animatedPosition
-                = CGPoint(x: self.animatingView.center.x + distance, y: self.animatingView.center.y)
-                self.animatingView.center = animatedPosition
-                }, completion: { finished in
-                    if finished {
-                        self.animatingView.hidden = true
-                        self.delegate?.swipeAnimator(self, viewDidExitContainerBounds: self.animatingView)
-                    }
-            })
+            close(velocity: velocity, actualVelocity: actualVelocity)
 
         default:
             break
         }
+    }
+
+    func close(#velocity: CGPoint, actualVelocity: CGFloat) {
+        // Calculate the edge to calculate distance from
+        let edgeX = velocity.x > 0 ? CGRectGetMaxX(self.container.frame) : CGRectGetMinX(self.container.frame)
+        var distance = (self.animatingView.center.x / 2) + abs(self.animatingView.center.x - edgeX)
+
+        // Determine which way we need to travel
+        distance *= velocity.x > 0 ? 1 : -1
+
+        let timeStep = NSTimeInterval(abs(distance) / actualVelocity)
+        UIView.animateWithDuration(timeStep, animations: {
+            let animatedPosition
+            = CGPoint(x: self.animatingView.center.x + distance, y: self.animatingView.center.y)
+            self.animatingView.center = animatedPosition
+        }, completion: { finished in
+            if finished {
+                self.animatingView.hidden = true
+                self.delegate?.swipeAnimator(self, viewDidExitContainerBounds: self.animatingView)
+            }
+        })
+    }
+
+    @objc func SELcloseWithoutGesture() -> Bool {
+        close(velocity: CGPointMake(-self.ux.minExitVelocity, 0), actualVelocity: self.ux.minExitVelocity)
+        return true
     }
 }
 
@@ -339,7 +349,6 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     var settingsButton: UIButton!
 
     override func viewDidLoad() {
-        view.isAccessibilityElement = true
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
 
         navBar = UINavigationBar()
@@ -353,6 +362,12 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         signInButton.addTarget(self, action: "SELdidClickDone", forControlEvents: UIControlEvents.TouchUpInside)
         signInButton.setTitle(NSLocalizedString("Sign in", comment: "Button that leads to Sign in section of the Settings sheet."), forState: UIControlState.Normal)
         signInButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        // workaround for VoiceOver bug - if we create the button with UIButton.buttonWithType,
+        // it gets initial frame with height 0 and accessibility somehow does not update the height
+        // later and thus the button becomes completely unavailable to VoiceOver unless we
+        // explicitly set the height to some (reasonable) non-zero value.
+        // Also note that setting accessibilityFrame instead of frame has no effect.
+        signInButton.frame.size.height = signInButton.intrinsicContentSize().height
         
         let navItem = UINavigationItem()
         navItem.titleView = signInButton
@@ -449,6 +464,8 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         cell.delegate = self
 
         cell.titleText.text = tab.displayTitle
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = tab.displayTitle
 
         if let favIcon = tab.displayFavicon {
             cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
