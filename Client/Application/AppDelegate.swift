@@ -16,6 +16,7 @@ public func isAuroraChannel() -> Bool {
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
+    var browserViewController: BrowserViewController!
     var profile: Profile!
 
     private let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
@@ -41,14 +42,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
 
-        let controller = BrowserViewController(profile: profile)
+        browserViewController = BrowserViewController(profile: profile)
 
         // Add restoration class, the factory that will return the ViewController we 
         // will restore with.
-        controller.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
-        controller.restorationClass = AppDelegate.self
+        browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
+        browserViewController.restorationClass = AppDelegate.self
 
-        self.window!.rootViewController = controller
+        self.window!.rootViewController = browserViewController
         self.window!.backgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
 
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
@@ -57,7 +58,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.profile.readingList?.createRecordWithURL(absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
             }
         }
-
 
 #if MOZ_CHANNEL_AURORA
         checkForAuroraUpdate()

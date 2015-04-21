@@ -347,6 +347,26 @@ private class VersionSetting : Setting {
     }
 }
 
+// Opens the on-boarding screen again
+private class ShowIntroductionSetting: Setting {
+    let profile: Profile
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(title: NSAttributedString(string: NSLocalizedString("Show introduction again", comment: "Show the on-boarding screen again from the settings")))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        navigationController?.dismissViewControllerAnimated(true, completion: {
+            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+                appDelegate.browserViewController.dismissTabTrayController(animated: true) {
+                    appDelegate.browserViewController.presentIntroViewController(force: true)
+                }
+            }
+        })
+    }
+}
+
 // Opens the search settings pane
 private class SearchSetting: Setting {
     let profile: Profile
@@ -433,6 +453,9 @@ class SettingsTableViewController: UITableViewController {
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Search Settings", comment: "Search settings section title")), children: [
                 SearchSetting(settings: self)
+            ]),
+            SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
+                ShowIntroductionSetting(settings: self)
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
                 VersionSetting(settings: self)
