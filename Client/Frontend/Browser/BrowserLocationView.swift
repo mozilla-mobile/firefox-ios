@@ -62,28 +62,28 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         let container = self
 
         lockImageView.snp_remakeConstraints { make in
-            make.centerY.equalTo(container).centerY
-            make.leading.equalTo(container).with.offset(8)
+            make.centerY.equalTo(container)
+            make.leading.equalTo(container).offset(8)
             make.width.equalTo(self.lockImageView.intrinsicContentSize().width)
         }
 
         locationLabel.snp_remakeConstraints { make in
             make.centerY.equalTo(container.snp_centerY)
             if self.url?.scheme == "https" {
-                make.leading.equalTo(self.lockImageView.snp_trailing).with.offset(8)
+                make.leading.equalTo(self.lockImageView.snp_trailing).offset(8)
             } else {
-                make.leading.equalTo(container).with.offset(8)
+                make.leading.equalTo(container).offset(8)
             }
 
             if self.readerModeButton.readerModeState == ReaderModeState.Unavailable {
-                make.trailing.equalTo(self).with.offset(-8)
+                make.trailing.equalTo(self).offset(-8)
             } else {
-                make.trailing.equalTo(self.readerModeButton.snp_leading).with.offset(-8)
+                make.trailing.equalTo(self.readerModeButton.snp_leading).offset(-8)
             }
         }
 
         readerModeButton.snp_remakeConstraints { make in
-            make.centerY.equalTo(container).centerY
+            make.centerY.equalTo(container)
             make.trailing.equalTo(self.snp_trailing).offset(-4)
 
             // We fix the width of the button (to the height of the view) to prevent content

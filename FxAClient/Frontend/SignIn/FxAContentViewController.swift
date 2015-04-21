@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import Snap
+import SnapKit
 import UIKit
 import WebKit
 

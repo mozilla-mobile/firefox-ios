@@ -1,10 +1,11 @@
 import Foundation
-import Snap
+import SnapKit
 
 class Toolbar : UIView {
     var drawTopBorder = false
     var drawBottomBorder = false
     var drawSeperators = false
+    var drawLeftBorder = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -16,7 +17,7 @@ class Toolbar : UIView {
     }
 
     private func drawLine(context: CGContextRef, start: CGPoint, end: CGPoint) {
-        CGContextSetStrokeColorWithColor(context, UIColor.darkGrayColor().CGColor)
+        CGContextSetStrokeColorWithColor(context, UIColor.lightGrayColor().CGColor)
         CGContextSetLineWidth(context, 1)
         CGContextMoveToPoint(context, start.x, start.y)
         CGContextAddLineToPoint(context, end.x, end.y)
@@ -31,6 +32,10 @@ class Toolbar : UIView {
 
         if drawBottomBorder {
             drawLine(context, start: CGPoint(x: 0, y: frame.height), end: CGPoint(x: frame.width, y: frame.height))
+        }
+
+        if drawLeftBorder {
+            drawLine(context, start: CGPoint(x: 0, y: 0), end: CGPoint(x: 0, y: frame.height))
         }
 
         if drawSeperators {

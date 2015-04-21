@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Snap
+import SnapKit
 
 
 /**
@@ -68,7 +68,12 @@ class SnackBar: UIView {
     let textView: UITextView
     let backgroundView: UIView
     let buttonsView: Toolbar
-    private var buttons = [SnackButton]()
+    let progress: UIProgressView
+
+    // A list of buttons shown on the view
+    private let buttons: [SnackButton]
+    // The Constraint for the bottom of this snackbar. We use this to transition it
+    var bottom: Constraint?
 
     convenience init(text: String, img: UIImage?, buttons: [SnackButton]?) {
         var attributes = [NSObject: AnyObject]()
@@ -83,6 +88,8 @@ class SnackBar: UIView {
         textView = UITextView()
         buttonsView = Toolbar()
         backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
+        progress = UIProgressView()
+        self.buttons = buttons ?? [SnackButton]()
 
         super.init(frame: CGRectZero)
 
@@ -101,26 +108,53 @@ class SnackBar: UIView {
         textView = UITextView()
         buttonsView = Toolbar()
         backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
+        progress = UIProgressView()
+        self.buttons = [SnackButton]()
 
         super.init(frame: frame)
     }
 
+    deinit {
+        if imageView.image == nil {
+            textView.removeObserver(self, forKeyPath: "contentSize")
+        }
+    }
+
     private func setup() {
         textView.backgroundColor = nil
+        if imageView.image == nil {
+            textView.addObserver(self, forKeyPath: "contentSize", options: .New, context: nil)
+        }
 
-        addSubview(backgroundView)
+        insertSubview(backgroundView, atIndex: 0)
         addSubview(imageView)
         addSubview(textView)
         addSubview(buttonsView)
+        addSubview(progress)
+
+        progress.hidden = true
 
         self.backgroundColor = UIColor.clearColor()
-        buttonsView.drawTopBorder = true
-        buttonsView.drawBottomBorder = true
-        buttonsView.drawSeperators = true
+        if buttons.count > 1 {
+            buttonsView.drawTopBorder = true
+            buttonsView.drawBottomBorder = true
+            buttonsView.drawSeperators = true
+        } else {
+            buttonsView.drawLeftBorder = true
+        }
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func setProgress(progress: Float, animated: Bool) {
+        if progress < 1.0 {
+            self.progress.hidden = false
+        } else {
+            self.progress.hidden = true
+        }
+        self.progress.setProgress(progress, animated: animated)
     }
 
     /**
@@ -134,19 +168,22 @@ class SnackBar: UIView {
     override func updateConstraints() {
         super.updateConstraints()
 
+        // The background will cover the entire view
         backgroundView.snp_remakeConstraints { make in
             make.edges.equalTo(self)
             return
         }
 
+        // Show an optional image to the left
         if let img = imageView.image {
             imageView.snp_remakeConstraints({ make in
-                make.left.equalTo(self).offset(AppConstants.DefaultPadding)
-                make.top.equalTo(self).offset(AppConstants.DefaultPadding)
                 make.width.equalTo(img.size.width)
                 make.height.equalTo(img.size.height)
+                make.top.left.equalTo(self).offset(AppConstants.DefaultPadding)
             })
         } else {
+            // If there is no image, we still place this but make it zero width
+            // (so that other views can position themselves relative to it).
             imageView.snp_remakeConstraints({ make in
                 make.width.equalTo(0)
                 make.height.equalTo(0)
@@ -154,35 +191,73 @@ class SnackBar: UIView {
             })
         }
 
-        let labelSize = self.textView.sizeThatFits(CGSizeMake(self.frame.width, CGFloat(MAXFLOAT)))
-        textView.textContainerInset = UIEdgeInsetsZero
-        textView.snp_remakeConstraints({ make in
-            make.top.equalTo(self.imageView.snp_top).offset(-5)
-            make.left.equalTo(self.imageView.snp_right)
+        let labelSize: CGSize
+        // If there's only one button, we show it to the right of the text
+        if buttons.count == 1 {
+            let buttonSize = buttons[0].titleLabel?.sizeThatFits(CGSizeMake(self.frame.width, CGFloat(MAXFLOAT))).width ?? 0
+            buttonsView.snp_remakeConstraints({ make in
+                make.top.equalTo(self.snp_top)
+                make.right.equalTo(self.snp_right)
+                make.height.equalTo(self.snp_height)
+                make.width.equalTo(buttonSize + 2 * AppConstants.DefaultPadding)
+            })
 
-            make.height.equalTo(labelSize.height)
-            make.trailing.equalTo(self)
-        })
+            // Stretch the label betweeen the image and button
+            labelSize = self.textView.sizeThatFits(CGSizeMake(self.frame.width - buttonSize - 2*AppConstants.DefaultPadding, CGFloat(MAXFLOAT)))
+            textView.textAlignment = NSTextAlignment.Justified
+            textView.snp_remakeConstraints({ make in
+                make.top.equalTo(self.imageView.snp_top).offset(-5)
+                make.left.equalTo(self.imageView.snp_right)
 
-        buttonsView.snp_remakeConstraints({ make in
-            make.bottom.equalTo(self)
-            make.left.right.equalTo(self)
-            if self.buttonsView.subviews.count > 0 {
-            	make.height.equalTo(AppConstants.ToolbarHeight)
-            } else {
-                make.height.equalTo(0)
-            }
-        })
+                make.height.equalTo(labelSize.height)
+                make.right.equalTo(buttonsView.snp_left)
+            })
+
+            // Show a progress bar along the bottom
+            progress.snp_remakeConstraints({ make in
+                make.leading.trailing.equalTo(self)
+                make.bottom.equalTo(self.snp_bottom)
+            })
+        } else {
+            // If there's more than one, we show it below the text and icon
+            buttonsView.snp_remakeConstraints({ make in
+                make.bottom.equalTo(self)
+                make.left.right.equalTo(self)
+                if self.buttonsView.subviews.count > 0 {
+                    make.height.equalTo(AppConstants.ToolbarHeight)
+                } else {
+                    make.height.equalTo(0)
+                }
+            })
+
+            // Stretch the label all the way to the edge of the view
+            labelSize = self.textView.sizeThatFits(CGSizeMake(self.frame.width, CGFloat(MAXFLOAT)))
+            textView.textContainerInset = UIEdgeInsetsZero
+            textView.snp_remakeConstraints({ make in
+                make.top.equalTo(self.imageView.snp_top)
+                make.left.equalTo(self.imageView.snp_right)
+
+                make.height.equalTo(labelSize.height)
+                make.right.equalTo(self.snp_right)
+            })
+
+            // Show a progress bar above the button
+            progress.snp_remakeConstraints({ make in
+                make.leading.trailing.equalTo(self)
+                make.bottom.equalTo(self.buttonsView.snp_top)
+            })
+        }
 
         self.snp_makeConstraints({ make in
             var h = labelSize.height
             if let img = self.imageView.image {
-                h = AppConstants.DefaultPadding + max(img.size.height, labelSize.height)
+                h = max(img.size.height, labelSize.height)
             }
 
-            let constraint = make.height.equalTo(h)
-            if (self.buttonsView.subviews.count > 0) {
-                constraint.offset(AppConstants.ToolbarHeight)
+            if (self.buttonsView.subviews.count > 1) {
+                make.height.equalTo(2 * AppConstants.DefaultPadding + h + AppConstants.ToolbarHeight)
+            } else {
+                make.height.equalTo(2 * AppConstants.DefaultPadding + h)
             }
         })
     }
@@ -192,7 +267,7 @@ class SnackBar: UIView {
     */
     func show() {
         alpha = 1
-        transform = CGAffineTransformIdentity
+        bottom?.updateOffset(0)
     }
 
     /**
@@ -204,13 +279,21 @@ class SnackBar: UIView {
         if h == 0 {
             h = AppConstants.ToolbarHeight
         }
-        transform = CGAffineTransformMakeTranslation(0, h)
+        bottom?.updateOffset(h)
     }
 
     private func addButton(snackButton: SnackButton) {
         snackButton.bar = self
         buttonsView.addButtons(snackButton)
         buttonsView.setNeedsUpdateConstraints()
+    }
+
+    // TODO: Move this to a textView helper
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        // Center vertical alignment
+        var topCorrect = (textView.bounds.size.height - textView.contentSize.height * textView.zoomScale)/2.0;
+        topCorrect = topCorrect < 0.0 ? 0.0 : topCorrect
+        textView.contentOffset = CGPoint(x: 0, y: -topCorrect)
     }
 }
 
