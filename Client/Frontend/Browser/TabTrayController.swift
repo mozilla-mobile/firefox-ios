@@ -362,6 +362,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
         navItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "add"), style: .Plain, target: self, action: "SELdidClickAddTab")
         navItem.rightBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: -TabTrayControllerUX.ToolbarButtonOffset, bottom: 0, right: TabTrayControllerUX.ToolbarButtonOffset)
+        navItem.rightBarButtonItem?.accessibilityLabel = NSLocalizedString("Add tab", comment: "Accessibility label for adding a tab in the Tab Tray.")
 
 
         navBar.pushNavigationItem(navItem, animated: false)
