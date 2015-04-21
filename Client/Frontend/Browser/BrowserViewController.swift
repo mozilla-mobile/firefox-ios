@@ -50,6 +50,7 @@ class BrowserViewController: UIViewController {
         let defaultURL = NSURL(string: HomeURL)!
         let defaultRequest = NSURLRequest(URL: defaultURL)
         tabManager = TabManager(defaultNewTabRequest: defaultRequest)
+        tabManager.delegate = self
         screenshotHelper = BrowserScreenshotHelper(controller: self)
     }
 
@@ -120,9 +121,14 @@ class BrowserViewController: UIViewController {
         footer = UIView()
         self.view.addSubview(footer)
 
-        tabManager.delegate = self
-        tabManager.addTab()
         super.viewDidLoad()
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        if (tabManager.count == 0) {
+            tabManager.addTab()
+        }
+        super.viewWillAppear(animated)
     }
 
     override func updateViewConstraints() {
@@ -1355,6 +1361,18 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 }
             }
         }
+    }
+}
+
+extension BrowserViewController: UIStateRestoring {
+    override func encodeRestorableStateWithCoder(coder: NSCoder) {
+        super.encodeRestorableStateWithCoder(coder)
+        tabManager.encodeRestorableStateWithCoder(coder)
+    }
+
+    override func decodeRestorableStateWithCoder(coder: NSCoder) {
+        super.decodeRestorableStateWithCoder(coder)
+        tabManager.decodeRestorableStateWithCoder(coder)
     }
 }
 

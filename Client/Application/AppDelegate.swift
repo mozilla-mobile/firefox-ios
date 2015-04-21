@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Setup a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setupWebServer()
 
@@ -31,15 +31,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let controller = BrowserViewController()
         controller.profile = profile
+
+        // Add restoration class, the factory that will return the ViewController we 
+        // will restore with.
+        controller.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
+        controller.restorationClass = AppDelegate.self
+
         self.window!.rootViewController = controller
         self.window!.backgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
-        self.window!.makeKeyAndVisible()
+
 
 #if MOZ_CHANNEL_AURORA
         checkForAuroraUpdate()
         registerFeedbackNotification()
 #endif
+        return true
+    }
 
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+        self.window!.makeKeyAndVisible()
         return true
     }
 
@@ -196,3 +206,23 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
     }
 }
 #endif
+
+extension AppDelegate: UIApplicationDelegate {
+    func application(application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
+        return true
+    }
+
+    func application(application: UIApplication, shouldRestoreApplicationState code: NSCoder) -> Bool {
+        return true
+    }
+}
+
+extension AppDelegate: UIViewControllerRestoration {
+    class func viewControllerWithRestorationIdentifierPath(identifierComponents: [AnyObject], coder: NSCoder) -> UIViewController? {
+        // There is only one restorationIdentifier in circulation.
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            return appDelegate.window!.rootViewController
+        }
+        return nil
+    }
+}
