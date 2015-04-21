@@ -1194,6 +1194,7 @@ extension BrowserViewController : Transitionable {
             let tab = tabManager.getTab(i)
             tab.webView.hidden = true
         }
+        self.homePanelController?.view.hidden = true
     }
 
     func transitionablePreShow(transitionable: Transitionable, options: TransitionOptions) {
@@ -1202,16 +1203,19 @@ extension BrowserViewController : Transitionable {
             let tab = tabManager.getTab(i)
             tab.webView.hidden = true
         }
+        self.homePanelController?.view.hidden = true
     }
 
     func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
         view.alpha = 1
         footer.transform = CGAffineTransformIdentity
+        header.transform = CGAffineTransformIdentity
     }
 
     func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {
         view.alpha = 0
         footer.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, footer.frame.height)
+        header.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, header.frame.height)
     }
 
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
@@ -1220,6 +1224,7 @@ extension BrowserViewController : Transitionable {
             let tab = tabManager.getTab(i)
             tab.webView.hidden = false
         }
+        self.homePanelController?.view.hidden = false
     }
 }
 

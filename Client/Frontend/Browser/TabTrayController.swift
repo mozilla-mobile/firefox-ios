@@ -13,8 +13,8 @@ private struct TabTrayControllerUX {
     static let CellHeight = TextBoxHeight * 5
     static let Margin = CGFloat(15)
     // This color has been manually adjusted to match background layer with iOS translucency effect.
-    static let ToolbarBarTintColor = UIColor(red: 0.16, green: 0.18, blue: 0.20, alpha: 1)
-    static let ToolbarButtonOffset = CGFloat(5.0)
+    static let ToolbarBarTintColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
+    static let ToolbarButtonOffset = CGFloat(10.0)
     static let TabTitleTextColor = UIColor.blackColor()
     static let TabTitleTextFont = AppConstants.DefaultSmallFontBold
     static let CloseButtonSize = CGFloat(18.0)
@@ -335,17 +335,19 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     var numberOfColumns: Int!
 
     var navBar: UINavigationBar!
+    var addTabButton: UIButton!
+    var settingsButton: UIButton!
 
     override func viewDidLoad() {
         view.isAccessibilityElement = true
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
-
 
         navBar = UINavigationBar()
 
         navBar.barTintColor = TabTrayControllerUX.ToolbarBarTintColor
         navBar.tintColor = UIColor.whiteColor()
         navBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        navBar.translucent = false // the translucency was causing some bad color pop during the transition
         
         let signInButton = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
         signInButton.addTarget(self, action: "SELdidClickDone", forControlEvents: UIControlEvents.TouchUpInside)
@@ -353,18 +355,21 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         signInButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         
         let navItem = UINavigationItem()
-        navItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "settings"), style: .Plain, target: self, action: "SELdidClickSettingsItem")
-        navItem.leftBarButtonItem?.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
-        navItem.leftBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: -TabTrayControllerUX.ToolbarButtonOffset, bottom: 0, right: 0)
-
         navItem.titleView = signInButton
         signInButton.hidden = true //hiding sign in button until we decide on UX
 
-        navItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "add"), style: .Plain, target: self, action: "SELdidClickAddTab")
-        navItem.rightBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: -TabTrayControllerUX.ToolbarButtonOffset, bottom: 0, right: TabTrayControllerUX.ToolbarButtonOffset)
+        addTabButton = UIButton()
+        addTabButton.setImage(UIImage(named: "add"), forState: .Normal)
+        addTabButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: .TouchUpInside)
+        addTabButton.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
 
+        settingsButton = UIButton()
+        settingsButton.setImage(UIImage(named: "settings"), forState: .Normal)
+        settingsButton.addTarget(self, action: "SELdidClickSettingsItem", forControlEvents: .TouchUpInside)
+        settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
 
-        navBar.pushNavigationItem(navItem, animated: false)
+        navBar.addSubview(addTabButton)
+        navBar.addSubview(settingsButton)
 
         numberOfColumns = numberOfColumnsForCurrentSize()
         let flowLayout = UICollectionViewFlowLayout()
@@ -384,6 +389,16 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
             make.height.equalTo(AppConstants.StatusBarHeight + AppConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
             return
+        }
+
+        addTabButton.snp_makeConstraints { make in
+            make.right.equalTo(self.view).offset(-TabTrayControllerUX.ToolbarButtonOffset)
+            make.centerY.equalTo(self.navBar.snp_bottom).offset(-(AppConstants.ToolbarHeight/2))
+        }
+
+        settingsButton.snp_makeConstraints { make in
+            make.left.equalTo(self.view).offset(TabTrayControllerUX.ToolbarButtonOffset)
+            make.centerY.equalTo(self.navBar.snp_bottom).offset(-(AppConstants.ToolbarHeight/2))
         }
 
         collectionView.snp_makeConstraints { make in
@@ -517,12 +532,12 @@ extension TabTrayController: Transitionable {
     }
 
     func transitionablePreShow(transitionable: Transitionable, options: TransitionOptions) {
-        self.collectionView.layoutSubviews();
+        self.collectionView.layoutSubviews()
         self.collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: tabManager.selectedIndex, inSection: 0), atScrollPosition: .CenteredVertically, animated: false)
     }
 
     func transitionablePreHide(transitionable: Transitionable, options: TransitionOptions) {
-        
+
     }
 
     func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {
@@ -541,13 +556,25 @@ extension TabTrayController: Transitionable {
             cell.showFullscreen(container, table: collectionView, shouldOffset: hasToolbar)
             cell.layoutIfNeeded()
             cell.title.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, -cell.title.frame.height)
+
+            let corners = CABasicAnimation(keyPath: "cornerRadius")
+            corners.toValue = 0
+            corners.fromValue = TabTrayControllerUX.CornerRadius
+            corners.duration = options.duration!
+            corners.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+            
+            cell.backgroundHolder.layer.addAnimation(corners, forKey: "cornerRadius")
+            cell.innerStroke.layer.addAnimation(corners, forKey: "cornerRadius")
+
             cell.innerStroke.alpha = 0
         }
 
-
-        // Scroll the toolbar off the top
+        let buttonOffset = addTabButton.frame.width + TabTrayControllerUX.ToolbarButtonOffset
+        addTabButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
+        settingsButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -buttonOffset , 0)
         navBar.alpha = 0
         collectionView.alpha = 0
+
     }
 
     func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
@@ -557,10 +584,20 @@ extension TabTrayController: Transitionable {
             cell.showAt(tabManager.selectedIndex, container: container, table: collectionView)
             cell.layoutIfNeeded()
 
+            let corners = CABasicAnimation(keyPath: "cornerRadius")
+            corners.toValue = TabTrayControllerUX.CornerRadius
+            corners.fromValue = 0
+            corners.duration = options.duration!
+            corners.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+
+            cell.backgroundHolder.layer.addAnimation(corners, forKey: "cornerRadius")
+            cell.innerStroke.layer.addAnimation(corners, forKey: "cornerRadius")
+
             cell.innerStroke.alpha = 1
         }
 
-        // Scroll the toolbar on from the top
+        addTabButton.transform = CGAffineTransformIdentity
+        settingsButton.transform = CGAffineTransformIdentity
         navBar.alpha = 1
         collectionView.alpha = 1
     }
@@ -570,6 +607,7 @@ extension TabTrayController: Transitionable {
           cell.removeFromSuperview()
         }
     }
+
 }
 
 extension TabTrayController: SwipeAnimatorDelegate {

@@ -8,6 +8,7 @@ class TransitionOptions {
     var moving: UIView? = nil
     var fromView: UIViewController? = nil
     var toView: UIViewController? = nil
+    var duration: NSTimeInterval? = nil
 }
 
 @objc
@@ -26,11 +27,14 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning  {
         self.show = show
     }
 
+
     func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
+
         let fromView = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!
         let toView = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!
 
         let container = transitionContext.containerView()
+
         if show {
             container.insertSubview(toView.view, aboveSubview: fromView.view)
         }
@@ -39,6 +43,7 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning  {
         options.container = container
         options.fromView = fromView
         options.toView = toView
+        options.duration = transitionDuration(transitionContext)
 
         if let to = toView as? Transitionable {
             if let from = fromView as? Transitionable {
@@ -50,7 +55,7 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning  {
                 to.transitionablePreShow(to, options: options)
                 from.transitionablePreHide(from, options: options)
 
-                UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 0.95, initialSpringVelocity: 0, options: nil, animations: { () -> Void in
+                UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
                         to.transitionableWillShow(to, options: options)
                         from.transitionableWillHide(from, options: options)
                     }, completion: { finished in
@@ -64,6 +69,6 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning  {
     }
 
     func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
-        return 0.35
+        return 0.4
     }
 }

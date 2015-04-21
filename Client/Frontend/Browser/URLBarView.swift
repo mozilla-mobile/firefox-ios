@@ -531,8 +531,8 @@ private class CurveView: UIView {
         let path = UIBezierPath()
         self.drawFromTop(path)
         path.addLineToPoint(CGPoint(x: self.frame.width, y: AppConstants.ToolbarHeight + AppConstants.StatusBarHeight))
-        path.addLineToPoint(CGPoint(x: self.frame.width, y: 0))
-        path.addLineToPoint(CGPoint(x: 0, y: 0))
+        path.addLineToPoint(CGPoint(x: self.frame.width, y: -10))
+        path.addLineToPoint(CGPoint(x: 0, y: -10))
         path.addLineToPoint(CGPoint(x: 0, y: AppConstants.StatusBarHeight))
         path.closePath()
         return path
