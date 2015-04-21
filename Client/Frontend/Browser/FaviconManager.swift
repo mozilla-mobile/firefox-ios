@@ -34,6 +34,7 @@ class FaviconManager : BrowserHelper {
         println("DEBUG: faviconsMessageHandler message: \(message.body)")
 
         let manager = SDWebImageManager.sharedManager()
+        self.browser?.favicons.removeAll(keepCapacity: false)
         if let url = browser?.webView.URL?.absoluteString {
             let site = Site(url: url, title: "")
             if let icons = message.body as? [String: Int] {
@@ -50,7 +51,7 @@ class FaviconManager : BrowserHelper {
                             } else {
                                 return
                             }
-
+                            self.browser?.favicons.append(fav)
                             self.profile.favicons.add(fav, site: site, complete: nil)
                         })
                     }

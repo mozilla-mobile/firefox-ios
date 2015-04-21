@@ -9,6 +9,7 @@ private struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
     static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
     static let TextBoxHeight = CGFloat(32.0)
+    static let FaviconSize = CGFloat(18.0)
     static let CellHeight = TextBoxHeight * 5
     static let Margin = CGFloat(15)
     // This color has been manually adjusted to match background layer with iOS translucency effect.
@@ -52,8 +53,10 @@ private class CustomCell: UICollectionViewCell {
         self.background.alignLeft = true
         self.background.alignTop = true
 
-        self.favicon = UIImageView(image: UIImage(named: "defaultFavicon")!)
+        self.favicon = UIImageView()
         self.favicon.backgroundColor = UIColor.clearColor()
+        self.favicon.layer.cornerRadius = 2.0
+        self.favicon.layer.masksToBounds = true
 
         self.title = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
         self.title.layer.shadowColor = UIColor.blackColor().CGColor
@@ -90,7 +93,6 @@ private class CustomCell: UICollectionViewCell {
         backgroundHolder.addSubview(innerStroke)
         backgroundHolder.addSubview(self.title)
 
-
         self.titleText.addObserver(self, forKeyPath: "contentSize", options: .New, context: nil)
         setupFrames()
 
@@ -113,7 +115,10 @@ private class CustomCell: UICollectionViewCell {
             width: backgroundHolder.frame.width,
             height: TabTrayControllerUX.TextBoxHeight)
 
-        favicon.frame = CGRect(x: 6, y: (TabTrayControllerUX.TextBoxHeight - 16)/2, width: 16, height: 16)
+        favicon.frame = CGRect(x: 6,
+            y: (TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.FaviconSize)/2,
+            width: TabTrayControllerUX.FaviconSize,
+            height: TabTrayControllerUX.FaviconSize)
 
         let titleTextLeft = favicon.frame.origin.x + favicon.frame.width + 6
         titleText.frame = CGRect(x: titleTextLeft,
@@ -187,6 +192,9 @@ private class CustomCell: UICollectionViewCell {
     var tab: Browser? {
         didSet {
             titleText.text = tab?.title
+            if let favIcon = tab?.displayFavicon {
+                favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
+            }
         }
     }
 
@@ -427,6 +435,13 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         cell.delegate = self
 
         cell.titleText.text = tab.displayTitle
+
+        if let favIcon = tab.displayFavicon {
+            cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
+        } else {
+            cell.favicon.image = UIImage(named: "defaultFavicon")
+        }
+
         let screenshotAspectRatio = cell.frame.width / TabTrayControllerUX.CellHeight
         cell.background.image = screenshotHelper.takeScreenshot(tab, aspectRatio: screenshotAspectRatio, quality: 1)
         cell.closeTab.addTarget(cell, action: "SELdidPressClose", forControlEvents: UIControlEvents.TouchUpInside)
@@ -495,6 +510,9 @@ extension TabTrayController: Transitionable {
         }
 
         transitionCell.titleText.text = browser?.displayTitle
+        if let favIcon = browser?.displayFavicon {
+            transitionCell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
+        }
         return transitionCell
     }
 
@@ -523,6 +541,7 @@ extension TabTrayController: Transitionable {
             cell.showFullscreen(container, table: collectionView, shouldOffset: hasToolbar)
             cell.layoutIfNeeded()
             cell.title.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, -cell.title.frame.height)
+            cell.innerStroke.alpha = 0
         }
 
 
@@ -537,6 +556,8 @@ extension TabTrayController: Transitionable {
             let cell = getTransitionCell(options, browser: tabManager.selectedTab)
             cell.showAt(tabManager.selectedIndex, container: container, table: collectionView)
             cell.layoutIfNeeded()
+
+            cell.innerStroke.alpha = 1
         }
 
         // Scroll the toolbar on from the top
