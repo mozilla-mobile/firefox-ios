@@ -685,8 +685,9 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
         // TODO: detect when the keys have changed, and scream and run away if so.
         // TODO: upload keys if necessary, then go to Restart.
         let syncKey = Keys(defaultBundle: self.scratchpad.syncKeyBundle)
-        let keysFactory: (String) -> KeysPayload? = syncKey.factory("keys", f: { KeysPayload($0) })
-        let client = self.client.clientForCollection("crypto", factory: keysFactory)
+        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0 })
+        let encrypter = syncKey.encrypter("keys", encoder: encoder)
+        let client = self.client.clientForCollection("crypto", encrypter: encrypter)
 
         // TODO: this assumes that there are keys on the server. Check first, and if there aren't,
         // go ahead and go to an upload state without having to fail.

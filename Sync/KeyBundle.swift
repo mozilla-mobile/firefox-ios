@@ -210,9 +210,8 @@ public class Keys: Equatable {
         return defaultBundle
     }
 
-    public func factory<T : CleartextPayloadJSON>(collection: String, f: (JSON) -> T) -> (String) -> T? {
-        let bundle = forCollection(collection)
-        return bundle.factory(f)
+    public func encrypter<T: CleartextPayloadJSON>(collection: String, encoder: RecordEncoder<T>) -> RecordEncrypter<T> {
+        return RecordEncrypter(bundle: forCollection(collection), encoder: encoder)
     }
 
     public func asPayload() -> KeysPayload {
@@ -222,6 +221,24 @@ public class Keys: Equatable {
             "collections": mapValues(self.collectionKeys, { $0.asPair() })
         ])
         return KeysPayload(json)
+    }
+}
+
+/**
+ * Yup, these are basically typed tuples.
+ */
+public struct RecordEncoder<T: CleartextPayloadJSON> {
+    let decode: JSON -> T
+    let encode: T -> JSON
+}
+
+public struct RecordEncrypter<T: CleartextPayloadJSON> {
+    let serializer: Record<T> -> JSON?
+    let factory: String -> T?
+
+    init(bundle: KeyBundle, encoder: RecordEncoder<T>) {
+        self.serializer = bundle.serializer(encoder.encode)
+        self.factory = bundle.factory(encoder.decode)
     }
 }
 

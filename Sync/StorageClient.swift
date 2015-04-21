@@ -359,9 +359,9 @@ public class Sync15StorageClient {
     // TODO: it would be convenient to have the storage client manage Keys,
     // but of course we need to use a different set of keys to fetch crypto/keys
     // itself.
-    func clientForCollection<T: CleartextPayloadJSON>(collection: String, factory: (String) -> T?) -> Sync15CollectionClient<T> {
+    func clientForCollection<T: CleartextPayloadJSON>(collection: String, encrypter: RecordEncrypter<T>) -> Sync15CollectionClient<T> {
         let storage = self.serverURI.URLByAppendingPathComponent("storage", isDirectory: true)
-        return Sync15CollectionClient(client: self, serverURI: storage, collection: collection, factory: factory)
+        return Sync15CollectionClient(client: self, serverURI: storage, collection: collection, encrypter: encrypter)
     }
 }
 
@@ -371,12 +371,12 @@ public class Sync15StorageClient {
  */
 public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     private let client: Sync15StorageClient
-    private let factory: (String) -> T?
+    private let encrypter: RecordEncrypter<T>
     private let collectionURI: NSURL
 
-    init(client: Sync15StorageClient, serverURI: NSURL, collection: String, factory: (String) -> T?) {
+    init(client: Sync15StorageClient, serverURI: NSURL, collection: String, encrypter: RecordEncrypter<T>) {
         self.client = client
-        self.factory = factory
+        self.encrypter = encrypter
         self.collectionURI = serverURI.URLByAppendingPathComponent(collection, isDirectory: false)
     }
 
@@ -393,7 +393,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
             if let json: JSON = data as? JSON {
                 let envelope = EnvelopeJSON(json)
                 println("Envelope: \(envelope) is valid \(envelope.isValid())")
-                let record = Record<T>.fromEnvelope(envelope, payloadFactory: self.factory)
+                let record = Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
                 if let record = record {
                     let storageResponse = StorageResponse(value: record, response: response!)
                     deferred.fill(Result(success: storageResponse))
@@ -419,10 +419,11 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
 
         let req = client.requestGET(self.collectionURI.withQueryParam("full", value: "1"))
         req.responseParsedJSON(errorWrap(deferred, { (_, response, data, error) in
+
             if let json: JSON = data as? JSON {
                 func recordify(json: JSON) -> Record<T>? {
                     let envelope = EnvelopeJSON(json)
-                    return Record<T>.fromEnvelope(envelope, payloadFactory: self.factory)
+                    return Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
                 }
                 if let arr = json.asArray {
                     let response = StorageResponse(value: optFilter(arr.map(recordify)), response: response!)
@@ -432,7 +433,6 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
             }
 
             deferred.fill(Result(failure: RecordParseError()))
-            return
         }))
 
         return deferred

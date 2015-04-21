@@ -28,14 +28,14 @@ class LiveStorageClientTests : LiveAccountTest {
         }
 
         let keyBundle: KeyBundle = KeyBundle.fromKB(kB)
-        let f: (JSON) -> KeysPayload = { return KeysPayload($0) }
-        let keysFactory: (String) -> KeysPayload? = Keys(defaultBundle: keyBundle).factory("crypto", f: f)
+        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0 })
+        let encrypter = Keys(defaultBundle: keyBundle).encrypter("crypto", encoder: encoder)
 
         let workQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
         let resultQueue = dispatch_get_main_queue()
 
         let storageClient = Sync15StorageClient(serverURI: cryptoURI!, authorizer: authorizer, workQueue: workQueue, resultQueue: resultQueue)
-        let keysFetcher = storageClient.clientForCollection("crypto", factory: keysFactory)
+        let keysFetcher = storageClient.clientForCollection("crypto", encrypter: encrypter)
 
         return keysFetcher.get("keys").map({
             // Unwrap the response.
