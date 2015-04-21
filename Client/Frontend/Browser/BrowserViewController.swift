@@ -332,7 +332,11 @@ extension BrowserViewController: URLBarDelegate {
         controller.tabManager = tabManager
         controller.transitioningDelegate = self
         controller.modalPresentationStyle = .Custom
-        controller.screenshotHelper = screenshotHelper
+
+        if let tab = tabManager.selectedTab {
+            tab.screenshot = screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1)
+        }
+
         presentViewController(controller, animated: true, completion: nil)
     }
 
