@@ -21,6 +21,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     var pageControl: UIPageControl!
     var backButton: UIButton!
     var forwardButton: UIButton!
+    var signInButton: UIButton!
 
     // TODO This is not correct. We are doing this here and not in viewDidLoad so that view.frame has been set, which we need to calculate the size of the images in the scrollview. There is probably a better way but for now this works.
 
@@ -36,7 +37,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         //
 
         button = UIButton()
-        button.backgroundColor = UIColor.grayColor()
+        button.backgroundColor = UIColor(red: 0.302, green: 0.314, blue: 0.333, alpha: 1.0)
         button.setTitle("Start Browsing", forState: UIControlState.Normal)
         button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         button.addTarget(self, action: "SELstartBrowsing", forControlEvents: UIControlEvents.TouchUpInside)
@@ -113,10 +114,27 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         label3.font = UIFont.systemFontOfSize(20)
         introView3.addSubview(label3)
         label3.snp_makeConstraints { (make) -> Void in
-            make.center.equalTo(introView3)
+            make.centerX.equalTo(introView3)
+            make.bottom.equalTo(introView3.snp_centerY).offset(-20)
             make.width.equalTo(self.view.frame.width <= 320 ? 200 : 260) // TODO Would be nicer to do this with actual constraints
         }
-        addBackButtonToIntroView(introView3)
+
+        signInButton = UIButton()
+        signInButton.backgroundColor = UIColor(red: 0.259, green: 0.49, blue: 0.831, alpha: 1.0)
+        signInButton.setTitle(NSLocalizedString("Sign in to Firefox", tableName: "Intro", comment: ""), forState: .Normal)
+        signInButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        signInButton.titleLabel?.font = UIFont.systemFontOfSize(20)
+        signInButton.layer.cornerRadius = 10
+        signInButton.clipsToBounds = true
+        introView3.addSubview(signInButton)
+        signInButton.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(introView3)
+            make.top.equalTo(introView3.snp_centerY).offset(10)
+            make.height.equalTo(66)
+            make.width.equalTo(self.view.frame.width <= 320 ? 200 : 260) // TODO Would be nicer to do this with actual constraints
+        }
+
+        //addBackButtonToIntroView(introView3)
         introViews.append(introView3)
 
         for introView in introViews {
