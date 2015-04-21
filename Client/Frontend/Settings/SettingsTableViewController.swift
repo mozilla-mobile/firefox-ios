@@ -214,11 +214,11 @@ private class AccountStatusSetting: WithAccountSetting {
         if let account = profile.getAccount() {
             switch account.actionNeeded {
             case .None, .NeedsVerification:
-                let cs = NSURLComponents(URL: profile.accountConfiguration.settingsURL, resolvingAgainstBaseURL: false)
+                let cs = NSURLComponents(URL: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(NSURLQueryItem(name: "email", value: account.email))
                 viewController.url = cs?.URL
             case .NeedsPassword:
-                let cs = NSURLComponents(URL: profile.accountConfiguration.forceAuthURL, resolvingAgainstBaseURL: false)
+                let cs = NSURLComponents(URL: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(NSURLQueryItem(name: "email", value: account.email))
                 viewController.url = cs?.URL
             case .NeedsUpgrade:

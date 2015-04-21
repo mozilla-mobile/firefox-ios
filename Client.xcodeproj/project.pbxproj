@@ -113,6 +113,7 @@
 		28F657DD1ABFC98300A608BD /* KeysPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BD1A1D1D3200576538 /* KeysPayload.swift */; };
 		28F657DE1ABFC98300A608BD /* SyncMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BF1A1D1D3200576538 /* SyncMeta.swift */; };
 		28F657EA1ABFCA7A00A608BD /* LiveAccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA4363B1ABB8448008031D1 /* LiveAccountTest.swift */; };
+		2F0624D51AE58C7800FA022C /* KeychainCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0624D41AE58C7800FA022C /* KeychainCache.swift */; };
 		2F13E77F1AC0BFF200D75081 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */; };
 		2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */; };
 		2F14E13A1ABB890800FF98DB /* Account-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */; };
@@ -575,6 +576,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 28F9520619D0F9FB00DCE892;
 			remoteInfo = FxATests;
+		};
+		2F0624F51AE5AA1A00FA022C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 55E3EE4419D76F280068C3A7;
+			remoteInfo = "XCGLogger (iOS)";
 		};
 		2F11EE4F1ABCAE910083902D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1086,6 +1094,7 @@
 		28CE842F1A1E571900576538 /* json.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = json.swift; path = ThirdParty/json.swift; sourceTree = "<group>"; };
 		28E23C111AC5A5EE00F5AC85 /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		28F596A01ACA13CA0071DDCC /* InfoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoTests.swift; path = SyncTests/InfoTests.swift; sourceTree = "<group>"; };
+		2F0624D41AE58C7800FA022C /* KeychainCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainCache.swift; sourceTree = "<group>"; };
 		2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		2F13E79A1AC0C02700D75081 /* StringExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensionsTests.swift; sourceTree = "<group>"; };
 		2F14E1391ABB890800FF98DB /* Account-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Account-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -2086,6 +2095,7 @@
 				E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */,
 				283306E81AB3BB87008999AC /* Functions.swift */,
 				D39999A81AA01D65005AED21 /* KeyboardHelper.swift */,
+				2F0624D41AE58C7800FA022C /* KeychainCache.swift */,
 				D339C2821AD354B400C087BD /* Loader.swift */,
 				282731A11ABC9D2600AA1954 /* Prefs.swift */,
 				2F3444561AB22A4B00FD9731 /* TimeConstants.swift */,
@@ -2495,6 +2505,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2F0624F61AE5AA1A00FA022C /* PBXTargetDependency */,
 				2FDE87561ABA3F5F005317B1 /* PBXTargetDependency */,
 			);
 			name = Shared;
@@ -3345,6 +3356,7 @@
 				2FDE87511ABA3E9A005317B1 /* HashExtensions.swift in Sources */,
 				282731A21ABC9D2600AA1954 /* Prefs.swift in Sources */,
 				2F13E77F1AC0BFF200D75081 /* StringExtensions.swift in Sources */,
+				2F0624D51AE58C7800FA022C /* KeychainCache.swift in Sources */,
 				288A2DB01AB8B37E0023ABC3 /* Deferred.swift in Sources */,
 				288A2DB51AB8B38D0023ABC3 /* Error.swift in Sources */,
 				288A2DB61AB8B38D0023ABC3 /* Result.swift in Sources */,
@@ -3760,6 +3772,11 @@
 			isa = PBXTargetDependency;
 			target = 288A2D851AB8B3260023ABC3 /* Shared */;
 			targetProxy = 288A2D9B1AB8B3260023ABC3 /* PBXContainerItemProxy */;
+		};
+		2F0624F61AE5AA1A00FA022C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "XCGLogger (iOS)";
+			targetProxy = 2F0624F51AE5AA1A00FA022C /* PBXContainerItemProxy */;
 		};
 		2F11EE501ABCAE910083902D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

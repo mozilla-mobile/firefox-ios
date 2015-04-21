@@ -144,7 +144,7 @@ public class LiveAccountTest: XCTestCase {
         return account.map { result in
             println("Result was successful? \(result.isSuccess)")
             if let account = result.successValue {
-                return Result(success: account.syncAuthState((ProductionSync15Configuration().tokenServerEndpointURL)))
+                return Result(success: account.syncAuthState)
             }
             return Result(failure: result.failureValue!)
         }
