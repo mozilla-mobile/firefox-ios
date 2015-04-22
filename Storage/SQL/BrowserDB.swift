@@ -41,7 +41,7 @@ let DBCouldNotOpenErrorCode = 200
 // Version 3 - Added a favicons table
 // Version 4 - Added a readinglist table
 // Version 5 - Added the clients and the tabs tables.
-class BrowserDB {
+public class BrowserDB {
     private let db: SwiftData
     // XXX: Increasing this should blow away old history, since we currently dont' support any upgrades
     private let Version: Int = 5
@@ -51,7 +51,7 @@ class BrowserDB {
 
     private var initialized = [String]()
 
-    init?(files: FileAccessor) {
+    public init(files: FileAccessor) {
         self.files = files
         db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent(FileName))
         self.schemaTable = SchemaTable()

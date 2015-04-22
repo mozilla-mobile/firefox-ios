@@ -9,7 +9,7 @@ class TestSchemaTable: XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testTable() {
         let files = MockFiles()
-        var db = BrowserDB(files: files)!
+        var db = BrowserDB(files: files)
 
         // Test creating a table
         var testTable = getCreateTable()

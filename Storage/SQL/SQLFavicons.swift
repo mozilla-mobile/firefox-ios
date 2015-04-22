@@ -9,7 +9,6 @@ import UIKit
  * The sqlite-backed implementation of the favicons protocol.
  */
 public class SQLiteFavicons : Favicons {
-    let files: FileAccessor
     let db: BrowserDB
     let table = JoinedFaviconsHistoryTable<(Site, Favicon)>()
 
@@ -17,9 +16,8 @@ public class SQLiteFavicons : Favicons {
         return UIImage(named: "defaultFavicon")!
     }()
 
-    required public init(files: FileAccessor) {
-        self.files = files
-        self.db = BrowserDB(files: files)!
+    required public init(db: BrowserDB) {
+        self.db = db
         db.createOrUpdate(table)
     }
 
@@ -28,8 +26,6 @@ public class SQLiteFavicons : Favicons {
         let res = db.delete(&err) { (conn, inout err: NSError?) -> Int in
             return self.table.delete(conn, item: nil, err: &err)
         }
-
-        files.remove("favicons")
 
         dispatch_async(dispatch_get_main_queue()) {
             complete?(success: err == nil)
