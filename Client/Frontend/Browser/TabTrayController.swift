@@ -41,7 +41,6 @@ private class CustomCell: UICollectionViewCell {
     var margin = CGFloat(0)
 
     override init(frame: CGRect) {
-
         self.backgroundHolder = UIView()
         self.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
         self.backgroundHolder.clipsToBounds = true
@@ -104,7 +103,6 @@ private class CustomCell: UICollectionViewCell {
     }
 
     func setupFrames() {
-
         let w = frame.width
         let h = frame.height
 
@@ -161,7 +159,6 @@ private class CustomCell: UICollectionViewCell {
     }
 
     func showFullscreen(container: UIView, table: UICollectionView, shouldOffset: Bool) {
-
         var offset: CGFloat = shouldOffset ? 2 : 1
 
         frame = CGRect(x: 0,
@@ -175,7 +172,6 @@ private class CustomCell: UICollectionViewCell {
     }
 
     func showAt(index: Int, container: UIView, table: UICollectionView) {
-
         let scrollOffset = table.contentOffset.y + table.contentInset.top
         if table.numberOfItemsInSection(0) > 0 {
             if let attr = table.collectionViewLayout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) {
@@ -203,14 +199,14 @@ private class CustomCell: UICollectionViewCell {
     }
 
     @objc func SELdidPressClose() {
-        let indexPath:NSIndexPath = self.delegate.collectionView.indexPathForCell(self)!
-        let tab = self.delegate.tabManager.getTab(indexPath.item)
-        self.delegate.tabManager.removeTab(tab)
-        self.delegate.collectionView.deleteItemsAtIndexPaths([indexPath])
+        let indexPath = delegate.collectionView.indexPathForCell(self)!
+        let tab = delegate.tabManager.getTab(indexPath.item)
+        delegate.tabManager.removeTab(tab)
+        delegate.collectionView.deleteItemsAtIndexPaths([indexPath])
     }
 }
 
-struct SwipeAnimatorUX {
+private struct SwipeAnimatorUX {
     let totalRotationInDegrees = 10.0
     let deleteThreshold = CGFloat(140)
     let totalScale = CGFloat(0.9)
@@ -421,7 +417,6 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
             make.top.equalTo(self.view)
             make.left.right.bottom.equalTo(self.view)
         }
-
     }
 
     private func numberOfColumnsForCurrentSize() -> Int {
@@ -639,7 +634,7 @@ extension TabTrayController: SwipeAnimatorDelegate {
     }
 }
 
-extension TabTrayController : TabManagerDelegate {
+extension TabTrayController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?) {
         // Our UI doesn't care about what's selected
     }
