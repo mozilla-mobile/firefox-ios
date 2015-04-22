@@ -183,7 +183,7 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             "os": "iOS",
             "commands": [JSON](),
             "type": "mobile",
-            "appPackage": NSBundle.mainBundle().bundleIdentifier ?? "org.mozilla.fennec_unknown",
+            "appPackage": NSBundle.mainBundle().bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
             "application": DeviceInfo.appName(),
             "device": DeviceInfo.deviceModel(),
             "formfactor": DeviceInfo.isSimulator() ? "simulator" : "phone",
