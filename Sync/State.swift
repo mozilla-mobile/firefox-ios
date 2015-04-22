@@ -271,8 +271,15 @@ public class Scratchpad {
             }
         }
 
-        b.clientName = prefs.stringForKey(PrefClientName) ?? DeviceInfo.defaultClientName()
-        b.clientGUID = prefs.stringForKey(PrefClientGUID) ?? Bytes.generateGUID()
+        b.clientGUID = prefs.stringForKey(PrefClientGUID) ?? {
+            log.error("No value found in prefs for client GUID! Generating one.")
+            return Bytes.generateGUID()
+        }()
+
+        b.clientName = prefs.stringForKey(PrefClientName) ?? {
+            log.error("No value found in prefs for client name! Using default.")
+            return DeviceInfo.defaultClientName()
+        }()
 
         // TODO: engineConfiguration
         return b.build()
