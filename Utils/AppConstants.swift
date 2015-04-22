@@ -28,6 +28,7 @@ public struct AppConstants {
     static let SeparatorColor = UIColor(rgb: 0xcccccc)
     static let HighlightBlue = UIColor(red:0.3, green:0.62, blue:1, alpha:1)
     static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.25)
+    static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
 
     // Firefox Orange
     static let ControlTintColor = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)

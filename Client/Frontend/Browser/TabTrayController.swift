@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 private struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
@@ -11,7 +12,6 @@ private struct TabTrayControllerUX {
     static let CellBackgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1)
     static let TextBoxHeight = CGFloat(32.0)
     static let FaviconSize = CGFloat(18.0)
-    static let CellHeight = TextBoxHeight * 5
     static let Margin = CGFloat(15)
     static let ToolbarBarTintColor = AppConstants.AppBackgroundColor
     static let ToolbarButtonOffset = CGFloat(10.0)
@@ -37,6 +37,7 @@ private struct TabTrayControllerUX {
 
 private protocol CustomCellDelegate: class {
     func customCellDidClose(cell: CustomCell)
+    func cellHeightForCurrentDevice() -> CGFloat
 }
 
 // UIcollectionViewController doesn't let us specify a style for recycling views. We override the default style here.
@@ -56,7 +57,9 @@ private class CustomCell: UICollectionViewCell {
     var margin = CGFloat(0)
 
     override init(frame: CGRect) {
+
         self.backgroundHolder = UIView()
+        self.backgroundHolder.backgroundColor = UIColor.whiteColor()
         self.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
         self.backgroundHolder.clipsToBounds = true
         self.backgroundHolder.backgroundColor = TabTrayControllerUX.CellBackgroundColor
@@ -99,6 +102,8 @@ private class CustomCell: UICollectionViewCell {
         self.innerStroke.layer.backgroundColor = UIColor.clearColor().CGColor
 
         super.init(frame: frame)
+
+        self.opaque = true
 
         self.animator = SwipeAnimator(animatingView: self.backgroundHolder,
             containerView: self, ux: SwipeAnimatorUX())
@@ -203,7 +208,7 @@ private class CustomCell: UICollectionViewCell {
             frame = CGRect(x: 0,
                         y: TabTrayControllerUX.Margin + AppConstants.ToolbarHeight + TabTrayControllerUX.StatusBarHeight,
                         width: container.frame.width,
-                        height: TabTrayControllerUX.CellHeight)
+                        height: self.delegate!.cellHeightForCurrentDevice())
         }
 
         container.insertSubview(self, atIndex: container.subviews.count)
@@ -222,6 +227,7 @@ private class CustomCell: UICollectionViewCell {
     @objc func SELdidPressClose() {
         delegate?.customCellDidClose(self)
     }
+
 }
 
 private struct SwipeAnimatorUX {
@@ -359,32 +365,29 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     var profile: Profile!
     var numberOfColumns: Int!
 
-    var navBar: UINavigationBar!
+    var navBar: UIView!
     var addTabButton: UIButton!
     var settingsButton: UIButton!
 
-    func SELstatusBarFrameWillChange(notification: NSNotification) {
-        self.view.setNeedsLayout()
+    var statusBarFrame: CGRect {
+        return UIApplication.sharedApplication().statusBarFrame
     }
 
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
+    var collectionViewTransitionSnapshot: UIView?
+
+    func SELstatusBarFrameDidChange(notification: NSNotification) {
+        self.view.setNeedsUpdateConstraints()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELstatusBarFrameWillChange:", name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
 
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
         tabManager.addDelegate(self)
 
-        navBar = UINavigationBar()
+        navBar = UIView()
+        navBar.backgroundColor = TabTrayControllerUX.BackgroundColor
 
-        navBar.barTintColor = TabTrayControllerUX.ToolbarBarTintColor
-        navBar.tintColor = UIColor.whiteColor()
-        navBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-        navBar.translucent = false // the translucency was causing some bad color pop during the transition
-        
         let signInButton = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
         signInButton.addTarget(self, action: "SELdidClickDone", forControlEvents: UIControlEvents.TouchUpInside)
         signInButton.setTitle(NSLocalizedString("Sign in", comment: "Button that leads to Sign in section of the Settings sheet."), forState: UIControlState.Normal)
@@ -410,21 +413,19 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         settingsButton.addTarget(self, action: "SELdidClickSettingsItem", forControlEvents: .TouchUpInside)
         settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
 
-        navBar.addSubview(addTabButton)
-        navBar.addSubview(settingsButton)
-
         numberOfColumns = numberOfColumnsForCurrentSize()
         let flowLayout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.registerClass(CustomCell.self, forCellWithReuseIdentifier: CellIdentifier)
-        collectionView.contentInset = UIEdgeInsets(top: AppConstants.ToolbarHeight, left: 0, bottom: 0, right: 0)
 
         collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
         view.addSubview(collectionView)
         view.addSubview(navBar)
+        view.addSubview(addTabButton)
+        view.addSubview(settingsButton)
     }
 
     private func relayoutTabs() {
@@ -439,8 +440,14 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELstatusBarFrameDidChange:", name: UIApplicationDidChangeStatusBarFrameNotification, object: nil)
         relayoutTabs()
         collectionView.reloadData()
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(true)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidChangeStatusBarFrameNotification, object: nil)
     }
 
     override func updateViewConstraints() {
@@ -464,7 +471,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         }
 
         collectionView.snp_remakeConstraints { make in
-            make.top.equalTo(navBar.snp_top)
+            make.top.equalTo(navBar.snp_bottom)
             make.left.right.bottom.equalTo(self.view)
         }
     }
@@ -483,6 +490,16 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         } else {
             // On iPad we make no difference between portrait and landscape
             return compactLayout ? TabTrayControllerUX.CompactNumberOfColumnsWide : TabTrayControllerUX.NumberOfColumnsWide
+        }
+    }
+
+    func cellHeightForCurrentDevice() -> CGFloat {
+        if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.Compact {
+            return TabTrayControllerUX.TextBoxHeight * 5
+        } else if self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClass.Compact {
+            return TabTrayControllerUX.TextBoxHeight * 5
+        } else {
+            return TabTrayControllerUX.TextBoxHeight * 8
         }
     }
 
@@ -535,7 +552,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
             cell.background.image = tab.screenshot
         }
 
-        let screenshotAspectRatio = cell.frame.width / TabTrayControllerUX.CellHeight
+        let screenshotAspectRatio = cell.frame.width / self.cellHeightForCurrentDevice()
         cell.closeButton.addTarget(cell, action: "SELdidPressClose", forControlEvents: UIControlEvents.TouchUpInside)
 
         // calling setupFrames here fixes reused cells which don't get resized on rotation
@@ -555,7 +572,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let cellWidth = (collectionView.bounds.width - TabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns)
-        return CGSizeMake(cellWidth, TabTrayControllerUX.CellHeight)
+        return CGSizeMake(cellWidth, self.cellHeightForCurrentDevice())
     }
 
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
@@ -601,6 +618,7 @@ extension TabTrayController: Transitionable {
 
         transitionCell.background.image = browser?.screenshot
         transitionCell.titleText.text = browser?.displayTitle
+
         if let favIcon = browser?.displayFavicon {
             transitionCell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
         }
@@ -610,9 +628,37 @@ extension TabTrayController: Transitionable {
     func transitionablePreShow(transitionable: Transitionable, options: TransitionOptions) {
         self.collectionView.layoutSubviews()
         self.collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: tabManager.selectedIndex, inSection: 0), atScrollPosition: .CenteredVertically, animated: false)
+        if let container = options.container {
+            let cell = getTransitionCell(options, browser: tabManager.selectedTab)
+            cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
+            cell.innerStroke.hidden = true
+        }
+
+        navBar.hidden = true
+        collectionView.backgroundColor = UIColor.clearColor()
+
+        view.layoutIfNeeded()
+        collectionViewTransitionSnapshot = snapshotTransitionView(collectionView)
+        self.view.addSubview(collectionViewTransitionSnapshot!)
+        collectionViewTransitionSnapshot?.transform = CGAffineTransformMakeScale(0.9, 0.9)
+        collectionViewTransitionSnapshot?.alpha = 0
+
     }
 
     func transitionablePreHide(transitionable: Transitionable, options: TransitionOptions) {
+        self.collectionView.layoutSubviews()
+
+        if let container = options.container {
+            let cell = getTransitionCell(options, browser: tabManager.selectedTab)
+            cell.backgroundHolder.layer.cornerRadius = 0
+            cell.innerStroke.hidden = true
+        }
+
+        navBar.hidden = true
+        collectionView.backgroundColor = UIColor.clearColor()
+
+        collectionViewTransitionSnapshot = snapshotTransitionView(collectionView)
+        self.view.addSubview(collectionViewTransitionSnapshot!)
 
     }
 
@@ -620,8 +666,6 @@ extension TabTrayController: Transitionable {
         // Create a fake cell that is shown fullscreen
         if let container = options.container {
             let cell = getTransitionCell(options, browser: tabManager.selectedTab)
-            // TODO: Smoothly animate the corner radius to 0.
-            // cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
             var hasToolbar = false
             if let fromView = options.fromView as? BrowserViewController {
                 hasToolbar = fromView.shouldShowToolbarForTraitCollection(self.traitCollection)
@@ -631,26 +675,18 @@ extension TabTrayController: Transitionable {
 
             cell.showFullscreen(container, table: collectionView, shouldOffset: hasToolbar)
             cell.layoutIfNeeded()
+            options.cellFrame = cell.frame
+
             cell.title.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, -cell.title.frame.height)
 
-            let corners = CABasicAnimation(keyPath: "cornerRadius")
-            corners.toValue = 0
-            corners.fromValue = TabTrayControllerUX.CornerRadius
-            corners.duration = options.duration!
-            corners.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-            
-            cell.backgroundHolder.layer.addAnimation(corners, forKey: "cornerRadius")
-            cell.innerStroke.layer.addAnimation(corners, forKey: "cornerRadius")
-
-            cell.innerStroke.alpha = 0
         }
+
+        collectionViewTransitionSnapshot?.transform = CGAffineTransformMakeScale(0.9, 0.9)
+        collectionViewTransitionSnapshot?.alpha = 0
 
         let buttonOffset = addTabButton.frame.width + TabTrayControllerUX.ToolbarButtonOffset
         addTabButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
         settingsButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -buttonOffset , 0)
-        navBar.alpha = 0
-        collectionView.alpha = 0
-
     }
 
     func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
@@ -659,29 +695,47 @@ extension TabTrayController: Transitionable {
             let cell = getTransitionCell(options, browser: tabManager.selectedTab)
             cell.showAt(tabManager.selectedIndex, container: container, table: collectionView)
             cell.layoutIfNeeded()
-
-            let corners = CABasicAnimation(keyPath: "cornerRadius")
-            corners.toValue = TabTrayControllerUX.CornerRadius
-            corners.fromValue = 0
-            corners.duration = options.duration!
-            corners.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-
-            cell.backgroundHolder.layer.addAnimation(corners, forKey: "cornerRadius")
-            cell.innerStroke.layer.addAnimation(corners, forKey: "cornerRadius")
-
-            cell.innerStroke.alpha = 1
+            options.cellFrame = cell.frame
         }
+
+
+        collectionViewTransitionSnapshot?.transform = CGAffineTransformIdentity
+        collectionViewTransitionSnapshot?.alpha = 1
 
         addTabButton.transform = CGAffineTransformIdentity
         settingsButton.transform = CGAffineTransformIdentity
         navBar.alpha = 1
-        collectionView.alpha = 1
     }
 
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
-        if let cell = options.moving {
-          cell.removeFromSuperview()
+        if let cell = options.moving as? CustomCell {
+            cell.removeFromSuperview()
+
+            cell.innerStroke.alpha = 0
+            cell.innerStroke.hidden = false
+
+            collectionViewTransitionSnapshot?.removeFromSuperview()
+            collectionView.hidden = false
+
+            navBar.hidden = false
+            collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
+            if let tab = collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: tabManager.selectedIndex, inSection: 0)) as? CustomCell {
+                UIView.animateWithDuration(0.55, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { _ in
+                    cell.innerStroke.alpha = 1
+
+                    }, completion: { _ in
+                        return
+                })
+            }
         }
+
+    }
+
+    private func snapshotTransitionView(view: UIView) -> UIView {
+        let snapshot = view.snapshotViewAfterScreenUpdates(true)
+        snapshot.frame = view.frame
+        view.hidden = true
+        return snapshot
     }
 
 }

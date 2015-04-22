@@ -1438,6 +1438,21 @@ extension BrowserViewController : UIViewControllerTransitioningDelegate {
 }
 
 extension BrowserViewController : Transitionable {
+    private func headerTransformToCellFrame(frame: CGRect) -> CGAffineTransform {
+        let scale = frame.size.width / header.frame.size.width
+        // Since the scale will happen in the center of the frame, we move this so the centers of the two frames overlap.
+        let tx = frame.origin.x + frame.width/2 - (header.frame.origin.x + header.frame.width/2)
+        let ty = frame.origin.y - header.frame.origin.y * scale * 2 // Move this up a little actually keeps it above the web page. I'm not sure what you want
+        var transform = CGAffineTransformMakeTranslation(tx, ty)
+        return CGAffineTransformScale(transform, scale, scale)
+    }
+
+    private func footerTransformToCellFrame(frame: CGRect) -> CGAffineTransform {
+        let tx = frame.origin.x + frame.width/2 - (footer.frame.origin.x + footer.frame.width/2)
+        var footerTransform = CGAffineTransformMakeTranslation(tx, -footer.frame.origin.y + frame.origin.y + frame.size.height - footer.frame.size.height)
+        let footerScale = frame.size.width / footer.frame.size.width
+        return CGAffineTransformScale(footerTransform, footerScale, footerScale)
+    }
 
     func transitionablePreHide(transitionable: Transitionable, options: TransitionOptions) {
         // Move all the webview's off screen
@@ -1456,19 +1471,32 @@ extension BrowserViewController : Transitionable {
                 tab.webView.hidden = true
             }
         }
+
+        // Move over the transforms to reflect where the opening tab is coming from instead of where the previous tab was
+        if let frame = options.cellFrame {
+            header.transform = CGAffineTransformIdentity
+            footer.transform = CGAffineTransformIdentity
+            header.transform = headerTransformToCellFrame(frame)
+            footer.transform = footerTransformToCellFrame(frame)
+        }
+
         self.homePanelController?.view.hidden = true
     }
 
     func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
         view.alpha = 1
-        footer.transform = CGAffineTransformIdentity
+
         header.transform = CGAffineTransformIdentity
+        footer.transform = CGAffineTransformIdentity
     }
 
     func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {
         view.alpha = 0
-        footer.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, footer.frame.height)
-        header.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, header.frame.height)
+
+        if let frame = options.cellFrame {
+            header.transform = headerTransformToCellFrame(frame)
+            footer.transform = footerTransformToCellFrame(frame)
+        }
     }
 
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
@@ -1478,6 +1506,7 @@ extension BrowserViewController : Transitionable {
                 tab.webView.hidden = false
             }
         }
+        self.updateViewConstraints()
         self.homePanelController?.view.hidden = false
         if options.toView === self {
             startTrackingAccessibilityStatus()
