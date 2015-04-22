@@ -155,7 +155,7 @@ public class FirefoxAccount {
         }
     }
 
-    func advance() -> Deferred<FxAState> {
+    public func advance() -> Deferred<FxAState> {
         let client = FxAClient10(endpoint: configuration.authEndpointURL)
         let stateMachine = FxALoginStateMachine(client: client)
         let now = NSDate.now()
