@@ -12,8 +12,37 @@ protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser)
 }
 
+// We can't use a WeakList here because this is a protocol.
+struct WeakTabManagerDelegate {
+    var value : TabManagerDelegate?
+
+    init (value: TabManagerDelegate) {
+        self.value = value
+    }
+
+    func get() -> TabManagerDelegate? {
+        return value
+    }
+}
+
 class TabManager {
-    weak var delegate: TabManagerDelegate? = nil
+    private var delegates = [WeakTabManagerDelegate]()
+
+    func addDelegate(delegate: TabManagerDelegate) {
+        assert(NSThread.isMainThread())
+        delegates.append(WeakTabManagerDelegate(value: delegate))
+    }
+
+    func removeDelegate(delegate: TabManagerDelegate) {
+        assert(NSThread.isMainThread())
+        for var i = 0; i < delegates.count; i++ {
+            var del = delegates[i]
+            if delegate === del.get() {
+                delegates.removeAtIndex(i)
+                return
+            }
+        }
+    }
 
     private var tabs: [Browser] = []
     private var _selectedIndex = -1
@@ -51,6 +80,8 @@ class TabManager {
     }
 
     func selectTab(tab: Browser?) {
+        assert(NSThread.isMainThread())
+
         if selectedTab === tab {
             return
         }
@@ -67,10 +98,13 @@ class TabManager {
 
         assert(tab === selectedTab, "Expected tab is selected")
 
-        delegate?.tabManager(self, didSelectedTabChange: tab, previous: previous)
+        for delegate in delegates {
+            delegate.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous)
+        }
     }
 
     func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration = WKWebViewConfiguration()) -> Browser {
+        assert(NSThread.isMainThread())
         if request == nil {
             request = defaultNewTabRequest
         }
@@ -83,12 +117,17 @@ class TabManager {
     }
 
     private func addTab(tab: Browser) {
-        delegate?.tabManager(self, didCreateTab: tab)
+        for delegate in delegates {
+            delegate.get()?.tabManager(self, didCreateTab: tab)
+        }
         tabs.append(tab)
-        delegate?.tabManager(self, didAddTab: tab)
+        for delegate in delegates {
+            delegate.get()?.tabManager(self, didAddTab: tab)
+        }
     }
 
     func removeTab(tab: Browser) {
+        assert(NSThread.isMainThread())
         // If the removed tab was selected, find the new tab to select.
         if tab === selectedTab {
             let index = getIndex(tab)
@@ -111,10 +150,19 @@ class TabManager {
         }
         assert(count == prevCount - 1, "Tab removed")
 
-        delegate?.tabManager(self, didRemoveTab: tab)
+        for delegate in delegates {
+            delegate.get()?.tabManager(self, didRemoveTab: tab)
+        }
     }
 
-    private func getIndex(tab: Browser) -> Int {
+    func removeAll() {
+        let tabs = self.tabs
+        for tab in tabs {
+            removeTab(tab)
+        }
+    }
+
+    func getIndex(tab: Browser) -> Int {
         for i in 0..<count {
             if tabs[i] === tab {
                 return i

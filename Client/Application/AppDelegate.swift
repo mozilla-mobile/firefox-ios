@@ -29,8 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
 
-        let controller = BrowserViewController()
-        controller.profile = profile
+        let controller = BrowserViewController(profile: profile)
 
         // Add restoration class, the factory that will return the ViewController we 
         // will restore with.
