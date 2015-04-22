@@ -47,8 +47,8 @@ class BrowserViewController: UIViewController {
     let profile: Profile
 
     // These views wrap the urlbar and toolbar to provide background effects on them
-    private var header: UIView!
-    private var footer: UIView!
+    var header: UIView!
+    var footer: UIView!
     private var footerBackground: UIView!
 
     // Scroll management properties
@@ -543,6 +543,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressTabs(urlBar: URLBarView) {
         let tabTrayController = TabTrayController()
         tabTrayController.profile = profile
+        tabTrayController.browserViewController = self
         tabTrayController.tabManager = tabManager
         tabTrayController.transitioningDelegate = self
         tabTrayController.modalPresentationStyle = .Custom
@@ -1428,7 +1429,6 @@ extension BrowserViewController : UIViewControllerTransitioningDelegate {
 }
 
 extension BrowserViewController : Transitionable {
-
     func transitionablePreHide(transitionable: Transitionable, options: TransitionOptions) {
         // Move all the webview's off screen
         for i in 0..<tabManager.count {
@@ -1436,7 +1436,10 @@ extension BrowserViewController : Transitionable {
                 tab.webView.hidden = true
             }
         }
-        self.homePanelController?.view.hidden = true
+
+        homePanelController?.view.hidden = true
+        header.alpha = 0
+        footer.alpha = 0
     }
 
     func transitionablePreShow(transitionable: Transitionable, options: TransitionOptions) {
@@ -1446,19 +1449,15 @@ extension BrowserViewController : Transitionable {
                 tab.webView.hidden = true
             }
         }
-        self.homePanelController?.view.hidden = true
+        homePanelController?.view.hidden = true
+        header.alpha = 0
+        footer.alpha = 0
     }
 
     func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
-        view.alpha = 1
-        footer.transform = CGAffineTransformIdentity
-        header.transform = CGAffineTransformIdentity
     }
 
     func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {
-        view.alpha = 0
-        footer.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, footer.frame.height)
-        header.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, header.frame.height)
     }
 
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
@@ -1468,9 +1467,12 @@ extension BrowserViewController : Transitionable {
                 tab.webView.hidden = false
             }
         }
-        self.homePanelController?.view.hidden = false
+
+        homePanelController?.view.hidden = false
         if options.toView === self {
             startTrackingAccessibilityStatus()
+            header.alpha = 1
+            footer.alpha = 1
         } else {
             stopTrackingAccessibilityStatus()
         }

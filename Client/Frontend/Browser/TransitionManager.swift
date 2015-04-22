@@ -5,10 +5,12 @@
 @objc
 class TransitionOptions {
     var container: UIView? = nil
+    var containerSnapshot: UIView? = nil
     var moving: UIView? = nil
     var fromView: UIViewController? = nil
     var toView: UIViewController? = nil
     var duration: NSTimeInterval? = nil
+    var cellFrame: CGRect? = nil
 }
 
 @objc
@@ -26,7 +28,6 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning  {
     init(show: Bool) {
         self.show = show
     }
-
 
     func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
 
@@ -55,9 +56,11 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning  {
                 to.transitionablePreShow(to, options: options)
                 from.transitionablePreHide(from, options: options)
 
+                container.layoutIfNeeded()
                 UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
                         to.transitionableWillShow(to, options: options)
                         from.transitionableWillHide(from, options: options)
+                        container.layoutIfNeeded()
                     }, completion: { finished in
                         to.transitionableWillComplete(to, options: options)
                         from.transitionableWillComplete(from, options: options)

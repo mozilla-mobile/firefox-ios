@@ -9,6 +9,7 @@ import SnapKit
 
 private struct URLBarViewUX {
     // The color shown behind the tabs count button, and underneath the (mostly transparent) status bar.
+    static let BackgroundColor = AppConstants.BackgroundColor
     static let TextFieldBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.05)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
     static let LocationLeftPadding = 5
