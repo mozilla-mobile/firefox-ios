@@ -273,6 +273,7 @@
 		D31A0FC81A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */; };
 		D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */; };
 		D31FC24C1A8D923000BAF7EC /* Alamofire.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = D31FC2311A8D908900BAF7EC /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D32CACED1AE04DA1000658EB /* TestSwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */; };
 		D339C2831AD354B400C087BD /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D339C2821AD354B400C087BD /* Loader.swift */; };
 		D33D6BC81ABCE8F60089DAB2 /* Thumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D6BC71ABCE8F60089DAB2 /* Thumbnails.swift */; };
 		D33D6BC91ABCE8F60089DAB2 /* Thumbnails.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D6BC71ABCE8F60089DAB2 /* Thumbnails.swift */; };
@@ -1207,6 +1208,7 @@
 		D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSuggestClient.swift; sourceTree = "<group>"; };
 		D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenshotHelper.swift; sourceTree = "<group>"; };
 		D31FC2291A8D908800BAF7EC /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Carthage/Checkouts/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
+		D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSwiftData.swift; sourceTree = "<group>"; };
 		D339C2821AD354B400C087BD /* Loader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
 		D33D6BC71ABCE8F60089DAB2 /* Thumbnails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Thumbnails.swift; path = Storage/Thumbnails.swift; sourceTree = "<group>"; };
 		D34510871ACF415700EC27F0 /* SearchLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchLoader.swift; sourceTree = "<group>"; };
@@ -1827,7 +1829,6 @@
 			isa = PBXGroup;
 			children = (
 				2FCAE2791ABB533A00877008 /* MockFiles.swift */,
-				2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */,
 				2FCAE27B1ABB533A00877008 /* TestBookmarks.swift */,
 				2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */,
 				2FCAE27D1ABB533A00877008 /* TestHistoryTable.swift */,
@@ -1835,6 +1836,8 @@
 				2FCAE27F1ABB533A00877008 /* TestJoinedHistoryVisits.swift */,
 				2FCAE2801ABB533A00877008 /* TestReadingListTable.swift */,
 				2FCAE2811ABB533A00877008 /* TestSQLiteReadingList.swift */,
+				2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */,
+				D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */,
 				2FCAE2821ABB533A00877008 /* TestTableTable.swift */,
 				2FCAE2831ABB533A00877008 /* TestVisitsTable.swift */,
 				2FCAE22B1ABB51F800877008 /* Supporting Files */,
@@ -2091,7 +2094,6 @@
 		E42CCDFF1A24C4E300B794D3 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				287DA9D51AE06D220055AC35 /* Extensions */,
 				0BAC7A7F1AC4B135006018CB /* AppConstants.swift */,
 				2FCAE2401ABB531100877008 /* Bytes.swift */,
 				281B2C071ADF4F29002917DC /* DeferredUtils.swift */,
@@ -2103,6 +2105,7 @@
 				282731A11ABC9D2600AA1954 /* Prefs.swift */,
 				2F3444561AB22A4B00FD9731 /* TimeConstants.swift */,
 				D3ACB4381AD33EBA00748D50 /* WeakList.swift */,
+				287DA9D51AE06D220055AC35 /* Extensions */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -3459,6 +3462,7 @@
 				2FA4351A1ABB6829008031D1 /* Site.swift in Sources */,
 				2FCAE28B1ABB533A00877008 /* TestReadingListTable.swift in Sources */,
 				2FA435211ABB6831008031D1 /* JoinedHistoryVisitsTable.swift in Sources */,
+				D32CACED1AE04DA1000658EB /* TestSwiftData.swift in Sources */,
 				2FCAE28A1ABB533A00877008 /* TestJoinedHistoryVisits.swift in Sources */,
 				2FA4352C1ABB6873008031D1 /* Visit.swift in Sources */,
 				2FA435201ABB6831008031D1 /* JoinedFaviconsHistoryTable.swift in Sources */,

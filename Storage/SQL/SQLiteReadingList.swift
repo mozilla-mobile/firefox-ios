@@ -8,13 +8,11 @@ import Foundation
  * The SQLite-backed implementation of the ReadingList protocol.
  */
 public class SQLiteReadingList: ReadingList {
-    let files: FileAccessor
     let db: BrowserDB
     let table = ReadingListTable<ReadingListItem>()
 
-    required public init(files: FileAccessor) {
-        self.files = files
-        self.db = BrowserDB(files: files)!
+    required public init(db: BrowserDB) {
+        self.db = db
         db.createOrUpdate(table)
     }
 

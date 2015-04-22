@@ -73,6 +73,12 @@ public class Cursor: SequenceType {
         status = .Closed
         statusMessage = "Closed"
     }
+
+    deinit {
+        if status != CursorStatus.Closed {
+            close()
+        }
+    }
 }
 
 /*

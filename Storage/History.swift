@@ -4,8 +4,6 @@
 
 /* The base history protocol */
 public protocol History {
-    init(files: FileAccessor)
-
     func clear(complete: (success: Bool) -> Void)
     func get(options: QueryOptions?, complete: (data: Cursor) -> Void)
     func addVisit(visit: Visit, complete: (success: Bool) -> Void)
