@@ -378,6 +378,17 @@ class SettingsTableViewController: UITableViewController {
         super.viewDidLoad()
 
         let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
+        let accountDebugSettings: [Setting]
+        if !isAuroraChannel() {
+            accountDebugSettings = [
+                // Debug settings:
+                RequirePasswordDebugSetting(settings: self),
+                RequireUpgradeDebugSetting(settings: self),
+                ForgetSyncAuthStateDebugSetting(settings: self),
+            ]
+        } else {
+            accountDebugSettings = []
+        }
 
         settings = [
             SettingSection(title: nil, children: [
@@ -386,11 +397,7 @@ class SettingsTableViewController: UITableViewController {
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 DisconnectSetting(settings: self),
-                // Debug settings:
-                RequirePasswordDebugSetting(settings: self),
-                RequireUpgradeDebugSetting(settings: self),
-                ForgetSyncAuthStateDebugSetting(settings: self),
-            ]),
+            ] + accountDebugSettings),
             SettingSection(title: NSAttributedString(string: privacyTitle), children: [
                 ClearPrivateDataSetting(settings: self)
             ]),
