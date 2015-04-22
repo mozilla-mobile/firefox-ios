@@ -207,6 +207,11 @@ private class CustomCell: UICollectionViewCell {
         let tab = self.delegate.tabManager.getTab(indexPath.item)
         self.delegate.tabManager.removeTab(tab)
         self.delegate.collectionView.deleteItemsAtIndexPaths([indexPath])
+
+        // Navigate to an about:home tab from an empty tray
+        if self.delegate.tabManager.count == 0 {
+            self.delegate.SELdidClickAddTab()
+        }
     }
 }
 
@@ -634,6 +639,11 @@ extension TabTrayController: SwipeAnimatorDelegate {
             let tab = tabManager.getTab(indexPath.item)
             tabManager.removeTab(tab)
             collectionView.deleteItemsAtIndexPaths([indexPath])
+
+            // Navigate to an about:home tab from an empty tray
+            if tabManager.count == 0 {
+                SELdidClickAddTab()
+            }
         }
     }
 }
