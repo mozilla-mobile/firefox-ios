@@ -12,7 +12,7 @@ private let SeparatorKind = "separator"
 private let SeparatorIdentifier = "separator"
 
 private let ThumbnailSectionPadding: CGFloat = 8
-private let SeparatorColor = UIColor(rgb: 0xcccccc)
+private let SeparatorColor = UIColor(rgb: 0xffffff)
 private let DefaultImage = "defaultFavicon"
 
 class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
@@ -45,7 +45,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
         layout.registerClass(TopSitesSeparator.self, forDecorationViewOfKind: SeparatorKind)
 
         collection = TopSitesCollectionView(frame: self.view.frame, collectionViewLayout: layout)
-        collection.backgroundColor = UIColor.whiteColor()
+        collection.backgroundColor = AppConstants.PanelBackgroundColor
         collection.delegate = self
         collection.dataSource = dataSource
         collection.registerClass(ThumbnailCell.self, forCellWithReuseIdentifier: ThumbnailIdentifier)

@@ -4,8 +4,8 @@
 
 import UIKit
 
-private let BorderColor = UIColor(rgb: 0xeeeeee)
-private let LabelFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Bold" : "HelveticaNeue", size: 11)
+private let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
+private let LabelFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Bold" : "HelveticaNeue-Medium", size: 11)
 private let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
 private let CellInsets = UIEdgeInsetsMake(8, 8, 8, 8)
 
@@ -27,9 +27,10 @@ class ThumbnailCell: UICollectionViewCell {
         contentView.addSubview(imageView)
 
         imageView.layer.borderColor = BorderColor.CGColor
-        imageView.layer.borderWidth = 2
+        imageView.layer.borderWidth = 1
         imageView.layer.cornerRadius = 3
         imageView.clipsToBounds = true
+
         imageView.snp_makeConstraints({ make in
             make.top.left.right.equalTo(self.contentView).insets(CellInsets)
             make.width.equalTo(self.imageView.snp_height).multipliedBy(ThumbnailCellUX.ImageAspectRatio)

@@ -51,6 +51,8 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         tableView.rowHeight = RemoteTabsPanelUX.RowHeight
         tableView.separatorInset = UIEdgeInsetsZero
 
+        view.backgroundColor = AppConstants.PanelBackgroundColor
+
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: "SELrefresh", forControlEvents: UIControlEvents.ValueChanged)
     }
