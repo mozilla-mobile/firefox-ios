@@ -34,7 +34,7 @@ private class CustomCell: UICollectionViewCell {
     let favicon: UIImageView
     let closeTab: UIButton
 
-    var delegate: TabTrayController!
+    weak var delegate: TabTrayController!
     var animator: SwipeAnimator!
 
     // Changes depending on whether we're full-screen or not.
@@ -215,18 +215,19 @@ private struct SwipeAnimatorUX {
     let recenterAnimationDuration = NSTimeInterval(0.15)
 }
 
-private protocol SwipeAnimatorDelegate {
+private protocol SwipeAnimatorDelegate: class {
     func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView)
 }
 
 private class SwipeAnimator: NSObject {
     let animatingView: UIView
-    let container: UIView
     let ux: SwipeAnimatorUX
 
     var originalCenter: CGPoint!
     var startLocation: CGPoint!
-    var delegate: SwipeAnimatorDelegate?
+
+    weak var container: UIView!
+    weak var delegate: SwipeAnimatorDelegate!
 
     init(animatingView view: UIView, containerView: UIView, ux swipeUX: SwipeAnimatorUX) {
         animatingView = view
