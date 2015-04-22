@@ -325,18 +325,18 @@ public class Sync15StorageClient {
     }
 
     // Sync storage responds with a plain timestamp to a PUT, not with a JSON body.
-    private func putResource<T>(path: String, body: JSON, ifUnmodifiedSince: Timestamp?, f: (String) -> T?) -> Deferred<Result<StorageResponse<T>>> {
+    private func putResource<T>(path: String, body: JSON, ifUnmodifiedSince: Timestamp?, parser: (String) -> T?) -> Deferred<Result<StorageResponse<T>>> {
         let url = self.serverURI.URLByAppendingPathComponent(path)
-        return self.putResource(url, body: body, ifUnmodifiedSince: ifUnmodifiedSince, f: f)
+        return self.putResource(url, body: body, ifUnmodifiedSince: ifUnmodifiedSince, parser: parser)
     }
 
-    private func putResource<T>(URL: NSURL, body: JSON, ifUnmodifiedSince: Timestamp?, f: (String) -> T?) -> Deferred<Result<StorageResponse<T>>> {
+    private func putResource<T>(URL: NSURL, body: JSON, ifUnmodifiedSince: Timestamp?, parser: (String) -> T?) -> Deferred<Result<StorageResponse<T>>> {
 
         let deferred = Deferred<Result<StorageResponse<T>>>(defaultQueue: self.resultQueue)
         let req = self.requestPUT(URL, body: body, ifUnmodifiedSince: ifUnmodifiedSince)
         let handler = errorWrap(deferred, { (_, response, data, error) in
             if let data = data as? String {
-                if let v = f(data) {
+                if let v = parser(data) {
                     let storageResponse = StorageResponse<T>(value: v, response: response!)
                     deferred.fill(Result(success: storageResponse))
                 } else {
@@ -381,7 +381,7 @@ public class Sync15StorageClient {
 
         // TODO finish this!
         let record: JSON = JSON(["payload": payload, "id": "global"])
-        return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, f: decimalSecondsStringToTimestamp)
+        return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
     }
 
     func wipeStorage() -> Deferred<Result<StorageResponse<JSON>>> {
@@ -421,7 +421,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         if let body = self.encrypter.serializer(record) {
             log.debug("Body is \(body)")
             log.debug("Original record is \(record)")
-            return self.client.putResource(uriForRecord(record.id), body: body, ifUnmodifiedSince: ifUnmodifiedSince, f: decimalSecondsStringToTimestamp)
+            return self.client.putResource(uriForRecord(record.id), body: body, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
         }
         return deferResult(RecordParseError())
     }
