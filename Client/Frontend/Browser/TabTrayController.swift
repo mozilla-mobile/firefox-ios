@@ -350,6 +350,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
     override func viewDidLoad() {
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
+        tabManager.addDelegate(self)
 
         navBar = UINavigationBar()
 
@@ -440,6 +441,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     func SELdidClickSettingsItem() {
         let controller = SettingsNavigationController()
         controller.profile = profile
+        controller.tabManager = tabManager
         presentViewController(controller, animated: true, completion: nil)
     }
 
@@ -633,8 +635,24 @@ extension TabTrayController: SwipeAnimatorDelegate {
         if let indexPath = self.collectionView.indexPathForCell(tabCell) {
             let tab = tabManager.getTab(indexPath.item)
             tabManager.removeTab(tab)
-            collectionView.deleteItemsAtIndexPaths([indexPath])
         }
+    }
+}
+
+extension TabTrayController : TabManagerDelegate {
+    func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?) {
+        // Our UI doesn't care about what's selected
+    }
+
+    func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
+    }
+
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser) {
+        collectionView.reloadData()
+    }
+
+    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser) {
+        collectionView.reloadData()
     }
 }
 

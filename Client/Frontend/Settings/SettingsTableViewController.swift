@@ -189,7 +189,6 @@ private class AccountStatusSetting: WithAccountSetting {
                 let range = NSRange(location: 0, length: count(string))
                 let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
                 let attrs : [NSObject : AnyObject]? = [NSForegroundColorAttributeName : orange]
-
                 let res = NSMutableAttributedString(string: string)
                 res.setAttributes(attrs, range: range)
                 return res
@@ -258,10 +257,40 @@ private class SearchSetting: Setting {
     }
 }
 
+private class ClearPrivateDataSetting: Setting {
+    let profile: Profile
+    var tabManager: TabManager!
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        self.tabManager = settings.tabManager
+
+        let clearTitle = NSLocalizedString("Clear private data", comment: "Clear private data setting")
+        super.init(title: NSAttributedString(string: clearTitle))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        let clearable = EverythingClearable(profile: profile, tabmanager: tabManager)
+
+        var title: String { return NSLocalizedString("Clear Everything", tableName: "ClearPrivateData", comment: "Clear everything title") }
+        var message: String { return NSLocalizedString("Are you sure you want all of your data? This will also close all open tabs.", tableName: "ClearPrivateData", comment: "Message shown in the dialog when clearing everything") }
+
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.ActionSheet)
+
+        let clearString = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Clicking this button will cause us to clear your private data")
+        alert.addAction(UIAlertAction(title: clearString, style: UIAlertActionStyle.Destructive, handler: { (action) -> Void in
+            clearable.clear()
+        }))
+
+        let cancelString = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Cancel string in the clear private data dialog")
+        alert.addAction(UIAlertAction(title: cancelString, style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in }))
+        navigationController?.presentViewController(alert, animated: true) { () -> Void in }
+    }
+}
+
 // The base settings view controller.
 class SettingsTableViewController: UITableViewController {
     private let Identifier = "CellIdentifier"
-
     private var settings: [SettingSection]!
 
     var profile: Profile!
@@ -270,6 +299,8 @@ class SettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
+
         settings = [
             SettingSection(title: nil, children: [
                 // Without a Firefox Account:
@@ -277,6 +308,9 @@ class SettingsTableViewController: UITableViewController {
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 DisconnectSetting(settings: self),
+            ]),
+            SettingSection(title: NSAttributedString(string: privacyTitle), children: [
+                ClearPrivateDataSetting(settings: self)
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Search Settings", comment: "Search settings section title")), children: [
                 SearchSetting(settings: self)

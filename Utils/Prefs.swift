@@ -103,7 +103,6 @@ public class MockProfilePrefs : Prefs {
                 return arr
             }
         }
-
         return nil
     }
 
