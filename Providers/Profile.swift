@@ -32,6 +32,13 @@ class ProfileFileAccessor: FileAccessor {
     }
 }
 
+class CommandDiscardingSyncDelegate: SyncDelegate {
+    func displaySentTabForURL(URL: NSURL, title: String) {
+        // TODO: do something else.
+        log.info("Discarding sent URL \(URL.absoluteString)")
+    }
+}
+
 class BrowserProfileSyncDelegate: SyncDelegate {
     let app: UIApplication
 
@@ -216,7 +223,14 @@ public class BrowserProfile: Profile {
     public func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
         log.info("Account is \(self.account), app is \(self.app)")
 
-        if let account = self.account, app = self.app {
+        if let account = self.account {
+            let delegate: SyncDelegate
+            if let app = self.app {
+                delegate = BrowserProfileSyncDelegate(app: app)
+            } else {
+                delegate = CommandDiscardingSyncDelegate()
+            }
+
             log.debug("Fetching clients and tabs.")
 
             let authState = account.syncAuthState
@@ -225,7 +239,6 @@ public class BrowserProfile: Profile {
 
             let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
 
-            let delegate = BrowserProfileSyncDelegate(app: app)
             let syncClients = curry(BrowserProfile.syncClientsToStorage)(storage, delegate, syncPrefs)
             let syncTabs = curry(BrowserProfile.syncTabsToStorage)(storage, delegate, syncPrefs)
 
