@@ -41,7 +41,7 @@ private let PrefKeyLabel = "keyLabel"
 private let PrefKeysTS = "keysTS"
 private let PrefLastFetched = "lastFetched"
 private let PrefClientName = "clientName"
-private let PrefClientLastUpload = "clientLastUpload"
+private let PrefClientGUID = "clientGUID"
 
 
 
@@ -68,7 +68,7 @@ public class Scratchpad {
         private var keyLabel: String
         var collectionLastFetched: [String: Timestamp]
         var engineConfiguration: EngineConfiguration?
-        var clientRecordLastUpload: Timestamp = 0
+        var clientGUID: String
         var clientName: String
         var prefs: Prefs
 
@@ -83,7 +83,7 @@ public class Scratchpad {
 
             self.collectionLastFetched = p.collectionLastFetched
             self.engineConfiguration = p.engineConfiguration
-            self.clientRecordLastUpload = p.clientRecordLastUpload
+            self.clientGUID = p.clientGUID
             self.clientName = p.clientName
         }
 
@@ -108,11 +108,6 @@ public class Scratchpad {
             return self
         }
 
-        public func clearClientUploadTimestamp() -> Builder {
-            self.clientRecordLastUpload = 0
-            return self
-        }
-
         public func build() -> Scratchpad {
             return Scratchpad(
                     b: self.syncKeyBundle,
@@ -121,7 +116,7 @@ public class Scratchpad {
                     keyLabel: self.keyLabel,
                     fetches: self.collectionLastFetched,
                     engines: self.engineConfiguration,
-                    clientUpload: self.clientRecordLastUpload,
+                    clientGUID: self.clientGUID,
                     clientName: self.clientName,
                     persistingTo: self.prefs
             )
@@ -168,20 +163,12 @@ public class Scratchpad {
     // Enablement states.
     let engineConfiguration: EngineConfiguration?
 
-    // When did we last upload our client record?
-    let clientRecordLastUpload: Timestamp
-
     // What's our client name?
     let clientName: String
-
-    let clientGUID: String = "TODOTODOTODO"
+    let clientGUID: String
 
     // Where do we persist when told?
     let prefs: Prefs
-
-    class func defaultClientName() -> String {
-        return "Firefox"   // TODO
-    }
 
     init(b: KeyBundle,
          m: Fetched<MetaGlobal>?,
@@ -189,7 +176,7 @@ public class Scratchpad {
          keyLabel: String,
          fetches: [String: Timestamp],
          engines: EngineConfiguration?,
-         clientUpload: Timestamp,
+         clientGUID: String,
          clientName: String,
          persistingTo prefs: Prefs
         ) {
@@ -201,7 +188,7 @@ public class Scratchpad {
         self.global = m
         self.engineConfiguration = engines
         self.collectionLastFetched = fetches
-        self.clientRecordLastUpload = clientUpload
+        self.clientGUID = clientGUID
         self.clientName = clientName
     }
 
@@ -216,8 +203,8 @@ public class Scratchpad {
         self.global = nil
         self.engineConfiguration = nil
         self.collectionLastFetched = [String: Timestamp]()
-        self.clientRecordLastUpload = 0
-        self.clientName = Scratchpad.defaultClientName()
+        self.clientGUID = Bytes.generateGUID()
+        self.clientName = DeviceInfo.defaultClientName()
     }
 
     // For convenience.
@@ -231,7 +218,6 @@ public class Scratchpad {
                    .setGlobal(global)
                    .setKeys(nil)
                    .clearFetchTimestamps()
-                   .clearClientUploadTimestamp()
                    .build()
     }
 
@@ -285,8 +271,8 @@ public class Scratchpad {
             }
         }
 
-        b.clientName = prefs.stringForKey(PrefClientName) ?? defaultClientName()
-        b.clientRecordLastUpload = prefs.unsignedLongForKey(PrefClientLastUpload) ?? 0
+        b.clientName = prefs.stringForKey(PrefClientName) ?? DeviceInfo.defaultClientName()
+        b.clientGUID = prefs.stringForKey(PrefClientGUID) ?? Bytes.generateGUID()
 
         // TODO: engineConfiguration
         return b.build()
@@ -346,7 +332,7 @@ public class Scratchpad {
         // TODO: engineConfiguration
 
         prefs.setString(clientName, forKey: PrefClientName)
-        prefs.setLong(clientRecordLastUpload, forKey: PrefClientLastUpload)
+        prefs.setString(clientGUID, forKey: PrefClientGUID)
 
         // Thanks, Swift.
         let dict = mapValues(collectionLastFetched, { NSNumber(unsignedLongLong: $0) }) as NSDictionary
