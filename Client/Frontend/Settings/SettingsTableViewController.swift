@@ -333,6 +333,18 @@ class SettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let accountDebugSettings: [Setting]
+        if !isAuroraChannel() {
+            accountDebugSettings = [
+                // Debug settings:
+                RequirePasswordDebugSetting(settings: self),
+                RequireUpgradeDebugSetting(settings: self),
+                ForgetSyncAuthStateDebugSetting(settings: self),
+            ]
+        } else {
+            accountDebugSettings = []
+        }
+
         settings = [
             SettingSection(title: nil, children: [
                 // Without a Firefox Account:
@@ -340,11 +352,8 @@ class SettingsTableViewController: UITableViewController {
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 DisconnectSetting(settings: self),
-                // Debug settings:
-                RequirePasswordDebugSetting(settings: self),
-                RequireUpgradeDebugSetting(settings: self),
-                ForgetSyncAuthStateDebugSetting(settings: self),
-            ]),
+            ]
+            + accountDebugSettings),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Search Settings", comment: "Search settings section title")), children: [
                 SearchSetting(settings: self)
             ]),
