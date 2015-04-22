@@ -186,6 +186,8 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             "appPackage": NSBundle.mainBundle().bundleIdentifier ?? "org.mozilla.ios.FennecUnknown",
             "application": DeviceInfo.appName(),
             "device": DeviceInfo.deviceModel(),
+
+            // Do better here: Bug 1157518.
             "formfactor": DeviceInfo.isSimulator() ? "simulator" : "phone",
         ])
 
