@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Storage
-import UIKit
 import XCGLogger
 
 // TODO: same comment as for SyncAuthState.swift!
