@@ -182,14 +182,14 @@ public class KeyBundle: Equatable {
                         "ciphertext": ciphertext,
                         "IV": iv,
                         "hmac": hmac,
-                        ]).toString(pretty: false)
+                    ]).toString(pretty: false)
 
                     return JSON([
                         "id": record.id,
                         "sortindex": record.sortindex,
                         "ttl": record.ttl,
                         "payload": payload,
-                        ])
+                    ])
                 }
             }
             return nil
