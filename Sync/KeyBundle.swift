@@ -166,7 +166,10 @@ public class KeyBundle: Equatable {
     public func serializer<T: CleartextPayloadJSON>(f: T -> JSON) -> Record<T> -> JSON? {
         return { (record: Record<T>) -> JSON? in
             let json = f(record.payload)
+
             if let data = json.toString(pretty: false).utf8EncodedData,
+               // We pass a null IV, which means "generate me a new one".
+               // We then include the generated IV in the resulting record.
                let (ciphertext, iv) = self.encrypt(data, iv: nil) {
 
                 // So we have the encrypted payload. Now let's build the envelope around it.
