@@ -55,6 +55,7 @@ public class SyncAuthState {
 
     // If a token gives you a 401, invalidate it and request a new one.
     public func invalidate() {
+        log.info("Invalidating cached token server token.")
         self.cache.value = nil
     }
 

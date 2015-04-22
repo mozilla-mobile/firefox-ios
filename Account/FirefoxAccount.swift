@@ -155,7 +155,7 @@ public class FirefoxAccount {
         }
     }
 
-    func advance() -> Deferred<FxAState> {
+    public func advance() -> Deferred<FxAState> {
         let client = FxAClient10(endpoint: configuration.authEndpointURL)
         let stateMachine = FxALoginStateMachine(client: client)
         let now = NSDate.now()
@@ -174,5 +174,27 @@ public class FirefoxAccount {
             }
             return Result(failure: AccountError.NotMarried)
         }
+    }
+
+    public func makeSeparated() -> Bool {
+        log.info("Making Account State be Separated.")
+        self.stateCache.value = SeparatedState()
+        return true
+    }
+
+    public func makeDoghouse() -> Bool {
+        log.info("Making Account State be Doghouse.")
+        self.stateCache.value = DoghouseState()
+        return true
+    }
+
+    public func makeCohabitingWithoutKeyPair() -> Bool {
+        if let married = self.stateCache.value as? MarriedState {
+            log.info("Making Account State be CohabitingWithoutKeyPair.")
+            self.stateCache.value = married.withoutKeyPair()
+            return true
+        }
+        log.info("Cannot make Account State be CohabitingWithoutKeyPair from state with label \(self.stateCache.value?.label).")
+        return false
     }
 }

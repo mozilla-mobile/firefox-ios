@@ -106,7 +106,11 @@ private class AccountSetting: Setting, FxAContentViewControllerDelegate {
         let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
         settings.profile.setAccount(account)
 
+        // Reload the data to reflect the new Account immediately.
         settings.tableView.reloadData()
+        // And start advancing the Account state in the background as well.
+        settings.SELrefresh()
+
         settings.navigationController?.popToRootViewControllerAnimated(true)
     }
 
@@ -160,7 +164,8 @@ private class DisconnectSetting: WithAccountSetting {
         alertController.addAction(
             UIAlertAction(title: NSLocalizedString("Disconnect", comment: "Disconnect button in the 'disconnect firefox account' alert"), style: .Destructive) { (action) in
                 self.settings.profile.setAccount(nil)
-                self.settings.tableView.reloadData()
+                // Refresh, to show that we no longer have an Account immediately.
+                self.settings.SELrefresh()
             })
         navigationController?.presentViewController(alertController, animated: true, completion: nil)
     }
@@ -231,6 +236,64 @@ private class AccountStatusSetting: WithAccountSetting {
     }
 }
 
+// For great debugging!
+private class RequirePasswordDebugSetting: WithAccountSetting {
+    override var hidden: Bool {
+        if let account = profile.getAccount() where account.actionNeeded != FxAActionNeeded.NeedsPassword {
+            return false
+        }
+        return true
+    }
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: require password", comment: "Debug option"))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        profile.getAccount()?.makeSeparated()
+        settings.tableView.reloadData()
+    }
+}
+
+
+// For great debugging!
+private class RequireUpgradeDebugSetting: WithAccountSetting {
+    override var hidden: Bool {
+        if let account = profile.getAccount() where account.actionNeeded != FxAActionNeeded.NeedsUpgrade {
+            return false
+        }
+        return true
+    }
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: require upgrade", comment: "Debug option"))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        profile.getAccount()?.makeDoghouse()
+        settings.tableView.reloadData()
+    }
+}
+
+// For great debugging!
+private class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
+    override var hidden: Bool {
+        if let account = profile.getAccount() {
+            return false
+        }
+        return true
+    }
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        profile.getAccount()?.syncAuthState.invalidate()
+        settings.tableView.reloadData()
+    }
+}
+
 // Show the current version of Firefox
 private class VersionSetting : Setting {
     override var title: NSAttributedString? {
@@ -270,6 +333,18 @@ class SettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let accountDebugSettings: [Setting]
+        if !isAuroraChannel() {
+            accountDebugSettings = [
+                // Debug settings:
+                RequirePasswordDebugSetting(settings: self),
+                RequireUpgradeDebugSetting(settings: self),
+                ForgetSyncAuthStateDebugSetting(settings: self),
+            ]
+        } else {
+            accountDebugSettings = []
+        }
+
         settings = [
             SettingSection(title: nil, children: [
                 // Without a Firefox Account:
@@ -277,7 +352,8 @@ class SettingsTableViewController: UITableViewController {
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 DisconnectSetting(settings: self),
-            ]),
+            ]
+            + accountDebugSettings),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Search Settings", comment: "Search settings section title")), children: [
                 SearchSetting(settings: self)
             ]),
@@ -292,6 +368,38 @@ class SettingsTableViewController: UITableViewController {
             style: UIBarButtonItemStyle.Done,
             target: navigationController, action: "SELdone")
         tableView.registerClass(SettingsTableViewCell.self, forCellReuseIdentifier: Identifier)
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        SELrefresh()
+    }
+
+    @objc private func SELrefresh() {
+        // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
+        if let account = self.profile.getAccount() {
+            // Add the refresh control right away.
+            if refreshControl == nil {
+                refreshControl = UIRefreshControl()
+                refreshControl?.addTarget(self, action: "SELrefresh", forControlEvents: UIControlEvents.ValueChanged)
+            }
+
+            refreshControl?.beginRefreshing()
+            account.advance().upon { _ in
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    self.tableView.reloadData()
+                    self.refreshControl?.endRefreshing()
+                }
+            }
+        } else {
+            // Remove the refresh control immediately after ending the refresh.
+            refreshControl?.endRefreshing()
+            if let refreshControl = self.refreshControl {
+                refreshControl.removeFromSuperview()
+            }
+            refreshControl = nil
+            self.tableView.reloadData()
+        }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

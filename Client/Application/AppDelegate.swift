@@ -7,6 +7,12 @@ import Alamofire
 import MessageUI
 import Shared
 
+public let AuroraBundleIdentifier = "org.mozilla.ios.FennecAurora"
+
+public func isAuroraChannel() -> Bool {
+    return NSBundle.mainBundle().bundleIdentifier == AuroraBundleIdentifier
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -125,7 +131,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 #if MOZ_CHANNEL_AURORA
-private let AuroraBundleIdentifier = "org.mozilla.ios.FennecAurora"
 private let AuroraPropertyListURL = "https://pvtbuilds.mozilla.org/ios/FennecAurora.plist"
 private let AuroraDownloadPageURL = "https://pvtbuilds.mozilla.org/ios/index.html"
 
@@ -150,10 +155,6 @@ extension AppDelegate: UIAlertViewDelegate {
                 }
             }
         }
-    }
-
-    private func isAuroraChannel() -> Bool {
-        return NSBundle.mainBundle().bundleIdentifier == AuroraBundleIdentifier
     }
 
     private func localVersion() -> NSString? {
