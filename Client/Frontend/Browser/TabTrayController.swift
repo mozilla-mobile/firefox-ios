@@ -24,6 +24,10 @@ private struct TabTrayControllerUX {
     static let NumberOfColumnsRegular = 3
 }
 
+private protocol CustomCellDelegate: class {
+    func customCellDidClose(cell: CustomCell)
+}
+
 // UIcollectionViewController doesn't let us specify a style for recycling views. We override the default style here.
 private class CustomCell: UICollectionViewCell {
     let backgroundHolder: UIView
@@ -33,9 +37,9 @@ private class CustomCell: UICollectionViewCell {
     let innerStroke: InnerStrokedView
     let favicon: UIImageView
     let closeTab: UIButton
-
-    var delegate: TabTrayController!
     var animator: SwipeAnimator!
+
+    weak var delegate: CustomCellDelegate?
 
     // Changes depending on whether we're full-screen or not.
     var margin = CGFloat(0)
@@ -199,10 +203,7 @@ private class CustomCell: UICollectionViewCell {
     }
 
     @objc func SELdidPressClose() {
-        let indexPath = delegate.collectionView.indexPathForCell(self)!
-        let tab = delegate.tabManager.getTab(indexPath.item)
-        delegate.tabManager.removeTab(tab)
-        delegate.collectionView.deleteItemsAtIndexPaths([indexPath])
+        delegate?.customCellDidClose(self)
     }
 }
 
@@ -215,18 +216,19 @@ private struct SwipeAnimatorUX {
     let recenterAnimationDuration = NSTimeInterval(0.15)
 }
 
-private protocol SwipeAnimatorDelegate {
+private protocol SwipeAnimatorDelegate: class {
     func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView)
 }
 
 private class SwipeAnimator: NSObject {
     let animatingView: UIView
-    let container: UIView
     let ux: SwipeAnimatorUX
 
     var originalCenter: CGPoint!
     var startLocation: CGPoint!
-    var delegate: SwipeAnimatorDelegate?
+
+    weak var container: UIView!
+    weak var delegate: SwipeAnimatorDelegate!
 
     init(animatingView view: UIView, containerView: UIView, ux swipeUX: SwipeAnimatorUX) {
         animatingView = view
@@ -648,6 +650,15 @@ extension TabTrayController: TabManagerDelegate {
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser) {
         collectionView.reloadData()
+    }
+}
+
+extension TabTrayController: CustomCellDelegate {
+    private func customCellDidClose(cell: CustomCell) {
+        let indexPath = collectionView.indexPathForCell(cell)!
+        let tab = tabManager.getTab(indexPath.item)
+        tabManager.removeTab(tab)
+        collectionView.deleteItemsAtIndexPaths([indexPath])
     }
 }
 
