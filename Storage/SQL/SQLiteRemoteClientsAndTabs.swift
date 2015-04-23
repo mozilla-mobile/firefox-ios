@@ -60,7 +60,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     public func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Result<Int>> {
         let deferred = Deferred<Result<Int>>(defaultQueue: dispatch_get_main_queue())
 
-        let deleteQuery = "DELETE FROM \(self.tabs.name) WHERE client_guid = ?"
+        let deleteQuery = "DELETE FROM \(self.tabs.name) WHERE client_guid IS ?"
         let deleteArgs: [AnyObject?] = [clientGUID]
 
         var err: NSError?

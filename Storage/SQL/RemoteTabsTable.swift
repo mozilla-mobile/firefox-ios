@@ -100,12 +100,12 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         // Key by (client_guid, url) rather than (transient) id.
         args.append(item.clientGUID)
         args.append(item.URL.absoluteString!)
-        return ("UPDATE \(name) SET title = ?, history = ?, last_used = ? WHERE client_guid = ? AND url = ?", args)
+        return ("UPDATE \(name) SET title = ?, history = ?, last_used = ? WHERE client_guid IS ? AND url = ?", args)
     }
 
     override func getDeleteAndArgs(inout item: RemoteTab?) -> (String, [AnyObject?])? {
         if let item = item {
-            return ("DELETE FROM \(name) WHERE client_guid = ? AND url = ?", [item.clientGUID, item.URL.absoluteString!])
+            return ("DELETE FROM \(name) WHERE client_guid = IS AND url = ?", [item.clientGUID, item.URL.absoluteString!])
         } else {
             return ("DELETE FROM \(name)", [])
         }
