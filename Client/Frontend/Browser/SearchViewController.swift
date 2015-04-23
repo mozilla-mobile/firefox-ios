@@ -244,6 +244,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             engineButton.addTarget(self, action: "SELdidSelectEngine:", forControlEvents: UIControlEvents.TouchUpInside)
             engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
 
+            engineButton.imageView?.snp_makeConstraints { make in
+                make.width.height.equalTo(OpenSearchEngine.PreferredIconSize)
+                return
+            }
+
             searchEngineScrollViewContent.addSubview(engineButton)
             engineButton.snp_makeConstraints { make in
                 make.width.equalTo(EngineButtonWidth)
