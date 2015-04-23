@@ -239,6 +239,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         for engine in searchEngines.quickSearchEngines {
             let engineButton = UIButton()
             engineButton.setImage(engine.image, forState: UIControlState.Normal)
+            engineButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
             engineButton.layer.backgroundColor = UIColor.whiteColor().CGColor
             engineButton.addTarget(self, action: "SELdidSelectEngine:", forControlEvents: UIControlEvents.TouchUpInside)
             engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
