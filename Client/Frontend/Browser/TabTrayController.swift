@@ -24,6 +24,10 @@ private struct TabTrayControllerUX {
     static let NumberOfColumnsRegular = 3
 }
 
+private protocol CustomCellDelegate: class {
+    func customCellDidClose(cell: CustomCell)
+}
+
 // UIcollectionViewController doesn't let us specify a style for recycling views. We override the default style here.
 private class CustomCell: UICollectionViewCell {
     let backgroundHolder: UIView
@@ -33,9 +37,9 @@ private class CustomCell: UICollectionViewCell {
     let innerStroke: InnerStrokedView
     let favicon: UIImageView
     let closeTab: UIButton
-
-    weak var delegate: TabTrayController!
     var animator: SwipeAnimator!
+
+    weak var delegate: CustomCellDelegate?
 
     // Changes depending on whether we're full-screen or not.
     var margin = CGFloat(0)
@@ -199,10 +203,7 @@ private class CustomCell: UICollectionViewCell {
     }
 
     @objc func SELdidPressClose() {
-        let indexPath = delegate.collectionView.indexPathForCell(self)!
-        let tab = delegate.tabManager.getTab(indexPath.item)
-        delegate.tabManager.removeTab(tab)
-        delegate.collectionView.deleteItemsAtIndexPaths([indexPath])
+        delegate?.customCellDidClose(self)
     }
 }
 
@@ -656,6 +657,15 @@ extension TabTrayController: TabManagerDelegate {
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser) {
         collectionView.reloadData()
+    }
+}
+
+extension TabTrayController: CustomCellDelegate {
+    private func customCellDidClose(cell: CustomCell) {
+        let indexPath = collectionView.indexPathForCell(cell)!
+        let tab = tabManager.getTab(indexPath.item)
+        tabManager.removeTab(tab)
+        collectionView.deleteItemsAtIndexPaths([indexPath])
     }
 }
 
