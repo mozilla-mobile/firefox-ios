@@ -346,8 +346,6 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
     override func viewDidLoad() {
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
-        tabManager.addDelegate(self)
-
         navBar = UINavigationBar()
 
         navBar.barTintColor = TabTrayControllerUX.ToolbarBarTintColor
@@ -417,6 +415,15 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
             make.top.equalTo(self.view)
             make.left.right.bottom.equalTo(self.view)
         }
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        collectionView.reloadData()
+        tabManager.addDelegate(self)
+    }
+
+    override func viewWillDisappear(animated: Bool) {
+        tabManager.removeDelegate(self)
     }
 
     private func numberOfColumnsForCurrentSize() -> Int {
