@@ -644,12 +644,12 @@ extension TabTrayController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
     }
 
-    func tabManager(tabManager: TabManager, didAddTab tab: Browser) {
-        collectionView.reloadData()
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex index: Int) {
+        self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
     }
 
-    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser) {
-        collectionView.reloadData()
+    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int) {
+        self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
     }
 }
 
@@ -658,7 +658,6 @@ extension TabTrayController: CustomCellDelegate {
         let indexPath = collectionView.indexPathForCell(cell)!
         let tab = tabManager.getTab(indexPath.item)
         tabManager.removeTab(tab)
-        collectionView.deleteItemsAtIndexPaths([indexPath])
     }
 }
 

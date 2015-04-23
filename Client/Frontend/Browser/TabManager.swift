@@ -8,8 +8,8 @@ import WebKit
 protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?)
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser)
-    func tabManager(tabManager: TabManager, didAddTab tab: Browser)
-    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser)
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int)
+    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int)
 }
 
 // We can't use a WeakList here because this is a protocol.
@@ -128,7 +128,7 @@ class TabManager {
         }
         tabs.append(tab)
         for delegate in delegates {
-            delegate.get()?.tabManager(self, didAddTab: tab)
+            delegate.get()?.tabManager(self, didAddTab: tab, atIndex: tabs.count-1)
         }
     }
 
@@ -148,16 +148,18 @@ class TabManager {
         }
 
         let prevCount = count
+        var index = -1
         for i in 0..<count {
             if tabs[i] === tab {
                 tabs.removeAtIndex(i)
+                index = i
                 break
             }
         }
         assert(count == prevCount - 1, "Tab removed")
 
         for delegate in delegates {
-            delegate.get()?.tabManager(self, didRemoveTab: tab)
+            delegate.get()?.tabManager(self, didRemoveTab: tab, atIndex: index)
         }
     }
 
