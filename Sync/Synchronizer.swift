@@ -247,7 +247,7 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
     private func maybeUploadOurRecord(should: Bool, ifUnmodifiedSince: Timestamp?, toServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
 
         let lastUpload = self.clientRecordLastUpload
-        let expired = lastUpload < (NSDate.now() - OneWeekInMilliseconds)
+        let expired = lastUpload < (NSDate.now() - (2 * OneDayInMilliseconds))
         log.debug("Should we upload our client record? Caller = \(should), expired = \(expired).")
         if !should && !expired {
             return succeed()
