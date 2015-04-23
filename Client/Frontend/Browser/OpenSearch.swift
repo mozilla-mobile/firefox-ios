@@ -10,6 +10,8 @@ private let TypeSearch = "text/html"
 private let TypeSuggest = "application/x-suggestions+json"
 
 class OpenSearchEngine {
+    static let PreferredIconSize = 32
+
     let shortName: String
     let description: String?
     let image: UIImage?
@@ -164,37 +166,39 @@ class OpenSearchParser {
             return nil
         }
 
-        var uiImage: UIImage?
-        var imageIndexers = docIndexer["Image"].all
+        let imageIndexers = docIndexer["Image"].all
+        var largestImage = 0
+        var largestImageElement: XMLElement?
 
+        // TODO: For now, just use the largest icon.
         for imageIndexer in imageIndexers {
-            // TODO: For now, we only look for 16x16 search icons.
-            let imageWidth = imageIndexer.element?.attributes["width"]
-            let imageHeight = imageIndexer.element?.attributes["height"]
-            if imageWidth?.toInt() != 16 || imageHeight?.toInt() != 16 {
+            let imageWidth = imageIndexer.element?.attributes["width"]?.toInt()
+            let imageHeight = imageIndexer.element?.attributes["height"]?.toInt()
+
+            // Only accept square images.
+            if imageWidth != imageHeight {
                 continue
             }
 
-            if imageIndexer.element?.text == nil {
-                continue
-            }
-
-            let imageURL = NSURL(string: imageIndexer.element!.text!)
-            if let imageURL = imageURL {
-                let imageData = NSData(contentsOfURL: imageURL)
-                if let imageData = imageData {
-                    let image = UIImage(data: imageData)
-                    if let image = image {
-                        uiImage = image
-                    } else {
-                        println("Error: Invalid search image data")
+            if let imageWidth = imageWidth {
+                if imageWidth > largestImage {
+                    if imageIndexer.element?.text != nil {
+                        largestImage = imageWidth
+                        largestImageElement = imageIndexer.element
                     }
-                } else {
-                    println("Error: Invalid search image data")
                 }
-            } else {
-                println("Error: Invalid search image data")
             }
+        }
+
+        var uiImage: UIImage?
+
+        if let imageElement = largestImageElement,
+               imageURL = NSURL(string: imageElement.text!),
+               imageData = NSData(contentsOfURL: imageURL),
+               image = UIImage(data: imageData) {
+            uiImage = image
+        } else {
+            println("Error: Invalid search image data")
         }
 
         return OpenSearchEngine(shortName: shortName!, description: description, image: uiImage, searchTemplate: searchTemplate, suggestTemplate: suggestTemplate)
