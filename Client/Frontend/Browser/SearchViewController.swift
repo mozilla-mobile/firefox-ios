@@ -128,15 +128,23 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     private func layoutSuggestionsOptInPrompt() {
         if !(searchEngines?.shouldShowSearchSuggestionsOptIn ?? false) {
+            // Make sure any pending layouts are drawn so they don't get coupled
+            // with the "slide up" animation below.
             view.layoutIfNeeded()
+
+            // Set the prompt to nil so layoutTable() aligns the top of the table
+            // to the top of the view. We still need a reference to the prompt so
+            // we can remove it from the controller after the animation is done.
+            let prompt = suggestionPrompt
             suggestionPrompt = nil
             layoutTable()
+
             UIView.animateWithDuration(0.2,
                 animations: {
                     self.view.layoutIfNeeded()
                 },
                 completion: { _ in
-                    self.suggestionPrompt?.removeFromSuperview()
+                    prompt?.removeFromSuperview()
                     return
                 })
             return
