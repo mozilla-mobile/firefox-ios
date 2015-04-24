@@ -9,11 +9,11 @@ class BookmarkTable<T> : GenericTable<BookmarkNode> {
     private let favicons = FaviconsTable<Favicon>()
     private let joinedFavicons = JoinedFaviconsHistoryTable<(Site, Favicon)>()
     override var name: String { return "bookmarks" }
-    override var version: Int { return 2 }
+    override var version: Int { return 3 }
     override var rows: String { return "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
         "guid TEXT NOT NULL UNIQUE, " +
         "url TEXT, " +
-        "parent INTEGER, " +
+        "parent INTEGER NOT NULL, " +
         "faviconId INTEGER, " +
         "title TEXT" }
 
@@ -87,7 +87,7 @@ class BookmarkTable<T> : GenericTable<BookmarkNode> {
     override func getDeleteAndArgs(inout item: BookmarkNode?) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         if let bookmark = item as? BookmarkItem {
-            if bookmark.guid != "" {
+            if bookmark.guid != nil {
                 // If there's a guid, we'll delete entries with it
                 args.append(bookmark.guid)
                 return ("DELETE FROM \(name) WHERE guid = ?", args)
@@ -99,17 +99,25 @@ class BookmarkTable<T> : GenericTable<BookmarkNode> {
                 // If you passed us something with no url or guid, we'll just have to bail...
                 return nil
             }
+        } else if let folder = item as? BookmarkFolder {
+            // If this is a folder, delete it and any bookmarks inside it.
+            args.append(folder.id)
+            args.append(folder.id)
+            return ("DELETE FROM \(name) WHERE id = ? OR parent = ?", args)
         }
         return ("DELETE FROM \(name)", args)
     }
 
     override var factory: ((row: SDRow) -> BookmarkNode)? {
         return { row -> BookmarkNode in
-            let url = row["bookmarkUrl"] as! String
-            let guid = row["guid"] as! String
-            let bookmark = BookmarkItem(guid: guid,
-                                        title: row["title"] as? String ?? url,
-                                        url: url)
+            let bookmark: BookmarkNode
+            if let url = row["bookmarkUrl"] as? String {
+                bookmark = BookmarkItem(title: row["title"] as? String ?? url,
+                                            url: url)
+            } else {
+                bookmark = BookmarkFolder(title: row["title"] as! String)
+            }
+            bookmark.guid = row["guid"] as? String
             bookmark.id = row["bookmarkId"] as? Int
 
             if let faviconUrl = row["faviconUrl"] as? String,
@@ -166,9 +174,9 @@ class SqliteBookmarkFolder: BookmarkFolder {
         return bookmark as! SqliteBookmarkFolder
     }
 
-    init(guid: String, title: String, children: Cursor) {
+    init(title: String, children: Cursor) {
         self.cursor = children
-        super.init(guid: guid, title: title)
+        super.init(title: title)
     }
 }
 
@@ -218,15 +226,18 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
 
     public var nullModel: BookmarksModel {
         let children = Cursor(status: .Failure, msg: "Null model")
-        let folder = SqliteBookmarkFolder(guid: "Null", title: "Null", children: children)
+        let folder = SqliteBookmarkFolder(title: "Null", children: children)
+        folder.guid = "Null"
         return BookmarksModel(modelFactory: self, root: folder)
     }
 
     public func shareItem(item: ShareItem) {
         var err: NSError? = nil
         let inserted = db.insert(&err, callback: { (connection, err) -> Int in
-            var bookmark = BookmarkItem(guid: Bytes.generateGUID(), title: item.title ?? "", url: item.url)
+            var bookmark = BookmarkItem(title: item.title ?? "", url: item.url)
+            bookmark.guid = Bytes.generateGUID()
             bookmark.favicon = item.favicon
+            bookmark.parent = folder?.id ?? bookmark.parent
             return self.table.insert(connection, item: bookmark, err: &err)
         })
     }
