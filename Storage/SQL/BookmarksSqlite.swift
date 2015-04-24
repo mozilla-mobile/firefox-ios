@@ -162,16 +162,17 @@ class BookmarkTable<T> : GenericTable<BookmarkNode> {
             if let type = options?.filterType {
                 switch(type) {
                 case .ExactUrl:
-                        args.append(filter)
-                        return ("\(sql) WHERE bookmarkUrl = ?", args)
+                    args.append(filter)
+                    return ("\(sql) WHERE bookmarkUrl = ?", args)
+                case .Guid:
+                    args.append(filter)
+                    return ("\(sql) WHERE guid = ?", args)
                 default:
-                    break
+                    // Default to search by parent folder.id
+                    args.append(filter)
+                    return ("\(sql) WHERE parent = ?", args)
                 }
             }
-
-            // Default to search by guid (i.e. for a folder)
-            args.append(filter)
-            return ("\(sql) WHERE guid = ?", args)
         }
 
         return (sql, args)
