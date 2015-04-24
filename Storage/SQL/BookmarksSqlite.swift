@@ -19,7 +19,14 @@ class BookmarkTable<T> : GenericTable<BookmarkNode> {
 
 
     override func create(db: SQLiteDBConnection, version: Int) -> Bool {
-        return super.create(db, version: version) && favicons.create(db, version: version) && joinedFavicons.create(db, version: version)
+        var created = super.create(db, version: version) && favicons.create(db, version: version) && joinedFavicons.create(db, version: version)
+        // insert a default places folder.
+        var err: NSError? = nil
+        let folder = BookmarkFolder(title: BookmarkRoots.PLACES_FOLDER_GUID)
+        folder.guid = BookmarkRoots.PLACES_FOLDER_GUID
+        folder.parent = 0
+        insert(db, item: folder, err: &err)
+        return created
     }
 
     override func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
