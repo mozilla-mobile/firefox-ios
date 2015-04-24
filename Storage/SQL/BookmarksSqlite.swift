@@ -88,8 +88,20 @@ class BookmarkTable<T> : GenericTable<BookmarkNode> {
         }
         args.append(item.title)
         args.append(item.favicon?.id)
-        args.append(item.guid)
-        return ("UPDATE \(name) SET url = ?, title = ?, faviconId = ? WHERE guid = ?", args)
+        args.append(item.parent)
+
+        if let id = item.id {
+            // If we knew the exact item ID, use it.
+            args.append(id)
+            return ("UPDATE \(name) SET url = ?, title = ?, faviconId = ?, parent = ? WHERE id = ?", args)
+        } else if let bookmark = item as? BookmarkItem {
+            // If the caller didn't know an ID, but only knew a url, they probably want to remove any bookmarks with the url.
+            args.append(bookmark.url)
+            return ("UPDATE \(name) SET url = ?, title = ?, faviconId = ?, parent = ? WHERE url = ?", args)
+        }
+
+        // If the caller passed a folder with no id. This shouldn't be hit.
+        return nil
     }
 
     override func getDeleteAndArgs(inout item: BookmarkNode?) -> (String, [AnyObject?])? {
