@@ -121,7 +121,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     /// Clear any highlighted text and turn off the autocompleting flag.
     private func clearAutocomplete() {
         if autocompleting {
-            attributedText = NSMutableAttributedString(string: enteredText as String)
+            let attributedString = NSMutableAttributedString(string: enteredText as String)
+            attributedString.addAttribute(NSBackgroundColorAttributeName, value: UIColor.clearColor(), range: NSMakeRange(0, enteredText.length))
+            attributedText = attributedString
+
             acceptingSuggestions = false
             autocompleting = false
 
