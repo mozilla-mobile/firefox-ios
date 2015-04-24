@@ -39,6 +39,13 @@ class CommandDiscardingSyncDelegate: SyncDelegate {
     }
 }
 
+/**
+ * This exists because the Sync code is extension-safe, and thus doesn't get
+ * direct access to UIApplication.sharedApplication, which it would need to
+ * display a notification.
+ * This will also likely be the extension point for wipes, resets, and
+ * getting access to data sources during a sync.
+ */
 class BrowserProfileSyncDelegate: SyncDelegate {
     let app: UIApplication
 
@@ -200,8 +207,15 @@ public class BrowserProfile: Profile {
         return success >>== always(storage)
     }
 
+    private func getSyncDelegate() -> SyncDelegate {
+        if let app = self.app {
+            return BrowserProfileSyncDelegate(app: app)
+        }
+        return CommandDiscardingSyncDelegate()
+    }
+
     public func getClients() -> Deferred<Result<[RemoteClient]>> {
-        if let account = self.account, app = self.app {
+        if let account = self.account {
             let authState = account.syncAuthState
 
             let syncPrefs = self.prefs.branch("sync")
@@ -209,7 +223,7 @@ public class BrowserProfile: Profile {
 
             let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
 
-            let delegate = BrowserProfileSyncDelegate(app: app)
+            let delegate = self.getSyncDelegate()
             let syncClients = curry(BrowserProfile.syncClientsToStorage)(storage, delegate, syncPrefs)
 
             return ready
@@ -224,13 +238,6 @@ public class BrowserProfile: Profile {
         log.info("Account is \(self.account), app is \(self.app)")
 
         if let account = self.account {
-            let delegate: SyncDelegate
-            if let app = self.app {
-                delegate = BrowserProfileSyncDelegate(app: app)
-            } else {
-                delegate = CommandDiscardingSyncDelegate()
-            }
-
             log.debug("Fetching clients and tabs.")
 
             let authState = account.syncAuthState
@@ -239,6 +246,7 @@ public class BrowserProfile: Profile {
 
             let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
 
+            let delegate = self.getSyncDelegate()
             let syncClients = curry(BrowserProfile.syncClientsToStorage)(storage, delegate, syncPrefs)
             let syncTabs = curry(BrowserProfile.syncTabsToStorage)(storage, delegate, syncPrefs)
 
