@@ -74,8 +74,9 @@ class BookmarkTable<T> : GenericTable<BookmarkNode> {
 
         args.append(item.title)
         args.append(item.favicon?.id)
+        args.append(item.parent)
 
-        return ("INSERT INTO \(name) (guid, url, title, faviconId) VALUES (?,?,?,?)", args)
+        return ("INSERT INTO \(name) (guid, url, title, faviconId, parent) VALUES (?,?,?,?,?)", args)
     }
 
     override func getUpdateAndArgs(inout item: BookmarkNode) -> (String, [AnyObject?])? {
