@@ -210,39 +210,40 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
         db.createOrUpdate(table)
     }
 
-    private func getChildren(guid: String) -> Cursor {
+    private func getChildren(id: Int?) -> Cursor {
         var err: NSError? = nil
         return db.query(&err, callback: { (connection, err) -> Cursor in
-            return self.table.query(connection, options: QueryOptions(filter: guid))
+            return self.table.query(connection, options: QueryOptions(filter: id))
         })
     }
 
     public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
-        let children = getChildren(folder.guid)
+        let children = getChildren(folder.id)
+
         if children.status == .Failure {
             failure(children.statusMessage)
             return
         }
-        let f = SqliteBookmarkFolder(guid: folder.guid, title: folder.title, children: children)
-        success(BookmarksModel(modelFactory: self, root: f))
-    }
 
-    public func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
-        var err: NSError? = nil
-        let children = db.query(&err, callback: { (connection, err) -> Cursor in
-            return self.table.query(connection, options: QueryOptions(filter: guid))
-        })
-        let folder = SqliteBookmarkFolder(guid: guid, title: "", children: children)
-        success(BookmarksModel(modelFactory: self, root: folder))
+        let f = SqliteBookmarkFolder(title: folder.title, children: children)
+        f.id = folder.id
+        f.guid = folder.guid
+        success(BookmarksModel(modelFactory: self, root: f))
     }
 
     public func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         var err: NSError? = nil
-        let children = db.query(&err, callback: { (connection, err) -> Cursor in
-            return self.table.query(connection, options: QueryOptions(filter: nil))
+        let folders = db.query(&err, callback: { (connection, err) -> Cursor in
+            return self.table.query(connection, options: QueryOptions(filter: BookmarkRoots.PLACES_FOLDER_GUID, filterType: .Guid))
         })
-        let folder = SqliteBookmarkFolder(guid: BookmarkRoots.PLACES_FOLDER_GUID, title: "Root", children: children)
-        success(BookmarksModel(modelFactory: self, root: folder))
+
+        if folders.count == 0 {
+            failure("Couldn't find the root folder")
+            return
+        }
+
+        let folder = folders[0] as! BookmarkFolder
+        modelForFolder(folder, success: success, failure: failure)
     }
 
     public var nullModel: BookmarksModel {
@@ -254,6 +255,11 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
 
     public func shareItem(item: ShareItem) {
         var err: NSError? = nil
+        let folders = db.query(&err, callback: { (connection, err) -> Cursor in
+            return self.table.query(connection, options: QueryOptions(filter: BookmarkRoots.PLACES_FOLDER_GUID, filterType: .Guid))
+        })
+
+        let folder = folders[0] as? BookmarkNode
         let inserted = db.insert(&err, callback: { (connection, err) -> Int in
             var bookmark = BookmarkItem(title: item.title ?? "", url: item.url)
             bookmark.guid = Bytes.generateGUID()
