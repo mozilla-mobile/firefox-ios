@@ -25,10 +25,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         KeyboardHelper.defaultHelper.startObserving()
 
         if NSClassFromString("XCTestCase") == nil {
-            profile = BrowserProfile(localName: "profile")
+            profile = BrowserProfile(localName: "profile", app: application)
         } else {
             // Use a clean profile for each test session.
-            profile = BrowserProfile(localName: "testProfile")
+            profile = BrowserProfile(localName: "testProfile", app: application)
             profile.files.removeFilesInDirectory()
         }
 

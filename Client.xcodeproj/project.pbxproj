@@ -74,6 +74,7 @@
 		285D37E31ABCA69E000E1CF9 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C077971A3B064000834FE5 /* CryptoTests.swift */; };
 		2868FA061ADF7B69000D9B1D /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		2868FA231ADF7B70000D9B1D /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
+		287DAA1F1AE06E5D0055AC35 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287DAA1E1AE06E5D0055AC35 /* DeviceInfo.swift */; };
 		288501DE1AC0F61D00E7F670 /* RequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */; };
 		288501F91AC0F62200E7F670 /* RequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */; };
 		288501FB1AC0F63800E7F670 /* NSScannerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288501FA1AC0F63800E7F670 /* NSScannerExtensions.swift */; };
@@ -1068,6 +1069,7 @@
 		283306E81AB3BB87008999AC /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		2853C5401AD84C6800C4F31D /* TabsPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsPayload.swift; sourceTree = "<group>"; };
 		28786E541AB0F5FA009EA9EF /* DeferredTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeferredTests.swift; path = SyncTests/DeferredTests.swift; sourceTree = "<group>"; };
+		287DAA1E1AE06E5D0055AC35 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestExtensions.swift; sourceTree = "<group>"; };
 		288501FA1AC0F63800E7F670 /* NSScannerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSScannerExtensions.swift; sourceTree = "<group>"; };
 		2885023E1AC117A500E7F670 /* SyncStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncStateMachine.swift; sourceTree = "<group>"; };
@@ -2100,6 +2102,7 @@
 				0BAC7A7F1AC4B135006018CB /* AppConstants.swift */,
 				2FCAE2401ABB531100877008 /* Bytes.swift */,
 				281B2C071ADF4F29002917DC /* DeferredUtils.swift */,
+				287DAA1E1AE06E5D0055AC35 /* DeviceInfo.swift */,
 				E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */,
 				283306E81AB3BB87008999AC /* Functions.swift */,
 				D39999A81AA01D65005AED21 /* KeyboardHelper.swift */,
@@ -3371,6 +3374,7 @@
 				288A2DB61AB8B38D0023ABC3 /* Result.swift in Sources */,
 				288A2DAC1AB8B3700023ABC3 /* MutableBox.swift in Sources */,
 				2FDE87501ABA3E93005317B1 /* HexExtensions.swift in Sources */,
+				287DAA1F1AE06E5D0055AC35 /* DeviceInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

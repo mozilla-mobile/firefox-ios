@@ -12,7 +12,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     var shareDialogController: ShareDialogController!
 
     lazy var profile: Profile = {
-        return BrowserProfile(localName: "profile")
+        return BrowserProfile(localName: "profile", app: nil)
     }()
     
     override func viewDidLoad() {

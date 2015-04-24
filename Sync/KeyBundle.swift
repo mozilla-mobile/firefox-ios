@@ -147,7 +147,7 @@ public class KeyBundle: Equatable {
      *
      * For this reason, be careful trying to simplify or improve this code.
      */
-    public func factory<T : CleartextPayloadJSON>(f: (JSON) -> T) -> (String) -> T? {
+    public func factory<T: CleartextPayloadJSON>(f: JSON -> T) -> String -> T? {
         return { (payload: String) -> T? in
             let potential = EncryptedJSON(json: payload, keyBundle: self)
             if !(potential.isValid()) {
@@ -159,6 +159,43 @@ public class KeyBundle: Equatable {
                 return nil
             }
             return f(cleartext!)
+        }
+    }
+
+    // TODO: how much do we want to move this into EncryptedJSON?
+    public func serializer<T: CleartextPayloadJSON>(f: T -> JSON) -> Record<T> -> JSON? {
+        return { (record: Record<T>) -> JSON? in
+            let json = f(record.payload)
+
+            if let data = json.toString(pretty: false).utf8EncodedData,
+               // We pass a null IV, which means "generate me a new one".
+               // We then include the generated IV in the resulting record.
+               let (ciphertext, iv) = self.encrypt(data, iv: nil) {
+
+                // So we have the encrypted payload. Now let's build the envelope around it.
+                let ciphertext = ciphertext.base64EncodedString
+
+                // The HMAC is computed over the base64 string. As bytes. Yes, I know.
+                if let encodedCiphertextBytes = ciphertext.dataUsingEncoding(NSASCIIStringEncoding, allowLossyConversion: false) {
+                    let hmac = self.hmacString(encodedCiphertextBytes)
+                    let iv = iv.base64EncodedString
+
+                    // The payload is stringified JSON. Yes, I know.
+                    let payload = JSON([
+                        "ciphertext": ciphertext,
+                        "IV": iv,
+                        "hmac": hmac,
+                    ]).toString(pretty: false)
+
+                    return JSON([
+                        "id": record.id,
+                        "sortindex": record.sortindex,
+                        "ttl": record.ttl,
+                        "payload": payload,
+                    ])
+                }
+            }
+            return nil
         }
     }
 
@@ -210,9 +247,8 @@ public class Keys: Equatable {
         return defaultBundle
     }
 
-    public func factory<T : CleartextPayloadJSON>(collection: String, f: (JSON) -> T) -> (String) -> T? {
-        let bundle = forCollection(collection)
-        return bundle.factory(f)
+    public func encrypter<T: CleartextPayloadJSON>(collection: String, encoder: RecordEncoder<T>) -> RecordEncrypter<T> {
+        return RecordEncrypter(bundle: forCollection(collection), encoder: encoder)
     }
 
     public func asPayload() -> KeysPayload {
@@ -222,6 +258,24 @@ public class Keys: Equatable {
             "collections": mapValues(self.collectionKeys, { $0.asPair() })
         ])
         return KeysPayload(json)
+    }
+}
+
+/**
+ * Yup, these are basically typed tuples.
+ */
+public struct RecordEncoder<T: CleartextPayloadJSON> {
+    let decode: JSON -> T
+    let encode: T -> JSON
+}
+
+public struct RecordEncrypter<T: CleartextPayloadJSON> {
+    let serializer: Record<T> -> JSON?
+    let factory: String -> T?
+
+    init(bundle: KeyBundle, encoder: RecordEncoder<T>) {
+        self.serializer = bundle.serializer(encoder.encode)
+        self.factory = bundle.factory(encoder.decode)
     }
 }
 

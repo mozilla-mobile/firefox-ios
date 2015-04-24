@@ -8,6 +8,10 @@ import ReadingList
 import Shared
 import Storage
 import Sync
+import XCGLogger
+
+// TODO: same comment as for SyncAuthState.swift!
+private let log = XCGLogger.defaultInstance()
 
 public class NoAccountError: SyncError {
     public var description: String {
@@ -25,6 +29,50 @@ class ProfileFileAccessor: FileAccessor {
             manager .URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as? NSURL
         let profilePath = url!.path!.stringByAppendingPathComponent(profileDirName)
         super.init(rootPath: profilePath)
+    }
+}
+
+class CommandDiscardingSyncDelegate: SyncDelegate {
+    func displaySentTabForURL(URL: NSURL, title: String) {
+        // TODO: do something else.
+        log.info("Discarding sent URL \(URL.absoluteString)")
+    }
+}
+
+class BrowserProfileSyncDelegate: SyncDelegate {
+    let app: UIApplication
+
+    init(app: UIApplication) {
+        self.app = app
+    }
+
+    // SyncDelegate
+    func displaySentTabForURL(URL: NSURL, title: String) {
+        log.info("Displaying notification for URL \(URL.absoluteString)")
+
+        app.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert, categories: nil))
+        app.registerForRemoteNotifications()
+
+        // TODO: localize.
+        let notification = UILocalNotification()
+
+        /* actions
+        notification.identifier = "tab-" + Bytes.generateGUID()
+        notification.activationMode = UIUserNotificationActivationMode.Foreground
+        notification.destructive = false
+        notification.authenticationRequired = true
+        */
+
+        notification.alertTitle = "New tab: \(title)"
+        notification.alertBody = URL.absoluteString!
+        notification.alertAction = nil
+
+        // TODO: categories
+        // TODO: put the URL into the alert userInfo.
+        // TODO: application:didFinishLaunchingWithOptions:
+        // TODO:
+        // TODO: set additionalActions to bookmark or add to reading list.
+        self.app.presentLocalNotificationNow(notification)
     }
 }
 
@@ -59,13 +107,20 @@ protocol Profile {
 
 public class BrowserProfile: Profile {
     private let name: String
+    weak private var app: UIApplication?
 
-    init(localName: String) {
+    init(localName: String, app: UIApplication?) {
         self.name = localName
+        self.app = app
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
         notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: "LocationChange", object: nil)
+    }
+
+    // Extensions don't have a UIApplication.
+    convenience init(localName: String) {
+        self.init(localName: localName, app: nil)
     }
 
     @objc
@@ -132,21 +187,30 @@ public class BrowserProfile: Profile {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
-    private class func syncClientsToStorage(storage: RemoteClientsAndTabs, prefs: Prefs, ready: Ready) -> Deferred<Result<Ready>> {
-        let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, prefs: prefs)
+    private class func syncClientsToStorage(storage: RemoteClientsAndTabs, delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Deferred<Result<Ready>> {
+        log.debug("Syncing clients to storage.")
+        let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs)
         let success = clientSynchronizer.synchronizeLocalClients(storage, withServer: ready.client, info: ready.info)
         return success >>== always(ready)
     }
 
+    private class func syncTabsToStorage(storage: RemoteClientsAndTabs, delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Deferred<Result<RemoteClientsAndTabs>> {
+        let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, delegate: delegate, prefs: prefs)
+        let success = tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
+        return success >>== always(storage)
+    }
+
     public func getClients() -> Deferred<Result<[RemoteClient]>> {
-        if let account = self.account {
+        if let account = self.account, app = self.app {
             let authState = account.syncAuthState
+
             let syncPrefs = self.prefs.branch("sync")
             let storage = self.remoteClientsAndTabs
 
             let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
 
-            let syncClients = curry(BrowserProfile.syncClientsToStorage)(storage, syncPrefs)
+            let delegate = BrowserProfileSyncDelegate(app: app)
+            let syncClients = curry(BrowserProfile.syncClientsToStorage)(storage, delegate, syncPrefs)
 
             return ready
               >>== syncClients
@@ -157,22 +221,26 @@ public class BrowserProfile: Profile {
     }
 
     public func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
-
-        func syncTabsToStorage(storage: RemoteClientsAndTabs, prefs: Prefs, ready: Ready) -> Deferred<Result<RemoteClientsAndTabs>> {
-            let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, prefs: prefs)
-            let success = tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
-            return success >>== always(storage)
-        }
+        log.info("Account is \(self.account), app is \(self.app)")
 
         if let account = self.account {
+            let delegate: SyncDelegate
+            if let app = self.app {
+                delegate = BrowserProfileSyncDelegate(app: app)
+            } else {
+                delegate = CommandDiscardingSyncDelegate()
+            }
+
+            log.debug("Fetching clients and tabs.")
+
             let authState = account.syncAuthState
             let syncPrefs = self.prefs.branch("sync")
             let storage = self.remoteClientsAndTabs
 
             let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
 
-            let syncClients = curry(BrowserProfile.syncClientsToStorage)(storage, syncPrefs)
-            let syncTabs = curry(syncTabsToStorage)(storage, syncPrefs)
+            let syncClients = curry(BrowserProfile.syncClientsToStorage)(storage, delegate, syncPrefs)
+            let syncTabs = curry(BrowserProfile.syncTabsToStorage)(storage, delegate, syncPrefs)
 
             return ready
               >>== syncClients

@@ -13,7 +13,7 @@ func compareScratchpads(lhs: Scratchpad, rhs: Scratchpad) {
 
     XCTAssertEqual(lhs.collectionLastFetched, rhs.collectionLastFetched)
     XCTAssertEqual(lhs.clientName, rhs.clientName)
-    XCTAssertEqual(lhs.clientRecordLastUpload, rhs.clientRecordLastUpload)
+    XCTAssertEqual(lhs.clientGUID, rhs.clientGUID)
     if let lkeys = lhs.keys {
         if let rkeys = rhs.keys {
             XCTAssertEqual(lkeys.timestamp, rkeys.timestamp)

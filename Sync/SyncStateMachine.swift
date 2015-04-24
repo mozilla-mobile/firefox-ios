@@ -153,8 +153,8 @@ public class BaseSyncState: SyncState {
         log.info("Inited \(self.label.rawValue)")
     }
 
-    public func synchronizer<T: Synchronizer>(synchronizerClass: T.Type, prefs: Prefs) -> T {
-        return T(scratchpad: self.scratchpad, basePrefs: prefs)
+    public func synchronizer<T: Synchronizer>(synchronizerClass: T.Type, delegate: SyncDelegate, prefs: Prefs) -> T {
+        return T(scratchpad: self.scratchpad, delegate: delegate, basePrefs: prefs)
     }
 
     // This isn't a convenience initializer 'cos subclasses can't call convenience initializers.
@@ -685,8 +685,9 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
         // TODO: detect when the keys have changed, and scream and run away if so.
         // TODO: upload keys if necessary, then go to Restart.
         let syncKey = Keys(defaultBundle: self.scratchpad.syncKeyBundle)
-        let keysFactory: (String) -> KeysPayload? = syncKey.factory("keys", f: { KeysPayload($0) })
-        let client = self.client.clientForCollection("crypto", factory: keysFactory)
+        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0 })
+        let encrypter = syncKey.encrypter("keys", encoder: encoder)
+        let client = self.client.clientForCollection("crypto", encrypter: encrypter)
 
         // TODO: this assumes that there are keys on the server. Check first, and if there aren't,
         // go ahead and go to an upload state without having to fail.
