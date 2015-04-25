@@ -11,7 +11,7 @@ class TestSQLiteReadingList: XCTestCase {
     override func setUp() {
         let files = MockFiles()
         files.remove("browser.db")
-        readingList = SQLiteReadingList(files: files)
+        readingList = SQLiteReadingList(db: BrowserDB(files: files))
     }
 
     func testInsertAndQueryAndClear() {

@@ -71,6 +71,15 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         self.panels = HomePanels().enabledPanels
         updateButtons()
         selectedButtonIndex = 0
+
+        // Gesture recognizer to dismiss the keyboard in the URLBarView when the buttonContainerView is tapped
+        let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELhandleDismissKeyboardGestureRecognizer:")
+        dismissKeyboardGestureRecognizer.cancelsTouchesInView = false
+        buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
+    }
+
+    func SELhandleDismissKeyboardGestureRecognizer(gestureRecognizer: UITapGestureRecognizer) {
+        view.window?.rootViewController?.view.endEditing(true)
     }
 
     var selectedButtonIndex: Int? = nil {
@@ -92,7 +101,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                 newButton.selected = true
 
                 let panel = self.panels[index].makeViewController(profile: profile)
-                (panel as HomePanel).homePanelDelegate = self
+                (panel as! HomePanel).homePanelDelegate = self
                 self.showPanel(panel)
             }
         }
@@ -103,7 +112,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     private func hideCurrentPanel() {
-        if let panel = childViewControllers.first? as? UIViewController {
+        if let panel = childViewControllers.first as? UIViewController {
             panel.view.removeFromSuperview()
             panel.removeFromParentViewController()
         }

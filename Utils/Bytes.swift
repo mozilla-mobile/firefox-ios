@@ -9,7 +9,8 @@ import Foundation
  */
 public class Bytes {
     public class func generateRandomBytes(len: UInt) -> NSData {
-        let data: NSMutableData! = NSMutableData(length: Int(len))
+        let len = Int(len)
+        let data: NSMutableData! = NSMutableData(length: len)
         let bytes = UnsafeMutablePointer<UInt8>(data.mutableBytes)
         let result: Int32 = SecRandomCopyBytes(kSecRandomDefault, len, bytes)
 

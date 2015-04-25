@@ -6,18 +6,18 @@ import Foundation
 import Shared
 
 public class InfoCollections {
-    private let collections: [String: UInt64]
+    private let collections: [String: Timestamp]
 
-    init(collections: [String: UInt64]) {
+    init(collections: [String: Timestamp]) {
         self.collections = collections
     }
 
     public class func fromJSON(json: JSON) -> InfoCollections? {
-        if let dict = json.asDictionary? {
-            var coll = [String: UInt64]()
+        if let dict = json.asDictionary {
+            var coll = [String: Timestamp]()
             for (key, value) in dict {
                 if let value = value.asDouble {
-                    coll[key] = UInt64(value * 1000)
+                    coll[key] = Timestamp(value * 1000)
                 } else {
                     return nil       // Invalid, so bail out.
                 }
@@ -31,7 +31,7 @@ public class InfoCollections {
         return self.collections.keys.array
     }
 
-    public func modified(collection: String) -> UInt64? {
+    public func modified(collection: String) -> Timestamp? {
         return self.collections[collection]
     }
 
@@ -54,7 +54,7 @@ public class InfoCollections {
 extension Array {
     // Laughably inefficient, but good enough for a handful of items.
     func sameElements(arr: [T], f: (T, T) -> Bool) -> Bool {
-        return self.count == arr.count && every { arr.contains($0, f) }
+        return self.count == arr.count && every { arr.contains($0, f: f) }
     }
 
     func contains(x: T, f: (T, T) -> Bool) -> Bool {

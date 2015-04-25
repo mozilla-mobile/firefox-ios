@@ -20,10 +20,6 @@ class ThumbnailCell: UICollectionViewCell {
     let textLabel = UILabel()
     let imageView = UIImageViewAligned()
 
-    override init() {
-        super.init()
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
 

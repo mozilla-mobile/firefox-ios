@@ -8,22 +8,20 @@ import Foundation
  * The sqlite-backed implementation of the history protocol.
  */
 public class SQLiteHistory : History {
-    let files: FileAccessor
     let db: BrowserDB
     private let table = JoinedHistoryVisitsTable()
     private var ignoredSchemes = ["about"]
 
-    required public init(files: FileAccessor) {
-        self.files = files
-        self.db = BrowserDB(files: files)!
+    required public init(db: BrowserDB) {
+        self.db = db
         db.createOrUpdate(table)
     }
 
     public func clear(complete: (success: Bool) -> Void) {
         let s: Site? = nil
         var err: NSError? = nil
-        db.delete(&err) { connection, err in
-            return self.table.delete(connection, item: nil, err: &err)
+        db.delete(&err) { (conn, inout err: NSError?) -> Int in
+            return self.table.delete(conn, item: nil, err: &err)
         }
 
         dispatch_async(dispatch_get_main_queue()) {
@@ -56,11 +54,15 @@ public class SQLiteHistory : History {
                 return nil
             }
         }
+
+        public override func close() {
+            cursor.close()
+        }
     }
 
     public func get(options: QueryOptions?, complete: (data: Cursor) -> Void) {
         var err: NSError? = nil
-        let res = db.query(&err) { connection, err in
+        let res = db.query(&err) { (connection, inout err: NSError?) -> Cursor in
             return WrappedCursor(cursor: self.table.query(connection, options: options))
         }
 
@@ -92,8 +94,8 @@ public class SQLiteHistory : History {
             return
         }
 
-        let inserted = db.insert(&err) { connection, err in
-            return self.table.insert(connection, item: (site: visit.site, visit: visit), err: &err)
+        let inserted = db.insert(&err) { (conn, inout err: NSError?) -> Int in
+            return self.table.insert(conn, item: (site: visit.site, visit: visit), err: &err)
         }
 
         dispatch_async(dispatch_get_main_queue()) {

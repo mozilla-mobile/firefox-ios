@@ -70,7 +70,7 @@ public class HawkHelper {
         append(timestampString)
         append(nonce)
         append(request.HTTPMethod?.uppercaseString ?? "GET")
-        let url = request.URL
+        let url = request.URL!
         s.appendString(url.path!)
         if let query = url.query {
             s.appendString("?")
@@ -97,7 +97,7 @@ public class HawkHelper {
         } else {
             append("")
         }
-        return s
+        return s as String
     }
 
     class func getPayloadHashFor(request: NSURLRequest) -> String {

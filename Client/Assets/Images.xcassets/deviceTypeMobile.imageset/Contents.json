@@ -2,16 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "iPhone.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "sync_mobile.png"
+      "filename" : "iPhone@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "iPhone@3x.png"
     }
   ],
   "info" : {

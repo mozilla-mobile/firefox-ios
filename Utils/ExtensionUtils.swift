@@ -19,14 +19,17 @@ struct ExtensionUtils {
                 for inputItem in inputItems {
                     if let attachments = inputItem.attachments as? [NSItemProvider] {
                         for attachment in attachments {
-                            if attachment.hasItemConformingToTypeIdentifier(kUTTypeURL) {
-                                attachment.loadItemForTypeIdentifier(kUTTypeURL, options: nil, completionHandler: { (obj, err) -> Void in
+                            if attachment.hasItemConformingToTypeIdentifier(kUTTypeURL as String) {
+                                attachment.loadItemForTypeIdentifier(kUTTypeURL as String, options: nil, completionHandler: { (obj, err) -> Void in
                                     if err != nil {
                                         completionHandler(nil, err)
                                     } else {
                                         let title = inputItem.attributedContentText?.string as String?
-                                        let url = obj as NSURL
-                                        completionHandler(ShareItem(url: url.absoluteString!, title: title, favicon: nil), nil)
+                                        if let url = obj as? NSURL {
+                                            completionHandler(ShareItem(url: url.absoluteString!, title: title, favicon: nil), nil)
+                                        } else {
+                                            completionHandler(nil, NSError(domain: "org.mozilla.fennec", code: 999, userInfo: ["Problem": "Non-URL result."]))
+                                        }
                                     }
                                 })
                                 return

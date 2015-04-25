@@ -32,4 +32,29 @@ class UtilsTests: XCTestCase {
         XCTAssertEqual(4, b.count)
         XCTAssertEqual([1, 2, 3, 4], b)
     }
+
+    func testOptArrayEqual() {
+        let x: [String] = ["a", "b", "c"]
+        let y: [String]? = ["a", "b", "c"]
+        let z: [String]? = nil
+
+        XCTAssertTrue(optArrayEqual(x, y))
+        XCTAssertTrue(optArrayEqual(x, x))
+        XCTAssertTrue(optArrayEqual(y, y))
+        XCTAssertTrue(optArrayEqual(z, z))
+        XCTAssertFalse(optArrayEqual(x, z))
+        XCTAssertFalse(optArrayEqual(z, y))
+    }
+
+    func testWithQueryParam() {
+        let urlA = NSURL(string: "http://foo.com/bar/")!
+        let urlB = NSURL(string: "http://bar.com/noo")!
+        let urlC = urlA.withQueryParam("ppp", value: "123")
+        let urlD = urlB.withQueryParam("qqq", value: "123")
+        let urlE = urlC.withQueryParam("rrr", value: "aaa")
+
+        XCTAssertEqual("http://foo.com/bar/?ppp=123", urlC.absoluteString!)
+        XCTAssertEqual("http://bar.com/noo?qqq=123", urlD.absoluteString!)
+        XCTAssertEqual("http://foo.com/bar/?ppp=123&rrr=aaa", urlE.absoluteString!)
+    }
 }

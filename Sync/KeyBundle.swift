@@ -48,7 +48,7 @@ public class KeyBundle: Equatable {
         let hmacAlgorithm = CCHmacAlgorithm(kCCHmacAlgSHA256)
         let digestLen: Int = Int(CC_SHA256_DIGEST_LENGTH)
         let result = UnsafeMutablePointer<CUnsignedChar>.alloc(digestLen)
-        CCHmac(hmacAlgorithm, hmacKey.bytes, UInt(hmacKey.length), ciphertext.bytes, UInt(ciphertext.length), result)
+        CCHmac(hmacAlgorithm, hmacKey.bytes, hmacKey.length, ciphertext.bytes, ciphertext.length, result)
         return (result, digestLen)
     }
 
@@ -97,7 +97,7 @@ public class KeyBundle: Equatable {
             let d = NSData(bytesNoCopy: b, length: Int(copied))
             let s = NSString(data: d, encoding: NSUTF8StringEncoding)
             b.destroy()
-            return s
+            return s as String?
         }
 
         b.destroy()
@@ -105,22 +105,22 @@ public class KeyBundle: Equatable {
     }
 
 
-    private func crypt(input: NSData, iv: NSData, op: CCOperation) -> (status: CCCryptorStatus, buffer: UnsafeMutablePointer<CUnsignedChar>, count: UInt) {
+    private func crypt(input: NSData, iv: NSData, op: CCOperation) -> (status: CCCryptorStatus, buffer: UnsafeMutablePointer<Void>, count: Int) {
         let resultSize = input.length + kCCBlockSizeAES128
-        let result = UnsafeMutablePointer<CUnsignedChar>.alloc(resultSize)
-        var copied: UInt = 0
+        let result = UnsafeMutablePointer<Void>.alloc(resultSize)
+        var copied: Int = 0
 
         let success: CCCryptorStatus =
         CCCrypt(op,
                 CCHmacAlgorithm(kCCAlgorithmAES128),
                 CCOptions(kCCOptionPKCS7Padding),
                 encKey.bytes,
-                UInt(kCCKeySizeAES256),
+                kCCKeySizeAES256,
                 iv.bytes,
                 input.bytes,
-                UInt(input.length),
+                input.length,
                 result,
-                UInt(resultSize),
+                resultSize,
                 &copied
         );
 
@@ -147,7 +147,7 @@ public class KeyBundle: Equatable {
      *
      * For this reason, be careful trying to simplify or improve this code.
      */
-    public func factory<T : CleartextPayloadJSON>(f: (JSON) -> T) -> (String) -> T? {
+    public func factory<T: CleartextPayloadJSON>(f: JSON -> T) -> String -> T? {
         return { (payload: String) -> T? in
             let potential = EncryptedJSON(json: payload, keyBundle: self)
             if !(potential.isValid()) {
@@ -161,6 +161,47 @@ public class KeyBundle: Equatable {
             return f(cleartext!)
         }
     }
+
+    // TODO: how much do we want to move this into EncryptedJSON?
+    public func serializer<T: CleartextPayloadJSON>(f: T -> JSON) -> Record<T> -> JSON? {
+        return { (record: Record<T>) -> JSON? in
+            let json = f(record.payload)
+
+            if let data = json.toString(pretty: false).utf8EncodedData,
+               // We pass a null IV, which means "generate me a new one".
+               // We then include the generated IV in the resulting record.
+               let (ciphertext, iv) = self.encrypt(data, iv: nil) {
+
+                // So we have the encrypted payload. Now let's build the envelope around it.
+                let ciphertext = ciphertext.base64EncodedString
+
+                // The HMAC is computed over the base64 string. As bytes. Yes, I know.
+                if let encodedCiphertextBytes = ciphertext.dataUsingEncoding(NSASCIIStringEncoding, allowLossyConversion: false) {
+                    let hmac = self.hmacString(encodedCiphertextBytes)
+                    let iv = iv.base64EncodedString
+
+                    // The payload is stringified JSON. Yes, I know.
+                    let payload = JSON([
+                        "ciphertext": ciphertext,
+                        "IV": iv,
+                        "hmac": hmac,
+                    ]).toString(pretty: false)
+
+                    return JSON([
+                        "id": record.id,
+                        "sortindex": record.sortindex,
+                        "ttl": record.ttl,
+                        "payload": payload,
+                    ])
+                }
+            }
+            return nil
+        }
+    }
+
+    public func asPair() -> [String] {
+        return [self.encKey.base64EncodedString, self.hmacKey.base64EncodedString]
+    }
 }
 
 public func == (lhs: KeyBundle, rhs: KeyBundle) -> Bool {
@@ -168,7 +209,7 @@ public func == (lhs: KeyBundle, rhs: KeyBundle) -> Bool {
            lhs.hmacKey.isEqualToData(rhs.hmacKey)
 }
 
-public class Keys {
+public class Keys: Equatable {
     let valid: Bool
     let defaultBundle: KeyBundle
     var collectionKeys: [String: KeyBundle] = [String: KeyBundle]()
@@ -180,14 +221,14 @@ public class Keys {
 
     public init(payload: KeysPayload?) {
         if let payload = payload {
-        if payload.isValid() {
-            if let keys = payload.defaultKeys {
-                self.defaultBundle = keys
-                self.valid = true
-                return
+            if payload.isValid() {
+                if let keys = payload.defaultKeys {
+                    self.defaultBundle = keys
+                    self.valid = true
+                    return
+                }
+                self.collectionKeys = payload.collectionKeys
             }
-            // TODO: collection keys.
-        }
         }
         self.defaultBundle = KeyBundle.invalid
         self.valid = false
@@ -206,8 +247,40 @@ public class Keys {
         return defaultBundle
     }
 
-    public func factory<T : CleartextPayloadJSON>(collection: String, f: (JSON) -> T) -> (String) -> T? {
-        let bundle = forCollection(collection)
-        return bundle.factory(f)
+    public func encrypter<T: CleartextPayloadJSON>(collection: String, encoder: RecordEncoder<T>) -> RecordEncrypter<T> {
+        return RecordEncrypter(bundle: forCollection(collection), encoder: encoder)
     }
+
+    public func asPayload() -> KeysPayload {
+        let json: JSON = JSON([
+            "collection": "crypto",
+            "default": self.defaultBundle.asPair(),
+            "collections": mapValues(self.collectionKeys, { $0.asPair() })
+        ])
+        return KeysPayload(json)
+    }
+}
+
+/**
+ * Yup, these are basically typed tuples.
+ */
+public struct RecordEncoder<T: CleartextPayloadJSON> {
+    let decode: JSON -> T
+    let encode: T -> JSON
+}
+
+public struct RecordEncrypter<T: CleartextPayloadJSON> {
+    let serializer: Record<T> -> JSON?
+    let factory: String -> T?
+
+    init(bundle: KeyBundle, encoder: RecordEncoder<T>) {
+        self.serializer = bundle.serializer(encoder.encode)
+        self.factory = bundle.factory(encoder.decode)
+    }
+}
+
+public func ==(lhs: Keys, rhs: Keys) -> Bool {
+    return lhs.valid == rhs.valid &&
+           lhs.defaultBundle == rhs.defaultBundle &&
+           lhs.collectionKeys == rhs.collectionKeys
 }

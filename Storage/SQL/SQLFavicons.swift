@@ -9,7 +9,6 @@ import UIKit
  * The sqlite-backed implementation of the favicons protocol.
  */
 public class SQLiteFavicons : Favicons {
-    let files: FileAccessor
     let db: BrowserDB
     let table = JoinedFaviconsHistoryTable<(Site, Favicon)>()
 
@@ -17,19 +16,16 @@ public class SQLiteFavicons : Favicons {
         return UIImage(named: "defaultFavicon")!
     }()
 
-    required public init(files: FileAccessor) {
-        self.files = files
-        self.db = BrowserDB(files: files)!
+    required public init(db: BrowserDB) {
+        self.db = db
         db.createOrUpdate(table)
     }
 
     public func clear(options: QueryOptions?, complete: ((success: Bool) -> Void)?) {
         var err: NSError? = nil
-        let res = db.delete(&err) { connection, err in
-            return self.table.delete(connection, item: nil, err: &err)
+        let res = db.delete(&err) { (conn, inout err: NSError?) -> Int in
+            return self.table.delete(conn, item: nil, err: &err)
         }
-
-        files.remove("favicons")
 
         dispatch_async(dispatch_get_main_queue()) {
             complete?(success: err == nil)
@@ -50,8 +46,8 @@ public class SQLiteFavicons : Favicons {
 
     public func add(icon: Favicon, site: Site, complete: ((success: Bool) -> Void)?) {
         var err: NSError? = nil
-        let res = db.insert(&err) { connection, err in
-            return self.table.insert(connection, item: (icon: icon, site: site), err: &err)
+        let res = db.insert(&err) { (conn, inout err: NSError?) -> Int in
+            return self.table.insert(conn, item: (icon: icon, site: site), err: &err)
         }
 
         dispatch_async(dispatch_get_main_queue()) {

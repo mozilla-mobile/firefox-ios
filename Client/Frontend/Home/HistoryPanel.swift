@@ -7,8 +7,8 @@ import UIKit
 import Storage
 
 private func getDate(#dayOffset: Int) -> NSDate {
-    let calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)!
-    let nowComponents = calendar.components(NSCalendarUnit.YearCalendarUnit | NSCalendarUnit.MonthCalendarUnit | NSCalendarUnit.DayCalendarUnit, fromDate: NSDate())
+    let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+    let nowComponents = calendar.components(NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay, fromDate: NSDate())
     let today = calendar.dateFromComponents(nowComponents)!
     return calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitDay, value: dayOffset, toDate: today, options: nil)!
 }
@@ -37,12 +37,14 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         let offset = sectionOffsets[indexPath.section]!
         if let site = data[indexPath.row + offset] as? Site {
-            (cell as TwoLineTableViewCell).setLines(site.title, detailText: site.url)
-            if let img = site.icon? {
-                let imgURL = NSURL(string: img.url)
-                cell.imageView?.sd_setImageWithURL(imgURL, placeholderImage: self.profile.favicons.defaultIcon)
-            } else {
-                cell.imageView?.image = self.profile.favicons.defaultIcon
+            if let cell = cell as? TwoLineTableViewCell {
+                cell.setLines(site.title, detailText: site.url)
+                if let img = site.icon {
+                    let imgURL = NSURL(string: img.url)
+                    cell.imageView?.sd_setImageWithURL(imgURL, placeholderImage: self.profile.favicons.defaultIcon)
+                } else {
+                    cell.imageView?.image = self.profile.favicons.defaultIcon
+                }
             }
         }
 

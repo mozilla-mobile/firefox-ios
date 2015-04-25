@@ -11,7 +11,7 @@ import Foundation
  * the path using ".." or symlinks.
  */
 public class FileAccessor {
-    private let rootPath: String
+    public let rootPath: String
 
     public init(rootPath: String) {
         self.rootPath = rootPath
@@ -42,21 +42,19 @@ public class FileAccessor {
      * Removes the contents of the directory without removing the directory itself.
      */
     public func removeFilesInDirectory(relativePath: String = "", error: NSErrorPointer = nil) -> Bool {
-        var success = true
         let fileManager = NSFileManager.defaultManager()
         let path = rootPath.stringByAppendingPathComponent(relativePath)
-        let files = fileManager.contentsOfDirectoryAtPath(path, error: error)
-
-        if files == nil {
-            return false
+        if let files = fileManager.contentsOfDirectoryAtPath(path, error: error) {
+            var success = true
+            for file in files {
+                if let filename = file as? String {
+                    success = success && remove(relativePath.stringByAppendingPathComponent(filename), error: error)
+                }
+            }
+            return success
         }
 
-        for file in files! {
-            let filename = file as String
-            success &= remove(relativePath.stringByAppendingPathComponent(filename), error: error)
-        }
-
-        return success
+        return false
     }
 
     /**

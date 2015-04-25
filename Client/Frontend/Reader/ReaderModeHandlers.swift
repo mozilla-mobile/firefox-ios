@@ -54,13 +54,15 @@ struct ReaderModeHandlers {
                         ReadabilityService.sharedInstance.process(url)
                         if let readerViewLoadingPath = NSBundle.mainBundle().pathForResource("ReaderViewLoading", ofType: "html") {
                             if let readerViewLoading = NSMutableString(contentsOfFile: readerViewLoadingPath, encoding: NSUTF8StringEncoding, error: nil) {
-                                return GCDWebServerDataResponse(HTML: readerViewLoading)
+                                return GCDWebServerDataResponse(HTML: readerViewLoading as String)
                             }
                         }
                     }
                 }
             }
-            return GCDWebServerDataResponse(HTML: "There was an error converting the page") // TODO Needs a proper error page
+
+            let errorString = NSLocalizedString("There was an error converting the page", comment: "Error displayed when reader mode cannot be enabled")
+            return GCDWebServerDataResponse(HTML: errorString) // TODO Needs a proper error page
         }
     }
 }

@@ -66,16 +66,16 @@ class ReadingListTable<T>: GenericTable<ReadingListItem> {
 
     override var factory: ((row: SDRow) -> ReadingListItem)? {
         return { row -> ReadingListItem in
-            let item = ReadingListItem(url: row["url"] as String, title: row["title"] as? String)
+            let item = ReadingListItem(url: row["url"] as! String, title: row["title"] as? String)
             item.id = row["id"] as? Int
             if let n = row["client_last_modified"] as? NSNumber {
                 item.clientLastModified = n.longLongValue
             }
             item.guid = row["guid"] as? String
-            item.isDeleted = (row["is_deleted"] as Int) != 0
-            item.isArchived = (row["is_archived"] as Int) != 0
-            item.isUnread = (row["is_unread"] as Int) != 0
-            item.isFavorite = (row["is_favorite"] as Int) != 0
+            item.isDeleted = (row["is_deleted"] as! Int) != 0
+            item.isArchived = (row["is_archived"] as! Int) != 0
+            item.isUnread = (row["is_unread"] as! Int) != 0
+            item.isFavorite = (row["is_favorite"] as! Int) != 0
             // TODO: Later add more fields that the client can set / needs
             return item
         }

@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Icon-Small.png"
+      "filename" : "Icon-60@3x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Icon-Small@2x.png"
+      "filename" : "Icon-72@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "Icon-Small@3x.png"
+      "filename" : "Icon-76@2x.png"
     }
   ],
   "info" : {
