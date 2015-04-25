@@ -106,7 +106,11 @@ private class AccountSetting: Setting, FxAContentViewControllerDelegate {
         let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
         settings.profile.setAccount(account)
 
+        // Reload the data to reflect the new Account immediately.
         settings.tableView.reloadData()
+        // And start advancing the Account state in the background as well.
+        settings.SELrefresh()
+
         settings.navigationController?.popToRootViewControllerAnimated(true)
     }
 
@@ -160,7 +164,8 @@ private class DisconnectSetting: WithAccountSetting {
         alertController.addAction(
             UIAlertAction(title: NSLocalizedString("Disconnect", comment: "Disconnect button in the 'disconnect firefox account' alert"), style: .Destructive) { (action) in
                 self.settings.profile.setAccount(nil)
-                self.settings.tableView.reloadData()
+                // Refresh, to show that we no longer have an Account immediately.
+                self.settings.SELrefresh()
             })
         navigationController?.presentViewController(alertController, animated: true, completion: nil)
     }
@@ -326,6 +331,38 @@ class SettingsTableViewController: UITableViewController {
             style: UIBarButtonItemStyle.Done,
             target: navigationController, action: "SELdone")
         tableView.registerClass(SettingsTableViewCell.self, forCellReuseIdentifier: Identifier)
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        SELrefresh()
+    }
+
+    @objc private func SELrefresh() {
+        // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
+        if let account = self.profile.getAccount() {
+            // Add the refresh control right away.
+            if refreshControl == nil {
+                refreshControl = UIRefreshControl()
+                refreshControl?.addTarget(self, action: "SELrefresh", forControlEvents: UIControlEvents.ValueChanged)
+            }
+
+            refreshControl?.beginRefreshing()
+            account.advance().upon { _ in
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    self.tableView.reloadData()
+                    self.refreshControl?.endRefreshing()
+                }
+            }
+        } else {
+            // Remove the refresh control immediately after ending the refresh.
+            refreshControl?.endRefreshing()
+            if let refreshControl = self.refreshControl {
+                refreshControl.removeFromSuperview()
+            }
+            refreshControl = nil
+            self.tableView.reloadData()
+        }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
