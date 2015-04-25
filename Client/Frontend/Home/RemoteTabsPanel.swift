@@ -37,7 +37,6 @@ private let RemoteTabIdentifier = "RemoteTab"
 class RemoteTabsPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
-    var timer: NSTimer!
 
     private var clientAndTabs: [ClientAndTabs]?
 
@@ -59,14 +58,6 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.SELrefresh()
-    }
-
-    override func viewDidAppear(animated: Bool) {
-        timer = NSTimer.scheduledTimerWithTimeInterval(60.0, target: self.tableView, selector: Selector("reloadData"), userInfo: nil, repeats: true)
-    }
-
-    override func viewWillDisappear(animated: Bool) {
-        timer.invalidate()
     }
 
     @objc private func SELrefresh() {
@@ -139,7 +130,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
              */
             let timestamp = clientTabs.approximateLastSyncTime()
             let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time")
-            view.detailTextLabel.text = String(format: label, timestamp.toNSDate().toRelativeTimeString())
+            view.detailTextLabel.text = String(format: label, String(timestamp))
             if client.type == "desktop" {
                 view.imageView.image = UIImage(named: "deviceTypeDesktop")
             } else {
