@@ -12,12 +12,11 @@ public class ClientPayload: CleartextPayloadJSON {
         // Swift compiler bug #18422804.
         return !isError &&
                self["name"].isString &&
-               self["commands"].isArray &&
                self["type"].isString
     }
 
     var commands: [JSON] {
-        return self["commands"].asArray!
+        return self["commands"].asArray ?? []   // It might not be present at all.
     }
 
     var name: String {
@@ -37,7 +36,7 @@ public class ClientPayload: CleartextPayloadJSON {
             return false;
         }
 
-        let p = obj as ClientPayload
+        let p = obj as! ClientPayload
         if p.name != self.name {
             return false
         }

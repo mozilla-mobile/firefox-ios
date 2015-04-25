@@ -49,7 +49,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
 
     override var factory: ((row: SDRow) -> Favicon)? {
         return { row -> Favicon in
-            let icon = Favicon(url: row["url"] as String, date: NSDate(timeIntervalSince1970: row["date"] as Double), type: IconType(rawValue: row["type"] as Int)!)
+            let icon = Favicon(url: row["url"] as! String, date: NSDate(timeIntervalSince1970: row["date"] as! Double), type: IconType(rawValue: row["type"] as! Int)!)
             icon.id = row["id"] as? Int
             return icon
         }
@@ -72,7 +72,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
         if (cursor.count != 1) {
             return nil
         }
-        return (cursor[0] as Favicon).id
+        return (cursor[0] as? Favicon)?.id
     }
 
     func insertOrUpdate(db: SQLiteDBConnection, obj: Favicon) {

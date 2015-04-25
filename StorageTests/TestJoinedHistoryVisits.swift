@@ -67,7 +67,7 @@ class TestJoinedHistoryVisits : XCTestCase {
             for index in 0..<urls.count {
                 let d = cursor[index]
                 println("Found \(d)")
-                let (site, visit) = cursor[index] as (site: Site, visit: Visit)
+                let (site, visit) = cursor[index] as! (site: Site, visit: Visit)
                 XCTAssertNotNil(s, "cursor has a site for entry")
                 let info = urls[index]
                 XCTAssertEqual(site.url, info.0, "Found url")

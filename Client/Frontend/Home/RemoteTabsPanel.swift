@@ -3,8 +3,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Account
+import Shared
 import Snap
 import Storage
+import Sync
+import XCGLogger
+
+// TODO: same comment as for SyncAuthState.swift!
+private let log = XCGLogger.defaultInstance()
+
 
 private struct RemoteTabsPanelUX {
     static let HeaderHeight: CGFloat = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
@@ -30,10 +38,10 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
 
-    private var clients: [RemoteClient]?
+    private var clientAndTabs: [ClientAndTabs]?
 
     private func tabAtIndexPath(indexPath: NSIndexPath) -> RemoteTab? {
-        return clients?[indexPath.section].tabs[indexPath.item]
+        return self.clientAndTabs?[indexPath.section].tabs[indexPath.item]
     }
 
     override func viewDidLoad() {
@@ -54,33 +62,45 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     @objc private func SELrefresh() {
         self.refreshControl?.beginRefreshing()
-        profile.remoteClientsAndTabs.getClientsAndTabs { clients in
-            self.refreshControl?.endRefreshing()
-            self.clients = clients
-            // Maybe show a background view.
-            let tableView = self.tableView
-            if self.clients == nil || self.clients!.isEmpty {
-                tableView.backgroundView = UIView()
-                tableView.backgroundView?.frame = tableView.frame
-                // TODO: Populate background view with UX-approved content.
-                tableView.backgroundView?.backgroundColor = UIColor.redColor()
-                // Hide dividing lines.
-                tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+
+        self.profile.getClientsAndTabs().upon({ tabs in
+            if let tabs = tabs.successValue {
+                log.info("\(tabs.count) tabs fetched.")
+                self.clientAndTabs = tabs
+
+                // Maybe show a background view.
+                let tableView = self.tableView
+                if tabs.isEmpty {
+                    // TODO: Bug 1144760 - Populate background view with UX-approved content.
+                    tableView.backgroundView = UIView()
+                    tableView.backgroundView?.frame = tableView.frame
+                    tableView.backgroundView?.backgroundColor = UIColor.redColor()
+
+                    // Hide dividing lines.
+                    tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+                } else {
+                    tableView.backgroundView = nil
+                    // Show dividing lines.
+                    tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+                }
+                tableView.reloadData()
             } else {
-                tableView.backgroundView = nil
-                // Show dividing lines.
-                tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+                log.error("Failed to fetch tabs.")
             }
-            tableView.reloadData()
-        }
+
+            // Always end refreshing, even if we failed!
+            self.refreshControl?.endRefreshing()
+        })
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return clients?.count ?? 0
+        log.debug("We have \(self.clientAndTabs?.count) sections.")
+        return self.clientAndTabs?.count ?? 0
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return clients?[section].tabs.count ?? 0
+        log.debug("Section \(section) has \(self.clientAndTabs?[section].tabs.count) tabs.")
+        return self.clientAndTabs?[section].tabs.count ?? 0
     }
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -88,28 +108,45 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if let client = clients?[section] {
-            let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(RemoteClientIdentifier) as TwoLineHeaderFooterView
+        if let clientTabs = self.clientAndTabs?[section] {
+            let client = clientTabs.client
+            let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(RemoteClientIdentifier) as! TwoLineHeaderFooterView
             view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
             view.textLabel.text = client.name
-            // TODO: allow localization; convert timestamp to relative timestring.
-            view.detailTextLabel.text = "Last synced: \(String(client.lastModified))"
+
+            // TODO: Bug 1154088 - Convert timestamp to locale-relative timestring.
+
+            /*
+             * A note on timestamps.
+             * We have access to two timestamps here: the timestamp of the remote client record,
+             * and the set of timestamps of the client's tabs.
+             * Neither is "last synced". The client record timestamp changes whenever the remote
+             * client uploads its record (i.e., infrequently), but also whenever another device
+             * sends a command to that client -- which can be much later than when that client
+             * last synced.
+             * The client's tabs haven't necessarily changed, but it can still have synced.
+             * Ideally, we should save and use the modified time of the tabs record itself.
+             * This will be the real time that the other client uploaded tabs.
+             */
+            let timestamp = clientTabs.approximateLastSyncTime()
+            let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time")
+            view.detailTextLabel.text = String(format: label, String(timestamp))
             if client.type == "desktop" {
                 view.imageView.image = UIImage(named: "deviceTypeDesktop")
             } else {
                 view.imageView.image = UIImage(named: "deviceTypeMobile")
             }
             return view
-        } else {
-            return nil
         }
+
+        return nil
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(RemoteTabIdentifier, forIndexPath: indexPath) as TwoLineTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(RemoteTabIdentifier, forIndexPath: indexPath) as! TwoLineTableViewCell
         let tab = tabAtIndexPath(indexPath)
         cell.setLines(tab?.title, detailText: tab?.URL.absoluteString)
-        // TODO: Populate image with cached favicons.
+        // TODO: Bug 1144765 - Populate image with cached favicons.
         return cell
     }
 

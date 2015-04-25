@@ -4,7 +4,6 @@
 
 import Foundation
 
-// This runs against a live profile for now.  Be careful!
 class SearchSettingsUITests: KIFTestCase {
     private func navigateToSearchSettings() {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
@@ -26,7 +25,18 @@ class SearchSettingsUITests: KIFTestCase {
 
     // Given that we're at the Search Settings sheet, return the default search engine's name.
     private func getDefaultSearchEngineName() -> String {
-        let view = tester().waitForViewWithAccessibilityLabel("Default Search Engine", traits: UIAccessibilityTraitButton)
+        var view: UIView!
+
+        // There appears to be a KIF bug where waitForViewWithAccessibilityLabel returns the parent
+        // UITableView instead of the UITableViewCell with the given label.
+        // As a workaround, retry until KIF gives us a cell.
+        // Open issue: https://github.com/kif-framework/KIF/issues/336
+        tester().runBlock { _ in
+            view = self.tester().waitForViewWithAccessibilityLabel("Default Search Engine", traits: UIAccessibilityTraitButton)
+            let cell = view as? UITableViewCell
+            return (cell == nil) ? KIFTestStepResult.Wait : KIFTestStepResult.Success
+        }
+
         return view.accessibilityValue
     }
 

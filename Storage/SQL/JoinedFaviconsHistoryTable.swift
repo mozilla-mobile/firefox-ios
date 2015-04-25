@@ -106,13 +106,13 @@ class JoinedFaviconsHistoryTable<T>: GenericTable<(site: Site?, icon: Favicon?)>
     }
 
     func factory(result: SDRow) -> (Site, Favicon) {
-        let site = Site(url: result["siteUrl"] as String, title: result["title"] as String)
+        let site = Site(url: result["siteUrl"] as! String, title: result["title"] as! String)
         site.guid = result["guid"] as? String
         site.id = result["historyId"] as? Int
 
-        let favicon = Favicon(url: result["iconUrl"] as String,
-            date: NSDate(timeIntervalSince1970: result["date"] as Double),
-            type: IconType(rawValue: result["iconType"] as Int)!)
+        let favicon = Favicon(url: result["iconUrl"] as! String,
+                              date: NSDate(timeIntervalSince1970: result["date"] as! Double),
+                              type: IconType(rawValue: result["iconType"] as! Int)!)
         favicon.id = result["iconId"] as? Int
 
         return (site, favicon)

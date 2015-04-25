@@ -8,7 +8,7 @@ import Snap
 
 protocol ClientPickerViewControllerDelegate {
     func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) -> Void
-    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [Client]) -> Void
+    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) -> Void
 }
 
 /*!
@@ -22,11 +22,11 @@ class ClientPickerViewController: UITableViewController {
     var profile: Profile?
     var clientPickerDelegate: ClientPickerViewControllerDelegate?
     
-    var clients: [Client] = []
+    var clients: [RemoteClient] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = NSLocalizedString("Send To Device", comment: "Title of the dialog that allows you to send a tab to a different device")
+        title = NSLocalizedString("Send To Device", tableName: "SendTo", comment: "Title of the dialog that allows you to send a tab to a different device")
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
@@ -48,7 +48,7 @@ class ClientPickerViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.textLabel?.font = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 17)
-        cell.textLabel?.text = String(format: NSLocalizedString("Send to %@", comment: "Text in a table view row that lets the user pick a device to which to send a tab to"), clients[indexPath.row].name)
+        cell.textLabel?.text = String(format: NSLocalizedString("Send to %@", tableName: "SendTo", comment: "Text in a table view row that lets the user pick a device to which to send a tab to"), clients[indexPath.row].name)
         return cell
     }
     
@@ -58,18 +58,14 @@ class ClientPickerViewController: UITableViewController {
     }
     
     private func reloadClients() {
-        profile?.clients.getAll(
-            { response in
-                self.clients = response
+        profile?.getClients().upon({ result in
+            self.refreshControl?.endRefreshing()
+            if let c = result.successValue {
+                self.clients = c
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.refreshControl?.endRefreshing()
                     self.tableView.reloadData()
                 }
-            },
-            error: { err in
-                // TODO: Figure out a good way to handle this.
-                print("Error: could not load clients: ")
-                println(err)
+            }
         })
     }
     
@@ -118,8 +114,9 @@ class ActionViewController: UINavigationController, ClientPickerViewControllerDe
         self.extensionContext!.completeRequestReturningItems(nil, completionHandler: nil)
     }
 
-    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [Client]) {
-        profile?.clients.sendItem(self.sharedItem!, toClients: clients)
+    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
+        // TODO: hook up Send Tab via Sync.
+        // profile?.clients.sendItem(self.sharedItem!, toClients: clients)
         finish()
     }
     

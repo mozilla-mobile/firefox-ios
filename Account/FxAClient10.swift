@@ -66,8 +66,8 @@ extension FxAClientError: Printable, ErrorType {
     public var description: String {
         switch self {
         case let .Remote(error):
-            let errorString = error.error ?? "Missing error"
-            let messageString = error.message ?? "Missing message"
+            let errorString = error.error ?? NSLocalizedString("Missing error", comment: "Error for a missing remote error number")
+            let messageString = error.message ?? NSLocalizedString("Missing message", comment: "Error for a missing remote error message")
             return "<FxAClientError.Remote \(error.code)/\(error.errno): \(errorString) (\(messageString))>"
         case let .Local(error):
             return "<FxAClientError.Local \(error.description)>"
@@ -146,9 +146,9 @@ public class FxAClient10 {
         if let code = json["code"].asInt32 {
             if let errno = json["errno"].asInt32 {
                 return RemoteError(code: code, errno: errno,
-                    error: json["error"].asString?,
-                    message: json["message"].asString?,
-                    info: json["info"].asString?)
+                                   error: json["error"].asString,
+                                   message: json["message"].asString,
+                                   info: json["info"].asString)
             }
         }
         return nil
@@ -308,7 +308,7 @@ public class FxAClient10 {
 
         let parameters = [
             "publicKey": publicKey.JSONRepresentation(),
-            "duration": NSNumber(longLong: OneDayInMilliseconds), // The maximum the server will allow.
+            "duration": NSNumber(unsignedLongLong: OneDayInMilliseconds), // The maximum the server will allow.
         ]
 
         let salt: NSData = NSData()

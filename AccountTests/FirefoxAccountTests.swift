@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Shared
 import UIKit
 import XCTest
 
@@ -14,19 +15,16 @@ class FirefoxAccountTests: XCTestCase {
     func testSerialization() {
         let d: [String: AnyObject] = [
             "version": 1,
+            "configurationLabel": FirefoxAccountConfigurationLabel.Production.rawValue,
             "email": "testtest@test.com",
             "uid": "uid",
-            "authEndpoint": "https://test.com/auth",
-            "contentEndpoint": "https://test.com/content",
-            "oauthEndpoint": "https://test.com/oauth"
         ]
 
         let account1 = FirefoxAccount(
-                email: d["email"] as String,
-                uid: d["uid"] as String,
-                authEndpoint: NSURL(string: d["authEndpoint"] as String)!,
-                contentEndpoint: NSURL(string: d["contentEndpoint"] as String)!,
-                oauthEndpoint: NSURL(string: d["oauthEndpoint"] as String)!,
+                configuration: FirefoxAccountConfigurationLabel.Production.toConfiguration(),
+                email: d["email"] as! String,
+                uid: d["uid"] as! String,
+                stateKeyLabel: Bytes.generateGUID(),
                 state: SeparatedState())
         let d1 = account1.asDictionary()
 
@@ -37,8 +35,8 @@ class FirefoxAccountTests: XCTestCase {
         for (k, v) in d {
             // Skip version, which is an Int.
             if let s = v as? String {
-                XCTAssertEqual(s, d1[k] as String, "Value for '\(k)' does not agree for manually created account.")
-                XCTAssertEqual(s, d2[k] as String, "Value for '\(k)' does not agree for deserialized account.")
+                XCTAssertEqual(s, d1[k] as! String, "Value for '\(k)' does not agree for manually created account.")
+                XCTAssertEqual(s, d2[k] as! String, "Value for '\(k)' does not agree for deserialized account.")
             }
         }
     }

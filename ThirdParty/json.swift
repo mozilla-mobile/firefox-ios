@@ -344,6 +344,20 @@ extension JSON {
     default: return 0
         }
     }
+    // gives all values content in JSON object.
+    public var allValues:JSON{
+        if(self._value.allValues == nil) {
+            return JSON([])
+        }
+        return JSON(self._value.allValues)
+    }
+    // gives all keys content in JSON object.
+    public var allKeys:JSON{
+        if(self._value.allKeys == nil) {
+            return JSON([])
+        }
+        return JSON(self._value.allKeys)
+    }
 }
 extension JSON : SequenceType {
     public func generate()->GeneratorOf<(AnyObject,JSON)> {

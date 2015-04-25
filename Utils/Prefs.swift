@@ -5,11 +5,15 @@
 import Foundation
 
 public protocol Prefs {
+    func branch(branch: String) -> Prefs
     func setLong(value: UInt64, forKey defaultName: String)
     func setLong(value: Int64, forKey defaultName: String)
+    func setInt(value: Int32, forKey defaultName: String)
+    func setString(value: String, forKey defaultName: String)
     func setObject(value: AnyObject?, forKey defaultName: String)
     func stringForKey(defaultName: String) -> String?
     func boolForKey(defaultName: String) -> Bool?
+    func intForKey(defaultName: String) -> Int32?
     func longForKey(defaultName: String) -> Int64?
     func unsignedLongForKey(defaultName: String) -> UInt64?
     func stringArrayForKey(defaultName: String) -> [String]?
@@ -20,33 +24,57 @@ public protocol Prefs {
 }
 
 public class MockProfilePrefs : Prefs {
+    let prefix: String
+
     var things: NSMutableDictionary = NSMutableDictionary()
 
+    public init(things: NSMutableDictionary, prefix: String) {
+        self.things = things
+        self.prefix = prefix
+    }
+
     public init() {
+        self.prefix = ""
+    }
+
+    public func branch(branch: String) -> Prefs {
+        return MockProfilePrefs(things: self.things, prefix: self.prefix + branch + ".")
+    }
+
+    private func name(name: String) -> String {
+        return self.prefix + name
     }
 
     public func setLong(value: UInt64, forKey defaultName: String) {
-        setObject(NSNumber(unsignedLongLong: value), forKey: defaultName)
+        setObject(NSNumber(unsignedLongLong: value), forKey: name(defaultName))
     }
 
     public func setLong(value: Int64, forKey defaultName: String) {
-        setObject(NSNumber(longLong: value), forKey: defaultName)
+        setObject(NSNumber(longLong: value), forKey: name(defaultName))
+    }
+
+    public func setInt(value: Int32, forKey defaultName: String) {
+        things[name(defaultName)] = NSNumber(int: value)
+    }
+
+    public func setString(value: String, forKey defaultName: String) {
+        things[name(defaultName)] = value
     }
 
     public func setObject(value: AnyObject?, forKey defaultName: String) {
-        things[defaultName] = value
+        things[name(defaultName)] = value
     }
 
     public func stringForKey(defaultName: String) -> String? {
-        return things[defaultName] as? String
+        return things[name(defaultName)] as? String
     }
 
     public func boolForKey(defaultName: String) -> Bool? {
-        return things[defaultName] as? Bool
+        return things[name(defaultName)] as? Bool
     }
 
     public func unsignedLongForKey(defaultName: String) -> UInt64? {
-        let num = things[defaultName] as? NSNumber
+        let num = things[name(defaultName)] as? NSNumber
         if let num = num {
             return num.unsignedLongLongValue
         }
@@ -54,15 +82,28 @@ public class MockProfilePrefs : Prefs {
     }
 
     public func longForKey(defaultName: String) -> Int64? {
-        let num = things[defaultName] as? NSNumber
+        let num = things[name(defaultName)] as? NSNumber
         if let num = num {
             return num.longLongValue
         }
         return nil
     }
 
+    public func intForKey(defaultName: String) -> Int32? {
+        let num = things[name(defaultName)] as? NSNumber
+        if let num = num {
+            return num.intValue
+        }
+        return nil
+    }
+
     public func stringArrayForKey(defaultName: String) -> [String]? {
-        return self.arrayForKey(defaultName) as [String]?
+        if let arr = self.arrayForKey(defaultName) {
+            if let arr = arr as? [String] {
+                return arr
+            }
+        }
+        return nil
     }
 
     public func arrayForKey(defaultName: String) -> [AnyObject]? {
@@ -77,11 +118,11 @@ public class MockProfilePrefs : Prefs {
     }
 
     public func dictionaryForKey(defaultName: String) -> [String : AnyObject]? {
-        return things.objectForKey(defaultName) as? [String: AnyObject]
+        return things.objectForKey(name(defaultName)) as? [String: AnyObject]
     }
 
     public func removeObjectForKey(defaultName: String) {
-        self.things[defaultName] = nil
+        self.things.removeObjectForKey(name(defaultName))
     }
 
     public func clearAll() {

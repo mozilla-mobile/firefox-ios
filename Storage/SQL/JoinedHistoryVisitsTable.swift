@@ -37,7 +37,7 @@ class JoinedHistoryVisitsTable: Table {
         if (cursor.count != 1) {
             return nil
         }
-        return (cursor[0] as Site).id
+        return (cursor[0] as? Site)?.id
     }
 
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
@@ -122,25 +122,26 @@ class JoinedHistoryVisitsTable: Table {
     }
 
     func factory(result: SDRow) -> (site: Site, visit: Visit) {
-        let site = Site(url: result["siteUrl"] as String, title: result["title"] as String)
+        let site = Site(url: result["siteUrl"] as! String, title: result["title"] as? String ?? "")
         site.guid = result["guid"] as? String
         site.id = result["historyId"] as? Int
 
-        let d = NSDate(timeIntervalSince1970: result["visitDate"] as Double)
+        let d = NSDate(timeIntervalSince1970: result["visitDate"] as! Double)
+
         // This visit is a combination of multiple visits. Type is meaningless.
         let visit = Visit(site: site, date: d, type: VisitType.Unknown)
         visit.id = result["visitId"] as? Int
 
         site.latestVisit = visit
 
-        if let iconurl = result["iconUrl"] as? String {
-            let icon = Favicon(url: iconurl, date: NSDate(timeIntervalSince1970: result["iconDate"] as Double), type: IconType(rawValue: result["iconType"] as Int)!)
+        if let iconurl = result["iconUrl"] as? String,
+           let iconDate = result["iconDate"] as? Double,
+           let iconType = result["iconType"] as? Int {
+
+            let icon = Favicon(url: iconurl, date: NSDate(timeIntervalSince1970: iconDate), type: IconType(rawValue: iconType)!)
             icon.id = result["faviconId"] as? Int
             site.icon = icon
         }
-
-        let dt2 = (NSDate().timeIntervalSince1970 - visit.date.timeIntervalSince1970) / 86400
-        println("DT \(site.url): \(dt2)")
 
         return (site, visit)
     }
@@ -160,7 +161,6 @@ class JoinedHistoryVisitsTable: Table {
         sql += "GROUP BY historyId";
 
         // Trying to do this in one line (i.e. options?.sort == .LastVisit) breaks the Swift compiler
-        println("Sort: \(options?.sort)")
         if let sort = options?.sort {
             if sort == .LastVisit {
                 sql += " ORDER BY visitDate DESC"

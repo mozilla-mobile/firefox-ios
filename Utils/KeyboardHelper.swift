@@ -15,12 +15,12 @@ public struct KeyboardState {
 
     private init(_ userInfo: [NSObject: AnyObject], height: CGFloat) {
         self.height = height
-        animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as Double
+        animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! Double
 
         // HACK: UIViewAnimationCurve doesn't expose the keyboard animation used (curveValue = 7),
         // so UIViewAnimationCurve(rawValue: curveValue) returns nil. As a workaround, get a
         // reference to an EaseIn curve, then change the underlying pointer data with that ref.
-        let curveValue = userInfo[UIKeyboardAnimationCurveUserInfoKey] as Int
+        let curveValue = userInfo[UIKeyboardAnimationCurveUserInfoKey] as! Int
         animationCurve = UIViewAnimationCurve.EaseIn
         NSNumber(integer: curveValue).getValue(&animationCurve)
     }
@@ -77,7 +77,7 @@ public class KeyboardHelper: NSObject {
 
     func SELkeyboardWillShow(notification: NSNotification) {
         let userInfo = notification.userInfo!
-        let height = (userInfo[UIKeyboardFrameBeginUserInfoKey] as NSValue).CGRectValue().height
+        let height = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue().height
         currentState = KeyboardState(userInfo, height: height)
 
         for weakDelegate in delegates {

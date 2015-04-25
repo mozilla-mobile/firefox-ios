@@ -10,12 +10,12 @@ private let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.bla
 private let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.grayColor()
 
 class TwoLineTableViewCell: UITableViewCell {
-    private let twoLineHelper: TwoLineCellHelper!
+    private let twoLineHelper = TwoLineCellHelper()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
 
-        twoLineHelper = TwoLineCellHelper(container: self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
+        twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
 
         indentationWidth = 0
         layoutMargins = UIEdgeInsetsZero
@@ -37,23 +37,19 @@ class TwoLineTableViewCell: UITableViewCell {
 }
 
 class TwoLineCollectionViewCell: UICollectionViewCell {
-    private let twoLineHelper: TwoLineCellHelper!
+    private let twoLineHelper = TwoLineCellHelper()
     let textLabel = UILabel()
     let detailTextLabel = UILabel()
     let imageView = UIImageView()
 
-    override init() {
-        super.init()
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        twoLineHelper.setUpViews(self, textLabel: textLabel, detailTextLabel: detailTextLabel, imageView: imageView)
 
         contentView.addSubview(textLabel)
         contentView.addSubview(detailTextLabel)
         contentView.addSubview(imageView)
-
-        twoLineHelper = TwoLineCellHelper(container: self, textLabel: textLabel, detailTextLabel: detailTextLabel, imageView: imageView)
 
         layoutMargins = UIEdgeInsetsZero
     }
@@ -73,7 +69,7 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
 }
 
 class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
-    private let twoLineHelper: TwoLineCellHelper!
+    private let twoLineHelper = TwoLineCellHelper()
 
     // UITableViewHeaderFooterView includes textLabel and detailTextLabel, so we can't override
     // them.  Unfortunately, they're also used in ways that interfere with us just using them: I get
@@ -94,10 +90,6 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
         return _detailTextLabel
     }
 
-    override init() {
-        super.init()
-    }
-
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
     }
@@ -105,11 +97,11 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        twoLineHelper.setUpViews(self, textLabel: _textLabel, detailTextLabel: _detailTextLabel, imageView: imageView)
+
         contentView.addSubview(_textLabel)
         contentView.addSubview(_detailTextLabel)
         contentView.addSubview(imageView)
-
-        twoLineHelper = TwoLineCellHelper(container: self, textLabel: _textLabel, detailTextLabel: _detailTextLabel, imageView: imageView)
 
         layoutMargins = UIEdgeInsetsZero
     }
@@ -125,12 +117,13 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
 }
 
 private class TwoLineCellHelper {
-    private let container: UIView
-    let textLabel: UILabel
-    let detailTextLabel: UILabel
-    let imageView: UIImageView
+    var container: UIView!
+    var textLabel: UILabel!
+    var detailTextLabel: UILabel!
+    var imageView: UIImageView!
 
-    init(container: UIView, textLabel: UILabel, detailTextLabel: UILabel, imageView: UIImageView) {
+    // TODO: Not ideal. We should figure out a better way to get this initialized.
+    func setUpViews(container: UIView, textLabel: UILabel, detailTextLabel: UILabel, imageView: UIImageView) {
         self.container = container
         self.textLabel = textLabel
         self.detailTextLabel = detailTextLabel

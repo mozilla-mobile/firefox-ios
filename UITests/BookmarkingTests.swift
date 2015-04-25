@@ -24,12 +24,12 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
 
         // Bookmark it using the bookmark button
         tester().tapViewWithAccessibilityLabel("Bookmark")
-        let bookmarkButton = tester().waitForViewWithAccessibilityLabel("Bookmark") as UIButton
+        let bookmarkButton = tester().waitForViewWithAccessibilityLabel("Bookmark") as! UIButton
         XCTAssertTrue(bookmarkButton.selected, "Bookmark button is marked selected")
 
         // Load a different page in a new tab
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Add tab")
+        tester().tapViewWithAccessibilityLabel("Add Tab")
         tester().tapViewWithAccessibilityLabel("URL")
         let url2 = "\(webRoot)/?page=2"
         tester().clearTextFromAndThenEnterText("\(url2)\n", intoViewWithAccessibilityLabel: "Address and Search")
@@ -46,15 +46,8 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         // Check that it appears in the bookmarks home panel
         tester().tapViewWithAccessibilityLabel("URL")
         tester().tapViewWithAccessibilityLabel("Bookmarks")
-        let bookmarkRow = tester().waitForViewWithAccessibilityLabel("Page 1") as UITableViewCell
+        let bookmarkRow = tester().waitForViewWithAccessibilityLabel("Page 1") as! UITableViewCell
         XCTAssertNotNil(bookmarkRow.imageView?.image)
-
-        // Verify its got the correct icon in the panel
-        let img1 = UIImagePNGRepresentation(bookmarkRow.imageView?.image)
-        let img2 = UIImagePNGRepresentation(UIImage(named: "defaultFavicon"))
-        let img3 = UIImagePNGRepresentation(UIImage(named: "back"))
-        XCTAssertNotEqual(img1, img2)
-        XCTAssertEqual(img1, img3)
 
         // Tap to open it
         tester().tapViewWithAccessibilityLabel("Page 1")

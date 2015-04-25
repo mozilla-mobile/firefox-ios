@@ -47,7 +47,7 @@ protocol SearchViewControllerDelegate: class {
     func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL)
 }
 
-class SearchViewController: SiteTableViewController, UITableViewDelegate, KeyboardHelperDelegate {
+class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
     var searchDelegate: SearchViewControllerDelegate?
 
     private var suggestClient: SearchSuggestClient?
@@ -63,12 +63,16 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
 
     private var suggestionPrompt: UIView?
 
-    convenience override init() {
+    convenience init() {
         self.init(nibName: nil, bundle: nil)
     }
 
     required override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
 
     override func viewDidLoad() {
@@ -218,7 +222,6 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
 
     override func reloadData() {
         querySuggestClient()
-        queryHistoryClient()
     }
 
     private func layoutTable() {
@@ -236,9 +239,15 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
         for engine in searchEngines.quickSearchEngines {
             let engineButton = UIButton()
             engineButton.setImage(engine.image, forState: UIControlState.Normal)
+            engineButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
             engineButton.layer.backgroundColor = UIColor.whiteColor().CGColor
             engineButton.addTarget(self, action: "SELdidSelectEngine:", forControlEvents: UIControlEvents.TouchUpInside)
-            engineButton.accessibilityLabel = NSString(format: NSLocalizedString("%@ search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
+            engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
+
+            engineButton.imageView?.snp_makeConstraints { make in
+                make.width.height.equalTo(OpenSearchEngine.PreferredIconSize)
+                return
+            }
 
             searchEngineScrollViewContent.addSubview(engineButton)
             engineButton.snp_makeConstraints { make in
@@ -257,10 +266,11 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
     func SELdidSelectEngine(sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         for i in 0..<searchEngineScrollViewContent.subviews.count {
-            let button = searchEngineScrollViewContent.subviews[i] as UIButton
-            if button === sender {
-                if let url = searchEngines.quickSearchEngines[i].searchURLForQuery(searchQuery) {
-                    searchDelegate?.searchViewController(self, didSelectURL: url)
+            if let button = searchEngineScrollViewContent.subviews[i] as? UIButton {
+                if button === sender {
+                    if let url = searchEngines.quickSearchEngines[i].searchURLForQuery(searchQuery) {
+                        searchDelegate?.searchViewController(self, didSelectURL: url)
+                    }
                 }
             }
         }
@@ -334,77 +344,21 @@ class SearchViewController: SiteTableViewController, UITableViewDelegate, Keyboa
         })
     }
 
-    private func queryHistoryClient() {
-        if searchQuery.isEmpty {
-            data = Cursor(status: .Success, msg: "Empty query")
-            return
-        }
-
-        let options = QueryOptions()
-        options.sort = .LastVisit
-        options.filter = searchQuery
-
-        profile.history.get(options, complete: { (data: Cursor) -> Void in
-            self.data = data
-            if data.status != .Success {
-                println("Err: \(data.statusMessage)")
-            }
-            self.tableView.reloadData()
-        })
+    func loader(dataLoaded data: Cursor) {
+        self.data = data
+        tableView.reloadData()
     }
 }
 
-extension SearchViewController: UITableViewDataSource {
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch SearchListSection(rawValue: indexPath.section)! {
-        case .SearchSuggestions:
-            suggestionCell.imageView?.image = searchEngines.defaultEngine.image
-            return suggestionCell
-
-        case .BookmarksAndHistory:
-            let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
-            if let site = data[indexPath.row] as? Site {
-                (cell as TwoLineTableViewCell).setLines(site.title, detailText: site.url)
-                if let img = site.icon? {
-                    let imgUrl = NSURL(string: img.url)
-                    cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
-                } else {
-                    cell.imageView?.image = self.profile.favicons.defaultIcon
-                }
-            }
-            return cell
-        }
-    }
-
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch SearchListSection(rawValue: section)! {
-        case .SearchSuggestions:
-            return searchEngines.shouldShowSearchSuggestions ? 1 : 0
-        case .BookmarksAndHistory:
-            return data.count
-        }
-    }
-
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
-    }
-
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return SearchListSection.Count
-    }
-
+extension SearchViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var url: NSURL?
-
         let section = SearchListSection(rawValue: indexPath.section)!
         if section == SearchListSection.BookmarksAndHistory {
             if let site = data[indexPath.row] as? Site {
-                url = NSURL(string: site.url)
+                if let url = NSURL(string: site.url) {
+                    searchDelegate?.searchViewController(self, didSelectURL: url)
+                }
             }
-        }
-
-        if let url = url {
-            searchDelegate?.searchViewController(self, didSelectURL: url)
         }
     }
 
@@ -422,6 +376,48 @@ extension SearchViewController: UITableViewDataSource {
         }
 
         return 0
+    }
+
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
+    }
+}
+
+extension SearchViewController: UITableViewDataSource {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        switch SearchListSection(rawValue: indexPath.section)! {
+        case .SearchSuggestions:
+            suggestionCell.imageView?.image = searchEngines.defaultEngine.image
+            return suggestionCell
+
+        case .BookmarksAndHistory:
+            let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+            if let site = data[indexPath.row] as? Site {
+                if let cell = cell as? TwoLineTableViewCell {
+                    cell.setLines(site.title, detailText: site.url)
+                    if let img = site.icon {
+                        let imgUrl = NSURL(string: img.url)
+                        cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
+                    } else {
+                        cell.imageView?.image = self.profile.favicons.defaultIcon
+                    }
+                }
+            }
+            return cell
+        }
+    }
+
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch SearchListSection(rawValue: section)! {
+        case .SearchSuggestions:
+            return searchEngines.shouldShowSearchSuggestions ? 1 : 0
+        case .BookmarksAndHistory:
+            return data.count
+        }
+    }
+
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return SearchListSection.Count
     }
 }
 
@@ -472,7 +468,7 @@ private class SuggestionCell: UITableViewCell {
     }
 
     required init(coder aDecoder: NSCoder) {
-        assertionFailure("Not supported")
+        fatalError("init(coder:) has not been implemented")
     }
 
     var suggestions: [String] = [] {
@@ -522,7 +518,7 @@ private class SuggestionCell: UITableViewCell {
         var currentRow = 0
 
         for view in container.subviews {
-            let button = view as UIButton
+            let button = view as! UIButton
             var buttonSize = button.intrinsicContentSize()
 
             if height == 0 {
@@ -570,10 +566,6 @@ private class SuggestionCell: UITableViewCell {
  * Rounded search suggestion button that highlights when selected.
  */
 private class SuggestionButton: InsetButton {
-    override init() {
-        super.init()
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -587,7 +579,7 @@ private class SuggestionButton: InsetButton {
     }
 
     required init(coder aDecoder: NSCoder) {
-        assertionFailure("Not supported")
+        fatalError("init(coder:) has not been implemented")
     }
 
     @objc
@@ -595,29 +587,5 @@ private class SuggestionButton: InsetButton {
         didSet {
             backgroundColor = highlighted ? UIColor.grayColor() : SuggestionBackgroundColor
         }
-    }
-}
-
-/**
- * Button whose insets are included in its intrinsic size.
- */
-private class InsetButton: UIButton {
-    override init() {
-        super.init()
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        assertionFailure("Not supported")
-    }
-
-    private override func intrinsicContentSize() -> CGSize {
-        var size = super.intrinsicContentSize()
-        size.width += titleEdgeInsets.left + titleEdgeInsets.right
-        size.height += titleEdgeInsets.top + titleEdgeInsets.bottom
-        return size
     }
 }

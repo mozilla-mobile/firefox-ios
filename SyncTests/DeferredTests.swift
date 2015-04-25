@@ -40,4 +40,31 @@ class DeferredTests: XCTestCase {
         d.fill(5)
         waitForExpectationsWithTimeout(10, handler: nil)
     }
+
+    func testOperators() {
+        let e1 = self.expectationWithDescription("First.")
+        let e2 = self.expectationWithDescription("Second.")
+
+        let f1: () -> Deferred<Result<Int>> = {
+            return deferResult(5)
+        }
+
+        let f2: (x: Int) -> Deferred<Result<String>> = {
+            if $0 == 5 {
+                e1.fulfill()
+            }
+            return deferResult("Hello!")
+        }
+
+        // Type signatures:
+        let combined: () -> Deferred<Result<String>> = { f1() >>== f2 }
+        let result: Deferred<Result<String>> = combined()
+
+        result.upon {
+            XCTAssertEqual("Hello!", $0.successValue!)
+            e2.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(10, handler: nil)
+    }
 }

@@ -7,20 +7,16 @@ import UIKit
 
 protocol BrowserLocationViewDelegate {
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView)
+    func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView)
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView)
-    func browserLocationViewDidTapStop(browserLocationView: BrowserLocationView)
-    func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView)
+    func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView)
 }
-
-let ImageReload = UIImage(named: "toolbar_reload.png")
-let ImageStop = UIImage(named: "toolbar_stop.png")
 
 class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     var delegate: BrowserLocationViewDelegate?
 
     private var lockImageView: UIImageView!
     private var locationLabel: UILabel!
-    private var stopReloadButton: UIButton!
     private var readerModeButton: ReaderModeButton!
     var readerModeButtonWidthConstraint: NSLayoutConstraint?
 
@@ -47,15 +43,17 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocationLabel:")
         locationLabel.addGestureRecognizer(tapGestureRecognizer)
 
-        stopReloadButton = UIButton()
-        stopReloadButton.setImage(ImageReload, forState: .Normal)
-        stopReloadButton.addTarget(self, action: "SELtapStopReload", forControlEvents: .TouchUpInside)
-        addSubview(stopReloadButton)
+        // Long press gesture recognizer (for URL bar copying/pasting without entering editing mode)
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "SELlongPressLocationLabel:")
+        locationLabel.addGestureRecognizer(longPressGestureRecognizer)
 
         readerModeButton = ReaderModeButton(frame: CGRectZero)
         readerModeButton.hidden = true
         readerModeButton.addTarget(self, action: "SELtapReaderModeButton", forControlEvents: .TouchUpInside)
+        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "SELlongPressReaderModeButton:"))
         addSubview(readerModeButton)
+        readerModeButton.isAccessibilityElement = true
+        readerModeButton.accessibilityLabel = NSLocalizedString("Reader Mode", comment: "Accessibility label for the reader mode button")
     }
 
     override func updateConstraints() {
@@ -78,21 +76,15 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
             }
 
             if self.readerModeButton.readerModeState == ReaderModeState.Unavailable {
-                make.trailing.equalTo(self.stopReloadButton.snp_leading).with.offset(-8)
+                make.trailing.equalTo(self).with.offset(-8)
             } else {
                 make.trailing.equalTo(self.readerModeButton.snp_leading).with.offset(-8)
             }
         }
 
-        stopReloadButton.snp_remakeConstraints { make in
-            make.centerY.equalTo(container).centerY
-            make.trailing.equalTo(container).with.offset(-4)
-            make.size.equalTo(20)
-        }
-
         readerModeButton.snp_remakeConstraints { make in
             make.centerY.equalTo(container).centerY
-            make.trailing.equalTo(self.stopReloadButton.snp_leading).offset(-4)
+            make.trailing.equalTo(self.snp_trailing).offset(-4)
 
             // We fix the width of the button (to the height of the view) to prevent content
             // compression when the locationLabel has more text contents than will fit. It
@@ -114,15 +106,19 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         delegate?.browserLocationViewDidTapLocation(self)
     }
 
+    func SELlongPressLocationLabel(recognizer: UILongPressGestureRecognizer) {
+        if (recognizer.state == UIGestureRecognizerState.Began) {
+            delegate?.browserLocationViewDidLongPressLocation(self)
+        }
+    }
+
     func SELtapReaderModeButton() {
         delegate?.browserLocationViewDidTapReaderMode(self)
     }
 
-    func SELtapStopReload() {
-        if loading {
-            delegate?.browserLocationViewDidTapStop(self)
-        } else {
-            delegate?.browserLocationViewDidTapReload(self)
+    func SELlongPressReaderModeButton(recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == UIGestureRecognizerState.Began {
+            delegate?.browserLocationViewDidLongPressReaderMode(self)
         }
     }
 
@@ -141,16 +137,6 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
                 locationLabel.text = t
             }
             setNeedsUpdateConstraints()
-        }
-    }
-
-    var loading: Bool = false {
-        didSet {
-            if loading {
-                stopReloadButton.setImage(ImageStop, forState: .Normal)
-            } else {
-                stopReloadButton.setImage(ImageReload, forState: .Normal)
-            }
         }
     }
 

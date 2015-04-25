@@ -47,7 +47,7 @@ class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityBrowse
 
             // Load the page in the webview. This either fails with a navigation error, or we get a readability
             // callback. Or it takes too long, in which case the semaphore times out.
-            
+
             self.browser.loadRequest(NSURLRequest(URL: self.url))
         })
 

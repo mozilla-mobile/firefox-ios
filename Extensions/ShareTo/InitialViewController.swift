@@ -12,12 +12,12 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     var shareDialogController: ShareDialogController!
 
     lazy var profile: Profile = {
-        return BrowserProfile(localName: "profile")
+        return BrowserProfile(localName: "profile", app: nil)
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor(white: 0.75, alpha: 0.65) // TODO: Is the correct color documented somewhere?
+        self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.66) // TODO: Is the correct color documented somewhere?
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -67,9 +67,10 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     
     //
     
+    // TODO: use Set.
     func getLastUsedShareDestinations() -> NSSet {
         if let destinations = NSUserDefaults.standardUserDefaults().objectForKey(LastUsedShareDestinationsKey) as? NSArray {
-            return NSSet(array: destinations)
+            return NSSet(array: destinations as [AnyObject])
         }
         return NSSet(object: ShareDestinationBookmarks)
     }
@@ -96,7 +97,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         let views: NSDictionary = ["dialog": shareDialogController.view]
         
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(16@751)-[dialog(<=380@1000)]-(16@751)-|",
-            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views as [NSObject : AnyObject]))
         
         let cx = NSLayoutConstraint(item: shareDialogController.view, attribute: NSLayoutAttribute.CenterX,
             relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
@@ -123,7 +124,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
     //
     
     func shareToReadingList(item: ShareItem) {
-        profile.readingList.shareItem(item)
+        profile.readingList?.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.currentDevice().name)
     }
     
     func shareToBookmarks(item: ShareItem) {

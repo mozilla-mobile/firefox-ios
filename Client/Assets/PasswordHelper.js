@@ -7,39 +7,14 @@
 "use strict";
 
 var gEnabled = true;
-var gStoreWhenAutocompleteOff = false;
+var gStoreWhenAutocompleteOff = true;
 var gAutofillForms = true;
-var gDebug = false
+var gDebug = false;
 
 function log(pieces) {
-  function generateLogMessage(args) {
-    var strings = ['Login Manager (content):'];
-
-    args.forEach(function(arg) {
-      if (typeof arg === 'string') {
-        strings.push(arg);
-      } else if (typeof arg === 'undefined') {
-        strings.push('undefined');
-      } else if (arg === null) {
-        strings.push('null');
-      } else {
-        try {
-          strings.push(JSON.stringify(arg, null, 2));
-        } catch(err) {
-          strings.push("<<something>>");
-        }
-      }
-    });
-    return strings.join(' ');
-  }
-
   if (!gDebug)
     return;
-
-  var message = generateLogMessage(pieces);
-  // Turn off logging, since its visible to the page
-  // dump(message + "\n");
-  // console.log(message);
+  alert(pieces);
 }
 
 var LoginManagerContent = {
@@ -634,16 +609,16 @@ window.addEventListener("load", function(event) {
     }
   } catch(ex) {
     // Eat errors to avoid leaking them to the page
-    // alert(ex);
+    log(ex);
   }
 })
 
 window.addEventListener("submit", function(event) {
   try {
-    LoginManagerContent._onFormSubmit(document.forms[0]);
+    LoginManagerContent._onFormSubmit(event.target);
   } catch(ex) {
     // Eat errors to avoid leaking them to the page
-    // alert(ex);
+    log(ex);
   }
 });
 
