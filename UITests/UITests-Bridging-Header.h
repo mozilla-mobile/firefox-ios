@@ -6,6 +6,7 @@
 #define Client_UITests_Bridging_Header_h
 
 #import <KIF/KIF.h>
+#import <KIF/KIFUITestActor-IdentifierTests.h>
 #import "GCDWebServer.h"
 #import "GCDWebServerDataResponse.h"
 
