@@ -36,8 +36,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         locationLabel.lineBreakMode = .ByClipping
         locationLabel.userInteractionEnabled = true
         locationLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        // TODO: This label isn't useful for people. We probably want this to be the page title or URL (see Safari).
-        locationLabel.accessibilityLabel = NSLocalizedString("URL", comment: "Accessibility label for the URL location label")
+        locationLabel.accessibilityIdentifier = "url"
         addSubview(locationLabel)
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocationLabel:")

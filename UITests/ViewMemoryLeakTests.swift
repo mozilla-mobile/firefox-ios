@@ -17,7 +17,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
 
     override func tearDown() {
         // Go back to about:home to reset the UI state between tests.
-        tester().tapViewWithAccessibilityLabel("URL")
+        tester().tapViewWithAccessibilityIdentifier("url")
         let url = "about:home\n"
         tester().clearTextFromAndThenEnterText(url, intoViewWithAccessibilityLabel: "Address and Search")
     }
@@ -28,7 +28,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         weak var aboutHomeController = getChildViewController(browserViewController, childClass: "HomePanelViewController")
 
         // Change the page to make about:home go away.
-        tester().tapViewWithAccessibilityLabel("URL")
+        tester().tapViewWithAccessibilityLabel("Search or enter address")
         let url = "\(webRoot)/?page=1"
         tester().clearTextFromAndThenEnterText("\(url)\n", intoViewWithAccessibilityLabel: "Address and Search")
 
@@ -40,7 +40,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
 
     func testSearchViewControllerDisposed() {
         // Type the URL to make the search controller appear.
-        tester().tapViewWithAccessibilityLabel("URL")
+        tester().tapViewWithAccessibilityLabel("Search or enter address")
         let url = "\(webRoot)/?page=1"
         tester().clearTextFromAndThenEnterText(url, intoViewWithAccessibilityLabel: "Address and Search")
         let browserViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!

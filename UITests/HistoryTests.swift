@@ -17,19 +17,19 @@ class HistoryTests: KIFTestCase {
      */
     func testHistoryUI() {
         // Load a page
-        tester().tapViewWithAccessibilityLabel("URL")
+        tester().tapViewWithAccessibilityIdentifier("url")
         let url1 = "\(webRoot)/?page=1"
         tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Load a different page
-        tester().tapViewWithAccessibilityLabel("URL")
+        tester().tapViewWithAccessibilityIdentifier("url")
         let url2 = "\(webRoot)/?page=2"
         tester().clearTextFromAndThenEnterText("\(url2)\n", intoViewWithAccessibilityLabel: "Address and Search")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
 
         // Check that both appear in the history home panel
-        tester().tapViewWithAccessibilityLabel("URL")
+        tester().tapViewWithAccessibilityIdentifier("url")
         tester().tapViewWithAccessibilityLabel("History")
 
         let firstHistoryRow = tester().waitForViewWithAccessibilityLabel("Page 1, \(url1)") as! UITableViewCell

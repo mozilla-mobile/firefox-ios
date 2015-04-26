@@ -17,7 +17,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
      */
     func testBookmarkingUI() {
         // Load a page
-        tester().tapViewWithAccessibilityLabel("URL")
+        tester().tapViewWithAccessibilityLabel("Search or enter address")
         let url1 = "\(webRoot)/?page=1"
         tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
@@ -30,7 +30,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         // Load a different page in a new tab
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Add Tab")
-        tester().tapViewWithAccessibilityLabel("URL")
+        tester().tapViewWithAccessibilityLabel("Search or enter address")
         let url2 = "\(webRoot)/?page=2"
         tester().clearTextFromAndThenEnterText("\(url2)\n", intoViewWithAccessibilityLabel: "Address and Search")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
@@ -44,7 +44,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertTrue(bookmarkButton.selected, "Bookmark button is marked selected")
 
         // Check that it appears in the bookmarks home panel
-        tester().tapViewWithAccessibilityLabel("URL")
+        tester().tapViewWithAccessibilityIdentifier("url")
         tester().tapViewWithAccessibilityLabel("Bookmarks")
         let bookmarkRow = tester().waitForViewWithAccessibilityLabel("Page 1") as! UITableViewCell
         XCTAssertNotNil(bookmarkRow.imageView?.image)
@@ -58,7 +58,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertFalse(bookmarkButton.selected, "Bookmark button is not selected")
 
         // Check that it no longer appears in the bookmarks home panel
-        tester().tapViewWithAccessibilityLabel("URL")
+        tester().tapViewWithAccessibilityIdentifier("url")
         tester().tapViewWithAccessibilityLabel("Bookmarks")
         tester().waitForAbsenceOfViewWithAccessibilityLabel("Page 1")
         tester().tapViewWithAccessibilityLabel("Cancel")
