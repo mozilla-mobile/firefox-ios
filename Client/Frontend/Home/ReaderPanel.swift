@@ -60,8 +60,12 @@ class ReadingListTableViewCell: SWTableViewCell {
             titleLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
             hostnameLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
             markAsReadButton.setTitle(unread ? ReadingListTableViewCellUX.MarkAsReadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText, forState: UIControlState.Normal)
+            markAsReadAction.name = markAsReadButton.titleLabel!.text
         }
     }
+
+    private let deleteAction: UIAccessibilityCustomAction
+    private let markAsReadAction: UIAccessibilityCustomAction
 
     let readStatusImageView: UIImageView!
     let titleLabel: UILabel!
@@ -75,6 +79,8 @@ class ReadingListTableViewCell: SWTableViewCell {
         hostnameLabel = UILabel()
         deleteButton = UIButton()
         markAsReadButton = UIButton()
+        deleteAction = UIAccessibilityCustomAction()
+        markAsReadAction = UIAccessibilityCustomAction()
 
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -117,6 +123,9 @@ class ReadingListTableViewCell: SWTableViewCell {
         deleteButton.setTitle(ReadingListTableViewCellUX.DeleteButtonTitleText, forState: UIControlState.Normal)
         deleteButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         deleteButton.titleEdgeInsets = ReadingListTableViewCellUX.DeleteButtonTitleEdgeInsets
+        deleteAction.name = deleteButton.titleLabel!.text
+        deleteAction.target = self
+        deleteAction.selector = "deleteActionActivated"
         rightUtilityButtons = [deleteButton]
 
         markAsReadButton.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
@@ -127,7 +136,12 @@ class ReadingListTableViewCell: SWTableViewCell {
         markAsReadButton.setTitle(ReadingListTableViewCellUX.MarkAsReadButtonTitleText, forState: UIControlState.Normal)
         markAsReadButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         markAsReadButton.titleEdgeInsets = ReadingListTableViewCellUX.MarkAsReadButtonTitleEdgeInsets
+        markAsReadAction.name = markAsReadButton.titleLabel!.text
+        markAsReadAction.target = self
+        markAsReadAction.selector = "markAsReadActionActivated"
         leftUtilityButtons = [markAsReadButton]
+
+        accessibilityCustomActions = [deleteAction, markAsReadAction]
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -144,6 +158,16 @@ class ReadingListTableViewCell: SWTableViewCell {
             }
         }
         return hostname
+    }
+
+    @objc private func markAsReadActionActivated() -> Bool {
+        self.delegate?.swipeableTableViewCell?(self, didTriggerLeftUtilityButtonWithIndex: 0)
+        return true
+    }
+
+    @objc private func deleteActionActivated() -> Bool {
+        self.delegate?.swipeableTableViewCell?(self, didTriggerRightUtilityButtonWithIndex: 0)
+        return true
     }
 }
 
