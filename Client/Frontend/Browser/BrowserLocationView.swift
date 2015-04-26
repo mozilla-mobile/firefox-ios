@@ -37,6 +37,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         locationLabel.userInteractionEnabled = true
         locationLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         locationLabel.accessibilityIdentifier = "url"
+        locationLabel.accessibilityTraits |= UIAccessibilityTraitButton
         addSubview(locationLabel)
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocationLabel:")
