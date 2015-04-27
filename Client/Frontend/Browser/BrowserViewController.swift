@@ -845,7 +845,7 @@ extension BrowserViewController: TabManagerDelegate {
         tab.addHelper(longPressBrowserHelper, name: LongPressBrowserHelper.name())
     }
 
-    func tabManager(tabManager: TabManager, didAddTab tab: Browser) {
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int) {
         urlBar.updateTabCount(tabManager.count)
 
         webViewContainer.insertSubview(tab.webView, atIndex: 0)
@@ -866,7 +866,7 @@ extension BrowserViewController: TabManagerDelegate {
         tab.webView.scrollView.delegate = self
     }
 
-    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser) {
+    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex: Int) {
         urlBar.updateTabCount(tabManager.count)
 
         tab.webView.removeObserver(self, forKeyPath: KVOEstimatedProgress)
