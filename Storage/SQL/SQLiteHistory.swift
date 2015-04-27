@@ -7,7 +7,7 @@ import Foundation
 /**
  * The sqlite-backed implementation of the history protocol.
  */
-public class SQLiteHistory : History {
+public class SQLiteHistory : BrowserHistory {
     let db: BrowserDB
     private let table = JoinedHistoryVisitsTable()
     private var ignoredSchemes = ["about"]

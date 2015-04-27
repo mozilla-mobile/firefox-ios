@@ -4,7 +4,7 @@ import Storage
 
 class TestHistory : ProfileTest {
 
-    private func innerAddSite(history: History, url: String, title: String, callback: (success: Bool) -> Void) {
+    private func innerAddSite(history: BrowserHistory, url: String, title: String, callback: (success: Bool) -> Void) {
         // Add an entry
         let site = Site(url: url, title: title)
         let visit = Visit(site: site, date: NSDate())
@@ -13,7 +13,7 @@ class TestHistory : ProfileTest {
         }
     }
 
-    private func addSite(history: History, url: String, title: String, s: Bool = true) {
+    private func addSite(history: BrowserHistory, url: String, title: String, s: Bool = true) {
         let expectation = self.expectationWithDescription("Wait for history")
         innerAddSite(history, url: url, title: title) { success in
             XCTAssertEqual(success, s, "Site added \(url)")
@@ -21,7 +21,7 @@ class TestHistory : ProfileTest {
         }
     }
 
-    private func innerCheckSites(history: History, callback: (cursor: Cursor) -> Void) {
+    private func innerCheckSites(history: BrowserHistory, callback: (cursor: Cursor) -> Void) {
         // Retrieve the entry
         history.get(nil, complete: { cursor in
             callback(cursor: cursor)
@@ -29,7 +29,7 @@ class TestHistory : ProfileTest {
     }
 
 
-    private func checkSites(history: History, urls: [String: String], s: Bool = true) {
+    private func checkSites(history: BrowserHistory, urls: [String: String], s: Bool = true) {
         let expectation = self.expectationWithDescription("Wait for history")
 
         // Retrieve the entry
@@ -50,13 +50,13 @@ class TestHistory : ProfileTest {
         self.waitForExpectationsWithTimeout(100, handler: nil)
     }
 
-    private func innerClear(history: History, callback: (s: Bool) -> Void) {
+    private func innerClear(history: BrowserHistory, callback: (s: Bool) -> Void) {
         history.clear({ success in
             callback(s: success)
         })
     }
 
-    private func clear(history: History, s: Bool = true) {
+    private func clear(history: BrowserHistory, s: Bool = true) {
         let expectation = self.expectationWithDescription("Wait for history")
 
         innerClear(history) { success in
@@ -67,7 +67,7 @@ class TestHistory : ProfileTest {
         self.waitForExpectationsWithTimeout(100, handler: nil)
     }
 
-    private func checkVisits(history: History, url: String) {
+    private func checkVisits(history: BrowserHistory, url: String) {
         let expectation = self.expectationWithDescription("Wait for history")
         history.get(nil) { cursor in
             let options = QueryOptions()
@@ -188,8 +188,8 @@ class TestHistory : ProfileTest {
     }
 
 
-    // Runs a random command on a database. Calls cb when finished
-    private func runRandom(inout history: History, cmdIn: Int, cb: () -> Void) {
+    // Runs a random command on a database. Calls cb when finished.
+    private func runRandom(inout history: BrowserHistory, cmdIn: Int, cb: () -> Void) {
         var cmd = cmdIn
         if cmd < 0 {
             cmd = Int(rand() % 5)
@@ -212,9 +212,9 @@ class TestHistory : ProfileTest {
         }
     }
 
-    // Calls numCmds random methods on this database. val is a counter used by this interally (i.e. always pass zero for it)
-    // Calls cb when finished
-    private func runMultiRandom(inout history: History, val: Int, numCmds: Int, cb: () -> Void) {
+    // Calls numCmds random methods on this database. val is a counter used by this interally (i.e. always pass zero for it).
+    // Calls cb when finished.
+    private func runMultiRandom(inout history: BrowserHistory, val: Int, numCmds: Int, cb: () -> Void) {
         if val == numCmds {
             cb()
             return
@@ -225,8 +225,8 @@ class TestHistory : ProfileTest {
         }
     }
 
-    // Helper for starting a new thread running NumCmds random methods on it. Calls cb when done
-    private func runRandom(inout history: History, queue: dispatch_queue_t, cb: () -> Void) {
+    // Helper for starting a new thread running NumCmds random methods on it. Calls cb when done.
+    private func runRandom(inout history: BrowserHistory, queue: dispatch_queue_t, cb: () -> Void) {
         dispatch_async(queue) {
             // Each thread creates its own history provider
             self.runMultiRandom(&history, val: 0, numCmds: self.NumCmds) { _ in

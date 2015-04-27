@@ -17,10 +17,10 @@ typealias SearchLoader = _SearchLoader<AnyObject, AnyObject>
  * Since both of these use the same SQL query, we can perform the query once and dispatch the results.
  */
 class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor, SearchViewController> {
-    private let history: History
+    private let history: BrowserHistory
     private let urlBar: URLBarView
 
-    init(history: History, urlBar: URLBarView) {
+    init(history: BrowserHistory, urlBar: URLBarView) {
         self.history = history
         self.urlBar = urlBar
         super.init()
