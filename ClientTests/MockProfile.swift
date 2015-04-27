@@ -42,7 +42,7 @@ public class MockProfile: Profile {
         return SQLiteFavicons(db: self.db)
         }()
 
-    lazy var history: History = {
+    lazy var history: BrowserHistory = {
         return SQLiteHistory(db: self.db)
         }()
 

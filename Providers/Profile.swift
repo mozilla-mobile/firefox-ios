@@ -92,7 +92,7 @@ protocol Profile {
     var prefs: Prefs { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
-    var history: History { get }
+    var history: BrowserHistory { get }   // TODO: protocol<BrowserHistory, SyncableHistory>.
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
     var passwords: Passwords { get }
@@ -182,7 +182,7 @@ public class BrowserProfile: Profile {
         return self.makePrefs()
     }()
 
-    lazy var history: History = {
+    lazy var history: BrowserHistory = {
         return SQLiteHistory(db: self.db)
     }()
 
