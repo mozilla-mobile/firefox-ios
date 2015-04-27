@@ -125,7 +125,12 @@ class TabManager : NSObject {
         }
     }
 
+    // This method is duplicated to hide the flushToDisk option from consumers.
     func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Browser {
+        return self.addTab(request: request, configuration: configuration, flushToDisk: true)
+    }
+
+    func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool) -> Browser {
         assert(NSThread.isMainThread())
         if request == nil {
             request = defaultNewTabRequest
@@ -139,8 +144,9 @@ class TabManager : NSObject {
         tab.loadRequest(request)
         selectTab(tab)
 
-        let storedTabs: [RemoteTab] = tabs.map(Browser.toTab)
-        storage?.insertOrUpdateTabsForClientGUID(nil, tabs: storedTabs)
+        if flushToDisk {
+        	storeChanges()
+        }
 
         return tab
     }
@@ -155,7 +161,12 @@ class TabManager : NSObject {
         }
     }
 
+    // This method is duplicated to hide the flushToDisk option from consumers.
     func removeTab(tab: Browser) {
+        self.removeTab(tab, flushToDisk: true)
+    }
+
+    private func removeTab(tab: Browser, flushToDisk: Bool) {
         assert(NSThread.isMainThread())
         // If the removed tab was selected, find the new tab to select.
         if tab === selectedTab {
@@ -184,14 +195,19 @@ class TabManager : NSObject {
         for delegate in delegates {
             delegate.get()?.tabManager(self, didRemoveTab: tab, atIndex: index)
         }
-        storage?.insertOrUpdateTabsForClientGUID(nil, tabs: tabs.map(Browser.toTab))
+
+        if flushToDisk {
+        	storeChanges()
+        }
     }
 
     func removeAll() {
         let tabs = self.tabs
+
         for tab in tabs {
-            removeTab(tab)
+            self.removeTab(tab, flushToDisk: false)
         }
+        storeChanges()
     }
 
     func getIndex(tab: Browser) -> Int {
@@ -203,6 +219,11 @@ class TabManager : NSObject {
         
         assertionFailure("Tab not in tabs list")
         return -1
+    }
+
+    private func storeChanges() {
+        let storedTabs: [RemoteTab] = tabs.map(Browser.toTab)
+        storage?.insertOrUpdateTabsForClientGUID(nil, tabs: storedTabs)
     }
 }
 
@@ -218,18 +239,21 @@ extension TabManager {
 
     func decodeRestorableStateWithCoder(coder: NSCoder) {
         let count: Int = coder.decodeIntegerForKey("tabCount")
+
         for i in 0..<count {
             let url = coder.decodeObjectForKey("tab-\(i)-url") as! NSURL
-            addTab(request: NSURLRequest(URL: url))
+            self.addTab(request: NSURLRequest(URL: url), flushToDisk: false)
         }
+
         let selectedIndex: Int = coder.decodeIntegerForKey("selectedIndex")
-        self.selectTab(tabs[selectedIndex])
+        self.selectTab(self.tabs[selectedIndex])
+        storeChanges()
     }
 }
 
 extension TabManager : WKNavigationDelegate {
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        storage?.insertOrUpdateTabsForClientGUID(nil, tabs: tabs.map(Browser.toTab))
+        storeChanges()
     }
 }
 
