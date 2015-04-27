@@ -173,7 +173,22 @@ private class DisconnectSetting: WithAccountSetting {
 
 // Sync setting that shows the current Firefox Account status.
 private class AccountStatusSetting: WithAccountSetting {
-    override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
+    override var accessoryType: UITableViewCellAccessoryType {
+        if let account = profile.getAccount() {
+            switch account.actionNeeded {
+            case .NeedsVerification:
+                // We link to the resend verification email page.
+                return .DisclosureIndicator
+            case .NeedsPassword:
+                 // We link to the re-enter password page.
+                return .DisclosureIndicator
+            case .None, .NeedsUpgrade:
+                // In future, we'll want to link to /settings and an upgrade page, respectively.
+                return .None
+            }
+        }
+        return .DisclosureIndicator
+    }
 
     override var title: NSAttributedString? {
         if let account = profile.getAccount() {
@@ -217,7 +232,7 @@ private class AccountStatusSetting: WithAccountSetting {
 
         if let account = profile.getAccount() {
             switch account.actionNeeded {
-            case .None, .NeedsVerification:
+            case .NeedsVerification:
                 let cs = NSURLComponents(URL: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(NSURLQueryItem(name: "email", value: account.email))
                 viewController.url = cs?.URL
@@ -225,8 +240,8 @@ private class AccountStatusSetting: WithAccountSetting {
                 let cs = NSURLComponents(URL: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(NSURLQueryItem(name: "email", value: account.email))
                 viewController.url = cs?.URL
-            case .NeedsUpgrade:
-                // In future, we'll want to link to an upgrade page.
+            case .None, .NeedsUpgrade:
+                // In future, we'll want to link to /settings and an upgrade page, respectively.
                 return
             }
         }
