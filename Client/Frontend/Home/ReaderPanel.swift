@@ -88,6 +88,8 @@ class ReadingListTableViewCell: SWTableViewCell {
 
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        backgroundColor = UIColor.clearColor()
+
         separatorInset = UIEdgeInsetsZero
         layoutMargins = UIEdgeInsetsZero
         preservesSuperviewLayoutMargins = false
@@ -208,6 +210,8 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.registerClass(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
+
+        view.backgroundColor = AppConstants.PanelBackgroundColor
     }
 
     override func viewWillAppear(animated: Bool) {

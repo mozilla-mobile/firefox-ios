@@ -9,8 +9,8 @@ import UIKit
 private struct HomePanelViewControllerUX {
     // Height of the top panel switcher button toolbar.
     static let ButtonContainerHeight: CGFloat = 40
-    static let ButtonContainerBorderColor = UIColor(rgb: 0xcccccc)
-    static let BackgroundColor = UIColor.whiteColor()
+    static let ButtonContainerBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
+    static let BackgroundColor = AppConstants.PanelBackgroundColor
 }
 
 protocol HomePanelViewControllerDelegate: class {
@@ -42,6 +42,9 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     override func viewDidLoad() {
         view.backgroundColor = HomePanelViewControllerUX.BackgroundColor
 
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light))
+        view.addSubview(blur)
+
         buttonContainerView = UIView()
         buttonContainerView.backgroundColor = HomePanelViewControllerUX.BackgroundColor
         view.addSubview(buttonContainerView)
@@ -52,6 +55,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
         controllerContainerView = UIView()
         view.addSubview(controllerContainerView)
+
+        blur.snp_makeConstraints { make in
+            make.edges.equalTo(self.view)
+        }
 
         buttonContainerView.snp_makeConstraints { make in
             make.top.left.right.equalTo(self.view)

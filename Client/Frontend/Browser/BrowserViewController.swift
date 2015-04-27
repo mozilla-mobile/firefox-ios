@@ -203,22 +203,32 @@ class BrowserViewController: UIViewController {
             homePanelController!.profile = profile
             homePanelController!.delegate = self
             homePanelController!.url = tabManager.selectedTab?.displayURL
-
+            homePanelController!.view.alpha = 0
             view.addSubview(homePanelController!.view)
+
+            UIView.animateWithDuration(0.2, animations: { () -> Void in
+                    self.homePanelController!.view.alpha = 1
+                }, completion: { _ in
+                    self.webViewContainer.accessibilityElementsHidden = true
+            })
+
             addChildViewController(homePanelController!)
         }
-        webViewContainer.hidden = true
         toolbar?.hidden = !inline
         view.setNeedsUpdateConstraints()
     }
 
     private func hideHomePanelController() {
         if let controller = homePanelController {
-            controller.view.removeFromSuperview()
-            controller.removeFromParentViewController()
-            homePanelController = nil
-            webViewContainer.hidden = false
-            toolbar?.hidden = false
+            UIView.animateWithDuration(0.2, animations: { () -> Void in
+                    controller.view.alpha = 0
+                }, completion: { _ in
+                    controller.view.removeFromSuperview()
+                    controller.removeFromParentViewController()
+                    self.homePanelController = nil
+                    self.webViewContainer.accessibilityElementsHidden = false
+                    self.toolbar?.hidden = false
+                })
         }
     }
 

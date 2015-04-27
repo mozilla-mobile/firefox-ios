@@ -21,4 +21,7 @@ public struct AppConstants {
     // These highlight colors are currently only used on Snackbar buttons when they're pressed
     static let HighlightColor = UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9)
     static let HighlightText = UIColor(red: 42/255, green: 121/255, blue: 213/255, alpha: 1.0)
+
+    static let PanelBackgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
+    static let HighlightBlue = UIColor(red:0.3, green:0.62, blue:1, alpha:1)
 }

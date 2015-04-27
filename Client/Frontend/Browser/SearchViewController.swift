@@ -6,17 +6,17 @@ import UIKit
 import Shared
 import Storage
 
-private let SuggestionBackgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
-private let SuggestionBorderColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1)
-private let SuggestionBorderWidth: CGFloat = 0.5
-private let SuggestionCornerRadius: CGFloat = 2
-private let SuggestionFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 12)
-private let SuggestionInsets = UIEdgeInsetsMake(5, 5, 5, 5)
-private let SuggestionMargin: CGFloat = 4
-private let SuggestionCellVerticalPadding: CGFloat = 8
+private let SuggestionBackgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8)
+private let SuggestionBorderColor = AppConstants.HighlightBlue
+private let SuggestionBorderWidth: CGFloat = 1
+private let SuggestionCornerRadius: CGFloat = 4
+private let SuggestionFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 13)
+private let SuggestionInsets = UIEdgeInsetsMake(8, 8, 8, 8)
+private let SuggestionMargin: CGFloat = 8
+private let SuggestionCellVerticalPadding: CGFloat = 10
 private let SuggestionCellMaxRows = 2
 
-private let PromptColor = UIColor(rgb: 0xeef0f3)
+private let PromptColor = AppConstants.PanelBackgroundColor
 private let PromptFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 12)
 private let PromptYesFont = UIFont(name: "HelveticaNeue-Bold", size: 15)
 private let PromptNoFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 15)
@@ -76,6 +76,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func viewDidLoad() {
+
+        view.backgroundColor = AppConstants.PanelBackgroundColor
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light))
+        view.addSubview(blur)
+
         super.viewDidLoad()
 
         KeyboardHelper.defaultHelper.addDelegate(self)
@@ -95,6 +100,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             make.left.greaterThanOrEqualTo(self.searchEngineScrollView).priorityHigh()
             make.right.lessThanOrEqualTo(self.searchEngineScrollView).priorityHigh()
             make.top.bottom.equalTo(self.searchEngineScrollView)
+        }
+
+        blur.snp_makeConstraints { make in
+            make.edges.equalTo(self.view)
         }
 
         suggestionCell.delegate = self
@@ -129,14 +138,16 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private func layoutSuggestionsOptInPrompt() {
         if !(searchEngines?.shouldShowSearchSuggestionsOptIn ?? false) {
             view.layoutIfNeeded()
+            let prompt = suggestionPrompt
             suggestionPrompt = nil
             layoutTable()
             UIView.animateWithDuration(0.2,
                 animations: {
                     self.view.layoutIfNeeded()
+                    prompt?.alpha = 0
                 },
                 completion: { _ in
-                    self.suggestionPrompt?.removeFromSuperview()
+                    prompt?.removeFromSuperview()
                     return
                 })
             return
@@ -144,6 +155,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         let prompt = UIView()
         prompt.backgroundColor = PromptColor
+
+        let promptBottomBorder = UIView()
+        promptBottomBorder.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
+        prompt.addSubview(promptBottomBorder)
+
         // Insert behind the tableView so the tableView slides on top of it
         // when the prompt is dismissed.
         view.insertSubview(prompt, belowSubview: tableView)
@@ -203,6 +219,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         promptYesButton.snp_makeConstraints { make in
             make.right.equalTo(promptNoButton.snp_leading).insets(PromptInsets)
             make.centerY.equalTo(prompt)
+        }
+
+        promptBottomBorder.snp_makeConstraints { make in
+            make.trailing.leading.equalTo(self.view)
+            make.top.equalTo(prompt.snp_bottom).offset(-1)
+            make.height.equalTo(1)
         }
 
         prompt.snp_makeConstraints { make in
@@ -464,6 +486,9 @@ private class SuggestionCell: UITableViewCell {
         separatorInset = UIEdgeInsetsZero
         selectionStyle = UITableViewCellSelectionStyle.None
 
+        container.backgroundColor = UIColor.clearColor()
+        contentView.backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clearColor()
         contentView.addSubview(container)
     }
 
@@ -505,7 +530,7 @@ private class SuggestionCell: UITableViewCell {
         super.layoutSubviews()
 
         // The left bounds of the suggestions align with where text would be displayed.
-        let textLeft: CGFloat = 44
+        let textLeft: CGFloat = 64
 
         // The maximum width of the container, after which suggestions will wrap to the next line.
         let maxWidth = contentView.frame.width
@@ -558,7 +583,7 @@ private class SuggestionCell: UITableViewCell {
         container.frame = frame
 
         let imageY = (frame.size.height - 24) / 2
-        imageView!.frame = CGRectMake(10, imageY, 24, 24)
+        imageView!.frame = CGRectMake(20, imageY, 24, 24)
     }
 }
 
@@ -569,10 +594,11 @@ private class SuggestionButton: InsetButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
+        setTitleColor(AppConstants.HighlightBlue, forState: UIControlState.Normal)
+        setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
         titleLabel?.font = SuggestionFont
         backgroundColor = SuggestionBackgroundColor
-        layer.borderColor = SuggestionBackgroundColor.CGColor
+        layer.borderColor = SuggestionBorderColor.CGColor
         layer.borderWidth = SuggestionBorderWidth
         layer.cornerRadius = SuggestionCornerRadius
         contentEdgeInsets = SuggestionInsets
@@ -585,7 +611,7 @@ private class SuggestionButton: InsetButton {
     @objc
     override var highlighted: Bool {
         didSet {
-            backgroundColor = highlighted ? UIColor.grayColor() : SuggestionBackgroundColor
+            backgroundColor = highlighted ? AppConstants.HighlightBlue : SuggestionBackgroundColor
         }
     }
 }

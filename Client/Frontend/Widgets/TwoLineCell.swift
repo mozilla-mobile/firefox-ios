@@ -51,6 +51,7 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(detailTextLabel)
         contentView.addSubview(imageView)
 
+        backgroundColor = UIColor.clearColor()
         layoutMargins = UIEdgeInsetsZero
     }
 
@@ -128,6 +129,8 @@ private class TwoLineCellHelper {
         self.textLabel = textLabel
         self.detailTextLabel = detailTextLabel
         self.imageView = imageView
+
+        self.container.backgroundColor = UIColor.clearColor()
 
         textLabel.font = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Bold" : "HelveticaNeue-Medium", size: 14)
         textLabel.textColor = TextColor
