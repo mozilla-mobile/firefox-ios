@@ -16,6 +16,7 @@ private struct ReadingListTableViewCellUX {
 
     static let ReadIndicatorWidth: CGFloat = 16 + 16 + 16 // padding + image width + padding
     static let ReadIndicatorHeight: CGFloat = 14 + 16 + 14 // padding + image height + padding
+    static let ReadAccessibilitySpeechPitch: Float = 0.7 // 1.0 default, 0.0 lowest, 2.0 highest
 
     static let TitleLabelFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Bold" : "HelveticaNeue-Medium", size: 15)
     static let TitleLabelTopOffset: CGFloat = 14 - 4
@@ -45,12 +46,14 @@ class ReadingListTableViewCell: SWTableViewCell {
     var title: String = "Example" {
         didSet {
             titleLabel.text = title
+            updateAccessibilityLabel()
         }
     }
 
     var url: NSURL = NSURL(string: "http://www.example.com")! {
         didSet {
             hostnameLabel.text = simplifiedHostnameFromURL(url)
+            updateAccessibilityLabel()
         }
     }
 
@@ -60,8 +63,13 @@ class ReadingListTableViewCell: SWTableViewCell {
             titleLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
             hostnameLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
             markAsReadButton.setTitle(unread ? ReadingListTableViewCellUX.MarkAsReadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText, forState: UIControlState.Normal)
+            markAsReadAction.name = markAsReadButton.titleLabel!.text
+            updateAccessibilityLabel()
         }
     }
+
+    private let deleteAction: UIAccessibilityCustomAction
+    private let markAsReadAction: UIAccessibilityCustomAction
 
     let readStatusImageView: UIImageView!
     let titleLabel: UILabel!
@@ -75,6 +83,8 @@ class ReadingListTableViewCell: SWTableViewCell {
         hostnameLabel = UILabel()
         deleteButton = UIButton()
         markAsReadButton = UIButton()
+        deleteAction = UIAccessibilityCustomAction()
+        markAsReadAction = UIAccessibilityCustomAction()
 
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -117,6 +127,9 @@ class ReadingListTableViewCell: SWTableViewCell {
         deleteButton.setTitle(ReadingListTableViewCellUX.DeleteButtonTitleText, forState: UIControlState.Normal)
         deleteButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         deleteButton.titleEdgeInsets = ReadingListTableViewCellUX.DeleteButtonTitleEdgeInsets
+        deleteAction.name = deleteButton.titleLabel!.text
+        deleteAction.target = self
+        deleteAction.selector = "deleteActionActivated"
         rightUtilityButtons = [deleteButton]
 
         markAsReadButton.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
@@ -127,7 +140,12 @@ class ReadingListTableViewCell: SWTableViewCell {
         markAsReadButton.setTitle(ReadingListTableViewCellUX.MarkAsReadButtonTitleText, forState: UIControlState.Normal)
         markAsReadButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         markAsReadButton.titleEdgeInsets = ReadingListTableViewCellUX.MarkAsReadButtonTitleEdgeInsets
+        markAsReadAction.name = markAsReadButton.titleLabel!.text
+        markAsReadAction.target = self
+        markAsReadAction.selector = "markAsReadActionActivated"
         leftUtilityButtons = [markAsReadButton]
+
+        accessibilityCustomActions = [deleteAction, markAsReadAction]
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -144,6 +162,37 @@ class ReadingListTableViewCell: SWTableViewCell {
             }
         }
         return hostname
+    }
+
+    @objc private func markAsReadActionActivated() -> Bool {
+        self.delegate?.swipeableTableViewCell?(self, didTriggerLeftUtilityButtonWithIndex: 0)
+        return true
+    }
+
+    @objc private func deleteActionActivated() -> Bool {
+        self.delegate?.swipeableTableViewCell?(self, didTriggerRightUtilityButtonWithIndex: 0)
+        return true
+    }
+
+    private func updateAccessibilityLabel() {
+        if let hostname = hostnameLabel.text,
+                  title = titleLabel.text {
+            let unreadStatus = unread ? NSLocalizedString("unread", comment: "Accessibility label for unread article in reading list. It's a past participle - functions as an adjective.") : NSLocalizedString("read", comment: "Accessibility label for read article in reading list. It's a past participle - functions as an adjective.")
+            let string = "\(title), \(unreadStatus), \(hostname)"
+            var label: AnyObject
+            if !unread {
+                // mimic light gray visual dimming by "dimming" the speech by reducing pitch
+                let lowerPitchString = NSMutableAttributedString(string: string as String)
+                lowerPitchString.addAttribute(UIAccessibilitySpeechAttributePitch, value: NSNumber(float: ReadingListTableViewCellUX.ReadAccessibilitySpeechPitch), range: NSMakeRange(0, lowerPitchString.length))
+                label = NSAttributedString(attributedString: lowerPitchString)
+            } else {
+                label = string
+            }
+            // need to use KVC as accessibilityLabel is of type String! and cannot be set to NSAttributedString other way than this
+            // see bottom of page 121 of the PDF slides of WWDC 2012 "Accessibility for iOS" session for indication that this is OK by Apple
+            // also this combined with Swift's strictness is why we cannot simply override accessibilityLabel and return the label directly...
+            setValue(label, forKey: "accessibilityLabel")
+        }
     }
 }
 
