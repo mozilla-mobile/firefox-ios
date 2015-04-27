@@ -7,6 +7,9 @@ import Base32
 import Shared
 import UIKit
 
+private var ShowDebugSettings: Bool = false
+private var DebugSettingsClickCount: Int = 0
+
 // A base TableViewCell, to help minimize initialization and allow recycling.
 class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -253,6 +256,9 @@ private class AccountStatusSetting: WithAccountSetting {
 // For great debugging!
 private class RequirePasswordDebugSetting: WithAccountSetting {
     override var hidden: Bool {
+        if !ShowDebugSettings {
+            return true
+        }
         if let account = profile.getAccount() where account.actionNeeded != FxAActionNeeded.NeedsPassword {
             return false
         }
@@ -273,6 +279,9 @@ private class RequirePasswordDebugSetting: WithAccountSetting {
 // For great debugging!
 private class RequireUpgradeDebugSetting: WithAccountSetting {
     override var hidden: Bool {
+        if !ShowDebugSettings {
+            return true
+        }
         if let account = profile.getAccount() where account.actionNeeded != FxAActionNeeded.NeedsUpgrade {
             return false
         }
@@ -292,6 +301,9 @@ private class RequireUpgradeDebugSetting: WithAccountSetting {
 // For great debugging!
 private class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
     override var hidden: Bool {
+        if !ShowDebugSettings {
+            return true
+        }
         if let account = profile.getAccount() {
             return false
         }
@@ -310,10 +322,28 @@ private class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
 
 // Show the current version of Firefox
 private class VersionSetting : Setting {
+    let settings: SettingsTableViewController
+
+    init(settings: SettingsTableViewController) {
+        self.settings = settings
+        super.init(title: nil)
+    }
+
     override var title: NSAttributedString? {
         let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
         let buildNumber = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleVersion") as! String
         return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"), appVersion, buildNumber))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        if !isAuroraChannel() {
+            DebugSettingsClickCount += 1
+            if DebugSettingsClickCount >= 5 {
+                DebugSettingsClickCount = 0
+                ShowDebugSettings = !ShowDebugSettings
+                settings.tableView.reloadData()
+            }
+        }
     }
 }
 
@@ -405,7 +435,7 @@ class SettingsTableViewController: UITableViewController {
                 SearchSetting(settings: self)
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
-                VersionSetting()
+                VersionSetting(settings: self)
             ]),
         ]
 
