@@ -10,6 +10,12 @@ import Storage
 import Sync
 import XCTest
 
+public class MockSyncManager: SyncManager {
+    public func syncClients() -> Success { return succeed() }
+    public func syncClientsAndTabs() -> Success { return succeed() }
+    public func syncHistory() -> Success { return succeed() }
+}
+
 public class MockProfile: Profile {
     private let name: String = "mockaccount"
 
@@ -36,6 +42,10 @@ public class MockProfile: Profile {
     var history: protocol<BrowserHistory, SyncableHistory> {
         return self.places
     }
+
+    lazy var syncManager: SyncManager = {
+        return MockSyncManager()
+    }()
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         return SQLiteBookmarks(db: self.db, favicons: self.places)
