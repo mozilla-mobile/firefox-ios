@@ -207,7 +207,9 @@ class BrowserViewController: UIViewController {
             view.addSubview(homePanelController!.view)
 
             UIView.animateWithDuration(0.2, animations: { () -> Void in
-                self.homePanelController!.view.alpha = 1
+                    self.homePanelController!.view.alpha = 1
+                }, completion: { _ in
+                    self.webViewContainer.accessibilityElementsHidden = true
             })
 
             addChildViewController(homePanelController!)
@@ -218,11 +220,15 @@ class BrowserViewController: UIViewController {
 
     private func hideHomePanelController() {
         if let controller = homePanelController {
-            controller.view.removeFromSuperview()
-            controller.removeFromParentViewController()
-            homePanelController = nil
-            webViewContainer.hidden = false
-            toolbar?.hidden = false
+            UIView.animateWithDuration(0.2, animations: { () -> Void in
+                    controller.view.alpha = 0
+                }, completion: { _ in
+                    controller.view.removeFromSuperview()
+                    controller.removeFromParentViewController()
+                    self.homePanelController = nil
+                    self.webViewContainer.accessibilityElementsHidden = false
+                    self.toolbar?.hidden = false
+                })
         }
     }
 
