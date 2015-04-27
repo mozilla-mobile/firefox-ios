@@ -1138,9 +1138,11 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
         profile.prefs.setObject(encodedStyle, forKey: ReaderModeProfileKeyStyle)
         // Change the reader mode style on all tabs that have reader mode active
         for tabIndex in 0..<tabManager.count {
-            if let readerMode = tabManager[tabIndex].getHelper(name: "ReaderMode") as? ReaderMode {
-                if readerMode.state == ReaderModeState.Active {
-                    readerMode.style = style
+            if let tab = tabManager[tabIndex] {
+                if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
+                    if readerMode.state == ReaderModeState.Active {
+                        readerMode.style = style
+                    }
                 }
             }
         }
@@ -1220,8 +1222,9 @@ extension BrowserViewController : Transitionable {
     func transitionablePreHide(transitionable: Transitionable, options: TransitionOptions) {
         // Move all the webview's off screen
         for i in 0..<tabManager.count {
-            let tab = tabManager[i]
-            tab.webView.hidden = true
+            if let tab = tabManager[i] {
+                tab.webView.hidden = true
+            }
         }
         self.homePanelController?.view.hidden = true
     }
@@ -1229,8 +1232,9 @@ extension BrowserViewController : Transitionable {
     func transitionablePreShow(transitionable: Transitionable, options: TransitionOptions) {
         // Move all the webview's off screen
         for i in 0..<tabManager.count {
-            let tab = tabManager[i]
-            tab.webView.hidden = true
+            if let tab = tabManager[i] {
+                tab.webView.hidden = true
+            }
         }
         self.homePanelController?.view.hidden = true
     }
@@ -1250,8 +1254,9 @@ extension BrowserViewController : Transitionable {
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
         // Move all the webview's back on screen
         for i in 0..<tabManager.count {
-            let tab = tabManager[i]
-            tab.webView.hidden = false
+            if let tab = tabManager[i] {
+                tab.webView.hidden = false
+            }
         }
         self.homePanelController?.view.hidden = false
     }

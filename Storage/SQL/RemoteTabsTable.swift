@@ -52,7 +52,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
 
     override var factory: ((row: SDRow) -> RemoteClient)? {
         return { row -> RemoteClient in
-            return RemoteClient(guid: row["guid"] as! String,
+            return RemoteClient(guid: row["guid"] as? String,
                                 name: row["name"] as! String,
                                 modified: (row["modified"] as! NSNumber).unsignedLongLongValue,
                                 type: row["type"] as? String,

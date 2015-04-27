@@ -36,13 +36,10 @@ class Browser: NSObject, WKScriptMessageHandler {
     }
 
     class func toTab(browser: Browser) -> RemoteTab {
-        func listToUrl(item: WKBackForwardListItem) -> NSURL { return item.URL }
-        var tabs = browser.backList?.map(listToUrl) ?? [NSURL]()
-        tabs.extend(browser.forwardList?.map(listToUrl) ?? [NSURL]())
         return RemoteTab(clientGUID: nil,
             URL: browser.displayURL ?? NSURL(),
             title: browser.displayTitle,
-            history: tabs,
+            history: browser.historyList,
             lastUsed: Timestamp(),
             icon: nil)
     }
@@ -57,6 +54,13 @@ class Browser: NSObject, WKScriptMessageHandler {
 
     var forwardList: [WKBackForwardListItem]? {
         return webView.backForwardList.forwardList as? [WKBackForwardListItem]
+    }
+
+    var historyList: [NSURL] {
+        func listToUrl(item: WKBackForwardListItem) -> NSURL { return item.URL }
+        var tabs = self.backList?.map(listToUrl) ?? [NSURL]()
+        tabs.append(self.url!)
+        return tabs
     }
 
     var title: String? {

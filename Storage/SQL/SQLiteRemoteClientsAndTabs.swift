@@ -199,14 +199,20 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         // Most recent first.
         let sort: (RemoteTab, RemoteTab) -> Bool = { $0.lastUsed > $1.lastUsed }
-        let f: (RemoteClient) -> ClientAndTabs = { client in
-            let guid: String = client.guid
-            let tabs = acc[guid]   // ?.sorted(sort)   // The sort should be unnecessary: the DB does that.
+        let fillTabs: (RemoteClient) -> ClientAndTabs = { client in
+            var tabs: [RemoteTab]? = nil
+            if let guid: String = client.guid {
+                tabs = acc[guid]   // ?.sorted(sort)   // The sort should be unnecessary: the DB does that.
+            }
             return ClientAndTabs(client: client, tabs: tabs ?? [])
         }
 
+        let removeLocalClient: (RemoteClient) -> Bool = { client in
+            return client.guid != nil
+        }
+
         // Why is this whole function synchronous?
-        deferred.fill(Result(success: clients.map(f)))
+        deferred.fill(Result(success: clients.filter(removeLocalClient).map(fillTabs)))
         return deferred
     }
 

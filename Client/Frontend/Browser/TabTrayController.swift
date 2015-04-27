@@ -459,23 +459,23 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     }
 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let tab = tabManager[indexPath.item]
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(CellIdentifier, forIndexPath: indexPath) as! CustomCell
         cell.animator.delegate = self
         cell.delegate = self
 
-        cell.titleText.text = tab.displayTitle
-        cell.isAccessibilityElement = true
-        cell.accessibilityLabel = tab.displayTitle
-
-        if let favIcon = tab.displayFavicon {
-            cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
-        } else {
-            cell.favicon.image = UIImage(named: "defaultFavicon")
+        if let tab = tabManager[indexPath.item] {
+            cell.titleText.text = tab.displayTitle
+            cell.accessibilityLabel = tab.displayTitle
+            cell.isAccessibilityElement = true
+            if let favIcon = tab.displayFavicon {
+                cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
+            } else {
+                cell.favicon.image = UIImage(named: "defaultFavicon")
+            }
+            cell.background.image = tab.screenshot
         }
 
         let screenshotAspectRatio = cell.frame.width / TabTrayControllerUX.CellHeight
-        cell.background.image = tab.screenshot
         cell.closeTab.addTarget(cell, action: "SELdidPressClose", forControlEvents: UIControlEvents.TouchUpInside)
 
         // calling setupFrames here fixes reused cells which don't get resized on rotation
@@ -636,8 +636,9 @@ extension TabTrayController: SwipeAnimatorDelegate {
     private func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView) {
         let tabCell = animator.container as! CustomCell
         if let indexPath = self.collectionView.indexPathForCell(tabCell) {
-            let tab = tabManager[indexPath.item]
-            tabManager.removeTab(tab)
+            if let tab = tabManager[indexPath.item] {
+                tabManager.removeTab(tab)
+            }
         }
     }
 }
@@ -662,8 +663,9 @@ extension TabTrayController: TabManagerDelegate {
 extension TabTrayController: CustomCellDelegate {
     private func customCellDidClose(cell: CustomCell) {
         let indexPath = collectionView.indexPathForCell(cell)!
-        let tab = tabManager[indexPath.item]
-        tabManager.removeTab(tab)
+        if let tab = tabManager[indexPath.item] {
+            tabManager.removeTab(tab)
+        }
     }
 }
 
