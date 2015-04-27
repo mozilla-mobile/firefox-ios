@@ -45,7 +45,7 @@ class HomePanels {
 
         HomePanelDescriptor(
             makeViewController: { profile in
-                let controller = RemoteTabsPanel()
+                let controller = RemoteTabsTableViewController()
                 controller.profile = profile
                 return controller
             },

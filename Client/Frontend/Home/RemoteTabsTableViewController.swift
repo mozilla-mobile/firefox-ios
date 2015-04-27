@@ -14,7 +14,7 @@ import XCGLogger
 private let log = XCGLogger.defaultInstance()
 
 
-private struct RemoteTabsPanelUX {
+private struct RemoteTabsTableViewControllerUX {
     static let HeaderHeight: CGFloat = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
     static let RowHeight: CGFloat = SiteTableViewControllerUX.RowHeight
 }
@@ -34,7 +34,7 @@ private let RemoteTabIdentifier = "RemoteTab"
  * a technical detail is that STVC is backed by a Cursor and this is backed by a richer data
  * structure.  However, the styling here should agree with STVC where possible.
  */
-class RemoteTabsPanel: UITableViewController, HomePanel {
+class RemoteTabsTableViewController: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
 
@@ -48,7 +48,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         super.viewDidLoad()
         tableView.registerClass(TwoLineHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: RemoteClientIdentifier)
         tableView.registerClass(TwoLineTableViewCell.self, forCellReuseIdentifier: RemoteTabIdentifier)
-        tableView.rowHeight = RemoteTabsPanelUX.RowHeight
+        tableView.rowHeight = RemoteTabsTableViewControllerUX.RowHeight
         tableView.separatorInset = UIEdgeInsetsZero
 
         view.backgroundColor = AppConstants.PanelBackgroundColor
@@ -106,14 +106,14 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
     }
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return RemoteTabsPanelUX.HeaderHeight
+        return RemoteTabsTableViewControllerUX.HeaderHeight
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if let clientTabs = self.clientAndTabs?[section] {
             let client = clientTabs.client
             let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(RemoteClientIdentifier) as! TwoLineHeaderFooterView
-            view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
+            view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: RemoteTabsTableViewControllerUX.HeaderHeight)
             view.textLabel.text = client.name
 
             // TODO: Bug 1154088 - Convert timestamp to locale-relative timestring.
