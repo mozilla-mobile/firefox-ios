@@ -16,7 +16,7 @@ public typealias GUID = String
 public protocol BrowserHistory {
     func clear(complete: (success: Bool) -> Void)
     func get(options: QueryOptions?, complete: (data: Cursor) -> Void)
-    func addVisit(visit: Visit, complete: (success: Bool) -> Void)
+    func addVisit(visit: SiteVisit, complete: (success: Bool) -> Void)
 }
 
 /**

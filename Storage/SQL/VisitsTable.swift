@@ -3,12 +3,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 private let TableNameVisits = "visits"
 
 // NOTE: If you add a new Table, make sure you update the version number in BrowserDB.swift!
 // This is our default visits store.
-class VisitsTable<T>: GenericTable<Visit> {
+class VisitsTable<T>: GenericTable<SiteVisit> {
     override var name: String { return TableNameVisits }
     override var rows: String { return "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                                        "siteId INTEGER NOT NULL, " +
@@ -16,7 +17,7 @@ class VisitsTable<T>: GenericTable<Visit> {
                                        "type INTEGER NOT NULL" }
     override var version: Int { return 1 }
 
-    override func getInsertAndArgs(inout item: Visit) -> (String, [AnyObject?])? {
+    override func getInsertAndArgs(inout item: SiteVisit) -> (String, [AnyObject?])? {
         // Runtime errors happen if we let Swift try to infer the type of this array
         // so we construct it very specifically.
         var args = [AnyObject?]()
@@ -25,34 +26,33 @@ class VisitsTable<T>: GenericTable<Visit> {
         // If you don't know if you have an ID, use JoinedHistoryVisitsTable.swift instead.
         args.append(item.site.id!)
 
-        args.append(item.date.timeIntervalSince1970)
+        args.append(NSNumber(unsignedLongLong: item.date))
         args.append(item.type.rawValue)
         return ("INSERT INTO \(TableNameVisits) (siteId, date, type) VALUES (?,?,?)", args)
     }
 
-    override func getUpdateAndArgs(inout item: Visit) -> (String, [AnyObject?])? {
+    override func getUpdateAndArgs(inout item: SiteVisit) -> (String, [AnyObject?])? {
         return nil
     }
 
-    override func getDeleteAndArgs(inout item: Visit?) -> (String, [AnyObject?])? {
+    override func getDeleteAndArgs(inout item: SiteVisit?) -> (String, [AnyObject?])? {
         if let visit = item {
             return ("DELETE FROM \(TableNameVisits) WHERE id = ?", [visit.id])
         }
         return ("DELETE FROM \(TableNameVisits)", [AnyObject]())
     }
 
-    override var factory: ((row: SDRow) -> Visit)? {
-        return { row -> Visit in
+    override var factory: ((row: SDRow) -> SiteVisit)? {
+        return { row -> SiteVisit in
             let site = Site(url: "", title: "")
             site.id = row["siteId"] as? Int
 
-            let dt = row["date"] as! NSTimeInterval
-            let date = NSDate(timeIntervalSince1970: dt)
+            let date = (row["date"] as! NSNumber).unsignedLongLongValue
             var type = VisitType(rawValue: row["type"] as! Int)
             if type == nil {
                 type = VisitType.Unknown
             }
-            let visit = Visit(site: site, date: date, type: type!)
+            let visit = SiteVisit(site: site, date: date, type: type!)
             visit.id = row["id"] as? Int
             return visit
         }

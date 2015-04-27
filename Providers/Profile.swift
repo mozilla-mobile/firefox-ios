@@ -136,7 +136,7 @@ public class BrowserProfile: Profile {
             var site: Site!
             if let title = notification.userInfo!["title"] as? NSString {
                 site = Site(url: url.absoluteString!, title: title as String)
-                let visit = Visit(site: site, date: NSDate())
+                let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
                 history.addVisit(visit, complete: { (success) -> Void in
                     // nothing to do
                 })

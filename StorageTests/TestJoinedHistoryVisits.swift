@@ -21,9 +21,9 @@ class TestJoinedHistoryVisits : XCTestCase {
         return site
     }
 
-    private func addVisit(history: JoinedHistoryVisitsTable, site: Site, s: Bool = true) -> Visit {
+    private func addVisit(history: JoinedHistoryVisitsTable, site: Site, s: Bool = true) -> SiteVisit {
         var inserted = -1;
-        let visit = Visit(site: site, date: NSDate())
+        let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
         db.withConnection(.ReadWrite) { connection -> NSError? in
             var err: NSError? = nil
             inserted = history.insert(connection, item: (nil, visit), err: &err)
@@ -77,7 +77,7 @@ class TestJoinedHistoryVisits : XCTestCase {
         }
     }
 
-    private func clear(history: JoinedHistoryVisitsTable, item: (site:Site?, visit:Visit?)? = nil, s: Bool = true) {
+    private func clear(history: JoinedHistoryVisitsTable, item: (site: Site?, visit: SiteVisit?)? = nil, s: Bool = true) {
         var deleted = -1;
         db.withConnection(.ReadWrite) { connection -> NSError? in
             var err: NSError? = nil

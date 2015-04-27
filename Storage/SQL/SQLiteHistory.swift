@@ -7,7 +7,7 @@ import Foundation
 /**
  * The sqlite-backed implementation of the history protocol.
  */
-public class SQLiteHistory : BrowserHistory {
+public class SQLiteHistory: BrowserHistory {
     let db: BrowserDB
     private let table = JoinedHistoryVisitsTable()
     private var ignoredSchemes = ["about"]
@@ -83,7 +83,7 @@ public class SQLiteHistory : BrowserHistory {
         return true
     }
 
-    public func addVisit(visit: Visit, complete: (success: Bool) -> Void) {
+    public func addVisit(visit: SiteVisit, complete: (success: Bool) -> Void) {
         var err: NSError? = nil
 
         // Don't store visits to sites with about: protocols

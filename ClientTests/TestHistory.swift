@@ -7,7 +7,7 @@ class TestHistory : ProfileTest {
     private func innerAddSite(history: BrowserHistory, url: String, title: String, callback: (success: Bool) -> Void) {
         // Add an entry
         let site = Site(url: url, title: title)
-        let visit = Visit(site: site, date: NSDate())
+        let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
         history.addVisit(visit) { success in
             callback(success: success)
         }
