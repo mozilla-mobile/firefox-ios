@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+import Storage
 
 protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?)
@@ -51,12 +52,15 @@ class TabManager {
 
     private var configuration: WKWebViewConfiguration
 
-    init(defaultNewTabRequest: NSURLRequest) {
-        self.defaultNewTabRequest = defaultNewTabRequest
+    let storage: RemoteClientsAndTabs?
 
+    init(defaultNewTabRequest: NSURLRequest, storage: RemoteClientsAndTabs? = nil) {
         // Create a common webview configuration with a shared process pool.
         configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
+
+        self.defaultNewTabRequest = defaultNewTabRequest
+        self.storage = storage
     }
 
     var count: Int {
@@ -119,6 +123,11 @@ class TabManager {
         addTab(tab)
         tab.loadRequest(request)
         selectTab(tab)
+
+        let storedTabs: [RemoteTab] = tabs.map(Browser.toTab)
+        storage?.insertOrUpdateTabsForClientGUID(nil, tabs: storedTabs)
+        // XXX - Need to monitor location changes for this tab and update storage...
+
         return tab
     }
 
@@ -161,6 +170,7 @@ class TabManager {
         for delegate in delegates {
             delegate.get()?.tabManager(self, didRemoveTab: tab, atIndex: index)
         }
+        storage?.insertOrUpdateTabsForClientGUID(nil, tabs: tabs.map(Browser.toTab))
     }
 
     func removeAll() {

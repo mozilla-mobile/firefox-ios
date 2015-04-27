@@ -57,7 +57,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
     }
 
-    public func insertOrUpdateTabsForClientGUID(clientGUID: String, tabs: [RemoteTab]) -> Deferred<Result<Int>> {
+    public func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Result<Int>> {
         let deferred = Deferred<Result<Int>>(defaultQueue: dispatch_get_main_queue())
 
         let deleteQuery = "DELETE FROM \(self.tabs.name) WHERE client_guid = ?"
@@ -182,11 +182,11 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         // Aggregate clientGUID -> RemoteTab.
         var acc = [String: [RemoteTab]]()
         for tab in tabCursor {
-            if let tab = tab as? RemoteTab {
-                if acc[tab.clientGUID] == nil {
-                    acc[tab.clientGUID] = [tab]
+            if let tab = tab as? RemoteTab, guid = tab.clientGUID {
+                if acc[guid] == nil {
+                    acc[guid] = [tab]
                 } else {
-                    acc[tab.clientGUID]!.append(tab)
+                    acc[guid]!.append(tab)
                 }
             } else {
                 log.error("Couldn't cast tab \(tab) to RemoteTab.")
