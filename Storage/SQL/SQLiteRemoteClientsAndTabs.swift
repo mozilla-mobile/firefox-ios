@@ -78,11 +78,12 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             for tab in tabs {
                 // We trust that each tab's clientGUID matches the supplied client!
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
-                inserted += self.tabs.insert(connection, item: tab, err: &err)
+                self.tabs.insert(connection, item: tab, err: &err)
                 if let err = err {
                     deferred.fill(Result(failure: DatabaseError(err: err)))
                     return false
                 }
+                inserted++;
             }
 
             deferred.fill(Result(success: inserted))

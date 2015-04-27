@@ -450,7 +450,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let tab = tabManager.getTab(indexPath.item)
+        let tab = tabManager[indexPath.item]
         tabManager.selectTab(tab)
 
         dispatch_async(dispatch_get_main_queue()) { _ in
@@ -459,7 +459,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     }
 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let tab = tabManager.getTab(indexPath.item)
+        let tab = tabManager[indexPath.item]
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(CellIdentifier, forIndexPath: indexPath) as! CustomCell
         cell.animator.delegate = self
         cell.delegate = self
@@ -636,7 +636,7 @@ extension TabTrayController: SwipeAnimatorDelegate {
     private func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView) {
         let tabCell = animator.container as! CustomCell
         if let indexPath = self.collectionView.indexPathForCell(tabCell) {
-            let tab = tabManager.getTab(indexPath.item)
+            let tab = tabManager[indexPath.item]
             tabManager.removeTab(tab)
         }
     }
@@ -662,7 +662,7 @@ extension TabTrayController: TabManagerDelegate {
 extension TabTrayController: CustomCellDelegate {
     private func customCellDidClose(cell: CustomCell) {
         let indexPath = collectionView.indexPathForCell(cell)!
-        let tab = tabManager.getTab(indexPath.item)
+        let tab = tabManager[indexPath.item]
         tabManager.removeTab(tab)
     }
 }

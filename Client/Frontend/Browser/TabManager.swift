@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 import Storage
+import Shared
 
 protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?)
@@ -26,7 +27,8 @@ struct WeakTabManagerDelegate {
     }
 }
 
-class TabManager {
+// TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
+class TabManager : NSObject {
     private var delegates = [WeakTabManagerDelegate]()
 
     func addDelegate(delegate: TabManagerDelegate) {
@@ -49,6 +51,7 @@ class TabManager {
     private var _selectedIndex = -1
     var selectedIndex: Int { return _selectedIndex }
     private let defaultNewTabRequest: NSURLRequest
+    private let navDelegate: TabManagerNavDelegate
 
     private var configuration: WKWebViewConfiguration
 
@@ -61,6 +64,15 @@ class TabManager {
 
         self.defaultNewTabRequest = defaultNewTabRequest
         self.storage = storage
+        self.navDelegate = TabManagerNavDelegate()
+
+        super.init()
+
+        addNavigationDelegate(self)
+    }
+
+    func addNavigationDelegate(delegate: WKNavigationDelegate) {
+        self.navDelegate.insert(delegate)
     }
 
     var count: Int {
@@ -75,11 +87,11 @@ class TabManager {
         return tabs[_selectedIndex]
     }
 
-    func getTab(index: Int) -> Browser {
+    subscript(index: Int) -> Browser {
         return tabs[index]
     }
 
-    func getTab(webView: WKWebView) -> Browser? {
+    subscript(webView: WKWebView) -> Browser? {
         for tab in tabs {
             if tab.webView === webView {
                 return tab
@@ -120,13 +132,15 @@ class TabManager {
         }
 
         let tab = Browser(configuration: configuration ?? self.configuration)
+        tab.webView.navigationDelegate = self.navDelegate
+
         addTab(tab)
+
         tab.loadRequest(request)
         selectTab(tab)
 
         let storedTabs: [RemoteTab] = tabs.map(Browser.toTab)
         storage?.insertOrUpdateTabsForClientGUID(nil, tabs: storedTabs)
-        // XXX - Need to monitor location changes for this tab and update storage...
 
         return tab
     }
@@ -210,5 +224,94 @@ extension TabManager {
         }
         let selectedIndex: Int = coder.decodeIntegerForKey("selectedIndex")
         self.selectTab(tabs[selectedIndex])
+    }
+}
+
+extension TabManager : WKNavigationDelegate {
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+        storage?.insertOrUpdateTabsForClientGUID(nil, tabs: tabs.map(Browser.toTab))
+    }
+}
+
+// WKNavigationDelegates must implement NSObjectProtocol
+class TabManagerNavDelegate : NSObject, WKNavigationDelegate {
+    private var delegates = WeakList<WKNavigationDelegate>()
+
+    func insert(delegate: WKNavigationDelegate) {
+        delegates.insert(delegate)
+    }
+
+    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+        for delegate in delegates {
+            println("Call \(delegate)")
+            delegate.webView?(webView, didCommitNavigation: navigation)
+        }
+    }
+
+    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+        for delegate in delegates {
+            delegate.webView?(webView, didFailNavigation: navigation, withError: error)
+        }
+    }
+
+    func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!,
+        withError error: NSError) {
+            for delegate in delegates {
+                delegate.webView?(webView, didFailProvisionalNavigation: navigation, withError: error)
+            }
+    }
+
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+        for delegate in delegates {
+            delegate.webView?(webView, didFinishNavigation: navigation)
+        }
+    }
+
+    func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge,
+        completionHandler: (NSURLSessionAuthChallengeDisposition,
+        NSURLCredential!) -> Void) {
+            for delegate in delegates {
+                delegate.webView?(webView, didReceiveAuthenticationChallenge: challenge, completionHandler: completionHandler)
+            }
+    }
+
+    func webView(webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+        for delegate in delegates {
+            delegate.webView?(webView, didReceiveServerRedirectForProvisionalNavigation: navigation)
+        }
+    }
+
+    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        for delegate in delegates {
+            delegate.webView?(webView, didStartProvisionalNavigation: navigation)
+        }
+    }
+
+    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction,
+        decisionHandler: (WKNavigationActionPolicy) -> Void) {
+            var res = WKNavigationActionPolicy.Allow
+            for delegate in delegates {
+                delegate.webView?(webView, decidePolicyForNavigationAction: navigationAction, decisionHandler: { policy in
+                    if policy == .Cancel {
+                        res = policy
+                    }
+                })
+            }
+
+            decisionHandler(res)
+    }
+
+    func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse,
+        decisionHandler: (WKNavigationResponsePolicy) -> Void) {
+            var res = WKNavigationResponsePolicy.Allow
+            for delegate in delegates {
+                delegate.webView?(webView, decidePolicyForNavigationResponse: navigationResponse, decisionHandler: { policy in
+                    if policy == .Cancel {
+                        res = policy
+                    }
+                })
+            }
+
+            decisionHandler(res)
     }
 }

@@ -31,8 +31,6 @@ class FaviconManager : BrowserHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        println("DEBUG: faviconsMessageHandler message: \(message.body)")
-
         let manager = SDWebImageManager.sharedManager()
         self.browser?.favicons.removeAll(keepCapacity: false)
         if let url = browser?.webView.URL?.absoluteString {
