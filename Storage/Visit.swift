@@ -19,9 +19,13 @@ public enum VisitType : Int {
     case FramedLink = 8
 }
 
-public class Visit {
+public class Visit: Hashable {
     public let date: MicrosecondTimestamp
     public let type: VisitType
+
+    public var hashValue: Int {
+        return date.hashValue ^ type.hashValue
+    }
 
     public init(date: MicrosecondTimestamp, type: VisitType = .Unknown) {
         self.date = date
@@ -36,6 +40,11 @@ public class Visit {
         }
         return nil
     }
+}
+
+public func ==(lhs: Visit, rhs: Visit) -> Bool {
+    return lhs.date == rhs.date &&
+           lhs.type == rhs.type
 }
 
 public class SiteVisit: Visit {
