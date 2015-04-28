@@ -51,6 +51,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.rootViewController = controller
         self.window!.backgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
 
+        NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
+            if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL, absoluteString = url.absoluteString {
+                let title = (userInfo["Title"] as? String) ?? ""
+                self.profile.readingList?.createRecordWithURL(absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
+            }
+        }
+
 
 #if MOZ_CHANNEL_AURORA
         checkForAuroraUpdate()

@@ -860,10 +860,6 @@ extension BrowserViewController: TabManagerDelegate {
 
         let passwords = PasswordHelper(browser: tab, profile: profile)
         tab.addHelper(passwords, name: PasswordHelper.name())
-        
-        let longPressBrowserHelper = LongPressBrowserHelper(browser: tab)
-        longPressBrowserHelper.delegate = self
-        tab.addHelper(longPressBrowserHelper, name: LongPressBrowserHelper.name())
     }
 
     func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int) {
@@ -1145,64 +1141,6 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
                 }
             }
         }
-    }
-}
-
-extension BrowserViewController: LongPressDelegate {
-    func longPressBrowserHelper(longPressBrowserHelper: LongPressBrowserHelper, didLongPressElements elements: [LongPressElementType : NSURL]) {
-        var actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        var dialogTitleURL: NSURL?
-        if let linkURL = elements[LongPressElementType.Link] {
-            dialogTitleURL = linkURL
-            let newTabTitle = NSLocalizedString("Open In New Tab", comment: "Context menu option")
-            var openNewTabAction = UIAlertAction(title: newTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) in
-                let request =  NSURLRequest(URL: linkURL)
-                let tab = self.tabManager.addTab(request: request)
-            }
-            actionSheetController.addAction(openNewTabAction)
-
-            let copyTitle = NSLocalizedString("Copy", comment: "Context menu option")
-            var copyAction = UIAlertAction(title: copyTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
-                var pasteBoard = UIPasteboard.generalPasteboard()
-                pasteBoard.string = linkURL.absoluteString
-            }
-            actionSheetController.addAction(copyAction)
-        }
-        if let imageURL = elements[LongPressElementType.Image] {
-            if dialogTitleURL == nil {
-                dialogTitleURL = imageURL
-            }
-
-            let saveImageTitle = NSLocalizedString("Save Image", comment: "Context menu option")
-            var saveImageAction = UIAlertAction(title: saveImageTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
-                    var imageData = NSData(contentsOfURL: imageURL)
-                    if imageData != nil {
-                        UIImageWriteToSavedPhotosAlbum(UIImage(data: imageData!), nil, nil, nil)
-                    }
-                })
-            }
-            actionSheetController.addAction(saveImageAction)
-
-            let copyImageTitle = NSLocalizedString("Copy Image URL", comment: "Context menu option")
-            var copyAction = UIAlertAction(title: copyImageTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
-                var pasteBoard = UIPasteboard.generalPasteboard()
-                pasteBoard.string = imageURL.absoluteString
-            }
-            actionSheetController.addAction(copyAction)
-        }
-
-        actionSheetController.title = dialogTitleURL!.absoluteString
-        var cancelAction = UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: nil)
-        actionSheetController.addAction(cancelAction)
-
-        if let popoverPresentationController = actionSheetController.popoverPresentationController {
-            popoverPresentationController.sourceView = self.view
-            popoverPresentationController.sourceRect = CGRectInset(CGRect(origin: longPressBrowserHelper.longPressGestureRecognizer.locationInView(self.view), size: CGSizeZero), -8, -8)
-            popoverPresentationController.permittedArrowDirections = .Any
-        }
-        
-        self.presentViewController(actionSheetController, animated: true, completion: nil)
     }
 }
 
