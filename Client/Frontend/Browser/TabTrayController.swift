@@ -8,6 +8,7 @@ import UIKit
 private struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
     static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
+    static let CellBackgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1)
     static let TextBoxHeight = CGFloat(32.0)
     static let FaviconSize = CGFloat(18.0)
     static let CellHeight = TextBoxHeight * 5
@@ -48,6 +49,7 @@ private class CustomCell: UICollectionViewCell {
         self.backgroundHolder = UIView()
         self.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
         self.backgroundHolder.clipsToBounds = true
+        self.backgroundHolder.backgroundColor = TabTrayControllerUX.CellBackgroundColor
 
         self.background = UIImageViewAligned()
         self.background.contentMode = UIViewContentMode.ScaleAspectFill
