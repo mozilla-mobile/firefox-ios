@@ -16,12 +16,12 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
      * Tests basic page navigation with the URL bar.
      */
     func testNavigation() {
-        tester().tapViewWithAccessibilityLabel("URL")
+        tester().tapViewWithAccessibilityIdentifier("url")
         let url1 = "\(webRoot)/?page=1"
         tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
-        tester().tapViewWithAccessibilityLabel("URL")
+        tester().tapViewWithAccessibilityIdentifier("url")
         let url2 = "\(webRoot)/?page=2"
         tester().clearTextFromAndThenEnterText("\(url2)\n", intoViewWithAccessibilityLabel: "Address and Search")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
