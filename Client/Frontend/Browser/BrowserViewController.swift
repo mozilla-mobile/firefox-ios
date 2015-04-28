@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 import WebKit
+import Shared
 import Storage
 import Snap
 
@@ -35,6 +36,7 @@ class BrowserViewController: UIViewController {
     private var footer: UIView!
     private var footerBackground: UIView?
     private var previousScroll: CGPoint? = nil
+    let WhiteListedUrls = ["\\/\\/itunes\\.apple\\.com\\/"]
 
     init(profile: Profile) {
         self.profile = profile
@@ -329,6 +331,15 @@ class BrowserViewController: UIViewController {
         default:
             assertionFailure("Unhandled KVO key: \(keyPath)")
         }
+    }
+
+    private func isWhitelistedUrl(url: NSURL) -> Bool {
+        for entry in WhiteListedUrls {
+            if let match = url.absoluteString!.rangeOfString(entry, options: .RegularExpressionSearch) {
+                return UIApplication.sharedApplication().canOpenURL(url)
+            }
+        }
+        return false
     }
 }
 
@@ -906,45 +917,54 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
+    private func openExternal(url: NSURL, prompt: Bool = true) {
+        if prompt {
+            // Ask the user if it's okay to open the url with UIApplication.
+            let alert = UIAlertController(
+                title: String(format: NSLocalizedString("Opening %@", comment:"Opening an external URL"), url),
+                message: NSLocalizedString("This will open in another application", comment: "Opening an external app"),
+                preferredStyle: UIAlertControllerStyle.Alert
+            )
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Alert Cancel Button"), style: UIAlertActionStyle.Cancel, handler: { (action: UIAlertAction!) in
+            }))
+
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment:"Alert OK Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
+                UIApplication.sharedApplication().openURL(url)
+            }))
+
+            presentViewController(alert, animated: true, completion: nil)
+        } else {
+            UIApplication.sharedApplication().openURL(url)
+        }
+    }
+
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
         let url = navigationAction.request.URL
         if url == nil {
+            decisionHandler(WKNavigationActionPolicy.Cancel)
             return
         }
 
-        var openExternally = false
-        
         if let scheme = url!.scheme {
             switch scheme {
             case "about", "http", "https":
-                // TODO: Check for urls that we want to special case.
-                decisionHandler(WKNavigationActionPolicy.Allow)
-                return
+                if isWhitelistedUrl(url!) {
+                    // If the url is whitelisted, we open it without prompting.
+                    openExternal(url!, prompt: false)
+                    decisionHandler(WKNavigationActionPolicy.Cancel)
+                } else {
+                    decisionHandler(WKNavigationActionPolicy.Allow)
+                }
             default:
                 if UIApplication.sharedApplication().canOpenURL(url!) {
-                    // Ask the user if it's okay to open the url with UIApplication.
-                    let alert = UIAlertController(
-                        title: String(format: NSLocalizedString("Opening %@", comment:"Opening an external URL"), url!),
-                        message: NSLocalizedString("This will open in another application", comment: "Opening an external app"),
-                        preferredStyle: UIAlertControllerStyle.Alert
-                    )
-
-                    alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Alert Cancel Button"), style: UIAlertActionStyle.Cancel, handler: { (action: UIAlertAction!) in
-                        // NOP
-                    }))
-                    
-                    alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment:"Alert OK Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
-                        UIApplication.sharedApplication().openURL(url!)
-                        return
-                    }))
-
-                    presentViewController(alert, animated: true, completion: nil)
+                    openExternal(url!)
                 }
                 decisionHandler(WKNavigationActionPolicy.Cancel)
             }
         }
     }
-    
+
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         if let tab = tabManager.selectedTab {
             if tab.webView == webView {
