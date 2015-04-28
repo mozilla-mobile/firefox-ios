@@ -46,11 +46,11 @@ public class MockProfilePrefs : Prefs {
     }
 
     public func setLong(value: UInt64, forKey defaultName: String) {
-        setObject(NSNumber(unsignedLongLong: value), forKey: name(defaultName))
+        setObject(NSNumber(unsignedLongLong: value), forKey: defaultName)
     }
 
     public func setLong(value: Int64, forKey defaultName: String) {
-        setObject(NSNumber(longLong: value), forKey: name(defaultName))
+        setObject(NSNumber(longLong: value), forKey: defaultName)
     }
 
     public func setInt(value: Int32, forKey defaultName: String) {

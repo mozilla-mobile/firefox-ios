@@ -57,4 +57,11 @@ class UtilsTests: XCTestCase {
         XCTAssertEqual("http://bar.com/noo?qqq=123", urlD.absoluteString!)
         XCTAssertEqual("http://foo.com/bar/?ppp=123&rrr=aaa", urlE.absoluteString!)
     }
+
+    func testMockProfilePrefs() {
+        let prefs = MockProfilePrefs().branch("baz")
+        let val: Timestamp = NSDate.now()
+        prefs.setLong(val, forKey: "foobar")
+        XCTAssertEqual(val, prefs.unsignedLongForKey("foobar")!)
+    }
 }
