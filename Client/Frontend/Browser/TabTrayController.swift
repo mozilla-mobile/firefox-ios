@@ -502,6 +502,10 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         return UIEdgeInsetsMake(TabTrayControllerUX.Margin, TabTrayControllerUX.Margin, TabTrayControllerUX.Margin, TabTrayControllerUX.Margin)
     }
 
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return TabTrayControllerUX.Margin
+    }
+
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         collectionView.collectionViewLayout.invalidateLayout()
     }
