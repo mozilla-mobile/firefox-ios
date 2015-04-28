@@ -17,6 +17,7 @@ private let log = XCGLogger.defaultInstance()
 private struct RemoteTabsPanelUX {
     static let HeaderHeight: CGFloat = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
     static let RowHeight: CGFloat = SiteTableViewControllerUX.RowHeight
+    static let HeaderBackgroundColor = UIColor(rgb: 0xf8f8f8)
 }
 
 private let RemoteClientIdentifier = "RemoteClient"
@@ -115,6 +116,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
             let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(RemoteClientIdentifier) as! TwoLineHeaderFooterView
             view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
             view.textLabel.text = client.name
+            view.contentView.backgroundColor = RemoteTabsPanelUX.HeaderBackgroundColor
 
             // TODO: Bug 1154088 - Convert timestamp to locale-relative timestring.
 
