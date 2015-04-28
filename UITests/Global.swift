@@ -69,6 +69,11 @@ extension KIFUITestActor {
 }
 
 class SimplePageServer {
+    class func getPageData(name: String, ext: String = "html") -> String {
+        var pageDataPath = NSBundle(forClass: self).pathForResource(name, ofType: ext)!
+        return NSString(contentsOfFile: pageDataPath, encoding: NSUTF8StringEncoding, error: nil)! as String
+    }
+
     class func start() -> String {
         let webServer: GCDWebServer = GCDWebServer()
 
@@ -77,11 +82,16 @@ class SimplePageServer {
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
-        webServer.addHandlerForMethod("GET", path: "/", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        webServer.addHandlerForMethod("GET", path: "/noTitle.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            return GCDWebServerDataResponse(HTML: self.getPageData("noTitle"))
+        }
+
+        webServer.addHandlerForMethod("GET", path: "/numberedPage.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            var pageData = self.getPageData("numberedPage")
+
             let page = (request.query["page"] as! String).toInt()!
-            var pageDataPath = NSBundle(forClass: self).pathForResource("baseFile", ofType: "html")!
-            var pageData = NSString(contentsOfFile: pageDataPath, encoding: NSUTF8StringEncoding, error: nil)!
             pageData = pageData.stringByReplacingOccurrencesOfString("{page}", withString: page.description)
+
             return GCDWebServerDataResponse(HTML: pageData as String)
         }
 

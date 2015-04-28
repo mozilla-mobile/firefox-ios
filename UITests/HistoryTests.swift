@@ -18,13 +18,13 @@ class HistoryTests: KIFTestCase {
     func testHistoryUI() {
         // Load a page
         tester().tapViewWithAccessibilityIdentifier("url")
-        let url1 = "\(webRoot)/?page=1"
+        let url1 = "\(webRoot)/numberedPage.html?page=1"
         tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Load a different page
         tester().tapViewWithAccessibilityIdentifier("url")
-        let url2 = "\(webRoot)/?page=2"
+        let url2 = "\(webRoot)/numberedPage.html?page=2"
         tester().clearTextFromAndThenEnterText("\(url2)\n", intoViewWithAccessibilityLabel: "Address and Search")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
 

@@ -40,11 +40,23 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         if let source = source {
-            let bookmark = source.current[indexPath.row]
-            if let favicon = bookmark?.favicon {
-                cell.imageView?.sd_setImageWithURL(NSURL(string: favicon.url)!, placeholderImage: profile.favicons.defaultIcon)
+            if let bookmark = source.current[indexPath.row] {
+                if let favicon = bookmark.favicon {
+                    cell.imageView?.sd_setImageWithURL(NSURL(string: favicon.url)!, placeholderImage: profile.favicons.defaultIcon)
+                }
+
+                switch (bookmark) {
+                    case let item as BookmarkItem:
+                        if item.title.isEmpty {
+                            cell.textLabel?.text = item.url
+                        } else {
+                            cell.textLabel?.text = item.title
+                        }
+                    default:
+                        // Bookmark folders don't have a good fallback if there's no title. :(
+                        cell.textLabel?.text = bookmark.title
+                }
             }
-            cell.textLabel?.text = bookmark?.title
         }
 
         return cell
