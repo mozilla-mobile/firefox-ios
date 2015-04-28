@@ -82,6 +82,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag
         tableView.backgroundColor = AppConstants.PanelBackgroundColor
+        tableView.accessibilityIdentifier = "SiteTable"
     }
 
     func reloadData() {
