@@ -123,6 +123,7 @@
 		28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28E23C121AC5A5EE00F5AC85 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E23C111AC5A5EE00F5AC85 /* State.swift */; };
+		28EDE6CB1AF2929900FB2937 /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2551ABB531100877008 /* SQLiteHistory.swift */; };
 		28F596A11ACA13CA0071DDCC /* InfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F596A01ACA13CA0071DDCC /* InfoTests.swift */; };
 		28F657C01ABFC97D00A608BD /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BE1A1D1D3200576538 /* Record.swift */; };
 		28F657DB1ABFC98300A608BD /* ClientPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BB1A1D1D3200576538 /* ClientPayload.swift */; };
@@ -170,20 +171,13 @@
 		2FA435171ABB6829008031D1 /* Passwords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2451ABB531100877008 /* Passwords.swift */; };
 		2FA435191ABB6829008031D1 /* RemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2471ABB531100877008 /* RemoteTabs.swift */; };
 		2FA4351A1ABB6829008031D1 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2481ABB531100877008 /* Site.swift */; };
-		2FA4351B1ABB6831008031D1 /* BookmarksSqlite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24A1ABB531100877008 /* BookmarksSqlite.swift */; };
 		2FA4351C1ABB6831008031D1 /* BrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24B1ABB531100877008 /* BrowserDB.swift */; };
 		2FA4351D1ABB6831008031D1 /* FaviconsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24C1ABB531100877008 /* FaviconsTable.swift */; };
 		2FA4351E1ABB6831008031D1 /* GenericTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24D1ABB531100877008 /* GenericTable.swift */; };
-		2FA4351F1ABB6831008031D1 /* HistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24E1ABB531100877008 /* HistoryTable.swift */; };
-		2FA435201ABB6831008031D1 /* JoinedFaviconsHistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24F1ABB531100877008 /* JoinedFaviconsHistoryTable.swift */; };
-		2FA435211ABB6831008031D1 /* JoinedHistoryVisitsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2501ABB531100877008 /* JoinedHistoryVisitsTable.swift */; };
 		2FA435231ABB6831008031D1 /* RemoteTabsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2521ABB531100877008 /* RemoteTabsTable.swift */; };
 		2FA435241ABB6831008031D1 /* SchemaTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2531ABB531100877008 /* SchemaTable.swift */; };
-		2FA435251ABB6831008031D1 /* SQLFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2541ABB531100877008 /* SQLFavicons.swift */; };
-		2FA435261ABB6831008031D1 /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2551ABB531100877008 /* SQLiteHistory.swift */; };
 		2FA435271ABB6831008031D1 /* SQLitePasswords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2561ABB531100877008 /* SQLitePasswords.swift */; };
 		2FA435291ABB6831008031D1 /* SQLiteRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */; };
-		2FA4352A1ABB6831008031D1 /* VisitsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2591ABB531100877008 /* VisitsTable.swift */; };
 		2FA4352B1ABB6836008031D1 /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25B1ABB531100877008 /* SwiftData.swift */; };
 		2FA4352C1ABB6873008031D1 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25C1ABB531100877008 /* Visit.swift */; };
 		2FA436061ABB83B4008031D1 /* Account.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA435FB1ABB83B4008031D1 /* Account.framework */; };
@@ -217,20 +211,13 @@
 		2FCAE2631ABB531100877008 /* Passwords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2451ABB531100877008 /* Passwords.swift */; };
 		2FCAE2651ABB531100877008 /* RemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2471ABB531100877008 /* RemoteTabs.swift */; };
 		2FCAE2661ABB531100877008 /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2481ABB531100877008 /* Site.swift */; };
-		2FCAE2671ABB531100877008 /* BookmarksSqlite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24A1ABB531100877008 /* BookmarksSqlite.swift */; };
 		2FCAE2681ABB531100877008 /* BrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24B1ABB531100877008 /* BrowserDB.swift */; };
 		2FCAE2691ABB531100877008 /* FaviconsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24C1ABB531100877008 /* FaviconsTable.swift */; };
 		2FCAE26A1ABB531100877008 /* GenericTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24D1ABB531100877008 /* GenericTable.swift */; };
-		2FCAE26B1ABB531100877008 /* HistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24E1ABB531100877008 /* HistoryTable.swift */; };
-		2FCAE26C1ABB531100877008 /* JoinedFaviconsHistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24F1ABB531100877008 /* JoinedFaviconsHistoryTable.swift */; };
-		2FCAE26D1ABB531100877008 /* JoinedHistoryVisitsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2501ABB531100877008 /* JoinedHistoryVisitsTable.swift */; };
 		2FCAE26F1ABB531100877008 /* RemoteTabsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2521ABB531100877008 /* RemoteTabsTable.swift */; };
 		2FCAE2701ABB531100877008 /* SchemaTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2531ABB531100877008 /* SchemaTable.swift */; };
-		2FCAE2711ABB531100877008 /* SQLFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2541ABB531100877008 /* SQLFavicons.swift */; };
-		2FCAE2721ABB531100877008 /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2551ABB531100877008 /* SQLiteHistory.swift */; };
 		2FCAE2731ABB531100877008 /* SQLitePasswords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2561ABB531100877008 /* SQLitePasswords.swift */; };
 		2FCAE2751ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */; };
-		2FCAE2761ABB531100877008 /* VisitsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2591ABB531100877008 /* VisitsTable.swift */; };
 		2FCAE2771ABB531100877008 /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25B1ABB531100877008 /* SwiftData.swift */; };
 		2FCAE2781ABB531100877008 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25C1ABB531100877008 /* Visit.swift */; };
 		2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2791ABB533A00877008 /* MockFiles.swift */; };
@@ -1175,20 +1162,14 @@
 		2FCAE2451ABB531100877008 /* Passwords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Passwords.swift; sourceTree = "<group>"; };
 		2FCAE2471ABB531100877008 /* RemoteTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteTabs.swift; sourceTree = "<group>"; };
 		2FCAE2481ABB531100877008 /* Site.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Site.swift; sourceTree = "<group>"; };
-		2FCAE24A1ABB531100877008 /* BookmarksSqlite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksSqlite.swift; sourceTree = "<group>"; };
 		2FCAE24B1ABB531100877008 /* BrowserDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserDB.swift; sourceTree = "<group>"; };
 		2FCAE24C1ABB531100877008 /* FaviconsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaviconsTable.swift; sourceTree = "<group>"; };
 		2FCAE24D1ABB531100877008 /* GenericTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericTable.swift; sourceTree = "<group>"; };
-		2FCAE24E1ABB531100877008 /* HistoryTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTable.swift; sourceTree = "<group>"; };
-		2FCAE24F1ABB531100877008 /* JoinedFaviconsHistoryTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinedFaviconsHistoryTable.swift; sourceTree = "<group>"; };
-		2FCAE2501ABB531100877008 /* JoinedHistoryVisitsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinedHistoryVisitsTable.swift; sourceTree = "<group>"; };
 		2FCAE2521ABB531100877008 /* RemoteTabsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteTabsTable.swift; sourceTree = "<group>"; };
 		2FCAE2531ABB531100877008 /* SchemaTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemaTable.swift; sourceTree = "<group>"; };
-		2FCAE2541ABB531100877008 /* SQLFavicons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLFavicons.swift; sourceTree = "<group>"; };
 		2FCAE2551ABB531100877008 /* SQLiteHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteHistory.swift; sourceTree = "<group>"; };
 		2FCAE2561ABB531100877008 /* SQLitePasswords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLitePasswords.swift; sourceTree = "<group>"; };
 		2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteRemoteClientsAndTabs.swift; sourceTree = "<group>"; };
-		2FCAE2591ABB531100877008 /* VisitsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisitsTable.swift; sourceTree = "<group>"; };
 		2FCAE25B1ABB531100877008 /* SwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftData.swift; sourceTree = "<group>"; };
 		2FCAE25C1ABB531100877008 /* Visit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Visit.swift; sourceTree = "<group>"; };
 		2FCAE2791ABB533A00877008 /* MockFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFiles.swift; sourceTree = "<group>"; };
@@ -1599,6 +1580,20 @@
 			path = SyncTests;
 			sourceTree = "<group>";
 		};
+		282915DF1AF1A5F90006EEB5 /* Dead */ = {
+			isa = PBXGroup;
+			children = (
+				2FCAE27B1ABB533A00877008 /* TestBookmarks.swift */,
+				2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */,
+				2FCAE27D1ABB533A00877008 /* TestHistoryTable.swift */,
+				2FCAE27E1ABB533A00877008 /* TestJoinedFaviconTable.swift */,
+				2FCAE27F1ABB533A00877008 /* TestJoinedHistoryVisits.swift */,
+				2FCAE2821ABB533A00877008 /* TestTableTable.swift */,
+				2FCAE2831ABB533A00877008 /* TestVisitsTable.swift */,
+			);
+			name = Dead;
+			sourceTree = "<group>";
+		};
 		284AA38F1AD4C115009041C5 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
@@ -1870,6 +1865,7 @@
 		2FCAE22A1ABB51F800877008 /* StorageTests */ = {
 			isa = PBXGroup;
 			children = (
+				282915DF1AF1A5F90006EEB5 /* Dead */,
 				2FCAE2791ABB533A00877008 /* MockFiles.swift */,
 				2FCAE27B1ABB533A00877008 /* TestBookmarks.swift */,
 				2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */,
@@ -1878,8 +1874,6 @@
 				2FCAE27F1ABB533A00877008 /* TestJoinedHistoryVisits.swift */,
 				2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */,
 				D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */,
-				2FCAE2821ABB533A00877008 /* TestTableTable.swift */,
-				2FCAE2831ABB533A00877008 /* TestVisitsTable.swift */,
 				2FCAE22B1ABB51F800877008 /* Supporting Files */,
 			);
 			path = StorageTests;
@@ -1896,20 +1890,13 @@
 		2FCAE2491ABB531100877008 /* SQL */ = {
 			isa = PBXGroup;
 			children = (
-				2FCAE24A1ABB531100877008 /* BookmarksSqlite.swift */,
 				2FCAE24B1ABB531100877008 /* BrowserDB.swift */,
 				2FCAE24C1ABB531100877008 /* FaviconsTable.swift */,
 				2FCAE24D1ABB531100877008 /* GenericTable.swift */,
-				2FCAE24E1ABB531100877008 /* HistoryTable.swift */,
-				2FCAE24F1ABB531100877008 /* JoinedFaviconsHistoryTable.swift */,
-				2FCAE2501ABB531100877008 /* JoinedHistoryVisitsTable.swift */,
 				2FCAE2521ABB531100877008 /* RemoteTabsTable.swift */,
 				2FCAE2531ABB531100877008 /* SchemaTable.swift */,
-				2FCAE2541ABB531100877008 /* SQLFavicons.swift */,
-				2FCAE2551ABB531100877008 /* SQLiteHistory.swift */,
 				2FCAE2561ABB531100877008 /* SQLitePasswords.swift */,
 				2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */,
-				2FCAE2591ABB531100877008 /* VisitsTable.swift */,
 			);
 			path = SQL;
 			sourceTree = "<group>";
@@ -3492,30 +3479,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FCAE2671ABB531100877008 /* BookmarksSqlite.swift in Sources */,
 				2FCAE2621ABB531100877008 /* History.swift in Sources */,
 				D33D6BC81ABCE8F60089DAB2 /* Thumbnails.swift in Sources */,
-				2FCAE2721ABB531100877008 /* SQLiteHistory.swift in Sources */,
 				2FCAE2631ABB531100877008 /* Passwords.swift in Sources */,
 				2FCAE2731ABB531100877008 /* SQLitePasswords.swift in Sources */,
 				2FCAE2751ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift in Sources */,
 				2FCAE26A1ABB531100877008 /* GenericTable.swift in Sources */,
 				28C4AB721AD42D4300D9ACE3 /* Clients.swift in Sources */,
-				2FCAE26D1ABB531100877008 /* JoinedHistoryVisitsTable.swift in Sources */,
-				2FCAE2761ABB531100877008 /* VisitsTable.swift in Sources */,
 				2FCAE26F1ABB531100877008 /* RemoteTabsTable.swift in Sources */,
 				2FCAE25D1ABB531100877008 /* Bookmarks.swift in Sources */,
 				2FCAE2781ABB531100877008 /* Visit.swift in Sources */,
 				2FCAE2701ABB531100877008 /* SchemaTable.swift in Sources */,
 				2FCAE2611ABB531100877008 /* FileAccessor.swift in Sources */,
-				2FCAE26B1ABB531100877008 /* HistoryTable.swift in Sources */,
 				2FCAE2691ABB531100877008 /* FaviconsTable.swift in Sources */,
 				2FCAE2661ABB531100877008 /* Site.swift in Sources */,
 				2FCAE2681ABB531100877008 /* BrowserDB.swift in Sources */,
 				2FCAE2651ABB531100877008 /* RemoteTabs.swift in Sources */,
 				2FCAE2601ABB531100877008 /* Favicons.swift in Sources */,
-				2FCAE2711ABB531100877008 /* SQLFavicons.swift in Sources */,
-				2FCAE26C1ABB531100877008 /* JoinedFaviconsHistoryTable.swift in Sources */,
 				2FCAE2771ABB531100877008 /* SwiftData.swift in Sources */,
 				2FCAE25F1ABB531100877008 /* Cursor.swift in Sources */,
 				28302E401AF0747800521E2E /* DatabaseError.swift in Sources */,
@@ -3529,36 +3509,24 @@
 				2FA435291ABB6831008031D1 /* SQLiteRemoteClientsAndTabs.swift in Sources */,
 				2FA435161ABB6829008031D1 /* History.swift in Sources */,
 				2FA435151ABB6829008031D1 /* FileAccessor.swift in Sources */,
-				2FA435261ABB6831008031D1 /* SQLiteHistory.swift in Sources */,
-				2FCAE2861ABB533A00877008 /* TestBookmarks.swift in Sources */,
-				2FCAE28D1ABB533A00877008 /* TestTableTable.swift in Sources */,
 				2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */,
 				2FA4351C1ABB6831008031D1 /* BrowserDB.swift in Sources */,
-				2FCAE2891ABB533A00877008 /* TestJoinedFaviconTable.swift in Sources */,
 				2FA4351A1ABB6829008031D1 /* Site.swift in Sources */,
 				2FA435211ABB6831008031D1 /* JoinedHistoryVisitsTable.swift in Sources */,
 				D32CACED1AE04DA1000658EB /* TestSwiftData.swift in Sources */,
-				2FCAE28A1ABB533A00877008 /* TestJoinedHistoryVisits.swift in Sources */,
 				2FA4352C1ABB6873008031D1 /* Visit.swift in Sources */,
-				2FA435201ABB6831008031D1 /* JoinedFaviconsHistoryTable.swift in Sources */,
 				2FA435271ABB6831008031D1 /* SQLitePasswords.swift in Sources */,
 				2FA4351B1ABB6831008031D1 /* BookmarksSqlite.swift in Sources */,
 				2FA435231ABB6831008031D1 /* RemoteTabsTable.swift in Sources */,
 				2FA435241ABB6831008031D1 /* SchemaTable.swift in Sources */,
 				2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */,
-				2FCAE2871ABB533A00877008 /* TestFaviconsTable.swift in Sources */,
 				2FA435131ABB6829008031D1 /* Cursor.swift in Sources */,
-				2FA435251ABB6831008031D1 /* SQLFavicons.swift in Sources */,
 				2FA435171ABB6829008031D1 /* Passwords.swift in Sources */,
 				2FA435141ABB6829008031D1 /* Favicons.swift in Sources */,
 				2FA4351E1ABB6831008031D1 /* GenericTable.swift in Sources */,
-				2FCAE28E1ABB533A00877008 /* TestVisitsTable.swift in Sources */,
-				2FCAE2881ABB533A00877008 /* TestHistoryTable.swift in Sources */,
-				2FA4351F1ABB6831008031D1 /* HistoryTable.swift in Sources */,
 				2FA435191ABB6829008031D1 /* RemoteTabs.swift in Sources */,
 				283A2AD91AF0794D003C0A26 /* DatabaseError.swift in Sources */,
 				284AA3AD1AD4C386009041C5 /* Clients.swift in Sources */,
-				2FA4352A1ABB6831008031D1 /* VisitsTable.swift in Sources */,
 				2FA435111ABB6829008031D1 /* Bookmarks.swift in Sources */,
 				2FA4351D1ABB6831008031D1 /* FaviconsTable.swift in Sources */,
 				2FA4352B1ABB6836008031D1 /* SwiftData.swift in Sources */,
