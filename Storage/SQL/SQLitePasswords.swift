@@ -104,7 +104,7 @@ public class SQLitePasswords : Passwords {
 
     public func get(options: QueryOptions, complete: (cursor: Cursor) -> Void) {
         var err: NSError? = nil
-        let cursor = db.query(&err, callback: { (connection, err) -> Cursor in
+        let cursor = db.withReadableConnection(&err, callback: { (connection, err) -> Cursor in
             return self.table.query(connection, options: options)
 
         })
@@ -117,12 +117,12 @@ public class SQLitePasswords : Passwords {
     public func add(password: Password, complete: (success: Bool) -> Void) {
         var err: NSError? = nil
         var success = false
-        let updated = db.update(&err) { (connection, inout err: NSError?) -> Int in
+        let updated = db.withWritableConnection(&err) { (connection, inout err: NSError?) -> Int in
             return self.table.update(connection, item: password, err: &err)
         }
 
         if updated == 0 {
-            let inserted = db.insert(&err) { (connection, inout err: NSError?) -> Int in
+            let inserted = db.withWritableConnection(&err) { (connection, inout err: NSError?) -> Int in
                 return self.table.insert(connection, item: password, err: &err)
             }
 
@@ -141,7 +141,7 @@ public class SQLitePasswords : Passwords {
 
     public func remove(password: Password, complete: (success: Bool) -> Void) {
         var err: NSError? = nil
-        let deleted = db.delete(&err) { (conn, inout err: NSError?) -> Int in
+        let deleted = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
             return self.table.delete(conn, item: password, err: &err)
         }
 
@@ -152,7 +152,7 @@ public class SQLitePasswords : Passwords {
 
     public func removeAll(complete: (success: Bool) -> Void) {
         var err: NSError? = nil
-        let deleted = db.delete(&err) { (conn, inout err: NSError?) -> Int in
+        let deleted = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
             return self.table.delete(conn, item: nil, err: &err)
         }
 
