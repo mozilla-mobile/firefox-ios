@@ -20,6 +20,9 @@ private struct URLBarViewUX {
     static let URLBarCurveOffset: CGFloat = 14
     // buffer so we dont see edges when animation overshoots with spring
     static let URLBarCurveBounceBuffer: CGFloat = 8
+
+    static let TabsButtonRotationOffset: CGFloat = 1.5
+    static let TabsButtonHeight: CGFloat = 18.0
 }
 
 protocol URLBarDelegate: class {
@@ -106,14 +109,15 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
 
         tabsButton = InsetButton()
         tabsButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-        tabsButton.setTitleColor(UIColor.darkGrayColor(), forState: UIControlState.Normal)
+        tabsButton.setTitleColor(URLBarViewUX.BackgroundColor, forState: UIControlState.Normal)
         tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the urlbar tabs button")
         tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
         tabsButton.titleLabel?.layer.cornerRadius = 2
         tabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
         tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        tabsButton.titleLabel?.layer.anchorPoint = CGPoint(x: 0.5, y: URLBarViewUX.TabsButtonRotationOffset)
         tabsButton.titleLabel?.snp_makeConstraints { make in
-            make.size.equalTo(18)
+            make.size.equalTo(URLBarViewUX.TabsButtonHeight)
             return
         }
         tabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
@@ -204,7 +208,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         }
 
         tabsButton.snp_remakeConstraints { make in
-            make.centerY.equalTo(self.locationContainer)
+            make.centerY.equalTo(self.locationContainer).offset((URLBarViewUX.TabsButtonRotationOffset - 0.5) * URLBarViewUX.TabsButtonHeight)
             make.trailing.equalTo(self)
             make.width.height.equalTo(AppConstants.ToolbarHeight)
         }
@@ -264,9 +268,50 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     }
 
     func updateTabCount(count: Int) {
-        tabsButton.setTitle(count.description, forState: UIControlState.Normal)
-        tabsButton.accessibilityValue = count.description
-        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
+
+        // make a 'clone' of the tabs button
+        let newTabsButton = InsetButton()
+        newTabsButton.setTitleColor(URLBarViewUX.BackgroundColor, forState: UIControlState.Normal)
+        newTabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
+        newTabsButton.titleLabel?.layer.cornerRadius = 2
+        newTabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
+        newTabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        newTabsButton.titleLabel?.snp_makeConstraints { make in
+            make.size.equalTo(URLBarViewUX.TabsButtonHeight)
+            return
+        }
+
+        if let anchor = tabsButton.titleLabel?.layer.anchorPoint {
+            newTabsButton.titleLabel?.layer.anchorPoint = anchor
+        }
+
+        newTabsButton.setTitle(count.description, forState: .Normal)
+        newTabsButton.frame = tabsButton.frame
+
+        // setup the rotation matrix
+        var flipTransform = CATransform3DIdentity
+        flipTransform.m34 = -1.0 / 200.0 // add some perspective
+        flipTransform = CATransform3DRotate(flipTransform, CGFloat(-M_PI_2), 1.0, 0.0, 0.0)
+        newTabsButton.titleLabel?.layer.transform = flipTransform
+
+        // offset the target rotation by 180º so the new tab comes from the front and the old tab falls back
+        flipTransform = CATransform3DRotate(flipTransform, CGFloat(M_PI), 1.0, 0.0, 0.0)
+
+        self.addSubview(newTabsButton)
+
+        UIView.animateWithDuration(1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { _ in
+                newTabsButton.titleLabel?.layer.transform = CATransform3DIdentity
+                self.tabsButton.titleLabel?.layer.transform = flipTransform
+                self.tabsButton.alpha = 0
+            }, completion: { _ in
+                // remove the clone and setup the actual tab button
+                newTabsButton.removeFromSuperview()
+                self.tabsButton.alpha = 1
+                self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
+                self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
+                self.tabsButton.accessibilityValue = count.description
+                self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
+        })
     }
 
     func SELdidClickAddTab() {
