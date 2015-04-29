@@ -272,7 +272,6 @@
 		59A68D66379CFA85C4EAF00B /* TwoLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68B1F857A8638598A63A0 /* TwoLineCell.swift */; };
 		59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A6839879D615FC1C0D71CE /* BookmarksPanel.swift */; };
 		59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */; };
-		9B64C2A81A6451A800473AE3 /* LongPress.js in Resources */ = {isa = PBXBuildFile; fileRef = 9B64C2A71A6451A800473AE3 /* LongPress.js */; };
 		D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D301AAED1A3A55B70078DD1D /* TabTrayController.swift */; };
 		D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D308E4EC1A530A8B00842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
@@ -385,6 +384,7 @@
 		E42475E81AB73B9B00B23D33 /* SWUtilityButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = E42475D81AB73B9B00B23D33 /* SWUtilityButtonView.m */; };
 		E42475E91AB73B9B00B23D33 /* SWUtilityButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = E42475D81AB73B9B00B23D33 /* SWUtilityButtonView.m */; };
 		E42475EA1AB73B9B00B23D33 /* SWUtilityButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = E42475D81AB73B9B00B23D33 /* SWUtilityButtonView.m */; };
+		E4252A0E1AF01AE40028C684 /* Swizzling.m in Sources */ = {isa = PBXBuildFile; fileRef = E4252A0D1AF01AE40028C684 /* Swizzling.m */; };
 		E42CCDE81A23A73D00B794D3 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
 		E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
 		E42CCE021A24C4E300B794D3 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
@@ -419,6 +419,7 @@
 		E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7561A793CF20022C5E0 /* FiraSans-Regular.ttf */; };
 		E4B7B77E1A793CF20022C5E0 /* FiraSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7571A793CF20022C5E0 /* FiraSans-SemiBold.ttf */; };
 		E4B7B7861A793CF20022C5E0 /* FiraSans-UltraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B75F1A793CF20022C5E0 /* FiraSans-UltraLight.ttf */; };
+		E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */ = {isa = PBXBuildFile; fileRef = E4C358541AF144BA00299F7E /* FSReadingList.m */; };
 		E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CD9E901A6897FB00318571 /* ReaderMode.swift */; };
 		E4CD9E9A1A68980A00318571 /* ReaderMode.js in Resources */ = {isa = PBXBuildFile; fileRef = E4CD9E991A68980A00318571 /* ReaderMode.js */; };
 		E4CD9F1B1A6D9B8E00318571 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E4CD9F191A6D9B7B00318571 /* libz.dylib */; };
@@ -491,7 +492,6 @@
 		E4F21AA61A13C4A300B0FAAA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4F21AA51A13C4A300B0FAAA /* Images.xcassets */; };
 		E4F480F51A954660003C0444 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */; };
 		E4F481041A95466A003C0444 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */; };
-		F835F3EB1AD6EBA900F894C8 /* LongPressBrowserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F835F3EA1AD6EBA900F894C8 /* LongPressBrowserHelper.swift */; };
 		F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21D91A090F8100AAB793 /* ClientTests.swift */; };
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
@@ -1216,7 +1216,6 @@
 		59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderPanel.swift; sourceTree = "<group>"; };
 		59A68B1F857A8638598A63A0 /* TwoLineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwoLineCell.swift; sourceTree = "<group>"; };
 		59A68CCB63E2A565CB03F832 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
-		9B64C2A71A6451A800473AE3 /* LongPress.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = LongPress.js; path = JavaScripts/LongPress.js; sourceTree = "<group>"; };
 		D301AAED1A3A55B70078DD1D /* TabTrayController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayController.swift; sourceTree = "<group>"; };
 		D308E4E31A5306F500842685 /* SearchEngines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngines.swift; sourceTree = "<group>"; };
 		D30B0F2F1AA7D66300C01CA3 /* ThumbnailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailCell.swift; sourceTree = "<group>"; };
@@ -1300,6 +1299,7 @@
 		E42475D61AB73B9B00B23D33 /* SWUtilityButtonTapGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWUtilityButtonTapGestureRecognizer.m; path = Carthage/Checkouts/SWTableViewCell/SWTableViewCell/PodFiles/SWUtilityButtonTapGestureRecognizer.m; sourceTree = "<group>"; };
 		E42475D71AB73B9B00B23D33 /* SWUtilityButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWUtilityButtonView.h; path = Carthage/Checkouts/SWTableViewCell/SWTableViewCell/PodFiles/SWUtilityButtonView.h; sourceTree = "<group>"; };
 		E42475D81AB73B9B00B23D33 /* SWUtilityButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWUtilityButtonView.m; path = Carthage/Checkouts/SWTableViewCell/SWTableViewCell/PodFiles/SWUtilityButtonView.m; sourceTree = "<group>"; };
+		E4252A0D1AF01AE40028C684 /* Swizzling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Swizzling.m; sourceTree = "<group>"; };
 		E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUtils.swift; sourceTree = "<group>"; };
 		E4424B1F1AC6EBE100F44C38 /* ReaderSettings.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ReaderSettings.xcassets; sourceTree = "<group>"; };
 		E4424B3B1AC71FB400F44C38 /* FiraSans-Book.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Book.ttf"; sourceTree = "<group>"; };
@@ -1330,6 +1330,9 @@
 		E4B7B7561A793CF20022C5E0 /* FiraSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Regular.ttf"; sourceTree = "<group>"; };
 		E4B7B7571A793CF20022C5E0 /* FiraSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		E4B7B75F1A793CF20022C5E0 /* FiraSans-UltraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-UltraLight.ttf"; sourceTree = "<group>"; };
+		E4C358531AF1440B00299F7E /* Swizzling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Swizzling.h; sourceTree = "<group>"; };
+		E4C358541AF144BA00299F7E /* FSReadingList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSReadingList.m; sourceTree = "<group>"; };
+		E4C358561AF1467A00299F7E /* FSReadingList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSReadingList.h; sourceTree = "<group>"; };
 		E4CD9E901A6897FB00318571 /* ReaderMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderMode.swift; sourceTree = "<group>"; };
 		E4CD9E991A68980A00318571 /* ReaderMode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ReaderMode.js; sourceTree = "<group>"; };
 		E4CD9F191A6D9B7B00318571 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -1379,7 +1382,6 @@
 		E4ECCD8C1AB091470005E717 /* Reader.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Reader.xcassets; sourceTree = "<group>"; };
 		E4ECCDAD1AB131770005E717 /* FiraSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Medium.ttf"; sourceTree = "<group>"; };
 		E4F21AA51A13C4A300B0FAAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		F835F3EA1AD6EBA900F894C8 /* LongPressBrowserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LongPressBrowserHelper.swift; sourceTree = "<group>"; };
 		F84B21BE1A090F8100AAB793 /* Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D31A090F8100AAB793 /* FennecAurora.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FennecAurora.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D81A090F8100AAB793 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1931,7 +1933,6 @@
 			isa = PBXGroup;
 			children = (
 				0BB5B3081AC0AD150052877D /* PasswordHelper.js */,
-				9B64C2A71A6451A800473AE3 /* LongPress.js */,
 			);
 			name = JavaScripts;
 			sourceTree = "<group>";
@@ -2090,7 +2091,6 @@
 				E4CD9F2C1A6DC91200318571 /* BrowserLocationView.swift */,
 				D314E7F51A37B98700426A76 /* BrowserToolbar.swift */,
 				D3A994951A3686BD008AD1AC /* BrowserViewController.swift */,
-				F835F3EA1AD6EBA900F894C8 /* LongPressBrowserHelper.swift */,
 				D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */,
 				0BB5B30A1AC0AD1F0052877D /* PasswordHelper.swift */,
 				D308E4E31A5306F500842685 /* SearchEngines.swift */,
@@ -2142,6 +2142,8 @@
 				2F3444561AB22A4B00FD9731 /* TimeConstants.swift */,
 				D3ACB4381AD33EBA00748D50 /* WeakList.swift */,
 				287DA9D51AE06D220055AC35 /* Extensions */,
+				E4252A0D1AF01AE40028C684 /* Swizzling.m */,
+				E4C358531AF1440B00299F7E /* Swizzling.h */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -2378,6 +2380,8 @@
 				E4A961331AC051360069AD6F /* ReadabilityBrowserHelper.swift */,
 				E4A961351AC052DE0069AD6F /* ReadabilityBrowserHelper.js */,
 				E4A961371AC06FA50069AD6F /* ReaderViewLoading.html */,
+				E4C358541AF144BA00299F7E /* FSReadingList.m */,
+				E4C358561AF1467A00299F7E /* FSReadingList.h */,
 			);
 			path = Reader;
 			sourceTree = "<group>";
@@ -3272,7 +3276,6 @@
 				E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */,
 				0BB5B3091AC0AD150052877D /* PasswordHelper.js in Resources */,
 				E4B7B7791A793CF20022C5E0 /* FiraSans-Light.ttf in Resources */,
-				9B64C2A81A6451A800473AE3 /* LongPress.js in Resources */,
 				D38A1BF01A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */,
 				E4CD9E9A1A68980A00318571 /* ReaderMode.js in Resources */,
 				E4424B201AC6EBE100F44C38 /* ReaderSettings.xcassets in Resources */,
@@ -3684,7 +3687,7 @@
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				D38B2D311A8D96D00040E6B5 /* GCDWebServerConnection.m in Sources */,
 				D38B2D401A8D96D00040E6B5 /* GCDWebServerFileRequest.m in Sources */,
-				F835F3EB1AD6EBA900F894C8 /* LongPressBrowserHelper.swift in Sources */,
+				E4252A0E1AF01AE40028C684 /* Swizzling.m in Sources */,
 				D38B2D4F1A8D96D00040E6B5 /* GCDWebServerFileResponse.m in Sources */,
 				E43A4E551A96B88100E25676 /* GCDWebServerDataRequest.m in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
@@ -3712,6 +3715,7 @@
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				D38B2D491A8D96D00040E6B5 /* GCDWebServerDataResponse.m in Sources */,
+				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
 				D38B2D521A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
 				E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,

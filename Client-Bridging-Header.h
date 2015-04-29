@@ -3,6 +3,9 @@
 
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCrypto.h>
+
+#import "FSReadingList.h"
+
 #import "GCDWebServer.h"
 #import "GCDWebServerDataResponse.h"
 #import "ThirdParty/UIImageViewAligned/UIImageViewAligned/UIImageViewAligned.h"
