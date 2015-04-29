@@ -4,7 +4,7 @@
 
 import UIKit
 import Storage
-import Snap
+import SnapKit
 
 protocol ClientPickerViewControllerDelegate {
     func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) -> Void

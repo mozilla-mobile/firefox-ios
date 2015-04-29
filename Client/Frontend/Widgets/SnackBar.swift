@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Snap
+import SnapKit
 
 
 /**
@@ -69,6 +69,8 @@ class SnackBar: UIView {
     let backgroundView: UIView
     let buttonsView: Toolbar
     private var buttons = [SnackButton]()
+    // The Constraint for the bottom of this snackbar. We use this to transition it
+    var bottom: Constraint?
 
     convenience init(text: String, img: UIImage?, buttons: [SnackButton]?) {
         var attributes = [NSObject: AnyObject]()
@@ -192,7 +194,7 @@ class SnackBar: UIView {
     */
     func show() {
         alpha = 1
-        transform = CGAffineTransformIdentity
+        bottom?.updateOffset(0)
     }
 
     /**
@@ -204,7 +206,7 @@ class SnackBar: UIView {
         if h == 0 {
             h = AppConstants.ToolbarHeight
         }
-        transform = CGAffineTransformMakeTranslation(0, h)
+        bottom?.updateOffset(h)
     }
 
     private func addButton(snackButton: SnackButton) {

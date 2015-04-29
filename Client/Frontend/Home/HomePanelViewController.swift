@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Snap
+import SnapKit
 import UIKit
 
 private struct HomePanelViewControllerUX {

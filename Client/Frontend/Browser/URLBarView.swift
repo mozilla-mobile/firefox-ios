@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 import Shared
-import Snap
+import SnapKit
 
 private struct URLBarViewUX {
     // The color shown behind the tabs count button, and underneath the (mostly transparent) status bar.
@@ -224,9 +224,9 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         }
 
         // Add an offset to the left for slide animation, and a bit of extra offset for spring bounces
-        let leftOffset = self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer
+        let leftOffset: CGFloat = self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer
         self.curveShape.snp_remakeConstraints { make in
-            make.edges.equalTo(self).offset(EdgeInsetsMake(0, -leftOffset, 0, -URLBarViewUX.URLBarCurveBounceBuffer))
+            make.edges.equalTo(self).offset(EdgeInsetsMake(0, -leftOffset, 0, URLBarViewUX.URLBarCurveBounceBuffer))
             return
         }
 

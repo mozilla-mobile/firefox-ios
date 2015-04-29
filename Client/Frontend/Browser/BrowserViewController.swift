@@ -7,7 +7,7 @@ import UIKit
 import WebKit
 import Shared
 import Storage
-import Snap
+import SnapKit
 
 private let OKString = NSLocalizedString("OK", comment: "OK button")
 private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
@@ -28,6 +28,7 @@ class BrowserViewController: UIViewController {
     private var screenshotHelper: ScreenshotHelper!
     private var homePanelIsInline = false
     private var searchLoader: SearchLoader!
+    private var snackBars = UIView()
 
     let profile: Profile
 
@@ -123,6 +124,8 @@ class BrowserViewController: UIViewController {
 
         footer = UIView()
         self.view.addSubview(footer)
+        footer.addSubview(snackBars)
+        snackBars.backgroundColor = UIColor.clearColor()
 
         super.viewDidLoad()
     }
@@ -164,7 +167,14 @@ class BrowserViewController: UIViewController {
             make.height.equalTo(AppConstants.ToolbarHeight)
         }
 
-        adjustFooterSize()
+        footer.snp_remakeConstraints { make in
+            let bars = self.footer.subviews
+            make.bottom.equalTo(self.view.snp_bottom)
+            make.top.equalTo(self.snackBars.snp_top)
+            make.leading.trailing.equalTo(self.view)
+        }
+
+        adjustFooterSize(top: nil)
         footerBackground?.snp_remakeConstraints { make in
             make.bottom.left.right.equalTo(self.footer)
             make.height.equalTo(AppConstants.ToolbarHeight)
@@ -538,9 +548,9 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 }
 
-
 extension BrowserViewController: BrowserDelegate {
-    private func findSnackbar(bars: [AnyObject], barToFind: SnackBar) -> Int? {
+    private func findSnackbar(barToFind: SnackBar) -> Int? {
+        let bars = snackBars.subviews
         for (index, bar) in enumerate(bars) {
             if bar === barToFind {
                 return index
@@ -550,43 +560,37 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     private func adjustFooterSize(top: UIView? = nil) {
-        footer.snp_remakeConstraints { make in
-            let bars = self.footer.subviews
-            make.bottom.equalTo(self.view.snp_bottom)
-
-            if let top = top {
-                make.top.equalTo(top.snp_top)
-            } else if bars.count > 0 {
-                if let bar = bars[bars.count-1] as? SnackBar {
-                    make.top.equalTo(bar.snp_top)
-                } else {
-                    make.top.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
-                }
+        snackBars.snp_remakeConstraints({ make in
+            make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
+            make.leading.trailing.equalTo(self.footer)
+            let bars = self.snackBars.subviews
+            if bars.count > 0 {
+                let view = bars[bars.count-1] as! UIView
+                make.top.equalTo(view.snp_top)
+            } else {
+                make.top.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
             }
-
-            make.leading.trailing.equalTo(self.view)
-        }
+        })
     }
 
     // This removes the bar from its superview and updates constraints appropriately
     private func finishRemovingBar(bar: SnackBar) {
-        // If there was a bar above this one, we need to remake its constraints so that it doesn't
-        // try to sit about "this" bar anymore.
-        let bars = footer.subviews
-        if let index = findSnackbar(bars, barToFind: bar) {
+        // If there was a bar above this one, we need to remake its constraints.
+        if let index = findSnackbar(bar) {
+            // If the bar being removed isn't on the top of the list
+            let bars = snackBars.subviews
             if index < bars.count-1 {
-                if var nextbar = bars[index+1] as? SnackBar {
-                    nextbar.snp_remakeConstraints { make in
-                        if index > 1 {
-                            if let bar = bars[index-1] as? SnackBar {
-                                make.bottom.equalTo(bar.snp_top)
-                            }
-                        } else {
-                            make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
-                        }
-                        make.left.width.equalTo(self.footer)
+                // Move the bar above this one
+                var nextbar = bars[index+1] as! SnackBar
+                nextbar.snp_updateConstraints { make in
+                    // If this wasn't the bottom bar, attach to the bar below it
+                    if index > 0 {
+                        let bar = bars[index-1] as! SnackBar
+                        nextbar.bottom = make.bottom.equalTo(bar.snp_top).constraint
+                    } else {
+                        // Otherwise, we attach it to the bottom of the snackbars
+                        nextbar.bottom = make.bottom.equalTo(self.snackBars.snp_bottom).constraint
                     }
-                    nextbar.setNeedsUpdateConstraints()
                 }
             }
         }
@@ -596,16 +600,20 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     private func finishAddingBar(bar: SnackBar) {
-        footer.addSubview(bar)
-        bar.snp_makeConstraints({ make in
+        snackBars.addSubview(bar)
+        bar.snp_remakeConstraints({ make in
             // If there are already bars showing, add this on top of them
-            let bars = self.footer.subviews
+            let bars = self.snackBars.subviews
+
+            // Add the bar on top of the stack
+            // We're the new top bar in the stack, so make sure we ignore ourself
             if bars.count > 1 {
-                if let view = bars[bars.count - 2] as? UIView {
-                    make.bottom.equalTo(view.snp_top)
-                }
+                let view = bars[bars.count - 2] as! UIView
+                bar.bottom = make.bottom.equalTo(view.snp_top).offset(0).constraint
+            } else {
+                bar.bottom = make.bottom.equalTo(self.snackBars.snp_bottom).offset(0).constraint
             }
-            make.left.width.equalTo(self.footer)
+            make.leading.trailing.equalTo(self.snackBars)
         })
     }
 
@@ -614,32 +622,19 @@ extension BrowserViewController: BrowserDelegate {
         adjustFooterSize(top: bar)
 
         bar.hide()
+        view.layoutIfNeeded()
         UIView.animateWithDuration(animated ? 0.25 : 0, animations: { () -> Void in
             bar.show()
+            self.view.layoutIfNeeded()
         })
     }
 
     func removeBar(bar: SnackBar, animated: Bool) {
-        bar.show()
-
-        let bars = footer.subviews
-        let index = findSnackbar(bars, barToFind: bar)!
+        let index = findSnackbar(bar)!
         UIView.animateWithDuration(animated ? 0.25 : 0, animations: { () -> Void in
             bar.hide()
-            // Make sure all the bars above it slide down as well
-            for i in index..<bars.count {
-                if let sibling = bars[i] as? SnackBar {
-                    sibling.transform = CGAffineTransformMakeTranslation(0, bar.frame.height)
-                }
-            }
+            self.view.layoutIfNeeded()
         }) { success in
-            // Undo all the animation transforms
-            for i in index..<bars.count {
-                if let bar = bars[i] as? SnackBar {
-                    bar.transform = CGAffineTransformIdentity
-                }
-            }
-
             // Really remove the bar
             self.finishRemovingBar(bar)
 

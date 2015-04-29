@@ -5,7 +5,7 @@
 import UIKit
 import Account
 import Shared
-import Snap
+import SnapKit
 import Storage
 import Sync
 import XCGLogger
