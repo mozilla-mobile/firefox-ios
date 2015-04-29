@@ -1,4 +1,4 @@
-github "Alamofire/Alamofire" == 1.2.0
+github "Alamofire/Alamofire"
 github "Masonry/Snap"
 github "swisspol/GCDWebServer"
 github "kif-framework/KIF"

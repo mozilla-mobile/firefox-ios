@@ -49,7 +49,7 @@ public class KeychainCache<T: JSONLiteralConvertible> {
     }
 
     public func checkpoint() {
-        log.info("Storing \(branch) in Keychain with label \(branch).\(label).")
+        log.info("Storing \(self.branch) in Keychain with label \(self.branch).\(self.label).")
         // TODO: PII logging.
         if let value = value {
             let jsonString = value.asJSON().toString(pretty: false)
