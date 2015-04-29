@@ -1,5 +1,5 @@
 import Foundation
-import Snap
+import SnapKit
 
 class Toolbar : UIView {
     var drawTopBorder = false
