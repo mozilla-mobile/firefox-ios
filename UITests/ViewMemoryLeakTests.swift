@@ -16,10 +16,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
-        // Go back to about:home to reset the UI state between tests.
-        tester().tapViewWithAccessibilityIdentifier("url")
-        let url = "about:home\n"
-        tester().clearTextFromAndThenEnterText(url, intoViewWithAccessibilityLabel: "Address and Search")
+        BrowserUtils.resetToAboutHome(tester())
     }
 
     func testAboutHomeDisposed() {

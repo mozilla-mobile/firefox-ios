@@ -14,6 +14,12 @@ class SearchSettingsUITests: KIFTestCase {
         tester().waitForViewWithAccessibilityLabel("Search")
     }
 
+    private func navigateFromSearchSettings() {
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("about:home")
+    }
+
     // Given that we're at the Search Settings sheet, select the named search engine as the default.
     // Afterwards, we're still at the Search Settings sheet.
     private func selectDefaultSearchEngineName(engineName: String) {
@@ -48,5 +54,6 @@ class SearchSettingsUITests: KIFTestCase {
         XCTAssertEqual("Amazon.com", getDefaultSearchEngineName())
         selectDefaultSearchEngineName("Yahoo")
         XCTAssertEqual("Yahoo", getDefaultSearchEngineName())
+        navigateFromSearchSettings()
     }
 }

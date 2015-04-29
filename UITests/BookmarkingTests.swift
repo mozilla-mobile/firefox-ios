@@ -86,6 +86,9 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertEqual(cell.textLabel!.text!, url1, "Cell shows url")
 
         tester().tapViewWithAccessibilityLabel("Cancel")
+    }
 
+    override func tearDown() {
+        BrowserUtils.resetToAboutHome(tester())
     }
 }
