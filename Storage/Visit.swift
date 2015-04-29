@@ -63,8 +63,28 @@ public class SiteVisit: Visit {
     var id: Int? = nil
     public let site: Site
 
+    public override var hashValue: Int {
+        return date.hashValue ^ type.hashValue ^ (id?.hashValue ?? 0) ^ (site.id ?? 0)
+    }
+
     public init(site: Site, date: MicrosecondTimestamp, type: VisitType = .Unknown) {
         self.site = site
         super.init(date: date, type: type)
     }
+}
+
+public func ==(lhs: SiteVisit, rhs: SiteVisit) -> Bool {
+    if let lhsID = lhs.id, rhsID = rhs.id {
+        if lhsID != rhsID {
+            return false
+        }
+    } else {
+        if lhs.id != nil || rhs.id != nil {
+            return false
+        }
+    }
+
+    // TODO: compare Site.
+    return lhs.date == rhs.date &&
+           lhs.type == rhs.type
 }
