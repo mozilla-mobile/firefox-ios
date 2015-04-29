@@ -159,7 +159,8 @@ public class BrowserProfile: Profile {
     } ()
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
-        return BookmarksSqliteFactory(db: self.db)
+        return MockMemoryBookmarksStore()
+//        return BookmarksSqliteFactory(db: self.db)
     }()
 
     lazy var searchEngines: SearchEngines = {
@@ -171,7 +172,8 @@ public class BrowserProfile: Profile {
     }
 
     lazy var favicons: Favicons = {
-        return SQLiteFavicons(db: self.db)
+        return MockFavicons()
+//        return SQLiteFavicons(db: self.db)
     }()
 
     // lazy var ReadingList readingList
@@ -181,7 +183,8 @@ public class BrowserProfile: Profile {
     }()
 
     lazy var history: BrowserHistory = {
-        return SQLiteHistory(db: self.db)
+        return MockBrowserHistory()
+//        return SQLiteHistory(db: self.db)
     }()
 
     lazy var readingList: ReadingListService? = {
