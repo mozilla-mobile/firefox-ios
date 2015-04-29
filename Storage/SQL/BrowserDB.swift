@@ -41,10 +41,11 @@ let DBCouldNotOpenErrorCode = 200
 // Version 3 - Added a favicons table
 // Version 4 - Added a readinglist table
 // Version 5 - Added the clients and the tabs tables.
+// Version 6 - Visit timestamps are now microseconds.
 public class BrowserDB {
     private let db: SwiftData
-    // XXX: Increasing this should blow away old history, since we currently dont' support any upgrades
-    private let Version: Int = 5
+    // XXX: Increasing this should blow away old history, since we currently don't support any upgrades.
+    private let Version: Int = 6
     private let FileName = "browser.db"
     private let files: FileAccessor
     private let schemaTable: SchemaTable<TableInfo>
