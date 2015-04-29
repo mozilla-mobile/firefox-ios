@@ -19,6 +19,21 @@ public protocol BrowserHistory {
     func addVisit(visit: SiteVisit) -> Success
 }
 
+// TODO: rip this out.
+public class MockBrowserHistory: BrowserHistory {
+    public init() {}
+
+    public func clear() -> Success {
+        return succeed()
+    }
+    public func get(options: QueryOptions?) -> Deferred<Result<Cursor>> {
+        return deferResult(DatabaseError(err: nil))
+    }
+    public func addVisit(visit: SiteVisit) -> Success {
+        return succeed()
+    }
+}
+
 /**
  * The interface that history storage needs to provide in order to be
  * synced by a `HistorySynchronizer`.
