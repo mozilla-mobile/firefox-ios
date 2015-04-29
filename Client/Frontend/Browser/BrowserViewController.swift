@@ -939,29 +939,41 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
-        let url = navigationAction.request.URL
-        if url == nil {
-            decisionHandler(WKNavigationActionPolicy.Cancel)
-            return
+    private func callExternal(url: NSURL) {
+        if let phoneNumber = url.resourceSpecifier?.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding) {
+            let alert = UIAlertController(title: phoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Alert Cancel Button"), style: UIAlertActionStyle.Cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Call", comment:"Alert Call Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
+                UIApplication.sharedApplication().openURL(url)
+            }))
+            presentViewController(alert, animated: true, completion: nil)
         }
+    }
 
-        if let scheme = url!.scheme {
-            switch scheme {
-            case "about", "http", "https":
-                if isWhitelistedUrl(url!) {
-                    // If the url is whitelisted, we open it without prompting.
-                    openExternal(url!, prompt: false)
+    func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
+        if let url = navigationAction.request.URL {
+            if let scheme = url.scheme {
+                switch scheme {
+                case "about", "http", "https":
+                    if isWhitelistedUrl(url) {
+                        // If the url is whitelisted, we open it without prompting.
+                        openExternal(url, prompt: false)
+                        decisionHandler(WKNavigationActionPolicy.Cancel)
+                    } else {
+                        decisionHandler(WKNavigationActionPolicy.Allow)
+                    }
+                case "tel":
+                    callExternal(url)
                     decisionHandler(WKNavigationActionPolicy.Cancel)
-                } else {
-                    decisionHandler(WKNavigationActionPolicy.Allow)
+                default:
+                    if UIApplication.sharedApplication().canOpenURL(url) {
+                        openExternal(url)
+                    }
+                    decisionHandler(WKNavigationActionPolicy.Cancel)
                 }
-            default:
-                if UIApplication.sharedApplication().canOpenURL(url!) {
-                    openExternal(url!)
-                }
-                decisionHandler(WKNavigationActionPolicy.Cancel)
             }
+        } else {
+            decisionHandler(WKNavigationActionPolicy.Cancel)
         }
     }
 
