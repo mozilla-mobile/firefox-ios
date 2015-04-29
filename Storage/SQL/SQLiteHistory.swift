@@ -46,7 +46,7 @@ public class SQLiteHistory: BrowserHistory {
         var err: NSError? = nil
 
         // TODO: this should happen asynchronously.
-        db.delete(&err) { (conn, inout err: NSError?) -> Int in
+        db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
             return self.table.delete(conn, item: nil, err: &err)
         }
 
@@ -81,7 +81,7 @@ public class SQLiteHistory: BrowserHistory {
 
     public func get(options: QueryOptions?) -> Deferred<Result<Cursor>> {
         var err: NSError? = nil
-        let res = db.query(&err) { (connection, inout err: NSError?) -> Cursor in
+        let res = db.withReadableConnection(&err) { (connection, inout err: NSError?) -> Cursor in
             return WrappedCursor(cursor: self.table.query(connection, options: options))
         }
 

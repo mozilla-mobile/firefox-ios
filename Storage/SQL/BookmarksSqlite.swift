@@ -183,7 +183,7 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
 
     private func getChildren(guid: String) -> Cursor {
         var err: NSError? = nil
-        return db.query(&err, callback: { (connection, err) -> Cursor in
+        return db.withReadableConnection(&err, callback: { (connection, err) -> Cursor in
             return self.table.query(connection, options: QueryOptions(filter: guid))
         })
     }
@@ -200,7 +200,7 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
 
     public func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         var err: NSError? = nil
-        let children = db.query(&err, callback: { (connection, err) -> Cursor in
+        let children = db.withReadableConnection(&err, callback: { (connection, err) -> Cursor in
             return self.table.query(connection, options: QueryOptions(filter: guid))
         })
         let folder = SqliteBookmarkFolder(guid: guid, title: "", children: children)
@@ -209,7 +209,7 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
 
     public func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         var err: NSError? = nil
-        let children = db.query(&err, callback: { (connection, err) -> Cursor in
+        let children = db.withReadableConnection(&err, callback: { (connection, err) -> Cursor in
             return self.table.query(connection, options: QueryOptions(filter: nil))
         })
         let folder = SqliteBookmarkFolder(guid: BookmarkRoots.PLACES_FOLDER_GUID, title: "Root", children: children)
@@ -224,7 +224,7 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
 
     public func shareItem(item: ShareItem) {
         var err: NSError? = nil
-        let inserted = db.insert(&err, callback: { (connection, err) -> Int in
+        let inserted = db.withWritableConnection(&err, callback: { (connection, err) -> Int in
             var bookmark = BookmarkItem(guid: Bytes.generateGUID(), title: item.title ?? "", url: item.url)
             bookmark.favicon = item.favicon
             return self.table.insert(connection, item: bookmark, err: &err)
@@ -233,7 +233,7 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
 
     public func findForUrl(url: String, success: (Cursor) -> (), failure: (Any) -> ()) {
         var err: NSError? = nil
-        let children = db.query(&err, callback: { (connection, err) -> Cursor in
+        let children = db.withReadableConnection(&err, callback: { (connection, err) -> Cursor in
             let opts = QueryOptions(filter: url, filterType: FilterType.ExactUrl, sort: QuerySort.None)
             return self.table.query(connection, options: opts)
         })
@@ -254,7 +254,7 @@ public class BookmarksSqliteFactory : BookmarksModelFactory, ShareToDestination 
     // Why does this function look so strangely worded? Segfault in the compiler.
     public func remove(bookmark: BookmarkNode, success: (Bool) -> (), failure: (Any) -> ()) {
         var err: NSError? = nil
-        let numDeleted = self.db.delete(&err) { (conn, inout err: NSError?) -> Int in
+        let numDeleted = self.db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
             return self.table.delete(conn, item: bookmark, err: &err)
         }
 
