@@ -4,7 +4,7 @@
 
 import Foundation
 
-class GenericTable<T>: Table {
+class GenericTable<T>: BaseTable {
     typealias Type = T
 
     // Implementors need override these methods
