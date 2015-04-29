@@ -20,15 +20,23 @@ class TableInfoWrapper: TableInfo {
     }
 }
 
-/* A table in our database. Note this doesn't have to be a real table. It might be backed by a join
- * or something else interesting. */
-protocol Table : TableInfo {
-    typealias Type
+/**
+ * Something that knows how to build and maintain part of a database.
+ * This should really be called "Section" or something like that.
+ */
+protocol Table: TableInfo {
     func create(db: SQLiteDBConnection, version: Int) -> Bool
     func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool
     func exists(db: SQLiteDBConnection) -> Bool
     func drop(db: SQLiteDBConnection) -> Bool
+}
 
+/**
+ * A table in our database. Note this doesn't have to be a real table. It might be backed by a join
+ * or something else interesting.
+ */
+protocol BaseTable: Table {
+    typealias Type
     func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
     func update(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
     func delete(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
