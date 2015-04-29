@@ -34,14 +34,13 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor, SearchViewController> {
             }
 
             let options = QueryOptions(filter: query, filterType: FilterType.Url, sort: QuerySort.Frecency)
-            self.history.get(options, complete: { (cursor: Cursor) in
-                if cursor.status != .Success {
-                    println("Err: \(cursor.statusMessage)")
-                } else {
+            self.history.get(options).uponQueue(dispatch_get_main_queue()) { result in
+                // Failed cursors are excluded in .get().
+                if let cursor = result.successValue {
                     self.load(cursor)
                     self.urlBar.setAutocompleteSuggestion(self.getAutocompleteSuggestion(cursor))
                 }
-            })
+            }
         }
     }
 

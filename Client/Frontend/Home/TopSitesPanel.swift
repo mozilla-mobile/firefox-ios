@@ -25,11 +25,16 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
     var profile: Profile! {
         didSet {
             let options = QueryOptions(filter: nil, filterType: .None, sort: .Frecency)
-            profile.history.get(options, complete: { (data) -> Void in
-                self.dataSource.data = data
-                self.dataSource.profile = self.profile
-                self.collection.reloadData()
-            })
+
+            // This needs to run on the main thread so that our dataSource is ready.
+            profile.history.get(options).uponQueue(dispatch_get_main_queue()) { result in
+                if let data = result.successValue {
+                    self.dataSource.data = data
+                    self.dataSource.profile = self.profile
+                    self.collection.reloadData()
+                }
+                // TODO: error handling.
+            }
         }
     }
 

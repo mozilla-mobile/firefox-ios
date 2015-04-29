@@ -5,6 +5,7 @@
 import Foundation
 
 public typealias Timestamp = UInt64
+public typealias MicrosecondTimestamp = UInt64
 
 public let ThreeWeeksInSeconds = 3 * 7 * 24 * 60 * 60
 
@@ -17,6 +18,9 @@ public let OneMinuteInMilliseconds: UInt64 = 60 * 1000
 extension NSDate {
     public class func now() -> Timestamp {
         return UInt64(1000 * NSDate().timeIntervalSince1970)
+    }
+    public class func nowMicroseconds() -> MicrosecondTimestamp {
+        return UInt64(1000000 * NSDate().timeIntervalSince1970)
     }
 }
 

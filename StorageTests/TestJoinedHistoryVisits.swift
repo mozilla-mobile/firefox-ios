@@ -4,7 +4,7 @@ import XCTest
 class TestJoinedHistoryVisits : XCTestCase {
     var db: SwiftData!
 
-    private func addSite(history: JoinedHistoryVisitsTable, url: String, title: String, s: Bool = true) -> Site {
+    private func addSite(history: JoinedHistoryVisitsTable, url: String, title: String, expectSuccess: Bool = true) -> Site {
         var inserted = -1;
         let site = Site(url: url, title: title)
         db.withConnection(.ReadWrite) { connection -> NSError? in
@@ -13,7 +13,7 @@ class TestJoinedHistoryVisits : XCTestCase {
             return err
         }
 
-        if s {
+        if expectSuccess {
             XCTAssert(inserted >= 0, "Inserted succeeded \(url) \(title)")
         } else {
             XCTAssert(inserted == -1, "Inserted failed")
@@ -21,16 +21,16 @@ class TestJoinedHistoryVisits : XCTestCase {
         return site
     }
 
-    private func addVisit(history: JoinedHistoryVisitsTable, site: Site, s: Bool = true) -> Visit {
+    private func addVisit(history: JoinedHistoryVisitsTable, site: Site, expectSuccess: Bool = true) -> SiteVisit {
         var inserted = -1;
-        let visit = Visit(site: site, date: NSDate())
+        let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
         db.withConnection(.ReadWrite) { connection -> NSError? in
             var err: NSError? = nil
             inserted = history.insert(connection, item: (nil, visit), err: &err)
             return err
         }
 
-        if s {
+        if expectSuccess {
             XCTAssert(inserted >= 0, "Inserted succeeded")
         } else {
             XCTAssert(inserted == -1, "Inserted failed")
@@ -38,7 +38,7 @@ class TestJoinedHistoryVisits : XCTestCase {
         return visit
     }
 
-    private func checkSites(history: JoinedHistoryVisitsTable, options: QueryOptions?, urls: [String: String], s: Bool = true) {
+    private func checkSites(history: JoinedHistoryVisitsTable, options: QueryOptions?, urls: [String: String]) {
         db.withConnection(.ReadOnly) { connection -> NSError? in
             var cursor = history.query(connection, options: options)
             XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
@@ -58,7 +58,7 @@ class TestJoinedHistoryVisits : XCTestCase {
         }
     }
 
-    private func checkSitesOrdered(history: JoinedHistoryVisitsTable, options: QueryOptions?, urls: [(String, String)], s: Bool = true) {
+    private func checkSitesOrdered(history: JoinedHistoryVisitsTable, options: QueryOptions?, urls: [(String, String)], expectSuccess: Bool = true) {
         db.withConnection(.ReadOnly) { connection -> NSError? in
             var cursor = history.query(connection, options: options)
             XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
@@ -68,7 +68,11 @@ class TestJoinedHistoryVisits : XCTestCase {
                 let d = cursor[index]
                 println("Found \(d)")
                 let (site, visit) = cursor[index] as! (site: Site, visit: Visit)
-                XCTAssertNotNil(s, "cursor has a site for entry")
+                if expectSuccess {
+                    XCTAssertNotNil(site, "cursor has a site for entry")
+                } else {
+                    XCTAssertNil(site, "cursor has no site for entry")
+                }
                 let info = urls[index]
                 XCTAssertEqual(site.url, info.0, "Found url")
                 XCTAssertEqual(site.title, info.1, "Found right title")
@@ -77,14 +81,14 @@ class TestJoinedHistoryVisits : XCTestCase {
         }
     }
 
-    private func clear(history: JoinedHistoryVisitsTable, item: (site:Site?, visit:Visit?)? = nil, s: Bool = true) {
+    private func clear(history: JoinedHistoryVisitsTable, item: (site: Site?, visit: SiteVisit?)? = nil, expectSuccess: Bool = true) {
         var deleted = -1;
         db.withConnection(.ReadWrite) { connection -> NSError? in
             var err: NSError? = nil
             deleted = history.delete(connection, item: item, err: &err)
             return nil
         }
-        if s {
+        if expectSuccess {
             XCTAssert(deleted >= 0, "Delete worked")
         } else {
             XCTAssert(deleted == -1, "Delete failed")

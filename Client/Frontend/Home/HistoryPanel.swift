@@ -4,6 +4,7 @@
 
 import UIKit
 
+import Shared
 import Storage
 
 private func getDate(#dayOffset: Int) -> NSDate {
@@ -26,11 +27,14 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     override func reloadData() {
         let opts = QueryOptions()
         opts.sort = .LastVisit
-        profile.history.get(opts, complete: { (data: Cursor) -> Void in
-            self.sectionOffsets = [Int: Int]()
-            self.data = data
-            self.tableView.reloadData()
-        })
+        profile.history.get(opts).uponQueue(dispatch_get_main_queue()) { result in
+            if let data = result.successValue {
+                self.sectionOffsets = [Int: Int]()
+                self.data = data
+                self.tableView.reloadData()
+            }
+            // TODO: error handling.
+        }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -80,15 +84,15 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return title.uppercaseString
     }
 
-    private func isInSection(date: NSDate, section: Int) -> Bool {
-        let now = NSDate()
+    private func isInSection(date: MicrosecondTimestamp, section: Int) -> Bool {
+        let date = Double(date)
         switch section {
         case 0:
-            return date.timeIntervalSince1970 > Today.timeIntervalSince1970
+            return date > (1000 * Today.timeIntervalSince1970)
         case 1:
-            return date.timeIntervalSince1970 > Yesterday.timeIntervalSince1970
+            return date > (1000 * Yesterday.timeIntervalSince1970)
         case 2:
-            return date.timeIntervalSince1970 > ThisWeek.timeIntervalSince1970
+            return date > (1000 * ThisWeek.timeIntervalSince1970)
         default:
             return true
         }

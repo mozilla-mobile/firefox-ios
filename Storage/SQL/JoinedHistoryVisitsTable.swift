@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 let HistoryVisits = "history-visits"
 
@@ -20,7 +21,7 @@ func getFrecency() -> String {
 // 2.) Adding a visit here will ensure that a site exists for the visit
 // 3.) Updates currently only update site information.
 class JoinedHistoryVisitsTable: Table {
-    typealias Type = (site: Site?, visit: Visit?)
+    typealias Type = (site: Site?, visit: SiteVisit?)
     var name: String { return HistoryVisits }
     var version: Int { return 1 }
 
@@ -94,7 +95,7 @@ class JoinedHistoryVisitsTable: Table {
             }
 
             // Now add a visit
-            let visit = Visit(site: site, date: NSDate())
+            let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
             return visits.insert(db, item: visit, err: &err)
         }
 
@@ -109,12 +110,12 @@ class JoinedHistoryVisitsTable: Table {
         if let visit = item?.visit {
             return visits.delete(db, item: visit, err: &err)
         } else if let site = item?.site {
-            let v = Visit(site: site, date: NSDate())
+            let v = SiteVisit(site: site, date: NSDate.nowMicroseconds())
             visits.delete(db, item: v, err: &err)
             return history.delete(db, item: site, err: &err)
         } else if item == nil {
             let site: Site? = nil
-            let visit: Visit? = nil
+            let visit: SiteVisit? = nil
             history.delete(db, item: site, err: &err);
             return visits.delete(db, item: visit, err: &err);
         }
@@ -126,10 +127,10 @@ class JoinedHistoryVisitsTable: Table {
         site.guid = result["guid"] as? String
         site.id = result["historyId"] as? Int
 
-        let d = NSDate(timeIntervalSince1970: result["visitDate"] as! Double)
+        let d = (result["visitDate"] as! NSNumber).unsignedLongLongValue
 
         // This visit is a combination of multiple visits. Type is meaningless.
-        let visit = Visit(site: site, date: d, type: VisitType.Unknown)
+        let visit = SiteVisit(site: site, date: d, type: VisitType.Unknown)
         visit.id = result["visitId"] as? Int
 
         site.latestVisit = visit

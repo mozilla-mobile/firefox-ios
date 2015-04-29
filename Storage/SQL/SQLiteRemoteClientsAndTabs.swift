@@ -8,18 +8,6 @@ import XCGLogger
 
 private let log = XCGLogger.defaultInstance()
 
-public class DatabaseError: ErrorType {
-    let err: NSError?
-
-    public var description: String {
-        return err?.localizedDescription ?? "Unknown database error."
-    }
-
-    init(err: NSError?) {
-        self.err = err
-    }
-}
-
 public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     let db: BrowserDB
     let clients = RemoteClientsTable<RemoteClient>()

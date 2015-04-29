@@ -45,6 +45,11 @@ public func deferResult<T>(e: ErrorType) -> Deferred<Result<T>> {
     return Deferred(value: Result(failure: e))
 }
 
+public typealias Success = Deferred<Result<()>>
+
+public func succeed() -> Success {
+    return deferResult(())
+}
 
 
 public func chainDeferred<T, U>(a: Deferred<Result<T>>, f: T -> Deferred<Result<U>>) -> Deferred<Result<U>> {

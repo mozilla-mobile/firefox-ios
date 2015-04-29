@@ -7,9 +7,9 @@ class TestHistory : ProfileTest {
     private func innerAddSite(history: BrowserHistory, url: String, title: String, callback: (success: Bool) -> Void) {
         // Add an entry
         let site = Site(url: url, title: title)
-        let visit = Visit(site: site, date: NSDate())
-        history.addVisit(visit) { success in
-            callback(success: success)
+        let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
+        history.addVisit(visit).upon {
+            callback(success: $0.isSuccess)
         }
     }
 
@@ -23,9 +23,10 @@ class TestHistory : ProfileTest {
 
     private func innerCheckSites(history: BrowserHistory, callback: (cursor: Cursor) -> Void) {
         // Retrieve the entry
-        history.get(nil, complete: { cursor in
-            callback(cursor: cursor)
-        })
+        history.get(nil).upon {
+            XCTAssertTrue($0.isSuccess)
+            callback(cursor: $0.successValue!)
+        }
     }
 
 
@@ -51,9 +52,7 @@ class TestHistory : ProfileTest {
     }
 
     private func innerClear(history: BrowserHistory, callback: (s: Bool) -> Void) {
-        history.clear({ success in
-            callback(s: success)
-        })
+        history.clear().upon { callback(s: $0.isSuccess) }
     }
 
     private func clear(history: BrowserHistory, s: Bool = true) {
@@ -69,10 +68,13 @@ class TestHistory : ProfileTest {
 
     private func checkVisits(history: BrowserHistory, url: String) {
         let expectation = self.expectationWithDescription("Wait for history")
-        history.get(nil) { cursor in
+        history.get(nil).upon { result in
+            XCTAssertTrue(result.isSuccess)
             let options = QueryOptions()
             options.filter = url
-            history.get(options) { cursor in
+            history.get(options).upon { result in
+                XCTAssertTrue(result.isSuccess)
+                let cursor = result.successValue!
                 XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
                 // XXX - We don't allow querying much info about visits here anymore, so there isn't a lot to do
                 expectation.fulfill()

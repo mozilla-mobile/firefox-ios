@@ -3,11 +3,35 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
+import XCGLogger
+
+private let log = XCGLogger.defaultInstance()
+
+public class IgnoredSiteError: ErrorType {
+    public var description: String {
+        return "Ignored site."
+    }
+}
+
+
+func failOrSucceed<T>(err: NSError?, op: String, val: T) -> Deferred<Result<T>> {
+    if let err = err {
+        log.debug("\(op) failed: \(err.localizedDescription)")
+        return deferResult(DatabaseError(err: err))
+    }
+
+    return deferResult(val)
+}
+
+func failOrSucceed(err: NSError?, op: String) -> Success {
+    return failOrSucceed(err, op, ())
+}
 
 /**
  * The sqlite-backed implementation of the history protocol.
  */
-public class SQLiteHistory : BrowserHistory {
+public class SQLiteHistory: BrowserHistory {
     let db: BrowserDB
     private let table = JoinedHistoryVisitsTable()
     private var ignoredSchemes = ["about"]
@@ -17,21 +41,16 @@ public class SQLiteHistory : BrowserHistory {
         db.createOrUpdate(table)
     }
 
-    public func clear(complete: (success: Bool) -> Void) {
+    public func clear() -> Success {
         let s: Site? = nil
         var err: NSError? = nil
+
+        // TODO: this should happen asynchronously.
         db.delete(&err) { (conn, inout err: NSError?) -> Int in
             return self.table.delete(conn, item: nil, err: &err)
         }
 
-        dispatch_async(dispatch_get_main_queue()) {
-            if err != nil {
-                self.debug("Clear failed: \(err!.localizedDescription)")
-                complete(success: false)
-            } else {
-                complete(success: true)
-            }
-        }
+        return failOrSucceed(err, "Clear")
     }
 
     public class WrappedCursor : Cursor {
@@ -60,15 +79,23 @@ public class SQLiteHistory : BrowserHistory {
         }
     }
 
-    public func get(options: QueryOptions?, complete: (data: Cursor) -> Void) {
+    public func get(options: QueryOptions?) -> Deferred<Result<Cursor>> {
         var err: NSError? = nil
         let res = db.query(&err) { (connection, inout err: NSError?) -> Cursor in
             return WrappedCursor(cursor: self.table.query(connection, options: options))
         }
 
-        dispatch_async(dispatch_get_main_queue()) {
-            complete(data: res)
+        if let err = err {
+            log.debug("Query failed: \(err.localizedDescription)")
+            return deferResult(DatabaseError(err: err))
         }
+
+        if res.status != .Success {
+            log.warning("Got cursor but status != Success: \(res.statusMessage).")
+            return deferResult(DatabaseError(err: nil))
+        }
+
+        return deferResult(res)
     }
 
     private func shouldAdd(url: String) -> Bool {
@@ -83,33 +110,18 @@ public class SQLiteHistory : BrowserHistory {
         return true
     }
 
-    public func addVisit(visit: Visit, complete: (success: Bool) -> Void) {
+    public func addVisit(visit: SiteVisit) -> Success {
         var err: NSError? = nil
 
         // Don't store visits to sites with about: protocols
         if !shouldAdd(visit.site.url) {
-            dispatch_async(dispatch_get_main_queue()) {
-                complete(success: false)
-            }
-            return
+            return deferResult(IgnoredSiteError())
         }
 
         let inserted = db.insert(&err) { (conn, inout err: NSError?) -> Int in
             return self.table.insert(conn, item: (site: visit.site, visit: visit), err: &err)
         }
 
-        dispatch_async(dispatch_get_main_queue()) {
-            if err != nil {
-                self.debug("Add failed: \(err!.localizedDescription)")
-            }
-            complete(success: err == nil)
-        }
-    }
-
-    private let debug_enabled = false
-    private func debug(msg: String) {
-        if debug_enabled {
-            println("HistorySqlite: " + msg)
-        }
+        return failOrSucceed(err, "Add")
     }
 }

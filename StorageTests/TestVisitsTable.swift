@@ -4,11 +4,11 @@ import XCTest
 class TestVisitsTable : XCTestCase {
     var db: SwiftData!
 
-    private func addVisit(visits: VisitsTable<Visit>, site: Site, s: Bool = true) -> Visit {
+    private func addVisit(visits: VisitsTable<SiteVisit>, site: Site, s: Bool = true) -> SiteVisit {
         var inserted = -1;
-        var visit : Visit!
+        var visit : SiteVisit!
         db.withConnection(.ReadWrite) { connection -> NSError? in
-            visit = Visit(site: site, date: NSDate())
+            visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
             var err: NSError? = nil
             visit.id = visits.insert(connection, item: visit, err: &err)
             return nil
@@ -22,7 +22,7 @@ class TestVisitsTable : XCTestCase {
         return visit
     }
 
-    private func checkVisits(visits: VisitsTable<Visit>, options: QueryOptions? = nil, vs: [Visit], s: Bool = true) {
+    private func checkVisits(visits: VisitsTable<SiteVisit>, options: QueryOptions? = nil, vs: [SiteVisit], s: Bool = true) {
         db.withConnection(.ReadOnly) { connection -> NSError? in
             var cursor = visits.query(connection, options: options)
             XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
@@ -31,7 +31,7 @@ class TestVisitsTable : XCTestCase {
             for index in 0..<cursor.count {
                 if let s = cursor[index] as? Visit {
                     XCTAssertNotNil(s, "cursor has a site for entry")
-                    XCTAssertEqual(s.date.timeIntervalSince1970, vs[index].date.timeIntervalSince1970, "Found right date")
+                    XCTAssertEqual(s.date, vs[index].date, "Found right date")
                 } else {
                     XCTAssertFalse(true, "Should not be nil...")
                 }
@@ -40,7 +40,7 @@ class TestVisitsTable : XCTestCase {
         }
     }
 
-    private func clear(visits: VisitsTable<Visit>, visit: Visit? = nil, s: Bool = true) {
+    private func clear(visits: VisitsTable<SiteVisit>, visit: SiteVisit? = nil, s: Bool = true) {
         var deleted = -1;
         db.withConnection(.ReadWrite) { connection -> NSError? in
             var err: NSError? = nil
@@ -59,7 +59,7 @@ class TestVisitsTable : XCTestCase {
     func testVisitsTable() {
         let files = MockFiles()
         self.db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent("test.db"))
-        let h = VisitsTable<Visit>()
+        let h = VisitsTable<SiteVisit>()
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
             h.create(db, version: 2)

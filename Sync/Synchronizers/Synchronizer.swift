@@ -10,12 +10,6 @@ import XCGLogger
 // TODO: same comment as for SyncAuthState.swift!
 private let log = XCGLogger.defaultInstance()
 
-public typealias Success = Deferred<Result<()>>
-
-func succeed() -> Success {
-    return deferResult(())
-}
-
 /**
  * This exists to pass in external context: e.g., the UIApplication can
  * expose notification functionality in this way.
