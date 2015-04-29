@@ -27,11 +27,14 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     override func reloadData() {
         let opts = QueryOptions()
         opts.sort = .LastVisit
-        profile.history.get(opts, complete: { (data: Cursor) -> Void in
-            self.sectionOffsets = [Int: Int]()
-            self.data = data
-            self.tableView.reloadData()
-        })
+        profile.history.get(opts).uponQueue(dispatch_get_main_queue()) { result in
+            if let data = result.successValue {
+                self.sectionOffsets = [Int: Int]()
+                self.data = data
+                self.tableView.reloadData()
+            }
+            // TODO: error handling.
+        }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

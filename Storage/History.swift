@@ -14,9 +14,9 @@ public typealias GUID = String
  * `clear` might or might not need to set a bunch of flags to upload deletions.
  */
 public protocol BrowserHistory {
-    func clear(complete: (success: Bool) -> Void)
-    func get(options: QueryOptions?, complete: (data: Cursor) -> Void)
-    func addVisit(visit: SiteVisit, complete: (success: Bool) -> Void)
+    func clear() -> Success
+    func get(options: QueryOptions?) -> Deferred<Result<Cursor>>
+    func addVisit(visit: SiteVisit) -> Success
 }
 
 /**
