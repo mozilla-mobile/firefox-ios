@@ -325,6 +325,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         animateSearchEnginesWithKeyboard(state)
     }
 
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        // The height of the suggestions row may change, so call reloadData() to recalculate cell heights.
+        coordinator.animateAlongsideTransition({ _ in
+            self.tableView.reloadData()
+        }, completion: nil)
+    }
+
     private func animateSearchEnginesWithKeyboard(keyboardState: KeyboardState) {
         layoutSearchEngineScrollView()
 
