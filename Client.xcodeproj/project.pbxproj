@@ -1599,6 +1599,20 @@
 			name = Dead;
 			sourceTree = "<group>";
 		};
+		282915DF1AF1A5F90006EEB5 /* Dead */ = {
+			isa = PBXGroup;
+			children = (
+				2FCAE27B1ABB533A00877008 /* TestBookmarks.swift */,
+				2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */,
+				2FCAE27D1ABB533A00877008 /* TestHistoryTable.swift */,
+				2FCAE27E1ABB533A00877008 /* TestJoinedFaviconTable.swift */,
+				2FCAE27F1ABB533A00877008 /* TestJoinedHistoryVisits.swift */,
+				2FCAE2821ABB533A00877008 /* TestTableTable.swift */,
+				2FCAE2831ABB533A00877008 /* TestVisitsTable.swift */,
+			);
+			name = Dead;
+			sourceTree = "<group>";
+		};
 		284AA38F1AD4C115009041C5 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
@@ -1870,6 +1884,7 @@
 		2FCAE22A1ABB51F800877008 /* StorageTests */ = {
 			isa = PBXGroup;
 			children = (
+				282915DF1AF1A5F90006EEB5 /* Dead */,
 				2FCAE2791ABB533A00877008 /* MockFiles.swift */,
 				2FCAE27B1ABB533A00877008 /* TestBookmarks.swift */,
 				2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */,
@@ -1878,8 +1893,6 @@
 				2FCAE27F1ABB533A00877008 /* TestJoinedHistoryVisits.swift */,
 				2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */,
 				D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */,
-				2FCAE2821ABB533A00877008 /* TestTableTable.swift */,
-				2FCAE2831ABB533A00877008 /* TestVisitsTable.swift */,
 				2FCAE22B1ABB51F800877008 /* Supporting Files */,
 			);
 			path = StorageTests;
@@ -3490,15 +3503,12 @@
 				2FA435291ABB6831008031D1 /* SQLiteRemoteClientsAndTabs.swift in Sources */,
 				2FA435161ABB6829008031D1 /* History.swift in Sources */,
 				2FA435151ABB6829008031D1 /* FileAccessor.swift in Sources */,
-				2FCAE2861ABB533A00877008 /* TestBookmarks.swift in Sources */,
-				2FCAE28D1ABB533A00877008 /* TestTableTable.swift in Sources */,
 				2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */,
 				2FA4351C1ABB6831008031D1 /* BrowserDB.swift in Sources */,
 				2FCAE2891ABB533A00877008 /* TestJoinedFaviconTable.swift in Sources */,
 				2FA4351A1ABB6829008031D1 /* Site.swift in Sources */,
 				2FA435211ABB6831008031D1 /* JoinedHistoryVisitsTable.swift in Sources */,
 				D32CACED1AE04DA1000658EB /* TestSwiftData.swift in Sources */,
-				2FCAE28A1ABB533A00877008 /* TestJoinedHistoryVisits.swift in Sources */,
 				2FA4352C1ABB6873008031D1 /* Visit.swift in Sources */,
 				2FA435271ABB6831008031D1 /* SQLitePasswords.swift in Sources */,
 				2FA4351B1ABB6831008031D1 /* BookmarksSqlite.swift in Sources */,
@@ -3510,8 +3520,6 @@
 				2FA435171ABB6829008031D1 /* Passwords.swift in Sources */,
 				2FA435141ABB6829008031D1 /* Favicons.swift in Sources */,
 				2FA4351E1ABB6831008031D1 /* GenericTable.swift in Sources */,
-				2FCAE28E1ABB533A00877008 /* TestVisitsTable.swift in Sources */,
-				2FCAE2881ABB533A00877008 /* TestHistoryTable.swift in Sources */,
 				2FA435191ABB6829008031D1 /* RemoteTabs.swift in Sources */,
 				283A2AD91AF0794D003C0A26 /* DatabaseError.swift in Sources */,
 				284AA3AD1AD4C386009041C5 /* Clients.swift in Sources */,
