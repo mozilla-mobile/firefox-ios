@@ -39,4 +39,8 @@ class HistoryTests: KIFTestCase {
 
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
+
+    override func tearDown() {
+        BrowserUtils.resetToAboutHome(tester())
+    }
 }

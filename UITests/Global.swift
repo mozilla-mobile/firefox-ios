@@ -68,6 +68,20 @@ extension KIFUITestActor {
     // TODO: Click element, etc.
 }
 
+class BrowserUtils {
+    /// Close all tabs and open a single about:home tab to restore the browser to startup state.
+    class func resetToAboutHome(tester: KIFUITestActor) {
+        tester.tapViewWithAccessibilityLabel("Show Tabs")
+        let tabsView = tester.waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
+        while tabsView.numberOfItemsInSection(0) > 0 {
+            let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+            tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
+            tester.waitForAbsenceOfViewWithAccessibilityLabel(cell.accessibilityLabel)
+        }
+        tester.tapViewWithAccessibilityLabel("Add Tab")
+    }
+}
+
 class SimplePageServer {
     class func getPageData(name: String, ext: String = "html") -> String {
         var pageDataPath = NSBundle(forClass: self).pathForResource(name, ofType: ext)!
