@@ -135,7 +135,7 @@ public func find<T>(arr: [T], f: T -> Bool) -> T? {
     return nil
 }
 
-public func findFirstValue<K, V>(map: [K: V], f: V -> Bool) -> V? {
+public func findOneValue<K, V>(map: [K: V], f: V -> Bool) -> V? {
     for v in map.values {
         if f(v) {
             return v
