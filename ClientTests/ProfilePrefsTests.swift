@@ -72,4 +72,18 @@ class TestProfilePrefs: ProfileTest {
             XCTAssertNil(prefs.stringArrayForKey("key"))
         }
     }
+
+    func testMockProfilePrefsRoundtripsTimestamps() {
+        let prefs = MockProfilePrefs().branch("baz")
+        let val: Timestamp = NSDate.now()
+        prefs.setLong(val, forKey: "foobar")
+        XCTAssertEqual(val, prefs.unsignedLongForKey("foobar")!)
+    }
+
+    func testMockProfilePrefsKeys() {
+        let prefs = MockProfilePrefs().branch("baz") as! MockProfilePrefs
+        let val: Timestamp = NSDate.now()
+        prefs.setLong(val, forKey: "foobar")
+        XCTAssertEqual(val, (prefs.things["baz.foobar"] as! NSNumber).unsignedLongLongValue)
+    }
 }

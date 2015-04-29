@@ -26,7 +26,8 @@ public protocol Prefs {
 public class MockProfilePrefs : Prefs {
     let prefix: String
 
-    var things: NSMutableDictionary = NSMutableDictionary()
+    // Public for testing.
+    public var things: NSMutableDictionary = NSMutableDictionary()
 
     public init(things: NSMutableDictionary, prefix: String) {
         self.things = things
