@@ -32,4 +32,8 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Forward")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
     }
+
+    override func tearDown() {
+        BrowserUtils.resetToAboutHome(tester())
+    }
 }
