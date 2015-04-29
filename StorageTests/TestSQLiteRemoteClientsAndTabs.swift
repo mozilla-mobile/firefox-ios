@@ -14,7 +14,7 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         let client1GUID = Bytes.generateGUID()
         let client2GUID = Bytes.generateGUID()
         let u11 = NSURL(string: "http://test.com/test1")!
-        let tab11 = RemoteTab(clientGUID: client1GUID, URL: u11, title: "Test 1", history: [], lastUsed: (now - OneMinuteInMilliseconds), icon: nil)
+        let tab11 = RemoteTab(clientGUID: client1GUID, URL: u11, title: "Test 1", history: [    ], lastUsed: (now - OneMinuteInMilliseconds), icon: nil)
 
         let u12 = NSURL(string: "http://test.com/test2")!
         let tab12 = RemoteTab(clientGUID: client1GUID, URL: u12, title: "Test 2", history: [], lastUsed: (now - OneHourInMilliseconds), icon: nil)
@@ -27,8 +27,16 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         let client1 = RemoteClient(guid: client1GUID, name: "Test client 1", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS")
         let client2 = RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now - OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin")
 
+        let localClient = RemoteClient(guid: nil, name: "Test local client", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS")
+        let localUrl1 = NSURL(string: "http://test.com/testlocal1")!
+        let localTab1 = RemoteTab(clientGUID: nil, URL: localUrl1, title: "Local test 1", history: [], lastUsed: (now - OneMinuteInMilliseconds), icon: nil)
+        let localUrl2 = NSURL(string: "http://test.com/testlocal2")!
+        let localTab2 = RemoteTab(clientGUID: nil, URL: localUrl2, title: "Local test 2", history: [], lastUsed: (now - OneMinuteInMilliseconds), icon: nil)
+
         // Tabs are ordered most-recent-first.
-        self.clientsAndTabs = [ClientAndTabs(client: client1, tabs: [tab11, tab12]), ClientAndTabs(client: client2, tabs: [tab22, tab21])]
+        self.clientsAndTabs = [ClientAndTabs(client: client1, tabs: [tab11, tab12]),
+                               ClientAndTabs(client: client2, tabs: [tab22, tab21]),
+                               ClientAndTabs(client: localClient, tabs: [localTab1, localTab2])]
     }
 
     public func wipeClients() -> Deferred<Result<()>> {
@@ -47,7 +55,11 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return Deferred(value: Result(success: ()))
     }
 
-    public func insertOrUpdateTabsForClientGUID(clientGUID: String, tabs: [RemoteTab]) -> Deferred<Result<Int>> {
+    public func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> {
+        return insertOrUpdateTabsForClientGUID(nil, tabs: [RemoteTab]())
+    }
+
+    public func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Result<Int>> {
         return Deferred(value: Result(success: -1))
     }
 
@@ -60,6 +72,9 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 }
 
+func removeLocalClient(a: ClientAndTabs) -> Bool {
+    return a.client.guid != nil
+}
 
 func byGUID(a: ClientAndTabs, b: ClientAndTabs) -> Bool {
     return a.client.guid < b.client.guid
@@ -91,7 +106,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         let f = self.expectationWithDescription("Get after insert.")
         clientsAndTabs.getClientsAndTabs().upon {
             if let got = $0.successValue {
-                let expected = self.clients.sorted(byGUID)
+                let expected = self.clients.sorted(byGUID).filter(removeLocalClient)
                 let actual = got.sorted(byGUID)
 
                 // This comparison will fail if the order of the tabs changes. We sort the result
@@ -111,7 +126,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
             ClientAndTabs(client: clients[1].client, tabs: client1NewTabs),
         ].sorted(byGUID)
 
-        func doUpdate(guid: String, tabs: [RemoteTab]) {
+        func doUpdate(guid: String?, tabs: [RemoteTab]) {
             let g0 = self.expectationWithDescription("Update client \(guid).")
             clientsAndTabs.insertOrUpdateTabsForClientGUID(guid, tabs: tabs).upon {
                 if let rowID = $0.successValue {
@@ -125,6 +140,8 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
 
         doUpdate(clients[0].client.guid, client0NewTabs)
         doUpdate(clients[1].client.guid, client1NewTabs)
+        // Also update the local tabs list. It should still not appear in the expected tabs below.
+        doUpdate(clients[2].client.guid, client1NewTabs)
 
         let h = self.expectationWithDescription("Get after update.")
         clientsAndTabs.getClientsAndTabs().upon {

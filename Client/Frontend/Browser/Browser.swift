@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 import Storage
+import Shared
 
 protocol BrowserHelper {
     static func name() -> String
@@ -34,6 +35,15 @@ class Browser: NSObject, WKScriptMessageHandler {
         super.init()
     }
 
+    class func toTab(browser: Browser) -> RemoteTab {
+        return RemoteTab(clientGUID: nil,
+            URL: browser.displayURL ?? NSURL(),
+            title: browser.displayTitle,
+            history: browser.historyList,
+            lastUsed: Timestamp(),
+            icon: nil)
+    }
+
     var loading: Bool {
         return webView.loading
     }
@@ -44,6 +54,13 @@ class Browser: NSObject, WKScriptMessageHandler {
 
     var forwardList: [WKBackForwardListItem]? {
         return webView.backForwardList.forwardList as? [WKBackForwardListItem]
+    }
+
+    var historyList: [NSURL] {
+        func listToUrl(item: WKBackForwardListItem) -> NSURL { return item.URL }
+        var tabs = self.backList?.map(listToUrl) ?? [NSURL]()
+        tabs.append(self.url!)
+        return tabs
     }
 
     var title: String? {

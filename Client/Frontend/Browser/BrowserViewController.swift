@@ -54,6 +54,7 @@ class BrowserViewController: UIViewController {
         tabManager = TabManager(defaultNewTabRequest: defaultRequest)
         tabManager.addDelegate(self)
         screenshotHelper = BrowserScreenshotHelper(controller: self)
+        tabManager.addNavigationDelegate(self)
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -879,7 +880,6 @@ extension BrowserViewController: TabManagerDelegate {
         tab.webView.addObserver(self, forKeyPath: KVOLoading, options: .New, context: nil)
         tab.webView.UIDelegate = self
         tab.browserDelegate = self
-        tab.webView.navigationDelegate = self
         tab.webView.scrollView.delegate = self
     }
 
@@ -890,7 +890,6 @@ extension BrowserViewController: TabManagerDelegate {
         tab.webView.removeObserver(self, forKeyPath: KVOLoading)
         tab.webView.UIDelegate = nil
         tab.browserDelegate = nil
-        tab.webView.navigationDelegate = nil
         tab.webView.scrollView.delegate = nil
 
         tab.webView.removeFromSuperview()
@@ -1009,7 +1008,7 @@ extension BrowserViewController: WKNavigationDelegate {
         didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge,
         completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
             if challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodClientCertificate {
-                if let tab = tabManager.getTab(webView) {
+                if let tab = tabManager[webView] {
                     let helper = tab.getHelper(name: PasswordHelper.name()) as! PasswordHelper
                     helper.handleAuthRequest(self, challenge: challenge) { password in
                         if let password = password {
@@ -1023,7 +1022,7 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        let tab: Browser! = tabManager.getTab(webView)
+        let tab: Browser! = tabManager[webView]
 
         tab.expireSnackbars()
 
@@ -1071,7 +1070,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
-        tabManager.selectTab(tabManager.getTab(webView))
+        tabManager.selectTab(tabManager[webView])
 
         // Show JavaScript alerts.
         let title = frame.request.URL!.host
@@ -1083,7 +1082,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (Bool) -> Void) {
-        tabManager.selectTab(tabManager.getTab(webView))
+        tabManager.selectTab(tabManager[webView])
 
         // Show JavaScript confirm dialogs.
         let title = frame.request.URL!.host
@@ -1098,7 +1097,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 
     func webView(webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: (String!) -> Void) {
-        tabManager.selectTab(tabManager.getTab(webView))
+        tabManager.selectTab(tabManager[webView])
 
         // Show JavaScript input dialogs.
         let title = frame.request.URL!.host
@@ -1147,9 +1146,11 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
         profile.prefs.setObject(encodedStyle, forKey: ReaderModeProfileKeyStyle)
         // Change the reader mode style on all tabs that have reader mode active
         for tabIndex in 0..<tabManager.count {
-            if let readerMode = tabManager.getTab(tabIndex).getHelper(name: "ReaderMode") as? ReaderMode {
-                if readerMode.state == ReaderModeState.Active {
-                    readerMode.style = style
+            if let tab = tabManager[tabIndex] {
+                if let readerMode = tab.getHelper(name: "ReaderMode") as? ReaderMode {
+                    if readerMode.state == ReaderModeState.Active {
+                        readerMode.style = style
+                    }
                 }
             }
         }
@@ -1171,8 +1172,9 @@ extension BrowserViewController : Transitionable {
     func transitionablePreHide(transitionable: Transitionable, options: TransitionOptions) {
         // Move all the webview's off screen
         for i in 0..<tabManager.count {
-            let tab = tabManager.getTab(i)
-            tab.webView.hidden = true
+            if let tab = tabManager[i] {
+                tab.webView.hidden = true
+            }
         }
         self.homePanelController?.view.hidden = true
     }
@@ -1180,8 +1182,9 @@ extension BrowserViewController : Transitionable {
     func transitionablePreShow(transitionable: Transitionable, options: TransitionOptions) {
         // Move all the webview's off screen
         for i in 0..<tabManager.count {
-            let tab = tabManager.getTab(i)
-            tab.webView.hidden = true
+            if let tab = tabManager[i] {
+                tab.webView.hidden = true
+            }
         }
         self.homePanelController?.view.hidden = true
     }
@@ -1201,8 +1204,9 @@ extension BrowserViewController : Transitionable {
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
         // Move all the webview's back on screen
         for i in 0..<tabManager.count {
-            let tab = tabManager.getTab(i)
-            tab.webView.hidden = false
+            if let tab = tabManager[i] {
+                tab.webView.hidden = false
+            }
         }
         self.homePanelController?.view.hidden = false
     }

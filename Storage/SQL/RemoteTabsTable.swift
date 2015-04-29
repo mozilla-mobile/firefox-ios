@@ -52,7 +52,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
 
     override var factory: ((row: SDRow) -> RemoteClient)? {
         return { row -> RemoteClient in
-            return RemoteClient(guid: row["guid"] as! String,
+            return RemoteClient(guid: row["guid"] as? String,
                                 name: row["name"] as! String,
                                 modified: (row["modified"] as! NSNumber).unsignedLongLongValue,
                                 type: row["type"] as? String,
@@ -68,12 +68,12 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
 
 class RemoteTabsTable<T>: GenericTable<RemoteTab> {
     override var name: String { return "tabs" }
-    override var version: Int { return 1 }
+    override var version: Int { return 2 }
 
     // TODO: index on id, client_guid, last_used, and position.
     override var rows: String { return join(",", [
             "id INTEGER PRIMARY KEY AUTOINCREMENT", // An individual tab has no GUID from Sync.
-            "client_guid TEXT NOT NULL REFERENCES clients(guid) ON DELETE CASCADE",
+            "client_guid TEXT REFERENCES clients(guid) ON DELETE CASCADE",
             "url TEXT NOT NULL",
             "title TEXT", // TODO: NOT NULL throughout.
             "history TEXT",
@@ -100,12 +100,12 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         // Key by (client_guid, url) rather than (transient) id.
         args.append(item.clientGUID)
         args.append(item.URL.absoluteString!)
-        return ("UPDATE \(name) SET title = ?, history = ?, last_used = ? WHERE client_guid = ? AND url = ?", args)
+        return ("UPDATE \(name) SET title = ?, history = ?, last_used = ? WHERE client_guid IS ? AND url = ?", args)
     }
 
     override func getDeleteAndArgs(inout item: RemoteTab?) -> (String, [AnyObject?])? {
         if let item = item {
-            return ("DELETE FROM \(name) WHERE client_guid = ? AND url = ?", [item.clientGUID, item.URL.absoluteString!])
+            return ("DELETE FROM \(name) WHERE client_guid = IS AND url = ?", [item.clientGUID, item.URL.absoluteString!])
         } else {
             return ("DELETE FROM \(name)", [])
         }
@@ -114,7 +114,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
     override var factory: ((row: SDRow) -> RemoteTab)? {
         return { row -> RemoteTab in
             return RemoteTab(
-                clientGUID: row["client_guid"] as! String,
+                clientGUID: row["client_guid"] as? String,
                 URL: NSURL(string: row["url"] as! String)!, // TODO: find a way to make this less dangerous.
                 title: row["title"] as! String,
                 history: [], // TODO: extract history.

@@ -39,19 +39,19 @@ public protocol RemoteClientsAndTabs {
     func insertOrUpdateClients(clients: [RemoteClient]) -> Deferred<Result<()>>
 
     // Returns number of tabs inserted.
-    func insertOrUpdateTabsForClientGUID(clientGUID: String, tabs: [RemoteTab]) -> Deferred<Result<Int>>
+    func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> // Insert into the local client.
+    func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Result<Int>>
 }
 
-
 public struct RemoteTab: Equatable {
-    public let clientGUID: String
+    public let clientGUID: String?
     public let URL: NSURL
     public let title: String
     public let history: [NSURL]
     public let lastUsed: Timestamp
     public let icon: NSURL?
 
-    public init(clientGUID: String, URL: NSURL, title: String, history: [NSURL], lastUsed: Timestamp, icon: NSURL?) {
+    public init(clientGUID: String?, URL: NSURL, title: String, history: [NSURL], lastUsed: Timestamp, icon: NSURL?) {
         self.clientGUID = clientGUID
         self.URL = URL
         self.title = title
@@ -60,7 +60,7 @@ public struct RemoteTab: Equatable {
         self.icon = icon
     }
 
-    public func withClientGUID(clientGUID: String) -> RemoteTab {
+    public func withClientGUID(clientGUID: String?) -> RemoteTab {
         return RemoteTab(clientGUID: clientGUID, URL: URL, title: title, history: history, lastUsed: lastUsed, icon: icon)
     }
 }
