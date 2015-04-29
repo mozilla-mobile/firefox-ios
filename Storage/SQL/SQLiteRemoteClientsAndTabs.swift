@@ -57,6 +57,10 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
     }
 
+    public func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> {
+        return self.insertOrUpdateTabsForClientGUID(nil, tabs: tabs)
+    }
+
     public func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Result<Int>> {
         let deferred = Deferred<Result<Int>>(defaultQueue: dispatch_get_main_queue())
 

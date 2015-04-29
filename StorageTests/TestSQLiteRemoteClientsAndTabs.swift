@@ -55,6 +55,10 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return Deferred(value: Result(success: ()))
     }
 
+    public func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> {
+        return insertOrUpdateTabsForClientGUID(nil, tabs: [RemoteTab]())
+    }
+
     public func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Result<Int>> {
         return Deferred(value: Result(success: -1))
     }

@@ -226,7 +226,7 @@ class TabManager : NSObject {
 
     private func storeChanges() {
         let storedTabs: [RemoteTab] = tabs.map(Browser.toTab)
-        storage?.insertOrUpdateTabsForClientGUID(nil, tabs: storedTabs)
+        storage?.insertOrUpdateTabs(storedTabs)
     }
 }
 
