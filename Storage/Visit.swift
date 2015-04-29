@@ -19,6 +19,18 @@ public enum VisitType : Int {
     case FramedLink = 8
 }
 
+/**
+ * SiteVisit is a sop to the existing API, which expects to be able to go
+ * backwards from a visit to a site, and preserve the ID of the database row.
+ * Visit is the model of what lives on the wire: just a date and a type.
+ * Ultimately we'll end up with something similar to ClientAndTabs: the tabs
+ * don't need to know about the client, and visits don't need to know about
+ * the site, because they're bound together.
+ *
+ * (Furthermore, we probably shouldn't ever need something like SiteVisit
+ * to reach the UI: we care about "last visited", "visit count", or just
+ * "places ordered by frecency" — we don't care about lists of visits.)
+ */
 public class Visit: Hashable {
     public let date: MicrosecondTimestamp
     public let type: VisitType
@@ -34,9 +46,9 @@ public class Visit: Hashable {
 
     public class func fromJSON(json: JSON) -> Visit? {
         if let type = json["type"].asInt,
-               typeEnum = VisitType(rawValue: type),
-               date = json["date"].asInt64 {
-            return Visit(date: MicrosecondTimestamp(date), type: typeEnum)
+            typeEnum = VisitType(rawValue: type),
+            date = json["date"].asInt64 {
+                return Visit(date: MicrosecondTimestamp(date), type: typeEnum)
         }
         return nil
     }
