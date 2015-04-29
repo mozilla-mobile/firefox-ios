@@ -63,8 +63,8 @@ public class BrowserDB {
         return db.filename
     }
 
-    // Creates a table and writes its table info the the table-table database.
-    private func createTable<T:Table>(db: SQLiteDBConnection, table: T) -> Bool {
+    // Creates a table and writes its table info into the table-table database.
+    private func createTable<T: Table>(db: SQLiteDBConnection, table: T) -> Bool {
         debug("Try create \(table.name) version \(table.version)")
         if !table.create(db, version: table.version) {
             // If creating failed, we'll bail without storing the table info
@@ -101,8 +101,8 @@ public class BrowserDB {
         return schemaTable.update(db, item: table, err: &err) > 0
     }
 
-    // Utility for table classes. They should call then when they're initialized to force
-    // creation of the table in the database
+    // Utility for table classes. They should call this when they're initialized to force
+    // creation of the table in the database.
     func createOrUpdate<T: Table>(table: T) -> Bool {
         debug("Create or update \(table.name) version \(table.version)")
         var success = true
@@ -125,7 +125,7 @@ public class BrowserDB {
             }
 
             // If we failed, move the file and try again. This will probably break things that are already
-            // attached and expecting a working DB, but at least we should be able to restart
+            // attached and expecting a working DB, but at least we should be able to restart.
             if !success {
                 println("Couldn't create or update \(table.name).")
                 println("Attempting to move \(self.FileName) to another location.")
