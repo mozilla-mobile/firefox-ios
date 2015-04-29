@@ -138,7 +138,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     public func getClients() -> Deferred<Result<[RemoteClient]>> {
         var err: NSError?
 
-        let clientCursor = db.query(&err) { connection, _ in
+        let clientCursor = db.withReadableConnection(&err) { connection, _ in
             return self.clients.query(connection, options: nil)
         }
 
@@ -157,7 +157,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         var err: NSError?
 
         // Now find the clients.
-        let clientCursor = db.query(&err) { connection, _ in
+        let clientCursor = db.withReadableConnection(&err) { connection, _ in
             return self.clients.query(connection, options: nil)
         }
 
@@ -171,7 +171,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         log.info("Found \(clients.count) clients in the DB.")
 
-        let tabCursor = db.query(&err) { connection, _ in
+        let tabCursor = db.withReadableConnection(&err) { connection, _ in
             return self.tabs.query(connection, options: nil)
         }
 

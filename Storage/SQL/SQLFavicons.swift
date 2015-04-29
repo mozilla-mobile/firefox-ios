@@ -23,7 +23,7 @@ public class SQLiteFavicons : Favicons {
 
     public func clear(options: QueryOptions?, complete: ((success: Bool) -> Void)?) {
         var err: NSError? = nil
-        let res = db.delete(&err) { (conn, inout err: NSError?) -> Int in
+        let res = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
             return self.table.delete(conn, item: nil, err: &err)
         }
 
@@ -35,7 +35,7 @@ public class SQLiteFavicons : Favicons {
 
     public func get(options: QueryOptions?, complete: (data: Cursor) -> Void) {
         var err: NSError? = nil
-        let res = db.query(&err) { connection, err in
+        let res = db.withReadableConnection(&err) { connection, err in
             return self.table.query(connection, options: options)
         }
 
@@ -46,7 +46,7 @@ public class SQLiteFavicons : Favicons {
 
     public func add(icon: Favicon, site: Site, complete: ((success: Bool) -> Void)?) {
         var err: NSError? = nil
-        let res = db.insert(&err) { (conn, inout err: NSError?) -> Int in
+        let res = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
             return self.table.insert(conn, item: (icon: icon, site: site), err: &err)
         }
 
