@@ -160,7 +160,7 @@ public class BrowserDB {
         return res
     }
 
-    func withReadableConnection<T>(inout err: NSError?, callback: ((connection: SQLiteDBConnection, inout err: NSError?) -> Cursor<T>)) -> Cursor<T> {
+    func withReadableConnection<T>(inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> Cursor<T>) -> Cursor<T> {
         var c: Cursor<T>!
         db.withConnection(SwiftData.Flags.ReadOnly) { connection in
             var err: NSError? = nil
