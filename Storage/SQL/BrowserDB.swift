@@ -36,16 +36,17 @@ public class QueryOptions {
 let DBCouldNotOpenErrorCode = 200
 
 /* This is a base interface into our browser db. It holds arrays of tables and handles basic creation/updating of them. */
-// Version 1 - Basic history table
-// Version 2 - Added a visits table, refactored the history table to be a GenericTable
-// Version 3 - Added a favicons table
-// Version 4 - Added a readinglist table
+// Version 1 - Basic history table.
+// Version 2 - Added a visits table, refactored the history table to be a GenericTable.
+// Version 3 - Added a favicons table.
+// Version 4 - Added a readinglist table.
 // Version 5 - Added the clients and the tabs tables.
 // Version 6 - Visit timestamps are now microseconds.
+// Version 7 - Eliminate most tables.
 public class BrowserDB {
     private let db: SwiftData
     // XXX: Increasing this should blow away old history, since we currently don't support any upgrades.
-    private let Version: Int = 6
+    private let Version: Int = 7
     private let FileName = "browser.db"
     private let files: FileAccessor
     private let schemaTable: SchemaTable<TableInfo>
