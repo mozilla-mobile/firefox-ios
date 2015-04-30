@@ -276,6 +276,16 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         newTabsButton.titleLabel?.layer.cornerRadius = 2
         newTabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
         newTabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
+
+        self.addSubview(newTabsButton)
+
+        // copy constraints from original button for positioning
+        newTabsButton.snp_makeConstraints { make in
+            make.centerY.equalTo(self.locationContainer).offset((URLBarViewUX.TabsButtonRotationOffset - 0.5) * URLBarViewUX.TabsButtonHeight)
+            make.trailing.equalTo(self)
+            make.width.height.equalTo(AppConstants.ToolbarHeight)
+        }
+
         newTabsButton.titleLabel?.snp_makeConstraints { make in
             make.size.equalTo(URLBarViewUX.TabsButtonHeight)
             return
@@ -286,7 +296,6 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         }
 
         newTabsButton.setTitle(count.description, forState: .Normal)
-        newTabsButton.frame = tabsButton.frame
 
         // setup the rotation matrix
         var flipTransform = CATransform3DIdentity
@@ -297,7 +306,6 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         // offset the target rotation by 180º so the new tab comes from the front and the old tab falls back
         flipTransform = CATransform3DRotate(flipTransform, CGFloat(M_PI), 1.0, 0.0, 0.0)
 
-        self.addSubview(newTabsButton)
 
         UIView.animateWithDuration(1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { _ in
                 newTabsButton.titleLabel?.layer.transform = CATransform3DIdentity
