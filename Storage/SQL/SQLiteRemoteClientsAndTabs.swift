@@ -147,7 +147,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             return Deferred(value: Result(failure: DatabaseError(err: err)))
         }
 
-        let clients = clientCursor.mapAsType(RemoteClient.self, f: { $0 })
+        let clients = clientCursor.asArray()
         clientCursor.close()
 
         return Deferred(value: Result(success: clients))
@@ -166,7 +166,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             return Deferred(value: Result(failure: DatabaseError(err: err)))
         }
 
-        let clients = clientCursor.mapAsType(RemoteClient.self, f: { $0 })
+        let clients = clientCursor.asArray()
         clientCursor.close()
 
         log.info("Found \(clients.count) clients in the DB.")
@@ -187,7 +187,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         // Aggregate clientGUID -> RemoteTab.
         var acc = [String: [RemoteTab]]()
         for tab in tabCursor {
-            if let tab = tab as? RemoteTab, guid = tab.clientGUID {
+            if let tab = tab, guid = tab.clientGUID {
                 if acc[guid] == nil {
                     acc[guid] = [tab]
                 } else {

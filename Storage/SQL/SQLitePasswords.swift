@@ -93,7 +93,7 @@ private class PasswordsTable<T>: GenericTable<Password> {
     }
 }
 
-public class SQLitePasswords : Passwords {
+public class SQLitePasswords: Passwords {
     private let table = PasswordsTable<Password>()
     private let db: BrowserDB
 
@@ -102,9 +102,9 @@ public class SQLitePasswords : Passwords {
         db.createOrUpdate(table)
     }
 
-    public func get(options: QueryOptions, complete: (cursor: Cursor) -> Void) {
+    public func get(options: QueryOptions, complete: (cursor: Cursor<Password>) -> Void) {
         var err: NSError? = nil
-        let cursor = db.withReadableConnection(&err, callback: { (connection, err) -> Cursor in
+        let cursor = db.withReadableConnection(&err, callback: { (connection, err) -> Cursor<Password> in
             return self.table.query(connection, options: options)
 
         })

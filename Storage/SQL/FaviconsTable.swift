@@ -72,7 +72,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
         if (cursor.count != 1) {
             return nil
         }
-        return (cursor[0] as? Favicon)?.id
+        return cursor[0]?.id
     }
 
     func insertOrUpdate(db: SQLiteDBConnection, obj: Favicon) {

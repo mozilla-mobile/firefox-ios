@@ -10,7 +10,7 @@ public protocol Favicons {
     var defaultIcon: UIImage { get }
 
     func clear(options: QueryOptions?, complete: ((success: Bool) -> Void)?)
-    func get(options: QueryOptions?, complete: (data: Cursor) -> Void)
+    func get(options: QueryOptions?, complete: (data: Cursor<(Site, Favicon)>) -> Void)
     func add(icon: Favicon, site: Site, complete: ((success: Bool) -> Void)?)
 }
 
@@ -27,7 +27,7 @@ public class MockFavicons: Favicons {
             complete(success: false)
         }
     }
-    public func get(options: QueryOptions?, complete: (data: Cursor) -> Void) {
+    public func get(options: QueryOptions?, complete: (data: Cursor<(Site, Favicon)>) -> Void) {
         complete(data: Cursor())
     }
 

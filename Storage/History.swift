@@ -15,7 +15,7 @@ public typealias GUID = String
  */
 public protocol BrowserHistory {
     func clear() -> Success
-    func get(options: QueryOptions?) -> Deferred<Result<Cursor>>
+    func get(options: QueryOptions?) -> Deferred<Result<Cursor<Site>>>
     func addVisit(visit: SiteVisit) -> Success
 }
 
@@ -26,7 +26,7 @@ public class MockBrowserHistory: BrowserHistory {
     public func clear() -> Success {
         return succeed()
     }
-    public func get(options: QueryOptions?) -> Deferred<Result<Cursor>> {
+    public func get(options: QueryOptions?) -> Deferred<Result<Cursor<Site>>> {
         return deferResult(DatabaseError(err: nil))
     }
     public func addVisit(visit: SiteVisit) -> Success {
