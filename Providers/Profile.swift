@@ -183,8 +183,7 @@ public class BrowserProfile: Profile {
     }()
 
     lazy var history: BrowserHistory = {
-        return MockBrowserHistory()
-//        return SQLiteHistory(db: self.db)
+        return SQLiteHistory(db: self.db)
     }()
 
     lazy var readingList: ReadingListService? = {
