@@ -12,7 +12,7 @@ private let SeparatorKind = "separator"
 private let SeparatorIdentifier = "separator"
 private let SeparatorColor = UIColor(rgb: 0xffffff)
 
-private class Tile: Site {
+class Tile: Site {
     let backgroundColor: UIColor
     let trackingId: Int
 
@@ -36,8 +36,8 @@ private class Tile: Site {
     }
 }
 
-private class SuggestedSitesData: Cursor {
-    var tiles = [Tile]()
+private class SuggestedSitesData<T: Tile>: Cursor<T> {
+    var tiles = [T]()
 
     init() {
         // TODO: Make this list localized. That should be as simple as making sure its in the lproj directory.
@@ -47,7 +47,8 @@ private class SuggestedSitesData: Cursor {
         let json = JSON.parse(data as! String)
 
         for i in 0..<json.length {
-            tiles.append(Tile(json: json[i]))
+            let t = T(json: json[i])
+            tiles.append(t)
         }
     }
 
@@ -55,7 +56,7 @@ private class SuggestedSitesData: Cursor {
         return tiles.count
     }
 
-    override subscript(index: Int) -> Any? {
+    override subscript(index: Int) -> T? {
         get {
             return tiles[index]
         }
@@ -111,8 +112,9 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let site = dataSource[indexPath.item]
-        homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!)
+        if let site = dataSource[indexPath.item] {
+            homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!)
+        }
     }
 }
 
@@ -247,13 +249,13 @@ private class TopSitesLayout: UICollectionViewLayout {
 }
 
 private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
-    var data: Cursor
+    var data: Cursor<Site>
     var profile: Profile
-    lazy var suggestedSites: SuggestedSitesData = {
-        return SuggestedSitesData()
+    lazy var suggestedSites: SuggestedSitesData<Tile> = {
+        return SuggestedSitesData<Tile>()
     }()
 
-    init(profile: Profile, data: Cursor) {
+    init(profile: Profile, data: Cursor<Site>) {
         self.data = data
         self.profile = profile
     }
@@ -330,16 +332,16 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         return cell
     }
 
-    subscript(index: Int) -> Site {
+    subscript(index: Int) -> Site? {
         if index >= data.count {
-            return suggestedSites[index - data.count] as! Site
+            return suggestedSites[index - data.count]
         }
-        return data[index] as! Site
+        return data[index] as Site?
     }
 
     @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         // Cells for the top site thumbnails.
-        let site = self[indexPath.item]
+        let site = self[indexPath.item]!
 
         if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
             if indexPath.item < layout.thumbnailCount {
