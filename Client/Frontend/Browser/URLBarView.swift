@@ -281,9 +281,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
 
         // copy constraints from original button for positioning
         newTabsButton.snp_makeConstraints { make in
-            make.centerY.equalTo(self.locationContainer).offset((URLBarViewUX.TabsButtonRotationOffset - 0.5) * URLBarViewUX.TabsButtonHeight)
-            make.trailing.equalTo(self)
-            make.width.height.equalTo(AppConstants.ToolbarHeight)
+            make.edges.equalTo(self.tabsButton)
         }
 
         newTabsButton.titleLabel?.snp_makeConstraints { make in
