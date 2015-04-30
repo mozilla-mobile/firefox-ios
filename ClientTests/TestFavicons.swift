@@ -29,7 +29,7 @@ class TestFavicons : ProfileTest {
             XCTAssertEqual(cursor.count, icons.count, "cursor has \(icons.count) entries")
 
             for index in 0..<cursor.count {
-                let (site, favicon) = cursor[index] as! (Site, Favicon)
+                let (site, favicon) = cursor[index]!
                 XCTAssertNotNil(s, "cursor has a favicon for entry")
                 let index = find(icons, favicon.url)
                 XCTAssertNotNil(index, "Found expected entry \(favicon.url)")

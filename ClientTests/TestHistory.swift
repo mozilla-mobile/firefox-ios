@@ -21,7 +21,7 @@ class TestHistory : ProfileTest {
         }
     }
 
-    private func innerCheckSites(history: BrowserHistory, callback: (cursor: Cursor) -> Void) {
+    private func innerCheckSites(history: BrowserHistory, callback: (cursor: Cursor<Site>) -> Void) {
         // Retrieve the entry
         history.get(nil).upon {
             XCTAssertTrue($0.isSuccess)
@@ -39,7 +39,7 @@ class TestHistory : ProfileTest {
             XCTAssertEqual(cursor.count, urls.count, "cursor has \(urls.count) entries")
 
             for index in 0..<cursor.count {
-                let s = cursor[index] as! Site
+                let s = cursor[index]!
                 XCTAssertNotNil(s, "cursor has a site for entry")
                 let title = urls[s.url]
                 XCTAssertNotNil(title, "Found right url")
@@ -205,7 +205,7 @@ class TestHistory : ProfileTest {
         case 2...3:
             innerCheckSites(history) { cursor in
                 for site in cursor {
-                    let s = site as! Site
+                    let s = site!
                 }
             }
             cb()
