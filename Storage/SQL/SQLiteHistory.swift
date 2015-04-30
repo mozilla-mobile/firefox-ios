@@ -111,10 +111,26 @@ public class SQLiteHistory: BrowserHistory {
             return deferResult(IgnoredSiteError())
         }
 
-        let inserted = db.insert(&err) { (conn, inout err: NSError?) -> Int in
-            return self.table.insert(conn, item: (site: visit.site, visit: visit), err: &err)
+        // TODO: at this point we need to 'shadow' the mirrored site, if the
+        // remote is still authoritative.
+        // For now, we just update-or-insert on our one and only table.
+        db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
+            // TODO
+            return 0
         }
 
         return failOrSucceed(err, "Add")
+    }
+
+    public func getByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
+        return deferResult(DatabaseError(err: nil))
+    }
+
+    public func getByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
+        return deferResult(DatabaseError(err: nil))
+    }
+
+    public func getByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
+        return deferResult(DatabaseError(err: nil))
     }
 }

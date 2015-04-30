@@ -20,23 +20,36 @@ public class IgnoredSiteError: ErrorType {
  * `clear` might or might not need to set a bunch of flags to upload deletions.
  */
 public protocol BrowserHistory {
+    func addLocalVisit(visit: SiteVisit) -> Success
     func clear() -> Success
-    func get(options: QueryOptions?) -> Deferred<Result<Cursor<Site>>>
-    func addVisit(visit: SiteVisit) -> Success
+
+    func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>>
+    func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>>
+    func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>>
 }
 
 // TODO: rip this out.
 public class MockBrowserHistory: BrowserHistory {
     public init() {}
 
+    public func addLocalVisit(visit: SiteVisit) -> Success {
+        return succeed()
+    }
+
     public func clear() -> Success {
         return succeed()
     }
-    public func get(options: QueryOptions?) -> Deferred<Result<Cursor<Site>>> {
+
+    public func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
         return deferResult(DatabaseError(err: nil))
     }
-    public func addVisit(visit: SiteVisit) -> Success {
-        return succeed()
+
+    public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
+        return deferResult(DatabaseError(err: nil))
+    }
+
+    public func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
+        return deferResult(DatabaseError(err: nil))
     }
 }
 
