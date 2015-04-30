@@ -8,13 +8,6 @@ import XCGLogger
 
 private let log = XCGLogger.defaultInstance()
 
-public class IgnoredSiteError: ErrorType {
-    public var description: String {
-        return "Ignored site."
-    }
-}
-
-
 func failOrSucceed<T>(err: NSError?, op: String, val: T) -> Deferred<Result<T>> {
     if let err = err {
         log.debug("\(op) failed: \(err.localizedDescription)")
