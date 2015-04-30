@@ -74,6 +74,8 @@
 		2827319F1ABC9C5900AA1954 /* DeferredTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28786E541AB0F5FA009EA9EF /* DeferredTests.swift */; };
 		282731A01ABC9C5900AA1954 /* ResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBABAE1AB3659000DB5728 /* ResultTests.swift */; };
 		282731A21ABC9D2600AA1954 /* Prefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282731A11ABC9D2600AA1954 /* Prefs.swift */; };
+		282915E61AF1A7920006EEB5 /* BrowserTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282915E51AF1A7920006EEB5 /* BrowserTable.swift */; };
+		282915E71AF1A7920006EEB5 /* BrowserTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282915E51AF1A7920006EEB5 /* BrowserTable.swift */; };
 		282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
 		28302E401AF0747800521E2E /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28302E3F1AF0747800521E2E /* DatabaseError.swift */; };
 		283A2AD91AF0794D003C0A26 /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28302E3F1AF0747800521E2E /* DatabaseError.swift */; };
@@ -122,6 +124,7 @@
 		28C8D13C1AD4CEB400F62011 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
 		28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
+		28E08C9A1AF44F00009BA2FA /* BrowserTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282915E51AF1A7920006EEB5 /* BrowserTable.swift */; };
 		28E23C121AC5A5EE00F5AC85 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E23C111AC5A5EE00F5AC85 /* State.swift */; };
 		28EDE6CB1AF2929900FB2937 /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2551ABB531100877008 /* SQLiteHistory.swift */; };
 		28F596A11ACA13CA0071DDCC /* InfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F596A01ACA13CA0071DDCC /* InfoTests.swift */; };
@@ -1070,6 +1073,7 @@
 		282731681ABC9BE700AA1954 /* SyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		282731701ABC9BE700AA1954 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		282731A11ABC9D2600AA1954 /* Prefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefs.swift; sourceTree = "<group>"; };
+		282915E51AF1A7920006EEB5 /* BrowserTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTable.swift; sourceTree = "<group>"; };
 		28302E3F1AF0747800521E2E /* DatabaseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 		283306E81AB3BB87008999AC /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		2853C5401AD84C6800C4F31D /* TabsPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsPayload.swift; sourceTree = "<group>"; };
@@ -1897,6 +1901,7 @@
 				2FCAE2531ABB531100877008 /* SchemaTable.swift */,
 				2FCAE2561ABB531100877008 /* SQLitePasswords.swift */,
 				2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */,
+				282915E51AF1A7920006EEB5 /* BrowserTable.swift */,
 			);
 			path = SQL;
 			sourceTree = "<group>";
@@ -3493,6 +3498,7 @@
 				2FCAE2611ABB531100877008 /* FileAccessor.swift in Sources */,
 				2FCAE2691ABB531100877008 /* FaviconsTable.swift in Sources */,
 				2FCAE2661ABB531100877008 /* Site.swift in Sources */,
+				28E08C9A1AF44F00009BA2FA /* BrowserTable.swift in Sources */,
 				2FCAE2681ABB531100877008 /* BrowserDB.swift in Sources */,
 				2FCAE2651ABB531100877008 /* RemoteTabs.swift in Sources */,
 				2FCAE2601ABB531100877008 /* Favicons.swift in Sources */,
@@ -3522,6 +3528,7 @@
 				2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */,
 				2FA435131ABB6829008031D1 /* Cursor.swift in Sources */,
 				2FA435171ABB6829008031D1 /* Passwords.swift in Sources */,
+				282915E71AF1A7920006EEB5 /* BrowserTable.swift in Sources */,
 				2FA435141ABB6829008031D1 /* Favicons.swift in Sources */,
 				2FA4351E1ABB6831008031D1 /* GenericTable.swift in Sources */,
 				2FA435191ABB6829008031D1 /* RemoteTabs.swift in Sources */,
