@@ -138,6 +138,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         mutableUA.insertString("FxiOS/\(appVersion) ", atIndex: mobileRange.location)
         let firefoxUA = "\(mutableUA) Safari/\(webKitVersion)"
         NSUserDefaults.standardUserDefaults().registerDefaults(["UserAgent": firefoxUA])
+
+        SDWebImageDownloader.sharedDownloader().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
     }
 }
 
