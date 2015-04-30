@@ -379,7 +379,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         })
     }
 
-    func loader(dataLoaded data: Cursor) {
+    func loader(dataLoaded data: Cursor<Site>) {
         self.data = data
         tableView.reloadData()
     }
@@ -389,7 +389,7 @@ extension SearchViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let section = SearchListSection(rawValue: indexPath.section)!
         if section == SearchListSection.BookmarksAndHistory {
-            if let site = data[indexPath.row] as? Site {
+            if let site = data[indexPath.row] {
                 if let url = NSURL(string: site.url) {
                     searchDelegate?.searchViewController(self, didSelectURL: url)
                 }
@@ -427,7 +427,7 @@ extension SearchViewController: UITableViewDataSource {
 
         case .BookmarksAndHistory:
             let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
-            if let site = data[indexPath.row] as? Site {
+            if let site = data[indexPath.row] {
                 if let cell = cell as? TwoLineTableViewCell {
                     cell.setLines(site.title, detailText: site.url)
                     if let img = site.icon {
