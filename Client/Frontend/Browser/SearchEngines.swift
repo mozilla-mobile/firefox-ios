@@ -124,7 +124,7 @@ class SearchEngines {
     // particular order.
     class func getUnorderedEngines() -> [OpenSearchEngine] {
         var error: NSError?
-        let path = NSBundle.mainBundle().resourcePath?.stringByAppendingPathComponent("Locales/en-US/searchplugins")
+        let path = NSBundle.mainBundle().resourcePath?.stringByAppendingPathComponent("SearchPlugins/en")
 
         if path == nil {
             println("Error: Could not find search engine directory")
