@@ -171,19 +171,21 @@ public class BrowserProfile: Profile {
         return NSUserDefaultsProfilePrefs(profile: self)
     }
 
-    lazy var favicons: Favicons = {
-        return MockFavicons()
-//        return SQLiteFavicons(db: self.db)
+    private lazy var places: protocol<BrowserHistory, Favicons> = {
+        return SQLiteHistory(db: self.db)
     }()
 
-    // lazy var ReadingList readingList
+    lazy var favicons: Favicons = {
+        return self.places
+//        return SQLiteFavicons(db: self.db)
+    }()
 
     lazy var prefs: Prefs = {
         return self.makePrefs()
     }()
 
     lazy var history: BrowserHistory = {
-        return SQLiteHistory(db: self.db)
+        return self.places
     }()
 
     lazy var readingList: ReadingListService? = {

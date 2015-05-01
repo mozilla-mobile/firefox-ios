@@ -21,7 +21,7 @@ public class IgnoredSiteError: ErrorType {
  */
 public protocol BrowserHistory {
     func addLocalVisit(visit: SiteVisit) -> Success
-    func clear() -> Success
+    func clearHistory() -> Success
 
     func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>>
     func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>>
@@ -36,7 +36,7 @@ public class MockBrowserHistory: BrowserHistory {
         return succeed()
     }
 
-    public func clear() -> Success {
+    public func clearHistory() -> Success {
         return succeed()
     }
 

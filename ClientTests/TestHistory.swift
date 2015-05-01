@@ -52,7 +52,7 @@ class TestHistory : ProfileTest {
     }
 
     private func innerClear(history: BrowserHistory, callback: (s: Bool) -> Void) {
-        history.clear().upon { callback(s: $0.isSuccess) }
+        history.clearHistory().upon { callback(s: $0.isSuccess) }
     }
 
     private func clear(history: BrowserHistory, s: Bool = true) {

@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Shared
 import UIKit
 
 /* The base favicons protocol */
@@ -9,9 +10,8 @@ import UIKit
 public protocol Favicons {
     var defaultIcon: UIImage { get }
 
-    func clear(options: QueryOptions?, complete: ((success: Bool) -> Void)?)
-    func get(options: QueryOptions?, complete: (data: Cursor<(Site, Favicon)>) -> Void)
-    func add(icon: Favicon, site: Site, complete: ((success: Bool) -> Void)?)
+    func clearFavicons() -> Success
+    func addFavicon(icon: Favicon, forSite site: Site) -> Success
 }
 
 // TODO: rip this back out.
@@ -22,18 +22,11 @@ public class MockFavicons: Favicons {
         return UIImage(named: "defaultFavicon")!
     }()
 
-    public func clear(options: QueryOptions?, complete: ((success: Bool) -> Void)?) {
-        if let complete = complete {
-            complete(success: false)
-        }
-    }
-    public func get(options: QueryOptions?, complete: (data: Cursor<(Site, Favicon)>) -> Void) {
-        complete(data: Cursor())
+    public func clearFavicons() -> Success {
+        return succeed()
     }
 
-    public func add(icon: Favicon, site: Site, complete: ((success: Bool) -> Void)?) {
-        if let complete = complete {
-            complete(success: false)
-        }
+    public func addFavicon(icon: Favicon, forSite site: Site) -> Success {
+        return succeed()
     }
 }

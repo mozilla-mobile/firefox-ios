@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import UIKit           // For UIImage only.
 import XCGLogger
 
 private let log = XCGLogger.defaultInstance()
@@ -32,20 +33,31 @@ func getMicrosecondFrecencySQL(visitDateColumn: String, visitCountColumn: String
  */
 public class SQLiteHistory: BrowserHistory {
     let db: BrowserDB
+    let favicons: FaviconsTable<Favicon>
+
     private var ignoredSchemes = ["about"]
+
+    lazy public var defaultIcon: UIImage = {
+        return UIImage(named: "defaultFavicon")!
+    }()
 
     required public init(db: BrowserDB) {
         self.db = db
+        self.favicons = FaviconsTable<Favicon>()
+        db.createOrUpdate(self.favicons)
         db.createOrUpdate(BrowserTable())
     }
 
-    public func clear() -> Success {
+    public func clearHistory() -> Success {
         let s: Site? = nil
         var err: NSError? = nil
 
         // TODO: this should happen asynchronously.
         db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
             err = conn.executeChange("DELETE FROM visits", withArgs: nil)
+            if err == nil {
+                err = conn.executeChange("DELETE FROM faviconSites", withArgs: nil)
+            }
             if err == nil {
                 err = conn.executeChange("DELETE FROM history", withArgs: nil)
             }
@@ -67,7 +79,7 @@ public class SQLiteHistory: BrowserHistory {
         return true
     }
 
-    private func recordVisitedSite(site: Site) -> Success {
+    func recordVisitedSite(site: Site) -> Success {
         var err: NSError? = nil
 
         // Don't store visits to sites with about: protocols
@@ -104,7 +116,7 @@ public class SQLiteHistory: BrowserHistory {
     }
 
     // TODO: thread siteID into this to avoid the need to do the lookup.
-    private func addLocalVisitForExistingSite(visit: SiteVisit) -> Success {
+    func addLocalVisitForExistingSite(visit: SiteVisit) -> Success {
         var err: NSError? = nil
         db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
             let insert = "INSERT INTO visits (siteID, date, type) VALUES (" +
@@ -129,18 +141,18 @@ public class SQLiteHistory: BrowserHistory {
     public func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
         let frecencySQL = getMicrosecondFrecencySQL("visitDate", "visitCount")
         let orderBy = "ORDER BY \(frecencySQL) DESC "
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy)
+        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, includeIcon: true)
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
         let frecencySQL = getMicrosecondFrecencySQL("visitDate", "visitCount")
         let orderBy = "ORDER BY \(frecencySQL) DESC "
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: filter, orderBy: orderBy)
+        return self.getFilteredSitesWithLimit(limit, whereURLContains: filter, orderBy: orderBy, includeIcon: true)
     }
 
     public func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
         let orderBy = "ORDER BY visitDate DESC "
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy)
+        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, includeIcon: true)
     }
 
     private class func basicHistoryColumnFactory(row: SDRow) -> Site {
@@ -160,37 +172,134 @@ public class SQLiteHistory: BrowserHistory {
         return site
     }
 
-    private func getFilteredSitesWithLimit(limit: Int, whereURLContains filter: String?, orderBy: String) -> Deferred<Result<Cursor<Site>>> {
+    private class func iconHistoryColumnFactory(row: SDRow) -> Site {
+        let site = basicHistoryColumnFactory(row)
 
+        let iconURL = row["iconURL"] as? String
+        if let iconType = row["iconType"] as? Int,
+            let iconURL = iconURL,
+            let iconDate = row["iconDate"] as? Double,
+            let iconID = row["iconID"] as? Int {
+                let date = NSDate(timeIntervalSince1970: iconDate)
+                let icon = Favicon(url: iconURL, date: date, type: IconType(rawValue: iconType)!)
+                site.icon = icon
+        }
+
+        return site
+    }
+
+    private func runQuery<T>(sql: String, args: [AnyObject?]?, factory: (SDRow) -> T) -> Deferred<Result<Cursor<T>>> {
+        func f(conn: SQLiteDBConnection, inout err: NSError?) -> Cursor<T> {
+            return conn.executeQuery(sql, factory: factory, withArgs: args)
+        }
+
+        var err: NSError? = nil
+        let cursor = db.withReadableConnection(&err, callback: f)
+
+        return deferResult(cursor)
+    }
+
+    private func getFilteredSitesWithLimit(limit: Int, whereURLContains filter: String?, orderBy: String, includeIcon: Bool) -> Deferred<Result<Cursor<Site>>> {
         let args: [AnyObject?]?
         let whereClause: String
         if let filter = filter {
             args = ["%\(filter)%", "%\(filter)%"]
-            whereClause = " AND ((history.url LIKE ?) OR (history.title LIKE ?)) "
+            whereClause = " WHERE ((history.url LIKE ?) OR (history.title LIKE ?)) "
         } else {
             args = []
             whereClause = " "
         }
 
-        let sql =
+        let historySQL =
         "SELECT history.id AS historyID, history.url AS url, title, guid, " +
         "max(visits.date) AS visitDate, " +
         "count(visits.id) AS visitCount " +
-        "FROM history, visits " +
-        "WHERE history.id = visits.siteID " +
+        "FROM history INNER JOIN visits ON visits.siteID = history.id " +
         whereClause +
         "GROUP BY history.id " +
         orderBy
         "LIMIT \(limit) "
 
-        let factory = SQLiteHistory.basicHistoryColumnFactory
-        func runQuery(conn: SQLiteDBConnection, inout err: NSError?) -> Cursor<Site> {
-            return conn.executeQuery(sql, factory: factory, withArgs: args)
+        if includeIcon {
+            // We select the history items then immediately join to get the largest icon.
+            // We do this so that we limit and filter *before* joining against icons.
+            let sql = "SELECT " +
+                "historyID, url, title, guid, visitDate, visitCount " +
+                "iconID, iconURL, iconDate, iconType, iconWidth " +
+                "FROM (\(historySQL)) LEFT OUTER JOIN " +
+                "view_history_id_favicon ON historyID = view_history_id_favicon.id"
+            let factory = SQLiteHistory.iconHistoryColumnFactory
+            return self.runQuery(sql, args: args, factory: factory)
         }
 
-        var err: NSError? = nil
-        let cursor = db.withReadableConnection(&err, callback: runQuery)
+        let factory = SQLiteHistory.basicHistoryColumnFactory
+        return self.runQuery(historySQL, args: args, factory: factory)
+    }
+}
 
-        return deferResult(cursor)
+extension SQLiteHistory: Favicons {
+    public func clearFavicons() -> Success {
+        var err: NSError? = nil
+
+        // TODO: this should happen asynchronously.
+        db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
+            err = conn.executeChange("DELETE FROM faviconSites", withArgs: nil)
+            if err == nil {
+                err = conn.executeChange("DELETE FROM favicons", withArgs: nil)
+            }
+            return 1
+        }
+
+        return failOrSucceed(err, "Clear favicons")
+    }
+
+    /**
+     * This method assumes that the site has already been recorded
+     * in the history table.
+     */
+    public func addFavicon(icon: Favicon, forSite site: Site) -> Success {
+        log.verbose("Adding favicon \(icon.url) for site \(site.url).")
+        func doChange(query: String, args: [AnyObject?]?) -> Success {
+            var err: NSError?
+            let res = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
+                // Blind!
+                self.favicons.insertOrUpdate(conn, obj: icon)
+
+                // Now set up the mapping.
+                err = conn.executeChange(query, withArgs: args)
+                return err == nil ? 1 : 0
+            }
+            if res == 1 {
+                return succeed()
+            }
+            return deferResult(DatabaseError(err: err))
+        }
+
+        let siteSubselect = "(SELECT id FROM history WHERE url = ?)"
+        let iconSubselect = "(SELECT id FROM favicons WHERE url = ?)"
+        let insertOrIgnore = "INSERT OR IGNORE INTO faviconSites(siteID, faviconID) VALUES "
+        if let iconID = icon.id {
+            // Easy!
+            if let siteID = site.id {
+                // So easy!
+                let args: [AnyObject?]? = [siteID, iconID]
+                return doChange("\(insertOrIgnore) (?, ?)", args)
+            }
+
+            // Nearly easy.
+            let args: [AnyObject?]? = [site.url, iconID]
+            return doChange("\(insertOrIgnore) (\(siteSubselect), ?)", args)
+
+        }
+
+        // Sigh.
+        if let siteID = site.id {
+            let args: [AnyObject?]? = [siteID, icon.url]
+            return doChange("\(insertOrIgnore) (?, \(iconSubselect))", args)
+        }
+
+        // The worst.
+        let args: [AnyObject?]? = [site.url, icon.url]
+        return doChange("\(insertOrIgnore) (\(siteSubselect), \(iconSubselect))", args)
     }
 }
