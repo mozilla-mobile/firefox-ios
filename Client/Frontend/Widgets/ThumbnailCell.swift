@@ -14,40 +14,57 @@ private let PlaceholderImage = UIImage(named: "defaultFavicon")
 struct ThumbnailCellUX {
     /// Ratio of width:height of the thumbnail image.
     static let ImageAspectRatio: Float = 1.5
+    static let TextSize = AppConstants.DefaultSmallFontSize
 }
 
 class ThumbnailCell: UICollectionViewCell {
     let textLabel = UILabel()
     let imageView = UIImageViewAligned()
+    let imageWrapper = UIView()
 
     override init(frame: CGRect) {
+        imagePadding = CGFloat(0)
         super.init(frame: frame)
 
         contentView.addSubview(textLabel)
-        contentView.addSubview(imageView)
+        contentView.addSubview(imageWrapper)
+        imageWrapper.addSubview(imageView)
 
-        imageView.layer.borderColor = BorderColor.CGColor
-        imageView.layer.borderWidth = 1
-        imageView.layer.cornerRadius = 3
-        imageView.clipsToBounds = true
+        imageWrapper.layer.borderColor = BorderColor.CGColor
+        imageWrapper.layer.borderWidth = 1
+        imageWrapper.layer.cornerRadius = 3
+        imageWrapper.clipsToBounds = true
 
-        imageView.snp_makeConstraints({ make in
+        imageWrapper.snp_remakeConstraints({ make in
             make.top.left.right.equalTo(self.contentView).insets(CellInsets)
-            make.width.equalTo(self.imageView.snp_height).multipliedBy(ThumbnailCellUX.ImageAspectRatio)
-            return
+            make.width.equalTo(self.imageWrapper.snp_height).multipliedBy(ThumbnailCellUX.ImageAspectRatio)
+        })
+
+        imageView.snp_remakeConstraints({ make in
+            make.top.bottom.left.right.equalTo(self.imageWrapper)
         })
 
         textLabel.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
         textLabel.font = LabelFont
         textLabel.textColor = LabelColor
-        textLabel.snp_makeConstraints({ make in
-            make.left.right.bottom.equalTo(self.contentView).insets(CellInsets)
+        textLabel.snp_remakeConstraints({ make in
+            make.top.equalTo(self.imageWrapper.snp_bottom).offset(CellInsets.top)
+            make.left.right.equalTo(self.contentView).insets(CellInsets)
             return
         })
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    var imagePadding: CGFloat {
+        didSet {
+            imageView.snp_remakeConstraints({ make in
+                make.top.bottom.left.right.equalTo(self.imageWrapper).insets(UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding))
+                return
+            })
+        }
     }
 
     var image: UIImage? = nil {
