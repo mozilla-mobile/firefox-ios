@@ -140,6 +140,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
             } else {
                 view.imageView.image = UIImage(named: "deviceTypeMobile")
             }
+            view.mergeAccessibilityLabels()
             return view
         }
 

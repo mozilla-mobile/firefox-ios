@@ -34,6 +34,10 @@ class TwoLineTableViewCell: UITableViewCell {
     func setLines(text: String?, detailText: String?) {
         twoLineHelper.setLines(text, detailText: detailText)
     }
+
+    func mergeAccessibilityLabels(views: [AnyObject?]? = nil) {
+        twoLineHelper.mergeAccessibilityLabels(views)
+    }
 }
 
 class TwoLineCollectionViewCell: UICollectionViewCell {
@@ -66,6 +70,10 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
 
     func setLines(text: String?, detailText: String?) {
         twoLineHelper.setLines(text, detailText: detailText)
+    }
+
+    func mergeAccessibilityLabels(views: [AnyObject?]? = nil) {
+        twoLineHelper.mergeAccessibilityLabels(views)
     }
 }
 
@@ -115,6 +123,10 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
         super.layoutSubviews()
         twoLineHelper.layoutSubviews()
     }
+
+    func mergeAccessibilityLabels(views: [AnyObject?]? = nil) {
+        twoLineHelper.mergeAccessibilityLabels(views)
+    }
 }
 
 private class TwoLineCellHelper {
@@ -162,5 +174,34 @@ private class TwoLineCellHelper {
             textLabel.text = text
             detailTextLabel.text = detailText
         }
+    }
+
+    func mergeAccessibilityLabels(labels: [AnyObject?]?) {
+        let labels = labels ?? [textLabel, imageView, detailTextLabel]
+
+        let label = labels.map({ (var label: AnyObject?) -> NSAttributedString? in
+            if let view = label as? UIView {
+                label = view.valueForKey("accessibilityLabel")
+            }
+
+            if let attrString = label as? NSAttributedString {
+                return attrString
+            } else if let string = label as? String {
+                return NSAttributedString(string: string)
+            } else {
+                return nil
+            }
+        }).filter({
+            $0 != nil
+        }).reduce(NSMutableAttributedString(string: ""), combine: {
+            if ($0.length > 0) {
+                $0.appendAttributedString(NSAttributedString(string: ", "))
+            }
+            $0.appendAttributedString($1!)
+            return $0
+        })
+
+        container.isAccessibilityElement = true
+        container.setValue(NSAttributedString(attributedString: label), forKey: "accessibilityLabel")
     }
 }
