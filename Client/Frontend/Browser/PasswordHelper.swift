@@ -82,6 +82,10 @@ class PasswordHelper: BrowserHelper {
     }
 
     private func setPassword(password: Password) {
+        if password.username.isEmpty || password.password.isEmpty {
+            return
+        }
+
         profile.passwords.get(QueryOptions(filter: password.hostname), complete: { data in
             for i in 0..<data.count {
                 let savedPassword = data[i] as! Password
