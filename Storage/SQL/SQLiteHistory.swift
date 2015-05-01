@@ -103,6 +103,7 @@ public class SQLiteHistory: BrowserHistory {
         return failOrSucceed(err, "Record site")
     }
 
+    // TODO: thread siteID into this to avoid the need to do the lookup.
     private func addLocalVisitForExistingSite(visit: SiteVisit) -> Success {
         var err: NSError? = nil
         db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
