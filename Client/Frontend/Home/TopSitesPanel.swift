@@ -110,9 +110,8 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if let site = dataSource[indexPath.item] as? Site {
-            homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!)
-        }
+        let site = dataSource[indexPath.item]
+        homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!)
     }
 }
 
@@ -275,6 +274,8 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
 
     private func createTileForSite(cell: ThumbnailCell, site: Site) -> ThumbnailCell {
         cell.textLabel.text = site.title.isEmpty ? site.url : site.title
+        cell.imageWrapper.backgroundColor = UIColor.clearColor()
+
         if let thumbs = profile.thumbnails as? SDWebThumbnails {
             let key = SDWebThumbnails.getKey(site.url)
             cell.imageView.moz_getImageFromCache(key, cache: thumbs.cache, completed: { img, err, type, key in
@@ -334,7 +335,7 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         // Cells for the top site thumbnails.
-        let site = self[indexPath.item] as! Site
+        let site = self[indexPath.item]
 
         if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
             if indexPath.item < layout.thumbnailCount {
