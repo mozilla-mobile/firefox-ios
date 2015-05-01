@@ -19,6 +19,8 @@ class TestFavicons : ProfileTest {
         self.waitForExpectationsWithTimeout(100, handler: nil)
     }
 
+    // TODO: uncomment.
+    /*
     private func checkSites(favicons: Favicons, icons: [String], s: Bool = true) {
         let expectation = self.expectationWithDescription("Wait for history")
 
@@ -68,4 +70,5 @@ class TestFavicons : ProfileTest {
             profile.files.remove("browser.db")
         }
     }
+    */
 }

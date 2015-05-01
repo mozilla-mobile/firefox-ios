@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 import Foundation
 import XCTest
 
@@ -28,7 +32,7 @@ class TestFaviconsTable : XCTestCase {
             XCTAssertEqual(cursor.count, urls.count, "cursor has right num of entries")
 
             for index in 0..<cursor.count {
-                if let s = cursor[index] as? Favicon {
+                if let s = cursor[index] {
                     XCTAssertNotNil(s, "cursor has an icon for entry")
                     let index = find(urls, s.url)
                     XCTAssert(index > -1, "Found right url")

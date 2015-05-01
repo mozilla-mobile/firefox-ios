@@ -4,7 +4,7 @@
 
 import Foundation
 
-extension String {
+public extension String {
     public func contains(other: String) -> Bool {
         // rangeOfString returns nil if other is empty, destroying the analogy with (ordered) sets.
         if other.isEmpty {

@@ -161,7 +161,7 @@ public class BrowserDB {
 
     typealias IntCallback = (connection: SQLiteDBConnection, inout err: NSError?) -> Int
 
-    private func withConnection<T>(#flags: SwiftData.Flags, inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> T {
+    func withConnection<T>(#flags: SwiftData.Flags, inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> T {
         var res: T!
         db.withConnection(flags) { connection in
             var err: NSError? = nil
@@ -171,7 +171,7 @@ public class BrowserDB {
         return res
     }
 
-    func withWritableConnection(inout err: NSError?, callback: IntCallback) -> Int {
+    func withWritableConnection<T>(inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> T {
         return withConnection(flags: SwiftData.Flags.ReadWrite, err: &err, callback: callback)
     }
 
