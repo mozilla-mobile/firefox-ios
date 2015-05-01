@@ -15,32 +15,27 @@ private let ThumbnailSectionPadding: CGFloat = 8
 private let SeparatorColor = UIColor(rgb: 0xffffff)
 private let DefaultImage = "defaultFavicon"
 
-class Tile {
-    let url: String
+class Tile : Site {
     let backgroundColor: UIColor
-    let image: String
     let trackingId: Int
-    let title: String
 
     init(url: String, color: UIColor, image: String, trackingId: Int, title: String) {
-        self.url = url
         self.backgroundColor = color
-        self.image = image
         self.trackingId = trackingId
-        self.title = title
+        super.init(url: url, title: title)
+        self.icon = Favicon(url: image, date: NSDate(), type: IconType.Icon)
     }
 
     init(json: JSON) {
-        self.url = json["url"].asString!
-
         let colorString = json["bgcolor"].asString!
         var colorInt: UInt32 = 0
         NSScanner(string: colorString).scanHexInt(&colorInt)
         self.backgroundColor = UIColor(rgb: (Int) (colorInt ?? 0xaaaaaa))
-
-        self.image = json["imageurl"].asString!
         self.trackingId = json["trackingid"].asInt ?? 0
-        self.title = json["title"].asString!
+
+        super.init(url: json["url"].asString!, title: json["title"].asString!)
+
+        self.icon = Favicon(url: json["imageurl"].asString!, date: NSDate(), type: .Icon)
     }
 }
 
@@ -115,7 +110,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if let site = dataSource?.data[indexPath.item] as? Site {
+        if let site = dataSource[indexPath.item] as? Site {
             homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!)
         }
     }
@@ -330,21 +325,31 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         return cell
     }
 
+    subscript(index: Int) -> Site {
+        if index >= data.count {
+            return suggestedSites[index - data.count] as! Site
+        }
+        return data[index] as! Site
+    }
+
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         // Cells for the top site thumbnails.
+        let site = self[indexPath.item] as! Site
+
         if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
             if indexPath.item < layout.thumbnailCount {
                 let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as! ThumbnailCell
+
                 if indexPath.item >= data.count {
-                    return createTileForSuggestedSite(cell, tile: suggestedSites[indexPath.item - data.count] as! Tile)
+                    return createTileForSuggestedSite(cell, tile: site as! Tile)
                 }
-                return createTileForSite(cell, site: data[indexPath.item] as! Site)
+                return createTileForSite(cell, site: site)
             }
         }
 
         // Cells for the remainder of the top sites list.
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(RowIdentifier, forIndexPath: indexPath) as! TwoLineCollectionViewCell
-        return createListCell(cell, site: data[indexPath.item] as! Site)
+        return createListCell(cell, site: site)
     }
     
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
