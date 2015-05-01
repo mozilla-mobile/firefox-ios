@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-
+import Shared
 import Storage
 
 private let ThumbnailIdentifier = "Thumbnail"
@@ -14,6 +14,57 @@ private let SeparatorIdentifier = "separator"
 private let ThumbnailSectionPadding: CGFloat = 8
 private let SeparatorColor = UIColor(rgb: 0xffffff)
 private let DefaultImage = "defaultFavicon"
+
+class Tile {
+    let url: String
+    let backgroundColor: UIColor
+    let image: String
+    let trackingId: Int
+    let title: String
+
+    init(url: String, color: UIColor, image: String, trackingId: Int, title: String) {
+        self.url = url
+        self.backgroundColor = color
+        self.image = image
+        self.trackingId = trackingId
+        self.title = title
+    }
+
+    init(json: JSON) {
+        self.url = json["url"].asString!
+
+        let colorString = json["bgcolor"].asString!
+        var colorInt: UInt32 = 0
+        NSScanner(string: colorString).scanHexInt(&colorInt)
+        self.backgroundColor = UIColor(rgb: (Int) (colorInt ?? 0xaaaaaa))
+
+        self.image = json["imageurl"].asString!
+        self.trackingId = json["trackingid"].asInt ?? 0
+        self.title = json["title"].asString!
+    }
+}
+
+class SuggestedSitesData: Cursor {
+    let json: JSON
+
+    init() {
+        // TODO: Make this list localized. That should be as simple as making sure its in the lproj directory.
+        var err: NSError? = nil
+        let path = NSBundle.mainBundle().pathForResource("suggestedsites", ofType: "json")
+        let data = NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: &err)
+        json = JSON.parse(data as! String)
+    }
+
+    override var count: Int {
+        return json.length
+    }
+
+    override subscript(index: Int) -> Any? {
+        get {
+            return Tile(json: json[index])
+        }
+    }
+}
 
 class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
