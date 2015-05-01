@@ -198,16 +198,18 @@ public class SQLiteBookmarks: BookmarksModelFactory {
 }
 
 extension SQLiteBookmarks: ShareToDestination {
-    public func shareItem(item: ShareItem) {
+    public func addToMobileBookmarks(url: NSURL, title: String, favicon: Favicon?) -> Success {
         var err: NSError?
-        self.db.withWritableConnection(&err) {  (conn, err) -> Int in
+
+        return self.db.withWritableConnection(&err) {  (conn, err) -> Success in
             func insertBookmark(icon: Int) -> Success {
                 log.debug("Inserting bookmark with specified icon \(icon).")
+                let urlString = url.absoluteString!
                 var args: Args = [
                     Bytes.generateGUID(),
                     BookmarkNodeType.Bookmark.rawValue,
-                    item.url,
-                    (item.title ?? item.url),
+                    urlString,
+                    title,
                     BookmarkRoots.MobileID,
                 ]
 
@@ -216,7 +218,7 @@ extension SQLiteBookmarks: ShareToDestination {
                 let iconValue: String
                 if icon == -1 {
                     iconValue = "(SELECT iconID FROM \(ViewIconForURL) WHERE url = ?)"
-                    args.append(item.url)
+                    args.append(urlString)
                 } else {
                     iconValue = "?"
                     args.append(icon)
@@ -225,19 +227,25 @@ extension SQLiteBookmarks: ShareToDestination {
                 let sql = "INSERT INTO \(TableBookmarks) (guid, type, url, title, parent, faviconID) VALUES (?, ?, ?, ?, ?, \(iconValue))"
                 err = conn.executeChange(sql, withArgs: args)
                 if let err = err {
-                    log.error("Error inserting \(item.url). Got \(err).")
+                    log.error("Error inserting \(urlString). Got \(err).")
                     return deferResult(DatabaseError(err: err))
                 }
                 return succeed()
             }
 
             // Insert the favicon.
-            if let icon = item.favicon {
-                self.favicons.addFavicon(icon) >>== insertBookmark
-            } else {
-                insertBookmark(-1)
+            if let icon = favicon {
+                return self.favicons.addFavicon(icon) >>== insertBookmark
             }
-            return 1   // This is dumb. We should chain off the insert, for one thing.
+            return insertBookmark(-1)
+        }
+    }
+
+    public func shareItem(item: ShareItem) {
+        // We parse here in anticipation of getting real URLs at some point.
+        if let url = item.url.asURL {
+            let title = item.title ?? url.absoluteString!
+            self.addToMobileBookmarks(url, title: title, favicon: item.favicon)
         }
     }
 }
