@@ -281,11 +281,9 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     private func createTileForSite(cell: ThumbnailCell, site: Site) -> ThumbnailCell {
         cell.textLabel.text = site.title.isEmpty ? site.url : site.title
         if let thumbs = profile.thumbnails as? SDWebThumbnails {
-            cell.imageView.moz_getImageFromCache(site.url, cache: thumbs.cache, completed: { (img, err, type, url) -> Void in
-                if img != nil {
-                    return
-                }
-                self.setDefaultThumbnailBackground(cell)
+            let key = SDWebThumbnails.getKey(site.url)
+            cell.imageView.moz_getImageFromCache(key, cache: thumbs.cache, completed: { img, err, type, key in
+                if img == nil { self.setDefaultThumbnailBackground(cell) }
             })
         } else {
             setDefaultThumbnailBackground(cell)
@@ -297,7 +295,6 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     private func createTileForSuggestedSite(cell: ThumbnailCell, tile: Tile) -> ThumbnailCell {
-        println("Create suggested \(tile)")
         cell.textLabel.text = tile.title.isEmpty ? tile.url : tile.title
         cell.imageWrapper.backgroundColor = tile.backgroundColor
 
