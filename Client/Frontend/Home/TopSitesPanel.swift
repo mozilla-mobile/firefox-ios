@@ -144,7 +144,7 @@ private class TopSitesLayout: UICollectionViewLayout {
     // Used to calculate the height of the list.
     private var count: Int {
         if let dataSource = self.collectionView?.dataSource as? TopSitesDataSource {
-            return dataSource.data.count
+            return dataSource.collectionView(self.collectionView!, numberOfItemsInSection: 0)
         }
         return 0
     }
@@ -254,6 +254,9 @@ private class TopSitesLayout: UICollectionViewLayout {
 class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var data: Cursor
     var profile: Profile
+    lazy var suggestedSites: SuggestedSitesData = {
+        return SuggestedSitesData()
+    }()
 
     init(profile: Profile, data: Cursor) {
         self.data = data
@@ -261,6 +264,12 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        // If there aren't enough data items to fill the grid,
+        if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
+            if (data.count < layout.thumbnailCount) {
+                return min(data.count + suggestedSites.count, layout.thumbnailCount)
+            }
+        }
         return data.count
     }
 
@@ -268,31 +277,51 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.imageView.image = UIImage(named: "defaultFavicon")!
         cell.imageView.contentMode = UIViewContentMode.Center
     }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let site = data[indexPath.item] as! Site
 
-        // Cells for the top site thumbnails.
-        if indexPath.item < 6 {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as! ThumbnailCell
-            cell.textLabel.text = site.title.isEmpty ? site.url : site.title
-            if let thumbs = profile.thumbnails as? SDWebThumbnails {
-                cell.imageView.moz_getImageFromCache(site.url, cache: thumbs.cache, completed: { (img, err, type, url) -> Void in
-                    if img != nil {
-                        return
-                    }
-                    self.setDefaultThumbnailBackground(cell)
-                })
+    private func createTileForSite(cell: ThumbnailCell, site: Site) -> ThumbnailCell {
+        cell.textLabel.text = site.title.isEmpty ? site.url : site.title
+        if let thumbs = profile.thumbnails as? SDWebThumbnails {
+            cell.imageView.moz_getImageFromCache(site.url, cache: thumbs.cache, completed: { (img, err, type, url) -> Void in
+                if img != nil {
+                    return
+                }
+                self.setDefaultThumbnailBackground(cell)
+            })
+        } else {
+            setDefaultThumbnailBackground(cell)
+        }
+        cell.imagePadding = 0
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = cell.textLabel.text
+        return cell
+    }
+
+    private func createTileForSuggestedSite(cell: ThumbnailCell, tile: Tile) -> ThumbnailCell {
+        println("Create suggested \(tile)")
+        cell.textLabel.text = tile.title.isEmpty ? tile.url : tile.title
+        cell.imageWrapper.backgroundColor = tile.backgroundColor
+
+        if let iconString = tile.icon?.url {
+            let icon = NSURL(string: iconString)!
+            if icon.scheme == "asset" {
+                cell.imageView.image = UIImage(named: icon.host!)
             } else {
-                setDefaultThumbnailBackground(cell)
+                cell.imageView.sd_setImageWithURL(icon, completed: { img, err, type, key in
+                    if img == nil { self.setDefaultThumbnailBackground(cell) }
+                })
             }
-            cell.isAccessibilityElement = true
-            cell.accessibilityLabel = cell.textLabel.text
-            return cell
+        } else {
+            self.setDefaultThumbnailBackground(cell)
         }
 
-        // Cells for the remainder of the top sites list.
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(RowIdentifier, forIndexPath: indexPath) as! TwoLineCollectionViewCell
+        cell.imagePadding = 10
+        cell.imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = cell.textLabel.text
+        return cell
+    }
+
+    private func createListCell(cell: TwoLineCollectionViewCell, site: Site) -> TwoLineCollectionViewCell {
         cell.textLabel.text = site.title.isEmpty ? site.url : site.title
         cell.detailTextLabel.text = site.url
         cell.mergeAccessibilityLabels()
@@ -302,6 +331,23 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
             cell.imageView.image = UIImage(named: DefaultImage)
         }
         return cell
+    }
+
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        // Cells for the top site thumbnails.
+        if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
+            if indexPath.item < layout.thumbnailCount {
+                let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as! ThumbnailCell
+                if indexPath.item >= data.count {
+                    return createTileForSuggestedSite(cell, tile: suggestedSites[indexPath.item - data.count] as! Tile)
+                }
+                return createTileForSite(cell, site: data[indexPath.item] as! Site)
+            }
+        }
+
+        // Cells for the remainder of the top sites list.
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(RowIdentifier, forIndexPath: indexPath) as! TwoLineCollectionViewCell
+        return createListCell(cell, site: data[indexPath.item] as! Site)
     }
     
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
