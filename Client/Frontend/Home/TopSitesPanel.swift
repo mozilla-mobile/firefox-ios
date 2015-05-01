@@ -130,15 +130,18 @@ private class TopSitesCollectionView: UICollectionView {
 }
 
 private class TopSitesLayout: UICollectionViewLayout {
-    private let AspectRatio: CGFloat = 1.25 // Ratio of width:height.
-
     private var thumbnailRows = 3
     private var thumbnailCols = 2
     private var thumbnailCount: Int { return thumbnailRows * thumbnailCols }
     private var width: CGFloat { return self.collectionView?.frame.width ?? 0 }
-    private var thumbnailWidth: CGFloat { return width / CGFloat(thumbnailCols) - (ThumbnailSectionPadding * 2) / CGFloat(thumbnailCols) }
-    private var thumbnailHeight: CGFloat { return thumbnailWidth / AspectRatio }
 
+    // The width and height of the thumbnail here are the width and height of the tile itself, not the image inside the tile.
+    private var thumbnailWidth: CGFloat { return width / CGFloat(thumbnailCols) }
+    // The tile's height is determined the aspect ratio of the thumbnails width + the height of the text label on the bottom. We also take into account
+    // some padding between the title and the image.
+    private var thumbnailHeight: CGFloat { return thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio) + ThumbnailCellUX.TextSize + ThumbnailSectionPadding}
+
+    // Used to calculate the height of the list.
     private var count: Int {
         if let dataSource = self.collectionView?.dataSource as? TopSitesDataSource {
             return dataSource.data.count
@@ -149,7 +152,7 @@ private class TopSitesLayout: UICollectionViewLayout {
     private var topSectionHeight: CGFloat {
         let maxRows = ceil(Float(count) / Float(thumbnailCols))
         let rows = min(Int(maxRows), thumbnailRows)
-        return thumbnailHeight * CGFloat(rows) + ThumbnailSectionPadding * 2
+        return thumbnailHeight * CGFloat(rows)
     }
 
     override init() {
@@ -213,10 +216,11 @@ private class TopSitesLayout: UICollectionViewLayout {
 
     // Set the frames for the row separators.
     override func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
-        let decoration = UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
         let rowIndex = indexPath.item - thumbnailCount + 1
         let rowYOffset = CGFloat(rowIndex) * AppConstants.DefaultRowHeight
         let y = topSectionHeight + rowYOffset
+
+        let decoration = UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
         decoration.frame = CGRectMake(0, y, width, 0.5)
         return decoration
     }
@@ -229,8 +233,8 @@ private class TopSitesLayout: UICollectionViewLayout {
             // Set the top thumbnail frames.
             let row = floor(Double(i / thumbnailCols))
             let col = i % thumbnailCols
-            let x = CGFloat(thumbnailWidth * CGFloat(col)) + ThumbnailSectionPadding
-            let y = CGFloat(row) * thumbnailHeight + ThumbnailSectionPadding
+            let x = thumbnailWidth * CGFloat(col)
+            let y = CGFloat(row) * thumbnailHeight
             attr.frame = CGRectMake(x, y, thumbnailWidth, thumbnailHeight)
         } else {
             // Set the bottom row frames.

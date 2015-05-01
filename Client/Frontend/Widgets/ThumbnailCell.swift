@@ -5,7 +5,7 @@
 import UIKit
 
 private let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
-private let LabelFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Bold" : "HelveticaNeue-Medium", size: 11)
+private let LabelFont = AppConstants.DefaultSmallFont
 private let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
 private let CellInsets = UIEdgeInsetsMake(8, 8, 8, 8)
 
