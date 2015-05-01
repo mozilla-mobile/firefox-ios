@@ -45,8 +45,8 @@ private let DatabaseBusyTimeout: Int32 = 3 * 1000
 public class SwiftData {
     let filename: String
 
-    /// Used for testing.
     static var EnableWAL = true
+    static var EnableForeignKeys = true
 
     /// Used for testing.
     static var ReuseConnections = true
@@ -253,6 +253,10 @@ public class SQLiteDBConnection {
         if SwiftData.EnableWAL {
             let cursor = executeQueryUnsafe("PRAGMA journal_mode=WAL", factory: StringFactory)
             assert(cursor[0] as! String == "wal", "WAL journal mode set")
+        }
+
+        if SwiftData.EnableForeignKeys {
+            let cursor = executeQueryUnsafe("PRAGMA foreign_keys=ON", factory: IntFactory)
         }
 
         // Retry queries before returning locked errors.
