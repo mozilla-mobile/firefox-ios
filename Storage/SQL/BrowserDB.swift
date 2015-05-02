@@ -127,8 +127,17 @@ public class BrowserDB {
             // If we failed, move the file and try again. This will probably break things that are already
             // attached and expecting a working DB, but at least we should be able to restart
             if !success {
-                println("Couldn't create or update \(table.name)")
-                success = self.files.move(self.FileName, toRelativePath: "\(self.FileName).bak")
+                println("Couldn't create or update \(table.name).")
+                println("Attempting to move \(self.FileName) to another location.")
+
+                // Note that a backup file might already exist! We append a counter to avoid this.
+                var bakCounter = 0
+                var bak: String
+                do {
+                    bak = "\(self.FileName).bak.\(++bakCounter)"
+                } while self.files.exists(bak)
+
+                success = self.files.move(self.FileName, toRelativePath: bak)
                 assert(success)
                 success = self.createTable(connection, table: table)
             }
