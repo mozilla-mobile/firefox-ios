@@ -831,6 +831,8 @@ extension BrowserViewController: TabManagerDelegate {
         toolbar?.updateBackStatus(selected?.canGoBack ?? false)
         toolbar?.updateFowardStatus(selected?.canGoForward ?? false)
         toolbar?.updateReloadStatus(selected?.webView.loading ?? false)
+        toolbar?.updatePageStatus(isWebPage(selected!.displayURL!))
+
         self.urlBar.updateBackStatus(selected?.canGoBack ?? false)
         self.urlBar.updateFowardStatus(selected?.canGoForward ?? false)
         self.urlBar.updateProgressBar(Float(selected?.webView.estimatedProgress ?? 0))
@@ -892,6 +894,17 @@ extension BrowserViewController: TabManagerDelegate {
         tab.webView.scrollView.delegate = nil
 
         tab.webView.removeFromSuperview()
+    }
+
+    func isWebPage(url: NSURL) -> Bool {
+        let httpSchemes = ["http", "https"]
+
+        if let scheme = url.scheme,
+            index = find(httpSchemes, scheme) {
+                return true
+        }
+        
+        return false
     }
 }
 
@@ -977,6 +990,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 urlBar.updateURL(tab.displayURL);
                 toolbar?.updateBackStatus(webView.canGoBack)
                 toolbar?.updateFowardStatus(webView.canGoForward)
+                toolbar?.updatePageStatus(isWebPage(webView.URL!))
+
                 urlBar.updateBackStatus(webView.canGoBack)
                 urlBar.updateFowardStatus(webView.canGoForward)
                 showToolbars(animated: false)
