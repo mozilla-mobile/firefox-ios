@@ -203,4 +203,9 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
         helper?.updateReloadStatus(isLoading)
     }
 
+    func updatePageStatus(#isWebPage: Bool) {
+        bookmarkButton.enabled = isWebPage
+        stopReloadButton.enabled = isWebPage
+        shareButton.enabled = isWebPage
+    }
 }
