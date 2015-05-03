@@ -510,11 +510,6 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         finishEditing()
     }
 
-    override func accessibilityPerformEscape() -> Bool {
-        self.SELdidClickCancel()
-        return true
-    }
-
     /* BrowserToolbarProtocol */
     func updateBackStatus(canGoBack: Bool) {
         backButton.enabled = canGoBack

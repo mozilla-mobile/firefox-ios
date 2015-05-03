@@ -319,11 +319,12 @@ class BrowserViewController: UIViewController {
     }
 
     override func accessibilityPerformEscape() -> Bool {
-        if let selectedTab = tabManager.selectedTab {
-            if selectedTab.canGoBack {
-                tabManager.selectedTab?.goBack()
-               return true
-            }
+        if urlBar.isEditing {
+            urlBar.SELdidClickCancel()
+            return true
+        } else if let selectedTab = tabManager.selectedTab where selectedTab.canGoBack {
+            selectedTab.goBack()
+            return true
         }
         return false
     }
