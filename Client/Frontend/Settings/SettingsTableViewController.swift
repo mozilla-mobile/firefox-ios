@@ -373,24 +373,24 @@ private class ClearPrivateDataSetting: Setting {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
 
-        let clearTitle = NSLocalizedString("Clear private data", comment: "Clear private data setting")
+        let clearTitle = NSLocalizedString("Clear private data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
         super.init(title: NSAttributedString(string: clearTitle))
     }
 
     override func onClick(navigationController: UINavigationController?) {
         let clearable = EverythingClearable(profile: profile, tabmanager: tabManager)
 
-        var title: String { return NSLocalizedString("Clear Everything", tableName: "ClearPrivateData", comment: "Clear everything title") }
-        var message: String { return NSLocalizedString("Are you sure you want all of your data? This will also close all open tabs.", tableName: "ClearPrivateData", comment: "Message shown in the dialog when clearing everything") }
+        var title: String { return NSLocalizedString("Clear Everything", tableName: "ClearPrivateData", comment: "Title of the Clear private data dialog.") }
+        var message: String { return NSLocalizedString("Are you sure you want to clear all of your data? This will also close all open tabs.", tableName: "ClearPrivateData", comment: "Message shown in the dialog prompting users if they want to clear everything") }
 
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.ActionSheet)
 
-        let clearString = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Clicking this button will cause us to clear your private data")
+        let clearString = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to Clear private data dialog")
         alert.addAction(UIAlertAction(title: clearString, style: UIAlertActionStyle.Destructive, handler: { (action) -> Void in
             clearable.clear()
         }))
 
-        let cancelString = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Cancel string in the clear private data dialog")
+        let cancelString = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")
         alert.addAction(UIAlertAction(title: cancelString, style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in }))
         navigationController?.presentViewController(alert, animated: true) { () -> Void in }
     }
