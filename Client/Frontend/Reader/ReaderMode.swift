@@ -35,14 +35,22 @@ enum ReaderModeFontType: String {
 }
 
 enum ReaderModeFontSize: Int {
-    case Smallest = 1
-    case Small = 2
-    case Normal = 3
-    case Large = 4
-    case Largest = 5
+    case Size1 = 1
+    case Size2 = 2
+    case Size3 = 3
+    case Size4 = 4
+    case Size5 = 5
+    case Size6 = 6
+    case Size7 = 7
+    case Size8 = 8
+    case Size9 = 9
+    case Size10 = 10
+    case Size11 = 11
+    case Size12 = 12
+    case Size13 = 13
 
     func isSmallest() -> Bool {
-        return self == Smallest
+        return self == Size1
     }
 
     func smaller() -> ReaderModeFontSize {
@@ -54,11 +62,11 @@ enum ReaderModeFontSize: Int {
     }
 
     func isLargest() -> Bool {
-        return self == Largest
+        return self == Size13
     }
 
     static var defaultSize: ReaderModeFontSize {
-        return .Normal
+        return .Size5
     }
 
     func bigger() -> ReaderModeFontSize {

@@ -187,6 +187,38 @@ body {
   font-size: 40px;
 }
 
+.font-size6 > .header > h1 {
+  font-size: 44px;
+}
+
+.font-size7 > .header > h1 {
+  font-size: 48px;
+}
+
+.font-size8 > .header > h1 {
+  font-size: 52px;
+}
+
+.font-size9 > .header > h1 {
+  font-size: 56px;
+}
+
+.font-size10 > .header > h1 {
+  font-size: 60px;
+}
+
+.font-size11 > .header > h1 {
+  font-size: 64px;
+}
+
+.font-size12 > .header > h1 {
+  font-size: 68px;
+}
+
+.font-size13 > .header > h1 {
+  font-size: 72px;
+}
+
 /* This covers caption, domain, and credits
    texts in the reader UI */
 
@@ -223,6 +255,62 @@ body {
 .font-size5 > .header > .domain,
 .font-size5 > .header > .credits {
   font-size: 20px;
+}
+
+.font-size6 > .content .wp-caption-text,
+.font-size6 > .content figcaption,
+.font-size6 > .header > .domain,
+.font-size6 > .header > .credits {
+  font-size: 22px;
+}
+
+.font-size7 > .content .wp-caption-text,
+.font-size7 > .content figcaption,
+.font-size7 > .header > .domain,
+.font-size7 > .header > .credits {
+  font-size: 25px;
+}
+
+.font-size8 > .content .wp-caption-text,
+.font-size8 > .content figcaption,
+.font-size8 > .header > .domain,
+.font-size8 > .header > .credits {
+  font-size: 28px;
+}
+
+.font-size9 > .content .wp-caption-text,
+.font-size9 > .content figcaption,
+.font-size9 > .header > .domain,
+.font-size9 > .header > .credits {
+  font-size: 31px;
+}
+
+.font-size10 > .content .wp-caption-text,
+.font-size10 > .content figcaption,
+.font-size10 > .header > .domain,
+.font-size10 > .header > .credits {
+  font-size: 35px;
+}
+
+.font-size11 > .content .wp-caption-text,
+.font-size11 > .content figcaption,
+.font-size11 > .header > .domain,
+.font-size11 > .header > .credits {
+  font-size: 40px;
+}
+
+.font-size12 > .content .wp-caption-text,
+.font-size12 > .content figcaption,
+.font-size12 > .header > .domain,
+.font-size12 > .header > .credits {
+  font-size: 45px;
+}
+
+.font-size13 > .content .wp-caption-text,
+.font-size13 > .content figcaption,
+.font-size13 > .header > .domain,
+.font-size13 > .header > .credits {
+  font-size: 50px;
 }
 
 .content {
@@ -368,27 +456,67 @@ body {
 
 .font-size1-sample,
 .font-size1 > .content {
-  font-size: 14px !important;
+  font-size: 10px !important;
 }
 
 .font-size2-sample,
 .font-size2 > .content {
-  font-size: 16px !important;
+  font-size: 11px !important;
 }
 
 .font-size3-sample,
 .font-size3 > .content {
-  font-size: 18px !important;
+  font-size: 12px !important;
 }
 
 .font-size4-sample,
 .font-size4 > .content {
-  font-size: 20px !important;
+  font-size: 14px !important;
 }
 
 .font-size5-sample,
 .font-size5 > .content {
-  font-size: 22px !important;
+  font-size: 16px !important;
+}
+
+.font-size6-sample,
+.font-size6 > .content {
+  font-size: 18px !important;
+}
+
+.font-size7-sample,
+.font-size7 > .content {
+  font-size: 21px !important;
+}
+
+.font-size8-sample,
+.font-size8 > .content {
+  font-size: 24px !important;
+}
+
+.font-size9-sample,
+.font-size9 > .content {
+  font-size: 28px !important;
+}
+
+.font-size10-sample,
+.font-size10 > .content {
+  font-size: 32px !important;
+}
+
+.font-size11-sample,
+.font-size11 > .content {
+  font-size: 37px !important;
+}
+
+.font-size12-sample,
+.font-size12 > .content {
+  font-size: 42px !important;
+}
+
+.font-size13-sample,
+.font-size13 > .content {
+  font-size: 48px !important;
 }
 
 .toolbar {
