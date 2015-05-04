@@ -223,6 +223,7 @@ class BrowserViewController: UIViewController {
                     self.homePanelController!.view.alpha = 1
                 }, completion: { _ in
                     self.webViewContainer.accessibilityElementsHidden = true
+                    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             })
 
             addChildViewController(homePanelController!)
@@ -241,6 +242,7 @@ class BrowserViewController: UIViewController {
                     self.homePanelController = nil
                     self.webViewContainer.accessibilityElementsHidden = false
                     self.toolbar?.hidden = false
+                    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
                 })
         }
     }
