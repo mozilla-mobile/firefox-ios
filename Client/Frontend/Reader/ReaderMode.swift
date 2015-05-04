@@ -46,17 +46,10 @@ enum ReaderModeFontSize: Int {
     }
 
     func smaller() -> ReaderModeFontSize {
-        switch self {
-        case Smallest:
-            return Smallest
-        case Small:
-            return Smallest
-        case Normal:
-            return Small
-        case Large:
-            return Normal
-        case Largest:
-            return Large
+        if isSmallest() {
+            return self
+        } else {
+            return ReaderModeFontSize(rawValue: self.rawValue - 1)!
         }
     }
 
@@ -64,18 +57,15 @@ enum ReaderModeFontSize: Int {
         return self == Largest
     }
 
+    static var defaultSize: ReaderModeFontSize {
+        return .Normal
+    }
+
     func bigger() -> ReaderModeFontSize {
-        switch self {
-        case Smallest:
-            return Small
-        case Small:
-            return Normal
-        case Normal:
-            return Large
-        case Large:
-            return Largest
-        case Largest:
-            return Largest
+        if isLargest() {
+            return self
+        } else {
+            return ReaderModeFontSize(rawValue: self.rawValue + 1)!
         }
     }
 }
@@ -123,7 +113,7 @@ struct ReaderModeStyle {
     }
 }
 
-let DefaultReaderModeStyle = ReaderModeStyle(theme: .Light, fontType: .SansSerif, fontSize: .Normal)
+let DefaultReaderModeStyle = ReaderModeStyle(theme: .Light, fontType: .SansSerif, fontSize: ReaderModeFontSize.defaultSize)
 
 /// This struct captures the response from the Readability.js code.
 struct ReadabilityResult {
