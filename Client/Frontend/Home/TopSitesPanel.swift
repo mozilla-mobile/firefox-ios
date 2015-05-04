@@ -240,8 +240,7 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(RowIdentifier, forIndexPath: indexPath) as! TwoLineCollectionViewCell
         cell.textLabel.text = site.title.isEmpty ? site.url : site.title
         cell.detailTextLabel.text = site.url
-        cell.isAccessibilityElement = true
-        cell.accessibilityLabel = "\(cell.textLabel.text!), \(cell.detailTextLabel.text!)"
+        cell.mergeAccessibilityLabels()
         if let icon = site.icon {
             cell.imageView.sd_setImageWithURL(NSURL(string: icon.url)!)
         } else {
