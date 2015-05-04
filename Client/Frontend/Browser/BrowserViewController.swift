@@ -803,11 +803,13 @@ extension BrowserViewController: TabManagerDelegate {
         // and having multiple views with the same label confuses tests.
         if let wv = previous?.webView {
             wv.accessibilityLabel = nil
+            wv.accessibilityElementsHidden = true
         }
 
         if let wv = selected?.webView {
             wv.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the web view")
             webViewContainer.addSubview(wv)
+            wv.accessibilityElementsHidden = false
             if let url = wv.URL?.absoluteString {
                 profile.bookmarks.isBookmarked(url, success: { bookmarked in
                     self.toolbar?.updateBookmarkStatus(bookmarked)
