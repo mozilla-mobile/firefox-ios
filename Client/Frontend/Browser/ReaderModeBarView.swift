@@ -8,6 +8,32 @@ import SnapKit
 
 enum ReaderModeBarButtonType {
     case MarkAsRead, MarkAsUnread, Settings, AddToReadingList, RemoveFromReadingList
+
+    private var localizedDescription: String {
+        switch self {
+        case .MarkAsRead: return NSLocalizedString("Mark as read", comment: "Name for Mark as read button in reader mode")
+        case .MarkAsUnread: return NSLocalizedString("Mark as unread", comment: "Name for Mark as unread button in reader mode")
+        case .Settings: return NSLocalizedString("Display Settings", comment: "Name for display settings button in reader mode. Display in the meaning of presentation, not monitor.")
+        case .AddToReadingList: return NSLocalizedString("Add to Reading List", comment: "Name for button adding current article to reading list in reader mode")
+        case .RemoveFromReadingList: return NSLocalizedString("Remove from Reading List", comment: "Name for button removing current article from reading list in reader mode")
+        }
+    }
+
+    private var imageName: String {
+        switch self {
+        case .MarkAsRead: return "MarkAsRead"
+        case .MarkAsUnread: return "MarkAsUnread"
+        case .Settings: return "SettingsSerif"
+        case .AddToReadingList: return "addToReadingList"
+        case .RemoveFromReadingList: return "removeFromReadingList"
+        }
+    }
+
+    private var image: UIImage? {
+        let image = UIImage(named: imageName)
+        image?.accessibilityLabel = localizedDescription
+        return image
+    }
 }
 
 protocol ReaderModeBarViewDelegate {
@@ -26,29 +52,20 @@ class ReaderModeBarView: UIView {
 
         backgroundColor = UIColor.whiteColor()
 
-        readStatusButton = UIButton()
-        addSubview(readStatusButton)
-        readStatusButton.setImage(UIImage(named: "MarkAsRead"), forState: UIControlState.Normal)
-        readStatusButton.addTarget(self, action: "SELtappedReadStatusButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        readStatusButton = createButton(type: .MarkAsRead, action: "SELtappedReadStatusButton:")
         readStatusButton.snp_makeConstraints { (make) -> () in
             make.left.equalTo(self)
             make.height.centerY.equalTo(self)
             make.width.equalTo(80)
         }
 
-        settingsButton = UIButton()
-        addSubview(settingsButton)
-        settingsButton.setImage(UIImage(named: "SettingsSerif"), forState: UIControlState.Normal)
-        settingsButton.addTarget(self, action: "SELtappedSettingsButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        settingsButton = createButton(type: .Settings, action: "SELtappedSettingsButton:")
         settingsButton.snp_makeConstraints { (make) -> () in
             make.height.centerX.centerY.equalTo(self)
             make.width.equalTo(80)
         }
 
-        listStatusButton = UIButton()
-        addSubview(listStatusButton)
-        listStatusButton.setImage(UIImage(named: "addToReadingList"), forState: UIControlState.Normal)
-        listStatusButton.addTarget(self, action: "SELtappedListStatusButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        listStatusButton = createButton(type: .AddToReadingList, action: "SELtappedListStatusButton:")
         listStatusButton.snp_makeConstraints { (make) -> () in
             make.right.equalTo(self)
             make.height.centerY.equalTo(self)
@@ -72,6 +89,14 @@ class ReaderModeBarView: UIView {
         CGContextStrokePath(context)
     }
 
+    private func createButton(#type: ReaderModeBarButtonType, action: Selector) -> UIButton {
+        let button = UIButton()
+        addSubview(button)
+        button.setImage(type.image, forState: .Normal)
+        button.addTarget(self, action: action, forControlEvents: .TouchUpInside)
+        return button
+    }
+
     func SELtappedReadStatusButton(sender: UIButton!) {
         delegate?.readerModeBar(self, didSelectButton: unread ? .MarkAsRead : .MarkAsUnread)
     }
@@ -86,13 +111,15 @@ class ReaderModeBarView: UIView {
 
     var unread: Bool = true {
         didSet {
-            readStatusButton.setImage(UIImage(named: unread ? "MarkAsRead" : "MarkAsUnread"), forState: UIControlState.Normal)
+            let buttonType: ReaderModeBarButtonType = unread ? .MarkAsRead : .MarkAsUnread
+            readStatusButton.setImage(buttonType.image, forState: UIControlState.Normal)
         }
     }
 
     var added: Bool = false {
         didSet {
-            listStatusButton.setImage(UIImage(named: added ? "removeFromReadingList" : "addToReadingList"), forState: UIControlState.Normal)
+            let buttonType: ReaderModeBarButtonType = added ? .RemoveFromReadingList : .AddToReadingList
+            listStatusButton.setImage(buttonType.image, forState: UIControlState.Normal)
         }
     }
 }
