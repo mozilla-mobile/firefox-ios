@@ -482,10 +482,11 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 
     func browserToolbarDidLongPressBack(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
-        let controller = BackForwardListViewController()
-        controller.listData = tabManager.selectedTab?.backList
-        controller.tabManager = tabManager
-        presentViewController(controller, animated: true, completion: nil)
+// See 1159373 - Disable long press back/forward for backforward list
+//        let controller = BackForwardListViewController()
+//        controller.listData = tabManager.selectedTab?.backList
+//        controller.tabManager = tabManager
+//        presentViewController(controller, animated: true, completion: nil)
     }
 
     func browserToolbarDidPressReload(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
@@ -501,10 +502,11 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 
     func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
-        let controller = BackForwardListViewController()
-        controller.listData = tabManager.selectedTab?.forwardList
-        controller.tabManager = tabManager
-        presentViewController(controller, animated: true, completion: nil)
+// See 1159373 - Disable long press back/forward for backforward list
+//        let controller = BackForwardListViewController()
+//        controller.listData = tabManager.selectedTab?.forwardList
+//        controller.tabManager = tabManager
+//        presentViewController(controller, animated: true, completion: nil)
     }
 
     func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
