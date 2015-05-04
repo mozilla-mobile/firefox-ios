@@ -15,8 +15,8 @@ protocol TabManagerDelegate: class {
 }
 
 // We can't use a WeakList here because this is a protocol.
-struct WeakTabManagerDelegate {
-    var value : TabManagerDelegate?
+class WeakTabManagerDelegate {
+    weak var value : TabManagerDelegate?
 
     init (value: TabManagerDelegate) {
         self.value = value
