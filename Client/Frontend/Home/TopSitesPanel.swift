@@ -258,7 +258,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         self.profile = profile
     }
 
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    @objc func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // If there aren't enough data items to fill the grid, look for items in suggested sites.
         if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
             if data.count < layout.thumbnailCount {
@@ -337,7 +337,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         return data[index] as! Site
     }
 
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         // Cells for the top site thumbnails.
         let site = self[indexPath.item]
 
@@ -357,7 +357,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         return createListCell(cell, site: site)
     }
     
-    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    @objc func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         return collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: SeparatorIdentifier, forIndexPath: indexPath) as! UICollectionReusableView
     }
 }
