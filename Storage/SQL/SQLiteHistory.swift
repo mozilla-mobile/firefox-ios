@@ -93,7 +93,7 @@ public class SQLiteHistory: BrowserHistory {
         // TODO: also set modified times.
         db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
             let update = "UPDATE history SET title = ? WHERE url = ?"
-            let updateArgs: [AnyObject?]? = [site.title, site.url]
+            let updateArgs: Args? = [site.title, site.url]
             err = conn.executeChange(update, withArgs: updateArgs)
             if err != nil {
                 return 0
@@ -104,7 +104,7 @@ public class SQLiteHistory: BrowserHistory {
 
             // Insert instead.
             let insert = "INSERT INTO history (guid, url, title) VALUES (?, ?, ?)"
-            let insertArgs: [AnyObject?]? = [Bytes.generateGUID(), site.url, site.title]
+            let insertArgs: Args? = [Bytes.generateGUID(), site.url, site.title]
             err = conn.executeChange(insert, withArgs: insertArgs)
             if err != nil {
                 return 0
@@ -122,7 +122,7 @@ public class SQLiteHistory: BrowserHistory {
             let insert = "INSERT INTO visits (siteID, date, type) VALUES (" +
                          "(SELECT id FROM history WHERE url = ?), ?, ?)"
             let realDate = NSNumber(unsignedLongLong: visit.date)
-            let insertArgs: [AnyObject?]? = [visit.site.url, realDate, visit.type.rawValue]
+            let insertArgs: Args? = [visit.site.url, realDate, visit.type.rawValue]
             err = conn.executeChange(insert, withArgs: insertArgs)
             if err != nil {
                 return 0
@@ -188,7 +188,7 @@ public class SQLiteHistory: BrowserHistory {
         return site
     }
 
-    private func runQuery<T>(sql: String, args: [AnyObject?]?, factory: (SDRow) -> T) -> Deferred<Result<Cursor<T>>> {
+    private func runQuery<T>(sql: String, args: Args?, factory: (SDRow) -> T) -> Deferred<Result<Cursor<T>>> {
         func f(conn: SQLiteDBConnection, inout err: NSError?) -> Cursor<T> {
             return conn.executeQuery(sql, factory: factory, withArgs: args)
         }
@@ -200,7 +200,7 @@ public class SQLiteHistory: BrowserHistory {
     }
 
     private func getFilteredSitesWithLimit(limit: Int, whereURLContains filter: String?, orderBy: String, includeIcon: Bool) -> Deferred<Result<Cursor<Site>>> {
-        let args: [AnyObject?]?
+        let args: Args?
         let whereClause: String
         if let filter = filter {
             args = ["%\(filter)%", "%\(filter)%"]
@@ -259,7 +259,7 @@ extension SQLiteHistory: Favicons {
      */
     public func addFavicon(icon: Favicon, forSite site: Site) -> Success {
         log.verbose("Adding favicon \(icon.url) for site \(site.url).")
-        func doChange(query: String, args: [AnyObject?]?) -> Success {
+        func doChange(query: String, args: Args?) -> Success {
             var err: NSError?
             let res = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
                 // Blind!
@@ -282,24 +282,24 @@ extension SQLiteHistory: Favicons {
             // Easy!
             if let siteID = site.id {
                 // So easy!
-                let args: [AnyObject?]? = [siteID, iconID]
+                let args: Args? = [siteID, iconID]
                 return doChange("\(insertOrIgnore) (?, ?)", args)
             }
 
             // Nearly easy.
-            let args: [AnyObject?]? = [site.url, iconID]
+            let args: Args? = [site.url, iconID]
             return doChange("\(insertOrIgnore) (\(siteSubselect), ?)", args)
 
         }
 
         // Sigh.
         if let siteID = site.id {
-            let args: [AnyObject?]? = [siteID, icon.url]
+            let args: Args? = [siteID, icon.url]
             return doChange("\(insertOrIgnore) (?, \(iconSubselect))", args)
         }
 
         // The worst.
-        let args: [AnyObject?]? = [site.url, icon.url]
+        let args: Args? = [site.url, icon.url]
         return doChange("\(insertOrIgnore) (\(siteSubselect), \(iconSubselect))", args)
     }
 }

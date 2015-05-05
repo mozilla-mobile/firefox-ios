@@ -5,25 +5,29 @@
 import Foundation
 import XCGLogger
 
+// To keep SwiftData happy.
+typealias Args = [AnyObject?]
+
+private let TableBookmarks = "bookmarks"
 private let TableHistory = "history"
 private let TableVisits = "visits"
 private let TableFaviconSites = "faviconSites"
 private let ViewWidestFaviconsForSites = "view_favicons_widest"
 private let ViewHistoryIDsWithWidestFavicons = "view_history_id_favicon"
 
-// All of these insane type declarations are to make SwiftData happy.
-private let AllTables: [AnyObject?] = [
+private let AllTables: Args = [
     TableFaviconSites,
     TableVisits,
     TableHistory,
+    TableBookmarks,
 ]
 
-private let AllViews: [AnyObject?] = [
+private let AllViews: Args = [
     ViewHistoryIDsWithWidestFavicons,
     ViewWidestFaviconsForSites,
 ]
 
-private let AllTablesAndViews: [AnyObject?] = AllViews + AllTables
+private let AllTablesAndViews: Args = AllViews + AllTables
 
 private let log = XCGLogger.defaultInstance()
 
@@ -33,13 +37,13 @@ private let log = XCGLogger.defaultInstance()
  */
 public class BrowserTable: Table {
     var name: String { return "BROWSER" }
-    var version: Int { return 8 }
+    var version: Int { return 9 }
 
     public init() {
     }
 
-    func run(db: SQLiteDBConnection, sql: String) -> Bool {
-        let err = db.executeChange(sql, withArgs: nil)
+    func run(db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
+        let err = db.executeChange(sql, withArgs: args)
         if err != nil {
             log.error("Error running SQL in BrowserTable. \(err?.localizedDescription)")
             log.error("SQL was \(sql)")
@@ -50,11 +54,39 @@ public class BrowserTable: Table {
     // TODO: transaction.
     func run(db: SQLiteDBConnection, queries: [String]) -> Bool {
         for sql in queries {
-            if !run(db, sql: sql) {
+            if !run(db, sql: sql, args: nil) {
                 return false
             }
         }
         return true
+    }
+
+    func prepopulate(db: SQLiteDBConnection) -> Bool {
+        let type = BookmarkNodeType.Folder.rawValue
+        let root = BookmarkRoots.RootID
+
+        let titleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Bookmarks", comment:"The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
+        let titleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Bookmarks", comment:"The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
+        let titleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Bookmarks", comment:"The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
+        let titleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Bookmarks", comment:"The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+
+        let args: Args = [
+            root, BookmarkRoots.RootGUID, type, "Root", root,
+            BookmarkRoots.MobileID, BookmarkRoots.MobileFolderGUID, type, titleMobile, root,
+            BookmarkRoots.MenuID, BookmarkRoots.MenuFolderGUID, type, titleMenu, root,
+            BookmarkRoots.ToolbarID, BookmarkRoots.ToolbarFolderGUID, type, titleToolbar, root,
+            BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, titleUnsorted, root,
+        ]
+
+        let sql =
+        "INSERT INTO bookmarks (id, guid, type, url, title, parent) VALUES " +
+            "(?, ?, ?, NULL, ?, ?), " +    // Root
+            "(?, ?, ?, NULL, ?, ?), " +    // Mobile
+            "(?, ?, ?, NULL, ?, ?), " +    // Menu
+            "(?, ?, ?, NULL, ?, ?), " +    // Toolbar
+            "(?, ?, ?, NULL, ?, ?)  "      // Unsorted
+
+        return self.run(db, sql: sql, args: args)
     }
 
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
@@ -104,11 +136,23 @@ public class BrowserTable: Table {
         "LEFT OUTER JOIN " +
         "\(ViewWidestFaviconsForSites) ON history.id = \(ViewWidestFaviconsForSites).siteID "
 
+        let bookmarks =
+        "CREATE TABLE IF NOT EXISTS \(TableBookmarks) (" +
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "guid TEXT NOT NULL UNIQUE, " +
+        "type TINYINT NOT NULL, " +
+        "url TEXT, " +
+        "parent INTEGER REFERENCES bookmarks(id) NOT NULL, " +
+        "faviconId INTEGER REFERENCES favicons(id) ON DELETE SET NULL, " +
+        "title TEXT" +
+        ") "
+
         let queries = [
-            history, visits, faviconSites, widestFavicons, historyIDsWithIcon,
+            history, visits, bookmarks, faviconSites, widestFavicons, historyIDsWithIcon,
         ]
         assert(queries.count == AllTablesAndViews.count, "Did you forget to add your table or view to the list?")
-        return self.run(db, queries: queries)
+        return self.run(db, queries: queries) &&
+               self.prepopulate(db)
     }
 
     func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
@@ -120,9 +164,12 @@ public class BrowserTable: Table {
     }
 
     func exists(db: SQLiteDBConnection) -> Bool {
-        let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND (name = ? OR name= ?)"
+        let count = AllTables.count
+        let orClause = join(" OR ", Array(count: count, repeatedValue: "name = ?"))
+        let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND (\(orClause))"
+
         let res = db.executeQuery(tablesSQL, factory: StringFactory, withArgs: AllTables)
-        log.debug("\(res.count) tables exist. Expected \(AllTables.count)")
+        log.debug("\(res.count) tables exist. Expected \(count)")
         return res.count == AllTables.count
     }
 
