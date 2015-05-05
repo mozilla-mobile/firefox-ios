@@ -116,6 +116,8 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
 
@@ -123,8 +125,8 @@ class BrowserViewController: UIViewController {
         urlBar = URLBarView()
         urlBar.setTranslatesAutoresizingMaskIntoConstraints(false)
         urlBar.delegate = self
-        header = wrapInEffect(urlBar, parent: view)
         urlBar.browserToolbarDelegate = self
+        header = wrapInEffect(urlBar, parent: view, backgroundColor: nil)
 
         searchLoader = SearchLoader(history: profile.history, urlBar: urlBar)
 
@@ -138,14 +140,10 @@ class BrowserViewController: UIViewController {
         self.view.addSubview(footer)
         footer.addSubview(snackBars)
         snackBars.backgroundColor = UIColor.clearColor()
-
-        super.viewDidLoad()
     }
 
     override func viewWillAppear(animated: Bool) {
-        if (tabManager.count == 0) {
-            tabManager.addTab()
-        }
+        super.viewWillAppear(animated)
 
         // On iPhone, if we are about to show the On-Boarding, blank out the browser so that it does
         // not flash before we present. This change of alpha also participates in the animation when
@@ -154,7 +152,9 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
         }
 
-        super.viewWillAppear(animated)
+        if (tabManager.count == 0) {
+            tabManager.addTab()
+        }
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -223,10 +223,15 @@ class BrowserViewController: UIViewController {
     }
 
     private func wrapInEffect(view: UIView, parent: UIView) -> UIView {
+        return self.wrapInEffect(view, parent: parent, backgroundColor: UIColor.clearColor())
+    }
+
+    private func wrapInEffect(view: UIView, parent: UIView, backgroundColor: UIColor?) -> UIView {
         let effect = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
         effect.setTranslatesAutoresizingMaskIntoConstraints(false)
-
-        view.backgroundColor = UIColor.clearColor()
+        if let background = backgroundColor {
+            view.backgroundColor = backgroundColor
+        }
         effect.addSubview(view)
 
         parent.addSubview(effect)

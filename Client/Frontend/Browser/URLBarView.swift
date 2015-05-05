@@ -70,6 +70,8 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     }
 
     private func initViews() {
+        self.backgroundColor = URLBarViewUX.BackgroundColor
+
         curveShape = CurveView()
         self.addSubview(curveShape);
 
@@ -539,6 +541,15 @@ private let H_M4 = 0.961
 
 /* Code for drawing the urlbar curve */
 private class CurveView: UIView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.opaque = false
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.opaque = false
+    }
 
     func getWidthForHeight(height: Double) -> Double {
         return height * ASPECT_RATIO
@@ -562,24 +573,20 @@ private class CurveView: UIView {
     private func getPath() -> UIBezierPath {
         let path = UIBezierPath()
         self.drawFromTop(path)
-        path.addLineToPoint(CGPoint(x: self.frame.width, y: AppConstants.ToolbarHeight + AppConstants.StatusBarHeight))
-        path.addLineToPoint(CGPoint(x: self.frame.width, y: -10))
-        path.addLineToPoint(CGPoint(x: 0, y: -10))
+        path.addLineToPoint(CGPoint(x: 0, y: AppConstants.ToolbarHeight + AppConstants.StatusBarHeight))
         path.addLineToPoint(CGPoint(x: 0, y: AppConstants.StatusBarHeight))
         path.closePath()
         return path
     }
 
-    override class func layerClass() -> AnyClass {
-        return CAShapeLayer.self
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if let layer = layer as? CAShapeLayer {
-            layer.path = self.getPath().CGPath
-            layer.fillColor = URLBarViewUX.BackgroundColor.CGColor
-        }
+    private override func drawRect(rect: CGRect) {
+        let context = UIGraphicsGetCurrentContext()
+        CGContextSaveGState(context)
+        CGContextClearRect(context, rect)
+        CGContextSetFillColorWithColor(context, UIColor.whiteColor().CGColor)
+        self.getPath().fill()
+        CGContextDrawPath(context, kCGPathFill)
+        CGContextRestoreGState(context)
     }
 }
 
