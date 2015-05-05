@@ -16,6 +16,10 @@ private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
 private let HomeURL = "about:home"
 
+private struct BrowserViewControllerUX {
+    private static let ToolbarBaseAnimationDuration: CGFloat = 0.3
+}
+
 class BrowserViewController: UIViewController {
     private var urlBar: URLBarView!
     private var readerModeBar: ReaderModeBarView!
@@ -40,7 +44,20 @@ class BrowserViewController: UIViewController {
     private var header: UIView!
     private var footer: UIView!
     private var footerBackground: UIView?
-    private var previousScroll: CGPoint? = nil
+
+    // Scroll management properties
+    private var previousScroll: CGPoint?
+    private var startOffset: CGFloat?
+
+    private var headerConstraint: Constraint?
+    private var headerConstraintOffset: CGFloat = 0
+
+    private var footerConstraint: Constraint?
+    private var footerConstraintOffset: CGFloat = 0
+
+    private var readerConstraint: Constraint?
+    private var readerConstraintOffset: CGFloat = 0
+
     let WhiteListedUrls = ["\\/\\/itunes\\.apple\\.com\\/"]
 
     init(profile: Profile) {
@@ -104,14 +121,11 @@ class BrowserViewController: UIViewController {
         if let home = homePanelController {
             home.view.setNeedsUpdateConstraints()
         }
-
-        if let tab = tabManager.selectedTab {
-            tab.webView.scrollView.contentInset = UIEdgeInsetsMake(AppConstants.ToolbarHeight + AppConstants.StatusBarHeight, 0, toolbar?.frame.height ?? 0, 0)
-        }
     }
 
     override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
         updateToolbarState()
+        showToolbars(animated: false)
         super.traitCollectionDidChange(previousTraitCollection)
     }
 
@@ -121,6 +135,12 @@ class BrowserViewController: UIViewController {
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
 
+        // Setup the reader mode control bar. This bar starts not visible with a zero height.
+        readerModeBar = ReaderModeBarView(frame: CGRectZero)
+        readerModeBar.delegate = self
+        view.addSubview(readerModeBar)
+        readerModeBar.hidden = true
+
         // Setup the URL bar, wrapped in a view to get transparency effect
         urlBar = URLBarView()
         urlBar.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -129,12 +149,6 @@ class BrowserViewController: UIViewController {
         header = wrapInEffect(urlBar, parent: view, backgroundColor: nil)
 
         searchLoader = SearchLoader(history: profile.history, urlBar: urlBar)
-
-        // Setup the reader mode control bar. This bar starts not visible with a zero height.
-        readerModeBar = ReaderModeBarView(frame: CGRectZero)
-        readerModeBar.delegate = self
-        view.addSubview(readerModeBar)
-        readerModeBar.hidden = true
 
         footer = UIView()
         self.view.addSubview(footer)
@@ -163,27 +177,39 @@ class BrowserViewController: UIViewController {
     }
 
     override func updateViewConstraints() {
-        webViewContainer.snp_remakeConstraints { make in
-            make.edges.equalTo(self.view)
-            return
-        }
 
         urlBar.snp_remakeConstraints { make in
             make.edges.equalTo(self.header)
-            return
         }
 
         header.snp_remakeConstraints { make in
-            make.top.equalTo(self.view.snp_top)
+            self.headerConstraint = make.top.equalTo(self.view.snp_top).constraint
             make.height.equalTo(AppConstants.ToolbarHeight + AppConstants.StatusBarHeight)
             make.leading.trailing.equalTo(self.view)
         }
         header.setNeedsUpdateConstraints()
 
         readerModeBar.snp_remakeConstraints { make in
-            make.top.equalTo(self.header.snp_bottom)
+            self.readerConstraint = make.top.equalTo(self.header.snp_bottom).constraint
             make.height.equalTo(AppConstants.ToolbarHeight)
             make.leading.trailing.equalTo(self.view)
+        }
+
+        webViewContainer.snp_remakeConstraints { make in
+            make.left.right.bottom.equalTo(self.view)
+
+            if readerModeBar.hidden {
+                self.startOffset = self.header.frame.size.height
+                make.top.equalTo(self.header.snp_bottom).offset(-self.startOffset!)
+            } else {
+                self.startOffset = self.header.frame.size.height + self.readerModeBar.frame.size.height
+                make.top.equalTo(self.readerModeBar.snp_bottom).offset(-self.startOffset!)
+            }
+
+            self.tabManager.selectedTab?.webView.scrollView.contentInset =
+                UIEdgeInsets(top: self.startOffset!, left: 0, bottom: 0, right: 0)
+            self.tabManager.selectedTab?.webView.scrollView.scrollIndicatorInsets =
+                UIEdgeInsets(top: self.startOffset!, left: 0, bottom: 0, right: 0)
         }
 
         // Setup the bottom toolbar
@@ -192,9 +218,9 @@ class BrowserViewController: UIViewController {
             make.height.equalTo(AppConstants.ToolbarHeight)
         }
 
-        footer.snp_remakeConstraints { make in
+        footer.snp_remakeConstraints { [unowned self] make in
             let bars = self.footer.subviews
-            make.bottom.equalTo(self.view.snp_bottom)
+            self.footerConstraint = make.bottom.equalTo(self.view.snp_bottom).constraint
             make.top.equalTo(self.snackBars.snp_top)
             make.leading.trailing.equalTo(self.view)
         }
@@ -720,6 +746,79 @@ extension BrowserViewController: SearchViewControllerDelegate {
 }
 
 extension BrowserViewController: UIScrollViewDelegate {
+
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        self.previousScroll = scrollView.contentOffset
+    }
+
+    // Careful! This method can be called multiple times concurrently.
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if let tab = tabManager.selectedTab, let prev = self.previousScroll, let startOffset = self.startOffset {
+            let dy = prev.y - scrollView.contentOffset.y
+
+            if !tab.loading &&
+                scrollView.contentOffset.y > -startOffset  &&
+                scrollView.contentOffset.y < scrollView.contentSize.height {
+                self.scrollFooter(dy)
+                self.scrollHeader(dy)
+                self.scrollReader(dy)
+            }
+
+            self.previousScroll = scrollView.contentOffset
+        }
+    }
+
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint,
+        targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        self.previousScroll = nil
+
+        if shouldAnimateToolbarsOpened() {
+            showToolbars(animated: true)
+        } else if shouldAnimateToolbarsClosed() {
+            hideToolbars(animated: true)
+        }
+    }
+
+    func shouldAnimateToolbarsClosed() -> Bool {
+        let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
+        return self.headerConstraintOffset <= -(totalOffset / 2) && self.headerConstraintOffset > -totalOffset
+    }
+
+    func shouldAnimateToolbarsOpened() -> Bool {
+        let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
+        return self.headerConstraintOffset < 0 && self.headerConstraintOffset > -(totalOffset / 2)
+    }
+
+    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
+        showToolbars(animated: true)
+        return true
+    }
+
+    private func scrollHeader(dy: CGFloat) {
+        let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
+        let newOffset = self.clamp(self.headerConstraintOffset + dy,
+            min: -totalOffset, max: 0)
+        self.headerConstraint?.updateOffset(newOffset)
+        self.headerConstraintOffset = newOffset
+        let alpha = 1 - (abs(newOffset) / totalOffset)
+        self.urlBar.updateAlphaForSubviews(alpha)
+    }
+
+    private func scrollFooter(dy: CGFloat) {
+        let newOffset = self.clamp(self.footerConstraintOffset - dy,
+            min: 0, max: self.footer.frame.size.height)
+        self.footerConstraint?.updateOffset(newOffset)
+        self.footerConstraintOffset = newOffset
+    }
+
+    private func scrollReader(dy: CGFloat) {
+        let totalOffset = AppConstants.ToolbarHeight
+        let newOffset = self.clamp(self.readerConstraintOffset + dy,
+            min: -totalOffset, max: 0)
+        self.readerConstraint?.updateOffset(newOffset)
+        self.readerConstraintOffset = newOffset
+    }
+
     private func clamp(y: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
         if y >= max {
             return max
@@ -729,114 +828,61 @@ extension BrowserViewController: UIScrollViewDelegate {
         return y
     }
 
-    private func scrollUrlBar(dy: CGFloat) {
-        let newY = clamp(header.transform.ty + dy, min: -AppConstants.ToolbarHeight, max: 0)
-        header.transform = CGAffineTransformMakeTranslation(0, newY)
+    private func showToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
+        let animationDistance = self.headerConstraintOffset
+        let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
+        let durationRatio = abs(animationDistance / totalOffset)
+        let actualDuration = NSTimeInterval(BrowserViewControllerUX.ToolbarBaseAnimationDuration * durationRatio)
 
-        let percent = 1 - newY / -AppConstants.ToolbarHeight
-        urlBar.alpha = percent
-        self.setNeedsStatusBarAppearanceUpdate()
-    }
-
-    private func scrollReaderModeBar(dy: CGFloat) {
-        let newY = clamp(readerModeBar.transform.ty + dy, min: -AppConstants.ToolbarHeight, max: 0)
-        readerModeBar.transform = CGAffineTransformMakeTranslation(0, newY)
-
-        let percent = 1 - newY / -AppConstants.ToolbarHeight
-        readerModeBar.alpha = percent
-    }
-
-    private func scrollToolbar(dy: CGFloat) {
-        let newY = clamp(footer.transform.ty - dy, min: 0, max: toolbar?.frame.height ?? 0)
-        footer.transform = CGAffineTransformMakeTranslation(0, newY)
-    }
-
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        previousScroll = scrollView.contentOffset
-    }
-
-    // Careful! This method can be called multiple times concurrently.
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        if var prev = previousScroll {
-            if let tab = tabManager.selectedTab {
-                if tab.loading {
-                    return
-                }
-
-                let offset = scrollView.contentOffset
-                var delta = CGPoint(x: prev.x - offset.x, y: prev.y - offset.y)
-                previousScroll = offset
-
-                let inset = tab.webView.scrollView.contentInset
-                if let tab = self.tabManager.selectedTab {
-                    let newInset = clamp(inset.top + delta.y, min: AppConstants.StatusBarHeight, max: AppConstants.ToolbarHeight + AppConstants.StatusBarHeight)
-
-                    tab.webView.scrollView.contentInset = UIEdgeInsetsMake(newInset, 0,
-                        clamp(newInset - AppConstants.StatusBarHeight, min: 0, max: toolbar?.frame.height ?? 0), 0)
-                    tab.webView.scrollView.scrollIndicatorInsets = tab.webView.scrollView.contentInset
-                }
-
-                // Adjust the urlbar, reader bar, and toolbar by the change in the contentInset
-                scrollUrlBar(tab.webView.scrollView.contentInset.top - inset.top)
-                scrollReaderModeBar(tab.webView.scrollView.contentInset.top - inset.top)
-                scrollToolbar(tab.webView.scrollView.contentInset.top - inset.top)
-            }
-        }
-    }
-
-    func scrollViewWillEndDragging(scrollView: UIScrollView,
-            withVelocity velocity: CGPoint,
-            targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        previousScroll = nil
-        if tabManager.selectedTab?.loading ?? false {
-            return
-        }
-
-        let offset = scrollView.contentOffset
-        // If we're moving up, or the header is half onscreen, hide the toolbars
-        if velocity.y < 0 || self.header.transform.ty > -self.header.frame.height / 2 {
-            showToolbars(animated: true)
-        } else {
-            hideToolbars(animated: true)
-        }
-    }
-
-    func scrollViewDidScrollToTop(scrollView: UIScrollView) {
-        showToolbars(animated: true)
+        self.animateToolbarsWithOffsets(
+            animated: animated,
+            duration: actualDuration,
+            headerOffset: 0,
+            footerOffset: 0,
+            readerOffset: 0,
+            alpha: 1,
+            completion: completion)
     }
 
     private func hideToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
-        UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
-            self.scrollUrlBar(CGFloat(-1*MAXFLOAT))
-            self.scrollToolbar(CGFloat(-1*MAXFLOAT))
+        let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
+        let animationDistance = totalOffset - abs(self.headerConstraintOffset)
+        let durationRatio = abs(animationDistance / totalOffset)
+        let actualDuration = NSTimeInterval(BrowserViewControllerUX.ToolbarBaseAnimationDuration * durationRatio)
 
-            self.header.transform = CGAffineTransformMakeTranslation(0, -self.urlBar.frame.height + AppConstants.StatusBarHeight)
-            self.footer.transform = CGAffineTransformMakeTranslation(0, self.toolbar?.frame.height ?? 0)
-
-            // Reset the insets so that clicking works on the edges of the screen
-            if let tab = self.tabManager.selectedTab {
-                tab.webView.scrollView.contentInset = UIEdgeInsets(top: AppConstants.StatusBarHeight, left: 0, bottom: 0, right: 0)
-                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: AppConstants.StatusBarHeight, left: 0, bottom: 0, right: 0)
-            }
-            self.setNeedsStatusBarAppearanceUpdate()
-        }, completion: completion)
+        self.animateToolbarsWithOffsets(
+            animated: animated,
+            duration: actualDuration,
+            headerOffset: -(self.header.frame.size.height - AppConstants.StatusBarHeight),
+            footerOffset: self.footer.frame.height,
+            readerOffset: -self.readerModeBar.frame.size.height,
+            alpha: 0,
+            completion: completion)
     }
 
-    private func showToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
-        UIView.animateWithDuration(animated ? 0.5 : 0.0, animations: { () -> Void in
-            self.scrollUrlBar(CGFloat(MAXFLOAT))
-            self.scrollToolbar(CGFloat(MAXFLOAT))
+    private func animateToolbarsWithOffsets(#animated: Bool, duration: NSTimeInterval, headerOffset: CGFloat,
+        footerOffset: CGFloat, readerOffset: CGFloat, alpha: CGFloat, completion: ((finished: Bool) -> Void)?) {
 
-            self.header.transform = CGAffineTransformIdentity
-            self.footer.transform = CGAffineTransformIdentity
-            // Reset the insets so that clicking works on the edges of the screen
-            if let tab = self.tabManager.selectedTab {
-                tab.webView.scrollView.contentInset = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: self.toolbar?.frame.height ?? 0, right: 0)
-                tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: self.toolbar?.frame.height ?? 0, right: 0)
-            }
+        let animation: () -> Void = {
+            self.headerConstraint?.updateOffset(headerOffset)
+            self.footerConstraint?.updateOffset(footerOffset)
+            self.readerConstraint?.updateOffset(readerOffset)
+            self.headerConstraintOffset = headerOffset
+            self.footerConstraintOffset = footerOffset
+            self.readerConstraintOffset = readerOffset
+            self.urlBar.updateAlphaForSubviews(alpha)
             self.setNeedsStatusBarAppearanceUpdate()
-        }, completion: completion)
+            self.view.layoutIfNeeded()
+        }
+
+        self.view.layoutIfNeeded()
+        if animated {
+            UIView.animateWithDuration(duration, animations: animation, completion: completion)
+        } else {
+            animation()
+        }
     }
+
 }
 
 extension BrowserViewController: TabManagerDelegate {
@@ -917,11 +963,9 @@ extension BrowserViewController: TabManagerDelegate {
         urlBar.updateTabCount(tabManager.count)
 
         webViewContainer.insertSubview(tab.webView, atIndex: 0)
-        tab.webView.scrollView.contentInset = UIEdgeInsetsMake(AppConstants.ToolbarHeight + AppConstants.StatusBarHeight, 0, toolbar?.frame.height ?? 0, 0)
-        tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(AppConstants.ToolbarHeight + AppConstants.StatusBarHeight, 0, toolbar?.frame.height ?? 0, 0)
+
         tab.webView.snp_makeConstraints { make in
-            make.top.equalTo(self.view.snp_top)
-            make.leading.trailing.bottom.equalTo(self.view)
+            make.edges.equalTo(self.webViewContainer)
         }
 
         // Observers that live as long as the tab. Make sure these are all cleared
@@ -1278,13 +1322,6 @@ extension BrowserViewController : Transitionable {
 }
 
 extension BrowserViewController {
-    private func updateScrollbarInsets() {
-        if let tab = self.tabManager.selectedTab {
-            tab.webView.scrollView.contentInset = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: toolbar?.frame.height ?? 0, right: 0)
-            tab.webView.scrollView.scrollIndicatorInsets = UIEdgeInsets(top: self.header.frame.height + (self.readerModeBar.hidden ? 0 : self.readerModeBar.frame.height), left: 0, bottom: toolbar?.frame.height ?? 0, right: 0)
-        }
-    }
-
     func showReaderModeBar(#animated: Bool) {
         if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
             if let successValue = result.successValue, record = successValue {
@@ -1296,12 +1333,12 @@ extension BrowserViewController {
             readerModeBar.added = false
         }
         readerModeBar.hidden = false
-        updateScrollbarInsets()
+        self.updateViewConstraints()
     }
 
     func hideReaderModeBar(#animated: Bool) {
         readerModeBar.hidden = true
-        updateScrollbarInsets()
+        self.updateViewConstraints()
     }
 
     /// There are two ways we can enable reader mode. In the simplest case we open a URL to our internal reader mode
