@@ -55,7 +55,7 @@ extension UIImageView {
                 return
             }
 
-            // If it was found in the ache, we can just use it
+            // If it was found in the cache, we can just use it
             if let image = image {
                 self.image = image
                 self.setNeedsLayout()

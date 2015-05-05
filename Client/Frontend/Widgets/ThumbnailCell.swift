@@ -61,7 +61,6 @@ class ThumbnailCell: UICollectionViewCell {
         didSet {
             imageView.snp_remakeConstraints({ make in
                 make.top.bottom.left.right.equalTo(self.imageWrapper).insets(UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding))
-                return
             })
         }
     }

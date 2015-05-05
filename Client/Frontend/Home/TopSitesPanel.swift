@@ -12,7 +12,7 @@ private let SeparatorKind = "separator"
 private let SeparatorIdentifier = "separator"
 private let SeparatorColor = UIColor(rgb: 0xffffff)
 
-class Tile : Site {
+private class Tile: Site {
     let backgroundColor: UIColor
     let trackingId: Int
 
@@ -36,24 +36,28 @@ class Tile : Site {
     }
 }
 
-class SuggestedSitesData: Cursor {
-    let json: JSON
+private class SuggestedSitesData: Cursor {
+    var tiles = [Tile]()
 
     init() {
         // TODO: Make this list localized. That should be as simple as making sure its in the lproj directory.
         var err: NSError? = nil
         let path = NSBundle.mainBundle().pathForResource("suggestedsites", ofType: "json")
         let data = NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: &err)
-        json = JSON.parse(data as! String)
+        let json = JSON.parse(data as! String)
+
+        for i in 0..<json.length {
+            tiles.append(Tile(json: json[i]))
+        }
     }
 
     override var count: Int {
-        return json.length
+        return tiles.count
     }
 
     override subscript(index: Int) -> Any? {
         get {
-            return Tile(json: json[index])
+            return tiles[index]
         }
     }
 }
@@ -242,7 +246,7 @@ private class TopSitesLayout: UICollectionViewLayout {
     }
 }
 
-class TopSitesDataSource: NSObject, UICollectionViewDataSource {
+private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var data: Cursor
     var profile: Profile
     lazy var suggestedSites: SuggestedSitesData = {
@@ -255,9 +259,9 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // If there aren't enough data items to fill the grid,
+        // If there aren't enough data items to fill the grid, look for items in suggested sites.
         if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
-            if (data.count < layout.thumbnailCount) {
+            if data.count < layout.thumbnailCount {
                 return min(data.count + suggestedSites.count, layout.thumbnailCount)
             }
         }
@@ -298,7 +302,9 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
                 cell.imageView.image = UIImage(named: icon.host!)
             } else {
                 cell.imageView.sd_setImageWithURL(icon, completed: { img, err, type, key in
-                    if img == nil { self.setDefaultThumbnailBackground(cell) }
+                    if img == nil {
+                        self.setDefaultThumbnailBackground(cell)
+                    }
                 })
             }
         } else {
