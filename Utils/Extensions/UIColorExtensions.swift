@@ -5,6 +5,12 @@
 import Foundation
 import UIKit
 
+private struct Color {
+    var red: CGFloat
+    var green: CGFloat
+    var blue: CGFloat
+};
+
 extension UIColor {
     /**
      * Initializes and returns a color object for the given RGB hex integer.
