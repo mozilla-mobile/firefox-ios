@@ -132,6 +132,7 @@ public protocol BookmarksModelFactory {
 
     func isBookmarked(url: String, success: (Bool) -> (), failure: (Any) -> ())
     func remove(bookmark: BookmarkNode, success: (Bool) -> (), failure: (Any) -> ())
+    func removeByURL(url: String, success: (Bool) -> Void, failure: (Any) -> Void)
 }
 
 /*
@@ -288,6 +289,10 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
     }
 
     public func remove(bookmark: BookmarkNode, success: (Bool) -> (), failure: (Any) -> ()) {
+        failure("Not implemented")
+    }
+
+    public func removeByURL(url: String, success: (Bool) -> Void, failure: (Any) -> Void) {
         failure("Not implemented")
     }
 }
