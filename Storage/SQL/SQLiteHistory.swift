@@ -253,26 +253,45 @@ extension SQLiteHistory: Favicons {
         return failOrSucceed(err, "Clear favicons")
     }
 
+    public func addFavicon(icon: Favicon) -> Deferred<Result<Int>> {
+        var err: NSError?
+        let res = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
+            // Blind!
+            let id = self.favicons.insertOrUpdate(conn, obj: icon)
+            return id ?? 0
+        }
+        if err == nil {
+            return deferResult(res)
+        }
+        return deferResult(DatabaseError(err: err))
+    }
+
     /**
      * This method assumes that the site has already been recorded
      * in the history table.
      */
-    public func addFavicon(icon: Favicon, forSite site: Site) -> Success {
+    public func addFavicon(icon: Favicon, forSite site: Site) -> Deferred<Result<Int>> {
         log.verbose("Adding favicon \(icon.url) for site \(site.url).")
-        func doChange(query: String, args: Args?) -> Success {
+        func doChange(query: String, args: Args?) -> Deferred<Result<Int>> {
             var err: NSError?
             let res = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
                 // Blind!
-                self.favicons.insertOrUpdate(conn, obj: icon)
+                let id = self.favicons.insertOrUpdate(conn, obj: icon)
 
                 // Now set up the mapping.
                 err = conn.executeChange(query, withArgs: args)
-                return err == nil ? 1 : 0
+                if let err = err {
+                    log.error("Got error adding icon: \(err).")
+                    return 0
+                }
+
+                return id ?? 0
             }
-            if res == 1 {
-                return succeed()
+
+            if res == 0 {
+                return deferResult(DatabaseError(err: err))
             }
-            return deferResult(DatabaseError(err: err))
+            return deferResult(icon.id!)
         }
 
         let siteSubselect = "(SELECT id FROM history WHERE url = ?)"

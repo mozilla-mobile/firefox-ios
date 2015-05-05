@@ -11,7 +11,8 @@ public protocol Favicons {
     var defaultIcon: UIImage { get }
 
     func clearFavicons() -> Success
-    func addFavicon(icon: Favicon, forSite site: Site) -> Success
+    func addFavicon(icon: Favicon) -> Deferred<Result<Int>>
+    func addFavicon(icon: Favicon, forSite site: Site) -> Deferred<Result<Int>>
 }
 
 // TODO: rip this back out.
@@ -26,7 +27,11 @@ public class MockFavicons: Favicons {
         return succeed()
     }
 
-    public func addFavicon(icon: Favicon, forSite site: Site) -> Success {
-        return succeed()
+    public func addFavicon(icon: Favicon) -> Deferred<Result<Int>> {
+        return deferResult(-1)
+    }
+
+    public func addFavicon(icon: Favicon, forSite site: Site) -> Deferred<Result<Int>> {
+        return deferResult(-1)
     }
 }

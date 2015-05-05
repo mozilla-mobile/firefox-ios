@@ -32,9 +32,11 @@ class SQLiteBookmarkFolder: BookmarkFolder {
 
 public class SQLiteBookmarks: BookmarksModelFactory {
     let db: BrowserDB
+    let favicons: Favicons
 
-    public init(db: BrowserDB) {
+    public init(db: BrowserDB, favicons: Favicons) {
         self.db = db
+        self.favicons = favicons
     }
 
     private class func factory(row: SDRow) -> BookmarkNode {
@@ -76,22 +78,34 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         assert(false, "Invalid bookmark data.")
     }
 
-    private func getRootChildren() -> Cursor<BookmarkNode> {
+    private func getChildrenWhere(whereClause: String, args: Args, includeIcon: Bool) -> Cursor<BookmarkNode> {
         var err: NSError? = nil
         return db.withReadableConnection(&err) { (conn, err) -> Cursor<BookmarkNode> in
-            let sql = "SELECT id, type, guid, url, title FROM bookmarks WHERE parent = ? AND id IS NOT ?"
-            let args: Args? = [BookmarkRoots.RootID, BookmarkRoots.RootID]
-            return conn.executeQuery(sql, factory: SQLiteBookmarks.factory, withArgs: args)
+            let inner = "SELECT id, type, guid, url, title, faviconID FROM bookmarks WHERE \(whereClause)"
+
+            if includeIcon {
+                let sql =
+                "SELECT bookmarks.id AS id, bookmarks.type AS type, guid, bookmarks.url AS url, title, " +
+                "favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType " +
+                "FROM (\(inner)) AS bookmarks " +
+                "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
+                return conn.executeQuery(sql, factory: SQLiteBookmarks.factory, withArgs: args)
+            } else {
+                return conn.executeQuery(inner, factory: SQLiteBookmarks.factory, withArgs: args)
+            }
         }
     }
 
+    private func getRootChildren() -> Cursor<BookmarkNode> {
+        let args: Args = [BookmarkRoots.RootID, BookmarkRoots.RootID]
+        let sql = "parent = ? AND id IS NOT ?"
+        return self.getChildrenWhere(sql, args: args, includeIcon: true)
+    }
+
     private func getChildren(guid: String) -> Cursor<BookmarkNode> {
-        var err: NSError? = nil
-        return db.withReadableConnection(&err) { (conn, err) -> Cursor<BookmarkNode> in
-            let sql = "SELECT id, type, guid, url, title FROM bookmarks WHERE parent IS NOT NULL AND parent = (SELECT id FROM bookmarks WHERE guid = ?)"
-            let args: Args? = [guid]
-            return conn.executeQuery(sql, factory: SQLiteBookmarks.factory, withArgs: args)
-        }
+        let args: Args = [guid]
+        let sql = "parent IS NOT NULL AND parent = (SELECT id FROM bookmarks WHERE guid = ?)"
+        return self.getChildrenWhere(sql, args: args, includeIcon: true)
     }
 
     public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
@@ -188,15 +202,33 @@ extension SQLiteBookmarks: ShareToDestination {
     public func shareItem(item: ShareItem) {
         var err: NSError?
         self.db.withWritableConnection(&err) {  (conn, err) -> Int in
-            // TODO: favicon
-            let args: Args? = [Bytes.generateGUID(), BookmarkNodeType.Bookmark.rawValue, item.url, item.title ?? item.url, BookmarkRoots.MobileID]
-            let sql = "INSERT INTO bookmarks (guid, type, url, title, parent) VALUES (?, ?, ?, ?, ?)"
-            err = conn.executeChange(sql, withArgs: args)
-            if let err = err {
-                log.error("Error inserting \(item.url). Got \(err).")
-                return 0
+            func insertBookmark(icon: Int) -> Success {
+                log.debug("Inserting bookmark with icon \(icon)")
+                let args: Args? = [
+                    Bytes.generateGUID(),
+                    BookmarkNodeType.Bookmark.rawValue,
+                    item.url,
+                    (item.title ?? item.url),
+                    BookmarkRoots.MobileID,
+                ]
+                // Having nulls in arg lists is hard.
+                let iconValue = icon == -1 ? " NULL" : " \(icon)"
+                let sql = "INSERT INTO bookmarks (guid, type, url, title, parent, faviconID) VALUES (?, ?, ?, ?, ?, \(iconValue))"
+                err = conn.executeChange(sql, withArgs: args)
+                if let err = err {
+                    log.error("Error inserting \(item.url). Got \(err).")
+                    return deferResult(DatabaseError(err: err))
+                }
+                return succeed()
             }
-            return 1
+
+            // Insert the favicon.
+            if let icon = item.favicon {
+                self.favicons.addFavicon(icon) >>== insertBookmark
+            } else {
+                insertBookmark(-1)
+            }
+            return 1   // This is dumb.
         }
     }
 }

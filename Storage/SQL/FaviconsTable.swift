@@ -44,6 +44,8 @@ class FaviconsTable<T>: GenericTable<Favicon> {
             args.append(icon.url)
             return ("DELETE FROM \(TableNameFavicons) WHERE url = ?", args)
         }
+
+        // TODO: don't delete icons that are in use. Bug 1161630.
         return ("DELETE FROM \(TableNameFavicons)", args)
     }
 
@@ -75,16 +77,20 @@ class FaviconsTable<T>: GenericTable<Favicon> {
         return cursor[0]?.id
     }
 
-    func insertOrUpdate(db: SQLiteDBConnection, obj: Favicon) {
+    func insertOrUpdate(db: SQLiteDBConnection, obj: Favicon) -> Int? {
         var err: NSError? = nil
         let id = self.insert(db, item: obj, err: &err)
         if id >= 0 {
             obj.id = id
-            return
+            return id
         }
 
         if obj.id == nil {
-            obj.id = getIDFor(db, obj: obj)
+            let id = getIDFor(db, obj: obj)
+            obj.id = id
+            return id
         }
+
+        return obj.id
     }
 }

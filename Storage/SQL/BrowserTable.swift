@@ -37,7 +37,7 @@ private let log = XCGLogger.defaultInstance()
  */
 public class BrowserTable: Table {
     var name: String { return "BROWSER" }
-    var version: Int { return 9 }
+    var version: Int { return 10 }
 
     public init() {
     }
@@ -143,7 +143,7 @@ public class BrowserTable: Table {
         "type TINYINT NOT NULL, " +
         "url TEXT, " +
         "parent INTEGER REFERENCES bookmarks(id) NOT NULL, " +
-        "faviconId INTEGER REFERENCES favicons(id) ON DELETE SET NULL, " +
+        "faviconID INTEGER REFERENCES favicons(id) ON DELETE SET NULL, " +
         "title TEXT" +
         ") "
 
