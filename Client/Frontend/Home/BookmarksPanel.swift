@@ -11,7 +11,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override var profile: Profile! {
         didSet {
-            profile.bookmarks.modelForRoot(self.onNewModel, failure: self.onModelFailure)
+            // Until we have something useful to show for desktop bookmarks,
+            // only show mobile bookmarks.
+            // Note that we also need to build a similar kind of virtual hierarchy
+            // to what we have on Android.
+            profile.bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID, success: self.onNewModel, failure: self.onModelFailure)
+            // profile.bookmarks.modelForRoot(self.onNewModel, failure: self.onModelFailure)
         }
     }
 
