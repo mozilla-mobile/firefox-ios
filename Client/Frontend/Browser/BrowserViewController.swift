@@ -8,6 +8,9 @@ import WebKit
 import Shared
 import Storage
 import SnapKit
+import XCGLogger
+
+private let log = XCGLogger.defaultInstance()
 
 private let OKString = NSLocalizedString("OK", comment: "OK button")
 private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
@@ -372,7 +375,7 @@ class BrowserViewController: UIViewController {
             self.toolbar?.updateBookmarkStatus(!success)
             self.urlBar.updateBookmarkStatus(!success)
         }, failure: { err in
-                println("Err removing bookmark \(err)")
+            log.error("Error removing bookmark: \(err).")
         })
     }
 
@@ -528,7 +531,7 @@ extension BrowserViewController: URLBarDelegate {
 
         // If we still don't have a valid URL, something is broken. Give up.
         if url == nil {
-            println("Error handling URL entry: " + text)
+            log.error("Error handling URL entry: \"\(text)\".")
             return
         }
 
@@ -590,11 +593,11 @@ extension BrowserViewController: BrowserToolbarDelegate {
                     }
                 },
                 failure: { err in
-                    println("Bookmark error: \(err)")
+                    log.error("Bookmark error: \(err).")
                 }
             )
         } else {
-            println("Bookmark error: No tab is selected, or no URL in tab.")
+            log.error("Bookmark error: No tab is selected, or no URL in tab.")
         }
     }
 
@@ -903,7 +906,7 @@ extension BrowserViewController: TabManagerDelegate {
                     self.toolbar?.updateBookmarkStatus(bookmarked)
                     self.urlBar.updateBookmarkStatus(bookmarked)
                 }, failure: { err in
-                    println("Error getting bookmark status: \(err)")
+                    log.error("Error getting bookmark status: \(err).")
                 })
             } else {
                 // The web view can go gray if it was zombified due to memory pressure.
@@ -1096,7 +1099,7 @@ extension BrowserViewController: WKNavigationDelegate {
                         self.toolbar?.updateBookmarkStatus(bookmarked)
                         self.urlBar.updateBookmarkStatus(bookmarked)
                     }, failure: { err in
-                        println("Error getting bookmark status: \(err)")
+                        log.error("Error getting bookmark status: \(err).")
                     })
                 }
 
@@ -1231,7 +1234,7 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
         // If this reader mode availability state change is for the tab that we currently show, then update
         // the button. Otherwise do nothing and the button will be updated when the tab is made active.
         if tabManager.selectedTab == browser {
-            println("DEBUG: New readerModeState: \(state.rawValue)")
+            log.debug("New readerModeState: \(state.rawValue)")
             urlBar.updateReaderModeState(state)
         }
     }
