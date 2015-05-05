@@ -102,7 +102,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         locationContainer.addSubview(editTextField)
 
         self.progressBar = UIProgressView()
-        self.progressBar.trackTintColor = self.backgroundColor
+        self.progressBar.progressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
         self.progressBar.alpha = 0
         self.progressBar.hidden = true
         self.addSubview(progressBar)
@@ -195,7 +195,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         updateToolbarConstraints()
 
         progressBar.snp_remakeConstraints { make in
-            make.centerY.equalTo(self.snp_bottom)
+            make.top.equalTo(self.snp_bottom)
             make.width.equalTo(self)
         }
 
