@@ -4,17 +4,16 @@
 
 import UIKit
 
-private let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
-private let LabelFont = AppConstants.DefaultSmallFont
-private let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
-private let CellInsets = UIEdgeInsetsMake(8, 8, 8, 8)
-
-private let PlaceholderImage = UIImage(named: "defaultFavicon")
-
 struct ThumbnailCellUX {
     /// Ratio of width:height of the thumbnail image.
     static let ImageAspectRatio: Float = 1.5
     static let TextSize = AppConstants.DefaultSmallFontSize
+    static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
+    static let LabelFont = AppConstants.DefaultSmallFont
+    static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
+    static let Insets = UIEdgeInsetsMake(8, 8, 8, 8)
+    static let TextOffset = 2
+    static let PlaceholderImage = UIImage(named: "defaultFavicon")
 }
 
 class ThumbnailCell: UICollectionViewCell {
@@ -30,13 +29,13 @@ class ThumbnailCell: UICollectionViewCell {
         contentView.addSubview(imageWrapper)
         imageWrapper.addSubview(imageView)
 
-        imageWrapper.layer.borderColor = BorderColor.CGColor
+        imageWrapper.layer.borderColor = ThumbnailCellUX.BorderColor.CGColor
         imageWrapper.layer.borderWidth = 1
         imageWrapper.layer.cornerRadius = 3
         imageWrapper.clipsToBounds = true
 
         imageWrapper.snp_remakeConstraints({ make in
-            make.top.left.right.equalTo(self.contentView).insets(CellInsets)
+            make.top.left.right.equalTo(self.contentView).insets(ThumbnailCellUX.Insets)
             make.width.equalTo(self.imageWrapper.snp_height).multipliedBy(ThumbnailCellUX.ImageAspectRatio)
         })
 
@@ -45,11 +44,11 @@ class ThumbnailCell: UICollectionViewCell {
         })
 
         textLabel.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
-        textLabel.font = LabelFont
-        textLabel.textColor = LabelColor
+        textLabel.font = ThumbnailCellUX.LabelFont
+        textLabel.textColor = ThumbnailCellUX.LabelColor
         textLabel.snp_remakeConstraints({ make in
-            make.top.equalTo(self.imageWrapper.snp_bottom).offset(CellInsets.top)
-            make.left.right.equalTo(self.contentView).insets(CellInsets)
+            make.top.equalTo(self.imageWrapper.snp_bottom).offset(ThumbnailCellUX.TextOffset)
+            make.left.right.equalTo(self.contentView).insets(ThumbnailCellUX.Insets)
             return
         })
     }
@@ -74,7 +73,7 @@ class ThumbnailCell: UICollectionViewCell {
                 imageView.alignment = UIImageViewAlignmentMaskTop
                 imageView.contentMode = UIViewContentMode.ScaleAspectFill
             } else {
-                imageView.image = PlaceholderImage
+                imageView.image = ThumbnailCellUX.PlaceholderImage
                 imageView.alignment = UIImageViewAlignmentMaskCenter
                 imageView.contentMode = UIViewContentMode.Center
             }

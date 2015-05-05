@@ -10,10 +10,7 @@ private let ThumbnailIdentifier = "Thumbnail"
 private let RowIdentifier = "Row"
 private let SeparatorKind = "separator"
 private let SeparatorIdentifier = "separator"
-
-private let ThumbnailSectionPadding: CGFloat = 8
 private let SeparatorColor = UIColor(rgb: 0xffffff)
-private let DefaultImage = "defaultFavicon"
 
 class Tile : Site {
     let backgroundColor: UIColor
@@ -130,10 +127,10 @@ private class TopSitesLayout: UICollectionViewLayout {
     private var width: CGFloat { return self.collectionView?.frame.width ?? 0 }
 
     // The width and height of the thumbnail here are the width and height of the tile itself, not the image inside the tile.
-    private var thumbnailWidth: CGFloat { return width / CGFloat(thumbnailCols) }
+    private var thumbnailWidth: CGFloat { return (width - ThumbnailCellUX.Insets.left - ThumbnailCellUX.Insets.right) / CGFloat(thumbnailCols) }
     // The tile's height is determined the aspect ratio of the thumbnails width + the height of the text label on the bottom. We also take into account
     // some padding between the title and the image.
-    private var thumbnailHeight: CGFloat { return thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio) + ThumbnailCellUX.TextSize + ThumbnailSectionPadding}
+    private var thumbnailHeight: CGFloat { return thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio) + CGFloat(ThumbnailCellUX.TextSize) + CGFloat(ThumbnailCellUX.Insets.bottom) + CGFloat(ThumbnailCellUX.TextOffset) }
 
     // Used to calculate the height of the list.
     private var count: Int {
@@ -146,7 +143,7 @@ private class TopSitesLayout: UICollectionViewLayout {
     private var topSectionHeight: CGFloat {
         let maxRows = ceil(Float(count) / Float(thumbnailCols))
         let rows = min(Int(maxRows), thumbnailRows)
-        return thumbnailHeight * CGFloat(rows)
+        return thumbnailHeight * CGFloat(rows) + ThumbnailCellUX.Insets.top + ThumbnailCellUX.Insets.bottom
     }
 
     override init() {
@@ -227,8 +224,8 @@ private class TopSitesLayout: UICollectionViewLayout {
             // Set the top thumbnail frames.
             let row = floor(Double(i / thumbnailCols))
             let col = i % thumbnailCols
-            let x = thumbnailWidth * CGFloat(col)
-            let y = CGFloat(row) * thumbnailHeight
+            let x = ThumbnailCellUX.Insets.left + thumbnailWidth * CGFloat(col)
+            let y = ThumbnailCellUX.Insets.top + CGFloat(row) * thumbnailHeight
             attr.frame = CGRectMake(x, y, thumbnailWidth, thumbnailHeight)
         } else {
             // Set the bottom row frames.
@@ -275,6 +272,7 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     private func createTileForSite(cell: ThumbnailCell, site: Site) -> ThumbnailCell {
         cell.textLabel.text = site.title.isEmpty ? site.url : site.title
         cell.imageWrapper.backgroundColor = UIColor.clearColor()
+        // cell.backgroundColor = UIColor.random()
 
         if let thumbs = profile.thumbnails as? SDWebThumbnails {
             let key = SDWebThumbnails.getKey(site.url)
@@ -321,7 +319,7 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         if let icon = site.icon {
             cell.imageView.sd_setImageWithURL(NSURL(string: icon.url)!)
         } else {
-            cell.imageView.image = UIImage(named: DefaultImage)
+            cell.imageView.image = ThumbnailCellUX.PlaceholderImage
         }
         return cell
     }
