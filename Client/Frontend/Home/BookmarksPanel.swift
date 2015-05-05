@@ -87,4 +87,25 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             }
         }
     }
+
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        // Intentionally blank. Required to use UITableViewRowActions
+    }
+
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+        let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
+
+        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
+            if let bookmark = self.source?.current[indexPath.row] {
+                self.profile.bookmarks.remove(bookmark, success: { success in
+                    self.source?.reloadData({ model in
+                        self.source = model
+                        self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+                    }, failure: self.onModelFailure)
+                }, failure: self.onModelFailure)
+            }
+        })
+
+        return [delete]
+    }
 }
