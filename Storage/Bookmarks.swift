@@ -23,15 +23,35 @@ public protocol ShareToDestination {
 }
 
 public struct BookmarkRoots {
-    // These are stolen from Fennec's BrowserContract.
-    static let MOBILE_FOLDER_GUID = "mobile"
-    static let PLACES_FOLDER_GUID = "places"
-    static let MENU_FOLDER_GUID = "menu"
-    static let TAGS_FOLDER_GUID = "tags"
-    static let TOOLBAR_FOLDER_GUID = "toolbar"
-    static let UNFILED_FOLDER_GUID = "unfiled"
-    static let FAKE_DESKTOP_FOLDER_GUID = "desktop"
-    static let PINNED_FOLDER_GUID = "pinned"
+    // These match Places on desktop.
+    public static let RootGUID =               "root________"
+    public static let MobileFolderGUID =       "mobile______"
+    public static let MenuFolderGUID =         "menu________"
+    public static let ToolbarFolderGUID =      "toolbar_____"
+    public static let UnfiledFolderGUID =      "unfiled_____"
+
+    /*
+    public static let TagsFolderGUID =         "tags________"
+    public static let PinnedFolderGUID =       "pinned______"
+    public static let FakeDesktopFolderGUID =  "desktop_____"
+     */
+
+    static let RootID =    0
+    static let MobileID =  1
+    static let MenuID =    2
+    static let ToolbarID = 3
+    static let UnfiledID = 4
+}
+
+/**
+ * This matches Places's nsINavBookmarksService, just for sanity.
+ * These are only used at the DB layer.
+ */
+public enum BookmarkNodeType: Int {
+    case Bookmark = 1
+    case Folder = 2
+    case Separator = 3
+    case DynamicContainer = 4
 }
 
 /**
@@ -132,6 +152,7 @@ public protocol BookmarksModelFactory {
 
     func isBookmarked(url: String, success: (Bool) -> (), failure: (Any) -> ())
     func remove(bookmark: BookmarkNode, success: (Bool) -> (), failure: (Any) -> ())
+    func removeByURL(url: String, success: (Bool) -> Void, failure: (Any) -> Void)
 }
 
 /*
@@ -234,12 +255,12 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
             res.append(BookmarkItem(guid: Bytes.generateGUID(), title: "Title \(i)", url: "http://www.example.com/\(i)"))
         }
 
-        mobile = MemoryBookmarkFolder(guid: BookmarkRoots.MOBILE_FOLDER_GUID, title: "Mobile Bookmarks", children: res)
+        mobile = MemoryBookmarkFolder(guid: BookmarkRoots.MobileFolderGUID, title: "Mobile Bookmarks", children: res)
 
-        unsorted = MemoryBookmarkFolder(guid: BookmarkRoots.UNFILED_FOLDER_GUID, title: "Unsorted Bookmarks", children: [])
+        unsorted = MemoryBookmarkFolder(guid: BookmarkRoots.UnfiledFolderGUID, title: "Unsorted Bookmarks", children: [])
         sink = MemoryBookmarksSink()
 
-        root = MemoryBookmarkFolder(guid: BookmarkRoots.PLACES_FOLDER_GUID, title: "Root", children: [mobile, unsorted])
+        root = MemoryBookmarkFolder(guid: BookmarkRoots.RootGUID, title: "Root", children: [mobile, unsorted])
     }
 
     public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
@@ -249,14 +270,14 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
     public  func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         var m: BookmarkFolder
         switch (guid) {
-        case BookmarkRoots.MOBILE_FOLDER_GUID:
+        case BookmarkRoots.MobileFolderGUID:
             // Transparently merges in any queued items.
             m = self.mobile.append(self.sink.queue)
             break;
-        case BookmarkRoots.PLACES_FOLDER_GUID:
+        case BookmarkRoots.RootGUID:
             m = self.root
             break;
-        case BookmarkRoots.UNFILED_FOLDER_GUID:
+        case BookmarkRoots.UnfiledFolderGUID:
             m = self.unsorted
             break;
         default:
@@ -275,7 +296,7 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
     * This class could return the full data immediately. We don't, because real DB-backed code won't.
     */
     public var nullModel: BookmarksModel {
-        let f = MemoryBookmarkFolder(guid: BookmarkRoots.PLACES_FOLDER_GUID, title: "Root", children: [])
+        let f = MemoryBookmarkFolder(guid: BookmarkRoots.RootGUID, title: "Root", children: [])
         return BookmarksModel(modelFactory: self, root: f)
     }
 
@@ -288,6 +309,10 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
     }
 
     public func remove(bookmark: BookmarkNode, success: (Bool) -> (), failure: (Any) -> ()) {
+        failure("Not implemented")
+    }
+
+    public func removeByURL(url: String, success: (Bool) -> Void, failure: (Any) -> Void) {
         failure("Not implemented")
     }
 }
