@@ -81,7 +81,7 @@ public class SQLiteBookmarks: BookmarksModelFactory {
     private func getChildrenWhere(whereClause: String, args: Args, includeIcon: Bool) -> Cursor<BookmarkNode> {
         var err: NSError? = nil
         return db.withReadableConnection(&err) { (conn, err) -> Cursor<BookmarkNode> in
-            let inner = "SELECT id, type, guid, url, title, faviconID FROM bookmarks WHERE \(whereClause)"
+            let inner = "SELECT id, type, guid, url, title, faviconID FROM \(TableBookmarks) WHERE \(whereClause)"
 
             if includeIcon {
                 let sql =
@@ -104,7 +104,7 @@ public class SQLiteBookmarks: BookmarksModelFactory {
 
     private func getChildren(guid: String) -> Cursor<BookmarkNode> {
         let args: Args = [guid]
-        let sql = "parent IS NOT NULL AND parent = (SELECT id FROM bookmarks WHERE guid = ?)"
+        let sql = "parent IS NOT NULL AND parent = (SELECT id FROM \(TableBookmarks) WHERE guid = ?)"
         return self.getChildrenWhere(sql, args: args, includeIcon: true)
     }
 
@@ -146,8 +146,8 @@ public class SQLiteBookmarks: BookmarksModelFactory {
 
     public func isBookmarked(url: String, success: (Bool) -> (), failure: (Any) -> ()) {
         var err: NSError?
-        let sql = "SELECT id FROM bookmarks WHERE url = ? LIMIT 1"
-        let args: Args? = [url]
+        let sql = "SELECT id FROM \(TableBookmarks) WHERE url = ? LIMIT 1"
+        let args: Args = [url]
 
         let c = db.withReadableConnection(&err) { (conn, err) -> Cursor<Int> in
             return conn.executeQuery(sql, factory: { $0["id"] as! Int }, withArgs: args)
@@ -173,8 +173,8 @@ public class SQLiteBookmarks: BookmarksModelFactory {
 
     public func removeByURL(url: String, success: (Bool) -> Void, failure: (Any) -> Void) {
         log.debug("Removing bookmark \(url).")
-        let sql = "DELETE FROM bookmarks WHERE url = ?"
-        let args: Args? = [url]
+        let sql = "DELETE FROM \(TableBookmarks) WHERE url = ?"
+        let args: Args = [url]
 
         self.runSQL(sql, args: args, success: success, failure: failure)
     }
@@ -185,12 +185,12 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         }
 
         let sql: String
-        let args: Args?
+        let args: Args
         if let id = bookmark.id {
-            sql = "DELETE FROM bookmarks WHERE id = ?"
+            sql = "DELETE FROM \(TableBookmarks) WHERE id = ?"
             args = [id]
         } else {
-            sql = "DELETE FROM bookmarks WHERE guid = ?"
+            sql = "DELETE FROM \(TableBookmarks) WHERE guid = ?"
             args = [bookmark.guid]
         }
 
@@ -203,17 +203,27 @@ extension SQLiteBookmarks: ShareToDestination {
         var err: NSError?
         self.db.withWritableConnection(&err) {  (conn, err) -> Int in
             func insertBookmark(icon: Int) -> Success {
-                log.debug("Inserting bookmark with icon \(icon)")
-                let args: Args? = [
+                log.debug("Inserting bookmark with specified icon \(icon).")
+                var args: Args = [
                     Bytes.generateGUID(),
                     BookmarkNodeType.Bookmark.rawValue,
                     item.url,
                     (item.title ?? item.url),
                     BookmarkRoots.MobileID,
                 ]
-                // Having nulls in arg lists is hard.
-                let iconValue = icon == -1 ? " NULL" : " \(icon)"
-                let sql = "INSERT INTO bookmarks (guid, type, url, title, parent, faviconID) VALUES (?, ?, ?, ?, ?, \(iconValue))"
+
+                // If the caller didn't provide an icon (and they usually don't!),
+                // do a reverse lookup in history. We use a view to make this simple.
+                let iconValue: String
+                if icon == -1 {
+                    iconValue = "(SELECT iconID FROM \(ViewIconForURL) WHERE url = ?)"
+                    args.append(item.url)
+                } else {
+                    iconValue = "?"
+                    args.append(icon)
+                }
+
+                let sql = "INSERT INTO \(TableBookmarks) (guid, type, url, title, parent, faviconID) VALUES (?, ?, ?, ?, ?, \(iconValue))"
                 err = conn.executeChange(sql, withArgs: args)
                 if let err = err {
                     log.error("Error inserting \(item.url). Got \(err).")
@@ -228,7 +238,7 @@ extension SQLiteBookmarks: ShareToDestination {
             } else {
                 insertBookmark(-1)
             }
-            return 1   // This is dumb.
+            return 1   // This is dumb. We should chain off the insert, for one thing.
         }
     }
 }

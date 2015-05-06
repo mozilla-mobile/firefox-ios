@@ -8,12 +8,13 @@ import XCGLogger
 // To keep SwiftData happy.
 typealias Args = [AnyObject?]
 
-private let TableBookmarks = "bookmarks"
-private let TableHistory = "history"
-private let TableVisits = "visits"
-private let TableFaviconSites = "faviconSites"
-private let ViewWidestFaviconsForSites = "view_favicons_widest"
-private let ViewHistoryIDsWithWidestFavicons = "view_history_id_favicon"
+let TableBookmarks = "bookmarks"
+let TableHistory = "history"
+let TableVisits = "visits"
+let TableFaviconSites = "faviconSites"
+let ViewWidestFaviconsForSites = "view_favicons_widest"
+let ViewHistoryIDsWithWidestFavicons = "view_history_id_favicon"
+let ViewIconForURL = "view_icon_for_url"
 
 private let AllTables: Args = [
     TableFaviconSites,
@@ -25,6 +26,7 @@ private let AllTables: Args = [
 private let AllViews: Args = [
     ViewHistoryIDsWithWidestFavicons,
     ViewWidestFaviconsForSites,
+    ViewIconForURL
 ]
 
 private let AllTablesAndViews: Args = AllViews + AllTables
@@ -136,6 +138,12 @@ public class BrowserTable: Table {
         "LEFT OUTER JOIN " +
         "\(ViewWidestFaviconsForSites) ON history.id = \(ViewWidestFaviconsForSites).siteID "
 
+        let iconForURL =
+        "CREATE VIEW IF NOT EXISTS \(ViewIconForURL) AS " +
+        "SELECT history.url AS url, icons.iconID AS iconID FROM " +
+        "history, \(ViewWidestFaviconsForSites) AS icons WHERE " +
+        "history.id = icons.siteID "
+
         let bookmarks =
         "CREATE TABLE IF NOT EXISTS \(TableBookmarks) (" +
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -148,7 +156,8 @@ public class BrowserTable: Table {
         ") "
 
         let queries = [
-            history, visits, bookmarks, faviconSites, widestFavicons, historyIDsWithIcon,
+            history, visits, bookmarks, faviconSites,
+            widestFavicons, historyIDsWithIcon, iconForURL,
         ]
         assert(queries.count == AllTablesAndViews.count, "Did you forget to add your table or view to the list?")
         return self.run(db, queries: queries) &&
