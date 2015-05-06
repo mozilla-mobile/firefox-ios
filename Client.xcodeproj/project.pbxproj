@@ -85,6 +85,7 @@
 		285D37E31ABCA69E000E1CF9 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C077971A3B064000834FE5 /* CryptoTests.swift */; };
 		2868FA061ADF7B69000D9B1D /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		2868FA231ADF7B70000D9B1D /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
+		287AC8661AF4776D00101515 /* TestSQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27D1ABB533A00877008 /* TestSQLiteHistory.swift */; };
 		287DAA1F1AE06E5D0055AC35 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287DAA1E1AE06E5D0055AC35 /* DeviceInfo.swift */; };
 		288501DE1AC0F61D00E7F670 /* RequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */; };
 		288501F91AC0F62200E7F670 /* RequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */; };
@@ -125,7 +126,9 @@
 		28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		28E08C9A1AF44F00009BA2FA /* BrowserTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282915E51AF1A7920006EEB5 /* BrowserTable.swift */; };
+		28E08C991AF44EF9009BA2FA /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2551ABB531100877008 /* SQLiteHistory.swift */; };
 		28E23C121AC5A5EE00F5AC85 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E23C111AC5A5EE00F5AC85 /* State.swift */; };
+		28EDE6CA1AF2929800FB2937 /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2551ABB531100877008 /* SQLiteHistory.swift */; };
 		28EDE6CB1AF2929900FB2937 /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2551ABB531100877008 /* SQLiteHistory.swift */; };
 		28F596A11ACA13CA0071DDCC /* InfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F596A01ACA13CA0071DDCC /* InfoTests.swift */; };
 		28F657C01ABFC97D00A608BD /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BE1A1D1D3200576538 /* Record.swift */; };
@@ -225,13 +228,6 @@
 		2FCAE2781ABB531100877008 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25C1ABB531100877008 /* Visit.swift */; };
 		2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2791ABB533A00877008 /* MockFiles.swift */; };
 		2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */; };
-		2FCAE2861ABB533A00877008 /* TestBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27B1ABB533A00877008 /* TestBookmarks.swift */; };
-		2FCAE2871ABB533A00877008 /* TestFaviconsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */; };
-		2FCAE2881ABB533A00877008 /* TestHistoryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27D1ABB533A00877008 /* TestHistoryTable.swift */; };
-		2FCAE2891ABB533A00877008 /* TestJoinedFaviconTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27E1ABB533A00877008 /* TestJoinedFaviconTable.swift */; };
-		2FCAE28A1ABB533A00877008 /* TestJoinedHistoryVisits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27F1ABB533A00877008 /* TestJoinedHistoryVisits.swift */; };
-		2FCAE28D1ABB533A00877008 /* TestTableTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2821ABB533A00877008 /* TestTableTable.swift */; };
-		2FCAE28E1ABB533A00877008 /* TestVisitsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2831ABB533A00877008 /* TestVisitsTable.swift */; };
 		2FCAE33E1ABB5F1800877008 /* Storage-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FCAE33D1ABB5F1800877008 /* Storage-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2FCAE33F1ABB604C00877008 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE28F1ABB53AA00877008 /* libsqlite3.dylib */; };
 		2FDB10931A9FBEC5006CF312 /* ProfilePrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB10921A9FBEC5006CF312 /* ProfilePrefsTests.swift */; };
@@ -1180,7 +1176,7 @@
 		2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteRemoteClientsAndTabs.swift; sourceTree = "<group>"; };
 		2FCAE27B1ABB533A00877008 /* TestBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBookmarks.swift; sourceTree = "<group>"; };
 		2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestFaviconsTable.swift; sourceTree = "<group>"; };
-		2FCAE27D1ABB533A00877008 /* TestHistoryTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistoryTable.swift; sourceTree = "<group>"; };
+		2FCAE27D1ABB533A00877008 /* TestSQLiteHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteHistory.swift; sourceTree = "<group>"; };
 		2FCAE27E1ABB533A00877008 /* TestJoinedFaviconTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestJoinedFaviconTable.swift; sourceTree = "<group>"; };
 		2FCAE27F1ABB533A00877008 /* TestJoinedHistoryVisits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestJoinedHistoryVisits.swift; sourceTree = "<group>"; };
 		2FCAE2821ABB533A00877008 /* TestTableTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestTableTable.swift; sourceTree = "<group>"; };
@@ -1587,11 +1583,6 @@
 		282915DF1AF1A5F90006EEB5 /* Dead */ = {
 			isa = PBXGroup;
 			children = (
-				2FCAE27B1ABB533A00877008 /* TestBookmarks.swift */,
-				2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */,
-				2FCAE27D1ABB533A00877008 /* TestHistoryTable.swift */,
-				2FCAE27E1ABB533A00877008 /* TestJoinedFaviconTable.swift */,
-				2FCAE27F1ABB533A00877008 /* TestJoinedHistoryVisits.swift */,
 				2FCAE2821ABB533A00877008 /* TestTableTable.swift */,
 				2FCAE2831ABB533A00877008 /* TestVisitsTable.swift */,
 			);
@@ -1873,7 +1864,7 @@
 				2FCAE2791ABB533A00877008 /* MockFiles.swift */,
 				2FCAE27B1ABB533A00877008 /* TestBookmarks.swift */,
 				2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */,
-				2FCAE27D1ABB533A00877008 /* TestHistoryTable.swift */,
+				2FCAE27D1ABB533A00877008 /* TestSQLiteHistory.swift */,
 				2FCAE27E1ABB533A00877008 /* TestJoinedFaviconTable.swift */,
 				2FCAE27F1ABB533A00877008 /* TestJoinedHistoryVisits.swift */,
 				2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */,
@@ -1899,6 +1890,7 @@
 				2FCAE24D1ABB531100877008 /* GenericTable.swift */,
 				2FCAE2521ABB531100877008 /* RemoteTabsTable.swift */,
 				2FCAE2531ABB531100877008 /* SchemaTable.swift */,
+				2FCAE2551ABB531100877008 /* SQLiteHistory.swift */,
 				2FCAE2561ABB531100877008 /* SQLitePasswords.swift */,
 				2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */,
 				282915E51AF1A7920006EEB5 /* BrowserTable.swift */,
@@ -3492,6 +3484,7 @@
 				2FCAE26A1ABB531100877008 /* GenericTable.swift in Sources */,
 				28C4AB721AD42D4300D9ACE3 /* Clients.swift in Sources */,
 				2FCAE26F1ABB531100877008 /* RemoteTabsTable.swift in Sources */,
+				28E08C991AF44EF9009BA2FA /* SQLiteHistory.swift in Sources */,
 				2FCAE25D1ABB531100877008 /* Bookmarks.swift in Sources */,
 				2FCAE2781ABB531100877008 /* Visit.swift in Sources */,
 				2FCAE2701ABB531100877008 /* SchemaTable.swift in Sources */,
@@ -3518,14 +3511,14 @@
 				2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */,
 				2FA4351C1ABB6831008031D1 /* BrowserDB.swift in Sources */,
 				2FA4351A1ABB6829008031D1 /* Site.swift in Sources */,
-				2FA435211ABB6831008031D1 /* JoinedHistoryVisitsTable.swift in Sources */,
+				28EDE6CB1AF2929900FB2937 /* SQLiteHistory.swift in Sources */,
 				D32CACED1AE04DA1000658EB /* TestSwiftData.swift in Sources */,
 				2FA4352C1ABB6873008031D1 /* Visit.swift in Sources */,
 				2FA435271ABB6831008031D1 /* SQLitePasswords.swift in Sources */,
-				2FA4351B1ABB6831008031D1 /* BookmarksSqlite.swift in Sources */,
 				2FA435231ABB6831008031D1 /* RemoteTabsTable.swift in Sources */,
 				2FA435241ABB6831008031D1 /* SchemaTable.swift in Sources */,
 				2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */,
+				287AC8661AF4776D00101515 /* TestSQLiteHistory.swift in Sources */,
 				2FA435131ABB6829008031D1 /* Cursor.swift in Sources */,
 				2FA435171ABB6829008031D1 /* Passwords.swift in Sources */,
 				282915E71AF1A7920006EEB5 /* BrowserTable.swift in Sources */,
