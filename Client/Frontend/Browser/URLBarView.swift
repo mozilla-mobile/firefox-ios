@@ -529,6 +529,23 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
             stopReloadButton.setImage(helper?.ImageReloadPressed, forState: .Highlighted)
         }
     }
+
+    override var accessibilityElements: [AnyObject]! {
+        get {
+            if isEditing {
+                return [editTextField, cancelButton]
+            } else {
+                if toolbarIsShowing {
+                    return [backButton, forwardButton, stopReloadButton, locationView, shareButton, bookmarkButton, tabsButton, progressBar]
+                } else {
+                    return [locationView, tabsButton, progressBar]
+                }
+            }
+        }
+        set {
+            super.accessibilityElements = newValue
+        }
+    }
 }
 
 /* Code for drawing the urlbar curve */

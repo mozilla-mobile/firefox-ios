@@ -209,6 +209,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         promptNoButton.addTarget(self, action: "SELdidClickOptInNo", forControlEvents: UIControlEvents.TouchUpInside)
         prompt.addSubview(promptNoButton)
 
+        // otherwise the label (i.e. question) is visited by VoiceOver *after* yes and no buttons
+        prompt.accessibilityElements = [promptImage, promptLabel, promptYesButton, promptNoButton]
+
         promptImage.snp_makeConstraints { make in
             make.left.equalTo(prompt).offset(PromptInsets.left)
             make.centerY.equalTo(prompt)
