@@ -234,7 +234,7 @@ public class MemoryBookmarksSink: ShareToDestination {
 
         // Don't create duplicates.
         if (!contains(queue, exists)) {
-            queue.append(BookmarkItem(guid: NSUUID().UUIDString, title: title, url: item.url))
+            queue.append(BookmarkItem(guid: Bytes.generateGUID(), title: title, url: item.url))
         }
     }
 }
@@ -251,9 +251,6 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
 
     public init() {
         var res = [BookmarkItem]()
-        for i in 0...10 {
-            res.append(BookmarkItem(guid: Bytes.generateGUID(), title: "Title \(i)", url: "http://www.example.com/\(i)"))
-        }
 
         mobile = MemoryBookmarkFolder(guid: BookmarkRoots.MobileFolderGUID, title: "Mobile Bookmarks", children: res)
 
