@@ -153,7 +153,6 @@ public class BrowserDB {
         return success
     }
 
-    typealias CursorCallback = (connection: SQLiteDBConnection, inout err: NSError?) -> Cursor
     typealias IntCallback = (connection: SQLiteDBConnection, inout err: NSError?) -> Int
 
     func withWritableConnection(inout err: NSError?, callback: IntCallback) -> Int {
@@ -166,8 +165,8 @@ public class BrowserDB {
         return res
     }
 
-    func withReadableConnection(inout err: NSError?, callback: CursorCallback) -> Cursor {
-        var c: Cursor!
+    func withReadableConnection<T>(inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> Cursor<T>) -> Cursor<T> {
+        var c: Cursor<T>!
         db.withConnection(SwiftData.Flags.ReadOnly) { connection in
             var err: NSError? = nil
             c = callback(connection: connection, err: &err)
