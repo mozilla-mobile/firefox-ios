@@ -125,7 +125,7 @@ class GenericTable<T>: Table {
         return 0
     }
 
-    func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor {
+    func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<T> {
         if var (query, args) = getQueryAndArgs(options) {
             if let factory = self.factory {
                 let c =  db.executeQuery(query, factory: factory, withArgs: args)
