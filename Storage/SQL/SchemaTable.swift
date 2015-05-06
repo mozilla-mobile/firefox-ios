@@ -32,7 +32,7 @@ protocol Table : TableInfo {
     func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
     func update(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
     func delete(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
-    func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor
+    func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<Type>
 }
 
 // A table for holding info about other tables (also holds info about itself :)). This is used
