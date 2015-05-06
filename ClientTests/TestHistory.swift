@@ -8,7 +8,7 @@ class TestHistory : ProfileTest {
         // Add an entry
         let site = Site(url: url, title: title)
         let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
-        history.addVisit(visit).upon {
+        history.addLocalVisit(visit).upon {
             callback(success: $0.isSuccess)
         }
     }
@@ -23,7 +23,7 @@ class TestHistory : ProfileTest {
 
     private func innerCheckSites(history: BrowserHistory, callback: (cursor: Cursor) -> Void) {
         // Retrieve the entry
-        history.get(nil).upon {
+        history.getSitesByLastVisit(100).upon {
             XCTAssertTrue($0.isSuccess)
             callback(cursor: $0.successValue!)
         }
@@ -52,7 +52,7 @@ class TestHistory : ProfileTest {
     }
 
     private func innerClear(history: BrowserHistory, callback: (s: Bool) -> Void) {
-        history.clear().upon { callback(s: $0.isSuccess) }
+        history.clearHistory().upon { callback(s: $0.isSuccess) }
     }
 
     private func clear(history: BrowserHistory, s: Bool = true) {
@@ -68,11 +68,9 @@ class TestHistory : ProfileTest {
 
     private func checkVisits(history: BrowserHistory, url: String) {
         let expectation = self.expectationWithDescription("Wait for history")
-        history.get(nil).upon { result in
+        history.getSitesByLastVisit(100).upon { result in
             XCTAssertTrue(result.isSuccess)
-            let options = QueryOptions()
-            options.filter = url
-            history.get(options).upon { result in
+            history.getSitesByFrecencyWithLimit(100, whereURLContains: url).upon { result in
                 XCTAssertTrue(result.isSuccess)
                 let cursor = result.successValue!
                 XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
