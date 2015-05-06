@@ -118,7 +118,7 @@ public func ==(lhs: Password, rhs: Password) -> Bool {
 }
 
 public protocol Passwords {
-    func get(options: QueryOptions, complete: (cursor: Cursor) -> Void)
+    func get(options: QueryOptions, complete: (cursor: Cursor<Password>) -> Void)
     func add(password: Password, complete: (success: Bool) -> Void)
     func remove(password: Password, complete: (success: Bool) -> Void)
     func removeAll(complete: (success: Bool) -> Void)
@@ -136,7 +136,7 @@ public class MockPasswords : Passwords {
         passwordsCache.append(Password(site: site, username: "Something", password: "else"))
     }
 
-    public func get(options: QueryOptions, complete: (cursor: Cursor) -> Void) {
+    public func get(options: QueryOptions, complete: (cursor: Cursor<Password>) -> Void) {
         dispatch_async(dispatch_get_main_queue()) { _ in
             complete(cursor: ArrayCursor<Password>(data: self.passwordsCache))
         }
