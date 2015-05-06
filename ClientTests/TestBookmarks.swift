@@ -15,8 +15,8 @@ class TestBookmarks : ProfileTest {
             }
 
             let expectation = self.expectationWithDescription("asynchronous request")
-            profile.bookmarks.modelForRoot({ (model: BookmarksModel) in
-                XCTAssertEqual(model.current.count, 11, "We create \(model.current.count) stub bookmarks.")
+            profile.bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID, success: { (model: BookmarksModel) in
+                XCTAssertEqual(model.current.count, 11, "We create \(model.current.count) stub bookmarks in the Mobile Bookmarks folder.")
                 let bookmark = model.current[0]
                 XCTAssertTrue(bookmark is BookmarkItem)
                 XCTAssertEqual((bookmark as! BookmarkItem).url, "http://www.example.com/0", "Example URL found.")
