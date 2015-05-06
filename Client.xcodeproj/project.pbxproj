@@ -83,6 +83,8 @@
 		2853C5411AD84C6800C4F31D /* TabsPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2853C5401AD84C6800C4F31D /* TabsPayload.swift */; };
 		2853C5421AD84C6800C4F31D /* TabsPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2853C5401AD84C6800C4F31D /* TabsPayload.swift */; };
 		285D37E31ABCA69E000E1CF9 /* CryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C077971A3B064000834FE5 /* CryptoTests.swift */; };
+		285F2DC11AF80B4600211843 /* SQLiteBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285F2DC01AF80B4600211843 /* SQLiteBookmarks.swift */; };
+		285F2DC21AF80B4600211843 /* SQLiteBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285F2DC01AF80B4600211843 /* SQLiteBookmarks.swift */; };
 		2868FA061ADF7B69000D9B1D /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		2868FA231ADF7B70000D9B1D /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		287AC8661AF4776D00101515 /* TestSQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27D1ABB533A00877008 /* TestSQLiteHistory.swift */; };
@@ -1073,6 +1075,7 @@
 		28302E3F1AF0747800521E2E /* DatabaseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 		283306E81AB3BB87008999AC /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		2853C5401AD84C6800C4F31D /* TabsPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsPayload.swift; sourceTree = "<group>"; };
+		285F2DC01AF80B4600211843 /* SQLiteBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarks.swift; sourceTree = "<group>"; };
 		28786E541AB0F5FA009EA9EF /* DeferredTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeferredTests.swift; path = SyncTests/DeferredTests.swift; sourceTree = "<group>"; };
 		287DAA1E1AE06E5D0055AC35 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestExtensions.swift; sourceTree = "<group>"; };
@@ -1890,6 +1893,7 @@
 				2FCAE24D1ABB531100877008 /* GenericTable.swift */,
 				2FCAE2521ABB531100877008 /* RemoteTabsTable.swift */,
 				2FCAE2531ABB531100877008 /* SchemaTable.swift */,
+				285F2DC01AF80B4600211843 /* SQLiteBookmarks.swift */,
 				2FCAE2551ABB531100877008 /* SQLiteHistory.swift */,
 				2FCAE2561ABB531100877008 /* SQLitePasswords.swift */,
 				2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */,
@@ -3482,6 +3486,7 @@
 				2FCAE2731ABB531100877008 /* SQLitePasswords.swift in Sources */,
 				2FCAE2751ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift in Sources */,
 				2FCAE26A1ABB531100877008 /* GenericTable.swift in Sources */,
+				285F2DC11AF80B4600211843 /* SQLiteBookmarks.swift in Sources */,
 				28C4AB721AD42D4300D9ACE3 /* Clients.swift in Sources */,
 				2FCAE26F1ABB531100877008 /* RemoteTabsTable.swift in Sources */,
 				28E08C991AF44EF9009BA2FA /* SQLiteHistory.swift in Sources */,
@@ -3528,6 +3533,7 @@
 				283A2AD91AF0794D003C0A26 /* DatabaseError.swift in Sources */,
 				284AA3AD1AD4C386009041C5 /* Clients.swift in Sources */,
 				2FA435111ABB6829008031D1 /* Bookmarks.swift in Sources */,
+				285F2DC21AF80B4600211843 /* SQLiteBookmarks.swift in Sources */,
 				2FA4351D1ABB6831008031D1 /* FaviconsTable.swift in Sources */,
 				2FA4352B1ABB6836008031D1 /* SwiftData.swift in Sources */,
 				D33D6BC91ABCE8F60089DAB2 /* Thumbnails.swift in Sources */,
