@@ -42,8 +42,8 @@ class PasswordsTable<T>: GenericTable<Password> {
         switch (encryption) {
         case EncryptionType.AES256:
             let secret = SQLitePasswords.secretKey!
-            args.append((item.username as NSString).AES128EncryptWithKey(secret))
-            args.append((item.password as NSString).AES128EncryptWithKey(secret))
+            args.append(item.username.AES128EncryptWithKey(secret))
+            args.append(item.password.AES128EncryptWithKey(secret))
             args.append(EncryptionType.AES256.rawValue)
         default:
             args.append(item.username)
@@ -68,9 +68,9 @@ class PasswordsTable<T>: GenericTable<Password> {
         switch (encryption) {
         case EncryptionType.AES256:
             let secret = SQLitePasswords.secretKey!
-            args.append((item.password as NSString).AES128EncryptWithKey(secret))
+            args.append(item.password.AES128EncryptWithKey(secret))
             args.append(EncryptionType.AES256.rawValue)
-            args.append((item.username as NSString).AES128EncryptWithKey(secret))
+            args.append(item.username.AES128EncryptWithKey(secret))
         default:
             args.append(item.password)
             args.append(EncryptionType.NONE.rawValue)
@@ -85,11 +85,12 @@ class PasswordsTable<T>: GenericTable<Password> {
         var args = [AnyObject?]()
         if let pw = item {
             args.append(pw.hostname)
-            // Unfortunately, this will fail if the password is encrypted and encryption is turned off...
+
+            // Unfortunately, this will fail if the password is encrypted and encryption is turned off.
             switch (encryption) {
             case EncryptionType.AES256:
                 let secret = SQLitePasswords.secretKey!
-                args.append((pw.username as NSString).AES128EncryptWithKey(secret))
+                args.append(pw.username.AES128EncryptWithKey(secret))
             default:
                 args.append(pw.username)
             }
