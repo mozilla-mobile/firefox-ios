@@ -1161,7 +1161,6 @@
 		2FCAE2451ABB531100877008 /* Passwords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Passwords.swift; sourceTree = "<group>"; };
 		2FCAE2471ABB531100877008 /* RemoteTabs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteTabs.swift; sourceTree = "<group>"; };
 		2FCAE2481ABB531100877008 /* Site.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Site.swift; sourceTree = "<group>"; };
-		2FCAE24A1ABB531100877008 /* BookmarksSqlite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksSqlite.swift; sourceTree = "<group>"; };
 		2FCAE24B1ABB531100877008 /* BrowserDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserDB.swift; sourceTree = "<group>"; };
 		2FCAE24C1ABB531100877008 /* FaviconsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaviconsTable.swift; sourceTree = "<group>"; };
 		2FCAE24D1ABB531100877008 /* GenericTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericTable.swift; sourceTree = "<group>"; };
@@ -1576,14 +1575,6 @@
 			path = SyncTests;
 			sourceTree = "<group>";
 		};
-		282915BD1AF1A0CA0006EEB5 /* Dead */ = {
-			isa = PBXGroup;
-			children = (
-				2FCAE24A1ABB531100877008 /* BookmarksSqlite.swift */,
-			);
-			name = Dead;
-			sourceTree = "<group>";
-		};
 		282915DF1AF1A5F90006EEB5 /* Dead */ = {
 			isa = PBXGroup;
 			children = (
@@ -1889,7 +1880,6 @@
 		2FCAE2491ABB531100877008 /* SQL */ = {
 			isa = PBXGroup;
 			children = (
-				282915BD1AF1A0CA0006EEB5 /* Dead */,
 				2FCAE24B1ABB531100877008 /* BrowserDB.swift */,
 				2FCAE24C1ABB531100877008 /* FaviconsTable.swift */,
 				2FCAE24D1ABB531100877008 /* GenericTable.swift */,
