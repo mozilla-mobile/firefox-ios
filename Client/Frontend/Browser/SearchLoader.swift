@@ -33,8 +33,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 return
             }
 
-            let options = QueryOptions(filter: query, filterType: FilterType.Url, sort: QuerySort.Frecency)
-            self.history.get(options).uponQueue(dispatch_get_main_queue()) { result in
+            self.history.getSitesByFrecencyWithLimit(100, whereURLContains: query).uponQueue(dispatch_get_main_queue()) { result in
                 // Failed cursors are excluded in .get().
                 if let cursor = result.successValue {
                     self.load(cursor)
