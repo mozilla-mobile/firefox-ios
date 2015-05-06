@@ -6,6 +6,12 @@ import Shared
 
 public typealias GUID = String
 
+public class IgnoredSiteError: ErrorType {
+    public var description: String {
+        return "Ignored site."
+    }
+}
+
 /**
  * The base history protocol for front-end code.
  *
@@ -14,9 +20,37 @@ public typealias GUID = String
  * `clear` might or might not need to set a bunch of flags to upload deletions.
  */
 public protocol BrowserHistory {
-    func clear() -> Success
-    func get(options: QueryOptions?) -> Deferred<Result<Cursor>>
-    func addVisit(visit: SiteVisit) -> Success
+    func addLocalVisit(visit: SiteVisit) -> Success
+    func clearHistory() -> Success
+
+    func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>>
+    func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>>
+    func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>>
+}
+
+// TODO: rip this out.
+public class MockBrowserHistory: BrowserHistory {
+    public init() {}
+
+    public func addLocalVisit(visit: SiteVisit) -> Success {
+        return succeed()
+    }
+
+    public func clearHistory() -> Success {
+        return succeed()
+    }
+
+    public func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
+        return deferResult(DatabaseError(err: nil))
+    }
+
+    public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
+        return deferResult(DatabaseError(err: nil))
+    }
+
+    public func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
+        return deferResult(DatabaseError(err: nil))
+    }
 }
 
 /**

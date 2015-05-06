@@ -88,14 +88,15 @@ class PasswordHelper: BrowserHelper {
 
         profile.passwords.get(QueryOptions(filter: password.hostname), complete: { data in
             for i in 0..<data.count {
-                let savedPassword = data[i] as! Password
-                if savedPassword.username == password.username {
-                    if savedPassword.password == password.password {
+                if let savedPassword = data[i] {
+                    if savedPassword.username == password.username {
+                        if savedPassword.password == password.password {
+                            return
+                        }
+
+                        self.promptUpdate(password)
                         return
                     }
-
-                    self.promptUpdate(password)
-                    return
                 }
             }
 
@@ -163,7 +164,7 @@ class PasswordHelper: BrowserHelper {
         profile.passwords.get(QueryOptions(filter: password.hostname), complete: { (cursor) -> Void in
             var logins = [[String: String]]()
             for i in 0..<cursor.count {
-                let password = cursor[i] as! Password
+                let password = cursor[i]!
                 logins.append(password.toDict())
             }
 
@@ -209,7 +210,7 @@ class PasswordHelper: BrowserHelper {
             // Otherwise, try to look one up
             let options = QueryOptions(filter: challenge.protectionSpace.host, filterType: .None, sort: .None)
             profile.passwords.get(options, complete: { (cursor) -> Void in
-                var password = cursor[0] as? Password
+                var password = cursor[0]
                 if password == nil {
                     password = Password(credential: nil, protectionSpace: challenge.protectionSpace)
                 }

@@ -2,13 +2,36 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Shared
 import UIKit
 
 /* The base favicons protocol */
+// TODO: Deferred, make this less generic.
 public protocol Favicons {
     var defaultIcon: UIImage { get }
 
-    func clear(options: QueryOptions?, complete: ((success: Bool) -> Void)?)
-    func get(options: QueryOptions?, complete: (data: Cursor) -> Void)
-    func add(icon: Favicon, site: Site, complete: ((success: Bool) -> Void)?)
+    func clearFavicons() -> Success
+    func addFavicon(icon: Favicon) -> Deferred<Result<Int>>
+    func addFavicon(icon: Favicon, forSite site: Site) -> Deferred<Result<Int>>
+}
+
+// TODO: rip this back out.
+public class MockFavicons: Favicons {
+    public init() {}
+
+    lazy public var defaultIcon: UIImage = {
+        return UIImage(named: "defaultFavicon")!
+    }()
+
+    public func clearFavicons() -> Success {
+        return succeed()
+    }
+
+    public func addFavicon(icon: Favicon) -> Deferred<Result<Int>> {
+        return deferResult(-1)
+    }
+
+    public func addFavicon(icon: Favicon, forSite site: Site) -> Deferred<Result<Int>> {
+        return deferResult(-1)
+    }
 }

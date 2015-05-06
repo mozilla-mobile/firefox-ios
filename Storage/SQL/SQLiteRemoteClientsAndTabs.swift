@@ -138,7 +138,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     public func getClients() -> Deferred<Result<[RemoteClient]>> {
         var err: NSError?
 
-        let clientCursor = db.query(&err) { connection, _ in
+        let clientCursor = db.withReadableConnection(&err) { connection, _ in
             return self.clients.query(connection, options: nil)
         }
 
@@ -147,7 +147,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             return Deferred(value: Result(failure: DatabaseError(err: err)))
         }
 
-        let clients = clientCursor.mapAsType(RemoteClient.self, f: { $0 })
+        let clients = clientCursor.asArray()
         clientCursor.close()
 
         return Deferred(value: Result(success: clients))
@@ -157,7 +157,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         var err: NSError?
 
         // Now find the clients.
-        let clientCursor = db.query(&err) { connection, _ in
+        let clientCursor = db.withReadableConnection(&err) { connection, _ in
             return self.clients.query(connection, options: nil)
         }
 
@@ -166,12 +166,12 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             return Deferred(value: Result(failure: DatabaseError(err: err)))
         }
 
-        let clients = clientCursor.mapAsType(RemoteClient.self, f: { $0 })
+        let clients = clientCursor.asArray()
         clientCursor.close()
 
         log.info("Found \(clients.count) clients in the DB.")
 
-        let tabCursor = db.query(&err) { connection, _ in
+        let tabCursor = db.withReadableConnection(&err) { connection, _ in
             return self.tabs.query(connection, options: nil)
         }
 
@@ -187,7 +187,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         // Aggregate clientGUID -> RemoteTab.
         var acc = [String: [RemoteTab]]()
         for tab in tabCursor {
-            if let tab = tab as? RemoteTab, guid = tab.clientGUID {
+            if let tab = tab, guid = tab.clientGUID {
                 if acc[guid] == nil {
                     acc[guid] = [tab]
                 } else {

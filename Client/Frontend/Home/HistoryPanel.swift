@@ -25,9 +25,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     private var sectionOffsets = [Int: Int]()
 
     override func reloadData() {
-        let opts = QueryOptions()
-        opts.sort = .LastVisit
-        profile.history.get(opts).uponQueue(dispatch_get_main_queue()) { result in
+        profile.history.getSitesByLastVisit(100).uponQueue(dispatch_get_main_queue()) { result in
             if let data = result.successValue {
                 self.sectionOffsets = [Int: Int]()
                 self.data = data
@@ -40,7 +38,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         let offset = sectionOffsets[indexPath.section]!
-        if let site = data[indexPath.row + offset] as? Site {
+        if let site = data[indexPath.row + offset] {
             if let cell = cell as? TwoLineTableViewCell {
                 cell.setLines(site.title, detailText: site.url)
                 if let img = site.icon {
@@ -57,7 +55,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let offset = sectionOffsets[indexPath.section]!
-        if let site = data[indexPath.row + offset] as? Site {
+        if let site = data[indexPath.row + offset] {
             if let url = NSURL(string: site.url) {
                 homePanelDelegate?.homePanel(self, didSelectURL: url)
                 return
@@ -129,7 +127,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         // Loop over all the data. Record the start of each "section" of our list.
         for i in 0..<data.count {
-            if let site = data[i] as? Site {
+            if let site = data[i] {
                 if !isInSection(site.latestVisit!.date, section: searchingSection) {
                     searchingSection++
                     sectionOffsets[searchingSection] = i
