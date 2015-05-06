@@ -223,6 +223,7 @@ class BrowserViewController: UIViewController {
                     self.homePanelController!.view.alpha = 1
                 }, completion: { _ in
                     self.webViewContainer.accessibilityElementsHidden = true
+                    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             })
 
             addChildViewController(homePanelController!)
@@ -241,6 +242,7 @@ class BrowserViewController: UIViewController {
                     self.homePanelController = nil
                     self.webViewContainer.accessibilityElementsHidden = false
                     self.toolbar?.hidden = false
+                    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
                 })
         }
     }
@@ -319,11 +321,12 @@ class BrowserViewController: UIViewController {
     }
 
     override func accessibilityPerformEscape() -> Bool {
-        if let selectedTab = tabManager.selectedTab {
-            if selectedTab.canGoBack {
-                tabManager.selectedTab?.goBack()
-               return true
-            }
+        if urlBar.isEditing {
+            urlBar.SELdidClickCancel()
+            return true
+        } else if let selectedTab = tabManager.selectedTab where selectedTab.canGoBack {
+            selectedTab.goBack()
+            return true
         }
         return false
     }
@@ -802,11 +805,13 @@ extension BrowserViewController: TabManagerDelegate {
         // and having multiple views with the same label confuses tests.
         if let wv = previous?.webView {
             wv.accessibilityLabel = nil
+            wv.accessibilityElementsHidden = true
         }
 
         if let wv = selected?.webView {
             wv.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the web view")
             webViewContainer.addSubview(wv)
+            wv.accessibilityElementsHidden = false
             if let url = wv.URL?.absoluteString {
                 profile.bookmarks.isBookmarked(url, success: { bookmarked in
                     self.toolbar?.updateBookmarkStatus(bookmarked)

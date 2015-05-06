@@ -11,8 +11,8 @@ enum ReaderModeBarButtonType {
 
     private var localizedDescription: String {
         switch self {
-        case .MarkAsRead: return NSLocalizedString("Mark as read", comment: "Name for Mark as read button in reader mode")
-        case .MarkAsUnread: return NSLocalizedString("Mark as unread", comment: "Name for Mark as unread button in reader mode")
+        case .MarkAsRead: return NSLocalizedString("Mark as Read", comment: "Name for Mark as read button in reader mode")
+        case .MarkAsUnread: return NSLocalizedString("Mark as Unread", comment: "Name for Mark as unread button in reader mode")
         case .Settings: return NSLocalizedString("Display Settings", comment: "Name for display settings button in reader mode. Display in the meaning of presentation, not monitor.")
         case .AddToReadingList: return NSLocalizedString("Add to Reading List", comment: "Name for button adding current article to reading list in reader mode")
         case .RemoveFromReadingList: return NSLocalizedString("Remove from Reading List", comment: "Name for button removing current article from reading list in reader mode")
