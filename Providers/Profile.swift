@@ -156,38 +156,41 @@ public class BrowserProfile: Profile {
 
     lazy var db: BrowserDB = {
         return BrowserDB(files: self.files)
-    } ()
-
-    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
-        return SQLiteBookmarks(db: self.db, favicons: self.places)
-//        return MockMemoryBookmarksStore()
-//        return BookmarksSqliteFactory(db: self.db)
     }()
 
-    lazy var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs)
-    } ()
 
-    func makePrefs() -> Prefs {
-        return NSUserDefaultsProfilePrefs(profile: self)
-    }
-
+    /**
+     * Favicons, history, and bookmarks are all stored in one intermeshed
+     * collection of tables.
+     */
     private lazy var places: protocol<BrowserHistory, Favicons> = {
         return SQLiteHistory(db: self.db)
     }()
 
     lazy var favicons: Favicons = {
         return self.places
-//        return SQLiteFavicons(db: self.db)
-    }()
-
-    lazy var prefs: Prefs = {
-        return self.makePrefs()
     }()
 
     lazy var history: BrowserHistory = {
         return self.places
     }()
+
+    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
+        return SQLiteBookmarks(db: self.db, favicons: self.places)
+    }()
+
+    lazy var searchEngines: SearchEngines = {
+        return SearchEngines(prefs: self.prefs)
+    }()
+
+    func makePrefs() -> Prefs {
+        return NSUserDefaultsProfilePrefs(profile: self)
+    }
+
+    lazy var prefs: Prefs = {
+        return self.makePrefs()
+    }()
+
 
     lazy var readingList: ReadingListService? = {
         return ReadingListService(profileStoragePath: self.files.rootPath)
