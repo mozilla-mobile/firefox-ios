@@ -370,8 +370,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func removeBookmark(url: String) {
-        var bookmark = BookmarkItem(guid: "", title: "", url: url)
-        profile.bookmarks.remove(bookmark, success: { success in
+        profile.bookmarks.removeByURL(url, success: { success in
             self.toolbar?.updateBookmarkStatus(!success)
             self.urlBar.updateBookmarkStatus(!success)
         }, failure: { err in
