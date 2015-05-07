@@ -10,6 +10,14 @@ public protocol Favicons {
     var defaultIcon: UIImage { get }
 
     func clearFavicons() -> Success
+
+    /**
+     * Returns the ID of the added favicon.
+     */
     func addFavicon(icon: Favicon) -> Deferred<Result<Int>>
+
+    /**
+     * Returns the ID of the added favicon.
+     */
     func addFavicon(icon: Favicon, forSite site: Site) -> Deferred<Result<Int>>
 }
