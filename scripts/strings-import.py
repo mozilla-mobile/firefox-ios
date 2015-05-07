@@ -13,7 +13,8 @@ from mod_pbxproj import XcodeProject, PBXFileReference, PBXBuildFile, PBXVariant
 TARGETS = {
     "Client":  {"path": "Client"},
     "ShareTo": {"path": "Extensions/ShareTo"},
-    "SendTo":  {"path": "Extensions/SendTo"}
+    "SendTo":  {"path": "Extensions/SendTo"},
+    "Shared":  {"path": "Shared"},
 }
 
 LOCALES_TO_SKIP = ['son']

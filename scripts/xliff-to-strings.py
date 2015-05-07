@@ -32,8 +32,15 @@ FILES = [
     "Client/Localizable.strings",
     "Client/search.strings",
     "Extensions/SendTo/SendTo.strings",
-    "Extensions/ShareTo/ShareTo.strings"
+    "Extensions/ShareTo/ShareTo.strings",
+    "Shared/Localizable.strings",
 ]
+
+# Because Xcode is unpredictable. See bug 1162510 - Sync.strings are not imported
+FILENAME_OVERRIDES = {
+    "Sync.strings": "Shared/Localizable.strings", # TODO This can go away when all the XLIFF files have been updated to use Shared.strings
+    "Shared.strings": "Shared/Localizable.strings",
+}
 
 def export_xliff_file(file_node, export_path, target_language):
     directory = os.path.dirname(export_path)
@@ -109,6 +116,7 @@ if __name__ == "__main__":
             # export root.
             for file_node in file_nodes:
                 original = file_node.get('original')
+                original = FILENAME_OVERRIDES.get(original, original)
                 if original in FILES:
                     export_path = original_path(export_root, target_language, original)
                     print "  Writing", export_path, target_language
