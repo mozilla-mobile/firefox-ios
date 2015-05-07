@@ -67,10 +67,10 @@ public class BrowserTable: Table {
         let type = BookmarkNodeType.Folder.rawValue
         let root = BookmarkRoots.RootID
 
-        let titleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Bookmarks", comment:"The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
-        let titleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Bookmarks", comment:"The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
-        let titleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Bookmarks", comment:"The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
-        let titleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Bookmarks", comment:"The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+        let titleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
+        let titleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
+        let titleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
+        let titleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,
