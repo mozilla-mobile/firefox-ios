@@ -542,8 +542,8 @@ private class SuggestionCell: UITableViewCell {
     private override func layoutSubviews() {
         super.layoutSubviews()
 
-        // The left bounds of the suggestions align with where text would be displayed.
-        let textLeft: CGFloat = 64
+        // The left bounds of the suggestions, aligned with where text would be displayed.
+        let textLeft: CGFloat = 48
 
         // The maximum width of the container, after which suggestions will wrap to the next line.
         let maxWidth = contentView.frame.width
@@ -596,7 +596,7 @@ private class SuggestionCell: UITableViewCell {
         container.frame = frame
 
         let imageY = (frame.size.height - 24) / 2
-        imageView!.frame = CGRectMake(20, imageY, 24, 24)
+        imageView!.frame = CGRectMake(12, imageY, 24, 24)
     }
 }
 

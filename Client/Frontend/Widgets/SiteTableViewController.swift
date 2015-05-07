@@ -83,6 +83,9 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag
         tableView.backgroundColor = AppConstants.PanelBackgroundColor
         tableView.accessibilityIdentifier = "SiteTable"
+
+        // Set an empty footer to prevent empty cells from appearing in the list.
+        tableView.tableFooterView = UIView()
     }
 
     func reloadData() {
