@@ -20,7 +20,6 @@ class BrowserViewController: UIViewController {
     private var urlBar: URLBarView!
     private var readerModeBar: ReaderModeBarView!
     private var toolbar: BrowserToolbar?
-    private var tabManager: TabManager!
     private var homePanelController: HomePanelViewController?
     private var searchController: SearchViewController?
     private var webViewContainer: UIView!
@@ -29,6 +28,11 @@ class BrowserViewController: UIViewController {
     private var homePanelIsInline = false
     private var searchLoader: SearchLoader!
     private var snackBars = UIView()
+
+    // This is public because the AppDelegate needs it when showing the settings. This is unfortunate
+    // and we should find a way to better organize that code in the future.
+    var tabManager: TabManager!
+    weak var tabTrayController: TabTrayController!
 
     let profile: Profile
 
@@ -47,6 +51,14 @@ class BrowserViewController: UIViewController {
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func supportedInterfaceOrientations() -> Int {
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+            return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
+        } else {
+            return Int(UIInterfaceOrientationMask.All.rawValue)
+        }
     }
 
     private func didInit() {
@@ -134,7 +146,20 @@ class BrowserViewController: UIViewController {
         if (tabManager.count == 0) {
             tabManager.addTab()
         }
+
+        // On iPhone, if we are about to show the On-Boarding, blank out the browser so that it does
+        // not flash before we present. This change of alpha also participates in the animation when
+        // the intro view is dismissed.
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+            self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
+        }
+
         super.viewWillAppear(animated)
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        presentIntroViewController()
+        super.viewDidAppear(animated)
     }
 
     override func updateViewConstraints() {
@@ -368,17 +393,27 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
-        let controller = TabTrayController()
-        controller.profile = profile
-        controller.tabManager = tabManager
-        controller.transitioningDelegate = self
-        controller.modalPresentationStyle = .Custom
+        let tabTrayController = TabTrayController()
+        tabTrayController.profile = profile
+        tabTrayController.tabManager = tabManager
+        tabTrayController.transitioningDelegate = self
+        tabTrayController.modalPresentationStyle = .Custom
 
         if let tab = tabManager.selectedTab {
             tab.screenshot = screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1)
         }
 
-        presentViewController(controller, animated: true, completion: nil)
+        presentViewController(tabTrayController, animated: true, completion: nil)
+        self.tabTrayController = tabTrayController
+    }
+
+    func dismissTabTrayController(#animated: Bool, completion: () -> Void) {
+        if let tabTrayController = tabTrayController {
+            tabTrayController.dismissViewControllerAnimated(animated) {
+                completion()
+                self.tabTrayController = nil
+            }
+        }
     }
 
     func urlBarDidPressReaderMode(urlBar: URLBarView) {
@@ -1414,5 +1449,36 @@ private class BrowserScreenshotHelper: ScreenshotHelper {
         }
 
         return nil
+    }
+}
+
+extension BrowserViewController: IntroViewControllerDelegate {
+    func presentIntroViewController(force: Bool = false) {
+        if force || profile.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
+            let introViewController = IntroViewController()
+            introViewController.delegate = self
+            // On iPad we present it modally in a controller
+            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+                introViewController.preferredContentSize = CGSize(width: IntroViewControllerUX.Width, height: IntroViewControllerUX.Height)
+                introViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
+            }
+            presentViewController(introViewController, animated: false) {
+                self.profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
+            }
+        }
+    }
+
+    func introViewControllerDidFinish(introViewController: IntroViewController) {
+        introViewController.dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    func introViewControllerDidRequestToLogin(introViewController: IntroViewController) {
+        introViewController.dismissViewControllerAnimated(true, completion: { () -> Void in
+            // TODO When bug 1161151 has been resolved we can jump directly to the sign in screen
+            let settingsNavigationController = SettingsNavigationController()
+            settingsNavigationController.profile = self.profile
+            settingsNavigationController.tabManager = self.tabManager
+            self.presentViewController(settingsNavigationController, animated: true, completion: nil)
+        })
     }
 }

@@ -395,6 +395,8 @@
 		E487B24E1AC1C66400F3E86F /* FiraSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7571A793CF20022C5E0 /* FiraSans-SemiBold.ttf */; };
 		E487B24F1AC1CC9200F3E86F /* FiraSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4ECCDAD1AB131770005E717 /* FiraSans-Medium.ttf */; };
 		E487B2501AC1CC9800F3E86F /* FiraSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4B7B7521A793CF20022C5E0 /* FiraSans-Light.ttf */; };
+		E49943F51AE6879C00BF9DE4 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49943F41AE6879C00BF9DE4 /* IntroViewController.swift */; };
+		E49943F71AE69EDD00BF9DE4 /* Intro.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E49943F61AE69EDD00BF9DE4 /* Intro.xcassets */; };
 		E4A888161A95679500CDC337 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
 		E4A888171A95679500CDC337 /* FxA.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */; };
@@ -1311,6 +1313,8 @@
 		E4988B571A9B95FF008B8B92 /* FennecNightly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FennecNightly.entitlements; sourceTree = "<group>"; };
 		E4988B6E1A9B964B008B8B92 /* FennecNightly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FennecNightly.entitlements; sourceTree = "<group>"; };
 		E4988B6F1A9B965A008B8B92 /* FennecNightly.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FennecNightly.entitlements; sourceTree = "<group>"; };
+		E49943F41AE6879C00BF9DE4 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
+		E49943F61AE69EDD00BF9DE4 /* Intro.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Intro.xcassets; sourceTree = "<group>"; };
 		E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeUtils.swift; sourceTree = "<group>"; };
 		E4A961171AC041C40069AD6F /* ReadabilityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadabilityService.swift; sourceTree = "<group>"; };
 		E4A961331AC051360069AD6F /* ReadabilityBrowserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadabilityBrowserHelper.swift; sourceTree = "<group>"; };
@@ -2145,6 +2149,15 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		E49943F31AE6879C00BF9DE4 /* Intro */ = {
+			isa = PBXGroup;
+			children = (
+				E49943F41AE6879C00BF9DE4 /* IntroViewController.swift */,
+				E49943F61AE69EDD00BF9DE4 /* Intro.xcassets */,
+			);
+			path = Intro;
+			sourceTree = "<group>";
+		};
 		E4D567191ADECE2700F1EFE7 /* ReadingList */ = {
 			isa = PBXGroup;
 			children = (
@@ -2352,6 +2365,7 @@
 			isa = PBXGroup;
 			children = (
 				D3A994941A368691008AD1AC /* Browser */,
+				E49943F31AE6879C00BF9DE4 /* Intro */,
 				F84B21F51A0910F600AAB793 /* Reader */,
 				F84B22211A09122500AAB793 /* Home */,
 				2F44FC551A9E83E200FD20CC /* Settings */,
@@ -3253,6 +3267,7 @@
 			files = (
 				E4B7B77E1A793CF20022C5E0 /* FiraSans-SemiBold.ttf in Resources */,
 				F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */,
+				E49943F71AE69EDD00BF9DE4 /* Intro.xcassets in Resources */,
 				E4B7B7631A793CF20022C5E0 /* CharisSILI.ttf in Resources */,
 				E4CD9F541A71506400318571 /* Reader.html in Resources */,
 				E414F0791A8445A500283322 /* FennecAurora.entitlements in Resources */,
@@ -3709,6 +3724,7 @@
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineCell.swift in Sources */,
 				E42475DF1AB73B9B00B23D33 /* SWLongPressGestureRecognizer.m in Sources */,
+				E49943F51AE6879C00BF9DE4 /* IntroViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
