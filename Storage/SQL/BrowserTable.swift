@@ -169,9 +169,17 @@ public class BrowserTable: Table {
             log.debug("Skipping update from \(from) to \(to).")
             return true
         }
+        log.debug("Updating browser tables from \(from) to \(to).")
         return drop(db) && create(db, version: to)
     }
 
+    /**
+     * The Table mechanism expects to be able to check if a 'table' exists. In our (ab)use
+     * of Table, that means making sure that all of our tables and views exist.
+     * We do that by fetching all tables from sqlite_master with matching names, and verifying
+     * that we get back as many rows as we expect.
+     * Note that we don't check for views -- trust to luck.
+     */
     func exists(db: SQLiteDBConnection) -> Bool {
         let count = AllTables.count
         let orClause = join(" OR ", Array(count: count, repeatedValue: "name = ?"))
