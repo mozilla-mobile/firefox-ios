@@ -20,7 +20,7 @@ private struct TabTrayControllerUX {
     static let TabTitleTextFont = AppConstants.DefaultSmallFontBold
     static let CloseButtonSize = CGFloat(18.0)
     static let CloseButtonMargin = CGFloat(6.0)
-    static let CloseButtonEdgeInset = CGFloat(3.0)
+    static let CloseButtonEdgeInset = CGFloat(10)
     static let NumberOfColumnsCompact = 1
     static let NumberOfColumnsRegular = 3
 }
@@ -136,10 +136,10 @@ private class CustomCell: UICollectionViewCell {
 
         innerStroke.frame = background.frame
 
-        closeButton.frame = CGRect(x: backgroundHolder.frame.width - TabTrayControllerUX.CloseButtonSize - TabTrayControllerUX.CloseButtonMargin,
-            y: (TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.CloseButtonSize) / 2,
-            width: TabTrayControllerUX.CloseButtonSize,
-            height: TabTrayControllerUX.CloseButtonSize)
+        closeButton.snp_makeConstraints { make in
+            make.size.equalTo(title.snp_height)
+            make.trailing.centerY.equalTo(title)
+        }
 
         verticalCenter(titleText)
 
