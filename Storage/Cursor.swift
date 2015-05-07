@@ -63,7 +63,7 @@ public class Cursor<T>: TypedCursor {
     }
 
     public func generate() -> GeneratorOf<T?> {
-        var nextIndex = 0;
+        var nextIndex = 0
         return GeneratorOf<T?>() {
             if (nextIndex >= self.count || self.status != CursorStatus.Success) {
                 return nil
@@ -93,9 +93,9 @@ public class ArrayCursor<T> : Cursor<T> {
 
     public override var count : Int {
         if (status != .Success) {
-            return 0;
+            return 0
         }
-        return data.count;
+        return data.count
     }
 
     public init(data: [T], status: CursorStatus, statusMessage: String) {
@@ -110,9 +110,9 @@ public class ArrayCursor<T> : Cursor<T> {
     public override subscript(index: Int) -> T? {
         get {
             if (index >= data.count || index < 0 || status != .Success) {
-                return nil;
+                return nil
             }
-            return data[index];
+            return data[index]
         }
     }
 
