@@ -404,17 +404,16 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
             make.top.equalTo(self.view)
             make.height.equalTo(AppConstants.StatusBarHeight + AppConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
-            return
         }
 
         addTabButton.snp_makeConstraints { make in
-            make.right.equalTo(self.view).offset(-TabTrayControllerUX.ToolbarButtonOffset)
-            make.centerY.equalTo(self.navBar.snp_bottom).offset(-(AppConstants.ToolbarHeight/2))
+            make.trailing.bottom.equalTo(self.navBar)
+            make.size.equalTo(AppConstants.ToolbarHeight)
         }
 
         settingsButton.snp_makeConstraints { make in
-            make.left.equalTo(self.view).offset(TabTrayControllerUX.ToolbarButtonOffset)
-            make.centerY.equalTo(self.navBar.snp_bottom).offset(-(AppConstants.ToolbarHeight/2))
+            make.leading.bottom.equalTo(self.navBar)
+            make.size.equalTo(AppConstants.ToolbarHeight)
         }
 
         collectionView.snp_makeConstraints { make in
