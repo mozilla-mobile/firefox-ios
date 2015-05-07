@@ -37,7 +37,7 @@ private class CustomCell: UICollectionViewCell {
     let title: UIVisualEffectView
     let innerStroke: InnerStrokedView
     let favicon: UIImageView
-    let closeTab: UIButton
+    let closeButton: UIButton
     var animator: SwipeAnimator!
 
     weak var delegate: CustomCellDelegate?
@@ -77,11 +77,11 @@ private class CustomCell: UICollectionViewCell {
         self.titleText.numberOfLines = 1
         self.titleText.font = TabTrayControllerUX.TabTitleTextFont
 
-        self.closeTab = UIButton()
-        self.closeTab.setImage(UIImage(named: "stop"), forState: UIControlState.Normal)
-        self.closeTab.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
+        self.closeButton = UIButton()
+        self.closeButton.setImage(UIImage(named: "stop"), forState: UIControlState.Normal)
+        self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
 
-        self.title.addSubview(self.closeTab)
+        self.title.addSubview(self.closeButton)
         self.title.addSubview(self.titleText)
         self.title.addSubview(self.favicon)
 
@@ -136,7 +136,7 @@ private class CustomCell: UICollectionViewCell {
 
         innerStroke.frame = background.frame
 
-        closeTab.frame = CGRect(x: backgroundHolder.frame.width - TabTrayControllerUX.CloseButtonSize - TabTrayControllerUX.CloseButtonMargin,
+        closeButton.frame = CGRect(x: backgroundHolder.frame.width - TabTrayControllerUX.CloseButtonSize - TabTrayControllerUX.CloseButtonMargin,
             y: (TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.CloseButtonSize) / 2,
             width: TabTrayControllerUX.CloseButtonSize,
             height: TabTrayControllerUX.CloseButtonSize)
@@ -475,7 +475,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         }
 
         let screenshotAspectRatio = cell.frame.width / TabTrayControllerUX.CellHeight
-        cell.closeTab.addTarget(cell, action: "SELdidPressClose", forControlEvents: UIControlEvents.TouchUpInside)
+        cell.closeButton.addTarget(cell, action: "SELdidPressClose", forControlEvents: UIControlEvents.TouchUpInside)
 
         // calling setupFrames here fixes reused cells which don't get resized on rotation
         // TODO: is there a better way?
