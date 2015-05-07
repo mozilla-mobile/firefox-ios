@@ -1382,6 +1382,8 @@
 		E4D6BEB51A092E0300F538BD /* Fennec.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Fennec.entitlements; sourceTree = "<group>"; };
 		E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		E4D8F3B11ACDD5150005A2E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E4E0BB151AFBC9E4008D6260 /* Shared-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Shared-Bridging-Header.h"; sourceTree = "<group>"; };
+		E4E0BB171AFBC9E4008D6260 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4ECCD8C1AB091470005E717 /* Reader.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Reader.xcassets; sourceTree = "<group>"; };
 		E4ECCDAD1AB131770005E717 /* FiraSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Medium.ttf"; sourceTree = "<group>"; };
 		E4F21AA51A13C4A300B0FAAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -2232,6 +2234,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		E4E0BB141AFBC9E4008D6260 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				E4E0BB151AFBC9E4008D6260 /* Shared-Bridging-Header.h */,
+				E4E0BB161AFBC9E4008D6260 /* Supporting Files */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		E4E0BB161AFBC9E4008D6260 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E4E0BB171AFBC9E4008D6260 /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
@@ -2261,6 +2280,7 @@
 				D34DC84C1A16C40C00D49B7B /* Providers */,
 				E4D567191ADECE2700F1EFE7 /* ReadingList */,
 				E4D567281ADECE2800F1EFE7 /* ReadingListTests */,
+				E4E0BB141AFBC9E4008D6260 /* Shared */,
 				2FCAE21B1ABB51F800877008 /* Storage */,
 				2FCAE22A1ABB51F800877008 /* StorageTests */,
 				28CE83B91A1D1D3200576538 /* Sync */,
@@ -4272,7 +4292,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = Shared/Info.plist;
+				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -4320,7 +4340,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Shared/Info.plist;
+				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -4371,7 +4391,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Shared/Info.plist;
+				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -5233,7 +5253,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Shared/Info.plist;
+				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
