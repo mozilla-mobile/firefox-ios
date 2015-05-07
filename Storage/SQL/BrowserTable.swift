@@ -63,7 +63,7 @@ public class BrowserTable: Table {
         return true
     }
 
-    func prepopulate(db: SQLiteDBConnection) -> Bool {
+    func prepopulateRootFolders(db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.Folder.rawValue
         let root = BookmarkRoots.RootID
 
@@ -161,7 +161,7 @@ public class BrowserTable: Table {
         ]
         assert(queries.count == AllTablesAndViews.count, "Did you forget to add your table or view to the list?")
         return self.run(db, queries: queries) &&
-               self.prepopulate(db)
+               self.prepopulateRootFolders(db)
     }
 
     func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
