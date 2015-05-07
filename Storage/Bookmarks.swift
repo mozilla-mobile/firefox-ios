@@ -113,21 +113,21 @@ public class BookmarksModel {
     /**
      * Produce a new model rooted at the appropriate folder. Fails if the folder doesn't exist.
      */
-    public func selectFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func selectFolder(folder: BookmarkFolder, success: BookmarksModel -> (), failure: Any -> ()) {
         modelFactory.modelForFolder(folder, success: success, failure: failure)
     }
 
     /**
      * Produce a new model rooted at the appropriate folder. Fails if the folder doesn't exist.
      */
-    public func selectFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func selectFolder(guid: String, success: BookmarksModel -> (), failure: Any -> ()) {
         modelFactory.modelForFolder(guid, success: success, failure: failure)
     }
 
     /**
      * Produce a new model rooted at the base of the hierarchy. Should never fail.
      */
-    public func selectRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func selectRoot(success: BookmarksModel -> (), failure: Any -> ()) {
         modelFactory.modelForRoot(success, failure: failure)
     }
 
@@ -135,24 +135,24 @@ public class BookmarksModel {
      * Produce a new model rooted at the same place as this model. Can fail if
      * the folder has been deleted from the backing store.
      */
-    public func reloadData(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func reloadData(success: BookmarksModel -> (), failure: Any -> ()) {
         modelFactory.modelForFolder(current, success: success, failure: failure)
     }
 }
 
 public protocol BookmarksModelFactory {
-    func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ())
-    func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ())
+    func modelForFolder(folder: BookmarkFolder, success: BookmarksModel -> (), failure: Any -> ())
+    func modelForFolder(guid: String, success: BookmarksModel -> (), failure: Any -> ())
 
-    func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ())
+    func modelForRoot(success: BookmarksModel -> (), failure: Any -> ())
 
     // Whenever async construction is necessary, we fall into a pattern of needing
     // a placeholder that behaves correctly for the period between kickoff and set.
     var nullModel: BookmarksModel { get }
 
-    func isBookmarked(url: String, success: (Bool) -> (), failure: (Any) -> ())
-    func remove(bookmark: BookmarkNode, success: (Bool) -> (), failure: (Any) -> ())
-    func removeByURL(url: String, success: (Bool) -> Void, failure: (Any) -> Void)
+    func isBookmarked(url: String, success: Bool -> (), failure: Any -> ())
+    func remove(bookmark: BookmarkNode, success: Bool -> (), failure: Any -> ())
+    func removeByURL(url: String, success: Bool -> Void, failure: Any -> Void)
 }
 
 /*
