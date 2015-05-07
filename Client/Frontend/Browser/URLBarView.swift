@@ -107,23 +107,9 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         self.progressBar.hidden = true
         self.addSubview(progressBar)
 
-        tabsButton = InsetButton()
-        tabsButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-        tabsButton.setTitleColor(URLBarViewUX.BackgroundColor, forState: UIControlState.Normal)
-        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the urlbar tabs button")
-        tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
-        tabsButton.titleLabel?.layer.cornerRadius = 2
-        tabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
-        tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
-        tabsButton.titleLabel?.layer.anchorPoint = CGPoint(x: 0.5, y: URLBarViewUX.TabsButtonRotationOffset)
-        tabsButton.titleLabel?.snp_makeConstraints { make in
-            make.size.equalTo(URLBarViewUX.TabsButtonHeight)
-            return
-        }
+        tabsButton = makeTabsButton(0)
         tabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
-        tabsButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
-        tabsButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
-        self.addSubview(tabsButton)
+        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the browser toolbar")
 
         cancelButton = InsetButton()
         cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
@@ -144,8 +130,55 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
 
         self.helper = BrowserToolbarHelper(toolbar: self)
 
+        tabsButton.snp_makeConstraints { make in
+            make.centerY.equalTo(self.locationContainer)
+            make.trailing.equalTo(self)
+            make.width.height.equalTo(AppConstants.ToolbarHeight)
+        }
+
+        progressBar.snp_makeConstraints { make in
+            make.top.equalTo(self.snp_bottom)
+            make.width.equalTo(self)
+        }
+
+        locationView.snp_makeConstraints { make in
+            make.edges.equalTo(self.locationContainer).insets(EdgeInsetsMake(URLBarViewUX.TextFieldBorderWidth,
+                URLBarViewUX.TextFieldBorderWidth,
+                URLBarViewUX.TextFieldBorderWidth,
+                URLBarViewUX.TextFieldBorderWidth))
+        }
+
+        editTextField.snp_makeConstraints { make in
+            make.edges.equalTo(self.locationContainer)
+        }
+
+        cancelButton.snp_makeConstraints { make in
+            make.centerY.equalTo(self.locationContainer)
+            make.trailing.equalTo(self)
+        }
+
         // Make sure we hide any views that shouldn't be showing in non-editing mode
         finishEditingAnimation(false)
+    }
+
+    private func makeTabsButton(count: Int) -> UIButton {
+        let tabsButton = InsetButton()
+        tabsButton.setTitle(count.description, forState: UIControlState.Normal)
+        tabsButton.setTitleColor(URLBarViewUX.BackgroundColor, forState: UIControlState.Normal)
+        tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
+        tabsButton.titleLabel?.layer.cornerRadius = 2
+        tabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
+        tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        tabsButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
+        tabsButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
+
+        self.addSubview(tabsButton)
+
+        tabsButton.titleLabel?.snp_makeConstraints { make in
+            make.size.equalTo(URLBarViewUX.TabsButtonHeight)
+        }
+
+        return tabsButton
     }
 
     private func updateToolbarConstraints() {
@@ -194,40 +227,10 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     override func updateConstraints() {
         updateToolbarConstraints()
 
-        progressBar.snp_remakeConstraints { make in
-            make.top.equalTo(self.snp_bottom)
-            make.width.equalTo(self)
-        }
-
-        locationView.snp_remakeConstraints { make in
-            make.edges.equalTo(self.locationContainer).insets(EdgeInsetsMake(URLBarViewUX.TextFieldBorderWidth,
-                URLBarViewUX.TextFieldBorderWidth,
-                URLBarViewUX.TextFieldBorderWidth,
-                URLBarViewUX.TextFieldBorderWidth))
-            return
-        }
-
-        tabsButton.snp_remakeConstraints { make in
-            make.centerY.equalTo(self.locationContainer).offset((URLBarViewUX.TabsButtonRotationOffset - 0.5) * URLBarViewUX.TabsButtonHeight)
-            make.trailing.equalTo(self)
-            make.width.height.equalTo(AppConstants.ToolbarHeight)
-        }
-
-        editTextField.snp_remakeConstraints { make in
-            make.edges.equalTo(self.locationContainer)
-            return
-        }
-
-        cancelButton.snp_remakeConstraints { make in
-            make.centerY.equalTo(self.locationContainer)
-            make.trailing.equalTo(self)
-        }
-
         // Add an offset to the left for slide animation, and a bit of extra offset for spring bounces
         let leftOffset: CGFloat = self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer
         self.curveShape.snp_remakeConstraints { make in
             make.edges.equalTo(self).offset(EdgeInsetsMake(0, -leftOffset, 0, URLBarViewUX.URLBarCurveBounceBuffer))
-            return
         }
 
         updateLayoutForEditing(editing: isEditing, animated: false)
@@ -268,55 +271,38 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     }
 
     func updateTabCount(count: Int) {
+        // Make a clone of the tabs button.
+        let newTabsButton = makeTabsButton(count)
 
-        // make a 'clone' of the tabs button
-        let newTabsButton = InsetButton()
-        newTabsButton.setTitleColor(URLBarViewUX.BackgroundColor, forState: UIControlState.Normal)
-        newTabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
-        newTabsButton.titleLabel?.layer.cornerRadius = 2
-        newTabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
-        newTabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
-
-        self.addSubview(newTabsButton)
-
-        // copy constraints from original button for positioning
+        // Copy constraints from original button, offset by the anchor position.
         newTabsButton.snp_makeConstraints { make in
-            make.edges.equalTo(self.tabsButton)
+            make.size.centerX.equalTo(tabsButton)
+            make.centerY.equalTo(self.tabsButton).offset((URLBarViewUX.TabsButtonRotationOffset - 0.5) * URLBarViewUX.TabsButtonHeight)
         }
 
-        newTabsButton.titleLabel?.snp_makeConstraints { make in
-            make.size.equalTo(URLBarViewUX.TabsButtonHeight)
-            return
-        }
+        // Set the anchor to the bottom of the label so it flips up.
+        newTabsButton.titleLabel?.layer.anchorPoint = CGPoint(x: 0.5, y: URLBarViewUX.TabsButtonRotationOffset)
 
-        if let anchor = tabsButton.titleLabel?.layer.anchorPoint {
-            newTabsButton.titleLabel?.layer.anchorPoint = anchor
-        }
-
-        newTabsButton.setTitle(count.description, forState: .Normal)
-
-        // setup the rotation matrix
+        // Set up the rotation matrix.
         var flipTransform = CATransform3DIdentity
         flipTransform.m34 = -1.0 / 200.0 // add some perspective
         flipTransform = CATransform3DRotate(flipTransform, CGFloat(-M_PI_2), 1.0, 0.0, 0.0)
         newTabsButton.titleLabel?.layer.transform = flipTransform
 
-        // offset the target rotation by 180º so the new tab comes from the front and the old tab falls back
+        // Offset the target rotation by 180º so the new tab comes from the front and the old tab falls back.
         flipTransform = CATransform3DRotate(flipTransform, CGFloat(M_PI), 1.0, 0.0, 0.0)
-
 
         UIView.animateWithDuration(1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { _ in
                 newTabsButton.titleLabel?.layer.transform = CATransform3DIdentity
                 self.tabsButton.titleLabel?.layer.transform = flipTransform
                 self.tabsButton.alpha = 0
             }, completion: { _ in
-                // remove the clone and setup the actual tab button
+                // Remove the clone and set up the actual tabs button.
                 newTabsButton.removeFromSuperview()
                 self.tabsButton.alpha = 1
                 self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
                 self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
                 self.tabsButton.accessibilityValue = count.description
-                self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
         })
     }
 
