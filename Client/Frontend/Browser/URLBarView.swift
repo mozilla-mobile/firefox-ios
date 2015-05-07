@@ -144,6 +144,33 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
 
         self.helper = BrowserToolbarHelper(toolbar: self)
 
+        tabsButton.snp_makeConstraints { make in
+            make.centerY.equalTo(self.locationContainer).offset((URLBarViewUX.TabsButtonRotationOffset - 0.5) * URLBarViewUX.TabsButtonHeight)
+            make.trailing.equalTo(self)
+            make.width.height.equalTo(AppConstants.ToolbarHeight)
+        }
+
+        progressBar.snp_makeConstraints { make in
+            make.top.equalTo(self.snp_bottom)
+            make.width.equalTo(self)
+        }
+
+        locationView.snp_makeConstraints { make in
+            make.edges.equalTo(self.locationContainer).insets(EdgeInsetsMake(URLBarViewUX.TextFieldBorderWidth,
+                URLBarViewUX.TextFieldBorderWidth,
+                URLBarViewUX.TextFieldBorderWidth,
+                URLBarViewUX.TextFieldBorderWidth))
+        }
+
+        editTextField.snp_makeConstraints { make in
+            make.edges.equalTo(self.locationContainer)
+        }
+
+        cancelButton.snp_makeConstraints { make in
+            make.centerY.equalTo(self.locationContainer)
+            make.trailing.equalTo(self)
+        }
+
         // Make sure we hide any views that shouldn't be showing in non-editing mode
         finishEditingAnimation(false)
     }
@@ -194,40 +221,10 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     override func updateConstraints() {
         updateToolbarConstraints()
 
-        progressBar.snp_remakeConstraints { make in
-            make.top.equalTo(self.snp_bottom)
-            make.width.equalTo(self)
-        }
-
-        locationView.snp_remakeConstraints { make in
-            make.edges.equalTo(self.locationContainer).insets(EdgeInsetsMake(URLBarViewUX.TextFieldBorderWidth,
-                URLBarViewUX.TextFieldBorderWidth,
-                URLBarViewUX.TextFieldBorderWidth,
-                URLBarViewUX.TextFieldBorderWidth))
-            return
-        }
-
-        tabsButton.snp_remakeConstraints { make in
-            make.centerY.equalTo(self.locationContainer).offset((URLBarViewUX.TabsButtonRotationOffset - 0.5) * URLBarViewUX.TabsButtonHeight)
-            make.trailing.equalTo(self)
-            make.width.height.equalTo(AppConstants.ToolbarHeight)
-        }
-
-        editTextField.snp_remakeConstraints { make in
-            make.edges.equalTo(self.locationContainer)
-            return
-        }
-
-        cancelButton.snp_remakeConstraints { make in
-            make.centerY.equalTo(self.locationContainer)
-            make.trailing.equalTo(self)
-        }
-
         // Add an offset to the left for slide animation, and a bit of extra offset for spring bounces
         let leftOffset: CGFloat = self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer
         self.curveShape.snp_remakeConstraints { make in
             make.edges.equalTo(self).offset(EdgeInsetsMake(0, -leftOffset, 0, URLBarViewUX.URLBarCurveBounceBuffer))
-            return
         }
 
         updateLayoutForEditing(editing: isEditing, animated: false)
