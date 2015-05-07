@@ -185,11 +185,6 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
         let records = response.value
         let responseTimestamp = response.metadata.lastModifiedMilliseconds
 
-        func updateMetadata() -> Success {
-            self.lastFetched = responseTimestamp!
-            return succeed()
-        }
-
         log.debug("Got \(records.count) client records.")
 
         let ourGUID = self.scratchpad.clientGUID
@@ -221,6 +216,7 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
                         for (command) in commands {
                             command.run(self)
                         }
+                        self.lastFetched = responseTimestamp!
                         return succeed()
                 }
         }
