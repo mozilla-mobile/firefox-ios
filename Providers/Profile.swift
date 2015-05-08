@@ -167,13 +167,13 @@ public class BrowserProfile: Profile {
         return SQLiteHistory(db: self.db)
     }()
 
-    lazy var favicons: Favicons = {
+    var favicons: Favicons {
         return self.places
-    }()
+    }
 
-    lazy var history: BrowserHistory = {
+    var history: BrowserHistory {
         return self.places
-    }()
+    }
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         return SQLiteBookmarks(db: self.db, favicons: self.places)
