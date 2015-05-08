@@ -6,6 +6,10 @@ import Foundation
 import SnapKit
 
 
+class SnackBarUX {
+    static var MaxWidth: CGFloat = 400
+}
+
 /**
 A specialized version of UIButton for use in SnackBars. These are displayed evenly spaced in the bottom of the bar. The main convenience of these is that you can pass in a callback in the constructor (although these also style themselves appropriately).
 
@@ -174,7 +178,7 @@ class SnackBar: UIView {
         if traitCollection.horizontalSizeClass != .Regular {
             snackBarWidth = self.superview?.frame.width ?? 0
         } else {
-            snackBarWidth = 400
+            snackBarWidth = SnackBarUX.MaxWidth
         }
 
         // Now calculate how tall the label needs to be. This takes into account space taken up by the image.

@@ -638,7 +638,7 @@ extension BrowserViewController: BrowserDelegate {
                 self.snackBars.layer.borderWidth = 0
             } else {
                 make.centerX.equalTo(self.footer)
-                make.width.equalTo(400)
+                make.width.equalTo(SnackBarUX.MaxWidth)
                 self.snackBars.layer.borderColor = AppConstants.BorderColor.CGColor
                 self.snackBars.layer.borderWidth = 1
             }
