@@ -25,4 +25,5 @@ public struct AppConstants {
 
     static let PanelBackgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
     static let HighlightBlue = UIColor(red:0.3, green:0.62, blue:1, alpha:1)
+    static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.25)
 }
