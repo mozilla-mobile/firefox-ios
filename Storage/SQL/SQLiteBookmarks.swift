@@ -109,24 +109,22 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         return self.getChildrenWhere(sql, args: args, includeIcon: true)
     }
 
-    public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
-        let children = getChildren(folder.guid)
-        if children.status == .Failure {
-            failure(children.statusMessage)
-            return
-        }
-        let f = SQLiteBookmarkFolder(guid: folder.guid, title: folder.title, children: children)
-        success(BookmarksModel(modelFactory: self, root: f))
-    }
-
-    public func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    private func modelForFolder(guid: String, title: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
         let children = getChildren(guid)
         if children.status == .Failure {
             failure(children.statusMessage)
             return
         }
-        let f = SQLiteBookmarkFolder(guid: guid, title: "", children: children)
+        let f = SQLiteBookmarkFolder(guid: guid, title: title, children: children)
         success(BookmarksModel(modelFactory: self, root: f))
+    }
+
+    public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+        self.modelForFolder(folder.guid, title: folder.title, success: success, failure: failure)
+    }
+
+    public func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+        self.modelForFolder(guid, title: "", success: success, failure: failure)
     }
 
     public func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
