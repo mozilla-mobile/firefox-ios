@@ -21,10 +21,21 @@ func failOrSucceed(err: NSError?, op: String) -> Success {
     return failOrSucceed(err, op, ())
 }
 
+/*
+// Here's the Swift equivalent of the below.
+func simulatedFrecency(now: MicrosecondTimestamp, then: MicrosecondTimestamp, visitCount: Int) -> Double {
+    let ageMicroseconds = (now - then)
+    let ageDays = Double(ageMicroseconds) / 86400000000.0         // In SQL the .0 does the coercion.
+    let f = 100 * 225 / ((ageSeconds * ageSeconds) + 225)
+    return Double(visitCount) * max(1.0, f)
+}
+*/
+
 func getMicrosecondFrecencySQL(visitDateColumn: String, visitCountColumn: String) -> String {
-    let now = NSDate().timeIntervalSince1970
-    let age = "(\(now) - (\(visitDateColumn) / 1000)) / 86400"
-    return "\(visitCountColumn) * MAX(1, 100 * 225 / (\(age) * \(age) + 225))"
+    let now = NSDate.nowMicroseconds()
+    let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
+    let ageDays = "(\(now) - (\(visitDateColumn))) / \(microsecondsPerDay)"
+    return "\(visitCountColumn) * max(1, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
 }
 
 /**
