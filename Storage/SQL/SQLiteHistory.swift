@@ -22,9 +22,9 @@ func failOrSucceed(err: NSError?, op: String) -> Success {
 }
 
 func getMicrosecondFrecencySQL(visitDateColumn: String, visitCountColumn: String) -> String {
-    let now = NSDate().timeIntervalSince1970
-    let age = "(\(now) - (\(visitDateColumn) / 1000)) / 86400"
-    return "\(visitCountColumn) * MAX(1, 100 * 225 / (\(age) * \(age) + 225))"
+    let now = NSDate.nowMicroseconds()
+    let ageSeconds = "(\(now) - (\(visitDateColumn))) / 86400000000"
+    return "\(visitCountColumn) * MAX(1, 100 * 225 / (\(ageSeconds) * \(ageSeconds) + 225))"
 }
 
 /**
