@@ -1152,7 +1152,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     return
                 }
 
-                if let screenshot = self.screenshotHelper.takeScreenshot(tab, aspectRatio: CGFloat(ThumbnailCellUX.ImageAspectRatio), quality: 0.5) {
+                if let screenshot = self.screenshotHelper.takeThumbnailScreenshot(tab, aspectRatio: CGFloat(ThumbnailCellUX.ImageAspectRatio), quality: 0.5) {
                     let thumbnail = Thumbnail(image: screenshot)
                     self.profile.thumbnails.set(url, thumbnail: thumbnail, complete: nil)
                 }
@@ -1478,7 +1478,7 @@ private class BrowserScreenshotHelper: ScreenshotHelper {
         self.controller = controller
     }
 
-    func takeScreenshot(tab: Browser, aspectRatio: CGFloat, quality: CGFloat) -> UIImage? {
+    private func takeScreenshot(#captureWebViewContent: Bool, tab: Browser, aspectRatio: CGFloat, quality: CGFloat) -> UIImage? {
         if let url = tab.url {
             if url.absoluteString == HomeURL {
                 if let homePanel = controller?.homePanelController {
@@ -1486,11 +1486,24 @@ private class BrowserScreenshotHelper: ScreenshotHelper {
                 }
             } else {
                 let offset = CGPointMake(0, -tab.webView.scrollView.contentInset.top)
-                return tab.webView.screenshot(aspectRatio, offset: offset, quality: quality)
+
+                if captureWebViewContent {
+                    return tab.webView.contentScreenshot(offset: offset, quality: quality)
+                } else {
+                    return tab.webView.screenshot(aspectRatio, offset: offset, quality: 0.5)
+                }
             }
         }
 
         return nil
+    }
+
+    func takeScreenshot(tab: Browser, aspectRatio: CGFloat, quality: CGFloat) -> UIImage? {
+        return self.takeScreenshot(captureWebViewContent: true, tab: tab, aspectRatio: aspectRatio, quality: quality)
+    }
+
+    func takeThumbnailScreenshot(tab: Browser, aspectRatio: CGFloat, quality: CGFloat) -> UIImage? {
+        return self.takeScreenshot(captureWebViewContent: false, tab: tab, aspectRatio: aspectRatio, quality: quality)
     }
 }
 
