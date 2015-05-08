@@ -5,9 +5,10 @@
 import UIKit
 
 private let ImageSize: CGFloat = 24
-private let ImageMargin: CGFloat = 20
+private let ImageMargin: CGFloat = 12
 private let TextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x333333)
 private let DetailTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.darkGrayColor() : UIColor.grayColor()
+private let DetailTextTopMargin = CGFloat(5)
 
 class TwoLineTableViewCell: UITableViewCell {
     private let twoLineHelper = TwoLineCellHelper()
@@ -158,11 +159,11 @@ private class TwoLineCellHelper {
         let textLeft = ImageSize + 2 * ImageMargin
         let textLabelHeight = textLabel.intrinsicContentSize().height
         let detailTextLabelHeight = detailTextLabel.intrinsicContentSize().height
-        let contentHeight = textLabelHeight + detailTextLabelHeight + 1
+        let contentHeight = textLabelHeight + detailTextLabelHeight + DetailTextTopMargin
         imageView.frame = CGRectMake(ImageMargin, (height - ImageSize) / 2, ImageSize, ImageSize)
         textLabel.frame = CGRectMake(textLeft, (height - contentHeight) / 2,
             container.frame.width - textLeft - ImageMargin, textLabelHeight)
-        detailTextLabel.frame = CGRectMake(textLeft, textLabel.frame.maxY + 5,
+        detailTextLabel.frame = CGRectMake(textLeft, textLabel.frame.maxY + DetailTextTopMargin,
             container.frame.width - textLeft - ImageMargin, detailTextLabelHeight)
     }
 
