@@ -184,11 +184,10 @@ public class SQLiteHistory: BrowserHistory {
     private class func iconHistoryColumnFactory(row: SDRow) -> Site {
         let site = basicHistoryColumnFactory(row)
 
-        let iconURL = row["iconURL"] as? String
         if let iconType = row["iconType"] as? Int,
-            let iconURL = iconURL,
-            let iconDate = row["iconDate"] as? Double,
-            let iconID = row["iconID"] as? Int {
+           let iconURL = row["iconURL"] as? String,
+           let iconDate = row["iconDate"] as? Double,
+           let iconID = row["iconID"] as? Int {
                 let date = NSDate(timeIntervalSince1970: iconDate)
                 let icon = Favicon(url: iconURL, date: date, type: IconType(rawValue: iconType)!)
                 site.icon = icon
@@ -197,7 +196,7 @@ public class SQLiteHistory: BrowserHistory {
         return site
     }
 
-    private func runQuery<T>(sql: String, args: Args?, factory: (SDRow) -> T) -> Deferred<Result<Cursor<T>>> {
+    private func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
         func f(conn: SQLiteDBConnection, inout err: NSError?) -> Cursor<T> {
             return conn.executeQuery(sql, factory: factory, withArgs: args)
         }
@@ -250,7 +249,6 @@ extension SQLiteHistory: Favicons {
     public func clearFavicons() -> Success {
         var err: NSError? = nil
 
-        // TODO: this should happen asynchronously.
         db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
             err = conn.executeChange("DELETE FROM faviconSites", withArgs: nil)
             if err == nil {
@@ -265,7 +263,7 @@ extension SQLiteHistory: Favicons {
     public func addFavicon(icon: Favicon) -> Deferred<Result<Int>> {
         var err: NSError?
         let res = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
-            // Blind!
+            // Blind! We don't see failure here.
             let id = self.favicons.insertOrUpdate(conn, obj: icon)
             return id ?? 0
         }
@@ -284,7 +282,7 @@ extension SQLiteHistory: Favicons {
         func doChange(query: String, args: Args?) -> Deferred<Result<Int>> {
             var err: NSError?
             let res = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
-                // Blind!
+                // Blind! We don't see failure here.
                 let id = self.favicons.insertOrUpdate(conn, obj: icon)
 
                 // Now set up the mapping.
