@@ -39,7 +39,7 @@ private let log = XCGLogger.defaultInstance()
  */
 public class BrowserTable: Table {
     var name: String { return "BROWSER" }
-    var version: Int { return 10 }
+    var version: Int { return 1 }
 
     public init() {
     }
@@ -169,15 +169,23 @@ public class BrowserTable: Table {
             log.debug("Skipping update from \(from) to \(to).")
             return true
         }
+
+        if from == 0 {
+            // This is likely an upgrade from before Bug 1160399.
+            log.debug("Updating browser tables from zero. Assuming drop and recreate.")
+            return drop(db) && create(db, version: to)
+        }
+
+        // TODO: real update!
         log.debug("Updating browser tables from \(from) to \(to).")
         return drop(db) && create(db, version: to)
     }
 
     /**
      * The Table mechanism expects to be able to check if a 'table' exists. In our (ab)use
-     * of Table, that means making sure that all of our tables and views exist.
+     * of Table, that means making sure that any of our tables and views exist.
      * We do that by fetching all tables from sqlite_master with matching names, and verifying
-     * that we get back as many rows as we expect.
+     * that we get back more than one.
      * Note that we don't check for views -- trust to luck.
      */
     func exists(db: SQLiteDBConnection) -> Bool {
@@ -187,11 +195,13 @@ public class BrowserTable: Table {
 
         let res = db.executeQuery(tablesSQL, factory: StringFactory, withArgs: AllTables)
         log.debug("\(res.count) tables exist. Expected \(count)")
-        return res.count == AllTables.count
+        return res.count > 0
     }
 
     func drop(db: SQLiteDBConnection) -> Bool {
-        let queries = AllViews.map { "DROP VIEW \($0)" } + AllTables.map { "DROP TABLE \($0)" }
+        log.debug("Dropping all browser tables.")
+        let queries = AllViews.map { "DROP VIEW IF EXISTS \($0!)" } +
+                      AllTables.map { "DROP TABLE IF EXISTS \($0!)" }
         return self.run(db, queries: queries)
     }
 }
