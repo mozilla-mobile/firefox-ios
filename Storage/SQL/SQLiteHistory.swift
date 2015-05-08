@@ -51,6 +51,9 @@ public class SQLiteHistory: BrowserHistory {
         self.db = db
         self.favicons = FaviconsTable<Favicon>()
         db.createOrUpdate(self.favicons)
+
+        // BrowserTable exists only to perform create/update etc. operations -- it's not
+        // a queryable thing that needs to stick around.
         db.createOrUpdate(BrowserTable())
     }
 
