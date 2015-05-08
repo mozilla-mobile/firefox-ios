@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import UIKit           // For UIImage only.
 import XCGLogger
 
 private let log = XCGLogger.defaultInstance()
@@ -36,10 +35,6 @@ public class SQLiteHistory: BrowserHistory {
     let favicons: FaviconsTable<Favicon>
 
     private var ignoredSchemes = ["about"]
-
-    lazy public var defaultIcon: UIImage = {
-        return UIImage(named: "defaultFavicon")!
-    }()
 
     required public init(db: BrowserDB) {
         self.db = db

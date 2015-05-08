@@ -9,6 +9,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var source: BookmarksModel?
 
+    private lazy var defaultIcon: UIImage = {
+        return UIImage(named: "defaultFavicon")!
+    }()
+
     override var profile: Profile! {
         didSet {
             // Until we have something useful to show for desktop bookmarks,
@@ -47,7 +51,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         if let source = source {
             if let bookmark = source.current[indexPath.row] {
                 if let favicon = bookmark.favicon {
-                    cell.imageView?.sd_setImageWithURL(NSURL(string: favicon.url)!, placeholderImage: profile.favicons.defaultIcon)
+                    cell.imageView?.setIcon(favicon, withPlaceholder: self.defaultIcon)
                 }
 
                 switch (bookmark) {
