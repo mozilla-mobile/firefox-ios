@@ -62,6 +62,8 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     var helper: BrowserToolbarHelper?
     var toolbarIsShowing = false
 
+    var backButtonLeftConstraint: Constraint?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         initViews()
@@ -189,7 +191,8 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     private func updateToolbarConstraints() {
         if toolbarIsShowing {
             backButton.snp_remakeConstraints { (make) -> () in
-                make.left.bottom.equalTo(self)
+                self.backButtonLeftConstraint = make.left.equalTo(self).constraint
+                make.bottom.equalTo(self)
                 make.height.equalTo(AppConstants.ToolbarHeight)
                 make.width.equalTo(AppConstants.ToolbarHeight)
             }
@@ -461,9 +464,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
             self.curveShape.transform = CGAffineTransformMakeTranslation(self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer, 0)
 
             if self.toolbarIsShowing {
-                self.forwardButton.transform = CGAffineTransformMakeTranslation(-3 * AppConstants.ToolbarHeight, 0)
-                self.backButton.transform = CGAffineTransformMakeTranslation(-3 * AppConstants.ToolbarHeight, 0)
-                self.stopReloadButton.transform = CGAffineTransformMakeTranslation(-3 * AppConstants.ToolbarHeight, 0)
+                self.backButtonLeftConstraint?.updateOffset(-3 * AppConstants.ToolbarHeight)
             }
         } else {
             self.tabsButton.transform = CGAffineTransformIdentity
@@ -471,9 +472,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
             self.curveShape.transform = CGAffineTransformIdentity
 
             if self.toolbarIsShowing {
-                self.forwardButton.transform = CGAffineTransformIdentity
-                self.backButton.transform = CGAffineTransformIdentity
-                self.stopReloadButton.transform = CGAffineTransformIdentity
+                self.backButtonLeftConstraint?.updateOffset(0)
             }
         }
     }
@@ -492,6 +491,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         prepareEditingAnimation(editing)
 
         if animated {
+            self.layoutIfNeeded()
             UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: nil, animations: { _ in
                 self.transitionToEditing(editing)
                 self.layoutIfNeeded()
