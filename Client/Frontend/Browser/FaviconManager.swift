@@ -50,7 +50,7 @@ class FaviconManager : BrowserHelper {
                                 return
                             }
                             self.browser?.favicons.append(fav)
-                            self.profile.favicons.add(fav, site: site, complete: nil)
+                            self.profile.favicons.addFavicon(fav, forSite: site)
                         })
                     }
                 }

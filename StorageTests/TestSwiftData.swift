@@ -6,6 +6,8 @@ import Foundation
 import XCTest
 import Storage
 
+
+// TODO: rewrite this test to not use HistoryTable.
 class TestSwiftData: XCTestCase {
     var swiftData: SwiftData!
 
@@ -26,6 +28,7 @@ class TestSwiftData: XCTestCase {
         SwiftData.EnableWAL = true
     }
 
+    /*
     func testNoWALOrConnectionReuse() {
         SwiftData.ReuseConnections = false
         SwiftData.EnableWAL = false
@@ -111,4 +114,5 @@ class TestSwiftData: XCTestCase {
             return err
         }
     }
+*/
 }

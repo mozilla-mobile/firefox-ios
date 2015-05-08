@@ -17,7 +17,7 @@ public enum IconType: Int {
     case Local = 4
 }
 
-public class Favicon : Identifiable {
+public class Favicon: Identifiable {
     var id: Int? = nil
     var img: UIImage? = nil
 
@@ -34,6 +34,8 @@ public class Favicon : Identifiable {
     }
 }
 
+// TODO: Site shouldn't have all of these optional decorators. Include those in the
+// cursor results, perhaps as a tuple.
 public class Site : Identifiable {
     var id: Int? = nil
     var guid: String? = nil

@@ -9,9 +9,18 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var source: BookmarksModel?
 
+    private lazy var defaultIcon: UIImage = {
+        return UIImage(named: "defaultFavicon")!
+    }()
+
     override var profile: Profile! {
         didSet {
-            profile.bookmarks.modelForRoot(self.onNewModel, failure: self.onModelFailure)
+            // Until we have something useful to show for desktop bookmarks,
+            // only show mobile bookmarks.
+            // Note that we also need to build a similar kind of virtual hierarchy
+            // to what we have on Android.
+            profile.bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID, success: self.onNewModel, failure: self.onModelFailure)
+            // profile.bookmarks.modelForRoot(self.onNewModel, failure: self.onModelFailure)
         }
     }
 
@@ -42,7 +51,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         if let source = source {
             if let bookmark = source.current[indexPath.row] {
                 if let favicon = bookmark.favicon {
-                    cell.imageView?.sd_setImageWithURL(NSURL(string: favicon.url)!, placeholderImage: profile.favicons.defaultIcon)
+                    cell.imageView?.setIcon(favicon, withPlaceholder: self.defaultIcon)
                 }
 
                 switch (bookmark) {
@@ -86,5 +95,34 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 break        // Just here until there's another executable statement (compiler requires one).
             }
         }
+    }
+
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        // Intentionally blank. Required to use UITableViewRowActions
+    }
+
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+        let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
+
+        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
+            if let bookmark = self.source?.current[indexPath.row] {
+                // Why the dispatches? Because we call success and failure on the DB
+                // queue, and so calling anything else that calls through to the DB will
+                // deadlock. This problem will go away when the bookmarks API switches to
+                // Deferred instead of using callbacks.
+                self.profile.bookmarks.remove(bookmark, success: { success in
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.source?.reloadData({ model in
+                            dispatch_async(dispatch_get_main_queue()) {
+                                self.source = model
+                                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+                            }
+                        }, failure: self.onModelFailure)
+                    }
+                }, failure: self.onModelFailure)
+            }
+        })
+
+        return [delete]
     }
 }
