@@ -88,15 +88,14 @@ class PasswordHelper: BrowserHelper {
 
         profile.passwords.get(QueryOptions(filter: password.hostname), complete: { data in
             for i in 0..<data.count {
-                if let savedPassword = data[i] {
-                    if savedPassword.username == password.username {
-                        if savedPassword.password == password.password {
-                            return
-                        }
-
-                        self.promptUpdate(password)
+                let savedPassword = data[i]!
+                if savedPassword.username == password.username {
+                    if savedPassword.password == password.password {
                         return
                     }
+
+                    self.promptUpdate(password)
+                    return
                 }
             }
 
