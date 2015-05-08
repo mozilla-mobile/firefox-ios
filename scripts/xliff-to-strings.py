@@ -38,8 +38,7 @@ FILES = [
 
 # Because Xcode is unpredictable. See bug 1162510 - Sync.strings are not imported
 FILENAME_OVERRIDES = {
-    "Sync.strings": "Shared/Localizable.strings", # TODO This can go away when all the XLIFF files have been updated to use Shared.strings
-    "Shared.strings": "Shared/Localizable.strings",
+    "Shared/Supporting Files/Info.plist": "Shared/Localizable.strings",
 }
 
 def export_xliff_file(file_node, export_path, target_language):
