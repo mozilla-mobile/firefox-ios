@@ -158,10 +158,15 @@ private class CustomCell: UICollectionViewCell {
         verticalCenter(tv)
     }
 
+    private override func prepareForReuse() {
+        // Reset any close animations.
+        backgroundHolder.transform = CGAffineTransformIdentity
+        backgroundHolder.alpha = 1
+    }
+
     private func verticalCenter(text: UILabel) {
         var top = (TabTrayControllerUX.TextBoxHeight - text.bounds.height) / 2.0
-        top = top < 0.0 ? 0.0 : top
-        text.frame.origin = CGPoint(x: text.frame.origin.x, y: top)
+        text.frame.origin = CGPoint(x: text.frame.origin.x, y: max(0, top))
     }
 
     func showFullscreen(container: UIView, table: UICollectionView, shouldOffset: Bool) {
@@ -316,7 +321,7 @@ private class SwipeAnimator: NSObject {
             self.animatingView.center = animatedPosition
         }, completion: { finished in
             if finished {
-                self.animatingView.hidden = true
+                self.animatingView.alpha = 0
                 self.delegate?.swipeAnimator(self, viewDidExitContainerBounds: self.animatingView)
             }
         })
