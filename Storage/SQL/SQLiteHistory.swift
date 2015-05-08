@@ -76,23 +76,23 @@ public class SQLiteHistory: BrowserHistory {
         return failOrSucceed(err, "Clear")
     }
 
-    private func shouldAdd(url: String) -> Bool {
+    private func isIgnoredURL(url: String) -> Bool {
         if let url = NSURL(string: url) {
             if let scheme = url.scheme {
                 if let index = find(ignoredSchemes, scheme) {
-                    return false
+                    return true
                 }
             }
         }
 
-        return true
+        return false
     }
 
     func recordVisitedSite(site: Site) -> Success {
         var err: NSError? = nil
 
         // Don't store visits to sites with about: protocols
-        if !shouldAdd(site.url) {
+        if isIgnoredURL(site.url) {
             return deferResult(IgnoredSiteError())
         }
 
