@@ -7,8 +7,6 @@ import UIKit
 
 /* The base favicons protocol */
 public protocol Favicons {
-    var defaultIcon: UIImage { get }
-
     func clearFavicons() -> Success
 
     /**
