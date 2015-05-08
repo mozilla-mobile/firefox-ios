@@ -100,12 +100,13 @@ class BrowserViewController: UIViewController {
         return UIStatusBarStyle.Default
     }
 
-    func shouldShowToolbar() -> Bool {
-        return traitCollection.verticalSizeClass != .Compact && traitCollection.horizontalSizeClass != .Regular
+    func shouldShowToolbarForTraitCollection(newCollection: UITraitCollection) -> Bool {
+        return newCollection.verticalSizeClass != .Compact &&
+               newCollection.horizontalSizeClass != .Regular
     }
 
-    private func updateToolbarState() {
-        let showToolbar = shouldShowToolbar()
+    private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection) {
+        let showToolbar = shouldShowToolbarForTraitCollection(newCollection)
 
         urlBar.setShowToolbar(!showToolbar)
         toolbar?.removeFromSuperview()
@@ -126,10 +127,24 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
-        updateToolbarState()
+    override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+
+        updateToolbarStateForTraitCollection(newCollection)
         showToolbars(animated: false)
-        super.traitCollectionDidChange(previousTraitCollection)
+
+        // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
+        // performs a device rotation. Since scrolling calls
+        // _updateVisibleContentRects (https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/API/Cocoa/WKWebView.mm#L1430)
+        // this method nudges the web view's scroll view by a single pixel to force it to invalidate.
+        if let tab = self.tabManager.selectedTab {
+            let contentOffset = tab.webView.scrollView.contentOffset
+            coordinator.animateAlongsideTransition({ context in
+                tab.webView.scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
+            }, completion: { context in
+                tab.webView.scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
+            })
+        }
     }
 
     override func viewDidLoad() {
