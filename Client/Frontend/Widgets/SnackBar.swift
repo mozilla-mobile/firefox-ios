@@ -119,6 +119,9 @@ class SnackBar: UIView {
         buttonsView.drawTopBorder = true
         buttonsView.drawBottomBorder = true
         buttonsView.drawSeperators = true
+
+        imageView.contentMode = UIViewContentMode.Center
+        textView.textContainerInset = UIEdgeInsets(top: AppConstants.DefaultPadding, left: 0, bottom: AppConstants.DefaultPadding, right: AppConstants.DefaultPadding)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -141,33 +144,51 @@ class SnackBar: UIView {
             return
         }
 
+        let imageHeight: CGFloat
+        let imageWidth: CGFloat
         if let img = imageView.image {
+            imageHeight = img.size.height + AppConstants.DefaultPadding * 2
+            imageWidth = img.size.width + AppConstants.DefaultPadding * 2
             imageView.snp_remakeConstraints({ make in
-                make.left.equalTo(self).offset(AppConstants.DefaultPadding)
-                make.top.equalTo(self).offset(AppConstants.DefaultPadding)
-                make.width.equalTo(img.size.width)
-                make.height.equalTo(img.size.height)
+                make.left.equalTo(self)
+                make.top.equalTo(self)
+                make.size.equalTo(CGSize(width: imageWidth, height: imageHeight))
             })
         } else {
+            imageHeight = 0
+            imageWidth = AppConstants.DefaultPadding
+
             imageView.snp_remakeConstraints({ make in
-                make.width.equalTo(0)
+                // To avoid doubling the padding, the textview doesn't have an inset on its left side.
+                // Instead, it relies on the imageView to tell it where its left side should be.
+                make.width.equalTo(imageWidth)
                 make.height.equalTo(0)
-                make.top.left.equalTo(self).offset(AppConstants.DefaultPadding)
+                make.top.equalTo(self)
+                make.left.equalTo(self)
             })
         }
 
-        let labelSize = self.textView.sizeThatFits(CGSizeMake(self.frame.width, CGFloat(MAXFLOAT)))
-        textView.textContainerInset = UIEdgeInsetsZero
-        textView.snp_remakeConstraints({ make in
-            make.top.equalTo(self.imageView.snp_top).offset(-5)
-            make.left.equalTo(self.imageView.snp_right)
+        // Find what size label will fit given this imageWidth
+        // On wide screen devices, our width will be fixed. That may not be known yet.
+        let snackBarWidth: CGFloat
+        if traitCollection.horizontalSizeClass != .Regular {
+            snackBarWidth = self.superview?.frame.width ?? 0
+        } else {
+            snackBarWidth = 400
+        }
 
+        // Now calculate how tall the label needs to be. This takes into account space taken up by the image.
+        let labelSize = self.textView.sizeThatFits(CGSizeMake(snackBarWidth - imageWidth, CGFloat.max))
+        textView.snp_remakeConstraints({ make in
+            make.top.equalTo(self.imageView.snp_top)
+            make.left.equalTo(self.imageView.snp_right)
             make.height.equalTo(labelSize.height)
             make.trailing.equalTo(self)
         })
 
         buttonsView.snp_remakeConstraints({ make in
-            make.bottom.equalTo(self)
+            // The buttons should be below the taller of the image or the text
+            make.top.equalTo(labelSize.height > imageHeight ? textView.snp_bottom : imageView.snp_bottom)
             make.left.right.equalTo(self)
             if self.buttonsView.subviews.count > 0 {
             	make.height.equalTo(AppConstants.ToolbarHeight)
@@ -176,15 +197,13 @@ class SnackBar: UIView {
             }
         })
 
+        // Now we adjust the snackbars height to make sure it wraps everything tightly.
         self.snp_makeConstraints({ make in
-            var h = labelSize.height
-            if let img = self.imageView.image {
-                h = AppConstants.DefaultPadding + max(img.size.height, labelSize.height)
-            }
-
-            let constraint = make.height.equalTo(h)
+            let h = max(imageHeight, labelSize.height)
             if (self.buttonsView.subviews.count > 0) {
-                constraint.offset(AppConstants.ToolbarHeight)
+                make.height.equalTo(h + AppConstants.ToolbarHeight)
+            } else {
+                make.height.equalTo(h)
             }
         })
     }
