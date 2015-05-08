@@ -9,7 +9,6 @@ import SnapKit
 
 private struct URLBarViewUX {
     // The color shown behind the tabs count button, and underneath the (mostly transparent) status bar.
-    static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
     static let TextFieldBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.05)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
     static let LocationLeftPadding = 5
@@ -23,6 +22,10 @@ private struct URLBarViewUX {
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
+
+    static func backgroundColorWithAlpha(alpha: CGFloat) -> UIColor {
+        return UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: alpha)
+    }
 }
 
 protocol URLBarDelegate: class {
@@ -72,6 +75,8 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     private func initViews() {
         curveShape = CurveView()
         self.addSubview(curveShape);
+
+        self.backgroundColor = URLBarViewUX.backgroundColorWithAlpha(0)
 
         locationContainer = UIView()
         locationContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -164,7 +169,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     private func makeTabsButton(count: Int) -> UIButton {
         let tabsButton = InsetButton()
         tabsButton.setTitle(count.description, forState: UIControlState.Normal)
-        tabsButton.setTitleColor(URLBarViewUX.BackgroundColor, forState: UIControlState.Normal)
+        tabsButton.setTitleColor(URLBarViewUX.backgroundColorWithAlpha(1), forState: UIControlState.Normal)
         tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
         tabsButton.titleLabel?.layer.cornerRadius = 2
         tabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
@@ -268,6 +273,12 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         updateLayoutForEditing(editing: true)
 
         delegate?.urlBar(self, didEnterText: text)
+    }
+
+    func updateAlphaForSubviews(alpha: CGFloat) {
+        self.tabsButton.alpha = alpha
+        self.locationContainer.alpha = alpha
+        self.backgroundColor = URLBarViewUX.backgroundColorWithAlpha(1 - alpha)
     }
 
     func updateTabCount(count: Int) {
@@ -539,6 +550,20 @@ private let H_M4 = 0.961
 
 /* Code for drawing the urlbar curve */
 private class CurveView: UIView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.commonInit()
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.commonInit()
+    }
+
+    func commonInit() {
+        self.opaque = false
+        self.contentMode = .Redraw
+    }
 
     func getWidthForHeight(height: Double) -> Double {
         return height * ASPECT_RATIO
@@ -563,23 +588,21 @@ private class CurveView: UIView {
         let path = UIBezierPath()
         self.drawFromTop(path)
         path.addLineToPoint(CGPoint(x: self.frame.width, y: AppConstants.ToolbarHeight + AppConstants.StatusBarHeight))
-        path.addLineToPoint(CGPoint(x: self.frame.width, y: -10))
-        path.addLineToPoint(CGPoint(x: 0, y: -10))
+        path.addLineToPoint(CGPoint(x: self.frame.width, y: 0))
+        path.addLineToPoint(CGPoint(x: 0, y: 0))
         path.addLineToPoint(CGPoint(x: 0, y: AppConstants.StatusBarHeight))
         path.closePath()
         return path
     }
 
-    override class func layerClass() -> AnyClass {
-        return CAShapeLayer.self
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if let layer = layer as? CAShapeLayer {
-            layer.path = self.getPath().CGPath
-            layer.fillColor = URLBarViewUX.BackgroundColor.CGColor
-        }
+    override func drawRect(rect: CGRect) {
+        let context = UIGraphicsGetCurrentContext()
+        CGContextSaveGState(context)
+        CGContextClearRect(context, rect)
+        CGContextSetFillColorWithColor(context, URLBarViewUX.backgroundColorWithAlpha(1).CGColor)
+        self.getPath().fill()
+        CGContextDrawPath(context, kCGPathFill)
+        CGContextRestoreGState(context)
     }
 }
 
