@@ -57,6 +57,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private let searchEngineScrollView = ButtonScrollView()
     private let searchEngineScrollViewContent = UIView()
 
+    private lazy var defaultIcon: UIImage = {
+        return UIImage(named: "defaultFavicon")!
+    }()
+
     // Cell for the suggestion flow layout. Since heightForHeaderInSection is called *before*
     // cellForRowAtIndexPath, we create the cell to find its height before it's added to the table.
     private let suggestionCell = SuggestionCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
@@ -430,12 +434,7 @@ extension SearchViewController: UITableViewDataSource {
             if let site = data[indexPath.row] {
                 if let cell = cell as? TwoLineTableViewCell {
                     cell.setLines(site.title, detailText: site.url)
-                    if let img = site.icon {
-                        let imgUrl = NSURL(string: img.url)
-                        cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
-                    } else {
-                        cell.imageView?.image = self.profile.favicons.defaultIcon
-                    }
+                    cell.imageView?.setIcon(site.icon, withPlaceholder: self.defaultIcon)
                 }
             }
             return cell

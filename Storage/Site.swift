@@ -17,7 +17,7 @@ public enum IconType: Int {
     case Local = 4
 }
 
-public class Favicon : Identifiable {
+public class Favicon: Identifiable {
     var id: Int? = nil
     var img: UIImage? = nil
 
