@@ -63,7 +63,8 @@ public class SQLiteBookmarks: BookmarksModelFactory {
                 return bookmark
 
             case .Folder:
-                let title = row["title"] as? String ?? "Untitled"     // TODO: l10n
+                let title = row["title"] as? String ??
+                NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark folders without titles.")
                 let folder = BookmarkFolder(guid: guid, title: title)
                 folder.id = id
                 return folder
