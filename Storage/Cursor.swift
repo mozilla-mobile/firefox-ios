@@ -13,10 +13,19 @@ public enum CursorStatus {
     case Closed
 }
 
+public protocol TypedCursor: SequenceType {
+    typealias T
+    var count: Int { get }
+    var status: CursorStatus { get }
+    var statusMessage: String { get }
+    subscript(index: Int) -> T? { get }
+    func asArray() -> [T]
+}
+
 /**
  * Provides a generic method of returning some data and status information about a request.
  */
-public class Cursor: SequenceType {
+public class Cursor<T>: TypedCursor {
     public var count: Int {
         get { return 0 }
     }
@@ -36,31 +45,26 @@ public class Cursor: SequenceType {
     }
 
     // Collection iteration and access functions
-    public subscript(index: Int) -> Any? {
+    public subscript(index: Int) -> T? {
         get { return nil }
     }
 
-    public func mapAsType<T, U>(type: T.Type, f: (T) -> U) -> [U] {
-        var acc = [U]()
+    public func asArray() -> [T] {
+        var acc = [T]()
+        acc.reserveCapacity(self.count)
         for row in self {
-            if let v = row as? T {
-                acc.append(f(v))
+            // Shouldn't ever be nil -- that's to allow the generator or subscript to be
+            // out of range.
+            if let row = row {
+                acc.append(row)
             }
         }
         return acc
     }
 
-    public func map<T>(f: (Any?) -> T?) -> [T?] {
-        var acc = [T?]()
-        for row in self {
-            acc.append(f(row))
-        }
-        return acc
-    }
-
-    public func generate() -> GeneratorOf<Any> {
-        var nextIndex = 0;
-        return GeneratorOf<Any>() {
+    public func generate() -> GeneratorOf<T?> {
+        var nextIndex = 0
+        return GeneratorOf<T?>() {
             if (nextIndex >= self.count || self.status != CursorStatus.Success) {
                 return nil
             }
@@ -84,14 +88,14 @@ public class Cursor: SequenceType {
 /*
  * A cursor implementation that wraps an array.
  */
-public class ArrayCursor<T : Any> : Cursor {
+public class ArrayCursor<T> : Cursor<T> {
     private var data : [T]
 
     public override var count : Int {
         if (status != .Success) {
-            return 0;
+            return 0
         }
-        return data.count;
+        return data.count
     }
 
     public init(data: [T], status: CursorStatus, statusMessage: String) {
@@ -103,12 +107,12 @@ public class ArrayCursor<T : Any> : Cursor {
         self.init(data: data, status: CursorStatus.Success, statusMessage: "Success")
     }
 
-    public override subscript(index: Int) -> Any? {
+    public override subscript(index: Int) -> T? {
         get {
             if (index >= data.count || index < 0 || status != .Success) {
-                return nil;
+                return nil
             }
-            return data[index];
+            return data[index]
         }
     }
 

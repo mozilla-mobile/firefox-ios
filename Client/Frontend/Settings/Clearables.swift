@@ -26,17 +26,16 @@ class HistoryClearable : Clearable {
         self.profile = profile
     }
 
+    // TODO: This can be cleaned up!
     func clear() -> Success {
         let deferred = Success()
-        profile.history.clear().upon { success in
+        profile.history.clearHistory().upon { success in
             self.profile.thumbnails.clear({ success in
                 SDImageCache.sharedImageCache().clearDisk()
                 SDImageCache.sharedImageCache().clearMemory()
-                self.profile.favicons.clear(nil, complete: { success in
-                    deferred.fill(success ? Result<()>(success: ()) :
-                                            Result<()>(failure: ClearableError(msg: "Could not clear favicons")))
-                    return
-                })
+                self.profile.favicons.clearFavicons().upon {
+                    deferred.fill($0)
+                }
             })
         }
         return deferred

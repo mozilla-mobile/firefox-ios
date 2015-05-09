@@ -14,11 +14,11 @@ class ClientTests: XCTestCase {
         let t = ArrayCursor<String>(data: data);
         
         // Test subscript access
-        XCTAssertNil(t[-1] as? String, "Subscript -1 returns nil");
-        XCTAssertEqual(t[0]! as! String, "One", "Subscript zero returns the correct data");
-        XCTAssertEqual(t[1]! as! String, "Two", "Subscript one returns the correct data");
-        XCTAssertEqual(t[2]! as! String, "Three", "Subscript two returns the correct data");
-        XCTAssertNil(t[3] as? String, "Subscript three returns nil");
+        XCTAssertNil(t[-1], "Subscript -1 returns nil");
+        XCTAssertEqual(t[0]!, "One", "Subscript zero returns the correct data");
+        XCTAssertEqual(t[1]!, "Two", "Subscript one returns the correct data");
+        XCTAssertEqual(t[2]!, "Three", "Subscript two returns the correct data");
+        XCTAssertNil(t[3], "Subscript three returns nil");
 
         // Test status data with default initializer
         XCTAssertEqual(t.status, CursorStatus.Success, "Cursor as correct status");
@@ -28,7 +28,7 @@ class ClientTests: XCTestCase {
         // Test generator access
         var i = 0;
         for s in t {
-            XCTAssertEqual(s as! String, data[i], "Subscript zero returns the correct data");
+            XCTAssertEqual(s!, data[i], "Subscript zero returns the correct data");
             i++;
         }
 
@@ -39,10 +39,10 @@ class ClientTests: XCTestCase {
         XCTAssertEqual(t2.count, 0, "Cursor as correct size");
 
         // Test subscript access return nil for a failed cursor
-        XCTAssertNil(t2[0] as? String, "Subscript zero returns nil if failure");
-        XCTAssertNil(t2[1] as? String, "Subscript one returns nil if failure");
-        XCTAssertNil(t2[2] as? String, "Subscript two returns nil if failure");
-        XCTAssertNil(t2[3] as? String, "Subscript three returns nil if failure");
+        XCTAssertNil(t2[0], "Subscript zero returns nil if failure");
+        XCTAssertNil(t2[1], "Subscript one returns nil if failure");
+        XCTAssertNil(t2[2], "Subscript two returns nil if failure");
+        XCTAssertNil(t2[3], "Subscript three returns nil if failure");
     
         // Test that generator doesn't work with failed cursors
         var ran = false;
