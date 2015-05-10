@@ -20,6 +20,7 @@ public class IgnoredSiteError: ErrorType {
 public protocol BrowserHistory {
     func addLocalVisit(visit: SiteVisit) -> Success
     func clearHistory() -> Success
+    func removeHistoryForURL(url: String) -> Success
 
     func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>>
     func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>>
@@ -31,12 +32,15 @@ public protocol BrowserHistory {
  * synced by a `HistorySynchronizer`.
  */
 public protocol SyncableHistory {
-    func ensurePlaceWithURL(url: String, hasGUID guid: GUID) -> Deferred<Result<()>>
-    func changeGUID(old: GUID, new: GUID) -> Deferred<Result<()>>
-    func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Deferred<Result<()>>
+    func ensurePlaceWithURL(url: String, hasGUID guid: GUID) -> Success
+    func changeGUID(old: GUID, new: GUID) -> Success
+    func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success
 
-    func insertOrReplaceRemoteVisits(visits: [Visit], forGUID guid: GUID) -> Deferred<Result<()>>
+    func storeRemoteVisits(visits: [Visit], forGUID guid: GUID) -> Success
     func insertOrUpdatePlace(place: RemotePlace) -> Deferred<Result<GUID>>
+
+    func getHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>>
+    func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>>
 }
 
 // TODO: integrate Site with these.
