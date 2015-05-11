@@ -78,6 +78,17 @@ public func optArrayEqual<T: Equatable>(lhs: [T]?, rhs: [T]?) -> Bool {
     }
 }
 
+/**
+ * Given an array, return an array of slices of size `by`.
+ */
+public func chunk<T>(arr: [T], #by: Int) -> [ArraySlice<T>] {
+    let count = arr.count
+    let s = stride(from: 0, to: count, by: by)
+    return map(s) {
+        arr[$0..<advance($0, by, count)]
+    }
+}
+
 public func optDictionaryEqual<K: Equatable, V: Equatable>(lhs: [K: V]?, rhs: [K: V]?) -> Bool {
     switch (lhs, rhs) {
     case (.None, .None):
