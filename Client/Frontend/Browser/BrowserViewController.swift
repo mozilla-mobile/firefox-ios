@@ -127,11 +127,11 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
+    override func traitCollectionDidChange(traitCollection: UITraitCollection?) {
         updateToolbarStateForTraitCollection(self.traitCollection)
         showToolbars(animated: false)
 
-        super.traitCollectionDidChange(previousTraitCollection)
+        super.traitCollectionDidChange(traitCollection)
     }
 
     override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
