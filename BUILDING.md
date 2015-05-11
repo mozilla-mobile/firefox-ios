@@ -85,7 +85,7 @@ Almost done. The one thing missing is that we need to adjust the following files
 * `Extensions/SendTo/Info.plist`
 * `Extensions/SendTo/Fennec.entitlements`
 
-In all these files, replace occurrences of `org.mozilla.ios` with `YOURREVERSEDOMAIN`.
+In all these files, replace occurrences of `org.mozilla.ios` with `YOURREVERSEDOMAIN`. Make sure you expand all the fields of the `.entitlements` files. Make sure you just replace the `org.mozilla.ios` part and keep prefixes like `group.` that some files contain.
 
 Before building, do *Product -> Clean Build Folder* (option-shift-command-k)
 
