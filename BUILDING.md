@@ -38,7 +38,7 @@ brew install carthage
 You can now execute our `checkout.sh` script:
 
 ```
-sh ./checkout.sh
+./checkout.sh
 ```
 
 At this point you have checked out the source code for both the Firefox for iOS project and it's dependencies. You can now build and run the application.
