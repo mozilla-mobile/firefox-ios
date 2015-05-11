@@ -57,4 +57,20 @@ class UtilsTests: XCTestCase {
         XCTAssertEqual("http://bar.com/noo?qqq=123", urlD.absoluteString!)
         XCTAssertEqual("http://foo.com/bar/?ppp=123&rrr=aaa", urlE.absoluteString!)
     }
+
+    func testChunk() {
+        let examples: [([Int], Int, [[Int]])] = [
+            ([], 2, []),
+            ([1, 2], 0, [[1], [2]]),
+            ([1, 2], 1, [[1], [2]]),
+            ([1, 2, 3], 2, [[1, 2], [3]]),
+            ([1, 2], 3, [[1, 2]]),
+            ([1, 2, 3], 1, [[1], [2], [3]]),
+        ]
+        for (arr, by, expected) in examples {
+            // Turn the ArraySlices back into Arrays for comparison.
+            let actual = chunk(arr, by: by).map { Array($0) }
+            XCTAssertEqual(actual, expected)
+        }
+    }
 }
