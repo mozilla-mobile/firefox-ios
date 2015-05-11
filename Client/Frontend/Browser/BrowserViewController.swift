@@ -8,6 +8,9 @@ import WebKit
 import Shared
 import Storage
 import SnapKit
+import XCGLogger
+
+private let log = XCGLogger.defaultInstance()
 
 private let OKString = NSLocalizedString("OK", comment: "OK button")
 private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
@@ -97,12 +100,13 @@ class BrowserViewController: UIViewController {
         return UIStatusBarStyle.Default
     }
 
-    func shouldShowToolbar() -> Bool {
-        return traitCollection.verticalSizeClass != .Compact && traitCollection.horizontalSizeClass != .Regular
+    func shouldShowToolbarForTraitCollection(newCollection: UITraitCollection) -> Bool {
+        return newCollection.verticalSizeClass != .Compact &&
+               newCollection.horizontalSizeClass != .Regular
     }
 
-    private func updateToolbarState() {
-        let showToolbar = shouldShowToolbar()
+    private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection) {
+        let showToolbar = shouldShowToolbarForTraitCollection(newCollection)
 
         urlBar.setShowToolbar(!showToolbar)
         toolbar?.removeFromSuperview()
@@ -123,10 +127,24 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
-        updateToolbarState()
+    override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+
+        updateToolbarStateForTraitCollection(newCollection)
         showToolbars(animated: false)
-        super.traitCollectionDidChange(previousTraitCollection)
+
+        // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
+        // performs a device rotation. Since scrolling calls
+        // _updateVisibleContentRects (https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/API/Cocoa/WKWebView.mm#L1430)
+        // this method nudges the web view's scroll view by a single pixel to force it to invalidate.
+        if let tab = self.tabManager.selectedTab {
+            let contentOffset = tab.webView.scrollView.contentOffset
+            coordinator.animateAlongsideTransition({ context in
+                tab.webView.scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
+            }, completion: { context in
+                tab.webView.scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
+            })
+        }
     }
 
     override func viewDidLoad() {
@@ -367,12 +385,11 @@ class BrowserViewController: UIViewController {
     }
 
     private func removeBookmark(url: String) {
-        var bookmark = BookmarkItem(guid: "", title: "", url: url)
-        profile.bookmarks.remove(bookmark, success: { success in
+        profile.bookmarks.removeByURL(url, success: { success in
             self.toolbar?.updateBookmarkStatus(!success)
             self.urlBar.updateBookmarkStatus(!success)
         }, failure: { err in
-                println("Err removing bookmark \(err)")
+            log.error("Error removing bookmark: \(err).")
         })
     }
 
@@ -528,7 +545,7 @@ extension BrowserViewController: URLBarDelegate {
 
         // If we still don't have a valid URL, something is broken. Give up.
         if url == nil {
-            println("Error handling URL entry: " + text)
+            log.error("Error handling URL entry: \"\(text)\".")
             return
         }
 
@@ -590,11 +607,11 @@ extension BrowserViewController: BrowserToolbarDelegate {
                     }
                 },
                 failure: { err in
-                    println("Bookmark error: \(err)")
+                    log.error("Bookmark error: \(err).")
                 }
             )
         } else {
-            println("Bookmark error: No tab is selected, or no URL in tab.")
+            log.error("Bookmark error: No tab is selected, or no URL in tab.")
         }
     }
 
@@ -903,7 +920,7 @@ extension BrowserViewController: TabManagerDelegate {
                     self.toolbar?.updateBookmarkStatus(bookmarked)
                     self.urlBar.updateBookmarkStatus(bookmarked)
                 }, failure: { err in
-                    println("Error getting bookmark status: \(err)")
+                    log.error("Error getting bookmark status: \(err).")
                 })
             } else {
                 // The web view can go gray if it was zombified due to memory pressure.
@@ -1096,7 +1113,7 @@ extension BrowserViewController: WKNavigationDelegate {
                         self.toolbar?.updateBookmarkStatus(bookmarked)
                         self.urlBar.updateBookmarkStatus(bookmarked)
                     }, failure: { err in
-                        println("Error getting bookmark status: \(err)")
+                        log.error("Error getting bookmark status: \(err).")
                     })
                 }
 
@@ -1231,7 +1248,7 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
         // If this reader mode availability state change is for the tab that we currently show, then update
         // the button. Otherwise do nothing and the button will be updated when the tab is made active.
         if tabManager.selectedTab == browser {
-            println("DEBUG: New readerModeState: \(state.rawValue)")
+            log.debug("New readerModeState: \(state.rawValue)")
             urlBar.updateReaderModeState(state)
         }
     }

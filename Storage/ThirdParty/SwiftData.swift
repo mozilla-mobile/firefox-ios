@@ -234,7 +234,7 @@ public class SQLiteDBConnection {
     public var version: Int {
         get {
             let res = executeQueryUnsafe("PRAGMA user_version", factory: IntFactory)
-            return res[0] as? Int ?? 0
+            return res[0] ?? 0
         }
 
         set {
@@ -252,7 +252,7 @@ public class SQLiteDBConnection {
 
         if SwiftData.EnableWAL {
             let cursor = executeQueryUnsafe("PRAGMA journal_mode=WAL", factory: StringFactory)
-            assert(cursor[0] as! String == "wal", "WAL journal mode set")
+            assert(cursor[0] == "wal", "WAL journal mode set")
         }
 
         if SwiftData.EnableForeignKeys {
@@ -336,14 +336,14 @@ public class SQLiteDBConnection {
 
     /// Queries the database.
     /// Returns a cursor pre-filled with the complete result set.
-    func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]? = nil) -> Cursor {
+    func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]? = nil) -> Cursor<T> {
         var error: NSError?
         let statement = SQLiteDBStatement(connection: self, query: sqlStr, args: args, error: &error)
         if let error = error {
-            return Cursor(err: error)
+            return Cursor<T>(err: error)
         }
 
-        return FilledSQLiteCursor(statement: statement!, factory: factory)
+        return FilledSQLiteCursor<T>(statement: statement!, factory: factory)
     }
 
     /**
@@ -351,7 +351,7 @@ public class SQLiteDBConnection {
      * Returns a live cursor that holds the query statement and database connection.
      * Instances of this class *must not* leak outside of the connection queue!
      */
-    func executeQueryUnsafe<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]? = nil) -> Cursor {
+    func executeQueryUnsafe<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]? = nil) -> Cursor<T> {
         var error: NSError?
         let statement = SQLiteDBStatement(connection: self, query: sqlStr, args: args, error: &error)
         if let error = error {
@@ -603,7 +603,7 @@ private class FilledSQLiteCursor<T>: ArrayCursor<T> {
 }
 
 /// Wrapper around a statement to help with iterating through the results.
-private class LiveSQLiteCursor<T>: Cursor {
+private class LiveSQLiteCursor<T>: Cursor<T> {
     private var statement: SQLiteDBStatement!
 
     // Function for generating objects of type T from a row.
@@ -678,7 +678,7 @@ private class LiveSQLiteCursor<T>: Cursor {
         return columns
     }()
 
-    override subscript(index: Int) -> Any? {
+    override subscript(index: Int) -> T? {
         get {
             if status != .Success {
                 return nil

@@ -63,7 +63,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
             reloadData()
         }
     }
-    var data: Cursor = Cursor(status: .Success, msg: "No data set")
+    var data: Cursor<Site> = Cursor<Site>(status: .Success, msg: "No data set")
     var tableView = UITableView()
 
     override func viewDidLoad() {
@@ -83,6 +83,9 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag
         tableView.backgroundColor = AppConstants.PanelBackgroundColor
         tableView.accessibilityIdentifier = "SiteTable"
+
+        // Set an empty footer to prevent empty cells from appearing in the list.
+        tableView.tableFooterView = UIView()
     }
 
     func reloadData() {

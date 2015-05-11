@@ -18,9 +18,10 @@ class TestSchemaTable: XCTestCase {
         // Now make sure the item is in the table-table
         var err: NSError? = nil
         let table = SchemaTable<TableInfo>()
-        var cursor = db.query(&err, callback: { (connection, err) -> Cursor in
+        var cursor = db.withReadableConnection(&err) { (connection, err) -> Cursor<TableInfo> in
             return table.query(connection, options: QueryOptions(filter: testTable.name))
-        })
+        }
+
         verifyTable(cursor, table: testTable)
         // We have to close this cursor to ensure we don't get results from a sqlite memory cache below when
         // we requery the table.
@@ -29,9 +30,9 @@ class TestSchemaTable: XCTestCase {
         // Now test updating the table
         testTable = getUpgradeTable()
         db.createOrUpdate(testTable)
-        cursor = db.query(&err, callback: { (connection, err) -> Cursor in
+        cursor = db.withReadableConnection(&err) { (connection, err) -> Cursor<TableInfo> in
             return table.query(connection, options: QueryOptions(filter: testTable.name))
-        })
+        }
         verifyTable(cursor, table: testTable)
         // We have to close this cursor to ensure we don't get results from a sqlite memory cache below when
         // we requery the table.
@@ -46,16 +47,16 @@ class TestSchemaTable: XCTestCase {
     }
 
     // Helper for verifying that the data in a cursor matches whats in a table
-    private func verifyTable(cursor: Cursor, table: TestTable) {
+    private func verifyTable(cursor: Cursor<TableInfo>, table: TestTable) {
         XCTAssertEqual(cursor.count, 1, "Cursor is the right size")
-        var data = cursor[0] as? TableInfoWrapper
+        var data = cursor[0] as! TableInfoWrapper
         XCTAssertNotNil(data, "Found an object of the right type")
-        XCTAssertEqual(data!.name, table.name, "Table info has the right name")
-        XCTAssertEqual(data!.version, table.version, "Table info has the right version")
+        XCTAssertEqual(data.name, table.name, "Table info has the right name")
+        XCTAssertEqual(data.version, table.version, "Table info has the right version")
     }
 
     // A test class for fake table creation/upgrades
-    class TestTable : Table {
+    class TestTable: Table {
         var name: String { return "testName" }
         var _version: Int = -1
         var version: Int { return _version }
@@ -107,7 +108,7 @@ class TestSchemaTable: XCTestCase {
         func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int { return -1 }
         func update(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int { return -1 }
         func delete(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int { return -1 }
-        func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor { return Cursor(status: .Failure, msg: "Shouldn't hit this") }
+        func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<Type> { return Cursor(status: .Failure, msg: "Shouldn't hit this") }
     }
 
     // This function will create a table with appropriate callbacks set. Pass "create" if you expect the table to

@@ -57,6 +57,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private let searchEngineScrollView = ButtonScrollView()
     private let searchEngineScrollViewContent = UIView()
 
+    private lazy var defaultIcon: UIImage = {
+        return UIImage(named: "defaultFavicon")!
+    }()
+
     // Cell for the suggestion flow layout. Since heightForHeaderInSection is called *before*
     // cellForRowAtIndexPath, we create the cell to find its height before it's added to the table.
     private let suggestionCell = SuggestionCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
@@ -379,7 +383,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         })
     }
 
-    func loader(dataLoaded data: Cursor) {
+    func loader(dataLoaded data: Cursor<Site>) {
         self.data = data
         tableView.reloadData()
     }
@@ -389,7 +393,7 @@ extension SearchViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let section = SearchListSection(rawValue: indexPath.section)!
         if section == SearchListSection.BookmarksAndHistory {
-            if let site = data[indexPath.row] as? Site {
+            if let site = data[indexPath.row] {
                 if let url = NSURL(string: site.url) {
                     searchDelegate?.searchViewController(self, didSelectURL: url)
                 }
@@ -427,15 +431,10 @@ extension SearchViewController: UITableViewDataSource {
 
         case .BookmarksAndHistory:
             let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
-            if let site = data[indexPath.row] as? Site {
+            if let site = data[indexPath.row] {
                 if let cell = cell as? TwoLineTableViewCell {
                     cell.setLines(site.title, detailText: site.url)
-                    if let img = site.icon {
-                        let imgUrl = NSURL(string: img.url)
-                        cell.imageView?.sd_setImageWithURL(imgUrl, placeholderImage: self.profile.favicons.defaultIcon)
-                    } else {
-                        cell.imageView?.image = self.profile.favicons.defaultIcon
-                    }
+                    cell.imageView?.setIcon(site.icon, withPlaceholder: self.defaultIcon)
                 }
             }
             return cell
@@ -542,8 +541,8 @@ private class SuggestionCell: UITableViewCell {
     private override func layoutSubviews() {
         super.layoutSubviews()
 
-        // The left bounds of the suggestions align with where text would be displayed.
-        let textLeft: CGFloat = 64
+        // The left bounds of the suggestions, aligned with where text would be displayed.
+        let textLeft: CGFloat = 48
 
         // The maximum width of the container, after which suggestions will wrap to the next line.
         let maxWidth = contentView.frame.width
@@ -596,7 +595,7 @@ private class SuggestionCell: UITableViewCell {
         container.frame = frame
 
         let imageY = (frame.size.height - 24) / 2
-        imageView!.frame = CGRectMake(20, imageY, 24, 24)
+        imageView!.frame = CGRectMake(12, imageY, 24, 24)
     }
 }
 

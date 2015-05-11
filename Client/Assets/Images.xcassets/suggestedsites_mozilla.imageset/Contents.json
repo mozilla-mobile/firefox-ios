@@ -1,19 +1,29 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
+      "idiom" : "iphone",
       "scale" : "1x",
-      "filename" : "suggestedsites_mozilla-1.png"
+      "filename" : "tile-mozilla.png"
     },
     {
-      "idiom" : "universal",
+      "idiom" : "iphone",
       "scale" : "2x",
-      "filename" : "suggestedsites_mozilla.png"
+      "filename" : "tile-mozilla@2x.png"
     },
     {
-      "idiom" : "universal",
+      "idiom" : "iphone",
       "scale" : "3x",
-      "filename" : "suggestedsites_mozilla-2.png"
+      "filename" : "tile-mozilla@3x.png"
+    },
+    {
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "filename" : "tile-mozilla-iPad.png"
+    },
+    {
+      "idiom" : "ipad",
+      "scale" : "2x",
+      "filename" : "tile-mozilla-iPad@2x.png"
     }
   ],
   "info" : {
