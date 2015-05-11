@@ -574,9 +574,9 @@ extension TabTrayController: Transitionable {
             // cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
             var hasToolbar = false
             if let fromView = options.fromView as? BrowserViewController {
-                hasToolbar = fromView.shouldShowToolbar()
+                hasToolbar = fromView.shouldShowToolbarForTraitCollection(self.traitCollection)
             } else if let toView = options.toView as? BrowserViewController {
-                hasToolbar = toView.shouldShowToolbar()
+                hasToolbar = toView.shouldShowToolbarForTraitCollection(self.traitCollection)
             }
 
             cell.showFullscreen(container, table: collectionView, shouldOffset: hasToolbar)
