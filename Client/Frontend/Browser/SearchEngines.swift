@@ -124,14 +124,26 @@ class SearchEngines {
     // particular order.
     class func getUnorderedEngines() -> [OpenSearchEngine] {
         var error: NSError?
-        let path = NSBundle.mainBundle().resourcePath?.stringByAppendingPathComponent("SearchPlugins/en")
 
-        if path == nil {
-            println("Error: Could not find search engine directory")
-            return []
+        let pluginBasePath = NSBundle.mainBundle().resourcePath!.stringByAppendingPathComponent("SearchPlugins")
+        let language = NSLocale.preferredLanguages().first as! String
+        let fallbackDirectory = pluginBasePath.stringByAppendingPathComponent("en")
+
+        // Look for search plugins in the following order:
+        //   1) the full language ID
+        //   2) the language ID without the dialect
+        //   3) the fallback language (English)
+        // For example, "fr-CA" would look for plugins in this order: 1) fr-CA, 2) fr, 3) en.
+        var searchDirectory = pluginBasePath.stringByAppendingPathComponent(language)
+        if !NSFileManager.defaultManager().fileExistsAtPath(searchDirectory) {
+            let languageWithoutDialect = language.componentsSeparatedByString("-").first!
+            searchDirectory = pluginBasePath.stringByAppendingPathComponent(languageWithoutDialect)
+            if language == languageWithoutDialect || !NSFileManager.defaultManager().fileExistsAtPath(searchDirectory) {
+                searchDirectory = fallbackDirectory
+            }
         }
 
-        let directory = NSFileManager.defaultManager().contentsOfDirectoryAtPath(path!, error: &error)
+        let directory = NSFileManager.defaultManager().contentsOfDirectoryAtPath(searchDirectory, error: &error)
 
         if error != nil {
             println("Could not fetch search engines")
@@ -141,7 +153,11 @@ class SearchEngines {
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)
         for file in directory! {
-            let fullPath = path!.stringByAppendingPathComponent(file as! String)
+            if !(file as! String).endsWith("xml") {
+                continue
+            }
+
+            let fullPath = searchDirectory.stringByAppendingPathComponent(file as! String)
             let engine = parser.parse(fullPath)
             engines.append(engine!)
         }
