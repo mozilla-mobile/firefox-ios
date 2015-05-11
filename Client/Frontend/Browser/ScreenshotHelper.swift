@@ -9,4 +9,6 @@ import Foundation
  */
 protocol ScreenshotHelper {
     func takeScreenshot(tab: Browser, aspectRatio: CGFloat, quality: CGFloat) -> UIImage?
+
+    func takeThumbnailScreenshot(tab: Browser, aspectRatio: CGFloat, quality: CGFloat) -> UIImage?
 }
