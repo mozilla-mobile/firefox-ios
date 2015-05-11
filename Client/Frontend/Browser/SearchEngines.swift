@@ -153,15 +153,25 @@ class SearchEngines {
     private func getOrderedEngines() -> [OpenSearchEngine] {
         let unorderedEngines = SearchEngines.getUnorderedEngines()
         if let orderedEngineNames = prefs.stringArrayForKey(OrderedEngineNames) {
-            var orderedEngines = [OpenSearchEngine]()
-            for engineName in orderedEngineNames {
-                for engine in unorderedEngines {
-                    if engine.shortName == engineName {
-                        orderedEngines.append(engine)
-                    }
+            // We have a persisted order of engines, so try to use that order.
+            // We may have found engines that weren't persisted in the ordered list
+            // (if the user changed locales or added a new engine); these engines
+            // will be appended to the end of the list.
+            return unorderedEngines.sorted { engine1, engine2 in
+                let index1 = find(orderedEngineNames, engine1.shortName)
+                let index2 = find(orderedEngineNames, engine2.shortName)
+
+                if index1 == nil && index2 == nil {
+                    return engine1.shortName < engine2.shortName
                 }
+
+                // nil < N for all non-nil values of N.
+                if index1 == nil || index2 == nil {
+                    return index1 > index2
+                }
+
+                return index1 < index2
             }
-            return orderedEngines
         } else {
             // We haven't persisted the engine order, so return whatever order we got from disk.
             return unorderedEngines
