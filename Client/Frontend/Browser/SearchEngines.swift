@@ -143,22 +143,27 @@ class SearchEngines {
             }
         }
 
-        let directory = NSFileManager.defaultManager().contentsOfDirectoryAtPath(searchDirectory, error: &error)
-
-        if error != nil {
-            println("Could not fetch search engines")
-            return []
-        }
+        let index = searchDirectory.stringByAppendingPathComponent("list.txt")
+        let listFile = String(contentsOfFile: index, encoding: NSUTF8StringEncoding, error: &error)
+        let engineNames = listFile!
+            .stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
+            .componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+        assert(error == nil, "Read the list of search engines")
 
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)
-        for file in directory! {
-            if !(file as! String).endsWith("xml") {
-                continue
+        for engineName in engineNames {
+            // Search the current localized search plugins directory for the search engine.
+            // If it doesn't exist, fall back to English.
+            var fullPath = searchDirectory.stringByAppendingPathComponent("\(engineName).xml")
+            if !NSFileManager.defaultManager().fileExistsAtPath(fullPath) {
+                fullPath = fallbackDirectory.stringByAppendingPathComponent("\(engineName).xml")
             }
+            assert(NSFileManager.defaultManager().fileExistsAtPath(fullPath), "\(fullPath) exists")
 
-            let fullPath = searchDirectory.stringByAppendingPathComponent(file as! String)
             let engine = parser.parse(fullPath)
+            assert(engine != nil, "Engine at \(fullPath) successfully parsed")
+
             engines.append(engine!)
         }
 
