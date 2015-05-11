@@ -69,7 +69,8 @@ Presents some information to the user. Can optionally include some buttons and a
 
 class SnackBar: UIView {
     let imageView: UIImageView
-    let textView: UITextView
+    let textLabel: UILabel
+    let contentView: UIView
     let backgroundView: UIView
     let buttonsView: Toolbar
     private var buttons = [SnackButton]()
@@ -86,14 +87,15 @@ class SnackBar: UIView {
 
     init(attrText: NSAttributedString, img: UIImage?, buttons: [SnackButton]?) {
         imageView = UIImageView()
-        textView = UITextView()
+        textLabel = UILabel()
+        contentView = UIView()
         buttonsView = Toolbar()
         backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
 
         super.init(frame: CGRectZero)
 
         imageView.image = img
-        textView.attributedText = attrText
+        textLabel.attributedText = attrText
         if let buttons = buttons {
             for button in buttons {
                 addButton(button)
@@ -104,7 +106,8 @@ class SnackBar: UIView {
 
     private override init(frame: CGRect) {
         imageView = UIImageView()
-        textView = UITextView()
+        textLabel = UILabel()
+        contentView = UIView()
         buttonsView = Toolbar()
         backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
 
@@ -112,11 +115,12 @@ class SnackBar: UIView {
     }
 
     private func setup() {
-        textView.backgroundColor = nil
+        textLabel.backgroundColor = nil
 
         addSubview(backgroundView)
-        addSubview(imageView)
-        addSubview(textView)
+        addSubview(contentView)
+        contentView.addSubview(imageView)
+        contentView.addSubview(textLabel)
         addSubview(buttonsView)
 
         self.backgroundColor = UIColor.clearColor()
@@ -124,12 +128,28 @@ class SnackBar: UIView {
         buttonsView.drawBottomBorder = true
         buttonsView.drawSeperators = true
 
-        imageView.contentMode = UIViewContentMode.Center
-        textView.textContainerInset = UIEdgeInsets(top: AppConstants.DefaultPadding, left: 0, bottom: AppConstants.DefaultPadding, right: AppConstants.DefaultPadding)
+        imageView.contentMode = UIViewContentMode.TopLeft
+
+        textLabel.font = AppConstants.DefaultMediumFont
+        textLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        textLabel.numberOfLines = 0
+        textLabel.backgroundColor = UIColor.clearColor()
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let imageWidth: CGFloat
+        if let img = imageView.image {
+            imageWidth = img.size.width + AppConstants.DefaultPadding * 2
+        } else {
+            imageWidth = 0
+        }
+        self.textLabel.preferredMaxLayoutWidth = contentView.frame.width - (imageWidth + AppConstants.DefaultPadding)
+        super.layoutSubviews()
     }
 
     /**
@@ -145,69 +165,44 @@ class SnackBar: UIView {
 
         backgroundView.snp_remakeConstraints { make in
             make.edges.equalTo(self)
-            return
         }
 
-        let imageHeight: CGFloat
-        let imageWidth: CGFloat
-        if let img = imageView.image {
-            imageHeight = img.size.height + AppConstants.DefaultPadding * 2
-            imageWidth = img.size.width + AppConstants.DefaultPadding * 2
-            imageView.snp_remakeConstraints({ make in
-                make.left.equalTo(self)
-                make.top.equalTo(self)
-                make.size.equalTo(CGSize(width: imageWidth, height: imageHeight))
-            })
-        } else {
-            imageHeight = 0
-            imageWidth = AppConstants.DefaultPadding
+        contentView.snp_remakeConstraints { make in
+            make.top.left.right.equalTo(self).insets(EdgeInsetsMake(AppConstants.DefaultPadding, AppConstants.DefaultPadding, AppConstants.DefaultPadding, AppConstants.DefaultPadding	))
+        }
 
+        if let img = imageView.image {
             imageView.snp_remakeConstraints({ make in
+                make.top.left.equalTo(contentView)
                 // To avoid doubling the padding, the textview doesn't have an inset on its left side.
                 // Instead, it relies on the imageView to tell it where its left side should be.
-                make.width.equalTo(imageWidth)
-                make.height.equalTo(0)
-                make.top.equalTo(self)
-                make.left.equalTo(self)
+                make.width.equalTo(img.size.width + AppConstants.DefaultPadding)
+                make.height.equalTo(img.size.height + AppConstants.DefaultPadding)
+                make.bottom.lessThanOrEqualTo(contentView.snp_bottom)
+            })
+        } else {
+            imageView.snp_remakeConstraints({ make in
+                make.width.height.equalTo(0)
+                make.top.left.equalTo(self)
+                make.bottom.lessThanOrEqualTo(contentView.snp_bottom)
             })
         }
 
-        // Find what size label will fit given this imageWidth
-        // On wide screen devices, our width will be fixed. That may not be known yet.
-        let snackBarWidth: CGFloat
-        if traitCollection.horizontalSizeClass != .Regular {
-            snackBarWidth = self.superview?.frame.width ?? 0
-        } else {
-            snackBarWidth = SnackBarUX.MaxWidth
-        }
-
-        // Now calculate how tall the label needs to be. This takes into account space taken up by the image.
-        let labelSize = self.textView.sizeThatFits(CGSizeMake(snackBarWidth - imageWidth, CGFloat.max))
-        textView.snp_remakeConstraints({ make in
-            make.top.equalTo(self.imageView.snp_top)
+        textLabel.snp_remakeConstraints({ make in
+            make.top.equalTo(contentView)
             make.left.equalTo(self.imageView.snp_right)
-            make.height.equalTo(labelSize.height)
-            make.trailing.equalTo(self)
+            make.trailing.equalTo(contentView)
+            make.bottom.lessThanOrEqualTo(contentView.snp_bottom)
         })
 
         buttonsView.snp_remakeConstraints({ make in
-            // The buttons should be below the taller of the image or the text
-            make.top.equalTo(labelSize.height > imageHeight ? textView.snp_bottom : imageView.snp_bottom)
+            make.top.equalTo(contentView.snp_bottom).offset(AppConstants.DefaultPadding)
+            make.bottom.equalTo(self.snp_bottom)
             make.left.right.equalTo(self)
             if self.buttonsView.subviews.count > 0 {
             	make.height.equalTo(AppConstants.ToolbarHeight)
             } else {
                 make.height.equalTo(0)
-            }
-        })
-
-        // Now we adjust the snackbars height to make sure it wraps everything tightly.
-        self.snp_makeConstraints({ make in
-            let h = max(imageHeight, labelSize.height)
-            if (self.buttonsView.subviews.count > 0) {
-                make.height.equalTo(h + AppConstants.ToolbarHeight)
-            } else {
-                make.height.equalTo(h)
             }
         })
     }
