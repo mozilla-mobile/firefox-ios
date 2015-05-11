@@ -11,7 +11,7 @@ Prerequisites, as of *May 11 2015*:
 
 When running on a device:
 
-* A device that supports iOS8 or newer
+* A device that supports iOS 8.0 or newer
 * A developer account and Admin access to the *Certificates, Identifiers & Profiles* section of the *iOS Dev Center*
 
 Get the Code
@@ -72,3 +72,21 @@ Now we are going to create three Provisioning Profiles that are linked to the Ap
 2. Create a new *Development Provisioning Profile* and link it to the *Fennec SendTo* App ID that you created. Select the *Developer Certificates* and *Devices* that you wish to include in this profile. Finally, name this profile *Fennec SendTo*.
 3. Create a new *Development Provisioning Profile* and link it to the *Fennec ShareTo* App ID that you created. Select the *Developer Certificates* and *Devices* that you wish to include in this profile. Finally, name this profile *Fennec ShareTo*.
 
+Now go to Xcode, *Preferences -> Accounts* and select your developer account. Hit the *View Details* button and then press the little reload button in the bottom left corner. This should sync the Provisioning Profiles and you should see the three profiles appear that you creates earlier.
+
+Almost done. The one thing missing is that we need to adjust the following files in the project:
+
+* `Client/Info.plist`
+* `Client/Fennec.entitlements`
+* `Extensions/ShareTo/Info.plist`
+* `Extensions/ShareTo/Fennec.entitlements`
+* `Extensions/SendTo/Info.plist`
+* `Extensions/SendTo/Fennec.entitlements`
+
+In all these files, replace occurrences of `org.mozilla.ios` with `YOURREVERSEDOMAIN`.
+
+Before building, do *Product -> Clean Build Folder* (option-shift-command-k)
+
+You should now be able to build the *Client* scheme and run on your device.
+
+We would love a Pull Request for a smarter Xcode project configuration or even a shell script that makes this process simpler.
