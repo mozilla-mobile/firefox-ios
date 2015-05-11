@@ -100,9 +100,9 @@ class BrowserViewController: UIViewController {
         return UIStatusBarStyle.Default
     }
 
-    func shouldShowToolbarForTraitCollection(newCollection: UITraitCollection) -> Bool {
-        return newCollection.verticalSizeClass != .Compact &&
-               newCollection.horizontalSizeClass != .Regular
+    func shouldShowToolbarForTraitCollection(previousTraitCollection: UITraitCollection) -> Bool {
+        return previousTraitCollection.verticalSizeClass != .Compact &&
+               previousTraitCollection.horizontalSizeClass != .Regular
     }
 
     private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection) {
@@ -127,11 +127,15 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
+        updateToolbarStateForTraitCollection(self.traitCollection)
+        showToolbars(animated: false)
+
+        super.traitCollectionDidChange(previousTraitCollection)
+    }
+
     override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
-
-        updateToolbarStateForTraitCollection(newCollection)
-        showToolbars(animated: false)
 
         // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
         // performs a device rotation. Since scrolling calls
