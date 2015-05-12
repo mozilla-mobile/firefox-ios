@@ -777,7 +777,7 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     func removeAllBars() {
-        let bars = footer.subviews
+        let bars = snackBars.subviews
         for bar in bars {
             if let bar = bar as? SnackBar {
                 bar.removeFromSuperview()
