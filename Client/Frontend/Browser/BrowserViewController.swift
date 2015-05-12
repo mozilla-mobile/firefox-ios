@@ -317,25 +317,30 @@ class BrowserViewController: UIViewController {
             homePanelController!.view.alpha = 0
             view.addSubview(homePanelController!.view)
 
-            UIView.animateWithDuration(0.2, animations: { () -> Void in
-                    self.homePanelController!.view.alpha = 1
-                }, completion: { _ in
-                    self.webViewContainer.accessibilityElementsHidden = true
-                    self.stopTrackingAccessibilityStatus()
-                    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
-            })
-
             addChildViewController(homePanelController!)
         }
+
+        // We have to run this animation, even if the view is already showing because there may be a hide animation running
+        // and we want to be sure to override its results.
+        UIView.animateWithDuration(0.2, animations: { () -> Void in
+            self.homePanelController!.view.alpha = 1
+        }, completion: { finished in
+            if finished {
+                self.webViewContainer.accessibilityElementsHidden = true
+                self.stopTrackingAccessibilityStatus()
+                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+            }
+        })
         toolbar?.hidden = !inline
         view.setNeedsUpdateConstraints()
     }
 
     private func hideHomePanelController() {
         if let controller = homePanelController {
-            UIView.animateWithDuration(0.2, animations: { () -> Void in
-                    controller.view.alpha = 0
-                }, completion: { _ in
+            UIView.animateWithDuration(0.2, delay: 0, options: .BeginFromCurrentState, animations: { () -> Void in
+                controller.view.alpha = 0
+            }, completion: { finished in
+                if finished {
                     controller.view.removeFromSuperview()
                     controller.removeFromParentViewController()
                     self.homePanelController = nil
@@ -348,7 +353,8 @@ class BrowserViewController: UIViewController {
                     if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode where readerMode.state == .Active {
                         self.showReaderModeBar(animated: false)
                     }
-                })
+                }
+            })
         }
     }
 

@@ -306,17 +306,21 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         // Offset the target rotation by 180º so the new tab comes from the front and the old tab falls back.
         flipTransform = CATransform3DRotate(flipTransform, CGFloat(M_PI), 1.0, 0.0, 0.0)
 
-        UIView.animateWithDuration(1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { _ in
+        // Force any in progress animation to end.
+        self.tabsButton.alpha = 1
+        UIView.animateWithDuration(1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: .CurveEaseInOut | .BeginFromCurrentState, animations: { _ in
                 newTabsButton.titleLabel?.layer.transform = CATransform3DIdentity
                 self.tabsButton.titleLabel?.layer.transform = flipTransform
                 self.tabsButton.alpha = 0
-            }, completion: { _ in
+            }, completion: { finished in
                 // Remove the clone and set up the actual tabs button.
                 newTabsButton.removeFromSuperview()
-                self.tabsButton.alpha = 1
-                self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
-                self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
-                self.tabsButton.accessibilityValue = count.description
+                if finished {
+                    self.tabsButton.alpha = 1
+                    self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
+                    self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
+                    self.tabsButton.accessibilityValue = count.description
+                }
         })
     }
 

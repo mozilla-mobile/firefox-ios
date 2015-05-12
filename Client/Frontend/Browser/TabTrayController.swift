@@ -454,8 +454,15 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     }
 
     func SELdidClickAddTab() {
-        tabManager?.addTab()
-        presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
+        // We're only doing one update here, but using a batch update lets us delay selecting the tab
+        // until after its insert animation finishes.
+        self.collectionView.performBatchUpdates({ _ in
+            self.tabManager.addTab()
+        }, completion: { finished in
+            if finished {
+                self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
+            }
+        })
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
@@ -665,7 +672,19 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int) {
-        self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
+        var newTab: Browser? = nil
+        self.collectionView.performBatchUpdates({ _ in
+            self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
+            if tabManager.count == 0 {
+                newTab = tabManager.addTab()
+            }
+        }, completion: { finished in
+            if finished {
+                if let newTab = newTab {
+                    self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
+                }
+            }
+        })
     }
 }
 
