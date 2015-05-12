@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */; };
 		0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */; };
+		0B2C34581AF044B70050CF1B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B2C34571AF044B70050CF1B /* Security.framework */; };
+		0B36296B1AF9561E007EE843 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B2C34571AF044B70050CF1B /* Security.framework */; };
+		0B36298D1AF957DC007EE843 /* TestPasswords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B36298C1AF957DC007EE843 /* TestPasswords.swift */; };
+		0B36298F1AF9749C007EE843 /* TestPasswordsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B36298E1AF9749C007EE843 /* TestPasswordsTable.swift */; };
 		0B5142CC1AE1BAF50014D0B3 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */; };
 		0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B62EFD11AD63CD100ACB9CD /* Clearables.swift */; };
 		0B6544D31A96C5F0000DD202 /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B6544C21A96C59E000DD202 /* libSDWebImage.a */; };
@@ -36,6 +40,7 @@
 		0BB5B3091AC0AD150052877D /* PasswordHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 0BB5B3081AC0AD150052877D /* PasswordHelper.js */; };
 		0BB5B30B1AC0AD1F0052877D /* PasswordHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B30A1AC0AD1F0052877D /* PasswordHelper.swift */; };
 		0BB5B3601AC0D6360052877D /* BookmarkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */; };
+		0BB92B991AF8217E00668406 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B2C34571AF044B70050CF1B /* Security.framework */; };
 		0BD19A651A2530840084FBA7 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		0BD19A671A25309B0084FBA7 /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
 		0BD19A681A2530A40084FBA7 /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
@@ -1040,6 +1045,9 @@
 		0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListViewController.swift; sourceTree = "<group>"; };
 		0B1C05D51A798B1F004C78B0 /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
 		0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
+		0B2C34571AF044B70050CF1B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		0B36298C1AF957DC007EE843 /* TestPasswords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPasswords.swift; sourceTree = "<group>"; };
+		0B36298E1AF9749C007EE843 /* TestPasswordsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPasswordsTable.swift; sourceTree = "<group>"; };
 		0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		0B62EFD11AD63CD100ACB9CD /* Clearables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clearables.swift; sourceTree = "<group>"; };
 		0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = Carthage/Checkouts/SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
@@ -1423,6 +1431,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0BA84AE21AE570A1009C4D0C /* SnapKit.framework in Frameworks */,
+				0BB92B991AF8217E00668406 /* Security.framework in Frameworks */,
 				E4D567BD1ADED48700F1EFE7 /* SQLite.framework in Frameworks */,
 				0B6544D31A96C5F0000DD202 /* libSDWebImage.a in Frameworks */,
 				288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */,
@@ -1509,6 +1518,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B36296B1AF9561E007EE843 /* Security.framework in Frameworks */,
 				0BA84AE71AE57172009C4D0C /* SnapKit.framework in Frameworks */,
 				2868FA061ADF7B69000D9B1D /* Sync.framework in Frameworks */,
 				28C8D1391AD4CE9100F62011 /* Shared.framework in Frameworks */,
@@ -1525,6 +1535,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B2C34581AF044B70050CF1B /* Security.framework in Frameworks */,
 				0BA84AE11AE57095009C4D0C /* SnapKit.framework in Frameworks */,
 				2868FA231ADF7B70000D9B1D /* Sync.framework in Frameworks */,
 				28C8D13C1AD4CEB400F62011 /* Storage.framework in Frameworks */,
@@ -1874,6 +1885,7 @@
 				D32CACEC1AE04DA1000658EB /* TestSwiftData.swift */,
 				2FCAE2821ABB533A00877008 /* TestTableTable.swift */,
 				2FCAE22B1ABB51F800877008 /* Supporting Files */,
+				0B36298E1AF9749C007EE843 /* TestPasswordsTable.swift */,
 			);
 			path = StorageTests;
 			sourceTree = "<group>";
@@ -2244,6 +2256,8 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				0B2C34571AF044B70050CF1B /* Security.framework */,
+				D3FA77C31A44F9A80010CD32 /* Locales */,
 				2FCAE28F1ABB53AA00877008 /* libsqlite3.dylib */,
 				E4CD9F191A6D9B7B00318571 /* libz.dylib */,
 				D39FA16B1A83E17800EE869C /* CoreGraphics.framework */,
@@ -2334,6 +2348,7 @@
 				0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */,
 				2F44FA1A1A9D426A00FD20CC /* TestHashExtensions.swift */,
 				4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */,
+				0B36298C1AF957DC007EE843 /* TestPasswords.swift */,
 				0BE108351A1B1EC700D4B712 /* TestLocking.swift */,
 				D3D247311ABCEA1700771C7E /* ThumbnailTests.swift */,
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
@@ -3534,6 +3549,10 @@
 				282915E71AF1A7920006EEB5 /* BrowserTable.swift in Sources */,
 				2FA435141ABB6829008031D1 /* Favicons.swift in Sources */,
 				2FA4351E1ABB6831008031D1 /* GenericTable.swift in Sources */,
+				2FCAE28E1ABB533A00877008 /* TestVisitsTable.swift in Sources */,
+				0B36298F1AF9749C007EE843 /* TestPasswordsTable.swift in Sources */,
+				2FCAE2881ABB533A00877008 /* TestHistoryTable.swift in Sources */,
+				2FA4351F1ABB6831008031D1 /* HistoryTable.swift in Sources */,
 				2FA435191ABB6829008031D1 /* RemoteTabs.swift in Sources */,
 				283A2AD91AF0794D003C0A26 /* DatabaseError.swift in Sources */,
 				284AA3AD1AD4C386009041C5 /* Clients.swift in Sources */,
@@ -3765,6 +3784,7 @@
 				D39843171AC13F9300D658F4 /* ThumbnailCell.swift in Sources */,
 				D3C744CE1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				D38B2D3E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m in Sources */,
+				0B36298D1AF957DC007EE843 /* TestPasswords.swift in Sources */,
 				D3D247321ABCEA1700771C7E /* ThumbnailTests.swift in Sources */,
 				0BF1B7FE1AC60F0200A7B407 /* InsetButton.swift in Sources */,
 				0BD19A681A2530A40084FBA7 /* ProfilePrefs.swift in Sources */,
