@@ -321,6 +321,11 @@ class BrowserViewController: UIViewController {
                     self.webViewContainer.accessibilityElementsHidden = false
                     self.toolbar?.hidden = false
                     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+
+                    // Refresh the reading view toolbar since the article record may have changed
+                    if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode where readerMode.state == .Active {
+                        self.showReaderModeBar(animated: false)
+                    }
                 })
         }
     }
@@ -1357,6 +1362,9 @@ extension BrowserViewController {
             if let successValue = result.successValue, record = successValue {
                 readerModeBar.unread = record.unread
                 readerModeBar.added = true
+            } else {
+                readerModeBar.unread = true
+                readerModeBar.added = false
             }
         } else {
             readerModeBar.unread = true
