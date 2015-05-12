@@ -654,7 +654,16 @@ extension BrowserViewController: BrowserDelegate {
     private func adjustFooterSize(top: UIView? = nil) {
         snackBars.snp_remakeConstraints({ make in
             make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
-            make.leading.trailing.equalTo(self.footer)
+            if traitCollection.horizontalSizeClass != .Regular {
+                make.leading.trailing.equalTo(self.footer)
+                self.snackBars.layer.borderWidth = 0
+            } else {
+                make.centerX.equalTo(self.footer)
+                make.width.equalTo(SnackBarUX.MaxWidth)
+                self.snackBars.layer.borderColor = AppConstants.BorderColor.CGColor
+                self.snackBars.layer.borderWidth = 1
+            }
+
             let bars = self.snackBars.subviews
             if bars.count > 0 {
                 let view = bars[bars.count-1] as! UIView
