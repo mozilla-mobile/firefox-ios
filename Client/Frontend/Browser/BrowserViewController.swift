@@ -34,7 +34,8 @@ class BrowserViewController: UIViewController {
     private var screenshotHelper: ScreenshotHelper!
     private var homePanelIsInline = false
     private var searchLoader: SearchLoader!
-    private var snackBars = UIView()
+    private let snackBars = UIView()
+    private let auralProgress = AuralProgressBar()
 
     // This is public because the AppDelegate needs it when showing the settings. This is unfortunate
     // and we should find a way to better organize that code in the future.
@@ -178,6 +179,18 @@ class BrowserViewController: UIViewController {
         snackBars.backgroundColor = UIColor.clearColor()
     }
 
+    func startTrackingAccessibilityStatus() {
+        NSNotificationCenter.defaultCenter().addObserverForName(UIAccessibilityVoiceOverStatusChanged, object: nil, queue: nil) { (notification) -> Void in
+            self.auralProgress.hidden = !UIAccessibilityIsVoiceOverRunning()
+        }
+        auralProgress.hidden = !UIAccessibilityIsVoiceOverRunning()
+    }
+
+    func stopTrackingAccessibilityStatus() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIAccessibilityVoiceOverStatusChanged, object: nil)
+        auralProgress.hidden = true
+    }
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -194,8 +207,13 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidAppear(animated: Bool) {
+        startTrackingAccessibilityStatus()
         presentIntroViewController()
         super.viewDidAppear(animated)
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        stopTrackingAccessibilityStatus()
     }
 
     override func updateViewConstraints() {
@@ -301,6 +319,7 @@ class BrowserViewController: UIViewController {
                     self.homePanelController!.view.alpha = 1
                 }, completion: { _ in
                     self.webViewContainer.accessibilityElementsHidden = true
+                    self.stopTrackingAccessibilityStatus()
                     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             })
 
@@ -320,6 +339,7 @@ class BrowserViewController: UIViewController {
                     self.homePanelController = nil
                     self.webViewContainer.accessibilityElementsHidden = false
                     self.toolbar?.hidden = false
+                    self.startTrackingAccessibilityStatus()
                     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
 
                     // Refresh the reading view toolbar since the article record may have changed
@@ -420,10 +440,17 @@ class BrowserViewController: UIViewController {
 
         switch keyPath {
         case KVOEstimatedProgress:
-            urlBar.updateProgressBar(change[NSKeyValueChangeNewKey] as! Float)
+            let progress = change[NSKeyValueChangeNewKey] as! Float
+            urlBar.updateProgressBar(progress)
+            // when loading is stopped, KVOLoading is fired first, and only then KVOEstimatedProgress with progress 1.0 which would leave the progress bar running
+            if progress != 1.0 || tabManager.selectedTab?.loading ?? false {
+                auralProgress.progress = Double(progress)
+            }
         case KVOLoading:
-            toolbar?.updateReloadStatus(change[NSKeyValueChangeNewKey] as! Bool)
-            urlBar.updateReloadStatus(change[NSKeyValueChangeNewKey] as! Bool)
+            let loading = change[NSKeyValueChangeNewKey] as! Bool
+            toolbar?.updateReloadStatus(loading)
+            urlBar.updateReloadStatus(loading)
+            auralProgress.progress = loading ? 0 : nil
         default:
             assertionFailure("Unhandled KVO key: \(keyPath)")
         }
@@ -1356,6 +1383,11 @@ extension BrowserViewController : Transitionable {
             }
         }
         self.homePanelController?.view.hidden = false
+        if options.toView === self {
+            startTrackingAccessibilityStatus()
+        } else {
+            stopTrackingAccessibilityStatus()
+        }
     }
 }
 
