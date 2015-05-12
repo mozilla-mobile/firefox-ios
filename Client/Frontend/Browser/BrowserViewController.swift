@@ -127,15 +127,9 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    override func traitCollectionDidChange(traitCollection: UITraitCollection?) {
-        updateToolbarStateForTraitCollection(self.traitCollection)
-        showToolbars(animated: false)
-
-        super.traitCollectionDidChange(traitCollection)
-    }
-
     override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+        updateToolbarStateForTraitCollection(self.traitCollection)
 
         // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
         // performs a device rotation. Since scrolling calls
@@ -144,6 +138,12 @@ class BrowserViewController: UIViewController {
         if let tab = self.tabManager.selectedTab {
             let contentOffset = tab.webView.scrollView.contentOffset
             coordinator.animateAlongsideTransition({ context in
+                self.updateHeaderFooterConstraintsAndAlpha(
+                    headerOffset: 0,
+                    footerOffset: 0,
+                    readerOffset: 0,
+                    alpha: 1)
+
                 tab.webView.scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
             }, completion: { context in
                 tab.webView.scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
@@ -899,18 +899,11 @@ extension BrowserViewController: UIScrollViewDelegate {
         footerOffset: CGFloat, readerOffset: CGFloat, alpha: CGFloat, completion: ((finished: Bool) -> Void)?) {
 
         let animation: () -> Void = {
-            self.headerConstraint?.updateOffset(headerOffset)
-            self.footerConstraint?.updateOffset(footerOffset)
-            self.readerConstraint?.updateOffset(readerOffset)
-            self.headerConstraintOffset = headerOffset
-            self.footerConstraintOffset = footerOffset
-            self.readerConstraintOffset = readerOffset
-            self.urlBar.updateAlphaForSubviews(alpha)
-            self.setNeedsStatusBarAppearanceUpdate()
+            self.updateHeaderFooterConstraintsAndAlpha(headerOffset: headerOffset, footerOffset: footerOffset,
+                readerOffset: readerOffset, alpha: alpha)
             self.view.layoutIfNeeded()
         }
 
-        self.view.layoutIfNeeded()
         if animated {
             UIView.animateWithDuration(duration, animations: animation, completion: completion)
         } else {
@@ -918,6 +911,16 @@ extension BrowserViewController: UIScrollViewDelegate {
         }
     }
 
+    private func updateHeaderFooterConstraintsAndAlpha(#headerOffset: CGFloat,
+        footerOffset: CGFloat, readerOffset: CGFloat, alpha: CGFloat) {
+            self.headerConstraint?.updateOffset(headerOffset)
+            self.footerConstraint?.updateOffset(footerOffset)
+            self.readerConstraint?.updateOffset(readerOffset)
+            self.headerConstraintOffset = headerOffset
+            self.footerConstraintOffset = footerOffset
+            self.readerConstraintOffset = readerOffset
+            self.urlBar.updateAlphaForSubviews(alpha)
+    }
 }
 
 extension BrowserViewController: TabManagerDelegate {
