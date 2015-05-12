@@ -57,7 +57,7 @@ class TestPasswordsTable : XCTestCase {
             let cursor =  db.executeQuery("SELECT * FROM logins", factory: self.factory!, withArgs: nil)
             XCTAssertEqual(cursor.count, 1, "Cursor has one entry")
             let p = cursor[0] as! Password
-            XCTAssertNotEqual(p.username, Username, "Cursor has encrypted username")
+            XCTAssertEqual(p.username, Username, "Cursor has non-encrypted username")
             XCTAssertNotEqual(p.password, Pass, "Cursor has encrypted password")
             XCTAssertEqual(p.hostname, HostName, "Cursor has right hostname")
             return err

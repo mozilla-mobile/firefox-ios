@@ -39,14 +39,13 @@ class PasswordsTable<T>: GenericTable<Password> {
         args.append(item.timeLastUsed)
         args.append(item.timePasswordChanged)
 
+        args.append(item.username)
         switch (encryption) {
         case EncryptionType.AES256:
             let secret = SQLitePasswords.secretKey!
-            args.append(item.username.AES128EncryptWithKey(secret))
-            args.append(item.password.AES128EncryptWithKey(secret))
+            args.append(item.password.AES256EncryptWithKey(secret))
             args.append(EncryptionType.AES256.rawValue)
         default:
-            args.append(item.username)
             args.append(item.password)
             args.append(EncryptionType.NONE.rawValue)
         }
@@ -68,14 +67,13 @@ class PasswordsTable<T>: GenericTable<Password> {
         switch (encryption) {
         case EncryptionType.AES256:
             let secret = SQLitePasswords.secretKey!
-            args.append(item.password.AES128EncryptWithKey(secret))
+            args.append(item.password.AES256EncryptWithKey(secret))
             args.append(EncryptionType.AES256.rawValue)
-            args.append(item.username.AES128EncryptWithKey(secret))
         default:
             args.append(item.password)
             args.append(EncryptionType.NONE.rawValue)
-            args.append(item.username)
         }
+        args.append(item.username)
         args.append(item.hostname)
 
         return ("UPDATE \(name) SET httpRealm = ?, formSubmitUrl = ?, usernameField = ?, passwordField = ?, timeCreated = ?, timeLastUsed = ?, timePasswordChanged = ?, password = ?, encryptionType = ? WHERE username = ? AND hostname = ?", args)
@@ -85,15 +83,7 @@ class PasswordsTable<T>: GenericTable<Password> {
         var args = [AnyObject?]()
         if let pw = item {
             args.append(pw.hostname)
-
-            // Unfortunately, this will fail if the password is encrypted and encryption is turned off.
-            switch (encryption) {
-            case EncryptionType.AES256:
-                let secret = SQLitePasswords.secretKey!
-                args.append(pw.username.AES128EncryptWithKey(secret))
-            default:
-                args.append(pw.username)
-            }
+            args.append(pw.username)
             return ("DELETE FROM \(name) WHERE hostname = ? AND username = ?", args)
         }
         return ("DELETE FROM \(name)", args)
@@ -107,8 +97,7 @@ class PasswordsTable<T>: GenericTable<Password> {
             let encType = EncryptionType(rawValue: row["encryptionType"] as? Int ?? EncryptionType.NONE.rawValue)
             if encType == EncryptionType.AES256 {
                 let secret = SQLitePasswords.secretKey!
-                user = user.AES128DecryptWithKey(secret)! as String
-                pass = pass.AES128DecryptWithKey(secret)! as String
+                pass = pass.AES256DecryptWithKey(secret)! as String
             }
 
             let pw = Password(hostname: row["hostname"] as! String, username: user, password: pass)
@@ -156,7 +145,7 @@ public class SQLitePasswords : Passwords {
             return KeychainWrapper.stringForKey(key)
         }
 
-        let Length = 24
+        let Length = 128
         if let secret = NSMutableData(length: Length) {
             // XXX - I really wanted to use SecKeyGenerateSymmetric but it doesn't seem defined...
             let err  = SecRandomCopyBytes(kSecRandomDefault, Length, UnsafeMutablePointer(secret.mutableBytes))
