@@ -110,8 +110,7 @@ class PasswordsTable<T>: GenericTable<Password> {
                 pass = pass.AES128DecryptWithKey(secret)! as String
             }
 
-            let site = Site(url: row["hostname"] as! String, title: "")
-            let pw = Password(site: site, username: user, password: pass)
+            let pw = Password(hostname: row["hostname"] as! String, username: user, password: pass)
 
             pw.httpRealm = row["httpRealm"] as? String ?? ""
             pw.formSubmitUrl = row["formSubmitUrl"] as? String ?? ""

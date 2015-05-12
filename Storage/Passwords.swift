@@ -4,6 +4,8 @@
 
 import Foundation
 import WebKit
+import Shared
+import Security
 
 public class Password : Equatable {
     public let hostname: String
@@ -17,9 +19,8 @@ public class Password : Equatable {
                 return
             }
 
-            let url2 = NSURL(string: self.hostname)
-            let url1 = NSURL(string: self.formSubmitUrl)
-            if url1?.host != url2?.host {
+            let url = NSURL(string: self.formSubmitUrl)
+            if hostname != url?.host {
                 formSubmitUrl = ""
             }
         }
@@ -33,12 +34,8 @@ public class Password : Equatable {
     var timePasswordChanged = NSDate()
     var timesUsed = 0
 
-    // var encryptedUsername: String { get }
-    // var encryptedPassword: String { get }
-    // var encType: String { get }
-
-    public init(site: Site, username: String, password: String) {
-        self.hostname = site.url
+    public init(hostname: String, username: String, password: String) {
+        self.hostname = hostname
         self.username = username
         self.password = password
     }
@@ -70,9 +67,7 @@ public class Password : Equatable {
     }
 
     public class func fromScript(url: NSURL, script: [String: String]) -> Password {
-        let site = Site(url: getPasswordOrigin(url.absoluteString!)!, title: "")
-
-        let pswd = Password(site: site, username: script["username"]!, password: script["password"]!)
+        let pswd = Password(hostname: getPasswordOrigin(url.absoluteString!)!, username: script["username"]!, password: script["password"]!)
 
         if let formSubmit = script["formSubmitUrl"] {
             pswd.formSubmitUrl = formSubmit
@@ -130,10 +125,6 @@ public class MockPasswords : Passwords {
 
     public init(files: FileAccessor) {
         self.files = files
-
-        let site = Site(url: "https://m.facebook.com", title: "")
-        passwordsCache.append(Password(site: site, username: "FakeUser", password: "FakePassword"))
-        passwordsCache.append(Password(site: site, username: "Something", password: "else"))
     }
 
     public func get(options: QueryOptions, complete: (cursor: Cursor<Password>) -> Void) {
