@@ -45,6 +45,38 @@ public class Password : Equatable {
         httpRealm = protectionSpace.realm!
     }
 
+    public init?(url: NSURL, script: [String: String]) {
+        if let username = script["username"],
+            let password = script["password"],
+            let urlString = url.absoluteString,
+            let hostname = Password.getPasswordOrigin(urlString) {
+
+                self.username = username
+                self.password = password
+                self.hostname = hostname
+
+                if let formSubmitUrl = script["formSubmitUrl"] {
+                    self.formSubmitUrl = formSubmitUrl
+                }
+
+                if let passwordField = script["passwordField"] {
+                    self.passwordField = passwordField
+                }
+
+                if let usernameField = script["usernameField"] {
+                    self.usernameField = usernameField
+                }
+        } else {
+            self.username = ""
+            self.password = ""
+            self.hostname = ""
+            self.formSubmitUrl = ""
+            self.passwordField = ""
+            self.usernameField = ""
+            return nil
+        }
+    }
+
     public var credential: NSURLCredential {
         return NSURLCredential(user: username, password: password, persistence: .ForSession)
     }
@@ -62,24 +94,6 @@ public class Password : Equatable {
             "password": password,
             "usernameField": usernameField,
             "passwordField": passwordField]
-    }
-
-    public class func fromScript(url: NSURL, script: [String: String]) -> Password {
-        let pswd = Password(hostname: getPasswordOrigin(url.absoluteString!)!, username: script["username"]!, password: script["password"]!)
-
-        if let formSubmit = script["formSubmitUrl"] {
-            pswd.formSubmitUrl = formSubmit
-        }
-
-        if let passField = script["passwordField"] {
-            pswd.passwordField = passField
-        }
-
-        if let userField = script["usernameField"] {
-            pswd.usernameField = userField
-        }
-
-        return pswd
     }
 
     private class func getPasswordOrigin(uriString: String, allowJS: Bool = false) -> String? {

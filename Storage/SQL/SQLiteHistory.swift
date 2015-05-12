@@ -196,7 +196,7 @@ public class SQLiteHistory: BrowserHistory {
         return site
     }
 
-    private func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
+    private func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T?) -> Deferred<Result<Cursor<T>>> {
         func f(conn: SQLiteDBConnection, inout err: NSError?) -> Cursor<T> {
             return conn.executeQuery(sql, factory: factory, withArgs: args)
         }

@@ -23,6 +23,7 @@ class TestPasswords : ProfileTest {
             profile.passwords.get(options, complete: { results in
                 XCTAssertEqual(results.count, 1, "Found one result")
                 let p = results[0]
+                XCTAssertEqual(p!.hostname, hostname, "Password has right hostname")
                 XCTAssertEqual(p!.username, username, "Password has right username")
                 XCTAssertEqual(p!.password, password, "Password has right password")
                 expectation.fulfill()
