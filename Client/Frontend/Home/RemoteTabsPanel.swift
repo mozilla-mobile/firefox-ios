@@ -69,11 +69,15 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         self.profile.getClientsAndTabs().upon({ tabs in
             if let tabs = tabs.successValue {
                 log.info("\(tabs.count) tabs fetched.")
-                self.clientAndTabs = tabs
+                self.clientAndTabs = tabs.filter { $0.tabs.count > 0 }
 
                 // Maybe show a background view.
                 let tableView = self.tableView
-                if tabs.isEmpty {
+                if let clientAndTabs = self.clientAndTabs where clientAndTabs.count > 0 {
+                    tableView.backgroundView = nil
+                    // Show dividing lines.
+                    tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+                } else {
                     // TODO: Bug 1144760 - Populate background view with UX-approved content.
                     tableView.backgroundView = UIView()
                     tableView.backgroundView?.frame = tableView.frame
@@ -81,10 +85,6 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
                     // Hide dividing lines.
                     tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-                } else {
-                    tableView.backgroundView = nil
-                    // Show dividing lines.
-                    tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
                 }
                 tableView.reloadData()
             } else {
