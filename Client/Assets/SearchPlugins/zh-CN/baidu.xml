@@ -1,0 +1,30 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+    <ShortName>百度</ShortName>
+    <Description>百度网页搜索</Description>
+    <InputEncoding>UTF-8</InputEncoding>
+    <Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Njc3NDM2Mzk4Rjc3MTFFMjg4Q0ZFNUE0MjFGRjhCODYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Njc3NDM2M0E4Rjc3MTFFMjg4Q0ZFNUE0MjFGRjhCODYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2Nzc0MzYzNzhGNzcxMUUyODhDRkU1QTQyMUZGOEI4NiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2Nzc0MzYzODhGNzcxMUUyODhDRkU1QTQyMUZGOEI4NiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PujlXfAAAAfeSURBVHja5Fd7UFTnFT/37u7d9y4PUTGioNECCRWJYIsNNqNMjKJAjRZiYjsOcRJt2rS1nRSDiZXUpNrEB4EkGpvGRjQTiRYNKopGRRtsQCUSkCqP4RVg2V32cXfv3r2357uw66ILtZ3O5I/emd/s/b77Pc53zu/8zreUKIrwbT40fMuPPLCxv9QGPA8wJ0EWbKzmTyX2nV/WuZcbjZRpeabuV/NT6HLpC6MaGsF7QkoPO3MbmvjIlCTmSMxUujY0XBl046WLNaN7IL/QCizLj0D5SWd+ZZUzj+fF0O5u74P7D9rex6GxAdMm4bzjZcecxc23PAXHTzlPYF/a/yoEEWXlbJ5OSwNFASiVFJj6hYgDZexPEXDhEgvv7bNu/aqBS1UyFMjRr/0mIeKDg+wWnKu47xAEPhtesUH+rw2+ZrzNLo6nA8wl76YBMTkxUU2aM/9R68rWau4MUCgosFq8ybdbPA9js+4/NoA8ff1eoGXSEA2enAr8RjwhAK3dXWIlze8wDOhlAdSh0BavCOqmZi7kv/KA75kwQVq1Azd04a/K1y9g9mq1dKswlMYUjLQPBNydkdPtSxZpb/j6mhpdoNXTEB+nHJMDUxE7EWWIp89fZEEhh8b4WOZLl2tIM8ieJATJibKjjy/QAKJXIadAEO4swuLYBfOZI/ja+9uX+6H4Pet9kdD4abn9AJLp5z29fHbBa9b92Pd7u0P0LF2s3Wg00L1kEy+eLmmW8uCKJYojbxRoAFE7dw7zicMhgs0ugMMpQsJDyurVufrNh4/a718HkDArr17nUnXaIXdSDMBfD9oK5iarzmLz7E9W6TPe2Tf45KwEZXfWUu275KCrfzYIHxYZuHVrjWvQwBo3Bym8F248navf0dziJevvQsxFdCHeRpwe1YDmf3rSFQE9hFQujPzfa9h0YkBYqOwK/l7xfX/iKSuEh9HwQr4dfrneaMOubf54N3mg8qzj8IVq94/0egoamzm43erJeHG9IQM/nwwagoYmLoZhRpJJyukBrwEhtXdtGwdrnjHAqdNOSQN9h+gzCZCzcihtk5MkriZfq+eW6nRD6xF9QA7Jj1WwhSSrghqgNqicgjCyOBHCMQqKR0DKHH8SRCHeZJ1ibW+fQDyyGRFGPqxYroejx+0E3yVyQAWcR6WioLOLT9he7IoOGoIf54aV/7HQkWbQU/7NeUK4RNX5gGEJb7xl/ritnY8liigix7q7+cQBs/DYq/lhOSTWt1p4idDBCi0vUDKz2cME9UBavHNvzDTVOcJklhXB5RZh/g/UpdFT5BUPTpMU1bCjyPKX1jY+Vq2mpFQkPCHv1667H91VYi0m3J0aJQfEPXnnRe+qQ7XmZ6bVdY0mRJb56eNWLqNtee2d3unmAe8Xcx9RfUzYfvGyC5pvcVu/vumZrdFQ95xMp6Ph4iV2mUZNbcrO1G5+IFJe/dImk91mE3TEU5I24KGSohUXiDYE9UBk+jiJT4itiDzEHoT1co1bKpJV59h1ahVF/FuLuITx7Q6cj/pPnTzj3ISva0wD3sasDO36CeNlnb4aMmO64qusTN2rTxQtCi5EvErvf18wTwbTpzHQ3iHFc+O771tfIxmCmxKvPYuYh8SsCYwz2Qizht6+w1KEzZy4OObDDS+GpGAGLEIPLX5+begPsb8eJo4LboCIev7c9khYmK4NDNH2kj3WQiL1AZsxKqVkzD1STmoW3hnUW143f0SM6Ojwdg3nfQXCNHYxQp3tO+P3auj5ara4td2TYwyh29JSVaWYQlX1NzgeY9o4PIYUKJIhFkQKTp+IwtQyaBPqOU6MfqVw4M/r8oyhqd9Tl2QuGTpU7KqIMWoBz/vetKWHXaUtrZ6cECPdmZ2hzXoyW/c7TL1KuZw6i56w+Ewe5komos3hFCAzQ0euaZlowF7UFNXud6RwbCTC+m+LEe12AIsFoKLC8UJ1jftx4vaFaUqSBVcRsxGliGOIOL/H75Roelg55dZBAVMOq7GMwjSl6GMnHIVXr7vzwieroO/z3hGxHGFA6xeSB9QVp5yrke1SX3QUVdXVw8NHh2wvmcxCDhJtCdGDQKW8WzlHHAp3oHGp0+fY54hnx+SA0yzp/VR0ZQxNEzqJwPIKRqeTDLNQgVy7s6Hvr4Xap7h3b0KuZ319fPzOtx0ziDcLRzMg3CjdKFxoNUcWIuv2fMM/5naJZVOi5PmxMxUdWNEmIQ/6vEO1Cfa8qYe9pR7y+taJSsf3cbOTdxtADMRQ8HiD4sfkgFInJ2ibPEl+zeNB2cQwnK5y5uKnhUhAk1JFbUE1fR4XvMXhd0xD3eU68dGYKApu33bvw3L97O4SyydkHoLzcxvrSYiR6vzFWnULYvQQGBKUMFjvFlctVxXVN3hScSMZ64Lwzy+yh9Lmqf+GQ85IcjEcAjQics8H9sJVK9QPYPPru9z+CAkPGcuhkOKVjpDXcY9uBP437IgIhcGaAbhxxQIHPnVvu1bv3uCr5U5W8AsNKatE34dDJcMrm0yOSebmRCB3Q9/tmISJzIubqaj7Q4ExC7vaJy4bqsSTe/qDCBHmkCF1PF5Jb5LWb17eYKz5rJLNa2j0zIieohgYHyEzTYlSdKIgXUmaxdxEgenCSuhpusmFHyqzxxv09LyOTn52zzfe8OEbdX9ykuZ81CT6dX8BoqjRPfB/+e/4XwIMAPFKOTjHG8XIAAAAAElFTkSuQmCC</Image>
+    <Url type="application/x-suggestions+json" method="GET" template="http://m.baidu.com/su">
+        <Param name="wd" value="{searchTerms}"/>
+        <Param name="action" value="opensearch"/>
+        <Param name="ie" value="UTF-8"/>
+        <Param name="from" value="1000969a"/>
+    </Url>
+    <Url type="text/html" method="GET" template="http://m.baidu.com/s">
+        <Param name="from" value="1000969a"/>
+        <Param name="word" value="{searchTerms}"/>
+    </Url>
+    <!-- As of Bug 861164, we can do a client-side detection to determine whether a user is using
+         tablet or a phone(relative to this case).
+         Note: The order of <URL> DOES not affect the way we pick between them.
+    -->
+    <Url type="application/x-moz-tabletsearch" method="GET" template="http://www.baidu.com/baidu">
+        <Param name="tn" value="monline_4_dg"/>
+        <Param name="ie" value="utf-8"/>
+        <Param name="wd" value="{searchTerms}"/>
+    </Url>
+
+    <SearchForm>http://m.baidu.com/</SearchForm>
+</SearchPlugin>

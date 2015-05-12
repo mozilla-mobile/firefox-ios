@@ -1,0 +1,6 @@
+bing
+duckduckgo
+faclair-beag
+google
+wikipedia-gd
+yahoo-en-GB

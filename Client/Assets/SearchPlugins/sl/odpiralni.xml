@@ -1,0 +1,15 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Odpiralni Časi</ShortName>
+<Description>Odpiralni Časi v Sloveniji</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAC4jAAAuIwF4pT92AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAABHpJREFUeNqkl11MXEUUx8+9C5SPWDaUj+7axS3bAn3q8qIljQ0qbIlFRPGhT5Yao4nR2CY11cSHvvok+tLEl+5Dq4mmSq3Uqm1KTSxCX+hDSxELhgU2tYAVEvYuH3s9Z3YuzJ37tYsnmdzLcHd+/zlz5swZBXK0I22xlxUFuvA1yhszXTd9NoJtgFr/Lz9fymVcxQNajtAT+ErNL8G87C9scWy9KObfvAXwGce3ALYTcsLJI4oD/BzCe5zAexvqIRQKQUlpKfs7tZyC6UQC/hgbcxNCnjjpKaAjFjuHDwu8YscO6Oh8CZoPHjT16/ghimWxoKVScGdkBH649D3Mz8/biYijiONih89r5iUlJdDV3Q1vvv0WhGprGUzhsufm5uDGtWvgr6iA4uJi8Pl8EHwyCM+1vgBlZWVw7+5dWUC0PhLxj088+MniAb7mfTL85AenOFjhM9XZbOn58YcfwQLONBAMwKnTp6GwqIi5QuctOTsLn3/aCyn0jGQt6Imb9KIK0R53gquKaoHreobByZKzSUin0yY4tZ2BALzz3rtQjGPJS2G8MAF8q/nFL15/4/gGHBTdApdjRM9kTHCyDPYFgkGItR+WBYRx0sc2BNA2EQekKI82NTG3O8F1SYEOYIEb788eOgR1kYgs4gwTQGsvz76jsxO4Z3KCiztChhui2g7HWJBKXtivIqRFHG8X7u/6hgZPuEWEC5waeaCmpkbW3EVL0CL27G+KmsZ0hNt4wQlu/N24bx+oqmraDap4sJDR7HOB2y2DG5zartoQFNFWFfKCKg9CS7D5I2e4XRC6wcnKy/3ZwN40v0VAKeb3XOBOHnCCZ/PCTnkJQLWPZm/48O9DG99TGgYPuJNoVe7TtFRO8K8uXNhcSMoZODMveHJmBgoKCtw9kJhKmINKgn938aIF/mLHESgsLHSfObaUpsH6+rpFwIjYMT015Qj/8vx5+HXgpgn+6mvdsI2WwANOj5nENNuqgg1YBNz67VY2UiX41Ss/wu2h4S3DySYmJmBlZcVUQ5KAPpMHsLL5Z2HBEjh/jo//T/gDmHv0CNbW1swe4LXaY7G3//JlS26P7MkeJgeam/OGZ3BXDaJn2ZEt1IrENkKy1zidyOjjp585AOHd4Y30Gmtvh+dbWyGDQeTjkZwrfGz0Pvz98KFcmMTFXdAre+GLs2exxtNMAEoi+cKTySTcuH4dlpaWxDzwmDOzNSHWaGms1TR8bTe+oLUaGx2F+sZGlmhySjI28G+//obBJfcfRfffMRWlKGIIRYTFw2lxcRFuDw9DdVU1VFVX5e32q/1XGHx5eVmujD+xLcupNuRXq6icoOg8b421we66Olf45OQkDA0OsoKU4Kurq+IwfQh/xfVewEVQgHTJ/6OjtLKyEsIoYvv2JzBAdVyebZDW0sxbM5hql/BJwaZpmuedwOtq9j7fGX7LjzBRUU6nJ6VgI7lQ3NgcOBRwZxD+2VYup09xET1bvBfG+b0w/8upzbL08PKtxc4rwmwHeHbtcwMb9p8AAwCnJC59Rj7PlgAAAABJRU5ErkJggg==</Image>
+<UpdateUrl>http://www.odpiralnicasi.com/opensearch/description.xml</UpdateUrl>
+<Url type="text/html" method="GET" template="http://www.odpiralnicasi.com/spots">
+  <Param name="q" value="{searchTerms}"/>
+  <Param name="source" value="1"/>
+</Url>
+</SearchPlugin>
