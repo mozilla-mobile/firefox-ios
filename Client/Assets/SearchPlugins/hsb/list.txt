@@ -1,0 +1,6 @@
+amazon-de
+bing
+google
+twitter
+wikipedia-hsb
+yahoo-de

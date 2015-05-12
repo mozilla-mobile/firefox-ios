@@ -124,25 +124,46 @@ class SearchEngines {
     // particular order.
     class func getUnorderedEngines() -> [OpenSearchEngine] {
         var error: NSError?
-        let path = NSBundle.mainBundle().resourcePath?.stringByAppendingPathComponent("Locales/en-US/searchplugins")
 
-        if path == nil {
-            println("Error: Could not find search engine directory")
-            return []
+        let pluginBasePath = NSBundle.mainBundle().resourcePath!.stringByAppendingPathComponent("SearchPlugins")
+        let language = NSLocale.preferredLanguages().first as! String
+        let fallbackDirectory = pluginBasePath.stringByAppendingPathComponent("en")
+
+        // Look for search plugins in the following order:
+        //   1) the full language ID
+        //   2) the language ID without the dialect
+        //   3) the fallback language (English)
+        // For example, "fr-CA" would look for plugins in this order: 1) fr-CA, 2) fr, 3) en.
+        var searchDirectory = pluginBasePath.stringByAppendingPathComponent(language)
+        if !NSFileManager.defaultManager().fileExistsAtPath(searchDirectory) {
+            let languageWithoutDialect = language.componentsSeparatedByString("-").first!
+            searchDirectory = pluginBasePath.stringByAppendingPathComponent(languageWithoutDialect)
+            if language == languageWithoutDialect || !NSFileManager.defaultManager().fileExistsAtPath(searchDirectory) {
+                searchDirectory = fallbackDirectory
+            }
         }
 
-        let directory = NSFileManager.defaultManager().contentsOfDirectoryAtPath(path!, error: &error)
-
-        if error != nil {
-            println("Could not fetch search engines")
-            return []
-        }
+        let index = searchDirectory.stringByAppendingPathComponent("list.txt")
+        let listFile = String(contentsOfFile: index, encoding: NSUTF8StringEncoding, error: &error)
+        let engineNames = listFile!
+            .stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
+            .componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
+        assert(error == nil, "Read the list of search engines")
 
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)
-        for file in directory! {
-            let fullPath = path!.stringByAppendingPathComponent(file as! String)
+        for engineName in engineNames {
+            // Search the current localized search plugins directory for the search engine.
+            // If it doesn't exist, fall back to English.
+            var fullPath = searchDirectory.stringByAppendingPathComponent("\(engineName).xml")
+            if !NSFileManager.defaultManager().fileExistsAtPath(fullPath) {
+                fullPath = fallbackDirectory.stringByAppendingPathComponent("\(engineName).xml")
+            }
+            assert(NSFileManager.defaultManager().fileExistsAtPath(fullPath), "\(fullPath) exists")
+
             let engine = parser.parse(fullPath)
+            assert(engine != nil, "Engine at \(fullPath) successfully parsed")
+
             engines.append(engine!)
         }
 

@@ -1,0 +1,14 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>eBay</ShortName>
+<Description>Ricerca integrata su eBay</Description>
+<InputEncoding>ISO-8859-1</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAAEEfUpiAAAEWklEQVRYw8WXfUxVdRjHP79z7guXBBTEEBXEraktCydjWi7RZW82lr340kZNXaX+41p/tF42Xakw3ZqNyeZMnZVYtjnLNLXMzJFLA1FrgiIioveCIvcyLvdyzz3n6Q+7FxIM5YJ8/jovv/2e7/Oc5+X8FICIbCKCiCyTLmgArcUbmb2ugirP3u4rlIjkA3P+3aFIiYjQBa21eCMARv2XFB5Mo9sKRORZ+R80IMv0NAJQ7Q4CYDYdJmwGehZ+O0pEXEA7d0B1i0UnbUqpd7urvg2NXtAAQhWnmF5Ug9tnQDiIZYUBCBo+NPf0WQTLfqc1aDEyyU77kWyCB9Kpa/6NOHsS3Mm9tQcejLoZk0gzEgehb2zp9VP0Ro8S522qv2sJGkDLR6uwmpvBsvA8n8+3f/oA+Oakly3HbhI6swKA9u9dFB5MA6DKs5drvtO3Noh/4Tm8a9fRunUbzkmTGJGgs3ZfIx/sbiT/YQPTdxbjUgnKkcL7z3goPJjG0PhM0pMeo19iYBIrIvJaH4x3iIgeyYNUYAWQepc2jyqlSiPWX+mr/wAqhiwEWKPFGL6sWDfoXm1Ltjf0bYNQ+SnEMPB4b7WLX6vbOmu2uQyrrZqg4Ys+izRGDaBxzlwcUybjXbkaEYuSIzfIGz8E9eZZQudWoidPQ+mJ/F25nNrrRwBY/3MWADYAfXgyrcUb0UeOQNpDLJ85HIAnH4rHrP8CQ9nQEibyiH0In1Ys5KXsLSyadqhL1ztfgy1rHP5du8HpJOu9Kjb8dJ3aGyHE9KMSJhA6XwhiMT/na3ZXLiEt8dFoGt8TJy5vFrfvTOR2R6yJVNr/eXCPhJSINN1DFd7O5EggvX0oxg97aipeGXjCIrJaRByRduACGoBk7j85GlAwSMYBVmiAzuChawwydyVgzmd1TC+qGRABtsiF5fXSsmoNofIKbBPGI01NWIEAQws/AZJpCVjMWHeRKy0GLodGlbuDd55KYf2r6VjXD9Nxcj44UtDiM7C8FcgDmWxTJgnOUbwxdX+XarPYXJZHYtwoFuTsRInIMqDEnfc09swxOPPyOgdBXS3tPxxg8YubONfmoK5oAkp1qs/++AJpiXZ+XJ5IuGEXVls1yriBWCFMz3600QvZ7j+Hy5bI61P3IWLxedlMklzpzJuyE6A0GgHb2AyU3UHCooKogY7ySvSx49B8Q7jW4Oe8J8j4kXEA1N80uNDYweKJlQT2L8D5+CHs45be8jLgJnBtD0op3nriKFuPz2bHyZcxwn4SnGkR40T6wDKgBMC8epXgsTLCl6+AaeLIzcE1K499f/nRFIxJtvPVcS++YJjMFAdvz0hhWLyO+C8Sqi1Ggo3orrHoGQVI4DKixWFLnYlpGWz4ZSKjh+Uyf0rpf6ZBzD93vWFZYfnij3zZc3ppT6932Aa6zJTSKcj9bsDGWb/0gUuDaL8mMgnnyv2nMHpc7TKSU4FcIBvI6GdvbwLlwAmlVPQU9g9eOPBg6mUX4QAAAABJRU5ErkJggg==</Image>
+<Url type="text/html" method="GET" template="http://rover.ebay.com/rover/1/724-51951-19398-1/4">
+  <Param name="satitle" value="{searchTerms}"/>
+</Url>
+<SearchForm>http://search.ebay.it/</SearchForm>
+</SearchPlugin>

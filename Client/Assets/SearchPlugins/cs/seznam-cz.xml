@@ -1,0 +1,18 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Seznam</ShortName>
+<Description>Integrované hledávání na Seznam.cz</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2RpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1MTMxNEY1Njg5NTJFMzExQTJGQjkxRDJBMkJDRUQyQyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo2NzlBRkNGNDUyODkxMUUzOEU3NzlFQjYwMDA3OUQ4MSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo2NzlBRkNGMzUyODkxMUUzOEU3NzlFQjYwMDA3OUQ4MSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1MTMxNEY1Njg5NTJFMzExQTJGQjkxRDJBMkJDRUQyQyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1MTMxNEY1Njg5NTJFMzExQTJGQjkxRDJBMkJDRUQyQyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvOhKJMAAAHISURBVHja7JbLqwFxFMePRxKSJMXCQomFPEpkgWbhD7CwkORfsLS0sVSKlY3l3VhYWVjYKGVLSoRiw4ZYoDzOnV9Xnnc8mlH3lm+n6fT7zZzPzDlnzgwPEeGd4sOb9QH8X8BiAeUy7PePz8TnNZlgtYrZLIbDqNPR3Y2p1MOLngD0+5hMoteLSiUJem4yGQ4G7ACZDCoU13HP7euLBSCfvxeaNrMZe737AB7jqFitwGSC4fB6XaMBsxkcDvB4wOcDieR+jYWMOzweCC93VSooFEhoqZSLNhWLIZ0mx/NnarVAIHitoR8UuVZDl+si73o9xuNYr+Nu90xvP9Gmmw2ptt1+XWGrFRMJ7HZZA46YYhEDAZTLLzBSKcZiOJ+zBhw1HGIuh34/ikQnjMOB4zFHgKMaDYxEToxolGvAj4LBA8BgwP3+dp/1uDYaD47NRl4dVtP0VqUSSiTk9ukeo2ciZymazciMoygS2mIhA3G5fH0WXWmzgU4HqlWoVKDZBD4fKApCIXC7ic8sZsB2C7MZjEYkLm20s16DWk1y7XSeUv9IDIDpFNptcqTrJpORCarVEud1MQDoxV9bgrOPPkfRPz9efwLwLcAAWeEoGTAkVScAAAAASUVORK5CYII=</Image>
+<Url type="application/x-suggestions+json" method="GET" template="http://suggest.fulltext.seznam.cz/fulltext_ff">
+  <Param name="phrase" value="{searchTerms}"/>
+</Url>
+<Url type="text/html" method="GET" template="http://search.seznam.cz/">
+  <Param name="q" value="{searchTerms}"/>
+  <Param name="sourceid" value="SearchBox"/>
+</Url>
+<SearchForm>http://search.seznam.cz/</SearchForm>
+</SearchPlugin>

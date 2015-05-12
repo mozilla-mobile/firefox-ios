@@ -1,0 +1,8 @@
+amazondotcom
+bing
+duckduckgo
+google
+mercadolibre-mx
+twitter
+wikipedia-es
+yahoo-mx
