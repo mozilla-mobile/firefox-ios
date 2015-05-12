@@ -38,7 +38,7 @@ public class Password : Equatable {
     // var encType: String { get }
 
     public init(site: Site, username: String, password: String) {
-        hostname = site.url
+        self.hostname = site.url
         self.username = username
         self.password = password
     }
