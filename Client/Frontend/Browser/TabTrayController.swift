@@ -404,24 +404,29 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
         view.addSubview(collectionView)
         view.addSubview(navBar)
+    }
 
-        navBar.snp_makeConstraints { make in
-            make.top.equalTo(self.view)
-            make.height.equalTo(AppConstants.StatusBarHeight + AppConstants.ToolbarHeight)
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+
+        navBar.snp_remakeConstraints { make in
+        let topLayoutGuide = self.topLayoutGuide as! UIView
+            make.top.equalTo(topLayoutGuide.snp_bottom)
+            make.height.equalTo(AppConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
         }
 
-        addTabButton.snp_makeConstraints { make in
+        addTabButton.snp_remakeConstraints { make in
             make.trailing.bottom.equalTo(self.navBar)
             make.size.equalTo(AppConstants.ToolbarHeight)
         }
 
-        settingsButton.snp_makeConstraints { make in
+        settingsButton.snp_remakeConstraints { make in
             make.leading.bottom.equalTo(self.navBar)
             make.size.equalTo(AppConstants.ToolbarHeight)
         }
 
-        collectionView.snp_makeConstraints { make in
+        collectionView.snp_remakeConstraints { make in
             make.top.equalTo(self.view)
             make.left.right.bottom.equalTo(self.view)
         }
