@@ -109,6 +109,10 @@ class SimplePageServer {
             return GCDWebServerDataResponse(HTML: pageData as String)
         }
 
+        webServer.addHandlerForMethod("GET", path: "/readerContent.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            return GCDWebServerDataResponse(HTML: self.getPageData("readerContent"))
+        }
+
         if !webServer.startWithPort(0, bonjourName: nil) {
             XCTFail("Can't start the GCDWebServer")
         }
