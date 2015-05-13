@@ -1500,7 +1500,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
             if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
                 if let successValue = result.successValue, record = successValue {
                     profile.readingList?.updateRecord(record, unread: false) // TODO Check result, can this fail?
-                    readerModeBar.unread = true
+                    readerModeBar.unread = false
                 }
             }
 
