@@ -130,7 +130,7 @@ class BrowserViewController: UIViewController {
 
     override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
-        updateToolbarStateForTraitCollection(self.traitCollection)
+        updateToolbarStateForTraitCollection(newCollection)
 
         // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
         // performs a device rotation. Since scrolling calls
@@ -177,6 +177,8 @@ class BrowserViewController: UIViewController {
         self.view.addSubview(footer)
         footer.addSubview(snackBars)
         snackBars.backgroundColor = UIColor.clearColor()
+
+        updateToolbarStateForTraitCollection(self.traitCollection)
     }
 
     func startTrackingAccessibilityStatus() {
