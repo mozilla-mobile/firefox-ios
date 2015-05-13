@@ -5,8 +5,6 @@
 import Foundation
 import Shared
 
-let DefaultSearchEngineName = "Yahoo"
-
 private let OrderedEngineNames = "search.orderedEngineNames"
 private let DisabledEngineNames = "search.disabledEngineNames"
 private let ShowSearchSuggestionsOptIn = "search.suggestions.showOptIn"
@@ -167,7 +165,10 @@ class SearchEngines {
             engines.append(engine!)
         }
 
-        return engines.sorted({ e, _ in e.shortName == DefaultSearchEngineName })
+        let defaultEngineFile = searchDirectory.stringByAppendingPathComponent("default.txt")
+        let defaultEngineName = String(contentsOfFile: defaultEngineFile, encoding: NSUTF8StringEncoding, error: nil)?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+
+        return engines.sorted({ e, _ in e.shortName == defaultEngineName })
     }
 
     // Get all known search engines, possibly as ordered by the user.

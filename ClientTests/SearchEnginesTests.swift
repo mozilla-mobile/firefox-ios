@@ -6,6 +6,7 @@ import Foundation
 import XCTest
 import Shared
 
+private let DefaultSearchEngineName = "Yahoo"
 private let ExpectedEngineNames = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "Twitter", "Wikipedia", "Yahoo"]
 
 class SearchEnginesTests: XCTestCase {
@@ -20,7 +21,7 @@ class SearchEnginesTests: XCTestCase {
     }
 
     func testDefaultEngineOnStartup() {
-        // If this is our first run, the global default search engine should be first.
+        // If this is our first run, Yahoo should be first for the en locale.
         let prefs = MockProfilePrefs()
         let engines = SearchEngines(prefs: prefs)
         XCTAssertEqual(engines.defaultEngine.shortName, DefaultSearchEngineName)
