@@ -54,6 +54,8 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         addSubview(readerModeButton)
         readerModeButton.isAccessibilityElement = true
         readerModeButton.accessibilityLabel = NSLocalizedString("Reader Mode", comment: "Accessibility label for the reader mode button")
+
+        accessibilityElements = [lockImageView, locationLabel, readerModeButton]
     }
 
     override func updateConstraints() {
