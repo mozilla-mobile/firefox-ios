@@ -321,6 +321,7 @@ public class SQLiteDBConnection {
         var error: NSError?
         let statement = SQLiteDBStatement(connection: self, query: sqlStr, args: args, error: &error)
         if let error = error {
+            println("SQL error: \(error.localizedDescription) for SQL \(sqlStr).")
             return error
         }
 
