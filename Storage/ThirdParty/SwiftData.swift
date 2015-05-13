@@ -34,7 +34,6 @@
 
 import Foundation
 import UIKit
-import sqlite3
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
 
