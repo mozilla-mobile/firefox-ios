@@ -54,24 +54,31 @@ class SearchEnginesTests: XCTestCase {
     func testOrderedEngines() {
         let prefs = MockProfilePrefs()
         let engines = SearchEngines(prefs: prefs)
-        let engineSet = engines.orderedEngines
 
-        engines.orderedEngines = [engineSet[4], engineSet[2], engineSet[0]]
-        XCTAssertEqual(engines.orderedEngines[0].shortName, engineSet[4].shortName)
-        XCTAssertEqual(engines.orderedEngines[1].shortName, engineSet[2].shortName)
-        XCTAssertEqual(engines.orderedEngines[2].shortName, engineSet[0].shortName)
+        engines.orderedEngines = [ExpectedEngineNames[4], ExpectedEngineNames[2], ExpectedEngineNames[0]].map { name in
+            for engine in engines.orderedEngines {
+                if engine.shortName == name {
+                    return engine
+                }
+            }
+            XCTFail("Could not find engine: \(name)")
+            return engines.orderedEngines.first!
+        }
+        XCTAssertEqual(engines.orderedEngines[0].shortName, ExpectedEngineNames[4])
+        XCTAssertEqual(engines.orderedEngines[1].shortName, ExpectedEngineNames[2])
+        XCTAssertEqual(engines.orderedEngines[2].shortName, ExpectedEngineNames[0])
 
         let engines2 = SearchEngines(prefs: prefs)
         // The ordering should have been persisted.
-        XCTAssertEqual(engines2.orderedEngines[0].shortName, engineSet[4].shortName)
-        XCTAssertEqual(engines2.orderedEngines[1].shortName, engineSet[2].shortName)
-        XCTAssertEqual(engines2.orderedEngines[2].shortName, engineSet[0].shortName)
+        XCTAssertEqual(engines2.orderedEngines[0].shortName, ExpectedEngineNames[4])
+        XCTAssertEqual(engines2.orderedEngines[1].shortName, ExpectedEngineNames[2])
+        XCTAssertEqual(engines2.orderedEngines[2].shortName, ExpectedEngineNames[0])
 
         // Remaining engines should be appended in alphabetical order.
-        XCTAssertEqual(engines2.orderedEngines[3].shortName, engineSet[1].shortName)
-        XCTAssertEqual(engines2.orderedEngines[4].shortName, engineSet[3].shortName)
-        XCTAssertEqual(engines2.orderedEngines[5].shortName, engineSet[5].shortName)
-        XCTAssertEqual(engines2.orderedEngines[6].shortName, engineSet[6].shortName)
+        XCTAssertEqual(engines2.orderedEngines[3].shortName, ExpectedEngineNames[1])
+        XCTAssertEqual(engines2.orderedEngines[4].shortName, ExpectedEngineNames[3])
+        XCTAssertEqual(engines2.orderedEngines[5].shortName, ExpectedEngineNames[5])
+        XCTAssertEqual(engines2.orderedEngines[6].shortName, ExpectedEngineNames[6])
     }
 
     func testQuickSearchEngines() {
