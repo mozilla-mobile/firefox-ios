@@ -120,7 +120,7 @@ class TestSwiftData: XCTestCase {
         return swiftData.withConnection(SwiftData.Flags.ReadWrite) { connection -> NSError? in
             var err: NSError?
             let args: Args = [Bytes.generateGUID(), url, title]
-            return connection.executeChange("INSERT INTO history (guid, url, title) VALUES (?, ?, ?)", withArgs: args)
+            return connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
         }
     }
 }
