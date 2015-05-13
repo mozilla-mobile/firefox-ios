@@ -58,6 +58,7 @@ class TestSQLiteHistory: XCTestCase {
                 XCTAssertEqual(1, sites.count)
                 XCTAssertEqual(site1.title, sites[0]!.title)
                 XCTAssertEqual(site1.url, sites[0]!.url)
+                sites.close()
                 return succeed()
             }
             >>>
@@ -67,6 +68,7 @@ class TestSQLiteHistory: XCTestCase {
                 XCTAssertEqual(1, sites.count)
                 XCTAssertEqual(site1Changed.title, sites[0]!.title)
                 XCTAssertEqual(site1Changed.url, sites[0]!.url)
+                sites.close()
                 return succeed()
             }
             >>>
