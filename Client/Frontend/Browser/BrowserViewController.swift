@@ -826,9 +826,9 @@ extension BrowserViewController: UIScrollViewDelegate {
             let scrollingSize = scrollView.contentSize.height - scrollView.frame.size.height
 
             if !tab.loading &&
-                scrollingSize > scrollView.frame.size.height &&
-                scrollView.contentOffset.y > 0 &&
-                scrollView.contentOffset.y < scrollingSize  {
+                true && //scrollingSize > scrollView.frame.size.height &&
+                true && //scrollView.contentOffset.y > 0 &&
+                true { // scrollView.contentOffset.y < scrollingSize  {
                 self.scrollFooter(dy)
                 self.scrollHeader(dy)
                 self.scrollReader(dy)
