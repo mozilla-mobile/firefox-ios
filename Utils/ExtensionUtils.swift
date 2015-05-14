@@ -42,27 +42,42 @@ struct ExtensionUtils {
         completionHandler(nil, nil)
     }
     
-    /// Return the shared container identifier (also known as the app group) to be used with for example background http requests.
+    /// Return the shared container identifier (also known as the app group) to be used with for example background
+    /// http requests. It is the base bundle identifier with a "group." prefix.
+    static func sharedContainerIdentifier() -> String? {
+        if let baseBundleIdentifier = ExtensionUtils.baseBundleIdentifier() {
+            return "group." + baseBundleIdentifier
+        } else {
+            return nil
+        }
+    }
+
+    /// Return the keychain access group.
+    static func keychainAccessGroupWithPrefix(prefix: String) -> String? {
+        if let baseBundleIdentifier = ExtensionUtils.baseBundleIdentifier() {
+            return prefix + "." + baseBundleIdentifier
+        } else {
+            return nil
+        }
+    }
+
+    /// Return the base bundle identifier.
     ///
-    /// This function is smart enough to find out if it is being called from an extension or the main application. In case of the
-    /// former, it will chop off the extension identifier from the bundle since that is a suffix not used in the app group.
-    ///
-    /// :returns: the shared container identifier (app group) or the string "group.unknown" if it cannot find the group
-    static func sharedContainerIdentifier() -> String {
+    /// This function is smart enough to find out if it is being called from an extension or the main application. In
+    /// case of the former, it will chop off the extension identifier from the bundle since that is a suffix not part
+    /// of the *base* bundle identifier.
+    static func baseBundleIdentifier() -> String? {
         let bundle = NSBundle.mainBundle()
         if let packageType = bundle.objectForInfoDictionaryKey("CFBundlePackageType") as? NSString {
-            switch packageType {
-            case "XPC!":
-                let identifier = bundle.bundleIdentifier!
-                let components = identifier.componentsSeparatedByString(".")
-                let baseIdentifier = ".".join(components[0..<components.count-1])
-                return "group.\(baseIdentifier)"
-            case "APPL":
-                return "group.\(bundle.bundleIdentifier!)"
-            default:
-                return "group.unknown"
+            if let baseBundleIdentifier = bundle.bundleIdentifier {
+                if packageType == "XPC!" {
+                    let components = baseBundleIdentifier.componentsSeparatedByString(".")
+                    return ".".join(components[0..<components.count-1])
+                } else {
+                    return baseBundleIdentifier
+                }
             }
         }
-        return "group.unknown"
+        return nil
     }
 }

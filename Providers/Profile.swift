@@ -22,13 +22,17 @@ public class NoAccountError: SyncError {
 class ProfileFileAccessor: FileAccessor {
     init(profile: Profile) {
         let profileDirName = "profile.\(profile.localName())"
-        let manager = NSFileManager.defaultManager()
+
         // Bug 1147262: First option is for device, second is for simulator.
-        let url =
-            manager.containerURLForSecurityApplicationGroupIdentifier(ExtensionUtils.sharedContainerIdentifier()) ??
-            manager .URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0] as? NSURL
-        let profilePath = url!.path!.stringByAppendingPathComponent(profileDirName)
-        super.init(rootPath: profilePath)
+        var rootPath: String?
+        if let sharedContainerIdentifier = ExtensionUtils.sharedContainerIdentifier(), url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(sharedContainerIdentifier), path = url.path {
+            rootPath = path
+        } else {
+            log.error("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
+            rootPath = String(NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! NSString)
+        }
+
+        super.init(rootPath: rootPath!.stringByAppendingPathComponent(profileDirName))
     }
 }
 
