@@ -5,32 +5,29 @@
 import Foundation
 import Shared
 
-public class NSUserDefaultsProfilePrefs: Prefs {
-    private let profile: Profile
-    private let prefix: String
+public class NSUserDefaultsPrefs: Prefs {
+    private let prefixWithDot: String
     private let userDefaults: NSUserDefaults
 
-    init(profile: Profile, prefix: String, userDefaults: NSUserDefaults) {
-        self.profile = profile
-        self.prefix = prefix
+    init(prefix: String, userDefaults: NSUserDefaults) {
+        self.prefixWithDot = prefix + (prefix.endsWith(".") ? "" : ".")
         self.userDefaults = userDefaults
     }
 
-    init(profile: Profile) {
-        self.profile = profile
-        self.prefix = profile.localName() + "."
+    init(prefix: String) {
+        self.prefixWithDot = prefix + (prefix.endsWith(".") ? "" : ".")
         self.userDefaults = NSUserDefaults(suiteName: ExtensionUtils.sharedContainerIdentifier())!
     }
 
     public func branch(branch: String) -> Prefs {
-        let prefix = self.prefix + branch + "."
-        return NSUserDefaultsProfilePrefs(profile: self.profile, prefix: prefix, userDefaults: self.userDefaults)
+        let prefix = self.prefixWithDot + branch + "."
+        return NSUserDefaultsPrefs(prefix: prefix, userDefaults: self.userDefaults)
     }
 
     // Preferences are qualified by the profile's local name.
     // Connecting a profile to a Firefox Account, or changing to another, won't alter this.
     private func qualifyKey(key: String) -> String {
-        return self.prefix + key
+        return self.prefixWithDot + key
     }
 
     public func setInt(value: Int32, forKey defaultName: String) {
