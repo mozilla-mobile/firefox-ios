@@ -184,7 +184,7 @@ public class BrowserProfile: Profile {
     }()
 
     func makePrefs() -> Prefs {
-        return NSUserDefaultsProfilePrefs(profile: self)
+        return NSUserDefaultsPrefs(prefix: self.localName())
     }
 
     lazy var prefs: Prefs = {
