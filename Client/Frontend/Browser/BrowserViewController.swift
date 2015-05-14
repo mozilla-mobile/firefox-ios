@@ -50,7 +50,7 @@ class BrowserViewController: UIViewController {
     private var footerBackground: UIView!
 
     // Scroll management properties
-    private var scrollRecognizer: ScrollRecognizer!
+    private var scrollRecognizer: ScrollRecognizer
 
     private var headerConstraint: Constraint?
     private var headerConstraintOffset: CGFloat = 0
@@ -65,6 +65,7 @@ class BrowserViewController: UIViewController {
 
     init(profile: Profile) {
         self.profile = profile
+        scrollRecognizer = ScrollRecognizer()
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -82,8 +83,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func didInit() {
-        scrollRecognizer = ScrollRecognizer()
-        scrollRecognizer.bvc = self
+        scrollRecognizer.browserViewController = self
         let defaultURL = NSURL(string: HomeURL)!
         let defaultRequest = NSURLRequest(URL: defaultURL)
         tabManager = TabManager(defaultNewTabRequest: defaultRequest)
@@ -816,7 +816,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
 }
 
 class ScrollRecognizer : UIGestureRecognizer {
-    weak var bvc: BrowserViewController?
+    weak var browserViewController: BrowserViewController?
     private var previousScroll: CGPoint?
 
     override func canPreventGestureRecognizer(preventedGestureRecognizer: UIGestureRecognizer!) -> Bool {
@@ -835,14 +835,10 @@ class ScrollRecognizer : UIGestureRecognizer {
         return preventingGestureRecognizer.description.rangeOfString("UIScrollViewPanGestureRecognizer") == nil
     }
 
-    override init(target: AnyObject, action: Selector) {
-        super.init(target: target, action: action)
-    }
-
     override func touchesBegan(touches: Set<NSObject>!, withEvent event: UIEvent!) {
         if touches.count == 1 {
             if let touch = touches.first as? UITouch {
-                previousScroll = touch.locationInView(bvc?.view)
+                previousScroll = touch.locationInView(browserViewController?.view)
             }
         } else {
             // If a second finer comes down, we'll stop dragging
@@ -852,43 +848,37 @@ class ScrollRecognizer : UIGestureRecognizer {
     }
 
     override func touchesMoved(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        if previousScroll != nil {
-            if let touch = touches.first as? UITouch,
-                let tab = bvc?.tabManager.selectedTab,
-                let prev = self.previousScroll {
+        if let touch = touches.first as? UITouch,
+            let browserViewController = browserViewController,
+            let tab = browserViewController.tabManager.selectedTab,
+            let prev = self.previousScroll {
                 let scrollView = tab.webView.scrollView
-                let offset = touch.locationInView(bvc?.view)
+                let offset = touch.locationInView(browserViewController.view)
                 let dy = offset.y - prev.y
                 let scrollingSize = scrollView.contentSize.height - scrollView.frame.size.height
 
                 if !tab.loading {
-                        bvc?.scrollFooter(dy)
-                        bvc?.scrollHeader(dy)
-                        bvc?.scrollReader(dy)
+                    browserViewController.scrollFooter(dy)
+                    browserViewController.scrollHeader(dy)
+                    browserViewController.scrollReader(dy)
                 }
                 self.previousScroll = offset
-            }
         }
         super.touchesMoved(touches, withEvent: event)
-    }
-
-    override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        super.touchesCancelled(touches, withEvent: event)
     }
 
     override func touchesEnded(touches: Set<NSObject>!, withEvent event: UIEvent!) {
         if previousScroll != nil && touches.count == 1 {
             endDragging()
-            self.previousScroll = nil
         }
         super.touchesEnded(touches, withEvent: event)
     }
 
     private func endDragging() {
-        let totalOffset = bvc!.header.frame.size.height - AppConstants.StatusBarHeight
-        if bvc!.headerConstraintOffset > -totalOffset {
+        let totalOffset = browserViewController!.header.frame.size.height - AppConstants.StatusBarHeight
+        if browserViewController!.headerConstraintOffset > -totalOffset {
             dispatch_async(dispatch_get_main_queue()) {
-                bvc?.showToolbars(animated: true)
+                browserViewController?.showToolbars(animated: true)
             }
         }
         self.previousScroll = nil
