@@ -11,6 +11,9 @@ class TestAppDelegate: AppDelegate {
         profile.files.removeFilesInDirectory()
         profile.prefs.clearAll()
 
+        // Skip the first run UI.
+        profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
+
         return profile
     }
 }
