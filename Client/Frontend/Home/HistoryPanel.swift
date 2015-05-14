@@ -85,11 +85,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         let date = Double(date)
         switch section {
         case 0:
-            return date > (1000 * Today.timeIntervalSince1970)
+            return date > (1000000 * Today.timeIntervalSince1970)
         case 1:
-            return date > (1000 * Yesterday.timeIntervalSince1970)
+            return date > (1000000 * Yesterday.timeIntervalSince1970)
         case 2:
-            return date > (1000 * ThisWeek.timeIntervalSince1970)
+            return date > (1000000 * ThisWeek.timeIntervalSince1970)
         default:
             return true
         }
