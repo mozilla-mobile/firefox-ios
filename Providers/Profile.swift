@@ -127,6 +127,12 @@ public class BrowserProfile: Profile {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         let mainQueue = NSOperationQueue.mainQueue()
         notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: "LocationChange", object: nil)
+
+        if let baseBundleIdentifier = ExtensionUtils.baseBundleIdentifier() {
+            KeychainWrapper.serviceName = baseBundleIdentifier
+        } else {
+            log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
+        }
     }
 
     // Extensions don't have a UIApplication.
