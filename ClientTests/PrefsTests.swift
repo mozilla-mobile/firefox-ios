@@ -16,6 +16,12 @@ class PrefsTests: XCTestCase {
     func testClearPrefs() {
         prefs.setObject("foo", forKey: "bar")
         XCTAssertEqual(prefs.stringForKey("bar")!, "foo")
+
+        // Ensure clearing prefs is branch-specific.
+        let otherPrefs = NSUserDefaultsPrefs(prefix: "othermockaccount")
+        otherPrefs.clearAll()
+        XCTAssertEqual(prefs.stringForKey("bar")!, "foo")
+
         prefs.clearAll()
         XCTAssertNil(prefs.stringForKey("bar"))
     }
@@ -69,5 +75,18 @@ class PrefsTests: XCTestCase {
         let val: Timestamp = NSDate.now()
         prefs.setLong(val, forKey: "foobar")
         XCTAssertEqual(val, (prefs.things["baz.foobar"] as! NSNumber).unsignedLongLongValue)
+    }
+
+    func testMockProfilePrefsClearAll() {
+        let prefs1 = MockProfilePrefs().branch("bar") as! MockProfilePrefs
+        let prefs2 = MockProfilePrefs().branch("baz") as! MockProfilePrefs
+
+        // Ensure clearing prefs is branch-specific.
+        prefs1.setInt(123, forKey: "foo")
+        prefs2.clearAll()
+        XCTAssertEqual(123, prefs1.intForKey("foo")!)
+
+        prefs1.clearAll()
+        XCTAssertNil(prefs1.intForKey("foo") as! AnyObject?)
     }
 }
