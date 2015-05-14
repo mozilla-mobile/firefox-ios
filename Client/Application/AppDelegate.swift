@@ -13,32 +13,23 @@ public func isAuroraChannel() -> Bool {
     return NSBundle.mainBundle().bundleIdentifier == AuroraBundleIdentifier
 }
 
-@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
-    var profile: Profile!
 
     private let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
     func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Setup a web server that serves us static content. Do this early so that it is ready when the UI is presented.
-        setupWebServer()
-
         // Set the Firefox UA for browsing.
         setUserAgent()
 
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
 
-        if NSClassFromString("XCTestCase") == nil {
-            profile = BrowserProfile(localName: "profile", app: application)
-        } else {
-            // Use a clean profile for each test session.
-            profile = BrowserProfile(localName: "testProfile", app: application)
-            profile.files.removeFilesInDirectory()
-            profile.prefs.clearAll()
-        }
+        let profile = getProfile(application)
+
+        // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
+        setUpWebServer(profile)
 
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
@@ -56,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL, absoluteString = url.absoluteString {
                 let title = (userInfo["Title"] as? String) ?? ""
-                self.profile.readingList?.createRecordWithURL(absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
+                profile.readingList?.createRecordWithURL(absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
             }
         }
 
@@ -65,6 +56,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         registerFeedbackNotification()
 #endif
         return true
+    }
+
+    func getProfile(application: UIApplication) -> Profile {
+        return BrowserProfile(localName: "profile", app: application)
     }
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
@@ -109,9 +104,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 #endif
 
-    private func setupWebServer() {
+    private func setUpWebServer(profile: Profile) {
         let server = WebServer.sharedInstance
-        ReaderModeHandlers.register(server)
+        ReaderModeHandlers.register(server, profile: profile)
         server.start()
     }
 
