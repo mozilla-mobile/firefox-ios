@@ -26,8 +26,8 @@ h1 {
     font-weight: 300;
 }
 
+/* Add a set of stripes at the top of pages */
 #decoration {
-    /* Add a set of stripes at the top of pages */
     background-image: repeating-linear-gradient(-65deg,      #eee,  #eee 10px,
                                                        white 10px, white 20px,
                                                                     #eee 20px);
@@ -96,14 +96,6 @@ button {
         padding-right: 5%;
         min-width: 40%;
         width: auto;
-    }
-
-    /* If the tablet is tall as well, add some padding to make content feel a bit more centered */
-    @media (min-height: 550px) {
-        #errorPageContainer {
-            padding-top: 64px;
-            min-height: calc(100% - 64px);
-        }
     }
 }
 
