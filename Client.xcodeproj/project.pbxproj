@@ -37,8 +37,8 @@
 		0BB5B30B1AC0AD1F0052877D /* PasswordHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B30A1AC0AD1F0052877D /* PasswordHelper.swift */; };
 		0BB5B3601AC0D6360052877D /* BookmarkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */; };
 		0BD19A651A2530840084FBA7 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
-		0BD19A671A25309B0084FBA7 /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
-		0BD19A681A2530A40084FBA7 /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
+		0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
+		0BD19A681A2530A40084FBA7 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
 		0BD2C61D1A643B6000BB4BB9 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		0BD75AD31AF2EE5A00B48915 /* suggestedsites.json in Resources */ = {isa = PBXBuildFile; fileRef = 0BD75AD21AF2EE5A00B48915 /* suggestedsites.json */; };
 		0BE108361A1B1EC700D4B712 /* TestLocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108351A1B1EC700D4B712 /* TestLocking.swift */; };
@@ -125,8 +125,8 @@
 		28C8D13B1AD4CEB100F62011 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		28C8D13C1AD4CEB400F62011 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
 		28CA1BA81AFC718800220D38 /* TestTableTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2821ABB533A00877008 /* TestTableTable.swift */; };
-		28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
-		28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */; };
+		28CDA55C1A43C37C005C318C /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
+		28CDA5641A43C37D005C318C /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
 		28D158AD1AFD90E500F9C065 /* TestSQLiteBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D158AC1AFD90E500F9C065 /* TestSQLiteBookmarks.swift */; };
 		28D158CC1AFDBCC000F9C065 /* TestFaviconsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27C1ABB533A00877008 /* TestFaviconsTable.swift */; };
 		28E08C991AF44EF9009BA2FA /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2551ABB531100877008 /* SQLiteHistory.swift */; };
@@ -235,7 +235,7 @@
 		2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */; };
 		2FCAE33E1ABB5F1800877008 /* Storage-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FCAE33D1ABB5F1800877008 /* Storage-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2FCAE33F1ABB604C00877008 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE28F1ABB53AA00877008 /* libsqlite3.dylib */; };
-		2FDB10931A9FBEC5006CF312 /* ProfilePrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB10921A9FBEC5006CF312 /* ProfilePrefsTests.swift */; };
+		2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */; };
 		2FDBCF611ABFC9DE00AFF7F0 /* SyncAuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDBCF601ABFC9DE00AFF7F0 /* SyncAuthState.swift */; };
 		2FDBCF621ABFC9DE00AFF7F0 /* SyncAuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDBCF601ABFC9DE00AFF7F0 /* SyncAuthState.swift */; };
 		2FDBCF9B1AC0ADB500AFF7F0 /* SyncAuthStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDBCF9A1AC0ADB500AFF7F0 /* SyncAuthStateTests.swift */; };
@@ -1055,7 +1055,7 @@
 		0BB5B3081AC0AD150052877D /* PasswordHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = PasswordHelper.js; path = Assets/PasswordHelper.js; sourceTree = "<group>"; };
 		0BB5B30A1AC0AD1F0052877D /* PasswordHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordHelper.swift; sourceTree = "<group>"; };
 		0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkingTests.swift; sourceTree = "<group>"; };
-		0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePrefs.swift; sourceTree = "<group>"; };
+		0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
 		0BD75AD21AF2EE5A00B48915 /* suggestedsites.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = suggestedsites.json; sourceTree = "<group>"; };
 		0BE108351A1B1EC700D4B712 /* TestLocking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLocking.swift; sourceTree = "<group>"; };
 		0BE108391A1B1ED200D4B712 /* Locking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locking.swift; sourceTree = "<group>"; };
@@ -1189,7 +1189,7 @@
 		2FCAE2821ABB533A00877008 /* TestTableTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestTableTable.swift; sourceTree = "<group>"; };
 		2FCAE28F1ABB53AA00877008 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		2FCAE33D1ABB5F1800877008 /* Storage-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Storage-Bridging-Header.h"; sourceTree = "<group>"; };
-		2FDB10921A9FBEC5006CF312 /* ProfilePrefsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfilePrefsTests.swift; sourceTree = "<group>"; };
+		2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefsTests.swift; sourceTree = "<group>"; };
 		2FDBCF601ABFC9DE00AFF7F0 /* SyncAuthState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncAuthState.swift; sourceTree = "<group>"; };
 		2FDBCF9A1AC0ADB500AFF7F0 /* SyncAuthStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncAuthStateTests.swift; sourceTree = "<group>"; };
 		2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanel.swift; sourceTree = "<group>"; };
@@ -1945,7 +1945,7 @@
 			children = (
 				0BE108391A1B1ED200D4B712 /* Locking.swift */,
 				D34DC84D1A16C40C00D49B7B /* Profile.swift */,
-				0BD19A661A25309B0084FBA7 /* ProfilePrefs.swift */,
+				0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */,
 				0BEFED8B1AC21C1E002E0A0C /* SDWebThumbnails.swift */,
 			);
 			path = Providers;
@@ -2325,7 +2325,7 @@
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
 				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
-				2FDB10921A9FBEC5006CF312 /* ProfilePrefsTests.swift */,
+				2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */,
 				0BA896491A250E6500C1010C /* ProfileTest.swift */,
 				2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */,
 				D3FA777A1A43B2990010CD32 /* SearchTests.swift */,
@@ -3703,7 +3703,7 @@
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				D38B2D3A1A8D96D00040E6B5 /* GCDWebServerResponse.m in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
-				0BD19A671A25309B0084FBA7 /* ProfilePrefs.swift in Sources */,
+				0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */,
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
 				28EADE5D1AFC3A78007FB2FB /* UIImageViewExtensions.swift in Sources */,
 				0BB5B2BC1AC0AB9F0052877D /* UIImage+Extensions.swift in Sources */,
@@ -3767,7 +3767,7 @@
 				D38B2D3E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m in Sources */,
 				D3D247321ABCEA1700771C7E /* ThumbnailTests.swift in Sources */,
 				0BF1B7FE1AC60F0200A7B407 /* InsetButton.swift in Sources */,
-				0BD19A681A2530A40084FBA7 /* ProfilePrefs.swift in Sources */,
+				0BD19A681A2530A40084FBA7 /* NSUserDefaultsPrefs.swift in Sources */,
 				28EADE5E1AFC3B86007FB2FB /* UIImageViewExtensions.swift in Sources */,
 				D308E4EC1A530A8B00842685 /* SearchEngines.swift in Sources */,
 				0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */,
@@ -3780,7 +3780,7 @@
 				D31A0FC81A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */,
 				59A687B4A05CC772FE7E5A09 /* SearchViewController.swift in Sources */,
-				2FDB10931A9FBEC5006CF312 /* ProfilePrefsTests.swift in Sources */,
+				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
 				E42475E91AB73B9B00B23D33 /* SWUtilityButtonView.m in Sources */,
 				0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */,
 				59A6897152D30C846676DA34 /* TwoLineCell.swift in Sources */,
@@ -3802,7 +3802,7 @@
 				E418D0D91A251B3200CAE47A /* Profile.swift in Sources */,
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
 				0BEFED8E1AC21C32002E0A0C /* SDWebThumbnails.swift in Sources */,
-				28CDA55C1A43C37C005C318C /* ProfilePrefs.swift in Sources */,
+				28CDA55C1A43C37C005C318C /* NSUserDefaultsPrefs.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3818,7 +3818,7 @@
 				E42CCE041A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,
 				0BEFED8F1AC21C34002E0A0C /* SDWebThumbnails.swift in Sources */,
 				F8708D2A1A0970B40051AB07 /* ActionViewController.swift in Sources */,
-				28CDA5641A43C37D005C318C /* ProfilePrefs.swift in Sources */,
+				28CDA5641A43C37D005C318C /* NSUserDefaultsPrefs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
