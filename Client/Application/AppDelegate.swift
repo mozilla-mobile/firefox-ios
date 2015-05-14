@@ -37,6 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Use a clean profile for each test session.
             profile = BrowserProfile(localName: "testProfile", app: application)
             profile.files.removeFilesInDirectory()
+            profile.prefs.clearAll()
         }
 
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
