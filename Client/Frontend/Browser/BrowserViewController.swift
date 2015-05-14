@@ -178,7 +178,6 @@ class BrowserViewController: UIViewController {
         footer.addSubview(snackBars)
         snackBars.backgroundColor = UIColor.clearColor()
 
-        updateToolbarStateForTraitCollection(self.traitCollection)
     }
 
     func startTrackingAccessibilityStatus() {
@@ -206,6 +205,8 @@ class BrowserViewController: UIViewController {
         if (tabManager.count == 0) {
             tabManager.addTab()
         }
+
+        updateToolbarStateForTraitCollection(self.traitCollection)
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -280,7 +281,7 @@ class BrowserViewController: UIViewController {
             make.top.equalTo(self.urlBar.snp_bottom)
             make.left.right.equalTo(self.view)
             let url = self.tabManager.selectedTab?.url
-            if url?.absoluteString == HomeURL && self.homePanelIsInline {
+            if url?.absoluteString == HomeURL || self.homePanelIsInline {
                 make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
             } else {
                 make.bottom.equalTo(self.view.snp_bottom)
