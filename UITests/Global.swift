@@ -69,16 +69,21 @@ extension KIFUITestActor {
 }
 
 class BrowserUtils {
-    /// Close all tabs and open a single about:home tab to restore the browser to startup state.
+    /// Close all tabs to restore the browser to startup state.
     class func resetToAboutHome(tester: KIFUITestActor) {
         tester.tapViewWithAccessibilityLabel("Show Tabs")
         let tabsView = tester.waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
-        while tabsView.numberOfItemsInSection(0) > 0 {
+        while tabsView.numberOfItemsInSection(0) > 1 {
             let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
             tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
             tester.waitForAbsenceOfViewWithAccessibilityLabel(cell.accessibilityLabel)
         }
-        tester.tapViewWithAccessibilityLabel("Add Tab")
+
+        // When the last tab is closed, the tabs tray will automatically be closed
+        // since a new about:home tab will be selected.
+        let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+        tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
+        tester.waitForTappableViewWithAccessibilityLabel("Show Tabs")
     }
 }
 
