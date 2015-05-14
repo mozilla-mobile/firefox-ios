@@ -5,26 +5,23 @@
 import Foundation
 import Shared
 
-public class NSUserDefaultsProfilePrefs: Prefs {
-    private let profile: Profile
+public class NSUserDefaultsPrefs: Prefs {
     private let prefix: String
     private let userDefaults: NSUserDefaults
 
-    init(profile: Profile, prefix: String, userDefaults: NSUserDefaults) {
-        self.profile = profile
+    init(prefix: String, userDefaults: NSUserDefaults) {
         self.prefix = prefix
         self.userDefaults = userDefaults
     }
 
-    init(profile: Profile) {
-        self.profile = profile
-        self.prefix = profile.localName() + "."
+    init(prefix: String) {
+        self.prefix = prefix + "."
         self.userDefaults = NSUserDefaults(suiteName: ExtensionUtils.sharedContainerIdentifier())!
     }
 
     public func branch(branch: String) -> Prefs {
         let prefix = self.prefix + branch + "."
-        return NSUserDefaultsProfilePrefs(profile: self.profile, prefix: prefix, userDefaults: self.userDefaults)
+        return NSUserDefaultsPrefs(prefix: prefix, userDefaults: self.userDefaults)
     }
 
     // Preferences are qualified by the profile's local name.
