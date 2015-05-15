@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */; };
 		0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */; };
+		0B2B65EB1B0683BE001D8481 /* Readability.js in Resources */ = {isa = PBXBuildFile; fileRef = 0B2B65381B0683BD001D8481 /* Readability.js */; };
+		0B2B668E1B0683EB001D8481 /* Readability.js in Sources */ = {isa = PBXBuildFile; fileRef = 0B2B65381B0683BD001D8481 /* Readability.js */; };
 		0B5142CC1AE1BAF50014D0B3 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */; };
 		0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B62EFD11AD63CD100ACB9CD /* Clearables.swift */; };
 		0B6544D31A96C5F0000DD202 /* libSDWebImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B6544C21A96C59E000DD202 /* libSDWebImage.a */; };
@@ -489,7 +491,6 @@
 		F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21D91A090F8100AAB793 /* ClientTests.swift */; };
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
-		F84B220C1A0910F600AAB793 /* Readability.js in Resources */ = {isa = PBXBuildFile; fileRef = F84B21F61A0910F600AAB793 /* Readability.js */; };
 		F84B22241A09122500AAB793 /* HomePanelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B22221A09122500AAB793 /* HomePanelViewController.swift */; };
 		F84B22541A0920C600AAB793 /* ShareTo.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F84B22491A0920C600AAB793 /* ShareTo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F84B22661A09210A00AAB793 /* SendTo.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F84B225C1A09210A00AAB793 /* SendTo.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -1043,6 +1044,7 @@
 		0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListViewController.swift; sourceTree = "<group>"; };
 		0B1C05D51A798B1F004C78B0 /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
 		0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
+		0B2B65381B0683BD001D8481 /* Readability.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Readability.js; sourceTree = "<group>"; };
 		0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		0B62EFD11AD63CD100ACB9CD /* Clearables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clearables.swift; sourceTree = "<group>"; };
 		0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDWebImage.xcodeproj; path = Carthage/Checkouts/SDWebImage/SDWebImage.xcodeproj; sourceTree = "<group>"; };
@@ -1387,7 +1389,6 @@
 		F84B21D91A090F8100AAB793 /* ClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientTests.swift; sourceTree = "<group>"; };
 		F84B21E51A0910F600AAB793 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F84B21EF1A0910F600AAB793 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		F84B21F61A0910F600AAB793 /* Readability.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Readability.js; sourceTree = "<group>"; };
 		F84B22221A09122500AAB793 /* HomePanelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePanelViewController.swift; sourceTree = "<group>"; };
 		F84B22261A09127C00AAB793 /* Home.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Home.xcassets; sourceTree = "<group>"; };
 		F84B22431A09165600AAB793 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1553,6 +1554,15 @@
 			);
 			name = UIImageViewAligned;
 			path = ThirdParty/UIImageViewAligned/UIImageViewAligned;
+			sourceTree = "<group>";
+		};
+		0B2B652F1B0683BD001D8481 /* readability */ = {
+			isa = PBXGroup;
+			children = (
+				0B2B65381B0683BD001D8481 /* Readability.js */,
+			);
+			name = readability;
+			path = Carthage/Checkouts/readability;
 			sourceTree = "<group>";
 		};
 		0B6544B11A96C59E000DD202 /* Products */ = {
@@ -1734,6 +1744,7 @@
 		28CE83EF1A1D246900576538 /* Third-Party Source */ = {
 			isa = PBXGroup;
 			children = (
+				0B2B652F1B0683BD001D8481 /* readability */,
 				288A2D801AB8B2B90023ABC3 /* Deferred */,
 				288A2D7F1AB8B2B20023ABC3 /* Box */,
 				288A2D7E1AB8B2AD0023ABC3 /* Result */,
@@ -2397,7 +2408,6 @@
 		F84B21F51A0910F600AAB793 /* Reader */ = {
 			isa = PBXGroup;
 			children = (
-				F84B21F61A0910F600AAB793 /* Readability.js */,
 				E4CD9E901A6897FB00318571 /* ReaderMode.swift */,
 				E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */,
 				E4B423BD1AB9FE6A007E66C8 /* ReaderModeCache.swift */,
@@ -3291,9 +3301,9 @@
 				E4CD9F541A71506400318571 /* Reader.html in Resources */,
 				E414F0791A8445A500283322 /* FennecAurora.entitlements in Resources */,
 				2F1BDF921A8523B000213B54 /* LICENSE in Resources */,
-				F84B220C1A0910F600AAB793 /* Readability.js in Resources */,
 				0BD75AD31AF2EE5A00B48915 /* suggestedsites.json in Resources */,
 				E4CD9F5B1A71506C00318571 /* Reader.css in Resources */,
+				0B2B65EB1B0683BE001D8481 /* Readability.js in Resources */,
 				E4B7B7611A793CF20022C5E0 /* CharisSILB.ttf in Resources */,
 				E4B7B7621A793CF20022C5E0 /* CharisSILBI.ttf in Resources */,
 				E4A961361AC052DE0069AD6F /* ReadabilityBrowserHelper.js in Resources */,
@@ -3655,6 +3665,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B2B668E1B0683EB001D8481 /* Readability.js in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
