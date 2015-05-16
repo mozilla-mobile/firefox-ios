@@ -162,6 +162,11 @@ class RecordTests: XCTestCase {
             XCTAssertEqual("1154549 – Encapsulate synced profile data within an account-centric object", payload["title"].asString!)
             XCTAssertEqual(1, payload.visits[0].type.rawValue)
             XCTAssertEqual(1429061233163240, payload.visits[0].date)
+
+            let v = payload.visits[0]
+            let j = v.toJSON()
+            XCTAssertEqual(1, j["type"].asInt!)
+            XCTAssertEqual(1429061233163240, j["date"].asInt64!)
         } else {
             XCTFail("Should have parsed.")
         }

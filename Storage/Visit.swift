@@ -52,6 +52,12 @@ public class Visit: Hashable {
         }
         return nil
     }
+
+    public func toJSON() -> JSON {
+        let d = NSNumber(unsignedLongLong: self.date)
+        let o: [String: AnyObject] = ["type": self.type.rawValue, "date": d]
+        return JSON(o)
+    }
 }
 
 public func ==(lhs: Visit, rhs: Visit) -> Bool {
