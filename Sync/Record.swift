@@ -70,7 +70,7 @@ public class Record<T: CleartextPayloadJSON> {
         self.init(id: envelope.id, payload: payload, modified: envelope.modified, sortindex: envelope.sortindex)
     }
 
-    init(id: String, payload: T, modified: Timestamp = Timestamp(time(nil)), sortindex: Int = 0, ttl: Int = ONE_YEAR_IN_SECONDS) {
+    init(id: GUID, payload: T, modified: Timestamp = Timestamp(time(nil)), sortindex: Int = 0, ttl: Int = ONE_YEAR_IN_SECONDS) {
         self.id = id
 
         self.payload = payload;
