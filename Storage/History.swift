@@ -4,8 +4,6 @@
 
 import Shared
 
-public typealias GUID = String
-
 public class IgnoredSiteError: ErrorType {
     public var description: String {
         return "Ignored site."
