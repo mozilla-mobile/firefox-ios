@@ -39,25 +39,24 @@ public class HistoryPayload: CleartextPayloadJSON {
     }
 
     override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
-        if !(obj is HistoryPayload) {
-            return false;
+        if let p = obj as? HistoryPayload {
+            if !super.equalPayloads(p) {
+                return false;
+            }
+
+            if p.title != self.title {
+                return false
+            }
+
+            if p.historyURI != self.historyURI {
+                return false
+            }
+
+            // TODO: compare visits.
+
+            return true
         }
 
-        if !super.equalPayloads(obj) {
-            return false;
-        }
-
-        let p = obj as! HistoryPayload
-        if p.title != self.title {
-            return false
-        }
-
-        if p.historyURI != self.historyURI {
-            return false
-        }
-
-        // TODO: compare visits.
-
-        return true
+        return false
     }
 }
