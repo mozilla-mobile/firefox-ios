@@ -16,10 +16,7 @@ public class HistoryPayload: CleartextPayloadJSON {
     }
 
     override public func isValid() -> Bool {
-        // We should also call super.isValid(), but that'll fail:
-        // Global is external, but doesn't have external or weak linkage!
-        // Swift compiler bug #18422804.
-        return !isError &&
+        return super.isValid() &&
                self["histUri"].isString &&      // TODO: validate URI.
                self["title"].isString &&
                self["visits"].isArray
