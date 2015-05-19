@@ -39,16 +39,16 @@ class HistorySynchronizerTests: XCTestCase {
     func testApplyRecords() {
         let earliest = NSDate.now()
 
-        func timestampIsSane(synchronizer: HistorySynchronizer) {
-            XCTAssertTrue(earliest <= synchronizer.lastFetched, "Timestamp is sane (lower).")
-            XCTAssertTrue(NSDate.now() >= synchronizer.lastFetched, "Timestamp is sane (upper).")
+        func assertTimestampIsReasonable(synchronizer: HistorySynchronizer) {
+            XCTAssertTrue(earliest <= synchronizer.lastFetched, "Timestamp is reasonable (lower).")
+            XCTAssertTrue(NSDate.now() >= synchronizer.lastFetched, "Timestamp is reasonable (upper).")
         }
 
         let empty = MockSyncableHistory()
         let noRecords = [Record<HistoryPayload>]()
 
         // Apply no records.
-        timestampIsSane(self.applyRecords(noRecords, toStorage: empty))
+        assertTimestampIsReasonable(self.applyRecords(noRecords, toStorage: empty))
 
         // Hey look! Nothing changed.
         XCTAssertTrue(empty.mirrorPlaces.isEmpty)
@@ -61,7 +61,7 @@ class HistorySynchronizerTests: XCTestCase {
         let pA = HistoryPayload.fromJSON(JSON.parse(jA))!
         let rA = Record<HistoryPayload>(id: "aaaaaa", payload: pA, modified: earliest + 10000, sortindex: 123, ttl: 1000000)
 
-        timestampIsSane(self.applyRecords([rA], toStorage: empty))
+        assertTimestampIsReasonable(self.applyRecords([rA], toStorage: empty))
 
         // The record was stored. This is checking our mock implementation, but real storage should work, too!
 
