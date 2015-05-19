@@ -82,7 +82,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
             switch (bookmark) {
             case let item as BookmarkItem:
-                homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: item.url)!)
+                homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: item.url)!, visitType: VisitType.Bookmark)
                 break
 
             case let folder as BookmarkFolder:

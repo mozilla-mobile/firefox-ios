@@ -163,7 +163,9 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
 
         if let tab = tabAtIndexPath(indexPath) {
-            homePanelDelegate?.homePanel(self, didSelectURL: tab.URL)
+            // It's not a bookmark, so let's call it Typed (which means History, too).
+            let visitType = VisitType.Typed
+            homePanelDelegate?.homePanel(self, didSelectURL: tab.URL, visitType: visitType)
         }
     }
 }

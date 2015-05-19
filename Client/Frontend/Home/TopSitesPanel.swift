@@ -111,7 +111,9 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if let site = dataSource[indexPath.item] {
-            homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!)
+            // We're gonna call Top Sites bookmarks for now.
+            let visitType = VisitType.Bookmark
+            homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!, visitType: visitType)
         }
     }
 }
