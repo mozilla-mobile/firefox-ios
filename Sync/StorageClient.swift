@@ -205,7 +205,7 @@ public struct POSTResult {
             return nil
         }
 
-        if let m = json["modified"].asDouble,
+        if let mDecimalSeconds = json["modified"].asDouble,
            let s = json["success"].asArray,
            let f = json["failed"].asDictionary {
             var failed = false
@@ -221,7 +221,8 @@ public struct POSTResult {
             if failed {
                 return nil
             }
-            return POSTResult(modified: UInt64(1000 * m), success: successGUIDs, failed: failedGUIDs)
+            let msec = Timestamp(1000 * mDecimalSeconds)
+            return POSTResult(modified: msec, success: successGUIDs, failed: failedGUIDs)
         }
         return nil
     }
@@ -321,9 +322,9 @@ public class Sync15StorageClient {
         return Alamofire.request(authorized)
     }
 
-    func requestWrite(url: NSURL, op: String, body: String, contentType: String, ifUnmodifiedSince: Timestamp?) -> Request {
+    func requestWrite(url: NSURL, method: String, body: String, contentType: String, ifUnmodifiedSince: Timestamp?) -> Request {
         let req = NSMutableURLRequest(URL: url)
-        req.HTTPMethod = op
+        req.HTTPMethod = method
 
         req.setValue(contentType, forHTTPHeaderField: "Content-Type")
         let authorized: NSMutableURLRequest = self.authorizer(req)
@@ -337,16 +338,16 @@ public class Sync15StorageClient {
     }
 
     func requestPUT(url: NSURL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {
-        return self.requestWrite(url, op: Method.PUT.rawValue, body: body.toString(pretty: false), contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
+        return self.requestWrite(url, method: Method.PUT.rawValue, body: body.toString(pretty: false), contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
     func requestPOST(url: NSURL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {
-        return self.requestWrite(url, op: Method.POST.rawValue, body: body.toString(pretty: false), contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
+        return self.requestWrite(url, method: Method.POST.rawValue, body: body.toString(pretty: false), contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
     func requestPOST(url: NSURL, body: [JSON], ifUnmodifiedSince: Timestamp?) -> Request {
         let body = "\n".join(body.map { $0.toString(pretty: false) })
-        return self.requestWrite(url, op: Method.POST.rawValue, body: body, contentType: "application/newlines", ifUnmodifiedSince: ifUnmodifiedSince)
+        return self.requestWrite(url, method: Method.POST.rawValue, body: body, contentType: "application/newlines", ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
     private func doOp<T>(op: (NSURL) -> Request, path: String, f: (JSON) -> T?) -> Deferred<Result<StorageResponse<T>>> {
