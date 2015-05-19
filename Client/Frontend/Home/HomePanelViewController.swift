@@ -5,6 +5,7 @@
 import Foundation
 import SnapKit
 import UIKit
+import Storage        // For VisitType.
 
 private struct HomePanelViewControllerUX {
     // Height of the top panel switcher button toolbar.
@@ -14,7 +15,7 @@ private struct HomePanelViewControllerUX {
 }
 
 protocol HomePanelViewControllerDelegate: class {
-    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL)
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType)
 }
 
 @objc
@@ -24,7 +25,7 @@ protocol HomePanel: class {
 
 @objc
 protocol HomePanelDelegate: class {
-    func homePanel(homePanel: HomePanel, didSelectURL url: NSURL)
+    func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
 }
 
 class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
@@ -176,8 +177,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         }
     }
 
-    func homePanel(homePanel: HomePanel, didSelectURL url: NSURL) {
-        delegate?.homePanelViewController(self, didSelectURL: url)
+    func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType) {
+        delegate?.homePanelViewController(self, didSelectURL: url, visitType: visitType)
         dismissViewControllerAnimated(true, completion: nil)
     }
 }

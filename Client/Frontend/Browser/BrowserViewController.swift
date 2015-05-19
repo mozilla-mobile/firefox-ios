@@ -406,13 +406,13 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func finishEditingAndSubmit(var url: NSURL) {
+    private func finishEditingAndSubmit(var url: NSURL, visitType: VisitType) {
         urlBar.updateURL(url)
         urlBar.finishEditing()
 
         if let tab = tabManager.selectedTab,
            let nav = tab.loadRequest(NSURLRequest(URL: url)) {
-            self.recordNavigationInTab(tab, navigation: nav, visitType: VisitType.Typed)
+            self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
     }
 
@@ -624,7 +624,7 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
-        finishEditingAndSubmit(url!)
+        finishEditingAndSubmit(url!, visitType: VisitType.Typed)
     }
 
     func urlBarDidBeginEditing(urlBar: URLBarView) {
@@ -835,14 +835,14 @@ extension BrowserViewController: BrowserDelegate {
 }
 
 extension BrowserViewController: HomePanelViewControllerDelegate {
-    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL) {
-        finishEditingAndSubmit(url)
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType) {
+        finishEditingAndSubmit(url, visitType: visitType)
     }
 }
 
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL) {
-        finishEditingAndSubmit(url)
+        finishEditingAndSubmit(url, visitType: VisitType.Typed)
     }
 }
 

@@ -7,10 +7,23 @@ import Shared
 
 // These are taken from the Places docs
 // http://mxr.mozilla.org/mozilla-central/source/toolkit/components/places/nsINavHistoryService.idl#1187
-public enum VisitType : Int {
+@objc public enum VisitType : Int {
     case Unknown = 0
+
+    /**
+     * This transition type means the user followed a link and got a new toplevel
+     * window.
+     */
     case Link = 1
+
+    /**
+     * This transition type means that the user typed the page's URL in the
+     * URL bar or selected it from URL bar autocomplete results, clicked on
+     * it from a history query (from the History sidebar, History menu,
+     * or history query in the personal toolbar or Places organizer).
+     */
     case Typed = 2
+
     case Bookmark = 3
     case Embed = 4
     case PermanentRedirect = 5
