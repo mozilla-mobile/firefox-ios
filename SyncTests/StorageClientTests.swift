@@ -8,6 +8,25 @@ import XCTest
 
 class StorageClientTests: XCTestCase {
 
+    func testPOSTResult() {
+        // Pulled straight from <http://docs.services.mozilla.com/storage/apis-1.5.html>.
+        let r = "{" +
+            "\"modified\": 1233702554.25," +
+            "\"success\": [\"GXS58IDC_12\", \"GXS58IDC_13\", \"GXS58IDC_15\"," +
+            "\"GXS58IDC_16\", \"GXS58IDC_18\", \"GXS58IDC_19\"]," +
+            "\"failed\": {\"GXS58IDC_11\": [\"invalid ttl\"]," +
+            "\"GXS58IDC_14\": [\"invalid sortindex\"]}" +
+        "}"
+
+        let p = POSTResult.fromJSON(JSON.parse(r))
+        XCTAssertTrue(p != nil)
+        XCTAssertEqual(p!.modified, 1233702554250)
+        XCTAssertEqual(p!.success[0], "GXS58IDC_12")
+        XCTAssertEqual(p!.failed["GXS58IDC_14"]![0], "invalid sortindex")
+
+        XCTAssertTrue(nil == POSTResult.fromJSON(JSON.parse("{\"foo\": 5}")))
+    }
+
     func testNumeric() {
         let m = ResponseMetadata(headers: [
             "X-Last-Modified": "2174380461.12",
