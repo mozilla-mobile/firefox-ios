@@ -393,9 +393,6 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         })
     }
 
-    func autocompleteTextFieldDidEndEditing(autocompleteTextField: AutocompleteTextField) {
-    }
-
     func autocompleteTextFieldShouldClear(autocompleteTextField: AutocompleteTextField) -> Bool {
         delegate?.urlBar(self, didEnterText: "")
         return true
