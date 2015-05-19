@@ -237,6 +237,7 @@ public class BrowserProfile: Profile {
                >>> { return storage.getClients() }
         }
 
+        log.warning("No account; can't fetch clients.")
         return deferResult(NoAccountError())
     }
 

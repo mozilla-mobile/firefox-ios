@@ -19,6 +19,10 @@ public class CleartextPayloadJSON: JSON {
         return !isError
     }
 
+    public var id: String {
+        return self["id"].asString!
+    }
+
     public var deleted: Bool {
         let d = self["deleted"]
         if d.isBool {

@@ -37,8 +37,8 @@ public class Password : Equatable {
     // var encryptedPassword: String { get }
     // var encType: String { get }
 
-    public init(site: Site, username: String, password: String) {
-        hostname = site.url
+    public init(hostname: String, username: String, password: String) {
+        self.hostname = hostname
         self.username = username
         self.password = password
     }
@@ -70,23 +70,21 @@ public class Password : Equatable {
     }
 
     public class func fromScript(url: NSURL, script: [String: String]) -> Password {
-        let site = Site(url: getPasswordOrigin(url.absoluteString!)!, title: "")
-
-        let pswd = Password(site: site, username: script["username"]!, password: script["password"]!)
+        let password = Password(hostname: getPasswordOrigin(url.absoluteString!)!, username: script["username"]!, password: script["password"]!)
 
         if let formSubmit = script["formSubmitUrl"] {
-            pswd.formSubmitUrl = formSubmit
+            password.formSubmitUrl = formSubmit
         }
 
-        if let passField = script["passwordField"] {
-            pswd.passwordField = passField
+        if let passwordField = script["passwordField"] {
+            password.passwordField = passwordField
         }
 
         if let userField = script["usernameField"] {
-            pswd.usernameField = userField
+            password.usernameField = userField
         }
 
-        return pswd
+        return password
     }
 
     private class func getPasswordOrigin(uriString: String, allowJS: Bool = false) -> String? {
@@ -131,9 +129,9 @@ public class MockPasswords : Passwords {
     public init(files: FileAccessor) {
         self.files = files
 
-        let site = Site(url: "https://m.facebook.com", title: "")
-        passwordsCache.append(Password(site: site, username: "FakeUser", password: "FakePassword"))
-        passwordsCache.append(Password(site: site, username: "Something", password: "else"))
+        let hostname = "https://m.facebook.com"
+        passwordsCache.append(Password(hostname: hostname, username: "FakeUser", password: "FakePassword"))
+        passwordsCache.append(Password(hostname: hostname, username: "Something", password: "else"))
     }
 
     public func get(options: QueryOptions, complete: (cursor: Cursor<Password>) -> Void) {

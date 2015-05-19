@@ -4,6 +4,8 @@
 
 import Foundation
 
+public typealias GUID = String
+
 /**
  * Utilities for futzing with bytes and such.
  */
@@ -18,7 +20,7 @@ public class Bytes {
         return data
     }
 
-    public class func generateGUID() -> String {
+    public class func generateGUID() -> GUID {
         return generateRandomBytes(9).base64EncodedStringWithOptions(NSDataBase64EncodingOptions.allZeros)
     }
 
