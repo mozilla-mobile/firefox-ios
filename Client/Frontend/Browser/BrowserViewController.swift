@@ -47,11 +47,10 @@ class BrowserViewController: UIViewController {
     // These views wrap the urlbar and toolbar to provide background effects on them
     private var header: UIView!
     private var footer: UIView!
-    private var footerBackground: UIView?
+    private var footerBackground: UIView!
 
     // Scroll management properties
-    private var previousScroll: CGPoint?
-    private var startOffset: CGFloat?
+    private var scrollRecognizer: ScrollRecognizer
 
     private var headerConstraint: Constraint?
     private var headerConstraintOffset: CGFloat = 0
@@ -66,6 +65,7 @@ class BrowserViewController: UIViewController {
 
     init(profile: Profile) {
         self.profile = profile
+        scrollRecognizer = ScrollRecognizer()
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -83,6 +83,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func didInit() {
+        scrollRecognizer.browserViewController = self
         let defaultURL = NSURL(string: HomeURL)!
         let defaultRequest = NSURLRequest(URL: defaultURL)
         tabManager = TabManager(defaultNewTabRequest: defaultRequest)
@@ -136,18 +137,19 @@ class BrowserViewController: UIViewController {
         // performs a device rotation. Since scrolling calls
         // _updateVisibleContentRects (https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/API/Cocoa/WKWebView.mm#L1430)
         // this method nudges the web view's scroll view by a single pixel to force it to invalidate.
-        if let tab = self.tabManager.selectedTab {
-            let contentOffset = tab.webView.scrollView.contentOffset
+        if let scrollView = self.tabManager.selectedTab?.webView.scrollView {
+            let contentOffset = scrollView.contentOffset
             coordinator.animateAlongsideTransition({ context in
                 self.updateHeaderFooterConstraintsAndAlpha(
                     headerOffset: 0,
                     footerOffset: 0,
                     readerOffset: 0,
                     alpha: 1)
+                self.view.layoutIfNeeded()
 
-                tab.webView.scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
+                scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
             }, completion: { context in
-                tab.webView.scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
+                scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
             })
         }
     }
@@ -177,8 +179,7 @@ class BrowserViewController: UIViewController {
         self.view.addSubview(footer)
         footer.addSubview(snackBars)
         snackBars.backgroundColor = UIColor.clearColor()
-
-        updateToolbarStateForTraitCollection(self.traitCollection)
+        self.updateToolbarStateForTraitCollection(self.traitCollection)
     }
 
     func startTrackingAccessibilityStatus() {
@@ -238,20 +239,19 @@ class BrowserViewController: UIViewController {
         }
 
         webViewContainer.snp_remakeConstraints { make in
-            make.left.right.bottom.equalTo(self.view)
+            make.left.right.equalTo(self.view)
 
-            if readerModeBar.hidden {
-                self.startOffset = self.header.frame.size.height
-                make.top.equalTo(self.header.snp_bottom).offset(-self.startOffset!)
+            if !self.readerModeBar.hidden {
+                make.top.equalTo(self.readerModeBar.snp_bottom)
             } else {
-                self.startOffset = self.header.frame.size.height + self.readerModeBar.frame.size.height
-                make.top.equalTo(self.readerModeBar.snp_bottom).offset(-self.startOffset!)
+                make.top.equalTo(self.header.snp_bottom)
             }
 
-            self.tabManager.selectedTab?.webView.scrollView.contentInset =
-                UIEdgeInsets(top: self.startOffset!, left: 0, bottom: 0, right: 0)
-            self.tabManager.selectedTab?.webView.scrollView.scrollIndicatorInsets =
-                UIEdgeInsets(top: self.startOffset!, left: 0, bottom: 0, right: 0)
+            if let toolbar = self.toolbar {
+                make.bottom.equalTo(toolbar.snp_top)
+            } else {
+                make.bottom.equalTo(self.view)
+            }
         }
 
         // Setup the bottom toolbar
@@ -815,50 +815,78 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 }
 
-extension BrowserViewController: UIScrollViewDelegate {
+class ScrollRecognizer : UIGestureRecognizer {
+    weak var browserViewController: BrowserViewController?
+    private var previousScroll: CGPoint?
 
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        self.previousScroll = scrollView.contentOffset
+    override func canPreventGestureRecognizer(preventedGestureRecognizer: UIGestureRecognizer!) -> Bool {
+        return false
     }
 
-    // Careful! This method can be called multiple times concurrently.
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        if let tab = tabManager.selectedTab, let prev = self.previousScroll, let startOffset = self.startOffset {
-            let dy = prev.y - scrollView.contentOffset.y
-
-            if !tab.loading &&
-                scrollView.contentOffset.y > -startOffset  &&
-                scrollView.contentOffset.y < scrollView.contentSize.height {
-                self.scrollFooter(dy)
-                self.scrollHeader(dy)
-                self.scrollReader(dy)
+    override func canBePreventedByGestureRecognizer(preventingGestureRecognizer: UIGestureRecognizer!) -> Bool {
+        if preventingGestureRecognizer.description.rangeOfString("UIWebTouchEventsGestureRecognizer") != nil {
+            // We normally wouldn't want to allow touch events a chance to prevent this, but doing so can result.
+            // in lock ups of the entire UI.
+            if preventingGestureRecognizer.state == .Ended {
+                return true
             }
-
-            self.previousScroll = scrollView.contentOffset
+            return false;
         }
+        return preventingGestureRecognizer.description.rangeOfString("UIScrollViewPanGestureRecognizer") == nil
     }
 
-    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint,
-        targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    override func touchesBegan(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        if touches.count == 1 {
+            if let touch = touches.first as? UITouch {
+                previousScroll = touch.locationInView(browserViewController?.view)
+            }
+        } else {
+            // If a second finer comes down, we'll stop dragging
+            endDragging()
+        }
+        super.touchesBegan(touches, withEvent: event)
+    }
+
+    override func touchesMoved(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        if let touch = touches.first as? UITouch,
+            let browserViewController = browserViewController,
+            let tab = browserViewController.tabManager.selectedTab,
+            let prev = self.previousScroll {
+                let scrollView = tab.webView.scrollView
+                let offset = touch.locationInView(browserViewController.view)
+                let dy = offset.y - prev.y
+                let scrollingSize = scrollView.contentSize.height - scrollView.frame.size.height
+
+                if !tab.loading {
+                    browserViewController.scrollFooter(dy)
+                    browserViewController.scrollHeader(dy)
+                    browserViewController.scrollReader(dy)
+                }
+                self.previousScroll = offset
+        }
+        super.touchesMoved(touches, withEvent: event)
+    }
+
+    override func touchesEnded(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        if previousScroll != nil && touches.count == 1 {
+            endDragging()
+        }
+        super.touchesEnded(touches, withEvent: event)
+    }
+
+    private func endDragging() {
+        let totalOffset = browserViewController!.header.frame.size.height - AppConstants.StatusBarHeight
+        if browserViewController!.headerConstraintOffset > -totalOffset {
+            dispatch_async(dispatch_get_main_queue()) {
+                browserViewController?.showToolbars(animated: true)
+            }
+        }
         self.previousScroll = nil
-
-        if shouldAnimateToolbarsOpened() {
-            showToolbars(animated: true)
-        } else if shouldAnimateToolbarsClosed() {
-            hideToolbars(animated: true)
-        }
     }
+}
 
-    func shouldAnimateToolbarsClosed() -> Bool {
-        let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
-        return self.headerConstraintOffset <= -(totalOffset / 2) && self.headerConstraintOffset > -totalOffset
-    }
-
-    func shouldAnimateToolbarsOpened() -> Bool {
-        let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
-        return self.headerConstraintOffset < 0 && self.headerConstraintOffset > -(totalOffset / 2)
-    }
-
+// Functions for scrolling the urlbar and footers.
+extension BrowserViewController {
     func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
         showToolbars(animated: true)
         return true
@@ -866,8 +894,7 @@ extension BrowserViewController: UIScrollViewDelegate {
 
     private func scrollHeader(dy: CGFloat) {
         let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
-        let newOffset = self.clamp(self.headerConstraintOffset + dy,
-            min: -totalOffset, max: 0)
+        let newOffset = self.clamp(self.headerConstraintOffset + dy, min: -totalOffset, max: 0)
         self.headerConstraint?.updateOffset(newOffset)
         self.headerConstraintOffset = newOffset
         let alpha = 1 - (abs(newOffset) / totalOffset)
@@ -875,8 +902,7 @@ extension BrowserViewController: UIScrollViewDelegate {
     }
 
     private func scrollFooter(dy: CGFloat) {
-        let newOffset = self.clamp(self.footerConstraintOffset - dy,
-            min: 0, max: self.footer.frame.size.height)
+        let newOffset = self.clamp(self.footerConstraintOffset - dy, min: 0, max: footer.frame.size.height)
         self.footerConstraint?.updateOffset(newOffset)
         self.footerConstraintOffset = newOffset
     }
@@ -1034,6 +1060,7 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int) {
         urlBar.updateTabCount(tabManager.count)
+        tab.webView.scrollView.addGestureRecognizer(scrollRecognizer)
 
         webViewContainer.insertSubview(tab.webView, atIndex: 0)
 
@@ -1047,7 +1074,6 @@ extension BrowserViewController: TabManagerDelegate {
         tab.webView.addObserver(self, forKeyPath: KVOLoading, options: .New, context: nil)
         tab.webView.UIDelegate = self
         tab.browserDelegate = self
-        tab.webView.scrollView.delegate = self
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex: Int) {
