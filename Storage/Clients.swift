@@ -5,7 +5,7 @@
 import Shared
 
 public struct RemoteClient: Equatable {
-    public let guid: String?
+    public let guid: GUID?
     public let modified: Timestamp
 
     public let name: String
@@ -36,7 +36,7 @@ public struct RemoteClient: Equatable {
         self.device = json["device"].asString
     }
 
-    public init(guid: String?, name: String, modified: Timestamp, type: String?, formfactor: String?, os: String?) {
+    public init(guid: GUID?, name: String, modified: Timestamp, type: String?, formfactor: String?, os: String?) {
         self.guid = guid
         self.name = name
         self.modified = modified
