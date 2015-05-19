@@ -132,13 +132,19 @@ public class BrowserProfile: Profile {
 
     @objc
     func onLocationChange(notification: NSNotification) {
-        if let url = notification.userInfo!["url"] as? NSURL {
-            var site: Site!
-            if let title = notification.userInfo!["title"] as? NSString {
-                site = Site(url: url.absoluteString!, title: title as String)
-                let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
-                history.addLocalVisit(visit)
-            }
+        if let v = notification.userInfo!["visitType"] as? Int,
+           let visitType = VisitType(rawValue: v),
+           let url = notification.userInfo!["url"] as? NSURL,
+           let title = notification.userInfo!["title"] as? NSString {
+
+            // We don't record a visit if no type was specified -- that means "ignore me".
+            let site = Site(url: url.absoluteString!, title: title as String)
+            let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
+            log.debug("Recording visit for \(url) with type \(v).")
+            history.addLocalVisit(visit)
+        } else {
+            let url = notification.userInfo!["url"] as? NSURL
+            log.debug("Ignoring navigation for \(url).")
         }
     }
 
