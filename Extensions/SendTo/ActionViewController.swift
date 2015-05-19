@@ -6,108 +6,38 @@ import UIKit
 import Storage
 import SnapKit
 
-protocol ClientPickerViewControllerDelegate {
-    func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) -> Void
-    func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) -> Void
-}
-
-/*!
-The ClientPickerViewController displays a list of clients associated with the provided Account.
-The user can select a number of devices and hit the Send button.
-This viewcontroller does not implement any specific business logic that needs to happen with the selected clients.
-That is up to it's delegate, who can listen for cancellation and success events.
-*/
-
-class ClientPickerViewController: UITableViewController {
-    var profile: Profile?
-    var clientPickerDelegate: ClientPickerViewControllerDelegate?
-    
-    var clients: [RemoteClient] = []
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = NSLocalizedString("Send To Device", tableName: "SendTo", comment: "Title of the dialog that allows you to send a tab to a different device")
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
-    }
-
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        reloadClients()
-    }
-    
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return clients.count
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.font = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 17)
-        cell.textLabel?.text = String(format: NSLocalizedString("Send to %@", tableName: "SendTo", comment: "Text in a table view row that lets the user pick a device to which to send a tab to"), clients[indexPath.row].name)
-        return cell
-    }
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        clientPickerDelegate?.clientPickerViewController(self, didPickClients: [clients[indexPath.row]])
-    }
-    
-    private func reloadClients() {
-        profile?.getClients().upon({ result in
-            self.refreshControl?.endRefreshing()
-            if let c = result.successValue {
-                self.clients = c
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.tableView.reloadData()
-                }
-            }
-        })
-    }
-    
-    func refresh() {
-        reloadClients()
-    }
-    
-    func cancel() {
-        self.extensionContext!.completeRequestReturningItems(nil, completionHandler: nil)
-    }
-}
-
-/*!
-The ActionViewController is the initial viewcontroller that is presented (full screen) when the share extension is activated.
-Depending on whether the user is logged in or not, this viewcontroller will present either a Login or ClientPicker.
-*/
+/// The ActionViewController is the initial viewcontroller that is presented (full screen) when the share extension
+/// is activated. Depending on whether the user is logged in or not, this viewcontroller will present either the
+/// InstructionsVC or the ClientPicker VC.
 
 @objc(ActionViewController)
-class ActionViewController: UINavigationController, ClientPickerViewControllerDelegate
+class ActionViewController: UIViewController, ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate
 {
-    var profile: Profile?
-    var sharedItem: ShareItem?
+    private lazy var profile: Profile = { return BrowserProfile(localName: "profile", app: nil) }()
+    private var sharedItem: ShareItem?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
-            if error == nil && item != nil {
-                self.sharedItem = item
-                
-                if self.profile == nil {
-                    // XXX todo.
-                } else {
+        if profile.getAccount() == nil {
+            let instructionsViewController = InstructionsViewController()
+            instructionsViewController.delegate = self
+            let navigationController = UINavigationController(rootViewController: instructionsViewController)
+            presentViewController(navigationController, animated: false, completion: nil)
+        } else {
+            ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
+                if error == nil && item != nil {
+                    self.sharedItem = item
                     let clientPickerViewController = ClientPickerViewController()
                     clientPickerViewController.clientPickerDelegate = self
                     clientPickerViewController.profile = self.profile
-                    self.pushViewController(clientPickerViewController, animated: false)
+                    let navigationController = UINavigationController(rootViewController: clientPickerViewController)
+                    self.presentViewController(navigationController, animated: false, completion: nil)
+                } else {
+                    self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
                 }
-            } else {
-                self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
-            }
-        })
+            })
+        }
     }
 
     func finish() {
@@ -117,10 +47,17 @@ class ActionViewController: UINavigationController, ClientPickerViewControllerDe
     func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
         // TODO: hook up Send Tab via Sync.
         // profile?.clients.sendItem(self.sharedItem!, toClients: clients)
+        for client in clients {
+            println("Sending tab to \(client.name)")
+        }
         finish()
     }
     
     func clientPickerViewControllerDidCancel(clientPickerViewController: ClientPickerViewController) {
+        finish()
+    }
+
+    func instructionsViewControllerDidClose(instructionsViewController: InstructionsViewController) {
         finish()
     }
 }
