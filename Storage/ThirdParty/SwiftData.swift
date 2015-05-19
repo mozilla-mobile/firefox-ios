@@ -335,7 +335,7 @@ public class SQLiteDBConnection {
 
     /// Queries the database.
     /// Returns a cursor pre-filled with the complete result set.
-    func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]? = nil) -> Cursor<T> {
+    func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T?), withArgs args: [AnyObject?]? = nil) -> Cursor<T> {
         var error: NSError?
         let statement = SQLiteDBStatement(connection: self, query: sqlStr, args: args, error: &error)
         if let error = error {
@@ -350,7 +350,7 @@ public class SQLiteDBConnection {
      * Returns a live cursor that holds the query statement and database connection.
      * Instances of this class *must not* leak outside of the connection queue!
      */
-    func executeQueryUnsafe<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]? = nil) -> Cursor<T> {
+    func executeQueryUnsafe<T>(sqlStr: String, factory: ((SDRow) -> T?), withArgs args: [AnyObject?]? = nil) -> Cursor<T> {
         var error: NSError?
         let statement = SQLiteDBStatement(connection: self, query: sqlStr, args: args, error: &error)
         if let error = error {
@@ -362,13 +362,13 @@ public class SQLiteDBConnection {
 }
 
 /// Helper for queries that return a single integer result.
-func IntFactory(row: SDRow) -> Int {
-    return row[0] as! Int
+func IntFactory(row: SDRow) -> Int? {
+    return row[0] as? Int
 }
 
 /// Helper for queries that return a single String result.
-func StringFactory(row: SDRow) -> String {
-    return row[0] as! String
+func StringFactory(row: SDRow) -> String? {
+    return row[0] as? String
 }
 
 /// Wrapper around a statement for getting data from a row. This provides accessors for subscript indexing
@@ -559,16 +559,15 @@ private struct SDError {
 /// The entire result set is cached, so this does not retain a reference
 /// to the statement or the database connection.
 private class FilledSQLiteCursor<T>: ArrayCursor<T> {
-    private init(statement: SQLiteDBStatement, factory: (SDRow) -> T) {
+    private init(statement: SQLiteDBStatement, factory: (SDRow) -> T?) {
         var status = CursorStatus.Success
         let data = FilledSQLiteCursor.getValues(statement, factory: factory, status: &status)
         super.init(data: data, status: CursorStatus.Success, statusMessage: "Success")
     }
 
     /// Return an array with the set of results and release the statement.
-    private class func getValues(statement: SQLiteDBStatement, factory: (SDRow) -> T, inout status: CursorStatus) -> [T] {
+    private class func getValues(statement: SQLiteDBStatement, factory: (SDRow) -> T?, inout status: CursorStatus) -> [T] {
         var rows = [T]()
-        var count = 0
         status = CursorStatus.Success
 
         var columns = [String]()
@@ -588,11 +587,11 @@ private class FilledSQLiteCursor<T>: ArrayCursor<T> {
                 break
             }
 
-            count++
-
             let row = SDRow(statement: statement, columns: columns)
-            let result = factory(row)
-            rows.append(result)
+            if let result = factory(row) {
+                println("Adding result \(result)")
+                rows.append(result)
+            }
         }
 
         sqlite3_reset(statement.pointer)
@@ -606,7 +605,7 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
     private var statement: SQLiteDBStatement!
 
     // Function for generating objects of type T from a row.
-    private let factory: (SDRow) -> T
+    private let factory: (SDRow) -> T?
 
     // Status of the previous fetch request.
     private var sqlStatus: Int32 = 0
@@ -647,7 +646,7 @@ private class LiveSQLiteCursor<T>: Cursor<T> {
         }
     }
 
-    init(statement: SQLiteDBStatement, factory: (SDRow) -> T) {
+    init(statement: SQLiteDBStatement, factory: (SDRow) -> T?) {
         self.factory = factory
         self.statement = statement
 

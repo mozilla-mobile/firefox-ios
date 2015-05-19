@@ -17,9 +17,8 @@ public class Password : Equatable {
                 return
             }
 
-            let url2 = NSURL(string: self.hostname)
-            let url1 = NSURL(string: self.formSubmitUrl)
-            if url1?.host != url2?.host {
+            let url = NSURL(string: self.formSubmitUrl)
+            if hostname != url?.host {
                 formSubmitUrl = ""
             }
         }
@@ -33,12 +32,8 @@ public class Password : Equatable {
     var timePasswordChanged = NSDate()
     var timesUsed = 0
 
-    // var encryptedUsername: String { get }
-    // var encryptedPassword: String { get }
-    // var encType: String { get }
-
-    public init(site: Site, username: String, password: String) {
-        hostname = site.url
+    public init(hostname: String, username: String, password: String) {
+        self.hostname = hostname
         self.username = username
         self.password = password
     }
@@ -48,6 +43,38 @@ public class Password : Equatable {
         password = credential?.password ?? ""
         hostname = protectionSpace.host
         httpRealm = protectionSpace.realm!
+    }
+
+    public init?(url: NSURL, script: [String: String]) {
+        if let username = script["username"],
+            let password = script["password"],
+            let urlString = url.absoluteString,
+            let hostname = Password.getPasswordOrigin(urlString) {
+
+                self.username = username
+                self.password = password
+                self.hostname = hostname
+
+                if let formSubmitUrl = script["formSubmitUrl"] {
+                    self.formSubmitUrl = formSubmitUrl
+                }
+
+                if let passwordField = script["passwordField"] {
+                    self.passwordField = passwordField
+                }
+
+                if let usernameField = script["usernameField"] {
+                    self.usernameField = usernameField
+                }
+        } else {
+            self.username = ""
+            self.password = ""
+            self.hostname = ""
+            self.formSubmitUrl = ""
+            self.passwordField = ""
+            self.usernameField = ""
+            return nil
+        }
     }
 
     public var credential: NSURLCredential {
@@ -67,26 +94,6 @@ public class Password : Equatable {
             "password": password,
             "usernameField": usernameField,
             "passwordField": passwordField]
-    }
-
-    public class func fromScript(url: NSURL, script: [String: String]) -> Password {
-        let site = Site(url: getPasswordOrigin(url.absoluteString!)!, title: "")
-
-        let pswd = Password(site: site, username: script["username"]!, password: script["password"]!)
-
-        if let formSubmit = script["formSubmitUrl"] {
-            pswd.formSubmitUrl = formSubmit
-        }
-
-        if let passField = script["passwordField"] {
-            pswd.passwordField = passField
-        }
-
-        if let userField = script["usernameField"] {
-            pswd.usernameField = userField
-        }
-
-        return pswd
     }
 
     private class func getPasswordOrigin(uriString: String, allowJS: Bool = false) -> String? {
@@ -130,10 +137,6 @@ public class MockPasswords : Passwords {
 
     public init(files: FileAccessor) {
         self.files = files
-
-        let site = Site(url: "https://m.facebook.com", title: "")
-        passwordsCache.append(Password(site: site, username: "FakeUser", password: "FakePassword"))
-        passwordsCache.append(Password(site: site, username: "Something", password: "else"))
     }
 
     public func get(options: QueryOptions, complete: (cursor: Cursor<Password>) -> Void) {

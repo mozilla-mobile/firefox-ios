@@ -12,7 +12,7 @@ class GenericTable<T>: BaseTable {
     var name: String { return "" }
     var version: Int { return 0 }
     var rows: String { return "" }
-    var factory: ((row: SDRow) -> Type)? {
+    var factory: ((row: SDRow) -> Type?)? {
         return nil
     }
 
