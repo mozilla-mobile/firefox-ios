@@ -19,6 +19,16 @@ public enum VisitType : Int {
     case FramedLink = 8
 }
 
+// WKWebView has these:
+/*
+WKNavigationTypeLinkActivated,
+WKNavigationTypeFormSubmitted,
+WKNavigationTypeBackForward,
+WKNavigationTypeReload,
+WKNavigationTypeFormResubmitted,
+WKNavigationTypeOther = -1,
+*/
+
 /**
  * SiteVisit is a sop to the existing API, which expects to be able to go
  * backwards from a visit to a site, and preserve the ID of the database row.

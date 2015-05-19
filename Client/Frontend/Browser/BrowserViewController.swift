@@ -64,6 +64,11 @@ class BrowserViewController: UIViewController {
 
     let WhiteListedUrls = ["\\/\\/itunes\\.apple\\.com\\/"]
 
+    // Tracking navigation items to record history types.
+    // TODO: weak references?
+    var ignoredNavigation = Set<WKNavigation>()
+    var typedNavigation = [WKNavigation: VisitType]()
+
     init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
@@ -405,8 +410,9 @@ class BrowserViewController: UIViewController {
         urlBar.updateURL(url)
         urlBar.finishEditing()
 
-        if let tab = tabManager.selectedTab {
-            tab.loadRequest(NSURLRequest(URL: url))
+        if let tab = tabManager.selectedTab,
+           let nav = tab.loadRequest(NSURLRequest(URL: url)) {
+            self.recordNavigationInTab(tab, navigation: nav, visitType: VisitType.Typed)
         }
     }
 
@@ -474,6 +480,31 @@ class BrowserViewController: UIViewController {
     }
 }
 
+/**
+ * History visit management.
+ * TODO: this should be expanded to track various visit types; see Bug 1166084.
+ */
+extension BrowserViewController {
+    func ignoreNavigationInTab(tab: Browser, navigation: WKNavigation) {
+        log.debug("Ignoring nav: \(navigation) (\(tab.url)).")
+        self.ignoredNavigation.insert(navigation)
+    }
+
+    func recordNavigationInTab(tab: Browser, navigation: WKNavigation, visitType: VisitType) {
+        log.debug("Tracking nav: \(navigation) = \(visitType.rawValue) (\(tab.url)).")
+        self.typedNavigation[navigation] = visitType
+    }
+
+    /**
+     * Untrack and do the right thing.
+     */
+    func getVisitTypeForTab(tab: Browser, navigation: WKNavigation) -> VisitType? {
+        if let ignored = self.ignoredNavigation.remove(navigation) {
+            return nil
+        }
+        return self.typedNavigation.removeValueForKey(navigation) ?? VisitType.Link
+    }
+}
 
 extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressReload(urlBar: URLBarView) {
@@ -1212,6 +1243,9 @@ extension BrowserViewController: WKNavigationDelegate {
         var info = [NSObject: AnyObject]()
         info["url"] = tab.displayURL
         info["title"] = tab.title
+        if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
+            info["visitType"] = visitType
+        }
         notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
 
         if let url = webView.URL {
@@ -1428,7 +1462,8 @@ extension BrowserViewController {
     /// of the current page is there. And if so, we go there.
 
     func enableReaderMode() {
-        if let webView = tabManager.selectedTab?.webView {
+        if let tab = tabManager.selectedTab {
+            let webView = tab.webView
             let backList = webView.backForwardList.backList as! [WKBackForwardListItem]
             let forwardList = webView.backForwardList.forwardList as! [WKBackForwardListItem]
 
@@ -1443,7 +1478,9 @@ extension BrowserViewController {
                         webView.evaluateJavaScript("\(ReaderModeNamespace).readerize()", completionHandler: { (object, error) -> Void in
                             if let readabilityResult = ReadabilityResult(object: object) {
                                 ReaderModeCache.sharedInstance.put(currentURL, readabilityResult, error: nil)
-                                webView.loadRequest(NSURLRequest(URL: readerModeURL))
+                                if let nav = webView.loadRequest(NSURLRequest(URL: readerModeURL)) {
+                                    self.ignoreNavigationInTab(tab, navigation: nav)
+                                }
                             }
                         })
                     }
@@ -1458,7 +1495,8 @@ extension BrowserViewController {
     /// of the page is either to the left or right in the BackForwardList. If that is the case, we navigate there.
 
     func disableReaderMode() {
-        if let webView = tabManager.selectedTab?.webView {
+        if let tab = tabManager.selectedTab {
+            let webView = tab.webView
             let backList = webView.backForwardList.backList as! [WKBackForwardListItem]
             let forwardList = webView.backForwardList.forwardList as! [WKBackForwardListItem]
 
@@ -1469,7 +1507,9 @@ extension BrowserViewController {
                     } else if forwardList.count > 0 && forwardList.first?.URL == originalURL {
                         webView.goToBackForwardListItem(forwardList.first!)
                     } else {
-                        webView.loadRequest(NSURLRequest(URL: originalURL))
+                        if let nav = webView.loadRequest(NSURLRequest(URL: originalURL)) {
+                            self.ignoreNavigationInTab(tab, navigation: nav)
+                        }
                     }
                 }
             }
