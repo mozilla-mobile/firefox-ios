@@ -35,6 +35,15 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         super.delegate = self
     }
 
+    func highlightAll() {
+        let attributedString = NSMutableAttributedString(string: text)
+        attributedString.addAttribute(NSBackgroundColorAttributeName, value: AutocompleteTextFieldUX.HighlightColor, range: NSMakeRange(0, count(text)))
+        attributedText = attributedString
+
+        enteredTextLength = 0
+        completionActive = true
+    }
+
     private func applyCompletion() {
         if completionActive {
             self.attributedText = NSAttributedString(string: text)
@@ -45,6 +54,11 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private func removeCompletion() {
         if completionActive {
             let enteredText = text.substringToIndex(advance(text.startIndex, enteredTextLength))
+
+            // Workaround for stuck highlight bug.
+            if enteredTextLength == 0 {
+                attributedText = NSAttributedString(string: " ")
+            }
 
             attributedText = NSAttributedString(string: enteredText)
             completionActive = false

@@ -386,11 +386,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     }
 
     func autocompleteTextFieldDidBeginEditing(autocompleteTextField: AutocompleteTextField) {
-        // Without the async dispatch below, text selection doesn't work
-        // intermittently and crashes on the iPhone 6 Plus (bug 1124310).
-        dispatch_async(dispatch_get_main_queue(), {
-            autocompleteTextField.selectedTextRange = autocompleteTextField.textRangeFromPosition(autocompleteTextField.beginningOfDocument, toPosition: autocompleteTextField.endOfDocument)
-        })
+        autocompleteTextField.highlightAll()
     }
 
     func autocompleteTextFieldShouldClear(autocompleteTextField: AutocompleteTextField) -> Bool {
