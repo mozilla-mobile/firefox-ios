@@ -70,21 +70,21 @@ public class Password : Equatable {
     }
 
     public class func fromScript(url: NSURL, script: [String: String]) -> Password {
-        let pswd = Password(hostname: getPasswordOrigin(url.absoluteString!)!, username: script["username"]!, password: script["password"]!)
+        let password = Password(hostname: getPasswordOrigin(url.absoluteString!)!, username: script["username"]!, password: script["password"]!)
 
         if let formSubmit = script["formSubmitUrl"] {
-            pswd.formSubmitUrl = formSubmit
+            password.formSubmitUrl = formSubmit
         }
 
-        if let passField = script["passwordField"] {
-            pswd.passwordField = passField
+        if let passwordField = script["passwordField"] {
+            password.passwordField = passwordField
         }
 
         if let userField = script["usernameField"] {
-            pswd.usernameField = userField
+            password.usernameField = userField
         }
 
-        return pswd
+        return password
     }
 
     private class func getPasswordOrigin(uriString: String, allowJS: Bool = false) -> String? {
