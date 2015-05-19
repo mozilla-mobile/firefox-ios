@@ -249,7 +249,9 @@ extension TabManager {
         }
 
         let selectedIndex: Int = coder.decodeIntegerForKey("selectedIndex")
-        self.selectTab(self.tabs[selectedIndex])
+        if (selectedIndex >= 0) {
+            self.selectTab(tabs[selectedIndex])
+        }
         storeChanges()
     }
 }
