@@ -9,7 +9,7 @@ import XCGLogger
 
 // TODO: same comment as for SyncAuthState.swift!
 private let log = XCGLogger.defaultInstance()
-private let HistoryTTL = 5184000                   // 60 days.
+private let HistoryTTLInSeconds = 5184000                   // 60 days.
 
 public class MockSyncableHistory {
     public var mirrorPlaces = [GUID: RemotePlace]()
@@ -215,7 +215,7 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
         let id = place.guid
         let modified: Timestamp = 0    // Ignored in upload serialization.
         let sortindex = 1              // TODO: frecency!
-        let ttl = HistoryTTL
+        let ttl = HistoryTTLInSeconds
         let json: JSON = JSON([
             "id": id,
             "visits": visits.map { $0.toJSON() },
