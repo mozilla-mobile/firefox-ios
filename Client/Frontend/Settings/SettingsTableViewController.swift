@@ -336,7 +336,7 @@ private class VersionSetting : Setting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        if !isAuroraChannel() {
+        if AppConstants.BuildChannel != .Aurora {
             DebugSettingsClickCount += 1
             if DebugSettingsClickCount >= 5 {
                 DebugSettingsClickCount = 0
@@ -429,7 +429,7 @@ class SettingsTableViewController: UITableViewController {
 
         let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
         let accountDebugSettings: [Setting]
-        if !isAuroraChannel() {
+        if AppConstants.BuildChannel != .Aurora {
             accountDebugSettings = [
                 // Debug settings:
                 RequirePasswordDebugSetting(settings: self),

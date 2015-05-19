@@ -341,6 +341,7 @@
 		D3ACB4541AD33F2200748D50 /* WeakList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3ACB4381AD33EBA00748D50 /* WeakList.swift */; };
 		D3BE7B261B054D4400641031 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B251B054D4400641031 /* main.swift */; };
 		D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B451B054F8600641031 /* TestAppDelegate.swift */; };
+		D3BE7B481B05596800641031 /* AuroraAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */; };
 		D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
 		D3C744CE1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
 		D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C744CC1A687D6C004CE85D /* URIFixup.swift */; };
@@ -1270,6 +1271,7 @@
 		D3ACB4381AD33EBA00748D50 /* WeakList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakList.swift; sourceTree = "<group>"; };
 		D3BE7B251B054D4400641031 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		D3BE7B451B054F8600641031 /* TestAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
+		D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuroraAppDelegate.swift; sourceTree = "<group>"; };
 		D3C744CC1A687D6C004CE85D /* URIFixup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URIFixup.swift; sourceTree = "<group>"; };
 		D3D247311ABCEA1700771C7E /* ThumbnailTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailTests.swift; sourceTree = "<group>"; };
 		D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileAccessorTests.swift; sourceTree = "<group>"; };
@@ -2362,6 +2364,7 @@
 				E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */,
 				D3BE7B251B054D4400641031 /* main.swift */,
 				D3BE7B451B054F8600641031 /* TestAppDelegate.swift */,
+				D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -3664,6 +3667,7 @@
 				D38B2D431A8D96D00040E6B5 /* GCDWebServerMultiPartFormRequest.m in Sources */,
 				D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */,
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,
+				D3BE7B481B05596800641031 /* AuroraAppDelegate.swift in Sources */,
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
 				D38B2D371A8D96D00040E6B5 /* GCDWebServerRequest.m in Sources */,
 				D314E7F71A37B98700426A76 /* BrowserToolbar.swift in Sources */,

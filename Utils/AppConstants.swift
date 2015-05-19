@@ -2,6 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+public enum AppBuildChannel {
+    case Developer
+    case Aurora
+}
+
 public struct AppConstants {
     static var StatusBarHeight: CGFloat {
         if UIScreen.mainScreen().traitCollection.verticalSizeClass == .Compact {
@@ -26,4 +31,12 @@ public struct AppConstants {
     static let PanelBackgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
     static let HighlightBlue = UIColor(red:0.3, green:0.62, blue:1, alpha:1)
     static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.25)
+
+#if MOZ_CHANNEL_AURORA
+    static let BuildChannel = AppBuildChannel.Aurora
+#else
+    static let BuildChannel = AppBuildChannel.Developer
+#endif
+
+    static let IsRunningTest = NSClassFromString("XCTestCase") != nil
 }
