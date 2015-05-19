@@ -486,12 +486,10 @@ class BrowserViewController: UIViewController {
  */
 extension BrowserViewController {
     func ignoreNavigationInTab(tab: Browser, navigation: WKNavigation) {
-        log.debug("Ignoring nav: \(navigation) (\(tab.url)).")
         self.ignoredNavigation.insert(navigation)
     }
 
     func recordNavigationInTab(tab: Browser, navigation: WKNavigation, visitType: VisitType) {
-        log.debug("Tracking nav: \(navigation) = \(visitType.rawValue) (\(tab.url)).")
         self.typedNavigation[navigation] = visitType
     }
 
