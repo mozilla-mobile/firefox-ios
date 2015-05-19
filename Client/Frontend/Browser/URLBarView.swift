@@ -104,6 +104,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         editTextField.font = AppConstants.DefaultMediumFont
         editTextField.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         editTextField.layer.borderColor = URLBarViewUX.TextFieldActiveBorderColor.CGColor
+        editTextField.layer.borderWidth = 1
         editTextField.hidden = true
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         locationContainer.addSubview(editTextField)
@@ -385,19 +386,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     }
 
     func autocompleteTextFieldDidBeginEditing(autocompleteTextField: AutocompleteTextField) {
-        // Without the async dispatch below, text selection doesn't work
-        // intermittently and crashes on the iPhone 6 Plus (bug 1124310).
-        dispatch_async(dispatch_get_main_queue(), {
-            autocompleteTextField.selectedTextRange = autocompleteTextField.textRangeFromPosition(autocompleteTextField.beginningOfDocument, toPosition: autocompleteTextField.endOfDocument)
-        })
-
-        autocompleteTextField.layer.borderWidth = 1
-        locationContainer.layer.shadowOpacity = 0
-    }
-
-    func autocompleteTextFieldDidEndEditing(autocompleteTextField: AutocompleteTextField) {
-        locationContainer.layer.shadowOpacity = 0.05
-        autocompleteTextField.layer.borderWidth = 0
+        autocompleteTextField.highlightAll()
     }
 
     func autocompleteTextFieldShouldClear(autocompleteTextField: AutocompleteTextField) -> Bool {
