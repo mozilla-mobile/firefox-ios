@@ -496,11 +496,16 @@ extension BrowserViewController {
     /**
      * Untrack and do the right thing.
      */
-    func getVisitTypeForTab(tab: Browser, navigation: WKNavigation) -> VisitType? {
-        if let ignored = self.ignoredNavigation.remove(navigation) {
-            return nil
+    func getVisitTypeForTab(tab: Browser, navigation: WKNavigation?) -> VisitType? {
+        if let navigation = navigation {
+            if let ignored = self.ignoredNavigation.remove(navigation) {
+                return nil
+            }
+            return self.typedNavigation.removeValueForKey(navigation) ?? VisitType.Link
+        } else {
+            // See https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/Cocoa/NavigationState.mm#L390
+            return VisitType.Link
         }
-        return self.typedNavigation.removeValueForKey(navigation) ?? VisitType.Link
     }
 }
 
