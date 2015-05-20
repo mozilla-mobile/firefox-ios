@@ -153,4 +153,22 @@ class RecordTests: XCTestCase {
             XCTAssertEqual("bookmarks", payload["declined"].asArray![0].asString!)
         }
     }
+
+    func testHistoryPayload() {
+        let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://bugzilla.mozilla.org/show_bug.cgi?id=1154549\",\"title\":\"1154549 – Encapsulate synced profile data within an account-centric object\",\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
+        let json = JSON(string: payloadJSON)
+        if let payload = HistoryPayload.fromJSON(json) {
+            XCTAssertEqual("--DzSJTCw-zb", payload["id"].asString!)
+            XCTAssertEqual("1154549 – Encapsulate synced profile data within an account-centric object", payload["title"].asString!)
+            XCTAssertEqual(1, payload.visits[0].type.rawValue)
+            XCTAssertEqual(1429061233163240, payload.visits[0].date)
+
+            let v = payload.visits[0]
+            let j = v.toJSON()
+            XCTAssertEqual(1, j["type"].asInt!)
+            XCTAssertEqual(1429061233163240, j["date"].asInt64!)
+        } else {
+            XCTFail("Should have parsed.")
+        }
+    }
 }

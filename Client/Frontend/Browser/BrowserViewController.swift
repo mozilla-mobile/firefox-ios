@@ -63,6 +63,11 @@ class BrowserViewController: UIViewController {
 
     let WhiteListedUrls = ["\\/\\/itunes\\.apple\\.com\\/"]
 
+    // Tracking navigation items to record history types.
+    // TODO: weak references?
+    var ignoredNavigation = Set<WKNavigation>()
+    var typedNavigation = [WKNavigation: VisitType]()
+
     init(profile: Profile) {
         self.profile = profile
         scrollRecognizer = ScrollRecognizer()
@@ -401,12 +406,13 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func finishEditingAndSubmit(var url: NSURL) {
+    private func finishEditingAndSubmit(var url: NSURL, visitType: VisitType) {
         urlBar.updateURL(url)
         urlBar.finishEditing()
 
-        if let tab = tabManager.selectedTab {
-            tab.loadRequest(NSURLRequest(URL: url))
+        if let tab = tabManager.selectedTab,
+           let nav = tab.loadRequest(NSURLRequest(URL: url)) {
+            self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
     }
 
@@ -474,6 +480,29 @@ class BrowserViewController: UIViewController {
     }
 }
 
+/**
+ * History visit management.
+ * TODO: this should be expanded to track various visit types; see Bug 1166084.
+ */
+extension BrowserViewController {
+    func ignoreNavigationInTab(tab: Browser, navigation: WKNavigation) {
+        self.ignoredNavigation.insert(navigation)
+    }
+
+    func recordNavigationInTab(tab: Browser, navigation: WKNavigation, visitType: VisitType) {
+        self.typedNavigation[navigation] = visitType
+    }
+
+    /**
+     * Untrack and do the right thing.
+     */
+    func getVisitTypeForTab(tab: Browser, navigation: WKNavigation) -> VisitType? {
+        if let ignored = self.ignoredNavigation.remove(navigation) {
+            return nil
+        }
+        return self.typedNavigation.removeValueForKey(navigation) ?? VisitType.Link
+    }
+}
 
 extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressReload(urlBar: URLBarView) {
@@ -593,7 +622,7 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
-        finishEditingAndSubmit(url!)
+        finishEditingAndSubmit(url!, visitType: VisitType.Typed)
     }
 
     func urlBarDidBeginEditing(urlBar: URLBarView) {
@@ -804,14 +833,14 @@ extension BrowserViewController: BrowserDelegate {
 }
 
 extension BrowserViewController: HomePanelViewControllerDelegate {
-    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL) {
-        finishEditingAndSubmit(url)
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType) {
+        finishEditingAndSubmit(url, visitType: visitType)
     }
 }
 
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL) {
-        finishEditingAndSubmit(url)
+        finishEditingAndSubmit(url, visitType: VisitType.Typed)
     }
 }
 
@@ -830,12 +859,14 @@ class ScrollRecognizer : UIGestureRecognizer {
             if preventingGestureRecognizer.state == .Ended {
                 return true
             }
-            return false;
+            return false
         }
         return preventingGestureRecognizer.description.rangeOfString("UIScrollViewPanGestureRecognizer") == nil
     }
 
     override func touchesBegan(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        super.touchesBegan(touches, withEvent: event)
+
         if touches.count == 1 {
             if let touch = touches.first as? UITouch {
                 previousScroll = touch.locationInView(browserViewController?.view)
@@ -844,44 +875,71 @@ class ScrollRecognizer : UIGestureRecognizer {
             // If a second finer comes down, we'll stop dragging
             endDragging()
         }
-        super.touchesBegan(touches, withEvent: event)
     }
 
     override func touchesMoved(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        if let touch = touches.first as? UITouch,
-            let browserViewController = browserViewController,
-            let tab = browserViewController.tabManager.selectedTab,
-            let prev = self.previousScroll {
-                let scrollView = tab.webView.scrollView
-                let offset = touch.locationInView(browserViewController.view)
-                let dy = offset.y - prev.y
-                let scrollingSize = scrollView.contentSize.height - scrollView.frame.size.height
-
-                if !tab.loading {
-                    browserViewController.scrollFooter(dy)
-                    browserViewController.scrollHeader(dy)
-                    browserViewController.scrollReader(dy)
-                }
-                self.previousScroll = offset
-        }
         super.touchesMoved(touches, withEvent: event)
+
+        if let tab = browserViewController?.tabManager.selectedTab,
+           let scrollView = view as? UIScrollView,
+           var totalToolbarHeight = browserViewController?.header.frame.size.height,
+           let prev = self.previousScroll,
+           let touch = touches.first as? UITouch,
+           let browserViewController = self.browserViewController,
+           let readerModeBar = self.browserViewController?.readerModeBar {
+
+            let offset = touch.locationInView(browserViewController.view)
+            let dy = offset.y - prev.y
+
+            let scrollingSize = scrollView.contentSize.height - scrollView.frame.size.height
+            totalToolbarHeight += readerModeBar.hidden ? 0 : readerModeBar.frame.size.height
+            totalToolbarHeight += self.browserViewController?.toolbar?.frame.size.height ?? 0
+
+            // Only scroll away our toolbars if,
+            if !tab.loading &&
+
+                // There is enough web content to fill the screen if the scroll bars are fulling animated out
+                scrollView.contentSize.height > (scrollView.frame.size.height + totalToolbarHeight) &&
+
+                // The user is scrolling through the content and not because of the bounces that
+                // happens when you pull up past the content
+                scrollView.contentOffset.y >= 0 &&
+
+                // The user has reached the limit as to which they can scroll to
+                scrollView.contentOffset.y < scrollingSize {
+
+                browserViewController.scrollFooter(dy)
+                browserViewController.scrollHeader(dy)
+                browserViewController.scrollReader(dy)
+            }
+
+            self.previousScroll = offset
+        }
     }
 
     override func touchesEnded(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        super.touchesEnded(touches, withEvent: event)
         if previousScroll != nil && touches.count == 1 {
             endDragging()
         }
-        super.touchesEnded(touches, withEvent: event)
     }
 
     private func endDragging() {
-        let totalOffset = browserViewController!.header.frame.size.height - AppConstants.StatusBarHeight
-        if browserViewController!.headerConstraintOffset > -totalOffset {
-            dispatch_async(dispatch_get_main_queue()) {
-                browserViewController?.showToolbars(animated: true)
+        self.previousScroll = nil
+
+        if let headerHeight = browserViewController?.header.frame.size.height, let headerConstraintOffset = browserViewController?.headerConstraintOffset {
+            let totalOffset = headerHeight - AppConstants.StatusBarHeight
+
+            if headerConstraintOffset > -totalOffset {
+                // Whenever we try running an animation from the scrollViewWillEndDragging delegate method,
+                // it calls layoutSubviews so many times that it ends up clobbering any animations we want to
+                // run from here. This dispatch_async places the animation onto the main queue for processing after
+                // the scrollView has placed it's work on it already
+                dispatch_async(dispatch_get_main_queue()) {
+                    browserViewController?.showToolbars(animated: true)
+                }
             }
         }
-        self.previousScroll = nil
     }
 }
 
@@ -1238,6 +1296,9 @@ extension BrowserViewController: WKNavigationDelegate {
         var info = [NSObject: AnyObject]()
         info["url"] = tab.displayURL
         info["title"] = tab.title
+        if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
+            info["visitType"] = visitType
+        }
         notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
 
         if let url = webView.URL {
@@ -1454,7 +1515,8 @@ extension BrowserViewController {
     /// of the current page is there. And if so, we go there.
 
     func enableReaderMode() {
-        if let webView = tabManager.selectedTab?.webView {
+        if let tab = tabManager.selectedTab {
+            let webView = tab.webView
             let backList = webView.backForwardList.backList as! [WKBackForwardListItem]
             let forwardList = webView.backForwardList.forwardList as! [WKBackForwardListItem]
 
@@ -1469,7 +1531,9 @@ extension BrowserViewController {
                         webView.evaluateJavaScript("\(ReaderModeNamespace).readerize()", completionHandler: { (object, error) -> Void in
                             if let readabilityResult = ReadabilityResult(object: object) {
                                 ReaderModeCache.sharedInstance.put(currentURL, readabilityResult, error: nil)
-                                webView.loadRequest(NSURLRequest(URL: readerModeURL))
+                                if let nav = webView.loadRequest(NSURLRequest(URL: readerModeURL)) {
+                                    self.ignoreNavigationInTab(tab, navigation: nav)
+                                }
                             }
                         })
                     }
@@ -1484,7 +1548,8 @@ extension BrowserViewController {
     /// of the page is either to the left or right in the BackForwardList. If that is the case, we navigate there.
 
     func disableReaderMode() {
-        if let webView = tabManager.selectedTab?.webView {
+        if let tab = tabManager.selectedTab {
+            let webView = tab.webView
             let backList = webView.backForwardList.backList as! [WKBackForwardListItem]
             let forwardList = webView.backForwardList.forwardList as! [WKBackForwardListItem]
 
@@ -1495,7 +1560,9 @@ extension BrowserViewController {
                     } else if forwardList.count > 0 && forwardList.first?.URL == originalURL {
                         webView.goToBackForwardListItem(forwardList.first!)
                     } else {
-                        webView.loadRequest(NSURLRequest(URL: originalURL))
+                        if let nav = webView.loadRequest(NSURLRequest(URL: originalURL)) {
+                            self.ignoreNavigationInTab(tab, navigation: nav)
+                        }
                     }
                 }
             }
