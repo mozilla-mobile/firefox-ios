@@ -33,6 +33,10 @@ class Browser: NSObject, WKScriptMessageHandler {
         webView.backgroundColor = UIColor.lightGrayColor()
         webView.scrollView.layer.masksToBounds = false
 
+        // Turning off masking allows the web content to flow outside of the scrollView's frame
+        // which allows the content appear beneath the toolbars in the BrowserViewController
+        webView.scrollView.layer.masksToBounds = false
+
         super.init()
     }
 
