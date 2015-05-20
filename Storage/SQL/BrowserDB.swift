@@ -237,7 +237,7 @@ extension BrowserDB {
         assert(values[0].count == variablesPerRow)
 
         let cols = ", ".join(columns)
-        let queryStart = "\(op) INTO \(table) (\(cols)) VALUES "
+        let queryStart = "\(op.rawValue) INTO \(table) (\(cols)) VALUES "
 
         let varString = BrowserDB.varlist(variablesPerRow)
 
