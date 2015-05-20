@@ -576,11 +576,11 @@ extension SQLiteHistory: SyncableHistory {
                 // and visit accumulators.
                 let count = c.count
                 var ids = Set<Int>()
-                for i in 0..<count {
+                for row in c {
                     // Collect every ID first, so that we're guaranteed to have
                     // fully populated the visit lists, and we don't have to
                     // worry about only collecting each place once.
-                    ids.insert(c[i]!)
+                    ids.insert(row!)
                 }
 
                 // Now we're done with the cursor. Close it.
