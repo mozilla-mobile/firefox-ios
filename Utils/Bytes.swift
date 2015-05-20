@@ -21,7 +21,11 @@ public class Bytes {
     }
 
     public class func generateGUID() -> GUID {
-        return generateRandomBytes(9).base64EncodedStringWithOptions(NSDataBase64EncodingOptions.allZeros)
+        // Turns the standard NSData encoding into the URL-safe variant that Sync expects.
+        return generateRandomBytes(9)
+            .base64EncodedStringWithOptions(NSDataBase64EncodingOptions.allZeros)
+            .stringByReplacingOccurrencesOfString("/", withString: "_", options: NSStringCompareOptions.allZeros, range: nil)
+            .stringByReplacingOccurrencesOfString("+", withString: "-", options: NSStringCompareOptions.allZeros, range: nil)
     }
 
     public class func decodeBase64(b64: String) -> NSData {
