@@ -248,8 +248,12 @@ extension TabManager {
             self.addTab(request: NSURLRequest(URL: url), flushToDisk: false)
         }
 
-        let selectedIndex: Int = coder.decodeIntegerForKey("selectedIndex")
-        self.selectTab(self.tabs[selectedIndex])
+        let selectedIndex = coder.decodeIntegerForKey("selectedIndex")
+        if selectedIndex >= 0 && selectedIndex < tabs.count {
+            selectTab(tabs[selectedIndex])
+        } else if let firstTab = tabs.first {
+            selectTab(firstTab)
+        }
         storeChanges()
     }
 }
