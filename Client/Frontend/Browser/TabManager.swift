@@ -55,18 +55,23 @@ class TabManager : NSObject {
     private var configuration: WKWebViewConfiguration
     let storage: RemoteClientsAndTabs?
 
-    init(defaultNewTabRequest: NSURLRequest, storage: RemoteClientsAndTabs? = nil) {
+    private let prefs: Prefs
+
+    init(defaultNewTabRequest: NSURLRequest, storage: RemoteClientsAndTabs? = nil, prefs: Prefs) {
         // Create a common webview configuration with a shared process pool.
         configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(prefs.boolForKey("blockPopups") ?? true)
 
         self.defaultNewTabRequest = defaultNewTabRequest
         self.storage = storage
         self.navDelegate = TabManagerNavDelegate()
-
+        self.prefs = prefs
         super.init()
 
         addNavigationDelegate(self)
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "prefsDidChange", name: NSUserDefaultsDidChangeNotification, object: nil)
     }
 
     func addNavigationDelegate(delegate: WKNavigationDelegate) {
@@ -136,6 +141,10 @@ class TabManager : NSObject {
         assert(NSThread.isMainThread())
         if request == nil {
             request = defaultNewTabRequest
+        }
+
+        if (configuration != nil) {
+            configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(prefs.boolForKey("blockPopups") ?? true)
         }
 
         let tab = Browser(configuration: configuration ?? self.configuration)
@@ -227,6 +236,13 @@ class TabManager : NSObject {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
         let storedTabs: [RemoteTab] = optFilter(tabs.map(Browser.toTab))
         storage?.insertOrUpdateTabs(storedTabs)
+    }
+
+    func prefsDidChange() {
+        let allowPopups = !(prefs.boolForKey("blockPopups") ?? true)
+        for i in 0..<count {
+            tabs[i].webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+        }
     }
 }
 

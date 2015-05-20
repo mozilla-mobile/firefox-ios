@@ -61,6 +61,8 @@ class Browser: NSObject {
         if webView == nil {
             assert(configuration != nil, "Create webview can only be called once")
             configuration!.userContentController = WKUserContentController()
+            configuration!.preferences = WKPreferences()
+            configuration!.preferences.javaScriptCanOpenWindowsAutomatically = false;
             let webView = WKWebView(frame: CGRectZero, configuration: configuration!)
             configuration = nil
 
