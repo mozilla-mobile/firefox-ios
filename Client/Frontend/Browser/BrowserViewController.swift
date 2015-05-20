@@ -1386,34 +1386,25 @@ extension BrowserViewController: WKUIDelegate {
         presentViewController(alertController, animated: true, completion: nil)
     }
 
-    func errorToHTML(error: NSError) -> String {
-        var html = "<html>"
-        html += "<p>localizedDescription: \(error.localizedDescription)</p>"
-        html += "<p>localizedFailureReason: \(error.localizedFailureReason)</p>"
-        html += "<p>localizedRecoverySuggestion: \(error.localizedRecoverySuggestion)</p>"
-        html += "<p>localizedRecoveryOptions: \(error.localizedRecoveryOptions)</p>"
-        html += "</html>"
-        println(html)
-        return html
-    }
-
     /// Invoked when an error occurs during a committed main frame navigation.
     func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
-        println("DIDFAILNAVIGATION:")
-        println(error)
-        println(error.userInfo)
+        if error.code == Int(CFNetworkErrors.CFURLErrorCancelled.rawValue) {
+            return
+        }
+
         if let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
-            webView.loadHTMLString(errorToHTML(error), baseURL: url)
+            ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
     }
 
     /// Invoked when an error occurs while starting to load data for the main frame.
     func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
-        println("DIDFAILPROVISIONALNAVIGATION:")
-        println(error)
-        println(error.userInfo)
+        if error.code == Int(CFNetworkErrors.CFURLErrorCancelled.rawValue) {
+            return
+        }
+
         if let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
-            webView.loadHTMLString(errorToHTML(error), baseURL: url)
+            ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
     }
 }

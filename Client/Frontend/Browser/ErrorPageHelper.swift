@@ -144,6 +144,15 @@ class ErrorPageHelper {
     }
 
     func showPage(error: NSError, forUrl url: NSURL, inWebView webView: WKWebView) {
+        // Don't show error pages for error pages.
+        if ErrorPageHelper.isErrorPageURL(url) {
+            let previousUrl = ErrorPageHelper.decodeURL(url)
+            if let index = find(ErrorPageHelper.redirecting, previousUrl) {
+                ErrorPageHelper.redirecting.removeAtIndex(index)
+            }
+            return
+        }
+
         // Add this page to the redirecting list. This will cause the server to actually show the error page
         // (instead of redirecting to the original URL).
         ErrorPageHelper.redirecting.append(url)
