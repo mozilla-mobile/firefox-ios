@@ -92,7 +92,7 @@ protocol Profile {
     var prefs: Prefs { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
-    var history: BrowserHistory { get }   // TODO: protocol<BrowserHistory, SyncableHistory>.
+    var history: protocol<BrowserHistory, SyncableHistory> { get }
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
     var passwords: Passwords { get }
@@ -163,7 +163,7 @@ public class BrowserProfile: Profile {
      * Favicons, history, and bookmarks are all stored in one intermeshed
      * collection of tables.
      */
-    private lazy var places: protocol<BrowserHistory, Favicons> = {
+    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory> = {
         return SQLiteHistory(db: self.db)
     }()
 
@@ -171,7 +171,7 @@ public class BrowserProfile: Profile {
         return self.places
     }
 
-    var history: BrowserHistory {
+    var history: protocol<BrowserHistory, SyncableHistory> {
         return self.places
     }
 
