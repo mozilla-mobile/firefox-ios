@@ -210,10 +210,6 @@ extension SQLiteHistory: BrowserHistory {
         return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, includeIcon: true)
     }
 
-    private func timestampFromRow(row: SDRow, column: String) -> UInt64? {
-        return (row[column] as? NSNumber)?.unsignedLongLongValue
-    }
-
     private class func basicHistoryColumnFactory(row: SDRow) -> Site {
         let id = row["historyID"] as! Int
         let url = row["url"] as! String
