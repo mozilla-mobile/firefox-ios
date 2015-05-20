@@ -32,14 +32,30 @@ public protocol BrowserHistory {
  * synced by a `HistorySynchronizer`.
  */
 public protocol SyncableHistory {
+    /**
+     * Make sure that the local place with the provided URL has the provided GUID.
+     * Succeeds if no place exists with that URL.
+     */
     func ensurePlaceWithURL(url: String, hasGUID guid: GUID) -> Success
+
+    /**
+     * Change any place with the old GUID to the new GUID. Succeeds if the GUID is unknown.
+     */
     func changeGUID(old: GUID, new: GUID) -> Success
+
+    /**
+     * Delete the place with the provided GUID, and all of its visits. Succeeds if the GUID is unknown.
+     */
     func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success
 
     func storeRemoteVisits(visits: [Visit], forGUID guid: GUID) -> Success
     func insertOrUpdatePlace(place: RemotePlace) -> Deferred<Result<GUID>>
 
     func getHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>>
+
+    /**
+     * Chains through the provided timestamp.
+     */
     func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>>
 }
 
