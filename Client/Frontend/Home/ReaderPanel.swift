@@ -209,6 +209,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         tableView.rowHeight = ReadingListPanelUX.RowHeight
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
+        tableView.separatorColor = AppConstants.SeparatorColor
         tableView.registerClass(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
 
         view.backgroundColor = AppConstants.PanelBackgroundColor
