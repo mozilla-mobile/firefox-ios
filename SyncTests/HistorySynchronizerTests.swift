@@ -67,22 +67,6 @@ extension MockSyncableHistory: SyncableHistory {
         return succeed()
     }
 
-    /**
-    * This assumes that the new GUID doesn't already exist!
-    */
-    func changeGUID(old: GUID, new: GUID) -> Success {
-        if let existing = self.places[old] {
-            let p = DBPlace(guid: new, url: existing.url, title: existing.title)
-            p.isDeleted = existing.isDeleted
-            p.serverModified = existing.serverModified
-            p.localModified = existing.localModified
-            self.places.removeValueForKey(old)
-            self.places[new] = p
-        }
-
-        return succeed()
-    }
-
     func storeRemoteVisits(visits: [Visit], forGUID guid: GUID) -> Success {
         // Strip out existing local visits.
         // We trust that an identical timestamp and type implies an identical visit.

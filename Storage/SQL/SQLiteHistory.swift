@@ -377,11 +377,6 @@ extension SQLiteHistory: SyncableHistory {
         return db.run("UPDATE \(TableHistory) SET guid = ? WHERE url = ?", withArgs: args)
     }
 
-    public func changeGUID(old: GUID, new: GUID) -> Success {
-        let args: Args = [new, old]
-        return db.run("UPDATE \(TableHistory) SET guid = ? WHERE guid = ?", withArgs: args)
-    }
-
     public func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success {
         let args: Args = [guid]
         // This relies on ON DELETE CASCADE to remove visits.
