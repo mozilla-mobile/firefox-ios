@@ -142,7 +142,25 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             let since: Timestamp = self.lastFetched
             log.debug("Synchronizing history. Last fetched: \(since).")
 
-            // TODO: buffer downloaded records. Do this by marking items as unprocessed?
+            // TODO: buffer downloaded records, fetching incrementally, so that we can separate
+            // the network fetch from record application.
+
+            /*
+             * On each chunk that we upload, we pass along the server modified timestamp to the next.
+             * The last chunk passes this modified timestamp out, and we assign it to lastFetched, above.
+             *
+             * The idea of this is twofold:
+             *
+             * 1. It does the fast-forwarding that every other Sync client does. The zero will never end
+             *    up as lastFetched, but reduce requires a base.
+             *
+             * 2. It allows us to (eventually) pass the last collection modified time as If-Unmodified-Since
+             *    on each upload batch, and between the download and the upload phase. This alone allows us
+             *    to detect conflicts.
+             *
+             * In order to implement the latter, we'd need to chain the date from getSince in place of the
+             * 0 in the call to uploadOutgoingFromStorage.
+             */
 
             return historyClient.getSince(since)
               >>== { self.applyIncomingToStorage(history, response: $0) }
