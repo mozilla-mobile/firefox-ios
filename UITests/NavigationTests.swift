@@ -17,11 +17,17 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
      */
     func testNavigation() {
         tester().tapViewWithAccessibilityIdentifier("url")
+        var textView = tester().waitForViewWithAccessibilityLabel("Address and Search") as? UITextField
+        XCTAssertTrue(textView!.text.isEmpty, "Text is empty")
+
         let url1 = "\(webRoot)/numberedPage.html?page=1"
         tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         tester().tapViewWithAccessibilityIdentifier("url")
+        textView = tester().waitForViewWithAccessibilityLabel("Address and Search") as? UITextField
+        XCTAssertEqual(textView!.text, url1, "Text is url")
+
         let url2 = "\(webRoot)/numberedPage.html?page=2"
         tester().clearTextFromAndThenEnterText("\(url2)\n", intoViewWithAccessibilityLabel: "Address and Search")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")

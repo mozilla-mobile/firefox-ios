@@ -107,6 +107,8 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         editTextField.layer.borderWidth = 1
         editTextField.hidden = true
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
+        editTextField.attributedPlaceholder = BrowserLocationView.PlaceholderText
+
         locationContainer.addSubview(editTextField)
 
         self.progressBar = UIProgressView()
