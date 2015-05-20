@@ -51,11 +51,11 @@ func getMicrosecondFrecencySQL(visitDateColumn: String, visitCountColumn: String
 }
 
 extension SDRow {
-    func timestampColumn(column: String) -> Timestamp? {
+    func getTimestamp(column: String) -> Timestamp? {
         return (self[column] as? NSNumber)?.unsignedLongLongValue
     }
 
-    func booleanColumn(column: String) -> Bool {
+    func getBoolean(column: String) -> Bool {
         if let val = self[column] as? Int {
             return val != 0
         }
@@ -224,7 +224,7 @@ extension SQLiteHistory: BrowserHistory {
         site.guid = guid
         site.id = id
 
-        if let visitDate = row.timestampColumn("visitDate") {
+        if let visitDate = row.getTimestamp("visitDate") {
             site.latestVisit = Visit(date: visitDate, type: VisitType.Unknown)
         }
 
@@ -436,10 +436,10 @@ extension SQLiteHistory: SyncableHistory {
         let factory = { (row: SDRow) -> HistoryMetadata in
             return HistoryMetadata(
                 id: row["id"] as! Int,
-                serverModified: row.timestampColumn("server_modified"),
-                localModified: row.timestampColumn("local_modified"),
-                isDeleted: row.booleanColumn("is_deleted"),
-                shouldUpload: row.booleanColumn("should_upload"),
+                serverModified: row.getTimestamp("server_modified"),
+                localModified: row.getTimestamp("local_modified"),
+                isDeleted: row.getBoolean("is_deleted"),
+                shouldUpload: row.getBoolean("should_upload"),
                 title: row["title"] as! String
             )
         }
@@ -570,7 +570,7 @@ extension SQLiteHistory: SyncableHistory {
 
         // Store the place and the visit.
         let factory: SDRow -> Int = { row in
-            let date = row.timestampColumn("visitDate")!
+            let date = row.getTimestamp("visitDate")!
             let type = VisitType(rawValue: row["visitType"] as! Int)!
             let visit = Visit(date: date, type: type)
             let id = ensurePlace(row)
