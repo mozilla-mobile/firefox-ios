@@ -68,7 +68,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if let site = self.siteForIndexPath(indexPath) {
             if let url = NSURL(string: site.url) {
-                homePanelDelegate?.homePanel(self, didSelectURL: url)
+                let visitType = VisitType.Typed    // Means History, too.
+                homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: visitType)
                 return
             }
         }

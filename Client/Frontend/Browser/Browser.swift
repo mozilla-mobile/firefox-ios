@@ -124,8 +124,8 @@ class Browser: NSObject, WKScriptMessageHandler {
         webView.goToBackForwardListItem(item)
     }
 
-    func loadRequest(request: NSURLRequest) {
-        webView.loadRequest(request)
+    func loadRequest(request: NSURLRequest) -> WKNavigation? {
+        return webView.loadRequest(request)
     }
 
     func stop() {
