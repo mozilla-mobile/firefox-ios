@@ -40,6 +40,8 @@ class Setting {
 
     var accessoryType: UITableViewCellAccessoryType { return .None }
 
+    var accessoryView: UIView? { return nil }
+
     // Called when the pref is tapped.
     func onClick(navigationController: UINavigationController?) { return }
 
@@ -416,6 +418,31 @@ private class ClearPrivateDataSetting: Setting {
     }
 }
 
+private class PopupBlockingSettings: Setting {
+    let prefs: Prefs
+    let tabManager: TabManager!
+
+    let prefKey = "blockPopups"
+
+    init(settings: SettingsTableViewController) {
+        self.prefs = settings.profile.prefs
+        self.tabManager = settings.tabManager
+        let title = NSLocalizedString("Block pop-up windows", comment: "Block pop-up windows setting")
+        super.init(title: NSAttributedString(string: title))
+    }
+
+    override var accessoryView: UIView? {
+        let toggle = UISwitch()
+        toggle.on = prefs.boolForKey(prefKey) ?? true
+        toggle.addTarget(self, action: "onToggle:", forControlEvents: .ValueChanged)
+        return toggle;
+    }
+
+    @objc func onToggle(toggle: UISwitch) {
+        prefs.setObject(toggle.on, forKey: prefKey)
+    }
+}
+
 // The base settings view controller.
 class SettingsTableViewController: UITableViewController {
     private let Identifier = "CellIdentifier"
@@ -448,6 +475,9 @@ class SettingsTableViewController: UITableViewController {
                 AccountStatusSetting(settings: self),
                 DisconnectSetting(settings: self),
             ] + accountDebugSettings),
+            SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: [
+                PopupBlockingSettings(settings: self),
+            ]),
             SettingSection(title: NSAttributedString(string: privacyTitle), children: [
                 ClearPrivateDataSetting(settings: self)
             ]),
@@ -516,7 +546,11 @@ class SettingsTableViewController: UITableViewController {
             }
             cell.detailTextLabel?.attributedText = setting.status
             cell.textLabel?.attributedText = setting.title
-            cell.accessoryType = setting.accessoryType
+            if let accessoryView = setting.accessoryView {
+                cell.accessoryView = accessoryView
+            } else {
+                cell.accessoryType = setting.accessoryType
+            }
             return cell
         }
         return tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath) as! UITableViewCell
