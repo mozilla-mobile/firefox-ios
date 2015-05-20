@@ -27,6 +27,9 @@ class Browser: NSObject, WKScriptMessageHandler {
 
     init(configuration: WKWebViewConfiguration) {
         configuration.userContentController = WKUserContentController()
+        configuration.preferences = WKPreferences()
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = false;
+
         webView = WKWebView(frame: CGRectZero, configuration: configuration)
         webView.allowsBackForwardNavigationGestures = true
         webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
