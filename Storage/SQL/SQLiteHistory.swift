@@ -81,91 +81,6 @@ public class SQLiteHistory {
         // a queryable thing that needs to stick around.
         db.createOrUpdate(BrowserTable())
     }
-
-    func run(sql: String, withArgs args: Args) -> Success {
-        var err: NSError?
-        return db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Success in
-            err = conn.executeChange(sql, withArgs: args)
-            if err == nil {
-                log.debug("Modified rows: \(conn.numberOfRowsModified).")
-                return succeed()
-            }
-            return deferResult(DatabaseError(err: err))
-        }
-    }
-
-    func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
-        func f(conn: SQLiteDBConnection, inout err: NSError?) -> Cursor<T> {
-            return conn.executeQuery(sql, factory: factory, withArgs: args)
-        }
-
-        var err: NSError? = nil
-        let cursor = db.withReadableConnection(&err, callback: f)
-
-        return deferResult(cursor)
-    }
-}
-
-extension SQLiteHistory {
-    private class func varlist(count: Int) -> String {
-        return "(" + ", ".join(Array(count: count, repeatedValue: "?")) + ")"
-    }
-
-    /**
-     * Insert multiple sets of values into the given table.
-     *
-     * Assumptions:
-     * 1. The table exists and contains the provided columns.
-     * 2. Every item in `values` is the same length.
-     * 3. That length is the same as the length of `columns`.
-     * 4. Every value in each element of `values` is non-nil.
-     *
-     * If there are too many items to insert, multiple individual queries will run
-     * in sequence.
-     *
-     * A failure anywhere in the sequence will cause immediate return of failure, but
-     * will not roll back — use a transaction if you need one.
-     */
-    func bulkInsert(table: String, op: String, columns: [String], values: [Args]) -> Success {
-        // Note that there's a limit to how many ?s can be in a single query!
-        // SQLITE_MAX_VARIABLE_NUMBER = 999 by default.
-        // So here we execute 999 / (columns * rows) insertions per query.
-        // Note that we can't use variables for the column names, so those don't affect the count.
-        if values.isEmpty {
-            log.debug("No values to insert.")
-            return succeed()
-        }
-
-        let variablesPerRow = columns.count
-
-        // Sanity check.
-        assert(values[0].count == variablesPerRow)
-
-        let cols = ", ".join(columns)
-        let queryStart = "\(op) INTO \(table) (\(cols)) VALUES "
-
-        let varString = SQLiteHistory.varlist(variablesPerRow)
-
-        let insertChunk: [Args] -> Success = { vals -> Success in
-            let valuesString = ", ".join(Array(count: vals.count, repeatedValue: varString))
-            let args: Args = vals.flatMap { $0 }
-            return self.run(queryStart + valuesString, withArgs: args)
-        }
-
-        let rowCount = values.count
-        if (variablesPerRow * rowCount) < 999 {
-            return insertChunk(values)
-        }
-
-        log.debug("Splitting bulk insert across multiple runs. I hope you started a transaction!")
-        let rowsPerInsert = (999 / variablesPerRow)
-        let chunks = chunk(values, by: rowsPerInsert)
-        log.debug("Inserting in \(chunks.count) chunks.")
-
-        // There's no real reason why we can't pass the ArraySlice here, except that I don't
-        // want to keep fighting Swift.
-        return walk(chunks, { insertChunk(Array($0)) })
-    }
 }
 
 extension SQLiteHistory: BrowserHistory {
@@ -174,7 +89,7 @@ extension SQLiteHistory: BrowserHistory {
         let markDeleted = "UPDATE \(TableHistory) SET is_deleted = 1, should_upload = 1, local_modified = ? WHERE url = ?"
         let visitArgs: Args = [url]
         let deleteVisits = "DELETE FROM \(TableVisits) WHERE siteID = (SELECT id FROM \(TableHistory) WHERE url = ?)"
-        return self.run(deleteVisits, withArgs: visitArgs) >>> { self.run(markDeleted, withArgs: markArgs) }
+        return self.db.run(deleteVisits, withArgs: visitArgs) >>> { self.db.run(markDeleted, withArgs: markArgs) }
     }
 
     // Note: clearing history isn't really a sane concept in the presence of Sync.
@@ -361,11 +276,11 @@ extension SQLiteHistory: BrowserHistory {
                 "FROM (\(historySQL)) LEFT OUTER JOIN " +
                 "view_history_id_favicon ON historyID = view_history_id_favicon.id"
             let factory = SQLiteHistory.iconHistoryColumnFactory
-            return self.runQuery(sql, args: args, factory: factory)
+            return db.runQuery(sql, args: args, factory: factory)
         }
 
         let factory = SQLiteHistory.basicHistoryColumnFactory
-        return self.runQuery(historySQL, args: args, factory: factory)
+        return db.runQuery(historySQL, args: args, factory: factory)
     }
 }
 
@@ -459,18 +374,18 @@ extension SQLiteHistory: Favicons {
 extension SQLiteHistory: SyncableHistory {
     public func ensurePlaceWithURL(url: String, hasGUID guid: GUID) -> Success {
         let args: Args = [guid, url]
-        return self.run("UPDATE \(TableHistory) SET guid = ? WHERE url = ?", withArgs: args)
+        return db.run("UPDATE \(TableHistory) SET guid = ? WHERE url = ?", withArgs: args)
     }
 
     public func changeGUID(old: GUID, new: GUID) -> Success {
         let args: Args = [new, old]
-        return self.run("UPDATE \(TableHistory) SET guid = ? WHERE guid = ?", withArgs: args)
+        return db.run("UPDATE \(TableHistory) SET guid = ? WHERE guid = ?", withArgs: args)
     }
 
     public func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success {
         let args: Args = [guid]
         // This relies on ON DELETE CASCADE to remove visits.
-        return self.run("DELETE FROM \(TableHistory) WHERE guid = ?", withArgs: args)
+        return db.run("DELETE FROM \(TableHistory) WHERE guid = ?", withArgs: args)
     }
 
     // Fails on non-existence.
@@ -479,7 +394,7 @@ extension SQLiteHistory: SyncableHistory {
         let query = "SELECT id FROM history WHERE guid = ?"
         let factory: SDRow -> Int = { return $0["id"] as! Int }
 
-        return self.runQuery(query, args: args, factory: factory)
+        return db.runQuery(query, args: args, factory: factory)
             >>== { cursor in
                 if cursor.count == 0 {
                     return deferResult(NoSuchRecordError(guid: guid))
@@ -502,7 +417,7 @@ extension SQLiteHistory: SyncableHistory {
             // constraint on `visits`: we allow only one row for (siteID, date, type), so if a
             // local visit already exists, this silently keeps it. End result? Any new remote
             // visits are added with only one query, keeping any existing rows.
-            return self.bulkInsert(TableVisits, op: "INSERT OR IGNORE", columns: ["siteID", "date", "type", "is_local"], values: visitArgs)
+            return self.db.bulkInsert(TableVisits, op: .InsertOrIgnore, columns: ["siteID", "date", "type", "is_local"], values: visitArgs)
         }
     }
 
@@ -528,7 +443,7 @@ extension SQLiteHistory: SyncableHistory {
                 title: row["title"] as! String
             )
         }
-        return self.runQuery(select, args: args, factory: factory) >>== { cursor in
+        return db.runQuery(select, args: args, factory: factory) >>== { cursor in
             return deferResult(cursor[0])
         }
     }
@@ -573,7 +488,7 @@ extension SQLiteHistory: SyncableHistory {
                         // Update server modified time only. (Though it'll be overwritten again after a successful upload.)
                         let update = "UPDATE \(TableHistory) SET server_modified = ? WHERE id = ?"
                         let args: Args = [serverModified, metadata.id]
-                        return self.run(update, withArgs: args) >>> always(place.guid)
+                        return self.db.run(update, withArgs: args) >>> always(place.guid)
                     }
 
                     log.debug("Remote changes overriding local.")
@@ -584,7 +499,7 @@ extension SQLiteHistory: SyncableHistory {
                 log.debug("Updating local history item for guid \(place.guid).")
                 let update = "UPDATE \(TableHistory) SET title = ?, server_modified = ?, is_deleted = 0 WHERE id = ?"
                 let args: Args = [place.title, serverModified, metadata.id]
-                return self.run(update, withArgs: args) >>> always(place.guid)
+                return self.db.run(update, withArgs: args) >>> always(place.guid)
             }
 
             // The record doesn't exist locally. Insert it.
@@ -594,7 +509,7 @@ extension SQLiteHistory: SyncableHistory {
             }
             let insert = "INSERT INTO \(TableHistory) (guid, url, title, server_modified, is_deleted, should_upload) VALUES (?, ?, ?, ?, 0, 0)"
             let args: Args = [place.guid, place.url, place.title, serverModified]
-            return self.run(insert, withArgs: args) >>> always(place.guid)
+            return self.db.run(insert, withArgs: args) >>> always(place.guid)
         }
 
         // Make sure that we only need to compare GUIDs by pre-merging on URL.
@@ -663,7 +578,7 @@ extension SQLiteHistory: SyncableHistory {
             return id
         }
 
-        return self.runQuery(sql, args: args, factory: factory)
+        return db.runQuery(sql, args: args, factory: factory)
             >>== { c in
 
                 // Consume every row, with the side effect of populating the places
@@ -695,13 +610,13 @@ extension SQLiteHistory: SyncableHistory {
 
         log.debug("Marking \(guids.count) GUIDs as synchronized. Returning timestamp \(modified).")
 
-        let inClause = SQLiteHistory.varlist(guids.count)
+        let inClause = BrowserDB.varlist(guids.count)
         let sql =
         "UPDATE \(TableHistory) SET " +
         "should_upload = 0, server_modified = \(modified) " +
         "WHERE guid IN \(inClause)"
 
         let args: Args = guids.map { $0 as AnyObject }
-        return self.run(sql, withArgs: args) >>> always(modified)
+        return self.db.run(sql, withArgs: args) >>> always(modified)
     }
 }
