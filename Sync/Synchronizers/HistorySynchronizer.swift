@@ -180,7 +180,7 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             // from our local cached server timestamp on each record that we've already seen it.
             // We have to reconcile on-the-fly: we're about to overwrite the server record, which
             // is our shared parent.
-            let place = rec.payload.asPlaceWithModifiedTime(modified)
+            let place = rec.payload.asPlace()
             return storage.insertOrUpdatePlace(place, modified: modified)
                >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
         }

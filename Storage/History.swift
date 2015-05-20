@@ -59,7 +59,7 @@ public protocol SyncableHistory {
     func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>>
 }
 
-// TODO: integrate Site with these.
+// TODO: integrate Site with this.
 
 public class Place {
     public let guid: GUID
@@ -70,33 +70,5 @@ public class Place {
         self.guid = guid
         self.url = url
         self.title = title
-    }
-}
-
-public class LocalPlace: Place {
-    // Local modification time.
-    public var modified: Timestamp
-
-    public init(guid: GUID, url: String, title: String, modified: Timestamp) {
-        self.modified = modified
-        super.init(guid: guid, url: url, title: title)
-    }
-}
-
-public class RemotePlace: Place {
-    // Server timestamp on the record.
-    public let modified: Timestamp
-
-    // Remote places are initially unapplied, and this is flipped when we reconcile them.
-    public var applied: Bool
-
-    public convenience init(guid: GUID, url: NSURL, title: String, modified: Timestamp) {
-        self.init(guid: guid, url: url.absoluteString!, title: title, modified: modified)
-    }
-
-    public init(guid: GUID, url: String, title: String, modified: Timestamp) {
-        self.applied = false
-        self.modified = modified
-        super.init(guid: guid, url: url, title: title)
     }
 }

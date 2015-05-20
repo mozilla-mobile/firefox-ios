@@ -22,8 +22,8 @@ public class HistoryPayload: CleartextPayloadJSON {
                self["visits"].isArray
     }
 
-    public func asPlaceWithModifiedTime(modified: Timestamp) -> RemotePlace {
-        return RemotePlace(guid: self.id, url: self.historyURI.absoluteString!, title: self.title, modified: modified)
+    public func asPlace() -> Place {
+        return Place(guid: self.id, url: self.historyURI.absoluteString!, title: self.title)
     }
 
     var visits: [Visit] {
