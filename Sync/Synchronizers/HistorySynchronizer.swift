@@ -112,9 +112,9 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
         // Chain the last upload timestamp right into our lastFetched timestamp.
         // This is what Sync clients tend to do, but we can probably do better.
         return walk(chunks, start, perChunk)
-          >>== {
-            log.debug("Setting post-upload lastFetched to \($0).")
-            self.lastFetched = $0
+          >>== { lastFetched in
+            log.debug("Setting post-upload lastFetched to \(lastFetched).")
+            self.lastFetched = lastFetched
             return succeed()
         }
     }
