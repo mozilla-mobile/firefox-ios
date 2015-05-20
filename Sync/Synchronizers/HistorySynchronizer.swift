@@ -181,7 +181,7 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             // We have to reconcile on-the-fly: we're about to overwrite the server record, which
             // is our shared parent.
             let place = rec.payload.asPlaceWithModifiedTime(modified)
-            return storage.insertOrUpdatePlace(place)
+            return storage.insertOrUpdatePlace(place, modified: modified)
                >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
         }
 

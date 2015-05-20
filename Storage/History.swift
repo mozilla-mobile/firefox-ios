@@ -49,7 +49,7 @@ public protocol SyncableHistory {
     func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success
 
     func storeRemoteVisits(visits: [Visit], forGUID guid: GUID) -> Success
-    func insertOrUpdatePlace(place: RemotePlace) -> Deferred<Result<GUID>>
+    func insertOrUpdatePlace(place: Place, modified: Timestamp) -> Deferred<Result<GUID>>
 
     func getHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>>
 

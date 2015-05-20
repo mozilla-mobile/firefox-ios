@@ -448,7 +448,7 @@ extension SQLiteHistory: SyncableHistory {
         }
     }
 
-    public func insertOrUpdatePlace(place: RemotePlace) -> Deferred<Result<GUID>> {
+    public func insertOrUpdatePlace(place: Place, modified: Timestamp) -> Deferred<Result<GUID>> {
         // One of these things will be true here.
         // 0. The item is new.
         //    (a) We have a local place with the same URL but a different GUID.
@@ -466,13 +466,13 @@ extension SQLiteHistory: SyncableHistory {
         //        which one wins.
 
         // We use this throughout.
-        let serverModified = NSNumber(unsignedLongLong: place.modified)
+        let serverModified = NSNumber(unsignedLongLong: modified)
 
         // Check to see if our modified time is unchanged, if the record exists locally, etc.
         let insertWithMetadata = { (metadata: HistoryMetadata?) -> Deferred<Result<GUID>> in
             if let metadata = metadata {
                 // The item exists locally (perhaps originally with a different GUID).
-                if metadata.serverModified == place.modified {
+                if metadata.serverModified == modified {
                     log.debug("History item \(place.guid) is unchanged; skipping insert-or-update.")
                     return deferResult(place.guid)
                 }
@@ -482,7 +482,7 @@ extension SQLiteHistory: SyncableHistory {
                     // Uh oh, it changed locally.
                     // This might well just be a visit change, but we can't tell. Usually this conflict is harmless.
                     log.debug("Warning: history item \(place.guid) changed both locally and remotely. Comparing timestamps from different clocks!")
-                    if metadata.localModified > place.modified {
+                    if metadata.localModified > modified {
                         log.debug("Local changes overriding remote.")
 
                         // Update server modified time only. (Though it'll be overwritten again after a successful upload.)
