@@ -99,7 +99,9 @@ class Browser: NSObject, WKScriptMessageHandler {
 
     var displayURL: NSURL? {
         if let url = webView.URL {
-            return ReaderModeUtils.isReaderModeURL(url) ? ReaderModeUtils.decodeURL(url) : url
+            if url.scheme != "about" {
+                return ReaderModeUtils.isReaderModeURL(url) ? ReaderModeUtils.decodeURL(url) : url
+            }
         }
         return nil
     }

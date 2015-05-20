@@ -19,6 +19,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityIdentifier("url")
         var textView = tester().waitForViewWithAccessibilityLabel("Address and Search") as? UITextField
         XCTAssertTrue(textView!.text.isEmpty, "Text is empty")
+        XCTAssertNotNil(textView!.placeholder, "Text view has a placeholder to show when its empty")
 
         let url1 = "\(webRoot)/numberedPage.html?page=1"
         tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")

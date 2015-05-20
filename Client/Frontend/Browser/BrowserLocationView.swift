@@ -20,7 +20,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     private var readerModeButton: ReaderModeButton!
     var readerModeButtonWidthConstraint: NSLayoutConstraint?
 
-     static var PlaceholderText: NSAttributedString {
+    static var PlaceholderText: NSAttributedString {
         let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
         return NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
     }
@@ -132,19 +132,16 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     var url: NSURL? {
         didSet {
             lockImageView.hidden = (url?.scheme != "https")
-            let t = url?.absoluteString
-
-            if t?.hasPrefix("http://") ?? false {
-                locationLabel.text = t!.substringFromIndex(advance(t!.startIndex, 7))
-            } else if t?.hasPrefix("https://") ?? false {
-                locationLabel.text = t!.substringFromIndex(advance(t!.startIndex, 8))
-            } else if t == "about:home" {
-                // This will show the placeholder label instead of the url.
-                url = nil
-                locationLabel.attributedText = BrowserLocationView.PlaceholderText
-                return
+            if let url = url?.absoluteString {
+                if url.hasPrefix("http://") ?? false {
+                    locationLabel.text = url.substringFromIndex(advance(url.startIndex, 7))
+                } else if url.hasPrefix("https://") ?? false {
+                    locationLabel.text = url.substringFromIndex(advance(url.startIndex, 8))
+                } else {
+                    locationLabel.text = url
+                }
             } else {
-                locationLabel.text = t
+                locationLabel.attributedText = BrowserLocationView.PlaceholderText
             }
 
             setNeedsUpdateConstraints()
