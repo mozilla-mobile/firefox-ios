@@ -1105,7 +1105,7 @@ extension BrowserViewController: TabManagerDelegate {
             urlBar.updateReaderModeState(ReaderModeState.Unavailable)
         }
 
-        updateInContentHomePanel(selected?.displayURL)
+        updateInContentHomePanel(selected?.url)
     }
 
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
@@ -1270,7 +1270,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     }
                 }
 
-                updateInContentHomePanel(tab.displayURL)
+                updateInContentHomePanel(tab.url)
             }
         }
     }
