@@ -57,6 +57,10 @@ public class BrowserDB {
 
     private var initialized = [String]()
 
+    // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
+    // appear in a query string.
+    static let MaxVariableNumber = 999
+
     public init(files: FileAccessor) {
         log.debug("Initializing BrowserDB.")
         self.files = files
@@ -220,7 +224,6 @@ extension BrowserDB {
      */
     func bulkInsert(table: String, op: InsertOperation, columns: [String], values: [Args]) -> Success {
         // Note that there's a limit to how many ?s can be in a single query!
-        // SQLITE_MAX_VARIABLE_NUMBER = 999 by default.
         // So here we execute 999 / (columns * rows) insertions per query.
         // Note that we can't use variables for the column names, so those don't affect the count.
         if values.isEmpty {
@@ -245,7 +248,7 @@ extension BrowserDB {
         }
 
         let rowCount = values.count
-        if (variablesPerRow * rowCount) < 999 {
+        if (variablesPerRow * rowCount) < BrowserDB.MaxVariableNumber {
             return insertChunk(values)
         }
 

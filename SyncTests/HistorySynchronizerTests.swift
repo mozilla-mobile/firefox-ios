@@ -129,7 +129,12 @@ extension MockSyncableHistory: SyncableHistory {
         }
     }
 
-    func getHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>> {
+    func getModifiedHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>> {
+        // TODO.
+        return deferResult([])
+    }
+
+    func getDeletedHistoryToUpload() -> Deferred<Result<[GUID]>> {
         // TODO.
         return deferResult([])
     }
@@ -137,6 +142,11 @@ extension MockSyncableHistory: SyncableHistory {
     func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>> {
         // TODO
         return deferResult(0)
+    }
+
+    func markAsDeleted([GUID]) -> Success {
+        // TODO
+        return succeed()
     }
 }
 

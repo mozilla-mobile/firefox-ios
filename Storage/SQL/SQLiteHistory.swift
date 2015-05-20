@@ -508,7 +508,14 @@ extension SQLiteHistory: SyncableHistory {
             >>> { self.metadataForGUID(place.guid) >>== insertWithMetadata }
     }
 
-    public func getHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>> {
+    public func getDeletedHistoryToUpload() -> Deferred<Result<[GUID]>> {
+        let sql = "SELECT guid FROM history WHERE history.is_deleted = 1"
+        let f: SDRow -> String = { $0["guid"] as! String }
+
+        return self.db.runQuery(sql, args: nil, factory: f) >>== { deferResult($0.asArray()) }
+    }
+
+    public func getModifiedHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>> {
         // What we want to do: find all items flagged for update, selecting some number of their
         // visits alongside.
         //
@@ -589,6 +596,25 @@ extension SQLiteHistory: SyncableHistory {
                 // Now collect the return value.
                 return deferResult(map(ids, { return (places[$0]!, visits[$0]!) }))
         }
+    }
+
+    public func markAsDeleted(guids: [GUID]) -> Success {
+        // TODO: support longer GUID lists.
+        assert(guids.count < BrowserDB.MaxVariableNumber)
+
+        if guids.isEmpty {
+            return succeed()
+        }
+
+        log.debug("Wiping \(guids.count) deleted GUIDs.")
+
+        let inClause = BrowserDB.varlist(guids.count)
+        let sql =
+        "DELETE FROM \(TableHistory) WHERE " +
+        "is_deleted = 1 AND guid IN \(inClause)"
+
+        let args: Args = guids.map { $0 as AnyObject }
+        return self.db.run(sql, withArgs: args)
     }
 
     public func markAsSynchronized(guids: [GUID], modified: Timestamp) -> Deferred<Result<Timestamp>> {

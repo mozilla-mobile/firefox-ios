@@ -46,12 +46,14 @@ public protocol SyncableHistory {
     func storeRemoteVisits(visits: [Visit], forGUID guid: GUID) -> Success
     func insertOrUpdatePlace(place: Place, modified: Timestamp) -> Deferred<Result<GUID>>
 
-    func getHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>>
+    func getModifiedHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>>
+    func getDeletedHistoryToUpload() -> Deferred<Result<[GUID]>>
 
     /**
      * Chains through the provided timestamp.
      */
     func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>>
+    func markAsDeleted(guids: [GUID]) -> Success
 }
 
 // TODO: integrate Site with this.

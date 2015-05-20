@@ -50,6 +50,16 @@ class TestSQLiteHistory: XCTestCase {
             }
         }
 
+        func checkDeletedCount(expected: Int) -> () -> Success {
+            return {
+                history.getDeletedHistoryToUpload()
+                >>== { guids in
+                    XCTAssertEqual(expected, guids.count)
+                    return succeed()
+                }
+            }
+        }
+
         history.clearHistory()
             >>>
             { history.addLocalVisit(siteVisit1) }
@@ -100,7 +110,22 @@ class TestSQLiteHistory: XCTestCase {
                 return succeed()
             }
             >>>
+            checkDeletedCount(0)
+            >>>
+            { history.removeHistoryForURL("http://url2/") }
+            >>>
+            checkDeletedCount(1)
+            >>> checkSitesByFrecency
+                { (sites: Cursor) -> Success in
+                    XCTAssertEqual(1, sites.count)
+                    // They're in order of frecency.
+                    XCTAssertEqual(site1Changed.title, sites[0]!.title)
+                    return succeed()
+            }
+            >>>
             { history.clearHistory() }
+            >>>
+            checkDeletedCount(0)
             >>> checkSitesByDate
             { (sites: Cursor<Site>) -> Success in
                 XCTAssertEqual(0, sites.count)
