@@ -10,7 +10,7 @@ private let ThumbnailIdentifier = "Thumbnail"
 private let RowIdentifier = "Row"
 private let SeparatorKind = "separator"
 private let SeparatorIdentifier = "separator"
-private let SeparatorColor = UIColor(rgb: 0xffffff)
+private let SeparatorColor = AppConstants.SeparatorColor
 
 class Tile: Site {
     let backgroundColor: UIColor
