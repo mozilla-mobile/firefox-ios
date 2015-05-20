@@ -99,18 +99,10 @@ public class BrowserTable: Table {
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
         // We ignore the version.
 
-
-        // TODO: tracking deletions. What does it mean to delete a history item?
-        // TODO: shared Places table -- just id, url, guid. Rely on guid replacement coming down.
-        // TODO: delete by GUID?
-          // -- remove all local visits
-          // -- mark as deleted, remove URL
-          // -- if new visits are synced down for that guid, what do we do?
-
         let history =
         "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "guid TEXT UNIQUE NOT NULL, " +    // Not null, but the value might be replaced by the server's.
+        "guid TEXT NOT NULL UNIQUE, " +    // Not null, but the value might be replaced by the server's.
         "url TEXT NOT NULL UNIQUE, " +
         "title TEXT NOT NULL, " +
         "server_modified INTEGER, " +      // Can be null. Integer milliseconds.
@@ -128,9 +120,9 @@ public class BrowserTable: Table {
         "CREATE TABLE IF NOT EXISTS \(TableVisits) (" +
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
         "siteID INTEGER NOT NULL REFERENCES \(TableHistory)(id) ON DELETE CASCADE, " +
-        "date REAL NOT NULL, " +           // Microseconds.
+        "date REAL NOT NULL, " +           // Microseconds since epoch.
         "type INTEGER NOT NULL, " +
-        "is_local TINYINT NOT NULL, " +
+        "is_local TINYINT NOT NULL, " +    // Some visits are local. Some are remote ('mirrored'). This boolean flag is the split.
         "UNIQUE (siteID, date, type) " +
         ") "
 
