@@ -31,8 +31,6 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             let payload = rec.payload
             let modified = rec.modified
 
-            log.debug("Record: \(guid): \(payload.title)")
-
             // We apply deletions immediately. Yes, this will throw away local visits
             // that haven't yet been synced. That's how Sync works, alas.
             if payload.deleted {
