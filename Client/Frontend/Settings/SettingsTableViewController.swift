@@ -445,6 +445,33 @@ private class ClearPrivateDataSetting: Setting {
     }
 }
 
+private class PopupBlockingSettings: Setting {
+    let prefs: Prefs
+    let tabManager: TabManager!
+
+    let prefKey = "blockPopups"
+
+    init(settings: SettingsTableViewController) {
+        self.prefs = settings.profile.prefs
+        self.tabManager = settings.tabManager
+        let title = NSLocalizedString("Block pop-up windows", comment: "Block pop-up windows setting")
+        super.init(title: NSAttributedString(string: title))
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        let control = UISwitch()
+        control.onTintColor = AppConstants.ControlTintColor
+        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        control.on = prefs.boolForKey(prefKey) ?? true
+        cell.accessoryView = control
+    }
+
+    @objc func switchValueChanged(toggle: UISwitch) {
+        prefs.setObject(toggle.on, forKey: prefKey)
+    }
+}
+
 // The base settings view controller.
 class SettingsTableViewController: UITableViewController {
     private let Identifier = "CellIdentifier"
@@ -478,6 +505,9 @@ class SettingsTableViewController: UITableViewController {
                 AccountStatusSetting(settings: self),
                 DisconnectSetting(settings: self),
             ] + accountDebugSettings),
+            SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: [
+                PopupBlockingSettings(settings: self),
+            ]),
             SettingSection(title: NSAttributedString(string: privacyTitle), children: [
                 ClearPrivateDataSetting(settings: self)
             ]),
