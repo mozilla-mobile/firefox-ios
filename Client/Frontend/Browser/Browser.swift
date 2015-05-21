@@ -40,13 +40,17 @@ class Browser: NSObject, WKScriptMessageHandler {
         super.init()
     }
 
-    class func toTab(browser: Browser) -> RemoteTab {
-        return RemoteTab(clientGUID: nil,
-            URL: browser.displayURL ?? NSURL(),
-            title: browser.displayTitle,
-            history: browser.historyList,
-            lastUsed: Timestamp(),
-            icon: nil)
+    class func toTab(browser: Browser) -> RemoteTab? {
+        if let displayURL = browser.displayURL {
+            return RemoteTab(clientGUID: nil,
+                URL: displayURL,
+                title: browser.displayTitle,
+                history: browser.historyList,
+                lastUsed: Timestamp(),
+                icon: nil)
+        } else {
+            return nil
+        }
     }
 
     var loading: Bool {
