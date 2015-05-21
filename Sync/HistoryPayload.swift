@@ -28,15 +28,19 @@ public class HistoryPayload: CleartextPayloadJSON {
     }
 
     public func asPlace() -> Place {
-        return Place(guid: self.id, url: self.historyURI.absoluteString!, title: self.title)
+        return Place(guid: self.id, url: self.histURI, title: self.title)
     }
 
     var visits: [Visit] {
         return optFilter(self["visits"].asArray!.map(Visit.fromJSON))
     }
 
+    private var histURI: String {
+        return self["histUri"].asString!
+    }
+
     var historyURI: NSURL {
-        return self["histUri"].asString!.asURL!
+        return self.histURI.asURL!
     }
 
     var title: String {
