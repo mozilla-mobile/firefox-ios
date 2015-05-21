@@ -18,7 +18,7 @@ class WebServer {
     }
 
     func start() -> Bool {
-        return server.running || server.startWithPort(0, bonjourName: nil)
+        return server.running || server.startWithOptions([GCDWebServerOption_Port: 0, GCDWebServerOption_BindToLocalhost: true, GCDWebServerOption_AutomaticallySuspendInBackground: true], error: nil)
     }
 
     /// Convenience method to register a dynamic handler. Will be mounted at $base/$module/$resource
@@ -49,5 +49,13 @@ class WebServer {
     /// Return a full url, as an NSURL, for a resource in a module. No check is done to find out if the resource actually exist.
     func URLForResource(resource: String, module: String) -> NSURL {
         return NSURL(string: "\(base)/\(module)/\(resource)")!
+    }
+
+    func updateLocalURL(url: NSURL) -> NSURL? {
+        let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
+        if components?.host == "localhost" && components?.scheme == "http" {
+            components?.port = WebServer.sharedInstance.server.port
+        }
+        return components?.URL
     }
 }

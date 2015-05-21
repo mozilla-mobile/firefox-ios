@@ -55,20 +55,17 @@ struct ReaderModeUtils {
     }
 
     static func isReaderModeURL(url: NSURL) -> Bool {
-        let baseReaderModeURL: String = WebServer.sharedInstance.URLForResource("page", module: "reader-mode")
-        if let absoluteString = url.absoluteString {
-            return absoluteString.hasPrefix(baseReaderModeURL)
+        if let scheme = url.scheme, host = url.host, path = url.path {
+            return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
         }
         return false
     }
 
     static func decodeURL(url: NSURL) -> NSURL? {
-        let baseReaderModeURL: String = WebServer.sharedInstance.URLForResource("page", module: "reader-mode")
-        if let absoluteString = url.absoluteString {
-            if absoluteString.hasPrefix(baseReaderModeURL) {
-                let encodedURL = absoluteString.substringFromIndex(advance(absoluteString.startIndex, baseReaderModeURL.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) + 5)) // TODO Actually parse the url
-                if let decodedURL = encodedURL.stringByRemovingPercentEncoding {
-                    return NSURL(string: decodedURL)
+        if ReaderModeUtils.isReaderModeURL(url) {
+            if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false), queryItems = components.queryItems where queryItems.count == 1 {
+                if let queryItem = queryItems.first as? NSURLQueryItem, value = queryItem.value {
+                    return NSURL(string: value)
                 }
             }
         }
