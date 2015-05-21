@@ -870,8 +870,6 @@ class ScrollRecognizer : UIGestureRecognizer {
     }
 
     override func touchesBegan(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        super.touchesBegan(touches, withEvent: event)
-
         if touches.count == 1 {
             if let touch = touches.first as? UITouch {
                 previousScroll = touch.locationInView(browserViewController?.view)
@@ -880,10 +878,11 @@ class ScrollRecognizer : UIGestureRecognizer {
             // If a second finer comes down, we'll stop dragging
             endDragging()
         }
+
+        super.touchesBegan(touches, withEvent: event)
     }
 
     override func touchesMoved(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        super.touchesMoved(touches, withEvent: event)
 
         if let tab = browserViewController?.tabManager.selectedTab,
            let scrollView = view as? UIScrollView,
@@ -920,13 +919,15 @@ class ScrollRecognizer : UIGestureRecognizer {
 
             self.previousScroll = offset
         }
+
+        super.touchesMoved(touches, withEvent: event)
     }
 
     override func touchesEnded(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        super.touchesEnded(touches, withEvent: event)
         if previousScroll != nil && touches.count == 1 {
             endDragging()
         }
+        super.touchesEnded(touches, withEvent: event)
     }
 
     private func endDragging() {
