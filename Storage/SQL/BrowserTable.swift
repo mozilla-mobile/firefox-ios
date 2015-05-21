@@ -19,6 +19,9 @@ let ViewWidestFaviconsForSites = "view_favicons_widest"
 let ViewHistoryIDsWithWidestFavicons = "view_history_id_favicon"
 let ViewIconForURL = "view_icon_for_url"
 
+let IndexHistoryShouldUpload = "idx_history_should_upload"
+let IndexVisitsSiteIDDate = "idx_visits_siteID_date"
+
 private let AllTables: Args = [
     TableFaviconSites,
 
@@ -34,7 +37,12 @@ private let AllViews: Args = [
     ViewIconForURL,
 ]
 
-private let AllTablesAndViews: Args = AllViews + AllTables
+private let AllIndices: Args = [
+    IndexHistoryShouldUpload,
+    IndexVisitsSiteIDDate,
+]
+
+private let AllTablesIndicesAndViews: Args = AllViews + AllIndices + AllTables
 
 private let log = XCGLogger.defaultInstance()
 
@@ -44,7 +52,7 @@ private let log = XCGLogger.defaultInstance()
  */
 public class BrowserTable: Table {
     var name: String { return "BROWSER" }
-    var version: Int { return 3 }
+    var version: Int { return 4 }
 
     public init() {
     }
@@ -102,13 +110,14 @@ public class BrowserTable: Table {
         let history =
         "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "guid TEXT NOT NULL UNIQUE, " +    // Not null, but the value might be replaced by the server's.
-        "url TEXT NOT NULL UNIQUE, " +
+        "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
+        "url TEXT UNIQUE, " +                 // May only be null for deleted records.
         "title TEXT NOT NULL, " +
-        "server_modified INTEGER, " +      // Can be null. Integer milliseconds.
-        "local_modified INTEGER, " +       // Can be null. Client clock. In extremis only.
-        "is_deleted TINYINT NOT NULL, " +  // Boolean. Locally deleted.
-        "should_upload TINYINT NOT NULL" + // Boolean. Set when changed or visits added.
+        "server_modified INTEGER, " +         // Can be null. Integer milliseconds.
+        "local_modified INTEGER, " +          // Can be null. Client clock. In extremis only.
+        "is_deleted TINYINT NOT NULL, " +     // Boolean. Locally deleted.
+        "should_upload TINYINT NOT NULL, " +  // Boolean. Set when changed or visits added.
+        "CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)" +
         ") "
 
         // Right now we don't need to track per-visit deletions: Sync can't
@@ -125,6 +134,15 @@ public class BrowserTable: Table {
         "is_local TINYINT NOT NULL, " +    // Some visits are local. Some are remote ('mirrored'). This boolean flag is the split.
         "UNIQUE (siteID, date, type) " +
         ") "
+
+        // There's no point tracking rows that are not flagged for upload.
+        let indexShouldUpload =
+        "CREATE INDEX IF NOT EXISTS \(IndexHistoryShouldUpload) " +
+        "ON \(TableHistory) (should_upload) WHERE should_upload = 1"
+
+        let indexSiteIDDate =
+        "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDDate) " +
+        "ON \(TableVisits) (siteID, date)"
 
         let faviconSites =
         "CREATE TABLE IF NOT EXISTS \(TableFaviconSites) (" +
@@ -174,9 +192,11 @@ public class BrowserTable: Table {
 
         let queries = [
             history, visits, bookmarks, faviconSites,
+            indexShouldUpload, indexSiteIDDate,
             widestFavicons, historyIDsWithIcon, iconForURL,
         ]
-        assert(queries.count == AllTablesAndViews.count, "Did you forget to add your table or view to the list?")
+
+        assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
         return self.run(db, queries: queries) &&
                self.prepopulateRootFolders(db)
     }
@@ -221,6 +241,7 @@ public class BrowserTable: Table {
             "DROP TABLE IF EXISTS faviconSites",  // We renamed it to match naming convention.
         ]
         let queries = AllViews.map { "DROP VIEW IF EXISTS \($0!)" } +
+                      AllIndices.map { "DROP INDEX IF EXISTS \($0!)" } +
                       AllTables.map { "DROP TABLE IF EXISTS \($0!)" } +
                       additional
 

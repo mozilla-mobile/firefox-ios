@@ -518,7 +518,8 @@ extension SQLiteHistory: SyncableHistory {
     }
 
     public func getDeletedHistoryToUpload() -> Deferred<Result<[GUID]>> {
-        let sql = "SELECT guid FROM history WHERE history.is_deleted = 1"
+        // Use the partial index on should_upload to make this nice and quick.
+        let sql = "SELECT guid FROM \(TableHistory) WHERE \(TableHistory).should_upload = 1 AND \(TableHistory).is_deleted = 1"
         let f: SDRow -> String = { $0["guid"] as! String }
 
         return self.db.runQuery(sql, args: nil, factory: f) >>== { deferResult($0.asArray()) }
@@ -617,6 +618,9 @@ extension SQLiteHistory: SyncableHistory {
 
         log.debug("Wiping \(guids.count) deleted GUIDs.")
 
+        // We deliberately don't limit this to records marked as should_upload, just
+        // in case a coding error leaves records with is_deleted=1 but not flagged for
+        // upload -- this will catch those and throw them away.
         let inClause = BrowserDB.varlist(guids.count)
         let sql =
         "DELETE FROM \(TableHistory) WHERE " +
