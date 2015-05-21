@@ -11,6 +11,7 @@ class SearchSettingsTableViewController: UITableViewController {
     private let NumberOfItemsInSectionDefault = 2
     private let SectionOrder = 1
     private let NumberOfSections = 2
+    private let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
 
     var model: SearchEngines!
 
@@ -38,7 +39,7 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell.accessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
                 cell.accessibilityValue = engine.shortName
                 cell.textLabel?.text = engine.shortName
-                cell.imageView?.image = engine.image
+                cell.imageView?.image = engine.image?.createScaled(IconSize)
 
             case ItemDefaultSuggestions:
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
@@ -69,7 +70,7 @@ class SearchSettingsTableViewController: UITableViewController {
             cell.editingAccessoryView = toggle
 
             cell.textLabel?.text = engine.shortName
-            cell.imageView?.image = engine.image
+            cell.imageView?.image = engine.image?.createScaled(IconSize)
         }
 
         // So that the seperator line goes all the way to the left edge.

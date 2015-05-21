@@ -15,6 +15,14 @@ extension UIImage {
         UIGraphicsEndImageContext()
         return image
     }
+
+    func createScaled(size: CGSize) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        drawInRect(CGRect(origin: CGPoint(x: 0, y: 0), size: size))
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return scaledImage
+    }
 }
 
 public class ImageOperation : NSObject, SDWebImageOperation {
