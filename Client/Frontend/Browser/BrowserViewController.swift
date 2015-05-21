@@ -35,7 +35,7 @@ class BrowserViewController: UIViewController {
     private var homePanelIsInline = false
     private var searchLoader: SearchLoader!
     private let snackBars = UIView()
-    private let auralProgress = AuralProgressBar()
+    private var auralProgress: AuralProgressBar? = nil
 
     // This is public because the AppDelegate needs it when showing the settings. This is unfortunate
     // and we should find a way to better organize that code in the future.
@@ -187,14 +187,17 @@ class BrowserViewController: UIViewController {
 
     func startTrackingAccessibilityStatus() {
         NSNotificationCenter.defaultCenter().addObserverForName(UIAccessibilityVoiceOverStatusChanged, object: nil, queue: nil) { (notification) -> Void in
-            self.auralProgress.hidden = !UIAccessibilityIsVoiceOverRunning()
+            if UIAccessibilityIsVoiceOverRunning() {
+                self.auralProgress = AuralProgressBar()
+            } else {
+                self.auralProgress = nil
+            }
         }
-        auralProgress.hidden = !UIAccessibilityIsVoiceOverRunning()
     }
 
     func stopTrackingAccessibilityStatus() {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIAccessibilityVoiceOverStatusChanged, object: nil)
-        auralProgress.hidden = true
+        self.auralProgress = nil
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -456,13 +459,13 @@ class BrowserViewController: UIViewController {
             urlBar.updateProgressBar(progress)
             // when loading is stopped, KVOLoading is fired first, and only then KVOEstimatedProgress with progress 1.0 which would leave the progress bar running
             if progress != 1.0 || tabManager.selectedTab?.loading ?? false {
-                auralProgress.progress = Double(progress)
+                auralProgress?.progress = Double(progress)
             }
         case KVOLoading:
             let loading = change[NSKeyValueChangeNewKey] as! Bool
             toolbar?.updateReloadStatus(loading)
             urlBar.updateReloadStatus(loading)
-            auralProgress.progress = loading ? 0 : nil
+            auralProgress?.progress = loading ? 0 : nil
         default:
             assertionFailure("Unhandled KVO key: \(keyPath)")
         }
