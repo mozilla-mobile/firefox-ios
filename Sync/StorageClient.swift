@@ -529,7 +529,10 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     public func getSince(since: Timestamp) -> Deferred<Result<StorageResponse<[Record<T>]>>> {
         let deferred = Deferred<Result<StorageResponse<[Record<T>]>>>(defaultQueue: client.resultQueue)
 
-        let req = client.requestGET(self.collectionURI.withQueryParam("full", value: "1"))
+        let req = client.requestGET(self.collectionURI.withQueryParams([
+            NSURLQueryItem(name: "full", value: "1"),
+            NSURLQueryItem(name: "newer", value: millisecondsToDecimalSeconds(since))]))
+
         req.responseParsedJSON(errorWrap(deferred, { (_, response, data, error) in
 
             if let json: JSON = data as? JSON {
