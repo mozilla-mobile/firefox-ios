@@ -50,7 +50,7 @@ class BrowserViewController: UIViewController {
     private var footerBackground: UIView!
 
     // Scroll management properties
-    private var scrollRecognizer: ScrollRecognizer
+    private var previousScroll: CGPoint?
 
     private var headerConstraint: Constraint?
     private var headerConstraintOffset: CGFloat = 0
@@ -70,7 +70,6 @@ class BrowserViewController: UIViewController {
 
     init(profile: Profile) {
         self.profile = profile
-        scrollRecognizer = ScrollRecognizer()
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -88,7 +87,6 @@ class BrowserViewController: UIViewController {
     }
 
     private func didInit() {
-        scrollRecognizer.browserViewController = self
         let defaultURL = NSURL(string: HomeURL)!
         let defaultRequest = NSURLRequest(URL: defaultURL)
         tabManager = TabManager(defaultNewTabRequest: defaultRequest)
@@ -849,56 +847,22 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 }
 
-class ScrollRecognizer : UIGestureRecognizer {
-    weak var browserViewController: BrowserViewController?
-    private var previousScroll: CGPoint?
-
-    override func canPreventGestureRecognizer(preventedGestureRecognizer: UIGestureRecognizer!) -> Bool {
-        return false
+extension BrowserViewController : UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        previousScroll = scrollView.contentOffset
     }
 
-    override func canBePreventedByGestureRecognizer(preventingGestureRecognizer: UIGestureRecognizer!) -> Bool {
-        if preventingGestureRecognizer.description.rangeOfString("UIWebTouchEventsGestureRecognizer") != nil {
-            // We normally wouldn't want to allow touch events a chance to prevent this, but doing so can result.
-            // in lock ups of the entire UI.
-            if preventingGestureRecognizer.state == .Ended {
-                return true
-            }
-            return false
-        }
-        return preventingGestureRecognizer.description.rangeOfString("UIScrollViewPanGestureRecognizer") == nil
-    }
-
-    override func touchesBegan(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        super.touchesBegan(touches, withEvent: event)
-
-        if touches.count == 1 {
-            if let touch = touches.first as? UITouch {
-                previousScroll = touch.locationInView(browserViewController?.view)
-            }
-        } else {
-            // If a second finer comes down, we'll stop dragging
-            endDragging()
-        }
-    }
-
-    override func touchesMoved(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        super.touchesMoved(touches, withEvent: event)
-
-        if let tab = browserViewController?.tabManager.selectedTab,
-           let scrollView = view as? UIScrollView,
-           var totalToolbarHeight = browserViewController?.header.frame.size.height,
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if let tab = tabManager.selectedTab,
            let prev = self.previousScroll,
-           let touch = touches.first as? UITouch,
-           let browserViewController = self.browserViewController,
-           let readerModeBar = self.browserViewController?.readerModeBar {
-
-            let offset = touch.locationInView(browserViewController.view)
-            let dy = offset.y - prev.y
+           let readerModeBar = self.readerModeBar {
+            var totalToolbarHeight = header.frame.size.height
+            let offset = scrollView.contentOffset
+            let dy = prev.y - offset.y
 
             let scrollingSize = scrollView.contentSize.height - scrollView.frame.size.height
             totalToolbarHeight += readerModeBar.hidden ? 0 : readerModeBar.frame.size.height
-            totalToolbarHeight += self.browserViewController?.toolbar?.frame.size.height ?? 0
+            totalToolbarHeight += self.toolbar?.frame.size.height ?? 0
 
             // Only scroll away our toolbars if,
             if !tab.loading &&
@@ -913,18 +877,17 @@ class ScrollRecognizer : UIGestureRecognizer {
                 // The user has reached the limit as to which they can scroll to
                 scrollView.contentOffset.y < scrollingSize {
 
-                browserViewController.scrollFooter(dy)
-                browserViewController.scrollHeader(dy)
-                browserViewController.scrollReader(dy)
+                scrollFooter(dy)
+                scrollHeader(dy)
+                scrollReader(dy)
             }
 
             self.previousScroll = offset
         }
     }
 
-    override func touchesEnded(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        super.touchesEnded(touches, withEvent: event)
-        if previousScroll != nil && touches.count == 1 {
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if previousScroll != nil {
             endDragging()
         }
     }
@@ -932,17 +895,16 @@ class ScrollRecognizer : UIGestureRecognizer {
     private func endDragging() {
         self.previousScroll = nil
 
-        if let headerHeight = browserViewController?.header.frame.size.height, let headerConstraintOffset = browserViewController?.headerConstraintOffset {
-            let totalOffset = headerHeight - AppConstants.StatusBarHeight
+        let headerHeight = header.frame.size.height
+        let totalOffset = headerHeight - AppConstants.StatusBarHeight
 
-            if headerConstraintOffset > -totalOffset {
-                // Whenever we try running an animation from the scrollViewWillEndDragging delegate method,
-                // it calls layoutSubviews so many times that it ends up clobbering any animations we want to
-                // run from here. This dispatch_async places the animation onto the main queue for processing after
-                // the scrollView has placed it's work on it already
-                dispatch_async(dispatch_get_main_queue()) {
-                    browserViewController?.showToolbars(animated: true)
-                }
+        if headerConstraintOffset > -totalOffset {
+            // Whenever we try running an animation from the scrollViewWillEndDragging delegate method,
+            // it calls layoutSubviews so many times that it ends up clobbering any animations we want to
+            // run from here. This dispatch_async places the animation onto the main queue for processing after
+            // the scrollView has placed it's work on it already
+            dispatch_async(dispatch_get_main_queue()) {
+                self.showToolbars(animated: true)
             }
         }
     }
@@ -1123,7 +1085,7 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int) {
         urlBar.updateTabCount(tabManager.count)
-        tab.webView.scrollView.addGestureRecognizer(scrollRecognizer)
+        tab.webView.scrollView.delegate = self
 
         webViewContainer.insertSubview(tab.webView, atIndex: 0)
 
