@@ -225,7 +225,8 @@ class TabManager : NSObject {
     }
 
     private func storeChanges() {
-        let storedTabs: [RemoteTab] = tabs.map(Browser.toTab)
+        // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
+        let storedTabs: [RemoteTab] = optFilter(tabs.map(Browser.toTab))
         storage?.insertOrUpdateTabs(storedTabs)
     }
 }
