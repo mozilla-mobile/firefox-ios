@@ -85,10 +85,11 @@ public class SQLiteHistory {
 
 extension SQLiteHistory: BrowserHistory {
     public func removeHistoryForURL(url: String) -> Success {
-        let markArgs: Args = [NSDate.nowNumber(), url]
-        let markDeleted = "UPDATE \(TableHistory) SET is_deleted = 1, should_upload = 1, local_modified = ? WHERE url = ?"
         let visitArgs: Args = [url]
         let deleteVisits = "DELETE FROM \(TableVisits) WHERE siteID = (SELECT id FROM \(TableHistory) WHERE url = ?)"
+
+        let markArgs: Args = [NSDate.nowNumber(), url]
+        let markDeleted = "UPDATE \(TableHistory) SET url = NULL, is_deleted = 1, should_upload = 1, local_modified = ? WHERE url = ?"
         return self.db.run(deleteVisits, withArgs: visitArgs) >>> { self.db.run(markDeleted, withArgs: markArgs) }
     }
 
@@ -139,7 +140,10 @@ extension SQLiteHistory: BrowserHistory {
             // If we ever switch to per-visit change flags, this should turn into a CASE statement like
             //   CASE WHEN title IS ? THEN max(should_upload, 1) ELSE should_upload END
             // so that we don't flag this as changed unless the title changed.
-            let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, is_deleted = 0, should_upload = 1 WHERE url = ?"
+            //
+            // Note that we will never match against a deleted item, because deleted items have no URL,
+            // so we don't need to unset is_deleted here.
+            let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1 WHERE url = ?"
             let updateArgs: Args? = [site.title, now, site.url]
             if LogPII {
                 log.debug("Setting title to \(site.title) for URL \(site.url)")
@@ -247,10 +251,12 @@ extension SQLiteHistory: BrowserHistory {
         let whereClause: String
         if let filter = filter {
             args = ["%\(filter)%", "%\(filter)%"]
+
+            // No deleted item has a URL, so there is no need to explicitly add that here.
             whereClause = " WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) "
         } else {
             args = []
-            whereClause = " "
+            whereClause = " WHERE (\(TableHistory).is_deleted = 0)"
         }
 
         let historySQL =
