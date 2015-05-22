@@ -42,21 +42,25 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             // We have to reconcile on-the-fly: we're about to overwrite the server record, which
             // is our shared parent.
             let place = rec.payload.asPlace()
-            return storage.insertOrUpdatePlace(place, modified: modified)
-               >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
+            let placeThenVisits = storage.insertOrUpdatePlace(place, modified: modified)
+                              >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
+            return placeThenVisits.map({ result in
+                if result.isFailure {
+                    log.error("Record application failed: \(result.failureValue)")
+                }
+                return result
+            })
         }
 
-        func allSucceed(arr: [Success]) -> Success {
-            return all(arr).map {
-                for x in $0 {
-                    if x.isFailure {
-                        log.error("Record application failed: \(x.failureValue)")
-                        return x
-                    }
-                }
-                log.debug("Record application succeeded.")
-                return Result(success: ())
-            }
+        func done() -> Success {
+            log.debug("Bumping fetch timestamp to \(fetched).")
+            self.lastFetched = fetched
+            return succeed()
+        }
+
+        if records.isEmpty {
+            log.debug("No records; done applying.")
+            return done()
         }
 
         // TODO: a much more efficient way to do this is to:
@@ -64,12 +68,7 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
         // 2. Try to update each place. Note failures.
         // 3. bulkInsert all failed updates in one go.
         // 4. Store all remote visits for all places in one go, constructing a single sequence of visits.
-        return allSucceed(records.map(applyRecord))
-           >>> {
-            log.debug("Bumping fetch timestamp to \(fetched).")
-            self.lastFetched = fetched
-            return succeed()
-        }
+        return walk(records, applyRecord) >>> done
     }
 
     private class func makeDeletedHistoryRecord(guid: GUID) -> Record<HistoryPayload> {
@@ -136,6 +135,7 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
 
     private func uploadModifiedPlaces(places: [(Place, [Visit])], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
         if places.isEmpty {
+            log.debug("No modified places to upload.")
             return deferResult(lastTimestamp)
         }
 
@@ -145,6 +145,7 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
               >>== { storage.markAsSynchronized($0.value.success, modified: $0.value.modified) }
         }
 
+        log.debug("Uploading \(places.count) modified places.")
         let records = places.map(HistorySynchronizer.makeHistoryRecord)
 
         // Chain the last upload timestamp right into our lastFetched timestamp.
@@ -156,9 +157,11 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
 
     private func uploadDeletedPlaces(places: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
         if places.isEmpty {
+            log.debug("No deleted places to upload.")
             return deferResult(lastTimestamp)
         }
 
+        log.debug("Uploading \(places.count) deletions.")
         let storageOp: ([Record<HistoryPayload>], Timestamp) -> DeferredTimestamp = { records, timestamp in
             return storageClient.post(records, ifUnmodifiedSince: nil)
               >>== { storage.markAsDeleted($0.value.success) >>> always($0.value.modified) }
@@ -175,7 +178,6 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
 
         let doDeleted: () -> DeferredTimestamp = { storage.getDeletedHistoryToUpload()
             >>== { guids in
-                log.debug("Uploading \(guids.count) deletions.")
                 return self.uploadDeletedPlaces(guids, lastTimestamp: lastTimestamp, fromStorage: storage, withServer: storageClient)
             }
         }
@@ -183,12 +185,11 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
         let doModified: Timestamp -> DeferredTimestamp = { timestamp in
             storage.getModifiedHistoryToUpload()
                 >>== { places in
-                    log.debug("Uploading \(places.count) modified places.")
                     return self.uploadModifiedPlaces(places, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
             }
         }
 
-        return doDeleted() >>== doModified >>> succeed
+        return doDeleted() >>== doModified >>> effect({ log.debug("Done syncing.") }) >>> succeed
     }
 
     public func synchronizeLocalHistory(history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Success {
