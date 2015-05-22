@@ -34,8 +34,10 @@
 
 import Foundation
 import UIKit
+import XCGLogger
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
+private let log = XCGLogger.defaultInstance()
 
 /**
  * Handle to a SQLite database.
@@ -325,14 +327,14 @@ public class SQLiteDBConnection {
         var msg = SDError.errorMessageFromCode(status)
 
         if (debug_enabled) {
-            println("SwiftData Error -> \(description)")
-            println("                -> Code: \(status) - \(msg)")
+            log.debug("SwiftData Error -> \(description)")
+            log.debug("                -> Code: \(status) - \(msg)")
         }
 
         if let errMsg = String.fromCString(sqlite3_errmsg(sqliteDB)) {
             msg += " " + errMsg
             if (debug_enabled) {
-                println("                -> Details: \(errMsg)")
+                log.debug("                -> Details: \(errMsg)")
             }
         }
 
@@ -454,7 +456,7 @@ class SDRow: SequenceType {
         case SQLITE_FLOAT:
             ret = Double(sqlite3_column_double(statement.pointer, i))
         default:
-            println("SwiftData Warning -> Column: \(index) is of an unrecognized type, returning nil")
+            log.debug("SwiftData Warning -> Column: \(index) is of an unrecognized type, returning nil")
         }
 
         return ret
