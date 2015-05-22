@@ -207,7 +207,7 @@ class ReaderMode: BrowserHelper {
         return "ReaderMode"
     }
 
-    required init?(browser: Browser) {
+    required init(browser: Browser) {
         self.browser = browser
 
         // This is a WKUserScript at the moment because webView.evaluateJavaScript() fails with an unspecified error. Possibly script size related.

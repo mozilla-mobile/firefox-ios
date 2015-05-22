@@ -9,6 +9,7 @@ import Shared
 import Storage
 import SnapKit
 import XCGLogger
+import Alamofire
 
 private let log = XCGLogger.defaultInstance()
 
@@ -1095,16 +1096,19 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
-        if let readerMode = ReaderMode(browser: tab) {
-            readerMode.delegate = self
-            tab.addHelper(readerMode, name: ReaderMode.name())
-        }
+        let readerMode = ReaderMode(browser: tab)
+        readerMode.delegate = self
+        tab.addHelper(readerMode, name: ReaderMode.name())
 
         let favicons = FaviconManager(browser: tab, profile: profile)
         tab.addHelper(favicons, name: FaviconManager.name())
 
         let passwords = PasswordHelper(browser: tab, profile: profile)
         tab.addHelper(passwords, name: PasswordHelper.name())
+
+        let contextMenuHelper = ContextMenuHelper(browser: tab)
+        contextMenuHelper.delegate = self
+        tab.addHelper(contextMenuHelper, name: ContextMenuHelper.name())
     }
 
     func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int) {
@@ -1693,5 +1697,65 @@ extension BrowserViewController: IntroViewControllerDelegate {
             settingsNavigationController.tabManager = self.tabManager
             self.presentViewController(settingsNavigationController, animated: true, completion: nil)
         })
+    }
+}
+
+extension BrowserViewController: ContextMenuHelperDelegate {
+    func contextMenuHelper(contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements) {
+        let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        var dialogTitle: String?
+
+        if let url = elements.link {
+            dialogTitle = url.absoluteString
+            let newTabTitle = NSLocalizedString("Open In New Tab", comment: "Context menu item for opening a link in a new tab")
+            let openNewTabAction =  UIAlertAction(title: newTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) in
+                let request =  NSURLRequest(URL: url)
+                let tab = self.tabManager.addTab(request: request)
+            }
+            actionSheetController.addAction(openNewTabAction)
+
+            let copyTitle = NSLocalizedString("Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
+            let copyAction = UIAlertAction(title: copyTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
+                var pasteBoard = UIPasteboard.generalPasteboard()
+                pasteBoard.string = url.absoluteString
+            }
+            actionSheetController.addAction(copyAction)
+        }
+
+        if let url = elements.image {
+            if dialogTitle == nil {
+                dialogTitle = url.absoluteString
+            }
+
+            let saveImageTitle = NSLocalizedString("Save Image", comment: "Context menu item for saving an image")
+            let saveImageAction = UIAlertAction(title: saveImageTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
+                self.getImage(url) { UIImageWriteToSavedPhotosAlbum($0, nil, nil, nil) }
+            }
+            actionSheetController.addAction(saveImageAction)
+
+            let copyImageTitle = NSLocalizedString("Copy Image", comment: "Context menu item for copying an image to the clipboard")
+            let copyAction = UIAlertAction(title: copyImageTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
+                let pasteBoard = UIPasteboard.generalPasteboard()
+                pasteBoard.string = url.absoluteString!
+                // TODO: put the actual image on the clipboard
+            }
+            actionSheetController.addAction(copyAction)
+        }
+
+        actionSheetController.title = dialogTitle
+        var cancelAction = UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: nil)
+        actionSheetController.addAction(cancelAction)
+        self.presentViewController(actionSheetController, animated: true, completion: nil)
+    }
+
+    private func getImage(url: NSURL, success: UIImage -> ()) {
+        Alamofire.request(.GET, url)
+            .validate(statusCode: 200..<300)
+            .response { _, _, data, _ in
+                if let data = data as? NSData,
+                   let image = UIImage(data: data) {
+                    success(image)
+                }
+            }
     }
 }
