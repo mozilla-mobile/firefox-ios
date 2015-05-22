@@ -176,20 +176,25 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
 
     private func uploadOutgoingFromStorage(storage: SyncableHistory, lastTimestamp: Timestamp, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> Success {
 
-        let doDeleted: () -> DeferredTimestamp = { storage.getDeletedHistoryToUpload()
+        let uploadDeleted: Timestamp -> DeferredTimestamp = { timestamp in
+            storage.getDeletedHistoryToUpload()
             >>== { guids in
-                return self.uploadDeletedPlaces(guids, lastTimestamp: lastTimestamp, fromStorage: storage, withServer: storageClient)
+                return self.uploadDeletedPlaces(guids, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
             }
         }
 
-        let doModified: Timestamp -> DeferredTimestamp = { timestamp in
+        let uploadModified: Timestamp -> DeferredTimestamp = { timestamp in
             storage.getModifiedHistoryToUpload()
                 >>== { places in
                     return self.uploadModifiedPlaces(places, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
             }
         }
 
-        return doDeleted() >>== doModified >>> effect({ log.debug("Done syncing.") }) >>> succeed
+        return deferResult(lastTimestamp)
+          >>== uploadDeleted
+          >>== uploadModified
+           >>> effect({ log.debug("Done syncing.") })
+           >>> succeed
     }
 
     public func synchronizeLocalHistory(history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Success {
