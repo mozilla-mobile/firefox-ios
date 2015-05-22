@@ -95,6 +95,10 @@ private class PasswordsTable<T>: GenericTable<Password> {
 }
 
 private var secretKey: String? {
+#if MOZ_CHANNEL_DEBUG
+    // Disable encryption in debug builds
+    return nil
+#else
     let key = "sqlcipher.key.browser.db"
     if KeychainWrapper.hasValueForKey(key) {
         return KeychainWrapper.stringForKey(key)
@@ -104,6 +108,7 @@ private var secretKey: String? {
     let secret = Bytes.generateRandomBytes(Length).base64EncodedString
     KeychainWrapper.setString(secret, forKey: key)
     return secret
+#endif
 }
 
 public class SQLitePasswords: Passwords {
