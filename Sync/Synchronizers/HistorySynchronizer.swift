@@ -155,19 +155,19 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
           >>== effect(self.setTimestamp)
     }
 
-    private func uploadDeletedPlaces(places: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
-        if places.isEmpty {
-            log.debug("No deleted places to upload.")
+    private func uploadDeletedPlaces(guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
+        if guids.isEmpty {
+            log.debug("No deleted records to upload.")
             return deferResult(lastTimestamp)
         }
 
-        log.debug("Uploading \(places.count) deletions.")
+        log.debug("Uploading \(guids.count) deletions.")
         let storageOp: ([Record<HistoryPayload>], Timestamp) -> DeferredTimestamp = { records, timestamp in
             return storageClient.post(records, ifUnmodifiedSince: nil)
               >>== { storage.markAsDeleted($0.value.success) >>> always($0.value.modified) }
         }
 
-        let records = places.map(HistorySynchronizer.makeDeletedHistoryRecord)
+        let records = guids.map(HistorySynchronizer.makeDeletedHistoryRecord)
 
         // Deletions are smaller, so upload 100 at a time.
         return self.sequentialPosts(records, by: 100, lastTimestamp: lastTimestamp, storageOp: storageOp)
