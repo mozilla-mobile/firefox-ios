@@ -11,6 +11,8 @@ import XCGLogger
 private let log = XCGLogger.defaultInstance()
 private let HistoryTTLInSeconds = 5184000                   // 60 days.
 
+typealias DeferredTimestamp = Deferred<Result<Timestamp>>
+
 public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
     public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "history")
@@ -29,8 +31,6 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             let payload = rec.payload
             let modified = rec.modified
 
-            log.debug("Record: \(guid): \(payload.title)")
-
             // We apply deletions immediately. Yes, this will throw away local visits
             // that haven't yet been synced. That's how Sync works, alas.
             if payload.deleted {
@@ -42,21 +42,25 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             // We have to reconcile on-the-fly: we're about to overwrite the server record, which
             // is our shared parent.
             let place = rec.payload.asPlace()
-            return storage.insertOrUpdatePlace(place, modified: modified)
-               >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
+            let placeThenVisits = storage.insertOrUpdatePlace(place, modified: modified)
+                              >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
+            return placeThenVisits.map({ result in
+                if result.isFailure {
+                    log.error("Record application failed: \(result.failureValue)")
+                }
+                return result
+            })
         }
 
-        func allSucceed(arr: [Success]) -> Success {
-            return all(arr).map {
-                for x in $0 {
-                    if x.isFailure {
-                        log.error("Record application failed: \(x.failureValue)")
-                        return x
-                    }
-                }
-                log.debug("Record application succeeded.")
-                return Result(success: ())
-            }
+        func done() -> Success {
+            log.debug("Bumping fetch timestamp to \(fetched).")
+            self.lastFetched = fetched
+            return succeed()
+        }
+
+        if records.isEmpty {
+            log.debug("No records; done applying.")
+            return done()
         }
 
         // TODO: a much more efficient way to do this is to:
@@ -64,12 +68,25 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
         // 2. Try to update each place. Note failures.
         // 3. bulkInsert all failed updates in one go.
         // 4. Store all remote visits for all places in one go, constructing a single sequence of visits.
-        return allSucceed(records.map(applyRecord))
-           >>> {
-            log.debug("Bumping fetch timestamp to \(fetched).")
-            self.lastFetched = fetched
-            return succeed()
-        }
+        return walk(records, applyRecord) >>> done
+    }
+
+    private class func makeDeletedHistoryRecord(guid: GUID) -> Record<HistoryPayload> {
+        // Local modified time is ignored in upload serialization.
+        let modified: Timestamp = 0
+
+        // Sortindex for history is frecency. Make deleted items more frecent than almost
+        // anything.
+        let sortindex = 5_000_000
+
+        let ttl = HistoryTTLInSeconds
+
+        let json: JSON = JSON([
+            "id": guid,
+            "deleted": true,
+            ])
+        let payload = HistoryPayload(json)
+        return Record<HistoryPayload>(id: guid, payload: payload, modified: modified, sortindex: sortindex, ttl: ttl)
     }
 
     private class func makeHistoryRecord(place: Place, visits: [Visit]) -> Record<HistoryPayload> {
@@ -87,51 +104,98 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
         return Record<HistoryPayload>(id: id, payload: payload, modified: modified, sortindex: sortindex, ttl: ttl)
     }
 
-    private func uploadModifiedPlaces(places: [(Place, [Visit])], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> Success {
+    private func setTimestamp(timestamp: Timestamp) {
+        log.debug("Setting post-upload lastFetched to \(timestamp).")
+        self.lastFetched = timestamp
+    }
 
-        // Upload 50 records at a time. This needs to be a real Array, not an ArraySlice,
+    /**
+     * Upload just about anything that can be turned into something we can upload.
+     */
+    private func sequentialPosts<T>(items: [T], by: Int, lastTimestamp: Timestamp, storageOp: ([T], Timestamp) -> DeferredTimestamp) -> DeferredTimestamp {
+
+        // This needs to be a real Array, not an ArraySlice,
         // for the types to line up.
+        let chunks = chunk(items, by: by).map { Array($0) }
 
-        let chunks = chunk(places, by: 50).map { Array($0) }
         let start = deferResult(lastTimestamp)
 
-        let perChunk: ([(Place, [Visit])], Timestamp) -> Deferred<Result<Timestamp>> = { (place, timestamp) in
+        let perChunk: ([T], Timestamp) -> DeferredTimestamp = { (records, timestamp) in
             // TODO: detect interruptions -- clients uploading records during our sync --
             // by using ifUnmodifiedSince. We can detect uploaded records since our download
             // (chain the download timestamp into this function), and we can detect uploads
             // that race with our own (chain download timestamps across 'walk' steps).
             // If we do that, we can also advance our last fetch timestamp after each chunk.
-            let records = places.map(HistorySynchronizer.makeHistoryRecord)
-
             log.debug("Uploading \(records.count) records.")
+            return storageOp(records, timestamp)
+        }
+
+        return walk(chunks, start, perChunk)
+    }
+
+    private func uploadModifiedPlaces(places: [(Place, [Visit])], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
+        if places.isEmpty {
+            log.debug("No modified places to upload.")
+            return deferResult(lastTimestamp)
+        }
+
+        let storageOp: ([Record<HistoryPayload>], Timestamp) -> DeferredTimestamp = { records, timestamp in
             // TODO: use I-U-S.
             return storageClient.post(records, ifUnmodifiedSince: nil)
-                >>== { storage.markAsSynchronized($0.value.success, modified: $0.value.modified) }
+              >>== { storage.markAsSynchronized($0.value.success, modified: $0.value.modified) }
         }
+
+        log.debug("Uploading \(places.count) modified places.")
+        let records = places.map(HistorySynchronizer.makeHistoryRecord)
 
         // Chain the last upload timestamp right into our lastFetched timestamp.
         // This is what Sync clients tend to do, but we can probably do better.
-        return walk(chunks, start, perChunk)
-          >>== { lastFetched in
-            log.debug("Setting post-upload lastFetched to \(lastFetched).")
-            self.lastFetched = lastFetched
-            return succeed()
+        // Upload 50 records at a time.
+        return self.sequentialPosts(records, by: 50, lastTimestamp: lastTimestamp, storageOp: storageOp)
+          >>== effect(self.setTimestamp)
+    }
+
+    private func uploadDeletedPlaces(guids: [GUID], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
+        if guids.isEmpty {
+            log.debug("No deleted records to upload.")
+            return deferResult(lastTimestamp)
         }
+
+        log.debug("Uploading \(guids.count) deletions.")
+        let storageOp: ([Record<HistoryPayload>], Timestamp) -> DeferredTimestamp = { records, timestamp in
+            return storageClient.post(records, ifUnmodifiedSince: nil)
+              >>== { storage.markAsDeleted($0.value.success) >>> always($0.value.modified) }
+        }
+
+        let records = guids.map(HistorySynchronizer.makeDeletedHistoryRecord)
+
+        // Deletions are smaller, so upload 100 at a time.
+        return self.sequentialPosts(records, by: 100, lastTimestamp: lastTimestamp, storageOp: storageOp)
+          >>== effect(self.setTimestamp)
     }
 
     private func uploadOutgoingFromStorage(storage: SyncableHistory, lastTimestamp: Timestamp, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> Success {
 
-        return storage.getHistoryToUpload()
-          >>== { places in
-            log.debug("Uploading \(places.count) places.")
-            if places.isEmpty {
-                return succeed()
+        let uploadDeleted: Timestamp -> DeferredTimestamp = { timestamp in
+            storage.getDeletedHistoryToUpload()
+            >>== { guids in
+                return self.uploadDeletedPlaces(guids, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
             }
-
-            return self.uploadModifiedPlaces(places, lastTimestamp: lastTimestamp, fromStorage: storage, withServer: storageClient)
         }
-    }
 
+        let uploadModified: Timestamp -> DeferredTimestamp = { timestamp in
+            storage.getModifiedHistoryToUpload()
+                >>== { places in
+                    return self.uploadModifiedPlaces(places, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
+            }
+        }
+
+        return deferResult(lastTimestamp)
+          >>== uploadDeleted
+          >>== uploadModified
+           >>> effect({ log.debug("Done syncing.") })
+           >>> succeed
+    }
 
     public func synchronizeLocalHistory(history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Success {
         let keys = self.scratchpad.keys?.value

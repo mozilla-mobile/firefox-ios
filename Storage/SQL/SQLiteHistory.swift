@@ -368,9 +368,18 @@ extension SQLiteHistory: Favicons {
 }
 
 extension SQLiteHistory: SyncableHistory {
+    /**
+     * TODO:
+     * When we replace an existing row, we want to create a deleted row with the old
+     * GUID and switch the new one in -- if the old record has escaped to a Sync server,
+     * we want to delete it so that we don't have two records with the same URL on the server.
+     * We will know if it's been uploaded because it'll have a server_modified time.
+     */
     public func ensurePlaceWithURL(url: String, hasGUID guid: GUID) -> Success {
-        let args: Args = [guid, url]
-        return db.run("UPDATE \(TableHistory) SET guid = ? WHERE url = ?", withArgs: args)
+        let args: Args = [guid, url, guid]
+
+        // The additional IS NOT is to ensure that we don't do a write for no reason.
+        return db.run("UPDATE \(TableHistory) SET guid = ? WHERE url = ? AND guid IS NOT ?", withArgs: args)
     }
 
     public func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success {
@@ -508,7 +517,14 @@ extension SQLiteHistory: SyncableHistory {
             >>> { self.metadataForGUID(place.guid) >>== insertWithMetadata }
     }
 
-    public func getHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>> {
+    public func getDeletedHistoryToUpload() -> Deferred<Result<[GUID]>> {
+        let sql = "SELECT guid FROM history WHERE history.is_deleted = 1"
+        let f: SDRow -> String = { $0["guid"] as! String }
+
+        return self.db.runQuery(sql, args: nil, factory: f) >>== { deferResult($0.asArray()) }
+    }
+
+    public func getModifiedHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>> {
         // What we want to do: find all items flagged for update, selecting some number of their
         // visits alongside.
         //
@@ -589,6 +605,25 @@ extension SQLiteHistory: SyncableHistory {
                 // Now collect the return value.
                 return deferResult(map(ids, { return (places[$0]!, visits[$0]!) }))
         }
+    }
+
+    public func markAsDeleted(guids: [GUID]) -> Success {
+        // TODO: support longer GUID lists.
+        assert(guids.count < BrowserDB.MaxVariableNumber)
+
+        if guids.isEmpty {
+            return succeed()
+        }
+
+        log.debug("Wiping \(guids.count) deleted GUIDs.")
+
+        let inClause = BrowserDB.varlist(guids.count)
+        let sql =
+        "DELETE FROM \(TableHistory) WHERE " +
+        "is_deleted = 1 AND guid IN \(inClause)"
+
+        let args: Args = guids.map { $0 as AnyObject }
+        return self.db.run(sql, withArgs: args)
     }
 
     public func markAsSynchronized(guids: [GUID], modified: Timestamp) -> Deferred<Result<Timestamp>> {

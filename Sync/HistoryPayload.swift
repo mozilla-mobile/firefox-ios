@@ -16,22 +16,31 @@ public class HistoryPayload: CleartextPayloadJSON {
     }
 
     override public func isValid() -> Bool {
-        return super.isValid() &&
-               self["histUri"].isString &&      // TODO: validate URI.
+        if !super.isValid() {
+            return false
+        }
+        if self["deleted"].isBool {
+            return true
+        }
+        return self["histUri"].isString &&      // TODO: validate URI.
                self["title"].isString &&
                self["visits"].isArray
     }
 
     public func asPlace() -> Place {
-        return Place(guid: self.id, url: self.historyURI.absoluteString!, title: self.title)
+        return Place(guid: self.id, url: self.histURI, title: self.title)
     }
 
     var visits: [Visit] {
         return optFilter(self["visits"].asArray!.map(Visit.fromJSON))
     }
 
+    private var histURI: String {
+        return self["histUri"].asString!
+    }
+
     var historyURI: NSURL {
-        return self["histUri"].asString!.asURL!
+        return self.histURI.asURL!
     }
 
     var title: String {
@@ -43,6 +52,13 @@ public class HistoryPayload: CleartextPayloadJSON {
             if !super.equalPayloads(p) {
                 return false;
             }
+
+            if p.deleted {
+                return self.deleted == p.deleted
+            }
+
+            // If either record is deleted, these other fields might be missing.
+            // But we just checked, so we're good to roll on.
 
             if p.title != self.title {
                 return false

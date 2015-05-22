@@ -62,6 +62,17 @@ public func walk<T>(items: [T], f: T -> Success) -> Success {
 }
 
 /**
+ * Take a function and turn it into a side-effect that can appear
+ * in a chain of async operations without producing its own value.
+ */
+public func effect<T, U>(f: T -> U) -> T -> Deferred<Result<T>> {
+    return { t in
+        f(t)
+        return deferResult(t)
+    }
+}
+
+/**
  * Return a single Deferred that represents the sequential chaining of
  * f over the provided items, with the return value chained through.
  */
