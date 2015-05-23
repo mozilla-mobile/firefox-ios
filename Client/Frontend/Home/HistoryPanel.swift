@@ -22,7 +22,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     private let Yesterday = getDate(dayOffset: -1)
     private let ThisWeek = getDate(dayOffset: -7)
 
-    private var sectionOffsets = [Int: Int]()
+    // Category number -> (UI section, row count, cursor offset).
+    private var categoryOffsets = [Int: (Int?, Int, Int)]()
+
+    // Reverse lookup from UI section to data category.
+    private var sectionLookup = [Int: Int]()
 
     private lazy var defaultIcon: UIImage = {
         return UIImage(named: "defaultFavicon")!
@@ -45,9 +49,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             if result.isSuccess {
                 self.reloadData()
             }
-
-            // Always end refreshing, even if we failed!
-            self.refreshControl?.endRefreshing()
         }
     }
 
@@ -56,8 +57,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     private func setData(data: Cursor<Site>) {
-        self.sectionOffsets = [Int: Int]()
         self.data = data
+        self.computeSectionOffsets()
     }
 
     override func reloadData() {
@@ -66,13 +67,17 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 self.setData(data)
                 self.tableView.reloadData()
             }
+
+            // Always end refreshing, even if we failed!
+            self.refreshControl?.endRefreshing()
+
             // TODO: error handling.
         }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
-        let offset = sectionOffsets[indexPath.section]!
+        let (section, sectionRowCount, offset) = categoryOffsets[indexPath.section]!
         if let site = data[indexPath.row + offset] {
             if let cell = cell as? TwoLineTableViewCell {
                 cell.setLines(site.title, detailText: site.url)
@@ -84,7 +89,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     private func siteForIndexPath(indexPath: NSIndexPath) -> Site? {
-        let offset = sectionOffsets[indexPath.section]!
+        let (section, sectionRowCount, offset) = categoryOffsets[sectionLookup[indexPath.section]!]!
         return data[indexPath.row + offset]
     }
 
@@ -99,14 +104,20 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         println("Could not click on history row")
     }
 
-    // Functions that deal with showing header rows
+    // Functions that deal with showing header rows.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return NumSections
+        var count = 0
+        for (section, rowCount, offset) in categoryOffsets.values {
+            if rowCount > 0 {
+                count++
+            }
+        }
+        return count
     }
 
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         var title = String()
-        switch section {
+        switch sectionLookup[section]! {
         case 0: title = NSLocalizedString("Today", comment: "History tableview section header")
         case 1: title = NSLocalizedString("Yesterday", comment: "History tableview section header")
         case 2: title = NSLocalizedString("Last week", comment: "History tableview section header")
@@ -117,73 +128,65 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return title.uppercaseString
     }
 
-    private func isInSection(date: MicrosecondTimestamp, section: Int) -> Bool {
+    func categoryForDate(date: MicrosecondTimestamp) -> Int {
         let date = Double(date)
-        switch section {
-        case 0:
-            return date > (1000000 * Today.timeIntervalSince1970)
-        case 1:
-            return date > (1000000 * Yesterday.timeIntervalSince1970)
-        case 2:
-            return date > (1000000 * ThisWeek.timeIntervalSince1970)
-        default:
-            return true
-        }
-    }
-
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if let current = sectionOffsets[section] {
-            if let next = sectionOffsets[section+1] {
-                if current == next {
-                    // If this points to the same element as the next one, it's empty. Don't show it.
-                    return 0
-                }
-            }
-        } else {
-            // This may not be filled in yet (for instance, if the number of rows in data is zero). If it is,
-            // just return zero.
+        if date > (1000000 * Today.timeIntervalSince1970) {
             return 0
         }
-
-        // Return the default height for header rows
-        return super.tableView(tableView, heightForHeaderInSection: section)
+        if date > (1000000 * Yesterday.timeIntervalSince1970) {
+            return 1
+        }
+        if date > (1000000 * ThisWeek.timeIntervalSince1970) {
+            return 2
+        }
+        return 3
     }
 
+    private func isInCategory(date: MicrosecondTimestamp, category: Int) -> Bool {
+        return self.categoryForDate(date) == category
+    }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let size = sectionOffsets[section] {
-            if let nextSize = sectionOffsets[section+1] {
-                return nextSize - size
-            }
-        }
-
-        var searchingSection = 0
-        sectionOffsets[searchingSection] = 0
+    func computeSectionOffsets() {
+        var counts = [Int](count: NumSections, repeatedValue: 0)
 
         // Loop over all the data. Record the start of each "section" of our list.
         for i in 0..<data.count {
             if let site = data[i] {
-                if !isInSection(site.latestVisit!.date, section: searchingSection) {
-                    searchingSection++
-                    sectionOffsets[searchingSection] = i
-                }
-
-                if searchingSection == NumSections {
-                    break
-                }
+                counts[categoryForDate(site.latestVisit!.date)]++
             }
         }
 
-        // Now fill in any sections that weren't found with data.count.
-        // Note, we actually fill in one past the end of the list to make finding the length
-        // of a section easier.
-        searchingSection++
-        for i in searchingSection...NumSections {
-            sectionOffsets[i] = data.count
+        var section = 0
+        var offset = 0
+        for i in 0..<NumSections {
+            let count = counts[i]
+            if count > 0 {
+                categoryOffsets[i] = (section, count, offset)
+                sectionLookup[section] = i
+                offset += count
+                section++
+            } else {
+                categoryOffsets[i] = (nil, 0, offset)
+            }
         }
+    }
 
-        // This function wants the size of a section, so return the distance between two adjacent ones
-        return sectionOffsets[section+1]! - sectionOffsets[section]!
+    // UI sections disappear as categories empty. We need to translate back and forth.
+    func uiSectionToCategory(section: Int) -> Int {
+        for i in 0..<categoryOffsets.count {
+            if let s = categoryOffsets[i]!.0 where s == section {
+                return i
+            }
+        }
+        return 0
+    }
+
+    func categoryToUISection(category: Int) -> Int? {
+        return categoryOffsets[category]?.0
+    }
+
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return categoryOffsets[uiSectionToCategory(section)]?.1 ?? 0
     }
 
 
@@ -192,26 +195,41 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
-        let title = NSLocalizedString("Remove", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the bookmarks panel.")
+        let title = NSLocalizedString("Remove", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
             if let site = self.siteForIndexPath(indexPath) {
+                let category = self.categoryForDate(site.latestVisit!.date)
+                let section = self.categoryToUISection(category)!
+
                 // Why the dispatches? Because we call success and failure on the DB
                 // queue, and so calling anything else that calls through to the DB will
-                // deadlock. This problem will go away when the bookmarks API switches to
+                // deadlock. This problem will go away when the history API switches to
                 // Deferred instead of using callbacks.
-                self.profile.history.removeHistoryForURL(site.url).uponQueue(dispatch_get_main_queue()) { success in
-                    self.refetchData().uponQueue(dispatch_get_main_queue()) { result in
-                        if let data = result.successValue {
-                            self.setData(data)
-                        }
+                self.profile.history.removeHistoryForURL(site.url)
+                    .upon { res in
+                        self.refetchData().uponQueue(dispatch_get_main_queue()) { result in
 
-                        self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
-                    }
+                            // If a section will be empty after removal, we must remove the section itself.
+                            if let data = result.successValue {
+                                tableView.beginUpdates()
+                                self.data = data
+                                self.computeSectionOffsets()
+
+                                let (_, count, offset) = self.categoryOffsets[category]!
+                                if count == 0 {
+                                    // Remove the section. Sections can't be empty.
+                                    self.tableView.deleteSections(NSIndexSet(index: section), withRowAnimation: UITableViewRowAnimation.Left)
+                                } else {
+                                    self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+                                }
+
+                                tableView.endUpdates()
+                            }
+                        }
                 }
             }
         })
-
         return [delete]
     }
 }
