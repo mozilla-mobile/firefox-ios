@@ -201,6 +201,20 @@ private class CustomCell: UICollectionViewCell {
             }
         }
     }
+
+    private override func accessibilityScroll(direction: UIAccessibilityScrollDirection) -> Bool {
+        var right: Bool
+        switch direction {
+        case .Left:
+            right = false
+        case .Right:
+            right = true
+        default:
+            return false
+        }
+        animator.close(right: right)
+        return true
+    }
 }
 
 class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -379,6 +393,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
             }
 
             cell.isAccessibilityElement = true
+            cell.accessibilityHint = NSLocalizedString("Swipe right or left with three fingers to close the tab.", comment: "Accessibility hint for tab tray's displayed tab.")
 
             if let favIcon = tab.displayFavicon {
                 cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
@@ -563,6 +578,7 @@ extension TabTrayController: SwipeAnimatorDelegate {
         if let indexPath = self.collectionView.indexPathForCell(tabCell) {
             if let tab = tabManager[indexPath.item] {
                 tabManager.removeTab(tab)
+                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: ""))
             }
         }
     }
