@@ -83,7 +83,8 @@ class ReadingListSQLStorage: ReadingListStorage {
 
     func createRecordWithURL(url: String, title: String, addedBy: String) -> Result<ReadingListClientRecord> {
         let items = db["items"]
-        if let id = items.insert(ItemColumns.ClientLastModified <- ReadingListNow(), ItemColumns.Url <- url, ItemColumns.Title <- title, ItemColumns.AddedBy <- addedBy) {
+        let (id, statement) = items.insert(ItemColumns.ClientLastModified <- ReadingListNow(), ItemColumns.Url <- url, ItemColumns.Title <- title, ItemColumns.AddedBy <- addedBy)
+        if let id = id {
             if let item = items.filter(ItemColumns.ClientId == id).first {
                 if let record = ReadingListClientRecord(row: rowToDictionary(item)) {
                     return Result(success: record)
@@ -94,6 +95,9 @@ class ReadingListSQLStorage: ReadingListStorage {
                 return Result(failure: ReadingListStorageError("Can't get first item from results"))
             }
         } else {
+            if let reason = statement.reason {
+                return Result(failure: ReadingListStorageError("Can't insert: \(reason)"))
+            }
             return Result(failure: ReadingListStorageError("Can't insert"))
         }
     }
