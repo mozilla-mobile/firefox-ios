@@ -153,7 +153,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
         readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "SELlongPressReaderModeButton:"))
         addSubview(readerModeButton)
         readerModeButton.isAccessibilityElement = true
-        readerModeButton.accessibilityLabel = NSLocalizedString("Reader Mode", comment: "Accessibility label for the reader mode button")
+        readerModeButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
         readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: "SELreaderModeCustomAction")]
 
         accessibilityElements = [editTextFieldListenerView, lockImageView, editTextField, readerModeButton]
@@ -354,7 +354,6 @@ private class ReaderModeButton: UIButton {
         super.init(frame: frame)
         setImage(UIImage(named: "reader.png"), forState: UIControlState.Normal)
         setImage(UIImage(named: "reader_active.png"), forState: UIControlState.Selected)
-        accessibilityLabel = NSLocalizedString("Reader", comment: "Browser function that presents simplified version of the page with bigger text.")
     }
     
     required init(coder aDecoder: NSCoder) {

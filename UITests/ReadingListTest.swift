@@ -23,7 +23,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForWebViewElementWithAccessibilityLabel("Readable Page")
 
         // Add it to the reading list
-        tester().tapViewWithAccessibilityLabel("Reader Mode")
+        tester().tapViewWithAccessibilityLabel("Reader View")
         tester().tapViewWithAccessibilityLabel("Add to Reading List")
 
         // Open a new page
