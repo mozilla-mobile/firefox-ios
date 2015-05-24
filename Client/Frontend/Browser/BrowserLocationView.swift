@@ -12,6 +12,7 @@ protocol BrowserLocationViewDelegate {
     func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView)
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView)
     func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView)
+    func browserLocationViewLocationAccessibilityActions(browserLocationView: BrowserLocationView) -> [UIAccessibilityCustomAction]?
 }
 
 private struct BrowserLocationViewUX {
@@ -122,6 +123,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
         editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
         editTextField.font = UIConstants.DefaultMediumFont
         editTextField.isAccessibilityElement = true
+        editTextField.accessibilityActionsSource = self
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         editTextField.attributedPlaceholder = BrowserLocationView.PlaceholderText
         editTextField.toolbarTextFieldDelegate = self
@@ -332,6 +334,15 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
     }
 }
 
+extension BrowserLocationView: AccessibilityActionsSource {
+    func accessibilityCustomActionsForView(view: UIView) -> [UIAccessibilityCustomAction]? {
+        if view === editTextField {
+            return delegate?.browserLocationViewLocationAccessibilityActions(self)
+        }
+        return nil
+    }
+}
+
 private class ReaderModeButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -370,6 +381,19 @@ private class ReaderModeButton: UIButton {
 class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate {
 
     var toolbarTextFieldDelegate: UITextFieldDelegate?
+
+    weak var accessibilityActionsSource: AccessibilityActionsSource?
+    override var accessibilityCustomActions: [AnyObject]! {
+        get {
+            if !editing {
+                return accessibilityActionsSource?.accessibilityCustomActionsForView(self)
+            }
+            return super.accessibilityCustomActions
+        }
+        set {
+            super.accessibilityCustomActions = newValue
+        }
+    }
 
     override init(frame: CGRect) {
 

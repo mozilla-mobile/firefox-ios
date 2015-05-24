@@ -41,6 +41,7 @@ protocol URLBarDelegate: class {
     func urlBarDidBeginEditing(urlBar: URLBarView)
     func urlBarDidEndEditing(urlBar: URLBarView)
     func urlBarDidLongPressLocation(urlBar: URLBarView)
+    func urlBarLocationAccessibilityActions(urlBar: URLBarView) -> [UIAccessibilityCustomAction]?
     func urlBarDidPressScrollToTop(urlBar: URLBarView)
     func urlBar(urlBar: URLBarView, didEnterText text: String)
     func urlBar(urlBar: URLBarView, didSubmitText text: String)
@@ -561,6 +562,10 @@ extension URLBarView: BrowserLocationViewDelegate {
 
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView) {
         delegate?.urlBarDidPressReaderMode(self)
+    }
+
+    func browserLocationViewLocationAccessibilityActions(browserLocationView: BrowserLocationView) -> [UIAccessibilityCustomAction]? {
+        return delegate?.urlBarLocationAccessibilityActions(self)
     }
 }
 
