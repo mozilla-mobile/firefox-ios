@@ -35,7 +35,8 @@ private struct URLBarViewUX {
 protocol URLBarDelegate: class {
     func urlBarDidPressTabs(urlBar: URLBarView)
     func urlBarDidPressReaderMode(urlBar: URLBarView)
-    func urlBarDidLongPressReaderMode(urlBar: URLBarView)
+    /// :returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
+    func urlBarDidLongPressReaderMode(urlBar: URLBarView) -> Bool
     func urlBarDidPressStop(urlBar: URLBarView)
     func urlBarDidPressReload(urlBar: URLBarView)
     func urlBarDidBeginEditing(urlBar: URLBarView)
@@ -535,8 +536,8 @@ extension URLBarView: BrowserToolbarProtocol {
 }
 
 extension URLBarView: BrowserLocationViewDelegate {
-    func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView) {
-        delegate?.urlBarDidLongPressReaderMode(self)
+    func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView) -> Bool {
+        return delegate?.urlBarDidLongPressReaderMode(self) ?? false
     }
 
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {

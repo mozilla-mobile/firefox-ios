@@ -738,15 +738,17 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBarDidLongPressReaderMode(urlBar: URLBarView) {
+    func urlBarDidLongPressReaderMode(urlBar: URLBarView) -> Bool {
         if let tab = tabManager.selectedTab {
             if var url = tab.displayURL {
                 if let absoluteString = url.absoluteString {
                     let result = profile.readingList?.createRecordWithURL(absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name) // TODO Check result, can this fail?
+                    return true
                     // TODO Followup bug, provide some form of 'this has been added' feedback?
                 }
             }
         }
+        return false
     }
 
     func locationActionsForURLBar(urlBar: URLBarView) -> [AccessibleAction] {

@@ -11,7 +11,8 @@ protocol BrowserLocationViewDelegate {
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView)
     func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView)
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView)
-    func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView)
+    /// :returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
+    func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView) -> Bool
     func browserLocationViewLocationAccessibilityActions(browserLocationView: BrowserLocationView) -> [UIAccessibilityCustomAction]?
 }
 
@@ -153,6 +154,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
         addSubview(readerModeButton)
         readerModeButton.isAccessibilityElement = true
         readerModeButton.accessibilityLabel = NSLocalizedString("Reader Mode", comment: "Accessibility label for the reader mode button")
+        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: "SELreaderModeCustomAction")]
 
         accessibilityElements = [editTextFieldListenerView, lockImageView, editTextField, readerModeButton]
     }
@@ -234,6 +236,10 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
             editTextFieldListenerView.hidden = true
             editTextField.becomeFirstResponder()
         }
+    }
+
+    func SELreaderModeCustomAction() -> Bool {
+        return delegate?.browserLocationViewDidLongPressReaderMode(self) ?? false
     }
 
     var url: NSURL? {
