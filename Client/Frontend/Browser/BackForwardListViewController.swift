@@ -6,7 +6,6 @@ import UIKit
 import WebKit
 
 class BackForwardListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    private let StatusBarHeight = 20
     var listData: [WKBackForwardListItem]?
     var tabManager: TabManager!
 
@@ -24,7 +23,8 @@ class BackForwardListViewController: UIViewController, UITableViewDelegate, UITa
         view.addSubview(listTableView)
 
         toolbar.snp_makeConstraints { make in
-            make.top.equalTo(self.view).offset(self.StatusBarHeight)
+            let topLayoutGuide = self.topLayoutGuide as! UIView
+            make.top.equalTo(topLayoutGuide.snp_bottom)
             make.left.right.equalTo(self.view)
             return
         }

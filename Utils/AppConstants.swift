@@ -8,12 +8,6 @@ public enum AppBuildChannel {
 }
 
 public struct AppConstants {
-    static var StatusBarHeight: CGFloat {
-        if UIScreen.mainScreen().traitCollection.verticalSizeClass == .Compact {
-            return 0
-        }
-        return 20
-    }
 
     static let ToolbarHeight: CGFloat = 44
     static let DefaultRowHeight: CGFloat = 58

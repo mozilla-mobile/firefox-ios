@@ -195,7 +195,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         if toolbarIsShowing {
             backButton.snp_remakeConstraints { (make) -> () in
                 self.backButtonLeftConstraint = make.left.equalTo(self).constraint
-                make.bottom.equalTo(self)
+                make.centerY.equalTo(self)
                 make.height.equalTo(AppConstants.ToolbarHeight)
                 make.width.equalTo(AppConstants.ToolbarHeight)
             }
@@ -203,7 +203,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
 
             forwardButton.snp_remakeConstraints { (make) -> () in
                 make.left.equalTo(self.backButton.snp_right)
-                make.bottom.equalTo(self)
+                make.centerY.equalTo(self)
                 make.height.equalTo(AppConstants.ToolbarHeight)
                 make.width.equalTo(AppConstants.ToolbarHeight)
             }
@@ -211,7 +211,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
 
             stopReloadButton.snp_remakeConstraints { (make) -> () in
                 make.left.equalTo(self.forwardButton.snp_right)
-                make.bottom.equalTo(self)
+                make.centerY.equalTo(self)
                 make.height.equalTo(AppConstants.ToolbarHeight)
                 make.width.equalTo(AppConstants.ToolbarHeight)
             }
@@ -219,7 +219,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
 
             shareButton.snp_remakeConstraints { (make) -> () in
                 make.right.equalTo(self.bookmarkButton.snp_left)
-                make.bottom.equalTo(self)
+                make.centerY.equalTo(self)
                 make.height.equalTo(AppConstants.ToolbarHeight)
                 make.width.equalTo(AppConstants.ToolbarHeight)
             }
@@ -227,7 +227,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
 
             bookmarkButton.snp_remakeConstraints { (make) -> () in
                 make.right.equalTo(self.tabsButton.snp_left)
-                make.bottom.equalTo(self)
+                make.centerY.equalTo(self)
                 make.height.equalTo(AppConstants.ToolbarHeight)
                 make.width.equalTo(AppConstants.ToolbarHeight)
             }
@@ -427,7 +427,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
                 make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
                 make.trailing.equalTo(self.cancelButton.snp_leading)
                 make.height.equalTo(URLBarViewUX.LocationHeight)
-                make.centerY.equalTo(self).offset(AppConstants.StatusBarHeight / 2)
+                make.centerY.equalTo(self)
             }
         } else {
             self.locationContainer.snp_remakeConstraints { make in
@@ -443,7 +443,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
 
                 make.height.equalTo(URLBarViewUX.LocationHeight)
 
-                make.centerY.equalTo(self).offset(AppConstants.StatusBarHeight / 2)
+                make.centerY.equalTo(self)
             }
         }
     }
@@ -584,7 +584,7 @@ private class CurveView: UIView {
     func drawFromTop(path: UIBezierPath) {
         let height: Double = Double(AppConstants.ToolbarHeight)
         let width = getWidthForHeight(height)
-        var from = (Double(self.frame.width) - width * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(AppConstants.StatusBarHeight))
+        var from = (Double(self.frame.width) - width * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(0))
 
         path.moveToPoint(CGPoint(x: from.0, y: from.1))
         path.addCurveToPoint(CGPoint(x: from.0 + width * W_M2, y: from.1 + height * H_M2),
@@ -599,10 +599,9 @@ private class CurveView: UIView {
     private func getPath() -> UIBezierPath {
         let path = UIBezierPath()
         self.drawFromTop(path)
-        path.addLineToPoint(CGPoint(x: self.frame.width, y: AppConstants.ToolbarHeight + AppConstants.StatusBarHeight))
+        path.addLineToPoint(CGPoint(x: self.frame.width, y: AppConstants.ToolbarHeight))
         path.addLineToPoint(CGPoint(x: self.frame.width, y: 0))
         path.addLineToPoint(CGPoint(x: 0, y: 0))
-        path.addLineToPoint(CGPoint(x: 0, y: AppConstants.StatusBarHeight))
         path.closePath()
         return path
     }

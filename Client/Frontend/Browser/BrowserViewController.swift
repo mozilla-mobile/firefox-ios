@@ -21,11 +21,13 @@ private let HomeURL = "about:home"
 
 private struct BrowserViewControllerUX {
     private static let ToolbarBaseAnimationDuration: CGFloat = 0.3
+    private static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
 }
 
 class BrowserViewController: UIViewController {
     private var urlBar: URLBarView!
     private var readerModeBar: ReaderModeBarView!
+    private var statusBarOverlay: UIView!
     private var toolbar: BrowserToolbar?
     private var homePanelController: HomePanelViewController?
     private var searchController: SearchViewController?
@@ -157,11 +159,28 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    func SELstatusBarFrameWillChange(notification: NSNotification) {
+        if let statusBarFrame = notification.userInfo![UIApplicationStatusBarFrameUserInfoKey] as? NSValue {
+            statusBarOverlay.frame = statusBarFrame.CGRectValue()
+            self.view.setNeedsLayout()
+        }
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELstatusBarFrameWillChange:", name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
 
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
+
+        // Temporary work around for covering the non-clipped web view content
+        statusBarOverlay = UIView()
+        statusBarOverlay.backgroundColor = BrowserViewControllerUX.BackgroundColor
+        view.addSubview(statusBarOverlay)
 
         // Setup the reader mode control bar. This bar starts not visible with a zero height.
         readerModeBar = ReaderModeBarView(frame: CGRectZero)
@@ -223,15 +242,15 @@ class BrowserViewController: UIViewController {
     }
 
     override func updateViewConstraints() {
-
         urlBar.snp_remakeConstraints { make in
             make.edges.equalTo(self.header)
         }
 
         header.snp_remakeConstraints { make in
-            self.headerConstraint = make.top.equalTo(self.view.snp_top).constraint
-            make.height.equalTo(AppConstants.ToolbarHeight + AppConstants.StatusBarHeight)
-            make.leading.trailing.equalTo(self.view)
+            let topLayoutGuide = self.topLayoutGuide as! UIView
+            self.headerConstraint = make.top.equalTo(topLayoutGuide.snp_bottom).constraint
+            make.height.equalTo(AppConstants.ToolbarHeight)
+            make.left.right.equalTo(self.view)
         }
         header.setNeedsUpdateConstraints()
 
@@ -896,7 +915,7 @@ extension BrowserViewController : UIScrollViewDelegate {
         self.previousScroll = nil
 
         let headerHeight = header.frame.size.height
-        let totalOffset = headerHeight - AppConstants.StatusBarHeight
+        let totalOffset = headerHeight
 
         if headerConstraintOffset > -totalOffset {
             // Whenever we try running an animation from the scrollViewWillEndDragging delegate method,
@@ -918,7 +937,7 @@ extension BrowserViewController {
     }
 
     private func scrollHeader(dy: CGFloat) {
-        let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
+        let totalOffset = self.header.frame.size.height
         let newOffset = self.clamp(self.headerConstraintOffset + dy, min: -totalOffset, max: 0)
         self.headerConstraint?.updateOffset(newOffset)
         self.headerConstraintOffset = newOffset
@@ -951,7 +970,7 @@ extension BrowserViewController {
 
     private func showToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
         let animationDistance = self.headerConstraintOffset
-        let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
+        let totalOffset = self.header.frame.size.height
         let durationRatio = abs(animationDistance / totalOffset)
         let actualDuration = NSTimeInterval(BrowserViewControllerUX.ToolbarBaseAnimationDuration * durationRatio)
 
@@ -966,7 +985,7 @@ extension BrowserViewController {
     }
 
     private func hideToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
-        let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
+        let totalOffset = self.header.frame.size.height
         let animationDistance = totalOffset - abs(self.headerConstraintOffset)
         let durationRatio = abs(animationDistance / totalOffset)
         let actualDuration = NSTimeInterval(BrowserViewControllerUX.ToolbarBaseAnimationDuration * durationRatio)
@@ -974,7 +993,7 @@ extension BrowserViewController {
         self.animateToolbarsWithOffsets(
             animated: animated,
             duration: actualDuration,
-            headerOffset: -(self.header.frame.size.height - AppConstants.StatusBarHeight),
+            headerOffset: -self.header.frame.size.height,
             footerOffset: self.footer.frame.height,
             readerOffset: -self.readerModeBar.frame.size.height,
             alpha: 0,
