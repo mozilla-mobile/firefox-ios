@@ -28,11 +28,19 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return UIImage(named: "defaultFavicon")!
     }()
 
+    private func refetchData() -> Deferred<Result<Cursor<Site>>> {
+        return profile.history.getSitesByLastVisit(100)
+    }
+
+    private func setData(data: Cursor<Site>) {
+        self.sectionOffsets = [Int: Int]()
+        self.data = data
+    }
+
     override func reloadData() {
-        profile.history.getSitesByLastVisit(100).uponQueue(dispatch_get_main_queue()) { result in
+        self.refetchData().uponQueue(dispatch_get_main_queue()) { result in
             if let data = result.successValue {
-                self.sectionOffsets = [Int: Int]()
-                self.data = data
+                self.setData(data)
                 self.tableView.reloadData()
             }
             // TODO: error handling.
@@ -52,11 +60,16 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return cell
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    private func siteForIndexPath(indexPath: NSIndexPath) -> Site? {
         let offset = sectionOffsets[indexPath.section]!
-        if let site = data[indexPath.row + offset] {
+        return data[indexPath.row + offset]
+    }
+
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if let site = self.siteForIndexPath(indexPath) {
             if let url = NSURL(string: site.url) {
-                homePanelDelegate?.homePanel(self, didSelectURL: url)
+                let visitType = VisitType.Typed    // Means History, too.
+                homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: visitType)
                 return
             }
         }
@@ -85,11 +98,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         let date = Double(date)
         switch section {
         case 0:
-            return date > (1000 * Today.timeIntervalSince1970)
+            return date > (1000000 * Today.timeIntervalSince1970)
         case 1:
-            return date > (1000 * Yesterday.timeIntervalSince1970)
+            return date > (1000000 * Yesterday.timeIntervalSince1970)
         case 2:
-            return date > (1000 * ThisWeek.timeIntervalSince1970)
+            return date > (1000000 * ThisWeek.timeIntervalSince1970)
         default:
             return true
         }
@@ -148,5 +161,34 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         // This function wants the size of a section, so return the distance between two adjacent ones
         return sectionOffsets[section+1]! - sectionOffsets[section]!
+    }
+
+
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        // Intentionally blank. Required to use UITableViewRowActions
+    }
+
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+        let title = NSLocalizedString("Remove", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the bookmarks panel.")
+
+        let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
+            if let site = self.siteForIndexPath(indexPath) {
+                // Why the dispatches? Because we call success and failure on the DB
+                // queue, and so calling anything else that calls through to the DB will
+                // deadlock. This problem will go away when the bookmarks API switches to
+                // Deferred instead of using callbacks.
+                self.profile.history.removeHistoryForURL(site.url).uponQueue(dispatch_get_main_queue()) { success in
+                    self.refetchData().uponQueue(dispatch_get_main_queue()) { result in
+                        if let data = result.successValue {
+                            self.setData(data)
+                        }
+
+                        self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+                    }
+                }
+            }
+        })
+
+        return [delete]
     }
 }

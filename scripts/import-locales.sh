@@ -12,6 +12,9 @@ fi
 
 svn co https://svn.mozilla.org/projects/l10n-misc/trunk/firefox-ios firefox-ios-l10n
 
+# Cleanup files (remove unwanted sections, map sv-SE to sv)
+scripts/update-xliff.py firefox-ios-l10n
+
 # Remove unwanted sections like Info.plist files and $(VARIABLES)
 scripts/xliff-cleanup.py firefox-ios-l10n/*/*.xliff
 

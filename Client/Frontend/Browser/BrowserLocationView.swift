@@ -20,6 +20,11 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     private var readerModeButton: ReaderModeButton!
     var readerModeButtonWidthConstraint: NSLayoutConstraint?
 
+    static var PlaceholderText: NSAttributedString {
+        let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
+        return NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.whiteColor()
@@ -54,6 +59,8 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
         addSubview(readerModeButton)
         readerModeButton.isAccessibilityElement = true
         readerModeButton.accessibilityLabel = NSLocalizedString("Reader Mode", comment: "Accessibility label for the reader mode button")
+
+        accessibilityElements = [lockImageView, locationLabel, readerModeButton]
     }
 
     override func updateConstraints() {
@@ -125,17 +132,18 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate {
     var url: NSURL? {
         didSet {
             lockImageView.hidden = (url?.scheme != "https")
-            let t = url?.absoluteString
-            if t?.hasPrefix("http://") ?? false {
-                locationLabel.text = t!.substringFromIndex(advance(t!.startIndex, 7))
-            } else if t?.hasPrefix("https://") ?? false {
-                locationLabel.text = t!.substringFromIndex(advance(t!.startIndex, 8))
-            } else if t == "about:home" {
-                let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
-                locationLabel.attributedText = NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+            if let url = url?.absoluteString {
+                if url.hasPrefix("http://") ?? false {
+                    locationLabel.text = url.substringFromIndex(advance(url.startIndex, 7))
+                } else if url.hasPrefix("https://") ?? false {
+                    locationLabel.text = url.substringFromIndex(advance(url.startIndex, 8))
+                } else {
+                    locationLabel.text = url
+                }
             } else {
-                locationLabel.text = t
+                locationLabel.attributedText = BrowserLocationView.PlaceholderText
             }
+
             setNeedsUpdateConstraints()
         }
     }

@@ -4,8 +4,6 @@
 
 import Shared
 
-public typealias GUID = String
-
 public class IgnoredSiteError: ErrorType {
     public var description: String {
         return "Ignored site."
@@ -22,6 +20,7 @@ public class IgnoredSiteError: ErrorType {
 public protocol BrowserHistory {
     func addLocalVisit(visit: SiteVisit) -> Success
     func clearHistory() -> Success
+    func removeHistoryForURL(url: String) -> Success
 
     func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>>
     func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>>
@@ -33,15 +32,31 @@ public protocol BrowserHistory {
  * synced by a `HistorySynchronizer`.
  */
 public protocol SyncableHistory {
-    func ensurePlaceWithURL(url: String, hasGUID guid: GUID) -> Deferred<Result<()>>
-    func changeGUID(old: GUID, new: GUID) -> Deferred<Result<()>>
-    func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Deferred<Result<()>>
+    /**
+     * Make sure that the local place with the provided URL has the provided GUID.
+     * Succeeds if no place exists with that URL.
+     */
+    func ensurePlaceWithURL(url: String, hasGUID guid: GUID) -> Success
 
-    func insertOrReplaceRemoteVisits(visits: [Visit], forGUID guid: GUID) -> Deferred<Result<()>>
-    func insertOrUpdatePlace(place: RemotePlace) -> Deferred<Result<GUID>>
+    /**
+     * Delete the place with the provided GUID, and all of its visits. Succeeds if the GUID is unknown.
+     */
+    func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success
+
+    func storeRemoteVisits(visits: [Visit], forGUID guid: GUID) -> Success
+    func insertOrUpdatePlace(place: Place, modified: Timestamp) -> Deferred<Result<GUID>>
+
+    func getModifiedHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>>
+    func getDeletedHistoryToUpload() -> Deferred<Result<[GUID]>>
+
+    /**
+     * Chains through the provided timestamp.
+     */
+    func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>>
+    func markAsDeleted(guids: [GUID]) -> Success
 }
 
-// TODO: integrate Site with these.
+// TODO: integrate Site with this.
 
 public class Place {
     public let guid: GUID
@@ -52,33 +67,5 @@ public class Place {
         self.guid = guid
         self.url = url
         self.title = title
-    }
-}
-
-public class LocalPlace: Place {
-    // Local modification time.
-    public var modified: Timestamp
-
-    public init(guid: GUID, url: String, title: String, modified: Timestamp) {
-        self.modified = modified
-        super.init(guid: guid, url: url, title: title)
-    }
-}
-
-public class RemotePlace: Place {
-    // Server timestamp on the record.
-    public let modified: Timestamp
-
-    // Remote places are initially unapplied, and this is flipped when we reconcile them.
-    public var applied: Bool
-
-    public convenience init(guid: GUID, url: NSURL, title: String, modified: Timestamp) {
-        self.init(guid: guid, url: url.absoluteString!, title: title, modified: modified)
-    }
-
-    public init(guid: GUID, url: String, title: String, modified: Timestamp) {
-        self.applied = false
-        self.modified = modified
-        super.init(guid: guid, url: url, title: title)
     }
 }

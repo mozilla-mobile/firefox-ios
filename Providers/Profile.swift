@@ -92,7 +92,7 @@ protocol Profile {
     var prefs: Prefs { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
-    var history: BrowserHistory { get }   // TODO: protocol<BrowserHistory, SyncableHistory>.
+    var history: protocol<BrowserHistory, SyncableHistory> { get }
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
     var passwords: Passwords { get }
@@ -132,13 +132,19 @@ public class BrowserProfile: Profile {
 
     @objc
     func onLocationChange(notification: NSNotification) {
-        if let url = notification.userInfo!["url"] as? NSURL {
-            var site: Site!
-            if let title = notification.userInfo!["title"] as? NSString {
-                site = Site(url: url.absoluteString!, title: title as String)
-                let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
-                history.addLocalVisit(visit)
-            }
+        if let v = notification.userInfo!["visitType"] as? Int,
+           let visitType = VisitType(rawValue: v),
+           let url = notification.userInfo!["url"] as? NSURL,
+           let title = notification.userInfo!["title"] as? NSString {
+
+            // We don't record a visit if no type was specified -- that means "ignore me".
+            let site = Site(url: url.absoluteString!, title: title as String)
+            let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
+            log.debug("Recording visit for \(url) with type \(v).")
+            history.addLocalVisit(visit)
+        } else {
+            let url = notification.userInfo!["url"] as? NSURL
+            log.debug("Ignoring navigation for \(url).")
         }
     }
 
@@ -163,7 +169,7 @@ public class BrowserProfile: Profile {
      * Favicons, history, and bookmarks are all stored in one intermeshed
      * collection of tables.
      */
-    private lazy var places: protocol<BrowserHistory, Favicons> = {
+    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory> = {
         return SQLiteHistory(db: self.db)
     }()
 
@@ -171,7 +177,7 @@ public class BrowserProfile: Profile {
         return self.places
     }
 
-    var history: BrowserHistory {
+    var history: protocol<BrowserHistory, SyncableHistory> {
         return self.places
     }
 
@@ -184,7 +190,7 @@ public class BrowserProfile: Profile {
     }()
 
     func makePrefs() -> Prefs {
-        return NSUserDefaultsProfilePrefs(profile: self)
+        return NSUserDefaultsPrefs(prefix: self.localName())
     }
 
     lazy var prefs: Prefs = {
@@ -237,6 +243,7 @@ public class BrowserProfile: Profile {
                >>> { return storage.getClients() }
         }
 
+        log.warning("No account; can't fetch clients.")
         return deferResult(NoAccountError())
     }
 

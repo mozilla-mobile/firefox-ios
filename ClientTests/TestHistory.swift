@@ -155,7 +155,7 @@ class TestHistory : ProfileTest {
 
             let expectation = self.expectationWithDescription("Wait for history")
             for i in 0..<self.NumThreads {
-                var history = profile.history
+                var history = profile.history as BrowserHistory
                 self.runRandom(&history, queue: queue, cb: { () -> Void in
                     counter++
                     if counter == self.NumThreads {
@@ -171,7 +171,7 @@ class TestHistory : ProfileTest {
     func testRandomThreading2() {
         withTestProfile { profile -> Void in
             var queue = dispatch_queue_create("My Queue", DISPATCH_QUEUE_CONCURRENT)
-            var history = profile.history
+            var history = profile.history as BrowserHistory
             var counter = 0
 
             let expectation = self.expectationWithDescription("Wait for history")

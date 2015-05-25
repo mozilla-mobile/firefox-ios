@@ -10,7 +10,7 @@ private let ThumbnailIdentifier = "Thumbnail"
 private let RowIdentifier = "Row"
 private let SeparatorKind = "separator"
 private let SeparatorIdentifier = "separator"
-private let SeparatorColor = UIColor(rgb: 0xffffff)
+private let SeparatorColor = AppConstants.SeparatorColor
 
 class Tile: Site {
     let backgroundColor: UIColor
@@ -111,7 +111,9 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if let site = dataSource[indexPath.item] {
-            homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!)
+            // We're gonna call Top Sites bookmarks for now.
+            let visitType = VisitType.Bookmark
+            homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!, visitType: visitType)
         }
     }
 }
@@ -259,6 +261,10 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     @objc func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if data.status != .Success {
+            return 0
+        }
+
         // If there aren't enough data items to fill the grid, look for items in suggested sites.
         if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
             if data.count < layout.thumbnailCount {
@@ -331,6 +337,10 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     subscript(index: Int) -> Site? {
+        if data.status != .Success {
+            return nil
+        }
+
         if index >= data.count {
             return suggestedSites[index - data.count]
         }

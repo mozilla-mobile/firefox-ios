@@ -12,7 +12,7 @@ class SearchTests: XCTestCase {
 
     func testParsing() {
         let parser = OpenSearchParser(pluginMode: true)
-        let file = NSBundle.mainBundle().pathForResource("google", ofType: "xml", inDirectory: "Locales/en-US/searchplugins")
+        let file = NSBundle.mainBundle().pathForResource("google", ofType: "xml", inDirectory: "SearchPlugins/en")
         let engine: OpenSearchEngine! = parser.parse(file!)
         XCTAssertEqual(engine.shortName, "Google")
         XCTAssertNil(engine.description)

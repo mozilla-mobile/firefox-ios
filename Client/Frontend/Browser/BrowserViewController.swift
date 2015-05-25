@@ -47,11 +47,10 @@ class BrowserViewController: UIViewController {
     // These views wrap the urlbar and toolbar to provide background effects on them
     private var header: UIView!
     private var footer: UIView!
-    private var footerBackground: UIView?
+    private var footerBackground: UIView!
 
     // Scroll management properties
     private var previousScroll: CGPoint?
-    private var startOffset: CGFloat?
 
     private var headerConstraint: Constraint?
     private var headerConstraintOffset: CGFloat = 0
@@ -63,6 +62,11 @@ class BrowserViewController: UIViewController {
     private var readerConstraintOffset: CGFloat = 0
 
     let WhiteListedUrls = ["\\/\\/itunes\\.apple\\.com\\/"]
+
+    // Tracking navigation items to record history types.
+    // TODO: weak references?
+    var ignoredNavigation = Set<WKNavigation>()
+    var typedNavigation = [WKNavigation: VisitType]()
 
     init(profile: Profile) {
         self.profile = profile
@@ -130,24 +134,25 @@ class BrowserViewController: UIViewController {
 
     override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
-        updateToolbarStateForTraitCollection(self.traitCollection)
+        updateToolbarStateForTraitCollection(newCollection)
 
         // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
         // performs a device rotation. Since scrolling calls
         // _updateVisibleContentRects (https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/API/Cocoa/WKWebView.mm#L1430)
         // this method nudges the web view's scroll view by a single pixel to force it to invalidate.
-        if let tab = self.tabManager.selectedTab {
-            let contentOffset = tab.webView.scrollView.contentOffset
+        if let scrollView = self.tabManager.selectedTab?.webView.scrollView {
+            let contentOffset = scrollView.contentOffset
             coordinator.animateAlongsideTransition({ context in
                 self.updateHeaderFooterConstraintsAndAlpha(
                     headerOffset: 0,
                     footerOffset: 0,
                     readerOffset: 0,
                     alpha: 1)
+                self.view.layoutIfNeeded()
 
-                tab.webView.scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
+                scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
             }, completion: { context in
-                tab.webView.scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
+                scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
             })
         }
     }
@@ -177,6 +182,7 @@ class BrowserViewController: UIViewController {
         self.view.addSubview(footer)
         footer.addSubview(snackBars)
         snackBars.backgroundColor = UIColor.clearColor()
+        self.updateToolbarStateForTraitCollection(self.traitCollection)
     }
 
     func startTrackingAccessibilityStatus() {
@@ -236,20 +242,19 @@ class BrowserViewController: UIViewController {
         }
 
         webViewContainer.snp_remakeConstraints { make in
-            make.left.right.bottom.equalTo(self.view)
+            make.left.right.equalTo(self.view)
 
-            if readerModeBar.hidden {
-                self.startOffset = self.header.frame.size.height
-                make.top.equalTo(self.header.snp_bottom).offset(-self.startOffset!)
+            if !self.readerModeBar.hidden {
+                make.top.equalTo(self.readerModeBar.snp_bottom)
             } else {
-                self.startOffset = self.header.frame.size.height + self.readerModeBar.frame.size.height
-                make.top.equalTo(self.readerModeBar.snp_bottom).offset(-self.startOffset!)
+                make.top.equalTo(self.header.snp_bottom)
             }
 
-            self.tabManager.selectedTab?.webView.scrollView.contentInset =
-                UIEdgeInsets(top: self.startOffset!, left: 0, bottom: 0, right: 0)
-            self.tabManager.selectedTab?.webView.scrollView.scrollIndicatorInsets =
-                UIEdgeInsets(top: self.startOffset!, left: 0, bottom: 0, right: 0)
+            if let toolbar = self.toolbar {
+                make.bottom.equalTo(toolbar.snp_top)
+            } else {
+                make.bottom.equalTo(self.view)
+            }
         }
 
         // Setup the bottom toolbar
@@ -315,25 +320,30 @@ class BrowserViewController: UIViewController {
             homePanelController!.view.alpha = 0
             view.addSubview(homePanelController!.view)
 
-            UIView.animateWithDuration(0.2, animations: { () -> Void in
-                    self.homePanelController!.view.alpha = 1
-                }, completion: { _ in
-                    self.webViewContainer.accessibilityElementsHidden = true
-                    self.stopTrackingAccessibilityStatus()
-                    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
-            })
-
             addChildViewController(homePanelController!)
         }
+
+        // We have to run this animation, even if the view is already showing because there may be a hide animation running
+        // and we want to be sure to override its results.
+        UIView.animateWithDuration(0.2, animations: { () -> Void in
+            self.homePanelController!.view.alpha = 1
+        }, completion: { finished in
+            if finished {
+                self.webViewContainer.accessibilityElementsHidden = true
+                self.stopTrackingAccessibilityStatus()
+                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+            }
+        })
         toolbar?.hidden = !inline
         view.setNeedsUpdateConstraints()
     }
 
     private func hideHomePanelController() {
         if let controller = homePanelController {
-            UIView.animateWithDuration(0.2, animations: { () -> Void in
-                    controller.view.alpha = 0
-                }, completion: { _ in
+            UIView.animateWithDuration(0.2, delay: 0, options: .BeginFromCurrentState, animations: { () -> Void in
+                controller.view.alpha = 0
+            }, completion: { finished in
+                if finished {
                     controller.view.removeFromSuperview()
                     controller.removeFromParentViewController()
                     self.homePanelController = nil
@@ -346,7 +356,8 @@ class BrowserViewController: UIViewController {
                     if let readerMode = self.tabManager.selectedTab?.getHelper(name: ReaderMode.name()) as? ReaderMode where readerMode.state == .Active {
                         self.showReaderModeBar(animated: false)
                     }
-                })
+                }
+            })
         }
     }
 
@@ -393,12 +404,13 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func finishEditingAndSubmit(var url: NSURL) {
+    private func finishEditingAndSubmit(var url: NSURL, visitType: VisitType) {
         urlBar.updateURL(url)
         urlBar.finishEditing()
 
-        if let tab = tabManager.selectedTab {
-            tab.loadRequest(NSURLRequest(URL: url))
+        if let tab = tabManager.selectedTab,
+           let nav = tab.loadRequest(NSURLRequest(URL: url)) {
+            self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
     }
 
@@ -466,6 +478,34 @@ class BrowserViewController: UIViewController {
     }
 }
 
+/**
+ * History visit management.
+ * TODO: this should be expanded to track various visit types; see Bug 1166084.
+ */
+extension BrowserViewController {
+    func ignoreNavigationInTab(tab: Browser, navigation: WKNavigation) {
+        self.ignoredNavigation.insert(navigation)
+    }
+
+    func recordNavigationInTab(tab: Browser, navigation: WKNavigation, visitType: VisitType) {
+        self.typedNavigation[navigation] = visitType
+    }
+
+    /**
+     * Untrack and do the right thing.
+     */
+    func getVisitTypeForTab(tab: Browser, navigation: WKNavigation?) -> VisitType? {
+        if let navigation = navigation {
+            if let ignored = self.ignoredNavigation.remove(navigation) {
+                return nil
+            }
+            return self.typedNavigation.removeValueForKey(navigation) ?? VisitType.Link
+        } else {
+            // See https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/Cocoa/NavigationState.mm#L390
+            return VisitType.Link
+        }
+    }
+}
 
 extension BrowserViewController: URLBarDelegate {
     func urlBarDidPressReload(urlBar: URLBarView) {
@@ -585,7 +625,7 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
-        finishEditingAndSubmit(url!)
+        finishEditingAndSubmit(url!, visitType: VisitType.Typed)
     }
 
     func urlBarDidBeginEditing(urlBar: URLBarView) {
@@ -777,7 +817,7 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     func removeAllBars() {
-        let bars = footer.subviews
+        let bars = snackBars.subviews
         for bar in bars {
             if let bar = bar as? SnackBar {
                 bar.removeFromSuperview()
@@ -796,61 +836,82 @@ extension BrowserViewController: BrowserDelegate {
 }
 
 extension BrowserViewController: HomePanelViewControllerDelegate {
-    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL) {
-        finishEditingAndSubmit(url)
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType) {
+        finishEditingAndSubmit(url, visitType: visitType)
     }
 }
 
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL) {
-        finishEditingAndSubmit(url)
+        finishEditingAndSubmit(url, visitType: VisitType.Typed)
     }
 }
 
-extension BrowserViewController: UIScrollViewDelegate {
-
+extension BrowserViewController : UIScrollViewDelegate {
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        self.previousScroll = scrollView.contentOffset
+        previousScroll = scrollView.contentOffset
     }
 
-    // Careful! This method can be called multiple times concurrently.
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if let tab = tabManager.selectedTab, let prev = self.previousScroll, let startOffset = self.startOffset {
-            let dy = prev.y - scrollView.contentOffset.y
+        if let tab = tabManager.selectedTab,
+           let prev = self.previousScroll,
+           let readerModeBar = self.readerModeBar {
+            var totalToolbarHeight = header.frame.size.height
+            let offset = scrollView.contentOffset
+            let dy = prev.y - offset.y
 
+            let scrollingSize = scrollView.contentSize.height - scrollView.frame.size.height
+            totalToolbarHeight += readerModeBar.hidden ? 0 : readerModeBar.frame.size.height
+            totalToolbarHeight += self.toolbar?.frame.size.height ?? 0
+
+            // Only scroll away our toolbars if,
             if !tab.loading &&
-                scrollView.contentOffset.y > -startOffset  &&
-                scrollView.contentOffset.y < scrollView.contentSize.height {
-                self.scrollFooter(dy)
-                self.scrollHeader(dy)
-                self.scrollReader(dy)
+
+                // There is enough web content to fill the screen if the scroll bars are fulling animated out
+                scrollView.contentSize.height > (scrollView.frame.size.height + totalToolbarHeight) &&
+
+                // The user is scrolling through the content and not because of the bounces that
+                // happens when you pull up past the content
+                scrollView.contentOffset.y >= 0 &&
+
+                // The user has reached the limit as to which they can scroll to
+                scrollView.contentOffset.y < scrollingSize {
+
+                scrollFooter(dy)
+                scrollHeader(dy)
+                scrollReader(dy)
             }
 
-            self.previousScroll = scrollView.contentOffset
+            self.previousScroll = offset
         }
     }
 
-    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint,
-        targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if previousScroll != nil {
+            endDragging()
+        }
+    }
+
+    private func endDragging() {
         self.previousScroll = nil
 
-        if shouldAnimateToolbarsOpened() {
-            showToolbars(animated: true)
-        } else if shouldAnimateToolbarsClosed() {
-            hideToolbars(animated: true)
+        let headerHeight = header.frame.size.height
+        let totalOffset = headerHeight - AppConstants.StatusBarHeight
+
+        if headerConstraintOffset > -totalOffset {
+            // Whenever we try running an animation from the scrollViewWillEndDragging delegate method,
+            // it calls layoutSubviews so many times that it ends up clobbering any animations we want to
+            // run from here. This dispatch_async places the animation onto the main queue for processing after
+            // the scrollView has placed it's work on it already
+            dispatch_async(dispatch_get_main_queue()) {
+                self.showToolbars(animated: true)
+            }
         }
     }
+}
 
-    func shouldAnimateToolbarsClosed() -> Bool {
-        let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
-        return self.headerConstraintOffset <= -(totalOffset / 2) && self.headerConstraintOffset > -totalOffset
-    }
-
-    func shouldAnimateToolbarsOpened() -> Bool {
-        let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
-        return self.headerConstraintOffset < 0 && self.headerConstraintOffset > -(totalOffset / 2)
-    }
-
+// Functions for scrolling the urlbar and footers.
+extension BrowserViewController {
     func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
         showToolbars(animated: true)
         return true
@@ -858,8 +919,7 @@ extension BrowserViewController: UIScrollViewDelegate {
 
     private func scrollHeader(dy: CGFloat) {
         let totalOffset = self.header.frame.size.height - AppConstants.StatusBarHeight
-        let newOffset = self.clamp(self.headerConstraintOffset + dy,
-            min: -totalOffset, max: 0)
+        let newOffset = self.clamp(self.headerConstraintOffset + dy, min: -totalOffset, max: 0)
         self.headerConstraint?.updateOffset(newOffset)
         self.headerConstraintOffset = newOffset
         let alpha = 1 - (abs(newOffset) / totalOffset)
@@ -867,8 +927,7 @@ extension BrowserViewController: UIScrollViewDelegate {
     }
 
     private func scrollFooter(dy: CGFloat) {
-        let newOffset = self.clamp(self.footerConstraintOffset - dy,
-            min: 0, max: self.footer.frame.size.height)
+        let newOffset = self.clamp(self.footerConstraintOffset - dy, min: 0, max: footer.frame.size.height)
         self.footerConstraint?.updateOffset(newOffset)
         self.footerConstraintOffset = newOffset
     }
@@ -1008,7 +1067,7 @@ extension BrowserViewController: TabManagerDelegate {
             urlBar.updateReaderModeState(ReaderModeState.Unavailable)
         }
 
-        updateInContentHomePanel(selected?.displayURL)
+        updateInContentHomePanel(selected?.url)
     }
 
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
@@ -1026,6 +1085,7 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int) {
         urlBar.updateTabCount(tabManager.count)
+        tab.webView.scrollView.delegate = self
 
         webViewContainer.insertSubview(tab.webView, atIndex: 0)
 
@@ -1039,7 +1099,6 @@ extension BrowserViewController: TabManagerDelegate {
         tab.webView.addObserver(self, forKeyPath: KVOLoading, options: .New, context: nil)
         tab.webView.UIDelegate = self
         tab.browserDelegate = self
-        tab.webView.scrollView.delegate = self
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex: Int) {
@@ -1173,7 +1232,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     }
                 }
 
-                updateInContentHomePanel(tab.displayURL)
+                updateInContentHomePanel(tab.url)
             }
         }
     }
@@ -1204,6 +1263,9 @@ extension BrowserViewController: WKNavigationDelegate {
         var info = [NSObject: AnyObject]()
         info["url"] = tab.displayURL
         info["title"] = tab.title
+        if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
+            info["visitType"] = visitType
+        }
         notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
 
         if let url = webView.URL {
@@ -1420,7 +1482,8 @@ extension BrowserViewController {
     /// of the current page is there. And if so, we go there.
 
     func enableReaderMode() {
-        if let webView = tabManager.selectedTab?.webView {
+        if let tab = tabManager.selectedTab {
+            let webView = tab.webView
             let backList = webView.backForwardList.backList as! [WKBackForwardListItem]
             let forwardList = webView.backForwardList.forwardList as! [WKBackForwardListItem]
 
@@ -1435,7 +1498,9 @@ extension BrowserViewController {
                         webView.evaluateJavaScript("\(ReaderModeNamespace).readerize()", completionHandler: { (object, error) -> Void in
                             if let readabilityResult = ReadabilityResult(object: object) {
                                 ReaderModeCache.sharedInstance.put(currentURL, readabilityResult, error: nil)
-                                webView.loadRequest(NSURLRequest(URL: readerModeURL))
+                                if let nav = webView.loadRequest(NSURLRequest(URL: readerModeURL)) {
+                                    self.ignoreNavigationInTab(tab, navigation: nav)
+                                }
                             }
                         })
                     }
@@ -1450,7 +1515,8 @@ extension BrowserViewController {
     /// of the page is either to the left or right in the BackForwardList. If that is the case, we navigate there.
 
     func disableReaderMode() {
-        if let webView = tabManager.selectedTab?.webView {
+        if let tab = tabManager.selectedTab {
+            let webView = tab.webView
             let backList = webView.backForwardList.backList as! [WKBackForwardListItem]
             let forwardList = webView.backForwardList.forwardList as! [WKBackForwardListItem]
 
@@ -1461,7 +1527,9 @@ extension BrowserViewController {
                     } else if forwardList.count > 0 && forwardList.first?.URL == originalURL {
                         webView.goToBackForwardListItem(forwardList.first!)
                     } else {
-                        webView.loadRequest(NSURLRequest(URL: originalURL))
+                        if let nav = webView.loadRequest(NSURLRequest(URL: originalURL)) {
+                            self.ignoreNavigationInTab(tab, navigation: nav)
+                        }
                     }
                 }
             }

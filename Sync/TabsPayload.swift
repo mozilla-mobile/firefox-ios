@@ -20,7 +20,7 @@ public class TabsPayload: CleartextPayloadJSON {
             self.icon = icon
         }
 
-        func toRemoteTabForClient(guid: String) -> RemoteTab? {
+        func toRemoteTabForClient(guid: GUID) -> RemoteTab? {
             let urls = optFilter(urlHistory.map({ $0.asURL }))
             if urls.isEmpty {
                 return nil
@@ -29,7 +29,7 @@ public class TabsPayload: CleartextPayloadJSON {
             return RemoteTab(clientGUID: guid, URL: urls[0], title: self.title, history: urls, lastUsed: self.lastUsed, icon: self.icon?.asURL)
         }
 
-        class func remoteTabFromJSON(json: JSON, clientGUID: String) -> RemoteTab? {
+        class func remoteTabFromJSON(json: JSON, clientGUID: GUID) -> RemoteTab? {
             return fromJSON(json)?.toRemoteTabForClient(clientGUID)
         }
 
@@ -59,10 +59,7 @@ public class TabsPayload: CleartextPayloadJSON {
     }
 
     override public func isValid() -> Bool {
-        // We should also call super.isValid(), but that'll fail:
-        // Global is external, but doesn't have external or weak linkage!
-        // Swift compiler bug #18422804.
-        return !isError &&
+        return super.isValid() &&
                self["clientName"].isString &&
                self["tabs"].isArray
     }

@@ -104,8 +104,11 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         editTextField.font = AppConstants.DefaultMediumFont
         editTextField.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         editTextField.layer.borderColor = URLBarViewUX.TextFieldActiveBorderColor.CGColor
+        editTextField.layer.borderWidth = 1
         editTextField.hidden = true
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
+        editTextField.attributedPlaceholder = BrowserLocationView.PlaceholderText
+
         locationContainer.addSubview(editTextField)
 
         self.progressBar = UIProgressView()
@@ -306,17 +309,21 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         // Offset the target rotation by 180º so the new tab comes from the front and the old tab falls back.
         flipTransform = CATransform3DRotate(flipTransform, CGFloat(M_PI), 1.0, 0.0, 0.0)
 
-        UIView.animateWithDuration(1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { _ in
+        // Force any in progress animation to end.
+        self.tabsButton.alpha = 1
+        UIView.animateWithDuration(1.0, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: .CurveEaseInOut | .BeginFromCurrentState, animations: { _ in
                 newTabsButton.titleLabel?.layer.transform = CATransform3DIdentity
                 self.tabsButton.titleLabel?.layer.transform = flipTransform
                 self.tabsButton.alpha = 0
-            }, completion: { _ in
+            }, completion: { finished in
                 // Remove the clone and set up the actual tabs button.
                 newTabsButton.removeFromSuperview()
-                self.tabsButton.alpha = 1
-                self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
-                self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
-                self.tabsButton.accessibilityValue = count.description
+                if finished {
+                    self.tabsButton.alpha = 1
+                    self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
+                    self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
+                    self.tabsButton.accessibilityValue = count.description
+                }
         })
     }
 
@@ -381,19 +388,7 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     }
 
     func autocompleteTextFieldDidBeginEditing(autocompleteTextField: AutocompleteTextField) {
-        // Without the async dispatch below, text selection doesn't work
-        // intermittently and crashes on the iPhone 6 Plus (bug 1124310).
-        dispatch_async(dispatch_get_main_queue(), {
-            autocompleteTextField.selectedTextRange = autocompleteTextField.textRangeFromPosition(autocompleteTextField.beginningOfDocument, toPosition: autocompleteTextField.endOfDocument)
-        })
-
-        autocompleteTextField.layer.borderWidth = 1
-        locationContainer.layer.shadowOpacity = 0
-    }
-
-    func autocompleteTextFieldDidEndEditing(autocompleteTextField: AutocompleteTextField) {
-        locationContainer.layer.shadowOpacity = 0.05
-        autocompleteTextField.layer.borderWidth = 0
+        autocompleteTextField.highlightAll()
     }
 
     func autocompleteTextFieldShouldClear(autocompleteTextField: AutocompleteTextField) -> Bool {
@@ -527,6 +522,23 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         } else {
             stopReloadButton.setImage(helper?.ImageReload, forState: .Normal)
             stopReloadButton.setImage(helper?.ImageReloadPressed, forState: .Highlighted)
+        }
+    }
+
+    override var accessibilityElements: [AnyObject]! {
+        get {
+            if isEditing {
+                return [editTextField, cancelButton]
+            } else {
+                if toolbarIsShowing {
+                    return [backButton, forwardButton, stopReloadButton, locationView, shareButton, bookmarkButton, tabsButton, progressBar]
+                } else {
+                    return [locationView, tabsButton, progressBar]
+                }
+            }
+        }
+        set {
+            super.accessibilityElements = newValue
         }
     }
 }

@@ -31,17 +31,26 @@ class Browser: NSObject, WKScriptMessageHandler {
         webView.allowsBackForwardNavigationGestures = true
         webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
         webView.backgroundColor = UIColor.lightGrayColor()
+        webView.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
+
+        // Turning off masking allows the web content to flow outside of the scrollView's frame
+        // which allows the content appear beneath the toolbars in the BrowserViewController
+        webView.scrollView.layer.masksToBounds = false
 
         super.init()
     }
 
-    class func toTab(browser: Browser) -> RemoteTab {
-        return RemoteTab(clientGUID: nil,
-            URL: browser.displayURL ?? NSURL(),
-            title: browser.displayTitle,
-            history: browser.historyList,
-            lastUsed: Timestamp(),
-            icon: nil)
+    class func toTab(browser: Browser) -> RemoteTab? {
+        if let displayURL = browser.displayURL {
+            return RemoteTab(clientGUID: nil,
+                URL: displayURL,
+                title: browser.displayTitle,
+                history: browser.historyList,
+                lastUsed: Timestamp(),
+                icon: nil)
+        } else {
+            return nil
+        }
     }
 
     var loading: Bool {
@@ -94,7 +103,9 @@ class Browser: NSObject, WKScriptMessageHandler {
 
     var displayURL: NSURL? {
         if let url = webView.URL {
-            return ReaderModeUtils.isReaderModeURL(url) ? ReaderModeUtils.decodeURL(url) : url
+            if url.scheme != "about" {
+                return ReaderModeUtils.isReaderModeURL(url) ? ReaderModeUtils.decodeURL(url) : url
+            }
         }
         return nil
     }
@@ -119,8 +130,8 @@ class Browser: NSObject, WKScriptMessageHandler {
         webView.goToBackForwardListItem(item)
     }
 
-    func loadRequest(request: NSURLRequest) {
-        webView.loadRequest(request)
+    func loadRequest(request: NSURLRequest) -> WKNavigation? {
+        return webView.loadRequest(request)
     }
 
     func stop() {

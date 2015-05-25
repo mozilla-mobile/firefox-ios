@@ -5,7 +5,7 @@
 import Foundation
 
 struct ReaderModeHandlers {
-    static func register(webServer: WebServer) {
+    static func register(webServer: WebServer, profile: Profile) {
         // Register our fonts, which we want to expose to web content that we present in the WebView
         webServer.registerMainBundleResourcesOfType("ttf", module: "reader-mode/fonts")
 
@@ -33,11 +33,9 @@ struct ReaderModeHandlers {
                         // We have this page in our cache, so we can display it. Just grab the correct style from the
                         // profile and then generate HTML from the Readability results.
                         var readerModeStyle = DefaultReaderModeStyle
-                        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-                            if let dict = appDelegate.profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
-                                if let style = ReaderModeStyle(dict: dict) {
-                                    readerModeStyle = style
-                                }
+                        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
+                            if let style = ReaderModeStyle(dict: dict) {
+                                readerModeStyle = style
                             }
                         }
                         if let html = ReaderModeUtils.generateReaderContent(readabilityResult, initialStyle: readerModeStyle) {

@@ -3,6 +3,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 extension NSURL {
+    public func withQueryParams(params: [NSURLQueryItem]) -> NSURL {
+        let components = NSURLComponents(URL: self, resolvingAgainstBaseURL: false)!
+        var items = (components.queryItems ?? [])
+        for param in params {
+            items.append(param)
+        }
+        components.queryItems = items
+        return components.URL!
+    }
+
     public func withQueryParam(name: String, value: String) -> NSURL {
         let components = NSURLComponents(URL: self, resolvingAgainstBaseURL: false)!
         let item = NSURLQueryItem(name: name, value: value)

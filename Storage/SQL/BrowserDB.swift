@@ -4,6 +4,7 @@
 
 import Foundation
 import XCGLogger
+import Shared
 
 private let log = XCGLogger.defaultInstance()
 
@@ -55,6 +56,10 @@ public class BrowserDB {
     private let schemaTable: SchemaTable<TableInfo>
 
     private var initialized = [String]()
+
+    // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
+    // appear in a query string.
+    static let MaxVariableNumber = 999
 
     public init(files: FileAccessor) {
         log.debug("Initializing BrowserDB.")
@@ -184,5 +189,99 @@ public class BrowserDB {
             var err: NSError? = nil
             return callback(connection: connection, err: &err)
         }
+    }
+}
+
+extension BrowserDB {
+    public class func varlist(count: Int) -> String {
+        return "(" + ", ".join(Array(count: count, repeatedValue: "?")) + ")"
+    }
+
+    enum InsertOperation: String {
+        case Insert = "INSERT"
+        case Replace = "REPLACE"
+        case InsertOrIgnore = "INSERT OR IGNORE"
+        case InsertOrReplace = "INSERT OR REPLACE"
+        case InsertOrRollback = "INSERT OR ROLLBACK"
+        case InsertOrAbort = "INSERT OR ABORT"
+        case InsertOrFail = "INSERT OR FAIL"
+    }
+
+    /**
+     * Insert multiple sets of values into the given table.
+     *
+     * Assumptions:
+     * 1. The table exists and contains the provided columns.
+     * 2. Every item in `values` is the same length.
+     * 3. That length is the same as the length of `columns`.
+     * 4. Every value in each element of `values` is non-nil.
+     *
+     * If there are too many items to insert, multiple individual queries will run
+     * in sequence.
+     *
+     * A failure anywhere in the sequence will cause immediate return of failure, but
+     * will not roll back — use a transaction if you need one.
+     */
+    func bulkInsert(table: String, op: InsertOperation, columns: [String], values: [Args]) -> Success {
+        // Note that there's a limit to how many ?s can be in a single query!
+        // So here we execute 999 / (columns * rows) insertions per query.
+        // Note that we can't use variables for the column names, so those don't affect the count.
+        if values.isEmpty {
+            log.debug("No values to insert.")
+            return succeed()
+        }
+
+        let variablesPerRow = columns.count
+
+        // Sanity check.
+        assert(values[0].count == variablesPerRow)
+
+        let cols = ", ".join(columns)
+        let queryStart = "\(op.rawValue) INTO \(table) (\(cols)) VALUES "
+
+        let varString = BrowserDB.varlist(variablesPerRow)
+
+        let insertChunk: [Args] -> Success = { vals -> Success in
+            let valuesString = ", ".join(Array(count: vals.count, repeatedValue: varString))
+            let args: Args = vals.flatMap { $0 }
+            return self.run(queryStart + valuesString, withArgs: args)
+        }
+
+        let rowCount = values.count
+        if (variablesPerRow * rowCount) < BrowserDB.MaxVariableNumber {
+            return insertChunk(values)
+        }
+
+        log.debug("Splitting bulk insert across multiple runs. I hope you started a transaction!")
+        let rowsPerInsert = (999 / variablesPerRow)
+        let chunks = chunk(values, by: rowsPerInsert)
+        log.debug("Inserting in \(chunks.count) chunks.")
+
+        // There's no real reason why we can't pass the ArraySlice here, except that I don't
+        // want to keep fighting Swift.
+        return walk(chunks, { insertChunk(Array($0)) })
+    }
+
+    func run(sql: String, withArgs args: Args) -> Success {
+        var err: NSError?
+        return self.withWritableConnection(&err) { (conn, inout err: NSError?) -> Success in
+            err = conn.executeChange(sql, withArgs: args)
+            if err == nil {
+                log.debug("Modified rows: \(conn.numberOfRowsModified).")
+                return succeed()
+            }
+            return deferResult(DatabaseError(err: err))
+        }
+    }
+
+    func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
+        func f(conn: SQLiteDBConnection, inout err: NSError?) -> Cursor<T> {
+            return conn.executeQuery(sql, factory: factory, withArgs: args)
+        }
+
+        var err: NSError? = nil
+        let cursor = self.withReadableConnection(&err, callback: f)
+
+        return deferResult(cursor)
     }
 }

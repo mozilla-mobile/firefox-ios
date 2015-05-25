@@ -209,6 +209,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         tableView.rowHeight = ReadingListPanelUX.RowHeight
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
+        tableView.separatorColor = AppConstants.SeparatorColor
         tableView.registerClass(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
 
         view.backgroundColor = AppConstants.PanelBackgroundColor
@@ -266,7 +267,9 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
         if let record = records?[indexPath.row], encodedURL = ReaderModeUtils.encodeURL(NSURL(string: record.url)!) {
-            homePanelDelegate?.homePanel(self, didSelectURL: encodedURL)
+            // Reading list items are closest in concept to bookmarks.
+            let visitType = VisitType.Bookmark
+            homePanelDelegate?.homePanel(self, didSelectURL: encodedURL, visitType: visitType)
         }
     }
 }

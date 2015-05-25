@@ -4,6 +4,8 @@
 
 import Foundation
 
+public typealias GUID = String
+
 /**
  * Utilities for futzing with bytes and such.
  */
@@ -18,8 +20,12 @@ public class Bytes {
         return data
     }
 
-    public class func generateGUID() -> String {
-        return generateRandomBytes(9).base64EncodedStringWithOptions(NSDataBase64EncodingOptions.allZeros)
+    public class func generateGUID() -> GUID {
+        // Turns the standard NSData encoding into the URL-safe variant that Sync expects.
+        return generateRandomBytes(9)
+            .base64EncodedStringWithOptions(NSDataBase64EncodingOptions.allZeros)
+            .stringByReplacingOccurrencesOfString("/", withString: "_", options: NSStringCompareOptions.allZeros, range: nil)
+            .stringByReplacingOccurrencesOfString("+", withString: "-", options: NSStringCompareOptions.allZeros, range: nil)
     }
 
     public class func decodeBase64(b64: String) -> NSData {

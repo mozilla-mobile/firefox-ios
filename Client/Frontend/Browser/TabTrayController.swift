@@ -398,7 +398,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.registerClass(CustomCell.self, forCellWithReuseIdentifier: CellIdentifier)
-        collectionView.contentInset = UIEdgeInsets(top: AppConstants.StatusBarHeight + AppConstants.ToolbarHeight, left: 0, bottom: 0, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: AppConstants.ToolbarHeight, left: 0, bottom: 0, right: 0)
 
         collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
 
@@ -410,7 +410,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         super.updateViewConstraints()
 
         navBar.snp_remakeConstraints { make in
-        let topLayoutGuide = self.topLayoutGuide as! UIView
+            let topLayoutGuide = self.topLayoutGuide as! UIView
             make.top.equalTo(topLayoutGuide.snp_bottom)
             make.height.equalTo(AppConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
@@ -427,7 +427,8 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         }
 
         collectionView.snp_remakeConstraints { make in
-            make.top.equalTo(self.view)
+            let topLayoutGuide = self.topLayoutGuide as! UIView
+            make.top.equalTo(topLayoutGuide.snp_bottom)
             make.left.right.bottom.equalTo(self.view)
         }
     }
@@ -454,8 +455,15 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     }
 
     func SELdidClickAddTab() {
-        tabManager?.addTab()
-        presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
+        // We're only doing one update here, but using a batch update lets us delay selecting the tab
+        // until after its insert animation finishes.
+        self.collectionView.performBatchUpdates({ _ in
+            self.tabManager.addTab()
+        }, completion: { finished in
+            if finished {
+                self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
+            }
+        })
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
@@ -665,7 +673,19 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int) {
-        self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
+        var newTab: Browser? = nil
+        self.collectionView.performBatchUpdates({ _ in
+            self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
+            if tabManager.count == 0 {
+                newTab = tabManager.addTab()
+            }
+        }, completion: { finished in
+            if finished {
+                if let newTab = newTab {
+                    self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
+                }
+            }
+        })
     }
 }
 

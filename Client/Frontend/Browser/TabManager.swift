@@ -225,7 +225,8 @@ class TabManager : NSObject {
     }
 
     private func storeChanges() {
-        let storedTabs: [RemoteTab] = tabs.map(Browser.toTab)
+        // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
+        let storedTabs: [RemoteTab] = optFilter(tabs.map(Browser.toTab))
         storage?.insertOrUpdateTabs(storedTabs)
     }
 }
@@ -248,8 +249,12 @@ extension TabManager {
             self.addTab(request: NSURLRequest(URL: url), flushToDisk: false)
         }
 
-        let selectedIndex: Int = coder.decodeIntegerForKey("selectedIndex")
-        self.selectTab(self.tabs[selectedIndex])
+        let selectedIndex = coder.decodeIntegerForKey("selectedIndex")
+        if selectedIndex >= 0 && selectedIndex < tabs.count {
+            selectTab(tabs[selectedIndex])
+        } else if let firstTab = tabs.first {
+            selectTab(firstTab)
+        }
         storeChanges()
     }
 }
