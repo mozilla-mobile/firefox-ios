@@ -206,6 +206,13 @@ public class BrowserProfile: Profile {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
+    private class func stubSyncHistory(storage: SyncableHistory, delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Deferred<Result<Ready>> {
+        log.debug("Stub: syncing history.")
+        let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs)
+        let success = historySynchronizer.synchronizeLocalHistory(storage, withServer: ready.client, info: ready.info)
+        return success >>== always(ready)
+    }
+
     private class func syncClientsToStorage(storage: RemoteClientsAndTabs, delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Deferred<Result<Ready>> {
         log.debug("Syncing clients to storage.")
         let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs)
@@ -262,9 +269,10 @@ public class BrowserProfile: Profile {
             let delegate = self.getSyncDelegate()
             let syncClients = curry(BrowserProfile.syncClientsToStorage)(storage, delegate, syncPrefs)
             let syncTabs = curry(BrowserProfile.syncTabsToStorage)(storage, delegate, syncPrefs)
-
+            let syncHistory = curry(BrowserProfile.stubSyncHistory)(self.history, delegate, syncPrefs)
             return ready
               >>== syncClients
+              >>== syncHistory       // For testing.
               >>== syncTabs
                >>> { return storage.getClientsAndTabs() }
         }
