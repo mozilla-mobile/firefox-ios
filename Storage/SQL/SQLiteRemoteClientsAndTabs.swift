@@ -222,6 +222,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     public func onRemovedAccount() -> Success {
         log.info("Clearing clients and tabs after account removal.")
+        // TODO: Bug 1168690 - delete our client and tabs records from the server.
         return self.clear()
     }
 
