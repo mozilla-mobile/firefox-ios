@@ -136,6 +136,15 @@ public class SwiftData {
         }
     }
 
+    func close() {
+        dispatch_sync(sharedConnectionQueue) {
+            if self.sharedConnection != nil {
+                self.sharedConnection?.closeCustomConnection()
+            }
+            self.sharedConnection = nil
+        }
+    }
+
     public enum Flags {
         case ReadOnly
         case ReadWrite

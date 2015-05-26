@@ -38,17 +38,6 @@ public class QueryOptions {
 }
 
 let DBCouldNotOpenErrorCode = 200
-private var secretKey: String? {
-    let key = "sqlcipher.key.browser.db"
-    if KeychainWrapper.hasValueForKey(key) {
-        return KeychainWrapper.stringForKey(key)
-    }
-
-    let Length: UInt = 256
-    let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-    KeychainWrapper.setString(secret, forKey: key)
-    return secret
-}
 
 /* This is a base interface into our browser db. It holds arrays of tables and handles basic creation/updating of them. */
 // Version 1 - Basic history table.
@@ -63,8 +52,9 @@ public class BrowserDB {
     private var db: SwiftData
     // XXX: Increasing this should blow away old history, since we currently don't support any upgrades.
     private let Version: Int = 7
-    private let FileName = "browser.db"
     private let files: FileAccessor
+    private let filename: String
+    private let secretKey: String?
     private let schemaTable: SchemaTable<TableInfo>
 
     private var initialized = [String]()
@@ -73,16 +63,16 @@ public class BrowserDB {
     // appear in a query string.
     static let MaxVariableNumber = 999
 
-    public init(files: FileAccessor) {
+    public init(filename: String, secretKey: String? = nil, files: FileAccessor) {
         log.debug("Initializing BrowserDB.")
         self.files = files
+        self.filename = filename
         self.schemaTable = SchemaTable()
+        self.secretKey = secretKey
 
         // Create and open the db file
-        let secret = secretKey
-        assert(secret != nil, "Database must be encrypted")
-        let file = files.getAndEnsureDirectory()!.stringByAppendingPathComponent(FileName)
-        db = SwiftData(filename: file, key: secret, prevKey: nil)
+        let file = files.getAndEnsureDirectory()!.stringByAppendingPathComponent(filename)
+        db = SwiftData(filename: file, key: secretKey, prevKey: nil)
 
         // Create or update will also delete and create the database if our key was incorrect.
         self.createOrUpdate(self.schemaTable)
@@ -169,7 +159,7 @@ public class BrowserDB {
             backupCurrentDB()
 
             // Now we create a brand new db connection.
-            db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent(self.FileName), key: secretKey)
+            db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent(self.filename), key: secretKey)
             success = true
             if let err = db.transaction({ connection -> Bool in
                 success = self.createTable(connection, table: table)
@@ -183,18 +173,18 @@ public class BrowserDB {
     }
 
     private func backupCurrentDB() -> Bool {
-        log.debug("Attempting to move \(self.FileName) to another location.")
+        log.debug("Attempting to move \(self.filename) to another location.")
 
         // Note that a backup file might already exist! We append a counter to avoid this.
         var bakCounter = 0
         var bak: String
         do {
-            bak = "\(self.FileName).bak.\(++bakCounter)"
+            bak = "\(self.filename).bak.\(++bakCounter)"
         } while self.files.exists(bak)
 
         // Make sure we close any open connections before moving the file.
         db.close()
-        let success = self.files.move(self.FileName, toRelativePath: bak)
+        let success = self.files.move(self.filename, toRelativePath: bak)
         assert(success)
         return success
     }
