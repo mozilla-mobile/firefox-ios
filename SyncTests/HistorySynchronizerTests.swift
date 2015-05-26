@@ -148,6 +148,11 @@ extension MockSyncableHistory: SyncableHistory {
         // TODO
         return succeed()
     }
+
+    func onRemovedAccount() -> Success {
+        // TODO
+        return succeed()
+    }
 }
 
 

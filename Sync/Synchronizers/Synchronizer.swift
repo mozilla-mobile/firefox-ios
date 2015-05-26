@@ -60,7 +60,19 @@ public class FatalError: SyncError {
     }
 }
 
-public class EngineNotEnabledError: FatalError {
+// These won't interrupt a multi-engine sync.
+public class ContinuableError: SyncError {
+    let message: String
+    init(message: String) {
+        self.message = message
+    }
+
+    public var description: String {
+        return self.message
+    }
+}
+
+public class EngineNotEnabledError: ContinuableError {
     init(engine: String) {
         super.init(message: "Engine \(engine) not enabled in meta/global.")
         log.debug("\(engine) sync disabled remotely.")

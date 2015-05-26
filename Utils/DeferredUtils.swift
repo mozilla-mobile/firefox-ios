@@ -85,6 +85,20 @@ public func walk<T, U>(items: [T], start: Deferred<Result<U>>, f: (T, U) -> Defe
     return fs.reduce(start, combine: >>==)
 }
 
+/**
+ * Like `all`, but doesn't accrue individual values.
+ */
+public func allSucceed(deferreds: Success...) -> Success {
+    return all(deferreds).bind {
+        (results) -> Success in
+        if let failure = find(results, { $0.isFailure }) {
+            return deferResult(failure.failureValue!)
+        }
+
+        return succeed()
+    }
+}
+
 public func chainDeferred<T, U>(a: Deferred<Result<T>>, f: T -> Deferred<Result<U>>) -> Deferred<Result<U>> {
     return a.bind { res in
         if let v = res.successValue {

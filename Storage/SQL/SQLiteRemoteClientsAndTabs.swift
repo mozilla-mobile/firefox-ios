@@ -220,6 +220,11 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferred
     }
 
+    public func onRemovedAccount() -> Success {
+        log.info("Clearing clients and tabs after account removal.")
+        return self.clear()
+    }
+
     private let debug_enabled = true
     private func debug(msg: String) {
         if debug_enabled {
