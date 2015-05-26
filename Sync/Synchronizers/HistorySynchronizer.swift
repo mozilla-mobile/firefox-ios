@@ -10,12 +10,17 @@ import XCGLogger
 // TODO: same comment as for SyncAuthState.swift!
 private let log = XCGLogger.defaultInstance()
 private let HistoryTTLInSeconds = 5184000                   // 60 days.
+private let HistoryStorageVersion = 1
 
 typealias DeferredTimestamp = Deferred<Result<Timestamp>>
 
 public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
     public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "history")
+    }
+
+    override var storageVersion: Int {
+        return HistoryStorageVersion
     }
 
     private func applyIncomingToStorage(storage: SyncableHistory, response: StorageResponse<[Record<HistoryPayload>]>) -> Success {
@@ -198,6 +203,10 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
     }
 
     public func synchronizeLocalHistory(history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Success {
+        if !self.canSync() {
+            return deferResult(EngineNotEnabledError(engine: self.collection))
+        }
+
         let keys = self.scratchpad.keys?.value
         let encoder = RecordEncoder<HistoryPayload>(decode: { HistoryPayload($0) }, encode: { $0 })
         if let encrypter = keys?.encrypter(self.collection, encoder: encoder) {

@@ -9,10 +9,15 @@ import XCGLogger
 
 // TODO: same comment as for SyncAuthState.swift!
 private let log = XCGLogger.defaultInstance()
+private let TabsStorageVersion = 1
 
 public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
     public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "tabs")
+    }
+
+    override var storageVersion: Int {
+        return TabsStorageVersion
     }
 
     public func synchronizeLocalTabs(localTabs: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Success {
@@ -52,6 +57,10 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
             }
 
             return afterWipe()
+        }
+
+        if !self.canSync() {
+            return deferResult(EngineNotEnabledError(engine: self.collection))
         }
 
         if !self.remoteHasChanges(info) {

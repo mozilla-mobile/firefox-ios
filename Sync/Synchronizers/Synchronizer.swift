@@ -41,7 +41,12 @@ public protocol SyncDelegate {
  */
 public protocol Synchronizer {
     init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs)
-    //func synchronize(client: Sync15StorageClient, info: InfoCollections) -> Deferred<Result<Scratchpad>>
+
+    /**
+     * Return true if the current state of this synchronizer -- particularly prefs and scratchpad --
+     * allow a sync to occur.
+     */
+    func canSync() -> Bool
 }
 
 public class FatalError: SyncError {
@@ -52,6 +57,13 @@ public class FatalError: SyncError {
 
     public var description: String {
         return self.message
+    }
+}
+
+public class EngineNotEnabledError: FatalError {
+    init(engine: String) {
+        super.init(message: "Engine \(engine) not enabled in meta/global.")
+        log.debug("\(engine) sync disabled remotely.")
     }
 }
 
@@ -76,6 +88,11 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
         log.info("Synchronizer configured with prefs \(branchName).")
     }
 
+    var storageVersion: Int {
+        assert(false, "Override me!")
+        return 0
+    }
+
     var lastFetched: Timestamp {
         set(value) {
             self.prefs.setLong(value, forKey: "lastFetched")
@@ -88,5 +105,12 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
 
     public func remoteHasChanges(info: InfoCollections) -> Bool {
         return info.modified(self.collection) > self.lastFetched
+    }
+
+    public func canSync() -> Bool {
+        if let engineMeta = self.scratchpad.global?.value.engines?[collection] {
+            return engineMeta.version == self.storageVersion
+        }
+        return false
     }
 }
