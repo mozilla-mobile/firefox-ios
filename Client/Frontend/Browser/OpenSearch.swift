@@ -10,7 +10,7 @@ private let TypeSearch = "text/html"
 private let TypeSuggest = "application/x-suggestions+json"
 
 class OpenSearchEngine {
-    static let PreferredIconSize = 32
+    static let PreferredIconSize = 30
 
     let shortName: String
     let description: String?

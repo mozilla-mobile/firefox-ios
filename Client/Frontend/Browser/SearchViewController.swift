@@ -597,8 +597,10 @@ private class SuggestionCell: UITableViewCell {
         contentView.frame = frame
         container.frame = frame
 
-        let imageY = (frame.size.height - 24) / 2
-        imageView!.frame = CGRectMake(12, imageY, 24, 24)
+        let imageSize = CGFloat(OpenSearchEngine.PreferredIconSize)
+        let imageX = (48 - imageSize) / 2
+        let imageY = (frame.size.height - imageSize) / 2
+        imageView!.frame = CGRectMake(imageX, imageY, imageSize, imageSize)
     }
 }
 
