@@ -655,4 +655,17 @@ extension SQLiteHistory: SyncableHistory {
         let args: Args = guids.map { $0 as AnyObject }
         return self.db.run(sql, withArgs: args) >>> always(modified)
     }
+
+    public func onRemovedAccount() -> Success {
+        log.info("Clearing history metadata after account removal.")
+
+        let discard =
+        "DELETE FROM \(TableHistory) WHERE is_deleted = 1"
+
+        let flag =
+        "UPDATE \(TableHistory) SET " +
+        "should_upload = 1, server_modified = NULL "
+
+        return self.db.run(discard) >>> { self.db.run(flag) }
+    }
 }

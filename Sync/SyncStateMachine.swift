@@ -47,6 +47,12 @@ public class SyncStateMachine {
         })
     }
 
+    public class func clearStateFromPrefs(prefs: Prefs) {
+        log.debug("Clearing all Sync prefs.")
+        Scratchpad.clearFromPrefs(self.scratchpadPrefs(prefs))
+        prefs.clearAll()
+    }
+
     public class func toReady(authState: SyncAuthState, prefs: Prefs) -> ReadyDeferred {
         let token = authState.token(NSDate.now(), canBeExpired: false)
         return chainDeferred(token, { (token, kB) in

@@ -23,6 +23,8 @@ public protocol SyncManager {
     func syncClients() -> Success
     func syncClientsAndTabs() -> Success
     func syncHistory() -> Success
+    func onRemovedAccount(account: FirefoxAccount?) -> Success
+    func onAddedAccount() -> Success
 }
 
 class ProfileFileAccessor: FileAccessor {
@@ -258,13 +260,21 @@ public class BrowserProfile: Profile {
     }
 
     func removeAccount() {
+        let old = self.account
+
         KeychainWrapper.removeObjectForKey(name + ".account")
         self.account = nil
+
+        // Trigger cleanup. Pass in the account in case we want to try to remove
+        // client-specific data from the server.
+        self.syncManager.onRemovedAccount(old)
     }
 
     func setAccount(account: FirefoxAccount) {
         KeychainWrapper.setObject(account.asDictionary(), forKey: name + ".account")
         self.account = account
+
+        self.syncManager.onAddedAccount()
     }
 
     class BrowserSyncManager: SyncManager {
@@ -274,87 +284,102 @@ public class BrowserProfile: Profile {
             self.profile = profile
         }
 
-        private class func syncClientsToStorage(storage: RemoteClientsAndTabs, delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Deferred<Result<Ready>> {
+        var prefsForSync: Prefs {
+            return self.profile.prefs.branch("sync")
+        }
+
+        func onAddedAccount() -> Success {
+            return self.syncEverything()
+        }
+
+        func onRemovedAccount(account: FirefoxAccount?) -> Success {
+            let h: SyncableHistory = self.profile.history
+            let flagHistory = h.onRemovedAccount()
+            let clearTabs = self.profile.remoteClientsAndTabs.onRemovedAccount()
+            let done = allSucceed(flagHistory, clearTabs)
+
+            // Clear prefs after we're done clearing everything else -- just in case
+            // one of them needs the prefs and we race. Clear regardless of success
+            // or failure.
+            done.upon { result in
+                // This will remove keys from the Keychain if they exist, as well
+                // as wiping the Sync prefs.
+                SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
+            }
+            return done
+        }
+
+        private func syncClientsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Success {
             log.debug("Syncing clients to storage.")
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs)
-            let success = clientSynchronizer.synchronizeLocalClients(storage, withServer: ready.client, info: ready.info)
-            return success >>== always(ready)
+            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info)
         }
 
-        private class func syncTabsToStorage(storage: RemoteClientsAndTabs, delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Deferred<Result<RemoteClientsAndTabs>> {
+        private func syncTabsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Success {
+            let storage = self.profile.remoteClientsAndTabs
             let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, delegate: delegate, prefs: prefs)
-            let success = tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
-            return success >>== always(storage)
+            return tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
         }
 
-        private class func syncHistoryToStorage(storage: SyncableHistory, delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Deferred<Result<Ready>> {
+        private func syncHistoryWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Success {
             log.debug("Syncing history to storage.")
             let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs)
-            let success = historySynchronizer.synchronizeLocalHistory(storage, withServer: ready.client, info: ready.info)
-            return success >>== always(ready)
+            return historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info)
+        }
+
+        func ignoreContinuableErrorInDeferred(deferred: Success) -> Success {
+            return deferred.bind() { result in
+                if let failure = result.failureValue where failure is ContinuableError {
+                    log.debug("Got continuable error \(failure); pretending that nothing failed.")
+                    return succeed()
+                }
+                return deferred
+            }
+        }
+
+        func doSync(label: String, synchronizers: (SyncDelegate, Prefs, Ready) -> Success ...) -> Success {
+            if let account = profile.account {
+                log.info("Syncing \(label).")
+
+                let authState = account.syncAuthState
+                let syncPrefs = profile.prefs.branch("sync")
+
+                let readyDeferred = SyncStateMachine.toReady(authState, prefs: syncPrefs)
+                let delegate = profile.getSyncDelegate()
+
+                // Run them sequentially, ignoring continuable errors.
+                // TODO: find a better way to do this. We want to report if tab sync is disabled, for
+                // example.
+                return readyDeferred >>== { ready in
+                    let tasks = synchronizers.map { f in
+                        { self.ignoreContinuableErrorInDeferred(f(delegate, syncPrefs, ready)) }
+                    }
+
+                    return walk(tasks, { $0() })
+                }
+            }
+
+            log.warning("No account; can't sync \(label).")
+            return deferResult(NoAccountError())
+        }
+
+        func syncEverything() -> Success {
+            return self.doSync("everything", synchronizers:
+                self.syncClientsWithDelegate,
+                self.syncTabsWithDelegate,
+                self.syncHistoryWithDelegate)
         }
 
         func syncClients() -> Success {
-            if let account = profile.account {
-                let authState = account.syncAuthState
-
-                let syncPrefs = profile.prefs.branch("sync")
-                let storage = profile.remoteClientsAndTabs
-
-                let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
-
-                let delegate = profile.getSyncDelegate()
-                let syncClients = curry(BrowserSyncManager.syncClientsToStorage)(storage, delegate, syncPrefs)
-
-                return ready
-                  >>== syncClients
-                   >>> succeed
-            }
-
-            log.warning("No account; can't fetch clients.")
-            return deferResult(NoAccountError())
+            return self.doSync("clients", synchronizers: syncClientsWithDelegate)
         }
 
         func syncClientsAndTabs() -> Success {
-            if let account = profile.account {
-                log.debug("Fetching clients and tabs.")
-
-                let authState = account.syncAuthState
-                let syncPrefs = profile.prefs.branch("sync")
-                let storage = profile.remoteClientsAndTabs
-
-                let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
-
-                let delegate = profile.getSyncDelegate()
-                let syncClients = curry(BrowserSyncManager.syncClientsToStorage)(storage, delegate, syncPrefs)
-                let syncTabs = curry(BrowserSyncManager.syncTabsToStorage)(storage, delegate, syncPrefs)
-                return ready
-                  >>== syncClients
-                  >>== syncTabs
-                   >>> succeed
-            }
-
-            return deferResult(NoAccountError())
+            return self.doSync("clients and tabs", synchronizers: self.syncClientsWithDelegate, self.syncTabsWithDelegate)
         }
 
         func syncHistory() -> Success {
-            if let account = profile.account {
-                log.debug("Syncing history.")
-
-                let authState = account.syncAuthState
-                let syncPrefs = profile.prefs.branch("sync")
-                let storage = profile.history
-
-                let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
-
-                let delegate = profile.getSyncDelegate()
-                let syncHistory = curry(BrowserSyncManager.syncHistoryToStorage)(storage, delegate, syncPrefs)
-                return ready
-                  >>== syncHistory
-                   >>> succeed
-            }
-
-            return deferResult(NoAccountError())
+            return self.doSync("history", synchronizers: syncHistoryWithDelegate)
         }
     }
 }
