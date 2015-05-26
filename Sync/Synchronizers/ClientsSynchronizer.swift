@@ -9,6 +9,7 @@ import XCGLogger
 
 // TODO: same comment as for SyncAuthState.swift!
 private let log = XCGLogger.defaultInstance()
+private let ClientsStorageVersion = 1
 
 // TODO
 public protocol Command {
@@ -74,6 +75,10 @@ let Commands: [String: (String, [JSON]) -> Command?] = [
 public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
     public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "clients")
+    }
+
+    override var storageVersion: Int {
+        return ClientsStorageVersion
     }
 
     var clientRecordLastUpload: Timestamp {
@@ -225,6 +230,10 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
     // TODO: return whether or not the sync should continue.
     public func synchronizeLocalClients(localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Success {
         log.debug("Synchronizing clients.")
+
+        if !self.canSync() {
+            return deferResult(FatalError(message: "clients not mentioned in meta/global. Server wiped?"))
+        }
 
         let keys = self.scratchpad.keys?.value
         let encoder = RecordEncoder<ClientPayload>(decode: { ClientPayload($0) }, encode: { $0 })
