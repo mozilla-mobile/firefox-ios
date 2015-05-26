@@ -161,8 +161,8 @@ class BrowserViewController: UIViewController {
 
     func SELstatusBarFrameWillChange(notification: NSNotification) {
         if let statusBarFrame = notification.userInfo![UIApplicationStatusBarFrameUserInfoKey] as? NSValue {
-            statusBarOverlay.frame = statusBarFrame.CGRectValue()
-            self.view.setNeedsLayout()
+            showToolbars(animated: false)
+            self.view.setNeedsUpdateConstraints()
         }
     }
 
@@ -242,6 +242,11 @@ class BrowserViewController: UIViewController {
     }
 
     override func updateViewConstraints() {
+        statusBarOverlay.snp_remakeConstraints { make in
+            make.top.left.right.equalTo(self.view)
+            make.height.equalTo(topLayoutGuide.length)
+        }
+
         urlBar.snp_remakeConstraints { make in
             make.edges.equalTo(self.header)
         }
