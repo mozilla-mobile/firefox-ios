@@ -86,8 +86,12 @@ public class MockProfile: Profile {
         return account
     }
 
-    func setAccount(account: FirefoxAccount?) {
+    func setAccount(account: FirefoxAccount) {
         self.account = account
+    }
+
+    func removeAccount() {
+        self.account = nil
     }
 
     func getClients() -> Deferred<Result<[RemoteClient]>> {
