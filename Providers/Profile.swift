@@ -112,7 +112,8 @@ protocol Profile {
     var accountConfiguration: FirefoxAccountConfiguration { get }
 
     func getAccount() -> FirefoxAccount?
-    func setAccount(account: FirefoxAccount?)
+    func removeAccount()
+    func setAccount(account: FirefoxAccount)
 
     func getClients() -> Deferred<Result<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
@@ -256,12 +257,13 @@ public class BrowserProfile: Profile {
         return account
     }
 
-    func setAccount(account: FirefoxAccount?) {
-        if account == nil {
-            KeychainWrapper.removeObjectForKey(name + ".account")
-        } else {
-            KeychainWrapper.setObject(account!.asDictionary(), forKey: name + ".account")
-        }
+    func removeAccount() {
+        KeychainWrapper.removeObjectForKey(name + ".account")
+        self.account = nil
+    }
+
+    func setAccount(account: FirefoxAccount) {
+        KeychainWrapper.setObject(account.asDictionary(), forKey: name + ".account")
         self.account = account
     }
 
