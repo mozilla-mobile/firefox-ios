@@ -1308,6 +1308,12 @@ extension BrowserViewController: WKNavigationDelegate {
                     self.profile.thumbnails.set(url, thumbnail: thumbnail, complete: nil)
                 }
             }
+
+            // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
+            // because that event wil not always fire due to unreliable page caching. This will either let us know that
+            // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
+            // ignore the result because we are being called back asynchronous when the readermode status changes.
+            webView.evaluateJavaScript("_firefox_ReaderMode.checkReadability()", completionHandler: nil)
         }
 
         if tab == tabManager.selectedTab {

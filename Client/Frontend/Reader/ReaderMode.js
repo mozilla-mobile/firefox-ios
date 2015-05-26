@@ -157,7 +157,3 @@ window.addEventListener('load', function(event) {
         _firefox_ReaderMode.configureReader();
     }
 });
-
-window.addEventListener('pageshow', function(event) {
-    _firefox_ReaderMode.checkReadability();
-});
