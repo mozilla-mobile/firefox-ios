@@ -22,6 +22,7 @@ private struct URLBarViewUX {
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
+    static let ToolbarButtonInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
     static func backgroundColorWithAlpha(alpha: CGFloat) -> UIColor {
         return UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: alpha)
@@ -41,59 +42,25 @@ protocol URLBarDelegate: class {
     func urlBar(urlBar: URLBarView, didSubmitText text: String)
 }
 
-class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDelegate, BrowserToolbarProtocol {
+class URLBarView: UIView {
     weak var delegate: URLBarDelegate?
-
-    private var locationView: BrowserLocationView!
-    private var editTextField: ToolbarTextField!
-    private var locationContainer: UIView!
-    private var tabsButton: UIButton!
-    private var progressBar: UIProgressView!
-    private var cancelButton: UIButton!
-    private var curveShape: CurveView!
-
     weak var browserToolbarDelegate: BrowserToolbarDelegate?
-
-    let shareButton = UIButton()
-    let bookmarkButton = UIButton()
-    let forwardButton = UIButton()
-    let backButton = UIButton()
-    let stopReloadButton = UIButton()
     var helper: BrowserToolbarHelper?
+
     var toolbarIsShowing = false
 
     var backButtonLeftConstraint: Constraint?
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        initViews()
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        initViews()
-    }
-
-    private func initViews() {
-        curveShape = CurveView()
-        self.addSubview(curveShape);
-
-        self.backgroundColor = URLBarViewUX.backgroundColorWithAlpha(0)
-
-        locationContainer = UIView()
-        locationContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
-        locationContainer.layer.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
-        locationContainer.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
-        locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
-        addSubview(locationContainer)
-
-        locationView = BrowserLocationView(frame: CGRectZero)
+    private lazy var locationView: BrowserLocationView = {
+        var locationView = BrowserLocationView(frame: CGRectZero)
         locationView.setTranslatesAutoresizingMaskIntoConstraints(false)
         locationView.readerModeState = ReaderModeState.Unavailable
         locationView.delegate = self
-        locationContainer.addSubview(locationView)
+        return locationView
+    }()
 
-        editTextField = ToolbarTextField()
+    private lazy var editTextField: ToolbarTextField = {
+        var editTextField = ToolbarTextField()
         editTextField.keyboardType = UIKeyboardType.WebSearch
         editTextField.autocorrectionType = UITextAutocorrectionType.No
         editTextField.autocapitalizationType = UITextAutocapitalizationType.None
@@ -108,20 +75,43 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         editTextField.hidden = true
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         editTextField.attributedPlaceholder = BrowserLocationView.PlaceholderText
+        return editTextField
+    }()
 
-        locationContainer.addSubview(editTextField)
+    private lazy var locationContainer: UIView = {
+        var locationContainer = UIView()
+        locationContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
+        locationContainer.layer.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
+        locationContainer.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
+        locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
+        return locationContainer
+    }()
 
-        self.progressBar = UIProgressView()
-        self.progressBar.progressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
-        self.progressBar.alpha = 0
-        self.progressBar.hidden = true
-        self.addSubview(progressBar)
-
-        tabsButton = makeTabsButton(0)
+    private lazy var tabsButton: UIButton = {
+        var tabsButton = InsetButton()
+        tabsButton.setTitle("0", forState: UIControlState.Normal)
+        tabsButton.setTitleColor(URLBarViewUX.backgroundColorWithAlpha(1), forState: UIControlState.Normal)
+        tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
+        tabsButton.titleLabel?.layer.cornerRadius = 2
+        tabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
+        tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        tabsButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
+        tabsButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
         tabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
         tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the browser toolbar")
+        return tabsButton
+    }()
 
-        cancelButton = InsetButton()
+    private lazy var progressBar: UIProgressView = {
+        var progressBar = UIProgressView()
+        progressBar.progressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
+        progressBar.alpha = 0
+        progressBar.hidden = true
+        return progressBar
+    }()
+
+    private lazy var cancelButton: UIButton = {
+        var cancelButton = InsetButton()
         cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         let cancelTitle = NSLocalizedString("Cancel", comment: "Button label to cancel entering a URL or search query")
         cancelButton.setTitle(cancelTitle, forState: UIControlState.Normal)
@@ -130,16 +120,76 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         cancelButton.titleEdgeInsets = UIEdgeInsetsMake(10, 12, 10, 12)
         cancelButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
         cancelButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
-        self.addSubview(cancelButton)
+        return cancelButton
+    }()
 
-        addSubview(self.shareButton)
-        addSubview(self.bookmarkButton)
-        addSubview(self.forwardButton)
-        addSubview(self.backButton)
-        addSubview(self.stopReloadButton)
+    private lazy var curveShape: CurveView = { return CurveView() }()
 
-        self.helper = BrowserToolbarHelper(toolbar: self)
+    lazy var shareButton: UIButton = { return UIButton() }()
 
+    lazy var bookmarkButton: UIButton = { return UIButton() }()
+
+    lazy var forwardButton: UIButton = { return UIButton() }()
+
+    lazy var backButton: UIButton = { return UIButton() }()
+
+    lazy var stopReloadButton: UIButton = { return UIButton() }()
+
+    lazy var actionButtons: [UIButton] = {
+        return [self.shareButton, self.bookmarkButton, self.forwardButton, self.backButton, self.stopReloadButton]
+    }()
+
+    var isEditing: Bool {
+        return !editTextField.hidden
+    }
+
+    var currentURL: NSURL? {
+        get {
+            return locationView.url
+        }
+        set(newURL) {
+            locationView.url = newURL
+        }
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        commonInit()
+    }
+
+    private func commonInit() {
+        backgroundColor = URLBarViewUX.backgroundColorWithAlpha(0)
+        clipsToBounds = true
+
+        addSubview(curveShape);
+
+        locationContainer.addSubview(locationView)
+        locationContainer.addSubview(editTextField)
+        addSubview(locationContainer)
+
+        addSubview(progressBar)
+        addSubview(tabsButton)
+        addSubview(cancelButton)
+
+        addSubview(shareButton)
+        addSubview(bookmarkButton)
+        addSubview(forwardButton)
+        addSubview(backButton)
+        addSubview(stopReloadButton)
+
+        helper = BrowserToolbarHelper(toolbar: self)
+        setupConstraints()
+
+        // Make sure we hide any views that shouldn't be showing in non-editing mode
+        finishEditingAnimation(false)
+    }
+
+    private func setupConstraints() {
         tabsButton.snp_makeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
             make.trailing.equalTo(self)
@@ -167,28 +217,9 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
             make.trailing.equalTo(self)
         }
 
-        // Make sure we hide any views that shouldn't be showing in non-editing mode
-        finishEditingAnimation(false)
-    }
-
-    private func makeTabsButton(count: Int) -> UIButton {
-        let tabsButton = InsetButton()
-        tabsButton.setTitle(count.description, forState: UIControlState.Normal)
-        tabsButton.setTitleColor(URLBarViewUX.backgroundColorWithAlpha(1), forState: UIControlState.Normal)
-        tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
-        tabsButton.titleLabel?.layer.cornerRadius = 2
-        tabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
-        tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
-        tabsButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
-        tabsButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
-
-        self.addSubview(tabsButton)
-
         tabsButton.titleLabel?.snp_makeConstraints { make in
             make.size.equalTo(URLBarViewUX.TabsButtonHeight)
         }
-
-        return tabsButton
     }
 
     private func updateToolbarConstraints() {
@@ -196,42 +227,35 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
             backButton.snp_remakeConstraints { (make) -> () in
                 self.backButtonLeftConstraint = make.left.equalTo(self).constraint
                 make.centerY.equalTo(self)
-                make.height.equalTo(AppConstants.ToolbarHeight)
-                make.width.equalTo(AppConstants.ToolbarHeight)
+                make.size.equalTo(AppConstants.ToolbarHeight)
             }
-            backButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+            backButton.contentEdgeInsets = URLBarViewUX.ToolbarButtonInsets
 
             forwardButton.snp_remakeConstraints { (make) -> () in
                 make.left.equalTo(self.backButton.snp_right)
                 make.centerY.equalTo(self)
-                make.height.equalTo(AppConstants.ToolbarHeight)
-                make.width.equalTo(AppConstants.ToolbarHeight)
+                make.size.equalTo(AppConstants.ToolbarHeight)
             }
-            forwardButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+            forwardButton.contentEdgeInsets = URLBarViewUX.ToolbarButtonInsets
 
             stopReloadButton.snp_remakeConstraints { (make) -> () in
                 make.left.equalTo(self.forwardButton.snp_right)
                 make.centerY.equalTo(self)
-                make.height.equalTo(AppConstants.ToolbarHeight)
-                make.width.equalTo(AppConstants.ToolbarHeight)
+                make.size.equalTo(AppConstants.ToolbarHeight)
             }
-            stopReloadButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+            stopReloadButton.contentEdgeInsets = URLBarViewUX.ToolbarButtonInsets
 
             shareButton.snp_remakeConstraints { (make) -> () in
                 make.right.equalTo(self.bookmarkButton.snp_left)
                 make.centerY.equalTo(self)
-                make.height.equalTo(AppConstants.ToolbarHeight)
-                make.width.equalTo(AppConstants.ToolbarHeight)
+                make.size.equalTo(AppConstants.ToolbarHeight)
             }
-            shareButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
             bookmarkButton.snp_remakeConstraints { (make) -> () in
                 make.right.equalTo(self.tabsButton.snp_left)
                 make.centerY.equalTo(self)
-                make.height.equalTo(AppConstants.ToolbarHeight)
-                make.width.equalTo(AppConstants.ToolbarHeight)
+                make.size.equalTo(AppConstants.ToolbarHeight)
             }
-            bookmarkButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         }
     }
 
@@ -248,26 +272,12 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         super.updateConstraints()
     }
 
-    var isEditing: Bool {
-        get {
-            return !editTextField.hidden
-        }
-    }
-
-    func updateURL(url: NSURL?) {
-        locationView.url = url
-    }
-
     // Ideally we'd split this implementation in two, one URLBarView with a toolbar and one without
     // However, switching views dynamically at runtime is a difficult. For now, we just use one view
     // that can show in either mode.
     func setShowToolbar(shouldShow: Bool) {
         toolbarIsShowing = shouldShow
         setNeedsUpdateConstraints()
-    }
-
-    func currentURL() -> NSURL {
-        return locationView.url!
     }
 
     func updateURLBarText(text: String) {
@@ -285,11 +295,14 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         self.tabsButton.alpha = alpha
         self.locationContainer.alpha = alpha
         self.backgroundColor = URLBarViewUX.backgroundColorWithAlpha(1 - alpha)
+        self.actionButtons.map { $0.alpha = alpha }
     }
 
     func updateTabCount(count: Int) {
+        self.tabsButton.setTitle(count.description, forState: .Normal)
         // Make a clone of the tabs button.
-        let newTabsButton = makeTabsButton(count)
+        let newTabsButton = self.tabsButton.clone() as! UIButton
+        addSubview(newTabsButton)
 
         // Copy constraints from original button, offset by the anchor position.
         newTabsButton.snp_makeConstraints { make in
@@ -327,10 +340,6 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         })
     }
 
-    func SELdidClickAddTab() {
-        delegate?.urlBarDidPressTabs(self)
-    }
-
     func updateProgressBar(progress: Float) {
         if progress == 1.0 {
             self.progressBar.setProgress(progress, animated: true)
@@ -347,53 +356,6 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
 
     func updateReaderModeState(state: ReaderModeState) {
         locationView.readerModeState = state
-    }
-
-    func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView) {
-        delegate?.urlBarDidPressReaderMode(self)
-    }
-
-    func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView) {
-        delegate?.urlBarDidLongPressReaderMode(self)
-    }
-
-    func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
-        delegate?.urlBarDidBeginEditing(self)
-
-        editTextField.text = locationView.url?.absoluteString
-        editTextField.becomeFirstResponder()
-
-        updateLayoutForEditing(editing: true)
-    }
-
-    func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView) {
-        delegate?.urlBarDidLongPressLocation(self)
-    }
-
-    func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView) {
-        delegate?.urlBarDidPressReload(self)
-    }
-    
-    func browserLocationViewDidTapStop(browserLocationView: BrowserLocationView) {
-        delegate?.urlBarDidPressStop(self)
-    }
-
-    func autocompleteTextFieldShouldReturn(autocompleteTextField: AutocompleteTextField) -> Bool {
-        delegate?.urlBar(self, didSubmitText: editTextField.text)
-        return true
-    }
-
-    func autocompleteTextField(autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
-        delegate?.urlBar(self, didEnterText: text)
-    }
-
-    func autocompleteTextFieldDidBeginEditing(autocompleteTextField: AutocompleteTextField) {
-        autocompleteTextField.highlightAll()
-    }
-
-    func autocompleteTextFieldShouldClear(autocompleteTextField: AutocompleteTextField) -> Bool {
-        delegate?.urlBar(self, didEnterText: "")
-        return true
     }
 
     func setAutocompleteSuggestion(suggestion: String?) {
@@ -442,7 +404,6 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
                 }
 
                 make.height.equalTo(URLBarViewUX.LocationHeight)
-
                 make.centerY.equalTo(self)
             }
         }
@@ -498,11 +459,16 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
         }
     }
 
+    func SELdidClickAddTab() {
+        delegate?.urlBarDidPressTabs(self)
+    }
+
     func SELdidClickCancel() {
         finishEditing()
     }
+}
 
-    /* BrowserToolbarProtocol */
+extension URLBarView: BrowserToolbarProtocol {
     func updateBackStatus(canGoBack: Bool) {
         backButton.enabled = canGoBack
     }
@@ -543,6 +509,57 @@ class URLBarView: UIView, BrowserLocationViewDelegate, AutocompleteTextFieldDele
     }
 }
 
+extension URLBarView: BrowserLocationViewDelegate {
+    func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView) {
+        delegate?.urlBarDidLongPressReaderMode(self)
+    }
+
+    func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
+        delegate?.urlBarDidBeginEditing(self)
+
+        editTextField.text = locationView.url?.absoluteString
+        editTextField.becomeFirstResponder()
+
+        updateLayoutForEditing(editing: true)
+    }
+
+    func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView) {
+        delegate?.urlBarDidLongPressLocation(self)
+    }
+
+    func browserLocationViewDidTapReload(browserLocationView: BrowserLocationView) {
+        delegate?.urlBarDidPressReload(self)
+    }
+    
+    func browserLocationViewDidTapStop(browserLocationView: BrowserLocationView) {
+        delegate?.urlBarDidPressStop(self)
+    }
+
+    func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView) {
+        delegate?.urlBarDidPressReaderMode(self)
+    }
+}
+
+extension URLBarView: AutocompleteTextFieldDelegate {
+    func autocompleteTextFieldShouldReturn(autocompleteTextField: AutocompleteTextField) -> Bool {
+        delegate?.urlBar(self, didSubmitText: editTextField.text)
+        return true
+    }
+
+    func autocompleteTextField(autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
+        delegate?.urlBar(self, didEnterText: text)
+    }
+
+    func autocompleteTextFieldDidBeginEditing(autocompleteTextField: AutocompleteTextField) {
+        autocompleteTextField.highlightAll()
+    }
+
+    func autocompleteTextFieldShouldClear(autocompleteTextField: AutocompleteTextField) -> Bool {
+        delegate?.urlBar(self, didEnterText: "")
+        return true
+    }
+}
+
 /* Code for drawing the urlbar curve */
 // Curve's aspect ratio
 private let ASPECT_RATIO = 0.729
@@ -564,24 +581,24 @@ private let H_M4 = 0.961
 private class CurveView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.commonInit()
+        commonInit()
     }
 
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.commonInit()
+        commonInit()
     }
 
-    func commonInit() {
+    private func commonInit() {
         self.opaque = false
         self.contentMode = .Redraw
     }
 
-    func getWidthForHeight(height: Double) -> Double {
+    private func getWidthForHeight(height: Double) -> Double {
         return height * ASPECT_RATIO
     }
 
-    func drawFromTop(path: UIBezierPath) {
+    private func drawFromTop(path: UIBezierPath) {
         let height: Double = Double(AppConstants.ToolbarHeight)
         let width = getWidthForHeight(height)
         var from = (Double(self.frame.width) - width * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(0))

@@ -429,7 +429,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func finishEditingAndSubmit(var url: NSURL, visitType: VisitType) {
-        urlBar.updateURL(url)
+        urlBar.currentURL = url
         urlBar.finishEditing()
 
         if let tab = tabManager.selectedTab,
@@ -609,7 +609,7 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         let copyAddressAction = UIAlertAction(title: NSLocalizedString("Copy Address", comment: "Copy the URL from the location bar"), style: .Default, handler: { (alert: UIAlertAction!) -> Void in
-            UIPasteboard.generalPasteboard().string = urlBar.currentURL().absoluteString
+            UIPasteboard.generalPasteboard().string = urlBar.currentURL?.absoluteString
         })
         longPressAlertController.addAction(copyAddressAction)
 
@@ -1061,7 +1061,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         removeAllBars()
-        urlBar.updateURL(selected?.displayURL)
+        urlBar.currentURL = selected?.displayURL
         if let bars = selected?.bars {
             for bar in bars {
                 showBar(bar, animated: true)
@@ -1228,7 +1228,7 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         if let tab = tabManager.selectedTab {
             if tab.webView == webView {
-                urlBar.updateURL(tab.displayURL);
+                urlBar.currentURL = tab.displayURL
                 toolbar?.updateBackStatus(webView.canGoBack)
                 toolbar?.updateFowardStatus(webView.canGoForward)
 
