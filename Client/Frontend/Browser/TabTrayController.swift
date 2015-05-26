@@ -79,6 +79,8 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         collectionView.delegate = self
         collectionView.registerClass(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
         collectionView.backgroundColor = UIColor.clearColor()
+        collectionView.layer.shouldRasterize = true
+        collectionView.layer.rasterizationScale = UIScreen.mainScreen().scale
         return collectionView
     }()
 
