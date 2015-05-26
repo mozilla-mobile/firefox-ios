@@ -19,6 +19,12 @@ public class NoAccountError: SyncError {
     }
 }
 
+public protocol SyncManager {
+    func syncClients() -> Success
+    func syncClientsAndTabs() -> Success
+    func syncHistory() -> Success
+}
+
 class ProfileFileAccessor: FileAccessor {
     init(profile: Profile) {
         let profileDirName = "profile.\(profile.localName())"
@@ -110,6 +116,8 @@ protocol Profile {
 
     func getClients() -> Deferred<Result<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
+
+    var syncManager: SyncManager { get }
 }
 
 public class BrowserProfile: Profile {
@@ -206,18 +214,9 @@ public class BrowserProfile: Profile {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
-    private class func syncClientsToStorage(storage: RemoteClientsAndTabs, delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Deferred<Result<Ready>> {
-        log.debug("Syncing clients to storage.")
-        let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs)
-        let success = clientSynchronizer.synchronizeLocalClients(storage, withServer: ready.client, info: ready.info)
-        return success >>== always(ready)
-    }
-
-    private class func syncTabsToStorage(storage: RemoteClientsAndTabs, delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Deferred<Result<RemoteClientsAndTabs>> {
-        let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, delegate: delegate, prefs: prefs)
-        let success = tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
-        return success >>== always(storage)
-    }
+    lazy var syncManager: SyncManager = {
+        return BrowserSyncManager(profile: self)
+    }()
 
     private func getSyncDelegate() -> SyncDelegate {
         if let app = self.app {
@@ -227,49 +226,13 @@ public class BrowserProfile: Profile {
     }
 
     public func getClients() -> Deferred<Result<[RemoteClient]>> {
-        if let account = self.account {
-            let authState = account.syncAuthState
-
-            let syncPrefs = self.prefs.branch("sync")
-            let storage = self.remoteClientsAndTabs
-
-            let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
-
-            let delegate = self.getSyncDelegate()
-            let syncClients = curry(BrowserProfile.syncClientsToStorage)(storage, delegate, syncPrefs)
-
-            return ready
-              >>== syncClients
-               >>> { return storage.getClients() }
-        }
-
-        log.warning("No account; can't fetch clients.")
-        return deferResult(NoAccountError())
+        return self.syncManager.syncClients()
+           >>> { self.remoteClientsAndTabs.getClients() }
     }
 
     public func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
-        log.info("Account is \(self.account), app is \(self.app)")
-
-        if let account = self.account {
-            log.debug("Fetching clients and tabs.")
-
-            let authState = account.syncAuthState
-            let syncPrefs = self.prefs.branch("sync")
-            let storage = self.remoteClientsAndTabs
-
-            let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
-
-            let delegate = self.getSyncDelegate()
-            let syncClients = curry(BrowserProfile.syncClientsToStorage)(storage, delegate, syncPrefs)
-            let syncTabs = curry(BrowserProfile.syncTabsToStorage)(storage, delegate, syncPrefs)
-
-            return ready
-              >>== syncClients
-              >>== syncTabs
-               >>> { return storage.getClientsAndTabs() }
-        }
-
-        return deferResult(NoAccountError())
+        return self.syncManager.syncClientsAndTabs()
+           >>> { self.remoteClientsAndTabs.getClientsAndTabs() }
     }
 
     lazy var passwords: Passwords = {
@@ -300,5 +263,96 @@ public class BrowserProfile: Profile {
             KeychainWrapper.setObject(account!.asDictionary(), forKey: name + ".account")
         }
         self.account = account
+    }
+
+    class BrowserSyncManager: SyncManager {
+        unowned private let profile: BrowserProfile
+
+        init(profile: BrowserProfile) {
+            self.profile = profile
+        }
+
+        private class func syncClientsToStorage(storage: RemoteClientsAndTabs, delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Deferred<Result<Ready>> {
+            log.debug("Syncing clients to storage.")
+            let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs)
+            let success = clientSynchronizer.synchronizeLocalClients(storage, withServer: ready.client, info: ready.info)
+            return success >>== always(ready)
+        }
+
+        private class func syncTabsToStorage(storage: RemoteClientsAndTabs, delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Deferred<Result<RemoteClientsAndTabs>> {
+            let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, delegate: delegate, prefs: prefs)
+            let success = tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
+            return success >>== always(storage)
+        }
+
+        private class func syncHistoryToStorage(storage: SyncableHistory, delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Deferred<Result<Ready>> {
+            log.debug("Syncing history to storage.")
+            let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs)
+            let success = historySynchronizer.synchronizeLocalHistory(storage, withServer: ready.client, info: ready.info)
+            return success >>== always(ready)
+        }
+
+        func syncClients() -> Success {
+            if let account = profile.account {
+                let authState = account.syncAuthState
+
+                let syncPrefs = profile.prefs.branch("sync")
+                let storage = profile.remoteClientsAndTabs
+
+                let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
+
+                let delegate = profile.getSyncDelegate()
+                let syncClients = curry(BrowserSyncManager.syncClientsToStorage)(storage, delegate, syncPrefs)
+
+                return ready
+                  >>== syncClients
+                   >>> succeed
+            }
+
+            log.warning("No account; can't fetch clients.")
+            return deferResult(NoAccountError())
+        }
+
+        func syncClientsAndTabs() -> Success {
+            if let account = profile.account {
+                log.debug("Fetching clients and tabs.")
+
+                let authState = account.syncAuthState
+                let syncPrefs = profile.prefs.branch("sync")
+                let storage = profile.remoteClientsAndTabs
+
+                let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
+
+                let delegate = profile.getSyncDelegate()
+                let syncClients = curry(BrowserSyncManager.syncClientsToStorage)(storage, delegate, syncPrefs)
+                let syncTabs = curry(BrowserSyncManager.syncTabsToStorage)(storage, delegate, syncPrefs)
+                return ready
+                  >>== syncClients
+                  >>== syncTabs
+                   >>> succeed
+            }
+
+            return deferResult(NoAccountError())
+        }
+
+        func syncHistory() -> Success {
+            if let account = profile.account {
+                log.debug("Syncing history.")
+
+                let authState = account.syncAuthState
+                let syncPrefs = profile.prefs.branch("sync")
+                let storage = profile.history
+
+                let ready = SyncStateMachine.toReady(authState, prefs: syncPrefs)
+
+                let delegate = profile.getSyncDelegate()
+                let syncHistory = curry(BrowserSyncManager.syncHistoryToStorage)(storage, delegate, syncPrefs)
+                return ready
+                  >>== syncHistory
+                   >>> succeed
+            }
+
+            return deferResult(NoAccountError())
+        }
     }
 }

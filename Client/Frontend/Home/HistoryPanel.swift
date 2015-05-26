@@ -28,6 +28,30 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return UIImage(named: "defaultFavicon")!
     }()
 
+    var refreshControl: UIRefreshControl?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let refresh = UIRefreshControl()
+        refresh.attributedTitle = NSAttributedString(string: NSLocalizedString("Pull to Sync", comment: "The pull-to-refresh string for syncing in the history panel."))
+        refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl = refresh
+        self.tableView.addSubview(refresh)
+    }
+
+    @objc func refresh() {
+        self.refreshControl?.beginRefreshing()
+        profile.syncManager.syncHistory().uponQueue(dispatch_get_main_queue()) { result in
+            if result.isSuccess {
+                self.reloadData()
+            }
+
+            // Always end refreshing, even if we failed!
+            self.refreshControl?.endRefreshing()
+        }
+    }
+
     private func refetchData() -> Deferred<Result<Cursor<Site>>> {
         return profile.history.getSitesByLastVisit(100)
     }
