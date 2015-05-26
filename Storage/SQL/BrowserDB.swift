@@ -262,7 +262,7 @@ extension BrowserDB {
         return walk(chunks, { insertChunk(Array($0)) })
     }
 
-    func run(sql: String, withArgs args: Args) -> Success {
+    func run(sql: String, withArgs args: Args? = nil) -> Success {
         var err: NSError?
         return self.withWritableConnection(&err) { (conn, inout err: NSError?) -> Success in
             err = conn.executeChange(sql, withArgs: args)
