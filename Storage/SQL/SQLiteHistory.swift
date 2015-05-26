@@ -335,6 +335,12 @@ extension SQLiteHistory: Favicons {
                     return 0
                 }
 
+                // Try to update the favicon ID column in the bookmarks table as well for this favicon
+                // if this site has been bookmarked
+                if let id = id {
+                    conn.executeChange("UPDATE \(TableBookmarks) SET faviconID = ? WHERE url = ?", withArgs: [id, site.url])
+                }
+
                 return id ?? 0
             }
 

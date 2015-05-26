@@ -22,6 +22,10 @@ public protocol ShareToDestination {
     func shareItem(item: ShareItem)
 }
 
+public protocol SearchableBookmarks {
+    func bookmarksByURL(url: NSURL) -> Deferred<Result<Cursor<BookmarkItem>>>
+}
+
 public struct BookmarkRoots {
     // These match Places on desktop.
     public static let RootGUID =               "root________"
@@ -153,6 +157,7 @@ public protocol BookmarksModelFactory {
     func isBookmarked(url: String, success: Bool -> (), failure: Any -> ())
     func remove(bookmark: BookmarkNode, success: Bool -> (), failure: Any -> ())
     func removeByURL(url: String, success: Bool -> Void, failure: Any -> Void)
+    func clearBookmarks() -> Success
 }
 
 /*
@@ -311,5 +316,9 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
 
     public func removeByURL(url: String, success: (Bool) -> Void, failure: (Any) -> Void) {
         failure("Not implemented")
+    }
+
+    public func clearBookmarks() -> Success {
+        return succeed()
     }
 }
