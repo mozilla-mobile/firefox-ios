@@ -92,6 +92,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
     }
 
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        return true
+    }
+
     func textFieldDidBeginEditing(textField: UITextField) {
         autocompleteDelegate?.autocompleteTextFieldDidBeginEditing(self)
     }

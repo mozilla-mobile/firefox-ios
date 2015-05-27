@@ -11,6 +11,7 @@ private struct URLBarViewUX {
     // The color shown behind the tabs count button, and underneath the (mostly transparent) status bar.
     static let TextFieldBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.05)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
+    static let TextFieldContentInset = CGPointMake(10, 5)
     static let LocationLeftPadding = 5
     static let LocationHeight = 30
     static let TextFieldCornerRadius: CGFloat = 3
@@ -19,6 +20,7 @@ private struct URLBarViewUX {
     static let URLBarCurveOffset: CGFloat = 14
     // buffer so we dont see edges when animation overshoots with spring
     static let URLBarCurveBounceBuffer: CGFloat = 8
+
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
@@ -57,26 +59,14 @@ class URLBarView: UIView {
         locationView.setTranslatesAutoresizingMaskIntoConstraints(false)
         locationView.readerModeState = ReaderModeState.Unavailable
         locationView.delegate = self
-        return locationView
-    }()
 
-    private lazy var editTextField: ToolbarTextField = {
-        var editTextField = ToolbarTextField()
-        editTextField.keyboardType = UIKeyboardType.WebSearch
-        editTextField.autocorrectionType = UITextAutocorrectionType.No
-        editTextField.autocapitalizationType = UITextAutocapitalizationType.None
-        editTextField.returnKeyType = UIReturnKeyType.Go
-        editTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
-        editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
-        editTextField.autocompleteDelegate = self
-        editTextField.font = AppConstants.DefaultMediumFont
-        editTextField.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
-        editTextField.layer.borderColor = URLBarViewUX.TextFieldActiveBorderColor.CGColor
-        editTextField.layer.borderWidth = 1
-        editTextField.hidden = true
-        editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
-        editTextField.attributedPlaceholder = BrowserLocationView.PlaceholderText
-        return editTextField
+        locationView.autocompleteDelegate = self
+        locationView.cornerRadius = URLBarViewUX.TextFieldCornerRadius
+        locationView.editingBorderColor = URLBarViewUX.TextFieldActiveBorderColor.CGColor
+        locationView.textInset = URLBarViewUX.TextFieldContentInset
+        locationView.editingInset = URLBarViewUX.TextFieldContentInset
+
+        return locationView
     }()
 
     private lazy var locationContainer: UIView = {
@@ -151,7 +141,7 @@ class URLBarView: UIView {
     private weak var clonedTabsButton: InsetButton?
 
     var isEditing: Bool {
-        return !editTextField.hidden
+        return locationView.active
     }
 
     var currentURL: NSURL? {
@@ -179,7 +169,6 @@ class URLBarView: UIView {
         addSubview(scrollToTopButton)
 
         locationContainer.addSubview(locationView)
-        locationContainer.addSubview(editTextField)
         addSubview(locationContainer)
 
         addSubview(progressBar)
@@ -215,10 +204,6 @@ class URLBarView: UIView {
                 URLBarViewUX.TextFieldBorderWidth,
                 URLBarViewUX.TextFieldBorderWidth,
                 URLBarViewUX.TextFieldBorderWidth))
-        }
-
-        editTextField.snp_makeConstraints { make in
-            make.edges.equalTo(self.locationContainer)
         }
 
         cancelButton.snp_makeConstraints { make in
@@ -298,8 +283,7 @@ class URLBarView: UIView {
     func updateURLBarText(text: String) {
         delegate?.urlBarDidBeginEditing(self)
 
-        editTextField.text = text
-        editTextField.becomeFirstResponder()
+        locationView.text = text
 
         updateLayoutForEditing(editing: true)
 
@@ -388,11 +372,11 @@ class URLBarView: UIView {
     }
 
     func setAutocompleteSuggestion(suggestion: String?) {
-        editTextField.setAutocompleteSuggestion(suggestion)
+        locationView.editTextField.setAutocompleteSuggestion(suggestion)
     }
 
     func finishEditing() {
-        editTextField.resignFirstResponder()
+        locationView.active = false
         updateLayoutForEditing(editing: false)
         delegate?.urlBarDidEndEditing(self)
     }
@@ -400,8 +384,6 @@ class URLBarView: UIView {
     func prepareEditingAnimation(editing: Bool) {
         // Make sure everything is showing during the transition (we'll hide it afterwards).
         self.progressBar.hidden = editing
-        self.locationView.hidden = editing
-        self.editTextField.hidden = !editing
         self.tabsButton.hidden = false
         self.cancelButton.hidden = false
         self.forwardButton.hidden = !self.toolbarIsShowing
@@ -496,6 +478,7 @@ class URLBarView: UIView {
     }
 
     func SELdidClickCancel() {
+        locationView.cancel()
         finishEditing()
     }
 
@@ -536,7 +519,7 @@ extension URLBarView: BrowserToolbarProtocol {
     override var accessibilityElements: [AnyObject]! {
         get {
             if isEditing {
-                return [editTextField, cancelButton]
+                return [locationView, cancelButton]
             } else {
                 if toolbarIsShowing {
                     return [backButton, forwardButton, stopReloadButton, locationView, shareButton, bookmarkButton, tabsButton, progressBar]
@@ -559,8 +542,8 @@ extension URLBarView: BrowserLocationViewDelegate {
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
         delegate?.urlBarDidBeginEditing(self)
 
-        editTextField.text = locationView.url?.absoluteString
-        editTextField.becomeFirstResponder()
+//        locationView÷.editTextField.text = locationView.url?.absoluteString
+//        locationView.editTextField.becomeFirstResponder()
 
         updateLayoutForEditing(editing: true)
     }
@@ -584,7 +567,7 @@ extension URLBarView: BrowserLocationViewDelegate {
 
 extension URLBarView: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldReturn(autocompleteTextField: AutocompleteTextField) -> Bool {
-        delegate?.urlBar(self, didSubmitText: editTextField.text)
+        delegate?.urlBar(self, didSubmitText: locationView.text)
         return true
     }
 
@@ -674,17 +657,5 @@ private class CurveView: UIView {
         self.getPath().fill()
         CGContextDrawPath(context, kCGPathFill)
         CGContextRestoreGState(context)
-    }
-}
-
-private class ToolbarTextField: AutocompleteTextField {
-    override func textRectForBounds(bounds: CGRect) -> CGRect {
-        let rect = super.textRectForBounds(bounds)
-        return rect.rectByInsetting(dx: 5, dy: 5)
-    }
-
-    override func editingRectForBounds(bounds: CGRect) -> CGRect {
-        let rect = super.editingRectForBounds(bounds)
-        return rect.rectByInsetting(dx: 5, dy: 5)
     }
 }
