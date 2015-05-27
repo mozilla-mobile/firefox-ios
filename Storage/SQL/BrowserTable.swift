@@ -53,8 +53,15 @@ private let log = XCGLogger.defaultInstance()
 public class BrowserTable: Table {
     var name: String { return "BROWSER" }
     var version: Int { return 4 }
+    let sqliteVersion: Int32
+    let supportsPartialIndices: Bool
 
     public init() {
+        let v = sqlite3_libversion_number()
+        self.sqliteVersion = v
+        self.supportsPartialIndices = v >= 3008000          // 3.8.0.
+        let ver = String.fromCString(sqlite3_libversion())!
+        log.info("SQLite version: \(ver) (\(v)).")
     }
 
     func run(db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
@@ -135,10 +142,17 @@ public class BrowserTable: Table {
         "UNIQUE (siteID, date, type) " +
         ") "
 
-        // There's no point tracking rows that are not flagged for upload.
-        let indexShouldUpload =
-        "CREATE INDEX IF NOT EXISTS \(IndexHistoryShouldUpload) " +
-        "ON \(TableHistory) (should_upload) WHERE should_upload = 1"
+        let indexShouldUpload: String
+        if self.supportsPartialIndices {
+            // There's no point tracking rows that are not flagged for upload.
+            indexShouldUpload =
+            "CREATE INDEX IF NOT EXISTS \(IndexHistoryShouldUpload) " +
+            "ON \(TableHistory) (should_upload) WHERE should_upload = 1"
+        } else {
+            indexShouldUpload =
+            "CREATE INDEX IF NOT EXISTS \(IndexHistoryShouldUpload) " +
+            "ON \(TableHistory) (should_upload)"
+        }
 
         let indexSiteIDDate =
         "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDDate) " +
