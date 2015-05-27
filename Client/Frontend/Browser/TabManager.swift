@@ -232,30 +232,60 @@ class TabManager : NSObject {
 }
 
 extension TabManager {
-    func encodeRestorableStateWithCoder(coder: NSCoder) {
-        coder.encodeInteger(count, forKey: "tabCount")
-        coder.encodeInteger(selectedIndex, forKey: "selectedIndex")
-        for i in 0..<count {
-            let tab = tabs[i]
-            coder.encodeObject(tab.url!, forKey: "tab-\(i)-url")
+    class SavedTab: NSObject, NSCoding {
+        let url: NSURL?
+        let isSelected: Bool
+        let screenshot: UIImage?
+
+        init?(browser: Browser, isSelected: Bool) {
+            self.url = browser.url
+            self.screenshot = browser.screenshot
+            self.isSelected = isSelected
+
+            super.init()
+
+            if browser.url == nil {
+                return nil
+            }
+        }
+
+        required init(coder: NSCoder) {
+            self.url = coder.decodeObjectForKey("url") as? NSURL
+            self.screenshot = coder.decodeObjectForKey("screenshot") as? UIImage
+            self.isSelected = coder.decodeBoolForKey("isSelected")
+        }
+
+        func encodeWithCoder(coder: NSCoder) {
+            coder.encodeObject(url, forKey: "url")
+            coder.encodeObject(screenshot, forKey: "screenshot")
+            coder.encodeBool(isSelected, forKey: "isSelected")
         }
     }
 
+    func encodeRestorableStateWithCoder(coder: NSCoder) {
+        var savedTabs = [SavedTab]()
+        for (tabIndex, tab) in enumerate(tabs) {
+            if let savedTab = SavedTab(browser: tab, isSelected: tabIndex == selectedIndex) {
+                savedTabs.append(savedTab)
+            }
+        }
+        coder.encodeObject(savedTabs, forKey: "tabs")
+    }
+
     func decodeRestorableStateWithCoder(coder: NSCoder) {
-        let count: Int = coder.decodeIntegerForKey("tabCount")
-
-        for i in 0..<count {
-            let url = coder.decodeObjectForKey("tab-\(i)-url") as! NSURL
-            self.addTab(request: NSURLRequest(URL: url), flushToDisk: false)
+        var tabToSelect: Browser?
+        if let savedTabs = coder.decodeObjectForKey("tabs") as? [SavedTab] {
+            for savedTab in savedTabs {
+                if let url = savedTab.url, updatedURL = WebServer.sharedInstance.updateLocalURL(url) {
+                    let tab = self.addTab(request: NSURLRequest(URL: updatedURL), flushToDisk: false)
+                    tab.screenshot = savedTab.screenshot
+                    if savedTab.isSelected {
+                        tabToSelect = tab
+                    }
+                }
+            }
         }
-
-        let selectedIndex = coder.decodeIntegerForKey("selectedIndex")
-        if selectedIndex >= 0 && selectedIndex < tabs.count {
-            selectTab(tabs[selectedIndex])
-        } else if let firstTab = tabs.first {
-            selectTab(firstTab)
-        }
-        storeChanges()
+        selectTab(tabToSelect ?? tabs.first)
     }
 }
 
