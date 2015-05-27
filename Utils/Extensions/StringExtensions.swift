@@ -37,6 +37,21 @@ public extension String {
         return false
     }
 
+    func escape() -> String {
+        var raw: NSString = self
+        var str = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+            raw,
+            "[].",":/?&=;+!@#$()',*",
+            CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding))
+        return str as! String
+    }
+
+    func unescape() -> String {
+        var raw: NSString = self
+        var str = CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, raw, "[].")
+        return str as! String
+    }
+
     public var asURL: NSURL? {
         return NSURL(string: self)
     }
