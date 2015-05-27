@@ -97,7 +97,7 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
         let branchName = "synchronizer." + collection + "."
         self.prefs = basePrefs.branch(branchName)
 
-        log.info("Synchronizer configured with prefs \(branchName).")
+        log.info("Synchronizer configured with prefs '\(branchName)'.")
     }
 
     var storageVersion: Int {

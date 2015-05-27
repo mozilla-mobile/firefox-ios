@@ -233,7 +233,7 @@ public typealias ResponseHandler = (NSURLRequest, NSHTTPURLResponse?, AnyObject?
 
 private func errorWrap<T>(deferred: Deferred<Result<T>>, handler: ResponseHandler) -> ResponseHandler {
     return { (request, response, data, error) in
-        log.debug("Response is \(response).")
+        log.verbose("Response is \(response).")
 
         if let error = error {
             log.error("Got error \(error). Response: \(response?.statusCode)")
