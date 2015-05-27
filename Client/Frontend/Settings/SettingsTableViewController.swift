@@ -166,7 +166,7 @@ private class DisconnectSetting: WithAccountSetting {
             })
         alertController.addAction(
             UIAlertAction(title: NSLocalizedString("Disconnect", comment: "Disconnect button in the 'disconnect firefox account' alert"), style: .Destructive) { (action) in
-                self.settings.profile.setAccount(nil)
+                self.settings.profile.removeAccount()
                 // Refresh, to show that we no longer have an Account immediately.
                 self.settings.SELrefresh()
             })

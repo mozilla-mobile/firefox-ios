@@ -285,6 +285,17 @@ public class Scratchpad {
         return b.build()
     }
 
+    /**
+     * Remove anything that might be left around after prefs is wiped.
+     */
+    public class func clearFromPrefs(prefs: Prefs) {
+        if let keyLabel = prefs.stringForKey(PrefKeyLabel) {
+            log.debug("Removing saved key from keychain.")
+            KeychainWrapper.removeObjectForKey(keyLabel)
+        } else {
+            log.debug("No key label; nothing to remove from keychain.")
+        }
+    }
 
     public class func restoreFromPrefs(prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad? {
         if let ver = prefs.intForKey(PrefVersion) {

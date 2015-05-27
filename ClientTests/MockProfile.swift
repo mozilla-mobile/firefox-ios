@@ -14,6 +14,12 @@ public class MockSyncManager: SyncManager {
     public func syncClients() -> Success { return succeed() }
     public func syncClientsAndTabs() -> Success { return succeed() }
     public func syncHistory() -> Success { return succeed() }
+    public func onAddedAccount() -> Success {
+        return succeed()
+    }
+    public func onRemovedAccount(account: FirefoxAccount?) -> Success {
+        return succeed()
+    }
 }
 
 public class MockProfile: Profile {
@@ -86,8 +92,15 @@ public class MockProfile: Profile {
         return account
     }
 
-    func setAccount(account: FirefoxAccount?) {
+    func setAccount(account: FirefoxAccount) {
         self.account = account
+        self.syncManager.onAddedAccount()
+    }
+
+    func removeAccount() {
+        let old = self.account
+        self.account = nil
+        self.syncManager.onRemovedAccount(old)
     }
 
     func getClients() -> Deferred<Result<[RemoteClient]>> {

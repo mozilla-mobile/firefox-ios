@@ -54,6 +54,11 @@ public protocol SyncableHistory {
      */
     func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>>
     func markAsDeleted(guids: [GUID]) -> Success
+
+    /**
+     * Clean up any metadata.
+     */
+    func onRemovedAccount() -> Success
 }
 
 // TODO: integrate Site with this.

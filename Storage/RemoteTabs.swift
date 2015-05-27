@@ -41,6 +41,8 @@ public protocol RemoteClientsAndTabs {
     // Returns number of tabs inserted.
     func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> // Insert into the local client.
     func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Result<Int>>
+
+    func onRemovedAccount() -> Success
 }
 
 public struct RemoteTab: Equatable {
