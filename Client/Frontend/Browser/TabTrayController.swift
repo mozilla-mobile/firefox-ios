@@ -21,8 +21,11 @@ private struct TabTrayControllerUX {
     static let CloseButtonSize = CGFloat(18.0)
     static let CloseButtonMargin = CGFloat(6.0)
     static let CloseButtonEdgeInset = CGFloat(10)
-    static let NumberOfColumnsCompact = 1
-    static let NumberOfColumnsRegular = 3
+
+    static let NumberOfColumnsThin = 1
+    static let NumberOfColumnsWide = 3
+    static let CompactNumberOfColumnsThin = 2
+    static let CompactNumberOfColumnsWide = 4
 
     // Moved from AppConstants temporarily until animation code is merged
     static var StatusBarHeight: CGFloat {
@@ -425,6 +428,22 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         view.addSubview(navBar)
     }
 
+    private func relayoutTabs() {
+        numberOfColumns = numberOfColumnsForCurrentSize()
+        collectionView.layoutIfNeeded()
+        for cell in collectionView.visibleCells() {
+            if let tab = cell as? CustomCell {
+                tab.setupFrames()
+            }
+        }
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        relayoutTabs()
+        collectionView.reloadData()
+    }
+
     override func updateViewConstraints() {
         super.updateViewConstraints()
 
@@ -452,12 +471,19 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     }
 
     private func numberOfColumnsForCurrentSize() -> Int {
-        if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.Compact {
-            return TabTrayControllerUX.NumberOfColumnsRegular
-        } else if self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClass.Compact {
-            return TabTrayControllerUX.NumberOfColumnsCompact
+        let compactLayout = profile.prefs.boolForKey("CompactTabLayout") ?? true
+        let idiom = UIDevice.currentDevice().userInterfaceIdiom
+        let orientation = UIDevice.currentDevice().orientation
+
+        if idiom == .Phone {
+            if orientation == .Portrait {
+                return compactLayout ? TabTrayControllerUX.CompactNumberOfColumnsThin : TabTrayControllerUX.NumberOfColumnsThin
+            } else {
+                return TabTrayControllerUX.NumberOfColumnsWide
+            }
         } else {
-            return TabTrayControllerUX.NumberOfColumnsRegular
+            // On iPad we make no difference between portrait and landscape
+            return compactLayout ? TabTrayControllerUX.CompactNumberOfColumnsWide : TabTrayControllerUX.NumberOfColumnsWide
         }
     }
 
@@ -556,13 +582,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
     override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        numberOfColumns = numberOfColumnsForCurrentSize()
-        collectionView.layoutIfNeeded()
-        for cell in collectionView.visibleCells() {
-            if let tab = cell as? CustomCell {
-                tab.setupFrames()
-            }
-        }
+        relayoutTabs()
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {

@@ -40,6 +40,13 @@ class Setting {
 
     var accessoryType: UITableViewCellAccessoryType { return .None }
 
+    // Called when the cell is setup. Call if you need the default behaviour.
+    func onConfigureCell(cell: UITableViewCell) {
+        cell.detailTextLabel?.attributedText = status
+        cell.textLabel?.attributedText = title
+        cell.accessoryType = accessoryType
+    }
+
     // Called when the pref is tapped.
     func onClick(navigationController: UINavigationController?) { return }
 
@@ -367,6 +374,28 @@ private class ShowIntroductionSetting: Setting {
     }
 }
 
+class UseCompactTabLayoutSetting: Setting {
+    let profile: Profile
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(title: NSAttributedString(string: NSLocalizedString("Use Compact Tabs", comment: "Setting to enable compact tabs in the tab overview")))
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        let control = UISwitch()
+        control.onTintColor = AppConstants.ControlTintColor
+        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        control.on = profile.prefs.boolForKey("CompactTabLayout") ?? true
+        cell.accessoryView = control
+    }
+
+    @objc func switchValueChanged(control: UISwitch) {
+        profile.prefs.setBool(control.on, forKey: "CompactTabLayout")
+    }
+}
+
 // Opens the search settings pane
 private class SearchSetting: Setting {
     let profile: Profile
@@ -457,6 +486,9 @@ class SettingsTableViewController: UITableViewController {
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
                 ShowIntroductionSetting(settings: self)
             ]),
+            SettingSection(title: NSAttributedString(string: NSLocalizedString("Customize", comment: "Customize section title in settings")), children: [
+                UseCompactTabLayoutSetting(settings: self)
+            ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
                 VersionSetting(settings: self)
             ]),
@@ -514,9 +546,7 @@ class SettingsTableViewController: UITableViewController {
             } else {
                 cell = tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath) as! UITableViewCell
             }
-            cell.detailTextLabel?.attributedText = setting.status
-            cell.textLabel?.attributedText = setting.title
-            cell.accessoryType = setting.accessoryType
+            setting.onConfigureCell(cell)
             return cell
         }
         return tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath) as! UITableViewCell

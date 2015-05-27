@@ -60,11 +60,16 @@ public class NSUserDefaultsPrefs: Prefs {
         return userDefaults.objectForKey(qualifyKey(defaultName)) as? String
     }
 
+    public func setBool(value: Bool, forKey defaultName: String) {
+        setObject(NSNumber(bool: value), forKey: defaultName)
+    }
+
     public func boolForKey(defaultName: String) -> Bool? {
         // boolForKey just returns false if the key doesn't exist. We need to
         // distinguish between false and non-existent keys, so use objectForKey
         // and cast the result instead.
-        return userDefaults.objectForKey(qualifyKey(defaultName)) as? Bool
+        let number = userDefaults.objectForKey(qualifyKey(defaultName)) as? NSNumber
+        return number?.boolValue
     }
 
     private func nsNumberForKey(defaultName: String) -> NSNumber? {
