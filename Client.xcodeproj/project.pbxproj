@@ -343,6 +343,8 @@
 		D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A994951A3686BD008AD1AC /* BrowserViewController.swift */; };
 		D3A9949D1A3686BD008AD1AC /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A994961A3686BD008AD1AC /* Browser.swift */; };
 		D3ACB4541AD33F2200748D50 /* WeakList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3ACB4381AD33EBA00748D50 /* WeakList.swift */; };
+		D3BA7E0C1B0E902A00153782 /* ContextMenu.js in Resources */ = {isa = PBXBuildFile; fileRef = D3BA7E0B1B0E902A00153782 /* ContextMenu.js */; };
+		D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */; };
 		D3BE7B261B054D4400641031 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B251B054D4400641031 /* main.swift */; };
 		D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B451B054F8600641031 /* TestAppDelegate.swift */; };
 		D3BE7B481B05596800641031 /* AuroraAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */; };
@@ -1059,7 +1061,7 @@
 		0BB5B2861AC0A2B90052877D /* SnackBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnackBar.swift; sourceTree = "<group>"; };
 		0BB5B2871AC0A2B90052877D /* Toolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		0BB5B2BB1AC0AB9F0052877D /* UIImage+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
-		0BB5B3081AC0AD150052877D /* PasswordHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = PasswordHelper.js; path = Assets/PasswordHelper.js; sourceTree = "<group>"; };
+		0BB5B3081AC0AD150052877D /* PasswordHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = PasswordHelper.js; sourceTree = "<group>"; };
 		0BB5B30A1AC0AD1F0052877D /* PasswordHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordHelper.swift; sourceTree = "<group>"; };
 		0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkingTests.swift; sourceTree = "<group>"; };
 		0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
@@ -1087,8 +1089,8 @@
 		28302E3F1AF0747800521E2E /* DatabaseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseError.swift; sourceTree = "<group>"; };
 		283306E81AB3BB87008999AC /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		2853C5401AD84C6800C4F31D /* TabsPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsPayload.swift; sourceTree = "<group>"; };
-		285F2DC01AF80B4600211843 /* SQLiteBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarks.swift; sourceTree = "<group>"; };
 		2855611E1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HistorySynchronizerTests.swift; path = SyncTests/HistorySynchronizerTests.swift; sourceTree = "<group>"; };
+		285F2DC01AF80B4600211843 /* SQLiteBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteBookmarks.swift; sourceTree = "<group>"; };
 		28786E541AB0F5FA009EA9EF /* DeferredTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeferredTests.swift; path = SyncTests/DeferredTests.swift; sourceTree = "<group>"; };
 		287DAA1E1AE06E5D0055AC35 /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestExtensions.swift; sourceTree = "<group>"; };
@@ -1275,6 +1277,8 @@
 		D3A994951A3686BD008AD1AC /* BrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserViewController.swift; sourceTree = "<group>"; };
 		D3A994961A3686BD008AD1AC /* Browser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Browser.swift; sourceTree = "<group>"; };
 		D3ACB4381AD33EBA00748D50 /* WeakList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakList.swift; sourceTree = "<group>"; };
+		D3BA7E0B1B0E902A00153782 /* ContextMenu.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ContextMenu.js; sourceTree = "<group>"; };
+		D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContextMenuHelper.swift; sourceTree = "<group>"; };
 		D3BE7B251B054D4400641031 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		D3BE7B451B054F8600641031 /* TestAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
 		D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuroraAppDelegate.swift; sourceTree = "<group>"; };
@@ -1936,14 +1940,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9B64C29F1A64518000473AE3 /* JavaScripts */ = {
-			isa = PBXGroup;
-			children = (
-				0BB5B3081AC0AD150052877D /* PasswordHelper.js */,
-			);
-			name = JavaScripts;
-			sourceTree = "<group>";
-		};
 		D31FC22A1A8D908800BAF7EC /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -2099,20 +2095,21 @@
 				E4CD9F2C1A6DC91200318571 /* BrowserLocationView.swift */,
 				D314E7F51A37B98700426A76 /* BrowserToolbar.swift */,
 				D3A994951A3686BD008AD1AC /* BrowserViewController.swift */,
+				D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */,
+				0BF42D361A7C0B8E00889E28 /* FaviconManager.swift */,
 				D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */,
 				0BB5B30A1AC0AD1F0052877D /* PasswordHelper.swift */,
-				D308E4E31A5306F500842685 /* SearchEngines.swift */,
-				D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */,
-				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
-				D301AAED1A3A55B70078DD1D /* TabTrayController.swift */,
-				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
-				0BF0DB931A8545800039F300 /* URLBarView.swift */,
-				0BF42D361A7C0B8E00889E28 /* FaviconManager.swift */,
-				59A68CCB63E2A565CB03F832 /* SearchViewController.swift */,
-				0BF0DBBF1A8598D50039F300 /* TransitionManager.swift */,
 				E47616C61AB74CA600E7DD25 /* ReaderModeBarView.swift */,
 				D31F95E81AC226CB005C9F3B /* ScreenshotHelper.swift */,
+				D308E4E31A5306F500842685 /* SearchEngines.swift */,
 				D34510871ACF415700EC27F0 /* SearchLoader.swift */,
+				D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */,
+				59A68CCB63E2A565CB03F832 /* SearchViewController.swift */,
+				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
+				D301AAED1A3A55B70078DD1D /* TabTrayController.swift */,
+				0BF0DBBF1A8598D50039F300 /* TransitionManager.swift */,
+				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
+				0BF0DB931A8545800039F300 /* URLBarView.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -2325,7 +2322,6 @@
 				E448FC7B1AEE79C600869B6C /* Firefox.entitlements */,
 				F84B22431A09165600AAB793 /* Info.plist */,
 				E4D8F3B21ACDD5150005A2E4 /* InfoPlist.strings */,
-				9B64C29F1A64518000473AE3 /* JavaScripts */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
 				F84B21E41A0910F600AAB793 /* Application */,
 				28EADE5C1AFC3A6D007FB2FB /* Extensions */,
@@ -2382,7 +2378,9 @@
 			isa = PBXGroup;
 			children = (
 				D32075381B017DA400CA1CD2 /* SearchPlugins */,
+				D3BA7E0B1B0E902A00153782 /* ContextMenu.js */,
 				0BF42D381A7C0E8900889E28 /* Favicons.js */,
+				0BB5B3081AC0AD150052877D /* PasswordHelper.js */,
 				0BD75AD21AF2EE5A00B48915 /* suggestedsites.json */,
 				F84B21EF1A0910F600AAB793 /* Images.xcassets */,
 				F84B22391A0914A300AAB793 /* Fonts */,
@@ -3318,6 +3316,7 @@
 				E4424B201AC6EBE100F44C38 /* ReaderSettings.xcassets in Resources */,
 				E4B7B7641A793CF20022C5E0 /* CharisSILR.ttf in Resources */,
 				2F834D161A80629A006A0B7B /* FxASignIn.js in Resources */,
+				D3BA7E0C1B0E902A00153782 /* ContextMenu.js in Resources */,
 				E4B7B7681A793CF20022C5E0 /* FiraSans-Bold.ttf in Resources */,
 				E4B7B7781A793CF20022C5E0 /* FiraSans-Italic.ttf in Resources */,
 				E4A961381AC06FA50069AD6F /* ReaderViewLoading.html in Resources */,
@@ -3691,6 +3690,7 @@
 				0BAC7A801AC4B135006018CB /* AppConstants.swift in Sources */,
 				0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
+				D3BA7E0E1B0E934F00153782 /* ContextMenuHelper.swift in Sources */,
 				0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */,
 				0BF648111A9C54E900BA963C /* TopSitesPanel.swift in Sources */,
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,
