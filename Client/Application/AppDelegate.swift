@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
+import AVFoundation
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -21,6 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
+
+        // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
+        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: AVAudioSessionCategoryOptions.MixWithOthers, error: nil)
 
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
