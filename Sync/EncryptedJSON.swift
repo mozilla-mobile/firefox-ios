@@ -6,6 +6,9 @@ import Foundation
 import Shared
 import FxA
 import Account
+import XCGLogger
+
+private let log = XCGLogger.defaultInstance()
 
 /**
  * Turns JSON of the form
@@ -108,13 +111,13 @@ public class EncryptedJSON : JSON {
         }
 
         if (!validate()) {
-            println("Failed to validate.")
+            log.error("Failed to validate.")
             return nil
         }
 
         let decrypted: String? = keyBundle.decrypt(self.ciphertext, iv: self.iv)
         if (decrypted == nil) {
-            println("Failed to decrypt.")
+            log.error("Failed to decrypt.")
             valid = false
             return nil
         }

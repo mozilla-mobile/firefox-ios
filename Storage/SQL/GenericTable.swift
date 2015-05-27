@@ -3,12 +3,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import XCGLogger
+
+private let log = XCGLogger.defaultInstance()
 
 class GenericTable<T>: BaseTable {
     typealias Type = T
 
     // Implementors need override these methods
-    let debug_enabled = false
     var name: String { return "" }
     var version: Int { return 0 }
     var rows: String { return "" }
@@ -34,22 +36,16 @@ class GenericTable<T>: BaseTable {
         return nil
     }
 
-    func debug(msg: String) {
-        if debug_enabled {
-            println("GenericTable: \(msg)")
-        }
-    }
-
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
         if let err = db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (\(rows))") {
-            println("Error creating \(name) - \(err)")
+            log.error("Error creating \(name) - \(err)")
             return false
         }
         return true
     }
 
     func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
-        debug("Update table \(name) from \(from) to \(to)")
+        log.debug("Update table \(name) from \(from) to \(to)")
         return false
     }
 
@@ -63,13 +59,12 @@ class GenericTable<T>: BaseTable {
         let args =  [AnyObject?]()
         let err = db.executeChange(sqlStr, withArgs: args)
         if err != nil {
-            println("Err dropping \(err)")
+            log.error("Error dropping \(name): \(err)")
         }
         return err == nil
     }
 
     func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int {
-        debug("Insert into \(name) \(item)")
         if var site = item {
             if let (query, args) = getInsertAndArgs(&site) {
                 if let error = db.executeChange(query, withArgs: args) {
@@ -77,7 +72,6 @@ class GenericTable<T>: BaseTable {
                     return -1
                 }
 
-                debug("Insert \(query) \(args) = \(db.lastInsertedRowID)")
                 return db.lastInsertedRowID
             }
         }
@@ -92,7 +86,7 @@ class GenericTable<T>: BaseTable {
         if var item = item {
             if let (query, args) = getUpdateAndArgs(&item) {
                 if let error = db.executeChange(query, withArgs: args) {
-                    println(error.description)
+                    log.error(error.description)
                     err = error
                     return 0
                 }
@@ -108,7 +102,6 @@ class GenericTable<T>: BaseTable {
     }
 
     func delete(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int {
-        debug("Delete from \(name) \(item)")
         var numDeleted: Int = 0
 
         if var item: Type? = item {
@@ -129,7 +122,6 @@ class GenericTable<T>: BaseTable {
         if var (query, args) = getQueryAndArgs(options) {
             if let factory = self.factory {
                 let c =  db.executeQuery(query, factory: factory, withArgs: args)
-                debug("Query \(query) \(args) = \(c)")
                 return c
             }
         }

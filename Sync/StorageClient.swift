@@ -504,7 +504,6 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
 
             if let json: JSON = data as? JSON {
                 let envelope = EnvelopeJSON(json)
-                println("Envelope: \(envelope) is valid \(envelope.isValid())")
                 let record = Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
                 if let record = record {
                     let storageResponse = StorageResponse(value: record, response: response!)
