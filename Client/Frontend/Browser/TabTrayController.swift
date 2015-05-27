@@ -2,24 +2,22 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
+import SnapKit
 
-private struct TabTrayControllerUX {
+public struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
-    static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
     static let CellBackgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1)
+    static let BackgroundColor = AppConstants.BackgroundColor
     static let TextBoxHeight = CGFloat(32.0)
     static let FaviconSize = CGFloat(18.0)
-    static let CellHeight = TextBoxHeight * 5
     static let Margin = CGFloat(15)
-    // This color has been manually adjusted to match background layer with iOS translucency effect.
-    static let ToolbarBarTintColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
+    static let ToolbarBarTintColor = AppConstants.BackgroundColor
     static let ToolbarButtonOffset = CGFloat(10.0)
     static let TabTitleTextColor = UIColor.blackColor()
     static let TabTitleTextFont = AppConstants.DefaultSmallFontBold
     static let CloseButtonSize = CGFloat(18.0)
-    static let CloseButtonMargin = CGFloat(6.0)
+    static let NavButtonMargin = CGFloat(6.0)
     static let CloseButtonEdgeInset = CGFloat(10)
     static let NumberOfColumnsCompact = 1
     static let NumberOfColumnsRegular = 3
@@ -33,416 +31,98 @@ private struct TabTrayControllerUX {
     }
 }
 
-private protocol CustomCellDelegate: class {
-    func customCellDidClose(cell: CustomCell)
-}
-
-// UIcollectionViewController doesn't let us specify a style for recycling views. We override the default style here.
-private class CustomCell: UICollectionViewCell {
-    let backgroundHolder: UIView
-    let background: UIImageViewAligned
-    let titleText: UILabel
-    let title: UIVisualEffectView
-    let innerStroke: InnerStrokedView
-    let favicon: UIImageView
-    let closeButton: UIButton
-    var animator: SwipeAnimator!
-
-    weak var delegate: CustomCellDelegate?
-
-    // Changes depending on whether we're full-screen or not.
-    var margin = CGFloat(0)
-
-    override init(frame: CGRect) {
-        self.backgroundHolder = UIView()
-        self.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
-        self.backgroundHolder.clipsToBounds = true
-        self.backgroundHolder.backgroundColor = TabTrayControllerUX.CellBackgroundColor
-
-        self.background = UIImageViewAligned()
-        self.background.contentMode = UIViewContentMode.ScaleAspectFill
-        self.background.clipsToBounds = true
-        self.background.userInteractionEnabled = false
-        self.background.alignLeft = true
-        self.background.alignTop = true
-
-        self.favicon = UIImageView()
-        self.favicon.backgroundColor = UIColor.clearColor()
-        self.favicon.layer.cornerRadius = 2.0
-        self.favicon.layer.masksToBounds = true
-
-        self.title = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
-        self.title.layer.shadowColor = UIColor.blackColor().CGColor
-        self.title.layer.shadowOpacity = 0.2
-        self.title.layer.shadowOffset = CGSize(width: 0, height: 0.5)
-        self.title.layer.shadowRadius = 0
-
-        self.titleText = UILabel()
-        self.titleText.textColor = TabTrayControllerUX.TabTitleTextColor
-        self.titleText.backgroundColor = UIColor.clearColor()
-        self.titleText.textAlignment = NSTextAlignment.Left
-        self.titleText.userInteractionEnabled = false
-        self.titleText.numberOfLines = 1
-        self.titleText.font = TabTrayControllerUX.TabTitleTextFont
-
-        self.closeButton = UIButton()
-        self.closeButton.setImage(UIImage(named: "stop"), forState: UIControlState.Normal)
-        self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
-
-        self.title.addSubview(self.closeButton)
-        self.title.addSubview(self.titleText)
-        self.title.addSubview(self.favicon)
-
-        self.innerStroke = InnerStrokedView(frame: self.backgroundHolder.frame)
-        self.innerStroke.layer.backgroundColor = UIColor.clearColor().CGColor
-
-        super.init(frame: frame)
-
-        self.animator = SwipeAnimator(animatingView: self.backgroundHolder,
-            containerView: self, ux: SwipeAnimatorUX())
-
-        backgroundHolder.addSubview(self.background)
-        addSubview(backgroundHolder)
-        backgroundHolder.addSubview(innerStroke)
-        backgroundHolder.addSubview(self.title)
-
-        self.titleText.addObserver(self, forKeyPath: "contentSize", options: .New, context: nil)
-        setupFrames()
-
-        self.animator.originalCenter = CGPoint(x: self.frame.width / 2, y: self.frame.height / 2)
-
-        self.accessibilityCustomActions = [
-            UIAccessibilityCustomAction(name: NSLocalizedString("Close", comment: "Accessibility label for action denoting closing a tab in tab list (tray)"), target: self.animator, selector: "SELcloseWithoutGesture")
-        ]
-    }
-
-    func setupFrames() {
-        let w = frame.width
-        let h = frame.height
-
-        backgroundHolder.frame = CGRect(x: margin,
-            y: margin,
-            width: w,
-            height: h)
-        background.frame = CGRect(origin: CGPointMake(0, 0), size: backgroundHolder.frame.size)
-
-        title.frame = CGRect(x: 0,
-            y: 0,
-            width: backgroundHolder.frame.width,
-            height: TabTrayControllerUX.TextBoxHeight)
-
-        favicon.frame = CGRect(x: 6,
-            y: (TabTrayControllerUX.TextBoxHeight - TabTrayControllerUX.FaviconSize)/2,
-            width: TabTrayControllerUX.FaviconSize,
-            height: TabTrayControllerUX.FaviconSize)
-
-        let titleTextLeft = favicon.frame.origin.x + favicon.frame.width + 6
-        titleText.frame = CGRect(x: titleTextLeft,
-            y: 0,
-            width: title.frame.width - titleTextLeft - margin  - TabTrayControllerUX.CloseButtonSize - TabTrayControllerUX.CloseButtonMargin * 2,
-            height: title.frame.height)
-
-        innerStroke.frame = background.frame
-
-        closeButton.snp_makeConstraints { make in
-            make.size.equalTo(title.snp_height)
-            make.trailing.centerY.equalTo(title)
-        }
-
-        verticalCenter(titleText)
-
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        self.titleText.removeObserver(self, forKeyPath: "contentSize")
-    }
-
-    private override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject: AnyObject], context: UnsafeMutablePointer<Void>) {
-        let tv = object as! UILabel
-        verticalCenter(tv)
-    }
-
-    private override func prepareForReuse() {
-        // Reset any close animations.
-        backgroundHolder.transform = CGAffineTransformIdentity
-        backgroundHolder.alpha = 1
-    }
-
-    private func verticalCenter(text: UILabel) {
-        var top = (TabTrayControllerUX.TextBoxHeight - text.bounds.height) / 2.0
-        text.frame.origin = CGPoint(x: text.frame.origin.x, y: max(0, top))
-    }
-
-    func showFullscreen(container: UIView, table: UICollectionView, shouldOffset: Bool) {
-        var offset: CGFloat = shouldOffset ? 2 : 1
-
-        frame = CGRect(x: 0,
-                        y: container.frame.origin.y + AppConstants.ToolbarHeight + TabTrayControllerUX.StatusBarHeight,
-                        width: container.frame.width,
-                        height: container.frame.height - (AppConstants.ToolbarHeight * offset + TabTrayControllerUX.StatusBarHeight))
-
-        container.insertSubview(self, atIndex: container.subviews.count)
-        setupFrames()
-
-    }
-
-    func showAt(index: Int, container: UIView, table: UICollectionView) {
-        let scrollOffset = table.contentOffset.y + table.contentInset.top
-        if table.numberOfItemsInSection(0) > 0 {
-            if let attr = table.collectionViewLayout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) {
-                frame = CGRectOffset(attr.frame, -container.frame.origin.x, -container.frame.origin.y + AppConstants.ToolbarHeight + TabTrayControllerUX.StatusBarHeight - scrollOffset)
-            }
-        } else {
-            // TODO: fix this so the frame is where the first item *would* be
-            frame = CGRect(x: 0,
-                        y: TabTrayControllerUX.Margin + AppConstants.ToolbarHeight + TabTrayControllerUX.StatusBarHeight,
-                        width: container.frame.width,
-                        height: TabTrayControllerUX.CellHeight)
-        }
-
-        container.insertSubview(self, atIndex: container.subviews.count)
-        setupFrames()
-    }
-
-    var tab: Browser? {
-        didSet {
-            titleText.text = tab?.title
-            if let favIcon = tab?.displayFavicon {
-                favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
-            }
-        }
-    }
-
-    @objc func SELdidPressClose() {
-        delegate?.customCellDidClose(self)
-    }
-}
-
-private struct SwipeAnimatorUX {
-    let totalRotationInDegrees = 10.0
-    let deleteThreshold = CGFloat(140)
-    let totalScale = CGFloat(0.9)
-    let totalAlpha = CGFloat(0.7)
-    let minExitVelocity = CGFloat(800.0)
-    let recenterAnimationDuration = NSTimeInterval(0.15)
-}
-
-private protocol SwipeAnimatorDelegate: class {
-    func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView)
-}
-
-private class SwipeAnimator: NSObject {
-    let animatingView: UIView
-    let ux: SwipeAnimatorUX
-
-    var originalCenter: CGPoint!
-    var startLocation: CGPoint!
-
-    weak var container: UIView!
-    weak var delegate: SwipeAnimatorDelegate!
-
-    init(animatingView view: UIView, containerView: UIView, ux swipeUX: SwipeAnimatorUX) {
-        animatingView = view
-        container = containerView
-        ux = swipeUX
-
-        super.init()
-
-        let panGesture = UIPanGestureRecognizer(target: self, action: Selector("SELdidPan:"))
-        container.addGestureRecognizer(panGesture)
-        panGesture.delegate = self
-    }
-
-    @objc func SELdidPan(recognizer: UIPanGestureRecognizer!) {
-        switch (recognizer.state) {
-        case .Began:
-            self.startLocation = self.animatingView.center;
-
-        case .Changed:
-            let translation = recognizer.translationInView(self.container)
-            let newLocation =
-            CGPoint(x: self.startLocation.x + translation.x, y: self.animatingView.center.y)
-            self.animatingView.center = newLocation
-
-            // Calculate values to determine the amount we need to scale/rotate with
-            let distanceFromCenter = abs(self.originalCenter.x - self.animatingView.center.x)
-            let halfWidth = self.container.frame.size.width / 2
-            let totalRotationInRadians = CGFloat(self.ux.totalRotationInDegrees / 180.0 * M_PI)
-
-            // Determine rotation / scaling amounts by the distance to the edge
-            var rotation = (distanceFromCenter / halfWidth) * totalRotationInRadians
-            rotation *= self.originalCenter.x - self.animatingView.center.x > 0 ? -1 : 1
-            var scale = 1 - (distanceFromCenter / halfWidth) * (1 - self.ux.totalScale)
-            let alpha = 1 - (distanceFromCenter / halfWidth) * (1 - self.ux.totalAlpha)
-
-            let rotationTransform = CGAffineTransformMakeRotation(rotation)
-            let scaleTransform = CGAffineTransformMakeScale(scale, scale)
-            let combinedTransform = CGAffineTransformConcat(rotationTransform, scaleTransform)
-
-            self.animatingView.transform = combinedTransform
-            self.animatingView.alpha = alpha
-
-        case .Cancelled:
-            self.animatingView.center = self.startLocation
-            self.animatingView.transform = CGAffineTransformIdentity
-            self.animatingView.alpha = 1
-
-        case .Ended:
-            // Bounce back if the velocity is too low or if we have not reached the treshold yet
-
-            let velocity = recognizer.velocityInView(self.container)
-            let actualVelocity = max(abs(velocity.x), self.ux.minExitVelocity)
-
-            if (actualVelocity < self.ux.minExitVelocity || abs(self.animatingView.center.x - self.originalCenter.x) < self.ux.deleteThreshold) {
-                UIView.animateWithDuration(self.ux.recenterAnimationDuration, animations: {
-                    self.animatingView.transform = CGAffineTransformIdentity
-                    self.animatingView.center = self.startLocation
-                    self.animatingView.alpha = 1
-                })
-                return
-            }
-
-            // Otherwise we are good and we can get rid of the view
-            close(velocity: velocity, actualVelocity: actualVelocity)
-
-        default:
-            break
-        }
-    }
-
-    func close(#velocity: CGPoint, actualVelocity: CGFloat) {
-        // Calculate the edge to calculate distance from
-        let edgeX = velocity.x > 0 ? CGRectGetMaxX(self.container.frame) : CGRectGetMinX(self.container.frame)
-        var distance = (self.animatingView.center.x / 2) + abs(self.animatingView.center.x - edgeX)
-
-        // Determine which way we need to travel
-        distance *= velocity.x > 0 ? 1 : -1
-
-        let timeStep = NSTimeInterval(abs(distance) / actualVelocity)
-        UIView.animateWithDuration(timeStep, animations: {
-            let animatedPosition
-            = CGPoint(x: self.animatingView.center.x + distance, y: self.animatingView.center.y)
-            self.animatingView.center = animatedPosition
-        }, completion: { finished in
-            if finished {
-                self.animatingView.alpha = 0
-                self.delegate?.swipeAnimator(self, viewDidExitContainerBounds: self.animatingView)
-            }
-        })
-    }
-
-    @objc func SELcloseWithoutGesture() -> Bool {
-        close(velocity: CGPointMake(-self.ux.minExitVelocity, 0), actualVelocity: self.ux.minExitVelocity)
-        return true
-    }
-}
-
-extension SwipeAnimator: UIGestureRecognizerDelegate {
-    @objc private func gestureRecognizerShouldBegin(recognizer: UIGestureRecognizer) -> Bool {
-        let cellView = recognizer.view as UIView!
-        let panGesture = recognizer as! UIPanGestureRecognizer
-        let translation = panGesture.translationInView(cellView.superview!)
-        return fabs(translation.x) > fabs(translation.y)
-    }
-}
-
 class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    weak var browserViewController: BrowserViewController?
+
     var tabManager: TabManager!
-    private let CellIdentifier = "CellIdentifier"
-    var collectionView: UICollectionView!
     var profile: Profile!
-    var numberOfColumns: Int!
 
-    var navBar: UINavigationBar!
-    var addTabButton: UIButton!
-    var settingsButton: UIButton!
+    lazy var numberOfColumns: Int = {
+        return self.numberOfColumnsForTraitCollection(self.traitCollection)
+    }()
 
-    func SELstatusBarFrameWillChange(notification: NSNotification) {
-        self.view.setNeedsLayout()
+    var cellHeight: CGFloat {
+        if self.traitCollection.verticalSizeClass == .Compact {
+            return TabTrayControllerUX.TextBoxHeight * 5
+        } else if self.traitCollection.horizontalSizeClass == .Compact {
+            return TabTrayControllerUX.TextBoxHeight * 5
+        } else {
+            return TabTrayControllerUX.TextBoxHeight * 8
+        }
     }
 
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
-    }
+    lazy var navBar: UIView = {
+        let bar = UIView()
+        bar.backgroundColor = AppConstants.BackgroundColor
+        return bar
+    }()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELstatusBarFrameWillChange:", name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
-
-        view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
-        tabManager.addDelegate(self)
-
-        navBar = UINavigationBar()
-
-        navBar.barTintColor = TabTrayControllerUX.ToolbarBarTintColor
-        navBar.tintColor = UIColor.whiteColor()
-        navBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-        navBar.translucent = false // the translucency was causing some bad color pop during the transition
-        
-        let signInButton = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
-        signInButton.addTarget(self, action: "SELdidClickDone", forControlEvents: UIControlEvents.TouchUpInside)
-        signInButton.setTitle(NSLocalizedString("Sign in", comment: "Button that leads to Sign in section of the Settings sheet."), forState: UIControlState.Normal)
-        signInButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        // workaround for VoiceOver bug - if we create the button with UIButton.buttonWithType,
-        // it gets initial frame with height 0 and accessibility somehow does not update the height
-        // later and thus the button becomes completely unavailable to VoiceOver unless we
-        // explicitly set the height to some (reasonable) non-zero value.
-        // Also note that setting accessibilityFrame instead of frame has no effect.
-        signInButton.frame.size.height = signInButton.intrinsicContentSize().height
-        
-        let navItem = UINavigationItem()
-        navItem.titleView = signInButton
-        signInButton.hidden = true //hiding sign in button until we decide on UX
-
-        addTabButton = UIButton()
+    lazy var addTabButton: UIButton = {
+        let addTabButton = UIButton()
         addTabButton.setImage(UIImage(named: "add"), forState: .Normal)
         addTabButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: .TouchUpInside)
         addTabButton.accessibilityLabel = NSLocalizedString("Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
+        return addTabButton
+    }()
 
-        settingsButton = UIButton()
+    lazy var settingsButton: UIButton = {
+        let settingsButton = UIButton()
         settingsButton.setImage(UIImage(named: "settings"), forState: .Normal)
         settingsButton.addTarget(self, action: "SELdidClickSettingsItem", forControlEvents: .TouchUpInside)
         settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
+        return settingsButton
+    }()
+
+    lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.registerClass(TabCell.self, forCellWithReuseIdentifier: TabCell.Identifier)
+        collectionView.backgroundColor = UIColor.clearColor()
+        collectionView.layer.shouldRasterize = true
+        collectionView.layer.rasterizationScale = UIScreen.mainScreen().scale
+        return collectionView
+    }()
+
+    var settingsLeft: Constraint?
+    var addTabRight: Constraint?
+
+    // MARK: View Controller Overrides and Callbacks
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = AppConstants.BackgroundColor
+        tabManager.addDelegate(self)
+
+        view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
 
         navBar.addSubview(addTabButton)
         navBar.addSubview(settingsButton)
 
-        numberOfColumns = numberOfColumnsForCurrentSize()
-        let flowLayout = UICollectionViewFlowLayout()
-        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.registerClass(CustomCell.self, forCellWithReuseIdentifier: CellIdentifier)
-        collectionView.contentInset = UIEdgeInsets(top: AppConstants.ToolbarHeight, left: 0, bottom: 0, right: 0)
-
-        collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
-
         view.addSubview(collectionView)
         view.addSubview(navBar)
+
+        setupConstraints()
     }
 
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
+    private func setupConstraints() {
+        let castedTopGuide = topLayoutGuide as! UIView
 
-        navBar.snp_remakeConstraints { make in
-            let topLayoutGuide = self.topLayoutGuide as! UIView
-            make.top.equalTo(topLayoutGuide.snp_bottom)
+        navBar.snp_makeConstraints { make in
+            make.top.equalTo(castedTopGuide.snp_bottom)
+            make.left.right.equalTo(view)
             make.height.equalTo(AppConstants.ToolbarHeight)
-            make.left.right.equalTo(self.view)
         }
 
-        addTabButton.snp_remakeConstraints { make in
-            make.trailing.bottom.equalTo(self.navBar)
-            make.size.equalTo(AppConstants.ToolbarHeight)
+        addTabButton.snp_makeConstraints { make in
+            make.centerY.equalTo(navBar)
+            make.size.equalTo(navBar.snp_height)
+            addTabRight = make.right.equalTo(navBar).offset(-TabTrayControllerUX.NavButtonMargin).constraint
         }
 
-        settingsButton.snp_remakeConstraints { make in
-            make.leading.bottom.equalTo(self.navBar)
-            make.size.equalTo(AppConstants.ToolbarHeight)
+        settingsButton.snp_makeConstraints { make in
+            make.centerY.equalTo(navBar)
+            make.size.equalTo(navBar.snp_height)
+            settingsLeft = make.left.equalTo(navBar).offset(TabTrayControllerUX.NavButtonMargin).constraint
         }
 
         collectionView.snp_remakeConstraints { make in
@@ -451,16 +131,31 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         }
     }
 
-    private func numberOfColumnsForCurrentSize() -> Int {
-        if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.Compact {
+    private func numberOfColumnsForTraitCollection(traitCollection: UITraitCollection) -> Int {
+        if traitCollection.verticalSizeClass == .Compact {
             return TabTrayControllerUX.NumberOfColumnsRegular
-        } else if self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClass.Compact {
+        } else if traitCollection.horizontalSizeClass == .Compact {
             return TabTrayControllerUX.NumberOfColumnsCompact
         } else {
             return TabTrayControllerUX.NumberOfColumnsRegular
         }
     }
 
+    override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+        numberOfColumns = numberOfColumnsForTraitCollection(newCollection)
+    }
+
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+
+    // MARK: Selectors
     func SELdidClickDone() {
         presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -475,8 +170,8 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     func SELdidClickAddTab() {
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
-        self.collectionView.performBatchUpdates({ _ in
-            self.tabManager.addTab()
+        collectionView.performBatchUpdates({ _ in
+            tabManager.addTab()
         }, completion: { finished in
             if finished {
                 self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
@@ -484,39 +179,26 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         })
     }
 
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let tab = tabManager[indexPath.item]
-        tabManager.selectTab(tab)
-
-        dispatch_async(dispatch_get_main_queue()) { _ in
-            self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
+    func SELdidPressClose(sender: AnyObject) {
+        let index = (sender as! UIButton).tag
+        if let tab = tabManager[index] {
+            tabManager.removeTab(tab)
         }
     }
 
+    // MARK: Collection View Delegate/Data Source
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let tab = tabManager[indexPath.item]
+        tabManager.selectTab(tab)
+        self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
+    }
+
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(CellIdentifier, forIndexPath: indexPath) as! CustomCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(TabCell.Identifier, forIndexPath: indexPath) as! TabCell
         cell.animator.delegate = self
-        cell.delegate = self
-
-        if let tab = tabManager[indexPath.item] {
-            cell.titleText.text = tab.displayTitle
-            cell.accessibilityLabel = tab.displayTitle
-            cell.isAccessibilityElement = true
-            if let favIcon = tab.displayFavicon {
-                cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
-            } else {
-                cell.favicon.image = UIImage(named: "defaultFavicon")
-            }
-            cell.background.image = tab.screenshot
-        }
-
-        let screenshotAspectRatio = cell.frame.width / TabTrayControllerUX.CellHeight
-        cell.closeButton.addTarget(cell, action: "SELdidPressClose", forControlEvents: UIControlEvents.TouchUpInside)
-
-        // calling setupFrames here fixes reused cells which don't get resized on rotation
-        // TODO: is there a better way?
-        cell.setupFrames()
-
+        cell.configureCellWithTab(tabManager[indexPath.row])
+        cell.closeButton.tag = indexPath.row
+        cell.closeButton.addTarget(self, action: "SELdidPressClose:", forControlEvents: .TouchUpInside)
         return cell
     }
 
@@ -530,146 +212,134 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let cellWidth = (collectionView.bounds.width - TabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns)
-        return CGSizeMake(cellWidth, TabTrayControllerUX.CellHeight)
+        return CGSizeMake(cellWidth, self.cellHeight)
     }
 
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(TabTrayControllerUX.Margin, TabTrayControllerUX.Margin, TabTrayControllerUX.Margin, TabTrayControllerUX.Margin)
+        return UIEdgeInsetsMake(TabTrayControllerUX.Margin + AppConstants.ToolbarHeight, TabTrayControllerUX.Margin, TabTrayControllerUX.Margin, TabTrayControllerUX.Margin)
     }
 
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return TabTrayControllerUX.Margin
     }
-
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        collectionView.collectionViewLayout.invalidateLayout()
-    }
-
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
-        collectionView.layoutSubviews()
-        for cell in collectionView.visibleCells() {
-            if let tab = cell as? CustomCell {
-                tab.setupFrames()
-            }
-        }
-    }
-
-    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        numberOfColumns = numberOfColumnsForCurrentSize()
-        collectionView.layoutIfNeeded()
-        for cell in collectionView.visibleCells() {
-            if let tab = cell as? CustomCell {
-                tab.setupFrames()
-            }
-        }
-    }
-
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
-    }
 }
 
 extension TabTrayController: Transitionable {
-    private func getTransitionCell(options: TransitionOptions, browser: Browser?) -> CustomCell {
-        var transitionCell: CustomCell
-        if let cell = options.moving as? CustomCell {
-            transitionCell = cell
-        } else {
-            transitionCell = CustomCell(frame: options.container!.frame)
-            options.moving = transitionCell
-        }
 
-        transitionCell.background.image = browser?.screenshot
-        transitionCell.titleText.text = browser?.displayTitle
-        if let favIcon = browser?.displayFavicon {
-            transitionCell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
-        }
-        return transitionCell
+    private func frameFittingBelowNavBar() -> CGRect {
+        let yOffset = self.topLayoutGuide.length
+        var belowNavFrame = CGRect()
+        belowNavFrame.origin = CGPoint(x: 0, y: yOffset)
+        belowNavFrame.size = CGSize(width: self.view.bounds.width, height: self.view.bounds.height - yOffset)
+        return belowNavFrame
+    }
+
+    private func tabCellFromBrowser(browser: Browser?, frame: CGRect) -> TabCell {
+        let tabCell = TabCell()
+        tabCell.configureCellWithTab(browser)
+        tabCell.storeSnapshotForHeader(browserViewController?.header)
+        tabCell.storeSnapshotForFooter(browserViewController?.footer)
+        tabCell.frame = frame
+        tabCell.setNeedsLayout()
+        return tabCell
     }
 
     func transitionablePreShow(transitionable: Transitionable, options: TransitionOptions) {
-        self.collectionView.layoutSubviews()
-        self.collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: tabManager.selectedIndex, inSection: 0), atScrollPosition: .CenteredVertically, animated: false)
+        if let browserViewController = options.fromView as? BrowserViewController,
+           let tabController = options.toView as? TabTrayController,
+           let container = options.container,
+           let browser = tabManager.selectedTab {
+
+            // Scroll to where we need to be in the collection view and take a snapshto if it to show for the
+            // alpha + scale animation
+            collectionView.frame = frameFittingBelowNavBar()
+            collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: tabManager.selectedIndex, inSection: 0), atScrollPosition: .None, animated: false)
+
+            let attributes = collectionView.collectionViewLayout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: self.tabManager.selectedIndex, inSection: 0))
+            options.cellFrame = collectionView.convertRect(attributes.frame, toView: self.view)
+            collectionView.transform = CGAffineTransformMakeScale(0.9, 0.9)
+            collectionView.alpha = 0
+
+            // Add tab to view hierarchy for animation
+            let tabCell = self.tabCellFromBrowser(browser, frame: frameFittingBelowNavBar())
+            tabCell.expanded = true
+
+            container.addSubview(tabCell)
+            options.moving = tabCell
+
+            // Hide and move the nav buttons offset screen
+            addTabRight?.updateOffset(addTabButton.frame.size.width + TabTrayControllerUX.NavButtonMargin)
+            addTabButton.alpha = 0
+            settingsLeft?.updateOffset(-(settingsButton.frame.size.width + TabTrayControllerUX.NavButtonMargin))
+            settingsButton.alpha = 0
+        }
     }
 
     func transitionablePreHide(transitionable: Transitionable, options: TransitionOptions) {
+        if let container = options.container, let browser = tabManager.selectedTab {
 
+            // Add tab view to container for animation
+            let attributes = self.collectionView.collectionViewLayout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: tabManager.selectedIndex, inSection: 0))
+            let tabFrame = self.collectionView.convertRect(attributes.frame, toView: self.view)
+            let tabCell = self.tabCellFromBrowser(browser, frame: tabFrame)
+            container.addSubview(tabCell)
+            options.moving = tabCell
+        }
     }
 
     func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {
-        // Create a fake cell that is shown fullscreen
-        if let container = options.container {
-            let cell = getTransitionCell(options, browser: tabManager.selectedTab)
-            // TODO: Smoothly animate the corner radius to 0.
-            // cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
-            var hasToolbar = false
-            if let fromView = options.fromView as? BrowserViewController {
-                hasToolbar = fromView.shouldShowToolbarForTraitCollection(self.traitCollection)
-            } else if let toView = options.toView as? BrowserViewController {
-                hasToolbar = toView.shouldShowToolbarForTraitCollection(self.traitCollection)
-            }
+        if let tabCell = options.moving as? TabCell, let container = options.container, let bvc = browserViewController {
 
-            cell.showFullscreen(container, table: collectionView, shouldOffset: hasToolbar)
-            cell.layoutIfNeeded()
-            cell.title.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, -cell.title.frame.height)
+            // Animate nav buttons
+            addTabRight?.updateOffset(addTabButton.frame.size.width + TabTrayControllerUX.NavButtonMargin)
+            addTabButton.alpha = 0
+            settingsLeft?.updateOffset(-(settingsButton.frame.size.width + TabTrayControllerUX.NavButtonMargin))
+            settingsButton.alpha = 0
 
-            let corners = CABasicAnimation(keyPath: "cornerRadius")
-            corners.toValue = 0
-            corners.fromValue = TabTrayControllerUX.CornerRadius
-            corners.duration = options.duration!
-            corners.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-            
-            cell.backgroundHolder.layer.addAnimation(corners, forKey: "cornerRadius")
-            cell.innerStroke.layer.addAnimation(corners, forKey: "cornerRadius")
+            // Animate tab view to fill the screen
+            var endFrame = CGRect()
+            let topLayoutLength = bvc.topLayoutGuide.length
+            endFrame.origin = CGPoint(x: bvc.view.bounds.origin.x, y: bvc.view.bounds.origin.y + topLayoutLength)
+            endFrame.size = CGSize(width: bvc.view.bounds.size.width, height: bvc.view.bounds.size.height - topLayoutLength)
 
-            cell.innerStroke.alpha = 0
+            tabCell.frame = endFrame
+            tabCell.layer.cornerRadius = 0
+            tabCell.expanded = true
+
+            collectionView.transform = CGAffineTransformMakeScale(0.9, 0.9)
+            collectionView.alpha = 0
         }
-
-        let buttonOffset = addTabButton.frame.width + TabTrayControllerUX.ToolbarButtonOffset
-        addTabButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, buttonOffset , 0)
-        settingsButton.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, -buttonOffset , 0)
-        navBar.alpha = 0
-        collectionView.alpha = 0
-
     }
 
     func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
-        if let container = options.container {
-            // Create a fake cell that is at the selected index
-            let cell = getTransitionCell(options, browser: tabManager.selectedTab)
-            cell.showAt(tabManager.selectedIndex, container: container, table: collectionView)
-            cell.layoutIfNeeded()
+        if let tabCell = options.moving as? TabCell, let cellFrame = options.cellFrame {
 
-            let corners = CABasicAnimation(keyPath: "cornerRadius")
-            corners.toValue = TabTrayControllerUX.CornerRadius
-            corners.fromValue = 0
-            corners.duration = options.duration!
-            corners.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+            // Animate nav buttons
+            addTabRight?.updateOffset(-TabTrayControllerUX.NavButtonMargin)
+            addTabButton.alpha = 1
+            settingsLeft?.updateOffset(TabTrayControllerUX.NavButtonMargin)
+            settingsButton.alpha = 1
 
-            cell.backgroundHolder.layer.addAnimation(corners, forKey: "cornerRadius")
-            cell.innerStroke.layer.addAnimation(corners, forKey: "cornerRadius")
-
-            cell.innerStroke.alpha = 1
+            // Animate the tab view to shrink to it's cell position
+            tabCell.frame = cellFrame
+            tabCell.layer.cornerRadius = TabTrayControllerUX.CornerRadius
+            tabCell.expanded = false
+            collectionView.transform = CGAffineTransformIdentity
+            collectionView.alpha = 1
         }
-
-        addTabButton.transform = CGAffineTransformIdentity
-        settingsButton.transform = CGAffineTransformIdentity
-        navBar.alpha = 1
-        collectionView.alpha = 1
     }
 
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
-        if let cell = options.moving {
-          cell.removeFromSuperview()
+        if let tabCell = options.moving as? TabCell {
+            tabCell.removeFromSuperview()
+            collectionView.alpha = 1
         }
     }
-
 }
 
 extension TabTrayController: SwipeAnimatorDelegate {
-    private func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView) {
-        let tabCell = animator.container as! CustomCell
+    func swipeAnimator(animator: SwipeAnimator, viewDidExitContainerBounds: UIView) {
+        let tabCell = animator.container as! TabCell
         if let indexPath = self.collectionView.indexPathForCell(tabCell) {
             if let tab = tabManager[indexPath.item] {
                 tabManager.removeTab(tab)
@@ -680,7 +350,6 @@ extension TabTrayController: SwipeAnimatorDelegate {
 
 extension TabTrayController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?) {
-        // Our UI doesn't care about what's selected
     }
 
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
@@ -704,42 +373,5 @@ extension TabTrayController: TabManagerDelegate {
                 }
             }
         })
-    }
-}
-
-extension TabTrayController: CustomCellDelegate {
-    private func customCellDidClose(cell: CustomCell) {
-        let indexPath = collectionView.indexPathForCell(cell)!
-        if let tab = tabManager[indexPath.item] {
-            tabManager.removeTab(tab)
-        }
-    }
-}
-
-// A transparent view with a rectangular border with rounded corners, stroked
-// with a semi-transparent white border.
-private class InnerStrokedView: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.backgroundColor = UIColor.clearColor()
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func drawRect(rect: CGRect) {
-        let strokeWidth = 1.0 as CGFloat
-        let halfWidth = strokeWidth/2 as CGFloat
-
-        let path = UIBezierPath(roundedRect: CGRect(x: halfWidth,
-            y: halfWidth,
-            width: rect.width - strokeWidth,
-            height: rect.height - strokeWidth),
-            cornerRadius: TabTrayControllerUX.CornerRadius)
-        
-        path.lineWidth = strokeWidth
-        UIColor.whiteColor().colorWithAlphaComponent(0.2).setStroke()
-        path.stroke()
     }
 }
