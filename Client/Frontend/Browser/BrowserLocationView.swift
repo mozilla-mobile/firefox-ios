@@ -25,18 +25,29 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         }
         set(newCornerRadius) {
             self.layer.cornerRadius = newCornerRadius
-            editTextField.layer.cornerRadius = cornerRadius
         }
     }
 
-    var editingBorderColor: CGColorRef {
-        get{
-            return editTextField.layer.borderColor
-        }
-        set(borderColor){
-            editTextField.layer.borderColor = borderColor
+    var editingBorderColor: CGColorRef!
+    var borderColor: CGColorRef! {
+        didSet {
+            if !editTextField.isFirstResponder(){
+                self.layer.borderColor = borderColor
+            }
         }
     }
+
+    var borderWidth: CGFloat {
+        get {
+            return self.layer.borderWidth
+        }
+
+        set (newBorderWidth) {
+            self.layer.borderWidth = newBorderWidth
+        }
+    }
+
+    var locationContentInset: CGFloat = 0
 
     var text: String {
         get {
@@ -61,34 +72,11 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
 
     var active = false {
         didSet{
-            if active {
-                editTextField.layer.borderWidth = 1
-            }
-            else {
-                editTextField.layer.borderWidth = 0
-                if editTextField.isFirstResponder() {
+            if !active
+                && editTextField.isFirstResponder() {
                     editTextField.resignFirstResponder()
-                }
             }
             readerModeButton.hidden = active
-        }
-    }
-
-    var editingInset: UIOffset  {
-        get {
-            return editTextField.editingRectInset
-        }
-        set(inset) {
-            editTextField.editingRectInset = inset
-        }
-    }
-
-    var textInset: UIOffset  {
-        get {
-            return editTextField.textRectInset
-        }
-        set(inset) {
-            editTextField.textRectInset = inset
         }
     }
 
@@ -102,6 +90,8 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.whiteColor()
+        borderColor = UIColor.clearColor().CGColor
+        editingBorderColor = UIColor.clearColor().CGColor
 
         editTextField = ToolbarTextField()
         editTextField.keyboardType = UIKeyboardType.WebSearch
@@ -142,23 +132,33 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
 
         lockImageView.snp_remakeConstraints { make in
             make.centerY.equalTo(container)
-            make.leading.equalTo(container).offset(8)
+            make.leading.equalTo(container).offset(locationContentInset)
             make.width.equalTo(self.lockImageView.intrinsicContentSize().width)
-        }
-
-        editTextField.snp_remakeConstraints { make in
-            make.edges.equalTo(container)
         }
 
         readerModeButton.snp_remakeConstraints { make in
             make.centerY.equalTo(container)
-            make.trailing.equalTo(self.snp_trailing).offset(-4)
+            make.trailing.equalTo(self.snp_trailing).offset(-(locationContentInset / 2))
 
             // We fix the width of the button (to the height of the view) to prevent content
             // compression when the locationLabel has more text contents than will fit. It
             // would be nice to do this with a content compression priority but that does
             // not seem to work.
             make.width.equalTo(container.snp_height)
+        }
+
+        editTextField.snp_remakeConstraints { make in
+            make.centerY.equalTo(container)
+            if lockImageView.hidden {
+                make.leading.equalTo(container).offset(locationContentInset)
+            } else {
+                make.leading.equalTo(self.lockImageView.snp_trailing).offset(locationContentInset)
+            }
+            if readerModeButton.hidden {
+                make.trailing.equalTo(container.snp_trailing)
+            } else {
+                make.trailing.equalTo(self.readerModeButton.snp_leading)
+            }
         }
     }
 
@@ -182,7 +182,7 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
 
     var url: NSURL? {
         didSet {
-            showLockImage((url?.scheme == "https"))
+            lockImageView.hidden = url?.scheme != "https"
             if let url = url?.absoluteString {
                 if url.hasPrefix("http://") ?? false {
                     editTextField.text = url.substringFromIndex(advance(url.startIndex, 7))
@@ -243,12 +243,15 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
 
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         active = true
+        layer.borderColor = editingBorderColor
         textField.text = url?.absoluteString
+        setNeedsUpdateConstraints()
         delegate?.browserLocationViewDidTapLocation(self)
         return true
     }
 
     func textFieldDidEndEditing(textField: UITextField) {
+        layer.borderColor = borderColor
         active = false
     }
 
@@ -306,9 +309,6 @@ class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate, UIGestureRec
 
     var toolbarTextFieldDelegate: ToolbarTextFieldDelegate?
 
-    var textRectInset: UIOffset = UIOffsetZero
-    var editingRectInset: UIOffset = UIOffsetZero
-
     private var longPress = false
     override init(frame: CGRect) {
 
@@ -322,19 +322,11 @@ class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate, UIGestureRec
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func textRectForBounds(bounds: CGRect) -> CGRect {
-        let rect = super.textRectForBounds(bounds)
-        return rect.rectByInsetting(dx: textRectInset.horizontal, dy: textRectInset.vertical)
-    }
-
-    override func editingRectForBounds(bounds: CGRect) -> CGRect {
-        let rect = super.editingRectForBounds(bounds)
-        return rect.rectByInsetting(dx:editingRectInset.horizontal, dy: editingRectInset.vertical)
-    }
-
     override func textFieldDidBeginEditing(textField: UITextField) {
         super.textFieldDidBeginEditing(textField)
         toolbarTextFieldDelegate?.textFieldDidBeginEditing?(textField)
+
+        textField.selectedTextRange = textField.textRangeFromPosition(textField.beginningOfDocument, toPosition: textField.endOfDocument)
     }
 
     override func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
@@ -348,7 +340,8 @@ class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate, UIGestureRec
         return toolbarTextFieldDelegate?.textFieldShouldClear?(textField) ?? shouldClear
     }
 
-    func textFieldDidEndEditing(textField: UITextField) {
+    override func textFieldDidEndEditing(textField: UITextField) {
+        super.textFieldDidEndEditing(textField)
         toolbarTextFieldDelegate?.textFieldDidEndEditing?(textField)
     }
 
@@ -366,6 +359,8 @@ class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate, UIGestureRec
     }
 
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        // only recognise our custom long press gesture recognizer when a long press is activated if we are not already
+        // editing this text field
+        return !active && (gestureRecognizer.isKindOfClass(UILongPressGestureRecognizer) && otherGestureRecognizer.isKindOfClass(UILongPressGestureRecognizer))
     }
 }

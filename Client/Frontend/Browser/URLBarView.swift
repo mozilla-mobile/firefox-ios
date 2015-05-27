@@ -14,6 +14,7 @@ private struct URLBarViewUX {
     static let TextFieldContentInset = UIOffsetMake(9, 5)
     static let LocationLeftPadding = 5
     static let LocationHeight = 30
+    static let LocationContentOffset: CGFloat = 8
     static let TextFieldCornerRadius: CGFloat = 3
     static let TextFieldBorderWidth: CGFloat = 1
     // offset from edge of tabs button
@@ -61,10 +62,11 @@ class URLBarView: UIView {
         locationView.delegate = self
 
         locationView.autocompleteDelegate = self
+        locationView.locationContentInset = URLBarViewUX.LocationContentOffset
+        locationView.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
         locationView.cornerRadius = URLBarViewUX.TextFieldCornerRadius
+        locationView.borderWidth = URLBarViewUX.TextFieldBorderWidth
         locationView.editingBorderColor = URLBarViewUX.TextFieldActiveBorderColor.CGColor
-        locationView.textInset = URLBarViewUX.TextFieldContentInset
-        locationView.editingInset = URLBarViewUX.TextFieldContentInset
 
         return locationView
     }()
@@ -72,9 +74,6 @@ class URLBarView: UIView {
     private lazy var locationContainer: UIView = {
         var locationContainer = UIView()
         locationContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
-        locationContainer.layer.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
-        locationContainer.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
-        locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
         return locationContainer
     }()
 
