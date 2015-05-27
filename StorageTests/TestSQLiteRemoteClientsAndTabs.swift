@@ -39,20 +39,24 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
                                ClientAndTabs(client: localClient, tabs: [localTab1, localTab2])]
     }
 
-    public func wipeClients() -> Deferred<Result<()>> {
-        return Deferred(value: Result(success: ()))
+    public func onRemovedAccount() -> Success {
+        return succeed()
     }
 
-    public func wipeTabs() -> Deferred<Result<()>> {
-        return Deferred(value: Result(success: ()))
+    public func wipeClients() -> Success {
+        return succeed()
     }
 
-    public func insertOrUpdateClients(clients: [RemoteClient]) -> Deferred<Result<()>> {
-        return Deferred(value: Result(success: ()))
+    public func wipeTabs() -> Success {
+        return succeed()
     }
 
-    public func insertOrUpdateClient(client: RemoteClient) -> Deferred<Result<()>> {
-        return Deferred(value: Result(success: ()))
+    public func insertOrUpdateClients(clients: [RemoteClient]) -> Success {
+        return succeed()
+    }
+
+    public func insertOrUpdateClient(client: RemoteClient) -> Success {
+        return succeed()
     }
 
     public func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> {
