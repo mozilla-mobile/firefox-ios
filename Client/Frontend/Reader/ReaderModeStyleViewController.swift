@@ -33,7 +33,7 @@ private struct ReaderModeStyleViewControllerUX {
     static let ThemeTitleColorDark = UIColor.whiteColor()
     static let ThemeTitleColorSepia = UIColor(rgb: 0x333333)
     static let ThemeBackgroundColorLight = UIColor.whiteColor()
-    static let ThemeBackgroundColorDark = UIColor.blackColor()
+    static let ThemeBackgroundColorDark = UIColor(rgb: 0x333333)
     static let ThemeBackgroundColorSepia = UIColor(rgb: 0xf0ece7)
 
     static let BrightnessRowBackground = UIColor(rgb: 0xf4f4f4)
