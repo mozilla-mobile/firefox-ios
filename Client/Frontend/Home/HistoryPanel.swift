@@ -57,6 +57,9 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             if result.isSuccess {
                 self.reloadData()
             }
+
+            // Always end refreshing, even if we failed!
+            self.refreshControl?.endRefreshing()
         }
     }
 
