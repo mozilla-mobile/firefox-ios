@@ -710,7 +710,6 @@ class BrowserViewController: UIViewController, UIActivityItemSource {
 			// Return the selected tab's URL
 			return tabManager.selectedTab!.displayURL!
 		}
-
 	}
 
 	func activityViewController(activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: String?) -> String {
