@@ -5,12 +5,13 @@
 import WebKit
 
 protocol ContextMenuHelperDelegate: class {
-    func contextMenuHelper(contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements)
+    func contextMenuHelper(contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UILongPressGestureRecognizer)
 }
 
 class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
     private weak var browser: Browser?
     weak var delegate: ContextMenuHelperDelegate?
+    private let gestureRecognizer = UILongPressGestureRecognizer()
 
     struct Elements {
         let link: NSURL?
@@ -31,9 +32,8 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
         browser.webView.configuration.userContentController.addUserScript(userScript)
 
         // Add a gesture recognizer that disables the built-in context menu gesture recognizer.
-        let disableRecognizer = UILongPressGestureRecognizer()
-        disableRecognizer.delegate = self
-        browser.webView.addGestureRecognizer(disableRecognizer)
+        gestureRecognizer.delegate = self
+        browser.webView.addGestureRecognizer(gestureRecognizer)
     }
 
     func scriptMessageHandlerName() -> String? {
@@ -55,7 +55,7 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
 
         if linkURL != nil || imageURL != nil {
             let elements = Elements(link: linkURL, image: imageURL)
-            delegate?.contextMenuHelper(self, didLongPressElements: elements)
+            delegate?.contextMenuHelper(self, didLongPressElements: elements, gestureRecognizer: gestureRecognizer)
         }
     }
 
