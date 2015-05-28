@@ -227,12 +227,17 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
         }
     }
 
-    // TODO: return whether or not the sync should continue.
-    public func synchronizeLocalClients(localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Success {
+    public func synchronizeLocalClients(localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
         log.debug("Synchronizing clients.")
 
-        if !self.canSync() {
-            return deferResult(FatalError(message: "clients not mentioned in meta/global. Server wiped?"))
+        if let reason = self.reasonToNotSync() {
+            switch reason {
+            case .EngineRemotelyNotEnabled:
+                // This is a hard error for us.
+                return deferResult(FatalError(message: "clients not mentioned in meta/global. Server wiped?"))
+            default:
+                return deferResult(SyncStatus.NotStarted(reason))
+            }
         }
 
         let keys = self.scratchpad.keys?.value
@@ -248,12 +253,17 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
         if !self.remoteHasChanges(info) {
             log.debug("No remote changes for clients. (Last fetched \(self.lastFetched).)")
             return maybeUploadOurRecord(false, ifUnmodifiedSince: nil, toServer: clientsClient)
+                >>> { deferResult(.Completed) }
         }
 
+        // TODO: some of the commands we process might involve wiping collections or the
+        // entire profile. We should model this as an explicit status, and return it here
+        // instead of .Completed.
         return clientsClient.getSince(self.lastFetched)
             >>== { response in
                 return self.wipeIfNecessary(localClients)
                     >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient) }
-        }
+            }
+            >>> { deferResult(.Completed) }
     }
 }

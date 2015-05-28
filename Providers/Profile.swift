@@ -13,16 +13,10 @@ import XCGLogger
 // TODO: same comment as for SyncAuthState.swift!
 private let log = XCGLogger.defaultInstance()
 
-public class NoAccountError: SyncError {
-    public var description: String {
-        return "No account configured."
-    }
-}
-
 public protocol SyncManager {
-    func syncClients() -> Success
+    func syncClients() -> SyncResult
     func syncClientsAndTabs() -> Success
-    func syncHistory() -> Success
+    func syncHistory() -> SyncResult
     func onRemovedAccount(account: FirefoxAccount?) -> Success
     func onAddedAccount() -> Success
 }
@@ -308,35 +302,28 @@ public class BrowserProfile: Profile {
             return done
         }
 
-        private func syncClientsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Success {
+        private func syncClientsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Syncing clients to storage.")
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs)
             return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info)
         }
 
-        private func syncTabsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Success {
+        private func syncTabsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             let storage = self.profile.remoteClientsAndTabs
             let tabSynchronizer = ready.synchronizer(TabsSynchronizer.self, delegate: delegate, prefs: prefs)
             return tabSynchronizer.synchronizeLocalTabs(storage, withServer: ready.client, info: ready.info)
         }
 
-        private func syncHistoryWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> Success {
+        private func syncHistoryWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
             log.debug("Syncing history to storage.")
             let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs)
             return historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info)
         }
 
-        func ignoreContinuableErrorInDeferred(deferred: Success) -> Success {
-            return deferred.bind() { result in
-                if let failure = result.failureValue where failure is ContinuableError {
-                    log.debug("Got continuable error \(failure); pretending that nothing failed.")
-                    return succeed()
-                }
-                return deferred
-            }
-        }
-
-        func doSync(label: String, synchronizers: (SyncDelegate, Prefs, Ready) -> Success ...) -> Success {
+        /**
+         * Returns nil if there's no account.
+         */
+        private func withSyncInputs<T>(label: String, function: (SyncDelegate, Prefs, Ready) -> Deferred<Result<T>>) -> Deferred<Result<T>>? {
             if let account = profile.account {
                 log.info("Syncing \(label).")
 
@@ -346,39 +333,60 @@ public class BrowserProfile: Profile {
                 let readyDeferred = SyncStateMachine.toReady(authState, prefs: syncPrefs)
                 let delegate = profile.getSyncDelegate()
 
-                // Run them sequentially, ignoring continuable errors.
-                // TODO: find a better way to do this. We want to report if tab sync is disabled, for
-                // example.
                 return readyDeferred >>== { ready in
-                    let tasks = synchronizers.map { f in
-                        { self.ignoreContinuableErrorInDeferred(f(delegate, syncPrefs, ready)) }
-                    }
-
-                    return walk(tasks, { $0() })
+                    function(delegate, syncPrefs, ready)
                 }
             }
 
             log.warning("No account; can't sync \(label).")
-            return deferResult(NoAccountError())
+            return nil
+        }
+
+        /**
+         * Runs the single provided synchronization function and returns its status.
+         */
+        private func sync(label: String, function: (SyncDelegate, Prefs, Ready) -> SyncResult) -> SyncSuccess {
+            return self.withSyncInputs(label, function: function) ??
+                   deferResult(.NotStarted(.NoAccount))
+        }
+
+        /**
+         * Runs each of the provided synchronization functions with the same inputs.
+         * Returns an array of SyncStatuses the same length as the input.
+         */
+        private func syncSeveral(label: String, synchronizers: (SyncDelegate, Prefs, Ready) -> SyncResult...) -> Deferred<Result<[SyncStatus]>> {
+            let combined: (SyncDelegate, Prefs, Ready) -> Deferred<Result<[SyncStatus]>> = { delegate, syncPrefs, ready in
+                let thunks = synchronizers.map { f in
+                    { f(delegate, syncPrefs, ready) }
+                }
+                return accumulate(thunks)
+            }
+
+            return self.withSyncInputs(label, function: combined) ??
+                   deferResult(Array(count: synchronizers.count, repeatedValue: .NotStarted(.NoAccount)))
         }
 
         func syncEverything() -> Success {
-            return self.doSync("everything", synchronizers:
+            return self.syncSeveral("everything", synchronizers:
                 self.syncClientsWithDelegate,
                 self.syncTabsWithDelegate,
                 self.syncHistoryWithDelegate)
+                >>> succeed
         }
 
-        func syncClients() -> Success {
-            return self.doSync("clients", synchronizers: syncClientsWithDelegate)
+        func syncClients() -> SyncResult {
+            // TODO: recognize .NotStarted.
+            return self.sync("clients", function: syncClientsWithDelegate)
         }
 
         func syncClientsAndTabs() -> Success {
-            return self.doSync("clients and tabs", synchronizers: self.syncClientsWithDelegate, self.syncTabsWithDelegate)
+            // TODO: recognize .NotStarted.
+            return self.syncSeveral("clients and tabs", synchronizers: self.syncClientsWithDelegate, self.syncTabsWithDelegate) >>> succeed
         }
 
-        func syncHistory() -> Success {
-            return self.doSync("history", synchronizers: syncHistoryWithDelegate)
+        func syncHistory() -> SyncResult {
+            // TODO: recognize .NotStarted.
+            return self.sync("history", function: syncHistoryWithDelegate)
         }
     }
 }
