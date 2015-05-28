@@ -36,12 +36,14 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     func highlightAll() {
-        let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttribute(NSBackgroundColorAttributeName, value: AutocompleteTextFieldUX.HighlightColor, range: NSMakeRange(0, count(text)))
-        attributedText = attributedString
+        if !text.isEmpty {
+            let attributedString = NSMutableAttributedString(string: text)
+            attributedString.addAttribute(NSBackgroundColorAttributeName, value: AutocompleteTextFieldUX.HighlightColor, range: NSMakeRange(0, count(text)))
+            attributedText = attributedString
 
-        enteredTextLength = 0
-        completionActive = true
+            enteredTextLength = 0
+            completionActive = true
+        }
     }
 
     private func applyCompletion() {
