@@ -45,6 +45,7 @@ class SearchSettingsTableViewController: UITableViewController {
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
                 cell.textLabel?.text = NSLocalizedString("Show search suggestions", comment: "Label for show search suggestions setting.")
                 let toggle = UISwitch()
+                toggle.onTintColor = AppConstants.ControlTintColor
                 toggle.addTarget(self, action: "SELdidToggleSearchSuggestions:", forControlEvents: UIControlEvents.ValueChanged)
                 toggle.on = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
@@ -62,6 +63,7 @@ class SearchSettingsTableViewController: UITableViewController {
             cell.showsReorderControl = true
 
             let toggle = UISwitch()
+            toggle.onTintColor = AppConstants.ControlTintColor
             // This is an easy way to get from the toggle control to the corresponding index.
             toggle.tag = index
             toggle.addTarget(self, action: "SELdidToggleEngine:", forControlEvents: UIControlEvents.ValueChanged)
