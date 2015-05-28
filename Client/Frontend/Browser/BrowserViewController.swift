@@ -1701,7 +1701,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
 }
 
 extension BrowserViewController: ContextMenuHelperDelegate {
-    func contextMenuHelper(contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements) {
+    func contextMenuHelper(contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UILongPressGestureRecognizer) {
         let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         var dialogTitle: String?
 
@@ -1740,6 +1740,13 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 // TODO: put the actual image on the clipboard
             }
             actionSheetController.addAction(copyAction)
+        }
+
+        // If we're showing an arrow popup, set the anchor to the long press location.
+        if let popoverPresentationController = actionSheetController.popoverPresentationController {
+            popoverPresentationController.sourceView = view
+            popoverPresentationController.sourceRect = CGRect(origin: gestureRecognizer.locationInView(view), size: CGSizeMake(0, 16))
+            popoverPresentationController.permittedArrowDirections = .Any
         }
 
         actionSheetController.title = dialogTitle
