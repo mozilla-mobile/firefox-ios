@@ -9,6 +9,7 @@ class TransitionOptions {
     var fromView: UIViewController? = nil
     var toView: UIViewController? = nil
     var duration: NSTimeInterval? = nil
+    var cellFrame: CGRect? = nil
 }
 
 @objc
