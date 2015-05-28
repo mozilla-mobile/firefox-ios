@@ -11,17 +11,19 @@ class SnackBarUX {
 }
 
 /**
-A specialized version of UIButton for use in SnackBars. These are displayed evenly spaced in the bottom of the bar. The main convenience of these is that you can pass in a callback in the constructor (although these also style themselves appropriately).
-
-``SnackButton(title: "OK", { _ in println("OK") })``
-*/
+ * A specialized version of UIButton for use in SnackBars. These are displayed evenly
+ * spaced in the bottom of the bar. The main convenience of these is that you can pass
+ * in a callback in the constructor (although these also style themselves appropriately).
+ *
+ *``SnackButton(title: "OK", { _ in println("OK") })``
+ */
 class SnackButton : UIButton {
     let callback: (bar: SnackBar) -> Void
     private var bar: SnackBar!
 
     /**
-    An image to show as the background when a button is pressed. This is currently a 1x1 pixel blue color
-    */
+     * An image to show as the background when a button is pressed. This is currently a 1x1 pixel blue color
+     */
     lazy var highlightImg: UIImage = {
         let size = CGSize(width: 1, height: 1)
         return UIImage.createWithColor(size, color: AppConstants.HighlightColor)
@@ -56,17 +58,17 @@ class SnackButton : UIButton {
 }
 
 /**
-Presents some information to the user. Can optionally include some buttons and an image. Usage:
-
-``let bar = SnackBar(text: "This is some text in the snackbar.",
-     img: UIImage(named: "bookmark"),
-     buttons: [
-         SnackButton(title: "OK", { _ in println("OK") }),
-         SnackButton(title: "Cancel", { _ in println("Cancel") }),
-         SnackButton(title: "Maybe", { _ in println("Maybe") })]
- )``
-*/
-
+ * Presents some information to the user. Can optionally include some buttons and an image. Usage:
+ *
+ * ``let bar = SnackBar(text: "This is some text in the snackbar.",
+ *     img: UIImage(named: "bookmark"),
+ *     buttons: [
+ *         SnackButton(title: "OK", { _ in println("OK") }),
+ *         SnackButton(title: "Cancel", { _ in println("Cancel") }),
+ *         SnackButton(title: "Maybe", { _ in println("Maybe") })
+ *     ]
+ * )``
+ */
 class SnackBar: UIView {
     let imageView: UIImageView
     let textLabel: UILabel
@@ -153,9 +155,10 @@ class SnackBar: UIView {
     }
 
     /**
-    Called to check if the snackbar should be removed or not. By default, Snackbars persist forever. Override this class or use a class like CountdownSnackbar if you want things expire
-    :returns: true if the snackbar should be kept alive
-    */
+     * Called to check if the snackbar should be removed or not. By default, Snackbars persist forever.
+     * Override this class or use a class like CountdownSnackbar if you want things expire
+     * :returns: true if the snackbar should be kept alive
+     */
     func shouldPersist(browser: Browser) -> Bool {
         return true
     }
@@ -208,16 +211,16 @@ class SnackBar: UIView {
     }
 
     /**
-    Helper for animating the Snackbar showing on screen
-    */
+     * Helper for animating the Snackbar showing on screen.
+     */
     func show() {
         alpha = 1
         bottom?.updateOffset(0)
     }
 
     /**
-    Helper for animating the Snackbar leaving the screen
-    */
+     * Helper for animating the Snackbar leaving the screen.
+     */
     func hide() {
         alpha = 0
         var h = frame.height
@@ -235,8 +238,10 @@ class SnackBar: UIView {
 }
 
 /**
-A special version of a snackbar that persists for maxCount page loads. Defaults to waiting for 2 loads (i.e. will persist over one page load, which is useful for things like saving passwords.
-*/
+ * A special version of a snackbar that persists for maxCount page loads.
+ * Defaults to waiting for 2 loads (i.e. will persist over one page load,
+ * which is useful for things like saving passwords.
+ */
 class CountdownSnackBar: SnackBar {
     private var maxCount: Int? = nil
     private var count = 0
