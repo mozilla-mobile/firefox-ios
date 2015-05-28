@@ -10,6 +10,7 @@ public protocol Prefs {
     func setLong(value: Int64, forKey defaultName: String)
     func setInt(value: Int32, forKey defaultName: String)
     func setString(value: String, forKey defaultName: String)
+    func setBool(value: Bool, forKey defaultName: String)
     func setObject(value: AnyObject?, forKey defaultName: String)
     func stringForKey(defaultName: String) -> String?
     func boolForKey(defaultName: String) -> Bool?
@@ -59,6 +60,10 @@ public class MockProfilePrefs : Prefs {
     }
 
     public func setString(value: String, forKey defaultName: String) {
+        things[name(defaultName)] = value
+    }
+
+    public func setBool(value: Bool, forKey defaultName: String) {
         things[name(defaultName)] = value
     }
 

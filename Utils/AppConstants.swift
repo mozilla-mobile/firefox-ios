@@ -27,6 +27,9 @@ public struct AppConstants {
     static let HighlightBlue = UIColor(red:0.3, green:0.62, blue:1, alpha:1)
     static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.25)
 
+    // Firefox Orange
+    static let ControlTintColor = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
+
 #if MOZ_CHANNEL_AURORA
     static let BuildChannel = AppBuildChannel.Aurora
 #else
