@@ -18,12 +18,13 @@ protocol BrowserDelegate {
     func browser(browser: Browser, didRemoveSnackbar bar: SnackBar)
 }
 
-class Browser: NSObject, WKScriptMessageHandler {
+class Browser {
     let webView: WKWebView
     var browserDelegate: BrowserDelegate? = nil
     var bars = [SnackBar]()
     var favicons = [Favicon]()
     var screenshot: UIImage?
+    private let helperManager: HelperManager
 
     init(configuration: WKWebViewConfiguration) {
         configuration.userContentController = WKUserContentController()
@@ -37,7 +38,7 @@ class Browser: NSObject, WKScriptMessageHandler {
         // which allows the content appear beneath the toolbars in the BrowserViewController
         webView.scrollView.layer.masksToBounds = false
 
-        super.init()
+        helperManager = HelperManager(webView: webView)
     }
 
     class func toTab(browser: Browser) -> RemoteTab? {
@@ -142,35 +143,12 @@ class Browser: NSObject, WKScriptMessageHandler {
         webView.reload()
     }
 
-    private var helpers: [String: BrowserHelper] = [String: BrowserHelper]()
-
-    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        for helper in helpers.values {
-            if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
-                if scriptMessageHandlerName == message.name {
-                    helper.userContentController(userContentController, didReceiveScriptMessage: message)
-                    return
-                }
-            }
-        }
-    }
-
     func addHelper(helper: BrowserHelper, name: String) {
-        if let existingHelper = helpers[name] {
-            assertionFailure("Duplicate helper added: \(name)")
-        }
-
-        helpers[name] = helper
-
-        // If this helper handles script messages, then get the handler name and register it. The Browser
-        // receives all messages and then dispatches them to the right BrowserHelper.
-        if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
-            webView.configuration.userContentController.addScriptMessageHandler(self, name: scriptMessageHandlerName)
-        }
+        helperManager.addHelper(helper, name: name)
     }
 
     func getHelper(#name: String) -> BrowserHelper? {
-        return helpers[name]
+        return helperManager.getHelper(name: name)
     }
 
     func hideContent(animated: Bool = false) {
@@ -223,6 +201,44 @@ class Browser: NSObject, WKScriptMessageHandler {
                 removeSnackbar(bar)
             }
         }
+    }
+}
+
+private class HelperManager: NSObject, WKScriptMessageHandler {
+    private var helpers = [String: BrowserHelper]()
+    private weak var webView: WKWebView?
+
+    init(webView: WKWebView) {
+        self.webView = webView
+    }
+
+    @objc func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        for helper in helpers.values {
+            if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
+                if scriptMessageHandlerName == message.name {
+                    helper.userContentController(userContentController, didReceiveScriptMessage: message)
+                    return
+                }
+            }
+        }
+    }
+
+    func addHelper(helper: BrowserHelper, name: String) {
+        if let existingHelper = helpers[name] {
+            assertionFailure("Duplicate helper added: \(name)")
+        }
+
+        helpers[name] = helper
+
+        // If this helper handles script messages, then get the handler name and register it. The Browser
+        // receives all messages and then dispatches them to the right BrowserHelper.
+        if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
+            webView?.configuration.userContentController.addScriptMessageHandler(self, name: scriptMessageHandlerName)
+        }
+    }
+
+    func getHelper(#name: String) -> BrowserHelper? {
+        return helpers[name]
     }
 }
 
