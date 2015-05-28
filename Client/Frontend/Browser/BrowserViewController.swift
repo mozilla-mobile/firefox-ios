@@ -25,7 +25,7 @@ private struct BrowserViewControllerUX {
     private static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
 }
 
-class BrowserViewController: UIViewController {
+class BrowserViewController: UIViewController, UIActivityItemSource {
     private var urlBar: URLBarView!
     private var readerModeBar: ReaderModeBarView!
     private var statusBarOverlay: UIView!
@@ -63,6 +63,9 @@ class BrowserViewController: UIViewController {
 
     private var readerConstraint: Constraint?
     private var readerConstraintOffset: CGFloat = 0
+
+	// 1Password extension item
+	private var onePasswordExtensionItem: NSExtensionItem!
 
     let WhiteListedUrls = ["\\/\\/itunes\\.apple\\.com\\/"]
 
@@ -501,6 +504,33 @@ class BrowserViewController: UIViewController {
         }
         return false
     }
+
+	private func isPasswordManagerActivityType(activityType: String?) -> Bool {
+		var isOnePassword = OnePasswordExtension.sharedExtension().isOnePasswordExtensionActivityType(activityType);
+		var isPasswordManager = (activityType == "bundle.identifier.for.another.password.manager")
+		return isOnePassword || isPasswordManager
+	}
+
+	func activityViewControllerPlaceholderItem(activityViewController: UIActivityViewController) -> AnyObject {
+		return tabManager.selectedTab!.displayURL!
+	}
+
+	func activityViewController(activityViewController: UIActivityViewController, itemForActivityType activityType: String) -> AnyObject? {
+		if isPasswordManagerActivityType(activityType) {
+			// Return the 1Password extension item
+			return self.onePasswordExtensionItem
+		}
+		else {
+			// Return the selected tab's URL
+			return tabManager.selectedTab!.displayURL!
+		}
+
+	}
+
+	func activityViewController(activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: String?) -> String {
+		// Because of our UTI declaration, this UTI now satisfies both the 1Password Extension and the usual NSURL for Share extensions.
+		return "org.appextension.fill-browser-action"
+	}
 }
 
 /**
@@ -722,16 +752,45 @@ extension BrowserViewController: BrowserToolbarDelegate {
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         if let selected = tabManager.selectedTab {
             if let url = selected.displayURL {
-                var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
-                // Hide 'Add to Reading List' which currently uses Safari
-                activityViewController.excludedActivityTypes = [UIActivityTypeAddToReadingList]
-                if let popoverPresentationController = activityViewController.popoverPresentationController {
-                    // Using the button for the sourceView here results in this not showing on iPads.
-                    popoverPresentationController.sourceView = toolbar ?? urlBar
-                    popoverPresentationController.sourceRect = button.frame ?? button.frame
-                    popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
-                }
-                presentViewController(activityViewController, animated: true, completion: nil)
+				let webView = tabManager.selectedTab?.webView
+
+				// Create the 1Password extension item. Note that it will be created regardless: 1Password can be installed or not
+				OnePasswordExtension.sharedExtension().createExtensionItemForWebView(webView, completion: {(extensionItem, error) -> Void in
+					if extensionItem == nil {
+						log.error("Failed to create the 1Password extension item: \(error).")
+						return
+					}
+
+					// Set the 1Password extension item property
+					self.onePasswordExtensionItem = extensionItem
+
+					var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url, self], applicationActivities: nil)
+					// Hide 'Add to Reading List' which currently uses Safari
+					activityViewController.excludedActivityTypes = [UIActivityTypeAddToReadingList]
+					if let popoverPresentationController = activityViewController.popoverPresentationController {
+						// Using the button for the sourceView here results in this not showing on iPads.
+						popoverPresentationController.sourceView = self.toolbar ?? self.urlBar
+						popoverPresentationController.sourceRect = button.frame ?? button.frame
+						popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
+					}
+
+					activityViewController.completionWithItemsHandler = {(activityType, completed, returnedItems, activityError) -> Void in
+						if self.isPasswordManagerActivityType(activityType) {
+							if returnedItems != nil {
+								OnePasswordExtension.sharedExtension().fillReturnedItems(returnedItems, intoWebView: webView, completion: { (success, returnedItemsError) -> Void in
+									if success == false {
+										log.error("Failed to fill item into webview: \(returnedItemsError).")
+									}
+								})
+							}
+							else {
+								// Code for other custom activity types
+							}
+						}
+					}
+
+					self.presentViewController(activityViewController, animated: true, completion: nil)
+				})
             }
         }
     }
