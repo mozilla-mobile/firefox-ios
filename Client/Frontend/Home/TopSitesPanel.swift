@@ -328,6 +328,14 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.textLabel.text = site.title.isEmpty ? site.url : site.title
         cell.detailTextLabel.text = site.url
         cell.mergeAccessibilityLabels()
+
+        cell.rightBadge.image = nil
+        if let bookmarked = site.bookmarked {
+            if bookmarked {
+                cell.rightBadge.image = UIImage(named: "bookmark")
+            }
+        }
+
         if let icon = site.icon {
             cell.imageView.sd_setImageWithURL(NSURL(string: icon.url)!)
         } else {

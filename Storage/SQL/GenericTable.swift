@@ -38,14 +38,14 @@ class GenericTable<T>: BaseTable {
 
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
         if let err = db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (\(rows))") {
-            log.error("Error creating \(name) - \(err)")
+            log.error("Error creating \(self.name) - \(err)")
             return false
         }
         return true
     }
 
     func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
-        log.debug("Update table \(name) from \(from) to \(to)")
+        log.debug("Update table \(self.name) from \(from) to \(to)")
         return false
     }
 
@@ -59,7 +59,7 @@ class GenericTable<T>: BaseTable {
         let args =  [AnyObject?]()
         let err = db.executeChange(sqlStr, withArgs: args)
         if err != nil {
-            log.error("Error dropping \(name): \(err)")
+            log.error("Error dropping \(self.name): \(err)")
         }
         return err == nil
     }
