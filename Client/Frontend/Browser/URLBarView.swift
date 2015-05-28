@@ -25,7 +25,7 @@ private struct URLBarViewUX {
     static let ToolbarButtonInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
     static func backgroundColorWithAlpha(alpha: CGFloat) -> UIColor {
-        return UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: alpha)
+        return AppConstants.AppBackgroundColor.colorWithAlphaComponent(alpha)
     }
 }
 
