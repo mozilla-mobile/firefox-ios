@@ -39,36 +39,43 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         self.favicons = favicons
     }
 
+    private class func itemFactory(row: SDRow) -> BookmarkItem {
+        let id = row["id"] as! Int
+        let guid = row["guid"] as! String
+        let url = row["url"] as! String
+        let title = row["title"] as? String ?? url
+        let bookmark = BookmarkItem(guid: guid, title: title, url: url)
+
+        // TODO: share this logic with SQLiteHistory.
+        if let faviconUrl = row["iconURL"] as? String,
+           let date = row["iconDate"] as? Double,
+           let faviconType = row["iconType"] as? Int {
+            bookmark.favicon = Favicon(url: faviconUrl,
+                date: NSDate(timeIntervalSince1970: date),
+                type: IconType(rawValue: faviconType)!)
+        }
+
+        bookmark.id = id
+        return bookmark
+    }
+
+    private class func folderFactory(row: SDRow) -> BookmarkFolder {
+        let id = row["id"] as! Int
+        let guid = row["guid"] as! String
+        let title = row["title"] as? String ??
+        NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark folders without titles.")
+        let folder = BookmarkFolder(guid: guid, title: title)
+        folder.id = id
+        return folder
+    }
+
     private class func factory(row: SDRow) -> BookmarkNode {
         if let typeCode = row["type"] as? Int, type = BookmarkNodeType(rawValue: typeCode) {
-
-            let id = row["id"] as! Int
-            let guid = row["guid"] as! String
             switch type {
             case .Bookmark:
-                let url = row["url"] as! String
-                let title = row["title"] as? String ?? url
-                let bookmark = BookmarkItem(guid: guid, title: title, url: url)
-
-                // TODO: share this logic with SQLiteHistory.
-                if let faviconUrl = row["iconURL"] as? String,
-                   let date = row["iconDate"] as? Double,
-                   let faviconType = row["iconType"] as? Int {
-                    bookmark.favicon = Favicon(url: faviconUrl,
-                        date: NSDate(timeIntervalSince1970: date),
-                        type: IconType(rawValue: faviconType)!)
-                }
-
-                bookmark.id = id
-                return bookmark
-
+                return itemFactory(row)
             case .Folder:
-                let title = row["title"] as? String ??
-                NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark folders without titles.")
-                let folder = BookmarkFolder(guid: guid, title: title)
-                folder.id = id
-                return folder
-
+                return folderFactory(row)
             case .DynamicContainer:
                 assert(false, "Should never occur.")
             case .Separator:
@@ -156,6 +163,10 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         } else {
             failure(err)
         }
+    }
+
+    public func clearBookmarks() -> Success {
+        return self.db.run("DELETE FROM \(TableBookmarks) WHERE parent IS NOT \(BookmarkRoots.RootID)")
     }
 
     private func runSQL(sql: String, args: Args?, success: (Bool) -> Void, failure: (Any) -> Void) {
@@ -247,5 +258,18 @@ extension SQLiteBookmarks: ShareToDestination {
             let title = item.title ?? url.absoluteString!
             self.addToMobileBookmarks(url, title: title, favicon: item.favicon)
         }
+    }
+}
+
+extension SQLiteBookmarks: SearchableBookmarks {
+    public func bookmarksByURL(url: NSURL) -> Deferred<Result<Cursor<BookmarkItem>>> {
+        let inner = "SELECT id, type, guid, url, title, faviconID FROM \(TableBookmarks) WHERE type = \(BookmarkNodeType.Bookmark.rawValue) AND url = ?"
+        let sql =
+        "SELECT bookmarks.id AS id, bookmarks.type AS type, guid, bookmarks.url AS url, title, " +
+        "favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType " +
+        "FROM (\(inner)) AS bookmarks " +
+        "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
+        let args: Args = [url.absoluteString]
+        return db.runQuery(sql, args: args, factory: SQLiteBookmarks.itemFactory)
     }
 }

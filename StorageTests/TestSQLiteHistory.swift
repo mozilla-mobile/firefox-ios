@@ -6,13 +6,16 @@ import Foundation
 import Shared
 import XCTest
 
+
 class TestSQLiteHistory: XCTestCase {
+
     // This is a very basic test. Adds an entry, retrieves it, updates it,
     // and then clears the database.
     func testHistoryTable() {
         let files = MockFiles()
         let db = BrowserDB(files: files)
         let history = SQLiteHistory(db: db)
+        let bookmarks = SQLiteBookmarks(db: db, favicons: history)
 
         let site1 = Site(url: "http://url1/", title: "title one")
         let site1Changed = Site(url: "http://url1/", title: "title one alt")
@@ -136,6 +139,57 @@ class TestSQLiteHistory: XCTestCase {
                 XCTAssertEqual(0, sites.count)
                 return succeed()
             }
+            >>> done
+
+
+        waitForExpectationsWithTimeout(10.0) { error in
+            return
+        }
+    }
+
+    func testFaviconTable() {
+        let files = MockFiles()
+        let db = BrowserDB(files: files)
+        let history = SQLiteHistory(db: db)
+        let bookmarks = SQLiteBookmarks(db: db, favicons: history)
+
+        let expectation = self.expectationWithDescription("First.")
+        func done() -> Success {
+            expectation.fulfill()
+            return succeed()
+        }
+
+        func updateFavicon() -> Success {
+            var fav = Favicon(url: "http://url2/", date: NSDate(), type: .Icon)
+            fav.id = 1
+            let site = Site(url: "http://bookmarkedurl/", title: "My Bookmark")
+            return history.addFavicon(fav, forSite: site) >>> { return succeed() }
+        }
+
+        func checkFaviconForBookmarkIsNil() -> Success {
+            return bookmarks.bookmarksByURL("http://bookmarkedurl/".asURL!) >>== { results in
+                XCTAssertEqual(1, results.count)
+                XCTAssertNil(results[0]?.favicon)
+                return succeed()
+            }
+        }
+
+        func checkFaviconWasSetForBookmark() -> Success {
+            return bookmarks.bookmarksByURL("http://bookmarkedurl/".asURL!) >>== { results in
+                XCTAssertEqual(1, results.count)
+                if let actualFaviconURL = results[0]?.favicon?.url {
+                    XCTAssertEqual("http://url2/", actualFaviconURL)
+                }
+                return succeed()
+            }
+        }
+
+        history.clearFavicons()
+            >>> bookmarks.clearBookmarks
+            >>> { bookmarks.addToMobileBookmarks("http://bookmarkedurl/".asURL!, title: "Title", favicon: nil) }
+            >>> checkFaviconForBookmarkIsNil
+            >>> updateFavicon
+            >>> checkFaviconWasSetForBookmark
             >>> done
 
         waitForExpectationsWithTimeout(10.0) { error in

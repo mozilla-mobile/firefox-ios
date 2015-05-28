@@ -11,7 +11,7 @@ public func >>== <T, U>(x: Deferred<Result<T>>, f: T -> Deferred<Result<U>>) -> 
 }
 
 // A termination case.
-public func >>== <T, U>(x: Deferred<Result<T>>, f: T -> ()) {
+public func >>== <T>(x: Deferred<Result<T>>, f: T -> ()) {
     return x.upon { result in
         if let v = result.successValue {
             f(v)
