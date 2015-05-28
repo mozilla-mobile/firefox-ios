@@ -7,14 +7,13 @@ import UIKit
 
 private struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
-    static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
+    static let BackgroundColor = AppConstants.AppBackgroundColor
     static let CellBackgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1)
     static let TextBoxHeight = CGFloat(32.0)
     static let FaviconSize = CGFloat(18.0)
     static let CellHeight = TextBoxHeight * 5
     static let Margin = CGFloat(15)
-    // This color has been manually adjusted to match background layer with iOS translucency effect.
-    static let ToolbarBarTintColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
+    static let ToolbarBarTintColor = AppConstants.AppBackgroundColor
     static let ToolbarButtonOffset = CGFloat(10.0)
     static let TabTitleTextColor = UIColor.blackColor()
     static let TabTitleTextFont = AppConstants.DefaultSmallFontBold

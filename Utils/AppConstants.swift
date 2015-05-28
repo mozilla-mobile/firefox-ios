@@ -9,6 +9,8 @@ public enum AppBuildChannel {
 
 public struct AppConstants {
 
+    static let AppBackgroundColor = UIColor.blackColor()
+
     static let ToolbarHeight: CGFloat = 44
     static let DefaultRowHeight: CGFloat = 58
     static let DefaultPadding: CGFloat = 10

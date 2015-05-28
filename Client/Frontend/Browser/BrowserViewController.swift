@@ -22,7 +22,7 @@ private let HomeURL = "about:home"
 
 private struct BrowserViewControllerUX {
     private static let ToolbarBaseAnimationDuration: CGFloat = 0.3
-    private static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
+    private static let BackgroundColor = AppConstants.AppBackgroundColor
 }
 
 class BrowserViewController: UIViewController {
