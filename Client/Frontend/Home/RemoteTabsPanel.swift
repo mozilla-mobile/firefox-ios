@@ -118,8 +118,6 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
             view.textLabel.text = client.name
             view.contentView.backgroundColor = RemoteTabsPanelUX.HeaderBackgroundColor
 
-            // TODO: Bug 1154088 - Convert timestamp to locale-relative timestring.
-
             /*
              * A note on timestamps.
              * We have access to two timestamps here: the timestamp of the remote client record,
@@ -132,9 +130,11 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
              * Ideally, we should save and use the modified time of the tabs record itself.
              * This will be the real time that the other client uploaded tabs.
              */
+
             let timestamp = clientTabs.approximateLastSyncTime()
-            let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time")
-            view.detailTextLabel.text = String(format: label, String(timestamp))
+            let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time. Argument is the relative date string.")
+            view.detailTextLabel.text = String(format: label, NSDate.fromTimestamp(timestamp).toRelativeTimeString())
+
             let image: UIImage?
             if client.type == "desktop" {
                 image = UIImage(named: "deviceTypeDesktop")
@@ -144,6 +144,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
                 image?.accessibilityLabel = NSLocalizedString("mobile device", comment: "Accessibility label for Mobile Device image in remote tabs list")
             }
             view.imageView.image = image
+
             view.mergeAccessibilityLabels()
             return view
         }
