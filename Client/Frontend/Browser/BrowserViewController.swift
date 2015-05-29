@@ -1407,6 +1407,14 @@ extension BrowserViewController: WKUIDelegate {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
     }
+
+    func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
+        if navigationResponse.canShowMIMEType {
+            decisionHandler(WKNavigationResponsePolicy.Allow)
+            return
+        }
+        decisionHandler(WKNavigationResponsePolicy.Cancel)
+    }
 }
 
 extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationControllerDelegate {
