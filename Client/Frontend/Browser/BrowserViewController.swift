@@ -1320,7 +1320,7 @@ extension BrowserViewController: WKNavigationDelegate {
             webView.evaluateJavaScript("_firefox_ReaderMode.checkReadability()", completionHandler: nil)
         }
 
-        if tab == tabManager.selectedTab {
+        if tab === tabManager.selectedTab {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
             // cursor land on the correct initial element, but if not followed by LayoutChanged,
@@ -1391,7 +1391,7 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
     func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forBrowser browser: Browser) {
         // If this reader mode availability state change is for the tab that we currently show, then update
         // the button. Otherwise do nothing and the button will be updated when the tab is made active.
-        if tabManager.selectedTab == browser {
+        if tabManager.selectedTab === browser {
             log.debug("New readerModeState: \(state.rawValue)")
             urlBar.updateReaderModeState(state)
         }

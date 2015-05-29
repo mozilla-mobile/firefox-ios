@@ -78,6 +78,22 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertNil(tabCell, "Tab tray cell disposed")
     }
 
+    func testWebViewDisposed() {
+        weak var webView = tester().waitForViewWithAccessibilityLabel("Web content")
+        XCTAssertNotNil(webView, "webView found")
+
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
+        let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+        tester().swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
+        tester().waitForTappableViewWithAccessibilityLabel("Show Tabs")
+
+        tester().runBlock { _ in
+            return (webView == nil) ? KIFTestStepResult.Success : KIFTestStepResult.Wait
+        }
+        XCTAssertNil(webView, "webView disposed")
+    }
+
     private func getChildViewController(parent: UIViewController, childClass: String) -> UIViewController {
         let childControllers = parent.childViewControllers.filter { child in
             let description = NSString(string: child.description)
