@@ -52,9 +52,7 @@ class TabManager : NSObject {
     var selectedIndex: Int { return _selectedIndex }
     private let defaultNewTabRequest: NSURLRequest
     private let navDelegate: TabManagerNavDelegate
-
     private var configuration: WKWebViewConfiguration
-
     let storage: RemoteClientsAndTabs?
 
     init(defaultNewTabRequest: NSURLRequest, storage: RemoteClientsAndTabs? = nil) {
@@ -122,6 +120,7 @@ class TabManager : NSObject {
         }
 
         assert(tab === selectedTab, "Expected tab is selected")
+        selectedTab?.createWebview()
 
         for delegate in delegates {
             delegate.get()?.tabManager(self, didSelectedTabChange: tab, previous: previous)
@@ -130,22 +129,23 @@ class TabManager : NSObject {
 
     // This method is duplicated to hide the flushToDisk option from consumers.
     func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Browser {
-        return self.addTab(request: request, configuration: configuration, flushToDisk: true)
+        return self.addTab(request: request, configuration: configuration, flushToDisk: true, zombie: false)
     }
 
-    func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool) -> Browser {
+    func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool) -> Browser {
         assert(NSThread.isMainThread())
         if request == nil {
             request = defaultNewTabRequest
         }
 
         let tab = Browser(configuration: configuration ?? self.configuration)
-        tab.webView.navigationDelegate = self.navDelegate
-
         addTab(tab)
 
+        if !zombie {
+            tab.createWebview()
+        }
+        tab.navigationDelegate = self.navDelegate
         tab.loadRequest(request)
-        selectTab(tab)
 
         if flushToDisk {
         	storeChanges()
@@ -277,7 +277,7 @@ extension TabManager {
         if let savedTabs = coder.decodeObjectForKey("tabs") as? [SavedTab] {
             for savedTab in savedTabs {
                 if let url = savedTab.url, updatedURL = WebServer.sharedInstance.updateLocalURL(url) {
-                    let tab = self.addTab(request: NSURLRequest(URL: updatedURL), flushToDisk: false)
+                    let tab = self.addTab(request: NSURLRequest(URL: updatedURL), flushToDisk: false, zombie: true)
                     tab.screenshot = savedTab.screenshot
                     if savedTab.isSelected {
                         tabToSelect = tab
@@ -305,7 +305,6 @@ class TabManagerNavDelegate : NSObject, WKNavigationDelegate {
 
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         for delegate in delegates {
-            println("Call \(delegate)")
             delegate.webView?(webView, didCommitNavigation: navigation)
         }
     }

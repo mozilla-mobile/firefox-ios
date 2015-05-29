@@ -208,7 +208,6 @@ public class BrowserProfile: Profile {
         return self.makePrefs()
     }()
 
-
     lazy var readingList: ReadingListService? = {
         return ReadingListService(profileStoragePath: self.files.rootPath)
     }()

@@ -29,11 +29,11 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
         let path = NSBundle.mainBundle().pathForResource("ContextMenu", ofType: "js")!
         let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) as! String
         let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
-        browser.webView.configuration.userContentController.addUserScript(userScript)
+        browser.webView!.configuration.userContentController.addUserScript(userScript)
 
         // Add a gesture recognizer that disables the built-in context menu gesture recognizer.
         gestureRecognizer.delegate = self
-        browser.webView.addGestureRecognizer(gestureRecognizer)
+        browser.webView!.addGestureRecognizer(gestureRecognizer)
     }
 
     func scriptMessageHandlerName() -> String? {
