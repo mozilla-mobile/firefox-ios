@@ -66,14 +66,29 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.url</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>1Password Fill Browser Action</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.appextension.fill-browser-action</string>
+			<key>UTTypeSize64IconFile</key>
+			<string></string>
+		</dict>
 	</array>
 </dict>
 </plist>
