@@ -8,6 +8,7 @@ public enum AppBuildChannel {
 }
 
 public struct AppConstants {
+    static let AboutHomeURL = NSURL(string: "about:home")!
 
     static let AppBackgroundColor = UIColor.blackColor()
 
