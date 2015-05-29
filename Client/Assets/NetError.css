@@ -1,0 +1,110 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    background-color: white;
+    padding: 0 65px;
+    color: #333;
+    font-size: 16px;
+    -webkit-text-size-adjust: none;
+    font-family: "Helvetica Neue Medium" sans-serif;
+}
+
+h1 {
+    color: #333;
+    font-size: 16px;
+    -webkit-text-size-adjust: none;
+    font-family: "Helvetica Neue Medium" sans-serif;
+    font-weight: 300;
+}
+
+/* Add a set of stripes at the top of pages */
+#decoration {
+    background-image: repeating-linear-gradient(-65deg,      #eee,  #eee 10px,
+                                                       white 10px, white 20px,
+                                                                    #eee 20px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 32px;
+    width: 100%;
+}
+
+a {
+    color: rgb(76, 158, 255);
+    text-decoration: none;
+}
+
+#errorShortDesc {
+    /* Margins between the li and buttons below it won't be collapsed. Remove the bottom margin here. */
+    margin: 20px 0 0;
+}
+
+button {
+    /* Force buttons to display: block here to try and enfoce collapsing margins */
+    display: block;
+    width: 100%;
+    border: none;
+    padding: 1rem;
+    font-family: "Helvetica Neue Medium" sans-serif;
+    background-color: rgb(76, 158, 255);
+    color: white;
+    font-size: 16px;
+    font-weight: 300;
+    border-radius: 5px;
+    background-image: none;
+    margin: 10px 0 0;
+    position: -webkit-sticky;
+    bottom: 5px;
+}
+
+#errorPageContainer {
+    /* If the page is greater than 550px center the content.
+     * This number should be kept in sync with the media query for tablets below */
+    max-width: 550px;
+    margin: 0 auto;
+    -webkit-transform: translateY(127px);
+    padding-bottom: 10px;
+
+    min-height: calc(100% - 127px - 10px);
+    display: flex;
+    flex-direction: column;
+}
+
+/* On large screen devices (hopefully a 7+ inch tablet, we already center content (see #errorPageContainer above).
+ Apply tablet specific styles here */
+@media (min-width: 550px) {
+    #errorTitle,
+    #errorShortDescText {
+        width: 50%;
+    }
+
+    button {
+        position: absolute;
+        top: -0.5em;
+        right: 0px;
+        bottom: auto;
+        padding-left: 5%;
+        padding-right: 5%;
+        min-width: 40%;
+        width: auto;
+    }
+}
+
+#errorLongContent {
+    font-family: "Helvetica Neue Light" sans-serif;
+    color: #ccc;
+    font-size: 12px;
+}
+
+#errorLongDesc {
+    margin-bottom: 78px;
+}

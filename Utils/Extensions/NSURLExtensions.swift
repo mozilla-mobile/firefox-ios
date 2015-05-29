@@ -19,4 +19,21 @@ extension NSURL {
         components.queryItems = (components.queryItems ?? []) + [item]
         return components.URL!
     }
+
+    public func getQuery() -> [String: String] {
+        var results = [String: String]()
+        var keyValues = self.query?.componentsSeparatedByString("&")
+
+        if keyValues?.count > 0 {
+            for pair in keyValues! {
+                let kv = pair.componentsSeparatedByString("=")
+                if kv.count > 1 {
+                    results[kv[0]] = kv[1]
+                }
+            }
+        }
+
+        return results
+    }
+
 }

@@ -1385,6 +1385,28 @@ extension BrowserViewController: WKUIDelegate {
         }))
         presentViewController(alertController, animated: true, completion: nil)
     }
+
+    /// Invoked when an error occurs during a committed main frame navigation.
+    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+        if error.code == Int(CFNetworkErrors.CFURLErrorCancelled.rawValue) {
+            return
+        }
+
+        if let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
+            ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
+        }
+    }
+
+    /// Invoked when an error occurs while starting to load data for the main frame.
+    func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
+        if error.code == Int(CFNetworkErrors.CFURLErrorCancelled.rawValue) {
+            return
+        }
+
+        if let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
+            ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
+        }
+    }
 }
 
 extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationControllerDelegate {
