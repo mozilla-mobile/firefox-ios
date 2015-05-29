@@ -763,7 +763,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
 					// Set the 1Password extension item property
 					self.onePasswordExtensionItem = extensionItem
 
-					var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url, self], applicationActivities: nil)
+					var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, self], applicationActivities: nil)
 					// Hide 'Add to Reading List' which currently uses Safari
 					activityViewController.excludedActivityTypes = [UIActivityTypeAddToReadingList]
 					if let popoverPresentationController = activityViewController.popoverPresentationController {
