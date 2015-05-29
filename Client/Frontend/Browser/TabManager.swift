@@ -139,7 +139,16 @@ class TabManager : NSObject {
         }
 
         let tab = Browser(configuration: configuration ?? self.configuration)
-        addTab(tab)
+
+        for delegate in delegates {
+            delegate.get()?.tabManager(self, didCreateTab: tab)
+        }
+
+        tabs.append(tab)
+
+        for delegate in delegates {
+            delegate.get()?.tabManager(self, didAddTab: tab, atIndex: tabs.count - 1)
+        }
 
         if !zombie {
             tab.createWebview()
@@ -152,16 +161,6 @@ class TabManager : NSObject {
         }
 
         return tab
-    }
-
-    private func addTab(tab: Browser) {
-        for delegate in delegates {
-            delegate.get()?.tabManager(self, didCreateTab: tab)
-        }
-        tabs.append(tab)
-        for delegate in delegates {
-            delegate.get()?.tabManager(self, didAddTab: tab, atIndex: tabs.count-1)
-        }
     }
 
     // This method is duplicated to hide the flushToDisk option from consumers.
