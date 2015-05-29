@@ -29,7 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
 
-        browserViewController = BrowserViewController(profile: profile)
+        let defaultRequest = NSURLRequest(URL: AppConstants.AboutHomeURL)
+        let tabManager = TabManager(defaultNewTabRequest: defaultRequest)
+
+        browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
 
         // Add restoration class, the factory that will return the ViewController we 
         // will restore with.

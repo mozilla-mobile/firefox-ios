@@ -18,7 +18,6 @@ private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
 
 private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
-private let HomeURL = "about:home"
 
 private struct BrowserViewControllerUX {
     private static let ToolbarBaseAnimationDuration: CGFloat = 0.3
@@ -40,12 +39,10 @@ class BrowserViewController: UIViewController {
     private let snackBars = UIView()
     private let auralProgress = AuralProgressBar()
 
-    // This is public because the AppDelegate needs it when showing the settings. This is unfortunate
-    // and we should find a way to better organize that code in the future.
-    var tabManager: TabManager!
-    weak var tabTrayController: TabTrayController!
+    private weak var tabTrayController: TabTrayController!
 
-    let profile: Profile
+    private let profile: Profile
+    private let tabManager: TabManager
 
     // These views wrap the urlbar and toolbar to provide background effects on them
     private var header: UIView!
@@ -71,8 +68,9 @@ class BrowserViewController: UIViewController {
     var ignoredNavigation = Set<WKNavigation>()
     var typedNavigation = [WKNavigation: VisitType]()
 
-    init(profile: Profile) {
+    init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
+        self.tabManager = tabManager
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -90,11 +88,8 @@ class BrowserViewController: UIViewController {
     }
 
     private func didInit() {
-        let defaultURL = NSURL(string: HomeURL)!
-        let defaultRequest = NSURLRequest(URL: defaultURL)
-        tabManager = TabManager(defaultNewTabRequest: defaultRequest)
-        tabManager.addDelegate(self)
         screenshotHelper = BrowserScreenshotHelper(controller: self)
+        tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
     }
 
@@ -309,7 +304,7 @@ class BrowserViewController: UIViewController {
             make.top.equalTo(self.urlBar.snp_bottom)
             make.left.right.equalTo(self.view)
             let url = self.tabManager.selectedTab?.url
-            if url?.absoluteString == HomeURL && self.homePanelIsInline {
+            if url == AppConstants.AboutHomeURL && self.homePanelIsInline {
                 make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
             } else {
                 make.bottom.equalTo(self.view.snp_bottom)
@@ -389,7 +384,7 @@ class BrowserViewController: UIViewController {
 
     private func updateInContentHomePanel(url: NSURL?) {
         if !urlBar.isEditing {
-            if url?.absoluteString == HomeURL {
+            if url == AppConstants.AboutHomeURL {
                 showHomePanelController(inline: true)
             } else {
                 hideHomePanelController()
@@ -1714,7 +1709,7 @@ private class BrowserScreenshotHelper: ScreenshotHelper {
 
     func takeScreenshot(tab: Browser, aspectRatio: CGFloat, quality: CGFloat) -> UIImage? {
         if let url = tab.url {
-            if url.absoluteString == HomeURL {
+            if url == AppConstants.AboutHomeURL {
                 if let homePanel = controller?.homePanelController {
                     return homePanel.view.screenshot(aspectRatio, quality: quality)
                 }
