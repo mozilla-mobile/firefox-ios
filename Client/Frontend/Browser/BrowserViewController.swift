@@ -962,6 +962,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
 					self.onePasswordExtensionItem = extensionItem
 					
 					var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
+					var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, self], applicationActivities: nil)
 					// Hide 'Add to Reading List' which currently uses Safari
 					activityViewController.excludedActivityTypes = [UIActivityTypeAddToReadingList]
 					activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
