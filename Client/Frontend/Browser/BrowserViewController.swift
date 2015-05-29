@@ -1109,6 +1109,9 @@ extension BrowserViewController: TabManagerDelegate {
         let contextMenuHelper = ContextMenuHelper(browser: tab)
         contextMenuHelper.delegate = self
         tab.addHelper(contextMenuHelper, name: ContextMenuHelper.name())
+
+        let errorPages = ErrorPageHelper()
+        tab.addHelper(errorPages, name: ErrorPageHelper.name())
     }
 
     func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int) {
@@ -1406,6 +1409,17 @@ extension BrowserViewController: WKUIDelegate {
         if let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
+    }
+
+    func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
+        if navigationResponse.canShowMIMEType {
+            decisionHandler(WKNavigationResponsePolicy.Allow)
+            return
+        }
+
+        let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: "Downloads aren't supported in Firefox yet (but we're working on it)."])
+        ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.URL!, inWebView: webView)
+        decisionHandler(WKNavigationResponsePolicy.Allow)
     }
 }
 
