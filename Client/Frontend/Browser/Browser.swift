@@ -145,7 +145,7 @@ class Browser: NSObject {
     }
 
     var displayURL: NSURL? {
-        if let url = webView?.URL {
+        if let url = webView?.URL ?? lastRequest?.URL {
             if url.scheme != "about" {
                 if ReaderModeUtils.isReaderModeURL(url) {
                     return ReaderModeUtils.decodeURL(url)
@@ -158,7 +158,7 @@ class Browser: NSObject {
                 return url
             }
         }
-        return lastRequest?.URL
+        return nil
     }
 
     var canGoBack: Bool {
