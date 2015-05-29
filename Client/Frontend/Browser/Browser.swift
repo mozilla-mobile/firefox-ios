@@ -13,32 +13,28 @@ protocol BrowserHelper {
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
 }
 
+@objc
 protocol BrowserDelegate {
     func browser(browser: Browser, didAddSnackbar bar: SnackBar)
     func browser(browser: Browser, didRemoveSnackbar bar: SnackBar)
+    optional func browser(browser: Browser, didCreateWebView webView: WKWebView)
+    optional func browser(browser: Browser, willDeleteWebView webView: WKWebView)
 }
 
-class Browser {
-    let webView: WKWebView
+class Browser: NSObject {
+    var webView: WKWebView? = nil
+
     var browserDelegate: BrowserDelegate? = nil
     var bars = [SnackBar]()
     var favicons = [Favicon]()
+
     var screenshot: UIImage?
-    private let helperManager: HelperManager
+    private var helperManager: HelperManager? = nil
+    var lastRequest: NSURLRequest? = nil
+    private var configuration: WKWebViewConfiguration? = nil
 
     init(configuration: WKWebViewConfiguration) {
-        configuration.userContentController = WKUserContentController()
-        webView = WKWebView(frame: CGRectZero, configuration: configuration)
-        webView.allowsBackForwardNavigationGestures = true
-        webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
-        webView.backgroundColor = UIColor.lightGrayColor()
-        webView.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
-
-        // Turning off masking allows the web content to flow outside of the scrollView's frame
-        // which allows the content appear beneath the toolbars in the BrowserViewController
-        webView.scrollView.layer.masksToBounds = false
-
-        helperManager = HelperManager(webView: webView)
+        self.configuration = configuration
     }
 
     class func toTab(browser: Browser) -> RemoteTab? {
@@ -54,16 +50,62 @@ class Browser {
         }
     }
 
+    weak var navigationDelegate: WKNavigationDelegate? {
+        didSet {
+            if let webView = webView {
+                webView.navigationDelegate = navigationDelegate
+            }
+        }
+    }
+
+    func createWebview() {
+        if webView == nil {
+            assert(configuration != nil, "Create webview can only be called once")
+            configuration!.userContentController = WKUserContentController()
+            let webView = WKWebView(frame: CGRectZero, configuration: configuration!)
+            configuration = nil
+
+            webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
+            webView.allowsBackForwardNavigationGestures = true
+            webView.backgroundColor = UIColor.lightGrayColor()
+            webView.scrollView.layer.masksToBounds = false
+
+            // Turning off masking allows the web content to flow outside of the scrollView's frame
+            // which allows the content appear beneath the toolbars in the BrowserViewController
+            webView.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
+            webView.scrollView.layer.masksToBounds = false
+            webView.navigationDelegate = navigationDelegate
+            helperManager = HelperManager(webView: webView)
+
+            if let request = lastRequest {
+                webView.loadRequest(request)
+            }
+
+            self.webView = webView
+            browserDelegate?.browser?(self, didCreateWebView: webView)
+        }
+    }
+
+    deinit {
+        if let webView = webView {
+            browserDelegate?.browser?(self, willDeleteWebView: webView)
+        }
+    }
+
     var loading: Bool {
-        return webView.loading
+        return webView?.loading ?? false
+    }
+
+    var estimatedProgress: Double {
+        return webView?.estimatedProgress ?? 0
     }
 
     var backList: [WKBackForwardListItem]? {
-        return webView.backForwardList.backList as? [WKBackForwardListItem]
+        return webView?.backForwardList.backList as? [WKBackForwardListItem]
     }
 
     var forwardList: [WKBackForwardListItem]? {
-        return webView.backForwardList.forwardList as? [WKBackForwardListItem]
+        return webView?.backForwardList.forwardList as? [WKBackForwardListItem]
     }
 
     var historyList: [NSURL] {
@@ -74,11 +116,11 @@ class Browser {
     }
 
     var title: String? {
-        return webView.title
+        return webView?.title
     }
 
     var displayTitle: String {
-        if let title = webView.title {
+        if let title = webView?.title {
             if !title.isEmpty {
                 return title
             }
@@ -99,11 +141,11 @@ class Browser {
     }
 
     var url: NSURL? {
-        return webView.URL
+        return webView?.URL ?? lastRequest?.URL
     }
 
     var displayURL: NSURL? {
-        if let url = webView.URL {
+        if let url = webView?.URL {
             if url.scheme != "about" {
                 if ReaderModeUtils.isReaderModeURL(url) {
                     return ReaderModeUtils.decodeURL(url)
@@ -116,68 +158,72 @@ class Browser {
                 return url
             }
         }
-        return nil
+        return lastRequest?.URL
     }
 
     var canGoBack: Bool {
-        return webView.canGoBack
+        return webView?.canGoBack ?? false
     }
 
     var canGoForward: Bool {
-        return webView.canGoForward
+        return webView?.canGoForward ?? false
     }
 
     func goBack() {
-        webView.goBack()
+        webView?.goBack()
     }
 
     func goForward() {
-        webView.goForward()
+        webView?.goForward()
     }
 
     func goToBackForwardListItem(item: WKBackForwardListItem) {
-        webView.goToBackForwardListItem(item)
+        webView?.goToBackForwardListItem(item)
     }
 
     func loadRequest(request: NSURLRequest) -> WKNavigation? {
-        return webView.loadRequest(request)
+        lastRequest = request
+        if let webView = webView {
+            return webView.loadRequest(request)
+        }
+        return nil
     }
 
     func stop() {
-        webView.stopLoading()
+        webView?.stopLoading()
     }
 
     func reload() {
-        webView.reload()
+        webView?.reload()
     }
 
     func addHelper(helper: BrowserHelper, name: String) {
-        helperManager.addHelper(helper, name: name)
+        helperManager!.addHelper(helper, name: name)
     }
 
     func getHelper(#name: String) -> BrowserHelper? {
-        return helperManager.getHelper(name: name)
+        return helperManager!.getHelper(name: name)
     }
 
     func hideContent(animated: Bool = false) {
-        webView.userInteractionEnabled = false
+        webView?.userInteractionEnabled = false
         if animated {
             UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.webView.alpha = 0.0
+                self.webView?.alpha = 0.0
             })
         } else {
-            webView.alpha = 0.0
+            webView?.alpha = 0.0
         }
     }
 
     func showContent(animated: Bool = false) {
-        webView.userInteractionEnabled = true
+        webView?.userInteractionEnabled = true
         if animated {
             UIView.animateWithDuration(0.25, animations: { () -> Void in
-                self.webView.alpha = 1.0
+                self.webView?.alpha = 1.0
             })
         } else {
-            webView.alpha = 1.0
+            webView?.alpha = 1.0
         }
     }
 

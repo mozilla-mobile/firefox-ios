@@ -143,7 +143,7 @@ class BrowserViewController: UIViewController {
         // performs a device rotation. Since scrolling calls
         // _updateVisibleContentRects (https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/API/Cocoa/WKWebView.mm#L1430)
         // this method nudges the web view's scroll view by a single pixel to force it to invalidate.
-        if let scrollView = self.tabManager.selectedTab?.webView.scrollView {
+        if let scrollView = self.tabManager.selectedTab?.webView?.scrollView {
             let contentOffset = scrollView.contentOffset
             coordinator.animateAlongsideTransition({ context in
                 self.updateHeaderFooterConstraintsAndAlpha(
@@ -228,7 +228,8 @@ class BrowserViewController: UIViewController {
         }
 
         if (tabManager.count == 0) {
-            tabManager.addTab()
+            let tab = tabManager.addTab()
+            tabManager.selectTab(tab)
         }
     }
 
@@ -738,6 +739,43 @@ extension BrowserViewController: BrowserToolbarDelegate {
 }
 
 extension BrowserViewController: BrowserDelegate {
+
+    func browser(browser: Browser, didCreateWebView webView: WKWebView) {
+        webView.scrollView.delegate = self
+        webViewContainer.insertSubview(webView, atIndex: 0)
+        webView.snp_makeConstraints { make in
+            make.edges.equalTo(self.webViewContainer)
+        }
+
+        // Observers that live as long as the tab. Make sure these are all cleared
+        // in willDeleteWebView below!
+        webView.addObserver(self, forKeyPath: KVOEstimatedProgress, options: .New, context: nil)
+        webView.addObserver(self, forKeyPath: KVOLoading, options: .New, context: nil)
+        webView.UIDelegate = self
+
+        let readerMode = ReaderMode(browser: browser)
+        readerMode.delegate = self
+        browser.addHelper(readerMode, name: ReaderMode.name())
+
+        let favicons = FaviconManager(browser: browser, profile: profile)
+        browser.addHelper(favicons, name: FaviconManager.name())
+
+        let passwords = PasswordHelper(browser: browser, profile: profile)
+        browser.addHelper(passwords, name: PasswordHelper.name())
+
+        let contextMenuHelper = ContextMenuHelper(browser: browser)
+        contextMenuHelper.delegate = self
+        browser.addHelper(contextMenuHelper, name: ContextMenuHelper.name())
+    }
+
+    func browser(browser: Browser, willDeleteWebView webView: WKWebView) {
+        webView.removeObserver(self, forKeyPath: KVOEstimatedProgress)
+        webView.removeObserver(self, forKeyPath: KVOLoading)
+        webView.UIDelegate = nil
+        webView.scrollView.delegate = nil
+        webView.removeFromSuperview()
+    }
+
     private func findSnackbar(barToFind: SnackBar) -> Int? {
         let bars = snackBars.subviews
         for (index, bar) in enumerate(bars) {
@@ -1043,11 +1081,12 @@ extension BrowserViewController: TabManagerDelegate {
             wv.accessibilityElementsHidden = true
         }
 
-        if let wv = selected?.webView {
-            wv.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the web view")
-            webViewContainer.addSubview(wv)
-            wv.accessibilityElementsHidden = false
-            if let url = wv.URL?.absoluteString {
+        if let webView = selected?.webView {
+            webViewContainer.addSubview(webView)
+            webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
+            webView.accessibilityElementsHidden = false
+
+            if let url = webView.URL?.absoluteString {
                 profile.bookmarks.isBookmarked(url, success: { bookmarked in
                     self.toolbar?.updateBookmarkStatus(bookmarked)
                     self.urlBar.updateBookmarkStatus(bookmarked)
@@ -1057,7 +1096,7 @@ extension BrowserViewController: TabManagerDelegate {
             } else {
                 // The web view can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
-                wv.reload()
+                webView.reload()
             }
         }
 
@@ -1072,14 +1111,14 @@ extension BrowserViewController: TabManagerDelegate {
 
         toolbar?.updateBackStatus(selected?.canGoBack ?? false)
         toolbar?.updateFowardStatus(selected?.canGoForward ?? false)
-        toolbar?.updateReloadStatus(selected?.webView.loading ?? false)
+        toolbar?.updateReloadStatus(selected?.loading ?? false)
 
         let isPage = (selected?.displayURL != nil) ? isWebPage(selected!.displayURL!) : false
         toolbar?.updatePageStatus(isWebPage: isPage)
 
         self.urlBar.updateBackStatus(selected?.canGoBack ?? false)
         self.urlBar.updateFowardStatus(selected?.canGoForward ?? false)
-        self.urlBar.updateProgressBar(Float(selected?.webView.estimatedProgress ?? 0))
+        self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
             urlBar.updateReaderModeState(readerMode.state)
@@ -1096,49 +1135,17 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
-        let readerMode = ReaderMode(browser: tab)
-        readerMode.delegate = self
-        tab.addHelper(readerMode, name: ReaderMode.name())
-
-        let favicons = FaviconManager(browser: tab, profile: profile)
-        tab.addHelper(favicons, name: FaviconManager.name())
-
-        let passwords = PasswordHelper(browser: tab, profile: profile)
-        tab.addHelper(passwords, name: PasswordHelper.name())
-
-        let contextMenuHelper = ContextMenuHelper(browser: tab)
-        contextMenuHelper.delegate = self
-        tab.addHelper(contextMenuHelper, name: ContextMenuHelper.name())
     }
 
     func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int) {
         urlBar.updateTabCount(tabManager.count)
-        tab.webView.scrollView.delegate = self
-
-        webViewContainer.insertSubview(tab.webView, atIndex: 0)
-
-        tab.webView.snp_makeConstraints { make in
-            make.edges.equalTo(self.webViewContainer)
-        }
-
-        // Observers that live as long as the tab. Make sure these are all cleared
-        // in didRemoveTab below!
-        tab.webView.addObserver(self, forKeyPath: KVOEstimatedProgress, options: .New, context: nil)
-        tab.webView.addObserver(self, forKeyPath: KVOLoading, options: .New, context: nil)
-        tab.webView.UIDelegate = self
         tab.browserDelegate = self
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex: Int) {
         urlBar.updateTabCount(tabManager.count)
-
-        tab.webView.removeObserver(self, forKeyPath: KVOEstimatedProgress)
-        tab.webView.removeObserver(self, forKeyPath: KVOLoading)
-        tab.webView.UIDelegate = nil
-        tab.browserDelegate = nil
-        tab.webView.scrollView.delegate = nil
-
-        tab.webView.removeFromSuperview()
+        // browserDelegate is a weak ref (and the tab's webView may not be destroyed yet)
+        // so we don't expcitly unset it.
     }
 
     private func isWebPage(url: NSURL) -> Bool {
@@ -1336,6 +1343,7 @@ extension BrowserViewController: WKUIDelegate {
         // If the page uses window.open() or target="_blank", open the page in a new tab.
         // TODO: This doesn't work for window.open() without user action (bug 1124942).
         let tab = tabManager.addTab(request: navigationAction.request, configuration: configuration)
+        tabManager.selectTab(tab)
         return tab.webView
     }
 
@@ -1480,7 +1488,7 @@ extension BrowserViewController : Transitionable {
         // Move all the webview's off screen
         for i in 0..<tabManager.count {
             if let tab = tabManager[i] {
-                tab.webView.hidden = true
+                tab.webView?.hidden = true
             }
         }
         self.homePanelController?.view.hidden = true
@@ -1490,7 +1498,7 @@ extension BrowserViewController : Transitionable {
         // Move all the webview's off screen
         for i in 0..<tabManager.count {
             if let tab = tabManager[i] {
-                tab.webView.hidden = true
+                tab.webView?.hidden = true
             }
         }
 
@@ -1525,7 +1533,7 @@ extension BrowserViewController : Transitionable {
         // Move all the webview's back on screen
         for i in 0..<tabManager.count {
             if let tab = tabManager[i] {
-                tab.webView.hidden = false
+                tab.webView?.hidden = false
             }
         }
         self.updateViewConstraints()
@@ -1567,10 +1575,10 @@ extension BrowserViewController {
     /// of the current page is there. And if so, we go there.
 
     func enableReaderMode() {
-        if let tab = tabManager.selectedTab {
-            let webView = tab.webView
-            let backList = webView.backForwardList.backList as! [WKBackForwardListItem]
-            let forwardList = webView.backForwardList.forwardList as! [WKBackForwardListItem]
+        if let tab = tabManager.selectedTab,
+            let webView = tab.webView,
+            let backList = webView.backForwardList.backList as? [WKBackForwardListItem],
+            let forwardList = webView.backForwardList.forwardList as? [WKBackForwardListItem] {
 
             if let currentURL = webView.backForwardList.currentItem?.URL {
                 if let readerModeURL = ReaderModeUtils.encodeURL(currentURL) {
@@ -1600,8 +1608,8 @@ extension BrowserViewController {
     /// of the page is either to the left or right in the BackForwardList. If that is the case, we navigate there.
 
     func disableReaderMode() {
-        if let tab = tabManager.selectedTab {
-            let webView = tab.webView
+        if let tab = tabManager.selectedTab,
+            let webView = tab.webView {
             let backList = webView.backForwardList.backList as! [WKBackForwardListItem]
             let forwardList = webView.backForwardList.forwardList as! [WKBackForwardListItem]
 
@@ -1711,8 +1719,8 @@ private class BrowserScreenshotHelper: ScreenshotHelper {
                     return homePanel.view.screenshot(aspectRatio, quality: quality)
                 }
             } else {
-                let offset = CGPointMake(0, -tab.webView.scrollView.contentInset.top)
-                return tab.webView.screenshot(aspectRatio, offset: offset, quality: quality)
+                let offset = CGPointMake(0, -(tab.webView?.scrollView.contentInset.top ?? 0))
+                return tab.webView?.screenshot(aspectRatio, offset: offset, quality: quality)
             }
         }
 

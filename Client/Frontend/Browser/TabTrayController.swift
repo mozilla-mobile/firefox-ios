@@ -518,7 +518,8 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         // We're only doing one update here, but using a batch update lets us delay selecting the tab
         // until after its insert animation finishes.
         self.collectionView.performBatchUpdates({ _ in
-            self.tabManager.addTab()
+            let tab = self.tabManager.addTab()
+            self.tabManager.selectTab(tab)
         }, completion: { finished in
             if finished {
                 self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
@@ -549,6 +550,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
             } else {
                 cell.favicon.image = UIImage(named: "defaultFavicon")
             }
+
             cell.background.image = tab.screenshot
         }
 
@@ -769,6 +771,7 @@ extension TabTrayController: TabManagerDelegate {
             self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
             if tabManager.count == 0 {
                 newTab = tabManager.addTab()
+                tabManager.selectTab(newTab)
             }
         }, completion: { finished in
             if finished {

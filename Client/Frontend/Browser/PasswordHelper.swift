@@ -30,7 +30,7 @@ class PasswordHelper: BrowserHelper {
         if let path = NSBundle.mainBundle().pathForResource("PasswordHelper", ofType: "js") {
             if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) as? String {
                 var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
-                browser.webView.configuration.userContentController.addUserScript(userScript)
+                browser.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
     }
@@ -175,7 +175,7 @@ class PasswordHelper: BrowserHelper {
 
             let json = JSON(jsonObj)
             let src = "window.__firefox__.passwords.inject(\(json.toString()))"
-            self.browser?.webView.evaluateJavaScript(src, completionHandler: { (obj, err) -> Void in
+            self.browser?.webView?.evaluateJavaScript(src, completionHandler: { (obj, err) -> Void in
             })
         })
     }
