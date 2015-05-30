@@ -45,6 +45,8 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
     private let twoLineHelper = TwoLineCellHelper()
     let textLabel = UILabel()
     let detailTextLabel = UILabel()
+    let leftBadge = UIImageView()
+    let rightBadge = UIImageView()
     let imageView = UIImageView()
 
     override init(frame: CGRect) {
@@ -55,6 +57,8 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(textLabel)
         contentView.addSubview(detailTextLabel)
         contentView.addSubview(imageView)
+        contentView.addSubview(leftBadge)
+        contentView.addSubview(rightBadge)
 
         backgroundColor = UIColor.clearColor()
         layoutMargins = UIEdgeInsetsZero
@@ -67,6 +71,30 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         twoLineHelper.layoutSubviews()
+
+        let baseFrame = detailTextLabel.frame
+        var leftBadgeWidth: CGFloat = 0
+        var rightBadgeWidth: CGFloat = 0
+        let Padding: CGFloat = 5
+        if let img = rightBadge.image {
+            rightBadgeWidth = img.size.width / img.size.height * baseFrame.height + Padding
+        }
+        if let img = leftBadge.image {
+            leftBadgeWidth = img.size.width / img.size.height * baseFrame.height + Padding
+        }
+
+        leftBadge.frame = CGRect(x: baseFrame.origin.x,
+            y: baseFrame.origin.y,
+            width: leftBadgeWidth - Padding,
+            height: baseFrame.height)
+        rightBadge.frame = CGRect(x: baseFrame.origin.x + baseFrame.width - rightBadgeWidth + Padding,
+            y: baseFrame.origin.y,
+            width: rightBadgeWidth - Padding,
+            height: baseFrame.height)
+        detailTextLabel.frame = CGRect(x: baseFrame.origin.x + leftBadgeWidth,
+            y: baseFrame.origin.y,
+            width: baseFrame.width - rightBadgeWidth - leftBadgeWidth,
+            height: baseFrame.height)
     }
 
     func setLines(text: String?, detailText: String?) {

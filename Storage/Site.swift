@@ -45,6 +45,8 @@ public class Site : Identifiable {
      // Sites may have multiple favicons. We'll return the largest.
     public var icon: Favicon?
     public var latestVisit: Visit?
+    // The bookmark status of this site may be unknown (nil)
+    public var bookmarked: Bool? = nil
 
     public init(url: String, title: String) {
         self.url = url
