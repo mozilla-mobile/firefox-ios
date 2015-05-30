@@ -21,6 +21,9 @@ public protocol SyncManager {
     func onAddedAccount() -> Success
 }
 
+typealias EngineIdentifier = String
+typealias SyncFunction = (SyncDelegate, Prefs, Ready) -> SyncResult
+
 class ProfileFileAccessor: FileAccessor {
     init(profile: Profile) {
         let profileDirName = "profile.\(profile.localName())"
@@ -323,9 +326,11 @@ public class BrowserProfile: Profile {
         /**
          * Returns nil if there's no account.
          */
-        private func withSyncInputs<T>(label: String, function: (SyncDelegate, Prefs, Ready) -> Deferred<Result<T>>) -> Deferred<Result<T>>? {
+        private func withSyncInputs<T>(label: EngineIdentifier? = nil, function: (SyncDelegate, Prefs, Ready) -> Deferred<Result<T>>) -> Deferred<Result<T>>? {
             if let account = profile.account {
-                log.info("Syncing \(label).")
+                if let label = label {
+                    log.info("Syncing \(label).")
+                }
 
                 let authState = account.syncAuthState
                 let syncPrefs = profile.prefs.branch("sync")
@@ -338,40 +343,44 @@ public class BrowserProfile: Profile {
                 }
             }
 
-            log.warning("No account; can't sync \(label).")
+            log.warning("No account; can't sync.")
             return nil
         }
 
         /**
          * Runs the single provided synchronization function and returns its status.
          */
-        private func sync(label: String, function: (SyncDelegate, Prefs, Ready) -> SyncResult) -> SyncSuccess {
-            return self.withSyncInputs(label, function: function) ??
+        private func sync(label: EngineIdentifier, function: (SyncDelegate, Prefs, Ready) -> SyncResult) -> SyncResult {
+            return self.withSyncInputs(label: label, function: function) ??
                    deferResult(.NotStarted(.NoAccount))
         }
 
         /**
          * Runs each of the provided synchronization functions with the same inputs.
-         * Returns an array of SyncStatuses the same length as the input.
+         * Returns an array of IDs and SyncStatuses the same length as the input.
          */
-        private func syncSeveral(label: String, synchronizers: (SyncDelegate, Prefs, Ready) -> SyncResult...) -> Deferred<Result<[SyncStatus]>> {
-            let combined: (SyncDelegate, Prefs, Ready) -> Deferred<Result<[SyncStatus]>> = { delegate, syncPrefs, ready in
-                let thunks = synchronizers.map { f in
-                    { f(delegate, syncPrefs, ready) }
+        private func syncSeveral(synchronizers: (EngineIdentifier, SyncFunction)...) -> Deferred<Result<[(EngineIdentifier, SyncStatus)]>> {
+            typealias Pair = (EngineIdentifier, SyncStatus)
+            let combined: (SyncDelegate, Prefs, Ready) -> Deferred<Result<[Pair]>> = { delegate, syncPrefs, ready in
+                let thunks = synchronizers.map { (i, f) in
+                    return { () -> Deferred<Result<Pair>> in
+                        log.debug("Syncing \(i)…")
+                        return f(delegate, syncPrefs, ready) >>== { deferResult((i, $0)) }
+                    }
                 }
                 return accumulate(thunks)
             }
 
-            return self.withSyncInputs(label, function: combined) ??
-                   deferResult(Array(count: synchronizers.count, repeatedValue: .NotStarted(.NoAccount)))
+            return self.withSyncInputs(label: nil, function: combined) ??
+                   deferResult(synchronizers.map { ($0.0, .NotStarted(.NoAccount)) })
         }
 
         func syncEverything() -> Success {
-            return self.syncSeveral("everything", synchronizers:
-                self.syncClientsWithDelegate,
-                self.syncTabsWithDelegate,
-                self.syncHistoryWithDelegate)
-                >>> succeed
+            return self.syncSeveral(
+                ("clients", self.syncClientsWithDelegate),
+                ("tabs", self.syncTabsWithDelegate),
+                ("history", self.syncHistoryWithDelegate)
+            ) >>> succeed
         }
 
         func syncClients() -> SyncResult {
@@ -381,7 +390,10 @@ public class BrowserProfile: Profile {
 
         func syncClientsAndTabs() -> Success {
             // TODO: recognize .NotStarted.
-            return self.syncSeveral("clients and tabs", synchronizers: self.syncClientsWithDelegate, self.syncTabsWithDelegate) >>> succeed
+            return self.syncSeveral(
+                ("clients", self.syncClientsWithDelegate),
+                ("tabs", self.syncTabsWithDelegate)
+            ) >>> succeed
         }
 
         func syncHistory() -> SyncResult {
