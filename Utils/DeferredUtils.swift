@@ -62,6 +62,44 @@ public func walk<T>(items: [T], f: T -> Success) -> Success {
 }
 
 /**
+ * Like `all`, but thanks to its taking thunks as input, each result is
+ * generated in strict sequence. Fails immediately if any result is failure.
+ */
+public func accumulate<T>(thunks: [() -> Deferred<Result<T>>]) -> Deferred<Result<[T]>> {
+    if thunks.isEmpty {
+        return deferResult([])
+    }
+
+    let combined = Deferred<Result<[T]>>()
+    var results: [T] = []
+    results.reserveCapacity(thunks.count)
+
+    var onValue: (T -> ())!
+    var onResult: (Result<T> -> ())!
+
+    onValue = { t in
+        results.append(t)
+        if results.count == thunks.count {
+            combined.fill(Result(success: results))
+        } else {
+            thunks[results.count]().upon(onResult)
+        }
+    }
+
+    onResult = { r in
+        if r.isFailure {
+            combined.fill(Result(failure: r.failureValue!))
+            return
+        }
+        onValue(r.successValue!)
+    }
+
+    thunks[0]().upon(onResult)
+
+    return combined
+}
+
+/**
  * Take a function and turn it into a side-effect that can appear
  * in a chain of async operations without producing its own value.
  */

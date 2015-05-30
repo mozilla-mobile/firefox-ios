@@ -20,7 +20,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
         return TabsStorageVersion
     }
 
-    public func synchronizeLocalTabs(localTabs: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Success {
+    public func synchronizeLocalTabs(localTabs: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
         func onResponseReceived(response: StorageResponse<[Record<TabsPayload>]>) -> Success {
 
             func afterWipe() -> Success {
@@ -59,14 +59,14 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
             return afterWipe()
         }
 
-        if !self.canSync() {
-            return deferResult(EngineNotEnabledError(engine: self.collection))
+        if let reason = self.reasonToNotSync() {
+            return deferResult(SyncStatus.NotStarted(reason))
         }
 
         if !self.remoteHasChanges(info) {
             // Nothing to do.
             // TODO: upload local tabs if they've changed or we're in a fresh start.
-            return succeed()
+            return deferResult(.Completed)
         }
 
         let keys = self.scratchpad.keys?.value
@@ -76,6 +76,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
 
             return tabsClient.getSince(self.lastFetched)
                 >>== onResponseReceived
+                >>> { deferResult(.Completed) }
         }
 
         log.error("Couldn't make tabs factory.")

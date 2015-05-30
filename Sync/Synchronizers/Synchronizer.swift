@@ -43,10 +43,40 @@ public protocol Synchronizer {
     init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs)
 
     /**
-     * Return true if the current state of this synchronizer -- particularly prefs and scratchpad --
-     * allow a sync to occur.
+     * Return a reason if the current state of this synchronizer -- particularly prefs and scratchpad --
+     * prevent a routine sync from occurring.
      */
-    func canSync() -> Bool
+    func reasonToNotSync() -> SyncNotStartedReason?
+}
+
+/**
+ * We sometimes wish to return something more nuanced than simple success or failure.
+ * For example, refusing to sync because the engine was disabled isn't success (nothing was transferred!)
+ * but it also isn't an error.
+ *
+ * To do this we model real failures -- something went wrong -- as failures in the Result, and
+ * everything else in this status enum. This will grow as we return more details from a sync to allow
+ * for batch scheduling, success-case backoff and so on.
+ */
+public enum SyncStatus {
+    case Completed                 // TODO: we pick up a bunch of info along the way. Pass it along.
+    case NotStarted(SyncNotStartedReason)
+}
+
+
+
+public typealias SyncResult = Deferred<Result<SyncStatus>>
+
+public enum SyncNotStartedReason {
+    case NoAccount
+    case Offline
+    case Backoff(remainingSeconds: Int)
+    case EngineRemotelyNotEnabled(collection: String)
+    case EngineFormatOutdated(needs: Int)
+    case EngineFormatTooNew(expected: Int)   // This'll disappear eventually; we'll wipe the server and upload m/g.
+    case StorageFormatOutdated(needs: Int)
+    case StorageFormatTooNew(expected: Int)  // This'll disappear eventually; we'll wipe the server and upload m/g.
+    case StateMachineNotReady                // Because we're not done implementing.
 }
 
 public class FatalError: SyncError {
@@ -57,25 +87,6 @@ public class FatalError: SyncError {
 
     public var description: String {
         return self.message
-    }
-}
-
-// These won't interrupt a multi-engine sync.
-public class ContinuableError: SyncError {
-    let message: String
-    init(message: String) {
-        self.message = message
-    }
-
-    public var description: String {
-        return self.message
-    }
-}
-
-public class EngineNotEnabledError: ContinuableError {
-    init(engine: String) {
-        super.init(message: "Engine \(engine) not enabled in meta/global.")
-        log.debug("\(engine) sync disabled remotely.")
     }
 }
 
@@ -119,10 +130,26 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
         return info.modified(self.collection) > self.lastFetched
     }
 
-    public func canSync() -> Bool {
-        if let engineMeta = self.scratchpad.global?.value.engines?[collection] {
-            return engineMeta.version == self.storageVersion
+    public func reasonToNotSync() -> SyncNotStartedReason? {
+        if let global = self.scratchpad.global?.value {
+            // There's no need to check the global storage format here; the state machine will already have
+            // done so.
+            if let engineMeta = self.scratchpad.global?.value.engines?[collection] {
+                if engineMeta.version > self.storageVersion {
+                    return .EngineFormatOutdated(needs: engineMeta.version)
+                }
+                if engineMeta.version < self.storageVersion {
+                    return .EngineFormatTooNew(expected: engineMeta.version)
+                }
+            } else {
+                return .EngineRemotelyNotEnabled(collection: self.collection)
+            }
+        } else {
+            // But a missing meta/global is a real problem.
+            return .StateMachineNotReady
         }
-        return false
+
+        // Success!
+        return nil
     }
 }

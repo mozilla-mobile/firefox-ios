@@ -202,9 +202,9 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
            >>> succeed
     }
 
-    public func synchronizeLocalHistory(history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> Success {
-        if !self.canSync() {
-            return deferResult(EngineNotEnabledError(engine: self.collection))
+    public func synchronizeLocalHistory(history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
+        if let reason = self.reasonToNotSync() {
+            return deferResult(.NotStarted(reason))
         }
 
         let keys = self.scratchpad.keys?.value
@@ -241,6 +241,7 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
                 // to the last successfully applied record timestamp, no matter where we fail.
                 // There's no need to do the upload before bumping -- the storage of local changes is stable.
                >>> { self.uploadOutgoingFromStorage(history, lastTimestamp: 0, withServer: historyClient) }
+               >>> { return deferResult(.Completed) }
         }
 
         log.error("Couldn't make history factory.")
