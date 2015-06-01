@@ -146,6 +146,10 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
 
         let storageOp: ([Record<HistoryPayload>], Timestamp) -> DeferredTimestamp = { records, timestamp in
             // TODO: use I-U-S.
+
+            // Each time we do the storage operation, we might receive a backoff notification.
+            // For a success response, this will be on the subsequent request, which means we don't
+            // have to worry about handling successes and failures mixed with backoffs here.
             return storageClient.post(records, ifUnmodifiedSince: nil)
               >>== { storage.markAsSynchronized($0.value.success, modified: $0.value.modified) }
         }
@@ -203,7 +207,7 @@ public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
     }
 
     public func synchronizeLocalHistory(history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
-        if let reason = self.reasonToNotSync() {
+        if let reason = self.reasonToNotSync(storageClient) {
             return deferResult(.NotStarted(reason))
         }
 

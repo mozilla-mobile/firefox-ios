@@ -43,7 +43,39 @@ private let PrefLastFetched = "lastFetched"
 private let PrefClientName = "clientName"
 private let PrefClientGUID = "clientGUID"
 
+class PrefsBackoffStorage: BackoffStorage {
+    let prefs: Prefs
+    private let key = "backoff.server.timestamp"
 
+    init(prefs: Prefs) {
+        self.prefs = prefs
+    }
+
+    var serverBackoffUntilLocalTimestamp: Timestamp? {
+        get {
+            return self.prefs.unsignedLongForKey(self.key)
+        }
+
+        set(value) {
+            if let value = value {
+                self.prefs.setLong(value, forKey: self.key)
+            } else {
+                self.prefs.removeObjectForKey(self.key)
+            }
+        }
+    }
+
+    func clearServerBackoff() {
+        self.prefs.removeObjectForKey(self.key)
+    }
+
+    func isInBackoff(now: Timestamp) -> Timestamp? {
+        if let ts = self.serverBackoffUntilLocalTimestamp where now < ts {
+            return ts
+        }
+        return nil
+    }
+}
 
 /**
  * The scratchpad consists of the following:
@@ -122,6 +154,10 @@ public class Scratchpad {
             )
         }
     }
+
+    public lazy var backoffStorage: BackoffStorage = {
+        return PrefsBackoffStorage(prefs: self.prefs)
+    }()
 
     public func evolve() -> Scratchpad.Builder {
         return Scratchpad.Builder(p: self)

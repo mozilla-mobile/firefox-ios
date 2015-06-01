@@ -14,6 +14,21 @@ private class KeyFetchError: ErrorType {
     }
 }
 
+private class MockBackoffStorage: BackoffStorage {
+    var serverBackoffUntilLocalTimestamp: Timestamp? = nil
+
+    func clearServerBackoff() {
+        self.serverBackoffUntilLocalTimestamp = nil
+    }
+
+    func isInBackoff(now: Timestamp) -> Timestamp? {
+        if let ts = self.serverBackoffUntilLocalTimestamp where now < ts {
+            return ts
+        }
+        return nil
+    }
+}
+
 class LiveStorageClientTests : LiveAccountTest {
     func getKeys(kB: NSData, token: TokenServerToken) -> Deferred<Result<Record<KeysPayload>>> {
         let endpoint = token.api_endpoint
@@ -33,8 +48,9 @@ class LiveStorageClientTests : LiveAccountTest {
 
         let workQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
         let resultQueue = dispatch_get_main_queue()
+        let backoff = MockBackoffStorage()
 
-        let storageClient = Sync15StorageClient(serverURI: cryptoURI!, authorizer: authorizer, workQueue: workQueue, resultQueue: resultQueue)
+        let storageClient = Sync15StorageClient(serverURI: cryptoURI!, authorizer: authorizer, workQueue: workQueue, resultQueue: resultQueue, backoff: backoff)
         let keysFetcher = storageClient.clientForCollection("crypto", encrypter: encrypter)
 
         return keysFetcher.get("keys").map({

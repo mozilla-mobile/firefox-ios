@@ -59,7 +59,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
             return afterWipe()
         }
 
-        if let reason = self.reasonToNotSync() {
+        if let reason = self.reasonToNotSync(storageClient) {
             return deferResult(SyncStatus.NotStarted(reason))
         }
 
