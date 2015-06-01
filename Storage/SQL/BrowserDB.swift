@@ -47,6 +47,8 @@ let DBCouldNotOpenErrorCode = 200
 // Version 5 - Added the clients and the tabs tables.
 // Version 6 - Visit timestamps are now microseconds.
 // Version 7 - Eliminate most tables.
+private var queue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUEUE_CONCURRENT)
+
 public class BrowserDB {
     private let db: SwiftData
     // XXX: Increasing this should blow away old history, since we currently don't support any upgrades.
@@ -263,25 +265,43 @@ extension BrowserDB {
     }
 
     func run(sql: String, withArgs args: Args? = nil) -> Success {
-        var err: NSError?
-        return self.withWritableConnection(&err) { (conn, inout err: NSError?) -> Success in
-            err = conn.executeChange(sql, withArgs: args)
-            if err == nil {
+        let deferred = Deferred<Result<()>>()
+
+        dispatch_async(queue) {
+            let start = NSDate()
+            var err: NSError?
+            let result = self.withWritableConnection(&err) { (conn, inout err: NSError?) -> NSError? in
+                err = conn.executeChange(sql, withArgs: args)
                 log.debug("Modified rows: \(conn.numberOfRowsModified).")
-                return succeed()
+                return err
             }
-            return deferResult(DatabaseError(err: err))
+
+            if err == nil {
+                deferred.fill(Result(success: ()))
+            } else {
+                deferred.fill(Result(failure: DatabaseError(err: err)))
+            }
+            let now = NSDate()
+            log.debug("Query \(sql) took \(now.timeIntervalSinceDate(start))")
         }
+
+        return deferred
     }
 
     func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
-        func f(conn: SQLiteDBConnection, inout err: NSError?) -> Cursor<T> {
-            return conn.executeQuery(sql, factory: factory, withArgs: args)
+        let result = Deferred<Result<Cursor<T>>>()
+
+        dispatch_async(queue) {
+            let start = NSDate()
+            var err: NSError? = nil
+            let cursor = self.withReadableConnection(&err, callback: { (conn: SQLiteDBConnection, inout err: NSError?) -> Cursor<T> in
+                return conn.executeQuery(sql, factory: factory, withArgs: args)
+            })
+            result.fill(Result(success: cursor))
+            let now = NSDate()
+            log.debug("Query \(sql) took \(now.timeIntervalSinceDate(start))")
         }
 
-        var err: NSError? = nil
-        let cursor = self.withReadableConnection(&err, callback: f)
-
-        return deferResult(cursor)
+        return result
     }
 }
