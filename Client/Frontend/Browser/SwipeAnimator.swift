@@ -4,17 +4,17 @@
 
 import Foundation
 
-struct SwipeAnimatorUX {
-    var totalRotationInDegrees: Double
-    var deleteThreshold: CGFloat
-    var totalScale: CGFloat
-    var totalAlpha: CGFloat
-    var minExitVelocity: CGFloat
-    var recenterAnimationDuration: NSTimeInterval
+struct SwipeAnimationParameters {
+    let totalRotationInDegrees: Double
+    let deleteThreshold: CGFloat
+    let totalScale: CGFloat
+    let totalAlpha: CGFloat
+    let minExitVelocity: CGFloat
+    let recenterAnimationDuration: NSTimeInterval
 }
 
-private let DefaultSwipeAnimatorUX =
-    SwipeAnimatorUX(
+private let DefaultParameters =
+    SwipeAnimationParameters(
         totalRotationInDegrees: 10,
         deleteThreshold: 80,
         totalScale: 0.9,
@@ -33,16 +33,16 @@ class SwipeAnimator: NSObject {
 
     let container: UIView
     let animatingView: UIView
-    private let ux: SwipeAnimatorUX
+    private let params: SwipeAnimationParameters
 
     var containerCenter: CGPoint {
         return CGPoint(x: CGRectGetWidth(container.frame) / 2, y: CGRectGetHeight(container.frame) / 2)
     }
 
-    init(animatingView: UIView, container: UIView, ux: SwipeAnimatorUX = DefaultSwipeAnimatorUX) {
+    init(animatingView: UIView, container: UIView, params: SwipeAnimationParameters = DefaultParameters) {
         self.animatingView = animatingView
         self.container = container
-        self.ux = ux
+        self.params = params
 
         super.init()
 
@@ -55,7 +55,7 @@ class SwipeAnimator: NSObject {
 //MARK: Private Helpers
 extension SwipeAnimator {
     private func animateBackToCenter() {
-        UIView.animateWithDuration(ux.recenterAnimationDuration, animations: {
+        UIView.animateWithDuration(params.recenterAnimationDuration, animations: {
             self.animatingView.transform = CGAffineTransformIdentity
             self.animatingView.alpha = 1
         })
@@ -78,11 +78,11 @@ extension SwipeAnimator {
 
     private func transformForTranslation(translation: CGFloat) -> CGAffineTransform {
         let halfWidth = container.frame.size.width / 2
-        let totalRotationInRadians = CGFloat(ux.totalRotationInDegrees / 180.0 * M_PI)
+        let totalRotationInRadians = CGFloat(params.totalRotationInDegrees / 180.0 * M_PI)
 
         // Determine rotation / scaling amounts by the distance to the edge
         var rotation = (translation / halfWidth) * totalRotationInRadians
-        var scale = 1 - (abs(translation) / halfWidth) * (1 - ux.totalScale)
+        var scale = 1 - (abs(translation) / halfWidth) * (1 - params.totalScale)
 
         let rotationTransform = CGAffineTransformMakeRotation(rotation)
         let scaleTransform = CGAffineTransformMakeScale(scale, scale)
@@ -92,10 +92,9 @@ extension SwipeAnimator {
 
     private func alphaForDistanceFromCenter(distance: CGFloat) -> CGFloat {
         let halfWidth = container.frame.size.width / 2
-        return 1 - (distance / halfWidth) * (1 - ux.totalAlpha)
+        return 1 - (distance / halfWidth) * (1 - params.totalAlpha)
     }
 }
-
 
 //MARK: Selectors
 extension SwipeAnimator {
@@ -114,8 +113,8 @@ extension SwipeAnimator {
         case .Ended:
             let velocity = recognizer.velocityInView(container)
             // Bounce back if the velocity is too low or if we have not reached the treshold yet
-            let speed = max(abs(velocity.x), ux.minExitVelocity)
-            if (speed < ux.minExitVelocity || abs(prevOffset.x) < ux.deleteThreshold) {
+            let speed = max(abs(velocity.x), params.minExitVelocity)
+            if (speed < params.minExitVelocity || abs(prevOffset.x) < params.deleteThreshold) {
                 animateBackToCenter()
             } else {
                 animateAwayWithVelocity(velocity, speed: speed)
@@ -126,7 +125,7 @@ extension SwipeAnimator {
     }
 
     @objc func SELcloseWithoutGesture() -> Bool {
-        animateAwayWithVelocity(CGPoint(x: -ux.minExitVelocity, y: 0), speed: ux.minExitVelocity)
+        animateAwayWithVelocity(CGPoint(x: -params.minExitVelocity, y: 0), speed: params.minExitVelocity)
         return true
     }
 }
