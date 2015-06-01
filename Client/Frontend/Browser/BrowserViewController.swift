@@ -239,6 +239,8 @@ class BrowserViewController: UIViewController {
     }
 
     override func updateViewConstraints() {
+        super.updateViewConstraints()
+
         statusBarOverlay.snp_remakeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(topLayoutGuide.length)
@@ -303,15 +305,12 @@ class BrowserViewController: UIViewController {
         homePanelController?.view.snp_remakeConstraints { make in
             make.top.equalTo(self.urlBar.snp_bottom)
             make.left.right.equalTo(self.view)
-            let url = self.tabManager.selectedTab?.url
-            if url == AppConstants.AboutHomeURL && self.homePanelIsInline {
+            if self.homePanelIsInline {
                 make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
             } else {
                 make.bottom.equalTo(self.view.snp_bottom)
             }
         }
-
-        super.updateViewConstraints()
     }
 
     private func wrapInEffect(view: UIView, parent: UIView) -> UIView {
