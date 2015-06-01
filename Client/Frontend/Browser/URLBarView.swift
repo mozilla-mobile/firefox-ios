@@ -89,6 +89,7 @@ class URLBarView: UIView {
 
     private lazy var tabsButton: UIButton = {
         var tabsButton = InsetButton()
+        tabsButton.setTranslatesAutoresizingMaskIntoConstraints(false)
         tabsButton.setTitle("0", forState: UIControlState.Normal)
         tabsButton.setTitleColor(URLBarViewUX.backgroundColorWithAlpha(1), forState: UIControlState.Normal)
         tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
@@ -297,7 +298,6 @@ class URLBarView: UIView {
     }
 
     func updateTabCount(count: Int) {
-
         // make a 'clone' of the tabs button
         let newTabsButton = InsetButton()
         newTabsButton.setTitleColor(AppConstants.AppBackgroundColor, forState: UIControlState.Normal)
@@ -305,16 +305,16 @@ class URLBarView: UIView {
         newTabsButton.titleLabel?.layer.cornerRadius = 2
         newTabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
         newTabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        newTabsButton.setTitle(count.description, forState: .Normal)
+        addSubview(newTabsButton)
         newTabsButton.titleLabel?.snp_makeConstraints { make in
             make.size.equalTo(URLBarViewUX.TabsButtonHeight)
         }
-
-        if let anchor = tabsButton.titleLabel?.layer.anchorPoint {
-            newTabsButton.titleLabel?.layer.anchorPoint = anchor
+        newTabsButton.snp_makeConstraints { make in
+            make.centerY.equalTo(self.locationContainer)
+            make.trailing.equalTo(self)
+            make.size.equalTo(AppConstants.ToolbarHeight)
         }
-
-        newTabsButton.setTitle(count.description, forState: .Normal)
-        addSubview(newTabsButton)
 
         // Force layout pass so we have our frames calculated for the transform math
         setNeedsLayout()
