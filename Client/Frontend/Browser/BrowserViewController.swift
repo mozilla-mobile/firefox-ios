@@ -258,8 +258,9 @@ class BrowserViewController: UIViewController {
         super.updateViewConstraints()
 
         statusBarOverlay.snp_remakeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.height.equalTo(topLayoutGuide.length)
+            make.left.right.equalTo(self.view)
+            make.height.equalTo(UIApplication.sharedApplication().statusBarFrame.height)
+            make.bottom.equalTo(header.snp_top)
         }
 
         urlBar.snp_remakeConstraints { make in
@@ -981,14 +982,17 @@ extension BrowserViewController : UIScrollViewDelegate {
 
                 // The user is scrolling through the content and not because of the bounces that
                 // happens when you pull up past the content
-                scrollView.contentOffset.y >= 0 &&
+                scrollView.contentOffset.y > 0 &&
 
-                // The user has reached the limit as to which they can scroll to
-                scrollView.contentOffset.y < scrollingSize {
+                // Only scroll away the toolbars if we are NOT pinching to zoom, only when we are dragging
+                !scrollView.zooming {
 
                 scrollFooter(dy)
                 scrollHeader(dy)
                 scrollReader(dy)
+            } else {
+                // Force toolbars to be in open state
+                showToolbars(animated: false)
             }
 
             self.previousScroll = offset
