@@ -164,8 +164,6 @@ class URLBarView: UIView {
 
     private func commonInit() {
         backgroundColor = URLBarViewUX.backgroundColorWithAlpha(0)
-        clipsToBounds = true
-
         addSubview(curveShape);
 
         locationContainer.addSubview(locationView)
