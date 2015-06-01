@@ -16,4 +16,13 @@ class TestAppDelegate: AppDelegate {
 
         return profile
     }
+
+    // Prevent app state from being saved/restored between tests.
+    override func application(application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
+        return false
+    }
+
+    override func application(application: UIApplication, shouldRestoreApplicationState coder: NSCoder) -> Bool {
+        return false
+    }
 }
