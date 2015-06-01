@@ -762,22 +762,23 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex index: Int) {
-        self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
+        self.collectionView.performBatchUpdates({ _ in
+            self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
+        }, completion: { finished in
+            if finished {
+                tabManager.selectTab(tabManager[index])
+                self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
+            }
+        })
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int) {
         var newTab: Browser? = nil
         self.collectionView.performBatchUpdates({ _ in
             self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
+        }, completion: { finished in
             if tabManager.count == 0 {
                 newTab = tabManager.addTab()
-                tabManager.selectTab(newTab)
-            }
-        }, completion: { finished in
-            if finished {
-                if let newTab = newTab {
-                    self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil)
-                }
             }
         })
     }
