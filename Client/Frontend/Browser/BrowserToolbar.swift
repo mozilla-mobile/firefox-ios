@@ -38,9 +38,6 @@ protocol BrowserToolbarDelegate: class {
 public class BrowserToolbarHelper {
     let toolbar: BrowserToolbarProtocol
 
-    private let ButtonInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-    private let NavButtonInset = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 10)
-
     let ImageReload = UIImage(named: "reload")
     let ImageReloadPressed = UIImage(named: "reloadPressed")
     let ImageStop = UIImage(named: "stop")
@@ -64,8 +61,6 @@ public class BrowserToolbarHelper {
 
     init(toolbar: BrowserToolbarProtocol) {
         self.toolbar = toolbar
-        let inset: CGFloat = UIScreen.mainScreen().traitCollection.verticalSizeClass == .Regular ? 10 : 2
-        let ButtonInset = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
 
         toolbar.backButton.setImage(UIImage(named: "back"), forState: .Normal)
         toolbar.backButton.setImage(UIImage(named: "backPressed"), forState: .Highlighted)
@@ -73,7 +68,6 @@ public class BrowserToolbarHelper {
         //toolbar.backButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
         var longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack:")
         toolbar.backButton.addGestureRecognizer(longPressGestureBackButton)
-        toolbar.backButton.contentEdgeInsets = NavButtonInset
         toolbar.backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
 
         toolbar.forwardButton.setImage(UIImage(named: "forward"), forState: .Normal)
@@ -83,20 +77,18 @@ public class BrowserToolbarHelper {
         var longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward:")
         toolbar.forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         toolbar.forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
-        toolbar.forwardButton.contentEdgeInsets = NavButtonInset
 
         toolbar.stopReloadButton.setImage(UIImage(named: "reload"), forState: .Normal)
         toolbar.stopReloadButton.setImage(UIImage(named: "reloadPressed"), forState: .Highlighted)
         toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the browser toolbar Reload button")
         toolbar.stopReloadButton.accessibilityHint = NSLocalizedString("Tap to reload page", comment: "")
         toolbar.stopReloadButton.addTarget(self, action: "SELdidClickStopReload", forControlEvents: UIControlEvents.TouchUpInside)
-        toolbar.stopReloadButton.contentEdgeInsets = NavButtonInset
 
         toolbar.shareButton.setImage(UIImage(named: "send"), forState: .Normal)
         toolbar.shareButton.setImage(UIImage(named: "sendPressed"), forState: .Highlighted)
         toolbar.shareButton.accessibilityLabel = NSLocalizedString("Share", comment: "Accessibility Label for the browser toolbar Share button")
         toolbar.shareButton.addTarget(self, action: "SELdidClickShare", forControlEvents: UIControlEvents.TouchUpInside)
-        toolbar.shareButton.contentEdgeInsets = ButtonInset
+        toolbar.bookmarkButton.contentMode = UIViewContentMode.Center
 
         toolbar.bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
         toolbar.bookmarkButton.setImage(UIImage(named: "bookmarked"), forState: UIControlState.Selected)
@@ -104,7 +96,6 @@ public class BrowserToolbarHelper {
         var longPressGestureBookmarkButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBookmark:")
         toolbar.bookmarkButton.addGestureRecognizer(longPressGestureBookmarkButton)
         toolbar.bookmarkButton.addTarget(self, action: "SELdidClickBookmark", forControlEvents: UIControlEvents.TouchUpInside)
-        toolbar.bookmarkButton.contentEdgeInsets = ButtonInset
     }
 
     func SELdidClickBack() {
