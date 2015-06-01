@@ -266,7 +266,7 @@ extension SQLiteHistory: BrowserHistory {
         "FROM \(TableHistory) INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
         whereClause +
         "GROUP BY \(TableHistory).id " +
-        orderBy
+        orderBy +
         "LIMIT \(limit) "
 
         if includeIcon {
