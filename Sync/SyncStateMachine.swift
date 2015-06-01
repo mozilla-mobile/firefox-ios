@@ -167,7 +167,8 @@ public class BaseSyncState: SyncState {
     public init(scratchpad: Scratchpad, token: TokenServerToken) {
         let workQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
         let resultQueue = dispatch_get_main_queue()
-        let client = Sync15StorageClient(token: token, workQueue: workQueue, resultQueue: resultQueue)
+        let backoff = scratchpad.backoffStorage
+        let client = Sync15StorageClient(token: token, workQueue: workQueue, resultQueue: resultQueue, backoff: backoff)
         self.scratchpad = scratchpad
         self.token = token
         self.client = client
@@ -563,16 +564,8 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
     public override var label: SyncStateLabel { return SyncStateLabel.InitialWithLiveTokenAndInfo }
 
     private func processFailure(failure: ErrorType?) -> ErrorType {
-        // For now, avoid the risky stuff.
-        if ShortCircuitMissingMetaGlobal {
-            return MissingMetaGlobalAndUnwillingError()
-        }
-
-        if let failure = failure as? NotFound<StorageResponse<GlobalEnvelope>> {
-            // OK, this is easy.
-            // This state is responsible for creating the new m/g, uploading it, and
-            // restarting with a clean scratchpad.
-            return MissingMetaGlobalError(previousState: self)
+        if let failure = failure as? ServerInBackoffError {
+            return failure
         }
 
         // TODO: backoff etc. for all of these.
@@ -585,6 +578,18 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
             // Uh oh.
             log.error("Bad request. Bailing out. \(failure.description)")
             return failure
+        }
+
+        // For now, avoid the risky stuff.
+        if ShortCircuitMissingMetaGlobal {
+            return MissingMetaGlobalAndUnwillingError()
+        }
+
+        if let failure = failure as? NotFound<StorageResponse<GlobalEnvelope>> {
+            // OK, this is easy.
+            // This state is responsible for creating the new m/g, uploading it, and
+            // restarting with a clean scratchpad.
+            return MissingMetaGlobalError(previousState: self)
         }
 
         log.error("Unexpected failure. \(failure?.description)")
