@@ -448,7 +448,7 @@ private class ClearPrivateDataSetting: Setting {
 // The base settings view controller.
 class SettingsTableViewController: UITableViewController {
     private let Identifier = "CellIdentifier"
-    private var settings: [SettingSection]!
+    private var settings = [SettingSection]()
 
     var profile: Profile!
     var tabManager: TabManager!
@@ -469,7 +469,7 @@ class SettingsTableViewController: UITableViewController {
             accountDebugSettings = []
         }
 
-        settings = [
+        settings += [
             SettingSection(title: nil, children: [
                 // Without a Firefox Account:
                 ConnectSetting(settings: self),
@@ -485,13 +485,24 @@ class SettingsTableViewController: UITableViewController {
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
                 ShowIntroductionSetting(settings: self)
-            ]),
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("Customize", comment: "Customize section title in settings")), children: [
-                UseCompactTabLayoutSetting(settings: self)
-            ]),
+            ])
+        ]
+
+        // There is nothing to show in the Customize section if we don't include the compact tab layout
+        // setting on iPad. When more options are added that work on both device types, this logic can
+        // be changed.
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+            settings += [
+                SettingSection(title: NSAttributedString(string: NSLocalizedString("Customize", comment: "Customize section title in settings")), children: [
+                    UseCompactTabLayoutSetting(settings: self)
+                ])
+            ]
+        }
+
+        settings += [
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
                 VersionSetting(settings: self)
-            ]),
+            ])
         ]
 
         navigationItem.title = NSLocalizedString("Settings", comment: "Settings")
