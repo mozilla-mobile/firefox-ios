@@ -13,12 +13,12 @@ struct IntroViewControllerUX {
 
     static let PagerCenterOffsetFromScrollViewBottom = 20
 
-    static let StartBrowsingButtonTitle = NSLocalizedString("Start Browsing", tableName: "Intro", comment: "")
+    static let StartBrowsingButtonTitle = NSLocalizedString("Start Browsing", tableName: "Intro", comment: "Do not translate yet")
     static let StartBrowsingButtonColor = UIColor(red: 0.302, green: 0.314, blue: 0.333, alpha: 1.0)
     static let StartBrowsingButtonHeight = 66
     static let StartBrowsingButtonFont = UIFont.systemFontOfSize(18)
 
-    static let SignInButtonTitle = NSLocalizedString("Sign in to Firefox", tableName: "Intro", comment: "")
+    static let SignInButtonTitle = NSLocalizedString("Sign in to Firefox", tableName: "Intro", comment: "Do not translate yet")
     static let SignInButtonColor = UIColor(red: 0.259, green: 0.49, blue: 0.831, alpha: 1.0)
     static let SignInButtonHeight = 66
     static let SignInButtonFont = UIFont.systemFontOfSize(20)
@@ -26,11 +26,11 @@ struct IntroViewControllerUX {
 
     static let CardTextFont = UIFont.systemFontOfSize(20)
 
-    static let Card1Text = NSLocalizedString("Browse the web with multiple tabs just like you’re used to.", tableName: "Intro", comment: "")
+    static let Card1Text = NSLocalizedString("Browse the web with multiple tabs just like you’re used to.", tableName: "Intro", comment: "Do not translate yet.")
 
-    static let Card2Text = NSLocalizedString("Personalize your Firefox just the way you’d like in the Settings area.", tableName: "Intro", comment: "")
+    static let Card2Text = NSLocalizedString("Personalize your Firefox just the way you’d like in the Settings area.", tableName: "Intro", comment: "Do not translate yet.")
 
-    static let Card3Text = NSLocalizedString("Connect to Firefox Accounts anywhere you want.", tableName: "Intro", comment: "")
+    static let Card3Text = NSLocalizedString("Connect to Firefox Accounts anywhere you want.", tableName: "Intro", comment: "Do not translate yet.")
     static let Card3TextOffsetFromCenter = 10
     static let Card3ButtonOffsetFromCenter = 10
 
