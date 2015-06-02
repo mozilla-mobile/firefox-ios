@@ -47,6 +47,8 @@ let DBCouldNotOpenErrorCode = 200
 // Version 5 - Added the clients and the tabs tables.
 // Version 6 - Visit timestamps are now microseconds.
 // Version 7 - Eliminate most tables.
+private var queue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUEUE_CONCURRENT)
+
 public class BrowserDB {
     private let db: SwiftData
     // XXX: Increasing this should blow away old history, since we currently don't support any upgrades.
@@ -263,14 +265,22 @@ extension BrowserDB {
     }
 
     func run(sql: String, withArgs args: Args? = nil) -> Success {
-        var err: NSError?
-        return self.withWritableConnection(&err) { (conn, inout err: NSError?) -> Success in
-            err = conn.executeChange(sql, withArgs: args)
-            if err == nil {
-                log.debug("Modified rows: \(conn.numberOfRowsModified).")
-                return succeed()
+        return DeferredSqliteOperation(block: { connection, err -> () in
+            err = connection.executeChange(sql, withArgs: args)
+            return ()
+        }, db: db)
+    }
+
+    func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
+        return DeferredSqliteOperation(block: { connection, err -> Cursor<T> in
+            return connection.executeQuery(sql, factory: factory, withArgs: args)
+        }, db: db)
+    }
+}
+
+
+private class DeferredSqliteOperation<T>: Deferred<Result<T>>, Cancellable {
             }
-            return deferResult(DatabaseError(err: err))
         }
     }
 
@@ -279,9 +289,40 @@ extension BrowserDB {
             return conn.executeQuery(sql, factory: factory, withArgs: args)
         }
 
-        var err: NSError? = nil
-        let cursor = self.withReadableConnection(&err, callback: f)
+    private var db: SwiftData
+    private var block: (connection: SQLiteDBConnection, inout err: NSError?) -> T
 
-        return deferResult(cursor)
+    init(block: (connection: SQLiteDBConnection, inout err: NSError?) -> T, db: SwiftData) {
+        self.block = block
+        self.db = db
+        super.init()
+        start()
+    }
+
+    func start() {
+        dispatch_async(queue) {
+            self.main()
+        }
+    }
+
+    func main() {
+        let start = NSDate.now()
+        var result: T? = nil
+        var err = db.withConnection(SwiftData.Flags.ReadWriteCreate) { (db) -> NSError? in
+            var err: NSError? = nil
+            result = self.block(connection: db, err: &err)
+            log.debug("Modified rows: \(db.numberOfRowsModified).")
+            self.executing = false
+            return err
+        }
+        log.debug("SQL took \(NSDate.now() - start)")
+
+        if let result = result {
+            fill(Result(success: result))
+        } else {
+            fill(Result(failure: DatabaseError(err: err)))
+        }
     }
 }
+
+
