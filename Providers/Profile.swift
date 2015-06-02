@@ -15,7 +15,7 @@ private let log = XCGLogger.defaultInstance()
 
 public protocol SyncManager {
     func syncClients() -> SyncResult
-    func syncClientsAndTabs() -> Success
+    func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
     func onRemovedAccount(account: FirefoxAccount?) -> Success
     func onAddedAccount() -> Success
@@ -240,7 +240,7 @@ public class BrowserProfile: Profile {
     }
 
     public func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
-        return self.syncManager.syncClientsAndTabs()
+        return self.syncManager.syncClientsThenTabs()
            >>> { self.remoteClientsAndTabs.getClientsAndTabs() }
     }
 
@@ -398,12 +398,15 @@ public class BrowserProfile: Profile {
             return self.sync("clients", function: syncClientsWithDelegate)
         }
 
-        func syncClientsAndTabs() -> Success {
-            // TODO: recognize .NotStarted.
+        func syncClientsThenTabs() -> SyncResult {
             return self.syncSeveral(
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate)
-            ) >>> succeed
+            ) >>== { statuses in
+                let tabsStatus = statuses[1].1
+                return deferResult(tabsStatus)
+            }
+        }
         }
 
         func syncHistory() -> SyncResult {
