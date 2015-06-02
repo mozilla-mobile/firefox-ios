@@ -17,6 +17,11 @@ public protocol SyncManager {
     func syncClients() -> SyncResult
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
+
+    // The simplest possible approach.
+    func beginTimedHistorySync()
+    func endTimedHistorySync()
+
     func onRemovedAccount(account: FirefoxAccount?) -> Success
     func onAddedAccount() -> Success
 }
@@ -167,6 +172,7 @@ public class BrowserProfile: Profile {
     }
 
     deinit {
+        self.syncManager.endTimedHistorySync()
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
@@ -283,8 +289,13 @@ public class BrowserProfile: Profile {
         self.syncManager.onAddedAccount()
     }
 
-    class BrowserSyncManager: SyncManager {
+    // Extends NSObject so we can use timers.
+    class BrowserSyncManager: NSObject, SyncManager {
         unowned private let profile: BrowserProfile
+        let FifteenMinutes = NSTimeInterval(60 * 15)
+        let OneMinute = NSTimeInterval(60)
+
+        private var historySyncTimer: NSTimer? = nil
 
         init(profile: BrowserProfile) {
             self.profile = profile
@@ -313,6 +324,34 @@ public class BrowserProfile: Profile {
                 SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
             }
             return done
+        }
+
+        private func repeatingTimerAtInterval(interval: NSTimeInterval, selector: Selector) -> NSTimer {
+            return NSTimer.scheduledTimerWithTimeInterval(interval, target: self, selector: selector, userInfo: nil, repeats: true)
+        }
+
+        func beginTimedHistorySync() {
+            if self.historySyncTimer != nil {
+                log.debug("Already running history sync timer.")
+                return
+            }
+
+            let interval = FifteenMinutes
+            let selector = Selector("syncHistoryOnTimer")
+            log.debug("Starting history sync timer.")
+            self.historySyncTimer = repeatingTimerAtInterval(interval, selector: selector)
+        }
+
+        /**
+         * The caller is responsible for calling this on the same thread as it called
+         * beginTimedHistorySync.
+         */
+        func endTimedHistorySync() {
+            if let t = self.historySyncTimer {
+                log.debug("Stopping history sync timer.")
+                self.historySyncTimer = nil
+                t.invalidate()
+            }
         }
 
         private func syncClientsWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
@@ -407,6 +446,17 @@ public class BrowserProfile: Profile {
                 return deferResult(tabsStatus)
             }
         }
+
+        @objc func syncHistoryOnTimer() {
+            log.debug("Running timed history sync.")
+            self.syncHistory().upon { result in
+                if let success = result.successValue {
+                    log.debug("Timed history sync succeeded. Status: \(success.description).")
+                } else {
+                    let reason = result.failureValue?.description ?? "none"
+                    log.debug("Timed history sync failed. Reason: \(reason).")
+                }
+            }
         }
 
         func syncHistory() -> SyncResult {
