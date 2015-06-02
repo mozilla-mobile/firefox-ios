@@ -25,8 +25,9 @@ private struct BrowserViewControllerUX {
 }
 
 class BrowserViewController: UIViewController {
+
     private var urlBar: URLBarView!
-    private var readerModeBar: ReaderModeBarView!
+    private var readerModeBar: ReaderModeBarView?
     private var statusBarOverlay: UIView!
     private var toolbar: BrowserToolbar?
     private var homePanelController: HomePanelViewController?
@@ -178,12 +179,6 @@ class BrowserViewController: UIViewController {
         statusBarOverlay.backgroundColor = BrowserViewControllerUX.BackgroundColor
         view.addSubview(statusBarOverlay)
 
-        // Setup the reader mode control bar. This bar starts not visible with a zero height.
-        readerModeBar = ReaderModeBarView(frame: CGRectZero)
-        readerModeBar.delegate = self
-        view.addSubview(readerModeBar)
-        readerModeBar.hidden = true
-
         // Setup the URL bar, wrapped in a view to get transparency effect
         urlBar = URLBarView()
         urlBar.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -258,7 +253,7 @@ class BrowserViewController: UIViewController {
         }
         header.setNeedsUpdateConstraints()
 
-        readerModeBar.snp_remakeConstraints { make in
+        readerModeBar?.snp_remakeConstraints { make in
             self.readerConstraint = make.top.equalTo(self.header.snp_bottom).constraint
             make.height.equalTo(AppConstants.ToolbarHeight)
             make.leading.trailing.equalTo(self.view)
@@ -267,8 +262,8 @@ class BrowserViewController: UIViewController {
         webViewContainer.snp_remakeConstraints { make in
             make.left.right.equalTo(self.view)
 
-            if !self.readerModeBar.hidden {
-                make.top.equalTo(self.readerModeBar.snp_bottom)
+            if let readerModeBarBottom = readerModeBar?.snp_bottom {
+                make.top.equalTo(readerModeBarBottom)
             } else {
                 make.top.equalTo(self.header.snp_bottom)
             }
@@ -911,14 +906,14 @@ extension BrowserViewController : UIScrollViewDelegate {
 
     func scrollViewDidScroll(scrollView: UIScrollView) {
         if let tab = tabManager.selectedTab,
-           let prev = self.previousScroll,
-           let readerModeBar = self.readerModeBar {
+           let prev = self.previousScroll {
+
             var totalToolbarHeight = header.frame.size.height
             let offset = scrollView.contentOffset
             let dy = prev.y - offset.y
 
             let scrollingSize = scrollView.contentSize.height - scrollView.frame.size.height
-            totalToolbarHeight += readerModeBar.hidden ? 0 : readerModeBar.frame.size.height
+            totalToolbarHeight += readerModeBar?.frame.size.height ?? 0
             totalToolbarHeight += self.toolbar?.frame.size.height ?? 0
 
             // Only scroll away our toolbars if,
@@ -1033,7 +1028,7 @@ extension BrowserViewController {
             duration: actualDuration,
             headerOffset: -self.header.frame.size.height,
             footerOffset: self.footer.frame.height,
-            readerOffset: -self.readerModeBar.frame.size.height,
+            readerOffset: -(readerModeBar?.frame.size.height ?? 0),
             alpha: 0,
             completion: completion)
     }
@@ -1542,24 +1537,34 @@ extension BrowserViewController : Transitionable {
 
 extension BrowserViewController {
     func showReaderModeBar(#animated: Bool) {
-        if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
-            if let successValue = result.successValue, record = successValue {
-                readerModeBar.unread = record.unread
-                readerModeBar.added = true
+        if self.readerModeBar == nil {
+            let readerModeBar = ReaderModeBarView(frame: CGRectZero)
+            readerModeBar.delegate = self
+            view.insertSubview(readerModeBar, belowSubview: header)
+            self.readerModeBar = readerModeBar
+        }
+
+        if let readerModeBar = readerModeBar {
+            if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
+                if let successValue = result.successValue, record = successValue {
+                    readerModeBar.unread = record.unread
+                    readerModeBar.added = true
+                } else {
+                    readerModeBar.unread = true
+                    readerModeBar.added = false
+                }
             } else {
                 readerModeBar.unread = true
                 readerModeBar.added = false
             }
-        } else {
-            readerModeBar.unread = true
-            readerModeBar.added = false
         }
-        readerModeBar.hidden = false
+
         self.updateViewConstraints()
     }
 
     func hideReaderModeBar(#animated: Bool) {
-        readerModeBar.hidden = true
+        readerModeBar?.removeFromSuperview()
+        readerModeBar = nil
         self.updateViewConstraints()
     }
 
