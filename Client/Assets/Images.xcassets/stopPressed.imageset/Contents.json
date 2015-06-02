@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Stop (Pressed).png"
+      "filename" : "stopPressed.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Stop (Pressed)@2x.png"
+      "filename" : "stopPressed@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "Stop (Pressed)@3x.png"
+      "filename" : "stopPressed@3x.png"
     }
   ],
   "info" : {
