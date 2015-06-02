@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "mobile-iOS.png"
+      "filename" : "deviceTypeMobile.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "mobile-iOS@2x.png"
+      "filename" : "deviceTypeMobile@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "mobile-iOS@3x.png"
+      "filename" : "deviceTypeMobile@3x.png"
     }
   ],
   "info" : {

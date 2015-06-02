@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "pc-iOS.png"
+      "filename" : "deviceTypeDesktop.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "pc-iOS@2x.png"
+      "filename" : "deviceTypeDesktop@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "pc-iOS@3x.png"
+      "filename" : "deviceTypeDesktop@3x.png"
     }
   ],
   "info" : {
