@@ -316,10 +316,6 @@ class URLBarView: UIView {
             make.size.equalTo(AppConstants.ToolbarHeight)
         }
 
-        // Force layout pass so we have our frames calculated for the transform math
-        setNeedsLayout()
-        layoutIfNeeded()
-
         newTabsButton.frame = tabsButton.frame
 
         // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
