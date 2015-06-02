@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Bookmark-star (on).png"
+      "filename" : "bookmarkPressed.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Bookmark-star (on)@2x.png"
+      "filename" : "bookmarkPressed@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "Bookmark-star (on)@3x.png"
+      "filename" : "bookmarkPressed@3x.png"
     }
   ],
   "info" : {
