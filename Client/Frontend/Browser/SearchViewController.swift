@@ -33,9 +33,9 @@ private let EngineButtonInsets = UIEdgeInsetsMake(0.5, 0.5, 0.5, 0.5)
 private let EngineButtonHeight: Float = 44
 private let EngineButtonWidth = EngineButtonHeight * 1.5
 
-private let PromptMessage = NSLocalizedString("Turn on search suggestions?", tableName: "search", comment: "Prompt shown before enabling provider search queries")
-private let PromptYes = NSLocalizedString("Yes", tableName: "search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
-private let PromptNo = NSLocalizedString("No", tableName: "search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
+private let PromptMessage = NSLocalizedString("Turn on search suggestions?", tableName: "Search", comment: "Prompt shown before enabling provider search queries")
+private let PromptYes = NSLocalizedString("Yes", tableName: "Search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
+private let PromptNo = NSLocalizedString("No", tableName: "Search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
 
 private enum SearchListSection: Int {
     case SearchSuggestions
@@ -277,7 +277,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             engineButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
             engineButton.layer.backgroundColor = UIColor.whiteColor().CGColor
             engineButton.addTarget(self, action: "SELdidSelectEngine:", forControlEvents: UIControlEvents.TouchUpInside)
-            engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
+            engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", tableName: "Search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
 
             engineButton.imageView?.snp_makeConstraints { make in
                 make.width.height.equalTo(OpenSearchEngine.PreferredIconSize)

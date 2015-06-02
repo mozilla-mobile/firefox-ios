@@ -117,7 +117,7 @@ class ErrorPageHelper {
                     errDomain = self.cfErrorToName(code)
                 }
 
-                let tryAgain = NSLocalizedString("Try again", tableName: "errorPages", comment: "Shown in error pages on a button that will try to load the page again")
+                let tryAgain = NSLocalizedString("Try again", tableName: "ErrorPages", comment: "Shown in error pages on a button that will try to load the page again")
 
                 let asset = NSBundle.mainBundle().pathForResource("NetError", ofType: "html")
                 let response = GCDWebServerDataResponse(HTMLTemplate: asset, variables: [
