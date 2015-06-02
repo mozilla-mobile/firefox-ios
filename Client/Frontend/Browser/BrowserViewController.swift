@@ -1104,14 +1104,14 @@ extension BrowserViewController: TabManagerDelegate {
         showToolbars(animated: false)
 
         toolbar?.updateBackStatus(selected?.canGoBack ?? false)
-        toolbar?.updateFowardStatus(selected?.canGoForward ?? false)
+        toolbar?.updateForwardStatus(selected?.canGoForward ?? false)
         toolbar?.updateReloadStatus(selected?.loading ?? false)
 
         let isPage = (selected?.displayURL != nil) ? isWebPage(selected!.displayURL!) : false
         toolbar?.updatePageStatus(isWebPage: isPage)
 
         self.urlBar.updateBackStatus(selected?.canGoBack ?? false)
-        self.urlBar.updateFowardStatus(selected?.canGoForward ?? false)
+        self.urlBar.updateForwardStatus(selected?.canGoForward ?? false)
         self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
@@ -1235,13 +1235,13 @@ extension BrowserViewController: WKNavigationDelegate {
             if tab.webView == webView {
                 urlBar.currentURL = tab.displayURL
                 toolbar?.updateBackStatus(webView.canGoBack)
-                toolbar?.updateFowardStatus(webView.canGoForward)
+                toolbar?.updateForwardStatus(webView.canGoForward)
 
                 let isPage = (tab.displayURL != nil) ? isWebPage(tab.displayURL!) : false
                 toolbar?.updatePageStatus(isWebPage: isPage)
 
                 urlBar.updateBackStatus(webView.canGoBack)
-                urlBar.updateFowardStatus(webView.canGoForward)
+                urlBar.updateForwardStatus(webView.canGoForward)
                 showToolbars(animated: false)
 
                 if let url = tab.displayURL?.absoluteString {

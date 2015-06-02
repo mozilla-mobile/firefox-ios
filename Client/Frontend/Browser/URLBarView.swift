@@ -487,7 +487,7 @@ extension URLBarView: BrowserToolbarProtocol {
         backButton.enabled = canGoBack
     }
 
-    func updateFowardStatus(canGoForward: Bool) {
+    func updateForwardStatus(canGoForward: Bool) {
         forwardButton.enabled = canGoForward
     }
 

@@ -16,7 +16,7 @@ protocol BrowserToolbarProtocol {
     var stopReloadButton: UIButton { get }
 
     func updateBackStatus(canGoBack: Bool)
-    func updateFowardStatus(canGoForward: Bool)
+    func updateForwardStatus(canGoForward: Bool)
     func updateBookmarkStatus(isBookmarked: Bool)
     func updateReloadStatus(isLoading: Bool)
 }
@@ -182,7 +182,7 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
         backButton.enabled = canGoBack
     }
 
-    func updateFowardStatus(canGoForward: Bool) {
+    func updateForwardStatus(canGoForward: Bool) {
         forwardButton.enabled = canGoForward
     }
 
