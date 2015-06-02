@@ -38,8 +38,8 @@ protocol BrowserToolbarDelegate: class {
 public class BrowserToolbarHelper {
     let toolbar: BrowserToolbarProtocol
 
-    private let ButtonInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-    private let NavButtonInset = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 10)
+    private let ButtonInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    private let NavButtonInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 
     let ImageReload = UIImage(named: "reload")
     let ImageReloadPressed = UIImage(named: "reloadPressed")
