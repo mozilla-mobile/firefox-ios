@@ -22,6 +22,7 @@ typealias SearchLoader = _SearchLoader<AnyObject, AnyObject>
 class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController> {
     private let history: BrowserHistory
     private let urlBar: URLBarView
+    private var inProgress: Cancellable? = nil
 
     init(history: BrowserHistory, urlBar: URLBarView) {
         self.history = history
@@ -36,12 +37,21 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 return
             }
 
-            self.history.getSitesByFrecencyWithLimit(100, whereURLContains: query).uponQueue(dispatch_get_main_queue()) { result in
+            if let inProgress = inProgress {
+                inProgress.cancel()
+                self.inProgress = nil
+            }
+
+            let deferred = self.history.getSitesByFrecencyWithLimit(100, whereURLContains: query)
+            inProgress = deferred as? Cancellable
+
+            deferred.uponQueue(dispatch_get_main_queue()) { result in
                 // Failed cursors are excluded in .get().
                 if let cursor = result.successValue {
                     self.load(cursor)
                     self.urlBar.setAutocompleteSuggestion(self.getAutocompleteSuggestion(cursor))
                 }
+                self.inProgress = nil
             }
         }
     }
