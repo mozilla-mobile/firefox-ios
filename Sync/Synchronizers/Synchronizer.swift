@@ -61,6 +61,15 @@ public protocol Synchronizer {
 public enum SyncStatus {
     case Completed                 // TODO: we pick up a bunch of info along the way. Pass it along.
     case NotStarted(SyncNotStartedReason)
+
+    public var description: String {
+        switch self {
+        case .Completed:
+            return "Completed"
+        case let .NotStarted(reason):
+            return "Not started: \(reason.description)"
+        }
+    }
 }
 
 
@@ -77,6 +86,17 @@ public enum SyncNotStartedReason {
     case StorageFormatOutdated(needs: Int)
     case StorageFormatTooNew(expected: Int)  // This'll disappear eventually; we'll wipe the server and upload m/g.
     case StateMachineNotReady                // Because we're not done implementing.
+
+    var description: String {
+        switch self {
+        case .NoAccount:
+            return "no account"
+        case let .Backoff(remaining):
+            return "in backoff: \(remaining) seconds remaining"
+        default:
+            return "undescribed reason"
+        }
+    }
 }
 
 public class FatalError: SyncError {
