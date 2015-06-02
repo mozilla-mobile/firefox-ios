@@ -352,8 +352,8 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
                 return TabTrayControllerUX.NumberOfColumnsWide
             }
         } else {
-            // On iPad we make no difference between portrait and landscape
-            return compactLayout ? TabTrayControllerUX.CompactNumberOfColumnsWide : TabTrayControllerUX.NumberOfColumnsWide
+            // On iPad we do not use compact tabs
+            return TabTrayControllerUX.NumberOfColumnsWide
         }
     }
 
