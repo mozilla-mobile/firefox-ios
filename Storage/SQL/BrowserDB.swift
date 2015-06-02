@@ -264,11 +264,15 @@ extension BrowserDB {
         return walk(chunks, { insertChunk(Array($0)) })
     }
 
+    func runWithConnection<U>(block: (connection: SQLiteDBConnection, inout err: NSError?) -> U) -> Deferred<Result<U>> {
+        return DeferredSqliteOperation(block: block, db: db)
+    }
+
     func run(sql: String, withArgs args: Args? = nil) -> Success {
-        return DeferredSqliteOperation(block: { connection, err -> () in
+        return runWithConnection { (connection, err) -> () in
             err = connection.executeChange(sql, withArgs: args)
             return ()
-        }, db: db)
+        }
     }
 
     func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
