@@ -278,16 +278,41 @@ extension BrowserDB {
     }
 }
 
+public protocol Cancellable {
+    func cancel()
+    var cancelled: Bool { get }
+}
 
 private class DeferredSqliteOperation<T>: Deferred<Result<T>>, Cancellable {
+    var cancelled: Bool {
+        get {
+            return self.cancelledLock.withReadLock({ cancelled -> Bool in
+                return cancelled
+            })
+        }
+        set {
+            cancelledLock.withWriteLock { cancelled -> T? in
+                cancelled = newValue
+                return nil
             }
         }
     }
+    var cancelledLock = LockProtected<Bool>(item: false)
 
-    func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
-        func f(conn: SQLiteDBConnection, inout err: NSError?) -> Cursor<T> {
-            return conn.executeQuery(sql, factory: factory, withArgs: args)
+    var executing: Bool {
+        get {
+            return self.executingLock.withReadLock({ executing -> Bool in
+                return executing
+            })
         }
+        set {
+            executingLock.withWriteLock { executing -> T? in
+                executing = newValue
+                return nil
+            }
+        }
+    }
+    var executingLock = LockProtected<Bool>(item: false)
 
     private var db: SwiftData
     private var block: (connection: SQLiteDBConnection, inout err: NSError?) -> T
@@ -309,6 +334,11 @@ private class DeferredSqliteOperation<T>: Deferred<Result<T>>, Cancellable {
         let start = NSDate.now()
         var result: T? = nil
         var err = db.withConnection(SwiftData.Flags.ReadWriteCreate) { (db) -> NSError? in
+            self.executing = true
+            if self.cancelled {
+                return NSError(domain: "mozilla", code: 9, userInfo: nil)
+            }
+
             var err: NSError? = nil
             result = self.block(connection: db, err: &err)
             log.debug("Modified rows: \(db.numberOfRowsModified).")
@@ -321,6 +351,13 @@ private class DeferredSqliteOperation<T>: Deferred<Result<T>>, Cancellable {
             fill(Result(success: result))
         } else {
             fill(Result(failure: DatabaseError(err: err)))
+        }
+    }
+
+    func cancel() {
+        self.cancelled = true
+        if executing {
+            self.db.interrupt()
         }
     }
 }
