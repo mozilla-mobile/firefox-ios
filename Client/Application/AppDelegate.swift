@@ -53,6 +53,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    /**
+     * We maintain a weak reference to the profile so that we can pause timed
+     * syncs when we're backgrounded.
+     *
+     * The long-lasting ref to the profile lives in BrowserViewController,
+     * which we set in application:willFinishLaunchingWithOptions:.
+     *
+     * If that ever disappears, we won't be able to grab the profile to stop
+     * syncing... but in that case the profile's deinit will take care of things.
+     */
     func getProfile(application: UIApplication) -> Profile {
         if let profile = self.profile {
             return profile
@@ -70,7 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(application: UIApplication) {
-        self.getProfile(application).syncManager.beginTimedHistorySync()
+        self.profile?.syncManager.beginTimedHistorySync()
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
