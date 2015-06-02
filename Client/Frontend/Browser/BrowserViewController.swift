@@ -184,11 +184,13 @@ class BrowserViewController: UIViewController {
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: BookmarkStatusChangedNotification, object: nil)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELstatusBarFrameWillChange:", name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELBookmarkStatusDidChange:", name: BookmarkStatusChangedNotification, object: nil)
 
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
@@ -470,6 +472,19 @@ class BrowserViewController: UIViewController {
         }, failure: { err in
             log.error("Error removing bookmark: \(err).")
         })
+    }
+
+    func SELBookmarkStatusDidChange(notification: NSNotification) {
+        if let bookmark = notification.object as? BookmarkItem {
+            if bookmark.url == urlBar.currentURL?.absoluteString {
+                if let userInfo = notification.userInfo as? Dictionary<String, Bool>{
+                    if let added = userInfo["added"]{
+                        self.toolbar?.updateBookmarkStatus(added)
+                        self.urlBar.updateBookmarkStatus(added)
+                    }
+                }
+            }
+        }
     }
 
     override func accessibilityPerformEscape() -> Bool {

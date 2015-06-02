@@ -5,6 +5,8 @@
 import UIKit
 import Storage
 
+let BookmarkStatusChangedNotification = "BookmarkStatusChangedNotification"
+
 class BookmarksPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var source: BookmarksModel?
@@ -116,6 +118,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                             dispatch_async(dispatch_get_main_queue()) {
                                 self.source = model
                                 self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+                                NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added":false])
                             }
                         }, failure: self.onModelFailure)
                     }
