@@ -145,10 +145,10 @@ private class TwoLineCellHelper {
 
         self.container.backgroundColor = UIColor.clearColor()
 
-        textLabel.font = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Bold" : "HelveticaNeue-Medium", size: 14)
+        textLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
         textLabel.textColor = TextColor
 
-        detailTextLabel.font = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 10)
+        detailTextLabel.font = UIFont.systemFontOfSize(10, weight: UIFontWeightRegular)
         detailTextLabel.textColor = DetailTextColor
 
         imageView.contentMode = .ScaleAspectFill
