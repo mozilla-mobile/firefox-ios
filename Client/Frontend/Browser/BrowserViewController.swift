@@ -1101,7 +1101,6 @@ extension BrowserViewController: TabManagerDelegate {
                 showBar(bar, animated: true)
             }
         }
-        showToolbars(animated: false)
 
         toolbar?.updateBackStatus(selected?.canGoBack ?? false)
         toolbar?.updateForwardStatus(selected?.canGoForward ?? false)
