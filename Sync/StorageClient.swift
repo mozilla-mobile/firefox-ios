@@ -396,12 +396,23 @@ public class Sync15StorageClient {
         return self.requestWrite(url, method: Method.POST.rawValue, body: body, contentType: "application/newlines", ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
+    /**
+     * Returns true and fills the provided Deferred if our state shows that we're in backoff.
+     * Returns false otherwise.
+     */
+    private func checkBackoff<T>(deferred: Deferred<Result<T>>) -> Bool {
+        if let until = self.backoff.isInBackoff(NSDate.now()) {
+            deferred.fill(Result<T>(failure: ServerInBackoffError(until: until)))
+            return true
+        }
+        return false
+    }
+
     private func doOp<T>(op: (NSURL) -> Request, path: String, f: (JSON) -> T?) -> Deferred<Result<StorageResponse<T>>> {
 
         let deferred = Deferred<Result<StorageResponse<T>>>(defaultQueue: self.resultQueue)
 
-        if let until = self.backoff.isInBackoff(NSDate.now()) {
-            deferred.fill(Result(failure: ServerInBackoffError(until: until)))
+        if self.checkBackoff(deferred) {
             return deferred
         }
 
@@ -434,8 +445,7 @@ public class Sync15StorageClient {
 
         let deferred = Deferred<Result<StorageResponse<T>>>(defaultQueue: self.resultQueue)
 
-        if let until = self.backoff.isInBackoff(NSDate.now()) {
-            deferred.fill(Result(failure: ServerInBackoffError(until: until)))
+        if self.checkBackoff(deferred) {
             return deferred
         }
 
@@ -526,8 +536,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     public func post(records: [Record<T>], ifUnmodifiedSince: Timestamp?) -> Deferred<Result<StorageResponse<POSTResult>>> {
         let deferred = Deferred<Result<StorageResponse<POSTResult>>>(defaultQueue: client.resultQueue)
 
-        if let until = self.client.backoff.isInBackoff(NSDate.now()) {
-            deferred.fill(Result(failure: ServerInBackoffError(until: until)))
+        if self.client.checkBackoff(deferred) {
             return deferred
         }
 
@@ -563,8 +572,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     public func get(guid: String) -> Deferred<Result<StorageResponse<Record<T>>>> {
         let deferred = Deferred<Result<StorageResponse<Record<T>>>>(defaultQueue: client.resultQueue)
 
-        if let until = self.client.backoff.isInBackoff(NSDate.now()) {
-            deferred.fill(Result(failure: ServerInBackoffError(until: until)))
+        if self.client.checkBackoff(deferred) {
             return deferred
         }
 
@@ -597,8 +605,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     public func getSince(since: Timestamp) -> Deferred<Result<StorageResponse<[Record<T>]>>> {
         let deferred = Deferred<Result<StorageResponse<[Record<T>]>>>(defaultQueue: client.resultQueue)
 
-        if let until = self.client.backoff.isInBackoff(NSDate.now()) {
-            deferred.fill(Result(failure: ServerInBackoffError(until: until)))
+        if self.client.checkBackoff(deferred) {
             return deferred
         }
 
