@@ -19,6 +19,7 @@ protocol BrowserToolbarProtocol {
     func updateForwardStatus(canGoForward: Bool)
     func updateBookmarkStatus(isBookmarked: Bool)
     func updateReloadStatus(isLoading: Bool)
+    func updatePageStatus(#isWebPage: Bool)
 }
 
 @objc
