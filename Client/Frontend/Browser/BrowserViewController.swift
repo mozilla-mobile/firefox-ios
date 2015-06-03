@@ -775,6 +775,10 @@ extension BrowserViewController: BrowserDelegate {
         let contextMenuHelper = ContextMenuHelper(browser: browser)
         contextMenuHelper.delegate = self
         browser.addHelper(contextMenuHelper, name: ContextMenuHelper.name())
+
+        let hashchangeHelper = HashchangeHelper(browser: browser)
+        hashchangeHelper.delegate = self
+        browser.addHelper(hashchangeHelper, name: HashchangeHelper.name())
     }
 
     func browser(browser: Browser, willDeleteWebView webView: WKWebView) {
@@ -1857,5 +1861,17 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     success(image)
                 }
             }
+    }
+}
+
+extension BrowserViewController: HashchangeHelperDelegate {
+    func hashchangeHelperDidHashchange(hashchangeHelper: HashchangeHelper) {
+        if let tab = tabManager.selectedTab,
+           let webView = tab.webView
+        {
+            urlBar.currentURL = tab.displayURL
+            navigationToolbar.updateBackStatus(webView.canGoBack)
+            navigationToolbar.updateForwardStatus(webView.canGoForward)
+        }
     }
 }
