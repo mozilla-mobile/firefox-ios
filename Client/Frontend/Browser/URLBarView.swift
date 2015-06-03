@@ -300,6 +300,7 @@ class URLBarView: UIView {
     func updateTabCount(count: Int) {
         // make a 'clone' of the tabs button
         let newTabsButton = InsetButton()
+        newTabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
         newTabsButton.setTitleColor(AppConstants.AppBackgroundColor, forState: UIControlState.Normal)
         newTabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
         newTabsButton.titleLabel?.layer.cornerRadius = 2
