@@ -9,7 +9,8 @@ script:
   - brew update
   - brew install carthage
   - ./checkout.sh
-  - xcodebuild -project Client.xcodeproj -scheme "Firefox" -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6" ONLY_ACTIVE_ARCH=NO  test | xcpretty -c
+  - rm -rf build
+  - xcodebuild -project Client.xcodeproj -scheme "Firefox" -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6" ONLY_ACTIVE_ARCH=NO -derivedDataPath build clean test | xcpretty -c
 
 notifications:
   email: false
