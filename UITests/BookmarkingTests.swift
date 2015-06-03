@@ -19,7 +19,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         // Load a page
         tester().tapViewWithAccessibilityIdentifier("url")
         let url1 = "\(webRoot)/numberedPage.html?page=1"
-        tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Bookmark it using the bookmark button
@@ -33,7 +33,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
 
         tester().tapViewWithAccessibilityIdentifier("url")
         let url2 = "\(webRoot)/numberedPage.html?page=2"
-        tester().clearTextFromAndThenEnterText("\(url2)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url2)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
 
         // Check that the bookmark button is no longer selected
@@ -69,7 +69,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         // Load a page with no title
         tester().tapViewWithAccessibilityIdentifier("url")
         let url1 = "\(webRoot)/noTitle.html"
-        tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("This page has no title")
 
         // Bookmark it using the bookmark button

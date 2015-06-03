@@ -19,13 +19,13 @@ class HistoryTests: KIFTestCase {
         // Load a page
         tester().tapViewWithAccessibilityIdentifier("url")
         let url1 = "\(webRoot)/numberedPage.html?page=1"
-        tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Load a different page
         tester().tapViewWithAccessibilityIdentifier("url")
         let url2 = "\(webRoot)/numberedPage.html?page=2"
-        tester().clearTextFromAndThenEnterText("\(url2)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url2)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
 
         // Check that both appear in the history home panel

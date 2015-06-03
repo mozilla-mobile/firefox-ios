@@ -11,7 +11,7 @@ private struct URLBarViewUX {
     // The color shown behind the tabs count button, and underneath the (mostly transparent) status bar.
     static let TextFieldBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.05)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
-    static let TextFieldContentInset = CGPointMake(10, 5)
+    static let TextFieldContentInset = UIOffsetMake(9, 5)
     static let LocationLeftPadding = 5
     static let LocationHeight = 30
     static let TextFieldCornerRadius: CGFloat = 3

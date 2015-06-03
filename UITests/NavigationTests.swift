@@ -22,7 +22,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertNotNil(textView!.placeholder, "Text view has a placeholder to show when its empty")
 
         let url1 = "\(webRoot)/numberedPage.html?page=1"
-        tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         tester().tapViewWithAccessibilityIdentifier("url")
@@ -30,7 +30,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertEqual(textView!.text, url1, "Text is url")
 
         let url2 = "\(webRoot)/numberedPage.html?page=2"
-        tester().clearTextFromAndThenEnterText("\(url2)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url2)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
 
         tester().tapViewWithAccessibilityLabel("Back")

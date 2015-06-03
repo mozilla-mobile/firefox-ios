@@ -12,7 +12,7 @@ protocol BrowserLocationViewDelegate {
     func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView)
 }
 
-class BrowserLocationView : UIView, UIGestureRecognizerDelegate, ToolbarTextFieldDelegate {
+class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
     var delegate: BrowserLocationViewDelegate?
 
     private var lockImageView: UIImageView!
@@ -74,7 +74,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, ToolbarTextFiel
         }
     }
 
-    var editingInset: CGPoint  {
+    var editingInset: UIOffset  {
         get {
             return editTextField.editingRectInset
         }
@@ -83,7 +83,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, ToolbarTextFiel
         }
     }
 
-    var textInset: CGPoint  {
+    var textInset: UIOffset  {
         get {
             return editTextField.textRectInset
         }
@@ -111,6 +111,8 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, ToolbarTextFiel
         editTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
         editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
         editTextField.font = AppConstants.DefaultMediumFont
+        editTextField.isAccessibilityElement = true
+        editTextField.accessibilityIdentifier = "url"
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         editTextField.attributedPlaceholder = BrowserLocationView.PlaceholderText
         editTextField.toolbarTextFieldDelegate = self
@@ -200,12 +202,12 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, ToolbarTextFiel
         let isVisible = !lockImageView.hidden
         if show != isVisible {
             if show {
-                editTextField.textRectInset.x += lockImageView.bounds.width
-                editTextField.editingRectInset.x += lockImageView.bounds.width
+                editTextField.textRectInset.horizontal += lockImageView.bounds.width
+                editTextField.editingRectInset.horizontal += lockImageView.bounds.width
             }
             else {
-                editTextField.textRectInset.x -= lockImageView.bounds.width
-                editTextField.editingRectInset.x -= lockImageView.bounds.width
+                editTextField.textRectInset.horizontal -= lockImageView.bounds.width
+                editTextField.editingRectInset.horizontal -= lockImageView.bounds.width
             }
         }
         lockImageView.hidden = !show
@@ -304,8 +306,8 @@ class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate, UIGestureRec
 
     var toolbarTextFieldDelegate: ToolbarTextFieldDelegate?
 
-    var textRectInset: CGPoint = CGPointZero
-    var editingRectInset: CGPoint = CGPointZero
+    var textRectInset: UIOffset = UIOffsetZero
+    var editingRectInset: UIOffset = UIOffsetZero
 
     private var longPress = false
     override init(frame: CGRect) {
@@ -322,22 +324,20 @@ class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate, UIGestureRec
 
     override func textRectForBounds(bounds: CGRect) -> CGRect {
         let rect = super.textRectForBounds(bounds)
-        return rect.rectByInsetting(dx: textRectInset.x, dy: textRectInset.y)
+        return rect.rectByInsetting(dx: textRectInset.horizontal, dy: textRectInset.vertical)
     }
 
     override func editingRectForBounds(bounds: CGRect) -> CGRect {
         let rect = super.editingRectForBounds(bounds)
-        return rect.rectByInsetting(dx:editingRectInset.x, dy: editingRectInset.y)
+        return rect.rectByInsetting(dx:editingRectInset.horizontal, dy: editingRectInset.vertical)
     }
 
     override func textFieldDidBeginEditing(textField: UITextField) {
-        println("textFieldDidBeginEditing")
         super.textFieldDidBeginEditing(textField)
         toolbarTextFieldDelegate?.textFieldDidBeginEditing?(textField)
     }
 
     override func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-        println("textFieldShouldBeginEditing \(!longPress)")
         var shouldBeginEditing = super.textFieldShouldBeginEditing(textField)
 
         return (toolbarTextFieldDelegate?.textFieldShouldBeginEditing?(textField) ?? shouldBeginEditing) && !longPress
@@ -349,18 +349,14 @@ class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate, UIGestureRec
     }
 
     func textFieldDidEndEditing(textField: UITextField) {
-        println("textFieldDidEndEditing")
         toolbarTextFieldDelegate?.textFieldDidEndEditing?(textField)
     }
 
     func longPress(gestureRecognizer: UIGestureRecognizer) {
-        print("long press")
         if gestureRecognizer.state == .Began {
-            println(" Began")
             longPress = true
         }
         else if gestureRecognizer.state == .Ended {
-            println(" Ended")
             toolbarTextFieldDelegate?.textFieldDidLongPress?(self)
             longPress = false
         }
@@ -370,54 +366,6 @@ class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate, UIGestureRec
     }
 
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer.isKindOfClass(UILongPressGestureRecognizer) {
-            println("long press shouldRecognizeSimultaneouslyWithGestureRecognizer \(otherGestureRecognizer)")
-        }
         return true
     }
-
-//    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-//        println("\ntouches began \(event)")
-//        super.touchesBegan(touches, withEvent: event)
-//        pressing = true
-//    }
-//
-//    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-//        println("\ntouches ended \(event)")
-//        super.touchesEnded(touches, withEvent: event)
-//        pressing = false
-//    }
-//
-//    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
-//
-//        if gestureRecognizer.isKindOfClass(UILongPressGestureRecognizer) {
-//            println("long press shouldReceiveTouch \(gestureRecognizer)")
-//        }
-//        return true
-//    }
-//
-//    override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
-//        let shouldBegin = super.gestureRecognizerShouldBegin(gestureRecognizer)
-//        if gestureRecognizer.isKindOfClass(UILongPressGestureRecognizer) {
-//            println("long press gestureRecognizerShouldBegin \(gestureRecognizer)")
-//        }
-//        return shouldBegin
-//    }
-//
-//    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOfGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        if gestureRecognizer.isKindOfClass(UILongPressGestureRecognizer) {
-//            println("long press shouldRequireFailureOfGestureRecognizer \(gestureRecognizer), \(otherGestureRecognizer)")
-//        }
-//
-//        return false
-//    }
-//
-//    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailByGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//
-//        if gestureRecognizer.isKindOfClass(UILongPressGestureRecognizer) {
-//            println("long press shouldBeRequiredToFailByGestureRecognizer \(gestureRecognizer), \(otherGestureRecognizer)")
-//        }
-//
-//        return false
-//    }
 }
