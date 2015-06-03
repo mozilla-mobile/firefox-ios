@@ -101,8 +101,10 @@ class SimplePageServer {
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
-        webServer.addHandlerForMethod("GET", path: "/noTitle.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-            return GCDWebServerDataResponse(HTML: self.getPageData("noTitle"))
+        for page in ["noTitle", "readablePage"] {
+            webServer.addHandlerForMethod("GET", path: "/\(page).html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+                return GCDWebServerDataResponse(HTML: self.getPageData(page))
+            }
         }
 
         webServer.addHandlerForMethod("GET", path: "/numberedPage.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
