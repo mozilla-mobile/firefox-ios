@@ -16,10 +16,12 @@ public struct AppConstants {
     static let DefaultRowHeight: CGFloat = 58
     static let DefaultPadding: CGFloat = 10
 
-    static let DefaultMediumFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: 13)
+    static let DefaultMediumFontSize: CGFloat = 13
+    static let DefaultMediumFont = UIFont.systemFontOfSize(DefaultMediumFontSize, weight: UIFontWeightRegular)
+
     static let DefaultSmallFontSize: CGFloat = 11
-    static let DefaultSmallFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Medium" : "HelveticaNeue", size: DefaultSmallFontSize)
-    static let DefaultSmallFontBold = UIFont(name: "HelveticaNeue-Bold", size: 11)
+    static let DefaultSmallFont = UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightRegular)
+    static let DefaultSmallFontBold = UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightBold)
 
     // These highlight colors are currently only used on Snackbar buttons when they're pressed
     static let HighlightColor = UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9)
