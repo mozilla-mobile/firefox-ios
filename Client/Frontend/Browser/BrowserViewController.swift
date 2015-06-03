@@ -384,7 +384,7 @@ class BrowserViewController: UIViewController {
     private func updateInContentHomePanel(url: NSURL?) {
         if !urlBar.isEditing {
             if url == AppConstants.AboutHomeURL {
-                showHomePanelController(inline: true)
+                showHomePanelController(inline: (tabManager.selectedTab?.canGoForward ?? false || tabManager.selectedTab?.canGoBack ?? false))
             } else {
                 hideHomePanelController()
             }
