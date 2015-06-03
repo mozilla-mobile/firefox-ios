@@ -3,14 +3,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import SnapKit
 import Storage
 import ReadingList
 
-private struct ReadingListPanelUX {
-    static let RowHeight: CGFloat = 86
-}
-
 private struct ReadingListTableViewCellUX {
+    static let RowHeight: CGFloat = 86
+
     static let ActiveTextColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
     static let DimmedTextColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.44)
 
@@ -40,6 +39,22 @@ private struct ReadingListTableViewCellUX {
     static let DeleteButtonTitleText = NSLocalizedString("Remove", comment: "Title for the button that removes a reading list item")
     static let MarkAsReadButtonTitleText = NSLocalizedString("Mark as Read", comment: "Title for the button that marks a reading list item as read")
     static let MarkAsUnreadButtonTitleText = NSLocalizedString("Mark as Unread", comment: "Title for the button that marks a reading list item as unread")
+}
+
+private struct ReadingListPanelUX {
+    // Welcome Screen
+    static let WelcomeScreenTopPadding: CGFloat = 16
+    static let WelcomeScreenPadding: CGFloat = 12
+
+    static let WelcomeScreenHeaderFont = UIFont.boldSystemFontOfSize(14)
+    static let WelcomeScreenHeaderTextColor = UIColor.darkGrayColor()
+
+    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(13)
+    static let WelcomeScreenItemTextColor = UIColor.lightGrayColor()
+    static let WelcomeScreenItemWidth = 180
+    static let WelcomeScreenItemOffset = -20
+
+    static let WelcomeScreenCircleOffset = 20
 }
 
 class ReadingListTableViewCell: SWTableViewCell {
@@ -198,6 +213,12 @@ class ReadingListTableViewCell: SWTableViewCell {
     }
 }
 
+class ReadingListEmptyStateView: UIView {
+    convenience init() {
+        self.init(frame: CGRectZero)
+    }
+}
+
 class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegate {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
@@ -206,18 +227,96 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = ReadingListPanelUX.RowHeight
+
+        tableView.rowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.separatorColor = AppConstants.SeparatorColor
         tableView.registerClass(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
 
         view.backgroundColor = AppConstants.PanelBackgroundColor
-    }
 
-    override func viewWillAppear(animated: Bool) {
         if let result = profile.readingList?.getAvailableRecords() where result.isSuccess {
             records = result.successValue
+
+            // If no records have been added yet, we display the empty state
+            if records?.count == 0 {
+                tableView.scrollEnabled = false
+
+                let overlayView = UIView(frame: tableView.bounds)
+                view.addSubview(overlayView)
+                overlayView.backgroundColor = UIColor.whiteColor()
+                // Unknown why this does not work with autolayout
+                overlayView.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+
+                let containerView = UIView()
+                overlayView.addSubview(containerView)
+
+                let logoImageView = UIImageView(image: UIImage(named: "ReadingListEmptyPanel"))
+                containerView.addSubview(logoImageView)
+                logoImageView.snp_makeConstraints({ (make) -> Void in
+                    make.centerX.equalTo(containerView)
+                    make.top.equalTo(containerView)
+                })
+
+                let welcomeLabel = UILabel()
+                containerView.addSubview(welcomeLabel)
+                welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "")
+                welcomeLabel.font = ReadingListPanelUX.WelcomeScreenHeaderFont
+                welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
+                welcomeLabel.snp_makeConstraints({ (make) -> Void in
+                    make.centerX.equalTo(containerView)
+                    make.top.equalTo(logoImageView.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
+                })
+
+                let readerModeLabel = UILabel()
+                containerView.addSubview(readerModeLabel)
+                readerModeLabel.text = NSLocalizedString("Open articles in reading view by tapping the icon when it appears in the title bar.", comment: "")
+                readerModeLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
+                readerModeLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
+                readerModeLabel.numberOfLines = 0
+                readerModeLabel.snp_makeConstraints({ (make) -> Void in
+                    make.top.equalTo(welcomeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
+                    make.left.equalTo(welcomeLabel.snp_left).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
+                    make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
+                })
+
+                let readerModeImageView = UIImageView(image: UIImage(named: "ReaderModeCircle"))
+                containerView.addSubview(readerModeImageView)
+                readerModeImageView.snp_makeConstraints({ (make) -> Void in
+                    make.centerY.equalTo(readerModeLabel)
+                    make.right.equalTo(welcomeLabel.snp_right).offset(ReadingListPanelUX.WelcomeScreenCircleOffset)
+                })
+
+                let readingListLabel = UILabel()
+                containerView.addSubview(readingListLabel)
+                readingListLabel.text = NSLocalizedString("Add to your Reading List by tapping the icon in the Reader View controls.", comment: "")
+                readingListLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
+                readingListLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
+                readingListLabel.numberOfLines = 0
+                readingListLabel.snp_makeConstraints({ (make) -> Void in
+                    make.top.equalTo(readerModeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
+                    make.left.equalTo(welcomeLabel.snp_left).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
+                    make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
+                })
+
+                let readingListImageView = UIImageView(image: UIImage(named: "AddToReadingListCircle"))
+                containerView.addSubview(readingListImageView)
+                readingListImageView.snp_makeConstraints({ (make) -> Void in
+                    make.centerY.equalTo(readingListLabel)
+                    make.right.equalTo(welcomeLabel.snp_right).offset(ReadingListPanelUX.WelcomeScreenCircleOffset)
+                })
+
+                containerView.snp_makeConstraints({ (make) -> Void in
+                    // Let the container wrap around the content
+                    make.top.equalTo(logoImageView.snp_top)
+                    make.bottom.equalTo(readingListLabel.snp_bottom)
+                    make.left.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
+                    make.right.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenCircleOffset)
+                    // And then center it in the overlay view that sits on top of the UITableView
+                    make.center.equalTo(overlayView)
+                })
+            }
         }
     }
 
