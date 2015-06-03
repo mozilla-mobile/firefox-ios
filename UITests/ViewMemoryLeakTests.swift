@@ -27,7 +27,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         // Change the page to make about:home go away.
         tester().tapViewWithAccessibilityIdentifier("url")
         let url = "\(webRoot)/numberedPage.html?page=1"
-        tester().clearTextFromAndThenEnterText("\(url)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
 
         tester().runBlock { _ in
             return (aboutHomeController == nil) ? KIFTestStepResult.Success : KIFTestStepResult.Wait
@@ -39,7 +39,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         // Type the URL to make the search controller appear.
         tester().tapViewWithAccessibilityIdentifier("url")
         let url = "\(webRoot)/numberedPage.html?page=1"
-        tester().clearTextFromAndThenEnterText(url, intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
         let browserViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
         weak var searchViewController = getChildViewController(browserViewController, childClass: "SearchViewController")
         XCTAssertNotNil(searchViewController, "Got search controller reference")
