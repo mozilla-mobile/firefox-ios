@@ -18,7 +18,7 @@ public struct AppConstants {
 
     static let DefaultMediumFontSize: CGFloat = 13
     static let DefaultMediumFont = UIFont.systemFontOfSize(DefaultMediumFontSize, weight: UIFontWeightRegular)
-
+    static let DefaultMediumBoldFont = UIFont.boldSystemFontOfSize(DefaultMediumFontSize)
     static let DefaultSmallFontSize: CGFloat = 11
     static let DefaultSmallFont = UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightRegular)
     static let DefaultSmallFontBold = UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightBold)
@@ -34,7 +34,7 @@ public struct AppConstants {
     static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
 
     // Firefox Orange
-    static let ControlTintColor = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
+    static let ControlTintColor = UIColor(red: 240.0 / 255, green: 105.0 / 255, blue: 31.0 / 255, alpha: 1)
 
 #if MOZ_CHANNEL_AURORA
     static let BuildChannel = AppBuildChannel.Aurora

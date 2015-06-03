@@ -202,7 +202,7 @@ private class AccountStatusSetting: WithAccountSetting {
 
     override var title: NSAttributedString? {
         if let account = profile.getAccount() {
-            return NSAttributedString(string: account.email)
+            return NSAttributedString(string: account.email, attributes: [NSFontAttributeName: UIFont.boldSystemFontOfSize(17)])
         }
         return nil
     }
@@ -511,6 +511,7 @@ class SettingsTableViewController: UITableViewController {
             style: UIBarButtonItemStyle.Done,
             target: navigationController, action: "SELdone")
         tableView.registerClass(SettingsTableViewCell.self, forCellReuseIdentifier: Identifier)
+        tableView.tableFooterView = UIView()
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -572,9 +573,25 @@ class SettingsTableViewController: UITableViewController {
         return section.count
     }
 
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        var headerView = SettingsTableSectionHeaderView()
         let section = settings[section]
-        return section.title?.string
+        if let sectionTitle = section.title?.string {
+            headerView.titleLabel.text = sectionTitle
+        }
+
+        return headerView
+    }
+
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        var height: CGFloat = 13
+        let section = settings[section]
+        if let sectionTitle = section.title{
+            if sectionTitle.length > 0 {
+                height = 44
+            }
+        }
+        return height
     }
 
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
@@ -583,5 +600,41 @@ class SettingsTableViewController: UITableViewController {
             setting.onClick(navigationController)
         }
         return nil
+    }
+}
+
+private class SettingsTableSectionHeaderView: UIView {
+    lazy var titleLabel: UILabel = {
+        var headerLabel = UILabel()
+        var frame = headerLabel.frame
+        frame.origin.x = 15
+        frame.origin.y = 17
+        headerLabel.frame = frame
+        headerLabel.textColor = UIColor(red: 130/255, green: 135/255, blue: 153/255, alpha: 1.0)
+        headerLabel.font = UIFont.boldSystemFontOfSize(17)
+        return headerLabel
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.layer.borderColor = UIColor(red: 218/255, green: 217/255, blue: 218/255, alpha: 1.0).CGColor
+        self.layer.borderWidth = 1.0
+        self.backgroundColor = UIColor(red: 242/255, green: 245/255, blue: 245/255, alpha: 1.0)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private override func layoutSubviews() {
+        if let label = titleLabel.text {
+            if titleLabel.superview == nil {
+                addSubview(titleLabel)
+            }
+            titleLabel.sizeToFit()
+        }
+        else {
+            titleLabel.removeFromSuperview()
+        }
     }
 }
