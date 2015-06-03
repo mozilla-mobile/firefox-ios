@@ -25,10 +25,11 @@ class AuroraAppDelegate: AppDelegate {
         return true
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    override func applicationDidBecomeActive(application: UIApplication) {
         if !naggedAboutAuroraUpdate {
             checkForAuroraUpdate()
         }
+        super.applicationDidBecomeActive(application)
     }
 
     func application(application: UIApplication, applicationWillTerminate app: UIApplication) {

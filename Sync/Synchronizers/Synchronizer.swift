@@ -46,7 +46,7 @@ public protocol Synchronizer {
      * Return a reason if the current state of this synchronizer -- particularly prefs and scratchpad --
      * prevent a routine sync from occurring.
      */
-    func reasonToNotSync() -> SyncNotStartedReason?
+    func reasonToNotSync(Sync15StorageClient) -> SyncNotStartedReason?
 }
 
 /**
@@ -61,6 +61,15 @@ public protocol Synchronizer {
 public enum SyncStatus {
     case Completed                 // TODO: we pick up a bunch of info along the way. Pass it along.
     case NotStarted(SyncNotStartedReason)
+
+    public var description: String {
+        switch self {
+        case .Completed:
+            return "Completed"
+        case let .NotStarted(reason):
+            return "Not started: \(reason.description)"
+        }
+    }
 }
 
 
@@ -77,6 +86,17 @@ public enum SyncNotStartedReason {
     case StorageFormatOutdated(needs: Int)
     case StorageFormatTooNew(expected: Int)  // This'll disappear eventually; we'll wipe the server and upload m/g.
     case StateMachineNotReady                // Because we're not done implementing.
+
+    var description: String {
+        switch self {
+        case .NoAccount:
+            return "no account"
+        case let .Backoff(remaining):
+            return "in backoff: \(remaining) seconds remaining"
+        default:
+            return "undescribed reason"
+        }
+    }
 }
 
 public class FatalError: SyncError {
@@ -130,7 +150,13 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
         return info.modified(self.collection) > self.lastFetched
     }
 
-    public func reasonToNotSync() -> SyncNotStartedReason? {
+    public func reasonToNotSync(client: Sync15StorageClient) -> SyncNotStartedReason? {
+        let now = NSDate.now()
+        if let until = client.backoff.isInBackoff(now) {
+            let remaining = (until - now) / 1000
+            return .Backoff(remainingSeconds: Int(remaining))
+        }
+
         if let global = self.scratchpad.global?.value {
             // There's no need to check the global storage format here; the state machine will already have
             // done so.

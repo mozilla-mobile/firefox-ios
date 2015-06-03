@@ -130,10 +130,10 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
     }
 
     /**
-    * Returns whether any commands were found (and thus a replacement record
-    * needs to be uploaded). Also returns the commands: we run them after we
-    * upload a replacement record.
-    */
+     * Returns whether any commands were found (and thus a replacement record
+     * needs to be uploaded). Also returns the commands: we run them after we
+     * upload a replacement record.
+     */
     private func processCommandsFromRecord(record: Record<ClientPayload>?, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Deferred<Result<(Bool, [Command])>> {
         log.debug("Processing commands from downloaded record.")
 
@@ -159,9 +159,9 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
     }
 
     /**
-    * Upload our record if either (a) we know we should upload, or (b)
-    * our own notes tell us we're due to reupload.
-    */
+     * Upload our record if either (a) we know we should upload, or (b)
+     * our own notes tell us we're due to reupload.
+     */
     private func maybeUploadOurRecord(should: Bool, ifUnmodifiedSince: Timestamp?, toServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
 
         let lastUpload = self.clientRecordLastUpload
@@ -230,7 +230,7 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
     public func synchronizeLocalClients(localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
         log.debug("Synchronizing clients.")
 
-        if let reason = self.reasonToNotSync() {
+        if let reason = self.reasonToNotSync(storageClient) {
             switch reason {
             case .EngineRemotelyNotEnabled:
                 // This is a hard error for us.
