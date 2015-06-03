@@ -16,7 +16,7 @@ struct SwipeAnimationParameters {
 private let DefaultParameters =
     SwipeAnimationParameters(
         totalRotationInDegrees: 10,
-        deleteThreshold: 80,
+        deleteThreshold: 60,
         totalScale: 0.9,
         totalAlpha: 0,
         minExitVelocity: 800,
