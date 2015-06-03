@@ -342,9 +342,7 @@ class BrowserViewController: UIViewController {
 
             addChildViewController(homePanelController!)
         }
-        
         homePanelController?.selectedButtonIndex = tabManager.selectedTab?.lastHomePanel
-        
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
         UIView.animateWithDuration(0.2, animations: { () -> Void in
@@ -898,7 +896,6 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType) {
         finishEditingAndSubmit(url, visitType: visitType)
     }
-    
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectPanel panel: Int) {
         tabManager.selectedTab?.lastHomePanel = panel
     }
