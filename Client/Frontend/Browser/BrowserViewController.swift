@@ -356,7 +356,11 @@ class BrowserViewController: UIViewController {
 
             addChildViewController(homePanelController!)
         }
-        homePanelController?.selectedButtonIndex = tabManager.selectedTab?.lastHomePanel
+
+        var panelNumber = tabManager.selectedTab?.url?.fragment
+        var numberArray = panelNumber?.componentsSeparatedByString("=")
+        homePanelController?.selectedButtonIndex = numberArray?.last?.toInt() ?? 0
+
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
         UIView.animateWithDuration(0.2, animations: { () -> Void in
@@ -397,7 +401,7 @@ class BrowserViewController: UIViewController {
 
     private func updateInContentHomePanel(url: NSURL?) {
         if !urlBar.isEditing {
-            if url == AppConstants.AboutHomeURL {
+            if AboutUtils.isAboutHomeURL(url){
                 showHomePanelController(inline: (tabManager.selectedTab?.canGoForward ?? false || tabManager.selectedTab?.canGoBack ?? false))
             } else {
                 hideHomePanelController()
@@ -915,8 +919,11 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType) {
         finishEditingAndSubmit(url, visitType: visitType)
     }
+    
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectPanel panel: Int) {
-        tabManager.selectedTab?.lastHomePanel = panel
+        if AboutUtils.isAboutHomeURL(tabManager.selectedTab?.url) {
+            tabManager.selectedTab?.webView?.evaluateJavaScript("history.replaceState({}, '', '#panel=\(panel)')", completionHandler: nil)
+        }
     }
 }
 

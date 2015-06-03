@@ -23,7 +23,6 @@ protocol BrowserDelegate {
 
 class Browser: NSObject {
     var webView: WKWebView? = nil
-    var lastHomePanel = 0
     var browserDelegate: BrowserDelegate? = nil
     var bars = [SnackBar]()
     var favicons = [Favicon]()
@@ -146,7 +145,7 @@ class Browser: NSObject {
 
     var displayURL: NSURL? {
         if let url = webView?.URL ?? lastRequest?.URL {
-            if url.scheme != "about" {
+            if !AboutUtils.isAboutHomeURL(url) {
                 if ReaderModeUtils.isReaderModeURL(url) {
                     return ReaderModeUtils.decodeURL(url)
                 }

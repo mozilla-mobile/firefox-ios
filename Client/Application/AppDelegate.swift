@@ -97,6 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let server = WebServer.sharedInstance
         ReaderModeHandlers.register(server, profile: profile)
         ErrorPageHelper.register(server)
+        AboutHomeHandler.register(server)
         server.start()
     }
 
