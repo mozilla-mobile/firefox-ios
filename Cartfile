@@ -9,3 +9,4 @@ github "DaveWoodCom/XCGLogger" "swift_1.2"   # Previously: ~> 1.8
 github "bignerdranch/Deferred" "master"
 github "CEWendel/SWTableViewCell"
 github "st3fan/SQLite.swift" "master"
+github "mozilla/readability" "master"
