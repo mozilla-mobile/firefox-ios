@@ -45,7 +45,7 @@ private let PrefClientGUID = "clientGUID"
 
 class PrefsBackoffStorage: BackoffStorage {
     let prefs: Prefs
-    private let key = "backoff.server.timestamp"
+    private let key = "timestamp"
 
     init(prefs: Prefs) {
         self.prefs = prefs
@@ -156,7 +156,7 @@ public class Scratchpad {
     }
 
     public lazy var backoffStorage: BackoffStorage = {
-        return PrefsBackoffStorage(prefs: self.prefs)
+        return PrefsBackoffStorage(prefs: self.prefs.branch("backoff.storage"))
     }()
 
     public func evolve() -> Scratchpad.Builder {
