@@ -46,7 +46,7 @@ public protocol Synchronizer {
      * Return a reason if the current state of this synchronizer -- particularly prefs and scratchpad --
      * prevent a routine sync from occurring.
      */
-    func reasonToNotSync() -> SyncNotStartedReason?
+    func reasonToNotSync(Sync15StorageClient) -> SyncNotStartedReason?
 }
 
 /**
@@ -130,7 +130,13 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
         return info.modified(self.collection) > self.lastFetched
     }
 
-    public func reasonToNotSync() -> SyncNotStartedReason? {
+    public func reasonToNotSync(client: Sync15StorageClient) -> SyncNotStartedReason? {
+        let now = NSDate.now()
+        if let until = client.backoff.isInBackoff(now) {
+            let remaining = (until - now) / 1000
+            return .Backoff(remainingSeconds: Int(remaining))
+        }
+
         if let global = self.scratchpad.global?.value {
             // There's no need to check the global storage format here; the state machine will already have
             // done so.
