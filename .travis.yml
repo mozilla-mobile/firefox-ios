@@ -11,7 +11,6 @@ script:
   - ./checkout.sh
   - xcodebuild -project Client.xcodeproj -scheme "Firefox" -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 6" ONLY_ACTIVE_ARCH=NO  test | xcpretty -c
 
-
 notifications:
   email: false
   irc:
