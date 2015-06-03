@@ -134,8 +134,8 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
              */
             let timestamp = clientTabs.approximateLastSyncTime()
             let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time")
-            view.detailTextLabel.text = String(format: label, String(timestamp))
             let image: UIImage?
+            view.detailTextLabel.text = String(format: label, timestamp.toNSDate().toRelativeTimeString())
             if client.type == "desktop" {
                 image = UIImage(named: "deviceTypeDesktop")
                 image?.accessibilityLabel = NSLocalizedString("computer", comment: "Accessibility label for Desktop Computer (PC) image in remote tabs list")
