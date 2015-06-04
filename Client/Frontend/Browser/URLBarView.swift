@@ -502,6 +502,12 @@ extension URLBarView: BrowserToolbarProtocol {
         }
     }
 
+    func updatePageStatus(#isWebPage: Bool) {
+        bookmarkButton.enabled = isWebPage
+        stopReloadButton.enabled = isWebPage
+        shareButton.enabled = isWebPage
+    }
+
     override var accessibilityElements: [AnyObject]! {
         get {
             if isEditing {

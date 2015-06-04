@@ -68,6 +68,9 @@ class BrowserViewController: UIViewController {
     // TODO: weak references?
     var ignoredNavigation = Set<WKNavigation>()
     var typedNavigation = [WKNavigation: VisitType]()
+    var navigationToolbar: BrowserToolbarProtocol {
+        return toolbar ?? urlBar
+    }
 
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
@@ -128,6 +131,22 @@ class BrowserViewController: UIViewController {
         view.setNeedsUpdateConstraints()
         if let home = homePanelController {
             home.view.setNeedsUpdateConstraints()
+        }
+
+        if let tab = tabManager.selectedTab {
+            navigationToolbar.updateBackStatus(tab.canGoBack)
+            navigationToolbar.updateForwardStatus(tab.canGoForward)
+            let isPage = (tab.displayURL != nil) ? isWebPage(tab.displayURL!) : false
+            navigationToolbar.updatePageStatus(isWebPage: isPage)
+            navigationToolbar.updateReloadStatus(tab.loading ?? false)
+
+            if let url = tab.displayURL?.absoluteString {
+                profile.bookmarks.isBookmarked(url, success: { bookmarked in
+                    self.navigationToolbar.updateBookmarkStatus(bookmarked)
+                }, failure: { err in
+                    log.error("Error getting bookmark status: \(err).")
+                })
+            }
         }
     }
 
@@ -1231,20 +1250,17 @@ extension BrowserViewController: WKNavigationDelegate {
         if let tab = tabManager.selectedTab {
             if tab.webView == webView {
                 urlBar.currentURL = tab.displayURL
-                toolbar?.updateBackStatus(webView.canGoBack)
-                toolbar?.updateForwardStatus(webView.canGoForward)
+                navigationToolbar.updateBackStatus(webView.canGoBack)
+                navigationToolbar.updateForwardStatus(webView.canGoForward)
 
                 let isPage = (tab.displayURL != nil) ? isWebPage(tab.displayURL!) : false
-                toolbar?.updatePageStatus(isWebPage: isPage)
+                navigationToolbar.updatePageStatus(isWebPage: isPage)
 
-                urlBar.updateBackStatus(webView.canGoBack)
-                urlBar.updateForwardStatus(webView.canGoForward)
                 showToolbars(animated: false)
 
                 if let url = tab.displayURL?.absoluteString {
                     profile.bookmarks.isBookmarked(url, success: { bookmarked in
-                        self.toolbar?.updateBookmarkStatus(bookmarked)
-                        self.urlBar.updateBookmarkStatus(bookmarked)
+                        self.navigationToolbar.updateBookmarkStatus(bookmarked)
                     }, failure: { err in
                         log.error("Error getting bookmark status: \(err).")
                     })
@@ -1257,7 +1273,6 @@ extension BrowserViewController: WKNavigationDelegate {
                         hideReaderModeBar(animated: false)
                     }
                 }
-
                 updateInContentHomePanel(tab.url)
             }
         }
