@@ -10,31 +10,31 @@ class RelativeDatesTests: XCTestCase {
         let dateOrig = NSDate()
         var date = NSDate(timeInterval: 0, sinceDate: dateOrig)
         
-        XCTAssertTrue(date.toRelativeTimeString() == "Just now")
+        XCTAssertTrue(date.toRelativeTimeString() == "just now")
         
         date = NSDate(timeInterval: 0, sinceDate: dateOrig)
         date = date.dateByAddingTimeInterval(-10)
-        XCTAssertTrue(date.toRelativeTimeString() == "Just now")
+        XCTAssertTrue(date.toRelativeTimeString() == "just now")
         
         date = NSDate(timeInterval: 0, sinceDate: dateOrig)
         date = date.dateByAddingTimeInterval(-60)
-        XCTAssertTrue(date.toRelativeTimeString() == ("Today at " + NSDateFormatter.localizedStringFromDate(date, dateStyle: NSDateFormatterStyle.ShortStyle, timeStyle: NSDateFormatterStyle.ShortStyle)))
+        XCTAssertTrue(date.toRelativeTimeString() == ("today at " + NSDateFormatter.localizedStringFromDate(date, dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle)))
         
         date = NSDate(timeInterval: 0, sinceDate: dateOrig)
         date = date.dateByAddingTimeInterval(-60 * 60 * 24)
-        XCTAssertTrue(date.toRelativeTimeString() == "Yesterday")
+        XCTAssertTrue(date.toRelativeTimeString() == "yesterday")
         
         date = NSDate(timeInterval: 0, sinceDate: dateOrig)
         date = date.dateByAddingTimeInterval(-60 * 60 * 24 * 2)
-        XCTAssertTrue(date.toRelativeTimeString() == "This week")
+        XCTAssertTrue(date.toRelativeTimeString() == "this week")
         
         date = NSDate(timeInterval: 0, sinceDate: dateOrig)
         date = date.dateByAddingTimeInterval(-60 * 60 * 24 * 7)
-        XCTAssertTrue(date.toRelativeTimeString() == "More than a week ago")
+        XCTAssertTrue(date.toRelativeTimeString() == "more than a week ago")
         
         date = NSDate(timeInterval: 0, sinceDate: dateOrig)
         date = date.dateByAddingTimeInterval(-60 * 60 * 24 * 7 * 5)
-        XCTAssertTrue(date.toRelativeTimeString() == "More than a month ago")
+        XCTAssertTrue(date.toRelativeTimeString() == "more than a month ago")
         
         date = NSDate(timeInterval: 0, sinceDate: dateOrig)
         date = date.dateByAddingTimeInterval(-60 * 60 * 24 * 7 * 5 * 2)
