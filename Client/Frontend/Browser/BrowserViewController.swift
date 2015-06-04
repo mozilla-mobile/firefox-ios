@@ -1527,7 +1527,7 @@ extension BrowserViewController : Transitionable {
                 tab.webView?.hidden = false
             }
         }
-        self.updateViewConstraints()
+
         self.homePanelController?.view.hidden = false
         if options.toView === self {
             startTrackingAccessibilityStatus()
@@ -1565,9 +1565,11 @@ extension BrowserViewController {
     }
 
     func hideReaderModeBar(#animated: Bool) {
-        readerModeBar?.removeFromSuperview()
-        readerModeBar = nil
-        self.updateViewConstraints()
+        if let readerModeBar = self.readerModeBar {
+            readerModeBar.removeFromSuperview()
+            self.readerModeBar = nil
+            self.updateViewConstraints()
+        }
     }
 
     /// There are two ways we can enable reader mode. In the simplest case we open a URL to our internal reader mode

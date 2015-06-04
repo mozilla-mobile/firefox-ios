@@ -56,7 +56,7 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning  {
                 to.transitionablePreShow(to, options: options)
                 from.transitionablePreHide(from, options: options)
 
-                UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
+                UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: UIViewAnimationOptions.AllowUserInteraction |  UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
                         to.transitionableWillShow(to, options: options)
                         from.transitionableWillHide(from, options: options)
                     }, completion: { finished in
