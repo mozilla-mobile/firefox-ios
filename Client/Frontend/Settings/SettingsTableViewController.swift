@@ -448,6 +448,7 @@ private class ClearPrivateDataSetting: Setting {
 // The base settings view controller.
 class SettingsTableViewController: UITableViewController {
     private let Identifier = "CellIdentifier"
+    private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
     private var settings = [SettingSection]()
 
     var profile: Profile!
@@ -511,6 +512,7 @@ class SettingsTableViewController: UITableViewController {
             style: UIBarButtonItemStyle.Done,
             target: navigationController, action: "SELdone")
         tableView.registerClass(SettingsTableViewCell.self, forCellReuseIdentifier: Identifier)
+        tableView.registerClass(SettingsTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
         tableView.tableFooterView = UIView()
     }
 
@@ -574,7 +576,7 @@ class SettingsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        var headerView = SettingsTableSectionHeaderView()
+        let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderView
         let section = settings[section]
         if let sectionTitle = section.title?.string {
             headerView.titleLabel.text = sectionTitle
@@ -584,9 +586,10 @@ class SettingsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // empty headers should be 13px high, but headers with text should be 44
         var height: CGFloat = 13
         let section = settings[section]
-        if let sectionTitle = section.title{
+        if let sectionTitle = section.title {
             if sectionTitle.length > 0 {
                 height = 44
             }
@@ -603,8 +606,8 @@ class SettingsTableViewController: UITableViewController {
     }
 }
 
-private class SettingsTableSectionHeaderView: UIView {
-    lazy var titleLabel: UILabel = {
+private class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
+    var titleLabel: UILabel = {
         var headerLabel = UILabel()
         var frame = headerLabel.frame
         frame.origin.x = 15
@@ -615,35 +618,34 @@ private class SettingsTableSectionHeaderView: UIView {
         return headerLabel
     }()
 
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = AppConstants.TableViewHeaderBackgroundColor
+        addSubview(titleLabel)
     }
+
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     private override func drawRect(rect: CGRect) {
-        var topBorder = CALayer()
+        let topBorder = CALayer()
         topBorder.frame = CGRectMake(0.0, 0.0, rect.size.width, 0.5)
         topBorder.backgroundColor = AppConstants.SeparatorColor.CGColor
         layer.addSublayer(topBorder)
-        var bottomBorder = CALayer()
-        bottomBorder.frame = CGRectMake(0.0, rect.size.height - 0.5 , rect.size.width, 0.5)
+        let bottomBorder = CALayer()
+        bottomBorder.frame = CGRectMake(0.0, rect.size.height - 0.5, rect.size.width, 0.5)
         bottomBorder.backgroundColor = AppConstants.SeparatorColor.CGColor
         layer.addSublayer(bottomBorder)
     }
 
     private override func layoutSubviews() {
-        if let label = titleLabel.text {
-            if titleLabel.superview == nil {
-                addSubview(titleLabel)
-            }
-            titleLabel.sizeToFit()
-        }
-        else {
-            titleLabel.removeFromSuperview()
-        }
+        super.layoutSubviews()
+        titleLabel.sizeToFit()
     }
 }
