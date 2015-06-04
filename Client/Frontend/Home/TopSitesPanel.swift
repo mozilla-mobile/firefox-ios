@@ -9,8 +9,12 @@ import Storage
 private let ThumbnailIdentifier = "Thumbnail"
 private let RowIdentifier = "Row"
 private let SeparatorKind = "separator"
-private let SeparatorIdentifier = "separator"
+private let CloseButtonKind = "closeButton"
 private let SeparatorColor = AppConstants.SeparatorColor
+
+struct TopSitesPanelUX {
+    static let SuggestedTileImagePadding: CGFloat = 10
+}
 
 class Tile: Site {
     let backgroundColor: UIColor
@@ -69,6 +73,22 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
     private var collection: TopSitesCollectionView!
     private var dataSource: TopSitesDataSource!
     private let layout = TopSitesLayout()
+    private lazy var longPressGesture: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: "SELdidLongPress")
+    }()
+
+    var editMode : Bool = false {
+        didSet {
+            if editMode != oldValue {
+                if editMode {
+                    homePanelDelegate?.homePanelWillEnterEditingMode?(self)
+                }
+
+                layout.editing = editMode
+                layout.invalidateLayout()
+            }
+        }
+    }
 
     var profile: Profile! {
         didSet {
@@ -94,6 +114,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
         dataSource = TopSitesDataSource(profile: profile, data: Cursor(status: .Failure, msg: "Nothing loaded yet"))
 
         layout.registerClass(TopSitesSeparator.self, forDecorationViewOfKind: SeparatorKind)
+        layout.registerClass(TopSitesCloseButton.self, forDecorationViewOfKind: CloseButtonKind)
 
         collection = TopSitesCollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collection.backgroundColor = AppConstants.PanelBackgroundColor
@@ -102,6 +123,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
         collection.registerClass(ThumbnailCell.self, forCellWithReuseIdentifier: ThumbnailIdentifier)
         collection.registerClass(TwoLineCollectionViewCell.self, forCellWithReuseIdentifier: RowIdentifier)
         collection.keyboardDismissMode = .OnDrag
+        collection.addGestureRecognizer(longPressGesture)
         view.addSubview(collection)
         collection.snp_makeConstraints { make in
             make.edges.equalTo(self.view)
@@ -116,6 +138,14 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
             homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!, visitType: visitType)
         }
     }
+
+    func SELdidLongPress() {
+        editMode = true
+    }
+
+    func endEditing() {
+        editMode = false
+    }
 }
 
 private class TopSitesCollectionView: UICollectionView {
@@ -127,6 +157,8 @@ private class TopSitesCollectionView: UICollectionView {
 }
 
 private class TopSitesLayout: UICollectionViewLayout {
+    var editing: Bool = false
+
     private var thumbnailRows = 3
     private var thumbnailCols = 2
     private var thumbnailCount: Int { return thumbnailRows * thumbnailCols }
@@ -203,23 +235,34 @@ private class TopSitesLayout: UICollectionViewLayout {
             let attr = layoutAttributesForItemAtIndexPath(indexPath)
             attrs.append(attr)
 
-            if i >= thumbnailCount - 1 {
-                let decoration = layoutAttributesForDecorationViewOfKind(SeparatorKind, atIndexPath: indexPath)
+            if let decoration = layoutAttributesForDecorationViewOfKind(SeparatorKind, atIndexPath: indexPath) {
                 attrs.append(decoration)
             }
         }
         return attrs
     }
 
-    // Set the frames for the row separators.
+    // Set the frames for the row separators and close buttons if we are in editing mode.
     override func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
-        let rowIndex = indexPath.item - thumbnailCount + 1
-        let rowYOffset = CGFloat(rowIndex) * AppConstants.DefaultRowHeight
-        let y = topSectionHeight + rowYOffset
+        if editing && indexPath.item < thumbnailCount {
+            let itemFrame = self.layoutAttributesForItemAtIndexPath(indexPath).frame
+            var deleteFrame = CGRect()
+            deleteFrame.size = CGSize(width: 20, height: 20)
+            deleteFrame.center = CGPoint(x: itemFrame.origin.x + TopSitesPanelUX.SuggestedTileImagePadding, y: itemFrame.origin.y + TopSitesPanelUX.SuggestedTileImagePadding)
+            var attrs = UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
+            attrs.frame = deleteFrame
+            return attrs
+        } else if (indexPath.item - thumbnailCount + 1) >= 0 {
+            let rowIndex = indexPath.item - thumbnailCount + 1
+            let rowYOffset = CGFloat(rowIndex) * AppConstants.DefaultRowHeight
+            let y = topSectionHeight + rowYOffset
 
-        let decoration = UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
-        decoration.frame = CGRectMake(0, y, width, 0.5)
-        return decoration
+            let decoration = UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
+            decoration.frame = CGRectMake(0, y, width, 0.5)
+            return decoration
+        } else {
+            return nil
+        }
     }
 
     override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
@@ -317,7 +360,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
             self.setDefaultThumbnailBackground(cell)
         }
 
-        cell.imagePadding = 10
+        cell.imagePadding = TopSitesPanelUX.SuggestedTileImagePadding
         cell.imageView.contentMode = UIViewContentMode.ScaleAspectFit
         cell.isAccessibilityElement = true
         cell.accessibilityLabel = cell.textLabel.text
@@ -368,7 +411,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
     
     @objc func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-        return collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: SeparatorIdentifier, forIndexPath: indexPath) as! UICollectionReusableView
+        return collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: kind, forIndexPath: indexPath) as! UICollectionReusableView
     }
 }
 
@@ -376,6 +419,17 @@ private class TopSitesSeparator: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = SeparatorColor
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+private class TopSitesCloseButton: UICollectionReusableView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.backgroundColor = UIColor.redColor()
     }
 
     required init(coder aDecoder: NSCoder) {
