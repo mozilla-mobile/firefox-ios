@@ -12,6 +12,7 @@ private struct HomePanelViewControllerUX {
     static let ButtonContainerHeight: CGFloat = 40
     static let ButtonContainerBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
     static let BackgroundColor = AppConstants.PanelBackgroundColor
+    static let EditDoneButtonLeftPadding: CGFloat = 10
 }
 
 protocol HomePanelViewControllerDelegate: class {
@@ -24,6 +25,7 @@ protocol HomePanelViewControllerDelegate: class {
 @objc
 protocol HomePanel: class {
     weak var homePanelDelegate: HomePanelDelegate? { get set }
+    optional func endEditing()
 }
 
 @objc
@@ -31,6 +33,7 @@ protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(homePanel: HomePanel)
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
+    optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
 }
 
 class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
@@ -45,6 +48,9 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     private var controllerContainerView: UIView!
     private var buttons: [UIButton] = []
 
+    private var finishEditingButton: UIButton?
+    private var editingPanel: HomePanel?
+
     override func viewDidLoad() {
         view.backgroundColor = HomePanelViewControllerUX.BackgroundColor
 
@@ -53,6 +59,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
         buttonContainerView = UIView()
         buttonContainerView.backgroundColor = HomePanelViewControllerUX.BackgroundColor
+        buttonContainerView.clipsToBounds = true
         view.addSubview(buttonContainerView)
 
         self.buttonContainerBottomBorderView = UIView()
@@ -150,6 +157,12 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         }
     }
 
+    func SELtappedEndEditing(sender: UIButton!) {
+        toggleEditingMode(false)
+        editingPanel?.endEditing?()
+        editingPanel = nil
+    }
+
     private func updateButtons() {
         // Remove any existing buttons if we're rebuilding the toolbar.
         for button in buttons {
@@ -193,5 +206,39 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     func homePanelDidRequestToSignIn(homePanel: HomePanel) {
         delegate?.homePanelViewControllerDidRequestToSignIn(self)
+    }
+
+    func homePanelWillEnterEditingMode(homePanel: HomePanel) {
+        editingPanel = homePanel
+        toggleEditingMode(true)
+    }
+
+    private func toggleEditingMode(editing: Bool) {
+        let translateUp = CGAffineTransformMakeTranslation(0, -AppConstants.ToolbarHeight)
+        let translateDown = CGAffineTransformMakeTranslation(0, AppConstants.ToolbarHeight)
+
+        if editing {
+            let button = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+            button.setTitle(NSLocalizedString("Done", comment: "Done editing button"), forState: UIControlState.Normal)
+            button.addTarget(self, action: "SELtappedEndEditing:", forControlEvents: UIControlEvents.TouchUpInside)
+            button.transform = translateDown
+            self.buttonContainerView.addSubview(button)
+            button.snp_makeConstraints { make in
+                make.left.equalTo(self.buttonContainerView).offset(HomePanelViewControllerUX.EditDoneButtonLeftPadding)
+                make.centerY.equalTo(self.buttonContainerView)
+            }
+            self.buttonContainerView.layoutIfNeeded()
+            finishEditingButton = button
+        }
+
+        UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: UIViewAnimationOptions.AllowUserInteraction |  UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
+            self.buttons.map { $0.transform = editing ? translateUp : CGAffineTransformIdentity }
+            self.finishEditingButton?.transform = editing ? CGAffineTransformIdentity : translateDown
+        }, completion: { _ in
+            if !editing {
+                self.finishEditingButton?.removeFromSuperview()
+                self.finishEditingButton = nil
+            }
+        })
     }
 }
