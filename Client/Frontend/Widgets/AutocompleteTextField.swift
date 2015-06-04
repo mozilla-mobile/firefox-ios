@@ -55,7 +55,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     private func removeCompletion() {
         if completionActive {
-            let enteredText = text.substringToIndex(advance(text.startIndex, enteredTextLength))
+            let enteredText = text.substringToIndex(advance(text.startIndex, enteredTextLength, text.endIndex))
 
             // Workaround for stuck highlight bug.
             if enteredTextLength == 0 {
