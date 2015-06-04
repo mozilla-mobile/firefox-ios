@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03B7516D1B111D910061086B /* RemoteTabsPanelSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B7516C1B111D910061086B /* RemoteTabsPanelSplitViewController.swift */; };
+		03B7518D1B111DAA0061086B /* SyncedTabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B7518C1B111DAA0061086B /* SyncedTabsViewController.swift */; };
+		03B7518F1B111DCA0061086B /* RemoteTabsPanelTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B7518E1B111DCA0061086B /* RemoteTabsPanelTableViewController.swift */; };
+		03B751911B111DE30061086B /* ClientsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B751901B111DE30061086B /* ClientsViewController.swift */; };
 		0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */; };
 		0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */; };
 		0B5142CC1AE1BAF50014D0B3 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */; };
@@ -1052,6 +1056,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		03B7516C1B111D910061086B /* RemoteTabsPanelSplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanelSplitViewController.swift; sourceTree = "<group>"; };
+		03B7518C1B111DAA0061086B /* SyncedTabsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncedTabsViewController.swift; sourceTree = "<group>"; };
+		03B7518E1B111DCA0061086B /* RemoteTabsPanelTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteTabsPanelTableViewController.swift; sourceTree = "<group>"; };
+		03B751901B111DE30061086B /* ClientsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientsViewController.swift; sourceTree = "<group>"; };
 		0AE491A51A41C88C0046C724 /* BackForwardListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListViewController.swift; sourceTree = "<group>"; };
 		0B1C05D51A798B1F004C78B0 /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
 		0B1C05D61A798B1F004C78B0 /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
@@ -2452,6 +2460,10 @@
 				0BF648101A9C54E900BA963C /* TopSitesPanel.swift */,
 				59A685F4EAD19EDEC854BCA4 /* ReaderPanel.swift */,
 				2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */,
+				03B7516C1B111D910061086B /* RemoteTabsPanelSplitViewController.swift */,
+				03B7518C1B111DAA0061086B /* SyncedTabsViewController.swift */,
+				03B7518E1B111DCA0061086B /* RemoteTabsPanelTableViewController.swift */,
+				03B751901B111DE30061086B /* ClientsViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -3719,7 +3731,9 @@
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */,
 				0BEFED8C1AC21C1E002E0A0C /* SDWebThumbnails.swift in Sources */,
+				03B7516D1B111D910061086B /* RemoteTabsPanelSplitViewController.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
+				03B7518D1B111DAA0061086B /* SyncedTabsViewController.swift in Sources */,
 				0BF42D371A7C0B8E00889E28 /* FaviconManager.swift in Sources */,
 				6BB2FD981B017DAB001A189B /* AuralProgressBar.swift in Sources */,
 				D38B2D341A8D96D00040E6B5 /* GCDWebServerFunctions.m in Sources */,
@@ -3736,6 +3750,7 @@
 				E43A4E551A96B88100E25676 /* GCDWebServerDataRequest.m in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				F84B22241A09122500AAB793 /* HomePanelViewController.swift in Sources */,
+				03B751911B111DE30061086B /* ClientsViewController.swift in Sources */,
 				E42475DC1AB73B9B00B23D33 /* SWCellScrollView.m in Sources */,
 				0B5142CC1AE1BAF50014D0B3 /* UIViewExtensions.swift in Sources */,
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
@@ -3752,6 +3767,7 @@
 				28EADE5D1AFC3A78007FB2FB /* UIImageViewExtensions.swift in Sources */,
 				0BB5B2BC1AC0AB9F0052877D /* UIImage+Extensions.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
+				03B7518F1B111DCA0061086B /* RemoteTabsPanelTableViewController.swift in Sources */,
 				D3A9949D1A3686BD008AD1AC /* Browser.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
