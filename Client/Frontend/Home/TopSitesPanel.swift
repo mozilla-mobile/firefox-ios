@@ -145,7 +145,10 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 
     func collectionView(collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, atIndexPath indexPath: NSIndexPath) {
         if elementKind == CloseButtonKind {
-            let closeButton = view as! TopSitesCloseButton
+            let closeView = view as! TopSitesCloseButton
+
+            closeView.indexPath = indexPath
+            closeView.removeButton.addTarget(self, action: "SELdidRemoveSuggestedTile:", forControlEvents: UIControlEvents.TouchUpInside)
 
             // We don't want the buttons to animate everytime they come into view - only the first time after entering edit mode
             if closeButtonDidAnimateMap[indexPath.item] == nil {
@@ -161,6 +164,11 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 
     func SELdidLongPress() {
         editMode = true
+    }
+
+    func SELdidRemoveSuggestedTile(sender: UIView!) {
+        let closeView = sender.superview as! TopSitesCloseButton
+        println(closeView.indexPath?.item)
     }
 
     func endEditing() {
@@ -450,12 +458,28 @@ private class TopSitesSeparator: UICollectionReusableView {
 }
 
 private class TopSitesCloseButton: UICollectionReusableView {
+    let removeButton = UIButton()
+    var indexPath: NSIndexPath?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.redColor()
+        backgroundColor = UIColor.redColor()
+        userInteractionEnabled = true
+
+        removeButton.backgroundColor = UIColor.blueColor()
+        addSubview(removeButton)
+    }
+
+    private override func prepareForReuse() {
+        indexPath = nil
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    private override func layoutSubviews() {
+        super.layoutSubviews()
+        removeButton.frame = CGRect(origin: CGPointZero, size: frame.size)
     }
 }
