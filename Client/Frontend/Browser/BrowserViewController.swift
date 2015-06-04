@@ -919,11 +919,19 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType) {
         finishEditingAndSubmit(url, visitType: visitType)
     }
-    
+
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectPanel panel: Int) {
         if AboutUtils.isAboutHomeURL(tabManager.selectedTab?.url) {
             tabManager.selectedTab?.webView?.evaluateJavaScript("history.replaceState({}, '', '#panel=\(panel)')", completionHandler: nil)
         }
+    }
+
+    func homePanelViewControllerDidRequestToCreateAccount(homePanelViewController: HomePanelViewController) {
+        presentSignInViewController() // TODO UX Right now the flow for sign in and create account is the same
+    }
+
+    func homePanelViewControllerDidRequestToSignIn(homePanelViewController: HomePanelViewController) {
+        presentSignInViewController() // TODO UX Right now the flow for sign in and create account is the same
     }
 }
 
@@ -1791,13 +1799,17 @@ extension BrowserViewController: IntroViewControllerDelegate {
         introViewController.dismissViewControllerAnimated(true, completion: nil)
     }
 
+    func presentSignInViewController() {
+        // TODO When bug 1161151 has been resolved we can jump directly to the sign in screen
+        let settingsNavigationController = SettingsNavigationController()
+        settingsNavigationController.profile = self.profile
+        settingsNavigationController.tabManager = self.tabManager
+        self.presentViewController(settingsNavigationController, animated: true, completion: nil)
+    }
+
     func introViewControllerDidRequestToLogin(introViewController: IntroViewController) {
         introViewController.dismissViewControllerAnimated(true, completion: { () -> Void in
-            // TODO When bug 1161151 has been resolved we can jump directly to the sign in screen
-            let settingsNavigationController = SettingsNavigationController()
-            settingsNavigationController.profile = self.profile
-            settingsNavigationController.tabManager = self.tabManager
-            self.presentViewController(settingsNavigationController, animated: true, completion: nil)
+            self.presentSignInViewController()
         })
     }
 }
