@@ -17,21 +17,21 @@ private struct ReadingListTableViewCellUX {
     static let ReadIndicatorHeight: CGFloat = 14 + 16 + 14 // padding + image height + padding
     static let ReadAccessibilitySpeechPitch: Float = 0.7 // 1.0 default, 0.0 lowest, 2.0 highest
 
-    static let TitleLabelFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Bold" : "HelveticaNeue-Medium", size: 15)
+    static let TitleLabelFont = UIFont.systemFontOfSize(15, weight: UIFontWeightMedium)
     static let TitleLabelTopOffset: CGFloat = 14 - 4
     static let TitleLabelLeftOffset: CGFloat = 16 + 16 + 16
     static let TitleLabelRightOffset: CGFloat = -40
 
-    static let HostnameLabelFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue" : "HelveticaNeue-Light", size: 14)
+    static let HostnameLabelFont = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
     static let HostnameLabelBottomOffset: CGFloat = 11
 
     static let DeleteButtonBackgroundColor = UIColor(rgb: 0xef4035)
-    static let DeleteButtonTitleFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue" : "HelveticaNeue-Light", size: 15)
+    static let DeleteButtonTitleFont = UIFont.systemFontOfSize(15, weight: UIFontWeightLight)
     static let DeleteButtonTitleColor = UIColor.whiteColor()
     static let DeleteButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 
     static let MarkAsReadButtonBackgroundColor = UIColor(rgb: 0x2193d1)
-    static let MarkAsReadButtonTitleFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue" : "HelveticaNeue-Light", size: 15)
+    static let MarkAsReadButtonTitleFont = UIFont.systemFontOfSize(15, weight: UIFontWeightLight)
     static let MarkAsReadButtonTitleColor = UIColor.whiteColor()
     static let MarkAsReadButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 
