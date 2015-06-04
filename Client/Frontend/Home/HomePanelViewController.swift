@@ -16,6 +16,7 @@ private struct HomePanelViewControllerUX {
 
 protocol HomePanelViewControllerDelegate: class {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType)
+    func homePanelViewController(HomePanelViewController: HomePanelViewController, didSelectPanel panel: Int)
 }
 
 @objc
@@ -140,6 +141,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         for (index, button) in enumerate(buttons) {
             if (button == sender) {
                 selectedButtonIndex = index
+                delegate?.homePanelViewController(self, didSelectPanel: index)
                 break
             }
         }

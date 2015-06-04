@@ -23,7 +23,7 @@ protocol BrowserDelegate {
 
 class Browser: NSObject {
     var webView: WKWebView? = nil
-
+    var lastHomePanel = 0
     var browserDelegate: BrowserDelegate? = nil
     var bars = [SnackBar]()
     var favicons = [Favicon]()

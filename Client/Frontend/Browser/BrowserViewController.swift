@@ -337,7 +337,7 @@ class BrowserViewController: UIViewController {
 
             addChildViewController(homePanelController!)
         }
-
+        homePanelController?.selectedButtonIndex = tabManager.selectedTab?.lastHomePanel
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
         UIView.animateWithDuration(0.2, animations: { () -> Void in
@@ -890,6 +890,9 @@ extension BrowserViewController: BrowserDelegate {
 extension BrowserViewController: HomePanelViewControllerDelegate {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType) {
         finishEditingAndSubmit(url, visitType: visitType)
+    }
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectPanel panel: Int) {
+        tabManager.selectedTab?.lastHomePanel = panel
     }
 }
 
@@ -1524,7 +1527,7 @@ extension BrowserViewController : Transitionable {
                 tab.webView?.hidden = false
             }
         }
-        self.updateViewConstraints()
+
         self.homePanelController?.view.hidden = false
         if options.toView === self {
             startTrackingAccessibilityStatus()
@@ -1562,9 +1565,11 @@ extension BrowserViewController {
     }
 
     func hideReaderModeBar(#animated: Bool) {
-        readerModeBar?.removeFromSuperview()
-        readerModeBar = nil
-        self.updateViewConstraints()
+        if let readerModeBar = self.readerModeBar {
+            readerModeBar.removeFromSuperview()
+            self.readerModeBar = nil
+            self.updateViewConstraints()
+        }
     }
 
     /// There are two ways we can enable reader mode. In the simplest case we open a URL to our internal reader mode
