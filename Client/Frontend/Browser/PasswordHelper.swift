@@ -11,7 +11,7 @@ private let SaveButtonTitle = NSLocalizedString("Save", comment: "Button to save
 private let NotNowButtonTitle = NSLocalizedString("Not now", comment: "Button to not save the user's password")
 private let UpdateButtonTitle = NSLocalizedString("Update", comment: "Button to update the user's password")
 private let CancelButtonTitle = NSLocalizedString("Cancel", comment: "Authentication prompt cancel button")
-private let LoginButtonTitle  = NSLocalizedString("Login", comment: "Authentication prompt login button")
+private let LogInButtonTitle  = NSLocalizedString("Log in", comment: "Authentication prompt log in button")
 
 class PasswordHelper: BrowserHelper {
     private weak var browser: Browser?
@@ -236,8 +236,8 @@ class PasswordHelper: BrowserHelper {
             alert = UIAlertController(title: title, message: formatted, preferredStyle: UIAlertControllerStyle.Alert)
         }
 
-        // Add a login button.
-        let action = UIAlertAction(title: LoginButtonTitle,
+        // Add a button to log in.
+        let action = UIAlertAction(title: LogInButtonTitle,
             style: UIAlertActionStyle.Default) { (action) -> Void in
                 let user = (alert.textFields?[0] as! UITextField).text
                 let pass = (alert.textFields?[1] as! UITextField).text
