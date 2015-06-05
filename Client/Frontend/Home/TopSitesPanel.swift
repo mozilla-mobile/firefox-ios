@@ -96,15 +96,17 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 
     var profile: Profile! {
         didSet {
-            // This needs to run on the main thread so that our dataSource is ready.
-            profile.history.getSitesByFrecencyWithLimit(100).uponQueue(dispatch_get_main_queue()) { result in
-                if let data = result.successValue {
-                    self.dataSource.data = data
-                    self.dataSource.profile = self.profile
-                    self.collection.reloadData()
-                }
-                // TODO: error handling.
-            }
+            profile.history.getSitesByFrecencyWithLimit(100).uponQueue(dispatch_get_main_queue(), block: { result in
+                self.updateDataSourceWithSites(result)
+                self.collection.reloadData()
+            })
+        }
+    }
+
+    private func updateDataSourceWithSites(result: Result<Cursor<Site>>) {
+        if let data = result.successValue {
+            self.dataSource.data = data
+            self.dataSource.profile = self.profile
         }
     }
 
@@ -168,7 +170,31 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 
     func SELdidRemoveSuggestedTile(sender: UIView!) {
         let closeView = sender.superview as! TopSitesCloseButton
-        println(closeView.indexPath?.item)
+        if let indexPath = closeView.indexPath {
+            let site = dataSource[indexPath.item]
+            if let url = site?.url {
+                self.deleteHistoryTileForURL(url, atIndexPath: indexPath)
+            }
+        }
+    }
+
+    private func deleteHistoryTileForURL(url: String, atIndexPath indexPath: NSIndexPath) {
+        profile.history.removeHistoryForURL(url) >>== {
+            self.profile.history.getSitesByFrecencyWithLimit(100).uponQueue(dispatch_get_main_queue(), block: { result in
+                self.updateDataSourceWithSites(result)
+                self.deleteOrUpdateSites(result, indexPath: indexPath)
+            })
+        }
+    }
+
+    private func deleteOrUpdateSites(result: Result<Cursor<Site>>, indexPath: NSIndexPath) {
+        if let data = result.successValue {
+            if data.count < layout.thumbnailCount {
+                self.collection.reloadData()
+            } else {
+                self.collection.deleteItemsAtIndexPaths([indexPath])
+            }
+        }
     }
 
     func endEditing() {
