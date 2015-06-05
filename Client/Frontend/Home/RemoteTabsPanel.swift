@@ -337,7 +337,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
 
         let instructionsLabel = UILabel()
         instructionsLabel.font = RemoteTabsPanelUX.EmptyStateInstructionsFont
-        instructionsLabel.text = NSLocalizedString("Sign in to sync your tabs, bookmarks, passwords, & more.", comment: "See http://mzl.la/1Qtkf0j")
+        instructionsLabel.text = NSLocalizedString("Sync your tabs, bookmarks, passwords and more.", comment: "See http://mzl.la/1Qtkf0j")
         instructionsLabel.textAlignment = NSTextAlignment.Center
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
         instructionsLabel.numberOfLines = 0
@@ -350,7 +350,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
 
         let signInButton = UIButton()
         signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
-        signInButton.setTitle(NSLocalizedString("Sign in to Firefox", tableName: "Intro", comment: "See http://mzl.la/1Qtkf0j"), forState: .Normal)
+        signInButton.setTitle(NSLocalizedString("Sign in", comment: "See http://mzl.la/1Qtkf0j"), forState: .Normal)
         signInButton.setTitleColor(RemoteTabsPanelUX.EmptyStateSignInButtonTitleColor, forState: .Normal)
         signInButton.titleLabel?.font = RemoteTabsPanelUX.EmptyStateSignInButtonTitleFont
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
