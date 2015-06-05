@@ -40,7 +40,7 @@ class Tile: Site {
     }
 }
 
-private class SuggestedSitesData<T: Tile>: Cursor<T> {
+class SuggestedSitesData<T: Tile>: Cursor<T> {
     var tiles = [T]()
 
     init() {
@@ -67,16 +67,23 @@ private class SuggestedSitesData<T: Tile>: Cursor<T> {
     }
 }
 
-class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
+class TopSitesPanel: UIViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
 
     private var collection: TopSitesCollectionView!
     private var dataSource: TopSitesDataSource!
+
+    private lazy var delegate: TopSitesCollectionViewDelegate = {
+        let delegate = TopSitesCollectionViewDelegate(homePanel: self)
+        delegate.dataSource = self.dataSource
+        delegate.homePanelDelegate = self.homePanelDelegate
+        return delegate
+    }()
+
     private let layout = TopSitesLayout()
     private lazy var longPressGesture: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: "SELdidLongPress")
     }()
-    private var closeButtonDidAnimateMap = [Int: Bool]()
 
     var editMode : Bool = false {
         didSet {
@@ -85,7 +92,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
                     homePanelDelegate?.homePanelWillEnterEditingMode?(self)
                 } else {
                     // If we exited editing mode, invalidate the animation state for the close buttons
-                    closeButtonDidAnimateMap = [Int: Bool]()
+                    self.delegate.closeButtonDidAnimateMap = [Int: Bool]()
                 }
 
                 layout.editing = editMode
@@ -124,7 +131,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
 
         collection = TopSitesCollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collection.backgroundColor = AppConstants.PanelBackgroundColor
-        collection.delegate = self
+        collection.delegate = delegate
         collection.dataSource = dataSource
         collection.registerClass(ThumbnailCell.self, forCellWithReuseIdentifier: ThumbnailIdentifier)
         collection.registerClass(TwoLineCollectionViewCell.self, forCellWithReuseIdentifier: RowIdentifier)
@@ -134,33 +141,6 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
         collection.snp_makeConstraints { make in
             make.edges.equalTo(self.view)
             return
-        }
-    }
-
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if let site = dataSource[indexPath.item] {
-            // We're gonna call Top Sites bookmarks for now.
-            let visitType = VisitType.Bookmark
-            homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!, visitType: visitType)
-        }
-    }
-
-    func collectionView(collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, atIndexPath indexPath: NSIndexPath) {
-        if elementKind == CloseButtonKind {
-            let closeView = view as! TopSitesCloseButton
-
-            closeView.indexPath = indexPath
-            closeView.removeButton.addTarget(self, action: "SELdidRemoveSuggestedTile:", forControlEvents: UIControlEvents.TouchUpInside)
-
-            // We don't want the buttons to animate everytime they come into view - only the first time after entering edit mode
-            if closeButtonDidAnimateMap[indexPath.item] == nil {
-                view.transform = CGAffineTransformMakeScale(0.01, 0.01)
-                UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: UIViewAnimationOptions.AllowUserInteraction |  UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
-                    view.transform = CGAffineTransformIdentity
-                }, completion: { finished in
-                    self.closeButtonDidAnimateMap[indexPath.item] = true
-                })
-            }
         }
     }
 
@@ -202,6 +182,7 @@ class TopSitesPanel: UIViewController, UICollectionViewDelegate, HomePanel {
     }
 }
 
+
 private class TopSitesCollectionView: UICollectionView {
     private override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         // Hide the keyboard if this view is touched.
@@ -210,7 +191,47 @@ private class TopSitesCollectionView: UICollectionView {
     }
 }
 
-private class TopSitesLayout: UICollectionViewLayout {
+class TopSitesCollectionViewDelegate: NSObject, UICollectionViewDelegate {
+    weak var dataSource: TopSitesDataSource?
+    weak var homePanelDelegate: HomePanelDelegate?
+    weak var homePanel: HomePanel?
+
+    var closeButtonDidAnimateMap = [Int: Bool]()
+
+    init(homePanel: HomePanel) {
+        self.homePanel = homePanel
+        super.init()
+    }
+
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if let site = dataSource?[indexPath.item] {
+            // We're gonna call Top Sites bookmarks for now.
+            let visitType = VisitType.Bookmark
+            homePanelDelegate?.homePanel(homePanel!, didSelectURL: NSURL(string: site.url)!, visitType: visitType)
+        }
+    }
+
+    func collectionView(collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, atIndexPath indexPath: NSIndexPath) {
+        if elementKind == CloseButtonKind {
+            let closeView = view as! TopSitesCloseButton
+
+            closeView.indexPath = indexPath
+            closeView.removeButton.addTarget(self, action: "SELdidRemoveSuggestedTile:", forControlEvents: UIControlEvents.TouchUpInside)
+
+            // We don't want the buttons to animate everytime they come into view - only the first time after entering edit mode
+            if closeButtonDidAnimateMap[indexPath.item] == nil {
+                view.transform = CGAffineTransformMakeScale(0.01, 0.01)
+                UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: UIViewAnimationOptions.AllowUserInteraction |  UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
+                    view.transform = CGAffineTransformIdentity
+                }, completion: { finished in
+                    self.closeButtonDidAnimateMap[indexPath.item] = true
+                })
+            }
+        }
+    }
+}
+
+class TopSitesLayout: UICollectionViewLayout {
     var editing: Bool = false
 
     private var thumbnailRows = 3
@@ -352,7 +373,7 @@ private class TopSitesLayout: UICollectionViewLayout {
     }
 }
 
-private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
+class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var data: Cursor<Site>
     var profile: Profile
     lazy var suggestedSites: SuggestedSitesData<Tile> = {
@@ -483,7 +504,7 @@ private class TopSitesSeparator: UICollectionReusableView {
     }
 }
 
-private class TopSitesCloseButton: UICollectionReusableView {
+class TopSitesCloseButton: UICollectionReusableView {
     let removeButton = UIButton()
     var indexPath: NSIndexPath?
 
@@ -496,7 +517,7 @@ private class TopSitesCloseButton: UICollectionReusableView {
         addSubview(removeButton)
     }
 
-    private override func prepareForReuse() {
+    override func prepareForReuse() {
         indexPath = nil
     }
 
@@ -504,7 +525,7 @@ private class TopSitesCloseButton: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private override func layoutSubviews() {
+    override func layoutSubviews() {
         super.layoutSubviews()
         removeButton.frame = CGRect(origin: CGPointZero, size: frame.size)
     }
