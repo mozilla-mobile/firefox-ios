@@ -14,8 +14,10 @@ private struct ReadingListTableViewCellUX {
     static let ActiveTextColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
     static let DimmedTextColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.44)
 
-    static let ReadIndicatorWidth: CGFloat = 16 + 16 + 16 // padding + image width + padding
-    static let ReadIndicatorHeight: CGFloat = 14 + 16 + 14 // padding + image height + padding
+    static let ReadIndicatorWidth: CGFloat =  12  // image width
+    static let ReadIndicatorHeight: CGFloat = 12 // image height
+    static let ReadIndicatorTopOffset: CGFloat = 36.75 // half of the cell - half of the height of the asset
+    static let ReadIndicatorLeftOffset: CGFloat = 18
     static let ReadAccessibilitySpeechPitch: Float = 0.7 // 1.0 default, 0.0 lowest, 2.0 highest
 
     static let TitleLabelFont = UIFont(name: UIAccessibilityIsBoldTextEnabled() ? "HelveticaNeue-Bold" : "HelveticaNeue-Medium", size: 15)
@@ -95,11 +97,12 @@ class ReadingListTableViewCell: SWTableViewCell {
         preservesSuperviewLayoutMargins = false
 
         contentView.addSubview(readStatusImageView)
-        readStatusImageView.contentMode = UIViewContentMode.Center
+        readStatusImageView.contentMode = UIViewContentMode.ScaleAspectFit
         readStatusImageView.snp_makeConstraints { (make) -> () in
-            make.top.left.equalTo(self.contentView)
             make.width.equalTo(ReadingListTableViewCellUX.ReadIndicatorWidth)
             make.height.equalTo(ReadingListTableViewCellUX.ReadIndicatorHeight)
+            make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.ReadIndicatorTopOffset)
+            make.left.equalTo(self.contentView).offset(ReadingListTableViewCellUX.ReadIndicatorLeftOffset)
         }
 
         contentView.addSubview(titleLabel)
