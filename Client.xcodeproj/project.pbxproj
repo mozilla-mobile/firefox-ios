@@ -508,6 +508,7 @@
 		E4F481041A95466A003C0444 /* SWXMLHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
 		E6A99D771B20D95800006EDD /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
+		E6EA06E71B21F7B8004C3969 /* TopSitesPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EA06E61B21F7B8004C3969 /* TopSitesPanelTests.swift */; };
 		F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21D91A090F8100AAB793 /* ClientTests.swift */; };
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
 		F84B220B1A0910F600AAB793 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
@@ -1429,6 +1430,7 @@
 		E61D833B1B21ED3600BE6F82 /* Quick.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Quick.xcodeproj; path = Carthage/Checkouts/XCGLogger/XCGLogger/Library/../../../Quick/Quick.xcodeproj; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
+		E6EA06E61B21F7B8004C3969 /* TopSitesPanelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSitesPanelTests.swift; sourceTree = "<group>"; };
 		F84B21BE1A090F8100AAB793 /* Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Client.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D31A090F8100AAB793 /* FennecAurora.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FennecAurora.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F84B21D81A090F8100AAB793 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2379,6 +2381,7 @@
 		F84B21D61A090F8100AAB793 /* ClientTests */ = {
 			isa = PBXGroup;
 			children = (
+				E6EA06E61B21F7B8004C3969 /* TopSitesPanelTests.swift */,
 				F84B21D91A090F8100AAB793 /* ClientTests.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
 				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
@@ -3857,6 +3860,7 @@
 				0BAC7A9B1AC4B3F2006018CB /* AppConstants.swift in Sources */,
 				D38B2D531A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */,
 				D38B2D4D1A8D96D00040E6B5 /* GCDWebServerErrorResponse.m in Sources */,
+				E6EA06E71B21F7B8004C3969 /* TopSitesPanelTests.swift in Sources */,
 				2F834D1B1A80629A006A0B7B /* FxAContentViewController.swift in Sources */,
 				D3FA77971A43B5390010CD32 /* OpenSearch.swift in Sources */,
 				D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */,
