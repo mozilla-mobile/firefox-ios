@@ -274,6 +274,11 @@
 		7B9486681B21BB620086F610 /* scrollablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = 7B9486671B21BB620086F610 /* scrollablePage.html */; };
 		746D4E371B1E699C008F789F /* HashchangeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D4E361B1E699C008F789F /* HashchangeHelper.swift */; };
 		746D4E571B1E7132008F789F /* HashchangeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 746D4E561B1E7132008F789F /* HashchangeHelper.js */; };
+		74C295271B21152000862FE3 /* AboutHomeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C295261B21152000862FE3 /* AboutHomeHandler.swift */; };
+		74C296431B22269E00862FE3 /* AboutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C296421B22269E00862FE3 /* AboutUtils.swift */; };
+		7B9486681B21BB620086F610 /* scrollablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = 7B9486671B21BB620086F610 /* scrollablePage.html */; };
+		746D4E371B1E699C008F789F /* HashchangeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D4E361B1E699C008F789F /* HashchangeHelper.swift */; };
+		746D4E571B1E7132008F789F /* HashchangeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 746D4E561B1E7132008F789F /* HashchangeHelper.js */; };
 		D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D301AAED1A3A55B70078DD1D /* TabTrayController.swift */; };
 		D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D308E4EC1A530A8B00842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
@@ -1234,6 +1239,11 @@
 		7B9486671B21BB620086F610 /* scrollablePage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = scrollablePage.html; sourceTree = "<group>"; };
 		746D4E361B1E699C008F789F /* HashchangeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashchangeHelper.swift; sourceTree = "<group>"; };
 		746D4E561B1E7132008F789F /* HashchangeHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = HashchangeHelper.js; sourceTree = "<group>"; };
+		74C295261B21152000862FE3 /* AboutHomeHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHomeHandler.swift; sourceTree = "<group>"; };
+		74C296421B22269E00862FE3 /* AboutUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutUtils.swift; sourceTree = "<group>"; };
+		7B9486671B21BB620086F610 /* scrollablePage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = scrollablePage.html; sourceTree = "<group>"; };
+		746D4E361B1E699C008F789F /* HashchangeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashchangeHelper.swift; sourceTree = "<group>"; };
+		746D4E561B1E7132008F789F /* HashchangeHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = HashchangeHelper.js; sourceTree = "<group>"; };
 		D301AAED1A3A55B70078DD1D /* TabTrayController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayController.swift; sourceTree = "<group>"; };
 		D308E4E31A5306F500842685 /* SearchEngines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngines.swift; sourceTree = "<group>"; };
 		D30B0F2F1AA7D66300C01CA3 /* ThumbnailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailCell.swift; sourceTree = "<group>"; };
@@ -2134,6 +2144,7 @@
 				0BA1E02D1B046F1E007675AF /* ErrorPageHelper.swift */,
 				E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */,
 				746D4E361B1E699C008F789F /* HashchangeHelper.swift */,
+				74C295261B21152000862FE3 /* AboutHomeHandler.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -2162,9 +2173,10 @@
 				2FCAE2401ABB531100877008 /* Bytes.swift */,
 				281B2C071ADF4F29002917DC /* DeferredUtils.swift */,
 				287DAA1E1AE06E5D0055AC35 /* DeviceInfo.swift */,
-				E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */,
 				283306E81AB3BB87008999AC /* Functions.swift */,
 				D39999A81AA01D65005AED21 /* KeyboardHelper.swift */,
+				74C296421B22269E00862FE3 /* AboutUtils.swift */,
+				E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */,
 				2F0624D41AE58C7800FA022C /* KeychainCache.swift */,
 				D339C2821AD354B400C087BD /* Loader.swift */,
 				282731A11ABC9D2600AA1954 /* Prefs.swift */,
@@ -3710,6 +3722,7 @@
 				E42475E81AB73B9B00B23D33 /* SWUtilityButtonView.m in Sources */,
 				D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */,
 				D38B2D431A8D96D00040E6B5 /* GCDWebServerMultiPartFormRequest.m in Sources */,
+				74C295271B21152000862FE3 /* AboutHomeHandler.swift in Sources */,
 				D3BE7B461B054F8600641031 /* TestAppDelegate.swift in Sources */,
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,
 				D3BE7B481B05596800641031 /* AuroraAppDelegate.swift in Sources */,
@@ -3779,6 +3792,7 @@
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				D38B2D491A8D96D00040E6B5 /* GCDWebServerDataResponse.m in Sources */,
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
+				74C296431B22269E00862FE3 /* AboutUtils.swift in Sources */,
 				D38B2D521A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
 				E42CCE011A24C4E300B794D3 /* ExtensionUtils.swift in Sources */,

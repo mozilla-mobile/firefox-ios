@@ -8,7 +8,7 @@ public enum AppBuildChannel {
 }
 
 public struct AppConstants {
-    static let AboutHomeURL = NSURL(string: "about:home")!
+    static let AboutHomeURL = NSURL(string: "\(WebServer.sharedInstance.base)/about/home/#panel=0")!
 
     static let AppBackgroundColor = UIColor.blackColor()
 
