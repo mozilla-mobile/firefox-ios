@@ -140,6 +140,9 @@ class URLBarView: UIView {
         return [self.shareButton, self.bookmarkButton, self.forwardButton, self.backButton, self.stopReloadButton]
     }()
 
+    // Used to temporarily store the cloned button so we can respond to layout changes during animation
+    private weak var clonedTabsButton: InsetButton?
+
     var isEditing: Bool {
         return !editTextField.hidden
     }
@@ -300,6 +303,7 @@ class URLBarView: UIView {
     func updateTabCount(count: Int) {
         // make a 'clone' of the tabs button
         let newTabsButton = InsetButton()
+        self.clonedTabsButton = newTabsButton
         newTabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
         newTabsButton.setTitleColor(AppConstants.AppBackgroundColor, forState: UIControlState.Normal)
         newTabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
@@ -342,6 +346,7 @@ class URLBarView: UIView {
                 }, completion: { _ in
                     // remove the clone and setup the actual tab button
                     newTabsButton.removeFromSuperview()
+
                     self.tabsButton.titleLabel?.layer.opacity = 1
                     self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
                     self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
@@ -427,7 +432,9 @@ class URLBarView: UIView {
 
         if editing {
             self.cancelButton.transform = CGAffineTransformIdentity
-            self.tabsButton.transform = CGAffineTransformMakeTranslation(self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset, 0)
+            let tabsButtonTransform = CGAffineTransformMakeTranslation(self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset, 0)
+            self.tabsButton.transform = tabsButtonTransform
+            self.clonedTabsButton?.transform = tabsButtonTransform
             self.curveShape.transform = CGAffineTransformMakeTranslation(self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer, 0)
 
             if self.toolbarIsShowing {
@@ -435,6 +442,7 @@ class URLBarView: UIView {
             }
         } else {
             self.tabsButton.transform = CGAffineTransformIdentity
+            self.clonedTabsButton?.transform = CGAffineTransformIdentity
             self.cancelButton.transform = CGAffineTransformMakeTranslation(self.cancelButton.frame.width, 0)
             self.curveShape.transform = CGAffineTransformIdentity
 

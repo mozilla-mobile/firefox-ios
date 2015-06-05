@@ -1068,6 +1068,7 @@ extension BrowserViewController {
             UIView.animateWithDuration(duration, animations: animation, completion: completion)
         } else {
             animation()
+            completion?(finished: true)
         }
     }
 
@@ -1786,9 +1787,11 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             dialogTitle = url.absoluteString
             let newTabTitle = NSLocalizedString("Open In New Tab", comment: "Context menu item for opening a link in a new tab")
             let openNewTabAction =  UIAlertAction(title: newTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) in
-                let request =  NSURLRequest(URL: url)
-                let tab = self.tabManager.addTab(request: request)
+                self.showToolbars(animated: self.headerConstraintOffset != 0, completion: { _ in
+                    self.tabManager.addTab(request: NSURLRequest(URL: url))
+                })
             }
+
             actionSheetController.addAction(openNewTabAction)
 
             let copyTitle = NSLocalizedString("Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
