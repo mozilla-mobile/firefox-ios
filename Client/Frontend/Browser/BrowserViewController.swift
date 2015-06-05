@@ -749,8 +749,9 @@ extension BrowserViewController: BrowserDelegate {
         let favicons = FaviconManager(browser: browser, profile: profile)
         browser.addHelper(favicons, name: FaviconManager.name())
 
-        let passwords = PasswordHelper(browser: browser, profile: profile)
-        browser.addHelper(passwords, name: PasswordHelper.name())
+        // Temporarily disable password support until the new code lands
+        //let passwords = PasswordHelper(browser: browser, profile: profile)
+        //browser.addHelper(passwords, name: PasswordHelper.name())
 
         let contextMenuHelper = ContextMenuHelper(browser: browser)
         contextMenuHelper.delegate = self

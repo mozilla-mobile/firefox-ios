@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
+import Storage
 import AVFoundation
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -49,6 +50,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 profile.readingList?.createRecordWithURL(absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
             }
         }
+
+        // Force a database upgrade by requesting a non-existent password
+        profile.passwords.get(QueryOptions(filter: "example.com"), complete: { (cursor) -> Void in
+            // Ignored
+        })
 
         return true
     }

@@ -6,7 +6,7 @@ import Foundation
 
 private class PasswordsTable<T>: GenericTable<Password> {
     override var name: String { return "logins" }
-    override var version: Int { return 1 }
+    override var version: Int { return 2 }
     override var rows: String { return "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
         "hostname TEXT NOT NULL, " +
         "httpRealm TEXT NOT NULL, " +
