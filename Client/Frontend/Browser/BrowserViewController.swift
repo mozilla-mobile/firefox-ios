@@ -1092,11 +1092,23 @@ extension BrowserViewController: TabManagerDelegate {
         if let wv = previous?.webView {
             wv.accessibilityLabel = nil
             wv.accessibilityElementsHidden = true
+            wv.accessibilityIdentifier = nil
+            // due to screwy handling within iOS, the scrollToTop handling does not work if there are
+            // more than one scroll view in the view hierarchy
+            // we therefore have to hide all the scrollViews that we are no actually interesting in interacting with
+            // to ensure that scrollsToTop actually works
+            wv.scrollView.hidden = true
         }
 
         if let webView = selected?.webView {
+            // if we have previously hidden this scrollview in order to make scrollsToTop work then
+            // we should ensure that it is not hidden now that it is our foreground scrollView
+            if webView.scrollView.hidden {
+                webView.scrollView.hidden = false
+            }
             webViewContainer.addSubview(webView)
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
+            webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
             if let url = webView.URL?.absoluteString {
