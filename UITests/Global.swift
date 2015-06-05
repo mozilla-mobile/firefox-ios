@@ -105,6 +105,14 @@ class SimplePageServer {
             return GCDWebServerDataResponse(HTML: self.getPageData("noTitle"))
         }
 
+        // we may create more than one of these but we need to give them uniquie accessibility ids in the tab manager so we'll pass in a page number
+        webServer.addHandlerForMethod("GET", path: "/scrollablePage.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            var pageData = self.getPageData("scrollablePage")
+            let page = (request.query["page"] as! String).toInt()!
+            pageData = pageData.stringByReplacingOccurrencesOfString("{page}", withString: page.description)
+            return GCDWebServerDataResponse(HTML: pageData as String)
+        }
+
         webServer.addHandlerForMethod("GET", path: "/numberedPage.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var pageData = self.getPageData("numberedPage")
 
