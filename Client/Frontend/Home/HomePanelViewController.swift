@@ -23,13 +23,13 @@ protocol HomePanelViewControllerDelegate: class {
 }
 
 @objc
-protocol HomePanel: class {
+public protocol HomePanel: class {
     weak var homePanelDelegate: HomePanelDelegate? { get set }
     optional func endEditing()
 }
 
 @objc
-protocol HomePanelDelegate: class {
+public protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(homePanel: HomePanel)
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)

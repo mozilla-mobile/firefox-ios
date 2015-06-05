@@ -67,25 +67,28 @@ class SuggestedSitesData<T: Tile>: Cursor<T> {
     }
 }
 
-class TopSitesPanel: UIViewController, HomePanel {
-    weak var homePanelDelegate: HomePanelDelegate?
+public class TopSitesPanel: UIViewController, HomePanel {
+    weak public var homePanelDelegate: HomePanelDelegate?
 
-    private var collection: TopSitesCollectionView!
-    private var dataSource: TopSitesDataSource!
+    public lazy var layout: TopSitesLayout = {
+        return TopSitesLayout()
+    }()
 
-    private lazy var delegate: TopSitesCollectionViewDelegate = {
-        let delegate = TopSitesCollectionViewDelegate(homePanel: self)
+    public lazy var delegate: TopSitesCollectionViewDelegate = {
+        let delegate = TopSitesCollectionViewDelegateImpl(homePanel: self)
         delegate.dataSource = self.dataSource
         delegate.homePanelDelegate = self.homePanelDelegate
         return delegate
     }()
 
-    private let layout = TopSitesLayout()
+    private var collection: TopSitesCollectionView!
+    private var dataSource: TopSitesDataSource!
+
     private lazy var longPressGesture: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: "SELdidLongPress")
     }()
 
-    var editMode : Bool = false {
+    public var editMode: Bool = false {
         didSet {
             if editMode != oldValue {
                 if editMode {
@@ -117,12 +120,12 @@ class TopSitesPanel: UIViewController, HomePanel {
         }
     }
 
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+    override public func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         layout.setupForOrientation(toInterfaceOrientation)
         collection.setNeedsLayout()
     }
 
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         dataSource = TopSitesDataSource(profile: profile, data: Cursor(status: .Failure, msg: "Nothing loaded yet"))
 
@@ -177,11 +180,10 @@ class TopSitesPanel: UIViewController, HomePanel {
         }
     }
 
-    func endEditing() {
+    public func endEditing() {
         editMode = false
     }
 }
-
 
 private class TopSitesCollectionView: UICollectionView {
     private override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -191,19 +193,26 @@ private class TopSitesCollectionView: UICollectionView {
     }
 }
 
-class TopSitesCollectionViewDelegate: NSObject, UICollectionViewDelegate {
-    weak var dataSource: TopSitesDataSource?
-    weak var homePanelDelegate: HomePanelDelegate?
-    weak var homePanel: HomePanel?
+public protocol TopSitesCollectionViewDelegate: UICollectionViewDelegate {
+    var dataSource: TopSitesDataSource? { get }
+    var homePanelDelegate: HomePanelDelegate? { get }
+    var homePanel: HomePanel? { get }
+    var closeButtonDidAnimateMap: [Int: Bool] { get set }
+}
 
-    var closeButtonDidAnimateMap = [Int: Bool]()
+public class TopSitesCollectionViewDelegateImpl: NSObject, TopSitesCollectionViewDelegate {
+    weak public var dataSource: TopSitesDataSource?
+    weak public var homePanelDelegate: HomePanelDelegate?
+    weak public var homePanel: HomePanel?
+
+    public var closeButtonDidAnimateMap = [Int: Bool]()
 
     init(homePanel: HomePanel) {
         self.homePanel = homePanel
         super.init()
     }
 
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if let site = dataSource?[indexPath.item] {
             // We're gonna call Top Sites bookmarks for now.
             let visitType = VisitType.Bookmark
@@ -211,7 +220,7 @@ class TopSitesCollectionViewDelegate: NSObject, UICollectionViewDelegate {
         }
     }
 
-    func collectionView(collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, atIndexPath indexPath: NSIndexPath) {
+    public func collectionView(collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, atIndexPath indexPath: NSIndexPath) {
         if elementKind == CloseButtonKind {
             let closeView = view as! TopSitesCloseButton
 
@@ -231,7 +240,7 @@ class TopSitesCollectionViewDelegate: NSObject, UICollectionViewDelegate {
     }
 }
 
-class TopSitesLayout: UICollectionViewLayout {
+public class TopSitesLayout: UICollectionViewLayout {
     var editing: Bool = false
 
     private var thumbnailRows = 3
@@ -259,12 +268,12 @@ class TopSitesLayout: UICollectionViewLayout {
         return thumbnailHeight * CGFloat(rows) + ThumbnailCellUX.Insets.top + ThumbnailCellUX.Insets.bottom
     }
 
-    override init() {
+    override public init() {
         super.init()
         setupForOrientation(UIApplication.sharedApplication().statusBarOrientation)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required public init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -286,7 +295,7 @@ class TopSitesLayout: UICollectionViewLayout {
         return min(count - 1, max(0, Int((y - topSectionHeight) / AppConstants.DefaultRowHeight + CGFloat(thumbnailCount))))
     }
 
-    override func collectionViewContentSize() -> CGSize {
+    override public func collectionViewContentSize() -> CGSize {
         if count <= thumbnailCount {
             let row = floor(Double(count / thumbnailCols))
             return CGSize(width: width, height: topSectionHeight)
@@ -296,7 +305,7 @@ class TopSitesLayout: UICollectionViewLayout {
         return CGSize(width: width, height: topSectionHeight + bottomSectionHeight)
     }
 
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [AnyObject]? {
+    override public func layoutAttributesForElementsInRect(rect: CGRect) -> [AnyObject]? {
         let start = getIndexAtPosition(y: rect.origin.y)
         let end = getIndexAtPosition(y: rect.origin.y + rect.height)
 
@@ -325,7 +334,7 @@ class TopSitesLayout: UICollectionViewLayout {
     }
 
     // Set the frames for the row separators and close buttons if we are in editing mode.
-    override func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
+    override public func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
         if editing && indexPath.item < thumbnailCount {
             let itemFrame = self.layoutAttributesForItemAtIndexPath(indexPath).frame
             var deleteFrame = CGRect()
@@ -347,7 +356,7 @@ class TopSitesLayout: UICollectionViewLayout {
         }
     }
 
-    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
+    override public func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
         let attr = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
 
         let i = indexPath.item
@@ -368,12 +377,12 @@ class TopSitesLayout: UICollectionViewLayout {
         return attr
     }
 
-    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
+    override public func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
         return true
     }
 }
 
-class TopSitesDataSource: NSObject, UICollectionViewDataSource {
+public class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var data: Cursor<Site>
     var profile: Profile
     lazy var suggestedSites: SuggestedSitesData<Tile> = {
@@ -385,19 +394,6 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         self.profile = profile
     }
 
-    @objc func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if data.status != .Success {
-            return 0
-        }
-
-        // If there aren't enough data items to fill the grid, look for items in suggested sites.
-        if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
-            if data.count < layout.thumbnailCount {
-                return min(data.count + suggestedSites.count, layout.thumbnailCount)
-            }
-        }
-        return data.count
-    }
 
     private func setDefaultThumbnailBackground(cell: ThumbnailCell) {
         cell.imageView.image = UIImage(named: "defaultFavicon")!
@@ -472,7 +468,21 @@ class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         return data[index] as Site?
     }
 
-    @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    @objc public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if data.status != .Success {
+            return 0
+        }
+
+        // If there aren't enough data items to fill the grid, look for items in suggested sites.
+        if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
+            if data.count < layout.thumbnailCount {
+                return min(data.count + suggestedSites.count, layout.thumbnailCount)
+            }
+        }
+        return data.count
+    }
+
+    @objc public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         // Cells for the top site thumbnails.
         let site = self[indexPath.item]!
 
@@ -504,11 +514,11 @@ private class TopSitesSeparator: UICollectionReusableView {
     }
 }
 
-class TopSitesCloseButton: UICollectionReusableView {
+public class TopSitesCloseButton: UICollectionReusableView {
     let removeButton = UIButton()
     var indexPath: NSIndexPath?
 
-    override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.redColor()
         userInteractionEnabled = true
@@ -517,15 +527,15 @@ class TopSitesCloseButton: UICollectionReusableView {
         addSubview(removeButton)
     }
 
-    override func prepareForReuse() {
+    override public func prepareForReuse() {
         indexPath = nil
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required public init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         removeButton.frame = CGRect(origin: CGPointZero, size: frame.size)
     }
