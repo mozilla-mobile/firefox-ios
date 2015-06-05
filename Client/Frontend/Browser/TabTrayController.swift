@@ -491,8 +491,9 @@ extension TabTrayController: Transitionable {
     }
 
     func transitionablePreShow(transitionable: Transitionable, options: TransitionOptions) {
-        self.collectionView.layoutSubviews()
+        self.view.layoutSubviews()
         self.collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: tabManager.selectedIndex, inSection: 0), atScrollPosition: .CenteredVertically, animated: false)
+
         if let container = options.container {
             let cell = getTransitionCell(options, browser: tabManager.selectedTab)
             cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
