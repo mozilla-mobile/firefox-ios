@@ -7,6 +7,9 @@ import WebKit
 import Shared
 
 class ErrorPageHelper {
+    static let MozDomain = "mozilla"
+    static let MozErrorDownloadsNotEnabled = 100
+
     // When an error page is intentionally loaded, its added to this set. If its in the set, we show
     // it as an error page. If its not, we assume someone is trying to reload this page somehow, and
     // we'll instead redirect back to the original URL.
@@ -113,11 +116,23 @@ class ErrorPageHelper {
                 let errCode = (request.query["code"] as! String).toInt()
                 let errDescription = request.query["description"] as! String
                 var errDomain = request.query["domain"] as! String
-                if let code = CFNetworkErrors(rawValue: Int32(errCode!)) {
-                    errDomain = self.cfErrorToName(code)
-                }
 
-                let tryAgain = NSLocalizedString("Try again", tableName: "ErrorPages", comment: "Shown in error pages on a button that will try to load the page again")
+                // If we don't have any other actions, we always add a try again button
+                let tryAgain = NSLocalizedString("Try again", tableName: "errorPages", comment: "Shown in error pages on a button that will try to load the page again")
+                var actions = "<button onclick='window.location.reload()'>\(tryAgain)</button>"
+
+                if errDomain == kCFErrorDomainCFNetwork as String {
+                    if let code = CFNetworkErrors(rawValue: Int32(errCode!)) {
+                        errDomain = self.cfErrorToName(code)
+                    }
+                } else if errDomain == ErrorPageHelper.MozDomain {
+                    if errCode == ErrorPageHelper.MozErrorDownloadsNotEnabled {
+                        // Overwrite the normal try-again action.
+                        let downloadInSafari = NSLocalizedString("Open in Safari", tableName: "errorPages", comment: "Shown in error pages for files that can't be shown and need to be downloaded.")
+                        actions = "<button onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"openInSafari\"})'>\(downloadInSafari)</a>"
+                    }
+                    errDomain = ""
+                }
 
                 let asset = NSBundle.mainBundle().pathForResource("NetError", ofType: "html")
                 let response = GCDWebServerDataResponse(HTMLTemplate: asset, variables: [
@@ -125,7 +140,7 @@ class ErrorPageHelper {
                     "error_title": errDescription ?? "",
                     "long_description": nil ?? "",
                     "short_description": errDomain,
-                    "actions": "<button onclick='window.location.reload()'>\(tryAgain)</button>" // This
+                    "actions": actions
                 ])
                 response.setValue("no cache", forAdditionalHeader: "Pragma")
                 response.setValue("no-cache,must-revalidate", forAdditionalHeader: "Cache-Control")
@@ -163,12 +178,37 @@ class ErrorPageHelper {
     }
 
     class func isErrorPageURL(url: NSURL) -> Bool {
-        return startsWith(url.absoluteString!, "\(WebServer.sharedInstance.base)/errors/error.html")
+        if let scheme = url.scheme, host = url.host, path = url.path {
+            return scheme == "http" && host == "localhost" && path == "/errors/error.html"
+        }
+        return false
     }
 
     class func decodeURL(url: NSURL) -> NSURL {
         let query = url.getQuery()
         let queryUrl = query["url"]
         return NSURL(string: query["url"]?.unescape() ?? "")!
+    }
+}
+
+extension ErrorPageHelper: BrowserHelper {
+    static func name() -> String {
+        return "ErrorPageHelper"
+    }
+
+    func scriptMessageHandlerName() -> String? {
+        return "errorPageHelperMessageManager"
+    }
+
+    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        if let url = message.frameInfo.request.URL {
+            if message.frameInfo.mainFrame && ErrorPageHelper.isErrorPageURL(url) {
+                var res = message.body as! [String: String]
+                let type = res["type"]
+                if type == "openInSafari" {
+                    UIApplication.sharedApplication().openURL(ErrorPageHelper.decodeURL(url))
+                }
+            }
+        }
     }
 }
