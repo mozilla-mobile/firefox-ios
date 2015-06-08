@@ -90,7 +90,7 @@ class ReadingListTableViewCell: SWTableViewCell {
 
         backgroundColor = UIColor.clearColor()
 
-        separatorInset = UIEdgeInsetsZero
+        separatorInset = UIEdgeInsets(top: 0, left: 48, bottom: 0, right: 0)
         layoutMargins = UIEdgeInsetsZero
         preservesSuperviewLayoutMargins = false
 
@@ -211,6 +211,9 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.separatorColor = AppConstants.SeparatorColor
         tableView.registerClass(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
+
+        // Set an empty footer to prevent empty cells from appearing in the list.
+        tableView.tableFooterView = UIView()
 
         view.backgroundColor = AppConstants.PanelBackgroundColor
     }
