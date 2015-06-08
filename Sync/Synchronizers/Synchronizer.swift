@@ -73,7 +73,7 @@ public enum SyncStatus {
 }
 
 
-
+typealias DeferredTimestamp = Deferred<Result<Timestamp>>
 public typealias SyncResult = Deferred<Result<SyncStatus>>
 
 public enum SyncNotStartedReason {
