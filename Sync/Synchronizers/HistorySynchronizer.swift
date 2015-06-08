@@ -12,8 +12,6 @@ private let log = XCGLogger.defaultInstance()
 private let HistoryTTLInSeconds = 5184000                   // 60 days.
 private let HistoryStorageVersion = 1
 
-typealias DeferredTimestamp = Deferred<Result<Timestamp>>
-
 public class HistorySynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
     public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "history")
