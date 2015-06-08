@@ -251,12 +251,26 @@ class TabManager : NSObject {
 
 extension TabManager {
     class SavedTab: NSObject, NSCoding {
-        let url: NSURL?
         let isSelected: Bool
         let screenshot: UIImage?
+        var sessionData: SessionData?
 
         init?(browser: Browser, isSelected: Bool) {
-            self.url = browser.url
+            let currentItem = browser.webView?.backForwardList.currentItem
+            if browser.sessionData == nil {
+                let backList = browser.webView?.backForwardList.backList as? [WKBackForwardListItem] ?? []
+                let forwardList = browser.webView?.backForwardList.forwardList as? [WKBackForwardListItem] ?? []
+                let currentList = (currentItem != nil) ? [currentItem!] : []
+                var urlList = backList + currentList + forwardList
+                var updatedUrlList = [NSURL]()
+                for url in urlList {
+                    updatedUrlList.append(url.URL)
+                }
+                var currentPage = -forwardList.count
+                self.sessionData = SessionData(currentPage: currentPage, urls: updatedUrlList)
+            } else {
+                self.sessionData = browser.sessionData
+            }
             self.screenshot = browser.screenshot
             self.isSelected = isSelected
 
@@ -265,16 +279,19 @@ extension TabManager {
             if browser.url == nil {
                 return nil
             }
+            if currentItem == nil {
+                return nil
+            }
         }
 
         required init(coder: NSCoder) {
-            self.url = coder.decodeObjectForKey("url") as? NSURL
+            self.sessionData = coder.decodeObjectForKey("sessionData") as? SessionData
             self.screenshot = coder.decodeObjectForKey("screenshot") as? UIImage
             self.isSelected = coder.decodeBoolForKey("isSelected")
         }
 
         func encodeWithCoder(coder: NSCoder) {
-            coder.encodeObject(url, forKey: "url")
+            coder.encodeObject(sessionData, forKey: "sessionData")
             coder.encodeObject(screenshot, forKey: "screenshot")
             coder.encodeBool(isSelected, forKey: "isSelected")
         }
@@ -294,13 +311,12 @@ extension TabManager {
         var tabToSelect: Browser?
         if let savedTabs = coder.decodeObjectForKey("tabs") as? [SavedTab] {
             for savedTab in savedTabs {
-                if let url = savedTab.url, updatedURL = WebServer.sharedInstance.updateLocalURL(url) {
-                    let tab = self.addTab(request: NSURLRequest(URL: updatedURL), flushToDisk: false, zombie: true)
-                    tab.screenshot = savedTab.screenshot
-                    if savedTab.isSelected {
-                        tabToSelect = tab
-                    }
+                let tab = self.addTab(flushToDisk: false, zombie: true)
+                tab.screenshot = savedTab.screenshot
+                if savedTab.isSelected {
+                    tabToSelect = tab
                 }
+                tab.sessionData = savedTab.sessionData
             }
         }
         selectTab(tabToSelect ?? tabs.first)
