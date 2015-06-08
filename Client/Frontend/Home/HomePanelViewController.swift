@@ -17,6 +17,8 @@ private struct HomePanelViewControllerUX {
 protocol HomePanelViewControllerDelegate: class {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType)
     func homePanelViewController(HomePanelViewController: HomePanelViewController, didSelectPanel panel: Int)
+    func homePanelViewControllerDidRequestToSignIn(homePanelViewController: HomePanelViewController)
+    func homePanelViewControllerDidRequestToCreateAccount(homePanelViewController: HomePanelViewController)
 }
 
 @objc
@@ -26,6 +28,8 @@ protocol HomePanel: class {
 
 @objc
 protocol HomePanelDelegate: class {
+    func homePanelDidRequestToSignIn(homePanel: HomePanel)
+    func homePanelDidRequestToCreateAccount(homePanel: HomePanel)
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
 }
 
@@ -181,5 +185,13 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType) {
         delegate?.homePanelViewController(self, didSelectURL: url, visitType: visitType)
         dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    func homePanelDidRequestToCreateAccount(homePanel: HomePanel) {
+        delegate?.homePanelViewControllerDidRequestToCreateAccount(self)
+    }
+
+    func homePanelDidRequestToSignIn(homePanel: HomePanel) {
+        delegate?.homePanelViewControllerDidRequestToSignIn(self)
     }
 }
