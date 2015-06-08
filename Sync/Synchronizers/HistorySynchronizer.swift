@@ -131,13 +131,10 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
             return deferResult(.NotStarted(reason))
         }
 
-        let keys = self.scratchpad.keys?.value
         let encoder = RecordEncoder<HistoryPayload>(decode: { HistoryPayload($0) }, encode: { $0 })
-        if let encrypter = keys?.encrypter(self.collection, encoder: encoder) {
-            let historyClient = storageClient.clientForCollection(self.collection, encrypter: encrypter)
-
+        if let historyClient = self.collectionClient(encoder, storageClient: storageClient) {
             let since: Timestamp = self.lastFetched
-            log.debug("Synchronizing history. Last fetched: \(since).")
+            log.debug("Synchronizing \(self.collection). Last fetched: \(since).")
 
             // TODO: buffer downloaded records, fetching incrementally, so that we can separate
             // the network fetch from record application.
