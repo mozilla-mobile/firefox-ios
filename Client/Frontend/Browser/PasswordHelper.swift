@@ -40,7 +40,6 @@ class PasswordHelper: BrowserHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        // println("DEBUG: passwordsManagerMessageHandler message: \(message.body)")
         var res = message.body as! [String: String]
         let type = res["type"]
         if let url = browser?.url {

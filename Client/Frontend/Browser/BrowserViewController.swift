@@ -1454,6 +1454,17 @@ extension BrowserViewController: WKUIDelegate {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
     }
+
+    func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
+        if navigationResponse.canShowMIMEType {
+            decisionHandler(WKNavigationResponsePolicy.Allow)
+            return
+        }
+
+        let error = NSError(domain: ErrorPageHelper.MozDomain, code: Int(ErrorPageHelper.MozErrorDownloadsNotEnabled), userInfo: [NSLocalizedDescriptionKey: "Downloads aren't supported in Firefox yet (but we're working on it)."])
+        ErrorPageHelper().showPage(error, forUrl: navigationResponse.response.URL!, inWebView: webView)
+        decisionHandler(WKNavigationResponsePolicy.Allow)
+    }
 }
 
 extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationControllerDelegate {
