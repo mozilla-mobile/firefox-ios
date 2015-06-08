@@ -78,12 +78,14 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     func setAutocompleteSuggestion(suggestion: String?) {
-        if suggestion?.startsWith(text) ?? false {
-            let endingString = suggestion!.substringFromIndex(advance(suggestion!.startIndex, count(self.text!)))
-            let completedAndMarkedString = NSMutableAttributedString(string: text + endingString)
-            completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: AutocompleteTextFieldUX.HighlightColor, range: NSMakeRange(enteredTextLength, count(endingString)))
-            attributedText = completedAndMarkedString
-            completionActive = true
+        if let suggestion = suggestion {
+            if suggestion.startsWith(text) && count(text) < count(suggestion) {
+                let endingString = suggestion.substringFromIndex(advance(suggestion.startIndex, count(self.text!)))
+                let completedAndMarkedString = NSMutableAttributedString(string: text + endingString)
+                completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: AutocompleteTextFieldUX.HighlightColor, range: NSMakeRange(enteredTextLength, count(endingString)))
+                attributedText = completedAndMarkedString
+                completionActive = true
+            }
         }
     }
 
