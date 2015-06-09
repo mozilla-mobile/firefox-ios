@@ -40,7 +40,7 @@
 		0BB5B2BC1AC0AB9F0052877D /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B2BB1AC0AB9F0052877D /* UIImage+Extensions.swift */; };
 		0BB5B2D71AC0ABA40052877D /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B2BB1AC0AB9F0052877D /* UIImage+Extensions.swift */; };
 		0BB5B3091AC0AD150052877D /* PasswordHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 0BB5B3081AC0AD150052877D /* PasswordHelper.js */; };
-		0BB5B30B1AC0AD1F0052877D /* PasswordHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B30A1AC0AD1F0052877D /* PasswordHelper.swift */; };
+		0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */; };
 		0BB5B3601AC0D6360052877D /* BookmarkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */; };
 		0BD19A651A2530840084FBA7 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
@@ -1085,7 +1085,7 @@
 		0BB5B2871AC0A2B90052877D /* Toolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		0BB5B2BB1AC0AB9F0052877D /* UIImage+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		0BB5B3081AC0AD150052877D /* PasswordHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = PasswordHelper.js; sourceTree = "<group>"; };
-		0BB5B30A1AC0AD1F0052877D /* PasswordHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordHelper.swift; sourceTree = "<group>"; };
+		0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginsHelper.swift; sourceTree = "<group>"; };
 		0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkingTests.swift; sourceTree = "<group>"; };
 		0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
 		0BD75AD21AF2EE5A00B48915 /* suggestedsites.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = suggestedsites.json; sourceTree = "<group>"; };
@@ -2134,7 +2134,7 @@
 				D3A994951A3686BD008AD1AC /* BrowserViewController.swift */,
 				D3BA7E0D1B0E934F00153782 /* ContextMenuHelper.swift */,
 				D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */,
-				0BB5B30A1AC0AD1F0052877D /* PasswordHelper.swift */,
+				0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */,
 				D308E4E31A5306F500842685 /* SearchEngines.swift */,
 				D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
@@ -3749,7 +3749,7 @@
 				0AE491A61A41C88C0046C724 /* BackForwardListViewController.swift in Sources */,
 				0BF648111A9C54E900BA963C /* TopSitesPanel.swift in Sources */,
 				0B1C05D71A798B1F004C78B0 /* UIImageViewAligned.m in Sources */,
-				0BB5B30B1AC0AD1F0052877D /* PasswordHelper.swift in Sources */,
+				0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */,
 				0BD19A651A2530840084FBA7 /* Locking.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */,
