@@ -799,6 +799,9 @@ extension BrowserViewController: BrowserDelegate {
         let hashchangeHelper = HashchangeHelper(browser: browser)
         hashchangeHelper.delegate = self
         browser.addHelper(hashchangeHelper, name: HashchangeHelper.name())
+
+        let errorHelper = ErrorPageHelper()
+        browser.addHelper(errorHelper, name: ErrorPageHelper.name())
     }
 
     func browser(browser: Browser, willDeleteWebView webView: WKWebView) {
