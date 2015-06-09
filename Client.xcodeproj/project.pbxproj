@@ -160,6 +160,8 @@
 		28E23C121AC5A5EE00F5AC85 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E23C111AC5A5EE00F5AC85 /* State.swift */; };
 		28EADE5D1AFC3A78007FB2FB /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EADE381AFC3898007FB2FB /* UIImageViewExtensions.swift */; };
 		28EADE5E1AFC3B86007FB2FB /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EADE381AFC3898007FB2FB /* UIImageViewExtensions.swift */; };
+		28ED02291B262E0A003948B2 /* IndependentRecordSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */; };
+		28ED022A1B262E0A003948B2 /* IndependentRecordSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */; };
 		28EDE6CB1AF2929900FB2937 /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2551ABB531100877008 /* SQLiteHistory.swift */; };
 		28F596A11ACA13CA0071DDCC /* InfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F596A01ACA13CA0071DDCC /* InfoTests.swift */; };
 		28F657C01ABFC97D00A608BD /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BE1A1D1D3200576538 /* Record.swift */; };
@@ -1217,6 +1219,7 @@
 		28D158AC1AFD90E500F9C065 /* TestSQLiteBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteBookmarks.swift; sourceTree = "<group>"; };
 		28E23C111AC5A5EE00F5AC85 /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		28EADE381AFC3898007FB2FB /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Extensions/UIImageViewExtensions.swift; sourceTree = "<group>"; };
+		28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IndependentRecordSynchronizer.swift; path = Synchronizers/IndependentRecordSynchronizer.swift; sourceTree = "<group>"; };
 		28F596A01ACA13CA0071DDCC /* InfoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoTests.swift; path = SyncTests/InfoTests.swift; sourceTree = "<group>"; };
 		2F0624D41AE58C7800FA022C /* KeychainCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainCache.swift; sourceTree = "<group>"; };
 		2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
@@ -1821,6 +1824,7 @@
 			isa = PBXGroup;
 			children = (
 				2F3724E41ABF3C19007607FA /* Synchronizer.swift */,
+				28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */,
 				2894C1681AE89DDC00F1F92F /* ClientsSynchronizer.swift */,
 				2894C1651AE89DD200F1F92F /* TabsSynchronizer.swift */,
 				2894C1421AE89D8900F1F92F /* HistorySynchronizer.swift */,
@@ -3620,6 +3624,7 @@
 				282731991ABC9C2F00AA1954 /* ClientPayload.swift in Sources */,
 				2894C1431AE89D8900F1F92F /* HistorySynchronizer.swift in Sources */,
 				28E23C121AC5A5EE00F5AC85 /* State.swift in Sources */,
+				28ED02291B262E0A003948B2 /* IndependentRecordSynchronizer.swift in Sources */,
 				2F3724E71ABF3C19007607FA /* StorageClient.swift in Sources */,
 				28926B1A1AC0F074009C0B1D /* EncryptedJSON.swift in Sources */,
 				2894C16C1AE89FD500F1F92F /* HistoryPayload.swift in Sources */,
@@ -3646,6 +3651,7 @@
 				28926B3B1AC0F128009C0B1D /* CleartextPayloadJSON.swift in Sources */,
 				282731A01ABC9C5900AA1954 /* ResultTests.swift in Sources */,
 				2894C1441AE89D8900F1F92F /* HistorySynchronizer.swift in Sources */,
+				28ED022A1B262E0A003948B2 /* IndependentRecordSynchronizer.swift in Sources */,
 				2F3724E81ABF3C19007607FA /* StorageClient.swift in Sources */,
 				2F3724C71ABF3C01007607FA /* StorageClientTests.swift in Sources */,
 				28F657DB1ABFC98300A608BD /* ClientPayload.swift in Sources */,
