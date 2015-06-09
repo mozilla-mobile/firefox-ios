@@ -26,7 +26,7 @@ def main():
             shutil.move(downloadedFile, os.path.join(directory, file))
 
 def getLocaleList():
-    response = requests.get('https://l10n.mozilla-community.org/~flod/webstatus/api/?product=firefox-ios&txt')
+    response = requests.get('http://hg.mozilla.org/releases/mozilla-aurora/raw-file/default/mobile/android/locales/all-locales')
     return response.text.strip().split("\n")
 
 def getFileList(locale):
