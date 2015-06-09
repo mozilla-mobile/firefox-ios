@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Export (Pressed).png"
+      "filename" : "sendPressed.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Export (Pressed)@2x.png"
+      "filename" : "sendPressed@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "Export (Pressed)@3x.png"
+      "filename" : "sendPressed@3x.png"
     }
   ],
   "info" : {
