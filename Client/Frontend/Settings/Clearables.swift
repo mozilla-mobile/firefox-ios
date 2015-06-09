@@ -53,7 +53,7 @@ class PasswordsClearable : Clearable {
     func clear() -> Success {
         let deferred = Success()
         // Clear our storage
-        profile.passwords.removeAll() { success in
+        return profile.logins.removeAll() >>== { res in
             let storage = NSURLCredentialStorage.sharedCredentialStorage()
             let credentials = storage.allCredentials
             for (space, credentials) in credentials {
@@ -61,10 +61,8 @@ class PasswordsClearable : Clearable {
                     storage.removeCredential(credential, forProtectionSpace: space as! NSURLProtectionSpace)
                 }
             }
-            deferred.fill(success ? Result<()>(success: ()) :
-                                    Result<()>(failure: ClearableError(msg: "Could not clear passwords")))
+            return succeed()
         }
-        return deferred
     }
 }
 

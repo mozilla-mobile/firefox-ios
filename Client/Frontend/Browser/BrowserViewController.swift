@@ -789,8 +789,8 @@ extension BrowserViewController: BrowserDelegate {
         browser.addHelper(favicons, name: FaviconManager.name())
 
         // Temporarily disable password support until the new code lands
-        //let passwords = PasswordHelper(browser: browser, profile: profile)
-        //browser.addHelper(passwords, name: PasswordHelper.name())
+        // let logins = LoginsHelper(browser: browser, profile: profile)
+        //  browser.addHelper(logins, name: LoginsHelper.name())
 
         let contextMenuHelper = ContextMenuHelper(browser: browser)
         contextMenuHelper.delegate = self
@@ -1338,10 +1338,10 @@ extension BrowserViewController: WKNavigationDelegate {
         completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
             if challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodClientCertificate {
                 if let tab = tabManager[webView] {
-                    let helper = tab.getHelper(name: PasswordHelper.name()) as! PasswordHelper
-                    helper.handleAuthRequest(self, challenge: challenge) { password in
-                        if let password = password {
-                            completionHandler(.UseCredential, password.credential)
+                    let helper = tab.getHelper(name: LoginsHelper.name()) as! LoginsHelper
+                    helper.handleAuthRequest(self, challenge: challenge).uponQueue(dispatch_get_main_queue()) { res in
+                        if let credentials = res.successValue {
+                            completionHandler(.UseCredential, credentials.credentials)
                         } else {
                             completionHandler(NSURLSessionAuthChallengeDisposition.CancelAuthenticationChallenge, nil)
                         }

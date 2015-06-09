@@ -81,8 +81,8 @@ public class MockProfile: Profile {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
-    lazy var passwords: Passwords = {
-        return MockPasswords(files: self.files)
+    lazy var logins: Logins = {
+        return MockLogins(files: self.files)
     }()
 
     lazy var thumbnails: Thumbnails = {

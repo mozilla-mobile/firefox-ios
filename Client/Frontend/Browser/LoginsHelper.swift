@@ -5,7 +5,10 @@
 import Foundation
 import Shared
 import Storage
+import XCGLogger
 import WebKit
+
+private let log = XCGLogger.defaultInstance()
 
 private let SaveButtonTitle = NSLocalizedString("Save", comment: "Button to save the user's password")
 private let NotNowButtonTitle = NSLocalizedString("Not now", comment: "Button to not save the user's password")
@@ -13,21 +16,21 @@ private let UpdateButtonTitle = NSLocalizedString("Update", comment: "Button to 
 private let CancelButtonTitle = NSLocalizedString("Cancel", comment: "Authentication prompt cancel button")
 private let LogInButtonTitle  = NSLocalizedString("Log in", comment: "Authentication prompt log in button")
 
-class PasswordHelper: BrowserHelper {
+class LoginsHelper: BrowserHelper {
     private weak var browser: Browser?
     private let profile: Profile
     private var snackBar: SnackBar?
     private static let MaxAuthenticationAttempts = 3
 
     class func name() -> String {
-        return "PasswordHelper"
+        return "LoginsHelper"
     }
 
     required init(browser: Browser, profile: Profile) {
         self.browser = browser
         self.profile = profile
 
-        if let path = NSBundle.mainBundle().pathForResource("PasswordHelper", ofType: "js") {
+        if let path = NSBundle.mainBundle().pathForResource("LoginsHelper", ofType: "js") {
             if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) as? String {
                 var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
                 browser.webView!.configuration.userContentController.addUserScript(userScript)
@@ -36,7 +39,7 @@ class PasswordHelper: BrowserHelper {
     }
 
     func scriptMessageHandlerName() -> String? {
-        return "passwordsManagerMessageHandler"
+        return "loginsManagerMessageHandler"
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
@@ -46,11 +49,10 @@ class PasswordHelper: BrowserHelper {
             if type == "request" {
                 res["username"] = ""
                 res["password"] = ""
-                let password = Password.fromScript(url, script: res)
-                requestPasswords(password, requestId: res["requestId"]!)
+                let login = Login.fromScript(url, script: res)
+                requestLogins(login, requestId: res["requestId"]!)
             } else if type == "submit" {
-                let password = Password.fromScript(url, script: res)
-                setPassword(Password.fromScript(url, script: res))
+                setCredentials(Login.fromScript(url, script: res))
             }
         }
     }
@@ -80,31 +82,40 @@ class PasswordHelper: BrowserHelper {
         return attr
     }
 
-    private func setPassword(password: Password) {
-        if password.username.isEmpty || password.password.isEmpty {
+    private func setCredentials(login: LoginData) {
+        if login.password.isEmpty {
+            log.debug("Empty password")
             return
         }
 
-        profile.passwords.get(QueryOptions(filter: password.hostname), complete: { data in
-            for i in 0..<data.count {
-                let savedPassword = data[i]!
-                if savedPassword.username == password.username {
-                    if savedPassword.password == password.password {
+        profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(dispatch_get_main_queue()) { res in
+            if let data = res.successValue {
+                for saved in data {
+                    if saved?.username == login.username {
+                        if saved?.password == login.password {
+                            self.profile.logins.addUseOf(login)
+                            return
+                        }
+
+                        self.promptUpdate(login)
                         return
                     }
-
-                    self.promptUpdate(password)
-                    return
                 }
             }
 
-           self.promptSave(password)
-        })
+            self.promptSave(login)
+        }
     }
 
-    private func promptSave(password: Password) {
-        let promptStringFormat = NSLocalizedString("Do you want to save the password for %@ on %@?", comment: "Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
-        let promptMessage = NSAttributedString(string: String(format: promptStringFormat, password.username, password.hostname))
+    private func promptSave(login: LoginData) {
+        let promptMessage: NSAttributedString
+        if let username = login.username {
+            let promptStringFormat = NSLocalizedString("Do you want to save the password for %@ on %@?", comment: "Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
+            promptMessage = NSAttributedString(string: String(format: promptStringFormat, username, login.hostname))
+        } else {
+            let promptStringFormat = NSLocalizedString("Do you want to save the password on %@?", comment: "Prompt for saving a password with no username. The parameter is the hostname of the site.")
+            promptMessage = NSAttributedString(string: String(format: promptStringFormat, login.hostname))
+        }
 
         if snackBar != nil {
             browser?.removeSnackbar(snackBar!)
@@ -116,9 +127,7 @@ class PasswordHelper: BrowserHelper {
                 SnackButton(title: SaveButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
-                    self.profile.passwords.add(password) { success in
-                        // nop
-                    }
+                    self.profile.logins.addLogin(login)
                 }),
 
                 SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
@@ -130,9 +139,15 @@ class PasswordHelper: BrowserHelper {
         browser?.addSnackbar(snackBar!)
     }
 
-    private func promptUpdate(password: Password) {
-        let promptStringFormat = NSLocalizedString("Do you want to update the password for %@ on %@?", comment: "Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
-        let formatted = String(format: promptStringFormat, password.username, password.hostname)
+    private func promptUpdate(login: LoginData) {
+        let formatted: String
+        if let username = login.username {
+            let promptStringFormat = NSLocalizedString("Do you want to update the password for %@ on %@?", comment: "Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
+            formatted = String(format: promptStringFormat, username, login.hostname)
+        } else {
+            let promptStringFormat = NSLocalizedString("Do you want to update the password on %@?", comment: "Prompt for updating a password with on username. The parameter is the hostname of the site.")
+            formatted = String(format: promptStringFormat, login.hostname)
+        }
         let promptMessage = NSAttributedString(string: formatted)
 
         if snackBar != nil {
@@ -145,9 +160,7 @@ class PasswordHelper: BrowserHelper {
                 SnackButton(title: UpdateButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
-                    self.profile.passwords.add(password) { success in
-                        // println("Add password \(success)")
-                    }
+                    self.profile.logins.updateLogin(login)
                 }),
                 SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
@@ -158,32 +171,26 @@ class PasswordHelper: BrowserHelper {
         browser?.addSnackbar(snackBar!)
     }
 
-    private func requestPasswords(password: Password, requestId: String) {
-        profile.passwords.get(QueryOptions(filter: password.hostname), complete: { (cursor) -> Void in
-            var logins = [[String: String]]()
-            for i in 0..<cursor.count {
-                let password = cursor[i]!
-                logins.append(password.toDict())
+    private func requestLogins(login: LoginData, requestId: String) {
+        profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(dispatch_get_main_queue()) { res in
+            var jsonObj = [String: AnyObject]()
+            if let cursor = res.successValue {
+                jsonObj["requestId"] = requestId
+                jsonObj["name"] = "RemoteLogins:loginsFound"
+                jsonObj["logins"] = map(cursor, { $0!.toDict() })
             }
 
-            let jsonObj: [String: AnyObject] = [
-                "requestId": requestId,
-                "name": "RemoteLogins:loginsFound",
-                "logins": logins
-            ]
-
             let json = JSON(jsonObj)
-            let src = "window.__firefox__.passwords.inject(\(json.toString()))"
+            let src = "window.__firefox__.logins.inject(\(json.toString()))"
             self.browser?.webView?.evaluateJavaScript(src, completionHandler: { (obj, err) -> Void in
             })
-        })
+        }
     }
 
-    func handleAuthRequest(viewController: UIViewController, challenge: NSURLAuthenticationChallenge, completion: (password: Password?) -> Void) {
+    func handleAuthRequest(viewController: UIViewController, challenge: NSURLAuthenticationChallenge) -> Deferred<Result<LoginData>> {
         // If there have already been too many login attempts, we'll just fail.
-        if challenge.previousFailureCount >= PasswordHelper.MaxAuthenticationAttempts {
-            completion(password: nil)
-            return
+        if challenge.previousFailureCount >= LoginsHelper.MaxAuthenticationAttempts {
+            return deferResult(LoginDataError(description: "Too many attempts to open site"))
         }
 
         var credential = challenge.proposedCredential
@@ -192,8 +199,7 @@ class PasswordHelper: BrowserHelper {
         if let proposed = credential {
             if !(proposed.user?.isEmpty ?? true) {
                 if challenge.previousFailureCount == 0 {
-                    completion(password: Password(credential: credential!, protectionSpace: challenge.protectionSpace))
-                    return
+                    return deferResult(Login.createWith(credential!, protectionSpace: challenge.protectionSpace))
                 }
             } else {
                 credential = nil
@@ -202,36 +208,33 @@ class PasswordHelper: BrowserHelper {
 
         if let credential = credential {
             // If we have some credentials, we'll show a prompt with them.
-            let password = Password(credential: credential, protectionSpace: challenge.protectionSpace)
-            promptForUsernamePassword(viewController, password: password, completion: completion)
-        } else {
-            // Otherwise, try to look one up
-            let options = QueryOptions(filter: challenge.protectionSpace.host, filterType: .None, sort: .None)
-            profile.passwords.get(options, complete: { (cursor) -> Void in
-                var password = cursor[0]
-                if password == nil {
-                    password = Password(credential: nil, protectionSpace: challenge.protectionSpace)
-                }
-                self.promptForUsernamePassword(viewController, password: password!, completion: completion)
-            })
+            return promptForUsernamePassword(viewController, credentials: credential, protectionSpace: challenge.protectionSpace)
+        }
+
+        // Otherwise, try to look one up
+        let options = QueryOptions(filter: challenge.protectionSpace.host, filterType: .None, sort: .None)
+        return profile.logins.getLoginsForProtectionSpace(challenge.protectionSpace).bindQueue(dispatch_get_main_queue()) { res in
+            let credentials = res.successValue?[0]?.credentials
+            return self.promptForUsernamePassword(viewController, credentials: credentials, protectionSpace: challenge.protectionSpace)
         }
     }
 
-    private func promptForUsernamePassword(viewController: UIViewController, password: Password, completion: (password: Password?) -> Void) {
-        if password.hostname.isEmpty {
+    private func promptForUsernamePassword(viewController: UIViewController, credentials: NSURLCredential?, protectionSpace: NSURLProtectionSpace) -> Deferred<Result<LoginData>> {
+        if protectionSpace.host.isEmpty {
             println("Unable to show a password prompt without a hostname")
-            completion(password: nil)
+            return deferResult(LoginDataError(description: "Unable to show a password prompt without a hostname"))
         }
 
+        let deferred = Deferred<Result<LoginData>>()
         let alert: UIAlertController
         let title = NSLocalizedString("Authentication required", comment: "Authentication prompt title")
-        if !password.httpRealm.isEmpty {
+        if !(protectionSpace.realm?.isEmpty ?? true) {
             let msg = NSLocalizedString("A username and password are being requested by %@. The site says: %@", comment: "Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string")
-            let formatted = NSString(format: msg, password.hostname, password.httpRealm) as String
+            let formatted = NSString(format: msg, protectionSpace.host, protectionSpace.realm ?? "") as String
             alert = UIAlertController(title: title, message: formatted, preferredStyle: UIAlertControllerStyle.Alert)
         } else {
             let msg = NSLocalizedString("A username and password are being requested by %@.", comment: "Authentication prompt message with no realm. Parameter is the hostname of the site")
-            let formatted = NSString(format: msg, password.hostname) as String
+            let formatted = NSString(format: msg, protectionSpace.host) as String
             alert = UIAlertController(title: title, message: formatted, preferredStyle: UIAlertControllerStyle.Alert)
         }
 
@@ -241,34 +244,33 @@ class PasswordHelper: BrowserHelper {
                 let user = (alert.textFields?[0] as! UITextField).text
                 let pass = (alert.textFields?[1] as! UITextField).text
 
-                let credential = NSURLCredential(user: user, password: pass, persistence: .ForSession)
-                let password = Password(credential: credential, protectionSpace: password.protectionSpace)
-                completion(password: password)
-                self.setPassword(password)
+                let login = Login.createWith(NSURLCredential(user: user, password: pass, persistence: .ForSession), protectionSpace: protectionSpace)
+                deferred.fill(Result(success: login))
+                self.setCredentials(login)
         }
         alert.addAction(action)
 
         // Add a cancel button.
         let cancel = UIAlertAction(title: CancelButtonTitle, style: UIAlertActionStyle.Cancel) { (action) -> Void in
-            completion(password: nil)
-            return
+            deferred.fill(Result(failure: LoginDataError(description: "Save password cancelled")))
         }
         alert.addAction(cancel)
 
         // Add a username textfield.
         alert.addTextFieldWithConfigurationHandler { (textfield) -> Void in
             textfield.placeholder = NSLocalizedString("Username", comment: "Username textbox in Authentication prompt")
-            textfield.text = password.username
+            textfield.text = credentials?.user
         }
 
         // Add a password textfield.
         alert.addTextFieldWithConfigurationHandler { (textfield) -> Void in
             textfield.placeholder = NSLocalizedString("Password", comment: "Password textbox in Authentication prompt")
             textfield.secureTextEntry = true
-            textfield.text = password.password
+            textfield.text = credentials?.password
         }
-
+        
         viewController.presentViewController(alert, animated: true) { () -> Void in }
+        return deferred
     }
-
+    
 }
