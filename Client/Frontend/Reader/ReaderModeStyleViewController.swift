@@ -12,7 +12,7 @@ private struct ReaderModeStyleViewControllerUX {
     static let Height = 4 * RowHeight
 
     static let FontTypeRowBackground = UIColor(rgb: 0xfbfbfb)
-    static let FontTypeTitleFontSansSerif = UIFont(name: "FiraSans", size: 16)
+    static let FontTypeTitleFontSansSerif = UIFont(name: "FiraSans-Book", size: 16)
     static let FontTypeTitleFontSerif = UIFont(name: "Charis SIL", size: 16)
 
     static let FontTypeTitleSelectedColor = UIColor(rgb: 0x333333)
@@ -24,17 +24,17 @@ private struct ReaderModeStyleViewControllerUX {
     static let FontSizeLabelColor = UIColor(rgb: 0x333333)
     static let FontSizeButtonTextColorEnabled = UIColor(rgb: 0x333333)
     static let FontSizeButtonTextColorDisabled = UIColor.lightGrayColor() // TODO THis needs to be 44% of 0x333333
-    static let FontSizeButtonTextFont = UIFont(name: "FiraSans-Book", size: 22)
+    static let FontSizeButtonTextFont = UIFont(name: "FiraSans-Light", size: 22)
 
     static let ThemeRowBackgroundColor = UIColor.whiteColor()
-    static let ThemeTitleFontSansSerif = UIFont(name: "FiraSans-Light", size: 15)
+    static let ThemeTitleFontSansSerif = UIFont(name: "FiraSans-Book", size: 15)
     static let ThemeTitleFontSerif = UIFont(name: "Charis SIL", size: 15)
     static let ThemeTitleColorLight = UIColor(rgb: 0x333333)
     static let ThemeTitleColorDark = UIColor.whiteColor()
     static let ThemeTitleColorSepia = UIColor(rgb: 0x333333)
     static let ThemeBackgroundColorLight = UIColor.whiteColor()
-    static let ThemeBackgroundColorDark = UIColor.blackColor()
-    static let ThemeBackgroundColorSepia = UIColor(rgb: 0xf0ece7)
+    static let ThemeBackgroundColorDark = UIColor(rgb: 0x333333)
+    static let ThemeBackgroundColorSepia = UIColor(rgb: 0xF0E6DC)
 
     static let BrightnessRowBackground = UIColor(rgb: 0xf4f4f4)
     static let BrightnessSliderTintColor = UIColor(rgb: 0xe66000)
