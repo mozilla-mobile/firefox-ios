@@ -101,8 +101,10 @@ class SimplePageServer {
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
-        webServer.addHandlerForMethod("GET", path: "/noTitle.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-            return GCDWebServerDataResponse(HTML: self.getPageData("noTitle"))
+        for page in ["noTitle", "readablePage"] {
+            webServer.addHandlerForMethod("GET", path: "/\(page).html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+                return GCDWebServerDataResponse(HTML: self.getPageData(page))
+            }
         }
 
         // we may create more than one of these but we need to give them uniquie accessibility ids in the tab manager so we'll pass in a page number
