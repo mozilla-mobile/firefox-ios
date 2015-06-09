@@ -3,98 +3,69 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
+import XCGLogger
 
-private class PasswordsTable<T>: GenericTable<Password> {
-    override var name: String { return "logins" }
-    override var version: Int { return 2 }
-    override var rows: String { return "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "hostname TEXT NOT NULL, " +
-        "httpRealm TEXT NOT NULL, " +
-        "formSubmitUrl TEXT NOT NULL, " +
-        "usernameField TEXT NOT NULL, " +
-        "passwordField TEXT NOT NULL, " +
-        "guid TEXT NOT NULL UNIQUE, " +
-        "timeCreated REAL NOT NULL, " +
-        "timeLastUsed REAL NOT NULL, " +
-        "timePasswordChanged REAL NOT NULL, " +
-        "username TEXT NOT NULL, " +
-        "password TEXT NOT NULL" }
+private let log = XCGLogger.defaultInstance()
 
-    override func getInsertAndArgs(inout item: Password) -> (String, [AnyObject?])? {
-        var args = [AnyObject?]()
-        if item.guid == nil {
-            item.guid = NSUUID().UUIDString
+private class LoginsTable: Table {
+    var name: String { return "logins" }
+    var version: Int { return 1 }
+
+    func create(db: SQLiteDBConnection, version: Int) -> Bool {
+        // We ignore the version.
+        let sql = "CREATE TABLE IF NOT EXISTS \(name) (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "hostname TEXT NOT NULL, " +
+            "httpRealm TEXT, " +
+            "formSubmitUrl TEXTL, " +
+            "usernameField TEXT, " +
+            "passwordField TEXT, " +
+            "guid TEXT NOT NULL UNIQUE, " +
+            "timeCreated INTEGER NOT NULL, " +
+            "timeLastUsed INTEGER NOT NULL, " +
+            "timePasswordChanged INTEGER NOT NULL, " +
+            "username TEXT, " +
+            "password TEXT NOT NULL" +
+        ")"
+        let err = db.executeChange(sql, withArgs: nil)
+        return err == nil
+    }
+
+    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
+        if from == to {
+            log.debug("Skipping update from \(from) to \(to).")
+            return true
         }
-        args.append(item.hostname)
-        args.append(item.httpRealm)
-        args.append(item.formSubmitUrl)
-        args.append(item.usernameField)
-        args.append(item.passwordField)
-        args.append(item.guid)
-        args.append(item.timeCreated)
-        args.append(item.timeLastUsed)
-        args.append(item.timePasswordChanged)
-        args.append(item.username)
-        args.append(item.password)
-        return ("INSERT INTO \(name) (hostname, httpRealm, formSubmitUrl, usernameField, passwordField, guid, timeCreated, timeLastUsed, timePasswordChanged, username, password) VALUES (?,?,?,?,?,?,?,?,?,?,?)", args)
-    }
 
-    override func getUpdateAndArgs(inout item: Password) -> (String, [AnyObject?])? {
-        var args = [AnyObject?]()
-        args.append(item.httpRealm)
-        args.append(item.formSubmitUrl)
-        args.append(item.usernameField)
-        args.append(item.passwordField)
-        args.append(item.timeCreated)
-        args.append(item.timeLastUsed)
-        args.append(item.timePasswordChanged)
-        args.append(item.password)
-        args.append(item.hostname)
-        args.append(item.username)
-
-        return ("UPDATE \(name) SET httpRealm = ?, formSubmitUrl = ?, usernameField = ?, passwordField = ?, timeCreated = ?, timeLastUsed = ?, timePasswordChanged = ?, password = ? WHERE hostname = ? AND username = ?", args)
-    }
-
-    override func getDeleteAndArgs(inout item: Password?) -> (String, [AnyObject?])? {
-        var args = [AnyObject?]()
-        if let pw = item {
-            args.append(pw.hostname)
-            args.append(pw.username)
-            return ("DELETE FROM \(name) WHERE hostname = ? AND username = ?", args)
+        if from == 0 {
+            // This is likely an upgrade from before Bug 1160399.
+            log.debug("Updating logins tables from zero. Assuming drop and recreate.")
+            return drop(db) && create(db, version: to)
         }
-        return ("DELETE FROM \(name)", args)
+
+        // TODO: real update!
+        log.debug("Updating logins table from \(from) to \(to).")
+        return drop(db) && create(db, version: to)
     }
 
-    override var factory: ((row: SDRow) -> Password)? {
-        return { row -> Password in
-            let hostname = row["hostname"] as? String ?? ""
-            let pw = Password(hostname: hostname, username: row["username"] as? String ?? "", password: row["password"] as? String ?? "")
-
-            pw.httpRealm = row["httpRealm"] as? String ?? ""
-            pw.formSubmitUrl = row["formSubmitUrl"] as? String ?? ""
-            pw.usernameField = row["usernameField"] as? String ?? ""
-            pw.passwordField = row["passwordField"] as? String ?? ""
-            pw.guid = row["guid"] as? String
-            pw.timeCreated = NSDate(timeIntervalSince1970: row["timeCreated"] as? Double ?? 0)
-            pw.timeLastUsed = NSDate(timeIntervalSince1970: row["timeLastUsed"] as? Double ?? 0)
-            pw.timePasswordChanged = NSDate(timeIntervalSince1970: row["timePasswordChanged"] as? Double ?? 0)
-
-            return pw
-        }
+    func exists(db: SQLiteDBConnection) -> Bool {
+        let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?)"
+        let res = db.executeQuery(tablesSQL, factory: StringFactory, withArgs: [name])
+        log.debug("\(res.count) logins tables exist.")
+        return res.count > 0
     }
 
-    override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
-        var args = [AnyObject?]()
-        if let filter: AnyObject = options?.filter {
-            args.append(filter)
-            return ("SELECT * FROM \(name) WHERE hostname = ?", args)
-        }
-        return ("SELECT * FROM \(name)", args)
+    func drop(db: SQLiteDBConnection) -> Bool {
+        log.debug("Dropping logins table.")
+        let err = db.executeChange("DROP TABLE IF EXISTS \(name)", withArgs: nil)
+        return err == nil
     }
+
 }
 
-public class SQLitePasswords: Passwords {
-    private let table = PasswordsTable<Password>()
+public class SQLiteLogins: Logins {
+    private let table = LoginsTable()
     private let db: BrowserDB
 
     public init(db: BrowserDB) {
@@ -102,62 +73,109 @@ public class SQLitePasswords: Passwords {
         db.createOrUpdate(table)
     }
 
-    public func get(options: QueryOptions, complete: (cursor: Cursor<Password>) -> Void) {
-        var err: NSError? = nil
-        let cursor = db.withReadableConnection(&err, callback: { (connection, err) -> Cursor<Password> in
-            return self.table.query(connection, options: options)
+    private class func LoginFactory(row: SDRow) -> Login {
+        let c = NSURLCredential(user: row["username"] as? String ?? "",
+            password: row["password"] as! String,
+            persistence: NSURLCredentialPersistence.None)
+        let protectionSpace = NSURLProtectionSpace(host: row["hostname"] as! String,
+            port: 0,
+            `protocol`: nil,
+            realm: row["httpRealm"] as? String,
+            authenticationMethod: nil)
 
-        })
+        let login = Login(credential: c, protectionSpace: protectionSpace)
+        login.formSubmitUrl = row["formSubmitUrl"] as? String
+        login.usernameField = row["usernameField"] as? String
+        login.passwordField = row["passwordField"] as? String
 
-        dispatch_async(dispatch_get_main_queue()) { _ in
-            complete(cursor: cursor)
+        if let timeCreated = row.getTimestamp("timeCreated"),
+            let timeLastUsed = row.getTimestamp("timeLastUsed"),
+            let timePasswordChanged = row.getTimestamp("timePasswordChanged") {
+                login.timeCreated = timeCreated
+                login.timeLastUsed = timeLastUsed
+                login.timePasswordChanged = timePasswordChanged
+        }
+
+        return login
+    }
+
+    private class func LoginDataFactory(row: SDRow) -> LoginData {
+        return LoginFactory(row) as LoginData
+    }
+
+    private class func LoginUsageDataFactory(row: SDRow) -> LoginUsageData {
+        return LoginFactory(row) as LoginUsageData
+    }
+
+    public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Result<Cursor<LoginData>>> {
+        let sql = "SELECT username, password, hostname, httpRealm, formSubmitUrl, usernameField, passwordField FROM \(table.name) WHERE hostname = ? ORDER BY timeLastUsed DESC"
+        let args: [AnyObject?] = [protectionSpace.host]
+        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
+    }
+
+    public func getUsageDataForLogin(login: LoginData) -> Deferred<Result<LoginUsageData>> {
+        let sql = "SELECT * FROM \(table.name) WHERE hostname = ? AND username IS ? LIMIT 1"
+        let args: [AnyObject?] = [login.hostname, login.username]
+        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginUsageDataFactory) >>== { value in
+            return deferResult(value[0]!)
         }
     }
 
-    public func add(password: Password, complete: (success: Bool) -> Void) {
-        var err: NSError? = nil
-        var success = false
-        let updated = db.withWritableConnection(&err) { (connection, inout err: NSError?) -> Int in
-            return self.table.update(connection, item: password, err: &err)
-        }
+    public func addLogin(login: LoginData) -> Success {
+        var args = [AnyObject?]()
+        args.append(login.hostname)
+        args.append(login.httpRealm)
+        args.append(login.formSubmitUrl)
+        args.append(login.usernameField)
+        args.append(login.passwordField)
 
-        if updated == 0 {
-            let inserted = db.withWritableConnection(&err) { (connection, inout err: NSError?) -> Int in
-                return self.table.insert(connection, item: password, err: &err)
+        if var login = login as? SyncableLoginData {
+            if login.guid == nil {
+                login.guid = NSUUID().UUIDString
             }
-
-            if inserted > -1 {
-                success = true
-            }
+            args.append(login.guid)
         } else {
-            success = true
+            args.append(NSUUID().UUIDString)
         }
 
-        dispatch_async(dispatch_get_main_queue()) { _ in
-            complete(success: success)
-            return
-        }
+        let date = NSNumber(unsignedLongLong: NSDate.nowMicroseconds())
+        args.append(date) // timeCreated
+        args.append(date) // timeLastUsed
+        args.append(date) // timePasswordChanged
+        args.append(login.username)
+        args.append(login.password)
+
+        return db.run("INSERT INTO \(table.name) (hostname, httpRealm, formSubmitUrl, usernameField, passwordField, guid, timeCreated, timeLastUsed, timePasswordChanged, username, password) VALUES (?,?,?,?,?,?,?,?,?,?,?)", withArgs: args)
     }
 
-    public func remove(password: Password, complete: (success: Bool) -> Void) {
-        var err: NSError? = nil
-        let deleted = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
-            return self.table.delete(conn, item: password, err: &err)
-        }
-
-        dispatch_async(dispatch_get_main_queue()) { _ in
-            complete(success: deleted > -1)
-        }
+    public func addVisitFor(login: LoginData) -> Success {
+        let date = NSNumber(unsignedLongLong: NSDate.nowMicroseconds())
+        return db.run("UPDATE \(table.name) SET timeLastUsed = ? WHERE hostname = ? AND username IS ?", withArgs: [date, login.hostname, login.username])
     }
 
-    public func removeAll(complete: (success: Bool) -> Void) {
-        var err: NSError? = nil
-        let deleted = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
-            return self.table.delete(conn, item: nil, err: &err)
-        }
+    public func updateLogin(login: LoginData) -> Success {
+        let date = NSNumber(unsignedLongLong: NSDate.nowMicroseconds())
+        var args = [AnyObject?]()
+        args.append(login.httpRealm)
+        args.append(login.formSubmitUrl)
+        args.append(login.usernameField)
+        args.append(login.passwordField)
+        args.append(date) // timePasswordChanged
+        args.append(login.password)
+        args.append(login.hostname)
+        args.append(login.username)
 
-        dispatch_async(dispatch_get_main_queue()) { _ in
-            complete(success: deleted > -1)
-        }
+        return db.run("UPDATE \(table.name) SET httpRealm = ?, formSubmitUrl = ?, usernameField = ?, passwordField = ?, timePasswordChanged = ?, password = ? WHERE hostname = ? AND username IS ?", withArgs: args)
+    }
+
+    public func removeLogin(login: LoginData) -> Success {
+        var args = [AnyObject?]()
+        args.append(login.hostname)
+        args.append(login.username)
+        return db.run("DELETE FROM \(table.name) WHERE hostname = ? AND username IS ?", withArgs: args)
+    }
+
+    public func removeAll() -> Success {
+        return db.run("DELETE FROM \(table.name)", withArgs: nil)
     }
 }
