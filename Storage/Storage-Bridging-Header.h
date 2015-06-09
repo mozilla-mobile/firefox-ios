@@ -2,6 +2,6 @@
 #define Client_Storage_Bridging_Header_h
 
 #import <Foundation/Foundation.h>
-#import "sqlite3.h"
+#import "../Carthage/Checkouts/sqlcipher/sqlite3.h"
 
 #endif
