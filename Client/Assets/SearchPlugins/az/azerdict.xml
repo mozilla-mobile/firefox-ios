@@ -1,0 +1,17 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Azerdict</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAADsQAAA7EB9YPtSQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAKESURBVFiF7ZfPT9NgGMeft+3W0W66bmNMiThxmCZsODEoAjPGGBP/CA6ciAkHj8SDFw8arxqv/g+ejCcTNIBRggIDRHHTOX5krHNsXdu1b70oWUx4WzrNNOF7fN7v+zyfvu/7PRTVtztMaKGoVg4/BPgnABgrQ6XqKj19fvI9QiZK9u6Ez3SXT9M0ttxnV4iUAkWh5fHJ4W3DoKKNZZ7T106d2C31n91hz/XuRNsDtfBfAZiZa59/9KQ3adWEosytUEDNxkVJOZ8oBMSYFGPd2NM0QEHybN+6M+gHALedZg3SeU5fnhhbgoQoJYjwpMWQoIRvjq4stnmMNADoBwBgqjKTePC4L2xgqkYyEk+gUZpGy+kPRz++WQhJ6VWBLUieKMYoYrXv4d3pdcGvdu9Lamc4AIDbbXDJeLEvGS/u1QpFNj+/FMy8XWhXP2d9QkVmegCA/7Ue8GsvBb86TOpr+wTsyDBQ/VPWt7a4GtzyejXq2lD+EkWbxPfzRwGcyNYV1FS6auhUfa+AwKxUXBXSnmBACbsYzDYFgDHSb98fmMltcEPQcLc/JVj01gf7t6YmxpZTJBMxhs9edE7nNrgRK98+YmbmOka+5LxZxwBgIuxgcKOQrDCaY4DrV3IXfZw253R6V+fuKzFW6iF5LFNgmsj4luczVYUifsnv8vFG2/FINWrl+09jaEMej84ztOlqCgBjpE/eG5jNb3JDAIAOAgAAcurC5vT46MplkskyhvlNbtjBcAAAbup1JJXNeTOOAXSdavZ9oPIuozgGuHH16wDP1d85nX6sozYbF0siyWOZAoyRsZ7xrRW/s/JBhoeC6pHurnLMytfyGLb8v+AQoOUAPwAom/28U1qKEgAAAABJRU5ErkJggg==</Image>
+<Url type="application/x-suggestions+json" method="GET" template="http://api.azerdict.com/english/autocomplete">
+    <Param name="action" value="opensearch" />
+    <Param name="query" value="{searchTerms}" />
+</Url>
+<Url type="text/html" method="GET" template="http://azerdict.com/english/" resultdomain="azerdict.com">
+  <Param name="word" value="{searchTerms}"/>
+</Url>
+<SearchForm>http://azerdict.com/</SearchForm>
+</SearchPlugin>

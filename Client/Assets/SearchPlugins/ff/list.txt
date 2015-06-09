@@ -1,0 +1,6 @@
+amazon-france
+bing
+eBay-france
+google
+wikipedia-fr
+yahoo-france

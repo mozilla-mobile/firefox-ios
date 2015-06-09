@@ -1,0 +1,5 @@
+google
+twitter
+wikipedia-fi
+yahoo-fi
+amazondotcom
