@@ -78,12 +78,17 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     func setAutocompleteSuggestion(suggestion: String?) {
-        if suggestion?.startsWith(text) ?? false {
-            let endingString = suggestion!.substringFromIndex(advance(suggestion!.startIndex, count(self.text!)))
-            let completedAndMarkedString = NSMutableAttributedString(string: text + endingString)
-            completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: AutocompleteTextFieldUX.HighlightColor, range: NSMakeRange(enteredTextLength, count(endingString)))
-            attributedText = completedAndMarkedString
-            completionActive = true
+        if let suggestion = suggestion {
+            // Check that the length of the entered text is shorter than the length of the suggestion.
+            // This ensures that completionActive is true only if there are remaining characters to
+            // suggest (which will suppress the caret).
+            if suggestion.startsWith(text) && count(text) < count(suggestion) {
+                let endingString = suggestion.substringFromIndex(advance(suggestion.startIndex, count(self.text)))
+                let completedAndMarkedString = NSMutableAttributedString(string: suggestion)
+                completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: AutocompleteTextFieldUX.HighlightColor, range: NSMakeRange(enteredTextLength, count(endingString)))
+                attributedText = completedAndMarkedString
+                completionActive = true
+            }
         }
     }
 
