@@ -146,6 +146,11 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
         }
     }
 
+    func setTimestamp(timestamp: Timestamp) {
+        log.debug("Setting post-upload lastFetched to \(timestamp).")
+        self.lastFetched = timestamp
+    }
+
     public func remoteHasChanges(info: InfoCollections) -> Bool {
         return info.modified(self.collection) > self.lastFetched
     }
