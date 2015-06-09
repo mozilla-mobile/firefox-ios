@@ -50,7 +50,7 @@ def export_xliff_file(file_node, export_path, target_language):
             trans_unit_id = trans_unit_node.get("id")
             targets = trans_unit_node.xpath("x:target", namespaces=NS)
 
-            if trans_unit_id is not None and len(targets) == 1:
+            if trans_unit_id is not None and len(targets) == 1 and targets[0].text is not None:
                 notes = trans_unit_node.xpath("x:note", namespaces=NS)
                 if len(notes) == 1:
                     line = u"/* %s */\n" % notes[0].text
