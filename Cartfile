@@ -9,5 +9,9 @@ github "DaveWoodCom/XCGLogger" "swift_1.2"   # Previously: ~> 1.8
 github "bignerdranch/Deferred" "master"
 github "CEWendel/SWTableViewCell"
 github "st3fan/SQLite.swift" "master"
+<<<<<<< HEAD
 github "mozilla/readability" "master"
 github "sqlcipher/sqlcipher"
+=======
+github "wesj/sqlcipher" "c59b9d899414071d841598a2377f3fbf636816a9"
+>>>>>>> 7dd4b97... Use a modified sqlcipher
