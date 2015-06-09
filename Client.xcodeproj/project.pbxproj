@@ -577,13 +577,6 @@
 			remoteGlobalIDString = EEBCC9D719CC627D0083B827;
 			remoteInfo = "SnapKit iOS";
 		};
-		0BD34C6E1B055D3F00DC8D27 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D38B2D621A8D976A0040E6B5 /* KIF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9CC9673B1AD4B1B600576D13;
-			remoteInfo = KIFFramework;
-		};
 		0BD34C791B055D3F00DC8D27 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0BD34C5C1B055D3E00DC8D27 /* sqlcipher.xcodeproj */;
@@ -2112,7 +2105,6 @@
 				D38B2D701A8D976A0040E6B5 /* Test Host.app */,
 				D38B2D721A8D976A0040E6B5 /* KIF Tests - XCTest.xctest */,
 				D38B2D741A8D976A0040E6B5 /* KIF Tests-OCUnit.octest */,
-				0BD34C6F1B055D3F00DC8D27 /* KIFFramework.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3110,13 +3102,6 @@
 			fileType = wrapper.cfbundle;
 			path = "SnapKit OSX Tests.xctest";
 			remoteRef = 0BA84ADF1AE57095009C4D0C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0BD34C6F1B055D3F00DC8D27 /* KIFFramework.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = KIFFramework.framework;
-			remoteRef = 0BD34C6E1B055D3F00DC8D27 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		0BD34C7A1B055D3F00DC8D27 /* libsqlcipher.a */ = {
