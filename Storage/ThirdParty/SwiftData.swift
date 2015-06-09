@@ -34,8 +34,10 @@
 
 import Foundation
 import UIKit
+import XCGLogger
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
+private let log = XCGLogger.defaultInstance()
 
 /**
  * Handle to a SQLite database.
@@ -56,21 +58,27 @@ public class SwiftData {
     /// Shared connection to this database.
     private var sharedConnection: SQLiteDBConnection?
 
-    init(filename: String) {
+    private var key: String? = nil
+    private var prevKey: String? = nil
+
+    init(filename: String, key: String? = nil, prevKey: String? = nil) {
         self.filename = filename
         self.sharedConnectionQueue = dispatch_queue_create("SwiftData queue: \(filename)", DISPATCH_QUEUE_SERIAL)
 
         // Ensure that multi-thread mode is enabled by default.
         // See https://www.sqlite.org/threadsafe.html
         assert(sqlite3_threadsafe() == 2)
+
+        self.key = key
+        self.prevKey = prevKey
     }
 
-    private func getSharedConnection(inout error: NSError?) -> SQLiteDBConnection? {
+    private func getSharedConnection() -> SQLiteDBConnection? {
         var connection: SQLiteDBConnection?
 
         dispatch_sync(sharedConnectionQueue) {
             if self.sharedConnection == nil {
-                self.sharedConnection = SQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.ReadWriteCreate.toSQL(), error: &error)
+                self.sharedConnection = SQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.ReadWriteCreate.toSQL(), key: self.key, prevKey: self.prevKey)
             }
             connection = self.sharedConnection
         }
@@ -83,19 +91,21 @@ public class SwiftData {
      * close a database connection and run a block of code inside it.
      */
     public func withConnection(flags: SwiftData.Flags, cb: (db: SQLiteDBConnection) -> NSError?) -> NSError? {
-        var error: NSError? = nil
         var connection: SQLiteDBConnection?
 
         if SwiftData.ReuseConnections {
-            connection = getSharedConnection(&error)
+            connection = getSharedConnection()
         } else {
-            connection = SQLiteDBConnection(filename: filename, flags: flags.toSQL(), error: &error)
+            connection = SQLiteDBConnection(filename: filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey)
         }
 
+        var error: NSError? = nil
         if let connection = connection {
             dispatch_sync(connection.queue) {
                 error = cb(db: connection)
             }
+        } else {
+            error = NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])
         }
 
         return error
@@ -123,6 +133,15 @@ public class SwiftData {
             }
 
             return nil
+        }
+    }
+
+    func close() {
+        dispatch_sync(sharedConnectionQueue) {
+            if self.sharedConnection != nil {
+                self.sharedConnection?.closeCustomConnection()
+            }
+            self.sharedConnection = nil
         }
     }
 
@@ -241,12 +260,49 @@ public class SQLiteDBConnection {
         }
     }
 
-    init?(filename: String, flags: Int32, inout error: NSError?) {
+    private func setKey(key: String?) -> NSError? {
+        sqlite3_key(sqliteDB, key ?? "", Int32(count(key ?? "")))
+
+        let cursor = executeQuery("SELECT count(*) FROM sqlite_master;", factory: IntFactory, withArgs: nil)
+        if cursor.status != .Success {
+            return NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid key"])
+        }
+
+        return nil
+    }
+
+    private func reKey(oldKey: String?, newKey: String?) -> NSError? {
+        sqlite3_key(sqliteDB, oldKey ?? "", Int32(count(oldKey ?? "")))
+        sqlite3_rekey(sqliteDB, newKey ?? "", Int32(count(newKey ?? "")))
+        // Check that the new key actually works
+        sqlite3_key(sqliteDB, newKey ?? "", Int32(count(newKey ?? "")))
+
+        let cursor = executeQuery("SELECT count(*) FROM sqlite_master;", factory: IntFactory, withArgs: nil)
+        if cursor.status != .Success {
+            return NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Rekey failed"])
+        }
+
+        return nil
+    }
+
+    init?(filename: String, flags: Int32, key: String? = nil, prevKey: String? = nil) {
         self.filename = filename
         self.queue = dispatch_queue_create("SQLite connection: \(filename)", DISPATCH_QUEUE_SERIAL)
         if let err = openWithFlags(flags) {
-            error = err
             return nil
+        }
+
+        // Setting the key need to be the first thing done with the database.
+        if let err = setKey(key) {
+            closeCustomConnection()
+            if let err = openWithFlags(flags) {
+                return nil
+            }
+
+            if let err = reKey(prevKey, newKey: key) {
+                log.error("Unable to encrypt database")
+                return nil
+            }
         }
 
         if SwiftData.EnableWAL {
@@ -280,14 +336,14 @@ public class SQLiteDBConnection {
         var msg = SDError.errorMessageFromCode(status)
 
         if (debug_enabled) {
-            println("SwiftData Error -> \(description)")
-            println("                -> Code: \(status) - \(msg)")
+            log.debug("SwiftData Error -> \(description)")
+            log.debug("                -> Code: \(status) - \(msg)")
         }
 
         if let errMsg = String.fromCString(sqlite3_errmsg(sqliteDB)) {
             msg += " " + errMsg
             if (debug_enabled) {
-                println("                -> Details: \(errMsg)")
+                log.debug("                -> Details: \(errMsg)")
             }
         }
 
@@ -409,7 +465,7 @@ class SDRow: SequenceType {
         case SQLITE_FLOAT:
             ret = Double(sqlite3_column_double(statement.pointer, i))
         default:
-            println("SwiftData Warning -> Column: \(index) is of an unrecognized type, returning nil")
+            log.debug("SwiftData Warning -> Column: \(index) is of an unrecognized type, returning nil")
         }
 
         return ret

@@ -51,11 +51,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-        // Force a database upgrade by requesting a non-existent password
-        profile.passwords.get(QueryOptions(filter: "example.com"), complete: { (cursor) -> Void in
-            // Ignored
-        })
-
         return true
     }
 

@@ -185,7 +185,7 @@ public class BrowserProfile: Profile {
     }
 
     lazy var db: BrowserDB = {
-        return BrowserDB(files: self.files)
+        return BrowserDB(filename: "browser.db", files: self.files)
     }()
 
 
@@ -206,7 +206,7 @@ public class BrowserProfile: Profile {
     }
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
-        return SQLiteBookmarks(db: self.db, favicons: self.places)
+        return SQLiteBookmarks(db: self.db, favicons: self.favicons)
     }()
 
     lazy var searchEngines: SearchEngines = {
@@ -251,7 +251,7 @@ public class BrowserProfile: Profile {
     }
 
     lazy var passwords: Passwords = {
-        return SQLitePasswords(db: self.db)
+        return SQLitePasswords(files: self.files)
     }()
 
     lazy var thumbnails: Thumbnails = {
