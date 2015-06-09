@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Shared
@@ -18,7 +18,7 @@ class TestSQLiteLogins: XCTestCase {
 
         let files = MockFiles()
         let db = BrowserDB(files: files)
-        self.logins = SQLitePasswords(db: db)
+        self.logins = SQLiteLogins(db: db)
     }
 
     func testAddLogin() {
@@ -69,12 +69,12 @@ class TestSQLiteLogins: XCTestCase {
     }
 
     /* XXX: Trying to get the usage data for a login throws EXC_BAD_ACCESS. Punting on this for now.
-    func testAddVisit() {
+    func testAddUseOfLogin() {
         let expectation = self.expectationWithDescription("Add visit")
 
         login.timeCreated = NSDate.nowMicroseconds()
         addLogin(login)() >>>
-            addVisitDelayed(login, time: 1) >>>
+            addUseDelayed(login, time: 1) >>>
             getLoginDetailsFor(login, expected: login) >>>
             done(expectation)
 
@@ -102,10 +102,10 @@ class TestSQLiteLogins: XCTestCase {
         return logins.updateLogin(login)
     }
 
-    func addVisitDelayed(login: Login, time: UInt32)() -> Success {
+    func addUseDelayed(login: Login, time: UInt32)() -> Success {
         sleep(time)
         login.timeLastUsed = NSDate.nowMicroseconds()
-        let res = logins.addVisitFor(login)
+        let res = logins.addUseOf(login)
         sleep(time)
         return res
     }

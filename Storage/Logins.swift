@@ -5,9 +5,12 @@
 import Foundation
 import WebKit
 import Shared
+import XCGLogger
+
+private var log = XCGLogger.defaultInstance()
 
 /**
- * Login is a wrapper around NSURLCredential and NSURLProtectionSpace to allow us to add extra fields where needed.
+ * LoginData is a wrapper around NSURLCredential and NSURLProtectionSpace to allow us to add extra fields where needed.
  **/
 public protocol LoginData {
     var credentials: NSURLCredential { get }
@@ -23,7 +26,7 @@ public protocol LoginData {
     func toDict() -> [String: String]
 }
 
-public protocol LoginUsageData: LoginData {
+public protocol LoginUsageData {
     var timeCreated: MicrosecondTimestamp { get set }
     var timeLastUsed: MicrosecondTimestamp { get set }
     var timePasswordChanged: MicrosecondTimestamp { get set }
@@ -34,7 +37,7 @@ public protocol SyncableLoginData {
     var isDeleted: Bool { get set }
 }
 
-public class Login : Printable, SyncableLoginData, LoginUsageData, Equatable {
+public class Login: Printable, SyncableLoginData, LoginData, LoginUsageData, Equatable {
     public let credentials: NSURLCredential
     public let protectionSpace: NSURLProtectionSpace
 
@@ -69,14 +72,14 @@ public class Login : Printable, SyncableLoginData, LoginUsageData, Equatable {
     public var guid: String? = nil
     public var isDeleted: Bool = false
 
-    // UsageLignData
+    // LoginUsageData
     public var timeCreated = NSDate.nowMicroseconds()
     public var timeLastUsed = NSDate.nowMicroseconds()
     public var timePasswordChanged = NSDate.nowMicroseconds()
 
     // Printable
     public var description: String {
-        return "Login: \(username) for \(hostname)"
+        return "Login for \(hostname)"
     }
 
     public class func createWith(hostname: String, username: String, password: String) -> LoginData {
@@ -144,7 +147,7 @@ public class Login : Printable, SyncableLoginData, LoginUsageData, Equatable {
         } else {
             // bug 159484 - disallow url types that don't support a hostPort.
             // (although we handle "javascript:..." as a special case above.)
-            println("Couldn't parse origin for \(uriString)")
+            log.debug("Couldn't parse origin for \(uriString)")
             realm = nil
         }
         return realm
@@ -160,7 +163,7 @@ public protocol Logins {
     func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Result<Cursor<LoginData>>>
     func addLogin(login: LoginData) -> Success
     func updateLogin(login: LoginData) -> Success
-    func addVisitFor(login: LoginData) -> Success
+    func addUseOf(login: LoginData) -> Success
     func removeLogin(login: LoginData) -> Success
     func removeAll() -> Success
 }
@@ -169,71 +172,5 @@ public class LoginDataError: ErrorType {
     public let description: String
     public init(description: String) {
         self.description = description
-    }
-}
-
-public class MockLogins : Logins {
-    private var cache = [Login]()
-
-    public init(files: FileAccessor) {
-    }
-
-    public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Result<Cursor<LoginData>>> {
-        let cursor = ArrayCursor(data: cache.filter({ login in
-            return login.protectionSpace.host == protectionSpace.host
-        }).sorted({ (loginA, loginB) -> Bool in
-            return loginA.timeLastUsed > loginB.timeLastUsed
-        }).map({ login in
-            return login as LoginData
-        }))
-        return Deferred(value: Result(success: cursor))
-    }
-
-    // This method is only here for testing
-    public func getUsageDataForLogin(login: LoginData) -> Deferred<Result<LoginUsageData>> {
-        let res = cache.filter({ login in
-            return login.protectionSpace.host == login.hostname
-        }).sorted({ (loginA, loginB) -> Bool in
-            return loginA.timeLastUsed > loginB.timeLastUsed
-        })[0] as LoginUsageData
-
-        return Deferred(value: Result(success: res))
-    }
-
-    public func addLogin(login: LoginData) -> Success {
-        if let index = find(cache, login as! Login) {
-            return deferResult(LoginDataError(description: "Already in the cache"))
-        }
-        cache.append(login as! Login)
-        return succeed()
-    }
-
-    public func updateLogin(login: LoginData) -> Success {
-        if let index = find(cache, login as! Login) {
-            cache[index].timePasswordChanged = NSDate.nowMicroseconds()
-            return succeed()
-        }
-        return deferResult(LoginDataError(description: "Password wasn't cached yet. Can't update"))
-    }
-
-    public func addVisitFor(login: LoginData) -> Success {
-        if let index = find(cache, login as! Login) {
-            cache[index].timeLastUsed = NSDate.nowMicroseconds()
-            return succeed()
-        }
-        return deferResult(LoginDataError(description: "Password wasn't cached yet. Can't update"))
-    }
-
-    public func removeLogin(login: LoginData) -> Success {
-        if let index = find(cache, login as! Login) {
-            cache.removeAtIndex(index)
-            return succeed()
-        }
-        return deferResult(LoginDataError(description: "Can not remove a password that wasn't stored"))
-    }
-
-    public func removeAll() -> Success {
-        cache.removeAll(keepCapacity: false)
-        return succeed()
     }
 }

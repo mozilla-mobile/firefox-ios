@@ -18,12 +18,12 @@ private class LoginsTable: Table {
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "hostname TEXT NOT NULL, " +
             "httpRealm TEXT, " +
-            "formSubmitUrl TEXTL, " +
+            "formSubmitUrl TEXT, " +
             "usernameField TEXT, " +
             "passwordField TEXT, " +
             "guid TEXT NOT NULL UNIQUE, " +
             "timeCreated INTEGER NOT NULL, " +
-            "timeLastUsed INTEGER NOT NULL, " +
+            "timeLastUsed INTEGER, " +
             "timePasswordChanged INTEGER NOT NULL, " +
             "username TEXT, " +
             "password TEXT NOT NULL" +
@@ -131,11 +131,11 @@ public class SQLiteLogins: Logins {
 
         if var login = login as? SyncableLoginData {
             if login.guid == nil {
-                login.guid = NSUUID().UUIDString
+                login.guid = Bytes.generateGUID()
             }
             args.append(login.guid)
         } else {
-            args.append(NSUUID().UUIDString)
+            args.append(Bytes.generateGUID())
         }
 
         let date = NSNumber(unsignedLongLong: NSDate.nowMicroseconds())
@@ -148,34 +148,32 @@ public class SQLiteLogins: Logins {
         return db.run("INSERT INTO \(table.name) (hostname, httpRealm, formSubmitUrl, usernameField, passwordField, guid, timeCreated, timeLastUsed, timePasswordChanged, username, password) VALUES (?,?,?,?,?,?,?,?,?,?,?)", withArgs: args)
     }
 
-    public func addVisitFor(login: LoginData) -> Success {
+    public func addUseOf(login: LoginData) -> Success {
         let date = NSNumber(unsignedLongLong: NSDate.nowMicroseconds())
         return db.run("UPDATE \(table.name) SET timeLastUsed = ? WHERE hostname = ? AND username IS ?", withArgs: [date, login.hostname, login.username])
     }
 
     public func updateLogin(login: LoginData) -> Success {
         let date = NSNumber(unsignedLongLong: NSDate.nowMicroseconds())
-        var args = [AnyObject?]()
-        args.append(login.httpRealm)
-        args.append(login.formSubmitUrl)
-        args.append(login.usernameField)
-        args.append(login.passwordField)
-        args.append(date) // timePasswordChanged
-        args.append(login.password)
-        args.append(login.hostname)
-        args.append(login.username)
+        var args: Args = [
+            login.httpRealm,
+            login.formSubmitUrl,
+            login.usernameField,
+            login.passwordField,
+            date, // timePasswordChanged
+            login.password,
+            login.hostname,
+            login.username]
 
         return db.run("UPDATE \(table.name) SET httpRealm = ?, formSubmitUrl = ?, usernameField = ?, passwordField = ?, timePasswordChanged = ?, password = ? WHERE hostname = ? AND username IS ?", withArgs: args)
     }
 
     public func removeLogin(login: LoginData) -> Success {
-        var args = [AnyObject?]()
-        args.append(login.hostname)
-        args.append(login.username)
+        var args: Args = [login.hostname, login.username]
         return db.run("DELETE FROM \(table.name) WHERE hostname = ? AND username IS ?", withArgs: args)
     }
 
     public func removeAll() -> Success {
-        return db.run("DELETE FROM \(table.name)", withArgs: nil)
+        return db.run("DELETE FROM \(table.name)")
     }
 }

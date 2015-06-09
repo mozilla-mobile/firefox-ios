@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Shared
@@ -83,7 +83,6 @@ class LoginsHelper: BrowserHelper {
     }
 
     private func setCredentials(login: LoginData) {
-        log.debug("Set credential \(login)")
         if login.password.isEmpty {
             log.debug("Empty password")
             return
@@ -91,12 +90,10 @@ class LoginsHelper: BrowserHelper {
 
         profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(dispatch_get_main_queue()) { res in
             if let data = res.successValue {
-                for i in 0..<data.count {
-                    let saved = data[i]!
-                    if login.username == login.username {
-                        if saved.password == login.password {
-                            log.debug("Add visit")
-                            self.profile.logins.addVisitFor(login)
+                for saved in data {
+                    if saved?.username == login.username {
+                        if saved?.password == login.password {
+                            self.profile.logins.addUseOf(login)
                             return
                         }
 
@@ -178,15 +175,9 @@ class LoginsHelper: BrowserHelper {
         profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(dispatch_get_main_queue()) { res in
             var jsonObj = [String: AnyObject]()
             if let cursor = res.successValue {
-                var logins = [[String: String]]()
-                for i in 0..<cursor.count {
-                    let login = cursor[i]!
-                    logins.append(login.toDict())
-                }
-
                 jsonObj["requestId"] = requestId
                 jsonObj["name"] = "RemoteLogins:loginsFound"
-                jsonObj["logins"] = logins
+                jsonObj["logins"] = map(cursor, { $0!.toDict() })
             }
 
             let json = JSON(jsonObj)
@@ -222,13 +213,9 @@ class LoginsHelper: BrowserHelper {
 
         // Otherwise, try to look one up
         let options = QueryOptions(filter: challenge.protectionSpace.host, filterType: .None, sort: .None)
-
         return profile.logins.getLoginsForProtectionSpace(challenge.protectionSpace).bindQueue(dispatch_get_main_queue()) { res in
-            var login: LoginData? = nil
-            if let cursor = res.successValue {
-                login = cursor[0]
-            }
-            return self.promptForUsernamePassword(viewController, credentials: login?.credentials, protectionSpace: challenge.protectionSpace)
+            let credentials = res.successValue?[0]?.credentials
+            return self.promptForUsernamePassword(viewController, credentials: credentials, protectionSpace: challenge.protectionSpace)
         }
     }
 
@@ -241,9 +228,9 @@ class LoginsHelper: BrowserHelper {
         let deferred = Deferred<Result<LoginData>>()
         let alert: UIAlertController
         let title = NSLocalizedString("Authentication required", comment: "Authentication prompt title")
-        if !(protectionSpace.realm ?? "").isEmpty {
+        if !(protectionSpace.realm?.isEmpty ?? true) {
             let msg = NSLocalizedString("A username and password are being requested by %@. The site says: %@", comment: "Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string")
-            let formatted = NSString(format: msg, protectionSpace.host, protectionSpace.realm!) as String
+            let formatted = NSString(format: msg, protectionSpace.host, protectionSpace.realm ?? "") as String
             alert = UIAlertController(title: title, message: formatted, preferredStyle: UIAlertControllerStyle.Alert)
         } else {
             let msg = NSLocalizedString("A username and password are being requested by %@.", comment: "Authentication prompt message with no realm. Parameter is the hostname of the site")
