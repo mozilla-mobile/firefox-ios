@@ -983,6 +983,9 @@ extension BrowserViewController : UIScrollViewDelegate {
                 // happens when you pull up past the content
                 scrollView.contentOffset.y >= 0 &&
 
+                // Only scroll away the toolbars if we are NOT pinching to zoom, only when we are dragging
+                !scrollView.zooming &&
+
                 // The user has reached the limit as to which they can scroll to
                 scrollView.contentOffset.y < scrollingSize {
 
