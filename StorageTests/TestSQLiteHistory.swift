@@ -15,7 +15,7 @@ class TestSQLiteHistory: XCTestCase {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         let history = SQLiteHistory(db: db)
-        let bookmarks = SQLiteBookmarks(db: db, favicons: history)
+        let bookmarks = SQLiteBookmarks(db: db)
 
         let site1 = Site(url: "http://url1/", title: "title one")
         let site1Changed = Site(url: "http://url1/", title: "title one alt")
@@ -151,7 +151,7 @@ class TestSQLiteHistory: XCTestCase {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         let history = SQLiteHistory(db: db)
-        let bookmarks = SQLiteBookmarks(db: db, favicons: history)
+        let bookmarks = SQLiteBookmarks(db: db)
 
         let expectation = self.expectationWithDescription("First.")
         func done() -> Success {
@@ -184,7 +184,7 @@ class TestSQLiteHistory: XCTestCase {
             }
         }
 
-        history.clearFavicons()
+        history.clearAllFavicons()
             >>> bookmarks.clearBookmarks
             >>> { bookmarks.addToMobileBookmarks("http://bookmarkedurl/".asURL!, title: "Title", favicon: nil) }
             >>> checkFaviconForBookmarkIsNil
