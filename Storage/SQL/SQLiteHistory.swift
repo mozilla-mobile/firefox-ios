@@ -90,7 +90,22 @@ extension SQLiteHistory: BrowserHistory {
 
         let markArgs: Args = [NSDate.nowNumber(), url]
         let markDeleted = "UPDATE \(TableHistory) SET url = NULL, is_deleted = 1, should_upload = 1, local_modified = ? WHERE url = ?"
-        return self.db.run(deleteVisits, withArgs: visitArgs) >>> { self.db.run(markDeleted, withArgs: markArgs) }
+
+        var err: NSError? = nil
+        return db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Success in
+            err = conn.executeChange(deleteVisits, withArgs: visitArgs)
+            if err == nil {
+                err = conn.executeChange(markDeleted, withArgs: markArgs)
+            }
+            // TODO: This won't work since we're not actually deleting the history (i.e. the cascade will fail)
+            if err == nil {
+                err = self.favicons.removeUnused(conn)
+            }
+            if let err = err {
+                return deferResult(DatabaseError(err: err))
+            }
+            return succeed()
+        }
     }
 
     // Note: clearing history isn't really a sane concept in the presence of Sync.
