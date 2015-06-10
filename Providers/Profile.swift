@@ -109,7 +109,7 @@ protocol Profile {
     var history: protocol<BrowserHistory, SyncableHistory> { get }
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
-    var logins: Logins { get }
+    var logins: protocol<BrowserLogins, SyncableLogins> { get }
     var thumbnails: Thumbnails { get }
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
@@ -250,7 +250,7 @@ public class BrowserProfile: Profile {
            >>> { self.remoteClientsAndTabs.getClientsAndTabs() }
     }
 
-    lazy var logins: Logins = {
+    lazy var logins: protocol<BrowserLogins, SyncableLogins> = {
         return SQLiteLogins(db: self.db)
     }()
 
