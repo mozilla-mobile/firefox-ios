@@ -274,6 +274,13 @@ public class SQLiteDBConnection {
         return Int(sqlite3_changes(sqliteDB))
     }
 
+    /**
+     * Blindly attempts a WAL checkpoint on all attached databases.
+     */
+    func checkpoint(mode: Int32 = SQLITE_CHECKPOINT_PASSIVE) {
+        sqlite3_wal_checkpoint_v2(sqliteDB, nil, mode, nil, nil)
+    }
+
     /// Creates an error from a sqlite status. Will print to the console if debug_enabled is set.
     /// Do not call this unless you're going to return this error.
     private func createErr(description: String, status: Int) -> NSError {
