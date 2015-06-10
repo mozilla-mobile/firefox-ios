@@ -219,8 +219,17 @@ private class SQLiteDBStatement {
         return nil
     }
 
+    func close() {
+        if nil != self.pointer {
+            sqlite3_finalize(self.pointer)
+            self.pointer = nil
+        }
+    }
+
     deinit {
-        sqlite3_finalize(pointer)
+        if nil != self.pointer {
+            sqlite3_finalize(self.pointer)
+        }
     }
 }
 
@@ -329,6 +338,7 @@ public class SQLiteDBConnection {
         let statement = SQLiteDBStatement(connection: self, query: sqlStr, args: args, error: &error)
         if let error = error {
             println("SQL error: \(error.localizedDescription) for SQL \(sqlStr).")
+            statement?.close()
             return error
         }
 
@@ -338,6 +348,7 @@ public class SQLiteDBConnection {
             error = createErr("During: SQL Step \(sqlStr)", status: Int(status))
         }
 
+        statement?.close()
         return error
     }
 
@@ -350,7 +361,13 @@ public class SQLiteDBConnection {
             return Cursor<T>(err: error)
         }
 
-        return FilledSQLiteCursor<T>(statement: statement!, factory: factory)
+        let cursor = FilledSQLiteCursor<T>(statement: statement!, factory: factory)
+
+        // Close, not reset -- this isn't going to be reused, and the cursor has
+        // consumed everything.
+        statement?.close()
+
+        return cursor
     }
 
     /**
@@ -602,8 +619,6 @@ private class FilledSQLiteCursor<T>: ArrayCursor<T> {
             let result = factory(row)
             rows.append(result)
         }
-
-        sqlite3_reset(statement.pointer)
 
         return rows
     }
