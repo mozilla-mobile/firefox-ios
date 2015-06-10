@@ -147,22 +147,6 @@ class TestSQLiteHistory: XCTestCase {
         }
     }
 
-    func testCancelling() {
-        let files = MockFiles()
-        let db = BrowserDB(files: files)
-        let expectation = self.expectationWithDescription("Wait")
-        let deferred = db.runWithConnection { (connection, err) -> Any? in
-            XCTFail("This should be cancelled before hitting this")
-            return nil
-        }
-        (deferred as! Cancellable).cancel()
-        deferred.upon({ res in
-            XCTAssert(res.isFailure, "Cancelled query is failure")
-            expectation.fulfill()
-        })
-        waitForExpectationsWithTimeout(10, handler: nil)
-    }
-
     func testFaviconTable() {
         let files = MockFiles()
         let db = BrowserDB(files: files)

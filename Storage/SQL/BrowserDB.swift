@@ -47,8 +47,6 @@ let DBCouldNotOpenErrorCode = 200
 // Version 5 - Added the clients and the tabs tables.
 // Version 6 - Visit timestamps are now microseconds.
 // Version 7 - Eliminate most tables.
-private var queue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUEUE_CONCURRENT)
-
 public class BrowserDB {
     private let db: SwiftData
     // XXX: Increasing this should blow away old history, since we currently don't support any upgrades.
@@ -264,8 +262,8 @@ extension BrowserDB {
         return walk(chunks, { insertChunk(Array($0)) })
     }
 
-    func runWithConnection<U>(block: (connection: SQLiteDBConnection, inout err: NSError?) -> U) -> Deferred<Result<U>> {
-        return DeferredSqliteOperation(block: block, db: db)
+    func runWithConnection<T>(block: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> Deferred<Result<T>> {
+        return DeferredSqliteOperation(block: block, withDB: db).start()
     }
 
     func run(sql: String, withArgs args: Args? = nil) -> Success {
@@ -278,92 +276,6 @@ extension BrowserDB {
     func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
         return DeferredSqliteOperation(block: { connection, err -> Cursor<T> in
             return connection.executeQuery(sql, factory: factory, withArgs: args)
-        }, db: db)
+        }, withDB: db)
     }
 }
-
-public protocol Cancellable {
-    func cancel()
-    var cancelled: Bool { get }
-}
-
-private class DeferredSqliteOperation<T>: Deferred<Result<T>>, Cancellable {
-    var cancelled: Bool {
-        get {
-            return self.cancelledLock.withReadLock({ cancelled -> Bool in
-                return cancelled
-            })
-        }
-        set {
-            cancelledLock.withWriteLock { cancelled -> T? in
-                cancelled = newValue
-                return nil
-            }
-        }
-    }
-    var cancelledLock = LockProtected<Bool>(item: false)
-
-    var executing: Bool {
-        get {
-            return self.executingLock.withReadLock({ executing -> Bool in
-                return executing
-            })
-        }
-        set {
-            executingLock.withWriteLock { executing -> T? in
-                executing = newValue
-                return nil
-            }
-        }
-    }
-    var executingLock = LockProtected<Bool>(item: false)
-
-    private var db: SwiftData
-    private var block: (connection: SQLiteDBConnection, inout err: NSError?) -> T
-
-    init(block: (connection: SQLiteDBConnection, inout err: NSError?) -> T, db: SwiftData) {
-        self.block = block
-        self.db = db
-        super.init()
-        start()
-    }
-
-    func start() {
-        dispatch_async(queue) {
-            self.main()
-        }
-    }
-
-    func main() {
-        let start = NSDate.now()
-        var result: T? = nil
-        var err = db.withConnection(SwiftData.Flags.ReadWriteCreate) { (db) -> NSError? in
-            self.executing = true
-            if self.cancelled {
-                return NSError(domain: "mozilla", code: 9, userInfo: nil)
-            }
-
-            var err: NSError? = nil
-            result = self.block(connection: db, err: &err)
-            log.debug("Modified rows: \(db.numberOfRowsModified).")
-            self.executing = false
-            return err
-        }
-        log.debug("SQL took \(NSDate.now() - start)")
-
-        if let result = result {
-            fill(Result(success: result))
-        } else {
-            fill(Result(failure: DatabaseError(err: err)))
-        }
-    }
-
-    func cancel() {
-        self.cancelled = true
-        if executing {
-            self.db.interrupt()
-        }
-    }
-}
-
-
