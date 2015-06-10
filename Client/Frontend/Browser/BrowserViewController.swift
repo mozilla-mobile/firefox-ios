@@ -530,6 +530,20 @@ class BrowserViewController: UIViewController {
         }
         return false
     }
+
+    private func updateNavigationToolbarStates(tab: Browser, webView: WKWebView) {
+        urlBar.currentURL = tab.displayURL
+        navigationToolbar.updateBackStatus(webView.canGoBack)
+        navigationToolbar.updateForwardStatus(webView.canGoForward)
+
+        if let url = tab.displayURL?.absoluteString {
+            profile.bookmarks.isBookmarked(url, success: { bookmarked in
+                self.navigationToolbar.updateBookmarkStatus(bookmarked)
+            }, failure: { err in
+                log.error("Error getting bookmark status: \(err).")
+            })
+        }
+    }
 }
 
 /**
@@ -1304,22 +1318,12 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
         if let tab = tabManager.selectedTab {
             if tab.webView == webView {
-                urlBar.currentURL = tab.displayURL
-                navigationToolbar.updateBackStatus(webView.canGoBack)
-                navigationToolbar.updateForwardStatus(webView.canGoForward)
+                updateNavigationToolbarStates(tab, webView: webView)
 
                 let isPage = (tab.displayURL != nil) ? isWebPage(tab.displayURL!) : false
                 navigationToolbar.updatePageStatus(isWebPage: isPage)
 
                 showToolbars(animated: false)
-
-                if let url = tab.displayURL?.absoluteString {
-                    profile.bookmarks.isBookmarked(url, success: { bookmarked in
-                        self.navigationToolbar.updateBookmarkStatus(bookmarked)
-                    }, failure: { err in
-                        log.error("Error getting bookmark status: \(err).")
-                    })
-                }
 
                 if let url = tab.url {
                     if ReaderModeUtils.isReaderModeURL(url) {
@@ -1921,9 +1925,7 @@ extension BrowserViewController: HashchangeHelperDelegate {
         if let tab = tabManager.selectedTab,
            let webView = tab.webView
         {
-            urlBar.currentURL = tab.displayURL
-            navigationToolbar.updateBackStatus(webView.canGoBack)
-            navigationToolbar.updateForwardStatus(webView.canGoForward)
+            updateNavigationToolbarStates(tab, webView: webView)
         }
     }
 }
