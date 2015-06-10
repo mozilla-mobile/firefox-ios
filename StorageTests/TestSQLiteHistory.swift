@@ -175,11 +175,22 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func checkFaviconWasSetForBookmark() -> Success {
-            return bookmarks.bookmarksByURL("http://bookmarkedurl/".asURL!) >>== { results in
+            return history.getFaviconsForUrl("http://bookmarkedurl/".asURL!) >>== { results in
                 XCTAssertEqual(1, results.count)
                 if let actualFaviconURL = results[0]?.favicon?.url {
                     XCTAssertEqual("http://url2/", actualFaviconURL)
                 }
+                return succeed()
+            }
+        }
+
+        func removeBookmark() -> Success {
+            return bookmarks.removeByURL("http://bookmarkedurl/")
+        }
+
+        func checkFaviconWasRemovedForBookmark() -> Success {
+            return history.getFaviconsForUrl("http://bookmarkedurl/".asURL!) >>== { results in
+                XCTAssertEqual(0, results.count)
                 return succeed()
             }
         }
@@ -190,6 +201,8 @@ class TestSQLiteHistory: XCTestCase {
             >>> checkFaviconForBookmarkIsNil
             >>> updateFavicon
             >>> checkFaviconWasSetForBookmark
+            >>> removeBookmark
+            >>> checkFaviconWasRemovedForBookmark
             >>> done
 
         waitForExpectationsWithTimeout(10.0) { error in
