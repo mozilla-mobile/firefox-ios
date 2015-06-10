@@ -577,12 +577,10 @@ class BrowserViewController: UIViewController {
     }
 
     private func removeBookmark(url: String) {
-        profile.bookmarks.removeByURL(url, success: { success in
-            self.toolbar?.updateBookmarkStatus(!success)
-            self.urlBar.updateBookmarkStatus(!success)
-        }, failure: { err in
-            log.error("Error removing bookmark: \(err).")
-        })
+        profile.bookmarks.removeByURL(url) >>== {
+            self.toolbar?.updateBookmarkStatus(false)
+            self.urlBar.updateBookmarkStatus(false)
+        }
     }
 
     func SELBookmarkStatusDidChange(notification: NSNotification) {

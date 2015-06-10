@@ -32,11 +32,11 @@ class SQLiteBookmarkFolder: BookmarkFolder {
 
 public class SQLiteBookmarks: BookmarksModelFactory {
     let db: BrowserDB
-    let favicons: Favicons
+    let favicons: FaviconsTable<Favicon>
 
-    public init(db: BrowserDB, favicons: Favicons) {
+    public init(db: BrowserDB) {
         self.db = db
-        self.favicons = favicons
+        self.favicons = FaviconsTable<Favicon>()
     }
 
     private class func itemFactory(row: SDRow) -> BookmarkItem {
@@ -166,30 +166,36 @@ public class SQLiteBookmarks: BookmarksModelFactory {
     }
 
     public func clearBookmarks() -> Success {
-        return self.db.run("DELETE FROM \(TableBookmarks) WHERE parent IS NOT \(BookmarkRoots.RootID)")
-    }
-
-    private func runSQL(sql: String, args: Args?, success: (Bool) -> Void, failure: (Any) -> Void) {
         var err: NSError?
-        self.db.withWritableConnection(&err) { (connection: SQLiteDBConnection, inout err: NSError?) -> Int in
-            if let err = connection.executeChange(sql, withArgs: args) {
-                failure(err)
-                return 0
+        return self.db.withWritableConnection(&err) { (connection: SQLiteDBConnection, inout err: NSError?) -> Success in
+            if let err = connection.executeChange("DELETE FROM \(TableBookmarks) WHERE parent IS NOT ?", withArgs: [BookmarkRoots.RootID]) {
+                return deferResult(DatabaseError(err: err))
             }
-            success(true)
-            return 1
+            if let err = self.favicons.removeUnused(connection) {
+                return deferResult(DatabaseError(err: err))
+            }
+            return succeed()
         }
     }
 
-    public func removeByURL(url: String, success: (Bool) -> Void, failure: (Any) -> Void) {
+    public func removeByURL(url: String) -> Success {
         log.debug("Removing bookmark \(url).")
         let sql = "DELETE FROM \(TableBookmarks) WHERE url = ?"
         let args: Args = [url]
 
-        self.runSQL(sql, args: args, success: success, failure: failure)
+        var err: NSError?
+        return self.db.withWritableConnection(&err) { (connection: SQLiteDBConnection, inout err: NSError?) -> Success in
+            if let err = connection.executeChange(sql, withArgs: args) {
+                return deferResult(DatabaseError(err: err))
+            }
+            if let err = self.favicons.removeUnused(connection) {
+                return deferResult(DatabaseError(err: err))
+            }
+            return succeed()
+        }
     }
 
-    public func remove(bookmark: BookmarkNode, success: (Bool) -> (), failure: (Any) -> ()) {
+    public func remove(bookmark: BookmarkNode) -> Success {
         if let item = bookmark as? BookmarkItem {
             log.debug("Removing bookmark \(item.url).")
         }
@@ -204,7 +210,16 @@ public class SQLiteBookmarks: BookmarksModelFactory {
             args = [bookmark.guid]
         }
 
-        self.runSQL(sql, args: args, success: success, failure: failure)
+        var err: NSError?
+        return self.db.withWritableConnection(&err) { (connection: SQLiteDBConnection, inout err: NSError?) -> Success in
+            if let err = connection.executeChange(sql, withArgs: args) {
+                return deferResult(DatabaseError(err: err))
+            }
+            if let err = self.favicons.removeUnused(connection) {
+                return deferResult(DatabaseError(err: err))
+            }
+            return succeed()
+        }
     }
 }
 
@@ -245,8 +260,11 @@ extension SQLiteBookmarks: ShareToDestination {
             }
 
             // Insert the favicon.
+            // Insert the favicon.
             if let icon = favicon {
-                return self.favicons.addFavicon(icon) >>== insertBookmark
+                if let id = self.favicons.insertOrUpdate(conn, obj: icon) {
+                	return insertBookmark(id)
+                }
             }
             return insertBookmark(-1)
         }
