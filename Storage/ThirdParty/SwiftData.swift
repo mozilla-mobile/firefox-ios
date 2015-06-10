@@ -67,21 +67,6 @@ public class SwiftData {
         assert(sqlite3_threadsafe() == 2)
     }
 
-    public func interrupt() {
-        var connection: SQLiteDBConnection?
-
-        var error: NSError? = nil
-        if SwiftData.ReuseConnections {
-            connection = getSharedConnection(&error)
-        } else {
-            assertionFailure("Interrupts don't make sense without a shared connection")
-        }
-
-        if let connection = connection {
-            connection.interrupt()
-        }
-    }
-
     private func getSharedConnection(inout error: NSError?) -> SQLiteDBConnection? {
         var connection: SQLiteDBConnection?
 

@@ -263,7 +263,7 @@ extension BrowserDB {
     }
 
     func runWithConnection<T>(block: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> Deferred<Result<T>> {
-        return DeferredSqliteOperation(block: block, withDB: db).start()
+        return DeferredDBOperation(db: db, block: block).start()
     }
 
     func run(sql: String, withArgs args: Args? = nil) -> Success {
@@ -274,8 +274,8 @@ extension BrowserDB {
     }
 
     func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
-        return DeferredSqliteOperation(block: { connection, err -> Cursor<T> in
+        return runWithConnection { (connection, err) -> Cursor<T> in
             return connection.executeQuery(sql, factory: factory, withArgs: args)
-        }, withDB: db)
+        }
     }
 }

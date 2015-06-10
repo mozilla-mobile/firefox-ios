@@ -6,14 +6,14 @@ import Foundation
 import Shared
 import XCGLogger
 
-private var log = XCGLogger.defaultInstance()
-private var DeferredQueue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUEUE_SERIAL)
+private let log = XCGLogger.defaultInstance()
+private let DeferredQueue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUEUE_SERIAL)
 
 /**
     This class is written to mimick an NSOperation, but also provide Deferred capabilities as well.
     
     Usage:
-    let deferred = DeferredSqliteOperation({ (db, err) -> Int
+    let deferred = DeferredDBOperation({ (db, err) -> Int
       // ... Do something long running
       return 1
     }, withDb: myDb, onQueue: myQueue).start(onQueue: myQueue)
@@ -24,7 +24,7 @@ private var DeferredQueue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUE
     // ... Some time later
     deferred.cancel()
 */
-class DeferredSqliteOperation<T>: Deferred<Result<T>>, Cancellable {
+class DeferredDBOperation<T>: Deferred<Result<T>>, Cancellable {
     /// Cancelled is wrapping a ReadWrite lock to make access to it thread-safe.
     private var cancelledLock = LockProtected<Bool>(item: false)
     var cancelled: Bool {
@@ -42,16 +42,16 @@ class DeferredSqliteOperation<T>: Deferred<Result<T>>, Cancellable {
     }
 
     /// Executing is wrapping a ReadWrite lock to make access to it thread-safe.
-    var executingLock = LockProtected<Bool>(item: false)
-    var executing: Bool {
+    private var connectionLock = LockProtected<SQLiteDBConnection?>(item: nil)
+    private var connection: SQLiteDBConnection? {
         get {
-            return self.executingLock.withReadLock({ executing -> Bool in
-                return executing
-            })
+            // We want to avoid leaking this connection. If you want access to it,
+            // you should use a read/write lock directly.
+            return nil
         }
         set {
-            executingLock.withWriteLock { executing -> T? in
-                executing = newValue
+            connectionLock.withWriteLock { connection -> T? in
+                connection = newValue
                 return nil
             }
         }
@@ -60,36 +60,39 @@ class DeferredSqliteOperation<T>: Deferred<Result<T>>, Cancellable {
     private var db: SwiftData
     private var block: (connection: SQLiteDBConnection, inout err: NSError?) -> T
 
-    init(block: (connection: SQLiteDBConnection, inout err: NSError?) -> T, withDB db: SwiftData) {
+    init(db: SwiftData, block: (connection: SQLiteDBConnection, inout err: NSError?) -> T) {
         self.block = block
         self.db = db
         super.init()
     }
 
-    func start(onQueue queue: dispatch_queue_t = DeferredQueue) -> DeferredSqliteOperation<T> {
-        dispatch_async(queue) {
-            self.main()
-        }
+    func start(onQueue queue: dispatch_queue_t = DeferredQueue) -> DeferredDBOperation<T> {
+        dispatch_async(queue, self.main)
         return self
     }
 
     private func main() {
+        if self.cancelled {
+            let err = NSError(domain: "mozilla", code: 9, userInfo: [NSLocalizedDescriptionKey: "Operation was cancelled before starting"])
+            fill(Result(failure: DatabaseError(err: err)))
+        }
+
         let start = NSDate.now()
         var result: T? = nil
         var err = db.withConnection(SwiftData.Flags.ReadWriteCreate) { (db) -> NSError? in
-            self.executing = true
+            self.connection = db
             if self.cancelled {
-                return NSError(domain: "mozilla", code: 9, userInfo: [NSLocalizedDescriptionKey: "Operation was cancelled  before starting"])
+                return NSError(domain: "mozilla", code: 9, userInfo: [NSLocalizedDescriptionKey: "Operation was cancelled before starting"])
             }
 
-            var err: NSError? = nil
-            result = self.block(connection: db, err: &err)
+            var error: NSError? = nil
+            result = self.block(connection: db, err: &error)
             log.debug("Modified rows: \(db.numberOfRowsModified).")
-            self.executing = false
-            return err
+            self.connection = nil
+            return error
         }
-        log.debug("SQL took \(NSDate.now() - start)")
 
+        log.debug("SQL took \(NSDate.now() - start)")
         if let result = result {
             fill(Result(success: result))
         } else {
@@ -99,9 +102,10 @@ class DeferredSqliteOperation<T>: Deferred<Result<T>>, Cancellable {
 
     func cancel() {
         self.cancelled = true
-        if executing {
-            self.db.interrupt()
-        }
+        self.connectionLock.withReadLock({ connection -> () in
+            connection?.interrupt()
+            return ()
+        })
     }
 }
 

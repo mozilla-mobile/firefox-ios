@@ -46,12 +46,13 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             inProgress = deferred as? Cancellable
 
             deferred.uponQueue(dispatch_get_main_queue()) { result in
-                // Failed cursors are excluded in .get().
+                self.inProgress = nil
+
+                    // Failed cursors are excluded in .get().
                 if let cursor = result.successValue {
                     self.load(cursor)
                     self.urlBar.setAutocompleteSuggestion(self.getAutocompleteSuggestion(cursor))
                 }
-                self.inProgress = nil
             }
         }
     }
