@@ -102,10 +102,10 @@ extension SQLiteHistory: BrowserHistory {
         db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
             err = conn.executeChange("DELETE FROM \(TableVisits)", withArgs: nil)
             if err == nil {
-                err = conn.executeChange("DELETE FROM \(TableFaviconSites)", withArgs: nil)
+                err = conn.executeChange("DELETE FROM \(TableHistory)", withArgs: nil)
             }
             if err == nil {
-                err = conn.executeChange("DELETE FROM \(TableHistory)", withArgs: nil)
+                err = self.favicons.removeUnused(conn)
             }
             return 1
         }
@@ -287,7 +287,7 @@ extension SQLiteHistory: BrowserHistory {
 }
 
 extension SQLiteHistory: Favicons {
-    public func clearFavicons() -> Success {
+    public func clearAllFavicons() -> Success {
         var err: NSError? = nil
 
         db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
