@@ -373,7 +373,7 @@ var LoginManagerContent = {
       usernameField: mockUsername.name,
       password: mockPassword.value,
       passwordField: mockPassword.name,
-      formSubmitUrl: formSubmitURL
+      formSubmitURL: formSubmitURL
     });
   },
 
