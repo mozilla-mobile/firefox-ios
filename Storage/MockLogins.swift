@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-public class MockLogins: Logins {
+public class MockLogins: BrowserLogins, SyncableLogins {
     private var cache = [Login]()
 
     public init(files: FileAccessor) {
@@ -22,10 +22,22 @@ public class MockLogins: Logins {
         return Deferred(value: Result(success: cursor))
     }
 
+    public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace, withUsername username: String?) -> Deferred<Result<Cursor<LoginData>>> {
+        let cursor = ArrayCursor(data: cache.filter({ login in
+            return login.protectionSpace.host == protectionSpace.host &&
+                   login.username == username
+        }).sorted({ (loginA, loginB) -> Bool in
+            return loginA.timeLastUsed > loginB.timeLastUsed
+        }).map({ login in
+            return login as LoginData
+        }))
+        return Deferred(value: Result(success: cursor))
+    }
+
     // This method is only here for testing
-    public func getUsageDataForLogin(login: LoginData) -> Deferred<Result<LoginUsageData>> {
+    public func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Result<LoginUsageData>> {
         let res = cache.filter({ login in
-            return login.protectionSpace.host == login.hostname
+            return login.guid == guid
         }).sorted({ (loginA, loginB) -> Bool in
             return loginA.timeLastUsed > loginB.timeLastUsed
         })[0] as LoginUsageData
@@ -41,6 +53,11 @@ public class MockLogins: Logins {
         return succeed()
     }
 
+    public func updateLoginByGUID(guid: GUID, new: LoginData, significant: Bool) -> Success {
+        // TODO
+        return succeed()
+    }
+
     public func updateLogin(login: LoginData) -> Success {
         if let index = find(cache, login as! Login) {
             cache[index].timePasswordChanged = NSDate.nowMicroseconds()
@@ -49,24 +66,32 @@ public class MockLogins: Logins {
         return deferResult(LoginDataError(description: "Password wasn't cached yet. Can't update"))
     }
 
-    public func addUseOf(login: LoginData) -> Success {
-        if let index = find(cache, login as! Login) {
-            cache[index].timeLastUsed = NSDate.nowMicroseconds()
+    public func addUseOfLoginByGUID(guid: GUID) -> Success {
+        if let login = cache.filter({ $0.guid == guid }).first {
+            login.timeLastUsed = NSDate.nowMicroseconds()
             return succeed()
         }
         return deferResult(LoginDataError(description: "Password wasn't cached yet. Can't update"))
     }
 
-    public func removeLogin(login: LoginData) -> Success {
-        if let index = find(cache, login as! Login) {
-            cache.removeAtIndex(index)
-            return succeed()
+    public func removeLoginByGUID(guid: GUID) -> Success {
+        let filtered = cache.filter { $0.guid != guid }
+        if filtered.count == cache.count {
+            return deferResult(LoginDataError(description: "Can not remove a password that wasn't stored"))
         }
-        return deferResult(LoginDataError(description: "Can not remove a password that wasn't stored"))
+        cache = filtered
+        return succeed()
     }
 
     public func removeAll() -> Success {
         cache.removeAll(keepCapacity: false)
         return succeed()
     }
+
+    // TODO
+    public func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success { return succeed() }
+    public func applyChangedLogin(upstream: Login, timestamp: Timestamp) -> Success { return succeed() }
+    public func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>> { return deferResult(0) }
+    public func markAsDeleted(guids: [GUID]) -> Success { return succeed() }
+    public func onRemovedAccount() -> Success { return succeed() }
 }

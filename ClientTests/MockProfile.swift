@@ -81,7 +81,7 @@ public class MockProfile: Profile {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
-    lazy var logins: Logins = {
+    lazy var logins: protocol<BrowserLogins, SyncableLogins> = {
         return MockLogins(files: self.files)
     }()
 
