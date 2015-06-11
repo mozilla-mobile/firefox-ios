@@ -9,6 +9,12 @@
 
 @font-face {
     font-family: sans-serif;
+    src: url('/reader-mode/fonts/FiraSans-Book.ttf');
+    font-weight: medium;
+    }
+
+@font-face {
+    font-family: sans-serif;
     src: url('/reader-mode/fonts/FiraSans-Bold.ttf');
     font-weight: bold;
 }
@@ -56,7 +62,7 @@ html {
 }
 
 body {
-  padding: 20px;
+  padding: 24px;
   transition-property: background-color, color;
   transition-duration: 0.4s;
   margin-left: auto;
@@ -69,12 +75,12 @@ body {
 }
 
 .dark {
-  background-color: #000000;
+  background-color: #333333;
   color: #eeeeee;
 }
 
 .sepia {
-    background-color: #f0ece7;
+    background-color: #F0E6DC;
     color: #333333;
 }
 
@@ -118,12 +124,12 @@ body {
 }
 
 .header > h1 {
-  font-size: 2.625em;
+  font-size: 1.5em;
   font-weight: 700;
   line-height: 1.1em;
   width: 100%;
   margin: 0px;
-  margin-top: 32px;
+  margin-top: 0px;
   margin-bottom: 16px;
   padding: 0px;
 }
@@ -131,7 +137,8 @@ body {
 .header > .credits {
   padding: 0px;
   margin: 0px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+  font-style: italic;
 }
 
 .light > .header > .domain {
@@ -144,7 +151,7 @@ body {
 }
 
 .light > .header > .credits {
-  color: #898989;
+  color: #333333;
 }
 
 .dark > .header > .domain {
@@ -161,23 +168,23 @@ body {
 }
 
 .font-size1 > .header > h1 {
-  font-size: 27px;
+  font-size: 24px;
 }
 
 .font-size2 > .header > h1 {
-  font-size: 29px;
+  font-size: 28px;
 }
 
 .font-size3 > .header > h1 {
-  font-size: 31px;
+  font-size: 32px;
 }
 
 .font-size4 > .header > h1 {
-  font-size: 33px;
+  font-size: 36px;
 }
 
 .font-size5 > .header > h1 {
-  font-size: 35px;
+  font-size: 40px;
 }
 
 /* This covers caption, domain, and credits
@@ -187,35 +194,35 @@ body {
 .font-size1 > .content figcaption,
 .font-size1 > .header > .domain,
 .font-size1 > .header > .credits {
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .font-size2 > .content .wp-caption-text,
 .font-size2 > .content figcaption,
 .font-size2 > .header > .domain,
 .font-size2 > .header > .credits {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .font-size3 > .content .wp-caption-text,
 .font-size3 > .content figcaption,
 .font-size3 > .header > .domain,
 .font-size3 > .header > .credits {
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .font-size4 > .content .wp-caption-text,
 .font-size4 > .content figcaption,
 .font-size4 > .header > .domain,
 .font-size4 > .header > .credits {
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .font-size5 > .content .wp-caption-text,
 .font-size5 > .content figcaption,
 .font-size5 > .header > .domain,
 .font-size5 > .header > .credits {
-  font-size: 19px;
+  font-size: 20px;
 }
 
 .content {
@@ -223,7 +230,7 @@ body {
 }
 
 .content a {
-  text-decoration: underline !important;
+  text-decoration: none !important;
   font-weight: normal;
 }
 
@@ -249,7 +256,7 @@ body {
 }
 
 .content * {
-  max-width: 100% !important;
+  max-width: 98% !important;
   height: auto !important;
 }
 
