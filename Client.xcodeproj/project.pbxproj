@@ -119,6 +119,8 @@
 		288A2DB21AB8B37E0023ABC3 /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DAF1AB8B37E0023ABC3 /* ReadWriteLock.swift */; };
 		288A2DB51AB8B38D0023ABC3 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DB31AB8B38D0023ABC3 /* Error.swift */; };
 		288A2DB61AB8B38D0023ABC3 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DB41AB8B38D0023ABC3 /* Result.swift */; };
+		288ED6DE1B29DEAA0008E140 /* SQLiteLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDA56B31B26B203008C9B96 /* SQLiteLogins.swift */; };
+		288ED6FD1B29DF260008E140 /* Logins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDA56B11B26B1E4008C9B96 /* Logins.swift */; };
 		28909D9C1ACCBB02009AD220 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E23C111AC5A5EE00F5AC85 /* State.swift */; };
 		2891CEC41ADC7F2900427D3C /* NSURLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2891CEC31ADC7F2900427D3C /* NSURLExtensions.swift */; };
 		28926B1A1AC0F074009C0B1D /* EncryptedJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28926B191AC0F074009C0B1D /* EncryptedJSON.swift */; };
@@ -3612,6 +3614,7 @@
 				2FA435151ABB6829008031D1 /* FileAccessor.swift in Sources */,
 				28D158AD1AFD90E500F9C065 /* TestSQLiteBookmarks.swift in Sources */,
 				2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */,
+				288ED6FD1B29DF260008E140 /* Logins.swift in Sources */,
 				2FA4351C1ABB6831008031D1 /* BrowserDB.swift in Sources */,
 				2FA4351A1ABB6829008031D1 /* Site.swift in Sources */,
 				28D158CC1AFDBCC000F9C065 /* TestFaviconsTable.swift in Sources */,
@@ -3622,6 +3625,7 @@
 				28CA1BA81AFC718800220D38 /* TestTableTable.swift in Sources */,
 				2FA435241ABB6831008031D1 /* SchemaTable.swift in Sources */,
 				2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */,
+				288ED6DE1B29DEAA0008E140 /* SQLiteLogins.swift in Sources */,
 				287AC8661AF4776D00101515 /* TestSQLiteHistory.swift in Sources */,
 				2FA435131ABB6829008031D1 /* Cursor.swift in Sources */,
 				282915E71AF1A7920006EEB5 /* BrowserTable.swift in Sources */,
