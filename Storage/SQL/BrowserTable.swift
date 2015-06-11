@@ -211,6 +211,8 @@ public class BrowserTable: Table {
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
+
+        log.debug("Creating \(queries.count) tables, views, and indices.")
         return self.run(db, queries: queries) &&
                self.prepopulateRootFolders(db)
     }

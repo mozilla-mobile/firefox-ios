@@ -39,6 +39,13 @@ public class QueryOptions {
 
 let DBCouldNotOpenErrorCode = 200
 
+enum TableResult {
+    case Exists
+    case Created
+    case Updated
+    case Failed
+}
+
 /* This is a base interface into our browser db. It holds arrays of tables and handles basic creation/updating of them. */
 // Version 1 - Basic history table.
 // Version 2 - Added a visits table, refactored the history table to be a GenericTable.
@@ -74,20 +81,20 @@ public class BrowserDB {
     }
 
     // Creates a table and writes its table info into the table-table database.
-    private func createTable<T: Table>(db: SQLiteDBConnection, table: T) -> Bool {
+    private func createTable<T: Table>(db: SQLiteDBConnection, table: T) -> TableResult {
         log.debug("Try create \(table.name) version \(table.version)")
         if !table.create(db, version: table.version) {
             // If creating failed, we'll bail without storing the table info
             log.debug("Creation failed.")
-            return false
+            return .Failed
         }
 
         var err: NSError? = nil
-        return schemaTable.insert(db, item: table, err: &err) > -1
+        return schemaTable.insert(db, item: table, err: &err) > -1 ? .Created : .Failed
     }
 
     // Updates a table and writes its table into the table-table database.
-    private func updateTable<T: Table>(db: SQLiteDBConnection, table: T) -> Bool {
+    private func updateTable<T: Table>(db: SQLiteDBConnection, table: T) -> TableResult {
         log.debug("Trying update \(table.name) version \(table.version)")
         var from = 0
         // Try to find the stored version of the table
@@ -100,13 +107,13 @@ public class BrowserDB {
 
         // If the versions match, no need to update
         if from == table.version {
-            return true
+            return .Exists
         }
 
         if !table.updateTable(db, from: from, to: table.version) {
             // If the update failed, we'll bail without writing the change to the table-table.
             log.debug("Updating failed.")
-            return false
+            return .Failed
         }
 
         var err: NSError? = nil
@@ -114,8 +121,11 @@ public class BrowserDB {
         // Yes, we UPDATE OR INSERT… because we might be transferring ownership of a database table
         // to a different Table. It'll trigger exists, and thus take the update path, but we won't
         // necessarily have an existing schema entry -- i.e., we'll be updating from 0.
-        return schemaTable.update(db, item: table, err: &err) > 0 ||
-               schemaTable.insert(db, item: table, err: &err) > 0
+        if schemaTable.update(db, item: table, err: &err) > 0 ||
+           schemaTable.insert(db, item: table, err: &err) > 0 {
+            return .Updated
+        }
+        return .Failed
     }
 
     // Utility for table classes. They should call this when they're initialized to force
@@ -123,21 +133,43 @@ public class BrowserDB {
     func createOrUpdate<T: Table>(table: T) -> Bool {
         log.debug("Create or update \(table.name) version \(table.version).")
         var success = true
+        let doCreate = { (connection: SQLiteDBConnection) -> () in
+            switch self.createTable(connection, table: table) {
+            case .Created:
+                success = true
+                connection.checkpoint()
+                return
+            case .Exists:
+                log.debug("Table already exists.")
+                success = true
+                return
+            default:
+                success = false
+            }
+        }
         db.transaction({ connection -> Bool in
             // If the table doesn't exist, we'll create it
             if !table.exists(connection) {
-                success = self.createTable(connection, table: table)
+                doCreate(connection)
             } else {
                 // Otherwise, we'll update it
-                success = self.updateTable(connection, table: table)
-                if !success {
+                switch self.updateTable(connection, table: table) {
+                case .Updated:
+                    success = true
+                    connection.checkpoint()
+                    break
+                case .Exists:
+                    log.debug("Table already exists.")
+                    success = true
+                    break
+                default:
                     log.error("Update failed for \(table.name). Dropping and recreating.")
 
                     table.drop(connection)
                     var err: NSError? = nil
                     self.schemaTable.delete(connection, item: table, err: &err)
 
-                    success = self.createTable(connection, table: table)
+                    doCreate(connection)
                 }
             }
 
@@ -156,7 +188,8 @@ public class BrowserDB {
 
                 success = self.files.move(self.FileName, toRelativePath: bak)
                 assert(success)
-                success = self.createTable(connection, table: table)
+
+                doCreate(connection)
             }
             return success
         })
