@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Storage
 import WebKit
 
 extension XCTestCase {
@@ -84,6 +85,16 @@ class BrowserUtils {
         let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
         tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
         tester.waitForTappableViewWithAccessibilityLabel("Show Tabs")
+    }
+
+    /// Injects a URL and title into the browser's history database.
+    class func addHistoryEntry(title: String, url: NSURL) {
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        var info = [NSObject: AnyObject]()
+        info["url"] = url
+        info["title"] = title
+        info["visitType"] = VisitType.Link.rawValue
+        notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
     }
 }
 
