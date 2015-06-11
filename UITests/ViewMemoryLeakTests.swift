@@ -60,12 +60,12 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().waitForViewWithAccessibilityLabel("Tabs Tray")
         weak var tabTrayController = browserViewController.presentedViewController
-        weak var tabCell = tester().waitForTappableViewWithAccessibilityLabel("about:home")
+        weak var tabCell = tester().waitForTappableViewWithAccessibilityLabel("home")
         XCTAssertNotNil(tabTrayController, "Got tab tray reference")
         XCTAssertNotNil(tabCell, "Got tab cell reference")
 
         // Leave the tab tray.
-        tester().tapViewWithAccessibilityLabel("about:home")
+        tester().tapViewWithAccessibilityLabel("home")
 
         tester().runBlock { _ in
             return (tabTrayController == nil) ? KIFTestStepResult.Success : KIFTestStepResult.Wait

@@ -17,7 +17,7 @@ class SearchSettingsUITests: KIFTestCase {
     private func navigateFromSearchSettings() {
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel("about:home")
+        tester().tapViewWithAccessibilityLabel("home")
     }
 
     // Given that we're at the Search Settings sheet, select the named search engine as the default.
