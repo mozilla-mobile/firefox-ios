@@ -697,7 +697,12 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidBeginEditing(urlBar: URLBarView) {
-        showHomePanelController(inline: false)
+        // Pass the edit message along if we are already showing the home panel
+        if let homePanelController = self.homePanelController where homePanelController.view.alpha == 1 {
+            homePanelController.endEditing(nil)
+        } else {
+            showHomePanelController(inline: false)
+        }
     }
 
     func urlBarDidEndEditing(urlBar: URLBarView) {

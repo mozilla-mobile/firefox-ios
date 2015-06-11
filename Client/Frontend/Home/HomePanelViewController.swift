@@ -157,7 +157,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         }
     }
 
-    func SELtappedEndEditing(sender: UIButton!) {
+    func endEditing(sender: UIButton!) {
         toggleEditingMode(false)
         editingPanel?.endEditing?()
         editingPanel = nil
@@ -213,14 +213,14 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         toggleEditingMode(true)
     }
 
-    private func toggleEditingMode(editing: Bool) {
+    func toggleEditingMode(editing: Bool) {
         let translateUp = CGAffineTransformMakeTranslation(0, -AppConstants.ToolbarHeight)
         let translateDown = CGAffineTransformMakeTranslation(0, AppConstants.ToolbarHeight)
 
         if editing {
             let button = UIButton.buttonWithType(UIButtonType.System) as! UIButton
             button.setTitle(NSLocalizedString("Done", comment: "Done editing button"), forState: UIControlState.Normal)
-            button.addTarget(self, action: "SELtappedEndEditing:", forControlEvents: UIControlEvents.TouchUpInside)
+            button.addTarget(self, action: "endEditing:", forControlEvents: UIControlEvents.TouchUpInside)
             button.transform = translateDown
             self.buttonContainerView.addSubview(button)
             button.snp_makeConstraints { make in
