@@ -318,3 +318,15 @@ extension BrowserDB {
         return deferResult(cursor)
     }
 }
+
+extension SQLiteDBConnection {
+    func tablesExist(names: Args) -> Bool {
+        let count = names.count
+        let orClause = join(" OR ", Array(count: count, repeatedValue: "name = ?"))
+        let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND (\(orClause))"
+
+        let res = self.executeQuery(tablesSQL, factory: StringFactory, withArgs: names)
+        log.debug("\(res.count) tables exist. Expected \(count)")
+        return res.count > 0
+    }
+}
