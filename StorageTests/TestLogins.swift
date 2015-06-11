@@ -58,12 +58,12 @@ class TestSQLiteLogins: XCTestCase {
         let expectation = self.expectationWithDescription("Update login")
         let updated = Login.createWithHostname("hostname1", username: "username1", password: "password3")
 
-        var usageData = login as! LoginUsageData
+        var usageData = updated as! LoginUsageData
         usageData.timeCreated = NSDate.nowMicroseconds()
         usageData.timeLastUsed = NSDate.nowMicroseconds()
 
         addLogin(login)() >>>
-            updateLogin(login) >>>
+            updateLogin(updated) >>>
             getLoginsFor(login.protectionSpace, expected: [updated]) >>>
             done(expectation)
 
