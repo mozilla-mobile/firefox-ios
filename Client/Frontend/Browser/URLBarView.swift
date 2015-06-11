@@ -576,6 +576,7 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextFieldDidBeginEditing(autocompleteTextField: AutocompleteTextField) {
+        delegate?.urlBarDidBeginEditing(self)
         autocompleteTextField.highlightAll()
     }
 
