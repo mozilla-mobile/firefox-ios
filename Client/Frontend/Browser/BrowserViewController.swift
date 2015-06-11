@@ -823,8 +823,8 @@ extension BrowserViewController: BrowserDelegate {
         browser.addHelper(favicons, name: FaviconManager.name())
 
         // Temporarily disable password support until the new code lands
-        // let logins = LoginsHelper(browser: browser, profile: profile)
-        //  browser.addHelper(logins, name: LoginsHelper.name())
+        let logins = LoginsHelper(browser: browser, profile: profile)
+        browser.addHelper(logins, name: LoginsHelper.name())
 
         let contextMenuHelper = ContextMenuHelper(browser: browser)
         contextMenuHelper.delegate = self
