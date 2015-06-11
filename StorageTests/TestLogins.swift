@@ -58,10 +58,12 @@ class TestSQLiteLogins: XCTestCase {
         let expectation = self.expectationWithDescription("Update login")
         let updated = Login.createWithHostname("hostname1", username: "username1", password: "password3")
 
-        login.timeCreated = NSDate.nowMicroseconds()
-        login.timeLastUsed = NSDate.nowMicroseconds()
+        var usageData = login as! LoginUsageData
+        usageData.timeCreated = NSDate.nowMicroseconds()
+        usageData.timeLastUsed = NSDate.nowMicroseconds()
+
         addLogin(login)() >>>
-            updateLogin(updated) >>>
+            updateLogin(login) >>>
             getLoginsFor(login.protectionSpace, expected: [updated]) >>>
             done(expectation)
 
@@ -91,14 +93,15 @@ class TestSQLiteLogins: XCTestCase {
     }
 
     // Note: These functions are all curried so that we pass arguments, but still chain them below
-    func addLogin(login: Login)() -> Success {
+    func addLogin(login: LoginData)() -> Success {
         log.debug("Add \(login)")
         return logins.addLogin(login)
     }
 
-    func updateLogin(login: Login)() -> Success {
+    func updateLogin(login: LoginData)() -> Success {
         log.debug("Update \(login)")
-        login.timePasswordChanged = NSDate.nowMicroseconds()
+        var usage = login as! LoginUsageData
+        usage.timePasswordChanged = NSDate.nowMicroseconds()
         return logins.updateLogin(login)
     }
 
@@ -138,7 +141,7 @@ class TestSQLiteLogins: XCTestCase {
     }
     */
 
-    func removeLogin(login: Login)() -> Success {
+    func removeLogin(login: LoginData)() -> Success {
         log.debug("Remove \(login)")
         return logins.removeLogin(login)
     }
