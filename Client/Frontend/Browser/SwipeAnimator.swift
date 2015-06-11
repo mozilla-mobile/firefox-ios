@@ -28,11 +28,10 @@ protocol SwipeAnimatorDelegate: class {
 
 class SwipeAnimator: NSObject {
     weak var delegate: SwipeAnimatorDelegate?
-
+    weak var container: UIView!
+    weak var animatingView: UIView!
+    
     private var prevOffset: CGPoint!
-
-    let container: UIView
-    let animatingView: UIView
     private let params: SwipeAnimationParameters
 
     var containerCenter: CGPoint {
