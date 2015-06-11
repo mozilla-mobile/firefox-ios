@@ -34,6 +34,9 @@
 
 import Foundation
 import UIKit
+import XCGLogger
+
+private let log = XCGLogger.defaultInstance()
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
 
@@ -108,15 +111,19 @@ public class SwiftData {
     public func transaction(transactionClosure: (db: SQLiteDBConnection)->Bool) -> NSError? {
         return withConnection(SwiftData.Flags.ReadWriteCreate) { db in
             if let err = db.executeChange("BEGIN EXCLUSIVE") {
+                log.warning("BEGIN EXCLUSIVE failed.")
                 return err
             }
 
             if transactionClosure(db: db) {
+                log.debug("Op in transaction succeeded. Committing.")
                 if let err = db.executeChange("COMMIT") {
+                    log.error("COMMIT failed. Rolling back.")
                     db.executeChange("ROLLBACK")
                     return err
                 }
             } else {
+                log.debug("Op in transaction failed. Rolling back.")
                 if let err = db.executeChange("ROLLBACK") {
                     return err
                 }
@@ -358,6 +365,7 @@ public class SQLiteDBConnection {
         var error: NSError?
         let statement = SQLiteDBStatement(connection: self, query: sqlStr, args: args, error: &error)
         if let error = error {
+            log.error("SQL error: \(error.localizedDescription).")
             return Cursor<T>(err: error)
         }
 
