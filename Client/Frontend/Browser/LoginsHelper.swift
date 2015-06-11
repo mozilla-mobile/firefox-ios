@@ -199,7 +199,7 @@ class LoginsHelper: BrowserHelper {
         if let proposed = credential {
             if !(proposed.user?.isEmpty ?? true) {
                 if challenge.previousFailureCount == 0 {
-                    return deferResult(Login.createWith(credential!, protectionSpace: challenge.protectionSpace))
+                    return deferResult(Login.createWithCredential(credential!, protectionSpace: challenge.protectionSpace))
                 }
             } else {
                 credential = nil
@@ -244,7 +244,7 @@ class LoginsHelper: BrowserHelper {
                 let user = (alert.textFields?[0] as! UITextField).text
                 let pass = (alert.textFields?[1] as! UITextField).text
 
-                let login = Login.createWith(NSURLCredential(user: user, password: pass, persistence: .ForSession), protectionSpace: protectionSpace)
+                let login = Login.createWithCredential(NSURLCredential(user: user, password: pass, persistence: .ForSession), protectionSpace: protectionSpace)
                 deferred.fill(Result(success: login))
                 self.setCredentials(login)
         }

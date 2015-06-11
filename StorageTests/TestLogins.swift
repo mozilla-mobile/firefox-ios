@@ -11,7 +11,7 @@ private let log = XCGLogger.defaultInstance()
 
 class TestSQLiteLogins: XCTestCase {
     var logins: Logins!
-    let login = Login(hostname: "hostname1", username: "username1", password: "password1")
+    let login = Login.createWithHostname("hostname1", username: "username1", password: "password1")
 
     override func setUp() {
         super.setUp()
@@ -33,7 +33,7 @@ class TestSQLiteLogins: XCTestCase {
 
     func testGetOrder() {
         let expectation = self.expectationWithDescription("Add login")
-        let login2 = Login(hostname: "hostname1", username: "username2", password: "password2")
+        let login2 = Login.createWithHostname("hostname1", username: "username2", password: "password2")
 
         addLogin(login)() >>>
             addLogin(login2) >>>
@@ -56,7 +56,7 @@ class TestSQLiteLogins: XCTestCase {
 
     func testUpdateLogin() {
         let expectation = self.expectationWithDescription("Update login")
-        let updated = Login(hostname: "hostname1", username: "username1", password: "password3")
+        let updated = Login.createWithHostname("hostname1", username: "username1", password: "password3")
 
         login.timeCreated = NSDate.nowMicroseconds()
         login.timeLastUsed = NSDate.nowMicroseconds()

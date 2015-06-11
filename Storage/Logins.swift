@@ -82,11 +82,11 @@ public class Login: Printable, SyncableLoginData, LoginData, LoginUsageData, Equ
         return "Login for \(hostname)"
     }
 
-    public class func createWith(hostname: String, username: String, password: String) -> LoginData {
+    public class func createWithHostname(hostname: String, username: String, password: String) -> LoginData {
         return Login(hostname: hostname, username: username, password: password) as LoginData
     }
 
-    public class func createWith(credential: NSURLCredential, protectionSpace: NSURLProtectionSpace) -> LoginData {
+    public class func createWithCredential(credential: NSURLCredential, protectionSpace: NSURLProtectionSpace) -> LoginData {
         return Login(credential: credential, protectionSpace: protectionSpace) as LoginData
     }
 
