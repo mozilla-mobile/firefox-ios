@@ -50,7 +50,7 @@ private class LoginsTable: Table {
     }
 
     func exists(db: SQLiteDBConnection) -> Bool {
-        let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?)"
+        let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?"
         let res = db.executeQuery(tablesSQL, factory: StringFactory, withArgs: [name])
         log.debug("\(res.count) logins tables exist.")
         return res.count > 0
