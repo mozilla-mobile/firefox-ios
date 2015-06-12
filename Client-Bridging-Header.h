@@ -13,4 +13,6 @@
 #import "Carthage/Checkouts/SDWebImage/SDWebImage/UIView+WebCacheOperation.h"
 #import "Carthage/Checkouts/SWTableViewCell/SWTableViewCell/PodFiles/SWTableViewCell.h"
 
+#import "WKWebView+PrivateAPI.h"
+
 #endif

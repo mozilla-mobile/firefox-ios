@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 import Shared
+import Alamofire
 
 class ErrorPageHelper {
     static let MozDomain = "mozilla"
@@ -173,8 +174,13 @@ class ErrorPageHelper {
         ErrorPageHelper.redirecting.append(url)
 
         let errorUrl = "\(WebServer.sharedInstance.base)/errors/error.html?url=\(url.absoluteString?.escape() ?? String())&code=\(error.code)&domain=\(error.domain)&description=\(error.localizedDescription.escape())"
-        let request = NSURLRequest(URL: errorUrl.asURL!)
-        webView.loadRequest(request)
+//        let request = NSURLRequest(URL: errorUrl.asURL!)
+//        webView.loadRequest(request)
+
+        Alamofire.request(.GET, errorUrl, parameters: nil, encoding: ParameterEncoding.URL)
+            .responseString(encoding: NSUTF8StringEncoding) { (request, response, data, error) in
+                        webView.loadAlternateHTMLString(data, baseURL: nil, forUnreachableURL: url)
+                   }
     }
 
     class func isErrorPageURL(url: NSURL) -> Bool {
