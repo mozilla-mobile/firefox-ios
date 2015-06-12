@@ -1,0 +1,7 @@
+amazondotcom
+azerdict
+bing
+google
+twitter
+wikipedia-az
+yandex-az
