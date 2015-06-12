@@ -38,6 +38,7 @@ protocol URLBarDelegate: class {
     func urlBarDidBeginEditing(urlBar: URLBarView)
     func urlBarDidEndEditing(urlBar: URLBarView)
     func urlBarDidLongPressLocation(urlBar: URLBarView)
+    func urlBarDidPressScrollToTop(urlBar: URLBarView)
     func urlBar(urlBar: URLBarView, didEnterText text: String)
     func urlBar(urlBar: URLBarView, didSubmitText text: String)
 }
@@ -126,6 +127,12 @@ class URLBarView: UIView {
 
     private lazy var curveShape: CurveView = { return CurveView() }()
 
+    private lazy var scrollToTopButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: "SELtappedScrollToTopArea", forControlEvents: UIControlEvents.TouchUpInside)
+        return button
+    }()
+
     lazy var shareButton: UIButton = { return UIButton() }()
 
     lazy var bookmarkButton: UIButton = { return UIButton() }()
@@ -169,6 +176,7 @@ class URLBarView: UIView {
     private func commonInit() {
         backgroundColor = URLBarViewUX.backgroundColorWithAlpha(0)
         addSubview(curveShape);
+        addSubview(scrollToTopButton)
 
         locationContainer.addSubview(locationView)
         locationContainer.addSubview(editTextField)
@@ -192,6 +200,11 @@ class URLBarView: UIView {
     }
 
     private func setupConstraints() {
+        scrollToTopButton.snp_makeConstraints { make in
+            make.top.equalTo(self)
+            make.left.right.equalTo(self.locationContainer)
+        }
+
         progressBar.snp_makeConstraints { make in
             make.top.equalTo(self.snp_bottom)
             make.width.equalTo(self)
@@ -484,6 +497,10 @@ class URLBarView: UIView {
 
     func SELdidClickCancel() {
         finishEditing()
+    }
+
+    func SELtappedScrollToTopArea() {
+        delegate?.urlBarDidPressScrollToTop(self)
     }
 }
 
