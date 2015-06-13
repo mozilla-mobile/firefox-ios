@@ -3,7 +3,7 @@ github "Masonry/Snap"
 github "swisspol/GCDWebServer"
 github "kif-framework/KIF"
 github "st3fan/SWXMLHash" "master"           # So we get Swift 1.2 fixes.
-github "rs/SDWebImage"
+github "rs/SDWebImage" "master"              # To get the fix for libwebp
 github "norio-nomura/Base32"
 github "DaveWoodCom/XCGLogger" "swift_1.2"   # Previously: ~> 1.8
 github "bignerdranch/Deferred" "master"
