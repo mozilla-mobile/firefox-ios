@@ -10,15 +10,20 @@ import XCGLogger
 private let log = XCGLogger.defaultInstance()
 
 class TestSQLiteLogins: XCTestCase {
-    var logins: Logins!
+    var db: BrowserDB!
+    var logins: SQLiteLogins!
     let login = Login.createWithHostname("hostname1", username: "username1", password: "password1")
 
     override func setUp() {
         super.setUp()
 
         let files = MockFiles()
-        let db = BrowserDB(files: files)
-        self.logins = SQLiteLogins(db: db)
+        self.db = BrowserDB(files: files)
+        self.logins = SQLiteLogins(db: self.db)
+
+        let expectation = self.expectationWithDescription("Remove all logins.")
+        self.removeAllLogins().upon({ res in expectation.fulfill() })
+        waitForExpectationsWithTimeout(10.0, handler: nil)
     }
 
     func testAddLogin() {
@@ -27,19 +32,21 @@ class TestSQLiteLogins: XCTestCase {
 
         addLogin(login) >>>
             getLoginsFor(login.protectionSpace, expected: [login]) >>>
-            done(login.protectionSpace, expectation: expectation)
+            done(expectation)
 
         waitForExpectationsWithTimeout(10.0, handler: nil)
     }
 
     func testGetOrder() {
         let expectation = self.expectationWithDescription("Add login")
+
+        // Different GUID.
         let login2 = Login.createWithHostname("hostname1", username: "username2", password: "password2")
 
         addLogin(login) >>>
-            addLoginCurried(login2) >>>
+            { self.addLogin(login2) } >>>
             getLoginsFor(login.protectionSpace, expected: [login2, login]) >>>
-            done(login.protectionSpace, expectation: expectation)
+            done(expectation)
 
         waitForExpectationsWithTimeout(10.0, handler: nil)
     }
@@ -50,7 +57,7 @@ class TestSQLiteLogins: XCTestCase {
         addLogin(login) >>>
             removeLogin(login) >>>
             getLoginsFor(login.protectionSpace, expected: []) >>>
-            done(login.protectionSpace, expectation: expectation)
+            done(expectation)
 
         waitForExpectationsWithTimeout(10.0, handler: nil)
     }
@@ -58,11 +65,12 @@ class TestSQLiteLogins: XCTestCase {
     func testUpdateLogin() {
         let expectation = self.expectationWithDescription("Update login")
         let updated = Login.createWithHostname("hostname1", username: "username1", password: "password3")
+        updated.guid = self.login.guid
 
         addLogin(login) >>>
             updateLogin(updated) >>>
             getLoginsFor(login.protectionSpace, expected: [updated]) >>>
-            done(login.protectionSpace, expectation: expectation)
+            done(expectation)
 
         waitForExpectationsWithTimeout(10.0, handler: nil)
     }
@@ -84,9 +92,10 @@ class TestSQLiteLogins: XCTestCase {
     }
     */
 
-    func done(protectionSpace: NSURLProtectionSpace, expectation: XCTestExpectation)() -> Success {
-        return removeAllLogins() >>>
-            getLoginsFor(protectionSpace, expected: []) >>> {
+    func done(expectation: XCTestExpectation)() -> Success {
+        return removeAllLogins()
+           >>> getLoginsFor(login.protectionSpace, expected: [])
+           >>> {
                 expectation.fulfill()
                 return succeed()
         }
@@ -98,29 +107,17 @@ class TestSQLiteLogins: XCTestCase {
         return logins.addLogin(login)
     }
 
-    func addLoginCurried(login: LoginData) -> (() -> Success) {
-        return { return self.addLogin(login) }
+    func updateLogin(login: LoginData)() -> Success {
+        log.debug("Update \(login)")
+        return logins.updateLoginByGUID(login.guid, new: login, significant: true)
     }
 
-    func updateLogin(login: LoginData) -> (() -> Success) {
-        return {
-            log.debug("Update \(login)")
-            var usage = login as! LoginUsageData
-            usage.timePasswordChanged = NSDate.nowMicroseconds()
-            return self.logins.updateLogin(login)
-        }
-    }
-
-    func addUseDelayed(login: LoginData, time: UInt32) -> (() -> Success) {
-        return {
-            sleep(time)
-            if var usageData = login as? LoginUsageData {
-                usageData.timeLastUsed = NSDate.nowMicroseconds()
-            }
-            let res = self.logins.addUseOf(login)
-            sleep(time)
-            return res
-        }
+    func addUseDelayed(login: Login, time: UInt32)() -> Success {
+        sleep(time)
+        login.timeLastUsed = NSDate.nowMicroseconds()
+        let res = logins.addUseOfLoginByGUID(login.guid)
+        sleep(time)
+        return res
     }
 
     func getLoginsFor(protectionSpace: NSURLProtectionSpace, expected: [LoginData]) -> (() -> Success) {
@@ -155,15 +152,77 @@ class TestSQLiteLogins: XCTestCase {
     }
     */
 
-    func removeLogin(login: LoginData) -> (() -> Success) {
-        return {
-            log.debug("Remove \(login)")
-            return self.logins.removeLogin(login)
-        }
+    func removeLogin(login: LoginData)() -> Success {
+        log.debug("Remove \(login)")
+        return logins.removeLoginByGUID(login.guid)
     }
 
     func removeAllLogins() -> Success {
         log.debug("Remove All")
-        return self.logins.removeAll()
+        // Because we don't want to just mark them as deleted.
+        return self.db.run("DELETE FROM \(TableLoginsMirror)") >>>
+            { self.db.run("DELETE FROM \(TableLoginsLocal)") }
+    }
+}
+
+class TestSyncableLogins: XCTestCase {
+    var db: BrowserDB!
+    var logins: SQLiteLogins!
+
+    override func setUp() {
+        super.setUp()
+
+        let files = MockFiles()
+        self.db = BrowserDB(files: files)
+        self.logins = SQLiteLogins(db: self.db)
+
+        let expectation = self.expectationWithDescription("Remove all logins.")
+        self.removeAllLogins().upon({ res in expectation.fulfill() })
+        waitForExpectationsWithTimeout(10.0, handler: nil)
+    }
+
+    func removeAllLogins() -> Success {
+        log.debug("Remove All")
+        // Because we don't want to just mark them as deleted.
+        return self.db.run("DELETE FROM \(TableLoginsMirror)") >>>
+            { self.db.run("DELETE FROM \(TableLoginsLocal)") }
+    }
+
+    func testDiffers() {
+        let guid = "abcdabcdabcd"
+        let host = "http://example.com"
+        let user = "username"
+        var loginA1 = Login(guid: guid, hostname: host, username: user, password: "password1")
+        loginA1.formSubmitURL = "\(host)/form1/"
+        loginA1.usernameField = "afield"
+
+        var loginA2 = Login(guid: guid, hostname: host, username: user, password: "password1")
+        loginA2.formSubmitURL = "\(host)/form1/"
+        loginA2.usernameField = "somefield"
+
+        var loginB = Login(guid: guid, hostname: host, username: user, password: "password2")
+        loginB.formSubmitURL = "\(host)/form1/"
+
+        var loginC = Login(guid: guid, hostname: host, username: user, password: "password")
+        loginC.formSubmitURL = "\(host)/form2/"
+
+        XCTAssert(loginA1.significantlyDiffersFrom(loginB))
+        XCTAssert(loginA1.significantlyDiffersFrom(loginC))
+        XCTAssert(loginA2.significantlyDiffersFrom(loginB))
+        XCTAssert(loginA2.significantlyDiffersFrom(loginC))
+        XCTAssert(!loginA1.significantlyDiffersFrom(loginA2))
+    }
+
+    func testApplyLogin() {
+        var loginA = Login(guid: "abcdabcdabcd", hostname: "http://example.com", username: "username", password: "password")
+        loginA.formSubmitURL = "http://example.com/form/"
+
+        XCTAssertTrue(self.logins.applyChangedLogin(loginA, timestamp: 1234).value.isSuccess)
+
+        let local = self.logins.getExistingLocalRecordByGUID("abcdabcdabcd").value.successValue!
+        let mirror = self.logins.getExistingMirrorRecordByGUID("abcdabcdabcd").value.successValue!
+
+        XCTAssertTrue(nil == local)
+        XCTAssertEqual(mirror!.serverModified, Timestamp(1234), "Timestamp matches.")
     }
 }
