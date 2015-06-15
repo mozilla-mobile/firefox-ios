@@ -1007,6 +1007,13 @@
 			remoteGlobalIDString = D2AAC046055464E500DB518D;
 			remoteInfo = sqlcipher;
 		};
+		E4F0999A1B2F67210008FB7B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4F099721B2F66B40008FB7B /* sqlcipher.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC045055464E500DB518D;
+			remoteInfo = sqlcipher;
+		};
 		F84B21D41A090F8100AAB793 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -2741,6 +2748,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E4F0999B1B2F67210008FB7B /* PBXTargetDependency */,
 				2FCAE23C1ABB520700877008 /* PBXTargetDependency */,
 				2FCAE23E1ABB520700877008 /* PBXTargetDependency */,
 			);
@@ -4139,6 +4147,11 @@
 			isa = PBXTargetDependency;
 			target = E4D567171ADECE2700F1EFE7 /* ReadingList */;
 			targetProxy = E4D5672D1ADECE2800F1EFE7 /* PBXContainerItemProxy */;
+		};
+		E4F0999B1B2F67210008FB7B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = sqlcipher;
+			targetProxy = E4F0999A1B2F67210008FB7B /* PBXContainerItemProxy */;
 		};
 		F84B21D51A090F8100AAB793 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
