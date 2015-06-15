@@ -67,7 +67,7 @@ class TestFavicons : ProfileTest {
 
             // TODO: Use the local file server for URLs here, so that we can test download/save/delete of local storage
             self.clear(h)
-            profile.files.remove("browser.db")
+            profile.files.remove("mock.db")
         }
     }
     */

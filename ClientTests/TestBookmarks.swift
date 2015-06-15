@@ -28,7 +28,7 @@ class TestBookmarks: ProfileTest {
 
             self.waitForExpectationsWithTimeout(10.0, handler:nil)
             // This'll do.
-            profile.files.remove("browser.db")
+            profile.files.remove("mock.db")
         }
     }
 }

@@ -92,7 +92,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
     override func setUp() {
         let files = MockFiles()
         files.remove("browser.db")
-        clientsAndTabs = SQLiteRemoteClientsAndTabs(db: BrowserDB(files: files))
+        clientsAndTabs = SQLiteRemoteClientsAndTabs(db: BrowserDB(filename: "browser.db", files: files))
     }
 
 

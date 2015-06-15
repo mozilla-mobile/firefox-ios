@@ -18,6 +18,8 @@ let SecAttrService: String! = kSecAttrService as String
 let SecAttrGeneric: String! = kSecAttrGeneric as String
 let SecAttrAccount: String! = kSecAttrAccount as String
 let SecAttrAccessGroup: String! = kSecAttrAccessGroup as String
+let SecAttrAccessibleWhenUnlocked: String! = kSecAttrAccessibleWhenUnlocked as String
+let SecReturnAttributes: String! = kSecReturnAttributes as String
 
 /// KeychainWrapper is a class to help make Keychain access in Swift more straightforward. It is designed to make accessing the Keychain services more like using NSUserDefaults, which is much more familiar to people.
 public class KeychainWrapper {
@@ -98,7 +100,7 @@ public class KeychainWrapper {
         var objectValue: NSCoding?
 
         if let data = dataValue {
-            objectValue = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! NSCoding?
+            objectValue = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? NSCoding
         }
 
         return objectValue;
@@ -127,14 +129,39 @@ public class KeychainWrapper {
         return status == noErr ? result as? NSData : nil
     }
 
+    /// Returns a NSData object for a specified key.
+    ///
+    /// :param: keyName The key to lookup data for.
+    /// :returns: The NSData object associated with the key if it exists. If no data exists, returns nil.
+    public class func accessibilityOfKey(keyName: String) -> String? {
+        var keychainQueryDictionary = self.setupKeychainQueryDictionaryForKey(keyName)
+        var result: AnyObject?
+
+        // Limit search results to one
+        keychainQueryDictionary[SecMatchLimit] = kSecMatchLimitOne
+        // Specify we want SecAttrAccessible returned
+        keychainQueryDictionary[SecReturnAttributes] = kCFBooleanTrue
+        // Search
+        let status = withUnsafeMutablePointer(&result) {
+            SecItemCopyMatching(keychainQueryDictionary, UnsafeMutablePointer($0))
+        }
+
+        if status == noErr {
+            if let resultsDictionary = result as? [String:AnyObject] {
+                return resultsDictionary[SecAttrAccessible] as? String
+            }
+        }
+        return nil
+    }
+
     /// Save a String value to the keychain associated with a specified key. If a String value already exists for the given keyname, the string will be overwritten with the new value.
     ///
     /// :param: value The String value to save.
     /// :param: forKey The key to save the String under.
     /// :returns: True if the save was successful, false otherwise.
-    public class func setString(value: String, forKey keyName: String) -> Bool {
+    public class func setString(value: String, forKey keyName: String, withAccessibility accessibility: String = SecAttrAccessibleWhenUnlocked) -> Bool {
         if let data = value.dataUsingEncoding(NSUTF8StringEncoding) {
-            return self.setData(data, forKey: keyName)
+            return self.setData(data, forKey: keyName, withAccessibility: accessibility)
         } else {
             return false
         }
@@ -145,10 +172,10 @@ public class KeychainWrapper {
     /// :param: value The NSCoding compliant object to save.
     /// :param: forKey The key to save the object under.
     /// :returns: True if the save was successful, false otherwise.
-    public class func setObject(value: NSCoding, forKey keyName: String) -> Bool {
+    public class func setObject(value: NSCoding, forKey keyName: String, withAccessibility accessibility: String = SecAttrAccessibleWhenUnlocked) -> Bool {
         let data = NSKeyedArchiver.archivedDataWithRootObject(value)
 
-        return self.setData(data, forKey: keyName)
+        return self.setData(data, forKey: keyName, withAccessibility: accessibility)
     }
 
     /// Save a NSData object to the keychain associated with a specified key. If data already exists for the given keyname, the data will be overwritten with the new value.
@@ -156,20 +183,20 @@ public class KeychainWrapper {
     /// :param: value The NSData object to save.
     /// :param: forKey The key to save the object under.
     /// :returns: True if the save was successful, false otherwise.
-    public class func setData(value: NSData, forKey keyName: String) -> Bool {
+    public class func setData(value: NSData, forKey keyName: String, withAccessibility accessibility: String = SecAttrAccessibleWhenUnlocked) -> Bool {
         var keychainQueryDictionary: [String:AnyObject] = self.setupKeychainQueryDictionaryForKey(keyName)
 
         keychainQueryDictionary[SecValueData] = value
 
         // Protect the keychain entry so it's only valid when the device is unlocked
-        keychainQueryDictionary[SecAttrAccessible] = kSecAttrAccessibleWhenUnlocked
+        keychainQueryDictionary[SecAttrAccessible] = accessibility
 
         let status: OSStatus = SecItemAdd(keychainQueryDictionary, nil)
 
         if status == errSecSuccess {
             return true
         } else if status == errSecDuplicateItem {
-            return self.updateData(value, forKey: keyName)
+            return self.updateData(value, forKey: keyName, withAccessibility: accessibility)
         } else {
             return false
         }
@@ -195,9 +222,12 @@ public class KeychainWrapper {
     // MARK: Private Methods
 
     /// Update existing data associated with a specified key name. The existing data will be overwritten by the new data
-    private class func updateData(value: NSData, forKey keyName: String) -> Bool {
+    private class func updateData(value: NSData, forKey keyName: String, withAccessibility accessibility: String? = nil) -> Bool {
         let keychainQueryDictionary: [String:AnyObject] = self.setupKeychainQueryDictionaryForKey(keyName)
-        let updateDictionary = [SecValueData:value]
+        var updateDictionary: [String:AnyObject] = [SecValueData: value]
+        if let accessibility = accessibility {
+            updateDictionary[SecAttrAccessible] = accessibility
+        }
 
         // Update
         let status: OSStatus = SecItemUpdate(keychainQueryDictionary, updateDictionary)

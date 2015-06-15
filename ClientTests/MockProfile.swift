@@ -34,7 +34,7 @@ public class MockProfile: Profile {
     }
 
     lazy var db: BrowserDB = {
-        return BrowserDB(files: self.files)
+        return BrowserDB(filename: "mock.db", files: self.files)
     }()
 
     /**

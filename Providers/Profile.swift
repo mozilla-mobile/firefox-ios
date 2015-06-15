@@ -185,7 +185,7 @@ public class BrowserProfile: Profile {
     }
 
     lazy var db: BrowserDB = {
-        return BrowserDB(files: self.files)
+        return BrowserDB(filename: "browser.db", files: self.files)
     }()
 
 
@@ -251,7 +251,7 @@ public class BrowserProfile: Profile {
     }
 
     lazy var logins: Logins = {
-        return SQLiteLogins(db: self.db)
+        return SQLiteLogins(files: self.files)
     }()
 
     lazy var thumbnails: Thumbnails = {

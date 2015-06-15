@@ -55,11 +55,12 @@ enum TableResult {
 // Version 6 - Visit timestamps are now microseconds.
 // Version 7 - Eliminate most tables.
 public class BrowserDB {
-    private let db: SwiftData
+    private var db: SwiftData
     // XXX: Increasing this should blow away old history, since we currently don't support any upgrades.
     private let Version: Int = 7
-    private let FileName = "browser.db"
     private let files: FileAccessor
+    private let filename: String
+    private let secretKey: String?
     private let schemaTable: SchemaTable<TableInfo>
 
     private var initialized = [String]()
@@ -68,16 +69,18 @@ public class BrowserDB {
     // appear in a query string.
     static let MaxVariableNumber = 999
 
-    public init(files: FileAccessor) {
+    public init(filename: String, secretKey: String? = nil, files: FileAccessor) {
         log.debug("Initializing BrowserDB.")
         self.files = files
-        db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent(FileName))
+        self.filename = filename
         self.schemaTable = SchemaTable()
-        self.createOrUpdate(self.schemaTable)
-    }
+        self.secretKey = secretKey
 
-    var filename: String {
-        return db.filename
+        let file = files.getAndEnsureDirectory()!.stringByAppendingPathComponent(filename)
+        db = SwiftData(filename: file, key: secretKey, prevKey: nil)
+
+        // Create or update will also delete and create the database if our key was incorrect.
+        self.createOrUpdate(self.schemaTable)
     }
 
     // Creates a table and writes its table info into the table-table database.
@@ -133,6 +136,7 @@ public class BrowserDB {
     func createOrUpdate<T: Table>(table: T) -> Bool {
         log.debug("Create or update \(table.name) version \(table.version).")
         var success = true
+        db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent(self.filename), key: secretKey)
         let doCreate = { (connection: SQLiteDBConnection) -> () in
             switch self.createTable(connection, table: table) {
             case .Created:
@@ -147,7 +151,8 @@ public class BrowserDB {
                 success = false
             }
         }
-        db.transaction({ connection -> Bool in
+
+        if let err = db.transaction({ connection -> Bool in
             // If the table doesn't exist, we'll create it
             if !table.exists(connection) {
                 doCreate(connection)
@@ -173,26 +178,35 @@ public class BrowserDB {
                 }
             }
 
-            // If we failed, move the file and try again. This will probably break things that are already
-            // attached and expecting a working DB, but at least we should be able to restart.
-            if !success {
-                log.debug("Couldn't create or update \(table.name).")
-                log.debug("Attempting to move \(self.FileName) to another location.")
-
-                // Note that a backup file might already exist! We append a counter to avoid this.
-                var bakCounter = 0
-                var bak: String
-                do {
-                    bak = "\(self.FileName).bak.\(++bakCounter)"
-                } while self.files.exists(bak)
-
-                success = self.files.move(self.FileName, toRelativePath: bak)
-                assert(success)
-
-                doCreate(connection)
-            }
             return success
-        })
+        }) {
+            // Err getting a transaction
+            success = false
+        }
+
+        // If we failed, move the file and try again. This will probably break things that are already
+        // attached and expecting a working DB, but at least we should be able to restart.
+        if !success {
+            log.debug("Couldn't create or update \(table.name).")
+            log.debug("Attempting to move \(self.filename) to another location.")
+
+            // Note that a backup file might already exist! We append a counter to avoid this.
+            var bakCounter = 0
+            var bak: String
+            do {
+                bak = "\(self.filename).bak.\(++bakCounter)"
+            } while self.files.exists(bak)
+
+            success = self.files.move(self.filename, toRelativePath: bak)
+            assert(success)
+
+            if let err = db.transaction({ connection -> Bool in
+                doCreate(connection)
+                return success
+            }) {
+                success = false;
+            }
+        }
 
         return success
     }
@@ -201,7 +215,7 @@ public class BrowserDB {
 
     func withConnection<T>(#flags: SwiftData.Flags, inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> T {
         var res: T!
-        db.withConnection(flags) { connection in
+        err = db.withConnection(flags) { connection in
             var err: NSError? = nil
             res = callback(connection: connection, err: &err)
             return err

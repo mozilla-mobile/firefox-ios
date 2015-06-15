@@ -13,7 +13,7 @@ class TestSQLiteHistory: XCTestCase {
     // and then clears the database.
     func testHistoryTable() {
         let files = MockFiles()
-        let db = BrowserDB(files: files)
+        let db = BrowserDB(filename: "browser.db", files: files)
         let history = SQLiteHistory(db: db)
         let bookmarks = SQLiteBookmarks(db: db, favicons: history)
 
@@ -149,7 +149,7 @@ class TestSQLiteHistory: XCTestCase {
 
     func testFaviconTable() {
         let files = MockFiles()
-        let db = BrowserDB(files: files)
+        let db = BrowserDB(filename: "browser.db", files: files)
         let history = SQLiteHistory(db: db)
         let bookmarks = SQLiteBookmarks(db: db, favicons: history)
 
