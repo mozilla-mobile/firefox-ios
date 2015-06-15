@@ -619,6 +619,8 @@ private class SuggestionButton: InsetButton {
         layer.borderWidth = SuggestionBorderWidth
         layer.cornerRadius = SuggestionCornerRadius
         contentEdgeInsets = SuggestionInsets
+
+        accessibilityHint = NSLocalizedString("Searches for the suggestion", comment: "Accessibility hint describing the action performed when a search suggestion is clicked")
     }
 
     required init(coder aDecoder: NSCoder) {

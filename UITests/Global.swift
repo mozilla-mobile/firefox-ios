@@ -5,6 +5,8 @@
 import Foundation
 import WebKit
 
+let LabelAddressAndSearch = "Address and Search"
+
 extension XCTestCase {
     func tester(_ file: String = __FILE__, _ line: Int = __LINE__) -> KIFUITestActor {
         return KIFUITestActor(inFile: file, atLine: line, delegate: self)
@@ -16,6 +18,15 @@ extension XCTestCase {
 }
 
 extension KIFUITestActor {
+    /// Looks for a view with the given accessibility hint.
+    func tryFindingViewWithAccessibilityHint(hint: String) -> Bool {
+        let element = UIApplication.sharedApplication().accessibilityElementMatchingBlock { element in
+            return element.accessibilityHint == hint
+        }
+
+        return element != nil
+    }
+
     /**
      * Finding views by accessibility label doesn't currently work with WKWebView:
      *     https://github.com/kif-framework/KIF/issues/460
