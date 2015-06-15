@@ -16,7 +16,7 @@ public struct AppConstants {
     static let DefaultRowHeight: CGFloat = 58
     static let DefaultPadding: CGFloat = 10
 
-    static let DefaultMediumFontSize: CGFloat = 13
+    static let DefaultMediumFontSize: CGFloat = 14
     static let DefaultMediumFont = UIFont.systemFontOfSize(DefaultMediumFontSize, weight: UIFontWeightRegular)
     static let DefaultMediumBoldFont = UIFont.boldSystemFontOfSize(DefaultMediumFontSize)
     static let DefaultSmallFontSize: CGFloat = 11
