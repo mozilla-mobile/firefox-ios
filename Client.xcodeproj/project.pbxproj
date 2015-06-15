@@ -993,12 +993,26 @@
 			remoteGlobalIDString = DCAE4D151ABE0B3300EFCE7A;
 			remoteInfo = sqlite3;
 		};
-		E6BA70371B2734EE00CE2662 /* PBXContainerItemProxy */ = {
+		E4F099881B2F66B40008FB7B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = D38B2D621A8D976A0040E6B5 /* KIF.xcodeproj */;
+			containerPortal = 0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 9CC9673B1AD4B1B600576D13;
-			remoteInfo = KIFFramework;
+			remoteGlobalIDString = 4A2CADFF1AB4BB5300B6BC39;
+			remoteInfo = WebImage;
+		};
+		E4F0998F1B2F66B40008FB7B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4F099721B2F66B40008FB7B /* sqlcipher.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC046055464E500DB518D;
+			remoteInfo = sqlcipher;
+		};
+		E4F0999A1B2F67210008FB7B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4F099721B2F66B40008FB7B /* sqlcipher.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC045055464E500DB518D;
+			remoteInfo = sqlcipher;
 		};
 		F84B21D41A090F8100AAB793 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1430,6 +1444,7 @@
 		E4E0BB171AFBC9E4008D6260 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4ECCD8C1AB091470005E717 /* Reader.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Reader.xcassets; sourceTree = "<group>"; };
 		E4ECCDAD1AB131770005E717 /* FiraSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Medium.ttf"; sourceTree = "<group>"; };
+		E4F099721B2F66B40008FB7B /* sqlcipher.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = sqlcipher.xcodeproj; path = sqlcipher/sqlcipher.xcodeproj; sourceTree = "<group>"; };
 		E4F21AA51A13C4A300B0FAAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
@@ -1621,6 +1636,7 @@
 				0B6544C21A96C59E000DD202 /* libSDWebImage.a */,
 				0B6544C41A96C59E000DD202 /* libSDWebImage+WebP.a */,
 				0B6544C61A96C59E000DD202 /* libSDWebImage+MKAnnotation.a */,
+				E4F099891B2F66B40008FB7B /* WebImage.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2098,7 +2114,6 @@
 				D38B2D701A8D976A0040E6B5 /* Test Host.app */,
 				D38B2D721A8D976A0040E6B5 /* KIF Tests - XCTest.xctest */,
 				D38B2D741A8D976A0040E6B5 /* KIF Tests-OCUnit.octest */,
-				E6BA70381B2734EE00CE2662 /* KIF.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2315,9 +2330,18 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		E4F099731B2F66B40008FB7B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E4F099901B2F66B40008FB7B /* libsqlcipher.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				E4F099721B2F66B40008FB7B /* sqlcipher.xcodeproj */,
 				2FCAE28F1ABB53AA00877008 /* libsqlite3.dylib */,
 				E4CD9F191A6D9B7B00318571 /* libz.dylib */,
 				D39FA16B1A83E17800EE869C /* CoreGraphics.framework */,
@@ -2724,6 +2748,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E4F0999B1B2F67210008FB7B /* PBXTargetDependency */,
 				2FCAE23C1ABB520700877008 /* PBXTargetDependency */,
 				2FCAE23E1ABB520700877008 /* PBXTargetDependency */,
 			);
@@ -3013,6 +3038,10 @@
 					ProjectRef = 0BA84AB61AE5706F009C4D0C /* SnapKit.xcodeproj */;
 				},
 				{
+					ProductGroup = E4F099731B2F66B40008FB7B /* Products */;
+					ProjectRef = E4F099721B2F66B40008FB7B /* sqlcipher.xcodeproj */;
+				},
+				{
 					ProductGroup = E4D567AB1ADED44A00F1EFE7 /* Products */;
 					ProjectRef = E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */;
 				},
@@ -3277,11 +3306,18 @@
 			remoteRef = E4D567BB1ADED44A00F1EFE7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		E6BA70381B2734EE00CE2662 /* KIF.framework */ = {
+		E4F099891B2F66B40008FB7B /* WebImage.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = KIF.framework;
-			remoteRef = E6BA70371B2734EE00CE2662 /* PBXContainerItemProxy */;
+			path = WebImage.framework;
+			remoteRef = E4F099881B2F66B40008FB7B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E4F099901B2F66B40008FB7B /* libsqlcipher.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libsqlcipher.a;
+			remoteRef = E4F0998F1B2F66B40008FB7B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -4111,6 +4147,11 @@
 			isa = PBXTargetDependency;
 			target = E4D567171ADECE2700F1EFE7 /* ReadingList */;
 			targetProxy = E4D5672D1ADECE2800F1EFE7 /* PBXContainerItemProxy */;
+		};
+		E4F0999B1B2F67210008FB7B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = sqlcipher;
+			targetProxy = E4F0999A1B2F67210008FB7B /* PBXContainerItemProxy */;
 		};
 		F84B21D51A090F8100AAB793 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
