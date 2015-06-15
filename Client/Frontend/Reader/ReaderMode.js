@@ -158,3 +158,11 @@ window.addEventListener('load', function(event) {
         _firefox_ReaderMode.configureReader();
     }
 });
+
+
+window.addEventListener('pageshow', function(event) {
+    // If this is an about:reader page that we are showing, fire an event to the native code
+    if (document.location.href.match(/^http:\/\/localhost:\d+\/reader-mode\/page/)) {
+        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderPageEvent", Value: "PageShow"});
+    }
+});
