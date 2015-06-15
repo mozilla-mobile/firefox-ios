@@ -1371,9 +1371,13 @@ extension BrowserViewController: WKNavigationDelegate {
         if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
             info["visitType"] = visitType
         }
-        notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
 
         if let url = webView.URL {
+            if (ErrorPageHelper.isErrorPageURL(url)) {
+                return
+            }
+            notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
+
             // The screenshot immediately after didFinishNavigation is actually a screenshot of the
             // previous page, presumably due to some iOS bug. Adding a small delay seems to fix this,
             // and the current page gets captured as expected.
