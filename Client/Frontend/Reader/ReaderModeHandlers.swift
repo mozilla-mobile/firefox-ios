@@ -6,8 +6,9 @@ import Foundation
 
 struct ReaderModeHandlers {
     static func register(webServer: WebServer, profile: Profile) {
-        // Register our fonts, which we want to expose to web content that we present in the WebView
+        // Register our fonts and css, which we want to expose to web content that we present in the WebView
         webServer.registerMainBundleResourcesOfType("ttf", module: "reader-mode/fonts")
+        webServer.registerMainBundleResource("Reader.css", module: "reader-mode/styles")
 
         // Register a handler that simply lets us know if a document is in the cache or not. This is called from the
         // reader view interstitial page to find out when it can stop showing the 'Loading...' page and instead load
