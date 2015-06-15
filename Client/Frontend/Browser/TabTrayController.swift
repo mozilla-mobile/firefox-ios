@@ -359,9 +359,9 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
     func cellHeightForCurrentDevice() -> CGFloat {
         if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.Compact {
-            return TabTrayControllerUX.TextBoxHeight * 5
+            return TabTrayControllerUX.TextBoxHeight * 6
         } else if self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClass.Compact {
-            return TabTrayControllerUX.TextBoxHeight * 5
+            return TabTrayControllerUX.TextBoxHeight * 6
         } else {
             return TabTrayControllerUX.TextBoxHeight * 8
         }
