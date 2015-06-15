@@ -141,7 +141,8 @@ var _firefox_ReaderMode = {
     
     configureReader: function() {
         // Configure the reader with the initial style that was injected in the page.
-        _firefox_ReaderMode.setStyle(_firefox_ReaderPage.style);
+        var style = JSON.parse(document.body.getAttribute("data-readerStyle"));
+        _firefox_ReaderMode.setStyle(style);
 
         // The order here is important. Because updateImageMargins depends on contentElement.offsetWidth which
         // will not be set until contentElement is visible. If this leads to annoying content reflowing then we
