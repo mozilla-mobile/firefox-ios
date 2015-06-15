@@ -51,6 +51,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
+        // Force a database upgrade by requesting a non-existent password
+        profile.logins.getLoginsForProtectionSpace(NSURLProtectionSpace(host: "example.com", port: 0, `protocol`: nil, realm: nil, authenticationMethod: nil))
+
+        // check to see if we started cos someone tapped on a notification
+        if let localNotification = launchOptions?[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
+            viewURLInNewTab(localNotification)
+        }
         return true
     }
 
@@ -133,6 +140,57 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         SDWebImageDownloader.sharedDownloader().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
     }
+
+    func application(application: UIApplication, handleActionWithIdentifier identifier: String?, forLocalNotification notification: UILocalNotification, completionHandler: () -> Void) {
+        if let actionId = identifier {
+            if let action = SentTabAction(rawValue: actionId) {
+                viewURLInNewTab(notification)
+                switch(action) {
+                case .Bookmark:
+                    addBookmark(notification)
+                    break
+                case .ReadingList:
+                    addToReadingList(notification)
+                    break
+                default:
+                    break
+                }
+            } else {
+                println("ERROR: Unknown notification action received")
+            }
+        } else {
+            println("ERROR: Unknown notification received")
+        }
+    }
+
+    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+        viewURLInNewTab(notification)
+    }
+
+    private func viewURLInNewTab(notification: UILocalNotification) {
+        if let alertURL = notification.userInfo?[TabSendURLKey] as? String {
+            if let urlToOpen = NSURL(string: alertURL) {
+                browserViewController.openURLInNewTab(urlToOpen)
+            }
+        }
+    }
+
+    private func addBookmark(notification: UILocalNotification) {
+        if let alertURL = notification.userInfo?[TabSendURLKey] as? String,
+            let title = notification.userInfo?[TabSendTitleKey] as? String {
+                browserViewController.addBookmark(alertURL, title: title)
+        }
+    }
+
+    private func addToReadingList(notification: UILocalNotification) {
+        if let alertURL = notification.userInfo?[TabSendURLKey] as? String,
+           let title = notification.userInfo?[TabSendTitleKey] as? String {
+            if let urlToOpen = NSURL(string: alertURL) {
+                NSNotificationCenter.defaultCenter().postNotificationName(FSReadingListAddReadingListItemNotification, object: self, userInfo: ["URL": urlToOpen, "Title": title])
+            }
+        }
+    }
+
 }
 
 extension AppDelegate: UIApplicationDelegate {
