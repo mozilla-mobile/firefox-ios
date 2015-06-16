@@ -22,6 +22,7 @@ private let KVOEstimatedProgress = "estimatedProgress"
 private struct BrowserViewControllerUX {
     private static let ToolbarBaseAnimationDuration: CGFloat = 0.3
     private static let BackgroundColor = AppConstants.AppBackgroundColor
+    private static let ShowHeaderTapAreaHeight: CGFloat = 32
 }
 
 class BrowserViewController: UIViewController {
@@ -49,6 +50,7 @@ class BrowserViewController: UIViewController {
     private var header: UIView!
     private var footer: UIView!
     private var footerBackground: UIView!
+    private var topTouchArea: UIButton!
 
     // Scroll management properties
     private var previousScroll: CGPoint?
@@ -182,6 +184,10 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    func SELtappedTopArea() {
+        showToolbars(animated: true, completion: nil)
+    }
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: BookmarkStatusChangedNotification, object: nil)
@@ -199,6 +205,10 @@ class BrowserViewController: UIViewController {
         statusBarOverlay = UIView()
         statusBarOverlay.backgroundColor = BrowserViewControllerUX.BackgroundColor
         view.addSubview(statusBarOverlay)
+
+        topTouchArea = UIButton()
+        topTouchArea.addTarget(self, action: "SELtappedTopArea", forControlEvents: UIControlEvents.TouchUpInside)
+        view.addSubview(topTouchArea)
 
         // Setup the URL bar, wrapped in a view to get transparency effect
         urlBar = URLBarView()
@@ -261,6 +271,11 @@ class BrowserViewController: UIViewController {
             make.left.right.equalTo(self.view)
             make.height.equalTo(UIApplication.sharedApplication().statusBarFrame.height)
             make.bottom.equalTo(header.snp_top)
+        }
+
+        topTouchArea.snp_remakeConstraints { make in
+            make.top.left.right.equalTo(self.view)
+            make.height.equalTo(BrowserViewControllerUX.ShowHeaderTapAreaHeight)
         }
 
         urlBar.snp_remakeConstraints { make in
@@ -666,6 +681,15 @@ extension BrowserViewController: URLBarDelegate {
             popoverPresentationController.permittedArrowDirections = .Any
         }
         self.presentViewController(longPressAlertController, animated: true, completion: nil)
+    }
+
+    func urlBarDidPressScrollToTop(urlBar: URLBarView) {
+        if let selectedTab = tabManager.selectedTab {
+            // Only scroll to top if we are not showing the home view controller
+            if homePanelController == nil {
+                selectedTab.webView?.scrollView.setContentOffset(CGPointZero, animated: true)
+            }
+        }
     }
 
     func urlBar(urlBar: URLBarView, didEnterText text: String) {
