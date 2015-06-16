@@ -81,13 +81,9 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             slideVerticalScaleFactor = 1.33
         }
 
-        //
-
         for i in 0..<IntroViewControllerUX.NumberOfCards {
             slides.append(UIImage(named: "slide\(i+1)")!)
         }
-
-        //
 
         startBrowsingButton = UIButton()
         startBrowsingButton.backgroundColor = IntroViewControllerUX.StartBrowsingButtonColor
@@ -148,8 +144,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         let introView2 = UIView()
         introViews.append(introView2)
         addLabelsToIntroView(introView2, text: IntroViewControllerUX.Card2Text, title: IntroViewControllerUX.Card2Title)
-//        addBackButtonToIntroView(introView2)
-//        addForwardButtonToIntroView(introView2)
 
         // Card 3
 
@@ -208,7 +202,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
         scrollView.snp_remakeConstraints { (make) -> Void in
             make.left.right.top.equalTo(self.view)
-            make.bottom.equalTo(startBrowsingButton.snp_top)
+            make.bottom.equalTo(self.startBrowsingButton.snp_top)
         }
 
         for i in 0..<IntroViewControllerUX.NumberOfCards {
@@ -384,7 +378,7 @@ private class IntroOverlayScrollView: UIScrollView {
             return !CGRectContainsPoint(convertedFrame, point)
         }
 
-        return true
+        return CGRectContainsPoint(CGRect(origin: self.frame.origin, size: CGSize(width: self.contentSize.width, height: self.frame.size.height)), point)
     }
 }
 
