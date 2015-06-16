@@ -336,6 +336,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         let controller = SettingsNavigationController()
         controller.profile = profile
         controller.tabManager = tabManager
+		controller.modalPresentationStyle = UIModalPresentationStyle.FormSheet
         presentViewController(controller, animated: true, completion: nil)
     }
 
