@@ -1864,12 +1864,19 @@ extension BrowserViewController: IntroViewControllerDelegate {
     func introViewControllerDidFinish(introViewController: IntroViewController) {
         introViewController.dismissViewControllerAnimated(true, completion: nil)
     }
+	
+	func IntroViewControllerDidRequestToLogin(introViewController: IntroViewController)
+	{
+		introViewController.modalPresentationStyle = .FormSheet
+		presentViewController(self, animated: true, completion: nil)
+	}
 
     func presentSignInViewController() {
         // TODO When bug 1161151 has been resolved we can jump directly to the sign in screen
         let settingsNavigationController = SettingsNavigationController()
         settingsNavigationController.profile = self.profile
         settingsNavigationController.tabManager = self.tabManager
+		settingsNavigationController.modalPresentationStyle = .FormSheet
         self.presentViewController(settingsNavigationController, animated: true, completion: nil)
     }
 

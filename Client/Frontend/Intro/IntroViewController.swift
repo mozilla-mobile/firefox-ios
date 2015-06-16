@@ -264,7 +264,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
 
     func SELlogin() {
-        delegate?.introViewControllerDidRequestToLogin(self)
+		delegate?.introViewControllerDidRequestToLogin(self)
     }
 
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
