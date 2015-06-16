@@ -1388,16 +1388,16 @@ extension BrowserViewController: WKNavigationDelegate {
 
         tab.expireSnackbars()
 
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        var info = [NSObject: AnyObject]()
-        info["url"] = tab.displayURL
-        info["title"] = tab.title
-        if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
-            info["visitType"] = visitType
-        }
-        notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
+        if let url = webView.URL where !ErrorPageHelper.isErrorPageURL(url) {
+            let notificationCenter = NSNotificationCenter.defaultCenter()
+            var info = [NSObject: AnyObject]()
+            info["url"] = tab.displayURL
+            info["title"] = tab.title
+            if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
+                info["visitType"] = visitType
+            }
+            notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
 
-        if let url = webView.URL {
             // The screenshot immediately after didFinishNavigation is actually a screenshot of the
             // previous page, presumably due to some iOS bug. Adding a small delay seems to fix this,
             // and the current page gets captured as expected.
