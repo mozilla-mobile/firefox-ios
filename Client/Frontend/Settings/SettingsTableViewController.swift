@@ -120,7 +120,6 @@ private class AccountSetting: Setting, FxAContentViewControllerDelegate {
         settings.tableView.reloadData()
         // And start advancing the Account state in the background as well.
         settings.SELrefresh()
-		//settings.navigationController?.modalPresentationStyle = UIModalPresentationStyle.FormSheet
 
         settings.navigationController?.popToRootViewControllerAnimated(true)
     }
