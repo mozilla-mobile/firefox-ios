@@ -37,6 +37,12 @@ class SearchEngines {
         self.shouldShowSearchSuggestions = prefs.boolForKey(ShowSearchSuggestions) ?? false
         self.disabledEngineNames = getDisabledEngineNames()
         self.orderedEngines = getOrderedEngines()
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELdidResetPrompt:", name: "SearchEnginesPromptReset", object: nil)
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     var defaultEngine: OpenSearchEngine {
@@ -52,6 +58,12 @@ class SearchEngines {
             orderedEngines.insert(defaultEngine, atIndex: 0)
             self.orderedEngines = orderedEngines
         }
+    }
+
+    @objc
+    func SELdidResetPrompt(notification: NSNotification) {
+        self.shouldShowSearchSuggestionsOptIn = true
+        self.shouldShowSearchSuggestions = false
     }
 
     func isEngineDefault(engine: OpenSearchEngine) -> Bool {

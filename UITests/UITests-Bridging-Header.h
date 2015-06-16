@@ -7,6 +7,7 @@
 
 #import <KIF/KIF.h>
 #import <KIF/KIFUITestActor-IdentifierTests.h>
+#import <KIF/UIApplication-KIFAdditions.h>
 #import "GCDWebServer.h"
 #import "GCDWebServerDataResponse.h"
 
