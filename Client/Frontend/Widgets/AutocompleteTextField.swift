@@ -25,6 +25,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private var completionActive = false
     private var enteredTextLength = 0
 
+    var active = false
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         super.delegate = self
@@ -92,8 +94,16 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
     }
 
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        return true
+    }
+
     func textFieldDidBeginEditing(textField: UITextField) {
         autocompleteDelegate?.autocompleteTextFieldDidBeginEditing(self)
+    }
+
+    func textFieldDidEndEditing(textField: UITextField) {
+        active = false
     }
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -142,7 +152,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if !completionActive {
+        if !active || !completionActive {
             super.touchesBegan(touches, withEvent: event)
         } else {
             applyCompletion()
@@ -150,5 +160,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             // Set the current position to the end of the text.
             selectedTextRange = textRangeFromPosition(endOfDocument, toPosition: endOfDocument)
         }
+        active = true
     }
 }
