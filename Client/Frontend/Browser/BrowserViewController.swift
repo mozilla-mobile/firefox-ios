@@ -136,19 +136,10 @@ class BrowserViewController: UIViewController {
         }
 
         if let tab = tabManager.selectedTab {
-            navigationToolbar.updateBackStatus(tab.canGoBack)
-            navigationToolbar.updateForwardStatus(tab.canGoForward)
+            updateNavigationToolbarStates(tab, webView: tab.webView!)
             let isPage = (tab.displayURL != nil) ? isWebPage(tab.displayURL!) : false
             navigationToolbar.updatePageStatus(isWebPage: isPage)
             navigationToolbar.updateReloadStatus(tab.loading ?? false)
-
-            if let url = tab.displayURL?.absoluteString {
-                profile.bookmarks.isBookmarked(url, success: { bookmarked in
-                    self.navigationToolbar.updateBookmarkStatus(bookmarked)
-                }, failure: { err in
-                    log.error("Error getting bookmark status: \(err).")
-                })
-            }
         }
     }
 

@@ -96,6 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ReaderModeHandlers.register(server, profile: profile)
         ErrorPageHelper.register(server)
         AboutHomeHandler.register(server)
+        SessionRestoreHandler.register(server)
         server.start()
     }
 
