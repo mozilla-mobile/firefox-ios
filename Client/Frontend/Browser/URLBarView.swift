@@ -591,17 +591,20 @@ extension URLBarView: AutocompleteTextFieldDelegate {
 private let ASPECT_RATIO = 0.729
 
 // Width multipliers
-private let W_M1 = 0.343
-private let W_M2 = 0.514
-private let W_M3 = 0.49
-private let W_M4 = 0.545
-private let W_M5 = 0.723
+private let W_M2 = 0.4317
+private let W_M1 = 0.5163
+private let W_M3 = 0.4830
+private let W_M4 = 1.0
+private let W_M5 = 0.568
+private let W_M6 = 0.7092
 
 // Height multipliers
-private let H_M1 = 0.25
-private let H_M2 = 0.5
-private let H_M3 = 0.72
-private let H_M4 = 0.961
+private let H_M2 = 0.06
+private let H_M1 = 0.54
+private let H_M3 = 0.37
+private let H_M4 = 1.0
+private let H_M5 = 0.818
+private let H_M6 = 0.961
 
 /* Code for drawing the urlbar curve */
 private class CurveView: UIView {
@@ -630,13 +633,13 @@ private class CurveView: UIView {
         var from = (Double(self.frame.width) - width * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(0))
 
         path.moveToPoint(CGPoint(x: from.0, y: from.1))
-        path.addCurveToPoint(CGPoint(x: from.0 + width * W_M2, y: from.1 + height * H_M2),
-              controlPoint1: CGPoint(x: from.0 + width * W_M1, y: from.1),
-              controlPoint2: CGPoint(x: from.0 + width * W_M3, y: from.1 + height * H_M1))
+        path.addCurveToPoint(CGPoint(x: from.0 + width * W_M1, y: from.1 + height * H_M1),
+              controlPoint1: CGPoint(x: from.0 + width * W_M2, y: from.1 + height * H_M2),
+              controlPoint2: CGPoint(x: from.0 + width * W_M3, y: from.1 + height * H_M3))
 
-        path.addCurveToPoint(CGPoint(x: from.0 + width,        y: from.1 + height),
-              controlPoint1: CGPoint(x: from.0 + width * W_M4, y: from.1 + height * H_M3),
-              controlPoint2: CGPoint(x: from.0 + width * W_M5, y: from.1 + height * H_M4))
+        path.addCurveToPoint(CGPoint(x: from.0 + width * W_M4, y: from.1 + height * H_M4),
+              controlPoint1: CGPoint(x: from.0 + width * W_M5, y: from.1 + height * H_M5),
+              controlPoint2: CGPoint(x: from.0 + width * W_M6, y: from.1 + height * H_M6))
     }
 
     private func getPath() -> UIBezierPath {
