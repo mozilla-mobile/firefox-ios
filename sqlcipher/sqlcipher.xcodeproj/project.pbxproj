@@ -198,14 +198,14 @@
 				OTHER_CFLAGS = (
 					"-DSQLITE_HAS_CODEC",
 					"-DSQLITE_TEMP_STORE=2",
-					"-DSQLITE_THREADSAFE",
+					"-DSQLITE_THREADSAFE=2",
 					"-DSQLCIPHER_CRYPTO_CC",
 				);
 				"OTHER_CFLAGS[arch=armv6]" = (
 					"-mno-thumb",
 					"-DSQLITE_HAS_CODEC",
 					"-DSQLITE_TEMP_STORE=2",
-					"-DSQLITE_THREADSAFE",
+					"-DSQLITE_THREADSAFE=2",
 					"-DSQLCIPHER_CRYPTO_CC",
 				);
 				OTHER_LDFLAGS = "";
@@ -227,7 +227,7 @@
 					"-DNDEBUG",
 					"-DSQLITE_OS_UNIX=1",
 					"-DSQLITE_TEMP_STORE=2",
-					"-DSQLITE_THREADSAFE",
+					"-DSQLITE_THREADSAFE=2",
 					"-DSQLCIPHER_CRYPTO_CC",
 				);
 				"OTHER_CFLAGS[arch=armv6]" = (
@@ -236,7 +236,7 @@
 					"-DNDEBUG",
 					"-DSQLITE_OS_UNIX=1",
 					"-DSQLITE_TEMP_STORE=2",
-					"-DSQLITE_THREADSAFE",
+					"-DSQLITE_THREADSAFE=2",
 					"-DSQLCIPHER_CRYPTO_CC",
 				);
 				OTHER_LDFLAGS = "";
