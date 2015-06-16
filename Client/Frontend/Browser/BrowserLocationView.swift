@@ -77,6 +77,7 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
                     editTextField.resignFirstResponder()
             }
             readerModeButton.hidden = active
+            setNeedsUpdateConstraints()
         }
     }
 
@@ -197,22 +198,6 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         }
     }
 
-    func showLockImage(show: Bool) {
-        // I know this could be written show == lockImageView.hidden but this made the code more semantically meaningful
-        let isVisible = !lockImageView.hidden
-        if show != isVisible {
-            if show {
-                editTextField.textRectInset.horizontal += lockImageView.bounds.width
-                editTextField.editingRectInset.horizontal += lockImageView.bounds.width
-            }
-            else {
-                editTextField.textRectInset.horizontal -= lockImageView.bounds.width
-                editTextField.editingRectInset.horizontal -= lockImageView.bounds.width
-            }
-        }
-        lockImageView.hidden = !show
-    }
-
     var readerModeState: ReaderModeState {
         get {
             return readerModeButton.readerModeState
@@ -220,8 +205,8 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         set (newReaderModeState) {
             if newReaderModeState != self.readerModeButton.readerModeState {
                 self.readerModeButton.readerModeState = newReaderModeState
-                setNeedsUpdateConstraints()
                 readerModeButton.hidden = (newReaderModeState == ReaderModeState.Unavailable)
+                setNeedsUpdateConstraints()
                 UIView.animateWithDuration(0.1, animations: { () -> Void in
                     if newReaderModeState == ReaderModeState.Unavailable {
                         self.readerModeButton.alpha = 0.0
