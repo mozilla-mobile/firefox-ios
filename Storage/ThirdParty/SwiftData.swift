@@ -323,6 +323,7 @@ public class SQLiteDBConnection {
         if status != SQLITE_OK {
             return createErr("During: Opening Database with Flags", status: Int(status))
         }
+        sqlite3_key(sqliteDB, "key", 3)
         return nil
     }
 
