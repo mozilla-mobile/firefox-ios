@@ -36,4 +36,13 @@ extension NSURL {
         return results
     }
 
+    public var hostPort: String? {
+        if let host = self.host {
+            if let port = self.port?.intValue {
+                return "\(host):\(port)"
+            }
+            return host
+        }
+        return nil
+    }
 }
