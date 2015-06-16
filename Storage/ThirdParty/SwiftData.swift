@@ -356,14 +356,14 @@ public class SQLiteDBConnection {
         var msg = SDError.errorMessageFromCode(status)
 
         if (debug_enabled) {
-            println("SwiftData Error -> \(description)")
-            println("                -> Code: \(status) - \(msg)")
+            log.debug("SwiftData Error -> \(description)")
+            log.debug("                -> Code: \(status) - \(msg)")
         }
 
         if let errMsg = String.fromCString(sqlite3_errmsg(sqliteDB)) {
             msg += " " + errMsg
             if (debug_enabled) {
-                println("                -> Details: \(errMsg)")
+                log.debug("                -> Details: \(errMsg)")
             }
         }
 
@@ -397,7 +397,7 @@ public class SQLiteDBConnection {
         var error: NSError?
         let statement = SQLiteDBStatement(connection: self, query: sqlStr, args: args, error: &error)
         if let error = error {
-            println("SQL error: \(error.localizedDescription) for SQL \(sqlStr).")
+            log.error("SQL error: \(error.localizedDescription) for SQL \(sqlStr).")
             statement?.close()
             return error
         }
@@ -494,7 +494,7 @@ class SDRow: SequenceType {
         case SQLITE_FLOAT:
             ret = Double(sqlite3_column_double(statement.pointer, i))
         default:
-            println("SwiftData Warning -> Column: \(index) is of an unrecognized type, returning nil")
+            log.warning("SwiftData Warning -> Column: \(index) is of an unrecognized type, returning nil")
         }
 
         return ret
