@@ -141,7 +141,8 @@ var _firefox_ReaderMode = {
     
     configureReader: function() {
         // Configure the reader with the initial style that was injected in the page.
-        _firefox_ReaderMode.setStyle(_firefox_ReaderPage.style);
+        var style = JSON.parse(document.body.getAttribute("data-readerStyle"));
+        _firefox_ReaderMode.setStyle(style);
 
         // The order here is important. Because updateImageMargins depends on contentElement.offsetWidth which
         // will not be set until contentElement is visible. If this leads to annoying content reflowing then we
@@ -155,5 +156,13 @@ window.addEventListener('load', function(event) {
     // If this is an about:reader page that we are loading, apply the initial style to the page.
     if (document.location.href.match(/^http:\/\/localhost:\d+\/reader-mode\/page/)) {
         _firefox_ReaderMode.configureReader();
+    }
+});
+
+
+window.addEventListener('pageshow', function(event) {
+    // If this is an about:reader page that we are showing, fire an event to the native code
+    if (document.location.href.match(/^http:\/\/localhost:\d+\/reader-mode\/page/)) {
+        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderPageEvent", Value: "PageShow"});
     }
 });

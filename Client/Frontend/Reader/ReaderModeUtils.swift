@@ -43,9 +43,6 @@ struct ReaderModeUtils {
                         tmpl.replaceOccurrencesOfString("%READER-CONTENT%", withString: readabilityResult.content,
                             options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
 
-                        tmpl.replaceOccurrencesOfString("%WEBSERVER-BASE%", withString: WebServer.sharedInstance.base,
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
-
                         return tmpl as String
                     }
                 }

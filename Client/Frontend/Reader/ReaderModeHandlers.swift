@@ -6,8 +6,9 @@ import Foundation
 
 struct ReaderModeHandlers {
     static func register(webServer: WebServer, profile: Profile) {
-        // Register our fonts, which we want to expose to web content that we present in the WebView
+        // Register our fonts and css, which we want to expose to web content that we present in the WebView
         webServer.registerMainBundleResourcesOfType("ttf", module: "reader-mode/fonts")
+        webServer.registerMainBundleResource("Reader.css", module: "reader-mode/styles")
 
         // Register a handler that simply lets us know if a document is in the cache or not. This is called from the
         // reader view interstitial page to find out when it can stop showing the 'Loading...' page and instead load
@@ -39,7 +40,10 @@ struct ReaderModeHandlers {
                             }
                         }
                         if let html = ReaderModeUtils.generateReaderContent(readabilityResult, initialStyle: readerModeStyle) {
-                            return GCDWebServerDataResponse(HTML: html)
+                            let response = GCDWebServerDataResponse(HTML: html)
+                            // Apply a Content Security Policy that disallows everything except images from anywhere and fonts and css from our internal server
+                            response.setValue("default-src 'none'; img-src *; style-src http://localhost:*; font-src http://localhost:*", forAdditionalHeader: "Content-Security-Policy")
+                            return response
                         }
                     } else {
                         // This page has not been converted to reader mode yet. This happens when you for example add an

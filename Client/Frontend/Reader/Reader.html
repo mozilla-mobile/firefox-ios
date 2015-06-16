@@ -7,14 +7,11 @@
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=.25, maximum-scale=1.6, initial-scale=1.0">
-  <style type="text/css">
-    %READER-CSS%
-  </style>
-  <script type="text/javascript">var _firefox_ReaderPage = { style: %READER-STYLE%, webServerBase: "%WEBSERVER-BASE%" };</script>
+  <link rel="stylesheet" type="text/css" href="/reader-mode/styles/Reader.css">
   <title>%READER-TITLE%</title>
 </head>
 
-<body>
+<body data-readerStyle='%READER-STYLE%'>
   <div id="reader-header" class="header">
     <h1 id="reader-title">%READER-TITLE%</h1>
     <div id="reader-credits" class="credits">%READER-CREDITS%</div>
@@ -44,11 +41,5 @@
   </ul>
 
 </body>
-
-<script type="text/javascript">
-window.addEventListener('pageshow', function(event) {
-    webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderPageEvent", Value: "PageShow"});
-});
-</script>
 
 </html>
