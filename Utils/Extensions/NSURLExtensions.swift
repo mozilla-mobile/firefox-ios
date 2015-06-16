@@ -87,6 +87,16 @@ extension NSURL {
         return results
     }
 
+    public var hostPort: String? {
+        if let host = self.host {
+            if let port = self.port?.intValue {
+                return "\(host):\(port)"
+            }
+            return host
+        }
+        return nil
+    }
+
     public func absoluteStringWithoutHTTPScheme() -> String? {
         if let urlString = self.absoluteString {
             // If it's basic http, strip out the string but leave anything else in
