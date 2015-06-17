@@ -375,7 +375,9 @@ private class IntroOverlayScrollView: UIScrollView {
     private override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
         if let signinFrame = signinButton?.frame {
             let convertedFrame = convertRect(signinFrame, fromView: signinButton?.superview)
-            return !CGRectContainsPoint(convertedFrame, point)
+            if CGRectContainsPoint(convertedFrame, point) {
+                return false
+            }
         }
 
         return CGRectContainsPoint(CGRect(origin: self.frame.origin, size: CGSize(width: self.contentSize.width, height: self.frame.size.height)), point)
