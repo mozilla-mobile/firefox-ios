@@ -14,7 +14,7 @@ let AllLoginTables: Args = [TableLoginsMirror, TableLoginsLocal]
 
 private class LoginsTable: Table {
     var name: String { return "LOGINS" }
-    var version: Int { return 2 }
+    var version: Int { return 3 }
 
     func run(db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
         let err = db.executeChange(sql, withArgs: args)
@@ -45,6 +45,7 @@ private class LoginsTable: Table {
         ", formSubmitURL TEXT" +
         ", usernameField TEXT" +
         ", passwordField TEXT" +
+        ", timesUsed INTEGER NOT NULL DEFAULT 0" +
         ", timeCreated INTEGER NOT NULL" +
         ", timeLastUsed INTEGER" +
         ", timePasswordChanged INTEGER NOT NULL" +
@@ -125,10 +126,12 @@ public class SQLiteLogins: BrowserLogins {
 
         if let timeCreated = row.getTimestamp("timeCreated"),
             let timeLastUsed = row.getTimestamp("timeLastUsed"),
-            let timePasswordChanged = row.getTimestamp("timePasswordChanged") {
+            let timePasswordChanged = row.getTimestamp("timePasswordChanged"),
+            let timesUsed = row["timesUsed"] as? Int {
                 login.timeCreated = timeCreated
                 login.timeLastUsed = timeLastUsed
                 login.timePasswordChanged = timePasswordChanged
+                login.timesUsed = timesUsed
         }
     }
 
@@ -179,8 +182,8 @@ public class SQLiteLogins: BrowserLogins {
     }
 
     private static let MainColumns = "guid, username, password, hostname, httpRealm, formSubmitURL, usernameField, passwordField"
-    private static let MainWithLastUsedColumns = MainColumns + ", timeLastUsed"
-    private static let LoginColumns = MainColumns + ", timeCreated, timeLastUsed, timePasswordChanged"
+    private static let MainWithLastUsedColumns = MainColumns + ", timeLastUsed, timesUsed"
+    private static let LoginColumns = MainColumns + ", timeCreated, timeLastUsed, timePasswordChanged, timesUsed"
 
     public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Result<Cursor<LoginData>>> {
         let projection = SQLiteLogins.MainWithLastUsedColumns
@@ -272,6 +275,7 @@ public class SQLiteLogins: BrowserLogins {
         ", timeCreated" +
         ", timeLastUsed" +
         ", timePasswordChanged" +
+        ", timesUsed" +
         ", username" +
         ", password " +
 
@@ -281,7 +285,7 @@ public class SQLiteLogins: BrowserLogins {
         ", is_deleted " +
         ", should_upload " +
         ") " +
-        "VALUES (?,?,?,?,?,?,?,?,?,?, " +
+        "VALUES (?,?,?,?,?,?,?,?, 1, ?,?, " +
         "?, ?, 0, 1" +         // Metadata.
         ")"
 
@@ -299,6 +303,7 @@ public class SQLiteLogins: BrowserLogins {
         ", timeCreated" +
         ", timeLastUsed" +
         ", timePasswordChanged" +
+        ", timesUsed" +
         ", username" +
         ", password "
 
@@ -354,7 +359,7 @@ public class SQLiteLogins: BrowserLogins {
     public func addUseOfLoginByGUID(guid: GUID) -> Success {
         let sql =
         "UPDATE \(TableLoginsLocal) SET " +
-        "timeLastUsed = ?, local_modified = ? " +
+        "timesUsed = timesUsed + 1, timeLastUsed = ?, local_modified = ? " +
         "WHERE guid = ? AND is_deleted = 0"
 
         // For now, mere use is not enough to flip should_upload.
@@ -563,6 +568,7 @@ extension SQLiteLogins: SyncableLogins {
             login.formSubmitURL,
             login.usernameField,
             login.passwordField,
+            login.timesUsed,
             NSNumber(unsignedLongLong: login.timeLastUsed),            // TODO: are these the right format?
             NSNumber(unsignedLongLong: login.timePasswordChanged),
             NSNumber(unsignedLongLong: login.timeCreated),
@@ -584,7 +590,7 @@ extension SQLiteLogins: SyncableLogins {
         "UPDATE \(TableLoginsMirror) SET " +
         " server_modified = ?" +
         ", httpRealm = ?, formSubmitURL = ?, usernameField = ?" +
-        ", passwordField = ?, timeLastUsed = ?, timePasswordChanged = ?, timeCreated = ?" +
+        ", passwordField = ?, timesUsed = ?, timeLastUsed = ?, timePasswordChanged = ?, timeCreated = ?" +
         ", password = ?, hostname = ?, username = ?" +
         " WHERE guid = ?"
 
@@ -601,9 +607,9 @@ extension SQLiteLogins: SyncableLogins {
         "INSERT OR IGNORE INTO \(TableLoginsMirror) (" +
             " is_overridden, server_modified" +
             ", httpRealm, formSubmitURL, usernameField" +
-            ", passwordField, timeLastUsed, timePasswordChanged, timeCreated" +
+            ", passwordField, timesUsed, timeLastUsed, timePasswordChanged, timeCreated" +
             ", password, hostname, username, guid" +
-        ") VALUES (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        ") VALUES (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
         return self.db.run(sql, withArgs: args)
     }
