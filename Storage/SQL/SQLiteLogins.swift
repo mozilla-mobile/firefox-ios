@@ -12,9 +12,20 @@ let TableLoginsMirror = "loginsM"
 let TableLoginsLocal = "loginsL"
 let AllLoginTables: Args = [TableLoginsMirror, TableLoginsLocal]
 
+enum SyncStatus: Int {
+    // Ordinarily not needed; synced items are removed from the overlay. But they start here when cloned.
+    case Synced = 0
+
+    // A material change that we want to upload on next sync.
+    case Changed = 1
+
+    // Created locally.
+    case New = 2
+}
+
 private class LoginsTable: Table {
     var name: String { return "LOGINS" }
-    var version: Int { return 1 }
+    var version: Int { return 2 }
 
     func run(db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
         let err = db.executeChange(sql, withArgs: args)
@@ -64,7 +75,8 @@ private class LoginsTable: Table {
             ", guid TEXT NOT NULL UNIQUE " +                  // Typically overlaps one in the mirror unless locally new.
             ", local_modified INTEGER" +                      // Can be null. Client clock. In extremis only.
             ", is_deleted TINYINT NOT NULL DEFAULT 0" +       // Boolean. Locally deleted.
-            ", should_upload TINYINT NOT NULL DEFAULT 0" +    // Boolean. Set when changed or created.
+            ", sync_status TINYINT " +                        // SyncStatus enum. Set when changed or created.
+            "NOT NULL DEFAULT \(SyncStatus.Synced.rawValue)" +
         ")"
 
         return self.run(db, queries: [mirror, local])
@@ -105,7 +117,7 @@ class MirrorLogin: Login {
 }
 
 class LocalLogin: Login {
-    var shouldUpload: Bool = false
+    var syncStatus: SyncStatus = .Synced
     var isDeleted: Bool = false
     var localModified: Timestamp = 0
 }
@@ -155,7 +167,7 @@ public class SQLiteLogins: BrowserLogins {
 
         login.localModified = row.getTimestamp("local_modified")!
         login.isDeleted = row.getBoolean("is_deleted")
-        login.shouldUpload = row.getBoolean("should_upload")
+        login.syncStatus = SyncStatus(rawValue: row["sync_status"] as! Int)!
 
         return login
     }
@@ -284,10 +296,10 @@ public class SQLiteLogins: BrowserLogins {
         ", guid " +
         ", local_modified " +
         ", is_deleted " +
-        ", should_upload " +
+        ", sync_status " +
         ") " +
         "VALUES (?,?,?,?,?,?,?,?, 1, ?,?, " +
-        "?, ?, 0, 1" +         // Metadata.
+        "?, ?, 0, \(SyncStatus.New.rawValue)" +         // Metadata.
         ")"
 
         return db.run(sql, withArgs: args)
@@ -311,11 +323,11 @@ public class SQLiteLogins: BrowserLogins {
         let local =
         ", local_modified " +
         ", is_deleted " +
-        ", should_upload "
+        ", sync_status "
 
         let sql = "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
         "(\(shared)\(local)) " +
-        "SELECT \(shared), NULL AS local_modified, 0 AS is_deleted, 0 AS should_upload " +
+        "SELECT \(shared), NULL AS local_modified, 0 AS is_deleted, 0 AS sync_status " +
         "FROM \(TableLoginsMirror) WHERE guid = ?"
 
         let args: Args = [guid]
@@ -363,7 +375,7 @@ public class SQLiteLogins: BrowserLogins {
         "timesUsed = timesUsed + 1, timeLastUsed = ?, local_modified = ? " +
         "WHERE guid = ? AND is_deleted = 0"
 
-        // For now, mere use is not enough to flip should_upload.
+        // For now, mere use is not enough to flip sync_status to Changed.
 
         let nowMicro = NSDate.nowMicroseconds()
         let nowMilli = nowMicro / 1000
@@ -404,7 +416,10 @@ public class SQLiteLogins: BrowserLogins {
         ", httpRealm = ?, formSubmitURL = ?, usernameField = ?" +
         ", passwordField = ?, timeLastUsed = ?, timePasswordChanged = ?, password = ?" +
         ", hostname = ?, username = ?" +
-        (significant ? ", should_upload = 1 " : "") +
+
+        // We keep rows marked as New in preference to marking them as changed. This allows us to
+        // delete them immediately if they don't reach the server.
+        (significant ? ", sync_status = max(sync_status, 1) " : "") +
         " WHERE guid = ?"
 
         return self.ensureLocalOverlayExistsForGUID(guid)
@@ -415,39 +430,58 @@ public class SQLiteLogins: BrowserLogins {
     public func removeLoginByGUID(guid: GUID) -> Success {
         let nowMillis = NSDate.now()
 
+        // Immediately delete anything that's marked as new -- i.e., it's never reached
+        // the server.
+        let delete =
+        "DELETE FROM \(TableLoginsLocal) WHERE guid = ? AND sync_status = \(SyncStatus.New.rawValue)"
+
+        // Otherwise, mark it as changed.
         let update =
-        "UPDATE \(TableLoginsLocal) SET local_modified = \(nowMillis), should_upload = 1, is_deleted = 1, password = '', hostname = '', username = '' WHERE guid = ?"
+        "UPDATE \(TableLoginsLocal) SET " +
+        " local_modified = \(nowMillis)" +
+        ", sync_status = \(SyncStatus.Changed.rawValue)" +
+        ", is_deleted = 1" +
+        ", password = ''" +
+        ", hostname = ''" +
+        ", username = ''" +
+        " WHERE guid = ?"
 
         let insert =
-        "INSERT OR IGNORE INTO \(TableLoginsLocal) (guid, local_modified, is_deleted, should_upload, hostname, timeCreated, timePasswordChanged, password, username) " +
-        "SELECT guid, \(nowMillis), 1, 1, '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid = ?"
+        "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
+        "(guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
+        "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror) WHERE guid = ?"
 
         let args: Args = [guid]
 
-        return self.db.run(update, withArgs: args)
+        return self.db.run(delete, withArgs: args)
+           >>> { self.db.run(update, withArgs: args) }
            >>> { self.markMirrorAsOverridden(guid) }
            >>> { self.db.run(insert, withArgs: args) }
     }
 
 
     public func removeAll() -> Success {
-        // TODO: don't bother if Sync isn't set up!
+        // Immediately delete anything that's marked as new -- i.e., it's never reached
+        // the server. If Sync isn't set up, this will be everything.
+        let delete =
+        "DELETE FROM \(TableLoginsLocal) WHERE sync_status = \(SyncStatus.New.rawValue)"
 
         let nowMillis = NSDate.now()
 
         // Mark anything we haven't already deleted.
         let update =
-        "UPDATE \(TableLoginsLocal) SET local_modified = \(nowMillis), should_upload = 1, is_deleted = 1, password = '', hostname = '', username = '' WHERE is_deleted = 0"
+        "UPDATE \(TableLoginsLocal) SET local_modified = \(nowMillis), sync_status = \(SyncStatus.Changed.rawValue), is_deleted = 1, password = '', hostname = '', username = '' WHERE is_deleted = 0"
 
         // Copy all the remaining rows from our mirror, marking them as locally deleted. The
         // OR IGNORE will cause conflicts due to non-unique guids to be dropped, preserving
         // anything we already deleted.
         let insert =
-        "INSERT OR IGNORE INTO \(TableLoginsLocal) (guid, local_modified, is_deleted, should_upload, hostname, timeCreated, timePasswordChanged, password, username) " +
-        "SELECT guid, \(nowMillis), 1, 1, '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror)"
+        "INSERT OR IGNORE INTO \(TableLoginsLocal) (guid, local_modified, is_deleted, sync_status, hostname, timeCreated, timePasswordChanged, password, username) " +
+        "SELECT guid, \(nowMillis), 1, \(SyncStatus.Changed.rawValue), '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror)"
 
         // After that, we mark all of the mirror rows as overridden.
-        return self.db.run(update)
+        return self.db.run(delete)
+           >>> { self.db.run(update) }
            >>> { self.db.run("UPDATE \(TableLoginsMirror) SET is_overridden = 1") }
            >>> { self.db.run(insert) }
     }
