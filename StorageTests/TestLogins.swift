@@ -272,8 +272,8 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertTrue(mirrorUsed!.isOverridden)                // It's now overridden.
         XCTAssertEqual(mirrorUsed!.serverModified, Timestamp(2234), "Timestamp is new.")
 
-        XCTAssertTrue(localUsed!.localModified >= preUse)      // Local record is modified.
-        XCTAssertFalse(localUsed!.shouldUpload)                // Uses aren't enough to warrant upload.
+        XCTAssertTrue(localUsed!.localModified >= preUse)         // Local record is modified.
+        XCTAssertEqual(localUsed!.syncStatus, SyncStatus.Synced)  // Uses aren't enough to warrant upload.
 
         // Uses are local until reconciled.
         XCTAssertEqual(localUsed!.timesUsed, 5)
@@ -297,7 +297,7 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(localAltered!.password, "yupyup")
         XCTAssertEqual(localAltered!.formSubmitURL!, "http://example.com/form2/")
         XCTAssertTrue(localAltered!.localModified >= preUpdate)
-        XCTAssertTrue(localAltered!.shouldUpload)                // Changes are enough to warrant upload.
+        XCTAssertEqual(localAltered!.syncStatus, SyncStatus.Changed)              // Changes are enough to warrant upload.
         XCTAssertEqual(localAltered!.timesUsed, 5)
         XCTAssertEqual(mirrorAltered!.timesUsed, 4)
     }
