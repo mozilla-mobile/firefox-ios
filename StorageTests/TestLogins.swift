@@ -213,6 +213,33 @@ class TestSyncableLogins: XCTestCase {
         XCTAssert(!loginA1.significantlyDiffersFrom(loginA2))
     }
 
+    func testLocalNewStaysNewAndIsRemoved() {
+        let guidA = "abcdabcdabcd"
+        var loginA1 = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "password")
+        loginA1.formSubmitURL = "http://example.com/form/"
+        loginA1.timesUsed = 1
+        XCTAssertTrue((self.logins as BrowserLogins).addLogin(loginA1).value.isSuccess)
+
+        let local1 = self.logins.getExistingLocalRecordByGUID(guidA).value.successValue!
+        XCTAssertNotNil(local1)
+        XCTAssertEqual(local1!.guid, guidA)
+        XCTAssertEqual(local1!.syncStatus, SyncStatus.New)
+        XCTAssertEqual(local1!.timesUsed, 1)
+
+        XCTAssertTrue(self.logins.addUseOfLoginByGUID(guidA).value.isSuccess)
+
+        // It's still new.
+        let local2 = self.logins.getExistingLocalRecordByGUID(guidA).value.successValue!
+        XCTAssertNotNil(local2)
+        XCTAssertEqual(local2!.guid, guidA)
+        XCTAssertEqual(local2!.syncStatus, SyncStatus.New)
+        XCTAssertEqual(local2!.timesUsed, 2)
+
+        // It's removed immediately, because it was never synced.
+        XCTAssertTrue((self.logins as BrowserLogins).removeLoginByGUID(guidA).value.isSuccess)
+        XCTAssertNil(self.logins.getExistingLocalRecordByGUID(guidA).value.successValue!)
+    }
+
     func testApplyLogin() {
         let guidA = "abcdabcdabcd"
         var loginA1 = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "password")
