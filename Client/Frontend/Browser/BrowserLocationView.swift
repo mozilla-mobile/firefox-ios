@@ -76,8 +76,6 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
                 && editTextField.isFirstResponder() {
                     editTextField.resignFirstResponder()
             }
-            readerModeButton.hidden = active
-            setNeedsUpdateConstraints()
         }
     }
 
@@ -206,13 +204,13 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
             if newReaderModeState != self.readerModeButton.readerModeState {
                 self.readerModeButton.readerModeState = newReaderModeState
                 readerModeButton.hidden = (newReaderModeState == ReaderModeState.Unavailable)
-                setNeedsUpdateConstraints()
                 UIView.animateWithDuration(0.1, animations: { () -> Void in
                     if newReaderModeState == ReaderModeState.Unavailable {
                         self.readerModeButton.alpha = 0.0
                     } else {
                         self.readerModeButton.alpha = 1.0
                     }
+                    self.setNeedsUpdateConstraints()
                     self.layoutIfNeeded()
                 })
             }
