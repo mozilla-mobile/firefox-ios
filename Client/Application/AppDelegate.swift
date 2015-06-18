@@ -10,6 +10,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
     weak var profile: BrowserProfile?
+    var tabManager: TabManager!
 
     let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
@@ -32,9 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.backgroundColor = UIColor.whiteColor()
 
         let defaultRequest = NSURLRequest(URL: AppConstants.AboutHomeURL)
-        let tabManager = TabManager(defaultNewTabRequest: defaultRequest, prefs: profile.prefs)
-
-        browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
+        self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, prefs: profile.prefs)
+        browserViewController = BrowserViewController(profile: profile, tabManager: self.tabManager)
 
         // Add restoration class, the factory that will return the ViewController we 
         // will restore with.
@@ -83,6 +83,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         self.window!.makeKeyAndVisible()
         return true
+    }
+
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+        if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) where components.scheme == "firefox" && components.host == "open-url" {
+            if let query = components.query, item = components.queryItems?.first as? NSURLQueryItem {
+                if item.name == "url" && item.value != nil {
+                    if let newURL = NSURL(string: item.value!) {
+                        let tab = self.tabManager.addTab(request: NSURLRequest(URL: newURL))
+                        self.tabManager.selectTab(tab)
+                        return true
+                    }
+                }
+            }
+        }
+        return false
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
