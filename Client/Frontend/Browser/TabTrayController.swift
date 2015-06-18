@@ -24,7 +24,6 @@ private struct TabTrayControllerUX {
     static let NumberOfColumnsThin = 1
     static let NumberOfColumnsWide = 3
     static let CompactNumberOfColumnsThin = 2
-    static let CompactNumberOfColumnsWide = 4
 
     // Moved from AppConstants temporarily until animation code is merged
     static var StatusBarHeight: CGFloat {
@@ -108,23 +107,25 @@ private class CustomCell: UICollectionViewCell {
         self.animator = SwipeAnimator(animatingView: self.backgroundHolder, container: self)
         self.closeButton.addTarget(self.animator, action: "SELcloseWithoutGesture", forControlEvents: UIControlEvents.TouchUpInside)
 
+        contentView.addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.background)
-        addSubview(backgroundHolder)
         backgroundHolder.addSubview(innerStroke)
         backgroundHolder.addSubview(self.title)
-
-        self.titleText.addObserver(self, forKeyPath: "contentSize", options: .New, context: nil)
-        setupFrames()
 
         self.accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: NSLocalizedString("Close", comment: "Accessibility label for action denoting closing a tab in tab list (tray)"), target: self.animator, selector: "SELcloseWithoutGesture")
         ]
     }
 
-    func setupFrames() {
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private override func layoutSubviews() {
+        super.layoutSubviews()
+
         let w = frame.width
         let h = frame.height
-
         backgroundHolder.frame = CGRect(x: margin,
             y: margin,
             width: w,
@@ -154,31 +155,14 @@ private class CustomCell: UICollectionViewCell {
             make.trailing.centerY.equalTo(title)
         }
 
-        verticalCenter(titleText)
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        self.titleText.removeObserver(self, forKeyPath: "contentSize")
-    }
-
-    private override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject: AnyObject], context: UnsafeMutablePointer<Void>) {
-        let tv = object as! UILabel
-        verticalCenter(tv)
+        var top = (TabTrayControllerUX.TextBoxHeight - titleText.bounds.height) / 2.0
+        titleText.frame.origin = CGPoint(x: titleText.frame.origin.x, y: max(0, top))
     }
 
     private override func prepareForReuse() {
         // Reset any close animations.
         backgroundHolder.transform = CGAffineTransformIdentity
         backgroundHolder.alpha = 1
-    }
-
-    private func verticalCenter(text: UILabel) {
-        var top = (TabTrayControllerUX.TextBoxHeight - text.bounds.height) / 2.0
-        text.frame.origin = CGPoint(x: text.frame.origin.x, y: max(0, top))
     }
 
     func showFullscreen(container: UIView, table: UICollectionView, shouldOffset: Bool) {
@@ -190,8 +174,6 @@ private class CustomCell: UICollectionViewCell {
                         height: container.frame.height - (AppConstants.ToolbarHeight * offset + TabTrayControllerUX.StatusBarHeight))
 
         container.insertSubview(self, atIndex: container.subviews.count)
-        setupFrames()
-
     }
 
     func showAt(index: Int, container: UIView, table: UICollectionView) {
@@ -209,7 +191,6 @@ private class CustomCell: UICollectionViewCell {
         }
 
         container.insertSubview(self, atIndex: container.subviews.count)
-        setupFrames()
     }
 
     var tab: Browser? {
@@ -227,7 +208,16 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     private let CellIdentifier = "CellIdentifier"
     var collectionView: UICollectionView!
     var profile: Profile!
-    var numberOfColumns: Int!
+    var numberOfColumns: Int {
+        let compactLayout = profile.prefs.boolForKey("CompactTabLayout") ?? true
+
+        // iPhone 4-6+ portrait
+        if traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular {
+            return compactLayout ? TabTrayControllerUX.CompactNumberOfColumnsThin : TabTrayControllerUX.NumberOfColumnsThin
+        } else {
+            return TabTrayControllerUX.NumberOfColumnsWide
+        }
+    }
 
     var navBar: UIView!
     var addTabButton: UIButton!
@@ -277,7 +267,6 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         settingsButton.addTarget(self, action: "SELdidClickSettingsItem", forControlEvents: .TouchUpInside)
         settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
 
-        numberOfColumns = numberOfColumnsForCurrentSize()
         let flowLayout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
         collectionView.dataSource = self
@@ -292,20 +281,9 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         view.addSubview(settingsButton)
     }
 
-    private func relayoutTabs() {
-        numberOfColumns = numberOfColumnsForCurrentSize()
-        collectionView.layoutIfNeeded()
-        for cell in collectionView.visibleCells() {
-            if let tab = cell as? CustomCell {
-                tab.setupFrames()
-            }
-        }
-    }
-
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELstatusBarFrameDidChange:", name: UIApplicationDidChangeStatusBarFrameNotification, object: nil)
-        relayoutTabs()
         collectionView.reloadData()
     }
 
@@ -337,23 +315,6 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         collectionView.snp_remakeConstraints { make in
             make.top.equalTo(navBar.snp_bottom)
             make.left.right.bottom.equalTo(self.view)
-        }
-    }
-
-    private func numberOfColumnsForCurrentSize() -> Int {
-        let compactLayout = profile.prefs.boolForKey("CompactTabLayout") ?? true
-        let idiom = UIDevice.currentDevice().userInterfaceIdiom
-        let orientation = UIDevice.currentDevice().orientation
-
-        if idiom == .Phone {
-            if orientation == .Portrait {
-                return compactLayout ? TabTrayControllerUX.CompactNumberOfColumnsThin : TabTrayControllerUX.NumberOfColumnsThin
-            } else {
-                return TabTrayControllerUX.NumberOfColumnsWide
-            }
-        } else {
-            // On iPad we do not use compact tabs
-            return TabTrayControllerUX.NumberOfColumnsWide
         }
     }
 
@@ -423,13 +384,6 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
             cell.background.image = tab.screenshot
         }
-
-        let screenshotAspectRatio = cell.frame.width / self.cellHeightForCurrentDevice()
-
-        // calling setupFrames here fixes reused cells which don't get resized on rotation
-        // TODO: is there a better way?
-        cell.setupFrames()
-
         return cell
     }
 
@@ -454,22 +408,9 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         return TabTrayControllerUX.Margin
     }
 
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
         collectionView.collectionViewLayout.invalidateLayout()
-    }
-
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
-        collectionView.layoutSubviews()
-        for cell in collectionView.visibleCells() {
-            if let tab = cell as? CustomCell {
-                tab.setupFrames()
-            }
-        }
-    }
-
-    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        relayoutTabs()
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {

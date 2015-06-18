@@ -654,7 +654,7 @@ private class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = AppConstants.TableViewHeaderBackgroundColor
+        self.contentView.backgroundColor = AppConstants.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
     }
 
