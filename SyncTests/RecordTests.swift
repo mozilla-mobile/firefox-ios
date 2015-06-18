@@ -171,4 +171,20 @@ class RecordTests: XCTestCase {
             XCTFail("Should have parsed.")
         }
     }
+
+    func testLoginPayload() {
+        let input = JSON([
+            "id": "abcdefabcdef",
+            "hostname": "http://foo.com/",
+            "username": "foo",
+            "password": "bar",
+            "usernameField": "field",
+            "passwordField": "bar",
+            // No formSubmitURL.
+            "httpRealm": "",
+        ])
+
+        // fromJSON returns nil if not valid.
+        XCTAssertNotNil(LoginPayload.fromJSON(input))
+    }
 }
