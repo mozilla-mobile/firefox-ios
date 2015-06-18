@@ -313,11 +313,20 @@ extension BrowserDB {
         return DeferredDBOperation(db: db, block: block).start()
     }
 
-    func run(sql: String, withArgs args: Args? = nil) -> Success {
-        return runWithConnection { (connection, err) -> () in
+    func write(sql: String, withArgs args: Args? = nil) -> Deferred<Result<Int>> {
+        return self.runWithConnection() { (connection, err) -> Int in
             err = connection.executeChange(sql, withArgs: args)
-            return ()
+            if err == nil {
+                let modified = connection.numberOfRowsModified
+                log.debug("Modified rows: \(modified).")
+                return modified
+            }
+            return 0
         }
+    }
+
+    func run(sql: String, withArgs args: Args? = nil) -> Success {
+        return self.write(sql, withArgs: args) >>> succeed
     }
 
     func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
