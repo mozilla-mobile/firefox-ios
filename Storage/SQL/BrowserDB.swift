@@ -295,16 +295,21 @@ extension BrowserDB {
         return walk(chunks, { insertChunk(Array($0)) })
     }
 
-    func run(sql: String, withArgs args: Args? = nil) -> Success {
+    func write(sql: String, withArgs args: Args? = nil) -> Deferred<Result<Int>> {
         var err: NSError?
-        return self.withWritableConnection(&err) { (conn, inout err: NSError?) -> Success in
+        return self.withWritableConnection(&err) { (conn, inout err: NSError?) -> Deferred<Result<Int>> in
             err = conn.executeChange(sql, withArgs: args)
             if err == nil {
-                log.debug("Modified rows: \(conn.numberOfRowsModified).")
-                return succeed()
+                let modified = conn.numberOfRowsModified
+                log.debug("Modified rows: \(modified).")
+                return deferResult(modified)
             }
             return deferResult(DatabaseError(err: err))
         }
+    }
+
+    func run(sql: String, withArgs args: Args? = nil) -> Success {
+        return self.write(sql, withArgs: args) >>> succeed
     }
 
     func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
@@ -316,5 +321,17 @@ extension BrowserDB {
         let cursor = self.withReadableConnection(&err, callback: f)
 
         return deferResult(cursor)
+    }
+}
+
+extension SQLiteDBConnection {
+    func tablesExist(names: Args) -> Bool {
+        let count = names.count
+        let orClause = join(" OR ", Array(count: count, repeatedValue: "name = ?"))
+        let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND (\(orClause))"
+
+        let res = self.executeQuery(tablesSQL, factory: StringFactory, withArgs: names)
+        log.debug("\(res.count) tables exist. Expected \(count)")
+        return res.count > 0
     }
 }

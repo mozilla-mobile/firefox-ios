@@ -88,16 +88,18 @@ class LoginsHelper: BrowserHelper {
             return
         }
 
-        profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(dispatch_get_main_queue()) { res in
+        profile.logins
+               .getLoginsForProtectionSpace(login.protectionSpace, withUsername: login.username)
+               .uponQueue(dispatch_get_main_queue()) { res in
             if let data = res.successValue {
                 for saved in data {
-                    if saved?.username == login.username {
-                        if saved?.password == login.password {
-                            self.profile.logins.addUseOf(login)
+                    if let saved = saved {
+                        if saved.password == login.password {
+                            self.profile.logins.addUseOfLoginByGUID(saved.guid)
                             return
                         }
 
-                        self.promptUpdate(login)
+                        self.promptUpdateFromLogin(login: saved, toLogin: login)
                         return
                     }
                 }
@@ -139,14 +141,16 @@ class LoginsHelper: BrowserHelper {
         browser?.addSnackbar(snackBar!)
     }
 
-    private func promptUpdate(login: LoginData) {
+    private func promptUpdateFromLogin(login old: LoginData, toLogin new: LoginData) {
+        let guid = old.guid
+
         let formatted: String
-        if let username = login.username {
+        if let username = new.username {
             let promptStringFormat = NSLocalizedString("Do you want to update the password for %@ on %@?", comment: "Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site.")
-            formatted = String(format: promptStringFormat, username, login.hostname)
+            formatted = String(format: promptStringFormat, username, new.hostname)
         } else {
             let promptStringFormat = NSLocalizedString("Do you want to update the password on %@?", comment: "Prompt for updating a password with on username. The parameter is the hostname of the site.")
-            formatted = String(format: promptStringFormat, login.hostname)
+            formatted = String(format: promptStringFormat, new.hostname)
         }
         let promptMessage = NSAttributedString(string: formatted)
 
@@ -160,7 +164,8 @@ class LoginsHelper: BrowserHelper {
                 SnackButton(title: UpdateButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
-                    self.profile.logins.updateLogin(login)
+                    self.profile.logins.updateLoginByGUID(guid, new: new,
+                                                          significant: new.significantlyDiffersFrom(old))
                 }),
                 SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
