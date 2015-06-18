@@ -243,26 +243,27 @@ public class SQLiteLogins: BrowserLogins {
     }
 
     public func addLogin(login: LoginData) -> Success {
-        var args: Args = [
+        let nowMicro = NSDate.nowMicroseconds()
+        let nowMilli = nowMicro / 1000
+        let dateMicro = NSNumber(unsignedLongLong: nowMicro)
+        let dateMilli = NSNumber(unsignedLongLong: nowMilli)
+
+        let args: Args = [
             login.hostname,
             login.httpRealm,
             login.formSubmitURL,
             login.usernameField,
             login.passwordField,
+
+            dateMicro,            // timeCreated
+            dateMicro,            // timeLastUsed
+            dateMicro,            // timePasswordChanged
+            login.username,
+            login.password,
+
+            login.guid,
+            dateMilli,            // localModified
         ]
-
-        let nowMicro = NSDate.nowMicroseconds()
-        let nowMilli = nowMicro / 1000
-        let dateMicro = NSNumber(unsignedLongLong: nowMicro)
-        let dateMilli = NSNumber(unsignedLongLong: nowMilli)
-        args.append(dateMicro)            // timeCreated
-        args.append(dateMicro)            // timeLastUsed
-        args.append(dateMicro)            // timePasswordChanged
-        args.append(login.username)
-        args.append(login.password)
-
-        args.append(login.guid)
-        args.append(dateMilli)            // localModified
 
         let sql =
         "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
