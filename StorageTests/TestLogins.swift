@@ -217,6 +217,7 @@ class TestSyncableLogins: XCTestCase {
         let guidA = "abcdabcdabcd"
         var loginA1 = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "password")
         loginA1.formSubmitURL = "http://example.com/form/"
+        loginA1.timesUsed = 3
 
         XCTAssertTrue(self.logins.applyChangedLogin(loginA1, timestamp: 1234).value.isSuccess)
 
@@ -229,6 +230,7 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(mirror!.guid, guidA)
         XCTAssertFalse(mirror!.isOverridden)
         XCTAssertEqual(mirror!.serverModified, Timestamp(1234), "Timestamp matches.")
+        XCTAssertEqual(mirror!.timesUsed, 3)
         XCTAssertTrue(nil == mirror!.httpRealm)
         XCTAssertTrue(nil == mirror!.passwordField)
         XCTAssertTrue(nil == mirror!.usernameField)
@@ -240,6 +242,7 @@ class TestSyncableLogins: XCTestCase {
         // Change it.
         var loginA2 = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "newpassword")
         loginA2.formSubmitURL = "http://example.com/form/"
+        loginA2.timesUsed = 4
 
         XCTAssertTrue(self.logins.applyChangedLogin(loginA2, timestamp: 2234).value.isSuccess)
         let changed = self.logins.getExistingMirrorRecordByGUID(guidA).value.successValue!
@@ -249,6 +252,7 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(changed!.serverModified, Timestamp(2234), "Timestamp is new.")
         XCTAssertEqual(changed!.username!, "username")
         XCTAssertEqual(changed!.password, "newpassword")
+        XCTAssertEqual(changed!.timesUsed, 4)
 
         // Change it locally.
         let preUse = NSDate.now()
@@ -271,6 +275,10 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertTrue(localUsed!.localModified >= preUse)      // Local record is modified.
         XCTAssertFalse(localUsed!.shouldUpload)                // Uses aren't enough to warrant upload.
 
+        // Uses are local until reconciled.
+        XCTAssertEqual(localUsed!.timesUsed, 5)
+        XCTAssertEqual(mirrorUsed!.timesUsed, 4)
+
         // Change the password and form URL locally.
         var newLocalPassword = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "yupyup")
         newLocalPassword.formSubmitURL = "http://example.com/form2/"
@@ -290,5 +298,7 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(localAltered!.formSubmitURL!, "http://example.com/form2/")
         XCTAssertTrue(localAltered!.localModified >= preUpdate)
         XCTAssertTrue(localAltered!.shouldUpload)                // Changes are enough to warrant upload.
+        XCTAssertEqual(localAltered!.timesUsed, 5)
+        XCTAssertEqual(mirrorAltered!.timesUsed, 4)
     }
 }
