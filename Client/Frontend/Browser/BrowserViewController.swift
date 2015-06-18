@@ -461,7 +461,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func addBookmark(url: String, title: String?) {
+    func addBookmark(url: String, title: String?) {
         let shareItem = ShareItem(url: url, title: title, favicon: nil)
         profile.bookmarks.shareItem(shareItem)
 
@@ -549,6 +549,11 @@ class BrowserViewController: UIViewController {
                 log.error("Error getting bookmark status: \(err).")
             })
         }
+    }
+
+    func openURLInNewTab(url: NSURL) {
+        let tab = tabManager.addTab(request: NSURLRequest(URL: url))
+        tabManager.selectTab(tab)
     }
 }
 

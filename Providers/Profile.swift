@@ -60,40 +60,76 @@ class CommandDiscardingSyncDelegate: SyncDelegate {
  * This will also likely be the extension point for wipes, resets, and
  * getting access to data sources during a sync.
  */
+
+let TabSendURLKey = "TabSendURL"
+let TabSendTitleKey = "TabSendTitle"
+let TabSendCategory = "TabSendCategory"
+
+enum SentTabAction: String {
+    case View = "TabSendViewAction"
+    case Bookmark = "TabSendBookmarkAction"
+    case ReadingList = "TabSendReadingListAction"
+}
+
 class BrowserProfileSyncDelegate: SyncDelegate {
     let app: UIApplication
 
     init(app: UIApplication) {
         self.app = app
+        registerForNotifications()
     }
 
     // SyncDelegate
     func displaySentTabForURL(URL: NSURL, title: String) {
         log.info("Displaying notification for URL \(URL.absoluteString)")
 
-        app.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert, categories: nil))
+        let currentSettings = app.currentUserNotificationSettings()
+        if currentSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
+            // TODO: localize.
+            let notification = UILocalNotification()
+
+            notification.fireDate = NSDate()
+            notification.timeZone = NSTimeZone.defaultTimeZone()
+            notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString!)
+            notification.userInfo = [TabSendURLKey: URL.absoluteString!, TabSendTitleKey: title]
+            notification.alertAction = nil
+            notification.category = TabSendCategory
+
+            app.presentLocalNotificationNow(notification)
+        }
+    }
+
+
+    func registerForNotifications() {
+        let viewAction = UIMutableUserNotificationAction()
+        viewAction.identifier = SentTabAction.View.rawValue
+        viewAction.title = NSLocalizedString("View", comment: "View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
+        viewAction.activationMode = UIUserNotificationActivationMode.Foreground
+        viewAction.destructive = false
+        viewAction.authenticationRequired = false
+
+        let bookmarkAction = UIMutableUserNotificationAction()
+        bookmarkAction.identifier = SentTabAction.Bookmark.rawValue
+        bookmarkAction.title = NSLocalizedString("Bookmark", comment: "Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
+        bookmarkAction.activationMode = UIUserNotificationActivationMode.Foreground
+        bookmarkAction.destructive = false
+        bookmarkAction.authenticationRequired = false
+
+        let readingListAction = UIMutableUserNotificationAction()
+        readingListAction.identifier = SentTabAction.ReadingList.rawValue
+        readingListAction.title = NSLocalizedString("Add to Reading List", comment: "Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
+        readingListAction.activationMode = UIUserNotificationActivationMode.Foreground
+        readingListAction.destructive = false
+        readingListAction.authenticationRequired = false
+
+        let sentTabsCategory = UIMutableUserNotificationCategory()
+        sentTabsCategory.identifier = TabSendCategory
+        sentTabsCategory.setActions([readingListAction, bookmarkAction, viewAction], forContext: UIUserNotificationActionContext.Default)
+
+        sentTabsCategory.setActions([bookmarkAction, viewAction], forContext: UIUserNotificationActionContext.Minimal)
+
+        app.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert, categories: [sentTabsCategory]))
         app.registerForRemoteNotifications()
-
-        // TODO: localize.
-        let notification = UILocalNotification()
-
-        /* actions
-        notification.identifier = "tab-" + Bytes.generateGUID()
-        notification.activationMode = UIUserNotificationActivationMode.Foreground
-        notification.destructive = false
-        notification.authenticationRequired = true
-        */
-
-        notification.alertTitle = "New tab: \(title)"
-        notification.alertBody = URL.absoluteString!
-        notification.alertAction = nil
-
-        // TODO: categories
-        // TODO: put the URL into the alert userInfo.
-        // TODO: application:didFinishLaunchingWithOptions:
-        // TODO:
-        // TODO: set additionalActions to bookmark or add to reading list.
-        self.app.presentLocalNotificationNow(notification)
     }
 }
 
