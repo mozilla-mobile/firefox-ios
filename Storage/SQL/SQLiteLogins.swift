@@ -143,6 +143,7 @@ public class SQLiteLogins: BrowserLogins {
             authenticationMethod: nil)
 
         let login = T(credential: credential, protectionSpace: protectionSpace)
+        self.populateLogin(login, row: row)
         return login
     }
 
@@ -150,8 +151,8 @@ public class SQLiteLogins: BrowserLogins {
         var login = self.constructLogin(row, c: LocalLogin.self)
 
         login.localModified = row.getTimestamp("local_modified")!
-        login.isDeleted = row["is_deleted"] as! Int == 1
-        login.shouldUpload = row["should_upload"] as! Int == 1
+        login.isDeleted = row.getBoolean("is_deleted")
+        login.shouldUpload = row.getBoolean("should_upload")
 
         return login
     }
@@ -159,26 +160,14 @@ public class SQLiteLogins: BrowserLogins {
     class func MirrorLoginFactory(row: SDRow) -> MirrorLogin {
         var login = self.constructLogin(row, c: MirrorLogin.self)
 
-        let timestamp = row.getTimestamp("server_modified")
-        login.serverModified = timestamp!
-        login.isOverridden = row["is_overridden"] as! Int == 1
+        login.serverModified = row.getTimestamp("server_modified")!
+        login.isOverridden = row.getBoolean("is_overridden")
 
         return login
     }
 
     private class func LoginFactory(row: SDRow) -> Login {
-        let c = NSURLCredential(user: row["username"] as? String ?? "",
-            password: row["password"] as! String,
-            persistence: NSURLCredentialPersistence.None)
-        let protectionSpace = NSURLProtectionSpace(host: row["hostname"] as! String,
-            port: 0,
-            `protocol`: nil,
-            realm: row["httpRealm"] as? String,
-            authenticationMethod: nil)
-
-        let login = self.constructLogin(row, c: Login.self)
-        self.populateLogin(login, row: row)
-        return login
+        return self.constructLogin(row, c: Login.self)
     }
 
     private class func LoginDataFactory(row: SDRow) -> LoginData {
@@ -320,7 +309,8 @@ public class SQLiteLogins: BrowserLogins {
 
         let sql = "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
         "(\(shared)\(local)) " +
-        "SELECT \(shared), NULL, 0, 0 FROM \(TableLoginsMirror) WHERE guid = ?"
+        "SELECT \(shared), NULL AS local_modified, 0 AS is_deleted, 0 AS should_upload " +
+        "FROM \(TableLoginsMirror) WHERE guid = ?"
 
         let args: Args = [guid]
         return self.db.write(sql, withArgs: args)
@@ -333,7 +323,7 @@ public class SQLiteLogins: BrowserLogins {
     private func ensureLocalOverlayExistsForGUID(guid: GUID) -> Success {
         let sql = "SELECT guid FROM \(TableLoginsLocal) WHERE guid = ?"
         let args: Args = [guid]
-        let c = db.runQuery(sql, args: args, factory: { $0 })
+        let c = db.runQuery(sql, args: args, factory: { row in 1 })
 
         return c >>== { rows in
             if rows.count > 0 {
@@ -345,55 +335,37 @@ public class SQLiteLogins: BrowserLogins {
                     if count > 0 {
                         return succeed()
                     }
-                    log.warning("No local overlay for GUID \(guid).")
+                    log.warning("Failed to create local overlay for GUID \(guid).")
                     return deferResult(NoSuchRecordError(guid: guid))
             }
         }
     }
 
+    private func markMirrorAsOverridden(guid: GUID) -> Success {
+        let args: Args = [guid]
+        let sql =
+        "UPDATE \(TableLoginsMirror) SET " +
+        "is_overridden = 1 " +
+        "WHERE guid = ?"
+
+        return self.db.run(sql, withArgs: args)
+    }
+
     public func addUseOfLoginByGUID(guid: GUID) -> Success {
         let sql =
         "UPDATE \(TableLoginsLocal) SET " +
-        "timeLastUsed = ?, local_modified = ?" +
+        "timeLastUsed = ?, local_modified = ? " +
         "WHERE guid = ? AND is_deleted = 0"
 
         // For now, mere use is not enough to flip should_upload.
 
         let nowMicro = NSDate.nowMicroseconds()
         let nowMilli = nowMicro / 1000
-        let args: Args = [NSNumber(unsignedLongLong: nowMicro), NSNumber(unsignedLongLong: nowMilli)]
+        let args: Args = [NSNumber(unsignedLongLong: nowMicro), NSNumber(unsignedLongLong: nowMilli), guid]
 
         return self.ensureLocalOverlayExistsForGUID(guid)
+           >>> { self.markMirrorAsOverridden(guid) }
            >>> { self.db.run(sql, withArgs: args) }
-    }
-
-    private func getSETClauseForLoginData(login: LoginData, significant: Bool) -> (String, Args) {
-        let nowMicro = NSDate.nowMicroseconds()
-        let nowMilli = nowMicro / 1000
-        let dateMicro = NSNumber(unsignedLongLong: nowMicro)
-        let dateMilli = NSNumber(unsignedLongLong: nowMilli)
-
-        var args: Args = [
-            dateMilli,            // local_modified
-            login.httpRealm,
-            login.formSubmitURL,
-            login.usernameField,
-            login.passwordField,
-            dateMicro,            // timeLastUsed
-            dateMicro,            // timePasswordChanged
-            login.password,
-            login.hostname,
-            login.username,
-        ]
-
-        let sql =
-        "  local_modified = ?" +
-        ", httpRealm = ?, formSubmitURL = ?, usernameField = ?" +
-        ", passwordField = ?, timeLastUsed = ?, timePasswordChanged = ?, password = ?" +
-        ", hostname = ?, username = ?" +
-        (significant ? ", should_upload = 1 " : "")
-
-        return (sql, args)
     }
 
     public func updateLoginByGUID(guid: GUID, new: LoginData, significant: Bool) -> Success {
@@ -401,16 +373,36 @@ public class SQLiteLogins: BrowserLogins {
         // point of use, so we always set `timePasswordChanged` and `timeLastUsed`.
         // We can (but don't) also assume that `significant` will always be `true`,
         // at least for the time being.
-        var (setClause, args) = self.getSETClauseForLoginData(new, significant: significant)
+        let nowMicro = NSDate.nowMicroseconds()
+        let nowMilli = nowMicro / 1000
+        let dateMicro = NSNumber(unsignedLongLong: nowMicro)
+        let dateMilli = NSNumber(unsignedLongLong: nowMilli)
+
+        let args: Args = [
+            dateMilli,            // local_modified
+            new.httpRealm,
+            new.formSubmitURL,
+            new.usernameField,
+            new.passwordField,
+            dateMicro,            // timeLastUsed
+            dateMicro,            // timePasswordChanged
+            new.password,
+            new.hostname,
+            new.username,
+            guid,
+        ]
 
         let update =
         "UPDATE \(TableLoginsLocal) SET " +
-        setClause +
+        "  local_modified = ?" +
+        ", httpRealm = ?, formSubmitURL = ?, usernameField = ?" +
+        ", passwordField = ?, timeLastUsed = ?, timePasswordChanged = ?, password = ?" +
+        ", hostname = ?, username = ?" +
+        (significant ? ", should_upload = 1 " : "") +
         " WHERE guid = ?"
 
-        args.append(guid)
-
         return self.ensureLocalOverlayExistsForGUID(guid)
+           >>> { self.markMirrorAsOverridden(guid) }
            >>> { self.db.run(update, withArgs: args) }
     }
 
@@ -426,7 +418,9 @@ public class SQLiteLogins: BrowserLogins {
 
         let args: Args = [guid]
 
-        return self.db.run(update, withArgs: args) >>> { self.db.run(insert, withArgs: args) }
+        return self.db.run(update, withArgs: args)
+           >>> { self.markMirrorAsOverridden(guid) }
+           >>> { self.db.run(insert, withArgs: args) }
     }
 
 
@@ -439,14 +433,17 @@ public class SQLiteLogins: BrowserLogins {
         let update =
         "UPDATE \(TableLoginsLocal) SET local_modified = \(nowMillis), should_upload = 1, is_deleted = 1, password = '', hostname = '', username = '' WHERE is_deleted = 0"
 
-        // Copy all the remaining rows from our mirror, marking them as deleted. The
+        // Copy all the remaining rows from our mirror, marking them as locally deleted. The
         // OR IGNORE will cause conflicts due to non-unique guids to be dropped, preserving
         // anything we already deleted.
         let insert =
         "INSERT OR IGNORE INTO \(TableLoginsLocal) (guid, local_modified, is_deleted, should_upload, hostname, timeCreated, timePasswordChanged, password, username) " +
         "SELECT guid, \(nowMillis), 1, 1, '', timeCreated, \(nowMillis)000, '', '' FROM \(TableLoginsMirror)"
 
-        return self.db.run(update) >>> { self.db.run(insert) }
+        // After that, we mark all of the mirror rows as overridden.
+        return self.db.run(update)
+           >>> { self.db.run("UPDATE \(TableLoginsMirror) SET is_overridden = 1") }
+           >>> { self.db.run(insert) }
     }
 }
 
@@ -577,11 +574,15 @@ extension SQLiteLogins: SyncableLogins {
         return args
     }
 
+    /**
+     * Called when we have a changed upstream record and no local changes.
+     * There's no need to flip the is_overridden flag.
+     */
     private func updateMirrorToLogin(login: Login, fromPrevious previous: Login, timestamp: Timestamp) -> Success {
         let args = self.mirrorArgs(login, timestamp: timestamp)
         let sql =
         "UPDATE \(TableLoginsMirror) SET " +
-        " is_overridden = 0, server_modified = ?" +
+        " server_modified = ?" +
         ", httpRealm = ?, formSubmitURL = ?, usernameField = ?" +
         ", passwordField = ?, timeLastUsed = ?, timePasswordChanged = ?, timeCreated = ?" +
         ", password = ?, hostname = ?, username = ?" +
@@ -590,6 +591,10 @@ extension SQLiteLogins: SyncableLogins {
         return self.db.run(sql, withArgs: args)
     }
 
+    /**
+     * Called when we have a completely new record. Naturally the new record
+     * is marked as non-overridden.
+     */
     private func insertNewMirror(login: Login, timestamp: Timestamp) -> Success {
         let args = self.mirrorArgs(login, timestamp: timestamp)
         let sql =
