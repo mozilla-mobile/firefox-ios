@@ -190,6 +190,8 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
                 } else {
                     editTextField.text = url
                 }
+            } else {
+                editTextField.text = nil
             }
 
             setNeedsUpdateConstraints()
