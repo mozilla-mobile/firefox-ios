@@ -14,7 +14,7 @@ let AllLoginTables: Args = [TableLoginsMirror, TableLoginsLocal]
 
 private class LoginsTable: Table {
     var name: String { return "LOGINS" }
-    var version: Int { return 3 }
+    var version: Int { return 1 }
 
     func run(db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
         let err = db.executeChange(sql, withArgs: args)
