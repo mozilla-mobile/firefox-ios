@@ -47,6 +47,7 @@ private enum SearchListSection: Int {
 protocol SearchViewControllerDelegate: class {
     func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL)
     func presentSearchSettingsController()
+    func searchViewControllerWillAppear(searchViewController: SearchViewController)
 }
 
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
@@ -128,6 +129,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.searchDelegate?.searchViewControllerWillAppear(self)
+        reloadSearchEngines()
         reloadData()
     }
 

@@ -14,7 +14,6 @@ class SearchSettingsTableViewController: UITableViewController {
     private let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
 
     var model: SearchEngines!
-    weak var modalDelegate: ModalDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -196,9 +195,7 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     func SELDismiss() {
-        self.dismissViewControllerAnimated(true, completion: { _ in
-            self.modalDelegate?.didDismissModal()
-        })
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 
