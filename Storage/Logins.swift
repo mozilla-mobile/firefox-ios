@@ -30,6 +30,7 @@ public protocol LoginData: class {
 }
 
 public protocol LoginUsageData {
+    var timesUsed: Int { get set }
     var timeCreated: MicrosecondTimestamp { get set }
     var timeLastUsed: MicrosecondTimestamp { get set }
     var timePasswordChanged: MicrosecondTimestamp { get set }
@@ -77,6 +78,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
     }
 
     // LoginUsageData
+    public var timesUsed = 0
     public var timeCreated = NSDate.nowMicroseconds()
     public var timeLastUsed = NSDate.nowMicroseconds()
     public var timePasswordChanged = NSDate.nowMicroseconds()
