@@ -64,12 +64,28 @@ private class LoginsTable: Table {
 
 }
 
+private var secretKey: String? {
+#if MOZ_CHANNEL_DEBUG
+    return nil
+#else
+    let key = "sqlcipher.key.logins.db"
+    if KeychainWrapper.hasValueForKey(key) {
+    return KeychainWrapper.stringForKey(key)
+    }
+
+    let Length: UInt = 256
+    let secret = Bytes.generateRandomBytes(Length).base64EncodedString
+    KeychainWrapper.setString(secret, forKey: key)
+    return secret
+#endif
+}
+
 public class SQLiteLogins: Logins {
     private let table = LoginsTable()
     private let db: BrowserDB
 
-    public init(db: BrowserDB) {
-        self.db = db
+    public init(files: FileAccessor) {
+        self.db = BrowserDB(filename: "logins.sqlite", secretKey: secretKey, files: files)
         db.createOrUpdate(table)
     }
 

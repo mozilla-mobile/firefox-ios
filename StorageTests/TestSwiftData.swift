@@ -10,25 +10,25 @@ import Storage
 
 // TODO: rewrite this test to not use BrowserTable. It used to use HistoryTable…
 class TestSwiftData: XCTestCase {
-    var swiftData: SwiftData!
-    var table: BrowserTable!
+    var swiftData: SwiftData?
     var urlCounter = 1
+    var testDB: String!
 
     override func setUp() {
         let files = MockFiles()
         files.remove("testSwiftData.db")
-        let testDB = files.getAndEnsureDirectory()!.stringByAppendingPathComponent("testSwiftData.db")
+        testDB = files.getAndEnsureDirectory()!.stringByAppendingPathComponent("testSwiftData.db")
         swiftData = SwiftData(filename: testDB)
-        table = BrowserTable()
+        var table = BrowserTable()
 
         // Ensure static flags match expected values.
         XCTAssert(SwiftData.ReuseConnections, "Reusing database connections")
         XCTAssert(SwiftData.EnableWAL, "WAL enabled")
 
-        swiftData.withConnection(SwiftData.Flags.ReadWriteCreate) { db in
+        swiftData!.withConnection(SwiftData.Flags.ReadWriteCreate) { db in
             let f = FaviconsTable<Favicon>()
             f.create(db, version: 1)    // Because BrowserTable needs it.
-            self.table.create(db, version: 1)
+            table.create(db, version: 1)
             var err: NSError?
             return nil
         }
@@ -91,7 +91,7 @@ class TestSwiftData: XCTestCase {
 
         // Query the database and hold the cursor.
         var c: Cursor<SDRow>!
-        var error = swiftData.withConnection(SwiftData.Flags.ReadOnly) { db in
+        var error = swiftData!.withConnection(SwiftData.Flags.ReadOnly) { db in
             if safeQuery {
                 c = db.executeQuery("SELECT * FROM history", factory: { $0 })
             } else {
@@ -113,14 +113,41 @@ class TestSwiftData: XCTestCase {
             }
         }
 
-        return addSite(table, url: "http://url/\(urlCounter++)", title: "title\(urlCounter++)")
+        return addSite(BrowserTable(), url: "http://url/\(urlCounter++)", title: "title\(urlCounter++)")
     }
 
     private func addSite(table: BrowserTable, url: String, title: String) -> NSError? {
-        return swiftData.withConnection(SwiftData.Flags.ReadWrite) { connection -> NSError? in
+        return swiftData!.withConnection(SwiftData.Flags.ReadWrite) { connection -> NSError? in
             var err: NSError?
             let args: Args = [Bytes.generateGUID(), url, title]
             return connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
         }
+    }
+
+    func testEncrypt() {
+        // XXX: Something is holding an open connection to the normal database, making it impossible
+        // to change its encryption. This kills it so that we can move on.
+        let files = MockFiles()
+        files.remove("testSwiftData.db")
+        let path = testDB
+        func verifyData(swiftData: SwiftData) -> NSError? {
+            return swiftData.withConnection(SwiftData.Flags.ReadOnly) { db in
+                return nil
+            }
+        }
+
+        XCTAssertNotNil(SwiftData(filename: path!), "Connected to unencrypted database")
+
+        // Encrypt the database.
+        XCTAssertNil(verifyData(SwiftData(filename: path!, key: "Secret")), "Encrypted database")
+
+        // Now change the encryption key.
+        XCTAssertNil(verifyData(SwiftData(filename: path!, key: "Secret2", prevKey: "Secret")), "Re-encrypted database")
+
+        // Changing the encryption without the prevKey should fail.
+        XCTAssertNotNil(verifyData(SwiftData(filename: path!)), "Failed decrypting database")
+
+        // Now remove the encryption key.
+        XCTAssertNil(verifyData(SwiftData(filename: path!, prevKey: "Secret2")), "Decrypted database")
     }
 }

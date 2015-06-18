@@ -17,8 +17,7 @@ class TestSQLiteLogins: XCTestCase {
         super.setUp()
 
         let files = MockFiles()
-        let db = BrowserDB(files: files)
-        self.logins = SQLiteLogins(db: db)
+        self.logins = SQLiteLogins(files: files)
     }
 
     func testAddLogin() {

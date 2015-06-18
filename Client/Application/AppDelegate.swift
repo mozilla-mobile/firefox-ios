@@ -51,9 +51,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-        // Force a database upgrade by requesting a non-existent password
-        profile.logins.getLoginsForProtectionSpace(NSURLProtectionSpace(host: "example.com", port: 0, `protocol`: nil, realm: nil, authenticationMethod: nil))
-
         return true
     }
 
