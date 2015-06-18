@@ -37,7 +37,15 @@ public class LoginPayload: CleartextPayloadJSON {
         if self["deleted"].isBool {
             return true
         }
-        return LoginPayload.RequiredStringFields.every({ self[$0].isString })
+        if !LoginPayload.RequiredStringFields.every({ self[$0].isString }) {
+            return false
+        }
+
+        return LoginPayload.OptionalStringFields.every({ field in
+            let val = self[field]
+            // Yup, 404 is not found, so this means "string or nothing".
+            return val.isString || val.asError?.code == 404
+        })
     }
 
     public var hostname: String {
@@ -74,7 +82,7 @@ public class LoginPayload: CleartextPayloadJSON {
                 return false;
             }
 
-            if p.deleted {
+            if p.deleted || self.deleted {
                 return self.deleted == p.deleted
             }
 
