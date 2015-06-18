@@ -307,7 +307,7 @@ public class BrowserProfile: Profile {
     }()
 
     private lazy var loginsDB: BrowserDB = {
-        return BrowserDB(filename: "logins.sqlite", secretKey: self.loginsKey, files: self.files)
+        return BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
     }()
 
     lazy var thumbnails: Thumbnails = {
