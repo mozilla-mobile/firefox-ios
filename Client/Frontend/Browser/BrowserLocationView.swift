@@ -19,8 +19,14 @@ private struct BrowserLocationViewUX {
     static let DefaultURLColor = UIColor.blackColor()
 }
 
+enum InputMode {
+    case URL
+    case Search
+}
+
 class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
     var delegate: BrowserLocationViewDelegate?
+    var inputMode: InputMode = .URL
 
     private var lockImageView: UIImageView!
     private var readerModeButton: ReaderModeButton!
@@ -240,9 +246,14 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         active = true
         layer.borderColor = editingBorderColor
         textField.textColor = BrowserLocationViewUX.DefaultURLColor
-        textField.text = url?.absoluteString
+
         setNeedsUpdateConstraints()
         delegate?.browserLocationViewDidTapLocation(self)
+
+        if inputMode == .URL {
+            textField.text = url?.absoluteString
+        }
+
         return true
     }
 

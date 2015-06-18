@@ -25,10 +25,6 @@ private struct BrowserViewControllerUX {
     private static let ShowHeaderTapAreaHeight: CGFloat = 32
 }
 
-protocol ModalDelegate: class {
-    func didDismissModal()
-}
-
 class BrowserViewController: UIViewController {
 
     private var urlBar: URLBarView!
@@ -427,6 +423,8 @@ class BrowserViewController: UIViewController {
             return
         }
 
+        urlBar.locationView.inputMode = .Search
+
         searchController = SearchViewController()
         searchController!.searchEngines = profile.searchEngines
         searchController!.searchDelegate = self
@@ -451,6 +449,7 @@ class BrowserViewController: UIViewController {
             searchController.view.removeFromSuperview()
             searchController.removeFromParentViewController()
             self.searchController = nil
+            urlBar.locationView.inputMode = .URL
             homePanelController?.view?.hidden = false
         }
     }
@@ -1006,16 +1005,13 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
         let settingsNavigationController = SearchSettingsTableViewController()
         settingsNavigationController.model = self.profile.searchEngines
-        settingsNavigationController.modalDelegate = self
-        
+
         let navController = UINavigationController(rootViewController: settingsNavigationController)
 
         self.presentViewController(navController, animated: true, completion: nil)
     }
-}
 
-extension BrowserViewController: ModalDelegate {
-    func didDismissModal() {
+    func searchViewControllerWillAppear(searchViewController: SearchViewController) {
         self.urlBar.locationView.editTextField.becomeFirstResponder()
     }
 }
