@@ -14,6 +14,7 @@ class SearchSettingsTableViewController: UITableViewController {
     private let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
 
     var model: SearchEngines!
+    weak var modalDelegate: ModalDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,10 @@ class SearchSettingsTableViewController: UITableViewController {
         tableView.editing = true
         // So that we push the default search engine controller on selection.
         tableView.allowsSelectionDuringEditing = true
+
+        if self.presentingViewController != nil {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "SELDismiss")
+        }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -188,6 +193,12 @@ class SearchSettingsTableViewController: UITableViewController {
 
     func SELcancel() {
         navigationController?.popViewControllerAnimated(true)
+    }
+
+    func SELDismiss() {
+        self.dismissViewControllerAnimated(true, completion: { _ in
+            self.modalDelegate?.didDismissModal()
+        })
     }
 }
 
