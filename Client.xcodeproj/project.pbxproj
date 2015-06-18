@@ -163,6 +163,8 @@
 		28EADE5E1AFC3B86007FB2FB /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EADE381AFC3898007FB2FB /* UIImageViewExtensions.swift */; };
 		28ED02021B26123E003948B2 /* LoginPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02011B26123E003948B2 /* LoginPayload.swift */; };
 		28ED02031B26123E003948B2 /* LoginPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02011B26123E003948B2 /* LoginPayload.swift */; };
+		28ED02261B262B5E003948B2 /* LoginsSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02251B262B5E003948B2 /* LoginsSynchronizer.swift */; };
+		28ED02271B262B5E003948B2 /* LoginsSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02251B262B5E003948B2 /* LoginsSynchronizer.swift */; };
 		28ED02291B262E0A003948B2 /* IndependentRecordSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */; };
 		28ED022A1B262E0A003948B2 /* IndependentRecordSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */; };
 		28EDE6CB1AF2929900FB2937 /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2551ABB531100877008 /* SQLiteHistory.swift */; };
@@ -1212,6 +1214,7 @@
 		28E23C111AC5A5EE00F5AC85 /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		28EADE381AFC3898007FB2FB /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Extensions/UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		28ED02011B26123E003948B2 /* LoginPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginPayload.swift; sourceTree = "<group>"; };
+		28ED02251B262B5E003948B2 /* LoginsSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginsSynchronizer.swift; path = Synchronizers/LoginsSynchronizer.swift; sourceTree = "<group>"; };
 		28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IndependentRecordSynchronizer.swift; path = Synchronizers/IndependentRecordSynchronizer.swift; sourceTree = "<group>"; };
 		28F596A01ACA13CA0071DDCC /* InfoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoTests.swift; path = SyncTests/InfoTests.swift; sourceTree = "<group>"; };
 		2F0624D41AE58C7800FA022C /* KeychainCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainCache.swift; sourceTree = "<group>"; };
@@ -1824,6 +1827,7 @@
 				2894C1681AE89DDC00F1F92F /* ClientsSynchronizer.swift */,
 				2894C1651AE89DD200F1F92F /* TabsSynchronizer.swift */,
 				2894C1421AE89D8900F1F92F /* HistorySynchronizer.swift */,
+				28ED02251B262B5E003948B2 /* LoginsSynchronizer.swift */,
 			);
 			name = Synchronizers;
 			sourceTree = "<group>";
@@ -3612,6 +3616,7 @@
 				28926B1A1AC0F074009C0B1D /* EncryptedJSON.swift in Sources */,
 				2894C16C1AE89FD500F1F92F /* HistoryPayload.swift in Sources */,
 				2885023F1AC117A500E7F670 /* SyncStateMachine.swift in Sources */,
+				28ED02261B262B5E003948B2 /* LoginsSynchronizer.swift in Sources */,
 				2894C1691AE89DDC00F1F92F /* ClientsSynchronizer.swift in Sources */,
 				2F3724E91ABF3C19007607FA /* Synchronizer.swift in Sources */,
 				28ED02021B26123E003948B2 /* LoginPayload.swift in Sources */,
@@ -3642,6 +3647,7 @@
 				28909D9C1ACCBB02009AD220 /* State.swift in Sources */,
 				28926B1B1AC0F074009C0B1D /* EncryptedJSON.swift in Sources */,
 				2894C16A1AE89DDC00F1F92F /* ClientsSynchronizer.swift in Sources */,
+				28ED02271B262B5E003948B2 /* LoginsSynchronizer.swift in Sources */,
 				2F3724C61ABF3C01007607FA /* LiveStorageClientTests.swift in Sources */,
 				28ED02031B26123E003948B2 /* LoginPayload.swift in Sources */,
 				2894C1671AE89DD200F1F92F /* TabsSynchronizer.swift in Sources */,
