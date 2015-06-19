@@ -47,6 +47,7 @@ private class SuggestedSitesData<T: Tile>: Cursor<T> {
         let path = NSBundle.mainBundle().pathForResource("suggestedsites", ofType: "json")
         let data = NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: &err)
         let json = JSON.parse(data as! String)
+        println("\(data) \(json)")
 
         for i in 0..<json.length {
             let t = T(json: json[i])
