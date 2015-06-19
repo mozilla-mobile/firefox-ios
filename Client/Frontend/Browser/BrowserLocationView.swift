@@ -111,7 +111,7 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         editTextField.returnKeyType = UIReturnKeyType.Go
         editTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
         editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
-        editTextField.font = AppConstants.DefaultMediumFont
+        editTextField.font = UIConstants.DefaultMediumFont
         editTextField.isAccessibilityElement = true
         editTextField.accessibilityIdentifier = "url"
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")

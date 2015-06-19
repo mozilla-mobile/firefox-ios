@@ -8,9 +8,9 @@ import Shared
 struct ThumbnailCellUX {
     /// Ratio of width:height of the thumbnail image.
     static let ImageAspectRatio: Float = 1.5
-    static let TextSize = AppConstants.DefaultSmallFontSize
+    static let TextSize = UIConstants.DefaultSmallFontSize
     static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
-    static let LabelFont = AppConstants.DefaultSmallFont
+    static let LabelFont = UIConstants.DefaultSmallFont
     static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
     static let InsetSize: CGFloat = 8
     static let Insets = UIEdgeInsetsMake(InsetSize, InsetSize, InsetSize, InsetSize)

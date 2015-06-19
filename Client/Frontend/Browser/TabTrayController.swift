@@ -8,15 +8,15 @@ import SnapKit
 
 private struct TabTrayControllerUX {
     static let CornerRadius = CGFloat(4.0)
-    static let BackgroundColor = AppConstants.AppBackgroundColor
+    static let BackgroundColor = UIConstants.AppBackgroundColor
     static let CellBackgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1)
     static let TextBoxHeight = CGFloat(32.0)
     static let FaviconSize = CGFloat(18.0)
     static let Margin = CGFloat(15)
-    static let ToolbarBarTintColor = AppConstants.AppBackgroundColor
+    static let ToolbarBarTintColor = UIConstants.AppBackgroundColor
     static let ToolbarButtonOffset = CGFloat(10.0)
     static let TabTitleTextColor = UIColor.blackColor()
-    static let TabTitleTextFont = AppConstants.DefaultSmallFontBold
+    static let TabTitleTextFont = UIConstants.DefaultSmallFontBold
     static let CloseButtonSize = CGFloat(18.0)
     static let CloseButtonMargin = CGFloat(6.0)
     static let CloseButtonEdgeInset = CGFloat(10)
@@ -25,7 +25,7 @@ private struct TabTrayControllerUX {
     static let NumberOfColumnsWide = 3
     static let CompactNumberOfColumnsThin = 2
 
-    // Moved from AppConstants temporarily until animation code is merged
+    // Moved from UIConstants temporarily until animation code is merged
     static var StatusBarHeight: CGFloat {
         if UIScreen.mainScreen().traitCollection.verticalSizeClass == .Compact {
             return 0
@@ -169,9 +169,9 @@ private class CustomCell: UICollectionViewCell {
         var offset: CGFloat = shouldOffset ? 2 : 1
 
         frame = CGRect(x: 0,
-                        y: container.frame.origin.y + AppConstants.ToolbarHeight + TabTrayControllerUX.StatusBarHeight,
+                        y: container.frame.origin.y + UIConstants.ToolbarHeight + TabTrayControllerUX.StatusBarHeight,
                         width: container.frame.width,
-                        height: container.frame.height - (AppConstants.ToolbarHeight * offset + TabTrayControllerUX.StatusBarHeight))
+                        height: container.frame.height - (UIConstants.ToolbarHeight * offset + TabTrayControllerUX.StatusBarHeight))
 
         container.insertSubview(self, atIndex: container.subviews.count)
     }
@@ -180,12 +180,12 @@ private class CustomCell: UICollectionViewCell {
         let scrollOffset = table.contentOffset.y + table.contentInset.top
         if table.numberOfItemsInSection(0) > 0 {
             if let attr = table.collectionViewLayout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) {
-                frame = CGRectOffset(attr.frame, -container.frame.origin.x, -container.frame.origin.y + AppConstants.ToolbarHeight + TabTrayControllerUX.StatusBarHeight - scrollOffset)
+                frame = CGRectOffset(attr.frame, -container.frame.origin.x, -container.frame.origin.y + UIConstants.ToolbarHeight + TabTrayControllerUX.StatusBarHeight - scrollOffset)
             }
         } else {
             // TODO: fix this so the frame is where the first item *would* be
             frame = CGRect(x: 0,
-                        y: TabTrayControllerUX.Margin + AppConstants.ToolbarHeight + TabTrayControllerUX.StatusBarHeight,
+                        y: TabTrayControllerUX.Margin + UIConstants.ToolbarHeight + TabTrayControllerUX.StatusBarHeight,
                         width: container.frame.width,
                         height: self.delegate!.cellHeightForCurrentDevice())
         }
@@ -298,18 +298,18 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         navBar.snp_remakeConstraints { make in
             let topLayoutGuide = self.topLayoutGuide as! UIView
             make.top.equalTo(topLayoutGuide.snp_bottom)
-            make.height.equalTo(AppConstants.ToolbarHeight)
+            make.height.equalTo(UIConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
         }
 
         addTabButton.snp_remakeConstraints { make in
             make.trailing.bottom.equalTo(self.navBar)
-            make.size.equalTo(AppConstants.ToolbarHeight)
+            make.size.equalTo(UIConstants.ToolbarHeight)
         }
 
         settingsButton.snp_remakeConstraints { make in
             make.leading.bottom.equalTo(self.navBar)
-            make.size.equalTo(AppConstants.ToolbarHeight)
+            make.size.equalTo(UIConstants.ToolbarHeight)
         }
 
         collectionView.snp_remakeConstraints { make in
