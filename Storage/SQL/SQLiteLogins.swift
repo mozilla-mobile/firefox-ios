@@ -386,6 +386,16 @@ public class SQLiteLogins: BrowserLogins {
            >>> { self.db.run(sql, withArgs: args) }
     }
 
+    /**
+     * Replace the local DB row with the provided GUID.
+     * If no local overlay exists, one is first created.
+     *
+     * If `significant` is `true`, the `sync_status` of the row is bumped to at least `Changed`.
+     * If it's already `New`, it remains marked as `New`.
+     *
+     * This flag allows callers to make minor changes (such as incrementing a usage count)
+     * without triggering an upload or a conflict.
+     */
     public func updateLoginByGUID(guid: GUID, new: LoginData, significant: Bool) -> Success {
         // Right now this method is only ever called if the password changes at
         // point of use, so we always set `timePasswordChanged` and `timeLastUsed`.
