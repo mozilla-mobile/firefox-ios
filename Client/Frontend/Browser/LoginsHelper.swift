@@ -165,7 +165,7 @@ class LoginsHelper: BrowserHelper {
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.logins.updateLoginByGUID(guid, new: new,
-                                                          significant: new.significantlyDiffersFrom(old))
+                                                          significant: new.isSignificantlyDifferentFrom(old))
                 }),
                 SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)

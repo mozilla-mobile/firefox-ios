@@ -206,11 +206,11 @@ class TestSyncableLogins: XCTestCase {
         var loginC = Login(guid: guid, hostname: host, username: user, password: "password")
         loginC.formSubmitURL = "\(host)/form2/"
 
-        XCTAssert(loginA1.significantlyDiffersFrom(loginB))
-        XCTAssert(loginA1.significantlyDiffersFrom(loginC))
-        XCTAssert(loginA2.significantlyDiffersFrom(loginB))
-        XCTAssert(loginA2.significantlyDiffersFrom(loginC))
-        XCTAssert(!loginA1.significantlyDiffersFrom(loginA2))
+        XCTAssert(loginA1.isSignificantlyDifferentFrom(loginB))
+        XCTAssert(loginA1.isSignificantlyDifferentFrom(loginC))
+        XCTAssert(loginA2.isSignificantlyDifferentFrom(loginB))
+        XCTAssert(loginA2.isSignificantlyDifferentFrom(loginC))
+        XCTAssert(!loginA1.isSignificantlyDifferentFrom(loginA2))
     }
 
     func testLocalNewStaysNewAndIsRemoved() {
@@ -316,11 +316,11 @@ class TestSyncableLogins: XCTestCase {
         let localAltered = self.logins.getExistingLocalRecordByGUID(guidA).value.successValue!
         let mirrorAltered = self.logins.getExistingMirrorRecordByGUID(guidA).value.successValue!
 
-        XCTAssertFalse(mirrorAltered!.significantlyDiffersFrom(mirrorUsed!))      // The mirror is unchanged.
-        XCTAssertFalse(mirrorAltered!.significantlyDiffersFrom(localUsed!))
+        XCTAssertFalse(mirrorAltered!.isSignificantlyDifferentFrom(mirrorUsed!))      // The mirror is unchanged.
+        XCTAssertFalse(mirrorAltered!.isSignificantlyDifferentFrom(localUsed!))
         XCTAssertTrue(mirrorAltered!.isOverridden)                                // It's still overridden.
 
-        XCTAssertTrue(localAltered!.significantlyDiffersFrom(localUsed!))
+        XCTAssertTrue(localAltered!.isSignificantlyDifferentFrom(localUsed!))
         XCTAssertEqual(localAltered!.password, "yupyup")
         XCTAssertEqual(localAltered!.formSubmitURL!, "http://example.com/form2/")
         XCTAssertTrue(localAltered!.localModified >= preUpdate)

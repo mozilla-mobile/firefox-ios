@@ -26,7 +26,7 @@ public protocol LoginData: class {
 
     func toDict() -> [String: String]
 
-    func significantlyDiffersFrom(login: LoginData) -> Bool
+    func isSignificantlyDifferentFrom(login: LoginData) -> Bool
 }
 
 public protocol LoginUsageData {
@@ -90,7 +90,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
 
     // Essentially: should we sync a change?
     // Desktop ignores usernameField and hostnameField.
-    public func significantlyDiffersFrom(login: LoginData) -> Bool {
+    public func isSignificantlyDifferentFrom(login: LoginData) -> Bool {
         return login.password != self.password ||
                login.hostname != self.hostname ||
                login.username != self.username ||
