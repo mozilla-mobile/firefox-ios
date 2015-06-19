@@ -55,7 +55,7 @@ class URLBarView: UIView {
 
     var backButtonLeftConstraint: Constraint?
 
-    private lazy var locationView: BrowserLocationView = {
+    lazy var locationView: BrowserLocationView = {
         var locationView = BrowserLocationView(frame: CGRectZero)
         locationView.setTranslatesAutoresizingMaskIntoConstraints(false)
         locationView.readerModeState = ReaderModeState.Unavailable

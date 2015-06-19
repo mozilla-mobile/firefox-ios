@@ -24,6 +24,10 @@ class SearchSettingsTableViewController: UITableViewController {
         tableView.editing = true
         // So that we push the default search engine controller on selection.
         tableView.allowsSelectionDuringEditing = true
+
+        if self.presentingViewController != nil {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "SELDismiss")
+        }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -188,6 +192,10 @@ class SearchSettingsTableViewController: UITableViewController {
 
     func SELcancel() {
         navigationController?.popViewControllerAnimated(true)
+    }
+
+    func SELDismiss() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 

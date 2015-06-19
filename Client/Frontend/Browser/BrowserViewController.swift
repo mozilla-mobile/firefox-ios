@@ -423,6 +423,8 @@ class BrowserViewController: UIViewController {
             return
         }
 
+        urlBar.locationView.inputMode = .Search
+
         searchController = SearchViewController()
         searchController!.searchEngines = profile.searchEngines
         searchController!.searchDelegate = self
@@ -447,6 +449,7 @@ class BrowserViewController: UIViewController {
             searchController.view.removeFromSuperview()
             searchController.removeFromParentViewController()
             self.searchController = nil
+            urlBar.locationView.inputMode = .URL
             homePanelController?.view?.hidden = false
         }
     }
@@ -996,6 +999,20 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(searchViewController: SearchViewController, didSelectURL url: NSURL) {
         finishEditingAndSubmit(url, visitType: VisitType.Typed)
+    }
+
+    func presentSearchSettingsController() {
+
+        let settingsNavigationController = SearchSettingsTableViewController()
+        settingsNavigationController.model = self.profile.searchEngines
+
+        let navController = UINavigationController(rootViewController: settingsNavigationController)
+
+        self.presentViewController(navController, animated: true, completion: nil)
+    }
+
+    func searchViewControllerWillAppear(searchViewController: SearchViewController) {
+        self.urlBar.locationView.editTextField.becomeFirstResponder()
     }
 }
 
