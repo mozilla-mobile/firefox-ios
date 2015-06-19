@@ -7,7 +7,6 @@ import Shared
 import Storage
 
 private let ThumbnailIdentifier = "Thumbnail"
-private let RowIdentifier = "Row"
 private let SeparatorKind = "separator"
 private let SeparatorColor = AppConstants.SeparatorColor
 
@@ -89,10 +88,11 @@ class TopSitesPanel: UIViewController {
 
     var profile: Profile! {
         didSet {
-            profile.history.getSitesByFrecencyWithLimit(100).uponQueue(dispatch_get_main_queue(), block: { result in
+            profile.history.getSitesByFrecencyWithLimit(self.layout.thumbnailCount)
+                   .uponQueue(dispatch_get_main_queue()) { result in
                 self.updateDataSourceWithSites(result)
                 self.collection.reloadData()
-            })
+            }
         }
     }
 
@@ -112,7 +112,6 @@ class TopSitesPanel: UIViewController {
         collection.delegate = self
         collection.dataSource = dataSource
         collection.registerClass(ThumbnailCell.self, forCellWithReuseIdentifier: ThumbnailIdentifier)
-        collection.registerClass(TwoLineCollectionViewCell.self, forCellWithReuseIdentifier: RowIdentifier)
         collection.keyboardDismissMode = .OnDrag
         view.addSubview(collection)
         collection.snp_makeConstraints { make in
@@ -472,21 +471,12 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         // Cells for the top site thumbnails.
         let site = self[indexPath.item]!
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as! ThumbnailCell
 
-        if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
-            if indexPath.item < layout.thumbnailCount {
-                let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as! ThumbnailCell
-
-                if indexPath.item >= data.count {
-                    return createTileForSuggestedSite(cell, tile: site as! Tile)
-                }
-                return createTileForSite(cell, site: site)
-            }
+        if indexPath.item >= data.count {
+            return createTileForSuggestedSite(cell, tile: site as! Tile)
         }
-
-        // Cells for the remainder of the top sites list.
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(RowIdentifier, forIndexPath: indexPath) as! TwoLineCollectionViewCell
-        return createListCell(cell, site: site)
+        return createTileForSite(cell, site: site)
     }
 }
 
