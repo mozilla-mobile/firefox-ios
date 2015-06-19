@@ -1883,6 +1883,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         let settingsNavigationController = SettingsNavigationController()
         settingsNavigationController.profile = self.profile
         settingsNavigationController.tabManager = self.tabManager
+		settingsNavigationController.modalPresentationStyle = .FormSheet
         self.presentViewController(settingsNavigationController, animated: true, completion: nil)
     }
 
