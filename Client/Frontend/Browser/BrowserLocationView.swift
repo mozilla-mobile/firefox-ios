@@ -4,12 +4,19 @@
 
 import Foundation
 import UIKit
+import Shared
 
 protocol BrowserLocationViewDelegate {
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView)
     func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView)
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView)
     func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView)
+}
+
+private struct BrowserLocationViewUX {
+    static let HostFontColor = UIColor.blackColor()
+    static let BaseURLFontColor = UIColor.lightGrayColor()
+    static let DefaultURLColor = UIColor.blackColor()
 }
 
 class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
@@ -183,17 +190,10 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         didSet {
             lockImageView.hidden = url?.scheme != "https"
             if let url = url?.absoluteString {
-                if url.hasPrefix("http://") ?? false {
-                    editTextField.text = url.substringFromIndex(advance(url.startIndex, 7))
-                } else if url.hasPrefix("https://") ?? false {
-                    editTextField.text = url.substringFromIndex(advance(url.startIndex, 8))
-                } else {
-                    editTextField.text = url
-                }
+            	highlightDomain()
             } else {
                 editTextField.text = nil
             }
-
             setNeedsUpdateConstraints()
         }
     }
@@ -219,6 +219,16 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         }
     }
 
+    private func highlightDomain() {
+        if let httplessURL = url?.absoluteStringWithoutHTTPScheme(), let baseDomain = url?.baseDomain() {
+            var attributedString = NSMutableAttributedString(string: httplessURL)
+            let nsRange = NSMakeRange(0, count(httplessURL))
+            attributedString.addAttribute(NSForegroundColorAttributeName, value: BrowserLocationViewUX.BaseURLFontColor, range: nsRange)
+            attributedString.colorSubstring(baseDomain, withColor: BrowserLocationViewUX.HostFontColor)
+            editTextField.attributedText = attributedString
+        }
+    }
+
     func cancel() {
         active = false
         if editTextField.text.isEmpty {
@@ -229,6 +239,7 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         active = true
         layer.borderColor = editingBorderColor
+        textField.textColor = BrowserLocationViewUX.DefaultURLColor
         textField.text = url?.absoluteString
         setNeedsUpdateConstraints()
         delegate?.browserLocationViewDidTapLocation(self)
@@ -237,6 +248,7 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
 
     func textFieldDidEndEditing(textField: UITextField) {
         layer.borderColor = borderColor
+        highlightDomain()
         active = false
     }
 
