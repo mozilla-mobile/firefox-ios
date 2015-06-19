@@ -27,7 +27,6 @@ enum InputMode {
 class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
     var delegate: BrowserLocationViewDelegate?
     var inputMode: InputMode = .URL
-
     private var lockImageView: UIImageView!
     private var readerModeButton: ReaderModeButton!
     var editTextField: ToolbarTextField!
@@ -333,7 +332,6 @@ class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate, UIGestureRec
     override func textFieldDidBeginEditing(textField: UITextField) {
         super.textFieldDidBeginEditing(textField)
         toolbarTextFieldDelegate?.textFieldDidBeginEditing?(textField)
-
         textField.selectedTextRange = textField.textRangeFromPosition(textField.beginningOfDocument, toPosition: textField.endOfDocument)
     }
 
