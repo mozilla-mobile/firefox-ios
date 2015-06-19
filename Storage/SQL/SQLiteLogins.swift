@@ -557,13 +557,16 @@ extension SQLiteLogins: SyncableLogins {
         // we assume that once a record makes it into the mirror, that the local record association
         // has already taken place, and we're tracking local changes correctly.
         if let mirror = mirror {
+            log.debug("Mirror record found for changed record \(mirror.guid).")
             if let local = local {
+                log.debug("Changed local overlay found for \(local.guid). Resolving conflict with 3WM.")
                 // * Changed remotely and locally (conflict). Resolve the conflict using a three-way merge: the
                 //   local mirror is the shared parent of both the local overlay and the new remote record.
                 //   Apply results as in the co-creation case.
                 return self.resolveConflictBetween(local: local, upstream: upstream, shared: mirror)
             }
 
+            log.debug("No local overlay found. Updating mirror to upstream.")
             // * Changed remotely but not locally. Apply the remote changes to the mirror.
             //   There is no local overlay to discard or resolve against.
             return self.updateMirrorToLogin(upstream, fromPrevious: mirror, timestamp: timestamp)
