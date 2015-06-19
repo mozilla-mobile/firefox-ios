@@ -11,7 +11,7 @@ private struct HomePanelViewControllerUX {
     // Height of the top panel switcher button toolbar.
     static let ButtonContainerHeight: CGFloat = 40
     static let ButtonContainerBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
-    static let BackgroundColor = AppConstants.PanelBackgroundColor
+    static let BackgroundColor = UIConstants.PanelBackgroundColor
     static let EditDoneButtonLeftPadding: CGFloat = 10
 }
 
@@ -214,8 +214,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     func toggleEditingMode(editing: Bool) {
-        let translateUp = CGAffineTransformMakeTranslation(0, -AppConstants.ToolbarHeight)
-        let translateDown = CGAffineTransformMakeTranslation(0, AppConstants.ToolbarHeight)
+        let translateUp = CGAffineTransformMakeTranslation(0, -UIConstants.ToolbarHeight)
+        let translateDown = CGAffineTransformMakeTranslation(0, UIConstants.ToolbarHeight)
 
         if editing {
             let button = UIButton.buttonWithType(UIButtonType.System) as! UIButton

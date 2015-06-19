@@ -21,7 +21,7 @@ private let KVOEstimatedProgress = "estimatedProgress"
 
 private struct BrowserViewControllerUX {
     private static let ToolbarBaseAnimationDuration: CGFloat = 0.3
-    private static let BackgroundColor = AppConstants.AppBackgroundColor
+    private static let BackgroundColor = UIConstants.AppBackgroundColor
     private static let ShowHeaderTapAreaHeight: CGFloat = 32
 }
 
@@ -276,14 +276,14 @@ class BrowserViewController: UIViewController {
         header.snp_remakeConstraints { make in
             let topLayoutGuide = self.topLayoutGuide as! UIView
             self.headerConstraint = make.top.equalTo(topLayoutGuide.snp_bottom).constraint
-            make.height.equalTo(AppConstants.ToolbarHeight)
+            make.height.equalTo(UIConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
         }
         header.setNeedsUpdateConstraints()
 
         readerModeBar?.snp_remakeConstraints { make in
             self.readerConstraint = make.top.equalTo(self.header.snp_bottom).constraint
-            make.height.equalTo(AppConstants.ToolbarHeight)
+            make.height.equalTo(UIConstants.ToolbarHeight)
             make.leading.trailing.equalTo(self.view)
         }
 
@@ -306,7 +306,7 @@ class BrowserViewController: UIViewController {
         // Setup the bottom toolbar
         toolbar?.snp_remakeConstraints { make in
             make.edges.equalTo(self.footerBackground!)
-            make.height.equalTo(AppConstants.ToolbarHeight)
+            make.height.equalTo(UIConstants.ToolbarHeight)
         }
 
         footer.snp_remakeConstraints { [unowned self] make in
@@ -319,7 +319,7 @@ class BrowserViewController: UIViewController {
         adjustFooterSize(top: nil)
         footerBackground?.snp_remakeConstraints { make in
             make.bottom.left.right.equalTo(self.footer)
-            make.height.equalTo(AppConstants.ToolbarHeight)
+            make.height.equalTo(UIConstants.ToolbarHeight)
         }
         urlBar.setNeedsUpdateConstraints()
 
@@ -873,7 +873,7 @@ extension BrowserViewController: BrowserDelegate {
             } else {
                 make.centerX.equalTo(self.footer)
                 make.width.equalTo(SnackBarUX.MaxWidth)
-                self.snackBars.layer.borderColor = AppConstants.BorderColor.CGColor
+                self.snackBars.layer.borderColor = UIConstants.BorderColor.CGColor
                 self.snackBars.layer.borderWidth = 1
             }
 
@@ -1105,7 +1105,7 @@ extension BrowserViewController {
     }
 
     private func scrollReader(dy: CGFloat) {
-        let totalOffset = AppConstants.ToolbarHeight
+        let totalOffset = UIConstants.ToolbarHeight
         let newOffset = self.clamp(self.readerConstraintOffset + dy,
             min: -totalOffset, max: 0)
         self.readerConstraint?.updateOffset(newOffset)
@@ -1781,7 +1781,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 popoverPresentationController?.backgroundColor = UIColor.whiteColor()
                 popoverPresentationController?.delegate = self
                 popoverPresentationController?.sourceView = readerModeBar
-                popoverPresentationController?.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: AppConstants.ToolbarHeight, width: 1, height: 1)
+                popoverPresentationController?.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: UIConstants.ToolbarHeight, width: 1, height: 1)
                 popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.Up
                 
                 self.presentViewController(readerModeStyleViewController, animated: true, completion: nil)
@@ -1844,7 +1844,7 @@ private class BrowserScreenshotHelper: ScreenshotHelper {
 
     func takeScreenshot(tab: Browser, aspectRatio: CGFloat, quality: CGFloat) -> UIImage? {
         if let url = tab.url {
-            if url == AppConstants.AboutHomeURL {
+            if url == UIConstants.AboutHomeURL {
                 if let homePanel = controller?.homePanelController {
                     return homePanel.view.screenshot(aspectRatio, quality: quality)
                 }

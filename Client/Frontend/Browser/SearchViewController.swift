@@ -31,7 +31,7 @@ private struct SearchViewControllerUX {
     static let SearchImageWidth: Float = 24
 
     static let SuggestionBackgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.8)
-    static let SuggestionBorderColor = AppConstants.HighlightBlue
+    static let SuggestionBorderColor = UIConstants.HighlightBlue
     static let SuggestionBorderWidth: CGFloat = 1
     static let SuggestionCornerRadius: CGFloat = 4
     static let SuggestionFont = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
@@ -40,7 +40,7 @@ private struct SearchViewControllerUX {
     static let SuggestionCellVerticalPadding: CGFloat = 10
     static let SuggestionCellMaxRows = 2
 
-    static let PromptColor = AppConstants.PanelBackgroundColor
+    static let PromptColor = UIConstants.PanelBackgroundColor
     static let PromptFont = UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)
     static let PromptYesFont = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
     static let PromptNoFont = UIFont.systemFontOfSize(15, weight: UIFontWeightRegular)
@@ -87,7 +87,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = AppConstants.PanelBackgroundColor
+        view.backgroundColor = UIConstants.PanelBackgroundColor
         let blur = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light))
         view.addSubview(blur)
 
@@ -668,7 +668,7 @@ private class SuggestionButton: InsetButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        setTitleColor(AppConstants.HighlightBlue, forState: UIControlState.Normal)
+        setTitleColor(UIConstants.HighlightBlue, forState: UIControlState.Normal)
         setTitleColor(UIColor.whiteColor(), forState: UIControlState.Highlighted)
         titleLabel?.font = SearchViewControllerUX.SuggestionFont
         backgroundColor = SearchViewControllerUX.SuggestionBackgroundColor
@@ -687,7 +687,7 @@ private class SuggestionButton: InsetButton {
     @objc
     override var highlighted: Bool {
         didSet {
-            backgroundColor = highlighted ? AppConstants.HighlightBlue : SearchViewControllerUX.SuggestionBackgroundColor
+            backgroundColor = highlighted ? UIConstants.HighlightBlue : SearchViewControllerUX.SuggestionBackgroundColor
         }
     }
 }

@@ -55,7 +55,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: "SELrefresh", forControlEvents: UIControlEvents.ValueChanged)
 
-        view.backgroundColor = AppConstants.PanelBackgroundColor
+        view.backgroundColor = UIConstants.PanelBackgroundColor
     }
 
     override func viewWillAppear(animated: Bool) {

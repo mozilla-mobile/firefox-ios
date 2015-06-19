@@ -143,7 +143,7 @@ private class ConnectSetting: WithoutAccountSetting {
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Sign in", comment: "Text message / button in the settings table view"), attributes: [NSForegroundColorAttributeName: AppConstants.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Sign in", comment: "Text message / button in the settings table view"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
 
     override func onClick(navigationController: UINavigationController?) {
@@ -159,7 +159,7 @@ private class DisconnectSetting: WithAccountSetting {
     override var accessoryType: UITableViewCellAccessoryType { return .None }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Disconnect", comment: "Button in settings screen to disconnect from your account"), attributes: [NSForegroundColorAttributeName: AppConstants.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Disconnect", comment: "Button in settings screen to disconnect from your account"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
 
     override func onClick(navigationController: UINavigationController?) {
@@ -202,7 +202,7 @@ private class AccountStatusSetting: WithAccountSetting {
 
     override var title: NSAttributedString? {
         if let account = profile.getAccount() {
-            return NSAttributedString(string: account.email, attributes: [NSFontAttributeName: AppConstants.DefaultStandardFontBold, NSForegroundColorAttributeName: AppConstants.TableViewRowTextColor])
+            return NSAttributedString(string: account.email, attributes: [NSFontAttributeName: UIConstants.DefaultStandardFontBold, NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
         }
         return nil
     }
@@ -213,7 +213,7 @@ private class AccountStatusSetting: WithAccountSetting {
             case .None:
                 return nil
             case .NeedsVerification:
-                return NSAttributedString(string: NSLocalizedString("Verify your email address.", comment: "Text message in the settings table view"), attributes: [NSForegroundColorAttributeName: AppConstants.TableViewRowTextColor])
+                return NSAttributedString(string: NSLocalizedString("Verify your email address.", comment: "Text message in the settings table view"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
             case .NeedsPassword:
                 let string = NSLocalizedString("Enter your password to connect.", comment: "Text message in the settings table view")
                 let range = NSRange(location: 0, length: count(string))
@@ -273,7 +273,7 @@ private class RequirePasswordDebugSetting: WithAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: require password", comment: "Debug option"), attributes: [NSForegroundColorAttributeName: AppConstants.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Debug: require password", comment: "Debug option"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
 
     override func onClick(navigationController: UINavigationController?) {
@@ -296,7 +296,7 @@ private class RequireUpgradeDebugSetting: WithAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: require upgrade", comment: "Debug option"), attributes: [NSForegroundColorAttributeName: AppConstants.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Debug: require upgrade", comment: "Debug option"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
 
     override func onClick(navigationController: UINavigationController?) {
@@ -318,7 +318,7 @@ private class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"), attributes: [NSForegroundColorAttributeName: AppConstants.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
 
     override func onClick(navigationController: UINavigationController?) {
@@ -339,7 +339,7 @@ private class VersionSetting : Setting {
     override var title: NSAttributedString? {
         let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
         let buildNumber = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleVersion") as! String
-        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"), appVersion, buildNumber), attributes: [NSForegroundColorAttributeName: AppConstants.TableViewRowTextColor])
+        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"), appVersion, buildNumber), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
 
     override func onClick(navigationController: UINavigationController?) {
@@ -360,7 +360,7 @@ private class ShowIntroductionSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Show introduction again", comment: "Show the on-boarding screen again from the settings"), attributes: [NSForegroundColorAttributeName: AppConstants.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: NSLocalizedString("Show introduction again", comment: "Show the on-boarding screen again from the settings"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
     }
 
     override func onClick(navigationController: UINavigationController?) {
@@ -379,13 +379,13 @@ class UseCompactTabLayoutSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Use Compact Tabs", comment: "Setting to enable compact tabs in the tab overview"), attributes: [NSForegroundColorAttributeName: AppConstants.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: NSLocalizedString("Use Compact Tabs", comment: "Setting to enable compact tabs in the tab overview"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
     }
 
     override func onConfigureCell(cell: UITableViewCell) {
         super.onConfigureCell(cell)
         let control = UISwitch()
-        control.onTintColor = AppConstants.ControlTintColor
+        control.onTintColor = UIConstants.ControlTintColor
         control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         control.on = profile.prefs.boolForKey("CompactTabLayout") ?? true
         cell.accessoryView = control
@@ -404,7 +404,7 @@ private class SearchSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Search", comment: "Open search section of settings"), attributes: [NSForegroundColorAttributeName: AppConstants.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: NSLocalizedString("Search", comment: "Open search section of settings"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
     }
 
     override func onClick(navigationController: UINavigationController?) {
@@ -423,7 +423,7 @@ private class ClearPrivateDataSetting: Setting {
         self.tabManager = settings.tabManager
 
         let clearTitle = NSLocalizedString("Clear private data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
-        super.init(title: NSAttributedString(string: clearTitle, attributes: [NSForegroundColorAttributeName: AppConstants.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: clearTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
     }
 
     override func onClick(navigationController: UINavigationController?) {
@@ -461,7 +461,7 @@ private class PopupBlockingSettings: Setting {
     override func onConfigureCell(cell: UITableViewCell) {
         super.onConfigureCell(cell)
         let control = UISwitch()
-        control.onTintColor = AppConstants.ControlTintColor
+        control.onTintColor = UIConstants.ControlTintColor
         control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         control.on = prefs.boolForKey(prefKey) ?? true
         cell.accessoryView = control
@@ -643,8 +643,8 @@ private class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
         frame.origin.x = 15
         frame.origin.y = 17
         headerLabel.frame = frame
-        headerLabel.textColor = AppConstants.TableViewHeaderTextColor
-        headerLabel.font = AppConstants.DefaultStandardFontBold
+        headerLabel.textColor = UIConstants.TableViewHeaderTextColor
+        headerLabel.font = UIConstants.DefaultStandardFontBold
         return headerLabel
     }()
 
@@ -654,7 +654,7 @@ private class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.contentView.backgroundColor = AppConstants.TableViewHeaderBackgroundColor
+        self.contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
     }
 
@@ -666,11 +666,11 @@ private class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
     private override func drawRect(rect: CGRect) {
         let topBorder = CALayer()
         topBorder.frame = CGRectMake(0.0, 0.0, rect.size.width, 0.5)
-        topBorder.backgroundColor = AppConstants.SeparatorColor.CGColor
+        topBorder.backgroundColor = UIConstants.SeparatorColor.CGColor
         layer.addSublayer(topBorder)
         let bottomBorder = CALayer()
         bottomBorder.frame = CGRectMake(0.0, rect.size.height - 0.5, rect.size.width, 0.5)
-        bottomBorder.backgroundColor = AppConstants.SeparatorColor.CGColor
+        bottomBorder.backgroundColor = UIConstants.SeparatorColor.CGColor
         layer.addSublayer(bottomBorder)
     }
 

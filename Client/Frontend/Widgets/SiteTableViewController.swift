@@ -81,8 +81,8 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.registerClass(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.OnDrag
-        tableView.backgroundColor = AppConstants.PanelBackgroundColor
-        tableView.separatorColor = AppConstants.SeparatorColor
+        tableView.backgroundColor = UIConstants.PanelBackgroundColor
+        tableView.separatorColor = UIConstants.SeparatorColor
         tableView.accessibilityIdentifier = "SiteTable"
 
         // Set an empty footer to prevent empty cells from appearing in the list.

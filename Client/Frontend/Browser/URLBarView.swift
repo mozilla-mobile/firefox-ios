@@ -28,7 +28,7 @@ private struct URLBarViewUX {
     static let ToolbarButtonInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
     static func backgroundColorWithAlpha(alpha: CGFloat) -> UIColor {
-        return AppConstants.AppBackgroundColor.colorWithAlphaComponent(alpha)
+        return UIConstants.AppBackgroundColor.colorWithAlphaComponent(alpha)
     }
 }
 
@@ -84,7 +84,7 @@ class URLBarView: UIView {
         tabsButton.setTitleColor(URLBarViewUX.backgroundColorWithAlpha(1), forState: UIControlState.Normal)
         tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
         tabsButton.titleLabel?.layer.cornerRadius = 2
-        tabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
+        tabsButton.titleLabel?.font = UIConstants.DefaultSmallFontBold
         tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
         tabsButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
         tabsButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
@@ -106,7 +106,7 @@ class URLBarView: UIView {
         cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         let cancelTitle = NSLocalizedString("Cancel", comment: "Button label to cancel entering a URL or search query")
         cancelButton.setTitle(cancelTitle, forState: UIControlState.Normal)
-        cancelButton.titleLabel?.font = AppConstants.DefaultMediumFont
+        cancelButton.titleLabel?.font = UIConstants.DefaultMediumFont
         cancelButton.addTarget(self, action: "SELdidClickCancel", forControlEvents: UIControlEvents.TouchUpInside)
         cancelButton.titleEdgeInsets = UIEdgeInsetsMake(10, 12, 10, 12)
         cancelButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
@@ -229,34 +229,34 @@ class URLBarView: UIView {
             backButton.snp_remakeConstraints { (make) -> () in
                 self.backButtonLeftConstraint = make.left.equalTo(self).constraint
                 make.centerY.equalTo(self)
-                make.size.equalTo(AppConstants.ToolbarHeight)
+                make.size.equalTo(UIConstants.ToolbarHeight)
             }
             backButton.contentEdgeInsets = URLBarViewUX.ToolbarButtonInsets
 
             forwardButton.snp_remakeConstraints { (make) -> () in
                 make.left.equalTo(self.backButton.snp_right)
                 make.centerY.equalTo(self)
-                make.size.equalTo(AppConstants.ToolbarHeight)
+                make.size.equalTo(UIConstants.ToolbarHeight)
             }
             forwardButton.contentEdgeInsets = URLBarViewUX.ToolbarButtonInsets
 
             stopReloadButton.snp_remakeConstraints { (make) -> () in
                 make.left.equalTo(self.forwardButton.snp_right)
                 make.centerY.equalTo(self)
-                make.size.equalTo(AppConstants.ToolbarHeight)
+                make.size.equalTo(UIConstants.ToolbarHeight)
             }
             stopReloadButton.contentEdgeInsets = URLBarViewUX.ToolbarButtonInsets
 
             shareButton.snp_remakeConstraints { (make) -> () in
                 make.right.equalTo(self.bookmarkButton.snp_left)
                 make.centerY.equalTo(self)
-                make.size.equalTo(AppConstants.ToolbarHeight)
+                make.size.equalTo(UIConstants.ToolbarHeight)
             }
 
             bookmarkButton.snp_remakeConstraints { (make) -> () in
                 make.right.equalTo(self.tabsButton.snp_left)
                 make.centerY.equalTo(self)
-                make.size.equalTo(AppConstants.ToolbarHeight)
+                make.size.equalTo(UIConstants.ToolbarHeight)
             }
         }
     }
@@ -267,7 +267,7 @@ class URLBarView: UIView {
         tabsButton.snp_remakeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
             make.trailing.equalTo(self)
-            make.width.height.equalTo(AppConstants.ToolbarHeight)
+            make.width.height.equalTo(UIConstants.ToolbarHeight)
         }
         updateLayoutForEditing(editing: isEditing, animated: false)
         super.updateConstraints()
@@ -303,10 +303,10 @@ class URLBarView: UIView {
         let newTabsButton = InsetButton()
         self.clonedTabsButton = newTabsButton
         newTabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
-        newTabsButton.setTitleColor(AppConstants.AppBackgroundColor, forState: UIControlState.Normal)
+        newTabsButton.setTitleColor(UIConstants.AppBackgroundColor, forState: UIControlState.Normal)
         newTabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
         newTabsButton.titleLabel?.layer.cornerRadius = 2
-        newTabsButton.titleLabel?.font = AppConstants.DefaultSmallFontBold
+        newTabsButton.titleLabel?.font = UIConstants.DefaultSmallFontBold
         newTabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
         newTabsButton.setTitle(count.description, forState: .Normal)
         addSubview(newTabsButton)
@@ -316,7 +316,7 @@ class URLBarView: UIView {
         newTabsButton.snp_makeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
             make.trailing.equalTo(self)
-            make.size.equalTo(AppConstants.ToolbarHeight)
+            make.size.equalTo(UIConstants.ToolbarHeight)
         }
 
         newTabsButton.frame = tabsButton.frame
@@ -433,7 +433,7 @@ class URLBarView: UIView {
             self.clonedTabsButton?.transform = tabsButtonTransform
             self.rightBarConstraint?.updateOffset(URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer + tabsButton.frame.width)
             if self.toolbarIsShowing {
-                self.backButtonLeftConstraint?.updateOffset(-3 * AppConstants.ToolbarHeight)
+                self.backButtonLeftConstraint?.updateOffset(-3 * UIConstants.ToolbarHeight)
             }
         } else {
             self.tabsButton.transform = CGAffineTransformIdentity
@@ -632,7 +632,7 @@ private class CurveView: UIView {
     }
 
     private func drawFromTop(path: UIBezierPath) {
-        let height: Double = Double(AppConstants.ToolbarHeight)
+        let height: Double = Double(UIConstants.ToolbarHeight)
         let width = getWidthForHeight(height)
         var from = (Double(self.frame.width) - width * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(0))
 
@@ -649,7 +649,7 @@ private class CurveView: UIView {
     private func getPath() -> UIBezierPath {
         let path = UIBezierPath()
         self.drawFromTop(path)
-        path.addLineToPoint(CGPoint(x: self.frame.width, y: AppConstants.ToolbarHeight))
+        path.addLineToPoint(CGPoint(x: self.frame.width, y: UIConstants.ToolbarHeight))
         path.addLineToPoint(CGPoint(x: self.frame.width, y: 0))
         path.addLineToPoint(CGPoint(x: 0, y: 0))
         path.closePath()
