@@ -64,6 +64,8 @@ class BrowserViewController: UIViewController {
     private var readerConstraint: Constraint?
     private var readerConstraintOffset: CGFloat = 0
 
+    private var keyboardState: KeyboardState?
+
     let WhiteListedUrls = ["\\/\\/itunes\\.apple\\.com\\/"]
 
     // Tracking navigation items to record history types.
@@ -188,6 +190,7 @@ class BrowserViewController: UIViewController {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELstatusBarFrameWillChange:", name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELBookmarkStatusDidChange:", name: BookmarkStatusChangedNotification, object: nil)
+        KeyboardHelper.defaultHelper.addDelegate(self)
 
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
@@ -310,7 +313,6 @@ class BrowserViewController: UIViewController {
         }
 
         footer.snp_remakeConstraints { [unowned self] make in
-            let bars = self.footer.subviews
             self.footerConstraint = make.bottom.equalTo(self.view.snp_bottom).constraint
             make.top.equalTo(self.snackBars.snp_top)
             make.leading.trailing.equalTo(self.view)
@@ -866,7 +868,13 @@ extension BrowserViewController: BrowserDelegate {
 
     private func adjustFooterSize(top: UIView? = nil) {
         snackBars.snp_remakeConstraints({ make in
-            make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
+            let bars = self.snackBars.subviews
+            // if the keyboard is showing then ensure that the snackbars are positioned above it, otherwise position them above the toolbar/view bottom
+            if let state = keyboardState {
+                make.bottom.equalTo(-(state.height + 20))
+            } else {
+                make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
+            }
             if traitCollection.horizontalSizeClass != .Regular {
                 make.leading.trailing.equalTo(self.footer)
                 self.snackBars.layer.borderWidth = 0
@@ -877,7 +885,6 @@ extension BrowserViewController: BrowserDelegate {
                 self.snackBars.layer.borderWidth = 1
             }
 
-            let bars = self.snackBars.subviews
             if bars.count > 0 {
                 let view = bars[bars.count-1] as! UIView
                 make.top.equalTo(view.snp_top)
@@ -1971,6 +1978,25 @@ extension BrowserViewController: HashchangeHelperDelegate {
            let webView = tab.webView
         {
             updateNavigationToolbarStates(tab, webView: webView)
+        }
+    }
+}
+
+extension BrowserViewController: KeyboardHelperDelegate {
+
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        keyboardState = state
+        // if we are already showing snack bars, adjust them so they sit above the keyboard
+        if snackBars.subviews.count > 0 {
+            adjustFooterSize(top: nil)
+        }
+    }
+
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        keyboardState = nil
+        // if we are showing snack bars, adjust them so they are no longer sitting above the keyboard
+        if snackBars.subviews.count > 0 {
+            adjustFooterSize(top: nil)
         }
     }
 }
