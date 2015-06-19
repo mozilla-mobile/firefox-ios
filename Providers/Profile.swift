@@ -291,9 +291,10 @@ public class BrowserProfile: Profile {
     }()
 
     private lazy var loginsKey: String? = {
-#if MOZ_CHANNEL_DEBUG
-        return nil
-#else
+        if AppConstants.IsDebug {
+            return nil
+        }
+
         let key = "sqlcipher.key.logins.db"
         if KeychainWrapper.hasValueForKey(key) {
             return KeychainWrapper.stringForKey(key)
@@ -303,7 +304,6 @@ public class BrowserProfile: Profile {
         let secret = Bytes.generateRandomBytes(Length).base64EncodedString
         KeychainWrapper.setString(secret, forKey: key)
         return secret
-#endif
     }()
 
     private lazy var loginsDB: BrowserDB = {
