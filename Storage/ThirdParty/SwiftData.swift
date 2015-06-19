@@ -36,9 +36,8 @@ import Foundation
 import UIKit
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
-
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
+private let log = XCGLogger.defaultInstance()
 
 /**
  * Handle to a SQLite database.
@@ -293,6 +292,11 @@ public class SQLiteDBConnection {
         }
 
         return nil
+    }
+
+    func interrupt() {
+        log.debug("Interrupt")
+        sqlite3_interrupt(sqliteDB)
     }
 
     init?(filename: String, flags: Int32, key: String? = nil, prevKey: String? = nil) {
@@ -643,15 +647,17 @@ private struct SDError {
 private class FilledSQLiteCursor<T>: ArrayCursor<T> {
     private init(statement: SQLiteDBStatement, factory: (SDRow) -> T) {
         var status = CursorStatus.Success
-        let data = FilledSQLiteCursor.getValues(statement, factory: factory, status: &status)
-        super.init(data: data, status: CursorStatus.Success, statusMessage: "Success")
+        var statusMessage = ""
+        let data = FilledSQLiteCursor.getValues(statement, factory: factory, status: &status, statusMessage: &statusMessage)
+        super.init(data: data, status: status, statusMessage: statusMessage)
     }
 
     /// Return an array with the set of results and release the statement.
-    private class func getValues(statement: SQLiteDBStatement, factory: (SDRow) -> T, inout status: CursorStatus) -> [T] {
+    private class func getValues(statement: SQLiteDBStatement, factory: (SDRow) -> T, inout status: CursorStatus, inout statusMessage: String) -> [T] {
         var rows = [T]()
         var count = 0
         status = CursorStatus.Success
+        statusMessage = "Success"
 
         var columns = [String]()
         let columnCount = sqlite3_column_count(statement.pointer)
@@ -665,7 +671,10 @@ private class FilledSQLiteCursor<T>: ArrayCursor<T> {
 
             if sqlStatus != SQLITE_ROW {
                 if sqlStatus != SQLITE_DONE {
+                    // NOTE: By setting our status to failure here, we'll report our count as zero,
+                    // regardless of how far we've read at this point.
                     status = CursorStatus.Failure
+                    statusMessage = SDError.errorMessageFromCode(Int(sqlStatus))
                 }
                 break
             }

@@ -309,26 +309,20 @@ extension BrowserDB {
         return walk(chunks, { insertChunk(Array($0)) })
     }
 
+    func runWithConnection<T>(block: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> Deferred<Result<T>> {
+        return DeferredDBOperation(db: db, block: block).start()
+    }
+
     func run(sql: String, withArgs args: Args? = nil) -> Success {
-        var err: NSError?
-        return self.withWritableConnection(&err) { (conn, inout err: NSError?) -> Success in
-            err = conn.executeChange(sql, withArgs: args)
-            if err == nil {
-                log.debug("Modified rows: \(conn.numberOfRowsModified).")
-                return succeed()
-            }
-            return deferResult(DatabaseError(err: err))
+        return runWithConnection { (connection, err) -> () in
+            err = connection.executeChange(sql, withArgs: args)
+            return ()
         }
     }
 
     func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
-        func f(conn: SQLiteDBConnection, inout err: NSError?) -> Cursor<T> {
-            return conn.executeQuery(sql, factory: factory, withArgs: args)
+        return runWithConnection { (connection, err) -> Cursor<T> in
+            return connection.executeQuery(sql, factory: factory, withArgs: args)
         }
-
-        var err: NSError? = nil
-        let cursor = self.withReadableConnection(&err, callback: f)
-
-        return deferResult(cursor)
     }
 }
