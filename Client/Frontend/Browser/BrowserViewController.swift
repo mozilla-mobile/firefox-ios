@@ -675,9 +675,17 @@ class BrowserViewController: UIViewController {
         }
     }
 
+
     func openURLInNewTab(url: NSURL) {
         let tab = tabManager.addTab(request: NSURLRequest(URL: url))
         tabManager.selectTab(tab)
+    }
+
+    func openCallbackURLWithBackToAppButton(url: NSURL, callbackURL: NSURL, appName: String) {
+        openURLInNewTab(url)
+        self.tabManager.selectedTab?.callbackURL = callbackURL
+        self.tabManager.selectedTab?.callbackToAppName = appName
+        self.urlBar.updateConstraints()
     }
 }
 
@@ -842,6 +850,64 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLeaveOverlayMode(urlBar: URLBarView) {
         hideSearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url)
+    }
+
+    func urlBarUpdateCallbackToAppButtonBarState(urlBar: URLBarView) {
+        if let callbackURL = tabManager.selectedTab?.callbackURL {
+            urlBar.callbackToAppButton.setTitle(tabManager.selectedTab!.callbackToAppName, forState: UIControlState.Normal)
+            urlBar.updateCallbackToAppButtonState(false)
+            urlBar.callbackToAppButton.tab = tabManager.selectedTab!
+            if urlBar.toolbarIsShowing {
+                if tabManager.selectedTab?.backList?.count == 0 {
+                    urlBar.backButton.hidden = true
+                    if tabManager.selectedTab?.forwardList?.count == 0 {
+                        urlBar.forwardButton.hidden = true
+                        urlBar.updateLandscapeConstraintsForCallbackState(false, withForward: false)
+                    } else {
+                        urlBar.forwardButton.hidden = false
+                        urlBar.updateLandscapeConstraintsForCallbackState(false, withForward: true)
+                    }
+                } else {
+                    urlBar.backButton.hidden = false
+                    urlBar.forwardButton.hidden = false
+                    urlBar.updateCallbackToAppButtonState(true)
+                    urlBar.updateLandscapeConstraintsForCallbackState(true, withForward: true)
+                }
+            } else {
+                urlBar.backButton.hidden = true
+                urlBar.forwardButton.hidden = true
+                updatePortraitConstraintsForCallbackState(false)
+            }
+        } else {
+            if urlBar.toolbarIsShowing {
+                urlBar.backButton.hidden = false
+                urlBar.forwardButton.hidden = false
+            } else {
+                urlBar.backButton.hidden = true
+                urlBar.forwardButton.hidden = true
+            }
+            urlBar.callbackToAppButton.titleLabel?.text = nil
+            urlBar.updateCallbackToAppButtonState(true)
+            urlBar.callbackToAppButton.tab = nil
+            updatePortraitConstraintsForCallbackState(true)
+            urlBar.updateLandscapeConstraintsForCallbackState(true, withForward: true)
+        }
+    }
+
+    func updatePortraitConstraintsForCallbackState(revert: Bool) {
+//        urlBar.callbackToAppButton.snp_remakeConstraints { (make) -> () in
+//            if revert {
+//                make.left.equalTo(urlBar.backButton.snp_left)
+//            } else {
+//                make.right.equalTo(urlBar.locationContainer.snp_leading)
+//            }
+//        }
+//
+//        if !revert {
+//            urlBar.locationContainer.snp_updateConstraints { (make) -> () in
+//                make.width.equalTo(400)
+//            }
+//        }
     }
 }
 
@@ -1120,6 +1186,10 @@ extension BrowserViewController: BrowserDelegate {
     func browser(browser: Browser, didRemoveSnackbar bar: SnackBar) {
         removeBar(bar, animated: true)
     }
+
+    func updateURLBarConstraintsAfterLoadRequest(browser: Browser) {
+        self.urlBar.updateConstraints()
+    }
 }
 
 extension BrowserViewController: HomePanelViewControllerDelegate {
@@ -1226,6 +1296,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateInContentHomePanel(selected?.url)
+        self.urlBar.updateConstraints()
     }
 
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser, restoring: Bool) {
@@ -1381,6 +1452,8 @@ extension BrowserViewController: WKNavigationDelegate {
             // and the current page gets captured as expected.
             let time = dispatch_time(DISPATCH_TIME_NOW, Int64(100 * NSEC_PER_MSEC))
             dispatch_after(time, dispatch_get_main_queue()) {
+                self.urlBar.updateConstraints()
+
                 if webView.URL != url {
                     // The page changed during the delay, so we missed our chance to get a thumbnail.
                     return

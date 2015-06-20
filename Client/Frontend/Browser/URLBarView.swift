@@ -13,6 +13,7 @@ private struct URLBarViewUX {
     static let TextFieldContentInset = UIOffsetMake(9, 5)
     static let LocationLeftPadding = 5
     static let LocationHeight = 28
+    static let CallbackButtonPadding = 16
     static let LocationContentOffset: CGFloat = 8
     static let TextFieldCornerRadius: CGFloat = 3
     static let TextFieldBorderWidth: CGFloat = 1
@@ -44,6 +45,7 @@ protocol URLBarDelegate: class {
     func urlBarDidPressScrollToTop(urlBar: URLBarView)
     func urlBar(urlBar: URLBarView, didEnterText text: String)
     func urlBar(urlBar: URLBarView, didSubmitText text: String)
+    func urlBarUpdateCallbackToAppButtonBarState(urlBar: URLBarView)
 }
 
 class URLBarView: UIView {
@@ -60,6 +62,7 @@ class URLBarView: UIView {
     var inOverlayMode = false
 
     var backButtonLeftConstraint: Constraint?
+    var callbackToAppButtonConstraint: Constraint?
 
     lazy var locationView: BrowserLocationView = {
         let locationView = BrowserLocationView()
@@ -87,7 +90,7 @@ class URLBarView: UIView {
         return locationTextField
     }()
 
-    private lazy var locationContainer: UIView = {
+    lazy var locationContainer: UIView = {
         let locationContainer = UIView()
         locationContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
 
@@ -156,6 +159,13 @@ class URLBarView: UIView {
 
     lazy var stopReloadButton: UIButton = { return UIButton() }()
 
+    lazy var callbackToAppButton: CallbackToAppButton = {
+        var callbackButton = CallbackToAppButton()
+        callbackButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
+        callbackButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
+        return callbackButton
+    }()
+
     lazy var actionButtons: [UIButton] = {
         return [self.shareButton, self.bookmarkButton, self.forwardButton, self.backButton, self.stopReloadButton]
     }()
@@ -173,6 +183,14 @@ class URLBarView: UIView {
 
         set(newURL) {
             locationView.url = newURL
+        }
+    }
+
+    func closeCallbackURLWithBackToAppButton() {
+        if let tab = callbackToAppButton.tab {
+            UIApplication.sharedApplication().openURL(tab.callbackURL!)
+            tab.callbackURL = nil
+            tab.callbackToAppName = nil
         }
     }
 
@@ -204,6 +222,8 @@ class URLBarView: UIView {
         addSubview(forwardButton)
         addSubview(backButton)
         addSubview(stopReloadButton)
+        addSubview(callbackToAppButton)
+        callbackToAppButton.addTarget(self, action: "closeCallbackURLWithBackToAppButton", forControlEvents: UIControlEvents.TouchUpInside)
 
         helper = BrowserToolbarHelper(toolbar: self)
         setupConstraints()
@@ -221,6 +241,14 @@ class URLBarView: UIView {
         progressBar.snp_makeConstraints { make in
             make.top.equalTo(self.snp_bottom)
             make.width.equalTo(self)
+        }
+
+        callbackToAppButton.snp_makeConstraints { (make) -> () in
+            make.centerY.equalTo(self)
+            make.height.equalTo(UIConstants.ToolbarHeight)
+            make.width.equalTo(0)
+            make.left.equalTo(backButton.snp_right)
+            make.right.equalTo(forwardButton.snp_left)
         }
 
         locationView.snp_makeConstraints { make in
@@ -265,7 +293,7 @@ class URLBarView: UIView {
             backButton.contentEdgeInsets = URLBarViewUX.ToolbarButtonInsets
 
             forwardButton.snp_remakeConstraints { (make) -> () in
-                make.left.equalTo(self.backButton.snp_right)
+                make.left.equalTo(self.callbackToAppButton.snp_right)
                 make.centerY.equalTo(self)
                 make.size.equalTo(UIConstants.ToolbarHeight)
             }
@@ -295,7 +323,65 @@ class URLBarView: UIView {
     override func updateConstraints() {
         updateToolbarConstraints()
         remakeLocationContainerConstraints()
+        delegate?.urlBarUpdateCallbackToAppButtonBarState(self)
+        tabsButton.snp_remakeConstraints { make in
+            make.centerY.equalTo(self.locationContainer)
+            make.trailing.equalTo(self)
+            make.width.height.equalTo(UIConstants.ToolbarHeight)
+        }
+
+        updateLayoutForEditing(editing: isEditing, animated: false)
         super.updateConstraints()
+    }
+
+    func updateCallbackToAppButtonState(revert: Bool) {
+        callbackToAppButton.hidden = revert
+        callbackToAppButton.titleLabel?.hidden = revert
+    }
+
+    func updateLandscapeConstraintsForCallbackState(revert: Bool, withForward: Bool) {
+        callbackToAppButton.snp_updateConstraints { (make) -> () in
+            if revert {
+                make.width.equalTo(0)
+            } else {
+                make.width.equalTo(95)
+            }
+        }
+
+        backButton.snp_updateConstraints { (make) -> () in
+            if revert {
+                make.size.equalTo(UIConstants.ToolbarHeight)
+            } else {
+                make.size.equalTo(0)
+            }
+        }
+
+        forwardButton.snp_updateConstraints { (make) -> () in
+            if revert {
+                make.left.equalTo(backButton.snp_right)
+            } else {
+                make.left.equalTo(callbackToAppButton.snp_right)
+            }
+            if revert || withForward {
+                make.size.equalTo(UIConstants.ToolbarHeight)
+            } else {
+                make.size.equalTo(0)
+            }
+        }
+
+
+        if revert {
+            backButton.contentEdgeInsets = URLBarViewUX.ToolbarButtonInsets
+        } else {
+            backButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
+
+
+        if revert || withForward {
+            forwardButton.contentEdgeInsets = URLBarViewUX.ToolbarButtonInsets
+        } else {
+            forwardButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
     }
 
     // Ideally we'd split this implementation in two, one URLBarView with a toolbar and one without
@@ -399,7 +485,6 @@ class URLBarView: UIView {
         // Show the overlay mode UI, which includes hiding the locationView and replacing it
         // with the editable locationTextField.
         animateToOverlayState(true)
-
         delegate?.urlBarDidEnterOverlayMode(self)
     }
 
@@ -446,6 +531,7 @@ class URLBarView: UIView {
         self.forwardButton.hidden = !self.toolbarIsShowing
         self.backButton.hidden = !self.toolbarIsShowing
         self.stopReloadButton.hidden = !self.toolbarIsShowing
+        self.callbackToAppButton.hidden = !self.toolbarIsShowing
     }
 
     func transitionToOverlay() {
@@ -457,6 +543,8 @@ class URLBarView: UIView {
         self.forwardButton.alpha = inOverlayMode ? 0 : 1
         self.backButton.alpha = inOverlayMode ? 0 : 1
         self.stopReloadButton.alpha = inOverlayMode ? 0 : 1
+        self.callbackToAppButton.alpha = inOverlayMode ? 0 : 1
+
 
         let borderColor = inOverlayMode ? URLBarViewUX.TextFieldActiveBorderColor : URLBarViewUX.TextFieldBorderColor
         locationContainer.layer.borderColor = borderColor.CGColor
@@ -501,6 +589,17 @@ class URLBarView: UIView {
         self.forwardButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.backButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.stopReloadButton.hidden = !self.toolbarIsShowing || inOverlayMode
+        self.callbackToAppButton.hidden = !self.toolbarIsShowing || inOverlayMode
+
+    func finishEditingAnimation(editing: Bool) {
+        self.tabsButton.hidden = editing
+        self.cancelButton.hidden = !editing
+        self.forwardButton.hidden = !self.toolbarIsShowing || editing
+        self.backButton.hidden = !self.toolbarIsShowing || editing
+        self.shareButton.hidden = !self.toolbarIsShowing || editing
+        self.bookmarkButton.hidden = !self.toolbarIsShowing || editing
+        self.stopReloadButton.hidden = !self.toolbarIsShowing || editing
+        self.callbackToAppButton.hidden = !self.toolbarIsShowing || editing
     }
 
     func animateToOverlayState(overlay: Bool) {
@@ -605,6 +704,10 @@ extension URLBarView: BrowserLocationViewDelegate {
 
     func browserLocationViewLocationAccessibilityActions(browserLocationView: BrowserLocationView) -> [UIAccessibilityCustomAction]? {
         return delegate?.urlBarLocationAccessibilityActions(self)
+    }
+
+    func browserLocationViewUpdateCallbackToAppButtonState(browserLocationView: BrowserLocationView) {
+        delegate?.urlBarUpdateCallbackToAppButtonBarState(self)
     }
 }
 
