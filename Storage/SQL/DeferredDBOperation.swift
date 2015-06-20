@@ -75,6 +75,7 @@ class DeferredDBOperation<T>: Deferred<Result<T>>, Cancellable {
         if self.cancelled {
             let err = NSError(domain: "mozilla", code: 9, userInfo: [NSLocalizedDescriptionKey: "Operation was cancelled before starting"])
             fill(Result(failure: DatabaseError(err: err)))
+            return
         }
 
         let start = NSDate.now()
