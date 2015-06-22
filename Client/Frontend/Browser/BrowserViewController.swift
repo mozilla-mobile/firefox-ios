@@ -912,7 +912,12 @@ extension BrowserViewController: BrowserToolbarDelegate {
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         if let selected = tabManager.selectedTab {
             if let url = selected.displayURL {
-                var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
+                let printInfo = UIPrintInfo(dictionary: nil)
+                printInfo.jobName = url.absoluteString
+                printInfo.outputType = .General
+                let renderer = BrowserPrintPageRenderer(browser: selected)
+                let activityItems = [printInfo, renderer, selected.title ?? url.absoluteString!, url]
+                var activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
                 // Hide 'Add to Reading List' which currently uses Safari
                 activityViewController.excludedActivityTypes = [UIActivityTypeAddToReadingList]
                 activityViewController.completionWithItemsHandler = { _, completed, _, _ in
