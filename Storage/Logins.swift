@@ -9,6 +9,76 @@ import XCGLogger
 
 private var log = XCGLogger.defaultInstance()
 
+public enum CommutativeLoginField {
+    case TimesUsed(increment: Int)
+}
+
+public protocol Indexable {
+    var index: Int { get }
+}
+
+public enum NonCommutativeLoginField: Indexable {
+    case Hostname(to: String)
+    case Password(to: String)
+    case Username(to: String?)
+    case HTTPRealm(to: String?)
+    case FormSubmitURL(to: String?)
+    case TimeCreated(to: MicrosecondTimestamp)                  // Should be immutable.
+    case TimeLastUsed(to: MicrosecondTimestamp)
+    case TimePasswordChanged(to: MicrosecondTimestamp)
+
+    public var index: Int {
+        switch self {
+        case .Hostname:
+            return 0
+        case .Password:
+            return 1
+        case .Username:
+            return 2
+        case .HTTPRealm:
+            return 3
+        case .FormSubmitURL:
+            return 4
+        case .TimeCreated:
+            return 5
+        case .TimeLastUsed:
+            return 6
+        case .TimePasswordChanged:
+            return 7
+        }
+    }
+
+    static let Entries: Int = 8
+}
+
+// We don't care about these, because they're slated for removal at some point --
+// we don't really use them for form fill.
+// We handle them in the same way as NonCommutative, just broken out to allow us
+// flexibility in removing them or reconciling them differently.
+public enum NonConflictingLoginField: Indexable {
+    case UsernameField(to: String?)
+    case PasswordField(to: String?)
+
+    public var index: Int {
+        switch self {
+        case .UsernameField:
+            return 0
+        case .PasswordField:
+            return 1
+        }
+    }
+
+    static let Entries: Int = 2
+}
+
+public typealias LoginDeltas = (
+    commutative: [CommutativeLoginField],
+    nonCommutative: [NonCommutativeLoginField],
+    nonConflicting: [NonConflictingLoginField]
+)
+
+public typealias TimestampedLoginDeltas = (at: Timestamp, changed: LoginDeltas)
+
 /**
  * LoginData is a wrapper around NSURLCredential and NSURLProtectionSpace to allow us to add extra fields where needed.
  **/
@@ -77,7 +147,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         }
     }
 
-    // LoginUsageData
+    // LoginUsageData. These defaults only apply to locally created records.
     public var timesUsed = 0
     public var timeCreated = NSDate.nowMicroseconds()
     public var timeLastUsed = NSDate.nowMicroseconds()
@@ -179,10 +249,238 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         }
         return realm
     }
+
+    /**
+     * Produce a delta stream by comparing this record to a source.
+     * Note that the source might be missing the timestamp and counter fields
+     * introduced in Bug 555755, so we pay special attention to those, checking for
+     * and ignoring transitions to zero.
+     *
+     * TODO: it's possible that we'll have, say, two iOS clients working with a desktop.
+     * Each time the desktop changes the password fields, it'll upload a record without
+     * these extra timestamp fields. We need to make sure the right thing happens.
+     *
+     * There are three phases in this process:
+     * 1. Producing deltas. There is no intrinsic ordering here, but we yield ordered
+     *    arrays for convenience and ease of debugging.
+     * 2. Comparing deltas. This is done through a kind of array-based Perlish Schwartzian
+     *    transform, where each field has a known index in space to allow for trivial
+     *    comparison; this, of course, is ordered.
+     * 3. Applying a merged delta stream to a record. Again, this is unordered, but we
+     *    use arrays for convenience.
+     */
+    public func deltas(#from: Login) -> LoginDeltas {
+        let commutative: [CommutativeLoginField]
+
+        if self.timesUsed > 0 && self.timesUsed != from.timesUsed {
+            commutative = [CommutativeLoginField.TimesUsed(increment: self.timesUsed - from.timesUsed)]
+        } else {
+            commutative = []
+        }
+
+        var nonCommutative = [NonCommutativeLoginField]()
+
+        if self.hostname != from.hostname {
+            nonCommutative.append(NonCommutativeLoginField.Hostname(to: self.hostname))
+        }
+        if self.password != from.password {
+            nonCommutative.append(NonCommutativeLoginField.Password(to: self.password))
+        }
+        if self.username != from.username {
+            nonCommutative.append(NonCommutativeLoginField.Username(to: self.username))
+        }
+        if self.httpRealm != from.httpRealm {
+            nonCommutative.append(NonCommutativeLoginField.HTTPRealm(to: self.httpRealm))
+        }
+        if self.formSubmitURL != from.formSubmitURL {
+            nonCommutative.append(NonCommutativeLoginField.FormSubmitURL(to: self.formSubmitURL))
+        }
+        if self.timeCreated > 0 && self.timeCreated != from.timeCreated {
+            nonCommutative.append(NonCommutativeLoginField.TimeCreated(to: self.timeCreated))
+        }
+        if self.timeLastUsed > 0 && self.timeLastUsed != from.timeLastUsed {
+            nonCommutative.append(NonCommutativeLoginField.TimeLastUsed(to: self.timeLastUsed))
+        }
+        if self.timeLastUsed > 0 && self.timePasswordChanged != from.timePasswordChanged {
+            nonCommutative.append(NonCommutativeLoginField.TimePasswordChanged(to: self.timePasswordChanged))
+        }
+
+        var nonConflicting = [NonConflictingLoginField]()
+
+        if self.passwordField != from.passwordField {
+            nonConflicting.append(NonConflictingLoginField.PasswordField(to: self.passwordField))
+        }
+        if self.usernameField != from.usernameField {
+            nonConflicting.append(NonConflictingLoginField.UsernameField(to: self.usernameField))
+        }
+
+        return (commutative, nonCommutative, nonConflicting)
+    }
+
+    private class func mergeDeltaFields<T: Indexable>(count: Int, a: [T], b: [T], preferBToA: Bool) -> [T] {
+        var deltas = Array<T?>(count: count, repeatedValue: nil)
+
+        // Let's start with the 'a's.
+        for (let f) in a {
+            deltas[f.index] = f
+        }
+
+        // Then detect any conflicts and fill out the rest.
+        for (let f) in b {
+            let index = f.index
+            if deltas[index] != nil {
+                log.warning("Collision in \(T.self) \(f.index). Using latest.")
+                if preferBToA {
+                    deltas[index] = f
+                }
+            } else {
+                deltas[index] = f
+            }
+        }
+
+        return optFilter(deltas)
+    }
+
+    public class func mergeDeltas(#a: TimestampedLoginDeltas, b: TimestampedLoginDeltas) -> LoginDeltas {
+        let (aAt, aChanged) = a
+        let (bAt, bChanged) = b
+        let (aCommutative, aNonCommutative, aNonConflicting) = aChanged
+        let (bCommutative, bNonCommutative, bNonConflicting) = bChanged
+
+        // If the timestamps are exactly the same -- an exceedingly rare occurrence -- we default
+        // to 'b', which is the remote record by convention.
+        let bLatest = aAt <= bAt
+
+        let commutative = aCommutative + bCommutative
+        let nonCommutative: [NonCommutativeLoginField]
+        let nonConflicting: [NonConflictingLoginField]
+
+        if aNonCommutative.isEmpty {
+            nonCommutative = bNonCommutative
+        } else if bNonCommutative.isEmpty {
+            nonCommutative = aNonCommutative
+        } else {
+            nonCommutative = mergeDeltaFields(NonCommutativeLoginField.Entries, a: aNonCommutative, b: bNonCommutative, preferBToA: bLatest)
+        }
+
+        if aNonConflicting.isEmpty {
+            nonConflicting = bNonConflicting
+        } else if bNonCommutative.isEmpty {
+            nonConflicting = aNonConflicting
+        } else {
+            nonConflicting = mergeDeltaFields(NonConflictingLoginField.Entries, a: aNonConflicting, b: bNonConflicting, preferBToA: bLatest)
+        }
+
+        return (
+            commutative: commutative,
+            nonCommutative: nonCommutative,
+            nonConflicting: nonConflicting
+        )
+    }
+
+    /**
+     * Apply the provided changes to yield a new login.
+     */
+    public func applyDeltas(deltas: LoginDeltas) -> Login {
+        let guid = self.guid
+        var hostname = self.hostname
+        var username = self.username
+        var password = self.password
+        var usernameField = self.usernameField
+        var passwordField = self.passwordField
+        var timesUsed = self.timesUsed
+        var httpRealm = self.httpRealm
+        var formSubmitURL = self.formSubmitURL
+        var timeCreated = self.timeCreated
+        var timeLastUsed = self.timeLastUsed
+        var timePasswordChanged = self.timePasswordChanged
+
+        for (let delta) in deltas.commutative {
+            switch delta {
+            case let .TimesUsed(increment):
+                timesUsed += increment
+            }
+        }
+
+        for (let delta) in deltas.nonCommutative {
+            switch delta {
+            case let .Hostname(to):
+                hostname = to
+                break
+            case let .Password(to):
+                password = to
+                break
+            case let .Username(to):
+                username = to
+                break
+            case let .HTTPRealm(to):
+                httpRealm = to
+                break
+            case let .FormSubmitURL(to):
+                formSubmitURL = to
+                break
+            case let .TimeCreated(to):
+                timeCreated = to
+                break
+            case let .TimeLastUsed(to):
+                timeLastUsed = to
+                break
+            case let .TimePasswordChanged(to):
+                timePasswordChanged = to
+                break
+            }
+        }
+
+        for (let delta) in deltas.nonConflicting {
+            switch delta {
+            case let .UsernameField(to):
+                usernameField = to
+                break
+            case let .PasswordField(to):
+                passwordField = to
+                break
+            }
+        }
+
+        var out = Login(guid: guid, hostname: hostname, username: username!, password: password)
+        out.timesUsed = timesUsed
+        out.httpRealm = httpRealm
+        out.formSubmitURL = formSubmitURL
+        out.timeCreated = timeCreated
+        out.timeLastUsed = timeLastUsed
+        out.timePasswordChanged = timePasswordChanged
+        out.usernameField = usernameField
+        out.passwordField = passwordField
+
+        return out
+    }
 }
 
 public func ==(lhs: Login, rhs: Login) -> Bool {
     return lhs.credentials == rhs.credentials && lhs.protectionSpace == rhs.protectionSpace
+}
+
+public class ServerLogin: Login {
+    var serverModified: Timestamp = 0
+
+    public init(guid: String, hostname: String, username: String, password: String, modified: Timestamp) {
+        self.serverModified = modified
+        super.init(guid: guid, hostname: hostname, username: username, password: password)
+    }
+
+    required public init(credential: NSURLCredential, protectionSpace: NSURLProtectionSpace) {
+        super.init(credential: credential, protectionSpace: protectionSpace)
+    }
+}
+
+class MirrorLogin: ServerLogin {
+    var isOverridden: Bool = false
+}
+
+class LocalLogin: Login {
+    var syncStatus: SyncStatus = .Synced
+    var isDeleted: Bool = false
+    var localModified: Timestamp = 0
 }
 
 public protocol BrowserLogins {
@@ -195,9 +493,6 @@ public protocol BrowserLogins {
     func addLogin(login: LoginData) -> Success
 
     func updateLoginByGUID(guid: GUID, new: LoginData, significant: Bool) -> Success
-
-    // Update based on username, hostname, httpRealm, formSubmitURL.
-    //func updateLogin(login: LoginData) -> Success
 
     // Add the use of a login by GUID.
     func addUseOfLoginByGUID(guid: GUID) -> Success
@@ -212,10 +507,12 @@ public protocol SyncableLogins {
      */
     func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success
 
-    func applyChangedLogin(upstream: Login, timestamp: Timestamp) -> Success
+    func applyChangedLogin(upstream: ServerLogin) -> Success
+
+    func getModifiedLoginsToUpload() -> Deferred<Result<[Login]>>
+    func getDeletedLoginsToUpload() -> Deferred<Result<[GUID]>>
 
     /**
-     * TODO: these might need some work.
      * Chains through the provided timestamp.
      */
     func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>>
