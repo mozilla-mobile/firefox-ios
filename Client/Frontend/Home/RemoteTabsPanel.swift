@@ -127,7 +127,7 @@ enum RemoteTabsError {
         case NoClients:
             return "You currently don't have any other devices connected to Firefox Sync." // TODO L10N
         case NoTabs:
-            return "You currently don't have any other devices tabs open on your other Firefox-enabled devices." // TODO L10N
+            return "You currently don't have any tabs open on your other Firefox-enabled devices." // TODO L10N
         case FailedToSync:
             return "There was a problem fetching tabs from the cloud. Please try again in a few moments." // TODO L10N
         }
