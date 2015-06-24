@@ -16,7 +16,7 @@ class Toolbar : UIView {
     }
 
     private func drawLine(context: CGContextRef, start: CGPoint, end: CGPoint) {
-        CGContextSetStrokeColorWithColor(context, AppConstants.BorderColor.CGColor)
+        CGContextSetStrokeColorWithColor(context, UIConstants.BorderColor.CGColor)
         CGContextSetLineWidth(context, 1)
         CGContextMoveToPoint(context, start.x, start.y)
         CGContextAddLineToPoint(context, end.x, end.y)
@@ -72,7 +72,7 @@ class Toolbar : UIView {
                     prev = view
 
                     make.centerY.equalTo(self)
-                    make.height.equalTo(AppConstants.ToolbarHeight)
+                    make.height.equalTo(UIConstants.ToolbarHeight)
                     make.width.equalTo(self).dividedBy(self.subviews.count)
                 }
             }

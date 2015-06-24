@@ -8,7 +8,7 @@ import Storage
 
 private let ThumbnailIdentifier = "Thumbnail"
 private let SeparatorKind = "separator"
-private let SeparatorColor = AppConstants.SeparatorColor
+private let SeparatorColor = UIConstants.SeparatorColor
 
 struct TopSitesPanelUX {
     static let SuggestedTileImagePadding: CGFloat = 10
@@ -109,7 +109,7 @@ class TopSitesPanel: UIViewController {
         layout.registerClass(TopSitesSeparator.self, forDecorationViewOfKind: SeparatorKind)
 
         collection = TopSitesCollectionView(frame: self.view.frame, collectionViewLayout: layout)
-        collection.backgroundColor = AppConstants.PanelBackgroundColor
+        collection.backgroundColor = UIConstants.PanelBackgroundColor
         collection.delegate = self
         collection.dataSource = dataSource
         collection.registerClass(ThumbnailCell.self, forCellWithReuseIdentifier: ThumbnailIdentifier)
@@ -292,7 +292,7 @@ private class TopSitesLayout: UICollectionViewLayout {
             let row = Int(y / thumbnailHeight)
             return min(count - 1, max(0, row * thumbnailCols))
         }
-        return min(count - 1, max(0, Int((y - topSectionHeight) / AppConstants.DefaultRowHeight + CGFloat(thumbnailCount))))
+        return min(count - 1, max(0, Int((y - topSectionHeight) / UIConstants.DefaultRowHeight + CGFloat(thumbnailCount))))
     }
 
     override func collectionViewContentSize() -> CGSize {
@@ -301,7 +301,7 @@ private class TopSitesLayout: UICollectionViewLayout {
             return CGSize(width: width, height: topSectionHeight)
         }
 
-        let bottomSectionHeight = CGFloat(count - thumbnailCount) * AppConstants.DefaultRowHeight
+        let bottomSectionHeight = CGFloat(count - thumbnailCount) * UIConstants.DefaultRowHeight
         return CGSize(width: width, height: topSectionHeight + bottomSectionHeight)
     }
 
@@ -330,7 +330,7 @@ private class TopSitesLayout: UICollectionViewLayout {
     override func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
         let rowIndex = indexPath.item - thumbnailCount + 1
         if rowIndex >= 0 {
-            let rowYOffset = CGFloat(rowIndex) * AppConstants.DefaultRowHeight
+            let rowYOffset = CGFloat(rowIndex) * UIConstants.DefaultRowHeight
             let y = topSectionHeight + rowYOffset
             let decoration = UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
             decoration.frame = CGRectMake(0, y, width, 0.5)
@@ -353,9 +353,9 @@ private class TopSitesLayout: UICollectionViewLayout {
             attr.frame = CGRectMake(x, y, thumbnailWidth, thumbnailHeight)
         } else {
             // Set the bottom row frames.
-            let rowYOffset = CGFloat(i - thumbnailCount) * AppConstants.DefaultRowHeight
+            let rowYOffset = CGFloat(i - thumbnailCount) * UIConstants.DefaultRowHeight
             let y = CGFloat(topSectionHeight + rowYOffset)
-            attr.frame = CGRectMake(0, y, width, AppConstants.DefaultRowHeight)
+            attr.frame = CGRectMake(0, y, width, UIConstants.DefaultRowHeight)
         }
 
         return attr

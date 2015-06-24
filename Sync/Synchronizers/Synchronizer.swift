@@ -73,7 +73,7 @@ public enum SyncStatus {
 }
 
 
-
+typealias DeferredTimestamp = Deferred<Result<Timestamp>>
 public typealias SyncResult = Deferred<Result<SyncStatus>>
 
 public enum SyncNotStartedReason {
@@ -146,6 +146,11 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
         }
     }
 
+    func setTimestamp(timestamp: Timestamp) {
+        log.debug("Setting post-upload lastFetched to \(timestamp).")
+        self.lastFetched = timestamp
+    }
+
     public func remoteHasChanges(info: InfoCollections) -> Bool {
         return info.modified(self.collection) > self.lastFetched
     }
@@ -176,6 +181,17 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
         }
 
         // Success!
+        return nil
+    }
+
+    func encrypter<T>(encoder: RecordEncoder<T>) -> RecordEncrypter<T>? {
+        return self.scratchpad.keys?.value.encrypter(self.collection, encoder: encoder)
+    }
+
+    func collectionClient<T>(encoder: RecordEncoder<T>, storageClient: Sync15StorageClient) -> Sync15CollectionClient<T>? {
+        if let encrypter = self.encrypter(encoder) {
+            return storageClient.clientForCollection(self.collection, encrypter: encrypter)
+        }
         return nil
     }
 }

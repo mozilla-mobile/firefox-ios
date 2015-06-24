@@ -145,7 +145,7 @@ protocol Profile {
     var history: protocol<BrowserHistory, SyncableHistory> { get }
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
-    var logins: Logins { get }
+    var logins: protocol<BrowserLogins, SyncableLogins> { get }
     var thumbnails: Thumbnails { get }
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
@@ -286,8 +286,28 @@ public class BrowserProfile: Profile {
            >>> { self.remoteClientsAndTabs.getClientsAndTabs() }
     }
 
-    lazy var logins: Logins = {
-        return SQLiteLogins(files: self.files)
+    lazy var logins: protocol<BrowserLogins, SyncableLogins> = {
+        return SQLiteLogins(db: self.loginsDB)
+    }()
+
+    private lazy var loginsKey: String? = {
+        if AppConstants.IsDebug {
+            return nil
+        }
+
+        let key = "sqlcipher.key.logins.db"
+        if KeychainWrapper.hasValueForKey(key) {
+            return KeychainWrapper.stringForKey(key)
+        }
+
+        let Length: UInt = 256
+        let secret = Bytes.generateRandomBytes(Length).base64EncodedString
+        KeychainWrapper.setString(secret, forKey: key)
+        return secret
+    }()
+
+    private lazy var loginsDB: BrowserDB = {
+        return BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
     }()
 
     lazy var thumbnails: Thumbnails = {

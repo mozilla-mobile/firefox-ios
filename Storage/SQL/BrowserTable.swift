@@ -242,13 +242,7 @@ public class BrowserTable: Table {
      * Note that we don't check for views -- trust to luck.
      */
     func exists(db: SQLiteDBConnection) -> Bool {
-        let count = AllTables.count
-        let orClause = join(" OR ", Array(count: count, repeatedValue: "name = ?"))
-        let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND (\(orClause))"
-
-        let res = db.executeQuery(tablesSQL, factory: StringFactory, withArgs: AllTables)
-        log.debug("\(res.count) tables exist. Expected \(count)")
-        return res.count > 0
+        return db.tablesExist(AllTables)
     }
 
     func drop(db: SQLiteDBConnection) -> Bool {

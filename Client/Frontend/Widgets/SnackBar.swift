@@ -26,7 +26,7 @@ class SnackButton : UIButton {
      */
     lazy var highlightImg: UIImage = {
         let size = CGSize(width: 1, height: 1)
-        return UIImage.createWithColor(size, color: AppConstants.HighlightColor)
+        return UIImage.createWithColor(size, color: UIConstants.HighlightColor)
     }()
 
     init(title: String, callback: (bar: SnackBar) -> Void) {
@@ -35,9 +35,9 @@ class SnackButton : UIButton {
         super.init(frame: CGRectZero)
 
         setTitle(title, forState: .Normal)
-        titleLabel?.font = AppConstants.DefaultMediumFont
+        titleLabel?.font = UIConstants.DefaultMediumFont
         setBackgroundImage(highlightImg, forState: .Highlighted)
-        setTitleColor(AppConstants.HighlightText, forState: .Highlighted)
+        setTitleColor(UIConstants.HighlightText, forState: .Highlighted)
 
         addTarget(self, action: "onClick", forControlEvents: .TouchUpInside)
     }
@@ -81,7 +81,7 @@ class SnackBar: UIView {
 
     convenience init(text: String, img: UIImage?, buttons: [SnackButton]?) {
         var attributes = [NSObject: AnyObject]()
-        attributes[NSFontAttributeName] = AppConstants.DefaultMediumFont
+        attributes[NSFontAttributeName] = UIConstants.DefaultMediumFont
         attributes[NSBackgroundColorAttributeName] = UIColor.clearColor()
         let attrText = NSAttributedString(string: text, attributes: attributes)
         self.init(attrText: attrText, img: img, buttons: buttons)
@@ -132,7 +132,7 @@ class SnackBar: UIView {
 
         imageView.contentMode = UIViewContentMode.TopLeft
 
-        textLabel.font = AppConstants.DefaultMediumFont
+        textLabel.font = UIConstants.DefaultMediumFont
         textLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         textLabel.numberOfLines = 0
         textLabel.backgroundColor = UIColor.clearColor()
@@ -146,11 +146,11 @@ class SnackBar: UIView {
         super.layoutSubviews()
         let imageWidth: CGFloat
         if let img = imageView.image {
-            imageWidth = img.size.width + AppConstants.DefaultPadding * 2
+            imageWidth = img.size.width + UIConstants.DefaultPadding * 2
         } else {
             imageWidth = 0
         }
-        self.textLabel.preferredMaxLayoutWidth = contentView.frame.width - (imageWidth + AppConstants.DefaultPadding)
+        self.textLabel.preferredMaxLayoutWidth = contentView.frame.width - (imageWidth + UIConstants.DefaultPadding)
         super.layoutSubviews()
     }
 
@@ -171,7 +171,7 @@ class SnackBar: UIView {
         }
 
         contentView.snp_remakeConstraints { make in
-            make.top.left.right.equalTo(self).insets(EdgeInsetsMake(AppConstants.DefaultPadding, AppConstants.DefaultPadding, AppConstants.DefaultPadding, AppConstants.DefaultPadding	))
+            make.top.left.right.equalTo(self).insets(EdgeInsetsMake(UIConstants.DefaultPadding, UIConstants.DefaultPadding, UIConstants.DefaultPadding, UIConstants.DefaultPadding	))
         }
 
         if let img = imageView.image {
@@ -179,8 +179,8 @@ class SnackBar: UIView {
                 make.top.left.equalTo(contentView)
                 // To avoid doubling the padding, the textview doesn't have an inset on its left side.
                 // Instead, it relies on the imageView to tell it where its left side should be.
-                make.width.equalTo(img.size.width + AppConstants.DefaultPadding)
-                make.height.equalTo(img.size.height + AppConstants.DefaultPadding)
+                make.width.equalTo(img.size.width + UIConstants.DefaultPadding)
+                make.height.equalTo(img.size.height + UIConstants.DefaultPadding)
                 make.bottom.lessThanOrEqualTo(contentView.snp_bottom)
             })
         } else {
@@ -199,11 +199,11 @@ class SnackBar: UIView {
         })
 
         buttonsView.snp_remakeConstraints({ make in
-            make.top.equalTo(contentView.snp_bottom).offset(AppConstants.DefaultPadding)
+            make.top.equalTo(contentView.snp_bottom).offset(UIConstants.DefaultPadding)
             make.bottom.equalTo(self.snp_bottom)
             make.left.right.equalTo(self)
             if self.buttonsView.subviews.count > 0 {
-            	make.height.equalTo(AppConstants.ToolbarHeight)
+		make.height.equalTo(UIConstants.ToolbarHeight)
             } else {
                 make.height.equalTo(0)
             }
@@ -225,7 +225,7 @@ class SnackBar: UIView {
         alpha = 0
         var h = frame.height
         if h == 0 {
-            h = AppConstants.ToolbarHeight
+            h = UIConstants.ToolbarHeight
         }
         bottom?.updateOffset(h)
     }

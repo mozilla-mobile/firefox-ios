@@ -234,13 +234,13 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         tableView.rowHeight = ReadingListTableViewCellUX.RowHeight
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
-        tableView.separatorColor = AppConstants.SeparatorColor
+        tableView.separatorColor = UIConstants.SeparatorColor
         tableView.registerClass(ReadingListTableViewCell.self, forCellReuseIdentifier: "ReadingListTableViewCell")
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
 
-        view.backgroundColor = AppConstants.PanelBackgroundColor
+        view.backgroundColor = UIConstants.PanelBackgroundColor
 
         if let result = profile.readingList?.getAvailableRecords() where result.isSuccess {
             records = result.successValue

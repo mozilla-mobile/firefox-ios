@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
 
-        let defaultRequest = NSURLRequest(URL: AppConstants.AboutHomeURL)
+        let defaultRequest = NSURLRequest(URL: UIConstants.AboutHomeURL)
         self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, prefs: profile.prefs)
         browserViewController = BrowserViewController(profile: profile, tabManager: self.tabManager)
 
@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         browserViewController.restorationClass = AppDelegate.self
 
         self.window!.rootViewController = browserViewController
-        self.window!.backgroundColor = AppConstants.AppBackgroundColor
+        self.window!.backgroundColor = UIConstants.AppBackgroundColor
 
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL, absoluteString = url.absoluteString {
