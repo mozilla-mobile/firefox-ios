@@ -139,6 +139,9 @@ class URLBarView: UIView {
     // Used to temporarily store the cloned button so we can respond to layout changes during animation
     private weak var clonedTabsButton: InsetButton?
 
+    private var rightBarConstraint: Constraint?
+    private let defaultRightOffset: CGFloat = URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer
+
     var isEditing: Bool {
         return locationView.active
     }
@@ -213,6 +216,12 @@ class URLBarView: UIView {
         tabsButton.titleLabel?.snp_makeConstraints { make in
             make.size.equalTo(URLBarViewUX.TabsButtonHeight)
         }
+
+        curveShape.snp_makeConstraints { make in
+            make.top.left.bottom.equalTo(self)
+            self.rightBarConstraint = make.right.equalTo(self).constraint
+            self.rightBarConstraint?.updateOffset(defaultRightOffset)
+        }
     }
 
     private func updateToolbarConstraints() {
@@ -260,13 +269,6 @@ class URLBarView: UIView {
             make.trailing.equalTo(self)
             make.width.height.equalTo(AppConstants.ToolbarHeight)
         }
-
-        // Add an offset to the left for slide animation, and a bit of extra offset for spring bounces
-        let leftOffset: CGFloat = self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer
-        self.curveShape.snp_remakeConstraints { make in
-            make.edges.equalTo(self).offset(EdgeInsetsMake(0, -leftOffset, 0, URLBarViewUX.URLBarCurveBounceBuffer))
-        }
-
         updateLayoutForEditing(editing: isEditing, animated: false)
         super.updateConstraints()
     }
@@ -429,8 +431,7 @@ class URLBarView: UIView {
             let tabsButtonTransform = CGAffineTransformMakeTranslation(self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset, 0)
             self.tabsButton.transform = tabsButtonTransform
             self.clonedTabsButton?.transform = tabsButtonTransform
-            self.curveShape.transform = CGAffineTransformMakeTranslation(self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer, 0)
-
+            self.rightBarConstraint?.updateOffset(URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer + tabsButton.frame.width)
             if self.toolbarIsShowing {
                 self.backButtonLeftConstraint?.updateOffset(-3 * AppConstants.ToolbarHeight)
             }
@@ -438,8 +439,7 @@ class URLBarView: UIView {
             self.tabsButton.transform = CGAffineTransformIdentity
             self.clonedTabsButton?.transform = CGAffineTransformIdentity
             self.cancelButton.transform = CGAffineTransformMakeTranslation(self.cancelButton.frame.width, 0)
-            self.curveShape.transform = CGAffineTransformIdentity
-
+            self.rightBarConstraint?.updateOffset(defaultRightOffset)
             if self.toolbarIsShowing {
                 self.backButtonLeftConstraint?.updateOffset(0)
             }
@@ -604,6 +604,14 @@ private let H_M4 = 0.961
 
 /* Code for drawing the urlbar curve */
 private class CurveView: UIView {
+    private lazy var leftCurvePath: UIBezierPath = {
+        var leftArc = UIBezierPath(arcCenter: CGPoint(x: 5, y: 5), radius: CGFloat(5), startAngle: CGFloat(-M_PI), endAngle: CGFloat(-M_PI_2), clockwise: true)
+        leftArc.addLineToPoint(CGPoint(x: 0, y: 0))
+        leftArc.addLineToPoint(CGPoint(x: 0, y: 5))
+        leftArc.closePath()
+        return leftArc
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -653,7 +661,8 @@ private class CurveView: UIView {
         CGContextSaveGState(context)
         CGContextClearRect(context, rect)
         CGContextSetFillColorWithColor(context, URLBarViewUX.backgroundColorWithAlpha(1).CGColor)
-        self.getPath().fill()
+        getPath().fill()
+        leftCurvePath.fill()
         CGContextDrawPath(context, kCGPathFill)
         CGContextRestoreGState(context)
     }
