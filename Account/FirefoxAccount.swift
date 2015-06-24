@@ -9,6 +9,8 @@ import XCGLogger
 // TODO: same comment as for SyncAuthState.swift!
 private let log = XCGLogger.defaultInstance()
 
+// Hello this is demo
+
 // The version of the account schema we persist.
 let AccountSchemaVersion = 1
 
@@ -198,3 +200,6 @@ public class FirefoxAccount {
         return false
     }
 }
+
+
+// Hello Too
