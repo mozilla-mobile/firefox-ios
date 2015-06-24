@@ -711,11 +711,18 @@ extension SQLiteLogins: SyncableLogins {
         }
     }
 
-    private func resolveConflictBetween(#local: LocalLogin, upstream: Login, shared: Login) -> Success {
+    private func resolveConflictBetween(#local: LocalLogin, upstream: MirrorLogin, shared: Login) -> Success {
         // Attempt to compute two delta sets by comparing each new record to the shared record.
         // Then we can merge the two delta sets -- either perfectly or by picking a winner in the case
         // of a true conflict -- and produce a resultant record.
-        //
+
+        let localDeltas = (local.localModified, local.deltas(shared))
+        let upstreamDeltas = (upstream.serverModified, upstream.deltas(shared))
+
+        let mergedDeltas = Login.mergeDeltas(localDeltas, b: upstreamDeltas)
+
+        let resultant = shared.applyDeltas(mergedDeltas)
+
         // We then apply this record to the local store, and mark it as needing upload.
 
         // We can immediately write the downloaded upstream record -- the old one -- to
