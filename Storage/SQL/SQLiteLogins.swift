@@ -306,6 +306,13 @@ public class SQLiteLogins: BrowserLogins {
     }
 
     private func cloneMirrorToOverlay(guid: GUID) -> Deferred<Result<Int>> {
+        let whereClause = "WHERE guid = ?"
+        let args: Args = [guid]
+
+        return self.cloneMirrorToOverlay(whereClause: whereClause, args: args)
+    }
+
+    private func cloneMirrorToOverlay(#whereClause: String?, args: Args?) -> Deferred<Result<Int>> {
         let shared =
         "guid " +
         ", hostname" +
@@ -328,9 +335,9 @@ public class SQLiteLogins: BrowserLogins {
         let sql = "INSERT OR IGNORE INTO \(TableLoginsLocal) " +
         "(\(shared)\(local)) " +
         "SELECT \(shared), NULL AS local_modified, 0 AS is_deleted, 0 AS sync_status " +
-        "FROM \(TableLoginsMirror) WHERE guid = ?"
+        "FROM \(TableLoginsMirror) " +
+        (whereClause ?? "")
 
-        let args: Args = [guid]
         return self.db.write(sql, withArgs: args)
     }
 
@@ -747,6 +754,15 @@ extension SQLiteLogins: SyncableLogins {
      * Clean up any metadata.
      */
     public func onRemovedAccount() -> Success {
-        return succeed()
+        return
+
+        // Clone all the mirrors so we don't lose data.
+        self.cloneMirrorToOverlay(whereClause: nil, args: nil)
+
+        // Drop all of the mirror data.
+        >>> { self.db.run("DELETE FROM \(TableLoginsMirror)") }
+
+        // Mark all of the local data as new.
+        >>> { self.db.run("UPDATE \(TableLoginsLocal) SET sync_status = \(SyncStatus.New.rawValue)") }
     }
 }
