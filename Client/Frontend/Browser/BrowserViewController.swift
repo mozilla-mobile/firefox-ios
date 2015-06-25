@@ -506,7 +506,7 @@ class BrowserViewController: UIViewController, UIActivityItemSource {
     }
 
 	private func isPasswordManagerActivityType(activityType: String?) -> Bool {
-		var isOnePassword = OnePasswordExtension.sharedExtension().isOnePasswordExtensionActivityType(activityType);
+		var isOnePassword = OnePasswordExtension.sharedExtension().isOnePasswordExtensionActivityType(activityType)
 		var isPasswordManager = (activityType == "bundle.identifier.for.another.password.manager")
 		return isOnePassword || isPasswordManager
 	}
