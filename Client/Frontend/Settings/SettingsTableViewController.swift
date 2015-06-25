@@ -656,6 +656,7 @@ private class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
         super.init(frame: frame)
         self.contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
+        self.clipsToBounds = true
     }
 
 
