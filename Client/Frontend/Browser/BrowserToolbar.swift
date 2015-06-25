@@ -36,7 +36,7 @@ protocol BrowserToolbarDelegate: class {
 }
 
 @objc
-public class BrowserToolbarHelper {
+public class BrowserToolbarHelper: NSObject {
     let toolbar: BrowserToolbarProtocol
 
     let ImageReload = UIImage(named: "reload")
@@ -62,6 +62,7 @@ public class BrowserToolbarHelper {
 
     init(toolbar: BrowserToolbarProtocol) {
         self.toolbar = toolbar
+        super.init()
 
         toolbar.backButton.setImage(UIImage(named: "back"), forState: .Normal)
         toolbar.backButton.setImage(UIImage(named: "backPressed"), forState: .Highlighted)
