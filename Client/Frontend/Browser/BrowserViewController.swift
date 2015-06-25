@@ -1393,6 +1393,8 @@ extension BrowserViewController: WKNavigationDelegate {
                         }
                     }
                 }
+            } else {
+                completionHandler(NSURLSessionAuthChallengeDisposition.PerformDefaultHandling, nil)
             }
     }
 
