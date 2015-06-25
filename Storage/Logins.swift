@@ -420,6 +420,29 @@ public func ==(lhs: Login, rhs: Login) -> Bool {
     return lhs.credentials == rhs.credentials && lhs.protectionSpace == rhs.protectionSpace
 }
 
+public class ServerLogin: Login {
+    var serverModified: Timestamp = 0
+
+    public init(guid: String, hostname: String, username: String, password: String, modified: Timestamp) {
+        self.serverModified = modified
+        super.init(guid: guid, hostname: hostname, username: username, password: password)
+    }
+
+    required public init(credential: NSURLCredential, protectionSpace: NSURLProtectionSpace) {
+        fatalError("init(credential:protectionSpace:) has not been implemented")
+    }
+}
+
+class MirrorLogin: ServerLogin {
+    var isOverridden: Bool = false
+}
+
+class LocalLogin: Login {
+    var syncStatus: SyncStatus = .Synced
+    var isDeleted: Bool = false
+    var localModified: Timestamp = 0
+}
+
 public protocol BrowserLogins {
     func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Result<LoginUsageData>>
     func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Result<Cursor<LoginData>>>
@@ -444,7 +467,7 @@ public protocol SyncableLogins {
      */
     func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success
 
-    func applyChangedLogin(upstream: Login, timestamp: Timestamp) -> Success
+    func applyChangedLogin(upstream: ServerLogin, timestamp: Timestamp) -> Success
 
     /**
      * TODO: these might need some work.

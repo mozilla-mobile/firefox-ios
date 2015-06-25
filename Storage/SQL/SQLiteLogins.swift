@@ -111,17 +111,6 @@ private class LoginsTable: Table {
 
 }
 
-class MirrorLogin: Login {
-    var serverModified: Timestamp = 0
-    var isOverridden: Bool = false
-}
-
-class LocalLogin: Login {
-    var syncStatus: SyncStatus = .Synced
-    var isDeleted: Bool = false
-    var localModified: Timestamp = 0
-}
-
 public class SQLiteLogins: BrowserLogins {
     private let db: BrowserDB
 
@@ -424,7 +413,8 @@ public class SQLiteLogins: BrowserLogins {
         "UPDATE \(TableLoginsLocal) SET " +
         "  local_modified = ?" +
         ", httpRealm = ?, formSubmitURL = ?, usernameField = ?" +
-        ", passwordField = ?, timeLastUsed = ?, timePasswordChanged = ?, password = ?" +
+        ", passwordField = ?, timesUsed = timesUsed + 1" +
+        ", timeLastUsed = ?, timePasswordChanged = ?, password = ?" +
         ", hostname = ?, username = ?" +
 
         // We keep rows marked as New in preference to marking them as changed. This allows us to
@@ -531,7 +521,38 @@ extension SQLiteLogins: SyncableLogins {
         return self.db.runQuery(sql, args: args, factory: SQLiteLogins.LocalLoginFactory) >>== { deferResult($0[0]) }
     }
 
-    public func applyChangedLogin(upstream: Login, timestamp: Timestamp) -> Success {
+    private func storeReconciledLogin(login: Login) -> Success {
+        let dateMilli = NSNumber(unsignedLongLong: NSDate.now())
+
+        let args: Args = [
+            dateMilli,            // local_modified
+            login.httpRealm,
+            login.formSubmitURL,
+            login.usernameField,
+            login.passwordField,
+            NSNumber(unsignedLongLong: login.timeLastUsed),
+            NSNumber(unsignedLongLong: login.timePasswordChanged),
+            login.timesUsed,
+            login.password,
+            login.hostname,
+            login.username,
+            login.guid,
+        ]
+
+        let update =
+        "UPDATE \(TableLoginsLocal) SET " +
+            "  local_modified = ?" +
+            ", httpRealm = ?, formSubmitURL = ?, usernameField = ?" +
+            ", passwordField = ?, timeLastUsed = ?, timePasswordChanged = ?, timesUsed = ?" +
+            ", password = ?" +
+            ", hostname = ?, username = ?" +
+            ", sync_status = 1 " +
+        " WHERE guid = ?"
+
+        return self.db.run(update, withArgs: args)
+    }
+
+    public func applyChangedLogin(upstream: ServerLogin, timestamp: Timestamp) -> Success {
         // Our login storage tracks the shared parent from the last sync (the "mirror").
         // This allows us to conclusively determine what changed in the case of conflict.
         //
@@ -549,7 +570,7 @@ extension SQLiteLogins: SyncableLogins {
         }
     }
 
-    private func applyChangedLogin(upstream: Login, timestamp: Timestamp, local: LocalLogin?, mirror: Login?) -> Success {
+    private func applyChangedLogin(upstream: ServerLogin, timestamp: Timestamp, local: LocalLogin?, mirror: MirrorLogin?) -> Success {
         // Once we have the server record, the mirror record (if any), and the local overlay (if any),
         // we can always know which state a record is in.
 
@@ -649,7 +670,7 @@ extension SQLiteLogins: SyncableLogins {
      * Called when we have a completely new record. Naturally the new record
      * is marked as non-overridden.
      */
-    private func insertNewMirror(login: Login, timestamp: Timestamp) -> Success {
+    private func insertNewMirror(login: Login, timestamp: Timestamp, isOverridden: Int = 0) -> Success {
         let args = self.mirrorArgs(login, timestamp: timestamp)
         let sql =
         "INSERT OR IGNORE INTO \(TableLoginsMirror) (" +
@@ -657,7 +678,7 @@ extension SQLiteLogins: SyncableLogins {
             ", httpRealm, formSubmitURL, usernameField" +
             ", passwordField, timesUsed, timeLastUsed, timePasswordChanged, timeCreated" +
             ", password, hostname, username, guid" +
-        ") VALUES (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        ") VALUES (\(isOverridden), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
         return self.db.run(sql, withArgs: args)
     }
@@ -711,7 +732,7 @@ extension SQLiteLogins: SyncableLogins {
         }
     }
 
-    private func resolveConflictBetween(#local: LocalLogin, upstream: MirrorLogin, shared: Login) -> Success {
+    private func resolveConflictBetween(#local: LocalLogin, upstream: ServerLogin, shared: Login) -> Success {
         // Attempt to compute two delta sets by comparing each new record to the shared record.
         // Then we can merge the two delta sets -- either perfectly or by picking a winner in the case
         // of a true conflict -- and produce a resultant record.
@@ -719,24 +740,29 @@ extension SQLiteLogins: SyncableLogins {
         let localDeltas = (local.localModified, local.deltas(shared))
         let upstreamDeltas = (upstream.serverModified, upstream.deltas(shared))
 
-        let mergedDeltas = Login.mergeDeltas(localDeltas, b: upstreamDeltas)
+        let mergedDeltas = Login.mergeDeltas(a: localDeltas, b: upstreamDeltas)
 
         let resultant = shared.applyDeltas(mergedDeltas)
 
-        // We then apply this record to the local store, and mark it as needing upload.
-
         // We can immediately write the downloaded upstream record -- the old one -- to
         // the mirror store.
+        // We then apply this record to the local store, and mark it as needing upload.
         // When the reconciled record is uploaded, it'll be flushed into the mirror
         // with the correct modified time.
-        //
-        // TODO
-        return succeed()
+        return self.updateMirrorToLogin(upstream, fromPrevious: shared, timestamp: upstream.serverModified)
+            >>> { self.storeReconciledLogin(resultant) }
     }
 
-    private func resolveConflictWithoutParentBetween(#local: LocalLogin, upstream: Login) -> Success {
-        // TODO
-        return succeed()
+    private func resolveConflictWithoutParentBetween(#local: LocalLogin, upstream: ServerLogin) -> Success {
+        // Do the best we can. Either the local wins and will be
+        // uploaded, or the remote wins and we delete our overlay.
+        if local.timePasswordChanged > upstream.timePasswordChanged {
+            return self.insertNewMirror(upstream, timestamp: upstream.serverModified, isOverridden: 1)
+        }
+
+        let args: Args = [local.guid]
+        return self.insertNewMirror(upstream, timestamp: upstream.serverModified, isOverridden: 0)
+            >>> { self.db.run("DELETE FROM \(TableLoginsLocal) WHERE guid = ?", withArgs: args) }
     }
 
     /**

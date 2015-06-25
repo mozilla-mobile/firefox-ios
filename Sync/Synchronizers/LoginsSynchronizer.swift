@@ -37,12 +37,12 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
         return PasswordsStorageVersion
     }
 
-    func getLogin(record: Record<LoginPayload>) -> Login {
+    func getLogin(record: Record<LoginPayload>) -> ServerLogin {
         let guid = record.id
         let payload = record.payload
         let modified = record.modified
 
-        let login = Login(guid: guid, hostname: payload.hostname, username: payload.username, password: payload.password)
+        let login = ServerLogin(guid: guid, hostname: payload.hostname, username: payload.username, password: payload.password, modified: modified)
         login.formSubmitURL = payload.formSubmitURL
         login.httpRealm = payload.httpRealm
         login.usernameField = payload.usernameField
@@ -50,7 +50,6 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
         login.timeCreated = 0               // TODO
         login.timeLastUsed = 0              // TODO
         login.timePasswordChanged = 0       // TODO
-
         return login
     }
 
