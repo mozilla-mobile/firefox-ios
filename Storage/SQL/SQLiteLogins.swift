@@ -757,9 +757,11 @@ extension SQLiteLogins: SyncableLogins {
         // Do the best we can. Either the local wins and will be
         // uploaded, or the remote wins and we delete our overlay.
         if local.timePasswordChanged > upstream.timePasswordChanged {
+            log.debug("Conflicting records with no shared parent. Using newer local record.")
             return self.insertNewMirror(upstream, timestamp: upstream.serverModified, isOverridden: 1)
         }
 
+        log.debug("Conflicting records with no shared parent. Using newer remote record.")
         let args: Args = [local.guid]
         return self.insertNewMirror(upstream, timestamp: upstream.serverModified, isOverridden: 0)
             >>> { self.db.run("DELETE FROM \(TableLoginsLocal) WHERE guid = ?", withArgs: args) }
