@@ -46,9 +46,10 @@ if __name__ == "__main__":
             for file_node in root.xpath("//x:file", namespaces=NS):
                 original = file_node.get('original')
                 if original and original.endswith('Info.plist'):
-                    for trans_unit_node in file_node.xpath("//x:trans-unit", namespaces=NS):
+                    for trans_unit_node in file_node.xpath("./x:body/x:trans-unit", namespaces=NS):
                         id = trans_unit_node.get('id')
-                        if id and id in STRINGS_TO_REMOVE:
+                        # TODO we should probably do the exception for SendTo in a nicer way with some kind of whitelist
+                        if id and id in STRINGS_TO_REMOVE and not (original == "Extensions/SendTo/Info.plist" and id == "CFBundleDisplayName"):
                             trans_unit_node.getparent().remove(trans_unit_node)
             # 3. Remove empty file sections
             for file_node in root.xpath("//x:file", namespaces=NS):

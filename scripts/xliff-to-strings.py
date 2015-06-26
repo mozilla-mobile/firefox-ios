@@ -17,6 +17,8 @@
 #  SendTo/en-US.lproj/SendTo.strings
 #  SendTo/fr.lproj/SendTo.strings
 #
+# For any Info.plist file in the xliff, we generate a InfoPlist.strings.
+#
 
 import glob
 import os
@@ -31,6 +33,7 @@ FILES = [
     "Client/Info.plist",
     "Client/Localizable.strings",
     "Client/search.strings",
+    "Extensions/SendTo/Info.plist",
     "Extensions/SendTo/SendTo.strings",
     "Extensions/ShareTo/ShareTo.strings",
     "Shared/Localizable.strings",
@@ -68,6 +71,8 @@ def export_xliff_file(file_node, export_path, target_language):
 
 def original_path(root, target, original):
     dir,file = os.path.split(original)
+    if file == "Info.plist":
+        file = "InfoPlist.strings"
     lproj = "%s.lproj" % target_language
     path = dir + "/" + lproj + "/" + file
     return path
