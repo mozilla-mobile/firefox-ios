@@ -6,7 +6,7 @@ import Foundation
 
 private struct PrintedPageUX {
     static let PageInsets = CGFloat(36.0)
-    static let PageTextFont = AppConstants.DefaultSmallFont
+    static let PageTextFont = UIConstants.DefaultSmallFont
     static let PageMarginScale = CGFloat(0.5)
 }
 
@@ -27,9 +27,11 @@ class BrowserPrintPageRenderer: UIPrintPageRenderer {
         self.footerHeight = PrintedPageUX.PageMarginScale * PrintedPageUX.PageInsets
         self.headerHeight = PrintedPageUX.PageMarginScale * PrintedPageUX.PageInsets
 
-        let formatter = browser.webView!.viewPrintFormatter()
-        formatter.perPageContentInsets = UIEdgeInsets(top: PrintedPageUX.PageInsets, left: PrintedPageUX.PageInsets, bottom: PrintedPageUX.PageInsets, right: PrintedPageUX.PageInsets)
-        addPrintFormatter(formatter, startingAtPageAtIndex: 0)
+        if let browser = self.browser {
+            let formatter = browser.webView!.viewPrintFormatter()
+            formatter.perPageContentInsets = UIEdgeInsets(top: PrintedPageUX.PageInsets, left: PrintedPageUX.PageInsets, bottom: PrintedPageUX.PageInsets, right: PrintedPageUX.PageInsets)
+            addPrintFormatter(formatter, startingAtPageAtIndex: 0)
+        }
     }
 
     override func drawFooterForPageAtIndex(pageIndex: Int, var inRect headerRect: CGRect) {
@@ -37,11 +39,11 @@ class BrowserPrintPageRenderer: UIPrintPageRenderer {
         headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
 
         // url on left
-        self.drawAtPoint(browser!.displayURL?.absoluteString ?? "", rect: headerRect, onLeft: true)
+        self.drawTextAtPoint(browser!.displayURL?.absoluteString ?? "", rect: headerRect, onLeft: true)
 
         // page number on right
-        let pageNumberString: String = "\(pageIndex + 1)"
-        self.drawAtPoint(pageNumberString, rect: headerRect, onLeft: false)
+        let pageNumberString = "\(pageIndex + 1)"
+        self.drawTextAtPoint(pageNumberString, rect: headerRect, onLeft: false)
     }
 
     override func drawHeaderForPageAtIndex(pageIndex: Int, var inRect headerRect: CGRect) {
@@ -49,16 +51,16 @@ class BrowserPrintPageRenderer: UIPrintPageRenderer {
         headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
 
         // page title on left
-        self.drawAtPoint(browser!.displayTitle, rect: headerRect, onLeft: true)
+        self.drawTextAtPoint(browser!.displayTitle, rect: headerRect, onLeft: true)
 
         // date on right
-        self.drawAtPoint(dateString, rect: headerRect, onLeft: false)
+        self.drawTextAtPoint(dateString, rect: headerRect, onLeft: false)
     }
 
-    func drawAtPoint(text: String, rect:CGRect, onLeft: Bool){
+    func drawTextAtPoint(text: String, rect:CGRect, onLeft: Bool){
         let size = text.sizeWithAttributes(textAttributes)
         let x, y: CGFloat
-        if(onLeft){
+        if onLeft {
             x = CGRectGetMinX(rect)
             y = CGRectGetMidY(rect) - size.height / 2
         } else {
