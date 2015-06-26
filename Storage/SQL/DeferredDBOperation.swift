@@ -93,12 +93,11 @@ class DeferredDBOperation<T>: Deferred<Result<T>>, Cancellable {
             return error
         }
 
-        log.debug("SQL took \(NSDate.now() - start)")
         if let result = result {
             fill(Result(success: result))
-        } else {
-            fill(Result(failure: DatabaseError(err: err)))
+            return
         }
+        fill(Result(failure: DatabaseError(err: err)))
     }
 
     func cancel() {
