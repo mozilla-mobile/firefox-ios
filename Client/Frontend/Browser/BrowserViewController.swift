@@ -183,6 +183,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(statusBarOverlay)
 
         topTouchArea = UIButton()
+        topTouchArea.isAccessibilityElement = false
         topTouchArea.addTarget(self, action: "SELtappedTopArea", forControlEvents: UIControlEvents.TouchUpInside)
         view.addSubview(topTouchArea)
 
