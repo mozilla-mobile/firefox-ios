@@ -17,6 +17,8 @@ private struct BrowserLocationViewUX {
     static let HostFontColor = UIColor.blackColor()
     static let BaseURLFontColor = UIColor.lightGrayColor()
     static let DefaultURLColor = UIColor.blackColor()
+    static let BaseURLPitch = 0.75
+    static let HostPitch = 1.0
 }
 
 enum InputMode {
@@ -230,6 +232,8 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
             let nsRange = NSMakeRange(0, count(httplessURL))
             attributedString.addAttribute(NSForegroundColorAttributeName, value: BrowserLocationViewUX.BaseURLFontColor, range: nsRange)
             attributedString.colorSubstring(baseDomain, withColor: BrowserLocationViewUX.HostFontColor)
+            attributedString.addAttribute(UIAccessibilitySpeechAttributePitch, value: NSNumber(double: BrowserLocationViewUX.BaseURLPitch), range: nsRange)
+            attributedString.pitchSubstring(baseDomain, withPitch: BrowserLocationViewUX.HostPitch)
             editTextField.attributedText = attributedString
         }
     }
