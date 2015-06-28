@@ -548,7 +548,7 @@ class BrowserViewController: UIViewController {
     }
 
     override func accessibilityPerformEscape() -> Bool {
-        if urlBar.isEditing {
+        if urlBar.canCancel {
             urlBar.SELdidClickCancel()
             return true
         } else if let selectedTab = tabManager.selectedTab where selectedTab.canGoBack {
