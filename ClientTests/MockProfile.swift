@@ -114,4 +114,8 @@ public class MockProfile: Profile {
     func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
         return deferResult([])
     }
+
+    func getCachedClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
+        return deferResult([])
+    }
 }

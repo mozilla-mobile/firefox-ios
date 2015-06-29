@@ -39,6 +39,10 @@ public class NSUserDefaultsPrefs: Prefs {
         setObject(NSNumber(int: value), forKey: defaultName)
     }
 
+    public func setTimestamp(value: Timestamp, forKey defaultName: String) {
+        setLong(value, forKey: defaultName)
+    }
+
     public func setLong(value: UInt64, forKey defaultName: String) {
         setObject(NSNumber(unsignedLongLong: value), forKey: defaultName)
     }
@@ -78,6 +82,10 @@ public class NSUserDefaultsPrefs: Prefs {
 
     public func unsignedLongForKey(defaultName: String) -> UInt64? {
         return nsNumberForKey(defaultName)?.unsignedLongLongValue
+    }
+
+    public func timestampForKey(defaultName: String) -> Timestamp? {
+        return unsignedLongForKey(defaultName)
     }
 
     public func longForKey(defaultName: String) -> Int64? {

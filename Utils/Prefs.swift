@@ -4,8 +4,13 @@
 
 import Foundation
 
+public struct PrefsKeys {
+    public static let KeyLastRemoteTabSyncTime = "lastRemoteTabSyncTime"
+}
+
 public protocol Prefs {
     func branch(branch: String) -> Prefs
+    func setTimestamp(value: Timestamp, forKey defaultName: String)
     func setLong(value: UInt64, forKey defaultName: String)
     func setLong(value: Int64, forKey defaultName: String)
     func setInt(value: Int32, forKey defaultName: String)
@@ -15,6 +20,7 @@ public protocol Prefs {
     func stringForKey(defaultName: String) -> String?
     func boolForKey(defaultName: String) -> Bool?
     func intForKey(defaultName: String) -> Int32?
+    func timestampForKey(defaultName: String) -> Timestamp?
     func longForKey(defaultName: String) -> Int64?
     func unsignedLongForKey(defaultName: String) -> UInt64?
     func stringArrayForKey(defaultName: String) -> [String]?
@@ -47,6 +53,10 @@ public class MockProfilePrefs : Prefs {
         return self.prefix + name
     }
 
+    public func setTimestamp(value: Timestamp, forKey defaultName: String) {
+        self.setLong(value, forKey: defaultName)
+    }
+
     public func setLong(value: UInt64, forKey defaultName: String) {
         setObject(NSNumber(unsignedLongLong: value), forKey: defaultName)
     }
@@ -77,6 +87,10 @@ public class MockProfilePrefs : Prefs {
 
     public func boolForKey(defaultName: String) -> Bool? {
         return things[name(defaultName)] as? Bool
+    }
+
+    public func timestampForKey(defaultName: String) -> Timestamp? {
+        return unsignedLongForKey(defaultName)
     }
 
     public func unsignedLongForKey(defaultName: String) -> UInt64? {

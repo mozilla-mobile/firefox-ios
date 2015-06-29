@@ -13,6 +13,7 @@ import XCGLogger
 // TODO: same comment as for SyncAuthState.swift!
 private let log = XCGLogger.defaultInstance()
 
+
 private struct RemoteTabsPanelUX {
     static let HeaderHeight: CGFloat = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
     static let RowHeight: CGFloat = SiteTableViewControllerUX.RowHeight
@@ -82,28 +83,49 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
             return
         }
 
-        // Otherwise, fetch the tabs cloud
-        self.profile.getClientsAndTabs().uponQueue(dispatch_get_main_queue()) { result in
-            self.refreshControl?.endRefreshing()
-
+        self.profile.getCachedClientsAndTabs().uponQueue(dispatch_get_main_queue()) { result in
             if let clientAndTabs = result.successValue {
-                if clientAndTabs.count == 0 {
-                    self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: self, error: .NoClients)
-                } else {
-                    let nonEmptyClientAndTabs = clientAndTabs.filter { $0.tabs.count > 0 }
-                    if nonEmptyClientAndTabs.count == 0 {
-                        self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: self, error: .NoTabs)
-                    } else {
-                        self.tableViewDelegate = RemoteTabsPanelClientAndTabsDataSource(homePanel: self, clientAndTabs: nonEmptyClientAndTabs)
-                        self.tableView.allowsSelection = true
-                    }
-                }
-            } else {
-                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: self, error: .FailedToSync)
+                self.updateDelegateClientAndTabData(clientAndTabs)
             }
 
-            self.tableView.scrollEnabled = true
-            self.tableView.reloadData()
+            // Otherwise, fetch the tabs cloud if its been more than 1 minute since last sync
+            let lastSyncTime = self.profile.prefs.timestampForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
+            if NSDate.now() - (lastSyncTime ?? 0) > OneMinuteInMilliseconds {
+                self.profile.getClientsAndTabs().uponQueue(dispatch_get_main_queue()) { result in
+                    if let clientAndTabs = result.successValue {
+                        self.profile.prefs.setTimestamp(NSDate.now(), forKey: PrefsKeys.KeyLastRemoteTabSyncTime)
+                        self.updateDelegateClientAndTabData(clientAndTabs)
+                    }
+                    self.endRefreshing()
+                }
+            } else {
+                // If we failed before and didn't sync, show the failure delegate
+                if let failed = result.failureValue {
+                    self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: self, error: .FailedToSync)
+                }
+
+                self.endRefreshing()
+            }
+        }
+    }
+
+    func endRefreshing() {
+        self.refreshControl?.endRefreshing()
+        self.tableView.scrollEnabled = true
+        self.tableView.reloadData()
+    }
+
+    func updateDelegateClientAndTabData(clientAndTabs: [ClientAndTabs]) {
+        if clientAndTabs.count == 0 {
+            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: self, error: .NoClients)
+        } else {
+            let nonEmptyClientAndTabs = clientAndTabs.filter { $0.tabs.count > 0 }
+            if nonEmptyClientAndTabs.count == 0 {
+                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: self, error: .NoTabs)
+            } else {
+                self.tableViewDelegate = RemoteTabsPanelClientAndTabsDataSource(homePanel: self, clientAndTabs: nonEmptyClientAndTabs)
+                self.tableView.allowsSelection = true
+            }
         }
     }
 
