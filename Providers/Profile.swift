@@ -161,6 +161,7 @@ protocol Profile {
 
     func getClients() -> Deferred<Result<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
+    func getCachedClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
 
     var syncManager: SyncManager { get }
 }
@@ -286,6 +287,10 @@ public class BrowserProfile: Profile {
            >>> { self.remoteClientsAndTabs.getClientsAndTabs() }
     }
 
+    public func getCachedClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
+        return self.remoteClientsAndTabs.getClientsAndTabs()
+    }
+
     lazy var logins: protocol<BrowserLogins, SyncableLogins> = {
         return SQLiteLogins(db: self.loginsDB)
     }()
@@ -330,6 +335,7 @@ public class BrowserProfile: Profile {
     func removeAccount() {
         let old = self.account
 
+        prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
         KeychainWrapper.removeObjectForKey(name + ".account")
         self.account = nil
 
