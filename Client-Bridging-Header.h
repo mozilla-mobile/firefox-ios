@@ -5,6 +5,7 @@
 #import <CommonCrypto/CommonCrypto.h>
 
 #import "FSReadingList.h"
+#import "Try.h"
 
 #import "GCDWebServer.h"
 #import "GCDWebServerDataResponse.h"

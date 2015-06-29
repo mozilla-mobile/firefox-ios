@@ -206,24 +206,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-}
-
-extension AppDelegate: UIApplicationDelegate {
-    func application(application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
-        return true
-    }
-
-    func application(application: UIApplication, shouldRestoreApplicationState code: NSCoder) -> Bool {
-        return true
-    }
-}
-
-extension AppDelegate: UIViewControllerRestoration {
-    class func viewControllerWithRestorationIdentifierPath(identifierComponents: [AnyObject], coder: NSCoder) -> UIViewController? {
-        // There is only one restorationIdentifier in circulation.
-        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-            return appDelegate.window!.rootViewController
-        }
-        return nil
+    func shouldRestoreTabs() -> Bool {
+        return true // TODO This is where we can do crash detection. See 1166372 - Don't reopen tabs after crash.
     }
 }
