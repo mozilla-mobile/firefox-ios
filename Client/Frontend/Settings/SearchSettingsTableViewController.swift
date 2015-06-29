@@ -25,7 +25,8 @@ class SearchSettingsTableViewController: UITableViewController {
         // So that we push the default search engine controller on selection.
         tableView.allowsSelectionDuringEditing = true
 
-        if self.presentingViewController != nil {
+        // Insert Done button if being presented outside of the Settings Nav stack
+        if !(self.navigationController is SettingsNavigationController) {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "SELDismiss")
         }
     }
