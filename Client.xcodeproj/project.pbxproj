@@ -556,6 +556,7 @@
 		E65072A31B2737DA001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
 		E65072A41B273824001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
+		E6E079851B41E54A001645A6 /* FXCrashDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = E6E079841B41E54A001645A6 /* FXCrashDetector.m */; };
 		E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */; };
 		E6F965121B2F1CF20034B023 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */; };
@@ -596,13 +597,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 531041E0157EAFA400BBABC3;
 			remoteInfo = "SDWebImage+MKAnnotation";
-		};
-		0B742CBA1B3248FD00EE9264 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4A2CADFF1AB4BB5300B6BC39;
-			remoteInfo = WebImage;
 		};
 		0B742CCB1B32491400EE9264 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1087,6 +1081,13 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
+		E662ADAB1B4C38F900DBB933 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4A2CADFF1AB4BB5300B6BC39;
+			remoteInfo = WebImage;
+		};
 		F84B21D41A090F8100AAB793 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1553,6 +1554,8 @@
 		E4F21AA51A13C4A300B0FAAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
+		E6E079831B41E54A001645A6 /* FXCrashDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXCrashDetector.h; sourceTree = "<group>"; };
+		E6E079841B41E54A001645A6 /* FXCrashDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXCrashDetector.m; sourceTree = "<group>"; };
 		E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = scrollablePage.html; sourceTree = "<group>"; };
 		E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SharedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6F9650F1B2F1CF20034B023 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1769,7 +1772,7 @@
 				0B6544C21A96C59E000DD202 /* libSDWebImage.a */,
 				0B6544C41A96C59E000DD202 /* libSDWebImage+WebP.a */,
 				0B6544C61A96C59E000DD202 /* libSDWebImage+MKAnnotation.a */,
-				0B742CBB1B3248FD00EE9264 /* WebImage.framework */,
+				E662ADAC1B4C38F900DBB933 /* WebImage.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2645,6 +2648,8 @@
 				D3BE7B251B054D4400641031 /* main.swift */,
 				D3BE7B451B054F8600641031 /* TestAppDelegate.swift */,
 				D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */,
+				E6E079831B41E54A001645A6 /* FXCrashDetector.h */,
+				E6E079841B41E54A001645A6 /* FXCrashDetector.m */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -3336,13 +3341,6 @@
 			remoteRef = 0B6544C51A96C59E000DD202 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		0B742CBB1B3248FD00EE9264 /* WebImage.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = WebImage.framework;
-			remoteRef = 0B742CBA1B3248FD00EE9264 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		0B742CCC1B32491400EE9264 /* libsqlcipher.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -3544,6 +3542,13 @@
 			fileType = wrapper.framework;
 			path = sqlite3.framework;
 			remoteRef = E4D567BB1ADED44A00F1EFE7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E662ADAC1B4C38F900DBB933 /* WebImage.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = WebImage.framework;
+			remoteRef = E662ADAB1B4C38F900DBB933 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -4144,6 +4149,7 @@
 				0BF0DBC01A8598D50039F300 /* TransitionManager.swift in Sources */,
 				2F834D1A1A80629A006A0B7B /* FxAContentViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
+				E6E079851B41E54A001645A6 /* FXCrashDetector.m in Sources */,
 				D38B2D3A1A8D96D00040E6B5 /* GCDWebServerResponse.m in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
 				0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */,
@@ -5465,6 +5471,7 @@
 				CODE_SIGN_ENTITLEMENTS = Client/FennecNightly.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,

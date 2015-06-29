@@ -16,9 +16,4 @@ class TestAppDelegate: AppDelegate {
 
         return profile
     }
-
-    // Prevent app state from being saved/restored between tests.
-    override func shouldRestoreTabs() -> Bool {
-        return false
-    }
 }
