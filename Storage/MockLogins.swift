@@ -58,6 +58,16 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return succeed()
     }
 
+    public func getModifiedLoginsToUpload() -> Deferred<Result<[Login]>> {
+        // TODO
+        return deferResult([])
+    }
+
+    public func getDeletedLoginsToUpload() -> Deferred<Result<[GUID]>> {
+        // TODO
+        return deferResult([])
+    }
+
     public func updateLogin(login: LoginData) -> Success {
         if let index = find(cache, login as! Login) {
             cache[index].timePasswordChanged = NSDate.nowMicroseconds()

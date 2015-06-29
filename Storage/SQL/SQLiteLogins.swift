@@ -791,6 +791,28 @@ extension SQLiteLogins: SyncableLogins {
             >>> { self.db.run("DELETE FROM \(TableLoginsLocal) WHERE guid = ?", withArgs: args) }
     }
 
+    public func getModifiedLoginsToUpload() -> Deferred<Result<[Login]>> {
+        let sql =
+        "SELECT * FROM \(TableLoginsLocal) " +
+        "WHERE sync_status IS NOT \(SyncStatus.Synced.rawValue) AND is_deleted = 0"
+
+        // Swift 2.0: use Cursor.asArray directly.
+        return self.db.runQuery(sql, args: nil, factory: SQLiteLogins.LoginFactory)
+          >>== { deferResult($0.asArray()) }
+    }
+
+    public func getDeletedLoginsToUpload() -> Deferred<Result<[GUID]>> {
+        // There are no logins that are marked as deleted that were not originally synced --
+        // others are deleted immediately.
+        let sql =
+        "SELECT guid FROM \(TableLoginsLocal) " +
+        "WHERE is_deleted = 1"
+
+        // Swift 2.0: use Cursor.asArray directly.
+        return self.db.runQuery(sql, args: nil, factory: { return $0["guid"] as! GUID })
+            >>== { deferResult($0.asArray()) }
+    }
+
     /**
      * Chains through the provided timestamp.
      */

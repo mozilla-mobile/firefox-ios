@@ -481,6 +481,9 @@ public protocol SyncableLogins {
 
     func applyChangedLogin(upstream: ServerLogin) -> Success
 
+    func getModifiedLoginsToUpload() -> Deferred<Result<[Login]>>
+    func getDeletedLoginsToUpload() -> Deferred<Result<[GUID]>>
+
     /**
      * TODO: these might need some work.
      * Chains through the provided timestamp.
