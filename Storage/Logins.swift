@@ -144,7 +144,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         }
     }
 
-    // LoginUsageData
+    // LoginUsageData. These defaults only apply to locally created records.
     public var timesUsed = 0
     public var timeCreated = NSDate.nowMicroseconds()
     public var timeLastUsed = NSDate.nowMicroseconds()
@@ -247,13 +247,23 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         return realm
     }
 
+    /**
+     * Produce a delta stream by comparing this record to a source.
+     * Note that the source might be missing the timestamp and counter fields
+     * introduced in Bug 555755, so we pay special attention to those, checking for
+     * and ignoring transitions to zero.
+     *
+     * TODO: it's possible that we'll have, say, two iOS clients working with a desktop.
+     * Each time the desktop changes the password fields, it'll upload a record without
+     * these extra timestamp fields. We need to make sure the right thing happens.
+     */
     public func deltas(#from: Login) -> LoginDeltas {
         let commutative: [CommutativeLoginField]
 
-        if self.timesUsed == from.timesUsed {
-            commutative = []
-        } else {
+        if self.timesUsed > 0 && self.timesUsed != from.timesUsed {
             commutative = [CommutativeLoginField.TimesUsed(increment: self.timesUsed - from.timesUsed)]
+        } else {
+            commutative = []
         }
 
         var nonCommutative = [NonCommutativeLoginField]()
@@ -273,13 +283,13 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         if self.formSubmitURL != from.formSubmitURL {
             nonCommutative.append(NonCommutativeLoginField.FormSubmitURL(to: self.formSubmitURL))
         }
-        if self.timeCreated != from.timeCreated {
+        if self.timeCreated > 0 && self.timeCreated != from.timeCreated {
             nonCommutative.append(NonCommutativeLoginField.TimeCreated(to: self.timeCreated))
         }
-        if self.timeLastUsed != from.timeLastUsed {
+        if self.timeLastUsed > 0 && self.timeLastUsed != from.timeLastUsed {
             nonCommutative.append(NonCommutativeLoginField.TimeLastUsed(to: self.timeLastUsed))
         }
-        if self.timePasswordChanged != from.timePasswordChanged {
+        if self.timeLastUsed > 0 && self.timePasswordChanged != from.timePasswordChanged {
             nonCommutative.append(NonCommutativeLoginField.TimePasswordChanged(to: self.timePasswordChanged))
         }
 

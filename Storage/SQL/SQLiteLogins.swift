@@ -667,7 +667,15 @@ extension SQLiteLogins: SyncableLogins {
         "UPDATE \(TableLoginsMirror) SET " +
         " server_modified = ?" +
         ", httpRealm = ?, formSubmitURL = ?, usernameField = ?" +
-        ", passwordField = ?, timesUsed = ?, timeLastUsed = ?, timePasswordChanged = ?, timeCreated = ?" +
+        ", passwordField = ?" +
+
+        // These we need to coalesce, because we might be supplying zeroes if the remote has
+        // been overwritten by an older client. In this case, preserve the old value in the
+        // mirror.
+        ", timesUsed = coalesce(nullif(?, 0), timesUsed)" +
+        ", timeLastUsed = coalesce(nullif(?, 0), timeLastUsed)" +
+        ", timePasswordChanged = coalesce(nullif(?, 0), timePasswordChanged)" +
+        ", timeCreated = coalesce(nullif(?, 0), timeCreated)" +
         ", password = ?, hostname = ?, username = ?" +
         " WHERE guid = ?"
 
@@ -750,6 +758,14 @@ extension SQLiteLogins: SyncableLogins {
 
         let mergedDeltas = Login.mergeDeltas(a: localDeltas, b: upstreamDeltas)
 
+        // Not all Sync clients handle the optional timestamp fields introduced in Bug 555755.
+        // We might get a server record with no timestamps, and it will differ from the original
+        // mirror!
+        // We solve that by refusing to generate deltas that discard information. We'll preserve
+        // the local values -- either from the local record or from the last shared parent that
+        // still included them -- and propagate them back to the server.
+        // It's OK for us to reconcile and reupload; it causes extra work for every client, but
+        // should not cause looping.
         let resultant = shared.applyDeltas(mergedDeltas)
 
         // We can immediately write the downloaded upstream record -- the old one -- to
