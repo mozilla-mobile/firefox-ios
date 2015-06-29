@@ -319,10 +319,13 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     }
 
     func cellHeightForCurrentDevice() -> CGFloat {
+        let compactLayout = profile.prefs.boolForKey("CompactTabLayout") ?? true
+        let shortHeight = (compactLayout ? TabTrayControllerUX.TextBoxHeight * 6 : TabTrayControllerUX.TextBoxHeight * 5)
+
         if self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClass.Compact {
-            return TabTrayControllerUX.TextBoxHeight * 6
+            return shortHeight
         } else if self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClass.Compact {
-            return TabTrayControllerUX.TextBoxHeight * 6
+            return shortHeight
         } else {
             return TabTrayControllerUX.TextBoxHeight * 8
         }
