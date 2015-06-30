@@ -573,10 +573,10 @@ extension TabTrayController: TabManagerDelegate {
         // Our UI doesn't care about what's selected
     }
 
-    func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
+    func tabManager(tabManager: TabManager, didCreateTab tab: Browser, restoring: Bool) {
     }
 
-    func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex index: Int) {
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex index: Int, restoring: Bool) {
         self.collectionView.performBatchUpdates({ _ in
             self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
         }, completion: { finished in
@@ -596,6 +596,9 @@ extension TabTrayController: TabManagerDelegate {
                 newTab = tabManager.addTab()
             }
         })
+    }
+
+    func tabManagerDidRestoreTabs(tabManager: TabManager) {
     }
 }
 

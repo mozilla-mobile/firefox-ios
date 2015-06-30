@@ -242,9 +242,17 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
         }
 
-        if (tabManager.count == 0) {
-            let tab = tabManager.addTab()
-            tabManager.selectTab(tab)
+        if tabManager.count == 0 {
+            // Restore tabs if not disabled by the TestAppDelegate or because we crashed previously
+            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate where appDelegate.shouldRestoreTabs() {
+                tabManager.restoreTabs()
+            }
+
+            // If restoring tabs failed, was disable, or there was nothing to restore, create an initial tab
+            if tabManager.count == 0 {
+                let tab = tabManager.addTab()
+                tabManager.selectTab(tab)
+            }
         }
     }
 
@@ -1262,11 +1270,14 @@ extension BrowserViewController: TabManagerDelegate {
         updateInContentHomePanel(selected?.url)
     }
 
-    func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
+    func tabManager(tabManager: TabManager, didCreateTab tab: Browser, restoring: Bool) {
     }
 
-    func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int) {
-        urlBar.updateTabCount(tabManager.count)
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int, restoring: Bool) {
+        // If we are restoring tabs then we update the count once at the end
+        if !restoring {
+            urlBar.updateTabCount(tabManager.count)
+        }
         tab.browserDelegate = self
     }
 
@@ -1274,6 +1285,10 @@ extension BrowserViewController: TabManagerDelegate {
         urlBar.updateTabCount(tabManager.count)
         // browserDelegate is a weak ref (and the tab's webView may not be destroyed yet)
         // so we don't expcitly unset it.
+    }
+
+    func tabManagerDidRestoreTabs(tabManager: TabManager) {
+        urlBar.updateTabCount(tabManager.count)
     }
 
     private func isWebPage(url: NSURL) -> Bool {
@@ -1829,18 +1844,6 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 }
             }
         }
-    }
-}
-
-extension BrowserViewController: UIStateRestoring {
-    override func encodeRestorableStateWithCoder(coder: NSCoder) {
-        super.encodeRestorableStateWithCoder(coder)
-        tabManager.encodeRestorableStateWithCoder(coder)
-    }
-
-    override func decodeRestorableStateWithCoder(coder: NSCoder) {
-        super.decodeRestorableStateWithCoder(coder)
-        tabManager.decodeRestorableStateWithCoder(coder)
     }
 }
 

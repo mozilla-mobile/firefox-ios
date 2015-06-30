@@ -9,9 +9,10 @@ import Shared
 
 protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?)
-    func tabManager(tabManager: TabManager, didCreateTab tab: Browser)
-    func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int)
+    func tabManager(tabManager: TabManager, didCreateTab tab: Browser, restoring: Bool)
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int, restoring: Bool)
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int)
+    func tabManagerDidRestoreTabs(tabManager: TabManager)
 }
 
 // We can't use a WeakList here because this is a protocol.
@@ -141,7 +142,7 @@ class TabManager : NSObject {
         return self.addTab(request: request, configuration: configuration, flushToDisk: true, zombie: false)
     }
 
-    func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool) -> Browser {
+    func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, restoring: Bool = false) -> Browser {
         assert(NSThread.isMainThread())
 
         configuration?.preferences.javaScriptCanOpenWindowsAutomatically = !(prefs.boolForKey("blockPopups") ?? true)
@@ -149,13 +150,13 @@ class TabManager : NSObject {
         let tab = Browser(configuration: configuration ?? self.configuration)
 
         for delegate in delegates {
-            delegate.get()?.tabManager(self, didCreateTab: tab)
+            delegate.get()?.tabManager(self, didCreateTab: tab, restoring: restoring)
         }
 
         tabs.append(tab)
 
         for delegate in delegates {
-            delegate.get()?.tabManager(self, didAddTab: tab, atIndex: tabs.count - 1)
+            delegate.get()?.tabManager(self, didAddTab: tab, atIndex: tabs.count - 1, restoring: restoring)
         }
 
         if !zombie {
@@ -239,6 +240,9 @@ class TabManager : NSObject {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
         let storedTabs: [RemoteTab] = optFilter(tabs.map(Browser.toTab))
         storage?.insertOrUpdateTabs(storedTabs)
+
+        // Also save (full) tab state to disk
+        preserveTabs()
     }
 
     func prefsDidChange() {
@@ -275,13 +279,6 @@ extension TabManager {
             self.isSelected = isSelected
 
             super.init()
-
-            if browser.url == nil {
-                return nil
-            }
-            if currentItem == nil {
-                return nil
-            }
         }
 
         required init(coder: NSCoder) {
@@ -297,29 +294,87 @@ extension TabManager {
         }
     }
 
-    func encodeRestorableStateWithCoder(coder: NSCoder) {
-        var savedTabs = [SavedTab]()
-        for (tabIndex, tab) in enumerate(tabs) {
-            if let savedTab = SavedTab(browser: tab, isSelected: tabIndex == selectedIndex) {
-                savedTabs.append(savedTab)
-            }
+    private func tabsStateArchivePath() -> String? {
+        if let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as? String {
+            return documentsPath.stringByAppendingPathComponent("tabsState.archive")
         }
-        coder.encodeObject(savedTabs, forKey: "tabs")
+        return nil
     }
 
-    func decodeRestorableStateWithCoder(coder: NSCoder) {
-        var tabToSelect: Browser?
-        if let savedTabs = coder.decodeObjectForKey("tabs") as? [SavedTab] {
-            for savedTab in savedTabs {
-                let tab = self.addTab(flushToDisk: false, zombie: true)
-                tab.screenshot = savedTab.screenshot
-                if savedTab.isSelected {
-                    tabToSelect = tab
+    private func preserveTabsInternal() {
+        if let path = tabsStateArchivePath() {
+            var savedTabs = [SavedTab]()
+            for (tabIndex, tab) in enumerate(tabs) {
+                if let savedTab = SavedTab(browser: tab, isSelected: tabIndex == selectedIndex) {
+                    savedTabs.append(savedTab)
                 }
-                tab.sessionData = savedTab.sessionData
+            }
+
+            let tabStateData = NSMutableData()
+            let archiver = NSKeyedArchiver(forWritingWithMutableData: tabStateData)
+            archiver.encodeObject(savedTabs, forKey: "tabs")
+            archiver.finishEncoding()
+            tabStateData.writeToFile(path, atomically: true)
+        }
+    }
+
+    func preserveTabs() {
+        // This is wrapped in an Objective-C @try/@catch handler because NSKeyedArchiver may throw exceptions which Swift cannot handle
+        Try(
+            try: { () -> Void in
+                self.preserveTabsInternal()
+            },
+            catch: { exception in
+                println("Failed to preserve tabs: \(exception)")
+            }
+        )
+    }
+
+    private func restoreTabsInternal() {
+        if let tabStateArchivePath = tabsStateArchivePath() {
+            if NSFileManager.defaultManager().fileExistsAtPath(tabStateArchivePath) {
+                if let data = NSData(contentsOfFile: tabStateArchivePath) {
+                    let unarchiver = NSKeyedUnarchiver(forReadingWithData: data)
+                    if let savedTabs = unarchiver.decodeObjectForKey("tabs") as? [SavedTab] {
+                        var tabToSelect: Browser?
+
+                        for (tabIndex, savedTab) in enumerate(savedTabs) {
+                            let tab = self.addTab(flushToDisk: false, zombie: true, restoring: true)
+                            tab.screenshot = savedTab.screenshot
+                            if savedTab.isSelected {
+                                tabToSelect = tab
+                            }
+                            tab.sessionData = savedTab.sessionData
+                        }
+
+                        if tabToSelect == nil {
+                            tabToSelect = tabs.first
+                        }
+
+                        for delegate in delegates {
+                            delegate.get()?.tabManagerDidRestoreTabs(self)
+                        }
+
+                        if let tab = tabToSelect {
+                            selectTab(tab)
+                            tab.createWebview()
+                        }
+                    }
+                }
             }
         }
-        selectTab(tabToSelect ?? tabs.first)
+    }
+
+    func restoreTabs() {
+        // This is wrapped in an Objective-C @try/@catch handler because NSKeyedUnarchiver may throw exceptions which Swift cannot handle
+        Try(
+            try: { () -> Void in
+                self.restoreTabsInternal()
+            },
+            catch: { exception in
+                println("Failed to restore tabs: \(exception)")
+            }
+        )
     }
 }
 
