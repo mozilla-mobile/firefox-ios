@@ -12,6 +12,7 @@ class SearchSettingsTableViewController: UITableViewController {
     private let SectionOrder = 1
     private let NumberOfSections = 2
     private let IconSize = CGSize(width: OpenSearchEngine.PreferredIconSize, height: OpenSearchEngine.PreferredIconSize)
+    private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
 
     var model: SearchEngines!
 
@@ -24,6 +25,8 @@ class SearchSettingsTableViewController: UITableViewController {
         tableView.editing = true
         // So that we push the default search engine controller on selection.
         tableView.allowsSelectionDuringEditing = true
+
+        tableView.registerClass(SettingsTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
 
         // Insert Done button if being presented outside of the Settings Nav stack
         if !(self.navigationController is SettingsNavigationController) {
@@ -99,14 +102,6 @@ class SearchSettingsTableViewController: UITableViewController {
         }
     }
 
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == SectionDefault {
-            return NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")
-        } else {
-            return NSLocalizedString("Quick-search Engines", comment: "Title for quick-search engines settings section.")
-        }
-    }
-
     override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
         if indexPath.section == SectionDefault && indexPath.item == ItemDefaultEngine {
             let searchEnginePicker = SearchEnginePicker()
@@ -139,6 +134,23 @@ class SearchSettingsTableViewController: UITableViewController {
                 }
             }
         }
+    }
+
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 44
+    }
+
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderView
+        var sectionTitle: String
+        if section == SectionDefault {
+            sectionTitle = NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")
+        } else {
+            sectionTitle = NSLocalizedString("Quick-search Engines", comment: "Title for quick-search engines settings section.")
+        }
+        headerView.titleLabel.text = sectionTitle.uppercaseString
+
+        return headerView
     }
 
     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {

@@ -609,7 +609,7 @@ class SettingsTableViewController: UITableViewController {
         let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderView
         let section = settings[section]
         if let sectionTitle = section.title?.string {
-            headerView.titleLabel.text = sectionTitle
+            headerView.titleLabel.text = sectionTitle.uppercaseString
         }
 
         return headerView
@@ -636,15 +636,15 @@ class SettingsTableViewController: UITableViewController {
     }
 }
 
-private class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
+class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
     var titleLabel: UILabel = {
         var headerLabel = UILabel()
         var frame = headerLabel.frame
         frame.origin.x = 15
-        frame.origin.y = 17
+        frame.origin.y = 25
         headerLabel.frame = frame
         headerLabel.textColor = UIConstants.TableViewHeaderTextColor
-        headerLabel.font = UIConstants.DefaultStandardFontBold
+        headerLabel.font = UIFont.systemFontOfSize(12.0, weight: UIFontWeightRegular)
         return headerLabel
     }()
 
@@ -663,7 +663,7 @@ private class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private override func drawRect(rect: CGRect) {
+    override func drawRect(rect: CGRect) {
         let topBorder = CALayer()
         topBorder.frame = CGRectMake(0.0, 0.0, rect.size.width, 0.5)
         topBorder.backgroundColor = UIConstants.SeparatorColor.CGColor
@@ -674,7 +674,7 @@ private class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
         layer.addSublayer(bottomBorder)
     }
 
-    private override func layoutSubviews() {
+   override func layoutSubviews() {
         super.layoutSubviews()
         titleLabel.sizeToFit()
     }
