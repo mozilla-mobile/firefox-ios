@@ -1531,6 +1531,12 @@ extension BrowserViewController: WKUIDelegate {
             return
         }
 
+        // Ignore the "Plug-in handled load" error. Which is more like a notification than an error.
+        // Note that there are no constants in the SDK for the WebKit domain or error codes.
+        if error.domain == "WebKitErrorDomain" && error.code == 204 {
+            return
+        }
+
         if let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
