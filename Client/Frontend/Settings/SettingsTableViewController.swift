@@ -362,7 +362,7 @@ private class ShowIntroductionSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Show introduction again", comment: "Show the on-boarding screen again from the settings"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: NSLocalizedString("Show Tour", comment: "Show the on-boarding screen again from the settings"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
     }
 
     override func onClick(navigationController: UINavigationController?) {
@@ -447,7 +447,7 @@ private class ClearPrivateDataSetting: Setting {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
 
-        let clearTitle = NSLocalizedString("Clear private data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
+        let clearTitle = NSLocalizedString("Clear Private Data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
         super.init(title: NSAttributedString(string: clearTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
     }
 
@@ -479,7 +479,7 @@ private class PopupBlockingSettings: Setting {
     init(settings: SettingsTableViewController) {
         self.prefs = settings.profile.prefs
         self.tabManager = settings.tabManager
-        let title = NSLocalizedString("Block pop-up windows", comment: "Block pop-up windows setting")
+        let title = NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")
         super.init(title: NSAttributedString(string: title))
     }
 
@@ -522,6 +522,18 @@ class SettingsTableViewController: UITableViewController {
             accountDebugSettings = []
         }
 
+        var generalSettings = [
+            SearchSetting(settings: self),
+            PopupBlockingSettings(settings: self),
+        ]
+
+        // There is nothing to show in the Customize section if we don't include the compact tab layout
+        // setting on iPad. When more options are added that work on both device types, this logic can
+        // be changed.
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+            generalSettings +=  [UseCompactTabLayoutSetting(settings: self)]
+        }
+
         settings += [
             SettingSection(title: nil, children: [
                 // Without a Firefox Account:
@@ -530,27 +542,15 @@ class SettingsTableViewController: UITableViewController {
                 AccountStatusSetting(settings: self),
                 DisconnectSetting(settings: self),
             ] + accountDebugSettings),
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: [
-                PopupBlockingSettings(settings: self),
-            ]),
-            SettingSection(title: NSAttributedString(string: privacyTitle), children: [
-                ClearPrivateDataSetting(settings: self)
-            ]),
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("Search Settings", comment: "Search settings section title")), children: [
-                SearchSetting(settings: self)
-            ])
+            SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)
         ]
 
-        // There is nothing to show in the Customize section if we don't include the compact tab layout
-        // setting on iPad. When more options are added that work on both device types, this logic can
-        // be changed.
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            settings += [
-                SettingSection(title: NSAttributedString(string: NSLocalizedString("Customize", comment: "Customize section title in settings")), children: [
-                    UseCompactTabLayoutSetting(settings: self)
-                ])
-            ]
-        }
+
+        settings += [
+            SettingSection(title: NSAttributedString(string: privacyTitle), children: [
+                ClearPrivateDataSetting(settings: self)
+            ])
+        ]
 
         settings += [
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
