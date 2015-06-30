@@ -376,6 +376,32 @@ public class BrowserProfile: Profile {
 
         init(profile: BrowserProfile) {
             self.profile = profile
+            super.init()
+
+            let center = NSNotificationCenter.defaultCenter()
+            center.addObserver(self, selector: "onLoginDidChange:", name: NotificationDataLoginDidChange, object: nil)
+        }
+
+        deinit {
+            // Remove 'em all.
+            NSNotificationCenter.defaultCenter().removeObserver(self)
+        }
+
+        // Simple in-memory rate limiting.
+        var lastTriggeredLoginSync: Timestamp = 0
+        @objc func onLoginDidChange(notification: NSNotification) {
+            log.debug("Login did change.")
+            if (NSDate.now() - lastTriggeredLoginSync) > OneMinuteInMilliseconds {
+                lastTriggeredLoginSync = NSDate.now()
+
+                // Give it a few seconds.
+                let when: dispatch_time_t = dispatch_time(DISPATCH_TIME_NOW, SyncConstants.SyncDelayTriggered)
+
+                // Trigger on the main queue. The bulk of the sync work runs in the background.
+                dispatch_after(when, dispatch_get_main_queue()) {
+                    self.syncLogins()
+                }
+            }
         }
 
         var prefsForSync: Prefs {
