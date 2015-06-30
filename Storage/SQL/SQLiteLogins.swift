@@ -496,10 +496,6 @@ public class SQLiteLogins: BrowserLogins {
     }
 }
 
-
-// If it's not deleted, let's make sure we're using the same GUID locally for this login.
-// TODO
-
 // When a server change is detected (e.g., syncID changes), we should consider shifting the contents
 // of the mirror into the local overlay, allowing a content-based reconciliation to occur on the next
 // full sync. Or we could flag the mirror as to-clear, download the server records and un-clear, and
@@ -635,7 +631,7 @@ extension SQLiteLogins: SyncableLogins {
             // * New upstream only; no local overlay, content-based merge,
             //   or shared parent in the mirror. Insert it in the mirror.
             log.debug("Never seen remote record \(upstream.guid). Mirroring.")
-            return self.insertNewMirror(upstream)      // TODO: Sync record timestamps.
+            return self.insertNewMirror(upstream)
         }
     }
 
@@ -648,7 +644,7 @@ extension SQLiteLogins: SyncableLogins {
             login.usernameField,
             login.passwordField,
             login.timesUsed,
-            NSNumber(unsignedLongLong: login.timeLastUsed),            // TODO: are these the right format?
+            NSNumber(unsignedLongLong: login.timeLastUsed),
             NSNumber(unsignedLongLong: login.timePasswordChanged),
             NSNumber(unsignedLongLong: login.timeCreated),
             login.password,

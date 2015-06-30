@@ -24,7 +24,7 @@ public enum NonCommutativeLoginField: Indexable {
     case HTTPRealm(to: String?)
     case FormSubmitURL(to: String?)
     case TimeCreated(to: MicrosecondTimestamp)                  // Should be immutable.
-    case TimeLastUsed(to: MicrosecondTimestamp)      // TODO: reconcile by taking the largest.
+    case TimeLastUsed(to: MicrosecondTimestamp)
     case TimePasswordChanged(to: MicrosecondTimestamp)
 
     public var index: Int {
@@ -500,7 +500,6 @@ public protocol SyncableLogins {
     func getDeletedLoginsToUpload() -> Deferred<Result<[GUID]>>
 
     /**
-     * TODO: these might need some work.
      * Chains through the provided timestamp.
      */
     func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>>
