@@ -626,7 +626,7 @@ if (!window.__firefox__) {
   window.__firefox__ = { }
 }
 
-function PasswordInjector() {
+function LoginInjector() {
   this.inject = function(msg) {
     try {
       LoginManagerContent.receiveMessage(msg)
