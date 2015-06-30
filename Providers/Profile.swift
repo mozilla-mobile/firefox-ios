@@ -360,6 +360,20 @@ public class BrowserProfile: Profile {
 
         private var syncTimer: NSTimer? = nil
 
+        /**
+         * Locking is managed by withSyncInputs. Make sure you take and release these
+         * whenever you do anything Sync-ey.
+         */
+        var syncLock = OSSpinLock()
+
+        private func beginSyncing() -> Bool {
+            return OSSpinLockTry(&syncLock)
+        }
+
+        private func endSyncing() {
+            return OSSpinLockUnlock(&syncLock)
+        }
+
         init(profile: BrowserProfile) {
             self.profile = profile
         }
@@ -446,6 +460,11 @@ public class BrowserProfile: Profile {
          */
         private func withSyncInputs<T>(label: EngineIdentifier? = nil, function: (SyncDelegate, Prefs, Ready) -> Deferred<Result<T>>) -> Deferred<Result<T>>? {
             if let account = profile.account {
+                if !beginSyncing() {
+                    log.info("Not syncing \(label); already syncing something.")
+                    return deferResult(AlreadySyncingError())
+                }
+
                 if let label = label {
                     log.info("Syncing \(label).")
                 }
@@ -456,9 +475,14 @@ public class BrowserProfile: Profile {
                 let readyDeferred = SyncStateMachine.toReady(authState, prefs: syncPrefs)
                 let delegate = profile.getSyncDelegate()
 
-                return readyDeferred >>== { ready in
+                let go = readyDeferred >>== { ready in
                     function(delegate, syncPrefs, ready)
                 }
+
+                // Always unlock when we're done.
+                go.upon({ res in self.endSyncing() })
+
+                return go
             }
 
             log.warning("No account; can't sync.")
@@ -552,5 +576,11 @@ public class BrowserProfile: Profile {
             // TODO: recognize .NotStarted.
             return self.sync("history", function: syncHistoryWithDelegate)
         }
+    }
+}
+
+class AlreadySyncingError: ErrorType {
+    var description: String {
+        return "Already syncing."
     }
 }
