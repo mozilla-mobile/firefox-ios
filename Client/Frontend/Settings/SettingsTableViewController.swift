@@ -13,7 +13,7 @@ private var DebugSettingsClickCount: Int = 0
 // A base TableViewCell, to help minimize initialization and allow recycling.
 class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         indentationWidth = 0
         layoutMargins = UIEdgeInsetsZero
         // So that the seperator line goes all the way to the left edge.
@@ -37,6 +37,8 @@ class Setting {
 
     // Whether or not to show this pref.
     var hidden: Bool { return false }
+
+    var style: UITableViewCellStyle { return .Subtitle }
 
     var accessoryType: UITableViewCellAccessoryType { return .None }
 
@@ -421,6 +423,10 @@ private class SearchSetting: Setting {
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
+    override var style: UITableViewCellStyle { return .Value1 }
+
+    override var status: NSAttributedString { return NSAttributedString(string: profile.searchEngines.defaultEngine.shortName) }
+
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         super.init(title: NSAttributedString(string: NSLocalizedString("Search", comment: "Open search section of settings"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
@@ -606,7 +612,7 @@ class SettingsTableViewController: UITableViewController {
                 // Work around http://stackoverflow.com/a/9999821 and http://stackoverflow.com/a/25901083 by using a new cell.
                 // I could not make any setNeedsLayout solution work in the case where we disconnect and then connect a new account.
                 // Be aware that dequeing and then ignoring a cell appears to cause issues; only deque a cell if you're going to return it.
-                cell = SettingsTableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: nil)
+                cell = SettingsTableViewCell(style: setting.style, reuseIdentifier: nil)
             } else {
                 cell = tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath) as! UITableViewCell
             }
