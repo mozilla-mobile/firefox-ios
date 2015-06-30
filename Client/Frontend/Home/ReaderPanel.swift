@@ -53,10 +53,12 @@ private struct ReadingListPanelUX {
 
     static let WelcomeScreenItemFont = UIFont.systemFontOfSize(13)
     static let WelcomeScreenItemTextColor = UIColor.lightGrayColor()
-    static let WelcomeScreenItemWidth = 180
+    static let WelcomeScreenItemWidth = 220
     static let WelcomeScreenItemOffset = -20
 
+    static let WelcomeScreenCircleWidth = 40
     static let WelcomeScreenCircleOffset = 20
+    static let WelcomeScreenCircleSpacer = 10
 }
 
 class ReadingListTableViewCell: SWTableViewCell {
@@ -268,10 +270,13 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
                 let welcomeLabel = UILabel()
                 containerView.addSubview(welcomeLabel)
                 welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "")
+                welcomeLabel.textAlignment = NSTextAlignment.Center
                 welcomeLabel.font = ReadingListPanelUX.WelcomeScreenHeaderFont
                 welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
+                welcomeLabel.adjustsFontSizeToFitWidth = true
                 welcomeLabel.snp_makeConstraints({ (make) -> Void in
                     make.centerX.equalTo(containerView)
+                    make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)
                     make.top.equalTo(logoImageView.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
                 })
 
@@ -283,7 +288,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
                 readerModeLabel.numberOfLines = 0
                 readerModeLabel.snp_makeConstraints({ (make) -> Void in
                     make.top.equalTo(welcomeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
-                    make.left.equalTo(welcomeLabel.snp_left).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
+                    make.left.equalTo(welcomeLabel.snp_left)
                     make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
                 })
 
@@ -291,7 +296,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
                 containerView.addSubview(readerModeImageView)
                 readerModeImageView.snp_makeConstraints({ (make) -> Void in
                     make.centerY.equalTo(readerModeLabel)
-                    make.right.equalTo(welcomeLabel.snp_right).offset(ReadingListPanelUX.WelcomeScreenCircleOffset)
+                    make.right.equalTo(welcomeLabel.snp_right)
                 })
 
                 let readingListLabel = UILabel()
@@ -302,7 +307,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
                 readingListLabel.numberOfLines = 0
                 readingListLabel.snp_makeConstraints({ (make) -> Void in
                     make.top.equalTo(readerModeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
-                    make.left.equalTo(welcomeLabel.snp_left).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
+                    make.left.equalTo(welcomeLabel.snp_left)
                     make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
                 })
 
@@ -310,7 +315,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
                 containerView.addSubview(readingListImageView)
                 readingListImageView.snp_makeConstraints({ (make) -> Void in
                     make.centerY.equalTo(readingListLabel)
-                    make.right.equalTo(welcomeLabel.snp_right).offset(ReadingListPanelUX.WelcomeScreenCircleOffset)
+                    make.right.equalTo(welcomeLabel.snp_right)
                 })
 
                 containerView.snp_makeConstraints({ (make) -> Void in
