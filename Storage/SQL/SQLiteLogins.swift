@@ -191,13 +191,14 @@ public class SQLiteLogins: BrowserLogins {
 
         let sql =
         "SELECT \(projection) FROM " +
-        "\(TableLoginsLocal) WHERE is_deleted = 0 AND hostname = ? " +
+        "\(TableLoginsLocal) WHERE is_deleted = 0 AND hostname IS ? " +
         "UNION ALL " +
         "SELECT \(projection) FROM " +
-        "\(TableLoginsMirror) WHERE is_overridden = 0 AND hostname = ? " +
+        "\(TableLoginsMirror) WHERE is_overridden = 0 AND hostname IS ? " +
         "ORDER BY timeLastUsed DESC"
 
         let args: Args = [protectionSpace.host, protectionSpace.host]
+        log.debug("Looking for login: \(args[0])")
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
     }
 
@@ -215,12 +216,13 @@ public class SQLiteLogins: BrowserLogins {
             usernameMatch = "username IS NULL"
         }
 
+        log.debug("Looking for login: \(username), \(args[0])")
         let sql =
         "SELECT \(projection) FROM " +
-        "\(TableLoginsLocal) WHERE is_deleted = 0 AND hostname = ? AND \(usernameMatch) " +
+        "\(TableLoginsLocal) WHERE is_deleted = 0 AND hostname IS ? AND \(usernameMatch) " +
         "UNION ALL " +
         "SELECT \(projection) FROM " +
-        "\(TableLoginsMirror) WHERE is_overridden = 0 AND hostname = ? AND username = ? " +
+        "\(TableLoginsMirror) WHERE is_overridden = 0 AND hostname IS ? AND username IS ? " +
         "ORDER BY timeLastUsed DESC"
 
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
@@ -816,12 +818,48 @@ extension SQLiteLogins: SyncableLogins {
     /**
      * Chains through the provided timestamp.
      */
-    public func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>> {
-        return deferResult(0)
+    public func markAsSynchronized(guids: [GUID], modified: Timestamp) -> Deferred<Result<Timestamp>> {
+        // Update the mirror from the local record that we just uploaded.
+        // sqlite doesn't support UPDATE FROM, so instead of running 10 subqueries * n GUIDs,
+        // we issue a single DELETE and a single INSERT on the mirror, then throw away the
+        // local overlay that we just uploaded with another DELETE.
+        log.debug("Marking \(guids.count) GUIDs as synchronized.")
+
+        // TODO: transaction!
+        let args: Args = guids.map { $0 as AnyObject }
+        let inClause = BrowserDB.varlist(args.count)
+
+        let delMirror = "DELETE FROM \(TableLoginsMirror) WHERE guid IN \(inClause)"
+
+        let insMirror =
+        "INSERT OR IGNORE INTO \(TableLoginsMirror) (" +
+            " is_overridden, server_modified" +
+            ", httpRealm, formSubmitURL, usernameField" +
+            ", passwordField, timesUsed, timeLastUsed, timePasswordChanged, timeCreated" +
+            ", password, hostname, username, guid" +
+        ") SELECT 0, \(modified)" +
+        ", httpRealm, formSubmitURL, usernameField" +
+        ", passwordField, timesUsed, timeLastUsed, timePasswordChanged, timeCreated" +
+        ", password, hostname, username, guid " +
+        "FROM \(TableLoginsLocal) " +
+        "WHERE guid IN \(inClause)"
+
+        let delLocal = "DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause)"
+
+        return self.db.run(delMirror, withArgs: args)
+         >>> { self.db.run(insMirror, withArgs: args) }
+         >>> { self.db.run(delLocal, withArgs: args) }
+         >>> always(modified)
     }
 
     public func markAsDeleted(guids: [GUID]) -> Success {
-        return succeed()
+        log.debug("Marking \(guids.count) GUIDs as deleted.")
+
+        let args: Args = guids.map { $0 as AnyObject }
+        let inClause = BrowserDB.varlist(args.count)
+
+        return self.db.run("DELETE FROM \(TableLoginsMirror) WHERE guid IN \(inClause)", withArgs: args)
+         >>> { self.db.run("DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause)", withArgs: args) }
     }
 
     /**

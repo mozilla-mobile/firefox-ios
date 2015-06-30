@@ -456,7 +456,7 @@ public class ServerLogin: Login {
     }
 
     required public init(credential: NSURLCredential, protectionSpace: NSURLProtectionSpace) {
-        fatalError("init(credential:protectionSpace:) has not been implemented")
+        super.init(credential: credential, protectionSpace: protectionSpace)
     }
 }
 

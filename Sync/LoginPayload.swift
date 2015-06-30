@@ -51,15 +51,24 @@ public class LoginPayload: CleartextPayloadJSON {
         if !LoginPayload.OptionalStringFields.every({ field in
             let val = self[field]
             // Yup, 404 is not found, so this means "string or nothing".
-            return val.isString || val.asError?.code == 404
+            let valid = val.isString || val.isNull || val.asError?.code == 404
+            if !valid {
+                log.debug("Field \(field) is invalid: \(val)")
+            }
+            return valid
         }) {
             return false
         }
 
         if !LoginPayload.OptionalNumericFields.every({ field in
             let val = self[field]
-            // Yup, 404 is not found, so this means "uint or nothing".
-            return val.isUInt || val.asError?.code == 404
+            // Yup, 404 is not found, so this means "number or nothing".
+            // We only check for number because we're including timestamps as NSNumbers.
+            let valid = val.isNumber || val.isNull || val.asError?.code == 404
+            if !valid {
+                log.debug("Field \(field) is invalid: \(val)")
+            }
+            return valid
         }) {
             return false
         }
