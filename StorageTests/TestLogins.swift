@@ -311,6 +311,8 @@ class TestSyncableLogins: XCTestCase {
         newLocalPassword.formSubmitURL = "http://example.com/form2/"
 
         let preUpdate = NSDate.now()
+
+        // Updates always bump our usages, too.
         XCTAssertTrue(self.logins.updateLoginByGUID(guidA, new: newLocalPassword, significant: true).value.isSuccess)
 
         let localAltered = self.logins.getExistingLocalRecordByGUID(guidA).value.successValue!
@@ -325,7 +327,7 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(localAltered!.formSubmitURL!, "http://example.com/form2/")
         XCTAssertTrue(localAltered!.localModified >= preUpdate)
         XCTAssertEqual(localAltered!.syncStatus, SyncStatus.Changed)              // Changes are enough to warrant upload.
-        XCTAssertEqual(localAltered!.timesUsed, 5)
+        XCTAssertEqual(localAltered!.timesUsed, 6)
         XCTAssertEqual(mirrorAltered!.timesUsed, 4)
     }
 
