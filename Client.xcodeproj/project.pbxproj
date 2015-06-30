@@ -302,6 +302,10 @@
 		7BF5A1CA1B4160EA00EA9DD8 /* CommandSyncTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1C91B4160EA00EA9DD8 /* CommandSyncTable.swift */; };
 		7BF5A1EA1B41640500EA9DD8 /* Commands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1E91B41640500EA9DD8 /* Commands.swift */; };
 		7BF5A1EC1B4193ED00EA9DD8 /* SQLiteCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1EB1B4193ED00EA9DD8 /* SQLiteCommands.swift */; };
+		7BF5A1EE1B429B3100EA9DD8 /* SQLiteCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1ED1B429B3100EA9DD8 /* SQLiteCommandsTests.swift */; };
+		7BF5A1EF1B429CCB00EA9DD8 /* SQLiteCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1EB1B4193ED00EA9DD8 /* SQLiteCommands.swift */; };
+		7BF5A1F01B429CD200EA9DD8 /* Commands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1E91B41640500EA9DD8 /* Commands.swift */; };
+		7BF5A1F11B429CD700EA9DD8 /* CommandSyncTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1C91B4160EA00EA9DD8 /* CommandSyncTable.swift */; };
 		D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D301AAED1A3A55B70078DD1D /* TabTrayController.swift */; };
 		D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D308E4EC1A530A8B00842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
@@ -1335,6 +1339,7 @@
 		7BF5A1C91B4160EA00EA9DD8 /* CommandSyncTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandSyncTable.swift; sourceTree = "<group>"; };
 		7BF5A1E91B41640500EA9DD8 /* Commands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Commands.swift; sourceTree = "<group>"; };
 		7BF5A1EB1B4193ED00EA9DD8 /* SQLiteCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteCommands.swift; sourceTree = "<group>"; };
+		7BF5A1ED1B429B3100EA9DD8 /* SQLiteCommandsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteCommandsTests.swift; sourceTree = "<group>"; };
 		D301AAED1A3A55B70078DD1D /* TabTrayController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayController.swift; sourceTree = "<group>"; };
 		D308E4E31A5306F500842685 /* SearchEngines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngines.swift; sourceTree = "<group>"; };
 		D30B0F2F1AA7D66300C01CA3 /* ThumbnailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailCell.swift; sourceTree = "<group>"; };
@@ -2064,6 +2069,7 @@
 				2FCAE2821ABB533A00877008 /* TestTableTable.swift */,
 				2FCAE22B1ABB51F800877008 /* Supporting Files */,
 				0B5A93071B1E64F3004F47A2 /* TestDeferredSqlite.swift */,
+				7BF5A1ED1B429B3100EA9DD8 /* SQLiteCommandsTests.swift */,
 			);
 			path = StorageTests;
 			sourceTree = "<group>";
@@ -3118,6 +3124,7 @@
 					};
 					F84B21BD1A090F8100AAB793 = {
 						CreatedOnToolsVersion = 6.1;
+						DevelopmentTeam = 43AQ936H96;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -3841,6 +3848,7 @@
 				2FA4351C1ABB6831008031D1 /* BrowserDB.swift in Sources */,
 				0B5A93081B1E64F3004F47A2 /* TestDeferredSqlite.swift in Sources */,
 				2FA4351A1ABB6829008031D1 /* Site.swift in Sources */,
+				7BF5A1EF1B429CCB00EA9DD8 /* SQLiteCommands.swift in Sources */,
 				28D158CC1AFDBCC000F9C065 /* TestFaviconsTable.swift in Sources */,
 				28EDE6CB1AF2929900FB2937 /* SQLiteHistory.swift in Sources */,
 				D32CACED1AE04DA1000658EB /* TestSwiftData.swift in Sources */,
@@ -3848,9 +3856,12 @@
 				2FA4352C1ABB6873008031D1 /* Visit.swift in Sources */,
 				2FA435231ABB6831008031D1 /* RemoteTabsTable.swift in Sources */,
 				28CA1BA81AFC718800220D38 /* TestTableTable.swift in Sources */,
+				7BF5A1F11B429CD700EA9DD8 /* CommandSyncTable.swift in Sources */,
 				2FA435241ABB6831008031D1 /* SchemaTable.swift in Sources */,
 				2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */,
+				7BF5A1F01B429CD200EA9DD8 /* Commands.swift in Sources */,
 				288ED6DE1B29DEAA0008E140 /* SQLiteLogins.swift in Sources */,
+				7BF5A1EE1B429B3100EA9DD8 /* SQLiteCommandsTests.swift in Sources */,
 				287AC8661AF4776D00101515 /* TestSQLiteHistory.swift in Sources */,
 				2FA435131ABB6829008031D1 /* Cursor.swift in Sources */,
 				282915E71AF1A7920006EEB5 /* BrowserTable.swift in Sources */,

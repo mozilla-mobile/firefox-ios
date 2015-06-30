@@ -14,10 +14,9 @@ class CommandSyncTable<T>: GenericTable<SyncCommand> {
 
     override var rows: String { return join(",", [
         "guid TEXT PRIMARY KEY",
-        "from_client_guid TEXT REFERENCES clients(guid)",
-        "to_client_guid TEXT REFERENCES clients(guid)",
+        "client_guid TEXT REFERENCES clients(guid)",
         "url TEXT",
-        "title TEXT NOT NULL",
+        "title TEXT",
         "action TEXT NOT NULL",
         "last_used INTEGER",
         ])
@@ -27,13 +26,12 @@ class CommandSyncTable<T>: GenericTable<SyncCommand> {
     override func getInsertAndArgs(inout item: SyncCommand) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         args.append(item.guid)
-        args.append(item.fromClient)
-        args.append(item.toClient)
+        args.append(item.client)
         args.append(item.url)
         args.append(item.title)
         args.append(item.action)
         args.append(NSNumber(unsignedLongLong: item.modified))
-        return ("INSERT INTO \(name) (guid, from_client_guid, to_client_guid, url, title, action, last_used) VALUES (?, ?, ?, ?, ?)", args)
+        return ("INSERT INTO \(name) (guid, client_guid, url, title, action, last_used) VALUES (?, ?, ?, ?, ?, ?)", args)
     }
 
     override func getDeleteAndArgs(inout item: SyncCommand?) -> (String, [AnyObject?])? {
@@ -48,17 +46,20 @@ class CommandSyncTable<T>: GenericTable<SyncCommand> {
         return { row -> SyncCommand in
             return SyncCommand(
                 guid: row["guid"] as! GUID,
-                fromClientGuid: row["from_client_guid"] as! String,
-                toClientGuid: row["to_client_guid"] as! String,
+                clientGuid: row["client_guid"] as! GUID,
                 url: row["url"] as? String,
-                title: row["title"] as! String,
+                title: row["title"] as? String,
                 action: row["action"] as! String,
                 lastUsed: (row["last_used"] as! NSNumber).unsignedLongLongValue)
         }
     }
 
     override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
-        // Per-client chunks, each chunk in client-order.
+        var args = [AnyObject?]()
+        if let filter: AnyObject = options?.filter {
+            args.append("%\(filter)%")
+            return ("SELECT * FROM \(name) WHERE client_guid LIKE ? ORDER BY last_used DESC", args)
+        }
         return ("SELECT * FROM \(name) ORDER BY client_guid DESC, last_used DESC", [])
     }
 }

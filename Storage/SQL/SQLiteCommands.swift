@@ -45,23 +45,23 @@ public class SQLiteCommands: SyncCommands {
     public func wipeCommandsForClient(client: RemoteClient) -> Deferred<Result<()>> {
         let deferred = Deferred<Result<()>>(defaultQueue: dispatch_get_main_queue())
         var err: NSError?
-        db.transaction(&err) { connection, _ in
-            self.getCommandsForClient(client).upon({ result in
-                if let clientCommands = result.successValue {
+        self.getCommandsForClient(client).upon({ result in
+            if let clientCommands = result.successValue {
+                self.db.transaction(&err) { connection, _ in
                     for command in clientCommands {
                         self.commands.delete(connection, item: command, err: &err)
                     }
+                    if let err = err {
+                        let databaseError = DatabaseError(err: err)
+                        log.debug("Wipe failed: \(databaseError)")
+                        deferred.fill(Result(failure: databaseError))
+                    } else {
+                        deferred.fill(Result(success: ()))
+                    }
+                    return true
                 }
-            })
-            if let err = err {
-                let databaseError = DatabaseError(err: err)
-                log.debug("Wipe failed: \(databaseError)")
-                deferred.fill(Result(failure: databaseError))
-            } else {
-                deferred.fill(Result(success: ()))
             }
-            return true
-        }
+        })
         return deferred
     }
 
@@ -119,7 +119,6 @@ public class SQLiteCommands: SyncCommands {
     // get all unsyced commands for a client
     public func getCommandsForClient(client: RemoteClient) -> Deferred<Result<[SyncCommand]>> {
         var err: NSError?
-
 
         let opts = QueryOptions()
         opts.filter = client.guid

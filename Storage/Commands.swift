@@ -12,19 +12,16 @@ public struct SyncCommand: Equatable {
     public let guid: GUID
     public let modified: Timestamp
 
-    public let title: String
+    public let title: String?
     public let url: String?
     public let action: String?
-    public let fromClient: String
-    public let toClient: String
+    public let client: GUID
 
     let version: String?
 
-
-    public init(guid: GUID, fromClientGuid: String, toClientGuid: String, url: String?, title: String, action: String, lastUsed: Timestamp) {
+    public init(guid: GUID, clientGuid: GUID, url: String?, title: String?, action: String, lastUsed: Timestamp) {
         self.guid = guid
-        self.fromClient = fromClientGuid
-        self.toClient = toClientGuid
+        self.client = clientGuid
         self.url = url
         self.title = title
         self.action = action
