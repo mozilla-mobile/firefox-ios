@@ -190,7 +190,7 @@ public class KeyBundle: Equatable {
                     return JSON([
                         "id": record.id,
                         "sortindex": record.sortindex,
-                        "ttl": record.ttl,
+                        "ttl": record.ttl ?? JSON.null,
                         "payload": payload,
                     ])
                 }

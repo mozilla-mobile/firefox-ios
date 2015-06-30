@@ -25,7 +25,7 @@ public class Record<T: CleartextPayloadJSON> {
 
     public let modified: Timestamp
     public let sortindex: Int
-    public let ttl: Int              // Seconds.
+    public let ttl: Int?              // Seconds. Can be null, which means 'don't expire'.
 
     // This is a hook for decryption.
     // Right now it only parses the string. In subclasses, it'll parse the
@@ -73,7 +73,7 @@ public class Record<T: CleartextPayloadJSON> {
         self.init(id: envelope.id, payload: payload, modified: envelope.modified, sortindex: envelope.sortindex)
     }
 
-    init(id: GUID, payload: T, modified: Timestamp = Timestamp(time(nil)), sortindex: Int = 0, ttl: Int = ONE_YEAR_IN_SECONDS) {
+    init(id: GUID, payload: T, modified: Timestamp = Timestamp(time(nil)), sortindex: Int = 0, ttl: Int? = nil) {
         self.id = id
 
         self.payload = payload;
