@@ -198,6 +198,7 @@ class TabManager : NSObject {
     // This method is duplicated to hide the flushToDisk option from consumers.
     func removeTab(tab: Browser) {
         self.removeTab(tab, flushToDisk: true)
+        hideNetworkActivitySpinner()
     }
 
     private func removeTab(tab: Browser, flushToDisk: Bool) {
@@ -402,8 +403,29 @@ extension TabManager {
 }
 
 extension TabManager : WKNavigationDelegate {
+    func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    }
+
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+        hideNetworkActivitySpinner()
         storeChanges()
+    }
+
+    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+        hideNetworkActivitySpinner()
+    }
+
+    func hideNetworkActivitySpinner() {
+        for tab in tabs {
+            if let tabWebView = tab.webView {
+                // If we find one tab loading, we don't hide the spinner
+                if tabWebView.loading {
+                    return
+                }
+            }
+        }
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
     }
 }
 
