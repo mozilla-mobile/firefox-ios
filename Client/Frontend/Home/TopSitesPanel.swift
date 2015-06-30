@@ -7,8 +7,6 @@ import Shared
 import Storage
 
 private let ThumbnailIdentifier = "Thumbnail"
-private let SeparatorKind = "separator"
-private let SeparatorColor = UIConstants.SeparatorColor
 
 struct TopSitesPanelUX {
     static let SuggestedTileImagePadding: CGFloat = 10
@@ -106,8 +104,6 @@ class TopSitesPanel: UIViewController {
         super.viewDidLoad()
         dataSource = TopSitesDataSource(profile: profile, data: Cursor(status: .Failure, msg: "Nothing loaded yet"))
 
-        layout.registerClass(TopSitesSeparator.self, forDecorationViewOfKind: SeparatorKind)
-
         collection = TopSitesCollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collection.backgroundColor = UIConstants.PanelBackgroundColor
         collection.delegate = self
@@ -155,29 +151,13 @@ class TopSitesPanel: UIViewController {
         if let data = result.successValue {
             let numOfThumbnails = self.layout.thumbnailCount
             collection.performBatchUpdates({
-                // If we have more than enough items to fill the list, delete and insert the new one at the
-                // end of the list to animate the cells
-                if data.count == 100 {
-                    self.collection.deleteItemsAtIndexPaths([indexPath])
-                    self.collection.insertItemsAtIndexPaths([NSIndexPath(forItem: data.count - 1, inSection: 0)])
-                    self.collection.reloadItemsAtIndexPaths([NSIndexPath(forItem: numOfThumbnails, inSection: 0)])
-                }
-
-                // If the history data has less than the number of tiles but we have enough suggested tiles to fill
-                // in the rest, delete and insert the suggested tiles at the end
-                else if (data.count < numOfThumbnails && min(data.count + self.dataSource.suggestedSites.count, numOfThumbnails) == numOfThumbnails) {
+                // If we have enough data to fill the tiles after the deletion, then delete and insert the next one from data
+                if (data.count + self.dataSource.suggestedSites.count >= numOfThumbnails) {
                     self.collection.deleteItemsAtIndexPaths([indexPath])
                     self.collection.insertItemsAtIndexPaths([NSIndexPath(forItem: numOfThumbnails - 1, inSection: 0)])
                 }
 
-                // If we have not enough entries to fill the history list the just delete and reload the one that will
-                // slide into the thumbnail area to update its layout
-                else if (data.count >= numOfThumbnails && data.count < 100) {
-                    self.collection.deleteItemsAtIndexPaths([indexPath])
-                    self.collection.reloadItemsAtIndexPaths([NSIndexPath(forItem: numOfThumbnails, inSection: 0)])
-                }
-
-                // IF we don't have enough to fill the thumbnail tile area even with suggested tiles, just delete
+                // If we don't have enough to fill the thumbnail tile area even with suggested tiles, just delete
                 else if (data.count + self.dataSource.suggestedSites.count) < numOfThumbnails {
                     self.collection.deleteItemsAtIndexPaths([indexPath])
                 }
@@ -318,45 +298,19 @@ private class TopSitesLayout: UICollectionViewLayout {
             let indexPath = NSIndexPath(forItem: i, inSection: 0)
             let attr = layoutAttributesForItemAtIndexPath(indexPath)
             attrs.append(attr)
-
-            if let decoration = layoutAttributesForDecorationViewOfKind(SeparatorKind, atIndexPath: indexPath) {
-                attrs.append(decoration)
-            }
         }
         return attrs
-    }
-
-    // Set the frames for the row separators and close buttons if we are in editing mode.
-    override func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
-        let rowIndex = indexPath.item - thumbnailCount + 1
-        if rowIndex >= 0 {
-            let rowYOffset = CGFloat(rowIndex) * UIConstants.DefaultRowHeight
-            let y = topSectionHeight + rowYOffset
-            let decoration = UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
-            decoration.frame = CGRectMake(0, y, width, 0.5)
-            return decoration
-        }
-
-        return nil
     }
 
     override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
         let attr = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
 
-        let i = indexPath.item
-        if i < thumbnailCount {
-            // Set the top thumbnail frames.
-            let row = floor(Double(i / thumbnailCols))
-            let col = i % thumbnailCols
-            let x = ThumbnailCellUX.Insets.left + thumbnailWidth * CGFloat(col)
-            let y = ThumbnailCellUX.Insets.top + CGFloat(row) * thumbnailHeight
-            attr.frame = CGRectMake(x, y, thumbnailWidth, thumbnailHeight)
-        } else {
-            // Set the bottom row frames.
-            let rowYOffset = CGFloat(i - thumbnailCount) * UIConstants.DefaultRowHeight
-            let y = CGFloat(topSectionHeight + rowYOffset)
-            attr.frame = CGRectMake(0, y, width, UIConstants.DefaultRowHeight)
-        }
+        // Set the top thumbnail frames.
+        let row = floor(Double(indexPath.item / thumbnailCols))
+        let col = indexPath.item % thumbnailCols
+        let x = ThumbnailCellUX.Insets.left + thumbnailWidth * CGFloat(col)
+        let y = ThumbnailCellUX.Insets.top + CGFloat(row) * thumbnailHeight
+        attr.frame = CGRectMake(x, y, thumbnailWidth, thumbnailHeight)
 
         return attr
     }
@@ -387,11 +341,10 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
 
         // If there aren't enough data items to fill the grid, look for items in suggested sites.
         if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
-            if data.count < layout.thumbnailCount {
-                return min(data.count + suggestedSites.count, layout.thumbnailCount)
-            }
+            return min(data.count + suggestedSites.count, layout.thumbnailCount)
         }
-        return data.count
+
+        return 0
     }
 
     private func setDefaultThumbnailBackground(cell: ThumbnailCell) {
@@ -446,18 +399,6 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         return cell
     }
 
-    private func createListCell(cell: TwoLineCollectionViewCell, site: Site) -> TwoLineCollectionViewCell {
-        cell.textLabel.text = site.title.isEmpty ? site.url : site.title
-        cell.detailTextLabel.text = site.url
-        cell.mergeAccessibilityLabels()
-        if let icon = site.icon {
-            cell.imageView.sd_setImageWithURL(NSURL(string: icon.url)!)
-        } else {
-            cell.imageView.image = ThumbnailCellUX.PlaceholderImage
-        }
-        return cell
-    }
-
     subscript(index: Int) -> Site? {
         if data.status != .Success {
             return nil
@@ -478,16 +419,5 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
             return createTileForSuggestedSite(cell, tile: site as! Tile)
         }
         return createTileForSite(cell, site: site)
-    }
-}
-
-private class TopSitesSeparator: UICollectionReusableView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.backgroundColor = SeparatorColor
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
