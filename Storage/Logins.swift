@@ -373,6 +373,8 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         var hostname = self.hostname
         var username = self.username
         var password = self.password
+        var usernameField = self.usernameField
+        var passwordField = self.passwordField
         var timesUsed = self.timesUsed
         var httpRealm = self.httpRealm
         var formSubmitURL = self.formSubmitURL
@@ -416,6 +418,17 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
             }
         }
 
+        for (let delta) in deltas.nonConflicting {
+            switch delta {
+            case let .UsernameField(to):
+                usernameField = to
+                break
+            case let .PasswordField(to):
+                passwordField = to
+                break
+            }
+        }
+
         var out = Login(guid: guid, hostname: hostname, username: username!, password: password)
         out.timesUsed = timesUsed
         out.httpRealm = httpRealm
@@ -423,6 +436,8 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         out.timeCreated = timeCreated
         out.timeLastUsed = timeLastUsed
         out.timePasswordChanged = timePasswordChanged
+        out.usernameField = usernameField
+        out.passwordField = passwordField
 
         return out
     }
