@@ -11,7 +11,6 @@ import Shared
 import XCTest
 
 
-
 func byGuid(a: SyncCommand, b: SyncCommand) -> Bool {
     return a.guid < b.guid
 }
@@ -48,13 +47,13 @@ class SQLiteCommandsTests: XCTestCase {
         clientsAndTabs.insertOrUpdateClients(clients)
 
 
-        multipleCommands.append(SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[0].guid!, url: "http://mozilla.com",    title: "Mozilla", action: "sendtab", lastUsed: NSDate.now()))
-        multipleCommands.append(SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[1].guid!, url: "http://slashdot.org",    title: "Slashdot", action: "sendtab", lastUsed: NSDate.now()))
-        multipleCommands.append(SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[0].guid!, url: "http://news.bbc.co.uk",    title: "BBC News", action: "sendtab", lastUsed: NSDate.now()))
-        emptyCommand = SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[0].guid!, url: nil, title: nil, action: "sendtab", lastUsed: NSDate.now())
-        urlOnlyCommand = SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[1].guid!, url: "http://mozilla.com", title: nil, action: "sendtab", lastUsed: NSDate.now())
-        titleOnlyCommand = SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[1].guid!, url: nil, title: "Empty Command", action: "sendtab", lastUsed: NSDate.now())
-        invalidClientCommand = SyncCommand(guid: Bytes.generateGUID(), clientGuid: Bytes.generateGUID(), url: "http://mozilla.com",    title: "Mozilla", action: "sendtab", lastUsed: NSDate.now())
+        multipleCommands.append(SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[0].guid!, url: "http://mozilla.com", title: "Mozilla", faviconID: nil, action: "sendtab", lastUsed: NSDate.now()))
+        multipleCommands.append(SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[1].guid!, url: "http://slashdot.org",    title: "Slashdot", faviconID: nil, action: "sendtab", lastUsed: NSDate.now()))
+        multipleCommands.append(SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[0].guid!, url: "http://news.bbc.co.uk",    title: "BBC News", faviconID: nil, action: "sendtab", lastUsed: NSDate.now()))
+        emptyCommand = SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[0].guid!, url: nil, title: nil, faviconID: nil, action: "sendtab", lastUsed: NSDate.now())
+        urlOnlyCommand = SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[1].guid!, url: "http://mozilla.com", title: nil, faviconID: nil, action: "sendtab", lastUsed: NSDate.now())
+        titleOnlyCommand = SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[1].guid!, url: nil, title: "Empty Command", faviconID: nil, action: "sendtab", lastUsed: NSDate.now())
+        invalidClientCommand = SyncCommand(guid: Bytes.generateGUID(), clientGuid: Bytes.generateGUID(), url: "http://mozilla.com", title: "Mozilla", faviconID: nil, action: "sendtab", lastUsed: NSDate.now())
     }
 
     override func tearDown() {

@@ -16,10 +16,11 @@ public struct SyncCommand: Equatable {
     public let url: String?
     public let action: String?
     public let client: GUID
+    public let faviconID: Int?
 
     let version: String?
 
-    public init(guid: GUID, clientGuid: GUID, url: String?, title: String?, action: String, lastUsed: Timestamp) {
+    public init(guid: GUID, clientGuid: GUID, url: String?, title: String?, faviconID: Int?, action: String, lastUsed: Timestamp) {
         self.guid = guid
         self.client = clientGuid
         self.url = url
@@ -27,6 +28,7 @@ public struct SyncCommand: Equatable {
         self.action = action
         self.modified = lastUsed
         self.version = nil
+        self.faviconID = nil
     }
 }
 

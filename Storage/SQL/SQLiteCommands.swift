@@ -64,6 +64,29 @@ public class SQLiteCommands: SyncCommands {
         })
         return deferred
     }
+//    public func wipeCommandsForClient(client: RemoteClient) -> Deferred<Result<()>> {
+//        var err: NSError?
+//
+//        return self.db.withWritableConnection(&err) {  (connection, err) -> Success in
+//            func wipeCommands(clientCommands: [SyncCommand]) -> Success {
+//                let deferred = Deferred<Result<()>>(defaultQueue: dispatch_get_main_queue())
+//                for command in clientCommands {
+//                    self.commands.delete(connection, item: command, err: &err)
+//                }
+//                if let err = err {
+//                    let databaseError = DatabaseError(err: err)
+//                    log.debug("Wipe failed: \(databaseError)")
+//                    deferred.fill(Result(failure: databaseError))
+//                } else {
+//                    deferred.fill(Result(success: ()))
+//                }
+//                return deferred
+//            }
+//
+//            // Insert the favicon.
+    //            return self.getCommandsForClient(client) >>== wipeCommands  // why does this hang and never call callback?
+//        }
+//    }
 
     // insert a single command
     public func insertCommand(command: SyncCommand) -> Deferred<Result<Int>> {

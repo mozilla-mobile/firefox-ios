@@ -15,6 +15,8 @@ private let ClientsStorageVersion = 1
 public protocol Command {
     static func fromName(command: String, args: [JSON]) -> Command?
     func run(synchronizer: ClientsSynchronizer) -> Success
+    init(command: SyncCommand)
+    func syncCommand() -> SyncCommand?
 }
 
 // Shit.
@@ -22,6 +24,17 @@ public protocol Command {
 // We need a way to log out the account.
 // So when we sync commands, we're gonna need a delegate of some kind.
 public class WipeCommand: Command {
+    var guid: GUID?
+    var clientGuid: GUID?
+    var modified: Timestamp?
+
+    required public init(command: SyncCommand) {
+        self.clientGuid = command.client
+        self.guid = command.guid
+        self.modified = command.modified
+        return
+    }
+
     public init?(command: String, args: [JSON]) {
         return nil
     }
@@ -33,12 +46,42 @@ public class WipeCommand: Command {
     public func run(synchronizer: ClientsSynchronizer) -> Success {
         return succeed()
     }
+
+    public func syncCommand() -> SyncCommand? {
+        if let clientSyncGuid = clientGuid {
+            let commandGuid = guid ?? Bytes.generateGUID()
+            let timestamp = modified ?? NSDate.now()
+            return SyncCommand(guid: commandGuid, clientGuid: clientSyncGuid, url: nil, title: nil, faviconID: nil, action: "wipe", lastUsed: timestamp)
+        }
+        return nil
+    }
 }
 
 public class DisplayURICommand: Command {
     let uri: NSURL
-    // clientID: we don't care.
     let title: String
+    public var guid: GUID?
+    public var clientGuid: GUID?
+    var modified: Timestamp?
+    public var action: String?
+
+    required public init(command: SyncCommand) {
+        if let uri = command.url {
+            self.uri = uri.asURL!
+        } else {
+            self.uri = "http://localhost/".asURL!
+        }
+
+        if let title = command.title {
+            self.title = title
+        } else {
+            self.title = ""
+        }
+        clientGuid = command.client
+        guid = command.guid
+        modified = command.modified
+        action = command.action
+    }
 
     public init?(command: String, args: [JSON]) {
         if let uri = args[0].asString?.asURL,
@@ -60,6 +103,17 @@ public class DisplayURICommand: Command {
     public func run(synchronizer: ClientsSynchronizer) -> Success {
         synchronizer.delegate.displaySentTabForURL(uri, title: title)
         return succeed()
+    }
+
+
+    public func syncCommand() -> SyncCommand? {
+        if let clientSyncGuid = clientGuid {
+            let commandGuid = guid ?? Bytes.generateGUID()
+            let timestamp = modified ?? NSDate.now()
+            let syncAction = action ?? "synctab"
+            return SyncCommand(guid: commandGuid, clientGuid: clientSyncGuid, url: uri.absoluteString, title: title, faviconID: nil, action: syncAction, lastUsed: timestamp)
+        }
+        return nil
     }
 }
 

@@ -49,6 +49,7 @@ class CommandSyncTable<T>: GenericTable<SyncCommand> {
                 clientGuid: row["client_guid"] as! GUID,
                 url: row["url"] as? String,
                 title: row["title"] as? String,
+                faviconID: nil,
                 action: row["action"] as! String,
                 lastUsed: (row["last_used"] as! NSNumber).unsignedLongLongValue)
         }
