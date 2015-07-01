@@ -58,6 +58,16 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return succeed()
     }
 
+    public func getModifiedLoginsToUpload() -> Deferred<Result<[Login]>> {
+        // TODO
+        return deferResult([])
+    }
+
+    public func getDeletedLoginsToUpload() -> Deferred<Result<[GUID]>> {
+        // TODO
+        return deferResult([])
+    }
+
     public func updateLogin(login: LoginData) -> Success {
         if let index = find(cache, login as! Login) {
             cache[index].timePasswordChanged = NSDate.nowMicroseconds()
@@ -90,7 +100,7 @@ public class MockLogins: BrowserLogins, SyncableLogins {
 
     // TODO
     public func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success { return succeed() }
-    public func applyChangedLogin(upstream: Login, timestamp: Timestamp) -> Success { return succeed() }
+    public func applyChangedLogin(upstream: ServerLogin) -> Success { return succeed() }
     public func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>> { return deferResult(0) }
     public func markAsDeleted(guids: [GUID]) -> Success { return succeed() }
     public func onRemovedAccount() -> Success { return succeed() }

@@ -242,11 +242,11 @@ class TestSyncableLogins: XCTestCase {
 
     func testApplyLogin() {
         let guidA = "abcdabcdabcd"
-        var loginA1 = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "password")
+        var loginA1 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "password", modified: 1234)
         loginA1.formSubmitURL = "http://example.com/form/"
         loginA1.timesUsed = 3
 
-        XCTAssertTrue(self.logins.applyChangedLogin(loginA1, timestamp: 1234).value.isSuccess)
+        XCTAssertTrue(self.logins.applyChangedLogin(loginA1).value.isSuccess)
 
         let local = self.logins.getExistingLocalRecordByGUID(guidA).value.successValue!
         let mirror = self.logins.getExistingMirrorRecordByGUID(guidA).value.successValue!
@@ -267,11 +267,11 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(mirror!.password, "password")
 
         // Change it.
-        var loginA2 = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "newpassword")
+        var loginA2 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "newpassword", modified: 2234)
         loginA2.formSubmitURL = "http://example.com/form/"
         loginA2.timesUsed = 4
 
-        XCTAssertTrue(self.logins.applyChangedLogin(loginA2, timestamp: 2234).value.isSuccess)
+        XCTAssertTrue(self.logins.applyChangedLogin(loginA2).value.isSuccess)
         let changed = self.logins.getExistingMirrorRecordByGUID(guidA).value.successValue!
 
         XCTAssertTrue(nil != changed)
@@ -311,6 +311,8 @@ class TestSyncableLogins: XCTestCase {
         newLocalPassword.formSubmitURL = "http://example.com/form2/"
 
         let preUpdate = NSDate.now()
+
+        // Updates always bump our usages, too.
         XCTAssertTrue(self.logins.updateLoginByGUID(guidA, new: newLocalPassword, significant: true).value.isSuccess)
 
         let localAltered = self.logins.getExistingLocalRecordByGUID(guidA).value.successValue!
@@ -325,7 +327,172 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(localAltered!.formSubmitURL!, "http://example.com/form2/")
         XCTAssertTrue(localAltered!.localModified >= preUpdate)
         XCTAssertEqual(localAltered!.syncStatus, SyncStatus.Changed)              // Changes are enough to warrant upload.
-        XCTAssertEqual(localAltered!.timesUsed, 5)
+        XCTAssertEqual(localAltered!.timesUsed, 6)
         XCTAssertEqual(mirrorAltered!.timesUsed, 4)
+    }
+
+    func testDeltas() {
+        // Shared.
+        let guidA = "abcdabcdabcd"
+        var loginA1 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "password", modified: 1234)
+        loginA1.timeCreated = 1200
+        loginA1.timeLastUsed = 1234
+        loginA1.timePasswordChanged = 1200
+        loginA1.formSubmitURL = "http://example.com/form/"
+        loginA1.timesUsed = 3
+
+        let a1a1 = loginA1.deltas(from: loginA1)
+        XCTAssertEqual(0, a1a1.nonCommutative.count)
+        XCTAssertEqual(0, a1a1.nonConflicting.count)
+        XCTAssertEqual(0, a1a1.commutative.count)
+
+        var loginA2 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "password", modified: 1235)
+        loginA2.timeCreated = 1200
+        loginA2.timeLastUsed = 1235
+        loginA2.timePasswordChanged = 1200
+        loginA2.timesUsed = 4
+
+        let a1a2 = loginA2.deltas(from: loginA1)
+
+        XCTAssertEqual(2, a1a2.nonCommutative.count)
+        XCTAssertEqual(0, a1a2.nonConflicting.count)
+        XCTAssertEqual(1, a1a2.commutative.count)
+
+        switch a1a2.commutative[0] {
+        case let .TimesUsed(increment):
+            XCTAssertEqual(increment, 1)
+            break
+        default:
+            XCTFail("Unexpected commutative login field.")
+        }
+        switch a1a2.nonCommutative[0] {
+        case let .FormSubmitURL(to):
+            XCTAssertNil(to)
+            break
+        default:
+            XCTFail("Unexpected non-commutative login field.")
+        }
+        switch a1a2.nonCommutative[1] {
+        case let .TimeLastUsed(to):
+            XCTAssertEqual(to, 1235)
+            break
+        default:
+            XCTFail("Unexpected non-commutative login field.")
+        }
+
+        var loginA3 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "something else", modified: 1280)
+        loginA3.timeCreated = 1200
+        loginA3.timeLastUsed = 1250
+        loginA3.timePasswordChanged = 1250
+        loginA3.formSubmitURL = "http://example.com/form/"
+        loginA3.timesUsed = 5
+
+        let a1a3 = loginA3.deltas(from: loginA1)
+
+        XCTAssertEqual(3, a1a3.nonCommutative.count)
+        XCTAssertEqual(0, a1a3.nonConflicting.count)
+        XCTAssertEqual(1, a1a3.commutative.count)
+
+        switch a1a3.commutative[0] {
+        case let .TimesUsed(increment):
+            XCTAssertEqual(increment, 2)
+            break
+        default:
+            XCTFail("Unexpected commutative login field.")
+        }
+
+        switch a1a3.nonCommutative[0] {
+        case let .Password(to):
+            XCTAssertEqual("something else", to)
+            break
+        default:
+            XCTFail("Unexpected non-commutative login field.")
+        }
+        switch a1a3.nonCommutative[1] {
+        case let .TimeLastUsed(to):
+            XCTAssertEqual(to, 1250)
+            break
+        default:
+            XCTFail("Unexpected non-commutative login field.")
+        }
+        switch a1a3.nonCommutative[2] {
+        case let .TimePasswordChanged(to):
+            XCTAssertEqual(to, 1250)
+            break
+        default:
+            XCTFail("Unexpected non-commutative login field.")
+        }
+
+        // Now apply the deltas to the original record and check that they match!
+        XCTAssertFalse(loginA1.applyDeltas(a1a2).isSignificantlyDifferentFrom(loginA2))
+        XCTAssertFalse(loginA1.applyDeltas(a1a3).isSignificantlyDifferentFrom(loginA3))
+
+        let merged = Login.mergeDeltas(a: (loginA2.serverModified, a1a2), b: (loginA3.serverModified, a1a3))
+        let mCCount = merged.commutative.count
+        let a2CCount = a1a2.commutative.count
+        let a3CCount = a1a3.commutative.count
+        XCTAssertEqual(mCCount, a2CCount + a3CCount)
+
+        let mNCount = merged.nonCommutative.count
+        let a2NCount = a1a2.nonCommutative.count
+        let a3NCount = a1a3.nonCommutative.count
+        XCTAssertLessThanOrEqual(mNCount, a2NCount + a3NCount)
+        XCTAssertGreaterThanOrEqual(mNCount, max(a2NCount, a3NCount))
+
+        let mFCount = merged.nonConflicting.count
+        let a2FCount = a1a2.nonConflicting.count
+        let a3FCount = a1a3.nonConflicting.count
+        XCTAssertLessThanOrEqual(mFCount, a2FCount + a3FCount)
+        XCTAssertGreaterThanOrEqual(mFCount, max(a2FCount, a3FCount))
+
+        switch merged.commutative[0] {
+        case let .TimesUsed(increment):
+            XCTAssertEqual(1, increment)
+        }
+        switch merged.commutative[1] {
+        case let .TimesUsed(increment):
+            XCTAssertEqual(2, increment)
+        }
+
+        switch merged.nonCommutative[0] {
+        case let .Password(to):
+            XCTAssertEqual("something else", to)
+            break
+        default:
+            XCTFail("Unexpected non-commutative login field.")
+        }
+        switch merged.nonCommutative[1] {
+        case let .FormSubmitURL(to):
+            XCTAssertNil(to)
+            break
+        default:
+            XCTFail("Unexpected non-commutative login field.")
+        }
+        switch merged.nonCommutative[2] {
+        case let .TimeLastUsed(to):
+            XCTAssertEqual(to, 1250)
+            break
+        default:
+            XCTFail("Unexpected non-commutative login field.")
+        }
+        switch merged.nonCommutative[3] {
+        case let .TimePasswordChanged(to):
+            XCTAssertEqual(to, 1250)
+            break
+        default:
+            XCTFail("Unexpected non-commutative login field.")
+        }
+
+        // Applying the merged deltas gives us the expected login.
+        var expected = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "something else")
+        expected.timeCreated = 1200
+        expected.timeLastUsed = 1250
+        expected.timePasswordChanged = 1250
+        expected.formSubmitURL = nil
+        expected.timesUsed = 6
+
+        let applied = loginA1.applyDeltas(merged)
+        XCTAssertFalse(applied.isSignificantlyDifferentFrom(expected))
+        XCTAssertFalse(expected.isSignificantlyDifferentFrom(applied))
     }
 }

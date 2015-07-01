@@ -14,6 +14,13 @@ public class LoginPayload: CleartextPayloadJSON {
         "httpRealm",
     ]
 
+    private static let OptionalNumericFields = [
+        "timeLastUsed",
+        "timeCreated",
+        "timePasswordChanged",
+        "timesUsed",
+    ]
+
     private static let RequiredStringFields = [
         "hostname",
         "username",
@@ -41,11 +48,32 @@ public class LoginPayload: CleartextPayloadJSON {
             return false
         }
 
-        return LoginPayload.OptionalStringFields.every({ field in
+        if !LoginPayload.OptionalStringFields.every({ field in
             let val = self[field]
             // Yup, 404 is not found, so this means "string or nothing".
-            return val.isString || val.asError?.code == 404
-        })
+            let valid = val.isString || val.isNull || val.asError?.code == 404
+            if !valid {
+                log.debug("Field \(field) is invalid: \(val)")
+            }
+            return valid
+        }) {
+            return false
+        }
+
+        if !LoginPayload.OptionalNumericFields.every({ field in
+            let val = self[field]
+            // Yup, 404 is not found, so this means "number or nothing".
+            // We only check for number because we're including timestamps as NSNumbers.
+            let valid = val.isNumber || val.isNull || val.asError?.code == 404
+            if !valid {
+                log.debug("Field \(field) is invalid: \(val)")
+            }
+            return valid
+        }) {
+            return false
+        }
+
+        return true
     }
 
     public var hostname: String {
@@ -74,6 +102,30 @@ public class LoginPayload: CleartextPayloadJSON {
 
     public var httpRealm: String? {
         return self["httpRealm"].asString
+    }
+
+    private func timestamp(field: String) -> Timestamp? {
+        let json = self[field]
+        if let i = json.asInt64 where i > 0 {
+            return Timestamp(i)
+        }
+        return nil
+    }
+
+    public var timesUsed: Int? {
+        return self["timesUsed"].asInt
+    }
+
+    public var timeCreated: Timestamp? {
+        return self.timestamp("timeCreated")
+    }
+
+    public var timeLastUsed: Timestamp? {
+        return self.timestamp("timeLastUsed")
+    }
+
+    public var timePasswordChanged: Timestamp? {
+        return self.timestamp("timePasswordChanged")
     }
 
     override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {

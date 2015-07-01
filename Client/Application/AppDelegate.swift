@@ -103,11 +103,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(application: UIApplication) {
-        self.profile?.syncManager.beginTimedHistorySync()
+        self.profile?.syncManager.beginTimedSyncs()
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
-        self.profile?.syncManager.endTimedHistorySync()
+        self.profile?.syncManager.endTimedSyncs()
     }
 
     private func setUpWebServer(profile: Profile) {

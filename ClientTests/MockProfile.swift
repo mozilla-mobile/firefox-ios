@@ -14,9 +14,10 @@ public class MockSyncManager: SyncManager {
     public func syncClients() -> SyncResult { return deferResult(.Completed) }
     public func syncClientsThenTabs() -> SyncResult { return deferResult(.Completed) }
     public func syncHistory() -> SyncResult { return deferResult(.Completed) }
+    public func syncLogins() -> SyncResult { return deferResult(.Completed) }
 
-    public func beginTimedHistorySync() {}
-    public func endTimedHistorySync() {}
+    public func beginTimedSyncs() {}
+    public func endTimedSyncs() {}
 
     public func onAddedAccount() -> Success {
         return succeed()
