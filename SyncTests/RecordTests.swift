@@ -15,6 +15,16 @@ class RecordTests: XCTestCase {
         XCTAssertEqual(12, s.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
     }
 
+    func testEnvelopeNullTTL() {
+        let p = CleartextPayloadJSON(JSON([]))
+        let r = Record<CleartextPayloadJSON>(id: "guid", payload: p, modified: NSDate.now(), sortindex: 15, ttl: nil)
+        let k = KeyBundle.random()
+        let s = k.serializer({ $0 })
+        let json = s(r)!
+        XCTAssertEqual(json["id"].asString!, "guid")
+        XCTAssertTrue(json["ttl"].isNull)
+    }
+
     func testEnvelopeJSON() {
         let e = EnvelopeJSON(JSON.parse("{}"))
         XCTAssertFalse(e.isValid())

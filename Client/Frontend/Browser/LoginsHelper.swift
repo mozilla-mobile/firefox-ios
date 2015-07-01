@@ -92,6 +92,7 @@ class LoginsHelper: BrowserHelper {
                .getLoginsForProtectionSpace(login.protectionSpace, withUsername: login.username)
                .uponQueue(dispatch_get_main_queue()) { res in
             if let data = res.successValue {
+                log.debug("Found \(data.count) logins.")
                 for saved in data {
                     if let saved = saved {
                         if saved.password == login.password {
@@ -180,6 +181,7 @@ class LoginsHelper: BrowserHelper {
         profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(dispatch_get_main_queue()) { res in
             var jsonObj = [String: AnyObject]()
             if let cursor = res.successValue {
+                log.debug("Found \(cursor.count) logins.")
                 jsonObj["requestId"] = requestId
                 jsonObj["name"] = "RemoteLogins:loginsFound"
                 jsonObj["logins"] = map(cursor, { $0!.toDict() })
