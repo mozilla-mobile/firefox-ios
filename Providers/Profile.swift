@@ -360,8 +360,48 @@ public class BrowserProfile: Profile {
 
         private var syncTimer: NSTimer? = nil
 
+        /**
+         * Locking is managed by withSyncInputs. Make sure you take and release these
+         * whenever you do anything Sync-ey.
+         */
+        var syncLock = OSSpinLock()
+
+        private func beginSyncing() -> Bool {
+            return OSSpinLockTry(&syncLock)
+        }
+
+        private func endSyncing() {
+            return OSSpinLockUnlock(&syncLock)
+        }
+
         init(profile: BrowserProfile) {
             self.profile = profile
+            super.init()
+
+            let center = NSNotificationCenter.defaultCenter()
+            center.addObserver(self, selector: "onLoginDidChange:", name: NotificationDataLoginDidChange, object: nil)
+        }
+
+        deinit {
+            // Remove 'em all.
+            NSNotificationCenter.defaultCenter().removeObserver(self)
+        }
+
+        // Simple in-memory rate limiting.
+        var lastTriggeredLoginSync: Timestamp = 0
+        @objc func onLoginDidChange(notification: NSNotification) {
+            log.debug("Login did change.")
+            if (NSDate.now() - lastTriggeredLoginSync) > OneMinuteInMilliseconds {
+                lastTriggeredLoginSync = NSDate.now()
+
+                // Give it a few seconds.
+                let when: dispatch_time_t = dispatch_time(DISPATCH_TIME_NOW, SyncConstants.SyncDelayTriggered)
+
+                // Trigger on the main queue. The bulk of the sync work runs in the background.
+                dispatch_after(when, dispatch_get_main_queue()) {
+                    self.syncLogins()
+                }
+            }
         }
 
         var prefsForSync: Prefs {
@@ -446,6 +486,11 @@ public class BrowserProfile: Profile {
          */
         private func withSyncInputs<T>(label: EngineIdentifier? = nil, function: (SyncDelegate, Prefs, Ready) -> Deferred<Result<T>>) -> Deferred<Result<T>>? {
             if let account = profile.account {
+                if !beginSyncing() {
+                    log.info("Not syncing \(label); already syncing something.")
+                    return deferResult(AlreadySyncingError())
+                }
+
                 if let label = label {
                     log.info("Syncing \(label).")
                 }
@@ -456,9 +501,14 @@ public class BrowserProfile: Profile {
                 let readyDeferred = SyncStateMachine.toReady(authState, prefs: syncPrefs)
                 let delegate = profile.getSyncDelegate()
 
-                return readyDeferred >>== { ready in
+                let go = readyDeferred >>== { ready in
                     function(delegate, syncPrefs, ready)
                 }
+
+                // Always unlock when we're done.
+                go.upon({ res in self.endSyncing() })
+
+                return go
             }
 
             log.warning("No account; can't sync.")
@@ -552,5 +602,11 @@ public class BrowserProfile: Profile {
             // TODO: recognize .NotStarted.
             return self.sync("history", function: syncHistoryWithDelegate)
         }
+    }
+}
+
+class AlreadySyncingError: ErrorType {
+    var description: String {
+        return "Already syncing."
     }
 }

@@ -294,6 +294,7 @@ public class SQLiteLogins: BrowserLogins {
         ")"
 
         return db.run(sql, withArgs: args)
+            >>> effect(self.notifyLoginDidChange)
     }
 
     private func cloneMirrorToOverlay(guid: GUID) -> Deferred<Result<Int>> {
@@ -434,6 +435,7 @@ public class SQLiteLogins: BrowserLogins {
         return self.ensureLocalOverlayExistsForGUID(guid)
            >>> { self.markMirrorAsOverridden(guid) }
            >>> { self.db.run(update, withArgs: args) }
+           >>> effect(self.notifyLoginDidChange)
     }
 
     public func removeLoginByGUID(guid: GUID) -> Success {
@@ -466,8 +468,8 @@ public class SQLiteLogins: BrowserLogins {
            >>> { self.db.run(update, withArgs: args) }
            >>> { self.markMirrorAsOverridden(guid) }
            >>> { self.db.run(insert, withArgs: args) }
+           >>> effect(self.notifyLoginDidChange)
     }
-
 
     public func removeAll() -> Success {
         // Immediately delete anything that's marked as new -- i.e., it's never reached
@@ -493,6 +495,7 @@ public class SQLiteLogins: BrowserLogins {
            >>> { self.db.run(update) }
            >>> { self.db.run("UPDATE \(TableLoginsMirror) SET is_overridden = 1") }
            >>> { self.db.run(insert) }
+           >>> effect(self.notifyLoginDidChange)
     }
 }
 
@@ -870,5 +873,16 @@ extension SQLiteLogins: SyncableLogins {
 
         // Mark all of the local data as new.
         >>> { self.db.run("UPDATE \(TableLoginsLocal) SET sync_status = \(SyncStatus.New.rawValue)") }
+    }
+}
+
+extension SQLiteLogins {
+    func notifyLoginDidChange() {
+        log.debug("Notifying login did change.")
+
+        // For now we don't care about the contents.
+        // This posts immediately to the shared notification center.
+        let notification = NSNotification(name: NotificationDataLoginDidChange, object: nil)
+        NSNotificationCenter.defaultCenter().postNotification(notification)
     }
 }
