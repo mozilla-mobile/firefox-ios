@@ -356,6 +356,25 @@ private class VersionSetting : Setting {
     }
 }
 
+// Opens the the license page in a new tab
+private class LicenseAndAcknowledgementsSetting: Setting {
+    init() {
+        super.init(title: NSAttributedString(string: NSLocalizedString("Licenses & Acknowledgements", comment: "Show the app's licenses from the About section in the settings. see http://mzl.la/1dmM8tZ"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        navigationController?.dismissViewControllerAnimated(true, completion: {
+            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+                appDelegate.browserViewController.dismissTabTrayController(animated: true) {
+                    if let url = NSURL(string: WebServer.sharedInstance.URLForResource("license", module: "about")) {
+                        appDelegate.browserViewController.openURLInNewTab(url)
+                    }
+                }
+            }
+        })
+    }
+}
+
 // Opens the on-boarding screen again
 private class ShowIntroductionSetting: Setting {
     let profile: Profile
@@ -558,6 +577,7 @@ class SettingsTableViewController: UITableViewController {
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
                 VersionSetting(settings: self),
+                LicenseAndAcknowledgementsSetting(),
                 DisconnectSetting(settings: self)
             ])
         ]
