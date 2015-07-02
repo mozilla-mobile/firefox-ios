@@ -144,13 +144,13 @@ public class SQLiteCommands: SyncCommands {
 
         if let err = err {
             commandCursor.close()
-            return Deferred(value: Result(failure: DatabaseError(err: err)))
+            return deferResult(DatabaseError(err: err))
         }
 
         let commands = commandCursor.asArray()
         commandCursor.close()
 
-        return Deferred(value: Result(success: commands))
+        return deferResult(commands)
     }
 
     // get all unsyced commands for a client
@@ -165,13 +165,13 @@ public class SQLiteCommands: SyncCommands {
 
         if commandCursor.status == CursorStatus.Failure {
             commandCursor.close()
-            return Deferred(value: Result(failure: DatabaseError(err: err)))
+            return deferResult(DatabaseError(err: err))
         }
 
         let commands = commandCursor.asArray()
         commandCursor.close()
 
-        return Deferred(value: Result(success: commands))
+        return deferResult(commands)
     }
 
     // we do something here when accounts are removed
