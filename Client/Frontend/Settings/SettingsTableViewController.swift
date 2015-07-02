@@ -688,8 +688,11 @@ class SettingsTableFooterView: UITableViewHeaderFooterView {
         var topBorder = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: 0.5))
         topBorder.backgroundColor = UIConstants.TableViewSeparatorColor
         addSubview(topBorder)
-        logo.frame = self.frame
         addSubview(logo)
+
+        logo.snp_makeConstraints { (make) -> Void in
+            make.centerY.centerX.equalTo(self)
+        }
     }
 
     required init(coder aDecoder: NSCoder) {
