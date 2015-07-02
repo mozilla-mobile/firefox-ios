@@ -269,7 +269,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
                 let welcomeLabel = UILabel()
                 containerView.addSubview(welcomeLabel)
-                welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "")
+                welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "See http://mzl.la/1LXbDOL")
                 welcomeLabel.textAlignment = NSTextAlignment.Center
                 welcomeLabel.font = ReadingListPanelUX.WelcomeScreenHeaderFont
                 welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
@@ -282,7 +282,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
                 let readerModeLabel = UILabel()
                 containerView.addSubview(readerModeLabel)
-                readerModeLabel.text = NSLocalizedString("Open articles in reading view by tapping the icon when it appears in the title bar.", comment: "")
+                readerModeLabel.text = NSLocalizedString("Open articles in Reader View by tapping the book icon when it appears in the title bar.", comment: "See http://mzl.la/1LXbDOL")
                 readerModeLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
                 readerModeLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
                 readerModeLabel.numberOfLines = 0
@@ -301,7 +301,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
                 let readingListLabel = UILabel()
                 containerView.addSubview(readingListLabel)
-                readingListLabel.text = NSLocalizedString("Add to your Reading List by tapping the icon in the Reader View controls.", comment: "")
+                readingListLabel.text = NSLocalizedString("Save pages to your Reading List by tapping the book plus icon in the Reader View controls.", comment: "See http://mzl.la/1LXbDOL")
                 readingListLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
                 readingListLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
                 readingListLabel.numberOfLines = 0
