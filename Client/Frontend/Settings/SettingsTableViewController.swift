@@ -13,7 +13,7 @@ private var DebugSettingsClickCount: Int = 0
 // A base TableViewCell, to help minimize initialization and allow recycling.
 class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         indentationWidth = 0
         layoutMargins = UIEdgeInsetsZero
         // So that the seperator line goes all the way to the left edge.
@@ -37,6 +37,8 @@ class Setting {
 
     // Whether or not to show this pref.
     var hidden: Bool { return false }
+
+    var style: UITableViewCellStyle { return .Subtitle }
 
     var accessoryType: UITableViewCellAccessoryType { return .None }
 
@@ -159,20 +161,20 @@ private class DisconnectSetting: WithAccountSetting {
     override var accessoryType: UITableViewCellAccessoryType { return .None }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Disconnect", comment: "Button in settings screen to disconnect from your account"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account"), attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
     }
 
     override func onClick(navigationController: UINavigationController?) {
         let alertController = UIAlertController(
-            title: NSLocalizedString("Disconnect Firefox Account?", comment: "Title of the 'disconnect firefox account' alert"),
-            message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'disconnect firefox account' alert"),
+            title: NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert"),
+            message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'log out firefox account' alert"),
             preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(
-            UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel button in the 'disconnect firefox account' alert"), style: .Cancel) { (action) in
+            UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel button in the 'log out firefox account' alert"), style: .Cancel) { (action) in
                 // Do nothing.
             })
         alertController.addAction(
-            UIAlertAction(title: NSLocalizedString("Disconnect", comment: "Disconnect button in the 'disconnect firefox account' alert"), style: .Destructive) { (action) in
+            UIAlertAction(title: NSLocalizedString("Log Out", comment: "Disconnect button in the 'log out firefox account' alert"), style: .Destructive) { (action) in
                 self.settings.profile.removeAccount()
                 // Refresh, to show that we no longer have an Account immediately.
                 self.settings.SELrefresh()
@@ -360,7 +362,7 @@ private class ShowIntroductionSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Show introduction again", comment: "Show the on-boarding screen again from the settings"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: NSLocalizedString("Show Tour", comment: "Show the on-boarding screen again from the settings"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
     }
 
     override func onClick(navigationController: UINavigationController?) {
@@ -421,6 +423,10 @@ private class SearchSetting: Setting {
 
     override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
 
+    override var style: UITableViewCellStyle { return .Value1 }
+
+    override var status: NSAttributedString { return NSAttributedString(string: profile.searchEngines.defaultEngine.shortName) }
+
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         super.init(title: NSAttributedString(string: NSLocalizedString("Search", comment: "Open search section of settings"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
@@ -441,7 +447,7 @@ private class ClearPrivateDataSetting: Setting {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
 
-        let clearTitle = NSLocalizedString("Clear private data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
+        let clearTitle = NSLocalizedString("Clear Private Data", comment: "Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.")
         super.init(title: NSAttributedString(string: clearTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
     }
 
@@ -473,7 +479,7 @@ private class PopupBlockingSettings: Setting {
     init(settings: SettingsTableViewController) {
         self.prefs = settings.profile.prefs
         self.tabManager = settings.tabManager
-        let title = NSLocalizedString("Block pop-up windows", comment: "Block pop-up windows setting")
+        let title = NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")
         super.init(title: NSAttributedString(string: title))
     }
 
@@ -516,35 +522,34 @@ class SettingsTableViewController: UITableViewController {
             accountDebugSettings = []
         }
 
-        settings += [
-            SettingSection(title: nil, children: [
-                // Without a Firefox Account:
-                ConnectSetting(settings: self),
-                // With a Firefox Account:
-                AccountStatusSetting(settings: self),
-                DisconnectSetting(settings: self),
-            ] + accountDebugSettings),
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: [
-                PopupBlockingSettings(settings: self),
-            ]),
-            SettingSection(title: NSAttributedString(string: privacyTitle), children: [
-                ClearPrivateDataSetting(settings: self)
-            ]),
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("Search Settings", comment: "Search settings section title")), children: [
-                SearchSetting(settings: self)
-            ])
+        var generalSettings = [
+            SearchSetting(settings: self),
+            PopupBlockingSettings(settings: self),
         ]
 
         // There is nothing to show in the Customize section if we don't include the compact tab layout
         // setting on iPad. When more options are added that work on both device types, this logic can
         // be changed.
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            settings += [
-                SettingSection(title: NSAttributedString(string: NSLocalizedString("Customize", comment: "Customize section title in settings")), children: [
-                    UseCompactTabLayoutSetting(settings: self)
-                ])
-            ]
+            generalSettings +=  [UseCompactTabLayoutSetting(settings: self)]
         }
+
+        settings += [
+            SettingSection(title: nil, children: [
+                // Without a Firefox Account:
+                ConnectSetting(settings: self),
+                // With a Firefox Account:
+                AccountStatusSetting(settings: self),
+            ] + accountDebugSettings),
+            SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)
+        ]
+
+
+        settings += [
+            SettingSection(title: NSAttributedString(string: privacyTitle), children: [
+                ClearPrivateDataSetting(settings: self)
+            ])
+        ]
 
         settings += [
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
@@ -552,7 +557,8 @@ class SettingsTableViewController: UITableViewController {
                 OpenSupportPageSetting()
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
-                VersionSetting(settings: self)
+                VersionSetting(settings: self),
+                DisconnectSetting(settings: self)
             ])
         ]
 
@@ -563,7 +569,10 @@ class SettingsTableViewController: UITableViewController {
             target: navigationController, action: "SELdone")
         tableView.registerClass(SettingsTableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.registerClass(SettingsTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
-        tableView.tableFooterView = UIView()
+        tableView.tableFooterView = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
+
+        tableView.separatorColor = UIConstants.TableViewSeparatorColor
+        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -606,7 +615,7 @@ class SettingsTableViewController: UITableViewController {
                 // Work around http://stackoverflow.com/a/9999821 and http://stackoverflow.com/a/25901083 by using a new cell.
                 // I could not make any setNeedsLayout solution work in the case where we disconnect and then connect a new account.
                 // Be aware that dequeing and then ignoring a cell appears to cause issues; only deque a cell if you're going to return it.
-                cell = SettingsTableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: nil)
+                cell = SettingsTableViewCell(style: setting.style, reuseIdentifier: nil)
             } else {
                 cell = tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath) as! UITableViewCell
             }
@@ -654,6 +663,38 @@ class SettingsTableViewController: UITableViewController {
         }
         return nil
     }
+
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if (indexPath.section == 0 && indexPath.row == 0) { return 64 } //make account/sign-in row taller, as per design specs
+        return 44
+    }
+}
+
+class SettingsTableFooterView: UITableViewHeaderFooterView {
+
+    var logo: UIImageView = {
+        var image =  UIImageView(image: UIImage(named: "settingsFlatfox"))
+        image.contentMode = UIViewContentMode.Center
+        return image
+    }()
+
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        var topBorder = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: 0.5))
+        topBorder.backgroundColor = UIConstants.TableViewSeparatorColor
+        addSubview(topBorder)
+        logo.frame = self.frame
+        addSubview(logo)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
@@ -676,6 +717,7 @@ class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
         super.init(frame: frame)
         self.contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
+        self.clipsToBounds = true
     }
 
 
