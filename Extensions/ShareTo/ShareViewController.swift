@@ -4,6 +4,9 @@
 
 import UIKit
 import Storage
+import XCGLogger
+
+private let log = XCGLogger.defaultInstance()
 
 struct ShareDestination {
     let code: String
@@ -12,10 +15,12 @@ struct ShareDestination {
 }
 
 // TODO: See if we can do this with an Enum instead. Previous attempts failed because for example NSSet does not take (string) enum values.
+let ShareDestinationViewLater: String = "ViewLater"
 let ShareDestinationBookmarks: String = "Bookmarks"
 let ShareDestinationReadingList: String = "ReadingList"
 
 let ShareDestinations = [
+    ShareDestination(code: ShareDestinationViewLater, name: NSLocalizedString("View later", tableName: "ShareTo", comment: "Button to open the URL in a tab in Firefox in the background"), image: "AddToReadingList"),   // TODO
     ShareDestination(code: ShareDestinationReadingList, name: NSLocalizedString("Add to Reading List", tableName: "ShareTo", comment: "On/off toggle to select adding this url to your reading list"), image: "AddToReadingList"),
     ShareDestination(code: ShareDestinationBookmarks, name: NSLocalizedString("Add to Bookmarks", tableName: "ShareTo", comment: "On/off toggle to select adding this url to your bookmarks"), image: "AddToBookmarks")
 ]
@@ -54,7 +59,7 @@ private struct ShareDialogControllerUX {
     static let TableRowTintColor = UIColor(red:0.427, green:0.800, blue:0.102, alpha:1.0)           // Green tint for the checkmark
     static let TableRowTextColor = UIColor(rgb: 0x555555)
 
-    static let TableHeight = 88                                                                     // Height of 2 standard 44px cells
+    static let TableHeight = 132                                                                    // Height of 3 standard 44px cells
 }
 
 class ShareDialogController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -95,6 +100,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         let logo = UIImageView(frame: CGRect(x: 0, y: 0, width: ShareDialogControllerUX.NavigationBarIconSize, height: ShareDialogControllerUX.NavigationBarIconSize))
         logo.image = UIImage(named: "Icon-Small")
         logo.contentMode = UIViewContentMode.ScaleAspectFit // TODO Can go away if icon is provided in correct size
+
         navItem.titleView = logo
 
         navBar.pushNavigationItem(navItem, animated: false)
@@ -182,6 +188,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
             view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(constraint, options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
         }
     }
+
 
     // UITabBarItem Actions that map to our delegate methods
 
