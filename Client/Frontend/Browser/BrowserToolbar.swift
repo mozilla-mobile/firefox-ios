@@ -83,7 +83,7 @@ public class BrowserToolbarHelper: NSObject {
         toolbar.stopReloadButton.setImage(UIImage(named: "reload"), forState: .Normal)
         toolbar.stopReloadButton.setImage(UIImage(named: "reloadPressed"), forState: .Highlighted)
         toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the browser toolbar Reload button")
-        toolbar.stopReloadButton.accessibilityHint = NSLocalizedString("Tap to reload the page", comment: "")
+        toolbar.stopReloadButton.accessibilityHint = NSLocalizedString("Tap to reload the page", comment: "Accessibility hint for the browser toolbar Reload button")
         toolbar.stopReloadButton.addTarget(self, action: "SELdidClickStopReload", forControlEvents: UIControlEvents.TouchUpInside)
 
         toolbar.shareButton.setImage(UIImage(named: "send"), forState: .Normal)
