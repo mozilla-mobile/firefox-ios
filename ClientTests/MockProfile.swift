@@ -27,6 +27,20 @@ public class MockSyncManager: SyncManager {
     }
 }
 
+public class MockTabQueue: TabQueue {
+    public func addToQueue(tab: ShareItem) -> Success {
+        return succeed()
+    }
+
+    public func getQueuedTabs() -> Deferred<Result<Cursor<ShareItem>>> {
+        return deferResult(ArrayCursor<ShareItem>(data: []))
+    }
+
+    public func clearQueuedTabs() -> Success {
+        return succeed()
+    }
+}
+
 public class MockProfile: Profile {
     private let name: String = "mockaccount"
 
@@ -49,6 +63,10 @@ public class MockProfile: Profile {
     var favicons: Favicons {
         return self.places
     }
+
+    lazy var queue: TabQueue = {
+        return MockTabQueue()
+    }()
 
     var history: protocol<BrowserHistory, SyncableHistory> {
         return self.places
