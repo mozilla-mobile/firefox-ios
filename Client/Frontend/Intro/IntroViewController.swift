@@ -13,12 +13,12 @@ struct IntroViewControllerUX {
 
     static let PagerCenterOffsetFromScrollViewBottom = 15
 
-    static let StartBrowsingButtonTitle = NSLocalizedString("Start Browsing", tableName: "Intro", comment: "Do not translate yet")
+    static let StartBrowsingButtonTitle = NSLocalizedString("Start Browsing", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     static let StartBrowsingButtonColor = UIColor(rgb: 0x363B40)
     static let StartBrowsingButtonHeight = 56
     static let StartBrowsingButtonFont = UIFont.systemFontOfSize(18)
 
-    static let SignInButtonTitle = NSLocalizedString("Sign in to Firefox", tableName: "Intro", comment: "Do not translate yet")
+    static let SignInButtonTitle = NSLocalizedString("Sign in to Firefox", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     static let SignInButtonColor = UIColor(red: 0.259, green: 0.49, blue: 0.831, alpha: 1.0)
     static let SignInButtonHeight = 46
     static let SignInButtonFont = UIFont.systemFontOfSize(16, weight: UIFontWeightMedium)
@@ -28,12 +28,12 @@ struct IntroViewControllerUX {
     static let CardTitleFont = UIFont.systemFontOfSize(18, weight: UIFontWeightBold)
     static let CardTextLineHeight = CGFloat(6)
 
-    static let Card1Title = NSLocalizedString("Organize", tableName: "Intro", comment: "Do not translate yet.")
-    static let Card2Title = NSLocalizedString("Customize", tableName: "Intro", comment: "Do not translate yet.")
+    static let Card1Title = NSLocalizedString("Organize", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    static let Card2Title = NSLocalizedString("Customize", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
 
-    static let Card1Text = NSLocalizedString("Browse multiple Web pages at the same time with tabs.", tableName: "Intro", comment: "Do not translate yet.")
-    static let Card2Text = NSLocalizedString("Personalize your Firefox just the way you like in Settings.", tableName: "Intro", comment: "Do not translate yet.")
-    static let Card3Text = NSLocalizedString("Connect Firefox everywhere you use it.", tableName: "Intro", comment: "Do not translate yet.")
+    static let Card1Text = NSLocalizedString("Browse multiple Web pages at the same time with tabs.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    static let Card2Text = NSLocalizedString("Personalize your Firefox just the way you like in Settings.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    static let Card3Text = NSLocalizedString("Connect Firefox everywhere you use it.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
 
     static let Card3TextOffsetFromCenter = 10
     static let Card3ButtonOffsetFromCenter = 10
