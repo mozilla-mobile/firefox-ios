@@ -145,13 +145,13 @@ enum RemoteTabsError {
     func localizedString() -> String {
         switch self {
         case NotLoggedIn:
-            return ""
+            return "" // This does not have a localized string because we have a whole specific screen for it.
         case NoClients:
-            return "You currently don't have any other devices connected to Firefox Sync." // TODO L10N
+            return NSLocalizedString("You don't have any other devices connected to this Firefox Account available to sync.", comment: "Error message in the remote tabs panel")
         case NoTabs:
-            return "You currently don't have any tabs open on your other Firefox-enabled devices." // TODO L10N
+            return NSLocalizedString("You don't have any tabs open in Firefox on your other devices.", comment: "Error message in the remote tabs panel")
         case FailedToSync:
-            return "There was a problem fetching tabs from the cloud. Please try again in a few moments." // TODO L10N
+            return NSLocalizedString("There was a problem accessing tabs from your other devices. Try again in a few moments.", comment: "Error message in the remote tabs panel")
         }
     }
 }
