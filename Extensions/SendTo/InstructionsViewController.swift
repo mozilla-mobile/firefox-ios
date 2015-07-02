@@ -18,6 +18,10 @@ protocol InstructionsViewControllerDelegate: class {
 
 private func highlightLink(var s: NSString, withColor color: UIColor) -> NSAttributedString {
     let start = s.rangeOfString("<")
+    if start.location == NSNotFound {
+        return NSAttributedString(string: s as String)
+    }
+
     s = s.stringByReplacingCharactersInRange(start, withString: "")
     let end = s.rangeOfString(">")
     s = s.stringByReplacingCharactersInRange(end, withString: "")

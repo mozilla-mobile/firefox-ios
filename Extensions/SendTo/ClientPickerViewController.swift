@@ -114,8 +114,8 @@ class ClientPickerViewController: UITableViewController {
         } else {
             if reloading == false {
                 setupHelpView(cell.contentView,
-                    introText: NSLocalizedString("You currently don’t have any other devices currently connected to Firefox Sync. This needs proper copy. Do not translate.", tableName: "SendTo", comment: ""),
-                    showMeText: NSLocalizedString("<Show me how> to connect my other Firefox-enabled devices. This needs proper copy. Do not translate.", tableName: "SendTo", comment: "The part between brackets is highlighted in styled text as if it is a link."))
+                    introText: NSLocalizedString("You don't have any other devices connected to this Firefox Account available to sync.", tableName: "SendTo", comment: "Error message shown in the remote tabs panel"),
+                    showMeText: "") // TODO We used to have a 'show me how to ...' text here. But, we cannot open web pages from the extension. So this is clear for now until we decide otherwise.
                 // Move the separator off screen
                 cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
             }
