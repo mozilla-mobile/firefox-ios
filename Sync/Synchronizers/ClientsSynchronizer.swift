@@ -15,6 +15,7 @@ private let ClientsStorageVersion = 1
 public protocol Command {
     static func fromName(command: String, args: [JSON]) -> Command?
     func run(synchronizer: ClientsSynchronizer) -> Success
+    static func commandFromSyncCommand(syncCommand: SyncCommand) -> Command?
 }
 
 // Shit.
@@ -22,6 +23,16 @@ public protocol Command {
 // We need a way to log out the account.
 // So when we sync commands, we're gonna need a delegate of some kind.
 public class WipeCommand: Command {
+
+    public static func commandFromSyncCommand(syncCommand: SyncCommand) -> Command? {
+        let json = JSON.parse(syncCommand.value)
+        if let name = json["command"].asString,
+            args = json["args"].asArray {
+                return WipeCommand.fromName(name, args: args)
+        }
+        return nil
+    }
+
     public init?(command: String, args: [JSON]) {
         return nil
     }
@@ -37,20 +48,20 @@ public class WipeCommand: Command {
 
 public class DisplayURICommand: Command {
     let uri: NSURL
-    // clientID: we don't care.
     let title: String
 
-    public init?(command: String, args: [JSON]) {
-        if let uri = args[0].asString?.asURL,
-            title = args[2].asString {
-                self.uri = uri
-                self.title = title
-        } else {
-            // Oh, Swift.
-            self.uri = "http://localhost/".asURL!
-            self.title = ""
-            return nil
+    public static func commandFromSyncCommand(syncCommand: SyncCommand) -> Command? {
+        let json = JSON.parse(syncCommand.value)
+        if let name = json["command"].asString,
+            args = json["args"].asArray {
+                return DisplayURICommand.fromName(name, args: args)
         }
+        return nil
+    }
+
+    public init?(command: String, args: [JSON]) {
+        self.uri = args[0].asString?.asURL ?? "http://localhost/".asURL!
+        self.title = args[2].asString ?? ""
     }
 
     public class func fromName(command: String, args: [JSON]) -> Command? {

@@ -164,6 +164,8 @@ protocol Profile {
     func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
     func getCachedClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
 
+    func sendItems(items: [ShareItem], toClients clients: [RemoteClient])
+
     var syncManager: SyncManager { get }
 }
 
@@ -267,6 +269,10 @@ public class BrowserProfile: Profile {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
+    private lazy var syncCommands: SyncCommands = {
+        return SQLiteCommands(db: self.db)
+    }()
+
     lazy var syncManager: SyncManager = {
         return BrowserSyncManager(profile: self)
     }()
@@ -290,6 +296,14 @@ public class BrowserProfile: Profile {
 
     public func getCachedClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
         return self.remoteClientsAndTabs.getClientsAndTabs()
+    }
+
+
+    public func sendItems(items: [ShareItem], toClients clients: [RemoteClient]) {
+        let commands = items.map { item in
+            return SyncCommand.fromShareItem(item, withAction: "displayURI")
+        }
+        syncCommands.insertCommands(commands, forClients: clients)
     }
 
     lazy var logins: protocol<BrowserLogins, SyncableLogins> = {
