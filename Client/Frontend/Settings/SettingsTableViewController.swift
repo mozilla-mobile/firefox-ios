@@ -663,6 +663,11 @@ class SettingsTableViewController: UITableViewController {
         }
         return nil
     }
+
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if (indexPath.section == 0 && indexPath.row == 0) { return 64 } //make account/sign-in row taller, as per design specs
+        return 44
+    }
 }
 
 class SettingsTableFooterView: UITableViewHeaderFooterView {
@@ -712,6 +717,7 @@ class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
         super.init(frame: frame)
         self.contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
+        self.clipsToBounds = true
     }
 
 
