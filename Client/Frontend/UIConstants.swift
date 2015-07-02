@@ -29,6 +29,7 @@ public struct UIConstants {
     static let PanelBackgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
     static let SeparatorColor = UIColor(rgb: 0xcccccc)
     static let HighlightBlue = UIColor(red:0.3, green:0.62, blue:1, alpha:1)
+    static let DestructiveRed = UIColor(red: 255/255, green: 64/255, blue: 0/255, alpha: 1.0)
     static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.25)
     static let BackgroundColor = UIColor(red: 0.21, green: 0.23, blue: 0.25, alpha: 1)
 
@@ -36,6 +37,7 @@ public struct UIConstants {
     static let TableViewHeaderBackgroundColor = UIColor(red: 242/255, green: 245/255, blue: 245/255, alpha: 1.0)
     static let TableViewHeaderTextColor = UIColor(red: 130/255, green: 135/255, blue: 153/255, alpha: 1.0)
     static let TableViewRowTextColor = UIColor(red: 53.55/255, green: 53.55/255, blue: 53.55/255, alpha: 1.0)
+    static let TableViewSeparatorColor = UIColor(rgb: 0xD1D1D4)
 
     // Firefox Orange
     static let ControlTintColor = UIColor(red: 240.0 / 255, green: 105.0 / 255, blue: 31.0 / 255, alpha: 1)

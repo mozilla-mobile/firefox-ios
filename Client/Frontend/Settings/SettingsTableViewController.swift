@@ -161,20 +161,20 @@ private class DisconnectSetting: WithAccountSetting {
     override var accessoryType: UITableViewCellAccessoryType { return .None }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Disconnect", comment: "Button in settings screen to disconnect from your account"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+        return NSAttributedString(string: NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account"), attributes: [NSForegroundColorAttributeName: UIConstants.DestructiveRed])
     }
 
     override func onClick(navigationController: UINavigationController?) {
         let alertController = UIAlertController(
-            title: NSLocalizedString("Disconnect Firefox Account?", comment: "Title of the 'disconnect firefox account' alert"),
-            message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'disconnect firefox account' alert"),
+            title: NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert"),
+            message: NSLocalizedString("Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.", comment: "Text of the 'log out firefox account' alert"),
             preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(
-            UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel button in the 'disconnect firefox account' alert"), style: .Cancel) { (action) in
+            UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel button in the 'log out firefox account' alert"), style: .Cancel) { (action) in
                 // Do nothing.
             })
         alertController.addAction(
-            UIAlertAction(title: NSLocalizedString("Disconnect", comment: "Disconnect button in the 'disconnect firefox account' alert"), style: .Destructive) { (action) in
+            UIAlertAction(title: NSLocalizedString("Log Out", comment: "Disconnect button in the 'log out firefox account' alert"), style: .Destructive) { (action) in
                 self.settings.profile.removeAccount()
                 // Refresh, to show that we no longer have an Account immediately.
                 self.settings.SELrefresh()
@@ -540,7 +540,6 @@ class SettingsTableViewController: UITableViewController {
                 ConnectSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
-                DisconnectSetting(settings: self),
             ] + accountDebugSettings),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)
         ]
@@ -558,7 +557,8 @@ class SettingsTableViewController: UITableViewController {
                 OpenSupportPageSetting()
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
-                VersionSetting(settings: self)
+                VersionSetting(settings: self),
+                DisconnectSetting(settings: self)
             ])
         ]
 
@@ -569,7 +569,10 @@ class SettingsTableViewController: UITableViewController {
             target: navigationController, action: "SELdone")
         tableView.registerClass(SettingsTableViewCell.self, forCellReuseIdentifier: Identifier)
         tableView.registerClass(SettingsTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
-        tableView.tableFooterView = UIView()
+        tableView.tableFooterView = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
+
+        tableView.separatorColor = UIConstants.TableViewSeparatorColor
+        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -659,6 +662,33 @@ class SettingsTableViewController: UITableViewController {
             setting.onClick(navigationController)
         }
         return nil
+    }
+}
+
+class SettingsTableFooterView: UITableViewHeaderFooterView {
+
+    var logo: UIImageView = {
+        var image =  UIImageView(image: UIImage(named: "settingsFlatfox"))
+        image.contentMode = UIViewContentMode.Center
+        return image
+    }()
+
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        var topBorder = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: 0.5))
+        topBorder.backgroundColor = UIConstants.TableViewSeparatorColor
+        addSubview(topBorder)
+        logo.frame = self.frame
+        addSubview(logo)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
