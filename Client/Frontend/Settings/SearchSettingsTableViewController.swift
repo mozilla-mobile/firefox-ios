@@ -32,6 +32,11 @@ class SearchSettingsTableViewController: UITableViewController {
         if !(self.navigationController is SettingsNavigationController) {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "SELDismiss")
         }
+
+        tableView.tableFooterView = UIView()
+
+        tableView.separatorColor = UIConstants.TableViewSeparatorColor
+        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
