@@ -13,6 +13,7 @@ protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int, restoring: Bool)
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int)
     func tabManagerDidRestoreTabs(tabManager: TabManager)
+    func tabManagerDidAddTabs(tabManager: TabManager)
 }
 
 // We can't use a WeakList here because this is a protocol.
@@ -140,6 +141,28 @@ class TabManager : NSObject {
     // This method is duplicated to hide the flushToDisk option from consumers.
     func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Browser {
         return self.addTab(request: request, configuration: configuration, flushToDisk: true, zombie: false)
+    }
+
+    func addTabsForURLs(urls: [NSURL], zombie: Bool) {
+        if urls.isEmpty {
+            return
+        }
+
+        var tab: Browser!
+        for (let url) in urls {
+            tab = self.addTab(request: NSURLRequest(URL: url), flushToDisk: false, zombie: zombie, restoring: true)
+        }
+
+        // Flush.
+        storeChanges()
+
+        // Select the most recent.
+        self.selectTab(tab)
+
+        // Notify that we bulk-loaded so we can adjust counts.
+        for delegate in delegates {
+            delegate.get()?.tabManagerDidAddTabs(self)
+        }
     }
 
     func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, restoring: Bool = false) -> Browser {

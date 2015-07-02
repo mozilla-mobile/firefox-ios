@@ -220,6 +220,35 @@ class BrowserViewController: UIViewController {
         self.updateToolbarStateForTraitCollection(self.traitCollection)
     }
 
+    func loadQueuedTabs() {
+        log.debug("Loading queued tabs.")
+
+        // This assumes that the DB returns rows in some kind of sane order.
+        // It does in practice, so WFM.
+        self.profile.queue.getQueuedTabs() >>== { c in
+            log.debug("Queue. Count: \(c.count).")
+            if c.count > 0 {
+                var urls = [NSURL]()
+                for (let r) in c {
+                    if let url = r?.url.asURL {
+                        log.debug("Queuing \(url).")
+                        urls.append(url)
+                    }
+                }
+                if !urls.isEmpty {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.tabManager.addTabsForURLs(urls, zombie: false)
+                    }
+                }
+            }
+
+            // Clear *after* making an attempt to open. We're making a bet that
+            // it's better to run the risk of perhaps opening twice on a crash,
+            // rather than losing data.
+            self.profile.queue.clearQueuedTabs()
+        }
+    }
+
     func startTrackingAccessibilityStatus() {
         NSNotificationCenter.defaultCenter().addObserverForName(UIAccessibilityVoiceOverStatusChanged, object: nil, queue: nil) { (notification) -> Void in
             self.auralProgress.hidden = !UIAccessibilityIsVoiceOverRunning()
@@ -1285,6 +1314,10 @@ extension BrowserViewController: TabManagerDelegate {
         urlBar.updateTabCount(tabManager.count)
         // browserDelegate is a weak ref (and the tab's webView may not be destroyed yet)
         // so we don't expcitly unset it.
+    }
+
+    func tabManagerDidAddTabs(tabManager: TabManager) {
+        urlBar.updateTabCount(tabManager.count)
     }
 
     func tabManagerDidRestoreTabs(tabManager: TabManager) {

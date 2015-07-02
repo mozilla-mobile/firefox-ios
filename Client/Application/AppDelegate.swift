@@ -104,6 +104,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(application: UIApplication) {
         self.profile?.syncManager.beginTimedSyncs()
+
+        // We could load these here, but then we have to futz with the tab counter
+        // and making NSURLRequests.
+        self.browserViewController.loadQueuedTabs()
     }
 
     func applicationDidEnterBackground(application: UIApplication) {

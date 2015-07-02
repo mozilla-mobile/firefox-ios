@@ -141,6 +141,7 @@ protocol Profile {
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
     // var favicons: Favicons { get }
     var prefs: Prefs { get }
+    var queue: TabQueue { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
     var history: protocol<BrowserHistory, SyncableHistory> { get }
@@ -221,6 +222,10 @@ public class BrowserProfile: Profile {
     var files: FileAccessor {
         return ProfileFileAccessor(profile: self)
     }
+
+    lazy var queue: TabQueue = {
+        return SQLiteQueue(db: self.db)
+    }()
 
     lazy var db: BrowserDB = {
         return BrowserDB(filename: "browser.db", files: self.files)

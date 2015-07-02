@@ -14,6 +14,7 @@ let TableFavicons = "favicons"
 let TableHistory = "history"
 let TableVisits = "visits"
 let TableFaviconSites = "favicon_sites"
+let TableQueuedTabs = "queue"
 
 let ViewWidestFaviconsForSites = "view_favicons_widest"
 let ViewHistoryIDsWithWidestFavicons = "view_history_id_favicon"
@@ -29,6 +30,8 @@ private let AllTables: Args = [
     TableVisits,
 
     TableBookmarks,
+
+    TableQueuedTabs,
 ]
 
 private let AllViews: Args = [
@@ -52,7 +55,7 @@ private let log = XCGLogger.defaultInstance()
  */
 public class BrowserTable: Table {
     var name: String { return "BROWSER" }
-    var version: Int { return 4 }
+    var version: Int { return 5 }
     let sqliteVersion: Int32
     let supportsPartialIndices: Bool
 
@@ -204,10 +207,17 @@ public class BrowserTable: Table {
         "title TEXT" +
         ") "
 
+        let queue =
+        "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
+        "url TEXT NOT NULL UNIQUE, " +
+        "title TEXT" +
+        ") "
+
         let queries = [
             history, visits, bookmarks, faviconSites,
             indexShouldUpload, indexSiteIDDate,
             widestFavicons, historyIDsWithIcon, iconForURL,
+            queue,
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -229,9 +239,23 @@ public class BrowserTable: Table {
             return drop(db) && create(db, version: to)
         }
 
-        // TODO: real update!
         log.debug("Updating browser tables from \(from) to \(to).")
-        return drop(db) && create(db, version: to)
+        if from < 4 {
+            return drop(db) && create(db, version: to)
+        }
+
+        if from < 5 {
+            let queue =
+            "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
+            "url TEXT NOT NULL UNIQUE, " +
+            "title TEXT" +
+            ") "
+            if !self.run(db, queries: [queue]) {
+                return false
+            }
+        }
+
+        return true
     }
 
     /**
