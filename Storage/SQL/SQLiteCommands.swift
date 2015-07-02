@@ -1,10 +1,6 @@
-//
-//  SQLiteCommands.swift
-//  Client
-//
-//  Created by Emily Toop on 6/29/15.
-//  Copyright (c) 2015 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Shared
@@ -14,107 +10,124 @@ private let log = XCGLogger.defaultInstance()
 
 public class SQLiteCommands: SyncCommands {
     let db: BrowserDB
-    let commands = CommandSyncTable<SyncCommand>()
+    let commands = SyncCommandsTable()
 
     public init(db: BrowserDB) {
         self.db = db
         db.createOrUpdate(commands)
     }
 
+    private class func factory(row: SDRow) -> SyncCommand {
+        let id = row["id"] as! Int
+        let value = row["value"] as! String
+        return SyncCommand(id: id, value: value)
+    }
+
     // wipe all unsynced commands
-    public func wipeCommands() -> Deferred<Result<()>> {
-        let deferred = Deferred<Result<()>>(defaultQueue: dispatch_get_main_queue())
+    public func deleteCommands() -> Deferred<Result<()>> {
+        let deleteClientsCommands = "DELETE FROM \(TableClientSyncCommands)"
+        let deleteCommands = "DELETE FROM \(TableSyncCommands) WHERE id NOT IN (SELECT command_id FROM \(TableClientSyncCommands)"
 
-        var err: NSError?
-        db.transaction(&err) { connection, _ in
-            self.commands.delete(connection, item: nil, err: &err)
-            if let err = err {
-                let databaseError = DatabaseError(err: err)
-                log.debug("Wipe failed: \(databaseError)")
-                deferred.fill(Result(failure: databaseError))
-            } else {
-                deferred.fill(Result(success: ()))
-            }
-            return true
-        }
-
-        return deferred
+        return self.db.run(deleteClientsCommands, withArgs: nil) >>> { self.db.run(deleteCommands, withArgs: nil) }
     }
 
     // wipe unsynced commands for a client
-    public func wipeCommandsForClient(client: RemoteClient) -> Deferred<Result<()>> {
-        let deferred = Deferred<Result<()>>(defaultQueue: dispatch_get_main_queue())
-        var err: NSError?
-        self.getCommandsForClient(client).upon({ result in
-            if let clientCommands = result.successValue {
-                self.db.transaction(&err) { connection, _ in
-                    for command in clientCommands {
-                        self.commands.delete(connection, item: command, err: &err)
-                    }
-                    if let err = err {
-                        let databaseError = DatabaseError(err: err)
-                        log.debug("Wipe failed: \(databaseError)")
-                        deferred.fill(Result(failure: databaseError))
-                    } else {
-                        deferred.fill(Result(success: ()))
-                    }
-                    return true
-                }
-            }
-        })
-        return deferred
+    public func deleteCommandsForClient(client: RemoteClient) -> Deferred<Result<()>> {
+        let deleteArgs: Args = [client.guid]
+        let deleteClientsCommands = "DELETE FROM \(TableClientSyncCommands) WHERE client_guid = ?"
+        let deleteCommands = "DELETE FROM \(TableSyncCommands) WHERE id NOT IN (SELECT command_id FROM \(TableClientSyncCommands)"
+
+        return self.db.run(deleteClientsCommands, withArgs: deleteArgs) >>> { self.db.run(deleteCommands, withArgs: deleteArgs) }
     }
-//    public func wipeCommandsForClient(client: RemoteClient) -> Deferred<Result<()>> {
-//        var err: NSError?
-//
-//        return self.db.withWritableConnection(&err) {  (connection, err) -> Success in
-//            func wipeCommands(clientCommands: [SyncCommand]) -> Success {
-//                let deferred = Deferred<Result<()>>(defaultQueue: dispatch_get_main_queue())
-//                for command in clientCommands {
-//                    self.commands.delete(connection, item: command, err: &err)
-//                }
-//                if let err = err {
-//                    let databaseError = DatabaseError(err: err)
-//                    log.debug("Wipe failed: \(databaseError)")
-//                    deferred.fill(Result(failure: databaseError))
-//                } else {
-//                    deferred.fill(Result(success: ()))
-//                }
-//                return deferred
-//            }
-//
-//            // Insert the favicon.
-    //            return self.getCommandsForClient(client) >>== wipeCommands  // why does this hang and never call callback?
-//        }
-//    }
+
+    // wipe unsynced commands for a client
+    public func deleteCommand(command: SyncCommand) -> Deferred<Result<()>> {
+        let deleteArgs: Args
+        var deleteCommand: String
+        if let cmdID = command.commandID {
+            deleteArgs = [cmdID]
+            deleteCommand = "DELETE FROM \(TableClientSyncCommands) WHERE command_id = ? "
+        } else {
+            deleteArgs = [command.value]
+            deleteCommand = "DELETE FROM \(TableClientSyncCommands) WHERE command_id IN (SELECT id FROM \(TableSyncCommands) WHERE value = ?)"
+        }
+
+        return self.db.run(deleteCommand, withArgs: deleteArgs)
+    }
 
     // insert a single command
-    public func insertCommand(command: SyncCommand) -> Deferred<Result<Int>> {
-        return self.insertCommands([command])
+    public func insertCommand(command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Result<Int>> {
+        return self.insertCommands([command], forClients: clients)
+    }
+
+    func idForCommand(command: SyncCommand, connection: SQLiteDBConnection) -> Int? {
+        let deferred = Deferred<Result<Int>>(defaultQueue: dispatch_get_main_queue())
+        var error: NSError? = nil
+        var commandID = command.commandID
+        if commandID == nil {
+            func getOrCreateCommand(command: SyncCommand) -> Int? {
+                // check to see if there are any other commands currently in the DB that match this one exactly
+                let select = "SELECT * FROM \(TableSyncCommands) WHERE value = ?"
+                let selectArgs: Args = [command.value]
+                let commandCursor = connection.executeQuery(select, factory: IntFactory, withArgs: selectArgs)
+
+                if commandCursor.status == CursorStatus.Failure {
+                    commandCursor.close()
+                    log.warning("select sync command failed with \(commandCursor.statusMessage)")
+                    return nil
+                }
+
+                if commandCursor.count > 0{
+                    return commandCursor[0]
+                } else {
+                    let insert = "INSERT INTO \(TableSyncCommands) (value) VALUES (" +
+                    "?)"
+                    let insertArgs: Args? = [command.value]
+                    error = connection.executeChange(insert, withArgs: insertArgs)
+                    if let err = error {
+                        log.warning("Insert sync command failed with \(err.localizedDescription)")
+                        return nil
+                    }
+                    return connection.lastInsertedRowID
+                }
+            }
+            commandID = getOrCreateCommand(command)
+        }
+        return commandID
     }
 
     // insert a batch of commands
-    public func insertCommands(commands: [SyncCommand]) -> Deferred<Result<Int>> {
-        let deferred = Deferred<Result<Int>>(defaultQueue: dispatch_get_main_queue())
-
-        var err: NSError?
-
-        db.transaction(&err) { connection, _ in
-            var inserted = 0
-            var err: NSError?
+    public func insertCommands(commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Result<Int>> {
+        var deferred = Deferred<Result<Int>>(defaultQueue: dispatch_get_main_queue())
+        var error: NSError? = nil
+        self.db.transaction(&error) { connection, _ in
+            var success = true
+            var numberOfInsertedRows = 0
             for command in commands {
-                // We trust that each tab's clientGUID matches the supplied client!
-                // Really tabs shouldn't have a GUID at all. Future cleanup!
-                self.commands.insert(connection, item: command, err: &err)
-                if let err = err {
-                    deferred.fill(Result(failure: DatabaseError(err: err)))
-                    return false
+                // get the id for the command
+                if let commandID = self.idForCommand(command, connection: connection) {
+                    // link the command with the right clients
+                    var err: NSError? = nil
+                    let insert = "INSERT INTO \(TableClientSyncCommands) (client_guid, command_id) values (?, \(commandID))"
+                    for client in clients {
+                        let insertArgs: Args = [client.guid]
+                        err = connection.executeChange(insert, withArgs: insertArgs)
+                        if let insertError = err {
+                            log.warning("Insert client commands failed with \(err?.localizedDescription)")
+                            success = false
+                            error = insertError
+                        }
+                        else {
+                            numberOfInsertedRows += connection.numberOfRowsModified
+                        }
+                    }
                 }
-                inserted++;
+                if !success {
+                    break
+                }
             }
-
-            deferred.fill(Result(success: inserted))
-            return true
+            error != nil ? deferred.fill(Result(failure: DatabaseError(err: error))) : deferred.fill(Result(success: numberOfInsertedRows))
+            return success
         }
 
         return deferred
@@ -124,8 +137,9 @@ public class SQLiteCommands: SyncCommands {
     public func getCommands() -> Deferred<Result<[SyncCommand]>> {
         var err: NSError?
 
-        let commandCursor = db.withReadableConnection(&err) { connection, _ in
-            return self.commands.query(connection, options: nil)
+        let commandCursor = db.withReadableConnection(&err) { (connection, err) -> Cursor<SyncCommand> in
+            let select = "SELECT * FROM \(TableSyncCommands)"
+            return connection.executeQuery(select, factory: SQLiteCommands.factory, withArgs: nil)
         }
 
         if let err = err {
@@ -143,14 +157,13 @@ public class SQLiteCommands: SyncCommands {
     public func getCommandsForClient(client: RemoteClient) -> Deferred<Result<[SyncCommand]>> {
         var err: NSError?
 
-        let opts = QueryOptions()
-        opts.filter = client.guid
-        opts.filterType = FilterType.Guid
-        let commandCursor = db.withReadableConnection(&err) { connection, _ in
-            return self.commands.query(connection, options: opts)
+        let commandCursor = db.withReadableConnection(&err) { (connection, err) -> Cursor<SyncCommand> in
+            let select = "SELECT * FROM \(TableSyncCommands) WHERE id IN (SELECT command_id from \(TableClientSyncCommands) WHERE client_guid = ?)"
+            let selectArgs: Args = [client.guid]
+            return connection.executeQuery(select, factory: SQLiteCommands.factory, withArgs: selectArgs)
         }
 
-        if let err = err {
+        if commandCursor.status == CursorStatus.Failure {
             commandCursor.close()
             return Deferred(value: Result(failure: DatabaseError(err: err)))
         }
@@ -163,8 +176,6 @@ public class SQLiteCommands: SyncCommands {
 
     // we do something here when accounts are removed
     public func onRemovedAccount() -> Success {
-        log.info("Clearing commands after account removal.")
-        // TODO: Bug 1168690 - delete our client and tabs records from the server.
-        return self.wipeCommands()
+        return self.deleteCommands()
     }
 }

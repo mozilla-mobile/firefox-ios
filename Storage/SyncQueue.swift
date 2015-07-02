@@ -1,51 +1,50 @@
-//
-//  Commands.swift
-//  Client
-//
-//  Created by Emily Toop on 6/29/15.
-//  Copyright (c) 2015 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
 
 public struct SyncCommand: Equatable {
-    public let guid: GUID
-    public let modified: Timestamp
-
-    public let title: String?
-    public let url: String?
-    public let action: String?
-    public let client: GUID
-    public let faviconID: Int?
+    public let value: String
+    public let commandID: Int?
 
     let version: String?
 
-    public init(guid: GUID, clientGuid: GUID, url: String?, title: String?, faviconID: Int?, action: String, lastUsed: Timestamp) {
-        self.guid = guid
-        self.client = clientGuid
-        self.url = url
-        self.title = title
-        self.action = action
-        self.modified = lastUsed
+    public init(value: String) {
+        self.value = value
         self.version = nil
-        self.faviconID = nil
+        self.commandID = nil
+    }
+
+    public init(id: Int, value: String) {
+        self.value = value
+        self.version = nil
+        self.commandID = id
+    }
+
+    public static func fromShareItem(shareItem: ShareItem, withAction action: String) -> SyncCommand {
+        let jsonObj:[String: AnyObject] = [
+            "command": action,
+            "args": [shareItem.url, shareItem.title ?? ""]
+        ]
+        return SyncCommand(value: JSON.stringify(jsonObj, pretty: false))
     }
 }
 
 public func ==(lhs: SyncCommand, rhs: SyncCommand) -> Bool {
-    return lhs.guid == rhs.guid
+    return lhs.value == rhs.value
 }
 
 
 public protocol SyncCommands {
-    func wipeCommands() -> Deferred<Result<()>>
-    func wipeCommandsForClient(client: RemoteClient) -> Deferred<Result<()>>
+    func deleteCommands() -> Success
+    func deleteCommandsForClient(client: RemoteClient) -> Success
 
     func getCommands() -> Deferred<Result<[SyncCommand]>>
     func getCommandsForClient(client: RemoteClient) -> Deferred<Result<[SyncCommand]>>
     
-    func insertCommand(command: SyncCommand) -> Deferred<Result<Int>>
-    func insertCommands(commands: [SyncCommand]) -> Deferred<Result<Int>>
+    func insertCommand(command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Result<Int>>
+    func insertCommands(commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Result<Int>>
 
     func onRemovedAccount() -> Success
 }

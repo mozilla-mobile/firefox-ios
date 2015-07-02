@@ -207,7 +207,7 @@ public class BrowserTable: Table {
         let queries = [
             history, visits, bookmarks, faviconSites,
             indexShouldUpload, indexSiteIDDate,
-            widestFavicons, historyIDsWithIcon, iconForURL,
+            widestFavicons, historyIDsWithIcon, iconForURL
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")

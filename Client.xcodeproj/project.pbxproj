@@ -299,13 +299,13 @@
 		746B6A791B277C1800EA83E3 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = 746B6A781B277C1800EA83E3 /* SessionRestore.html */; };
 		746D4E571B1E7132008F789F /* HashchangeHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 746D4E561B1E7132008F789F /* HashchangeHelper.js */; };
 		74C027451B2A348C001B1E88 /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* SessionData.swift */; };
-		7BF5A1CA1B4160EA00EA9DD8 /* CommandSyncTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1C91B4160EA00EA9DD8 /* CommandSyncTable.swift */; };
+		7BF411C01B4577F900DD9BDF /* CommandSyncTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF411BF1B4577F900DD9BDF /* CommandSyncTable.swift */; };
+		7BF411DF1B4578FA00DD9BDF /* CommandSyncTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF411BF1B4577F900DD9BDF /* CommandSyncTable.swift */; };
 		7BF5A1EA1B41640500EA9DD8 /* SyncQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1E91B41640500EA9DD8 /* SyncQueue.swift */; };
 		7BF5A1EC1B4193ED00EA9DD8 /* SQLiteCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1EB1B4193ED00EA9DD8 /* SQLiteCommands.swift */; };
 		7BF5A1EE1B429B3100EA9DD8 /* SQLiteCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1ED1B429B3100EA9DD8 /* SQLiteCommandsTests.swift */; };
 		7BF5A1EF1B429CCB00EA9DD8 /* SQLiteCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1EB1B4193ED00EA9DD8 /* SQLiteCommands.swift */; };
 		7BF5A1F01B429CD200EA9DD8 /* SyncQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1E91B41640500EA9DD8 /* SyncQueue.swift */; };
-		7BF5A1F11B429CD700EA9DD8 /* CommandSyncTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1C91B4160EA00EA9DD8 /* CommandSyncTable.swift */; };
 		D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D301AAED1A3A55B70078DD1D /* TabTrayController.swift */; };
 		D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
 		D308E4EC1A530A8B00842685 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
@@ -1336,7 +1336,7 @@
 		746D4E561B1E7132008F789F /* HashchangeHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = HashchangeHelper.js; sourceTree = "<group>"; };
 		74C027441B2A348C001B1E88 /* SessionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionData.swift; sourceTree = "<group>"; };
 		74C295261B21152000862FE3 /* AboutHomeHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHomeHandler.swift; sourceTree = "<group>"; };
-		7BF5A1C91B4160EA00EA9DD8 /* CommandSyncTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandSyncTable.swift; sourceTree = "<group>"; };
+		7BF411BF1B4577F900DD9BDF /* CommandSyncTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandSyncTable.swift; sourceTree = "<group>"; };
 		7BF5A1E91B41640500EA9DD8 /* SyncQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncQueue.swift; sourceTree = "<group>"; };
 		7BF5A1EB1B4193ED00EA9DD8 /* SQLiteCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteCommands.swift; sourceTree = "<group>"; };
 		7BF5A1ED1B429B3100EA9DD8 /* SQLiteCommandsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteCommandsTests.swift; sourceTree = "<group>"; };
@@ -2085,9 +2085,9 @@
 		2FCAE2491ABB531100877008 /* SQL */ = {
 			isa = PBXGroup;
 			children = (
+				7BF411BF1B4577F900DD9BDF /* CommandSyncTable.swift */,
 				2FCAE24B1ABB531100877008 /* BrowserDB.swift */,
 				282915E51AF1A7920006EEB5 /* BrowserTable.swift */,
-				7BF5A1C91B4160EA00EA9DD8 /* CommandSyncTable.swift */,
 				0B5A93031B1E60B4004F47A2 /* DeferredDBOperation.swift */,
 				2FCAE24C1ABB531100877008 /* FaviconsTable.swift */,
 				2FCAE24D1ABB531100877008 /* GenericTable.swift */,
@@ -3810,6 +3810,7 @@
 				D33D6BC81ABCE8F60089DAB2 /* Thumbnails.swift in Sources */,
 				0BDA56B21B26B1E4008C9B96 /* Logins.swift in Sources */,
 				0BDA56B41B26B203008C9B96 /* SQLiteLogins.swift in Sources */,
+				7BF411C01B4577F900DD9BDF /* CommandSyncTable.swift in Sources */,
 				2FCAE2751ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift in Sources */,
 				2FCAE26A1ABB531100877008 /* GenericTable.swift in Sources */,
 				285F2DC11AF80B4600211843 /* SQLiteBookmarks.swift in Sources */,
@@ -3817,7 +3818,6 @@
 				2FCAE26F1ABB531100877008 /* RemoteTabsTable.swift in Sources */,
 				7BF5A1EA1B41640500EA9DD8 /* SyncQueue.swift in Sources */,
 				28E08C991AF44EF9009BA2FA /* SQLiteHistory.swift in Sources */,
-				7BF5A1CA1B4160EA00EA9DD8 /* CommandSyncTable.swift in Sources */,
 				2FCAE25D1ABB531100877008 /* Bookmarks.swift in Sources */,
 				2FCAE2781ABB531100877008 /* Visit.swift in Sources */,
 				2FCAE2701ABB531100877008 /* SchemaTable.swift in Sources */,
@@ -3857,7 +3857,7 @@
 				2FA4352C1ABB6873008031D1 /* Visit.swift in Sources */,
 				2FA435231ABB6831008031D1 /* RemoteTabsTable.swift in Sources */,
 				28CA1BA81AFC718800220D38 /* TestTableTable.swift in Sources */,
-				7BF5A1F11B429CD700EA9DD8 /* CommandSyncTable.swift in Sources */,
+				7BF411DF1B4578FA00DD9BDF /* CommandSyncTable.swift in Sources */,
 				2FA435241ABB6831008031D1 /* SchemaTable.swift in Sources */,
 				2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */,
 				7BF5A1F01B429CD200EA9DD8 /* SyncQueue.swift in Sources */,

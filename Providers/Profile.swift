@@ -301,12 +301,10 @@ public class BrowserProfile: Profile {
 
     public func sendItems(items: [ShareItem], toClients clients: [RemoteClient]) {
         var cmds = [SyncCommand]()
-        for client in clients {
-            for item in items {
-                cmds.append(SyncCommand(guid: Bytes.generateGUID(), clientGuid: client.guid!, url: item.url, title: item.title, faviconID: nil, action: SentTabAction.View.rawValue, lastUsed: NSDate.now()))
-            }
+        let commands = items.map { item in
+            return SyncCommand.fromShareItem(item, withAction: "displayURI")
         }
-        syncCommands.insertCommands(cmds)
+        syncCommands.insertCommands(commands, forClients: clients)
     }
 
     lazy var logins: protocol<BrowserLogins, SyncableLogins> = {

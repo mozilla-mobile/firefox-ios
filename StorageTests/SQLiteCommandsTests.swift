@@ -11,166 +11,173 @@ import Shared
 import XCTest
 
 
-func byGuid(a: SyncCommand, b: SyncCommand) -> Bool {
-    return a.guid < b.guid
+func byValue(a: SyncCommand, b: SyncCommand) -> Bool {
+    return a.value < b.value
 }
 
 class SQLiteCommandsTests: XCTestCase {
 
-    var commands: SQLiteCommands!
 
     var clients: [RemoteClient] = [RemoteClient]()
     var clientsAndTabs: SQLiteRemoteClientsAndTabs!
+    var commands: SQLiteCommands!
 
-    var multipleCommands: [SyncCommand] = [SyncCommand]()
-    var emptyCommand: SyncCommand!
-    var urlOnlyCommand: SyncCommand!
-    var titleOnlyCommand: SyncCommand!
-    var invalidClientCommand: SyncCommand!
+    var shareItems = [ShareItem]()
+
+    var multipleCommands: [ShareItem] = [ShareItem]()
+    var wipeCommand: SyncCommand!
+    var db: BrowserDB!
 
     override func setUp() {
         let files = MockFiles()
         files.remove("browser.db")
-        let db = BrowserDB(filename: "browser.db", files: files)
-        commands = SQLiteCommands(db: db)
-
+        db = BrowserDB(filename: "browser.db", files: files)
         // create clients
 
         let now = NSDate.now()
         let client1GUID = Bytes.generateGUID()
         let client2GUID = Bytes.generateGUID()
+        let client3GUID = Bytes.generateGUID()
 
         self.clients.append(RemoteClient(guid: client1GUID, name: "Test client 1", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS"))
         self.clients.append(RemoteClient(guid: client2GUID, name: "Test client 2", modified: (now - OneHourInMilliseconds), type: "desktop", formfactor: "laptop", os: "Darwin"))
-        self.clients.append(RemoteClient(guid: nil, name: "Test local client", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS"))
+        self.clients.append(RemoteClient(guid: client3GUID, name: "Test local client", modified: (now - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS"))
         clientsAndTabs = SQLiteRemoteClientsAndTabs(db: db)
         clientsAndTabs.insertOrUpdateClients(clients)
 
+        commands = SQLiteCommands(db: db)
 
-        multipleCommands.append(SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[0].guid!, url: "http://mozilla.com", title: "Mozilla", faviconID: nil, action: "sendtab", lastUsed: NSDate.now()))
-        multipleCommands.append(SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[1].guid!, url: "http://slashdot.org",    title: "Slashdot", faviconID: nil, action: "sendtab", lastUsed: NSDate.now()))
-        multipleCommands.append(SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[0].guid!, url: "http://news.bbc.co.uk",    title: "BBC News", faviconID: nil, action: "sendtab", lastUsed: NSDate.now()))
-        emptyCommand = SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[0].guid!, url: nil, title: nil, faviconID: nil, action: "sendtab", lastUsed: NSDate.now())
-        urlOnlyCommand = SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[1].guid!, url: "http://mozilla.com", title: nil, faviconID: nil, action: "sendtab", lastUsed: NSDate.now())
-        titleOnlyCommand = SyncCommand(guid: Bytes.generateGUID(), clientGuid: self.clients[1].guid!, url: nil, title: "Empty Command", faviconID: nil, action: "sendtab", lastUsed: NSDate.now())
-        invalidClientCommand = SyncCommand(guid: Bytes.generateGUID(), clientGuid: Bytes.generateGUID(), url: "http://mozilla.com", title: "Mozilla", faviconID: nil, action: "sendtab", lastUsed: NSDate.now())
+        shareItems.append(ShareItem(url: "http://mozilla.com", title: "Mozilla", favicon: nil))
+        shareItems.append(ShareItem(url: "http://slashdot.org", title: "Slashdot", favicon: nil))
+        shareItems.append(ShareItem(url: "http://news.bbc.co.uk", title: "BBC News", favicon: nil))
+        shareItems.append(ShareItem(url: "http://news.bbc.co.uk", title: nil, favicon: nil))
+
+        wipeCommand = SyncCommand(value: "{'command':'wipeAll', 'args':[]}")
     }
 
     override func tearDown() {
-        commands.wipeCommands()
+        commands.deleteCommands()
         clientsAndTabs.clear()
+    }
+
+    func testCreateSyncCommandFromShareItem(){
+        let action = "testcommand"
+        let shareItem = shareItems[0]
+        let syncCommand = SyncCommand.fromShareItem(shareItem, withAction: action)
+        XCTAssertNil(syncCommand.commandID)
+        XCTAssertNotNil(syncCommand.value)
+        let jsonObj:[String: AnyObject] = [
+            "command": action,
+            "args": [shareItem.url, shareItem.title ?? ""]
+        ]
+        XCTAssertEqual(JSON.stringify(jsonObj, pretty: false), syncCommand.value)
     }
 
     func testInsertWithNoURLORTitle() {
         // Test insert command to table for
         let e = self.expectationWithDescription("Insert.")
-        commands.insertCommand(self.emptyCommand).upon {
+        commands.insertCommand(self.wipeCommand, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
+            XCTAssertEqual(3, $0.successValue!)
+
+            var error: NSError? = nil
+            let clientCursor = self.db.withReadableConnection(&error) { (connection, err) -> Cursor<Int> in
+                let select = "SELECT COUNT(*) FROM \(TableClientSyncCommands)"
+                return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
+            }
+            XCTAssertNil(error)
+            XCTAssertNotNil(clientCursor[0])
+            XCTAssertEqual(3, clientCursor[0]!)
+
+            var error2: NSError? = nil
+            let commandCursor = self.db.withReadableConnection(&error2) { (connection, err) -> Cursor<Int> in
+                let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
+                return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
+            }
+            XCTAssertNil(error2)
+            XCTAssertNotNil(commandCursor[0])
+            XCTAssertEqual(1, commandCursor[0]!)
             e.fulfill()
         }
         self.waitForExpectationsWithTimeout(5, handler: nil)
     }
 
     func testInsertWithURLOnly() {
-        let e = self.expectationWithDescription("Insert.")
-        commands.insertCommand(self.urlOnlyCommand).upon {
-            XCTAssertTrue($0.isSuccess)
-            e.fulfill()
-        }
-        self.waitForExpectationsWithTimeout(5, handler: nil)
-    }
+        let action = "testcommand"
+        let shareItem = shareItems[3]
+        let syncCommand = SyncCommand.fromShareItem(shareItem, withAction: action)
 
-    func testInsertWithTitleOnly() {
         let e = self.expectationWithDescription("Insert.")
-        commands.insertCommand(self.titleOnlyCommand).upon {
+        commands.insertCommand(syncCommand, forClients: clients).upon {
             XCTAssertTrue($0.isSuccess)
-            e.fulfill()
-        }
-        self.waitForExpectationsWithTimeout(5, handler: nil)
-    }
+            XCTAssertEqual(3, $0.successValue!)
 
-    func testInsertWithURLAndTitle() {
-        let e = self.expectationWithDescription("Insert.")
-        commands.insertCommand(self.multipleCommands[0]).upon {
-            XCTAssertTrue($0.isSuccess)
+            var error: NSError? = nil
+            let commandCursor = self.db.withReadableConnection(&error) { (connection, err) -> Cursor<Int> in
+                let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
+                return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
+            }
+            XCTAssertNil(error)
+            XCTAssertNotNil(commandCursor[0])
+            XCTAssertEqual(1, commandCursor[0]!)
             e.fulfill()
         }
         self.waitForExpectationsWithTimeout(5, handler: nil)
     }
 
     func testInsertWithMultipleCommands() {
-
+        let action = "testcommand"
         let e = self.expectationWithDescription("Insert.")
-        commands.insertCommands(self.multipleCommands).upon {
-            XCTAssertTrue($0.isSuccess)
-            e.fulfill()
+        let syncCommands = shareItems.map { item in
+            return SyncCommand.fromShareItem(item, withAction: action)
         }
-        self.waitForExpectationsWithTimeout(5, handler: nil)
-    }
+        commands.insertCommands(syncCommands, forClients: clients).upon {
+            XCTAssertTrue($0.isSuccess)
+            XCTAssertEqual(12, $0.successValue!)
 
-    func testInsertFailsWhenInvalidClient() {
-        let e = self.expectationWithDescription("Insert.")
-        commands.insertCommand(self.invalidClientCommand).upon {
-            XCTAssertTrue($0.isFailure)
+            var error: NSError? = nil
+            let commandCursor = self.db.withReadableConnection(&error) { (connection, err) -> Cursor<Int> in
+                let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
+                return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
+            }
+            XCTAssertNil(error)
+            XCTAssertNotNil(commandCursor[0])
+            XCTAssertEqual(4, commandCursor[0]!)
             e.fulfill()
         }
         self.waitForExpectationsWithTimeout(5, handler: nil)
     }
 
     func testGetForValidClient() {
-        let expectedClient1 = [
-            self.multipleCommands[0],
-            self.multipleCommands[2],
-            self.emptyCommand
-            ].sorted(byGuid)
-        let e = self.expectationWithDescription("Insert.")
-        commands.insertCommands(self.multipleCommands + [self.emptyCommand, self.urlOnlyCommand, self.titleOnlyCommand]).upon {
-            XCTAssertTrue($0.isSuccess)
-            if let numOfCreatedRecords = $0.successValue {
-                XCTAssertEqual(6, numOfCreatedRecords)
-            }
-            e.fulfill()
-        }
+        let action = "testcommand"
+        let syncCommands = shareItems.map { item in
+            return SyncCommand.fromShareItem(item, withAction: action)
+        }.sorted(byValue)
+        commands.insertCommands(syncCommands, forClients: clients)
+
+        // add in an extra command for a client we are not testing for
+        commands.insertCommand(wipeCommand, forClients: [clients[1]])
 
         let a = self.expectationWithDescription("Get for client 1.")
         var client = self.clients[0]
         commands.getCommandsForClient(client).upon({ result in
             if let clientCommands = result.successValue {
-                XCTAssertEqual(expectedClient1, clientCommands.sorted(byGuid))
+                XCTAssertEqual(syncCommands, clientCommands.sorted(byValue))
             } else {
                 XCTFail("Expected commands!")
             }
             a.fulfill()
         })
-
-        let expectedClient2 = [
-            self.multipleCommands[1],
-            self.urlOnlyCommand,
-            self.titleOnlyCommand
-        ].sorted(byGuid)
-        client = self.clients[1]
-
-        let b = self.expectationWithDescription("Get for client 2.")
-        commands.getCommandsForClient(client).upon({ result in
-            if let clientCommands = result.successValue {
-                XCTAssertEqual(expectedClient2, clientCommands.sorted(byGuid))
-            } else {
-                XCTFail("Expected commands!")
-            }
-            b.fulfill()
-        })
         self.waitForExpectationsWithTimeout(10, handler: nil)
     }
 
     func testGetForInvalidClient() {
-        let e = self.expectationWithDescription("Insert.")
-        commands.insertCommands(self.multipleCommands + [self.emptyCommand, self.urlOnlyCommand, self.titleOnlyCommand]).upon {
-            XCTAssertTrue($0.isSuccess)
-            if let numOfCreatedRecords = $0.successValue {
-                XCTAssertEqual(6, numOfCreatedRecords)
-            }
-            e.fulfill()
-        }
+        let action = "testcommand"
+        let syncCommands = shareItems.map { item in
+            return SyncCommand.fromShareItem(item, withAction: action)
+            }.sorted(byValue)
+        commands.insertCommands(syncCommands, forClients: clients)
+
         let b = self.expectationWithDescription("Get for invalid client.")
         commands.getCommandsForClient(RemoteClient(guid: Bytes.generateGUID(), name: "Invalid client 1", modified: (NSDate.now() - OneMinuteInMilliseconds), type: "mobile", formfactor: "largetablet", os: "iOS")).upon({ result in
             XCTAssertTrue(result.isSuccess)
@@ -185,20 +192,19 @@ class SQLiteCommandsTests: XCTestCase {
     }
 
     func testGetForAllClients() {
-        let expected = (self.multipleCommands + [self.emptyCommand, self.urlOnlyCommand, self.titleOnlyCommand]).sorted(byGuid)
-        let e = self.expectationWithDescription("Insert.")
-        commands.insertCommands(expected).upon {
-            XCTAssertTrue($0.isSuccess)
-            if let numOfCreatedRecords = $0.successValue {
-                XCTAssertEqual(6, numOfCreatedRecords)
-            }
-            e.fulfill()
+        let action = "testcommand"
+        let syncCommands = shareItems.map { item in
+            return SyncCommand.fromShareItem(item, withAction: action)
         }
+        commands.insertCommands(syncCommands, forClients: clients)
+
+        commands.insertCommand(wipeCommand, forClients: [clients[0]])
+
         let b = self.expectationWithDescription("Get for invalid client.")
         commands.getCommands().upon({ result in
             XCTAssertTrue(result.isSuccess)
             if let clientCommands = result.successValue {
-                XCTAssertEqual(expected, clientCommands.sorted(byGuid))
+                XCTAssertEqual((syncCommands + [self.wipeCommand]).sorted(byValue), clientCommands.sorted(byValue))
             } else {
                 XCTFail("Expected no commands!")
             }
@@ -207,23 +213,21 @@ class SQLiteCommandsTests: XCTestCase {
         self.waitForExpectationsWithTimeout(5, handler: nil)
     }
     
-    func testWipeForValidClient() {
-        let e = self.expectationWithDescription("Insert.")
-        commands.insertCommands(self.multipleCommands + [self.emptyCommand, self.urlOnlyCommand, self.titleOnlyCommand]).upon {
-            XCTAssertTrue($0.isSuccess)
-            if let numOfCreatedRecords = $0.successValue {
-                XCTAssertEqual(6, numOfCreatedRecords)
-            }
-            e.fulfill()
-        }
+    func testDeleteForValidClient() {
+        let action = "testcommand"
+        let syncCommands = shareItems.map { item in
+            return SyncCommand.fromShareItem(item, withAction: action)
+        }.sorted(byValue)
+        commands.insertCommands(syncCommands, forClients: clients)
+
         var client = self.clients[0]
-        let a = self.expectationWithDescription("Wipe for client.")
-        commands.wipeCommandsForClient(client).upon({ result in
+        let a = self.expectationWithDescription("delete for client.")
+        commands.deleteCommandsForClient(client).upon({ result in
             XCTAssertTrue(result.isSuccess)
             a.fulfill()
         })
 
-        let b = self.expectationWithDescription("Get for wiped client.")
+        let b = self.expectationWithDescription("Get for deleted client.")
         commands.getCommandsForClient(client).upon({ result in
             XCTAssertTrue(result.isSuccess)
             if let clientCommands = result.successValue {
@@ -234,21 +238,30 @@ class SQLiteCommandsTests: XCTestCase {
             b.fulfill()
         })
 
+        let c = self.expectationWithDescription("Get for not deleted client.")
+        commands.getCommandsForClient(clients[1]).upon({ result in
+            XCTAssertTrue(result.isSuccess)
+            if let clientCommands = result.successValue {
+                XCTAssertEqual(syncCommands, clientCommands.sorted(byValue))
+            } else {
+                XCTFail("Expected no commands!")
+            }
+            c.fulfill()
+        })
+
         self.waitForExpectationsWithTimeout(5, handler: nil)
     }
-    
-    func testWipeForAllClients() {
-        let e = self.expectationWithDescription("Insert.")
-        commands.insertCommands(self.multipleCommands + [self.emptyCommand, self.urlOnlyCommand, self.titleOnlyCommand]).upon {
-            XCTAssertTrue($0.isSuccess)
-            if let numOfCreatedRecords = $0.successValue {
-                XCTAssertEqual(6, numOfCreatedRecords)
-            }
-            e.fulfill()
+
+    // I have no idea why this test is failing??????????Remo
+    func testDeleteForAllClients() {
+        let action = "testcommand"
+        let syncCommands = shareItems.map { item in
+            return SyncCommand.fromShareItem(item, withAction: action)
         }
+        commands.insertCommands(syncCommands, forClients: clients)
 
         let a = self.expectationWithDescription("Wipe for all clients.")
-        commands.wipeCommands().upon({ result in
+        commands.deleteCommands().upon({ result in
             XCTAssertTrue(result.isSuccess)
             a.fulfill()
         })

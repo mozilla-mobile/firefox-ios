@@ -1,66 +1,97 @@
 //
-//  CommandSyncTable.swift
-//  Client
-//
-//  Created by Emily Toop on 6/29/15.
-//  Copyright (c) 2015 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
+import XCGLogger
 
-class CommandSyncTable<T>: GenericTable<SyncCommand> {
-    override var name: String { return "commands" }
-    override var version: Int { return 1 }
 
-    override var rows: String { return join(",", [
-        "guid TEXT PRIMARY KEY",
-        "client_guid TEXT REFERENCES clients(guid)",
-        "url TEXT",
-        "title TEXT",
-        "action TEXT NOT NULL",
-        "last_used INTEGER",
-        ])
+let TableSyncCommands = "commands"
+let TableClientSyncCommands = "clientcommands"
+let TableClient = "clients"
+private let log = XCGLogger.defaultInstance()
+
+public class SyncCommandsTable: Table {
+    var name: String { return "CLIENTCOMMANDS" }
+    var version: Int { return 1 }
+    let sqliteVersion: Int32
+    let supportsPartialIndices: Bool
+
+    public init() {
+        let v = sqlite3_libversion_number()
+        self.sqliteVersion = v
+        self.supportsPartialIndices = v >= 3008000          // 3.8.0.
+        let ver = String.fromCString(sqlite3_libversion())!
+        log.info("SQLite version: \(ver) (\(v)).")
     }
 
-
-    override func getInsertAndArgs(inout item: SyncCommand) -> (String, [AnyObject?])? {
-        var args = [AnyObject?]()
-        args.append(item.guid)
-        args.append(item.client)
-        args.append(item.url)
-        args.append(item.title)
-        args.append(item.action)
-        args.append(NSNumber(unsignedLongLong: item.modified))
-        return ("INSERT INTO \(name) (guid, client_guid, url, title, action, last_used) VALUES (?, ?, ?, ?, ?, ?)", args)
-    }
-
-    override func getDeleteAndArgs(inout item: SyncCommand?) -> (String, [AnyObject?])? {
-        if let item = item {
-            return ("DELETE FROM \(name) WHERE guid = ?", [item.guid])
-        } else {
-            return ("DELETE FROM \(name)", [])
+    func run(db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
+        let err = db.executeChange(sql, withArgs: args)
+        if err != nil {
+            log.error("Error running SQL in ClientCommandsTable. \(err?.localizedDescription)")
+            log.error("SQL was \(sql)")
         }
+        return err == nil
     }
 
-    override var factory: ((row: SDRow) -> SyncCommand)? {
-        return { row -> SyncCommand in
-            return SyncCommand(
-                guid: row["guid"] as! GUID,
-                clientGuid: row["client_guid"] as! GUID,
-                url: row["url"] as? String,
-                title: row["title"] as? String,
-                faviconID: nil,
-                action: row["action"] as! String,
-                lastUsed: (row["last_used"] as! NSNumber).unsignedLongLongValue)
+    // TODO: transaction.
+    func run(db: SQLiteDBConnection, queries: [String]) -> Bool {
+        for sql in queries {
+            if !run(db, sql: sql, args: nil) {
+                return false
+            }
         }
+        return true
     }
 
-    override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
-        var args = [AnyObject?]()
-        if let filter: AnyObject = options?.filter {
-            args.append("%\(filter)%")
-            return ("SELECT * FROM \(name) WHERE client_guid LIKE ? ORDER BY last_used DESC", args)
-        }
-        return ("SELECT * FROM \(name) ORDER BY client_guid DESC, last_used DESC", [])
+    func create(db: SQLiteDBConnection, version: Int) -> Bool {
+        // We ignore the version.
+
+
+
+        let syncCommands =
+        "CREATE TABLE IF NOT EXISTS \(TableSyncCommands) (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "value TEXT NOT NULL " +
+        ") "
+
+        let clientCommands =
+        "CREATE TABLE IF NOT EXISTS \(TableClientSyncCommands) (" +
+            "client_guid TEXT NOT NULL REFERENCES \(TableClient)(guid), " +
+            "command_id INTEGER NOT NULL REFERENCES \(TableSyncCommands)(id) ON DELETE CASCADE, " +           // Microseconds since epoch.
+            "PRIMARY KEY(client_guid, command_id) " +
+        ") "
+
+        let queries = [
+            syncCommands, clientCommands,
+        ]
+
+        log.debug("Creating \(queries.count) tables")
+        return self.run(db, queries: queries)
+    }
+
+    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
+
+        return true
+    }
+
+    /**
+    * The Table mechanism expects to be able to check if a 'table' exists. In our (ab)use
+    * of Table, that means making sure that any of our tables and views exist.
+    * We do that by fetching all tables from sqlite_master with matching names, and verifying
+    * that we get back more than one.
+    * Note that we don't check for views -- trust to luck.
+    */
+    func exists(db: SQLiteDBConnection) -> Bool {
+        return db.tablesExist([TableClientSyncCommands, TableSyncCommands])
+    }
+
+    func drop(db: SQLiteDBConnection) -> Bool {
+        log.debug("Dropping all tables.")
+        let queries = ["DROP VIEW IF EXISTS \(TableClientSyncCommands)",
+            "DROP INDEX IF EXISTS \(TableSyncCommands)"]
+        
+        return self.run(db, queries: queries)
     }
 }
