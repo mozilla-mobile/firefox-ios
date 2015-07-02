@@ -300,7 +300,6 @@ public class BrowserProfile: Profile {
 
 
     public func sendItems(items: [ShareItem], toClients clients: [RemoteClient]) {
-        var cmds = [SyncCommand]()
         let commands = items.map { item in
             return SyncCommand.fromShareItem(item, withAction: "displayURI")
         }
