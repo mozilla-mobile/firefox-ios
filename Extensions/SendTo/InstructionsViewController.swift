@@ -78,8 +78,8 @@ class InstructionsViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Close", tableName: "SendTo", comment: "Close button in top navigation bar"), style: UIBarButtonItemStyle.Done, target: self, action: "close")
 
         setupHelpView(view,
-            introText: NSLocalizedString("You are not logged in to your Firefox Account. This needs proper copy. Do not translate.", tableName: "SendTo", comment: ""),
-                showMeText: NSLocalizedString("<Show me how> to login to my Firefox Account.  This needs proper copy. Do not translate.", tableName: "SendTo", comment: "The part between brackets is highlighted in styled text as if it is a link."))
+            introText: NSLocalizedString("You are not signed in to your Firefox Account.", tableName: "SendTo", comment: "See http://mzl.la/1ISlXnU"),
+                showMeText: NSLocalizedString("Please open Firefox, go to Settings and sign in to continue.", tableName: "SendTo", comment: "See http://mzl.la/1ISlXnU"))
     }
 
     func close() {
