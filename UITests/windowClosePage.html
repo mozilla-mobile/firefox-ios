@@ -1,5 +1,20 @@
+<!DOCTYPE html>
 <html>
+    <head>
+    </head>
     <body>
-        <div>This page has no title</div>
+        <div>Window Closing Test</div>
     </body>
+    <script>
+        console.log('open-close');
+        if (document.location.search === "?close-window") {
+            console.log('closing');
+            window.close();
+        } else {
+            window.open("open-and-close-window.html?close-window");
+            setTimeout(function () {
+                       window.close();
+            }, 8000);
+        }
+    </script>
 </html>

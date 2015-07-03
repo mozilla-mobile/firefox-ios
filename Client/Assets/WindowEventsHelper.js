@@ -4,10 +4,14 @@
 
 (function() {
 
-"use strict";
+ "use strict";
+ console.log('registering onclose')
 
-addEventListener("close", function(event) {
-  webkit.messageHandlers.windowEventsMessageHandler.postMessage(null);
-});
+ var onclose = function(event) {
+ console.log('firing onclose')
+ webkit.messageHandlers.windowEventsMessageHandler.postMessage('close');
+ };
 
+ webkit.messageHandlers.windowEventsMessageHandler.postMessage('test');
+ addEventListener('closed', onclose);
 }) ();

@@ -883,6 +883,10 @@ extension BrowserViewController: BrowserDelegate {
 
         let errorHelper = ErrorPageHelper()
         browser.addHelper(errorHelper, name: ErrorPageHelper.name())
+
+        let windowEventsHelper = WindowEventsHelper(browser: browser)
+        windowEventsHelper.delegate = self
+        browser.addHelper(windowEventsHelper, name: WindowEventsHelper.name())
     }
 
     func browser(browser: Browser, willDeleteWebView webView: WKWebView) {
@@ -2040,5 +2044,11 @@ extension BrowserViewController: KeyboardHelperDelegate {
         if snackBars.subviews.count > 0 {
             adjustFooterSize(top: nil)
         }
+    }
+}
+
+extension BrowserViewController: WindowEventsHelperDelegate {
+    func windowEventsHelperDidClose(windowEventsHelper: WindowEventsHelper) {
+        println("Window closing!!!")
     }
 }

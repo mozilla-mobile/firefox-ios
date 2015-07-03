@@ -12,9 +12,27 @@ class WindowEventsTest: KIFTestCase, UITextFieldDelegate {
         webRoot = SimplePageServer.start()
     }
 
+
+    func testWindowClose() {
+        // Load a page
+        tester().tapViewWithAccessibilityIdentifier("url")
+        let url1 = "\(webRoot)/windowClosePage.html"
+
+        weak var webView = tester().waitForViewWithAccessibilityLabel("Web content") as? WKWebView
+        XCTAssertNotNil(webView!, "webView found")
+
+        webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = true
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
+        tester().waitForWebViewElementWithAccessibilityLabel("Window Closing Test")
+        webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = false
+
+        println("================================================================= End of test")
+
+    }
+
     /**
      * Tests basic page navigation with the URL bar.
-     */
+
     func testNavigation() {
         tester().tapViewWithAccessibilityIdentifier("url")
         var textView = tester().waitForViewWithAccessibilityLabel("Address and Search") as? UITextField
@@ -39,7 +57,9 @@ class WindowEventsTest: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Forward")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
     }
+         */
 
+    /*
     func testScrollsToTopWithMultipleTabs() {
         // test scrollsToTop works with 1 tab
         tester().tapViewWithAccessibilityIdentifier("url")
@@ -70,6 +90,7 @@ class WindowEventsTest: KIFTestCase, UITextFieldDelegate {
         tester().tapStatusBar()
         tester().waitForWebViewElementWithAccessibilityLabel("Top")
     }
+    */
 
     override func tearDown() {
         BrowserUtils.resetToAboutHome(tester())
