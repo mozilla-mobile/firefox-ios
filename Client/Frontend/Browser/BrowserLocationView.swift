@@ -252,6 +252,11 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         if inputMode == .URL {
             textField.text = url?.absoluteString
         }
+        UIView.animateWithDuration(0.1, animations: { () -> Void in
+            self.readerModeButton.hidden = true
+            self.lockImageView.hidden = true
+            self.setNeedsUpdateConstraints()
+        })
 
         return true
     }
@@ -260,6 +265,11 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         layer.borderColor = borderColor
         highlightDomain()
         active = false
+        UIView.animateWithDuration(0.1, animations: { () -> Void in
+            self.readerModeButton.hidden = (self.readerModeButton.readerModeState == ReaderModeState.Unavailable)
+            self.lockImageView.hidden = self.url?.scheme != "https"
+            self.setNeedsUpdateConstraints()
+        })
     }
 
     func textFieldShouldClear(textField: UITextField) -> Bool {
