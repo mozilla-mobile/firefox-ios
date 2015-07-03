@@ -847,6 +847,48 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 }
 
+protocol WindowCloseHelperDelegate: class {
+    func windowCloseHelper(windowCloseHelper: WindowCloseHelper, didRequestToCloseBrowser browser: Browser)
+}
+
+class WindowCloseHelper: BrowserHelper {
+    weak var delegate: WindowCloseHelperDelegate?
+    private weak var browser: Browser?
+
+    required init(browser: Browser) {
+        self.browser = browser
+        if let path = NSBundle.mainBundle().pathForResource("WindowCloseHelper", ofType: "js") {
+            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) as? String {
+                var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+                browser.webView!.configuration.userContentController.addUserScript(userScript)
+            }
+        }
+    }
+
+    func scriptMessageHandlerName() -> String? {
+        return "windowCloseHelper"
+    }
+
+    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        println("This is WindowCloseHelper.userContentController(_:, didReceiveScriptMessage:)")
+        if let browser = browser {
+            dispatch_async(dispatch_get_main_queue()) {
+                delegate?.windowCloseHelper(self, didRequestToCloseBrowser: browser)
+            }
+        }
+    }
+
+    class func name() -> String {
+        return "WindowCloseHelper"
+    }
+}
+
+extension BrowserViewController: WindowCloseHelperDelegate {
+    func windowCloseHelper(helper: WindowCloseHelper, didRequestToCloseBrowser browser: Browser) {
+        tabManager.removeTab(browser)
+    }
+}
+
 extension BrowserViewController: BrowserDelegate {
 
     func browser(browser: Browser, didCreateWebView webView: WKWebView) {
@@ -883,6 +925,10 @@ extension BrowserViewController: BrowserDelegate {
 
         let errorHelper = ErrorPageHelper()
         browser.addHelper(errorHelper, name: ErrorPageHelper.name())
+
+        let windowCloseHelper = WindowCloseHelper(browser: browser)
+        windowCloseHelper.delegate = self
+        browser.addHelper(windowCloseHelper, name: WindowCloseHelper.name())
     }
 
     func browser(browser: Browser, willDeleteWebView webView: WKWebView) {

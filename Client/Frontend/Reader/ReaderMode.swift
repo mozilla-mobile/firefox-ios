@@ -239,6 +239,7 @@ class ReaderMode: BrowserHelper {
     private func handleReaderModeStateChange(state: ReaderModeState) {
         self.state = state
         delegate?.readerMode(self, didChangeReaderModeState: state, forBrowser: browser!)
+
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
