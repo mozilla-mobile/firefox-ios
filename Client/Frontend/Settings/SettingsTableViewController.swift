@@ -47,6 +47,7 @@ class Setting {
         cell.detailTextLabel?.attributedText = status
         cell.textLabel?.attributedText = title
         cell.accessoryType = accessoryType
+        cell.accessoryView = nil
     }
 
     // Called when the pref is tapped.
