@@ -284,6 +284,7 @@
 		2FFC4D381ABE3C420081D675 /* FxAStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFC4D371ABE3C420081D675 /* FxAStateTests.swift */; };
 		39A362D91AAF5ECE00F47390 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; };
 		39A362DA1AAF5ECE00F47390 /* XCGLogger.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 39A362D41AAF5E2C00F47390 /* XCGLogger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		451390D61B47F74800CD9C1E /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 451390D51B47F74800CD9C1E /* Photos.framework */; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
@@ -646,20 +647,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2827315D1ABC9BE600AA1954;
 			remoteInfo = Sync;
-		};
-		285D3B521B4332C10035FD22 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D38B2D761A8D98380040E6B5 /* SWXMLHash.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CD9D052C1A757D8B003CCB21;
-			remoteInfo = SWXMLHashOSX;
-		};
-		285D3B541B4332C10035FD22 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D38B2D761A8D98380040E6B5 /* SWXMLHash.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CD9D05361A757D8B003CCB21;
-			remoteInfo = SWXMLHashOSXTests;
 		};
 		288A2D9B1AB8B3260023ABC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1316,6 +1303,7 @@
 		2FFC4D1A1ABE3C360081D675 /* FxAState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAState.swift; sourceTree = "<group>"; };
 		2FFC4D371ABE3C420081D675 /* FxAStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAStateTests.swift; sourceTree = "<group>"; };
 		39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XCGLogger.xcodeproj; path = Carthage/Checkouts/XCGLogger/XCGLogger/Library/XCGLogger.xcodeproj; sourceTree = "<group>"; };
+		451390D51B47F74800CD9C1E /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
 		4F9757391AFA6F37006ECC24 /* readerContent.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = readerContent.html; sourceTree = "<group>"; };
@@ -1570,6 +1558,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				451390D61B47F74800CD9C1E /* Photos.framework in Frameworks */,
 				0BA84AE21AE570A1009C4D0C /* SnapKit.framework in Frameworks */,
 				E4D567BD1ADED48700F1EFE7 /* SQLite.framework in Frameworks */,
 				0B6544D31A96C5F0000DD202 /* libSDWebImage.a in Frameworks */,
@@ -2226,8 +2215,6 @@
 			children = (
 				D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */,
 				D38B2D831A8D98380040E6B5 /* SWXMLHashTests.xctest */,
-				285D3B531B4332C10035FD22 /* SWXMLHash.framework */,
-				285D3B551B4332C10035FD22 /* SWXMLHashOSXTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2466,6 +2453,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				451390D51B47F74800CD9C1E /* Photos.framework */,
 				E4CD9F191A6D9B7B00318571 /* libz.dylib */,
 				D39FA16B1A83E17800EE869C /* CoreGraphics.framework */,
 				0B8E0FF31A932BD500161DC3 /* ImageIO.framework */,
@@ -3288,20 +3276,6 @@
 			fileType = wrapper.cfbundle;
 			path = "SnapKit OSX Tests.xctest";
 			remoteRef = 0BA84ADF1AE57095009C4D0C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		285D3B531B4332C10035FD22 /* SWXMLHash.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SWXMLHash.framework;
-			remoteRef = 285D3B521B4332C10035FD22 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		285D3B551B4332C10035FD22 /* SWXMLHashOSXTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = SWXMLHashOSXTests.xctest;
-			remoteRef = 285D3B541B4332C10035FD22 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		28CE83D01A1D1D5100576538 /* FxA.framework */ = {
