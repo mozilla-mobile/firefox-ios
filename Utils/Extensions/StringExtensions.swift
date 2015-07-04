@@ -55,4 +55,21 @@ public extension String {
     public var asURL: NSURL? {
         return NSURL(string: self)
     }
+
+    /*
+     * A string with an ellipsis needs at least a length of 3 - first element, ellipsis, last element. Anything less than 3 should just return an ellipsis by itself
+     * The string can't be shorter than the length it's being truncated to. In case of this, no ellipsis will be added.
+     * When the truncatedLength is even, the character at length / 2 + 1 is replaced with the ellipsis.
+     * When the truncatedLength is odd, the middle character is replaced.
+     */
+    public func ellipsize(truncatedLength: Int) -> String {
+        if count(self) < truncatedLength {
+            return self
+        }
+        if truncatedLength < 3 {
+            return "…"
+        }
+        let offsetForEven = truncatedLength % 2 == 0 ? 1 : 0
+        return self[self.startIndex..<advance(self.startIndex, truncatedLength / 2)] + "…" + self[advance(self.endIndex, truncatedLength / -2 + offsetForEven)..<self.endIndex]
+    }
 }
