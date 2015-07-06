@@ -247,16 +247,19 @@ private class TopSitesCollectionView: UICollectionView {
 }
 
 private class TopSitesLayout: UICollectionViewLayout {
-    private var thumbnailRows = 3
+    private var thumbnailRows: Int {
+        return Int((self.collectionView?.frame.height ?? 100) / self.thumbnailHeight)
+    }
+
     private var thumbnailCols = 2
     private var thumbnailCount: Int { return thumbnailRows * thumbnailCols }
     private var width: CGFloat { return self.collectionView?.frame.width ?? 0 }
 
     // The width and height of the thumbnail here are the width and height of the tile itself, not the image inside the tile.
     private var thumbnailWidth: CGFloat { return (width - ThumbnailCellUX.Insets.left - ThumbnailCellUX.Insets.right) / CGFloat(thumbnailCols) }
-    // The tile's height is determined the aspect ratio of the thumbnails width + the height of the text label on the bottom. We also take into account
+    // The tile's height is determined the aspect ratio of the thumbnails width. We also take into account
     // some padding between the title and the image.
-    private var thumbnailHeight: CGFloat { return thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio) + CGFloat(ThumbnailCellUX.TextSize) + CGFloat(ThumbnailCellUX.Insets.bottom) + CGFloat(ThumbnailCellUX.TextOffset) }
+    private var thumbnailHeight: CGFloat { return thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio) }
 
     // Used to calculate the height of the list.
     private var count: Int {
@@ -283,10 +286,8 @@ private class TopSitesLayout: UICollectionViewLayout {
 
     private func setupForOrientation(orientation: UIInterfaceOrientation) {
         if orientation.isLandscape {
-            thumbnailRows = 2
             thumbnailCols = 3
         } else {
-            thumbnailRows = 3
             thumbnailCols = 2
         }
     }
@@ -379,18 +380,16 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     private func createTileForSite(cell: ThumbnailCell, site: Site) -> ThumbnailCell {
         cell.textLabel.text = site.title.isEmpty ? site.url : site.title
         cell.imageWrapper.backgroundColor = UIColor.clearColor()
-        // cell.backgroundColor = UIColor.random()
 
-        if let thumbs = profile.thumbnails as? SDWebThumbnails {
-            let key = SDWebThumbnails.getKey(site.url)
-            cell.imageView.moz_getImageFromCache(key, cache: thumbs.cache, completed: { img, err, type, key in
-                if img == nil { self.setDefaultThumbnailBackground(cell) }
-            })
-        } else {
-            setDefaultThumbnailBackground(cell)
-        }
-        cell.imagePadding = 0
-        cell.isAccessibilityElement = true
+        cell.imageView.sd_setImageWithURL(site.icon?.url.asURL!, completed: { (img, err, type, url) -> Void in
+            if let img = img {
+                cell.backgroundImage.image = img
+            } else {
+                cell.backgroundImage.image = nil
+            }
+        })
+
+        cell.imagePadding = TopSitesPanelUX.SuggestedTileImagePadding
         cell.accessibilityLabel = cell.textLabel.text
         cell.removeButton.hidden = !editingThumbnails
         return cell
@@ -399,6 +398,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     private func createTileForSuggestedSite(cell: ThumbnailCell, tile: Tile) -> ThumbnailCell {
         cell.textLabel.text = tile.title.isEmpty ? tile.url : tile.title
         cell.imageWrapper.backgroundColor = tile.backgroundColor
+        cell.backgroundImage.image = nil
 
         if let iconString = tile.icon?.url {
             let icon = NSURL(string: iconString)!
