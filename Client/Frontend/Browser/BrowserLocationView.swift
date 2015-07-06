@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 import Shared
+import SnapKit
 
 protocol BrowserLocationViewDelegate {
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView)
@@ -27,6 +28,7 @@ enum InputMode {
 class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
     var delegate: BrowserLocationViewDelegate?
     var inputMode: InputMode = .URL
+    private var borderLayer: UIView!
     private var lockImageView: UIImageView!
     private var readerModeButton: ReaderModeButton!
     var editTextField: ToolbarTextField!
@@ -37,6 +39,8 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         }
         set(newCornerRadius) {
             self.layer.cornerRadius = newCornerRadius
+            // need to add borderWidth to the borderLayer radius so the corners nest properly, because it is offset outside this view
+            borderLayer.layer.cornerRadius = newCornerRadius + self.borderWidth
         }
     }
 
@@ -44,18 +48,18 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
     var borderColor: CGColorRef! {
         didSet {
             if !editTextField.isFirstResponder(){
-                self.layer.borderColor = borderColor
+                borderLayer.layer.borderColor = borderColor
             }
         }
     }
 
     var borderWidth: CGFloat {
         get {
-            return self.layer.borderWidth
+            return borderLayer.layer.borderWidth
         }
 
         set (newBorderWidth) {
-            self.layer.borderWidth = newBorderWidth
+            borderLayer.layer.borderWidth = newBorderWidth
         }
     }
 
@@ -103,6 +107,9 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         self.backgroundColor = UIColor.whiteColor()
         borderColor = UIColor.clearColor().CGColor
         editingBorderColor = UIColor.clearColor().CGColor
+
+        borderLayer = UIView()
+        addSubview(borderLayer)
 
         editTextField = ToolbarTextField()
         editTextField.keyboardType = UIKeyboardType.WebSearch
@@ -170,6 +177,10 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
             } else {
                 make.trailing.equalTo(self.readerModeButton.snp_leading)
             }
+        }
+
+        borderLayer.snp_makeConstraints { make in
+            make.edges.equalTo(container).insets(EdgeInsetsMake(-borderWidth, -borderWidth, -borderWidth, -borderWidth))
         }
     }
 
@@ -243,7 +254,6 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
 
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         active = true
-        layer.borderColor = editingBorderColor
         textField.textColor = BrowserLocationViewUX.DefaultURLColor
 
         setNeedsUpdateConstraints()
@@ -253,6 +263,7 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
             textField.text = url?.absoluteString
         }
         UIView.animateWithDuration(0.1, animations: { () -> Void in
+            self.borderLayer.layer.borderColor = self.editingBorderColor
             self.readerModeButton.hidden = true
             self.lockImageView.hidden = true
             self.setNeedsUpdateConstraints()
@@ -262,10 +273,10 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
     }
 
     func textFieldDidEndEditing(textField: UITextField) {
-        layer.borderColor = borderColor
         highlightDomain()
         active = false
         UIView.animateWithDuration(0.1, animations: { () -> Void in
+            self.borderLayer.layer.borderColor = self.borderColor
             self.readerModeButton.hidden = (self.readerModeButton.readerModeState == ReaderModeState.Unavailable)
             self.lockImageView.hidden = self.url?.scheme != "https"
             self.setNeedsUpdateConstraints()
