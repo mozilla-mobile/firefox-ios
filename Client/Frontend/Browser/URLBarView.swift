@@ -7,7 +7,7 @@ import UIKit
 import Shared
 import SnapKit
 
-private struct URLBarViewUX {
+struct URLBarViewUX {
     // The color shown behind the tabs count button, and underneath the (mostly transparent) status bar.
     static let TextFieldBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.05)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
@@ -50,6 +50,9 @@ class URLBarView: UIView {
     weak var delegate: URLBarDelegate?
     weak var browserToolbarDelegate: BrowserToolbarDelegate?
     var helper: BrowserToolbarHelper?
+    lazy var backgroundImage: UIView = {
+        return LightweightThemeImage()
+    }()
 
     var toolbarIsShowing = false
 
@@ -166,8 +169,9 @@ class URLBarView: UIView {
     }
 
     private func commonInit() {
-        backgroundColor = URLBarViewUX.backgroundColorWithAlpha(0)
-        addSubview(curveShape);
+        self.addSubview(self.backgroundImage)
+        addSubview(curveShape)
+
         addSubview(scrollToTopButton)
 
         locationContainer.addSubview(locationView)
@@ -269,6 +273,11 @@ class URLBarView: UIView {
             make.trailing.equalTo(self)
             make.width.height.equalTo(UIConstants.ToolbarHeight)
         }
+
+        backgroundImage.snp_makeConstraints() { make in
+            make.edges.equalTo(self.superview!)
+        }
+
         updateLayoutForEditing(editing: isEditing, animated: false)
         super.updateConstraints()
     }
@@ -296,6 +305,7 @@ class URLBarView: UIView {
         self.locationContainer.alpha = alpha
         self.backgroundColor = URLBarViewUX.backgroundColorWithAlpha(1 - alpha)
         self.actionButtons.map { $0.alpha = alpha }
+        self.curveShape.alpha = alpha
     }
 
     func updateTabCount(count: Int) {
@@ -440,6 +450,7 @@ class URLBarView: UIView {
             self.clonedTabsButton?.transform = CGAffineTransformIdentity
             self.cancelButton.transform = CGAffineTransformMakeTranslation(self.cancelButton.frame.width, 0)
             self.rightBarConstraint?.updateOffset(defaultRightOffset)
+
             if self.toolbarIsShowing {
                 self.backButtonLeftConstraint?.updateOffset(0)
             }
@@ -603,67 +614,58 @@ private let H_M3 = 0.72
 private let H_M4 = 0.961
 
 /* Code for drawing the urlbar curve */
-private class CurveView: UIView {
-    private lazy var leftCurvePath: UIBezierPath = {
-        var leftArc = UIBezierPath(arcCenter: CGPoint(x: 5, y: 5), radius: CGFloat(5), startAngle: CGFloat(-M_PI), endAngle: CGFloat(-M_PI_2), clockwise: true)
-        leftArc.addLineToPoint(CGPoint(x: 0, y: 0))
-        leftArc.addLineToPoint(CGPoint(x: 0, y: 5))
-        leftArc.closePath()
-        return leftArc
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        commonInit()
+private class CurveView: UIVisualEffectView {
+    init() {
+        var style = UIBlurEffectStyle.ExtraLight
+        super.init(effect: UIBlurEffect(style: style))
+        self.opaque = false
+        self.contentMode = .Redraw
     }
 
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        commonInit()
+        fatalError("init(coder:) has not been implemented")
     }
 
-    private func commonInit() {
-        self.opaque = false
-        self.contentMode = .Redraw
+    private override func layoutSubviews() {
+        super.layoutSubviews()
+        var layer = CAShapeLayer()
+        layer.path = getPath().CGPath
+        layer.frame = CGRect(origin: CGPoint(x: 0,y: 0), size: self.frame.size)
+        self.layer.mask = layer
     }
 
     private func getWidthForHeight(height: Double) -> Double {
         return height * ASPECT_RATIO
     }
 
-    private func drawFromTop(path: UIBezierPath) {
+    private func drawRightCurve(path: UIBezierPath) {
+        let width = self.frame.width
         let height: Double = Double(UIConstants.ToolbarHeight)
-        let width = getWidthForHeight(height)
-        var from = (Double(self.frame.width) - width * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(0))
+        let curveWidth = getWidthForHeight(height)
+        var from = (Double(width) - curveWidth * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(0))
 
         path.moveToPoint(CGPoint(x: from.0, y: from.1))
-        path.addCurveToPoint(CGPoint(x: from.0 + width * W_M2, y: from.1 + height * H_M2),
-              controlPoint1: CGPoint(x: from.0 + width * W_M1, y: from.1),
-              controlPoint2: CGPoint(x: from.0 + width * W_M3, y: from.1 + height * H_M1))
+        path.addCurveToPoint(CGPoint(x: from.0 + curveWidth * W_M2, y: from.1 + height * H_M2),
+              controlPoint1: CGPoint(x: from.0 + curveWidth * W_M1, y: from.1),
+              controlPoint2: CGPoint(x: from.0 + curveWidth * W_M3, y: from.1 + height * H_M1))
 
-        path.addCurveToPoint(CGPoint(x: from.0 + width,        y: from.1 + height),
-              controlPoint1: CGPoint(x: from.0 + width * W_M4, y: from.1 + height * H_M3),
-              controlPoint2: CGPoint(x: from.0 + width * W_M5, y: from.1 + height * H_M4))
+        path.addCurveToPoint(CGPoint(x: from.0 + curveWidth,        y: from.1 + height),
+              controlPoint1: CGPoint(x: from.0 + curveWidth * W_M4, y: from.1 + height * H_M3),
+              controlPoint2: CGPoint(x: from.0 + curveWidth * W_M5, y: from.1 + height * H_M4))
     }
 
-    private func getPath() -> UIBezierPath {
+    private func drawLeftCurve(path: UIBezierPath) {
+        path.addLineToPoint(CGPoint(x: 0, y: 5))
+        path.addArcWithCenter(CGPoint(x: 5, y: 5), radius: CGFloat(5), startAngle: CGFloat(-M_PI), endAngle: CGFloat(-M_PI_2), clockwise: true)
+    }
+
+    func getPath() -> UIBezierPath {
         let path = UIBezierPath()
-        self.drawFromTop(path)
-        path.addLineToPoint(CGPoint(x: self.frame.width, y: UIConstants.ToolbarHeight))
-        path.addLineToPoint(CGPoint(x: self.frame.width, y: 0))
-        path.addLineToPoint(CGPoint(x: 0, y: 0))
+        drawRightCurve(path)
+        path.addLineToPoint(CGPoint(x: self.frame.width, y: self.frame.height))
+        path.addLineToPoint(CGPoint(x: 0, y: self.frame.height))
+        drawLeftCurve(path)
         path.closePath()
         return path
-    }
-
-    override func drawRect(rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
-        CGContextSaveGState(context)
-        CGContextClearRect(context, rect)
-        CGContextSetFillColorWithColor(context, URLBarViewUX.backgroundColorWithAlpha(1).CGColor)
-        getPath().fill()
-        leftCurvePath.fill()
-        CGContextDrawPath(context, kCGPathFill)
-        CGContextRestoreGState(context)
     }
 }

@@ -222,6 +222,9 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     var navBar: UIView!
     var addTabButton: UIButton!
     var settingsButton: UIButton!
+    lazy var backgroundView: UIView = {
+        return LightweightThemeImage(tintColor: UIColor(red: 0, green: 0, blue: 0, alpha: 0.5))
+    }()
 
     var statusBarFrame: CGRect {
         return UIApplication.sharedApplication().statusBarFrame
@@ -239,8 +242,11 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
         tabManager.addDelegate(self)
 
+        view.addSubview(backgroundView)
+        backgroundView.snp_makeConstraints { make in
+            make.edges.equalTo(view)
+        }
         navBar = UIView()
-        navBar.backgroundColor = TabTrayControllerUX.BackgroundColor
 
         let signInButton = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
         signInButton.addTarget(self, action: "SELdidClickDone", forControlEvents: UIControlEvents.TouchUpInside)
@@ -273,7 +279,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         collectionView.delegate = self
         collectionView.registerClass(CustomCell.self, forCellWithReuseIdentifier: CellIdentifier)
 
-        collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
+        collectionView.backgroundColor = UIColor.clearColor()
 
         view.addSubview(collectionView)
         view.addSubview(navBar)
@@ -452,7 +458,6 @@ extension TabTrayController: Transitionable {
         }
 
         navBar.hidden = true
-        collectionView.backgroundColor = UIColor.clearColor()
 
         view.layoutIfNeeded()
         collectionViewTransitionSnapshot = snapshotTransitionView(collectionView)
@@ -472,11 +477,10 @@ extension TabTrayController: Transitionable {
         }
 
         navBar.hidden = true
-        collectionView.backgroundColor = UIColor.clearColor()
 
         collectionViewTransitionSnapshot = snapshotTransitionView(collectionView)
         self.view.addSubview(collectionViewTransitionSnapshot!)
-
+        backgroundView.alpha = 0
     }
 
     func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {
@@ -522,6 +526,7 @@ extension TabTrayController: Transitionable {
         addTabButton.transform = CGAffineTransformIdentity
         settingsButton.transform = CGAffineTransformIdentity
         navBar.alpha = 1
+        backgroundView.alpha = 1
     }
 
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
@@ -535,11 +540,9 @@ extension TabTrayController: Transitionable {
             collectionView.hidden = false
 
             navBar.hidden = false
-            collectionView.backgroundColor = TabTrayControllerUX.BackgroundColor
             if let tab = collectionView.cellForItemAtIndexPath(NSIndexPath(forItem: tabManager.selectedIndex, inSection: 0)) as? CustomCell {
                 UIView.animateWithDuration(0.55, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { _ in
-                    cell.innerStroke.alpha = 1
-
+                        cell.innerStroke.alpha = 1
                     }, completion: { _ in
                         return
                 })

@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         KeyboardHelper.defaultHelper.startObserving()
 
         let profile = getProfile(application)
+        LightweightThemeManager.setupInstance(profile)
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)

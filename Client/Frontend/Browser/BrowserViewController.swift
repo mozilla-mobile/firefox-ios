@@ -46,8 +46,7 @@ class BrowserViewController: UIViewController {
     private let profile: Profile
     private let tabManager: TabManager
 
-    // These views wrap the urlbar and toolbar to provide background effects on them
-    private var header: UIView!
+    // These views wrap the footer toolbar to provide background effects
     private var footer: UIView!
     private var footerBackground: UIView!
     private var topTouchArea: UIButton!
@@ -102,13 +101,10 @@ class BrowserViewController: UIViewController {
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        if header == nil {
-            return UIStatusBarStyle.LightContent
+        if LightweightThemeManager.themeImageIsLight {
+            return UIStatusBarStyle.Default
         }
-        if header.transform.ty == 0 {
-            return UIStatusBarStyle.LightContent
-        }
-        return UIStatusBarStyle.Default
+        return UIStatusBarStyle.LightContent
     }
 
     func shouldShowToolbarForTraitCollection(previousTraitCollection: UITraitCollection) -> Bool {
@@ -192,13 +188,27 @@ class BrowserViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELBookmarkStatusDidChange:", name: BookmarkStatusChangedNotification, object: nil)
         KeyboardHelper.defaultHelper.addDelegate(self)
 
+        // This background image is shown during the transition to/from the tabs tray
+        let background = LightweightThemeImage()
+        view.addSubview(background)
+        background.snp_updateConstraints { make in
+            make.edges.equalTo(view)
+        }
+
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
 
         // Temporary work around for covering the non-clipped web view content
         statusBarOverlay = UIView()
-        statusBarOverlay.backgroundColor = BrowserViewControllerUX.BackgroundColor
+        statusBarOverlay.clipsToBounds = true
         view.addSubview(statusBarOverlay)
+
+        // Theme the statusbar to ensure that the webpage content isn't shown there
+        let statusBarBackground = LightweightThemeImage()
+        statusBarOverlay.addSubview(statusBarBackground)
+        statusBarBackground.snp_makeConstraints { make in
+            make.edges.equalTo(view)
+        }
 
         topTouchArea = UIButton()
         topTouchArea.addTarget(self, action: "SELtappedTopArea", forControlEvents: UIControlEvents.TouchUpInside)
@@ -209,7 +219,8 @@ class BrowserViewController: UIViewController {
         urlBar.setTranslatesAutoresizingMaskIntoConstraints(false)
         urlBar.delegate = self
         urlBar.browserToolbarDelegate = self
-        header = wrapInEffect(urlBar, parent: view, backgroundColor: nil)
+        view.addSubview(urlBar)
+        urlBar.clipsToBounds = true
 
         searchLoader = SearchLoader(history: profile.history, urlBar: urlBar)
 
@@ -301,7 +312,7 @@ class BrowserViewController: UIViewController {
         statusBarOverlay.snp_remakeConstraints { make in
             make.left.right.equalTo(self.view)
             make.height.equalTo(UIApplication.sharedApplication().statusBarFrame.height)
-            make.bottom.equalTo(header.snp_top)
+            make.bottom.equalTo(urlBar.snp_top)
         }
 
         topTouchArea.snp_remakeConstraints { make in
@@ -310,19 +321,15 @@ class BrowserViewController: UIViewController {
         }
 
         urlBar.snp_remakeConstraints { make in
-            make.edges.equalTo(self.header)
-        }
-
-        header.snp_remakeConstraints { make in
             let topLayoutGuide = self.topLayoutGuide as! UIView
             self.headerConstraint = make.top.equalTo(topLayoutGuide.snp_bottom).constraint
             make.height.equalTo(UIConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
         }
-        header.setNeedsUpdateConstraints()
+        urlBar.setNeedsUpdateConstraints()
 
         readerModeBar?.snp_remakeConstraints { make in
-            self.readerConstraint = make.top.equalTo(self.header.snp_bottom).constraint
+            self.readerConstraint = make.top.equalTo(self.urlBar.snp_bottom).constraint
             make.height.equalTo(UIConstants.ToolbarHeight)
             make.leading.trailing.equalTo(self.view)
         }
@@ -333,7 +340,7 @@ class BrowserViewController: UIViewController {
             if let readerModeBarBottom = readerModeBar?.snp_bottom {
                 make.top.equalTo(readerModeBarBottom)
             } else {
-                make.top.equalTo(self.header.snp_bottom)
+                make.top.equalTo(self.urlBar.snp_bottom)
             }
 
             if let toolbar = self.toolbar {
@@ -385,6 +392,7 @@ class BrowserViewController: UIViewController {
         if let background = backgroundColor {
             view.backgroundColor = backgroundColor
         }
+        effect.setTranslatesAutoresizingMaskIntoConstraints(false)
         effect.addSubview(view)
 
         parent.addSubview(effect)
@@ -1069,7 +1077,7 @@ extension BrowserViewController : UIScrollViewDelegate {
         if let tab = tabManager.selectedTab,
            let prev = self.previousScroll {
 
-            var totalToolbarHeight = header.frame.size.height
+            var totalToolbarHeight = urlBar.frame.size.height
             let offset = scrollView.contentOffset
             let dy = prev.y - offset.y
 
@@ -1111,7 +1119,7 @@ extension BrowserViewController : UIScrollViewDelegate {
     private func endDragging() {
         self.previousScroll = nil
 
-        let headerHeight = header.frame.size.height
+        let headerHeight = urlBar.frame.size.height
         let totalOffset = headerHeight
 
         if headerConstraintOffset > -totalOffset {
@@ -1134,7 +1142,7 @@ extension BrowserViewController {
     }
 
     private func scrollHeader(dy: CGFloat) {
-        let totalOffset = self.header.frame.size.height
+        let totalOffset = self.urlBar.frame.size.height
         let newOffset = self.clamp(self.headerConstraintOffset + dy, min: -totalOffset, max: 0)
         self.headerConstraint?.updateOffset(newOffset)
         self.headerConstraintOffset = newOffset
@@ -1167,7 +1175,7 @@ extension BrowserViewController {
 
     private func showToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
         let animationDistance = self.headerConstraintOffset
-        let totalOffset = self.header.frame.size.height
+        let totalOffset = self.urlBar.frame.size.height
         let durationRatio = abs(animationDistance / totalOffset)
         let actualDuration = NSTimeInterval(BrowserViewControllerUX.ToolbarBaseAnimationDuration * durationRatio)
 
@@ -1182,7 +1190,7 @@ extension BrowserViewController {
     }
 
     private func hideToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
-        let totalOffset = self.header.frame.size.height
+        let totalOffset = self.urlBar.frame.size.height
         let animationDistance = totalOffset - abs(self.headerConstraintOffset)
         let durationRatio = abs(animationDistance / totalOffset)
         let actualDuration = NSTimeInterval(BrowserViewControllerUX.ToolbarBaseAnimationDuration * durationRatio)
@@ -1190,7 +1198,7 @@ extension BrowserViewController {
         self.animateToolbarsWithOffsets(
             animated: animated,
             duration: actualDuration,
-            headerOffset: -self.header.frame.size.height,
+            headerOffset: -self.urlBar.frame.size.height,
             footerOffset: self.footer.frame.height,
             readerOffset: -(readerModeBar?.frame.size.height ?? 0),
             alpha: 0,
@@ -1650,10 +1658,10 @@ extension BrowserViewController : UIViewControllerTransitioningDelegate {
 
 extension BrowserViewController : Transitionable {
     private func headerTransformToCellFrame(frame: CGRect) -> CGAffineTransform {
-        let scale = frame.size.width / header.frame.size.width
+        let scale = frame.size.width / urlBar.frame.size.width
         // Since the scale will happen in the center of the frame, we move this so the centers of the two frames overlap.
-        let tx = frame.origin.x + frame.width/2 - (header.frame.origin.x + header.frame.width/2)
-        let ty = frame.origin.y - header.frame.origin.y * scale * 2 // Move this up a little actually keeps it above the web page. I'm not sure what you want
+        let tx = frame.origin.x + frame.width/2 - (urlBar.frame.origin.x + urlBar.frame.width/2)
+        let ty = frame.origin.y - urlBar.frame.origin.y * scale * 2 // Move this up a little actually keeps it above the web page. I'm not sure what you want
         var transform = CGAffineTransformMakeTranslation(tx, ty)
         return CGAffineTransformScale(transform, scale, scale)
     }
@@ -1673,6 +1681,7 @@ extension BrowserViewController : Transitionable {
             }
         }
         self.homePanelController?.view.hidden = true
+        view.alpha = 0
     }
 
     func transitionablePreShow(transitionable: Transitionable, options: TransitionOptions) {
@@ -1685,27 +1694,25 @@ extension BrowserViewController : Transitionable {
 
         // Move over the transforms to reflect where the opening tab is coming from instead of where the previous tab was
         if let frame = options.cellFrame {
-            header.transform = CGAffineTransformIdentity
+            urlBar.transform = CGAffineTransformIdentity
             footer.transform = CGAffineTransformIdentity
-            header.transform = headerTransformToCellFrame(frame)
+            urlBar.transform = headerTransformToCellFrame(frame)
             footer.transform = footerTransformToCellFrame(frame)
         }
 
         self.homePanelController?.view.hidden = true
+        view.alpha = 1
     }
 
     func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
-        view.alpha = 1
 
-        header.transform = CGAffineTransformIdentity
+        urlBar.transform = CGAffineTransformIdentity
         footer.transform = CGAffineTransformIdentity
     }
 
     func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {
-        view.alpha = 0
-
         if let frame = options.cellFrame {
-            header.transform = headerTransformToCellFrame(frame)
+            urlBar.transform = headerTransformToCellFrame(frame)
             footer.transform = footerTransformToCellFrame(frame)
         }
     }
@@ -1732,7 +1739,7 @@ extension BrowserViewController {
         if self.readerModeBar == nil {
             let readerModeBar = ReaderModeBarView(frame: CGRectZero)
             readerModeBar.delegate = self
-            view.insertSubview(readerModeBar, belowSubview: header)
+            view.insertSubview(readerModeBar, belowSubview: urlBar)
             self.readerModeBar = readerModeBar
         }
 
