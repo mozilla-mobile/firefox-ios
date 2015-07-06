@@ -41,6 +41,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     var refreshControl: UIRefreshControl?
 
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -49,6 +54,20 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         self.refreshControl = refresh
         self.tableView.addSubview(refresh)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+    }
+
+    func firefoxAccountChanged(notification: NSNotification) {
+        if notification.name == NotificationFirefoxAccountChanged {
+            refresh()
+        }
     }
 
     @objc func refresh() {

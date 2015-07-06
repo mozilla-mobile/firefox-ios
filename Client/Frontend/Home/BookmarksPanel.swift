@@ -4,6 +4,7 @@
 
 import UIKit
 import Storage
+import Shared
 
 let BookmarkStatusChangedNotification = "BookmarkStatusChangedNotification"
 
@@ -23,6 +24,25 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             // to what we have on Android.
             profile.bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID, success: self.onNewModel, failure: self.onModelFailure)
             // profile.bookmarks.modelForRoot(self.onNewModel, failure: self.onModelFailure)
+        }
+    }
+
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+    }
+
+    func firefoxAccountChanged(notification: NSNotification) {
+        if notification.name == NotificationFirefoxAccountChanged {
+            self.reloadData()
         }
     }
 

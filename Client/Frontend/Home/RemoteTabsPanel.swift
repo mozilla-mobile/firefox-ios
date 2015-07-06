@@ -41,6 +41,15 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
 
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+    }
+
+    required init!(coder aDecoder: NSCoder!) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -59,9 +68,19 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         view.backgroundColor = UIConstants.PanelBackgroundColor
     }
 
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+    }
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         refresh()
+    }
+
+    func firefoxAccountChanged(notification: NSNotification) {
+        if notification.name == NotificationFirefoxAccountChanged {
+            refresh()
+        }
     }
 
     var tableViewDelegate: RemoteTabsPanelDataSource? {
