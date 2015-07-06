@@ -52,7 +52,11 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
             self.shareDialogController.view.alpha = 0.0
         }, completion: { (Bool) -> Void in
             self.dismissShareDialog()
-            
+
+            if destinations.containsObject(ShareDestinationViewLater) {
+                self.viewLater(item)
+            }
+
             if destinations.containsObject(ShareDestinationReadingList) {
                 self.shareToReadingList(item)
             }
@@ -120,9 +124,11 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         shareDialogController.view.removeFromSuperview()
         shareDialogController.removeFromParentViewController()
     }
-    
-    //
-    
+
+    func viewLater(item: ShareItem) {
+        profile.queue.addToQueue(item).value
+    }
+
     func shareToReadingList(item: ShareItem) {
         profile.readingList?.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.currentDevice().name)
     }
