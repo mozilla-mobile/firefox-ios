@@ -557,6 +557,7 @@
 		E65072A41B273824001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
 		E6E079851B41E54A001645A6 /* FXCrashDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = E6E079841B41E54A001645A6 /* FXCrashDetector.m */; };
+		E698FFDA1B4AADF40001F623 /* BrowserScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */; };
 		E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */; };
 		E6F965121B2F1CF20034B023 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */; };
@@ -1553,6 +1554,7 @@
 		E4ECCDAD1AB131770005E717 /* FiraSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Medium.ttf"; sourceTree = "<group>"; };
 		E4F21AA51A13C4A300B0FAAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
+		E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserScrollController.swift; sourceTree = "<group>"; };
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
 		E6E079831B41E54A001645A6 /* FXCrashDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXCrashDetector.h; sourceTree = "<group>"; };
 		E6E079841B41E54A001645A6 /* FXCrashDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXCrashDetector.m; sourceTree = "<group>"; };
@@ -1757,13 +1759,6 @@
 			);
 			name = UIImageViewAligned;
 			path = ThirdParty/UIImageViewAligned/UIImageViewAligned;
-			sourceTree = "<group>";
-		};
-		0B59D3361B27A5460037A0A5 /* Browser */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Browser;
 			sourceTree = "<group>";
 		};
 		0B6544B11A96C59E000DD202 /* Products */ = {
@@ -2346,6 +2341,7 @@
 				746D4E361B1E699C008F789F /* HashchangeHelper.swift */,
 				74C295261B21152000862FE3 /* AboutHomeHandler.swift */,
 				74C027441B2A348C001B1E88 /* SessionData.swift */,
+				E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -2370,6 +2366,7 @@
 		E42CCDFF1A24C4E300B794D3 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				287DA9D51AE06D220055AC35 /* Extensions */,
 				0B3E7DB51B27A7E900E2E84D /* AboutUtils.swift */,
 				0BAC7A7F1AC4B135006018CB /* AppConstants.swift */,
 				2FCAE2401ABB531100877008 /* Bytes.swift */,
@@ -2384,8 +2381,6 @@
 				282731A11ABC9D2600AA1954 /* Prefs.swift */,
 				2F3444561AB22A4B00FD9731 /* TimeConstants.swift */,
 				D3ACB4381AD33EBA00748D50 /* WeakList.swift */,
-				0B59D3361B27A5460037A0A5 /* Browser */,
-				287DA9D51AE06D220055AC35 /* Extensions */,
 				E4252A0D1AF01AE40028C684 /* Swizzling.m */,
 				E4C358531AF1440B00299F7E /* Swizzling.h */,
 				0B5A92E31B1E6075004F47A2 /* Cancellable.swift */,
@@ -4127,6 +4122,7 @@
 				0BF42D371A7C0B8E00889E28 /* FaviconManager.swift in Sources */,
 				6BB2FD981B017DAB001A189B /* AuralProgressBar.swift in Sources */,
 				D38B2D341A8D96D00040E6B5 /* GCDWebServerFunctions.m in Sources */,
+				E698FFDA1B4AADF40001F623 /* BrowserScrollController.swift in Sources */,
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
 				D30B101E1AA7F9C600C01CA3 /* HomePanels.swift in Sources */,
 				F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */,

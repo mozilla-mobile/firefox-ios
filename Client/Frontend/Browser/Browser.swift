@@ -70,7 +70,6 @@ class Browser: NSObject {
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.allowsBackForwardNavigationGestures = true
             webView.backgroundColor = UIColor.lightGrayColor()
-            webView.scrollView.layer.masksToBounds = false
 
             // Turning off masking allows the web content to flow outside of the scrollView's frame
             // which allows the content appear beneath the toolbars in the BrowserViewController

@@ -21,7 +21,6 @@ private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
 
 private struct BrowserViewControllerUX {
-    private static let ToolbarBaseAnimationDuration: CGFloat = 0.3
     private static let BackgroundColor = UIConstants.AppBackgroundColor
     private static let ShowHeaderTapAreaHeight: CGFloat = 32
 }
@@ -53,17 +52,7 @@ class BrowserViewController: UIViewController {
     private var footerBackground: UIView!
     private var topTouchArea: UIButton!
 
-    // Scroll management properties
-    private var previousScroll: CGPoint?
-
-    private var headerConstraint: Constraint?
-    private var headerConstraintOffset: CGFloat = 0
-
-    private var footerConstraint: Constraint?
-    private var footerConstraintOffset: CGFloat = 0
-
-    private var readerConstraint: Constraint?
-    private var readerConstraintOffset: CGFloat = 0
+    private var scrollController = BrowserScrollingController()
 
     private var keyboardState: KeyboardState?
 
@@ -157,14 +146,8 @@ class BrowserViewController: UIViewController {
         if let scrollView = self.tabManager.selectedTab?.webView?.scrollView {
             let contentOffset = scrollView.contentOffset
             coordinator.animateAlongsideTransition({ context in
-                self.updateHeaderFooterConstraintsAndAlpha(
-                    headerOffset: 0,
-                    footerOffset: 0,
-                    readerOffset: 0,
-                    alpha: 1)
-                self.view.layoutIfNeeded()
-
                 scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
+                self.scrollController.showToolbars(animated: false)
             }, completion: { context in
                 scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
             })
@@ -173,13 +156,13 @@ class BrowserViewController: UIViewController {
 
     func SELstatusBarFrameWillChange(notification: NSNotification) {
         if let statusBarFrame = notification.userInfo![UIApplicationStatusBarFrameUserInfoKey] as? NSValue {
-            showToolbars(animated: false)
+            scrollController.showToolbars(animated: false)
             self.view.setNeedsUpdateConstraints()
         }
     }
 
     func SELtappedTopArea() {
-        showToolbars(animated: true, completion: nil)
+        scrollController.showToolbars(animated: true)
     }
 
     deinit {
@@ -218,7 +201,13 @@ class BrowserViewController: UIViewController {
         self.view.addSubview(footer)
         footer.addSubview(snackBars)
         snackBars.backgroundColor = UIColor.clearColor()
+
+        scrollController.urlBar = urlBar
+        scrollController.header = header
+        scrollController.footer = footer
+
         self.updateToolbarStateForTraitCollection(self.traitCollection)
+
     }
 
     func loadQueuedTabs() {
@@ -326,14 +315,14 @@ class BrowserViewController: UIViewController {
 
         header.snp_remakeConstraints { make in
             let topLayoutGuide = self.topLayoutGuide as! UIView
-            self.headerConstraint = make.top.equalTo(topLayoutGuide.snp_bottom).constraint
+            scrollController.headerTopConstraint = make.top.equalTo(topLayoutGuide.snp_bottom).constraint
             make.height.equalTo(UIConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
         }
         header.setNeedsUpdateConstraints()
 
         readerModeBar?.snp_remakeConstraints { make in
-            self.readerConstraint = make.top.equalTo(self.header.snp_bottom).constraint
+            make.top.equalTo(self.header.snp_bottom).constraint
             make.height.equalTo(UIConstants.ToolbarHeight)
             make.leading.trailing.equalTo(self.view)
         }
@@ -360,8 +349,8 @@ class BrowserViewController: UIViewController {
             make.height.equalTo(UIConstants.ToolbarHeight)
         }
 
-        footer.snp_remakeConstraints { [unowned self] make in
-            self.footerConstraint = make.bottom.equalTo(self.view.snp_bottom).constraint
+        footer.snp_remakeConstraints { make in
+            scrollController.footerBottomConstraint = make.bottom.equalTo(self.view.snp_bottom).constraint
             make.top.equalTo(self.snackBars.snp_top)
             make.leading.trailing.equalTo(self.view)
         }
@@ -862,7 +851,6 @@ extension BrowserViewController: BrowserToolbarDelegate {
 extension BrowserViewController: BrowserDelegate {
 
     func browser(browser: Browser, didCreateWebView webView: WKWebView) {
-        webView.scrollView.delegate = self
         webViewContainer.insertSubview(webView, atIndex: 0)
         webView.snp_makeConstraints { make in
             make.edges.equalTo(self.webViewContainer)
@@ -1072,172 +1060,6 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 }
 
-extension BrowserViewController : UIScrollViewDelegate {
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        previousScroll = scrollView.contentOffset
-    }
-
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-        if let tab = tabManager.selectedTab,
-           let prev = self.previousScroll {
-
-            var totalToolbarHeight = header.frame.size.height
-            let offset = scrollView.contentOffset
-            let dy = prev.y - offset.y
-
-            let scrollingSize = scrollView.contentSize.height - scrollView.frame.size.height
-            totalToolbarHeight += readerModeBar?.frame.size.height ?? 0
-            totalToolbarHeight += self.toolbar?.frame.size.height ?? 0
-
-            // Only scroll away our toolbars if,
-            if !tab.loading &&
-
-                // There is enough web content to fill the screen if the scroll bars are fulling animated out
-                scrollView.contentSize.height > (scrollView.frame.size.height + totalToolbarHeight) &&
-
-                // The user is scrolling through the content and not because of the bounces that
-                // happens when you pull up past the content
-                scrollView.contentOffset.y > 0 &&
-
-                // Only scroll away the toolbars if we are NOT pinching to zoom, only when we are dragging
-                !scrollView.zooming {
-
-                scrollFooter(dy)
-                scrollHeader(dy)
-                scrollReader(dy)
-            } else {
-                // Force toolbars to be in open state
-                showToolbars(animated: false)
-            }
-
-            self.previousScroll = offset
-        }
-    }
-
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if previousScroll != nil {
-            endDragging()
-        }
-    }
-
-    private func endDragging() {
-        self.previousScroll = nil
-
-        let headerHeight = header.frame.size.height
-        let totalOffset = headerHeight
-
-        if headerConstraintOffset > -totalOffset {
-            // Whenever we try running an animation from the scrollViewWillEndDragging delegate method,
-            // it calls layoutSubviews so many times that it ends up clobbering any animations we want to
-            // run from here. This dispatch_async places the animation onto the main queue for processing after
-            // the scrollView has placed it's work on it already
-            dispatch_async(dispatch_get_main_queue()) {
-                self.showToolbars(animated: true)
-            }
-        }
-    }
-}
-
-// Functions for scrolling the urlbar and footers.
-extension BrowserViewController {
-    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
-        showToolbars(animated: true)
-        return true
-    }
-
-    private func scrollHeader(dy: CGFloat) {
-        let totalOffset = self.header.frame.size.height
-        let newOffset = self.clamp(self.headerConstraintOffset + dy, min: -totalOffset, max: 0)
-        self.headerConstraint?.updateOffset(newOffset)
-        self.headerConstraintOffset = newOffset
-        let alpha = 1 - (abs(newOffset) / totalOffset)
-        self.urlBar.updateAlphaForSubviews(alpha)
-    }
-
-    private func scrollFooter(dy: CGFloat) {
-        let newOffset = self.clamp(self.footerConstraintOffset - dy, min: 0, max: footer.frame.size.height)
-        self.footerConstraint?.updateOffset(newOffset)
-        self.footerConstraintOffset = newOffset
-    }
-
-    private func scrollReader(dy: CGFloat) {
-        let totalOffset = UIConstants.ToolbarHeight
-        let newOffset = self.clamp(self.readerConstraintOffset + dy,
-            min: -totalOffset, max: 0)
-        self.readerConstraint?.updateOffset(newOffset)
-        self.readerConstraintOffset = newOffset
-    }
-
-    private func clamp(y: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
-        if y >= max {
-            return max
-        } else if y <= min {
-            return min
-        }
-        return y
-    }
-
-    private func showToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
-        let animationDistance = self.headerConstraintOffset
-        let totalOffset = self.header.frame.size.height
-        let durationRatio = abs(animationDistance / totalOffset)
-        let actualDuration = NSTimeInterval(BrowserViewControllerUX.ToolbarBaseAnimationDuration * durationRatio)
-
-        self.animateToolbarsWithOffsets(
-            animated: animated,
-            duration: actualDuration,
-            headerOffset: 0,
-            footerOffset: 0,
-            readerOffset: 0,
-            alpha: 1,
-            completion: completion)
-    }
-
-    private func hideToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
-        let totalOffset = self.header.frame.size.height
-        let animationDistance = totalOffset - abs(self.headerConstraintOffset)
-        let durationRatio = abs(animationDistance / totalOffset)
-        let actualDuration = NSTimeInterval(BrowserViewControllerUX.ToolbarBaseAnimationDuration * durationRatio)
-
-        self.animateToolbarsWithOffsets(
-            animated: animated,
-            duration: actualDuration,
-            headerOffset: -self.header.frame.size.height,
-            footerOffset: self.footer.frame.height,
-            readerOffset: -(readerModeBar?.frame.size.height ?? 0),
-            alpha: 0,
-            completion: completion)
-    }
-
-    private func animateToolbarsWithOffsets(#animated: Bool, duration: NSTimeInterval, headerOffset: CGFloat,
-        footerOffset: CGFloat, readerOffset: CGFloat, alpha: CGFloat, completion: ((finished: Bool) -> Void)?) {
-
-        let animation: () -> Void = {
-            self.updateHeaderFooterConstraintsAndAlpha(headerOffset: headerOffset, footerOffset: footerOffset,
-                readerOffset: readerOffset, alpha: alpha)
-            self.view.layoutIfNeeded()
-        }
-
-        if animated {
-            UIView.animateWithDuration(duration, animations: animation, completion: completion)
-        } else {
-            animation()
-            completion?(finished: true)
-        }
-    }
-
-    private func updateHeaderFooterConstraintsAndAlpha(#headerOffset: CGFloat,
-        footerOffset: CGFloat, readerOffset: CGFloat, alpha: CGFloat) {
-            self.headerConstraint?.updateOffset(headerOffset)
-            self.footerConstraint?.updateOffset(footerOffset)
-            self.readerConstraint?.updateOffset(readerOffset)
-            self.headerConstraintOffset = headerOffset
-            self.footerConstraintOffset = footerOffset
-            self.readerConstraintOffset = readerOffset
-            self.urlBar.updateAlphaForSubviews(alpha)
-    }
-}
-
 extension BrowserViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?) {
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
@@ -1259,6 +1081,8 @@ extension BrowserViewController: TabManagerDelegate {
             if webView.scrollView.hidden {
                 webView.scrollView.hidden = false
             }
+
+            scrollController.browser = selected
             webViewContainer.addSubview(webView)
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.accessibilityIdentifier = "contentView"
@@ -1431,8 +1255,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
                 let isPage = (tab.displayURL != nil) ? isWebPage(tab.displayURL!) : false
                 navigationToolbar.updatePageStatus(isWebPage: isPage)
-
-                showToolbars(animated: false)
+                scrollController.showToolbars(animated: false)
 
                 if let url = tab.url {
                     if ReaderModeUtils.isReaderModeURL(url) {
@@ -1979,7 +1802,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             dialogTitle = url.absoluteString
             let newTabTitle = NSLocalizedString("Open In New Tab", comment: "Context menu item for opening a link in a new tab")
             let openNewTabAction =  UIAlertAction(title: newTabTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) in
-                self.showToolbars(animated: self.headerConstraintOffset != 0, completion: { _ in
+                self.scrollController.showToolbars(animated: !self.scrollController.toolbarsShowing, completion: { _ in
                     self.tabManager.addTab(request: NSURLRequest(URL: url))
                 })
             }
