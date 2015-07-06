@@ -14,7 +14,7 @@ class SearchTests: KIFTestCase {
 
         // Ensure that the prompt appears.
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterText("foobar", intoViewWithAccessibilityLabel: LabelAddressAndSearch)
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("foobar")
         found = tester().tryFindingViewWithAccessibilityLabel(LabelPrompt, error: nil)
         XCTAssertTrue(found, "Prompt is shown")
 

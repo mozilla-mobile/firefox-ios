@@ -38,8 +38,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
     func testSearchViewControllerDisposed() {
         // Type the URL to make the search controller appear.
         tester().tapViewWithAccessibilityIdentifier("url")
-        let url = "\(webRoot)/numberedPage.html?page=1"
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("foobar")
         let browserViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
         weak var searchViewController = getChildViewController(browserViewController, childClass: "SearchViewController")
         XCTAssertNotNil(searchViewController, "Got search controller reference")

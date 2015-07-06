@@ -25,13 +25,15 @@ enum InputMode {
     case Search
 }
 
-class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
+class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDelegate {
     var delegate: BrowserLocationViewDelegate?
     var inputMode: InputMode = .URL
     private var borderLayer: UIView!
     private var lockImageView: UIImageView!
     private var readerModeButton: ReaderModeButton!
     var editTextField: ToolbarTextField!
+
+    private var editTextFieldListenerView: UIView!
 
     var cornerRadius: CGFloat {
         get {
@@ -120,11 +122,21 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
         editTextField.font = UIConstants.DefaultMediumFont
         editTextField.isAccessibilityElement = true
-        editTextField.accessibilityIdentifier = "url"
         editTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         editTextField.attributedPlaceholder = BrowserLocationView.PlaceholderText
         editTextField.toolbarTextFieldDelegate = self
         addSubview(editTextField)
+
+        editTextFieldListenerView = UIView()
+        editTextFieldListenerView.userInteractionEnabled = true
+        editTextFieldListenerView.accessibilityIdentifier = "url"
+        editTextFieldListenerView.accessibilityLabel = NSLocalizedString("URL bar", comment: "Accessibility label for the URL bar")
+        editTextFieldListenerView.backgroundColor = UIColor.clearColor()
+        editTextFieldListenerView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "SELlongPressLocation:"))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocation:")
+        tapRecognizer.numberOfTapsRequired = 1
+        editTextFieldListenerView.addGestureRecognizer(tapRecognizer)
+        addSubview(editTextFieldListenerView)
 
         lockImageView = UIImageView(image: UIImage(named: "lock_verified.png"))
         lockImageView.hidden = true
@@ -140,7 +152,7 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         readerModeButton.isAccessibilityElement = true
         readerModeButton.accessibilityLabel = NSLocalizedString("Reader Mode", comment: "Accessibility label for the reader mode button")
 
-        accessibilityElements = [lockImageView, editTextField, readerModeButton]
+        accessibilityElements = [editTextFieldListenerView, lockImageView, editTextField, readerModeButton]
     }
 
     override func updateConstraints() {
@@ -167,6 +179,7 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
 
         editTextField.snp_remakeConstraints { make in
             make.centerY.equalTo(container)
+            make.height.equalTo(container)
             if lockImageView.hidden {
                 make.leading.equalTo(container).offset(locationContentInset)
             } else {
@@ -177,6 +190,12 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
             } else {
                 make.trailing.equalTo(self.readerModeButton.snp_leading)
             }
+        }
+        
+        editTextFieldListenerView.snp_remakeConstraints { make in
+            make.width.equalTo(editTextField.snp_width)
+            make.height.equalTo(editTextField.snp_height)
+            make.center.equalTo(editTextField.snp_center)
         }
 
         borderLayer.snp_makeConstraints { make in
@@ -199,6 +218,19 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
     func SELlongPressReaderModeButton(recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.Began {
             delegate?.browserLocationViewDidLongPressReaderMode(self)
+        }
+    }
+
+    func SELlongPressLocation(recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == UIGestureRecognizerState.Began {
+            delegate?.browserLocationViewDidLongPressLocation(self)
+        }
+    }
+
+    func SELtapLocation(recognizer: UITapGestureRecognizer) {
+        if recognizer.state == UIGestureRecognizerState.Ended {
+            editTextFieldListenerView.hidden = true
+            editTextField.becomeFirstResponder()
         }
     }
 
@@ -253,6 +285,10 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
     }
 
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        return true
+    }
+
+    func textFieldDidBeginEditing(textField: UITextField) {
         active = true
         textField.textColor = BrowserLocationViewUX.DefaultURLColor
 
@@ -262,14 +298,13 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         if inputMode == .URL {
             textField.text = url?.absoluteString
         }
+
         UIView.animateWithDuration(0.1, animations: { () -> Void in
             self.borderLayer.layer.borderColor = self.editingBorderColor
             self.readerModeButton.hidden = true
             self.lockImageView.hidden = true
             self.setNeedsUpdateConstraints()
         })
-
-        return true
     }
 
     func textFieldDidEndEditing(textField: UITextField) {
@@ -281,6 +316,7 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
             self.lockImageView.hidden = self.url?.scheme != "https"
             self.setNeedsUpdateConstraints()
         })
+        editTextFieldListenerView.hidden = false
     }
 
     func textFieldShouldClear(textField: UITextField) -> Bool {
@@ -288,8 +324,11 @@ class BrowserLocationView : UIView, ToolbarTextFieldDelegate {
         return true
     }
 
-    func textFieldDidLongPress(textField: ToolbarTextField) {
-        delegate?.browserLocationViewDidLongPressLocation(self)
+
+    func longPress(gestureRecognizer: UIGestureRecognizer) {
+        if gestureRecognizer.state == .Began {
+            delegate?.browserLocationViewDidLongPressLocation(self)
+        }
     }
 }
 
@@ -328,22 +367,13 @@ private class ReaderModeButton: UIButton {
     }
 }
 
-@objc protocol ToolbarTextFieldDelegate: UITextFieldDelegate {
-    optional func textFieldDidLongPress(textField: ToolbarTextField)
-}
+class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate {
 
+    var toolbarTextFieldDelegate: UITextFieldDelegate?
 
-class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate, UIGestureRecognizerDelegate {
-
-    var toolbarTextFieldDelegate: ToolbarTextFieldDelegate?
-
-    private var longPress = false
     override init(frame: CGRect) {
 
         super.init(frame: frame)
-        var longPressRecogniser = UILongPressGestureRecognizer(target: self, action: Selector("longPress:"))
-        longPressRecogniser.delegate = self
-        self.addGestureRecognizer(longPressRecogniser)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -357,9 +387,8 @@ class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate, UIGestureRec
     }
 
     override func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-        var shouldBeginEditing = super.textFieldShouldBeginEditing(textField)
-
-        return (toolbarTextFieldDelegate?.textFieldShouldBeginEditing?(textField) ?? shouldBeginEditing) && !longPress
+        active = toolbarTextFieldDelegate?.textFieldShouldBeginEditing?(textField) ?? super.textFieldShouldBeginEditing(textField)
+        return active
     }
 
     override func textFieldShouldClear(textField: UITextField) -> Bool {
@@ -370,24 +399,5 @@ class ToolbarTextField: AutocompleteTextField, UITextFieldDelegate, UIGestureRec
     override func textFieldDidEndEditing(textField: UITextField) {
         super.textFieldDidEndEditing(textField)
         toolbarTextFieldDelegate?.textFieldDidEndEditing?(textField)
-    }
-
-    func longPress(gestureRecognizer: UIGestureRecognizer) {
-        if gestureRecognizer.state == .Began {
-            longPress = true
-        }
-        else if gestureRecognizer.state == .Ended {
-            toolbarTextFieldDelegate?.textFieldDidLongPress?(self)
-            longPress = false
-        }
-        else {
-            longPress = false
-        }
-    }
-
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        // only recognise our custom long press gesture recognizer when a long press is activated if we are not already
-        // editing this text field
-        return !active && (gestureRecognizer.isKindOfClass(UILongPressGestureRecognizer) && otherGestureRecognizer.isKindOfClass(UILongPressGestureRecognizer))
     }
 }
