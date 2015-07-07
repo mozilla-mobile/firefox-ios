@@ -8,6 +8,7 @@ import SWXMLHash
 
 private let TypeSearch = "text/html"
 private let TypeSuggest = "application/x-suggestions+json"
+private let SearchTermsAllowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_."
 
 class OpenSearchEngine {
     static let PreferredIconSize = 30
@@ -45,7 +46,9 @@ class OpenSearchEngine {
     }
 
     private func getURLFromTemplate(searchTemplate: String, query: String) -> NSURL? {
-        if let escapedQuery = query.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) {
+        let allowedCharacters = NSCharacterSet(charactersInString: SearchTermsAllowedCharacters)
+
+        if let escapedQuery = query.stringByAddingPercentEncodingWithAllowedCharacters(allowedCharacters) {
             let urlString = searchTemplate.stringByReplacingOccurrencesOfString("{searchTerms}", withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
             return NSURL(string: urlString)
         }
