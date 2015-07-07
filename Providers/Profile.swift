@@ -18,6 +18,7 @@ public protocol SyncManager {
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
     func syncLogins() -> SyncResult
+    func syncEverything() -> Success
 
     // The simplest possible approach.
     func beginTimedSyncs()
