@@ -24,7 +24,8 @@ NS = {'x':'urn:oasis:names:tc:xliff:document:1.2'}
 
 FILES_TO_KEEP = ('Client/Info.plist',
                  'Extensions/ShareTo/Info.plist',
-                 'Extensions/SendTo/Info.plist')
+                 'Extensions/SendTo/Info.plist',
+                 'Extensions/ViewLater/Info.plist')
 
 STRINGS_TO_REMOVE = ('CFBundleDisplayName',
                      'CFBundleName',
@@ -49,7 +50,7 @@ if __name__ == "__main__":
                     for trans_unit_node in file_node.xpath("./x:body/x:trans-unit", namespaces=NS):
                         id = trans_unit_node.get('id')
                         # TODO we should probably do the exception for SendTo in a nicer way with some kind of whitelist
-                        if id and id in STRINGS_TO_REMOVE and not (original == "Extensions/SendTo/Info.plist" and id == "CFBundleDisplayName"):
+                        if id and id in STRINGS_TO_REMOVE and not ((original == "Extensions/SendTo/Info.plist" and id == "CFBundleDisplayName") or (original == "Extensions/ViewLater/Info.plist" and id == "CFBundleDisplayName")):
                             trans_unit_node.getparent().remove(trans_unit_node)
             # 3. Remove empty file sections
             for file_node in root.xpath("//x:file", namespaces=NS):

@@ -41,6 +41,7 @@ FILES = [
     "Extensions/SendTo/Info.plist",
     "Extensions/SendTo/SendTo.strings",
     "Extensions/ShareTo/ShareTo.strings",
+    "Extensions/ViewLater/Info.plist",
     "Shared/Localizable.strings",
 ]
 
