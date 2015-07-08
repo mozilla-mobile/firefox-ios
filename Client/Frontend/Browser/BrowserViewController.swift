@@ -2,14 +2,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Alamofire
 import Foundation
-import UIKit
-import WebKit
+import Photos
 import Shared
 import Storage
 import SnapKit
+import UIKit
+import WebKit
 import XCGLogger
-import Alamofire
+
 
 private let log = XCGLogger.defaultInstance()
 
@@ -1975,9 +1977,22 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 dialogTitle = url.absoluteString
             }
 
+            let photoAuthorizeStatus = PHPhotoLibrary.authorizationStatus()
             let saveImageTitle = NSLocalizedString("Save Image", comment: "Context menu item for saving an image")
             let saveImageAction = UIAlertAction(title: saveImageTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
-                self.getImage(url) { UIImageWriteToSavedPhotosAlbum($0, nil, nil, nil) }
+                if photoAuthorizeStatus == PHAuthorizationStatus.Authorized || photoAuthorizeStatus == PHAuthorizationStatus.NotDetermined {
+                    self.getImage(url) { UIImageWriteToSavedPhotosAlbum($0, nil, nil, nil) }
+                } else {
+                    let accessDenied = UIAlertController(title: NSLocalizedString("Firefox would like to access your Photos", comment: "See http://mzl.la/1G7uHo7"), message: NSLocalizedString("This allows you to save the image to your Camera Roll.", comment: "See http://mzl.la/1G7uHo7"), preferredStyle: UIAlertControllerStyle.Alert)
+                    let dismissAction = UIAlertAction(title: CancelString, style: UIAlertActionStyle.Default, handler: nil)
+                    accessDenied.addAction(dismissAction)
+                    let settingsAction = UIAlertAction(title: NSLocalizedString("Open Settings", comment: "See http://mzl.la/1G7uHo7"), style: UIAlertActionStyle.Default ) { (action: UIAlertAction!) -> Void in
+                        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+                    }
+                    accessDenied.addAction(settingsAction)
+                    self.presentViewController(accessDenied, animated: true, completion: nil)
+
+                }
             }
             actionSheetController.addAction(saveImageAction)
 
