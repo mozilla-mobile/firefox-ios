@@ -272,15 +272,25 @@ class BrowserViewController: UIViewController {
         }
 
         if tabManager.count == 0 {
-            // Restore tabs if not disabled by the TestAppDelegate or because we crashed previously
-            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate where appDelegate.shouldRestoreTabs() {
+            // If we previously crashed, ask the user if they want to restore their tabs
+            if FXCrashDetector.sharedDetector().hasCrashed() {
+                let crashData = FXCrashDetector.sharedDetector().crashData as FXCrashDetectorData
+                crashData.clearPreviousCrash()
+                let alertView = UIAlertView(
+                    title: CrashPromptMessaging.CrashPromptTitle,
+                    message: CrashPromptMessaging.CrashPromptDescription,
+                    delegate: self,
+                    cancelButtonTitle: CrashPromptMessaging.CrashPromptNegative,
+                    otherButtonTitles: CrashPromptMessaging.CrashPromptAffirmative)
+                alertView.show()
+            } else {
                 tabManager.restoreTabs()
-            }
 
-            // If restoring tabs failed, was disable, or there was nothing to restore, create an initial tab
-            if tabManager.count == 0 {
-                let tab = tabManager.addTab()
-                tabManager.selectTab(tab)
+                // If restoring tabs failed, was disable, or there was nothing to restore, create an initial tab
+                if tabManager.count == 0 {
+                    let tab = tabManager.addTab()
+                    tabManager.selectTab(tab)
+                }
             }
         }
     }
@@ -2043,3 +2053,30 @@ extension BrowserViewController: KeyboardHelperDelegate {
         }
     }
 }
+
+private struct CrashPromptMessaging {
+    static let CrashPromptTitle = NSLocalizedString("Well, this is embarrassing.", comment: "Restore Tabs Prompt Title")
+    static let CrashPromptDescription = NSLocalizedString("Looks like Firefox crashed previously. Would you like to restore your tabs?", comment: "Restore Tabs Prompt Description")
+    static let CrashPromptAffirmative = NSLocalizedString("Okay", comment: "Restore Tabs Affirmative Action")
+    static let CrashPromptNegative = NSLocalizedString("No", comment: "Restore Tabs Negative Action")
+}
+
+extension BrowserViewController: UIAlertViewDelegate {
+    private enum CrashPromptIndex: Int {
+        case Cancel = 0
+        case Restore = 1
+    }
+
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if buttonIndex == CrashPromptIndex.Restore.rawValue {
+            tabManager.restoreTabs()
+        }
+
+        // In case restore fails, launch at least one tab
+        if tabManager.count == 0 {
+            let tab = tabManager.addTab()
+            tabManager.selectTab(tab)
+        }
+    }
+}
+

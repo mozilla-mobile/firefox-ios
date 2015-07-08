@@ -18,6 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set the Firefox UA for browsing.
         setUserAgent()
 
+        // Listen for crashes
+        FXCrashDetector.sharedDetector().listenForCrashes()
+
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
 
@@ -210,8 +213,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
-    func shouldRestoreTabs() -> Bool {
-        return true // TODO This is where we can do crash detection. See 1166372 - Don't reopen tabs after crash.
-    }
 }
+
