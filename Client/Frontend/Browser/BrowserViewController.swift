@@ -1981,13 +1981,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let saveImageAction = UIAlertAction(title: saveImageTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction!) -> Void in
                 if photoAuthorizeStatus == PHAuthorizationStatus.Authorized || photoAuthorizeStatus == PHAuthorizationStatus.NotDetermined {
                     self.getImage(url) { UIImageWriteToSavedPhotosAlbum($0, nil, nil, nil) }
-                }
-                else {
-                    let accessDenied = UIAlertController(title: "Photo Library Access", message: "Firefox needs access privileges to the photo library to save this image. Please enable these privileges in the privacy settings.", preferredStyle: UIAlertControllerStyle.Alert)
-                    let dismissAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil)
+                } else {
+                    let accessDenied = UIAlertController(title: NSLocalizedString("Firefox would like to access your photos", comment: "See http://mzl.la/1G7uHo7"), message: NSLocalizedString("This allows you to save the image to your Camera Roll.", comment: "See http://mzl.la/1G7uHo7"), preferredStyle: UIAlertControllerStyle.Alert)
+                    let dismissAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "See http://mzl.la/1G7uHo7"), style: UIAlertActionStyle.Default, handler: nil)
                     accessDenied.addAction(dismissAction)
-                    let settingsAction = UIAlertAction(title: "Change Access Settings", style: UIAlertActionStyle.Default ) { (action: UIAlertAction!) -> Void in
-                        UIApplication.sharedApplication().openURL(NSURL(string:UIApplicationOpenSettingsURLString)!)
+                    let settingsAction = UIAlertAction(title: NSLocalizedString("Open Settings", comment: "See http://mzl.la/1G7uHo7"), style: UIAlertActionStyle.Default ) { (action: UIAlertAction!) -> Void in
+                        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
                     }
                     accessDenied.addAction(settingsAction)
                     self.presentViewController(accessDenied, animated: true, completion: nil)
