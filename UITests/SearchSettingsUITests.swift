@@ -10,8 +10,8 @@ class SearchSettingsUITests: KIFTestCase {
         tester().waitForViewWithAccessibilityLabel("Tabs Tray")
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().waitForViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Search")
-        tester().waitForViewWithAccessibilityLabel("Search")
+        tester().tapViewWithAccessibilityLabel("Search, Yahoo")
+        tester().waitForViewWithAccessibilityIdentifier("Search")
     }
 
     private func navigateFromSearchSettings() {

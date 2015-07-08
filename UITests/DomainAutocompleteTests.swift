@@ -11,7 +11,7 @@ class DomainAutocompleteTests: KIFTestCase {
         BrowserUtils.addHistoryEntry("Yahoo", url: NSURL(string: "http://www.yahoo.com/")!)
         BrowserUtils.addHistoryEntry("Foo bar baz", url: NSURL(string: "https://foo.bar.baz.org/dingbat")!)
 
-        tester().tapViewWithAccessibilityLabel("Search or enter address")
+        tester().tapViewWithAccessibilityIdentifier("url")
         let textField = tester().waitForViewWithAccessibilityLabel("Address and Search") as! UITextField
 
         // Basic autocompletion cases.

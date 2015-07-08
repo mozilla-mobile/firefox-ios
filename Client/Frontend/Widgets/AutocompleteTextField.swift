@@ -160,6 +160,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             // Set the current position to the end of the text.
             selectedTextRange = textRangeFromPosition(endOfDocument, toPosition: endOfDocument)
         }
-        active = true
+        active = self.isFirstResponder()
     }
 }

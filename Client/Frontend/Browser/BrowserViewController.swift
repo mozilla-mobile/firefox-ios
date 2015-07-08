@@ -710,7 +710,8 @@ extension BrowserViewController: URLBarDelegate {
         })
         longPressAlertController.addAction(copyAddressAction)
 
-        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel alert view"), style: .Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel alert view"), style: .Cancel, handler: { (alert: UIAlertAction!) -> Void in
+        })
         longPressAlertController.addAction(cancelAction)
 
         if let popoverPresentationController = longPressAlertController.popoverPresentationController {
