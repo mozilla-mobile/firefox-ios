@@ -231,7 +231,6 @@ public class BrowserProfile: Profile {
         return BrowserDB(filename: "browser.db", files: self.files)
     }()
 
-
     /**
      * Favicons, history, and bookmarks are all stored in one intermeshed
      * collection of tables.

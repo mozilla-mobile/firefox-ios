@@ -477,7 +477,7 @@ private class ClearPrivateDataSetting: Setting {
         var title: String { return NSLocalizedString("Clear Everything", tableName: "ClearPrivateData", comment: "Title of the Clear private data dialog.") }
         var message: String { return NSLocalizedString("Are you sure you want to clear all of your data? This will also close all open tabs.", tableName: "ClearPrivateData", comment: "Message shown in the dialog prompting users if they want to clear everything") }
 
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
 
         let clearString = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to Clear private data dialog")
         alert.addAction(UIAlertAction(title: clearString, style: UIAlertActionStyle.Destructive, handler: { (action) -> Void in
@@ -486,6 +486,7 @@ private class ClearPrivateDataSetting: Setting {
 
         let cancelString = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")
         alert.addAction(UIAlertAction(title: cancelString, style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in }))
+
         navigationController?.presentViewController(alert, animated: true) { () -> Void in }
     }
 }
@@ -517,6 +518,47 @@ private class PopupBlockingSettings: Setting {
     }
 }
 
+class ThemeImageSetting: Setting {
+    let profile: Profile
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        let title = NSLocalizedString("Theme image", comment: "Theme image setting")
+        super.init(title: NSAttributedString(string: title))
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        var title: String { return NSLocalizedString("Select a theme image", tableName: "Theme", comment: "Title of the ThemeImage selector dialog") }
+        let alert = UIAlertController(title: title, message: "", preferredStyle: UIAlertControllerStyle.Alert)
+
+        let defaultString = NSLocalizedString("Default", tableName: "ThemeImage", comment: "Used to select the default Firefox OS theme image background")
+        alert.addAction(UIAlertAction(title: defaultString, style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+            LightweightThemeManager.setThemeImageName("wallpaper")
+            return
+        }))
+
+        let photosString = NSLocalizedString("Photos", tableName: "ThemeImage", comment: "Used to show the photo library for selecting a theme image background")
+        alert.addAction(UIAlertAction(title: photosString, style: UIAlertActionStyle.Default, handler: { (action) -> Void in
+            var picker = UIImagePickerController()
+            picker.delegate = navigationController as? SettingsNavigationController
+            picker.allowsEditing = true
+            navigationController?.presentViewController(picker, animated: true, completion: nil)
+        }))
+
+        let cancelString = NSLocalizedString("None", tableName: "ThemeImage", comment: "Used as remove the current theme image")
+        alert.addAction(UIAlertAction(title: cancelString, style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+            LightweightThemeManager.setThemeImage(nil)
+            return
+        }))
+
+        navigationController?.presentViewController(alert, animated: true) { () -> Void in }
+    }
+}
+
 // The base settings view controller.
 class SettingsTableViewController: UITableViewController {
     private let Identifier = "CellIdentifier"
@@ -529,7 +571,13 @@ class SettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
+        var bgView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
+        bgView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        view.insertSubview(bgView, atIndex: 0)
+        bgView.snp_makeConstraints { make in
+            make.edges.equalTo(view)
+        }
+
         let accountDebugSettings: [Setting]
         if AppConstants.BuildChannel != .Aurora {
             accountDebugSettings = [
@@ -545,6 +593,7 @@ class SettingsTableViewController: UITableViewController {
         var generalSettings = [
             SearchSetting(settings: self),
             PopupBlockingSettings(settings: self),
+            ThemeImageSetting(settings: self),
         ]
 
         // There is nothing to show in the Customize section if we don't include the compact tab layout
@@ -561,12 +610,8 @@ class SettingsTableViewController: UITableViewController {
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
             ] + accountDebugSettings),
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)
-        ]
-
-
-        settings += [
-            SettingSection(title: NSAttributedString(string: privacyTitle), children: [
+            SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings),
+            SettingSection(title: NSAttributedString(string: NSLocalizedString("Privacy", comment: "Privacy section title")), children: [
                 ClearPrivateDataSetting(settings: self)
             ])
         ]
