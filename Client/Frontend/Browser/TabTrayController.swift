@@ -201,6 +201,20 @@ private class CustomCell: UICollectionViewCell {
             }
         }
     }
+
+    private override func accessibilityScroll(direction: UIAccessibilityScrollDirection) -> Bool {
+        var right: Bool
+        switch direction {
+        case .Left:
+            right = false
+        case .Right:
+            right = true
+        default:
+            return false
+        }
+        animator.close(right: right)
+        return true
+    }
 }
 
 class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -379,6 +393,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
             }
 
             cell.isAccessibilityElement = true
+            cell.accessibilityHint = NSLocalizedString("Swipe right or left with three fingers to close the tab.", comment: "Accessibility hint for tab tray's displayed tab.")
 
             if let favIcon = tab.displayFavicon {
                 cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
@@ -563,6 +578,7 @@ extension TabTrayController: SwipeAnimatorDelegate {
         if let indexPath = self.collectionView.indexPathForCell(tabCell) {
             if let tab = tabManager[indexPath.item] {
                 tabManager.removeTab(tab)
+                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: ""))
             }
         }
     }
@@ -610,6 +626,37 @@ extension TabTrayController: CustomCellDelegate {
         let indexPath = collectionView.indexPathForCell(cell)!
         if let tab = tabManager[indexPath.item] {
             tabManager.removeTab(tab)
+        }
+    }
+}
+
+extension TabTrayController: UIScrollViewAccessibilityDelegate {
+    func accessibilityScrollStatusForScrollView(scrollView: UIScrollView!) -> String! {
+        var visibleCells = collectionView.visibleCells() as! [CustomCell]
+        var bounds = collectionView.bounds
+        bounds = CGRectOffset(bounds, collectionView.contentInset.left, collectionView.contentInset.top)
+        bounds.size.width -= collectionView.contentInset.left + collectionView.contentInset.right
+        bounds.size.height -= collectionView.contentInset.top + collectionView.contentInset.bottom
+        // visible cells do sometimes return also not visible cells when attempting to go past the last cell with VoiceOver right-flick gesture; so make sure we have only visible cells (yeah...)
+        visibleCells = visibleCells.filter { !CGRectIsEmpty(CGRectIntersection($0.frame, bounds)) }
+
+        var indexPaths = visibleCells.map { self.collectionView.indexPathForCell($0)! }
+        indexPaths.sort { $0.section < $1.section || ($0.section == $1.section && $0.row < $1.row) }
+
+        if indexPaths.count == 0 {
+            return NSLocalizedString("No tabs", comment: "Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray")
+        }
+
+        let firstTab = indexPaths.first!.row + 1
+        let lastTab = indexPaths.last!.row + 1
+        let tabCount = collectionView.numberOfItemsInSection(0)
+
+        if (firstTab == lastTab) {
+            let format = NSLocalizedString("Tab %@ of %@", comment: "Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total.")
+            return String(format: format, NSNumber(integer: firstTab), NSNumber(integer: tabCount))
+        } else {
+            let format = NSLocalizedString("Tabs %@ to %@ of %@", comment: "Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total.")
+            return String(format: format, NSNumber(integer: firstTab), NSNumber(integer: lastTab), NSNumber(integer: tabCount))
         }
     }
 }
