@@ -360,7 +360,7 @@ private class VersionSetting : Setting {
 // Opens the the license page in a new tab
 private class LicenseAndAcknowledgementsSetting: Setting {
     init() {
-        super.init(title: NSAttributedString(string: NSLocalizedString("Licenses & Acknowledgements", comment: "Show the app's licenses from the About section in the settings. see http://mzl.la/1dmM8tZ"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+        super.init(title: NSAttributedString(string: NSLocalizedString("Licenses", comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
     }
 
     override func onClick(navigationController: UINavigationController?) {
