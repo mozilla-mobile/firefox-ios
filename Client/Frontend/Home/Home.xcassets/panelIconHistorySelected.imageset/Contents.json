@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "History panel (pressed).png"
+      "filename" : "paneliconhistorySelected.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "History panel (pressed)@2x.png"
+      "filename" : "paneliconhistorySelected@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "History panel (pressed)@3x.png"
+      "filename" : "paneliconhistorySelected@3x.png"
     }
   ],
   "info" : {
