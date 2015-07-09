@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Bookmarks (pressed).png"
+      "filename" : "paneliconbookmarksSelected.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Bookmarks (pressed)@2x.png"
+      "filename" : "paneliconbookmarksSelected@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "Bookmarks (pressed)@3x.png"
+      "filename" : "paneliconbookmarksSelected@3x.png"
     }
   ],
   "info" : {
