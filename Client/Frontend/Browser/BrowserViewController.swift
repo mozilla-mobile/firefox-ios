@@ -1142,12 +1142,14 @@ extension BrowserViewController: TabManagerDelegate {
             wv.scrollView.hidden = true
         }
 
-        if let webView = selected?.webView {
+        if let tab = selected,
+               webView = tab.webView {
             // if we have previously hidden this scrollview in order to make scrollsToTop work then
             // we should ensure that it is not hidden now that it is our foreground scrollView
             if webView.scrollView.hidden {
                 webView.scrollView.hidden = false
             }
+            updateNavigationToolbarStates(tab, webView: webView)
 
             scrollController.browser = selected
             webViewContainer.addSubview(webView)
@@ -1170,19 +1172,16 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         removeAllBars()
-        urlBar.currentURL = selected?.displayURL
         if let bars = selected?.bars {
             for bar in bars {
                 showBar(bar, animated: true)
             }
         }
 
-        toolbar?.updateBackStatus(selected?.canGoBack ?? false)
-        toolbar?.updateForwardStatus(selected?.canGoForward ?? false)
-        toolbar?.updateReloadStatus(selected?.loading ?? false)
+        navigationToolbar.updateReloadStatus(selected?.loading ?? false)
 
         let isPage = (selected?.displayURL != nil) ? isWebPage(selected!.displayURL!) : false
-        toolbar?.updatePageStatus(isWebPage: isPage)
+        navigationToolbar.updatePageStatus(isWebPage: isPage)
 
         self.urlBar.updateBackStatus(selected?.canGoBack ?? false)
         self.urlBar.updateForwardStatus(selected?.canGoForward ?? false)
