@@ -24,6 +24,8 @@ private struct BrowserViewControllerUX {
     private static let ToolbarBaseAnimationDuration: CGFloat = 0.3
     private static let BackgroundColor = UIConstants.AppBackgroundColor
     private static let ShowHeaderTapAreaHeight: CGFloat = 32
+    private static let BookmarkStarAnimationDuration: Double = 0.5
+    private static let BookmarkStarAnimationOffset: CGFloat = 80
 }
 
 class BrowserViewController: UIViewController {
@@ -518,11 +520,43 @@ class BrowserViewController: UIViewController {
         let shareItem = ShareItem(url: url, title: title, favicon: nil)
         profile.bookmarks.shareItem(shareItem)
 
+        animateBookmarkStar()
+
         // Dispatch to the main thread to update the UI
         dispatch_async(dispatch_get_main_queue()) { _ in
             self.toolbar?.updateBookmarkStatus(true)
             self.urlBar.updateBookmarkStatus(true)
         }
+    }
+
+    private func animateBookmarkStar() {
+        let offset: CGFloat
+        let button: UIButton!
+
+        if let toolbar: BrowserToolbar = self.toolbar {
+            offset = BrowserViewControllerUX.BookmarkStarAnimationOffset * -1
+            button = toolbar.bookmarkButton
+        } else {
+            offset = BrowserViewControllerUX.BookmarkStarAnimationOffset
+            button = self.urlBar.bookmarkButton
+        }
+
+        let offToolbar = CGAffineTransformMakeTranslation(0, offset)
+
+        UIView.animateWithDuration(BrowserViewControllerUX.BookmarkStarAnimationDuration, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 2.0, options: nil, animations: { () -> Void in
+            button.transform = offToolbar
+            var rotation = CABasicAnimation(keyPath: "transform.rotation")
+            rotation.toValue = CGFloat(M_PI * 2.0)
+            rotation.cumulative = true
+            rotation.duration = BrowserViewControllerUX.BookmarkStarAnimationDuration + 0.075
+            rotation.repeatCount = 1.0
+            rotation.timingFunction = CAMediaTimingFunction(controlPoints: 0.32, 0.70 ,0.18 ,1.00)
+            button.imageView?.layer.addAnimation(rotation, forKey: "rotateStar")
+        }, completion: { finished in
+            UIView.animateWithDuration(BrowserViewControllerUX.BookmarkStarAnimationDuration, delay: 0.15, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: nil, animations: { () -> Void in
+                button.transform = CGAffineTransformIdentity
+            }, completion: nil)
+        })
     }
 
     private func removeBookmark(url: String) {
