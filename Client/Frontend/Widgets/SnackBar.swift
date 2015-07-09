@@ -5,7 +5,6 @@
 import Foundation
 import SnapKit
 import Shared
-import WebKit
 
 class SnackBarUX {
     static var MaxWidth: CGFloat = 400
@@ -160,7 +159,7 @@ class SnackBar: UIView {
      * Override this class or use a class like CountdownSnackbar if you want things expire
      * :returns: true if the snackbar should be kept alive
      */
-    func shouldPersistForNavigation(navigation: WKNavigation, inBrowser browser: Browser) -> Bool {
+    func shouldPersist(browser: Browser) -> Bool {
         return true
     }
 
@@ -276,12 +275,19 @@ class CountdownSnackBar: SnackBar {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func shouldPersistForNavigation(navigation: WKNavigation, inBrowser browser: Browser) -> Bool {
-        if !navigation.isRedirect && browser.url != prevURL {
+    override func shouldPersist(browser: Browser) -> Bool {
+
+        if browser.url != prevURL {
+            if let timer = self.timer {
+                timer()
+            } else {
+                self.count++
+            }
+
             prevURL = browser.url
             return count < maxCount
         }
 
-        return super.shouldPersistForNavigation(navigation, inBrowser: browser)
+        return super.shouldPersist(browser)
     }
 }

@@ -1304,11 +1304,6 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(webView: WKWebView,
-        didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-            navigation.setRedirect(true)
-    }
-
-    func webView(webView: WKWebView,
         didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge,
         completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
             if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPBasic || challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPDigest {
@@ -1330,22 +1325,17 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         let tab: Browser! = tabManager[webView]
 
-        tab.expireSnackbars(navigation)
-        let isRedirect = navigation.isRedirect
-        navigation.clearInfo()
-
+        tab.expireSnackbars()
 
         if let url = webView.URL where !ErrorPageHelper.isErrorPageURL(url) && !AboutUtils.isAboutHomeURL(url) {
-            if !isRedirect {
-                let notificationCenter = NSNotificationCenter.defaultCenter()
-                var info = [NSObject: AnyObject]()
-                info["url"] = tab.displayURL
-                info["title"] = tab.title
-                if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
-                    info["visitType"] = visitType
-                }
-                notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
+            let notificationCenter = NSNotificationCenter.defaultCenter()
+            var info = [NSObject: AnyObject]()
+            info["url"] = tab.displayURL
+            info["title"] = tab.title
+            if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
+                info["visitType"] = visitType
             }
+            notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
 
             // The screenshot immediately after didFinishNavigation is actually a screenshot of the
             // previous page, presumably due to some iOS bug. Adding a small delay seems to fix this,
@@ -1370,7 +1360,6 @@ extension BrowserViewController: WKNavigationDelegate {
             webView.evaluateJavaScript("_firefox_ReaderMode.checkReadability()", completionHandler: nil)
         }
 
-        // Notify screen readers about the change
         if tab === tabManager.selectedTab {
             UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
@@ -1453,7 +1442,6 @@ extension BrowserViewController: WKUIDelegate {
         if let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
-        navigation.clearInfo()
     }
 
     /// Invoked when an error occurs while starting to load data for the main frame.
@@ -1465,7 +1453,6 @@ extension BrowserViewController: WKUIDelegate {
         if let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
-        navigation.clearInfo()
     }
 
     func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
@@ -1906,26 +1893,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     success(image)
                 }
             }
-    }
-}
-
-private class WKNavigationInfo {
-    private var isRedirect = false
-}
-private var NavigationInfo = [WKNavigation: WKNavigationInfo]()
-
-extension WKNavigation {
-    func clearInfo() { NavigationInfo.removeValueForKey(self) }
-    var isRedirect: Bool { return NavigationInfo[self]?.isRedirect ?? false }
-
-    func setRedirect(isRedirect: Bool) {
-        if let info = NavigationInfo[self] {
-            info.isRedirect = isRedirect
-        } else {
-            let info = WKNavigationInfo()
-            info.isRedirect = isRedirect
-            NavigationInfo[self] = info
-        }
     }
 }
 
