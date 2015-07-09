@@ -265,11 +265,11 @@ class Browser: NSObject {
         }
     }
 
-    func expireSnackbars(navigation: WKNavigation) {
+    func expireSnackbars() {
         // Enumerate backwards here because we may remove items from the list as we go.
         for var i = bars.count-1; i >= 0; i-- {
             let bar = bars[i]
-            if !bar.shouldPersistForNavigation(navigation, inBrowser: self) {
+            if !bar.shouldPersist(self) {
                 removeSnackbar(bar)
             }
         }
