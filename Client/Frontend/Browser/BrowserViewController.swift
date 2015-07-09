@@ -945,10 +945,6 @@ extension BrowserViewController: BrowserDelegate {
         contextMenuHelper.delegate = self
         browser.addHelper(contextMenuHelper, name: ContextMenuHelper.name())
 
-        let hashchangeHelper = HashchangeHelper(browser: browser)
-        hashchangeHelper.delegate = self
-        browser.addHelper(hashchangeHelper, name: HashchangeHelper.name())
-
         let errorHelper = ErrorPageHelper()
         browser.addHelper(errorHelper, name: ErrorPageHelper.name())
     }
@@ -1926,16 +1922,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     success(image)
                 }
             }
-    }
-}
-
-extension BrowserViewController: HashchangeHelperDelegate {
-    func hashchangeHelperDidHashchange(hashchangeHelper: HashchangeHelper) {
-        if let tab = tabManager.selectedTab,
-           let webView = tab.webView
-        {
-            updateNavigationToolbarStates(tab, webView: webView)
-        }
     }
 }
 
