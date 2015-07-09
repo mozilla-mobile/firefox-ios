@@ -64,6 +64,30 @@ function createHighlightOverlay(element) {
   }
 }
 
+function handleTouchEnd(event) {
+  cancel();
+
+  event.target.removeEventListener("touchend", handleTouchEnd, true);
+  event.target.removeEventListener("touchmove", handleTouchMove);
+
+  // If we're showing the context menu, prevent the page from handling the click event.
+  if (touchHandled) {
+    touchHandled = false;
+    event.preventDefault();
+  }
+}
+
+function handleTouchMove(event) {
+  if (longPressTimeout) {
+    var { screenX, screenY } = event.touches[0];
+
+    // Cancel the context menu if finger has moved beyond the maximum allowed distance.
+    if (Math.abs(touchDownX - screenX) > MAX_RADIUS || Math.abs(touchDownY - screenY) > MAX_RADIUS) {
+      cancel();
+    }
+  }
+}
+
 addEventListener("touchstart", function (event) {
   // Don't show the context menu for multi-touch events.
   if (event.touches.length !== 1) {
@@ -73,6 +97,9 @@ addEventListener("touchstart", function (event) {
 
   var data = {};
   var element = event.target;
+
+  element.addEventListener("touchend", handleTouchEnd, true);
+  element.addEventListener("touchmove", handleTouchMove);
 
   do {
     if (!data.link && element.localName === "a") {
@@ -108,27 +135,6 @@ addEventListener("touchstart", function (event) {
     }, 500);
   }
 }, true);
-
-addEventListener("touchend", function (event) {
-  cancel();
-
-  // If we're showing the context menu, prevent the page from handling the click event.
-  if (touchHandled) {
-    touchHandled = false;
-    event.preventDefault();
-  }
-}, true);
-
-addEventListener("touchmove", function (event) {
-  if (longPressTimeout) {
-    var { screenX, screenY } = event.touches[0];
-
-    // Cancel the context menu if finger has moved beyond the maximum allowed distance.
-    if (Math.abs(touchDownX - screenX) > MAX_RADIUS || Math.abs(touchDownY - screenY) > MAX_RADIUS) {
-      cancel();
-    }
-  }
-});
 
 addEventListener("scroll", cancel);
 
