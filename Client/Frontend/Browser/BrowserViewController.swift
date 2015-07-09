@@ -43,6 +43,11 @@ class BrowserViewController: UIViewController {
     private let snackBars = UIView()
     private let auralProgress = AuralProgressBar()
 
+    // location label actions
+    private var pasteGoAction: AccessibleAction!
+    private var pasteAction: AccessibleAction!
+    private var copyAddressAction: AccessibleAction!
+
     private weak var tabTrayController: TabTrayController!
 
     private let profile: Profile
@@ -196,6 +201,29 @@ class BrowserViewController: UIViewController {
         urlBar.delegate = self
         urlBar.browserToolbarDelegate = self
         header = wrapInEffect(urlBar, parent: view, backgroundColor: nil)
+
+        // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work, thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need to make them "persistent" e.g. by being stored in BVC
+        pasteGoAction = AccessibleAction(name: NSLocalizedString("Paste & Go", comment: "Paste the URL into the location bar and visit"), handler: { () -> Bool in
+            if let pasteboardContents = UIPasteboard.generalPasteboard().string {
+                self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
+                return true
+            }
+            return false
+        })
+        pasteAction = AccessibleAction(name: NSLocalizedString("Paste", comment: "Paste the URL into the location bar"), handler: { () -> Bool in
+            if let pasteboardContents = UIPasteboard.generalPasteboard().string {
+                self.urlBar.updateURLBarText(pasteboardContents)
+                return true
+            }
+            return false
+        })
+        copyAddressAction = AccessibleAction(name: NSLocalizedString("Copy Address", comment: "Copy the URL from the location bar"), handler: { () -> Bool in
+            if let urlString = self.urlBar.currentURL?.absoluteString {
+                UIPasteboard.generalPasteboard().string = urlString
+            }
+            return true
+        })
+
 
         searchLoader = SearchLoader(history: profile.history, urlBar: urlBar)
 
@@ -710,39 +738,40 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBarDidLongPressReaderMode(urlBar: URLBarView) {
-        if let tab = tabManager.selectedTab {
-            if var url = tab.displayURL {
-                if let absoluteString = url.absoluteString {
-                    let result = profile.readingList?.createRecordWithURL(absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name) // TODO Check result, can this fail?
-                    // TODO Followup bug, provide some form of 'this has been added' feedback?
-                }
+    func urlBarDidLongPressReaderMode(urlBar: URLBarView) -> Bool {
+        if let tab = tabManager.selectedTab,
+               url = tab.displayURL,
+               absoluteString = url.absoluteString,
+               result = profile.readingList?.createRecordWithURL(absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name)
+        {
+            switch result {
+            case .Success:
+                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Added page to Reading List", comment: "Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action."))
+                // TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1158503 provide some form of 'this has been added' visual feedback?
+            case .Failure(let error):
+                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading List. Maybe it's already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
+                log.error("readingList.createRecordWithURL(url: \"\(absoluteString)\", ...) failed with error: \(error)")
             }
+            return true
+        }
+        UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading list", comment: "Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed."))
+        return false
+    }
+
+    func locationActionsForURLBar(urlBar: URLBarView) -> [AccessibleAction] {
+        if UIPasteboard.generalPasteboard().string != nil {
+            return [pasteGoAction, pasteAction, copyAddressAction]
+        } else {
+            return [copyAddressAction]
         }
     }
 
     func urlBarDidLongPressLocation(urlBar: URLBarView) {
         let longPressAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
 
-        let pasteboardContents = UIPasteboard.generalPasteboard().string
-
-        // Check if anything is on the pasteboard
-        if pasteboardContents != nil {
-            let pasteAndGoAction = UIAlertAction(title: NSLocalizedString("Paste & Go", comment: "Paste the URL into the location bar and visit"), style: .Default, handler: { (alert: UIAlertAction!) -> Void in
-                self.urlBar(urlBar, didSubmitText: pasteboardContents!)
-            })
-            longPressAlertController.addAction(pasteAndGoAction)
-
-            let pasteAction = UIAlertAction(title: NSLocalizedString("Paste", comment: "Paste the URL into the location bar"), style: .Default, handler: { (alert: UIAlertAction!) -> Void in
-                urlBar.updateURLBarText(pasteboardContents!)
-            })
-            longPressAlertController.addAction(pasteAction)
+        for action in locationActionsForURLBar(urlBar) {
+            longPressAlertController.addAction(action.alertAction(style: .Default))
         }
-
-        let copyAddressAction = UIAlertAction(title: NSLocalizedString("Copy Address", comment: "Copy the URL from the location bar"), style: .Default, handler: { (alert: UIAlertAction!) -> Void in
-            UIPasteboard.generalPasteboard().string = urlBar.currentURL?.absoluteString
-        })
-        longPressAlertController.addAction(copyAddressAction)
 
         let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel alert view"), style: .Cancel, handler: { (alert: UIAlertAction!) -> Void in
         })
@@ -763,6 +792,10 @@ extension BrowserViewController: URLBarDelegate {
                 selectedTab.webView?.scrollView.setContentOffset(CGPointZero, animated: true)
             }
         }
+    }
+
+    func urlBarLocationAccessibilityActions(urlBar: URLBarView) -> [UIAccessibilityCustomAction]? {
+        return locationActionsForURLBar(urlBar).map { $0.accessibilityCustomAction }
     }
 
     func urlBar(urlBar: URLBarView, didEnterText text: String) {
