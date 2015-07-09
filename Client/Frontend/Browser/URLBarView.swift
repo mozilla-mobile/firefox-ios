@@ -148,6 +148,10 @@ class URLBarView: UIView {
         return locationView.active
     }
 
+    var canCancel: Bool {
+        return !cancelButton.hidden
+    }
+
     var currentURL: NSURL? {
         get {
             return locationView.url
@@ -519,7 +523,7 @@ extension URLBarView: BrowserToolbarProtocol {
 
     override var accessibilityElements: [AnyObject]! {
         get {
-            if isEditing {
+            if canCancel {
                 return [locationView, cancelButton]
             } else {
                 if toolbarIsShowing {
