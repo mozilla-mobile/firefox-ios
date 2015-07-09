@@ -89,15 +89,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-        if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) where components.scheme == "firefox" && components.host == "open-url" {
-            if let query = components.query, item = components.queryItems?.first as? NSURLQueryItem {
-                if item.name == "url" && item.value != nil {
-                    if let newURL = NSURL(string: item.value!) {
-                        let tab = self.tabManager.addTab(request: NSURLRequest(URL: newURL))
-                        self.tabManager.selectTab(tab)
-                        return true
-                    }
+        if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) {
+            if components.scheme != "firefox" && components.scheme != "firefox-x-callback" {
+                return false
+            }
+            var url: String?
+            var appName: String?
+            var callbackScheme: String?
+            for item in components.queryItems as? [NSURLQueryItem] ?? [] {
+                switch item.name {
+                case "url":
+                    url = item.value
+                case "x-source":
+                    callbackScheme = item.value
+                case "x-source-name":
+                    appName = item.value
+                default: ()
                 }
+            }
+            if let url = url,
+                   newURL = NSURL(string: url.unescape()) {
+                self.browserViewController.openURLInNewTab(newURL)
+                return true
             }
         }
         return false
