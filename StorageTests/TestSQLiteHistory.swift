@@ -175,9 +175,9 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func checkFaviconWasSetForBookmark() -> Success {
-            return history.getFaviconsForUrl("http://bookmarkedurl/".asURL!) >>== { results in
+            return history.getFaviconsForBookmarkedUrl("http://bookmarkedurl/") >>== { results in
                 XCTAssertEqual(1, results.count)
-                if let actualFaviconURL = results[0]?.favicon?.url {
+                if let actualFaviconURL = results[0]??.url {
                     XCTAssertEqual("http://url2/", actualFaviconURL)
                 }
                 return succeed()
@@ -189,7 +189,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func checkFaviconWasRemovedForBookmark() -> Success {
-            return history.getFaviconsForUrl("http://bookmarkedurl/".asURL!) >>== { results in
+            return history.getFaviconsForBookmarkedUrl("http://bookmarkedurl/") >>== { results in
                 XCTAssertEqual(0, results.count)
                 return succeed()
             }

@@ -94,7 +94,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
         return obj.id
     }
 
-    func removeUnused(db: SQLiteDBConnection) -> NSError? {
-        return db.executeChange("DELETE FROM \(TableFavicons) WHERE \(TableFavicons).id NOT IN (SELECT faviconID FROM \(TableFaviconSites) UNION SELECT faviconID FROM \(TableBookmarks) WHERE faviconID IS NOT NULL)")
+    func getCleanupCommands() -> (String, Args?) {
+        return ("DELETE FROM \(TableFavicons) WHERE \(TableFavicons).id NOT IN (SELECT faviconID FROM \(TableFaviconSites) UNION ALL SELECT faviconID FROM \(TableBookmarks) WHERE faviconID IS NOT NULL)", nil)
     }
 }

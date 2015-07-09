@@ -166,33 +166,18 @@ public class SQLiteBookmarks: BookmarksModelFactory {
     }
 
     public func clearBookmarks() -> Success {
-        var err: NSError?
-        return self.db.withWritableConnection(&err) { (connection: SQLiteDBConnection, inout err: NSError?) -> Success in
-            if let err = connection.executeChange("DELETE FROM \(TableBookmarks) WHERE parent IS NOT ?", withArgs: [BookmarkRoots.RootID]) {
-                return deferResult(DatabaseError(err: err))
-            }
-            if let err = self.favicons.removeUnused(connection) {
-                return deferResult(DatabaseError(err: err))
-            }
-            return succeed()
-        }
+        return self.db.run([
+            ("DELETE FROM \(TableBookmarks) WHERE parent IS NOT ?", [BookmarkRoots.RootID]),
+            self.favicons.getCleanupCommands()
+        ])
     }
 
     public func removeByURL(url: String) -> Success {
         log.debug("Removing bookmark \(url).")
-        let sql = "DELETE FROM \(TableBookmarks) WHERE url = ?"
-        let args: Args = [url]
-
-        var err: NSError?
-        return self.db.withWritableConnection(&err) { (connection: SQLiteDBConnection, inout err: NSError?) -> Success in
-            if let err = connection.executeChange(sql, withArgs: args) {
-                return deferResult(DatabaseError(err: err))
-            }
-            if let err = self.favicons.removeUnused(connection) {
-                return deferResult(DatabaseError(err: err))
-            }
-            return succeed()
-        }
+        return self.db.run([
+            ("DELETE FROM \(TableBookmarks) WHERE url = ?", [url]),
+            self.favicons.getCleanupCommands()
+        ])
     }
 
     public func remove(bookmark: BookmarkNode) -> Success {
@@ -210,16 +195,10 @@ public class SQLiteBookmarks: BookmarksModelFactory {
             args = [bookmark.guid]
         }
 
-        var err: NSError?
-        return self.db.withWritableConnection(&err) { (connection: SQLiteDBConnection, inout err: NSError?) -> Success in
-            if let err = connection.executeChange(sql, withArgs: args) {
-                return deferResult(DatabaseError(err: err))
-            }
-            if let err = self.favicons.removeUnused(connection) {
-                return deferResult(DatabaseError(err: err))
-            }
-            return succeed()
-        }
+        return self.db.run([
+            (sql, args),
+            self.favicons.getCleanupCommands()
+        ])
     }
 }
 

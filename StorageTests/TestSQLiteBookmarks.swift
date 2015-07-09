@@ -11,7 +11,7 @@ class TestSQLiteBookmarks: XCTestCase {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         let history = SQLiteHistory(db: db)
-        let bookmarks = SQLiteBookmarks(db: db, favicons: history)
+        let bookmarks = SQLiteBookmarks(db: db)
 
         let url = "http://url1/"
         let u = url.asURL!
@@ -46,13 +46,11 @@ class TestSQLiteBookmarks: XCTestCase {
 
         let e3 = self.expectationWithDescription("Waiting for delete.")
         func removeItemFromModel() -> Success {
-            bookmarks.removeByURL(url,
-                success: { yes in
-                    XCTAssertTrue(yes)
-                    e3.fulfill()
-                },
-                failure: { any in })
-            return succeed()
+            return bookmarks.removeByURL("") >>== {
+                XCTAssertTrue(true)
+                e3.fulfill()
+                return succeed()
+            }
         }
 
         addBookmark()
