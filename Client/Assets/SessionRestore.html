@@ -13,6 +13,16 @@
    * error pages so that they will redirect to the correct URLs when loaded.
    */
   (function () {
+      function getRestoreURL(url) {
+          // If the URL is already an internally hosted page, we can restore it directly.
+          if (url.indexOf(document.location.origin) == 0) {
+              return url;
+          }
+
+          // Otherwise, push an error page to trigger a redirect when loaded.
+          return '/errors/error.html?url=' + escape(url);
+      }
+
       var index = document.location.href.search("history");
 
       // Pull the session out of the history query argument. 
@@ -22,11 +32,11 @@
       var currentPage = sessionRestoreComponents['currentPage'];
 
       // First, replace the session restore page (this page) with the first URL to be restored.
-      history.replaceState({}, '', '/errors/error.html?url=' + escape(urlList[0]));
+      history.replaceState({}, "", getRestoreURL(urlList[0]));
 
       // Then push the remaining pages to be restored.
       for (var i = 1; i < urlList.length; i++) {
-          history.pushState({}, '', '/errors/error.html?url=' + escape(urlList[i]));
+          history.pushState({}, '', getRestoreURL(urlList[i]));
       }
 
       // We'll end up at the last page pushed, so set the selected index to the current index in the session history.
