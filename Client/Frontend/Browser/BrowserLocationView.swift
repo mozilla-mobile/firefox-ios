@@ -293,6 +293,10 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
         active = false
         if editTextField.text.isEmpty {
             editTextField.text = clearedText ?? ""
+        } else if let url = self.url {
+            highlightDomain()
+        } else {
+            self.url = nil
         }
     }
 
@@ -320,7 +324,6 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
     }
 
     func textFieldDidEndEditing(textField: UITextField) {
-        highlightDomain()
         active = false
         UIView.animateWithDuration(0.1, animations: { () -> Void in
             self.borderLayer.layer.borderColor = self.borderColor
