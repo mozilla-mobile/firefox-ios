@@ -325,6 +325,10 @@ extension BrowserDB {
         }
     }
 
+    public func close() {
+        db.close()
+    }
+
     func run(sql: String, withArgs args: Args? = nil) -> Success {
         return self.write(sql, withArgs: args) >>> succeed
     }

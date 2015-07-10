@@ -48,7 +48,15 @@ public class MockProfile: Profile {
         return name
     }
 
+    func shutdown() {
+        if dbCreated {
+            db.close()
+        }
+    }
+
+    private var dbCreated = false
     lazy var db: BrowserDB = {
+        self.dbCreated = true
         return BrowserDB(filename: "mock.db", files: self.files)
     }()
 
