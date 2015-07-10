@@ -487,6 +487,8 @@ extension SearchViewController: UITableViewDataSource {
         switch SearchListSection(rawValue: indexPath.section)! {
         case .SearchSuggestions:
             suggestionCell.imageView?.image = searchEngines.defaultEngine.image
+            suggestionCell.imageView?.isAccessibilityElement = true
+            suggestionCell.imageView?.accessibilityLabel = String(format: NSLocalizedString("Search suggestions from %@", tableName: "Search", comment: "Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google"), searchEngines.defaultEngine.shortName)
             return suggestionCell
 
         case .BookmarksAndHistory:
