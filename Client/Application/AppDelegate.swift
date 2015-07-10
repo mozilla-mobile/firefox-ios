@@ -115,6 +115,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidEnterBackground(application: UIApplication) {
         self.profile?.syncManager.endTimedSyncs()
+
+        let taskId = application.beginBackgroundTaskWithExpirationHandler { _ in }
+        self.profile?.shutdown()
+        application.endBackgroundTask(taskId)
     }
 
     private func setUpWebServer(profile: Profile) {

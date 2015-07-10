@@ -150,6 +150,8 @@ protocol Profile {
     var logins: protocol<BrowserLogins, SyncableLogins> { get }
     var thumbnails: Thumbnails { get }
 
+    func shutdown()
+
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
     func localName() -> String
@@ -192,6 +194,16 @@ public class BrowserProfile: Profile {
         self.init(localName: localName, app: nil)
     }
 
+    func shutdown() {
+        if dbCreated {
+            db.close()
+        }
+
+        if loginsDBCreated {
+            loginsDB.close()
+        }
+    }
+
     @objc
     func onLocationChange(notification: NSNotification) {
         if let v = notification.userInfo!["visitType"] as? Int,
@@ -227,7 +239,9 @@ public class BrowserProfile: Profile {
         return SQLiteQueue(db: self.db)
     }()
 
+    private var dbCreated = false
     lazy var db: BrowserDB = {
+        self.dbCreated = true
         return BrowserDB(filename: "browser.db", files: self.files)
     }()
 
@@ -317,7 +331,9 @@ public class BrowserProfile: Profile {
         return secret
     }()
 
+    private var loginsDBCreated = false
     private lazy var loginsDB: BrowserDB = {
+        self.loginsDBCreated = true
         return BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
     }()
 
