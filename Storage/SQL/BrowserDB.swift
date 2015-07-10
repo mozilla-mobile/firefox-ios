@@ -79,6 +79,10 @@ public class BrowserDB {
         let file = files.getAndEnsureDirectory()!.stringByAppendingPathComponent(filename)
         db = SwiftData(filename: file, key: secretKey, prevKey: nil)
 
+        if AppConstants.BuildChannel == .Developer && secretKey != nil {
+            log.debug("Creating db: \(file) with secret = \(secretKey)")
+        }
+
         // Create or update will also delete and create the database if our key was incorrect.
         self.createOrUpdate(self.schemaTable)
     }
