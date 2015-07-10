@@ -293,9 +293,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
         active = false
         if editTextField.text.isEmpty {
             editTextField.text = clearedText ?? ""
-        }
-
-        if let url = self.url {
+        } else if let url = self.url {
             highlightDomain()
         } else {
             self.url = nil
