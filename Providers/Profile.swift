@@ -316,10 +316,6 @@ public class BrowserProfile: Profile {
     }()
 
     private lazy var loginsKey: String? = {
-        if AppConstants.IsDebug {
-            return nil
-        }
-
         let key = "sqlcipher.key.logins.db"
         if KeychainWrapper.hasValueForKey(key) {
             return KeychainWrapper.stringForKey(key)
