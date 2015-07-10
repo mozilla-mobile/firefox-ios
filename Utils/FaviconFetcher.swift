@@ -6,6 +6,8 @@ private let queue = dispatch_queue_create("FaviconFetcher", DISPATCH_QUEUE_CONCU
  * If that fails, it will attempt to find a favicon.ico in the root host domain
  */
 class FaviconFetcher : NSObject, NSXMLParserDelegate {
+    static let ExpirationTime = NSTimeInterval(60*60*24*7) // Only check for icons once a week
+
     private var siteUrl: NSURL // The url we're looking for favicons for
     private var _favicons = [Favicon]() // An internal cache of favicons found for this url
 

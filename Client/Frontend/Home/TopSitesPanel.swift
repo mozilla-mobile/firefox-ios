@@ -394,6 +394,8 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
                         cell.backgroundImage.image = img
                         cell.image = img
                     } else {
+                        let icon = Favicon(url: "", date: NSDate(), type: IconType.NoneFound)
+                        self.profile.favicons.addFavicon(icon, forSite: site)
                         self.setDefaultThumbnailBackground(cell)
                     }
                 }
@@ -406,14 +408,23 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.imageWrapper.backgroundColor = UIColor.clearColor()
 
         if let icon = site.icon {
-            cell.imageView.sd_setImageWithURL(icon.url.asURL, completed: { (img, err, type, url) -> Void in
-                if let img = img {
-                    cell.backgroundImage.image = img
-                    cell.image = img
-                } else {
-                    self.getFavicon(cell, site: site)
+            // We've looked before recently and didn't find a favicon
+            switch icon.type {
+            case .NoneFound:
+                let t = NSDate().timeIntervalSinceDate(icon.date)
+                if t < FaviconFetcher.ExpirationTime {
+                    self.setDefaultThumbnailBackground(cell)
                 }
-            })
+            default:
+                cell.imageView.sd_setImageWithURL(icon.url.asURL, completed: { (img, err, type, url) -> Void in
+                    if let img = img {
+                        cell.backgroundImage.image = img
+                        cell.image = img
+                    } else {
+                        self.getFavicon(cell, site: site)
+                    }
+                })
+            }
         } else {
             getFavicon(cell, site: site)
         }
