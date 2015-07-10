@@ -568,10 +568,7 @@ class SettingsTableViewController: UITableViewController {
         settings += [
             SettingSection(title: NSAttributedString(string: privacyTitle), children: [
                 ClearPrivateDataSetting(settings: self)
-            ])
-        ]
-
-        settings += [
+            ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
                 ShowIntroductionSetting(settings: self),
                 OpenSupportPageSetting()

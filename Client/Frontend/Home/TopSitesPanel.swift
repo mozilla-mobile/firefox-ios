@@ -377,19 +377,41 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.imageView.contentMode = UIViewContentMode.Center
     }
 
+    private func getFavicon(cell: ThumbnailCell, site: Site) {
+        // TODO: This won't work well with recycled views...
+        cell.imageView.image = nil
+        cell.backgroundImage.image = nil
+
+        FaviconFetcher.getForUrl(site.url.asURL!, profile: profile) { icons in
+            if (icons.count > 0) {
+                cell.imageView.sd_setImageWithURL(icons[0].url.asURL!) { (img, err, type, url) -> Void in
+                    if let img = img {
+                        cell.backgroundImage.image = img
+                    }
+                }
+            }
+        }
+    }
+
     private func createTileForSite(cell: ThumbnailCell, site: Site) -> ThumbnailCell {
         cell.textLabel.text = site.title.isEmpty ? site.url : site.title
         cell.imageWrapper.backgroundColor = UIColor.clearColor()
 
-        cell.imageView.sd_setImageWithURL(site.icon?.url.asURL!, completed: { (img, err, type, url) -> Void in
-            if let img = img {
-                cell.backgroundImage.image = img
-            } else {
-                cell.backgroundImage.image = nil
-            }
-        })
+        if let icon = site.icon {
+            cell.imageView.sd_setImageWithURL(icon.url.asURL, completed: { (img, err, type, url) -> Void in
+                if let img = img {
+                    cell.backgroundImage.image = img
+                } else {
+                    self.getFavicon(cell, site: site)
+                }
+            })
+        } else {
+            getFavicon(cell, site: site)
+        }
 
         cell.imagePadding = TopSitesPanelUX.SuggestedTileImagePadding
+
+        cell.isAccessibilityElement = true
         cell.accessibilityLabel = cell.textLabel.text
         cell.removeButton.hidden = !editingThumbnails
         return cell
