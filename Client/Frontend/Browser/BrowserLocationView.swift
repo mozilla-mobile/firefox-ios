@@ -192,7 +192,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
                 make.leading.equalTo(self.lockImageView.snp_trailing).offset(locationContentInset)
             }
             if readerModeButton.hidden {
-                make.trailing.equalTo(container.snp_trailing)
+                make.trailing.equalTo(container.snp_trailing).offset(-(locationContentInset / 2))
             } else {
                 make.trailing.equalTo(self.readerModeButton.snp_leading)
             }
