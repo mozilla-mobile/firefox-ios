@@ -171,6 +171,8 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
 
         addButtons(backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton)
 
+        accessibilityNavigationStyle = .Combined
+        accessibilityLabel = NSLocalizedString("Navigation Toolbar", comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
     }
 
     required init(coder aDecoder: NSCoder) {
