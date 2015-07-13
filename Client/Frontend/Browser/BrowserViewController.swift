@@ -20,6 +20,8 @@ private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
 private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"
 
+private let ActionSheetTitleMaxLength = 120
+
 private struct BrowserViewControllerUX {
     private static let BackgroundColor = UIConstants.AppBackgroundColor
     private static let ShowHeaderTapAreaHeight: CGFloat = 32
@@ -1910,7 +1912,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             popoverPresentationController.permittedArrowDirections = .Any
         }
 
-        actionSheetController.title = dialogTitle
+        actionSheetController.title = dialogTitle?.ellipsize(maxLength: ActionSheetTitleMaxLength)
         var cancelAction = UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: nil)
         actionSheetController.addAction(cancelAction)
         self.presentViewController(actionSheetController, animated: true, completion: nil)
