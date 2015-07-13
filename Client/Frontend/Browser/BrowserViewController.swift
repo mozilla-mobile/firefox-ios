@@ -291,7 +291,7 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
         }
 
-        if tabManager.count == 0 {
+        if tabManager.count == 0 && !AppConstants.IsRunningTest {
             // If we previously crashed, ask the user if they want to restore their tabs
             if FXCrashDetector.sharedDetector().hasCrashed() {
                 let crashData = FXCrashDetector.sharedDetector().crashData as FXCrashDetectorData
