@@ -3,3 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 public let NotificationDataLoginDidChange = "Data:Login:DidChange"
+
+// add a property to allow the observation of firefox accounts
+public let NotificationFirefoxAccountChanged = "FirefoxAccountChangedNotification"

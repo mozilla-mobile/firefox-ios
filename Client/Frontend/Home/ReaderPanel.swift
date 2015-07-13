@@ -6,6 +6,7 @@ import UIKit
 import SnapKit
 import Storage
 import ReadingList
+import Shared
 
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
@@ -228,7 +229,18 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
 
+    private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
+
     private var records: [ReadingListClientRecord]?
+
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+    }
+
+    required init!(coder aDecoder: NSCoder!) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -250,85 +262,116 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
             // If no records have been added yet, we display the empty state
             if records?.count == 0 {
                 tableView.scrollEnabled = false
+                view.addSubview(emptyStateOverlayView)
 
-                let overlayView = UIView(frame: tableView.bounds)
-                view.addSubview(overlayView)
-                overlayView.backgroundColor = UIColor.whiteColor()
-                // Unknown why this does not work with autolayout
-                overlayView.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
-
-                let containerView = UIView()
-                overlayView.addSubview(containerView)
-
-                let logoImageView = UIImageView(image: UIImage(named: "ReadingListEmptyPanel"))
-                containerView.addSubview(logoImageView)
-                logoImageView.snp_makeConstraints({ (make) -> Void in
-                    make.centerX.equalTo(containerView)
-                    make.top.equalTo(containerView)
-                })
-
-                let welcomeLabel = UILabel()
-                containerView.addSubview(welcomeLabel)
-                welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "See http://mzl.la/1LXbDOL")
-                welcomeLabel.textAlignment = NSTextAlignment.Center
-                welcomeLabel.font = ReadingListPanelUX.WelcomeScreenHeaderFont
-                welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
-                welcomeLabel.adjustsFontSizeToFitWidth = true
-                welcomeLabel.snp_makeConstraints({ (make) -> Void in
-                    make.centerX.equalTo(containerView)
-                    make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)
-                    make.top.equalTo(logoImageView.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
-                })
-
-                let readerModeLabel = UILabel()
-                containerView.addSubview(readerModeLabel)
-                readerModeLabel.text = NSLocalizedString("Open articles in Reader View by tapping the book icon when it appears in the title bar.", comment: "See http://mzl.la/1LXbDOL")
-                readerModeLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
-                readerModeLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
-                readerModeLabel.numberOfLines = 0
-                readerModeLabel.snp_makeConstraints({ (make) -> Void in
-                    make.top.equalTo(welcomeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
-                    make.left.equalTo(welcomeLabel.snp_left)
-                    make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
-                })
-
-                let readerModeImageView = UIImageView(image: UIImage(named: "ReaderModeCircle"))
-                containerView.addSubview(readerModeImageView)
-                readerModeImageView.snp_makeConstraints({ (make) -> Void in
-                    make.centerY.equalTo(readerModeLabel)
-                    make.right.equalTo(welcomeLabel.snp_right)
-                })
-
-                let readingListLabel = UILabel()
-                containerView.addSubview(readingListLabel)
-                readingListLabel.text = NSLocalizedString("Save pages to your Reading List by tapping the book plus icon in the Reader View controls.", comment: "See http://mzl.la/1LXbDOL")
-                readingListLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
-                readingListLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
-                readingListLabel.numberOfLines = 0
-                readingListLabel.snp_makeConstraints({ (make) -> Void in
-                    make.top.equalTo(readerModeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
-                    make.left.equalTo(welcomeLabel.snp_left)
-                    make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
-                })
-
-                let readingListImageView = UIImageView(image: UIImage(named: "AddToReadingListCircle"))
-                containerView.addSubview(readingListImageView)
-                readingListImageView.snp_makeConstraints({ (make) -> Void in
-                    make.centerY.equalTo(readingListLabel)
-                    make.right.equalTo(welcomeLabel.snp_right)
-                })
-
-                containerView.snp_makeConstraints({ (make) -> Void in
-                    // Let the container wrap around the content
-                    make.top.equalTo(logoImageView.snp_top)
-                    make.bottom.equalTo(readingListLabel.snp_bottom)
-                    make.left.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
-                    make.right.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenCircleOffset)
-                    // And then center it in the overlay view that sits on top of the UITableView
-                    make.center.equalTo(overlayView)
-                })
             }
         }
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+    }
+
+    func firefoxAccountChanged(notification: NSNotification) {
+        if notification.name == NotificationFirefoxAccountChanged {
+            let prevNumberOfRecords = records?.count
+            if let result = profile.readingList?.getAvailableRecords() where result.isSuccess {
+                records = result.successValue
+
+                if records?.count == 0 {
+                    tableView.scrollEnabled = false
+                    if emptyStateOverlayView.superview == nil {
+                        view.addSubview(emptyStateOverlayView)
+                    }
+                } else {
+                    if prevNumberOfRecords == 0 {
+                        tableView.scrollEnabled = true
+                        emptyStateOverlayView.removeFromSuperview()
+                    }
+                }
+                self.tableView.reloadData()
+            }
+        }
+    }
+
+    private func createEmptyStateOverview() -> UIView {
+        let overlayView = UIView(frame: tableView.bounds)
+        overlayView.backgroundColor = UIColor.whiteColor()
+        // Unknown why this does not work with autolayout
+        overlayView.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+
+        let containerView = UIView()
+        overlayView.addSubview(containerView)
+
+        let logoImageView = UIImageView(image: UIImage(named: "ReadingListEmptyPanel"))
+        containerView.addSubview(logoImageView)
+        logoImageView.snp_makeConstraints({ (make) -> Void in
+            make.centerX.equalTo(containerView)
+            make.top.equalTo(containerView)
+        })
+
+        let welcomeLabel = UILabel()
+        containerView.addSubview(welcomeLabel)
+        welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "See http://mzl.la/1LXbDOL")
+        welcomeLabel.textAlignment = NSTextAlignment.Center
+        welcomeLabel.font = ReadingListPanelUX.WelcomeScreenHeaderFont
+        welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
+        welcomeLabel.adjustsFontSizeToFitWidth = true
+        welcomeLabel.snp_makeConstraints({ (make) -> Void in
+            make.centerX.equalTo(containerView)
+            make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)
+            make.top.equalTo(logoImageView.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
+        })
+
+        let readerModeLabel = UILabel()
+        containerView.addSubview(readerModeLabel)
+        readerModeLabel.text = NSLocalizedString("Open articles in Reader View by tapping the book icon when it appears in the title bar.", comment: "See http://mzl.la/1LXbDOL")
+        readerModeLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
+        readerModeLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
+        readerModeLabel.numberOfLines = 0
+        readerModeLabel.snp_makeConstraints({ (make) -> Void in
+            make.top.equalTo(welcomeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
+            make.left.equalTo(welcomeLabel.snp_left)
+            make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
+        })
+
+        let readerModeImageView = UIImageView(image: UIImage(named: "ReaderModeCircle"))
+        containerView.addSubview(readerModeImageView)
+        readerModeImageView.snp_makeConstraints({ (make) -> Void in
+            make.centerY.equalTo(readerModeLabel)
+            make.right.equalTo(welcomeLabel.snp_right)
+        })
+
+        let readingListLabel = UILabel()
+        containerView.addSubview(readingListLabel)
+        readingListLabel.text = NSLocalizedString("Save pages to your Reading List by tapping the book plus icon in the Reader View controls.", comment: "See http://mzl.la/1LXbDOL")
+        readingListLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
+        readingListLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
+        readingListLabel.numberOfLines = 0
+        readingListLabel.snp_makeConstraints({ (make) -> Void in
+            make.top.equalTo(readerModeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
+            make.left.equalTo(welcomeLabel.snp_left)
+            make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
+        })
+
+        let readingListImageView = UIImageView(image: UIImage(named: "AddToReadingListCircle"))
+        containerView.addSubview(readingListImageView)
+        readingListImageView.snp_makeConstraints({ (make) -> Void in
+            make.centerY.equalTo(readingListLabel)
+            make.right.equalTo(welcomeLabel.snp_right)
+        })
+
+        containerView.snp_makeConstraints({ (make) -> Void in
+            // Let the container wrap around the content
+            make.top.equalTo(logoImageView.snp_top)
+            make.bottom.equalTo(readingListLabel.snp_bottom)
+            make.left.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
+            make.right.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenCircleOffset)
+            // And then center it in the overlay view that sits on top of the UITableView
+            make.center.equalTo(overlayView)
+        })
+
+        return overlayView
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -370,6 +413,10 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
             if let result = profile.readingList?.deleteRecord(record) where result.isSuccess {
                 records?.removeAtIndex(indexPath.row)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                // reshow empty state if no records left
+                if records?.count == 0 {
+                    view.addSubview(emptyStateOverlayView)
+                }
             }
         }
     }

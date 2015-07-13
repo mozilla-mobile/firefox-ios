@@ -87,17 +87,22 @@ class TopSitesPanel: UIViewController {
 
     var profile: Profile! {
         didSet {
-            profile.history.getSitesByFrecencyWithLimit(self.layout.thumbnailCount)
-                   .uponQueue(dispatch_get_main_queue()) { result in
-                self.updateDataSourceWithSites(result)
-                self.collection.reloadData()
-            }
+            self.refreshHistory(self.layout.thumbnailCount)
         }
     }
 
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         layout.setupForOrientation(toInterfaceOrientation)
         collection.setNeedsLayout()
+    }
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -114,6 +119,18 @@ class TopSitesPanel: UIViewController {
         collection.snp_makeConstraints { make in
             make.edges.equalTo(self.view)
             return
+        }
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+    }
+
+
+
+    func firefoxAccountChanged(notification: NSNotification) {
+        if notification.name == NotificationFirefoxAccountChanged {
+            refreshHistory(self.layout.thumbnailCount)
         }
     }
 
@@ -145,6 +162,13 @@ class TopSitesPanel: UIViewController {
                 self.deleteOrUpdateSites(result, indexPath: indexPath)
             })
         }
+    }
+
+    private func refreshHistory(frequencyLimit: Int) {
+        self.profile.history.getSitesByFrecencyWithLimit(frequencyLimit).uponQueue(dispatch_get_main_queue(), block: { result in
+            self.updateDataSourceWithSites(result)
+            self.collection.reloadData()
+        })
     }
 
     private func deleteOrUpdateSites(result: Result<Cursor<Site>>, indexPath: NSIndexPath) {

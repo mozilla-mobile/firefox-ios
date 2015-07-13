@@ -357,6 +357,9 @@ public class BrowserProfile: Profile {
         KeychainWrapper.removeObjectForKey(name + ".account")
         self.account = nil
 
+        // tell any observers that our account has changed
+        NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil)
+
         // Trigger cleanup. Pass in the account in case we want to try to remove
         // client-specific data from the server.
         self.syncManager.onRemovedAccount(old)
@@ -365,6 +368,9 @@ public class BrowserProfile: Profile {
     func setAccount(account: FirefoxAccount) {
         KeychainWrapper.setObject(account.asDictionary(), forKey: name + ".account")
         self.account = account
+        
+        // tell any observers that our account has changed
+        NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil)
 
         self.syncManager.onAddedAccount()
     }
