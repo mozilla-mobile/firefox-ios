@@ -123,6 +123,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
         editTextField.autocapitalizationType = UITextAutocapitalizationType.None
         editTextField.returnKeyType = UIReturnKeyType.Go
         editTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
+        editTextField.layer.cornerRadius = 3
         editTextField.layer.backgroundColor = UIColor.whiteColor().CGColor
         editTextField.font = UIConstants.DefaultMediumFont
         editTextField.isAccessibilityElement = true
@@ -192,7 +193,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
                 make.leading.equalTo(self.lockImageView.snp_trailing).offset(locationContentInset)
             }
             if readerModeButton.hidden {
-                make.trailing.equalTo(container.snp_trailing).offset(-(locationContentInset / 2))
+                make.trailing.equalTo(container.snp_trailing)
             } else {
                 make.trailing.equalTo(self.readerModeButton.snp_leading)
             }
