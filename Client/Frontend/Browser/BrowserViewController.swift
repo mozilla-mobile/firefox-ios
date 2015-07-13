@@ -43,6 +43,8 @@ class BrowserViewController: UIViewController {
     private let snackBars = UIView()
     private let auralProgress = AuralProgressBar()
 
+    private var footerOverlay: UIView!
+
     // location label actions
     private var pasteGoAction: AccessibleAction!
     private var pasteAction: AccessibleAction!
@@ -232,6 +234,10 @@ class BrowserViewController: UIViewController {
         footer.addSubview(snackBars)
         snackBars.backgroundColor = UIColor.clearColor()
 
+        footerOverlay = UIView()
+        footerOverlay.backgroundColor = UIColor.whiteColor()
+        view.addSubview(footerOverlay)
+
         scrollController.urlBar = urlBar
         scrollController.header = header
         scrollController.footer = footer
@@ -384,6 +390,12 @@ class BrowserViewController: UIViewController {
             make.top.equalTo(self.snackBars.snp_top)
             make.leading.trailing.equalTo(self.view)
         }
+
+        footerOverlay.snp_remakeConstraints({ make in
+            make.bottom.equalTo(self.view.snp_bottom)
+            make.top.equalTo(self.snackBars.snp_top)
+            make.leading.trailing.equalTo(self.view)
+        })
 
         adjustFooterSize(top: nil)
         footerBackground?.snp_remakeConstraints { make in
@@ -1593,6 +1605,8 @@ extension BrowserViewController : Transitionable {
         }
 
         self.homePanelController?.view.hidden = true
+
+        footerOverlay.hidden = false
     }
 
     func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
@@ -1618,6 +1632,8 @@ extension BrowserViewController : Transitionable {
                 tab.webView?.hidden = false
             }
         }
+
+        footerOverlay.hidden = true
 
         self.homePanelController?.view.hidden = false
         if options.toView === self {
