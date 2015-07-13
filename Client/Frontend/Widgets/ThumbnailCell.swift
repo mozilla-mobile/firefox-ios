@@ -226,4 +226,26 @@ class ThumbnailCell: UICollectionViewCell {
                 }
             })
     }
+
+    var imagePadding: CGFloat {
+        didSet {
+            imageView.snp_remakeConstraints({ make in
+                make.top.bottom.left.right.equalTo(self.imageWrapper).insets(UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding))
+            })
+        }
+    }
+
+    var image: UIImage? = nil {
+        didSet {
+            if let image = image {
+                imageView.image = image
+                imageView.alignment = UIImageViewAlignmentMaskTop
+                imageView.contentMode = UIViewContentMode.ScaleAspectFill
+            } else {
+                imageView.image = ThumbnailCellUX.PlaceholderImage
+                imageView.alignment = UIImageViewAlignmentMaskCenter
+                imageView.contentMode = UIViewContentMode.Center
+            }
+        }
+    }    
 }

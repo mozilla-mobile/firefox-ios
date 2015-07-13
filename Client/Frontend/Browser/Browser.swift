@@ -220,7 +220,7 @@ class Browser: NSObject {
     }
 
     func getHelper(#name: String) -> BrowserHelper? {
-        return helperManager!.getHelper(name: name)
+        return helperManager?.getHelper(name: name)
     }
 
     func hideContent(animated: Bool = false) {
