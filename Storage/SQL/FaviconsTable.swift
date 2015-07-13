@@ -15,27 +15,24 @@ class FaviconsTable<T>: GenericTable<Favicon> {
                        "url TEXT NOT NULL UNIQUE, " +
                        "width INTEGER, " +
                        "height INTEGER, " +
-                       "type INTEGER NOT NULL, " +
-                       "date REAL NOT NULL" }
+                       "type INTEGER NOT NULL" }
 
     override func getInsertAndArgs(inout item: Favicon) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         args.append(item.url)
         args.append(item.width)
         args.append(item.height)
-        args.append(item.date)
         args.append(item.type.rawValue)
-        return ("INSERT INTO \(TableNameFavicons) (url, width, height, date, type) VALUES (?,?,?,?,?)", args)
+        return ("INSERT INTO \(TableNameFavicons) (url, width, height, type) VALUES (?,?,?,?)", args)
     }
 
     override func getUpdateAndArgs(inout item: Favicon) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         args.append(item.width)
         args.append(item.height)
-        args.append(item.date)
         args.append(item.type.rawValue)
         args.append(item.url)
-        return ("UPDATE \(TableNameFavicons) SET width = ?, height = ?, date = ?, type = ? WHERE url = ?", args)
+        return ("UPDATE \(TableNameFavicons) SET width = ?, height = ?, type = ? WHERE url = ?", args)
     }
 
     override func getDeleteAndArgs(inout item: Favicon?) -> (String, [AnyObject?])? {
@@ -51,7 +48,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
 
     override var factory: ((row: SDRow) -> Favicon)? {
         return { row -> Favicon in
-            let icon = Favicon(url: row["url"] as! String, date: NSDate(timeIntervalSince1970: row["date"] as! Double), type: IconType(rawValue: row["type"] as! Int)!)
+            let icon = Favicon(url: row["url"] as! String, type: IconType(rawValue: row["type"] as! Int)!)
             icon.id = row["id"] as? Int
             return icon
         }
@@ -61,9 +58,9 @@ class FaviconsTable<T>: GenericTable<Favicon> {
         var args = [AnyObject?]()
         if let filter: AnyObject = options?.filter {
             args.append("%\(filter)%")
-            return ("SELECT id, url, date, type FROM \(TableNameFavicons) WHERE url LIKE ?", args)
+            return ("SELECT id, url, type FROM \(TableNameFavicons) WHERE url LIKE ?", args)
         }
-        return ("SELECT id, url, date, type FROM \(TableNameFavicons)", args)
+        return ("SELECT id, url, type FROM \(TableNameFavicons)", args)
     }
 
     func getIDFor(db: SQLiteDBConnection, obj: Favicon) -> Int? {

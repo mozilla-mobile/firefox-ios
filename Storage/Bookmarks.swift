@@ -189,7 +189,7 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
         get {
             if let path = NSBundle.mainBundle().pathForResource("bookmark_folder_closed", ofType: "png") {
                 if let url = NSURL(fileURLWithPath: path) {
-                    return Favicon(url: url.absoluteString!, date: NSDate(), type: IconType.Local)
+                    return Favicon(url: url.absoluteString!, type: IconType.Local)
                 }
             }
             return nil
