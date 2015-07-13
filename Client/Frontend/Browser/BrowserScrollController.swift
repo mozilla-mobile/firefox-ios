@@ -8,6 +8,11 @@ import SnapKit
 private let ToolbarBaseAnimationDuration: CGFloat = 0.3
 
 class BrowserScrollingController: NSObject {
+    enum ScrollDirection {
+        case Up
+        case Down
+    }
+
     weak var browser: Browser? {
         willSet {
             self.scrollView?.delegate = nil
@@ -57,6 +62,7 @@ class BrowserScrollingController: NSObject {
     private var footerFrame: CGRect { return footer?.frame ?? CGRectZero }
 
     private var lastContentOffset: CGFloat = 0
+    private var scrollDirection: ScrollDirection = .Down
 
     override init() {
         super.init()
@@ -95,6 +101,13 @@ private extension BrowserScrollingController {
         if let containerView = scrollView?.superview {
             let translation = gesture.translationInView(containerView)
             let delta = lastContentOffset - translation.y
+
+            if delta > 0 {
+                scrollDirection = .Down
+            } else if delta < 0 {
+                scrollDirection = .Up
+            }
+
             lastContentOffset = translation.y
             if checkRubberbandingForDelta(delta) {
                 scrollWithDelta(delta)
@@ -171,14 +184,14 @@ extension BrowserScrollingController: UIGestureRecognizerDelegate {
 
 extension BrowserScrollingController: UIScrollViewDelegate {
     func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        // Check to see if the target offset after the scroll gesture will be enough to hide the toolbars or not
-        let finalOffset = -abs(contentOffset.y - targetContentOffset.memory.y) + headerTopOffset
-        if headerTopOffset > -headerFrame.height && headerTopOffset < 0 {
-            if finalOffset > (-headerFrame.height / 2) {
-                showToolbars(animated: true)
-            } else {
-                hideToolbars(animated: true)
-            }
+        if scrollViewHeight >= contentSize.height {
+            return
+        }
+
+        if scrollDirection == .Up {
+            showToolbars(animated: true)
+        } else if scrollDirection == .Down {
+            hideToolbars(animated: true)
         }
     }
 
