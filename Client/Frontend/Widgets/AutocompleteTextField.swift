@@ -153,7 +153,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         if !active || !completionActive {
-            super.touchesBegan(touches, withEvent: event)
+            super.touchesEnded(touches, withEvent: event)
         } else {
             applyCompletion()
 
