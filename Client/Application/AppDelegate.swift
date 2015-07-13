@@ -18,8 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set the Firefox UA for browsing.
         setUserAgent()
 
-        // Listen for crashes
-        FXCrashDetector.sharedDetector().listenForCrashes()
 
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
@@ -46,6 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.window!.rootViewController = browserViewController
         self.window!.backgroundColor = UIConstants.AppBackgroundColor
+
+        configureCrashReporter()
 
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL, absoluteString = url.absoluteString {
@@ -231,4 +231,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 }
+
+extension AppDelegate {
+    private func configureCrashReporter() {
+        BreakpadController.sharedInstance().start(true)
+        if let shouldUploadCrashes = NSBundle.mainBundle().objectForInfoDictionaryKey("BreakpadShouldUpload") as? NSString {
+            BreakpadController.sharedInstance().setUploadingEnabled(shouldUploadCrashes.boolValue)
+        }
+    }
+}
+
 

@@ -298,25 +298,14 @@ class BrowserViewController: UIViewController {
         }
 
         if tabManager.count == 0 && !AppConstants.IsRunningTest {
-            // If we previously crashed, ask the user if they want to restore their tabs
-            if FXCrashDetector.sharedDetector().hasCrashed() {
-                let crashData = FXCrashDetector.sharedDetector().crashData as FXCrashDetectorData
-                crashData.clearPreviousCrash()
-                let alertView = UIAlertView(
-                    title: CrashPromptMessaging.CrashPromptTitle,
-                    message: CrashPromptMessaging.CrashPromptDescription,
-                    delegate: self,
-                    cancelButtonTitle: CrashPromptMessaging.CrashPromptNegative,
-                    otherButtonTitles: CrashPromptMessaging.CrashPromptAffirmative)
-                alertView.show()
-            } else {
-                tabManager.restoreTabs()
-            }
-        }
+            self.tabManager.restoreTabs()
 
-        // If restoring tabs failed, was disabled, there was nothing to restore, or we're running tests,
-        // create an initial about:home tab.
-        if tabManager.count == 0 {
+            // If we failed to restore tabs, add a tab and select it
+            if self.tabManager.count == 0 {
+                let tab = self.tabManager.addTab()
+                self.tabManager.selectTab(tab)
+            }
+        } else if tabManager.count == 0 {
             let tab = tabManager.addTab()
             tabManager.selectTab(tab)
         }
