@@ -119,6 +119,11 @@ extension NSURL {
     */
     public func baseDomain() -> String? {
         if let host = self.host {
+            // If this is just a hostname and not a FQDN, use the entire hostname.
+            if !host.contains(".") {
+                return host
+            }
+
             return publicSuffixFromHost(host, withAdditionalParts: 1)
         } else {
             return nil
