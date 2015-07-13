@@ -95,6 +95,11 @@ class FaviconsTable<T>: GenericTable<Favicon> {
     }
 
     func getCleanupCommands() -> (String, Args?) {
-        return ("DELETE FROM \(TableFavicons) WHERE \(TableFavicons).id NOT IN (SELECT faviconID FROM \(TableFaviconSites) UNION ALL SELECT faviconID FROM \(TableBookmarks) WHERE faviconID IS NOT NULL)", nil)
+        return ("DELETE FROM \(TableFavicons) " +
+            "WHERE \(TableFavicons).id NOT IN (" +
+                "SELECT faviconID FROM \(TableFaviconSites) " +
+                "UNION ALL " +
+                "SELECT faviconID FROM \(TableBookmarks) WHERE faviconID IS NOT NULL" +
+            ")", nil)
     }
 }

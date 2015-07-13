@@ -176,7 +176,6 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         log.debug("Removing bookmark \(url).")
         return self.db.run([
             ("DELETE FROM \(TableBookmarks) WHERE url = ?", [url]),
-            self.favicons.getCleanupCommands()
         ])
     }
 
@@ -197,7 +196,6 @@ public class SQLiteBookmarks: BookmarksModelFactory {
 
         return self.db.run([
             (sql, args),
-            self.favicons.getCleanupCommands()
         ])
     }
 }
@@ -238,7 +236,6 @@ extension SQLiteBookmarks: ShareToDestination {
                 return succeed()
             }
 
-            // Insert the favicon.
             // Insert the favicon.
             if let icon = favicon {
                 if let id = self.favicons.insertOrUpdate(conn, obj: icon) {

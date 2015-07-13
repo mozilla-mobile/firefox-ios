@@ -329,6 +329,11 @@ extension BrowserDB {
         return run([(sql, args)])
     }
 
+    /**
+     * Runs an array of sql commands. Note: These will all run in order in a transaction and will block
+     * the callers thread until they've finished. If any of them fail the operation will abort (no more
+     * commands will be run) and the transaction will rollback, returning a DatabaseError.
+     */
     func run(sql: [(sql: String, args: Args?)]) -> Success {
         var err: NSError? = nil
         self.transaction(&err) { (conn, err) -> Bool in

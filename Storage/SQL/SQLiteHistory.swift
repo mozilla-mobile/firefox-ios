@@ -93,15 +93,15 @@ extension SQLiteHistory: BrowserHistory {
 
         return db.run([(deleteVisits, visitArgs),
                        (markDeleted, markArgs),
-                       self.favicons.getCleanupCommands()])
+                       favicons.getCleanupCommands()])
     }
 
     // Note: clearing history isn't really a sane concept in the presence of Sync.
     // This method should be split to do something else.
     public func clearHistory() -> Success {
         return db.run([("DELETE FROM \(TableVisits)", nil),
-            ("DELETE FROM \(TableHistory)", nil),
-            self.favicons.getCleanupCommands()])
+                       ("DELETE FROM \(TableHistory)", nil),
+                       self.favicons.getCleanupCommands()])
     }
 
     private func isIgnoredURL(url: String) -> Bool {
@@ -281,7 +281,7 @@ extension SQLiteHistory: BrowserHistory {
 
 extension SQLiteHistory: Favicons {
     // These two getter functions are only exposed for testing purposes (and aren't part of the public interface).
-    func getFaviconsForUrl(url: String) -> Deferred<Result<Cursor<Favicon?>>> {
+    func getFaviconsForURL(url: String) -> Deferred<Result<Cursor<Favicon?>>> {
         let sql = "SELECT iconID AS id, iconURL AS url, iconDate AS date, iconType AS type, iconWidth AS width FROM " +
             "\(ViewWidestFaviconsForSites), \(TableHistory) WHERE " +
             "\(TableHistory).id = siteID AND \(TableHistory).url = ?"
@@ -289,7 +289,7 @@ extension SQLiteHistory: Favicons {
         return db.runQuery(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
     }
 
-    func getFaviconsForBookmarkedUrl(url: String) -> Deferred<Result<Cursor<Favicon?>>> {
+    func getFaviconsForBookmarkedURL(url: String) -> Deferred<Result<Cursor<Favicon?>>> {
         let sql = "SELECT \(TableFavicons).id AS id, \(TableFavicons).url AS url, \(TableFavicons).date AS date, \(TableFavicons).type AS type, \(TableFavicons).width AS width FROM \(TableFavicons), \(TableBookmarks) WHERE \(TableBookmarks).faviconID = \(TableFavicons).id AND \(TableBookmarks).url IS ?"
         let args: Args = [url]
         return db.runQuery(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
@@ -316,6 +316,7 @@ extension SQLiteHistory: Favicons {
             let id = self.favicons.insertOrUpdate(conn, obj: icon)
             return id ?? 0
         }
+
         if err == nil {
             return deferResult(res)
         }

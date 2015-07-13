@@ -107,6 +107,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
+
+            let start = NSDate.nowMicroseconds()
             if let bookmark = self.source?.current[indexPath.row] {
                 // Why the dispatches? Because we call success and failure on the DB
                 // queue, and so calling anything else that calls through to the DB will
@@ -124,6 +126,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                                 self.source = model
                                 self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
                                 NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added":false])
+                                let end = NSDate.nowMicroseconds()
+                                println("Delete finished in \(end-start)")
                             }
                         }, failure: self.onModelFailure)
                     }
