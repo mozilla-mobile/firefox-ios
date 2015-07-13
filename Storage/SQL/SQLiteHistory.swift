@@ -90,27 +90,18 @@ extension SQLiteHistory: BrowserHistory {
 
         let markArgs: Args = [NSDate.nowNumber(), url]
         let markDeleted = "UPDATE \(TableHistory) SET url = NULL, is_deleted = 1, should_upload = 1, local_modified = ? WHERE url = ?"
-        return self.db.run(deleteVisits, withArgs: visitArgs) >>> { self.db.run(markDeleted, withArgs: markArgs) }
+
+        return db.run([(deleteVisits, visitArgs),
+                       (markDeleted, markArgs),
+                       favicons.getCleanupCommands()])
     }
 
     // Note: clearing history isn't really a sane concept in the presence of Sync.
     // This method should be split to do something else.
     public func clearHistory() -> Success {
-        let s: Site? = nil
-        var err: NSError? = nil
-
-        db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
-            err = conn.executeChange("DELETE FROM \(TableVisits)", withArgs: nil)
-            if err == nil {
-                err = conn.executeChange("DELETE FROM \(TableFaviconSites)", withArgs: nil)
-            }
-            if err == nil {
-                err = conn.executeChange("DELETE FROM \(TableHistory)", withArgs: nil)
-            }
-            return 1
-        }
-
-        return failOrSucceed(err, "Clear")
+        return db.run([("DELETE FROM \(TableVisits)", nil),
+                       ("DELETE FROM \(TableHistory)", nil),
+                       self.favicons.getCleanupCommands()])
     }
 
     private func isIgnoredURL(url: String) -> Bool {
@@ -231,18 +222,20 @@ extension SQLiteHistory: BrowserHistory {
         return site
     }
 
+    private class func iconColumnFactory(row: SDRow) -> Favicon? {
+        if let iconType = row["iconType"] as? Int,
+            let iconURL = row["iconURL"] as? String,
+            let iconDate = row["iconDate"] as? Double,
+            let iconID = row["iconID"] as? Int {
+                let date = NSDate(timeIntervalSince1970: iconDate)
+                return Favicon(url: iconURL, date: date, type: IconType(rawValue: iconType)!)
+        }
+        return nil
+    }
+
     private class func iconHistoryColumnFactory(row: SDRow) -> Site {
         let site = basicHistoryColumnFactory(row)
-
-        if let iconType = row["iconType"] as? Int,
-           let iconURL = row["iconURL"] as? String,
-           let iconDate = row["iconDate"] as? Double,
-           let iconID = row["iconID"] as? Int {
-                let date = NSDate(timeIntervalSince1970: iconDate)
-                let icon = Favicon(url: iconURL, date: date, type: IconType(rawValue: iconType)!)
-                site.icon = icon
-        }
-
+        site.icon = iconColumnFactory(row)
         return site
     }
 
@@ -287,7 +280,22 @@ extension SQLiteHistory: BrowserHistory {
 }
 
 extension SQLiteHistory: Favicons {
-    public func clearFavicons() -> Success {
+    // These two getter functions are only exposed for testing purposes (and aren't part of the public interface).
+    func getFaviconsForURL(url: String) -> Deferred<Result<Cursor<Favicon?>>> {
+        let sql = "SELECT iconID AS id, iconURL AS url, iconDate AS date, iconType AS type, iconWidth AS width FROM " +
+            "\(ViewWidestFaviconsForSites), \(TableHistory) WHERE " +
+            "\(TableHistory).id = siteID AND \(TableHistory).url = ?"
+        let args: Args = [url]
+        return db.runQuery(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
+    }
+
+    func getFaviconsForBookmarkedURL(url: String) -> Deferred<Result<Cursor<Favicon?>>> {
+        let sql = "SELECT \(TableFavicons).id AS id, \(TableFavicons).url AS url, \(TableFavicons).date AS date, \(TableFavicons).type AS type, \(TableFavicons).width AS width FROM \(TableFavicons), \(TableBookmarks) WHERE \(TableBookmarks).faviconID = \(TableFavicons).id AND \(TableBookmarks).url IS ?"
+        let args: Args = [url]
+        return db.runQuery(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
+    }
+
+    public func clearAllFavicons() -> Success {
         var err: NSError? = nil
 
         db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
@@ -308,6 +316,7 @@ extension SQLiteHistory: Favicons {
             let id = self.favicons.insertOrUpdate(conn, obj: icon)
             return id ?? 0
         }
+
         if err == nil {
             return deferResult(res)
         }

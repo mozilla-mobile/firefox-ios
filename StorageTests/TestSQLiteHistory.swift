@@ -15,7 +15,7 @@ class TestSQLiteHistory: XCTestCase {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         let history = SQLiteHistory(db: db)
-        let bookmarks = SQLiteBookmarks(db: db, favicons: history)
+        let bookmarks = SQLiteBookmarks(db: db)
 
         let site1 = Site(url: "http://url1/", title: "title one")
         let site1Changed = Site(url: "http://url1/", title: "title one alt")
@@ -151,7 +151,7 @@ class TestSQLiteHistory: XCTestCase {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         let history = SQLiteHistory(db: db)
-        let bookmarks = SQLiteBookmarks(db: db, favicons: history)
+        let bookmarks = SQLiteBookmarks(db: db)
 
         let expectation = self.expectationWithDescription("First.")
         func done() -> Success {
@@ -175,21 +175,34 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func checkFaviconWasSetForBookmark() -> Success {
-            return bookmarks.bookmarksByURL("http://bookmarkedurl/".asURL!) >>== { results in
+            return history.getFaviconsForBookmarkedUrl("http://bookmarkedurl/") >>== { results in
                 XCTAssertEqual(1, results.count)
-                if let actualFaviconURL = results[0]?.favicon?.url {
+                if let actualFaviconURL = results[0]??.url {
                     XCTAssertEqual("http://url2/", actualFaviconURL)
                 }
                 return succeed()
             }
         }
 
-        history.clearFavicons()
+        func removeBookmark() -> Success {
+            return bookmarks.removeByURL("http://bookmarkedurl/")
+        }
+
+        func checkFaviconWasRemovedForBookmark() -> Success {
+            return history.getFaviconsForBookmarkedUrl("http://bookmarkedurl/") >>== { results in
+                XCTAssertEqual(0, results.count)
+                return succeed()
+            }
+        }
+
+        history.clearAllFavicons()
             >>> bookmarks.clearBookmarks
             >>> { bookmarks.addToMobileBookmarks("http://bookmarkedurl/".asURL!, title: "Title", favicon: nil) }
             >>> checkFaviconForBookmarkIsNil
             >>> updateFavicon
             >>> checkFaviconWasSetForBookmark
+            >>> removeBookmark
+            >>> checkFaviconWasRemovedForBookmark
             >>> done
 
         waitForExpectationsWithTimeout(10.0) { error in

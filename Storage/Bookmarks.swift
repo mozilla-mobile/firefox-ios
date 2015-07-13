@@ -155,8 +155,8 @@ public protocol BookmarksModelFactory {
     var nullModel: BookmarksModel { get }
 
     func isBookmarked(url: String, success: Bool -> (), failure: Any -> ())
-    func remove(bookmark: BookmarkNode, success: Bool -> (), failure: Any -> ())
-    func removeByURL(url: String, success: Bool -> Void, failure: Any -> Void)
+    func remove(bookmark: BookmarkNode) -> Success
+    func removeByURL(url: String) -> Success
     func clearBookmarks() -> Success
 }
 
@@ -310,12 +310,12 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         failure("Not implemented")
     }
 
-    public func remove(bookmark: BookmarkNode, success: (Bool) -> (), failure: (Any) -> ()) {
-        failure("Not implemented")
+    public func remove(bookmark: BookmarkNode) -> Success {
+        return deferResult(DatabaseError(description: "Not implemented"))
     }
 
-    public func removeByURL(url: String, success: (Bool) -> Void, failure: (Any) -> Void) {
-        failure("Not implemented")
+    public func removeByURL(url: String) -> Success {
+        return deferResult(DatabaseError(description: "Not implemented"))
     }
 
     public func clearBookmarks() -> Success {

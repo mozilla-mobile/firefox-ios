@@ -127,22 +127,31 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
+
+            let start = NSDate.nowMicroseconds()
             if let bookmark = self.source?.current[indexPath.row] {
                 // Why the dispatches? Because we call success and failure on the DB
                 // queue, and so calling anything else that calls through to the DB will
                 // deadlock. This problem will go away when the bookmarks API switches to
                 // Deferred instead of using callbacks.
-                self.profile.bookmarks.remove(bookmark, success: { success in
+                self.profile.bookmarks.remove(bookmark).uponQueue(dispatch_get_main_queue()) { res in
+                    if let err = res.failureValue {
+                        self.onModelFailure(err)
+                        return
+                    }
+
                     dispatch_async(dispatch_get_main_queue()) {
                         self.source?.reloadData({ model in
                             dispatch_async(dispatch_get_main_queue()) {
                                 self.source = model
                                 self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
                                 NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added":false])
+                                let end = NSDate.nowMicroseconds()
+                                println("Delete finished in \(end-start)")
                             }
                         }, failure: self.onModelFailure)
                     }
-                }, failure: self.onModelFailure)
+                }
             }
         })
 

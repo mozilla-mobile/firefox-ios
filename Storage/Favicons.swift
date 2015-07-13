@@ -7,7 +7,7 @@ import UIKit
 
 /* The base favicons protocol */
 public protocol Favicons {
-    func clearFavicons() -> Success
+    func clearAllFavicons() -> Success
 
     /**
      * Returns the ID of the added favicon.

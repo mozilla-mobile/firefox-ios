@@ -263,7 +263,7 @@ public class BrowserProfile: Profile {
     }
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
-        return SQLiteBookmarks(db: self.db, favicons: self.places)
+        return SQLiteBookmarks(db: self.db)
     }()
 
     lazy var searchEngines: SearchEngines = {

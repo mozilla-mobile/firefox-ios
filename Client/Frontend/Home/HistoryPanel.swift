@@ -24,6 +24,7 @@ private typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: In
 class HistoryPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
 
+    private let QueryLimit = 100
     private let NumSections = 4
     private let Today = getDate(dayOffset: 0)
     private let Yesterday = getDate(dayOffset: -1)
@@ -83,7 +84,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     private func refetchData() -> Deferred<Result<Cursor<Site>>> {
-        return profile.history.getSitesByLastVisit(100)
+        return profile.history.getSitesByLastVisit(QueryLimit)
     }
 
     private func setData(data: Cursor<Site>) {
@@ -243,7 +244,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 self.profile.history.removeHistoryForURL(site.url)
                     .upon { res in
                         self.refetchData().uponQueue(dispatch_get_main_queue()) { result in
-
                             // If a section will be empty after removal, we must remove the section itself.
                             if let data = result.successValue {
                                 tableView.beginUpdates()
@@ -256,6 +256,22 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                                     self.tableView.deleteSections(NSIndexSet(index: section), withRowAnimation: UITableViewRowAnimation.Left)
                                 } else {
                                     self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+                                }
+
+                                // If the query was limited, we may also add a row at the end.
+                                if data.count == self.QueryLimit {
+                                    if let site = data[self.QueryLimit-1] {
+                                        let categoryIndex = self.categoryForDate(site.latestVisit!.date)
+                                        let section = self.categoryToUISection(categoryIndex)!
+                                        let category = self.categories[categoryIndex]
+                                        if category.rows == 1 {
+                                            let sections = NSIndexSet(index: section)
+                                            self.tableView.insertSections(sections, withRowAnimation: UITableViewRowAnimation.Right)
+                                        } else {
+                                            let indexPath = NSIndexPath(forItem: category.rows-1, inSection: section)
+                                            self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
+                                        }
+                                    }
                                 }
 
                                 tableView.endUpdates()

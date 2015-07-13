@@ -14,6 +14,10 @@ public class DatabaseError: ErrorType {
         return err?.localizedDescription ?? "Unknown database error."
     }
 
+    init(description: String) {
+        self.err = NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: description])
+    }
+
     init(err: NSError?) {
         self.err = err
     }

@@ -33,9 +33,7 @@ class HistoryClearable : Clearable {
             self.profile.thumbnails.clear({ success in
                 SDImageCache.sharedImageCache().clearDisk()
                 SDImageCache.sharedImageCache().clearMemory()
-                self.profile.favicons.clearFavicons().upon {
-                    deferred.fill($0)
-                }
+                deferred.fill(Result(success: ()))
             })
         }
         return deferred
