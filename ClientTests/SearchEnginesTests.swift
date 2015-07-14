@@ -140,4 +140,72 @@ class SearchEnginesTests: XCTestCase {
         XCTAssertFalse(engines2.shouldShowSearchSuggestionsOptIn)
         XCTAssertTrue(engines2.shouldShowSearchSuggestions)
     }
+
+    func testShouldDisableOldDefault() {
+        let prefs = MockProfilePrefs()
+        let engines = SearchEngines(prefs: prefs)
+
+        // Should be disabled on first time app ever opens up
+        XCTAssertFalse(engines.shouldDisableOldDefault)
+
+        // Case 1: switch from default engine to disabled engine once, then switch back.
+        // Disabled engine should stay disabled and default is still enabled after all is done
+        let startupDefaultEngine = engines.orderedEngines[0]
+        let engineSwitch = engines.orderedEngines[1]
+
+        XCTAssertTrue(engines.isEngineEnabled(engineSwitch))
+        engines.disableEngine(engineSwitch)
+        XCTAssertFalse(engines.isEngineEnabled(engineSwitch))
+
+        engines.defaultEngine = engineSwitch
+        XCTAssertTrue(engines.isEngineEnabled(engineSwitch))
+
+        XCTAssertTrue(engines.isEngineEnabled(startupDefaultEngine))
+
+        XCTAssertTrue(engines.shouldDisableOldDefault)
+
+        engines.defaultEngine = startupDefaultEngine
+        XCTAssertFalse(engines.isEngineEnabled(engineSwitch))
+        XCTAssertTrue(engines.isEngineEnabled(startupDefaultEngine))
+        XCTAssertFalse(engines.shouldDisableOldDefault)
+
+        // Case 2: switch from default to enabled engine once, then switch back
+        // Both engines should still be enabled after all is done
+        let enabledQuickSearchEngine = engines.orderedEngines[2]
+        XCTAssertTrue(engines.isEngineEnabled(enabledQuickSearchEngine))
+
+        engines.defaultEngine = enabledQuickSearchEngine
+        XCTAssertTrue(engines.isEngineEnabled(enabledQuickSearchEngine))
+        XCTAssertTrue(engines.isEngineEnabled(startupDefaultEngine))
+        XCTAssertFalse(engines.shouldDisableOldDefault)
+
+        engines.defaultEngine = startupDefaultEngine
+        XCTAssertTrue(engines.isEngineEnabled(startupDefaultEngine))
+        XCTAssertTrue(engines.isEngineEnabled(enabledQuickSearchEngine))
+        XCTAssertFalse(engines.shouldDisableOldDefault)
+
+        // Case 3: switch all quick search engines off, then iterate through all engines
+        // and set each to default, then switch back to original default engine.
+        // All engines should be disabled before set to default, enabled when they are default,
+        // and redisabled when they aren't default anymore. All quick search engines should be disabled
+        // after all is done with the original default engine being the only one enabled. 
+        // Note: this is the STR in the original Bugzilla report
+        var quicksearchEngines = engines.orderedEngines.filter({ engine in engine.shortName != startupDefaultEngine.shortName })
+        for engine in quicksearchEngines {
+            engines.disableEngine(engine)
+        }
+        XCTAssertFalse(engines.shouldDisableOldDefault)
+
+        for engine in engines.quickSearchEngines {
+            engines.defaultEngine = engine
+            XCTAssertTrue(engines.shouldDisableOldDefault)
+            XCTAssertTrue(engines.isEngineEnabled(engine))
+        }
+
+        engines.defaultEngine = startupDefaultEngine
+        XCTAssertFalse(engines.shouldDisableOldDefault)
+        for engine in quicksearchEngines {
+            XCTAssertFalse(engines.isEngineEnabled(engine))
+        }
+    }
 }
