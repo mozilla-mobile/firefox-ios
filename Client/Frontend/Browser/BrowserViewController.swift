@@ -1359,7 +1359,7 @@ extension BrowserViewController: WKNavigationDelegate {
                         if let credentials = res.successValue {
                             completionHandler(.UseCredential, credentials.credentials)
                         } else {
-                            completionHandler(NSURLSessionAuthChallengeDisposition.CancelAuthenticationChallenge, nil)
+                            completionHandler(NSURLSessionAuthChallengeDisposition.RejectProtectionSpace, nil)
                         }
                     }
                 }
