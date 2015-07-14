@@ -4,20 +4,50 @@
  - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <html>
 
+    <head>
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
+        <style>
+            @font-face {
+              font-family: sans-serif;
+              src: url('/reader-mode/fonts/FiraSans-Regular.ttf');
+            }
+            p {
+              font-family: sans-serif;
+              text-align: center;
+            }
+
+            #content {
+              padding-top: 20px;
+              width: 280px;
+              margin: auto;
+              horizontal: center;
+            }
+        </style>
+    </head>
+
     <body>
-        <h1 id="message">TODO Loading Interstitial</h1>
+      <div id="content">
+        <p>TODO Image Here</p>
+        <p id="message">%LOADING-TEXT%</p>
+        <p id="link" style="visibility: hidden;"><a id="link" href="%ORIGINAL-URL%">%LOAD-ORIGINAL-TEXT%</a></p>
+      </div>
     </body>
 
     <script>
-        var numberOfChecks = 10;
+        var numberOfChecks = 20; // 20 * 500ms = 10 seconds total
 
         function triggerCheck() {
             if (numberOfChecks--) {
-                setTimeout(function() { checkIfContentIsAvailable(); }, 1000);
+                setTimeout(function() { checkIfContentIsAvailable(); }, 500);
             } else {
-                var e = document.getElementById("message")
-                if (e != null) {
-                    e.innerText = "There was a problem loading the content. Click here to load the original page.";
+                var message = document.getElementById("message")
+                if (message != null) {
+                    message.innerText = "%LOADING-FAILED-TEXT%";
+                }
+
+                var link = document.getElementById("link")
+                if (link != null) {
+                    link.style.visibility = "visible";
                 }
             }
         }
