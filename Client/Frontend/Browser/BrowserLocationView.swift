@@ -247,11 +247,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
     var url: NSURL? {
         didSet {
             lockImageView.hidden = url?.scheme != "https"
-            if let url = url?.absoluteString {
-            	highlightDomain()
-            } else {
-                editTextField.text = nil
-            }
+            updateTextWithURL()
             setNeedsUpdateConstraints()
         }
     }
@@ -277,8 +273,9 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
         }
     }
 
-    private func highlightDomain() {
+    private func updateTextWithURL() {
         if let httplessURL = url?.absoluteStringWithoutHTTPScheme(), let baseDomain = url?.baseDomain() {
+            // Highlight the base domain of the current URL.
             var attributedString = NSMutableAttributedString(string: httplessURL)
             let nsRange = NSMakeRange(0, count(httplessURL))
             attributedString.addAttribute(NSForegroundColorAttributeName, value: BrowserLocationViewUX.BaseURLFontColor, range: nsRange)
@@ -286,6 +283,9 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
             attributedString.addAttribute(UIAccessibilitySpeechAttributePitch, value: NSNumber(double: BrowserLocationViewUX.BaseURLPitch), range: nsRange)
             attributedString.pitchSubstring(baseDomain, withPitch: BrowserLocationViewUX.HostPitch)
             editTextField.attributedText = attributedString
+        } else {
+            // If we're unable to highlight the domain, just use the URL as is.
+            editTextField.text = url?.absoluteString
         }
     }
 
@@ -293,10 +293,8 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
         active = false
         if editTextField.text.isEmpty {
             editTextField.text = clearedText ?? ""
-        } else if let url = self.url {
-            highlightDomain()
         } else {
-            self.url = nil
+            updateTextWithURL()
         }
     }
 
