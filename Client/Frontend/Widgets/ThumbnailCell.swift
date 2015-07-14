@@ -32,6 +32,8 @@ struct ThumbnailCellUX {
     static let RemoveButtonInsets = UIEdgeInsets(top: 11, left: 11, bottom: 11, right: 11)
     static let RemoveButtonAnimationDuration: NSTimeInterval = 0.4
     static let RemoveButtonAnimationDamping: CGFloat = 0.6
+
+    static let NearestNeighbordScalingThreshold: CGFloat = 24
 }
 
 @objc protocol ThumbnailCellDelegate {
@@ -41,6 +43,38 @@ struct ThumbnailCellUX {
 
 class ThumbnailCell: UICollectionViewCell {
     weak var delegate: ThumbnailCellDelegate?
+
+    var imagePadding: CGFloat = 0 {
+        didSet {
+            imageView.snp_remakeConstraints({ make in
+                let insets = UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding)
+                make.top.left.right.equalTo(self.imageWrapper).insets(insets)
+                make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding)
+            })
+            imageView.setNeedsUpdateConstraints()
+        }
+    }
+
+    var image: UIImage? = nil {
+        didSet {
+            if let image = image {
+                imageView.image = image
+                imageView.contentMode = UIViewContentMode.ScaleAspectFit
+
+                // Force nearest neighbor scaling for small favicons
+                if image.size.width < ThumbnailCellUX.NearestNeighbordScalingThreshold {
+                    imageView.layer.shouldRasterize = true
+                    imageView.layer.rasterizationScale = 2
+                    imageView.layer.minificationFilter = kCAFilterNearest
+                    imageView.layer.magnificationFilter = kCAFilterNearest
+                }
+
+            } else {
+                imageView.image = ThumbnailCellUX.PlaceholderImage
+                imageView.contentMode = UIViewContentMode.Center
+            }
+        }
+    }
 
     lazy var longPressGesture: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: "SELdidLongPress")
@@ -89,7 +123,7 @@ class ThumbnailCell: UICollectionViewCell {
         imageWrapper.layer.cornerRadius = ThumbnailCellUX.CornerRadius
         imageWrapper.clipsToBounds = true
         return imageWrapper
-    } ()
+    }()
 
     lazy var removeButton: UIButton = {
         let removeButton = UIButton()
@@ -98,10 +132,9 @@ class ThumbnailCell: UICollectionViewCell {
         removeButton.hidden = true
         removeButton.imageEdgeInsets = ThumbnailCellUX.RemoveButtonInsets
         return removeButton
-    } ()
+    }()
 
     override init(frame: CGRect) {
-        imagePadding = CGFloat(0)
         super.init(frame: frame)
 
         isAccessibilityElement = true
@@ -134,7 +167,7 @@ class ThumbnailCell: UICollectionViewCell {
             make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding) // .insets(insets)
         })
 
-        textWrapper.snp_remakeConstraints({ make in
+        textWrapper.snp_makeConstraints({ make in
             make.bottom.equalTo(self.imageWrapper.snp_bottom) // .offset(ThumbnailCellUX.BorderWidth)
             make.left.right.equalTo(self.imageWrapper) // .offset(ThumbnailCellUX.BorderWidth)
         })
@@ -192,36 +225,5 @@ class ThumbnailCell: UICollectionViewCell {
                     self.removeButton.hidden = true
                 }
             })
-    }
-
-    var imagePadding: CGFloat {
-        didSet {
-            imageView.snp_remakeConstraints({ make in
-                let insets = UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding)
-                make.top.left.right.equalTo(self.imageWrapper).insets(insets)
-                make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding) // .insets(insets)
-            })
-        }
-    }
-
-    var image: UIImage? = nil {
-        didSet {
-            if let image = image {
-                imageView.image = image
-                imageView.contentMode = UIViewContentMode.ScaleAspectFit
-
-                // Force nearest neighbor scaling for small favicons
-                if image.size.width < 24 {
-                    imageView.layer.shouldRasterize = true
-                    imageView.layer.rasterizationScale = 2
-                    imageView.layer.minificationFilter = kCAFilterNearest
-                    imageView.layer.magnificationFilter = kCAFilterNearest
-                }
-
-            } else {
-                imageView.image = ThumbnailCellUX.PlaceholderImage
-                imageView.contentMode = UIViewContentMode.Center
-            }
-        }
     }
 }
