@@ -77,18 +77,17 @@ class BrowserProfileSyncDelegate: SyncDelegate {
 
     init(app: UIApplication) {
         self.app = app
-        registerForNotifications()
     }
 
     // SyncDelegate
     func displaySentTabForURL(URL: NSURL, title: String) {
-        log.info("Displaying notification for URL \(URL.absoluteString)")
-
+        // check to see what the current notification settings are and only try and send a notification if
+        // the user has agreed to them
         let currentSettings = app.currentUserNotificationSettings()
         if currentSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
-            // TODO: localize.
-            let notification = UILocalNotification()
+            log.info("Displaying notification for URL \(URL.absoluteString)")
 
+            let notification = UILocalNotification()
             notification.fireDate = NSDate()
             notification.timeZone = NSTimeZone.defaultTimeZone()
             notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString!)
@@ -98,39 +97,6 @@ class BrowserProfileSyncDelegate: SyncDelegate {
 
             app.presentLocalNotificationNow(notification)
         }
-    }
-
-
-    func registerForNotifications() {
-        let viewAction = UIMutableUserNotificationAction()
-        viewAction.identifier = SentTabAction.View.rawValue
-        viewAction.title = NSLocalizedString("View", comment: "View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-        viewAction.activationMode = UIUserNotificationActivationMode.Foreground
-        viewAction.destructive = false
-        viewAction.authenticationRequired = false
-
-        let bookmarkAction = UIMutableUserNotificationAction()
-        bookmarkAction.identifier = SentTabAction.Bookmark.rawValue
-        bookmarkAction.title = NSLocalizedString("Bookmark", comment: "Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-        bookmarkAction.activationMode = UIUserNotificationActivationMode.Foreground
-        bookmarkAction.destructive = false
-        bookmarkAction.authenticationRequired = false
-
-        let readingListAction = UIMutableUserNotificationAction()
-        readingListAction.identifier = SentTabAction.ReadingList.rawValue
-        readingListAction.title = NSLocalizedString("Add to Reading List", comment: "Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
-        readingListAction.activationMode = UIUserNotificationActivationMode.Foreground
-        readingListAction.destructive = false
-        readingListAction.authenticationRequired = false
-
-        let sentTabsCategory = UIMutableUserNotificationCategory()
-        sentTabsCategory.identifier = TabSendCategory
-        sentTabsCategory.setActions([readingListAction, bookmarkAction, viewAction], forContext: UIUserNotificationActionContext.Default)
-
-        sentTabsCategory.setActions([bookmarkAction, viewAction], forContext: UIUserNotificationActionContext.Minimal)
-
-        app.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert, categories: [sentTabsCategory]))
-        app.registerForRemoteNotifications()
     }
 }
 
@@ -363,16 +329,54 @@ public class BrowserProfile: Profile {
         // Trigger cleanup. Pass in the account in case we want to try to remove
         // client-specific data from the server.
         self.syncManager.onRemovedAccount(old)
+
+        // deregister for remote notifications
+        app?.unregisterForRemoteNotifications()
     }
 
     func setAccount(account: FirefoxAccount) {
         KeychainWrapper.setObject(account.asDictionary(), forKey: name + ".account")
         self.account = account
+
+        // register for notifications for the account
+        registerForNotifications()
         
         // tell any observers that our account has changed
         NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil)
 
         self.syncManager.onAddedAccount()
+    }
+
+    func registerForNotifications() {
+        let viewAction = UIMutableUserNotificationAction()
+        viewAction.identifier = SentTabAction.View.rawValue
+        viewAction.title = NSLocalizedString("View", comment: "View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
+        viewAction.activationMode = UIUserNotificationActivationMode.Foreground
+        viewAction.destructive = false
+        viewAction.authenticationRequired = false
+
+        let bookmarkAction = UIMutableUserNotificationAction()
+        bookmarkAction.identifier = SentTabAction.Bookmark.rawValue
+        bookmarkAction.title = NSLocalizedString("Bookmark", comment: "Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
+        bookmarkAction.activationMode = UIUserNotificationActivationMode.Foreground
+        bookmarkAction.destructive = false
+        bookmarkAction.authenticationRequired = false
+
+        let readingListAction = UIMutableUserNotificationAction()
+        readingListAction.identifier = SentTabAction.ReadingList.rawValue
+        readingListAction.title = NSLocalizedString("Add to Reading List", comment: "Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440")
+        readingListAction.activationMode = UIUserNotificationActivationMode.Foreground
+        readingListAction.destructive = false
+        readingListAction.authenticationRequired = false
+
+        let sentTabsCategory = UIMutableUserNotificationCategory()
+        sentTabsCategory.identifier = TabSendCategory
+        sentTabsCategory.setActions([readingListAction, bookmarkAction, viewAction], forContext: UIUserNotificationActionContext.Default)
+
+        sentTabsCategory.setActions([bookmarkAction, viewAction], forContext: UIUserNotificationActionContext.Minimal)
+
+        app?.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert, categories: [sentTabsCategory]))
+        app?.registerForRemoteNotifications()
     }
 
     // Extends NSObject so we can use timers.
