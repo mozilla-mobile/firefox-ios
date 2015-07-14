@@ -44,7 +44,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         // test scrollsToTop works with 1 tab
         tester().tapViewWithAccessibilityIdentifier("url")
         let url = "\(webRoot)/scrollablePage.html?page=1"
-        tester().clearTextFromAndThenEnterText("\(url)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Top")
 
 //        var webView = tester().waitForViewWithAccessibilityLabel("Web content") as? WKWebView
@@ -61,7 +61,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForViewWithAccessibilityLabel("Web content")
         let url2 = "\(webRoot)/scrollablePage.html?page=2"
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterText("\(url2)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url2)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Top")
 
         tester().scrollViewWithAccessibilityIdentifier("contentView", byFractionOfSizeHorizontal: -0.9, vertical: -0.9)

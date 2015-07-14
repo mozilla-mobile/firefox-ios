@@ -7,11 +7,14 @@ import UIKit
 public enum AppBuildChannel {
     case Developer
     case Aurora
+    case Release
 }
 
 public struct AppConstants {
 #if MOZ_CHANNEL_AURORA
     public static let BuildChannel = AppBuildChannel.Aurora
+#elseif MOZ_CHANNEL_RELEASE
+    public static let BuildChannel = AppBuildChannel.Release
 #else
     public static let BuildChannel = AppBuildChannel.Developer
 #endif

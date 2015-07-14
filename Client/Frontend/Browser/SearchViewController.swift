@@ -139,8 +139,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     private func layoutSearchEngineScrollView() {
-        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.height ?? 0
-
+        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.view) ?? 0
         searchEngineScrollView.snp_remakeConstraints { make in
             make.left.right.equalTo(self.view)
             make.bottom.equalTo(self.view).offset(-keyboardHeight)

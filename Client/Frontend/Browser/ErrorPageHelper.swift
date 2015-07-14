@@ -107,10 +107,18 @@ class ErrorPageHelper {
 
     class func register(server: WebServer) {
         server.registerHandlerForMethod("GET", module: "errors", resource: "error.html", handler: { (request) -> GCDWebServerResponse! in
-            let urlString = request.query["url"] as? String
-            let url = (NSURL(string: urlString?.unescape() ?? "") ?? NSURL(string: ""))!
+            var url: NSURL? = ErrorPageHelper.decodeURL(request.URL)
+            // It shouldn't happen, but sometimes this url can be an error page url. If it is
+            // unwrap it as far as wel can.
+            while url != nil && ErrorPageHelper.isErrorPageURL(url!) {
+                url = ErrorPageHelper.decodeURL(url!)
+            }
 
-            if let index = find(self.redirecting, url) {
+            if url == nil {
+                return GCDWebServerResponse(statusCode: 404)
+            }
+
+            if let index = find(self.redirecting, url!) {
                 self.redirecting.removeAtIndex(index)
 
                 let errCode = (request.query["code"] as! String).toInt()
@@ -161,8 +169,8 @@ class ErrorPageHelper {
     func showPage(error: NSError, forUrl url: NSURL, inWebView webView: WKWebView) {
         // Don't show error pages for error pages.
         if ErrorPageHelper.isErrorPageURL(url) {
-            let previousUrl = ErrorPageHelper.decodeURL(url)
-            if let index = find(ErrorPageHelper.redirecting, previousUrl) {
+            if let previousUrl = ErrorPageHelper.decodeURL(url),
+               let index = find(ErrorPageHelper.redirecting, previousUrl) {
                 ErrorPageHelper.redirecting.removeAtIndex(index)
             }
             return
@@ -184,10 +192,13 @@ class ErrorPageHelper {
         return false
     }
 
-    class func decodeURL(url: NSURL) -> NSURL {
+    class func decodeURL(url: NSURL) -> NSURL? {
         let query = url.getQuery()
-        let queryUrl = query["url"]
-        return NSURL(string: query["url"]?.unescape() ?? "")!
+        if let queryUrl = query["url"] {
+            let escaped = queryUrl.unescape()
+            return NSURL(string: escaped)
+        }
+        return nil
     }
 }
 
@@ -203,10 +214,12 @@ extension ErrorPageHelper: BrowserHelper {
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         if let url = message.frameInfo.request.URL {
             if message.frameInfo.mainFrame && ErrorPageHelper.isErrorPageURL(url) {
-                var res = message.body as! [String: String]
-                let type = res["type"]
-                if type == "openInSafari" {
-                    UIApplication.sharedApplication().openURL(ErrorPageHelper.decodeURL(url))
+                if let res = message.body as? [String: String],
+                   let url = ErrorPageHelper.decodeURL(url) {
+                    let type = res["type"]
+                    if type == "openInSafari" {
+                        UIApplication.sharedApplication().openURL(url)
+                    }
                 }
             }
         }

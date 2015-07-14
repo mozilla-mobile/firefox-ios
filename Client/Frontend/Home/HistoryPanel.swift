@@ -222,7 +222,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return self.categories[uiSectionToCategory(section)].rows
     }
 
-
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
@@ -246,32 +245,70 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                         self.refetchData().uponQueue(dispatch_get_main_queue()) { result in
                             // If a section will be empty after removal, we must remove the section itself.
                             if let data = result.successValue {
-                                tableView.beginUpdates()
+
+                                let oldCategories = self.categories
                                 self.data = data
                                 self.computeSectionOffsets()
 
-                                let spec = self.categories[category]
-                                if spec.rows == 0 {
-                                    // Remove the section. Sections can't be empty.
-                                    self.tableView.deleteSections(NSIndexSet(index: section), withRowAnimation: UITableViewRowAnimation.Left)
-                                } else {
-                                    self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
-                                }
+                                let sectionsToDelete = NSMutableIndexSet()
+                                var rowsToDelete = [NSIndexPath]()
+                                let sectionsToAdd = NSMutableIndexSet()
+                                var rowsToAdd = [NSIndexPath]()
 
-                                // If the query was limited, we may also add a row at the end.
-                                if data.count == self.QueryLimit {
-                                    if let site = data[self.QueryLimit-1] {
-                                        let categoryIndex = self.categoryForDate(site.latestVisit!.date)
-                                        let section = self.categoryToUISection(categoryIndex)!
-                                        let category = self.categories[categoryIndex]
-                                        if category.rows == 1 {
-                                            let sections = NSIndexSet(index: section)
-                                            self.tableView.insertSections(sections, withRowAnimation: UITableViewRowAnimation.Right)
-                                        } else {
-                                            let indexPath = NSIndexPath(forItem: category.rows-1, inSection: section)
-                                            self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
+                                for (index, category) in enumerate(self.categories) {
+                                    let oldCategory = oldCategories[index]
+
+                                    // don't bother if we're not displaying this category
+                                    if oldCategory.section == nil && category.section == nil {
+                                        continue
+                                    }
+
+                                    // 1. add a new section if the section didn't previously exist
+                                    if oldCategory.section == nil && category.section != oldCategory.section {
+                                        log.debug("adding section \(category.section)")
+                                        sectionsToAdd.addIndex(category.section!)
+                                    }
+
+                                    // 2. add a new row if there are more rows now than there were before
+                                    if oldCategory.rows < category.rows {
+                                        log.debug("adding row to \(category.section) at \(category.rows-1)")
+                                        rowsToAdd.append(NSIndexPath(forRow: category.rows-1, inSection: category.section!))
+                                    }
+
+                                    // if we're dealing with the section where the row was deleted:
+                                    // 1. if the category no longer has a section, then we need to delete the entire section
+                                    // 2. delete a row if the number of rows has been reduced
+                                    // 3. delete the selected row and add a new one on the bottom of the section if the number of rows has stayed the same
+                                    if oldCategory.section == indexPath.section {
+                                        if category.section == nil {
+                                            log.debug("deleting section \(indexPath.section)")
+                                            sectionsToDelete.addIndex(indexPath.section)
+                                        } else if oldCategory.section == category.section {
+                                            if oldCategory.rows > category.rows {
+                                                log.debug("deleting row from \(category.section) at \(indexPath.row)")
+                                                rowsToDelete.append(indexPath)
+                                            } else if category.rows == oldCategory.rows {
+                                                log.debug("in section \(category.section), removing row at \(indexPath.row) and inserting row at \(category.rows-1)")
+                                                rowsToDelete.append(indexPath)
+                                                rowsToAdd.append(NSIndexPath(forRow: category.rows-1, inSection: indexPath.section))
+                                            }
                                         }
                                     }
+                                }
+
+                                tableView.beginUpdates()
+                                if sectionsToAdd.count > 0 {
+                                    tableView.insertSections(sectionsToAdd, withRowAnimation: UITableViewRowAnimation.Left)
+                                }
+                                if sectionsToDelete.count > 0 {
+                                    tableView.deleteSections(sectionsToDelete, withRowAnimation: UITableViewRowAnimation.Right)
+                                }
+                                if !rowsToDelete.isEmpty {
+                                    tableView.deleteRowsAtIndexPaths(rowsToDelete, withRowAnimation: UITableViewRowAnimation.Right)
+                                }
+
+                                if !rowsToAdd.isEmpty {
+                                    tableView.insertRowsAtIndexPaths(rowsToAdd, withRowAnimation: UITableViewRowAnimation.Right)
                                 }
 
                                 tableView.endUpdates()

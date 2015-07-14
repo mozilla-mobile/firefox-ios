@@ -69,6 +69,7 @@ public class TabsPayload: CleartextPayloadJSON {
     // lives in Storage, and Tab is more closely tied to TabsPayload.
 
     var remoteTabs: [RemoteTab] {
+        println(self)
         if let clientGUID = self["id"].asString {
             return optFilter(self["tabs"].asArray!.map({ Tab.remoteTabFromJSON($0, clientGUID: clientGUID) }))
         }

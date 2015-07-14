@@ -164,15 +164,20 @@ class Browser: NSObject {
 
     var displayURL: NSURL? {
         if let url = webView?.URL ?? lastRequest?.URL {
-            if !AboutUtils.isAboutHomeURL(url) {
-                if ReaderModeUtils.isReaderModeURL(url) {
-                    return ReaderModeUtils.decodeURL(url)
-                }
+            if ReaderModeUtils.isReaderModeURL(url) {
+                return ReaderModeUtils.decodeURL(url)
+            }
 
-                if ErrorPageHelper.isErrorPageURL(url) {
-                    return ErrorPageHelper.decodeURL(url)
+            if ErrorPageHelper.isErrorPageURL(url) {
+                let decodedURL = ErrorPageHelper.decodeURL(url)
+                if !AboutUtils.isAboutURL(decodedURL) {
+                    return decodedURL
+                } else {
+                    return nil
                 }
-
+            }
+            
+            if !AboutUtils.isAboutURL(url) {
                 return url
             }
         }
@@ -220,7 +225,7 @@ class Browser: NSObject {
     }
 
     func getHelper(#name: String) -> BrowserHelper? {
-        return helperManager!.getHelper(name: name)
+        return helperManager?.getHelper(name: name)
     }
 
     func hideContent(animated: Bool = false) {

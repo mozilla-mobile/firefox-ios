@@ -12,7 +12,7 @@ private struct HomePanelViewControllerUX {
     static let ButtonContainerHeight: CGFloat = 40
     static let ButtonContainerBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
     static let BackgroundColor = UIConstants.PanelBackgroundColor
-    static let EditDoneButtonLeftPadding: CGFloat = 10
+    static let EditDoneButtonRightPadding: CGFloat = -12
 }
 
 protocol HomePanelViewControllerDelegate: class {
@@ -60,6 +60,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView = UIView()
         buttonContainerView.backgroundColor = HomePanelViewControllerUX.BackgroundColor
         buttonContainerView.clipsToBounds = true
+        buttonContainerView.accessibilityNavigationStyle = .Combined
+        buttonContainerView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).")
         view.addSubview(buttonContainerView)
 
         self.buttonContainerBottomBorderView = UIView()
@@ -121,6 +123,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
                 let panel = self.panels[index].makeViewController(profile: profile)
                 (panel as! HomePanel).homePanelDelegate = self
+                panel.view.accessibilityNavigationStyle = .Combined
+                panel.view.accessibilityLabel = self.panels[index].accessibilityLabel
                 self.showPanel(panel)
             }
         }
@@ -222,9 +226,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             button.setTitle(NSLocalizedString("Done", comment: "Done editing button"), forState: UIControlState.Normal)
             button.addTarget(self, action: "endEditing:", forControlEvents: UIControlEvents.TouchUpInside)
             button.transform = translateDown
+            button.titleLabel?.textAlignment = .Right
             self.buttonContainerView.addSubview(button)
             button.snp_makeConstraints { make in
-                make.left.equalTo(self.buttonContainerView).offset(HomePanelViewControllerUX.EditDoneButtonLeftPadding)
+                make.right.equalTo(self.buttonContainerView).offset(HomePanelViewControllerUX.EditDoneButtonRightPadding)
                 make.centerY.equalTo(self.buttonContainerView)
             }
             self.buttonContainerView.layoutIfNeeded()
