@@ -4,13 +4,12 @@
 
 import UIKit
 import Shared
+import XCGLogger
 import Storage
 
-private let ThumbnailIdentifier = "Thumbnail"
+private let log = XCGLogger.defaultInstance()
 
-struct TopSitesPanelUX {
-    static let SuggestedTileImagePadding: CGFloat = 10
-}
+private let ThumbnailIdentifier = "Thumbnail"
 
 class Tile: Site {
     let backgroundColor: UIColor
@@ -247,16 +246,21 @@ private class TopSitesCollectionView: UICollectionView {
 }
 
 private class TopSitesLayout: UICollectionViewLayout {
-    private var thumbnailRows = 3
+    private var thumbnailRows: Int {
+        return Int((self.collectionView?.frame.height ?? 100) / self.thumbnailHeight)
+    }
+
     private var thumbnailCols = 2
     private var thumbnailCount: Int { return thumbnailRows * thumbnailCols }
     private var width: CGFloat { return self.collectionView?.frame.width ?? 0 }
 
     // The width and height of the thumbnail here are the width and height of the tile itself, not the image inside the tile.
-    private var thumbnailWidth: CGFloat { return (width - ThumbnailCellUX.Insets.left - ThumbnailCellUX.Insets.right) / CGFloat(thumbnailCols) }
-    // The tile's height is determined the aspect ratio of the thumbnails width + the height of the text label on the bottom. We also take into account
+    private var thumbnailWidth: CGFloat {
+        let insets = ThumbnailCellUX.Insets
+        return (width - insets.left - insets.right) / CGFloat(thumbnailCols) }
+    // The tile's height is determined the aspect ratio of the thumbnails width. We also take into account
     // some padding between the title and the image.
-    private var thumbnailHeight: CGFloat { return thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio) + CGFloat(ThumbnailCellUX.TextSize) + CGFloat(ThumbnailCellUX.Insets.bottom) + CGFloat(ThumbnailCellUX.TextOffset) }
+    private var thumbnailHeight: CGFloat { return thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio) }
 
     // Used to calculate the height of the list.
     private var count: Int {
@@ -269,7 +273,8 @@ private class TopSitesLayout: UICollectionViewLayout {
     private var topSectionHeight: CGFloat {
         let maxRows = ceil(Float(count) / Float(thumbnailCols))
         let rows = min(Int(maxRows), thumbnailRows)
-        return thumbnailHeight * CGFloat(rows) + ThumbnailCellUX.Insets.top + ThumbnailCellUX.Insets.bottom
+        let insets = ThumbnailCellUX.Insets
+        return thumbnailHeight * CGFloat(rows) + insets.top + insets.bottom
     }
 
     override init() {
@@ -283,11 +288,11 @@ private class TopSitesLayout: UICollectionViewLayout {
 
     private func setupForOrientation(orientation: UIInterfaceOrientation) {
         if orientation.isLandscape {
-            thumbnailRows = 2
+            thumbnailCols = 5
+        } else if UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact {
             thumbnailCols = 3
         } else {
-            thumbnailRows = 3
-            thumbnailCols = 2
+            thumbnailCols = 4
         }
     }
 
@@ -332,9 +337,10 @@ private class TopSitesLayout: UICollectionViewLayout {
         // Set the top thumbnail frames.
         let row = floor(Double(indexPath.item / thumbnailCols))
         let col = indexPath.item % thumbnailCols
-        let x = ThumbnailCellUX.Insets.left + thumbnailWidth * CGFloat(col)
-        let y = ThumbnailCellUX.Insets.top + CGFloat(row) * thumbnailHeight
-        attr.frame = CGRectMake(x, y, thumbnailWidth, thumbnailHeight)
+        let insets = ThumbnailCellUX.Insets
+        let x = insets.left + thumbnailWidth * CGFloat(col)
+        let y = insets.top + CGFloat(row) * thumbnailHeight
+        attr.frame = CGRectMake(ceil(x), ceil(y), thumbnailWidth, thumbnailHeight)
 
         return attr
     }
@@ -372,24 +378,57 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     private func setDefaultThumbnailBackground(cell: ThumbnailCell) {
-        cell.imageView.image = UIImage(named: "defaultFavicon")!
+        cell.imageView.image = UIImage(named: "defaultTopSiteIcon")!
         cell.imageView.contentMode = UIViewContentMode.Center
+    }
+
+    private func getFavicon(cell: ThumbnailCell, site: Site) {
+        // TODO: This won't work well with recycled views. Thankfully, TopSites doesn't really recycle much.'
+        cell.imageView.image = nil
+        cell.backgroundImage.image = nil
+
+        FaviconFetcher.getForUrl(site.url.asURL!, profile: profile) >>== { icons in
+            if (icons.count > 0) {
+                cell.imageView.sd_setImageWithURL(icons[0].url.asURL!) { (img, err, type, url) -> Void in
+                    if let img = img {
+                        cell.backgroundImage.image = img
+                        cell.image = img
+                    } else {
+                        let icon = Favicon(url: "", date: NSDate(), type: IconType.NoneFound)
+                        self.profile.favicons.addFavicon(icon, forSite: site)
+                        self.setDefaultThumbnailBackground(cell)
+                    }
+                }
+            }
+        }
     }
 
     private func createTileForSite(cell: ThumbnailCell, site: Site) -> ThumbnailCell {
         cell.textLabel.text = site.title.isEmpty ? site.url : site.title
         cell.imageWrapper.backgroundColor = UIColor.clearColor()
-        // cell.backgroundColor = UIColor.random()
 
-        if let thumbs = profile.thumbnails as? SDWebThumbnails {
-            let key = SDWebThumbnails.getKey(site.url)
-            cell.imageView.moz_getImageFromCache(key, cache: thumbs.cache, completed: { img, err, type, key in
-                if img == nil { self.setDefaultThumbnailBackground(cell) }
-            })
+        if let icon = site.icon {
+            // We've looked before recently and didn't find a favicon
+            switch icon.type {
+            case .NoneFound:
+                let t = NSDate().timeIntervalSinceDate(icon.date)
+                if t < FaviconFetcher.ExpirationTime {
+                    self.setDefaultThumbnailBackground(cell)
+                }
+            default:
+                cell.imageView.sd_setImageWithURL(icon.url.asURL, completed: { (img, err, type, url) -> Void in
+                    if let img = img {
+                        cell.backgroundImage.image = img
+                        cell.image = img
+                    } else {
+                        self.getFavicon(cell, site: site)
+                    }
+                })
+            }
         } else {
-            setDefaultThumbnailBackground(cell)
+            getFavicon(cell, site: site)
         }
-        cell.imagePadding = 0
+
         cell.isAccessibilityElement = true
         cell.accessibilityLabel = cell.textLabel.text
         cell.removeButton.hidden = !editingThumbnails
@@ -399,6 +438,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     private func createTileForSuggestedSite(cell: ThumbnailCell, tile: Tile) -> ThumbnailCell {
         cell.textLabel.text = tile.title.isEmpty ? tile.url : tile.title
         cell.imageWrapper.backgroundColor = tile.backgroundColor
+        cell.backgroundImage.image = nil
 
         if let iconString = tile.icon?.url {
             let icon = NSURL(string: iconString)!
@@ -415,7 +455,6 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
             self.setDefaultThumbnailBackground(cell)
         }
 
-        cell.imagePadding = TopSitesPanelUX.SuggestedTileImagePadding
         cell.imageView.contentMode = UIViewContentMode.ScaleAspectFit
         cell.isAccessibilityElement = true
         cell.accessibilityLabel = cell.textLabel.text

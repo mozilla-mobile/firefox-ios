@@ -12,7 +12,7 @@ private struct HomePanelViewControllerUX {
     static let ButtonContainerHeight: CGFloat = 40
     static let ButtonContainerBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
     static let BackgroundColor = UIConstants.PanelBackgroundColor
-    static let EditDoneButtonLeftPadding: CGFloat = 10
+    static let EditDoneButtonRightPadding: CGFloat = -12
 }
 
 protocol HomePanelViewControllerDelegate: class {
@@ -222,9 +222,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             button.setTitle(NSLocalizedString("Done", comment: "Done editing button"), forState: UIControlState.Normal)
             button.addTarget(self, action: "endEditing:", forControlEvents: UIControlEvents.TouchUpInside)
             button.transform = translateDown
+            button.titleLabel?.textAlignment = .Right
             self.buttonContainerView.addSubview(button)
             button.snp_makeConstraints { make in
-                make.left.equalTo(self.buttonContainerView).offset(HomePanelViewControllerUX.EditDoneButtonLeftPadding)
+                make.right.equalTo(self.buttonContainerView).offset(HomePanelViewControllerUX.EditDoneButtonRightPadding)
                 make.centerY.equalTo(self.buttonContainerView)
             }
             self.buttonContainerView.layoutIfNeeded()

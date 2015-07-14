@@ -10,3 +10,4 @@ github "wesj/Deferred" "master"   # Making Deferred extensible
 github "CEWendel/SWTableViewCell"
 github "st3fan/SQLite.swift" "master"
 github "mozilla/readability" "master"
+github "ZaBlanc/RaptureXML" "master"
