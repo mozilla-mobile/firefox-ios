@@ -466,7 +466,6 @@ class URLBarView: UIView {
         prepareEditingAnimation(editing)
 
         if animated {
-            self.layoutIfNeeded()
             UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: nil, animations: { _ in
                 self.transitionToEditing(editing)
                 self.layoutIfNeeded()
