@@ -933,11 +933,23 @@ extension BrowserViewController: BrowserToolbarDelegate {
                 var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
                 // Hide 'Add to Reading List' which currently uses Safari
                 activityViewController.excludedActivityTypes = [UIActivityTypeAddToReadingList]
+                activityViewController.completionWithItemsHandler = { _, completed, _, _ in
+                    if completed {
+                        if let selectedTab = self.tabManager.selectedTab {
+                            // We don't know what share action the user has chosen so we simply always
+                            // update the toolbar and reader mode bar to refelect the latest status.
+                            self.updateURLBarDisplayURL(selectedTab)
+                            self.updateReaderModeBar()
+                        }
+                    }
+                }
+
                 if let popoverPresentationController = activityViewController.popoverPresentationController {
                     // Using the button for the sourceView here results in this not showing on iPads.
                     popoverPresentationController.sourceView = toolbar ?? urlBar
                     popoverPresentationController.sourceRect = button.frame ?? button.frame
                     popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
+                    popoverPresentationController.delegate = self
                 }
                 presentViewController(activityViewController, animated: true, completion: nil)
             }
@@ -1176,8 +1188,7 @@ extension BrowserViewController: TabManagerDelegate {
             wv.scrollView.hidden = true
         }
 
-        if let tab = selected,
-               webView = tab.webView {
+        if let tab = selected, webView = tab.webView {
             // if we have previously hidden this scrollview in order to make scrollsToTop work then
             // we should ensure that it is not hidden now that it is our foreground scrollView
             if webView.scrollView.hidden {
@@ -1643,14 +1654,7 @@ extension BrowserViewController : Transitionable {
 }
 
 extension BrowserViewController {
-    func showReaderModeBar(#animated: Bool) {
-        if self.readerModeBar == nil {
-            let readerModeBar = ReaderModeBarView(frame: CGRectZero)
-            readerModeBar.delegate = self
-            view.insertSubview(readerModeBar, belowSubview: header)
-            self.readerModeBar = readerModeBar
-        }
-
+    func updateReaderModeBar() {
         if let readerModeBar = readerModeBar {
             if let url = self.tabManager.selectedTab?.displayURL?.absoluteString, result = profile.readingList?.getRecordWithURL(url) {
                 if let successValue = result.successValue, record = successValue {
@@ -1665,6 +1669,17 @@ extension BrowserViewController {
                 readerModeBar.added = false
             }
         }
+    }
+
+    func showReaderModeBar(#animated: Bool) {
+        if self.readerModeBar == nil {
+            let readerModeBar = ReaderModeBarView(frame: CGRectZero)
+            readerModeBar.delegate = self
+            view.insertSubview(readerModeBar, belowSubview: header)
+            self.readerModeBar = readerModeBar
+        }
+
+        updateReaderModeBar()
 
         self.updateViewConstraints()
     }
