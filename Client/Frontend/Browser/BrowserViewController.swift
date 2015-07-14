@@ -305,13 +305,14 @@ class BrowserViewController: UIViewController {
                 alertView.show()
             } else {
                 tabManager.restoreTabs()
-
-                // If restoring tabs failed, was disable, or there was nothing to restore, create an initial tab
-                if tabManager.count == 0 {
-                    let tab = tabManager.addTab()
-                    tabManager.selectTab(tab)
-                }
             }
+        }
+
+        // If restoring tabs failed, was disabled, there was nothing to restore, or we're running tests,
+        // create an initial about:home tab.
+        if tabManager.count == 0 {
+            let tab = tabManager.addTab()
+            tabManager.selectTab(tab)
         }
     }
 
