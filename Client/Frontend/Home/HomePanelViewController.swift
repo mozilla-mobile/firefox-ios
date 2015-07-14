@@ -60,6 +60,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView = UIView()
         buttonContainerView.backgroundColor = HomePanelViewControllerUX.BackgroundColor
         buttonContainerView.clipsToBounds = true
+        buttonContainerView.accessibilityNavigationStyle = .Combined
+        buttonContainerView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).")
         view.addSubview(buttonContainerView)
 
         self.buttonContainerBottomBorderView = UIView()
@@ -121,6 +123,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
                 let panel = self.panels[index].makeViewController(profile: profile)
                 (panel as! HomePanel).homePanelDelegate = self
+                panel.view.accessibilityNavigationStyle = .Combined
+                panel.view.accessibilityLabel = self.panels[index].accessibilityLabel
                 self.showPanel(panel)
             }
         }
