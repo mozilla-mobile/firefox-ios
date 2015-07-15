@@ -164,23 +164,21 @@ class Browser: NSObject {
 
     var displayURL: NSURL? {
         if let url = webView?.URL ?? lastRequest?.URL {
-            if !AboutUtils.isAboutHomeURL(url) {
-                if ReaderModeUtils.isReaderModeURL(url) {
-                    return ReaderModeUtils.decodeURL(url)
-                }
+            if ReaderModeUtils.isReaderModeURL(url) {
+                return ReaderModeUtils.decodeURL(url)
+            }
 
-                if ErrorPageHelper.isErrorPageURL(url) {
-                    let decodedURL = ErrorPageHelper.decodeURL(url)
-                    if !AboutUtils.isAboutURL(decodedURL) {
-                        return decodedURL
-                    } else {
-                        return nil
-                    }
+            if ErrorPageHelper.isErrorPageURL(url) {
+                let decodedURL = ErrorPageHelper.decodeURL(url)
+                if !AboutUtils.isAboutURL(decodedURL) {
+                    return decodedURL
+                } else {
+                    return nil
                 }
-                
-                if !AboutUtils.isAboutURL(url) {
-                    return url
-                }
+            }
+            
+            if !AboutUtils.isAboutURL(url) {
+                return url
             }
         }
         return nil
