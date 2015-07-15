@@ -9,20 +9,33 @@ import Foundation
  * The keyboard state at the time of notification.
  */
 public struct KeyboardState {
-    public let height: CGFloat
     public let animationDuration: Double
     public let animationCurve: UIViewAnimationCurve
+    private let userInfo: [NSObject: AnyObject]
 
-    private init(_ userInfo: [NSObject: AnyObject], height: CGFloat) {
-        self.height = height
+    private init(_ userInfo: [NSObject: AnyObject]) {
+        self.userInfo = userInfo
         animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! Double
-
         // HACK: UIViewAnimationCurve doesn't expose the keyboard animation used (curveValue = 7),
         // so UIViewAnimationCurve(rawValue: curveValue) returns nil. As a workaround, get a
         // reference to an EaseIn curve, then change the underlying pointer data with that ref.
         let curveValue = userInfo[UIKeyboardAnimationCurveUserInfoKey] as! Int
         animationCurve = UIViewAnimationCurve.EaseIn
         NSNumber(integer: curveValue).getValue(&animationCurve)
+    }
+
+    /// Return the height of the keyboard that overlaps with the specified view. This is more
+    /// accurate than simply using the height of UIKeyboardFrameBeginUserInfoKey since for example
+    /// on iPad the overlap may be partial or if an external keyboard is attached, the intersection
+    /// height will be zero. (Even if the height of the *invisible* keyboard will look normal!)
+    public func intersectionHeightForView(view: UIView) -> CGFloat {
+        if let keyboardFrameValue = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardFrame = keyboardFrameValue.CGRectValue()
+            let convertedKeyboardFrame = view.convertRect(keyboardFrame, fromView: nil)
+            let intersection = CGRectIntersection(convertedKeyboardFrame, view.bounds)
+            return intersection.size.height
+        }
+        return 0
     }
 }
 
@@ -76,20 +89,20 @@ public class KeyboardHelper: NSObject {
     }
 
     func SELkeyboardWillShow(notification: NSNotification) {
-        let userInfo = notification.userInfo!
-        let height = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue().height
-        currentState = KeyboardState(userInfo, height: height)
-
-        for weakDelegate in delegates {
-            weakDelegate.delegate?.keyboardHelper(self, keyboardWillShowWithState: currentState!)
+        if let userInfo = notification.userInfo {
+            currentState = KeyboardState(userInfo)
+            for weakDelegate in delegates {
+                weakDelegate.delegate?.keyboardHelper(self, keyboardWillShowWithState: currentState!)
+            }
         }
     }
 
     func SELkeyboardWillHide(notification: NSNotification) {
-        currentState = KeyboardState(notification.userInfo!, height: 0)
-
-        for weakDelegate in delegates {
-            weakDelegate.delegate?.keyboardHelper(self, keyboardWillHideWithState: currentState!)
+        if let userInfo = notification.userInfo {
+            currentState = KeyboardState(userInfo)
+            for weakDelegate in delegates {
+                weakDelegate.delegate?.keyboardHelper(self, keyboardWillHideWithState: currentState!)
+            }
         }
     }
 }

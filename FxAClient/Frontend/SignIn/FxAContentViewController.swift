@@ -287,7 +287,7 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
 
 extension FxAContentViewController: KeyboardHelperDelegate {
     private func layoutInnerViews() {
-        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.height ?? 0
+        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.webView) ?? 0
 
         self.webView.snp_remakeConstraints { make in
             make.left.right.top.equalTo(self.view)
