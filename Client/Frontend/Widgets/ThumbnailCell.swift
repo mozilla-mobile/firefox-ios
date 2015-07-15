@@ -127,6 +127,7 @@ class ThumbnailCell: UICollectionViewCell {
 
     lazy var removeButton: UIButton = {
         let removeButton = UIButton()
+        removeButton.accessibilityLabel = NSLocalizedString("Remove page", tableName: "topSites", comment: "Button shown in editing mode to remove this site from the top sites panel.")
         removeButton.setImage(UIImage(named: "TileCloseButton"), forState: UIControlState.Normal)
         removeButton.addTarget(self, action: "SELdidRemove", forControlEvents: UIControlEvents.TouchUpInside)
         removeButton.hidden = true
