@@ -323,40 +323,25 @@ extension SQLiteHistory: Favicons {
         return deferResult(DatabaseError(err: err))
     }
 
-    /**
-     * This method assumes that the site has already been recorded
-     * in the history table.
-     */
-    public func addFavicon(icon: Favicon, forSite site: Site) -> Deferred<Result<Int>> {
-        if LogPII {
-            log.verbose("Adding favicon \(icon.url) for site \(site.url).")
-        }
-        func doChange(query: String, args: Args?) -> Deferred<Result<Int>> {
+    private func addFavicon(conn: SQLiteDBConnection, icon: Favicon, site: Site, inout err: NSError?) -> Bool {
+        func doChange(query: String, args: Args?) -> Bool {
             var err: NSError?
-            let res = db.withWritableConnection(&err) { (conn, inout err: NSError?) -> Int in
-                // Blind! We don't see failure here.
-                let id = self.favicons.insertOrUpdate(conn, obj: icon)
+            // Blind! We don't see failure here.
+            icon.id = self.favicons.insertOrUpdate(conn, obj: icon)
 
-                // Now set up the mapping.
-                err = conn.executeChange(query, withArgs: args)
-                if let err = err {
-                    log.error("Got error adding icon: \(err).")
-                    return 0
-                }
-
-                // Try to update the favicon ID column in the bookmarks table as well for this favicon
-                // if this site has been bookmarked
-                if let id = id {
-                    conn.executeChange("UPDATE \(TableBookmarks) SET faviconID = ? WHERE url = ?", withArgs: [id, site.url])
-                }
-
-                return id ?? 0
+            // Now set up the mapping.
+            err = conn.executeChange(query, withArgs: args)
+            if let err = err {
+                log.error("Got error adding icon: \(err).")
+                return false
             }
 
-            if res == 0 {
-                return deferResult(DatabaseError(err: err))
+            // Try to update the favicon ID column in the bookmarks table as well for this favicon
+            // if this site has been bookmarked
+            if let id = icon.id {
+                conn.executeChange("UPDATE \(TableBookmarks) SET faviconID = ? WHERE url = ?", withArgs: [id, site.url])
             }
-            return deferResult(icon.id!)
+            return true
         }
 
         let siteSubselect = "(SELECT id FROM \(TableHistory) WHERE url = ?)"
@@ -385,6 +370,33 @@ extension SQLiteHistory: Favicons {
         // The worst.
         let args: Args? = [site.url, icon.url]
         return doChange("\(insertOrIgnore) (\(siteSubselect), \(iconSubselect))", args)
+    }
+
+    /**
+     * This method assumes that the site has already been recorded
+     * in the history table.
+     */
+    public func addFavicons(icons: [Favicon], forSite site: Site) -> Deferred<Result<[Int]>> {
+        if LogPII {
+            log.verbose("Adding \(icons.count) favicons for site \(site.url).")
+        }
+
+        var ids = [Int]()
+        var err: NSError? = nil
+        db.transaction(&err, callback: { (connection, err) -> Bool in
+            for icon in icons {
+                if !self.addFavicon(connection, icon: icon, site: site, err: &err) {
+                    return false
+                }
+                ids.append(icon.id ?? 0)
+            }
+            return true
+        })
+
+        if let err = err {
+            return deferResult(DatabaseError(err: err))
+        }
+        return deferResult(ids)
     }
 }
 
