@@ -31,14 +31,14 @@ private struct BrowserViewControllerUX {
 }
 
 class BrowserViewController: UIViewController {
-
-    private var urlBar: URLBarView!
-    private var readerModeBar: ReaderModeBarView?
+    var homePanelController: HomePanelViewController?
+    var webViewContainer: UIView!
+    var urlBar: URLBarView!
+    var readerModeBar: ReaderModeBarView?
+    
     private var statusBarOverlay: UIView!
     private var toolbar: BrowserToolbar?
-    private var homePanelController: HomePanelViewController?
     private var searchController: SearchViewController?
-    private var webViewContainer: UIView!
     private let uriFixup = URIFixup()
     private var screenshotHelper: ScreenshotHelper!
     private var homePanelIsInline = false
@@ -54,11 +54,11 @@ class BrowserViewController: UIViewController {
     private weak var tabTrayController: TabTrayController!
 
     private let profile: Profile
-    private let tabManager: TabManager
+    let tabManager: TabManager
 
     // These views wrap the urlbar and toolbar to provide background effects on them
-    private var header: UIView!
-    private var footer: UIView!
+    var header: UIView!
+    var footer: UIView!
     private var footerBackground: UIView!
     private var topTouchArea: UIButton!
 
@@ -102,22 +102,16 @@ class BrowserViewController: UIViewController {
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        if header == nil {
-            return UIStatusBarStyle.LightContent
-        }
-        if header.transform.ty == 0 {
-            return UIStatusBarStyle.LightContent
-        }
-        return UIStatusBarStyle.Default
+        return UIStatusBarStyle.LightContent
     }
 
-    func shouldShowToolbarForTraitCollection(previousTraitCollection: UITraitCollection) -> Bool {
+    func shouldShowFooterForTraitCollection(previousTraitCollection: UITraitCollection) -> Bool {
         return previousTraitCollection.verticalSizeClass != .Compact &&
                previousTraitCollection.horizontalSizeClass != .Regular
     }
 
     private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection) {
-        let showToolbar = shouldShowToolbarForTraitCollection(newCollection)
+        let showToolbar = shouldShowFooterForTraitCollection(newCollection)
 
         urlBar.setShowToolbar(!showToolbar)
         toolbar?.removeFromSuperview()
@@ -416,6 +410,7 @@ class BrowserViewController: UIViewController {
 
     private func wrapInEffect(view: UIView, parent: UIView, backgroundColor: UIColor?) -> UIView {
         let effect = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
+        effect.clipsToBounds = true
         effect.setTranslatesAutoresizingMaskIntoConstraints(false)
         if let background = backgroundColor {
             view.backgroundColor = backgroundColor
@@ -733,24 +728,13 @@ extension BrowserViewController: URLBarDelegate {
         let tabTrayController = TabTrayController()
         tabTrayController.profile = profile
         tabTrayController.tabManager = tabManager
-        tabTrayController.transitioningDelegate = self
-        tabTrayController.modalPresentationStyle = .Custom
 
         if let tab = tabManager.selectedTab {
             tab.screenshot = screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1)
         }
 
-        presentViewController(tabTrayController, animated: true, completion: nil)
+        self.navigationController?.pushViewController(tabTrayController, animated: true)
         self.tabTrayController = tabTrayController
-    }
-
-    func dismissTabTrayController(#animated: Bool, completion: () -> Void) {
-        if let tabTrayController = tabTrayController {
-            tabTrayController.dismissViewControllerAnimated(animated) {
-                completion()
-                self.tabTrayController = nil
-            }
-        }
     }
 
     func urlBarDidPressReaderMode(urlBar: URLBarView) {
@@ -1567,95 +1551,6 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
     }
 }
 
-extension BrowserViewController : UIViewControllerTransitioningDelegate {
-    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return TransitionManager(show: false)
-    }
-
-    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return TransitionManager(show: true)
-    }
-}
-
-extension BrowserViewController : Transitionable {
-    private func headerTransformToCellFrame(frame: CGRect) -> CGAffineTransform {
-        let scale = frame.size.width / header.frame.size.width
-        // Since the scale will happen in the center of the frame, we move this so the centers of the two frames overlap.
-        let tx = frame.origin.x + frame.width/2 - (header.frame.origin.x + header.frame.width/2)
-        let ty = frame.origin.y - header.frame.origin.y * scale * 2 // Move this up a little actually keeps it above the web page. I'm not sure what you want
-        var transform = CGAffineTransformMakeTranslation(tx, ty)
-        return CGAffineTransformScale(transform, scale, scale)
-    }
-
-    private func footerTransformToCellFrame(frame: CGRect) -> CGAffineTransform {
-        let tx = frame.origin.x + frame.width/2 - (footer.frame.origin.x + footer.frame.width/2)
-        var footerTransform = CGAffineTransformMakeTranslation(tx, -footer.frame.origin.y + frame.origin.y + frame.size.height - footer.frame.size.height)
-        let footerScale = frame.size.width / footer.frame.size.width
-        return CGAffineTransformScale(footerTransform, footerScale, footerScale)
-    }
-
-    func transitionablePreHide(transitionable: Transitionable, options: TransitionOptions) {
-        // Move all the webview's off screen
-        for i in 0..<tabManager.count {
-            if let tab = tabManager[i] {
-                tab.webView?.hidden = true
-            }
-        }
-        self.homePanelController?.view.hidden = true
-    }
-
-    func transitionablePreShow(transitionable: Transitionable, options: TransitionOptions) {
-        // Move all the webview's off screen
-        for i in 0..<tabManager.count {
-            if let tab = tabManager[i] {
-                tab.webView?.hidden = true
-            }
-        }
-
-        // Move over the transforms to reflect where the opening tab is coming from instead of where the previous tab was
-        if let frame = options.cellFrame {
-            header.transform = CGAffineTransformIdentity
-            footer.transform = CGAffineTransformIdentity
-            header.transform = headerTransformToCellFrame(frame)
-            footer.transform = footerTransformToCellFrame(frame)
-        }
-
-        self.homePanelController?.view.hidden = true
-    }
-
-    func transitionableWillShow(transitionable: Transitionable, options: TransitionOptions) {
-        view.alpha = 1
-
-        header.transform = CGAffineTransformIdentity
-        footer.transform = CGAffineTransformIdentity
-    }
-
-    func transitionableWillHide(transitionable: Transitionable, options: TransitionOptions) {
-        view.alpha = 0
-
-        if let frame = options.cellFrame {
-            header.transform = headerTransformToCellFrame(frame)
-            footer.transform = footerTransformToCellFrame(frame)
-        }
-    }
-
-    func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
-        // Move all the webview's back on screen
-        for i in 0..<tabManager.count {
-            if let tab = tabManager[i] {
-                tab.webView?.hidden = false
-            }
-        }
-
-        self.homePanelController?.view.hidden = false
-        if options.toView === self {
-            startTrackingAccessibilityStatus()
-        } else {
-            stopTrackingAccessibilityStatus()
-        }
-    }
-}
-
 extension BrowserViewController {
     func updateReaderModeBar() {
         if let readerModeBar = readerModeBar {
@@ -1852,14 +1747,18 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 introViewController.preferredContentSize = CGSize(width: IntroViewControllerUX.Width, height: IntroViewControllerUX.Height)
                 introViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
             }
-            presentViewController(introViewController, animated: false) {
+            presentViewController(introViewController, animated: true) {
                 self.profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
             }
         }
     }
 
     func introViewControllerDidFinish(introViewController: IntroViewController) {
-        introViewController.dismissViewControllerAnimated(true, completion: nil)
+        introViewController.dismissViewControllerAnimated(true) { finished in
+            if self.navigationController?.viewControllers.count > 1 {
+                self.navigationController?.popToRootViewControllerAnimated(true)
+            }
+        }
     }
 
     func presentSignInViewController() {
