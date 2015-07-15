@@ -34,8 +34,8 @@ class BrowserViewController: UIViewController {
     var homePanelController: HomePanelViewController?
     var webViewContainer: UIView!
     var urlBar: URLBarView!
-
-    private var readerModeBar: ReaderModeBarView?
+    var readerModeBar: ReaderModeBarView?
+    
     private var statusBarOverlay: UIView!
     private var toolbar: BrowserToolbar?
     private var searchController: SearchViewController?

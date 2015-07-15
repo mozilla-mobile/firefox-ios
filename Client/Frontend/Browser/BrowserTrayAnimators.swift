@@ -29,6 +29,7 @@ private extension TrayToBrowserAnimator {
         let tabTraySettingsButton = tabTray.settingsButton
         let tabIndex = tabManager.selectedIndex
         let urlBar = bvc.urlBar
+        let readerModeBar = bvc.readerModeBar
 
         // Hiden browser components
         bvc.webViewContainer.hidden = true
@@ -56,8 +57,12 @@ private extension TrayToBrowserAnimator {
         // Reset any transform we had previously on the header and transform them to where the cell will be animating from
         bvcHeader.transform = CGAffineTransformIdentity
         bvcFooter.transform = CGAffineTransformIdentity
+        readerModeBar?.transform = CGAffineTransformIdentity
         bvcHeader.transform = transformForHeaderFrame(bvcHeader.frame, toCellFrame: cell.frame)
         bvcFooter.transform = transformForFooterFrame(bvcFooter.frame, toCellFrame: cell.frame)
+        if let readerModeBar = readerModeBar {
+            readerModeBar.transform = transformForReaderBarFrame(readerModeBar.frame, toCellFrame: cell.frame)
+        }
 
         var finalFrame = bvc.webViewContainer.frame
         if AboutUtils.isAboutURL(browser?.url) {
@@ -78,6 +83,8 @@ private extension TrayToBrowserAnimator {
             cell.title.transform = CGAffineTransformMakeTranslation(0, -cell.title.frame.height)
             bvcHeader.transform = CGAffineTransformIdentity
             bvcFooter.transform = CGAffineTransformIdentity
+            readerModeBar?.transform = CGAffineTransformIdentity
+
             urlBar.updateAlphaForSubviews(1)
             bvcFooter.alpha = 1
 
@@ -127,6 +134,7 @@ private extension BrowserToTrayAnimator {
         let tabTraySettingsButton = tabTray.settingsButton
         let tabIndex = tabManager.selectedIndex
         let urlBar = bvc.urlBar
+        let readerModeBar = bvc.readerModeBar
 
         bvc.webViewContainer.hidden = true
         bvc.homePanelController?.view.hidden = true
@@ -174,6 +182,10 @@ private extension BrowserToTrayAnimator {
                 cell.title.transform = CGAffineTransformIdentity
                 bvcHeader.transform = transformForHeaderFrame(bvcHeader.frame, toCellFrame: finalFrame)
                 bvcFooter.transform = transformForFooterFrame(bvcFooter.frame, toCellFrame: finalFrame)
+
+                if let readerModeBar = readerModeBar {
+                    readerModeBar.transform = transformForReaderBarFrame(readerModeBar.frame, toCellFrame: finalFrame)
+                }
             }
 
             urlBar.updateAlphaForSubviews(0)
@@ -211,6 +223,15 @@ private func transformForFooterFrame(footerFrame: CGRect, toCellFrame cellFrame:
     var footerTransform = CGAffineTransformMakeTranslation(tx, -footerFrame.origin.y + cellFrame.origin.y + cellFrame.size.height - footerFrame.size.height)
     let footerScale = cellFrame.size.width / footerFrame.size.width
     return CGAffineTransformScale(footerTransform, footerScale, footerScale)
+}
+
+private func transformForReaderBarFrame(readerBarFrame: CGRect, toCellFrame cellFrame: CGRect) -> CGAffineTransform {
+    let scale = cellFrame.size.width / readerBarFrame.size.width
+    // Since the scale will happen in the center of the frame, we move this so the centers of the two frames overlap.
+    let tx = cellFrame.origin.x + cellFrame.width/2 - (readerBarFrame.origin.x + readerBarFrame.width/2)
+    let ty = cellFrame.origin.y - readerBarFrame.origin.y * scale * 2 // Move this up a little actually keeps it above the web page. I'm not sure what you want
+    var transform = CGAffineTransformMakeTranslation(tx, ty)
+    return CGAffineTransformScale(transform, scale, scale)
 }
 
 private func createTransitionCellFromBrowser(browser: Browser?) -> TabCell {
