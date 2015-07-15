@@ -683,7 +683,6 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
 
     func advance() -> ReadyDeferred {
         // Fetch crypto/keys, unless it's present in the cache already.
-        // For now, just fetch.
         //
         // N.B., we assume that if the server has a meta/global, we don't have a cached crypto/keys,
         // and the server doesn't have crypto/keys, that the server was wiped.
@@ -695,6 +694,22 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
         //
         // TODO: detect when the keys have changed, and scream and run away if so.
         // TODO: upload keys if necessary, then go to Restart.
+
+        if let keys = self.scratchpad.keys {
+            if let cryptoModified = self.info.modified("crypto") {
+                // The record timestamp *should* be no more recent than the current collection,
+                // (but we don't check that). All we care about here is if the server might have
+                // a newer record, in which case we won't use the cached keys.
+                if keys.timestamp >= cryptoModified {
+                    // Strictly speaking we can avoid fetching if this condition is not true,
+                    // for example if crypto/ is modified for a different reason.
+                    let ready = Ready(client: self.client, scratchpad: self.scratchpad, token: self.token, info: self.info, keys: keys.value)
+                    log.info("Using cached crypto/keys.  Arrived in Ready state.")
+                    return deferResult(ready)
+                }
+            }
+        }
+
         let syncKey = Keys(defaultBundle: self.scratchpad.syncKeyBundle)
         let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0 })
         let encrypter = syncKey.encrypter("keys", encoder: encoder)
