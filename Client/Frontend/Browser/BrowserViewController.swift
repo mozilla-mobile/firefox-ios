@@ -139,7 +139,6 @@ class BrowserViewController: UIViewController {
 
         if let tab = tabManager.selectedTab,
                webView = tab.webView {
-            updateURLBarDisplayURL(tab)
             navigationToolbar.updateBackStatus(webView.canGoBack)
             navigationToolbar.updateForwardStatus(webView.canGoForward)
             navigationToolbar.updateReloadStatus(tab.loading ?? false)
