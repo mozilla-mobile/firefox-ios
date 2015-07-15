@@ -16,4 +16,6 @@
 #import "Carthage/Checkouts/SWTableViewCell/SWTableViewCell/PodFiles/SWTableViewCell.h"
 #import "Carthage/Checkouts/RaptureXML/RaptureXML/RXMLElement.h"
 
+#import "WKWebView+PrivateAPI.h"
+
 #endif
