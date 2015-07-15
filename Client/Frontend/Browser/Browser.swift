@@ -170,10 +170,17 @@ class Browser: NSObject {
                 }
 
                 if ErrorPageHelper.isErrorPageURL(url) {
-                    return ErrorPageHelper.decodeURL(url)
+                    let decodedURL = ErrorPageHelper.decodeURL(url)
+                    if !AboutUtils.isAboutURL(decodedURL) {
+                        return decodedURL
+                    } else {
+                        return nil
+                    }
                 }
-
-                return url
+                
+                if !AboutUtils.isAboutURL(url) {
+                    return url
+                }
             }
         }
         return nil
