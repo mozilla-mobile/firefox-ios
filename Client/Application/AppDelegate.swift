@@ -44,8 +44,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // will restore with.
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         browserViewController.restorationClass = AppDelegate.self
+        browserViewController.automaticallyAdjustsScrollViewInsets = false
 
         rootViewController = UINavigationController(rootViewController: browserViewController)
+        rootViewController.automaticallyAdjustsScrollViewInsets = false
         rootViewController.delegate = self
         rootViewController.navigationBarHidden = true
 

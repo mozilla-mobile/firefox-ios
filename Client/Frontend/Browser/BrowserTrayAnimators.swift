@@ -59,13 +59,11 @@ private extension TrayToBrowserAnimator {
         bvcHeader.transform = transformForHeaderFrame(bvcHeader.frame, toCellFrame: cell.frame)
         bvcFooter.transform = transformForFooterFrame(bvcFooter.frame, toCellFrame: cell.frame)
 
-        let showToolbar = bvc.shouldShowToolbarForTraitCollection(tabTray.traitCollection)
-        var offset: CGFloat = showToolbar ? 1 : 2
-        let finalFrame = bvc.webViewContainer.frame
-//        let finalFrame = CGRec.height - (UIConstants.ToolbarHeight * offset + TabTrayControllerUX.StatusBarHeight))t(x: 0,
-//                                y: container.frame.origin.y + UIConstants.ToolbarHeight + TabTrayControllerUX.StatusBarHeight,
-//                                width: container.frame.width,
-//                                height: container.frame
+        var finalFrame = bvc.webViewContainer.frame
+        if AboutUtils.isAboutURL(browser?.url) {
+            bvcFooter.hidden = true
+            finalFrame.size.height += UIConstants.ToolbarHeight
+        }
 
         UIView.animateWithDuration(self.transitionDuration(transitionContext),
             delay: 0, usingSpringWithDamping: 1,
@@ -98,6 +96,7 @@ private extension TrayToBrowserAnimator {
             bvc.startTrackingAccessibilityStatus()
             bvc.webViewContainer.hidden = false
             bvc.homePanelController?.view.hidden = false
+            bvcFooter.hidden = false
             transitionContext.completeTransition(true)
         })
     }
