@@ -115,22 +115,25 @@ class ReadingListClientTestCase: XCTestCase {
         })
 
         // Get the record with a last modified set, which should result in a NotModified result
+        if recordId != nil {
+            let getExpectation = expectationWithDescription("get")
 
-        let getExpectation = expectationWithDescription("get")
-
-        client.getRecordWithGuid(recordId!, ifModifiedSince: recordLastModified) { (result) -> Void in
-            getExpectation.fulfill()
-            switch result {
-                case ReadingListGetRecordResult.NotModified(let response):
-                    break
-                default:
-                    XCTFail("Expected a ReadingListGetRecordResult.NotModified")
+            client.getRecordWithGuid(recordId!, ifModifiedSince: recordLastModified) { (result) -> Void in
+                getExpectation.fulfill()
+                switch result {
+                    case ReadingListGetRecordResult.NotModified(let response):
+                        break
+                    default:
+                        XCTFail("Expected a ReadingListGetRecordResult.NotModified")
+                }
             }
-        }
 
-        waitForExpectationsWithTimeout(5.0, handler: { error in
-            XCTAssertNil(error, "Error")
-        })
+            waitForExpectationsWithTimeout(5.0, handler: { error in
+                XCTAssertNil(error, "Error")
+            })
+        } else {
+            XCTFail("Expected the record ID to have been set")
+        }
     }
 
     func testBatchAddRecords() {
@@ -266,34 +269,37 @@ class ReadingListClientTestCase: XCTestCase {
 
         //
 
-        let getExpectation = expectationWithDescription("get")
+        if recordId != nil {
+            let getExpectation = expectationWithDescription("get")
 
-        client.getRecordWithGuid(recordId!) { (result) -> Void in
-            getExpectation.fulfill()
-            switch result {
-                case ReadingListGetRecordResult.Success(let response):
-                    // Check if lastModified is present in ReadingListResponse
-                    XCTAssertTrue(response.lastModified != nil)
-                    XCTAssertTrue(response.lastModified > 0)
-                    // Check if record is present in ReadingListRecordResponse
-                    let record = response.record
-                    XCTAssert(record != nil)
-                    XCTAssert(record!.serverMetadata != nil)
-                    XCTAssertEqual(record!.serverMetadata!.guid, recordId!)
-                    XCTAssertNotNil(record!.url)
-                    XCTAssertEqual(record!.url, "http://localhost/article/1234")
-                    XCTAssertNotNil(record!.title)
-                    XCTAssertEqual(record!.title, "Article 1234")
-                    XCTAssertNotNil(record!.addedBy)
-                    XCTAssertEqual(record!.addedBy, "testGetRecord")
-                default:
-                    XCTFail("Expected a ReadingListGetRecordResult.Success")
+            client.getRecordWithGuid(recordId!) { (result) -> Void in
+                getExpectation.fulfill()
+                switch result {
+                    case ReadingListGetRecordResult.Success(let response):
+                        // Check if lastModified is present in ReadingListResponse
+                        XCTAssertTrue(response.lastModified != nil)
+                        XCTAssertTrue(response.lastModified > 0)
+                        // Check if record is present in ReadingListRecordResponse
+                        let record = response.record
+                        XCTAssert(record != nil)
+                        XCTAssert(record!.serverMetadata != nil)
+                        XCTAssertEqual(record!.serverMetadata!.guid, recordId!)
+                        XCTAssertNotNil(record!.url)
+                        XCTAssertEqual(record!.url, "http://localhost/article/1234")
+                        XCTAssertNotNil(record!.title)
+                        XCTAssertEqual(record!.title, "Article 1234")
+                        XCTAssertNotNil(record!.addedBy)
+                        XCTAssertEqual(record!.addedBy, "testGetRecord")
+                    default:
+                        XCTFail("Expected a ReadingListGetRecordResult.Success")
+                }
             }
+            waitForExpectationsWithTimeout(5.0, handler: { error in
+                XCTAssertNil(error, "Error")
+            })
+        } else {
+            XCTFail("Expected the record ID to have been set")
         }
-
-        waitForExpectationsWithTimeout(5.0, handler: { error in
-            XCTAssertNil(error, "Error")
-        })
     }
 
     func testGetMissingRecord() {
@@ -427,42 +433,49 @@ class ReadingListClientTestCase: XCTestCase {
         })
 
         //
+        if recordId != nil {
+            let deleteExpectation = expectationWithDescription("delete")
 
-        let deleteExpectation = expectationWithDescription("delete")
+            client.deleteRecordWithGuid(recordId!) { (result) -> Void in
+                deleteExpectation.fulfill()
+                switch result {
+                    case ReadingListDeleteRecordResult.Success(let response):
+                        break
+                    default:
+                        XCTFail("Expected a ReadingListDeleteResult.MissingRecordFailure")
+                        break
+                }
+            }
 
-        client.deleteRecordWithGuid(recordId!) { (result) -> Void in
-            deleteExpectation.fulfill()
-            switch result {
-                case ReadingListDeleteRecordResult.Success(let response):
+            waitForExpectationsWithTimeout(5.0, handler: { error in
+                XCTAssertNil(error, "Error")
+            })
+        } else {
+            XCTFail("Expected the record ID to have been set")
+        }
+
+        //
+
+        if recordId != nil {
+            let getExpectation = expectationWithDescription("get")
+
+            client.getRecordWithGuid(recordId!) { (result) -> Void in
+                getExpectation.fulfill()
+                switch result {
+                case ReadingListGetRecordResult.NotFound(let response):
                     break
                 default:
                     XCTFail("Expected a ReadingListDeleteResult.MissingRecordFailure")
                     break
+                }
             }
+
+            waitForExpectationsWithTimeout(5.0, handler: { error in
+                XCTAssertNil(error, "Error")
+            })
+        } else {
+            XCTFail("Expected the record ID to have been set")
         }
-
-        waitForExpectationsWithTimeout(5.0, handler: { error in
-            XCTAssertNil(error, "Error")
-        })
-
-        //
-
-        let getExpectation = expectationWithDescription("get")
-
-        client.getRecordWithGuid(recordId!) { (result) -> Void in
-            getExpectation.fulfill()
-            switch result {
-            case ReadingListGetRecordResult.NotFound(let response):
-                break
-            default:
-                XCTFail("Expected a ReadingListDeleteResult.MissingRecordFailure")
-                break
-            }
-        }
-
-        waitForExpectationsWithTimeout(5.0, handler: { error in
-            XCTAssertNil(error, "Error")
-        })
     }
 
     func testDeleteMissingRecord() {
