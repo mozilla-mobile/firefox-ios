@@ -139,10 +139,9 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
             let url1 = NSURL(string: value!)
 
             if url1?.host != url2?.host {
-                assertionFailure("Form submit URL domain doesn't match login's domain.")
-                self._formSubmitURL = nil
-                return
+                log.warning("Form submit URL domain doesn't match login's domain.")
             }
+
             self._formSubmitURL = value
         }
     }
