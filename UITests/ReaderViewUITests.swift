@@ -30,7 +30,7 @@ class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
     func loadReaderContent() {
         tester().tapViewWithAccessibilityIdentifier("url")
         let url = "\(webRoot)/readerContent.html"
-        tester().clearTextFromAndThenEnterText("\(url)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
         tester().tapViewWithAccessibilityLabel("Reader View")
     }
 

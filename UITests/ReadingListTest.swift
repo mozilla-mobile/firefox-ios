@@ -19,7 +19,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         // Load a page
         tester().tapViewWithAccessibilityIdentifier("url")
         let url1 = "\(webRoot)/readablePage.html"
-        tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Readable Page")
 
         // Add it to the reading list
@@ -29,7 +29,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         // Open a new page
         tester().tapViewWithAccessibilityIdentifier("url")
         let url2 = "\(webRoot)/numberedPage.html?page=1"
-        tester().clearTextFromAndThenEnterText("\(url2)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url2)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Check that it appears in the reading list home panel
