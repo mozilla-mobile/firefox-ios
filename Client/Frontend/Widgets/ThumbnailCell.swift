@@ -11,6 +11,8 @@ struct ThumbnailCellUX {
     static let TextSize = UIConstants.DefaultSmallFontSize
     static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
     static let BorderWidth: CGFloat = 1
+    static let SelectedBackgroundColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.lightGrayColor()
+    static let SelectedBackgroundColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.lightGrayColor()
     static let LabelFont = UIConstants.DefaultSmallFont
     static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x353535)
     static let LabelBackgroundColor = UIColor(white: 1.0, alpha: 0.5)
@@ -226,4 +228,36 @@ class ThumbnailCell: UICollectionViewCell {
                 }
             })
     }
+
+    var imagePadding: CGFloat {
+        didSet {
+            imageView.snp_remakeConstraints({ make in
+                make.top.bottom.left.right.equalTo(self.imageWrapper).insets(UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding))
+            })
+        }
+    }
+
+    var image: UIImage? = nil {
+        didSet {
+            if let image = image {
+                imageView.image = image
+                imageView.alignment = UIImageViewAlignmentMaskTop
+                imageView.contentMode = UIViewContentMode.ScaleAspectFill
+            } else {
+                imageView.image = ThumbnailCellUX.PlaceholderImage
+                imageView.alignment = UIImageViewAlignmentMaskCenter
+                imageView.contentMode = UIViewContentMode.Center
+            }
+        }
+    }
+    
+    override var selected: Bool {
+        willSet {
+            super.selected = selected
+            if (selected) {
+                self.backgroundColor = ThumbnailCellUX.SelectedBackgroundColor
+            }
+        }
+    }
+
 }
