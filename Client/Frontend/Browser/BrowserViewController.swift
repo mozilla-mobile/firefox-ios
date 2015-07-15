@@ -1747,14 +1747,18 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 introViewController.preferredContentSize = CGSize(width: IntroViewControllerUX.Width, height: IntroViewControllerUX.Height)
                 introViewController.modalPresentationStyle = UIModalPresentationStyle.FormSheet
             }
-            presentViewController(introViewController, animated: false) {
+            presentViewController(introViewController, animated: true) {
                 self.profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
             }
         }
     }
 
     func introViewControllerDidFinish(introViewController: IntroViewController) {
-        introViewController.dismissViewControllerAnimated(true, completion: nil)
+        introViewController.dismissViewControllerAnimated(true) { finished in
+            if self.navigationController?.viewControllers.count > 1 {
+                self.navigationController?.popToRootViewControllerAnimated(true)
+            }
+        }
     }
 
     func presentSignInViewController() {
