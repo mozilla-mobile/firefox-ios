@@ -4,8 +4,10 @@
 
 import Foundation
 
+let TableClients = "clients"
+
 class RemoteClientsTable<T>: GenericTable<RemoteClient> {
-    override var name: String { return "clients" }
+    override var name: String { return TableClients }
     override var version: Int { return 1 }
 
     // TODO: index on guid and last_modified.
