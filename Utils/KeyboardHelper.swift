@@ -41,6 +41,7 @@ public struct KeyboardState {
 
 public protocol KeyboardHelperDelegate: class {
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState)
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState)
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState)
 }
 
@@ -64,8 +65,8 @@ public class KeyboardHelper: NSObject {
      */
     public func startObserving() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELkeyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELkeyboardDidShow:", name: UIKeyboardDidShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELkeyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
-
     }
 
     deinit {
@@ -93,6 +94,15 @@ public class KeyboardHelper: NSObject {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
                 weakDelegate.delegate?.keyboardHelper(self, keyboardWillShowWithState: currentState!)
+            }
+        }
+    }
+
+    func SELkeyboardDidShow(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            currentState = KeyboardState(userInfo)
+            for weakDelegate in delegates {
+                weakDelegate.delegate?.keyboardHelper(self, keyboardDidShowWithState: currentState!)
             }
         }
     }
