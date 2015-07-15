@@ -1504,6 +1504,9 @@ extension BrowserViewController: WKUIDelegate {
     /// Invoked when an error occurs while starting to load data for the main frame.
     func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
         if error.code == Int(CFNetworkErrors.CFURLErrorCancelled.rawValue) {
+            if let browser = tabManager[webView] where browser === tabManager.selectedTab {
+                urlBar.currentURL = browser.displayURL
+            }
             return
         }
 
