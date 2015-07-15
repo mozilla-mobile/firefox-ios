@@ -9,6 +9,7 @@ struct ThumbnailCellUX {
     /// Ratio of width:height of the thumbnail image.
     static let ImageAspectRatio: Float = 1.5
     static let TextSize = UIConstants.DefaultSmallFontSize
+    static let SelectedBackgroundColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.lightGrayColor()
     static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
     static let LabelFont = UIConstants.DefaultSmallFont
     static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.darkGrayColor()
@@ -145,6 +146,15 @@ class ThumbnailCell: UICollectionViewCell {
                 imageView.image = ThumbnailCellUX.PlaceholderImage
                 imageView.alignment = UIImageViewAlignmentMaskCenter
                 imageView.contentMode = UIViewContentMode.Center
+            }
+        }
+    }
+    
+    override var selected: Bool {
+        willSet {
+            super.selected = selected
+            if (selected) {
+                self.backgroundColor = ThumbnailCellUX.SelectedBackgroundColor
             }
         }
     }
