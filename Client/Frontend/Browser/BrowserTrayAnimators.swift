@@ -219,8 +219,9 @@ private func createTransitionCellFromBrowser(browser: Browser?) -> TabCell {
     cell.titleText.text = browser?.displayTitle
     if let favIcon = browser?.displayFavicon {
         cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
+    } else {
+        cell.favicon.image = UIImage(named: "defaultFavicon")
     }
-    
     cell.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
     cell.innerStroke.hidden = true
     return cell
