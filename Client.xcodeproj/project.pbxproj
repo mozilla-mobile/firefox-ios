@@ -50,8 +50,6 @@
 		0BB5B2D71AC0ABA40052877D /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B2BB1AC0AB9F0052877D /* UIImage+Extensions.swift */; };
 		0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */; };
 		0BB5B3601AC0D6360052877D /* BookmarkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */; };
-		0BC9CBD21B33DEB100422411 /* Logins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDA56B11B26B1E4008C9B96 /* Logins.swift */; };
-		0BC9CBF21B33DEB800422411 /* SQLiteLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDA56B31B26B203008C9B96 /* SQLiteLogins.swift */; };
 		0BD19A651A2530840084FBA7 /* Locking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE108391A1B1ED200D4B712 /* Locking.swift */; };
 		0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
 		0BD19A681A2530A40084FBA7 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
@@ -304,7 +302,6 @@
 		744B0FFE1B4F172E00100422 /* ToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B0FFD1B4F172E00100422 /* ToolbarTests.swift */; };
 		746B6A791B277C1800EA83E3 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = 746B6A781B277C1800EA83E3 /* SessionRestore.html */; };
 		74C027451B2A348C001B1E88 /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* SessionData.swift */; };
-		6BE4ACF91B0657180092AEBE /* Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE4ACF81B0657180092AEBE /* Accessibility.swift */; };
 		7BF5A1CA1B4160EA00EA9DD8 /* SyncCommandsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1C91B4160EA00EA9DD8 /* SyncCommandsTable.swift */; };
 		7BF5A1EA1B41640500EA9DD8 /* SyncQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1E91B41640500EA9DD8 /* SyncQueue.swift */; };
 		7BF5A1EE1B429B3100EA9DD8 /* SyncCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1ED1B429B3100EA9DD8 /* SyncCommandsTests.swift */; };
@@ -542,15 +539,8 @@
 		E4D567911ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567681ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift */; };
 		E4D567921ADECE8100F1EFE7 /* ReadingListUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567691ADECE8100F1EFE7 /* ReadingListUtils.swift */; };
 		E4D567931ADECE8100F1EFE7 /* ReadingListUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567691ADECE8100F1EFE7 /* ReadingListUtils.swift */; };
-		E4D5679E1ADECEB800F1EFE7 /* ReadingListBatchRecordResponseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567941ADECEB800F1EFE7 /* ReadingListBatchRecordResponseTestCase.swift */; };
 		E4D5679F1ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567951ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift */; };
-		E4D567A01ADECEB800F1EFE7 /* ReadingListClientTestCase.json in Resources */ = {isa = PBXBuildFile; fileRef = E4D567961ADECEB800F1EFE7 /* ReadingListClientTestCase.json */; };
-		E4D567A11ADECEB800F1EFE7 /* ReadingListClientTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567971ADECEB800F1EFE7 /* ReadingListClientTestCase.swift */; };
-		E4D567A31ADECEB800F1EFE7 /* ReadingListFetchSpecTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D567991ADECEB800F1EFE7 /* ReadingListFetchSpecTestCase.swift */; };
-		E4D567A41ADECEB800F1EFE7 /* ReadingListOAuthAuthenticatorTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5679A1ADECEB800F1EFE7 /* ReadingListOAuthAuthenticatorTestCase.swift */; };
 		E4D567A51ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5679B1ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift */; };
-		E4D567A61ADECEB800F1EFE7 /* ReadingListSynchronizerTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5679C1ADECEB800F1EFE7 /* ReadingListSynchronizerTestCase.swift */; };
-		E4D567A71ADECEB800F1EFE7 /* ReadingListTestCaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D5679D1ADECEB800F1EFE7 /* ReadingListTestCaseUtils.swift */; };
 		E4D567BD1ADED48700F1EFE7 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567B41ADED44A00F1EFE7 /* SQLite.framework */; };
 		E4D567BE1ADED4BB00F1EFE7 /* SQLite.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567B41ADED44A00F1EFE7 /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4D567BF1ADED4DE00F1EFE7 /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4D567B41ADED44A00F1EFE7 /* SQLite.framework */; };
@@ -656,13 +646,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = EEBCC9D719CC627D0083B827;
 			remoteInfo = "SnapKit iOS";
-		};
-		0BC9CBE61B33DEB100422411 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0B6544B01A96C59E000DD202 /* SDWebImage.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4A2CADFF1AB4BB5300B6BC39;
-			remoteInfo = WebImage;
 		};
 		2827316A1ABC9BE700AA1954 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -922,20 +905,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 55E3EE4419D76F280068C3A7;
 			remoteInfo = "XCGLogger (iOS)";
-		};
-		744B101C1B4F172E00100422 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D38B2D761A8D98380040E6B5 /* SWXMLHash.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CD9D052C1A757D8B003CCB21;
-			remoteInfo = SWXMLHashOSX;
-		};
-		744B101E1B4F172E00100422 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D38B2D761A8D98380040E6B5 /* SWXMLHash.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CD9D05361A757D8B003CCB21;
-			remoteInfo = SWXMLHashOSXTests;
 		};
 		D31FC2301A8D908900BAF7EC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1394,8 +1363,6 @@
 		744B0FFD1B4F172E00100422 /* ToolbarTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTests.swift; sourceTree = "<group>"; };
 		746B6A781B277C1800EA83E3 /* SessionRestore.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SessionRestore.html; sourceTree = "<group>"; };
 		74C027441B2A348C001B1E88 /* SessionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionData.swift; sourceTree = "<group>"; };
-		74C295261B21152000862FE3 /* AboutHomeHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutHomeHandler.swift; sourceTree = "<group>"; };
-		6BE4ACF81B0657180092AEBE /* Accessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accessibility.swift; sourceTree = "<group>"; };
 		7BF5A1C91B4160EA00EA9DD8 /* SyncCommandsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncCommandsTable.swift; sourceTree = "<group>"; };
 		7BF5A1E91B41640500EA9DD8 /* SyncQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncQueue.swift; sourceTree = "<group>"; };
 		7BF5A1ED1B429B3100EA9DD8 /* SyncCommandsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncCommandsTests.swift; sourceTree = "<group>"; };
@@ -1571,15 +1538,8 @@
 		E4D567671ADECE8100F1EFE7 /* ReadingListSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListSynchronizer.swift; sourceTree = "<group>"; };
 		E4D567681ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListSyncMetadata.swift; sourceTree = "<group>"; };
 		E4D567691ADECE8100F1EFE7 /* ReadingListUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListUtils.swift; sourceTree = "<group>"; };
-		E4D567941ADECEB800F1EFE7 /* ReadingListBatchRecordResponseTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListBatchRecordResponseTestCase.swift; sourceTree = "<group>"; };
 		E4D567951ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListClientRecordTestCase.swift; sourceTree = "<group>"; };
-		E4D567961ADECEB800F1EFE7 /* ReadingListClientTestCase.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ReadingListClientTestCase.json; sourceTree = "<group>"; };
-		E4D567971ADECEB800F1EFE7 /* ReadingListClientTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListClientTestCase.swift; sourceTree = "<group>"; };
-		E4D567991ADECEB800F1EFE7 /* ReadingListFetchSpecTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListFetchSpecTestCase.swift; sourceTree = "<group>"; };
-		E4D5679A1ADECEB800F1EFE7 /* ReadingListOAuthAuthenticatorTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListOAuthAuthenticatorTestCase.swift; sourceTree = "<group>"; };
 		E4D5679B1ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListStorageTestCase.swift; sourceTree = "<group>"; };
-		E4D5679C1ADECEB800F1EFE7 /* ReadingListSynchronizerTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListSynchronizerTestCase.swift; sourceTree = "<group>"; };
-		E4D5679D1ADECEB800F1EFE7 /* ReadingListTestCaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadingListTestCaseUtils.swift; sourceTree = "<group>"; };
 		E4D567AA1ADED44A00F1EFE7 /* SQLite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SQLite.xcodeproj; path = Carthage/Checkouts/SQLite.swift/SQLite.xcodeproj; sourceTree = "<group>"; };
 		E4D6BEB51A092E0300F538BD /* Fennec.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Fennec.entitlements; sourceTree = "<group>"; };
 		E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
@@ -1798,13 +1758,6 @@
 			path = ThirdParty/UIImageViewAligned/UIImageViewAligned;
 			sourceTree = "<group>";
 		};
-		0B59D3361B27A5460037A0A5 /* Browser */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Browser;
-			sourceTree = "<group>";
-		};
 		0B5B51AC1B4CDB9E00E3B6E9 /* RaptureXML */ = {
 			isa = PBXGroup;
 			children = (
@@ -1830,7 +1783,6 @@
 			isa = PBXGroup;
 			children = (
 				0B742CCC1B32491400EE9264 /* libsqlcipher.a */,
-				0BC9CBE71B33DEB100422411 /* WebImage.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2332,8 +2284,6 @@
 			children = (
 				D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */,
 				D38B2D831A8D98380040E6B5 /* SWXMLHashTests.xctest */,
-				744B101D1B4F172E00100422 /* SWXMLHash.framework */,
-				744B101F1B4F172E00100422 /* SWXMLHashOSXTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2516,15 +2466,8 @@
 		E4D567281ADECE2800F1EFE7 /* ReadingListTests */ = {
 			isa = PBXGroup;
 			children = (
-				E4D567941ADECEB800F1EFE7 /* ReadingListBatchRecordResponseTestCase.swift */,
 				E4D567951ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift */,
-				E4D567961ADECEB800F1EFE7 /* ReadingListClientTestCase.json */,
-				E4D567971ADECEB800F1EFE7 /* ReadingListClientTestCase.swift */,
-				E4D567991ADECEB800F1EFE7 /* ReadingListFetchSpecTestCase.swift */,
-				E4D5679A1ADECEB800F1EFE7 /* ReadingListOAuthAuthenticatorTestCase.swift */,
 				E4D5679B1ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift */,
-				E4D5679C1ADECEB800F1EFE7 /* ReadingListSynchronizerTestCase.swift */,
-				E4D5679D1ADECEB800F1EFE7 /* ReadingListTestCaseUtils.swift */,
 				E4D567291ADECE2800F1EFE7 /* Supporting Files */,
 			);
 			path = ReadingListTests;
@@ -3431,13 +3374,6 @@
 			remoteRef = 0BA84ADF1AE57095009C4D0C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		0BC9CBE71B33DEB100422411 /* WebImage.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = WebImage.framework;
-			remoteRef = 0BC9CBE61B33DEB100422411 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		28CE83D01A1D1D5100576538 /* FxA.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -3506,20 +3442,6 @@
 			fileType = wrapper.cfbundle;
 			path = XCGLoggerTests.xctest;
 			remoteRef = 39A362D71AAF5E2C00F47390 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		744B101D1B4F172E00100422 /* SWXMLHash.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SWXMLHash.framework;
-			remoteRef = 744B101C1B4F172E00100422 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		744B101F1B4F172E00100422 /* SWXMLHashOSXTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = SWXMLHashOSXTests.xctest;
-			remoteRef = 744B101E1B4F172E00100422 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		D31FC2311A8D908900BAF7EC /* Alamofire.framework */ = {
@@ -3718,7 +3640,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4D567A01ADECEB800F1EFE7 /* ReadingListClientTestCase.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3859,7 +3780,6 @@
 				28909D9C1ACCBB02009AD220 /* State.swift in Sources */,
 				28926B1B1AC0F074009C0B1D /* EncryptedJSON.swift in Sources */,
 				2894C16A1AE89DDC00F1F92F /* ClientsSynchronizer.swift in Sources */,
-				28ED02271B262B5E003948B2 /* LoginsSynchronizer.swift in Sources */,
 				2F3724C61ABF3C01007607FA /* LiveStorageClientTests.swift in Sources */,
 				28ED02031B26123E003948B2 /* LoginPayload.swift in Sources */,
 				2894C1671AE89DD200F1F92F /* TabsSynchronizer.swift in Sources */,
@@ -4121,16 +4041,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4D5678F1ADECE8100F1EFE7 /* ReadingListSynchronizer.swift in Sources */,
-				E4D567A71ADECEB800F1EFE7 /* ReadingListTestCaseUtils.swift in Sources */,
 				E4D567751ADECE8100F1EFE7 /* ReadingListClientMetadata.swift in Sources */,
 				E4D567A51ADECEB800F1EFE7 /* ReadingListStorageTestCase.swift in Sources */,
 				E4D5676B1ADECE8100F1EFE7 /* ReadingListAuthenticator.swift in Sources */,
 				E4D5676F1ADECE8100F1EFE7 /* ReadingListBatchRecordResponse.swift in Sources */,
-				E4D567A61ADECEB800F1EFE7 /* ReadingListSynchronizerTestCase.swift in Sources */,
-				E4D567A31ADECEB800F1EFE7 /* ReadingListFetchSpecTestCase.swift in Sources */,
 				E41F0D991ADFFB5400FC7387 /* ReadingListService.swift in Sources */,
 				E4D5677B1ADECE8100F1EFE7 /* ReadingListFetchSpec.swift in Sources */,
-				E4D5679E1ADECEB800F1EFE7 /* ReadingListBatchRecordResponseTestCase.swift in Sources */,
 				E4D567811ADECE8100F1EFE7 /* ReadingListRecordResponse.swift in Sources */,
 				E4D567911ADECE8100F1EFE7 /* ReadingListSyncMetadata.swift in Sources */,
 				E4D567931ADECE8100F1EFE7 /* ReadingListUtils.swift in Sources */,
@@ -4139,13 +4055,11 @@
 				E4D567871ADECE8100F1EFE7 /* ReadingListServerMetadata.swift in Sources */,
 				E41F0D9C1ADFFC5600FC7387 /* ReadingListError.swift in Sources */,
 				E4D5677F1ADECE8100F1EFE7 /* ReadingListRecord.swift in Sources */,
-				E4D567A41ADECEB800F1EFE7 /* ReadingListOAuthAuthenticatorTestCase.swift in Sources */,
 				E4D567771ADECE8100F1EFE7 /* ReadingListClientRecord.swift in Sources */,
 				E4D567831ADECE8100F1EFE7 /* ReadingListRecordsResponse.swift in Sources */,
 				E4D5679F1ADECEB800F1EFE7 /* ReadingListClientRecordTestCase.swift in Sources */,
 				E4D567731ADECE8100F1EFE7 /* ReadingListClient.swift in Sources */,
 				E4D567891ADECE8100F1EFE7 /* ReadingListServerRecord.swift in Sources */,
-				E4D567A11ADECEB800F1EFE7 /* ReadingListClientTestCase.swift in Sources */,
 				E4D5678B1ADECE8100F1EFE7 /* ReadingListSQLStorage.swift in Sources */,
 				E4D5676D1ADECE8100F1EFE7 /* ReadingListBasicAuthAuthenticator.swift in Sources */,
 				E4D5678D1ADECE8100F1EFE7 /* ReadingListStorage.swift in Sources */,
