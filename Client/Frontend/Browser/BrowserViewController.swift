@@ -1020,11 +1020,18 @@ extension BrowserViewController: BrowserDelegate {
         snackBars.snp_remakeConstraints({ make in
             let bars = self.snackBars.subviews
             // if the keyboard is showing then ensure that the snackbars are positioned above it, otherwise position them above the toolbar/view bottom
-            if let state = keyboardState {
-                make.bottom.equalTo(-(state.intersectionHeightForView(self.view) + 20)) // TODO Why is this 20 here? I don't think that should be here, it leaves a gap between the keyboard and the snackbar
+            if bars.count > 0 {
+                let view = bars[bars.count-1] as! UIView
+                make.top.equalTo(view.snp_top)
+                if let state = keyboardState {
+                    make.bottom.equalTo(-(state.intersectionHeightForView(self.view)))
+                } else {
+                    make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
+                }
             } else {
-                make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
+                make.top.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
             }
+
             if traitCollection.horizontalSizeClass != .Regular {
                 make.leading.trailing.equalTo(self.footer)
                 self.snackBars.layer.borderWidth = 0
@@ -1033,13 +1040,6 @@ extension BrowserViewController: BrowserDelegate {
                 make.width.equalTo(SnackBarUX.MaxWidth)
                 self.snackBars.layer.borderColor = UIConstants.BorderColor.CGColor
                 self.snackBars.layer.borderWidth = 1
-            }
-
-            if bars.count > 0 {
-                let view = bars[bars.count-1] as! UIView
-                make.top.equalTo(view.snp_top)
-            } else {
-                make.top.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
             }
         })
     }
