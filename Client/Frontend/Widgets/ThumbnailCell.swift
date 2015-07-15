@@ -12,6 +12,7 @@ struct ThumbnailCellUX {
     static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
     static let BorderWidth: CGFloat = 1
     static let SelectedBackgroundColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.lightGrayColor()
+    static let SelectedBackgroundColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor.lightGrayColor()
     static let LabelFont = UIConstants.DefaultSmallFont
     static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x353535)
     static let LabelBackgroundColor = UIColor(white: 1.0, alpha: 0.5)
