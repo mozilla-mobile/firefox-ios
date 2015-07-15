@@ -101,8 +101,6 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
         }
     }
 
-    private var clearedText: String?
-
     static var PlaceholderText: NSAttributedString {
         let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
         return NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
@@ -291,11 +289,7 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
 
     func cancel() {
         active = false
-        if editTextField.text.isEmpty {
-            editTextField.text = clearedText ?? ""
-        } else {
-            updateTextWithURL()
-        }
+        updateTextWithURL()
     }
 
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
@@ -331,12 +325,6 @@ class BrowserLocationView : UIView, UIGestureRecognizerDelegate, UITextFieldDele
         })
         editTextFieldListenerView.hidden = false
     }
-
-    func textFieldShouldClear(textField: UITextField) -> Bool {
-        clearedText = textField.text
-        return true
-    }
-
 
     func longPress(gestureRecognizer: UIGestureRecognizer) {
         if gestureRecognizer.state == .Began {
