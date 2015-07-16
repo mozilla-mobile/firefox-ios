@@ -1226,12 +1226,8 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         navigationToolbar.updateReloadStatus(selected?.loading ?? false)
-
-        let isPage = (selected?.displayURL != nil) ? isWebPage(selected!.displayURL!) : false
-        navigationToolbar.updatePageStatus(isWebPage: isPage)
-
-        self.urlBar.updateBackStatus(selected?.canGoBack ?? false)
-        self.urlBar.updateForwardStatus(selected?.canGoForward ?? false)
+        navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
+        navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
         self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
 
         if let readerMode = selected?.getHelper(name: ReaderMode.name()) as? ReaderMode {
