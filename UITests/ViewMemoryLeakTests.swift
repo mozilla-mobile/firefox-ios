@@ -28,6 +28,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityIdentifier("url")
         let url = "\(webRoot)/numberedPage.html?page=1"
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         tester().runBlock { _ in
             return (aboutHomeController == nil) ? KIFTestStepResult.Success : KIFTestStepResult.Wait
@@ -92,6 +93,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         }
         XCTAssertNil(webView, "webView disposed")
     }
+
 
     private func getChildViewController(parent: UIViewController, childClass: String) -> UIViewController {
         let childControllers = parent.childViewControllers.filter { child in
