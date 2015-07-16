@@ -218,7 +218,7 @@ class BrowserViewController: UIViewController {
         })
         pasteAction = AccessibleAction(name: NSLocalizedString("Paste", comment: "Paste the URL into the location bar"), handler: { () -> Bool in
             if let pasteboardContents = UIPasteboard.generalPasteboard().string {
-                self.urlBar.updateURLBarText(pasteboardContents)
+                self.urlBar.enterOverlayMode(pasteboardContents)
                 return true
             }
             return false
@@ -485,7 +485,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func updateInContentHomePanel(url: NSURL?) {
-        if !urlBar.isEditing {
+        if !urlBar.inOverlayMode {
             if AboutUtils.isAboutHomeURL(url){
                 showHomePanelController(inline: (tabManager.selectedTab?.canGoForward ?? false || tabManager.selectedTab?.canGoBack ?? false))
             } else {
@@ -498,8 +498,6 @@ class BrowserViewController: UIViewController {
         if searchController != nil {
             return
         }
-
-        urlBar.locationView.inputMode = .Search
 
         searchController = SearchViewController()
         searchController!.searchEngines = profile.searchEngines
@@ -525,14 +523,13 @@ class BrowserViewController: UIViewController {
             searchController.view.removeFromSuperview()
             searchController.removeFromParentViewController()
             self.searchController = nil
-            urlBar.locationView.inputMode = .URL
             homePanelController?.view?.hidden = false
         }
     }
 
     private func finishEditingAndSubmit(var url: NSURL, visitType: VisitType) {
         urlBar.currentURL = url
-        urlBar.finishEditing()
+        urlBar.leaveOverlayMode()
 
         if let tab = tabManager.selectedTab,
            let nav = tab.loadRequest(NSURLRequest(URL: url)) {
@@ -606,7 +603,7 @@ class BrowserViewController: UIViewController {
     }
 
     override func accessibilityPerformEscape() -> Bool {
-        if urlBar.canCancel {
+        if urlBar.inOverlayMode {
             urlBar.SELdidClickCancel()
             return true
         } else if let selectedTab = tabManager.selectedTab where selectedTab.canGoBack {
@@ -858,16 +855,11 @@ extension BrowserViewController: URLBarDelegate {
         finishEditingAndSubmit(url!, visitType: VisitType.Typed)
     }
 
-    func urlBarDidBeginEditing(urlBar: URLBarView) {
-        // Pass the edit message along if we are already showing the home panel
-        if let homePanelController = self.homePanelController where homePanelController.view.alpha == 1 {
-            homePanelController.endEditing(nil)
-        } else {
-            showHomePanelController(inline: false)
-        }
+    func urlBarDidEnterOverlayMode(urlBar: URLBarView) {
+        showHomePanelController(inline: false)
     }
 
-    func urlBarDidEndEditing(urlBar: URLBarView) {
+    func urlBarDidLeaveOverlayMode(urlBar: URLBarView) {
         hideSearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url)
     }
@@ -1161,17 +1153,12 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func presentSearchSettingsController() {
-
         let settingsNavigationController = SearchSettingsTableViewController()
         settingsNavigationController.model = self.profile.searchEngines
 
         let navController = UINavigationController(rootViewController: settingsNavigationController)
 
         self.presentViewController(navController, animated: true, completion: nil)
-    }
-
-    func searchViewControllerWillAppear(searchViewController: SearchViewController) {
-        self.urlBar.locationView.editTextField.becomeFirstResponder()
     }
 }
 
