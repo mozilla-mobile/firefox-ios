@@ -271,10 +271,12 @@ extension SQLiteHistory: BrowserHistory {
                 "FROM (\(historySQL)) LEFT OUTER JOIN " +
                 "view_history_id_favicon ON historyID = view_history_id_favicon.id"
             let factory = SQLiteHistory.iconHistoryColumnFactory
+            // log.debug("Run \(sql) with \(args)")
             return db.runQuery(sql, args: args, factory: factory)
         }
 
         let factory = SQLiteHistory.basicHistoryColumnFactory
+        // log.debug("Run \(historySQL) with \(args)")
         return db.runQuery(historySQL, args: args, factory: factory)
     }
 }
