@@ -17,7 +17,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
      * Tests landscape page navigation enablement with the URL bar with tab switching.
      */
     func testLandscapeNavigationWithTabSwitch() {
-        let previousOrientation = UIDevice.currentDevice().valueForKey("orientation")
+        let previousOrientation = UIDevice.currentDevice().valueForKey("orientation") as! Int
 
         // Rotate to landscape.
         let value = UIInterfaceOrientation.LandscapeLeft.rawValue
