@@ -24,6 +24,15 @@ protocol Transitionable : class {
 @objc
 class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning  {
     private let show: Bool
+    private var reduceMotionEnabled: Bool {
+        get {
+            if NSProcessInfo().isOperatingSystemAtLeastVersion(NSOperatingSystemVersion(majorVersion: 8, minorVersion: 0, patchVersion: 0)) {
+                return UIAccessibilityIsReduceMotionEnabled()
+            }
+            return false
+        }
+    }
+
     init(show: Bool) {
         self.show = show
     }
@@ -56,15 +65,23 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning  {
                 to.transitionablePreShow(to, options: options)
                 from.transitionablePreHide(from, options: options)
 
-                UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: UIViewAnimationOptions.AllowUserInteraction |  UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
+                if !reduceMotionEnabled {
+                    UIView.animateWithDuration(duration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: UIViewAnimationOptions.AllowUserInteraction |  UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
                         to.transitionableWillShow(to, options: options)
                         from.transitionableWillHide(from, options: options)
-                    }, completion: { finished in
-                        to.transitionableWillComplete(to, options: options)
-                        from.transitionableWillComplete(from, options: options)
-                        transitionContext.completeTransition(true)
-                })
-
+                        }, completion: { finished in
+                            to.transitionableWillComplete(to, options: options)
+                            from.transitionableWillComplete(from, options: options)
+                            transitionContext.completeTransition(true)
+                    })
+                }
+                else {
+                    to.transitionableWillShow(to, options: options)
+                    from.transitionableWillHide(from, options: options)
+                    to.transitionableWillComplete(to, options: options)
+                    from.transitionableWillComplete(from, options: options)
+                    transitionContext.completeTransition(true)
+                }
             }
         }
     }
