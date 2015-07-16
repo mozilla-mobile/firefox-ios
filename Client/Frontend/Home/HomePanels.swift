@@ -18,9 +18,7 @@ class HomePanels {
     let enabledPanels = [
         HomePanelDescriptor(
             makeViewController: { profile in
-                let controller = TopSitesPanel()
-                controller.profile = profile
-                return controller
+                TopSitesPanel(profile: profile)
             },
             imageName: "TopSites",
             accessibilityLabel: NSLocalizedString("Top sites", comment: "Panel accessibility label")),
