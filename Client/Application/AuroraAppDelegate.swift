@@ -5,8 +5,8 @@
 import Alamofire
 import MessageUI
 
-private let AuroraPropertyListURL = "https://pvtbuilds.mozilla.org/ios/FennecAurora.plist"
-private let AuroraDownloadPageURL = "https://pvtbuilds.mozilla.org/ios/index.html"
+private let AuroraPropertyListURL = "https://people.mozilla.org/iosbuilds/FennecAurora.plist"
+private let AuroraDownloadPageURL = "https://people.mozilla.org/iosbuilds/index.html"
 
 private let AppUpdateTitle = NSLocalizedString("New version available", comment: "Prompt title for application update")
 private let AppUpdateMessage = NSLocalizedString("There is a new version available of Firefox Aurora. Tap OK to go to the download page.", comment: "Prompt message for application update")
