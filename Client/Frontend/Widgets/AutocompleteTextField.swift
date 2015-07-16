@@ -5,11 +5,12 @@
 // This code is loosely based on https://github.com/Antol/APAutocompleteTextField
 
 import UIKit
+import Shared
 
 /// Delegate for the text field events. Since AutocompleteTextField owns the UITextFieldDelegate,
 /// callers must use this instead.
 protocol AutocompleteTextFieldDelegate: class {
-    func autocompleteTextField(autocompleteTextField: AutocompleteTextField, didTextChange text: String)
+    func autocompleteTextField(autocompleteTextField: AutocompleteTextField, didEnterText text: String)
     func autocompleteTextFieldShouldReturn(autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldShouldClear(autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldDidBeginEditing(autocompleteTextField: AutocompleteTextField)
@@ -24,17 +25,24 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     private var completionActive = false
     private var enteredTextLength = 0
+    private var notifyTextChanged: (() -> ())? = nil
 
     var active = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         super.delegate = self
+        self.notifyTextChanged = debounce(0.1, {
+            self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.text)
+        })
     }
 
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         super.delegate = self
+        notifyTextChanged = debounce(0.1, {
+            self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.text)
+        })
     }
 
     func highlightAll() {
@@ -127,7 +135,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         super.insertText(text)
         enteredTextLength = count(self.text)
 
-        autocompleteDelegate?.autocompleteTextField(self, didTextChange: self.text)
+        notifyTextChanged?()
     }
 
     override func caretRectForPosition(position: UITextPosition!) -> CGRect {

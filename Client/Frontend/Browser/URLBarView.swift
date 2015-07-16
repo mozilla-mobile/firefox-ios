@@ -579,7 +579,7 @@ extension URLBarView: AutocompleteTextFieldDelegate {
         return true
     }
 
-    func autocompleteTextField(autocompleteTextField: AutocompleteTextField, didTextChange text: String) {
+    func autocompleteTextField(autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
         delegate?.urlBar(self, didEnterText: text)
     }
 
