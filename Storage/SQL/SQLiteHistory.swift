@@ -191,23 +191,23 @@ extension SQLiteHistory: BrowserHistory {
     public func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
         let frecencySQL = getMicrosecondFrecencySQL("visitDate", "visitCount")
         let orderBy = "ORDER BY \(frecencySQL) DESC "
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, includeIcon: true)
+        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, iconWidth: 16)
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
         let frecencySQL = getMicrosecondFrecencySQL("visitDate", "visitCount")
         let orderBy = "ORDER BY \(frecencySQL) DESC "
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: filter, orderBy: orderBy, includeIcon: true)
+        return self.getFilteredSitesWithLimit(limit, whereURLContains: filter, orderBy: orderBy, iconWidth: 16)
     }
 
     public func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
         let orderBy = "ORDER BY visitDate DESC "
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, includeIcon: true)
+        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, iconWidth: 16)
     }
 
     private class func basicHistoryColumnFactory(row: SDRow) -> Site {
         let id = row["historyID"] as! Int
-        let url = row["url"] as! String
+        let url = row["historyUrl"] as! String
         let title = row["title"] as! String
         let guid = row["guid"] as! String
 
@@ -239,7 +239,10 @@ extension SQLiteHistory: BrowserHistory {
         return site
     }
 
-    private func getFilteredSitesWithLimit(limit: Int, whereURLContains filter: String?, orderBy: String, includeIcon: Bool) -> Deferred<Result<Cursor<Site>>> {
+    private func getFilteredSitesWithLimit(limit: Int, whereURLContains filter: String?, orderBy: String, iconWidth: Int = 16) -> Deferred<Result<Cursor<Site>>> {
+        // iconWidth = -1 : get widest icon
+        // iconWidth = 0 : doesn't get icon
+        // iconWidth > 0 : get smallest icon whose width >= iconWidth
         let args: Args?
         let whereClause: String
         if let filter = filter {
@@ -253,7 +256,7 @@ extension SQLiteHistory: BrowserHistory {
         }
 
         let historySQL =
-        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, " +
+        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS historyUrl, title, guid, " +
         "max(\(TableVisits).date) AS visitDate, " +
         "count(\(TableVisits).date) AS visitCount " +
         "FROM \(TableHistory) INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
@@ -262,14 +265,37 @@ extension SQLiteHistory: BrowserHistory {
         orderBy +
         "LIMIT \(limit) "
 
-        if includeIcon {
+        if iconWidth == -1 {
             // We select the history items then immediately join to get the largest icon.
             // We do this so that we limit and filter *before* joining against icons.
             let sql = "SELECT " +
-                "historyID, url, title, guid, visitDate, visitCount " +
+                "historyID, historyUrl, title, guid, visitDate, visitCount " +
                 "iconID, iconURL, iconDate, iconType, iconWidth " +
                 "FROM (\(historySQL)) LEFT OUTER JOIN " +
                 "view_history_id_favicon ON historyID = view_history_id_favicon.id"
+            let factory = SQLiteHistory.iconHistoryColumnFactory
+            return db.runQuery(sql, args: args, factory: factory)
+        }
+        else if iconWidth > 0 {
+            let iconSql = "SELECT * " +
+                "FROM \(TableFaviconSites) LEFT OUTER JOIN " +
+                "(SELECT " +
+                "favicons.id AS iconID, " +
+                "favicons.url AS iconURL, " +
+                "favicons.date AS iconDate, " +
+                "favicons.type AS iconType, " +
+                "favicons.width AS iconWidth " +
+                "FROM \(TableFavicons)) ON faviconID = iconID"
+            let sql = "SELECT " +
+                "historyID, historyUrl, title, guid, visitDate, visitCount, " +
+                "iconID, iconURL, iconDate, iconType, iconWidth " +
+                "FROM (\(historySQL)) LEFT OUTER JOIN " +
+                "(SELECT " +
+                "siteID, faviconID, iconID, iconURL, iconDate, iconType, " +
+                "MIN(iconWidth) AS iconWidth " +
+                "FROM (\(iconSql)) " +
+                "WHERE iconWidth >= ? GROUP BY siteID) ON historyID = siteID"
+            args?.append(iconWidth)
             let factory = SQLiteHistory.iconHistoryColumnFactory
             return db.runQuery(sql, args: args, factory: factory)
         }
