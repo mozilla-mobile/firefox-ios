@@ -155,6 +155,13 @@ public class BrowserProfile: Profile {
         } else {
             log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
         }
+
+        // If the profile dir doesn't exist yet, this is first run (for this profile).
+        if !files.exists("") {
+            log.info("New profile. Removing old account data.")
+            removeAccount()
+            prefs.clearAll()
+        }
     }
 
     // Extensions don't have a UIApplication.
