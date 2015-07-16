@@ -27,6 +27,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
                 log.info("Fetching tabs.")
                 func doInsert(record: Record<TabsPayload>) -> Deferred<Result<(Int)>> {
                     let remotes = record.payload.remoteTabs
+                    log.debug("\(remotes)")
                     log.info("Inserting \(remotes.count) tabs for client \(record.id).")
                     return localTabs.insertOrUpdateTabsForClientGUID(record.id, tabs: remotes)
                 }
