@@ -86,20 +86,15 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    var profile: Profile! {
-        didSet {
-            if collection != nil {
-                self.refreshHistory(self.layout.thumbnailCount)
-            }
-        }
-    }
+    let profile: Profile
 
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
         layout.setupForOrientation(toInterfaceOrientation)
         collection?.setNeedsLayout()
     }
     
-    init() {
+    init(profile: Profile) {
+        self.profile = profile
         super.init(nibName: nil, bundle: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
     }
