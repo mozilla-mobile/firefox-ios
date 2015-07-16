@@ -10,7 +10,7 @@ if [ -d firefox-ios-l10n ]; then
   exit 1
 fi
 
-svn co https://svn.mozilla.org/projects/l10n-misc/trunk/firefox-ios firefox-ios-l10n
+svn co --non-interactive --trust-server-cert https://svn.mozilla.org/projects/l10n-misc/trunk/firefox-ios firefox-ios-l10n
 
 # Cleanup files (remove unwanted sections, map sv-SE to sv)
 scripts/update-xliff.py firefox-ios-l10n
