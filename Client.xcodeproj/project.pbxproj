@@ -5601,7 +5601,7 @@
 					"-ObjC",
 					"-lxml2",
 				);
-				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_AURORA";
+				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE";
 				SDKROOT = iphoneos;
 				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Storage/modules";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Client-Bridging-Header.h";
@@ -5630,7 +5630,6 @@
 				MOZ_BUNDLE_DISPLAY_NAME = Firefox;
 				MOZ_PRODUCT_NAME = Firefox;
 				OTHER_LDFLAGS = "-ObjC";
-				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE = "";

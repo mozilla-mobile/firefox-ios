@@ -14,6 +14,8 @@ if AppConstants.IsRunningTest {
         appDelegate = AuroraAppDelegate.self
     case .Developer:
         appDelegate = AppDelegate.self
+    case .Release:
+        appDelegate = AppDelegate.self
     }
 }
 
