@@ -31,8 +31,7 @@ private extension TrayToBrowserAnimator {
         let urlBar = bvc.urlBar
         let readerModeBar = bvc.readerModeBar
 
-        // Hiden browser components
-
+        // Hide browser components
         toggleWebViewVisibility(show: false, usingTabManager: tabManager)
         bvc.homePanelController?.view.hidden = true
 
@@ -62,11 +61,14 @@ private extension TrayToBrowserAnimator {
         readerModeBar?.transform = CGAffineTransformIdentity
         bvcHeader.transform = transformForHeaderFrame(bvcHeader.frame, toCellFrame: cell.frame)
         bvcFooter.transform = transformForFooterFrame(bvcFooter.frame, toCellFrame: cell.frame)
+
+        // If we're in reader mode, transform it along with the header
         if let readerModeBar = readerModeBar {
             readerModeBar.transform = transformForReaderBarFrame(readerModeBar.frame, toCellFrame: cell.frame)
         }
 
         var finalFrame = bvc.webViewContainer.frame
+        // Account for the lack of toolbar for home panel views during transition
         if AboutUtils.isAboutURL(browser?.url) {
             bvcFooter.hidden = true
             finalFrame.size.height += UIConstants.ToolbarHeight
@@ -141,6 +143,8 @@ private extension BrowserToTrayAnimator {
 
         // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
         container.insertSubview(tabTray.view, belowSubview: bvc.view)
+
+        // Force subview layout on the collection view so we can calculate the correct end frame for the animation
         tabTray.view.layoutSubviews()
         tabCollectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: tabIndex, inSection: 0), atScrollPosition: .CenteredVertically, animated: false)
 
@@ -158,9 +162,13 @@ private extension BrowserToTrayAnimator {
         container.addSubview(cell)
         cell.layoutIfNeeded()
 
+        // Hide views we don't want to show during the animation in the BVC
         bvc.homePanelController?.view.hidden = true
         toggleWebViewVisibility(show: false, usingTabManager: tabManager)
 
+        // Since we are hiding the collection view and the snapshot API takes the snapshot after the next screen update,
+        // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens. 
+        // To work around this, we dispatch the setting of collection view to hidden after the screen update is completed.
         dispatch_async(dispatch_get_main_queue()) {
             tabCollectionView.hidden = true
             var finalFrame: CGRect?
@@ -218,6 +226,10 @@ private func toggleWebViewVisibility(#show: Bool, usingTabManager tabManager: Ta
     }
 }
 
+
+/**
+Helper methods for calculate affine transforms from frame A to frame B
+*/
 private func transformForHeaderFrame(headerFrame: CGRect, toCellFrame cellFrame: CGRect) -> CGAffineTransform {
     let scale = cellFrame.size.width / headerFrame.size.width
     // Since the scale will happen in the center of the frame, we move this so the centers of the two frames overlap.
