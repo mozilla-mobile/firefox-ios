@@ -21,7 +21,8 @@ let ViewHistoryIDsWithWidestFavicons = "view_history_id_favicon"
 let ViewIconForURL = "view_icon_for_url"
 
 let IndexHistoryShouldUpload = "idx_history_should_upload"
-let IndexVisitsSiteIDDate = "idx_visits_siteID_date"
+let IndexVisitsSiteIDDate = "idx_visits_siteID_date"                   // Removed in v6.
+let IndexVisitsSiteIDIsLocalDate = "idx_visits_siteID_is_local_date"   // Added in v6.
 
 private let AllTables: Args = [
     TableFaviconSites,
@@ -42,7 +43,7 @@ private let AllViews: Args = [
 
 private let AllIndices: Args = [
     IndexHistoryShouldUpload,
-    IndexVisitsSiteIDDate,
+    IndexVisitsSiteIDIsLocalDate,
 ]
 
 private let AllTablesIndicesAndViews: Args = AllViews + AllIndices + AllTables
@@ -55,7 +56,7 @@ private let log = XCGLogger.defaultInstance()
  */
 public class BrowserTable: Table {
     var name: String { return "BROWSER" }
-    var version: Int { return 5 }
+    var version: Int { return 6 }
     let sqliteVersion: Int32
     let supportsPartialIndices: Bool
 
@@ -158,8 +159,8 @@ public class BrowserTable: Table {
         }
 
         let indexSiteIDDate =
-        "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDDate) " +
-        "ON \(TableVisits) (siteID, date)"
+        "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDIsLocalDate) " +
+        "ON \(TableVisits) (siteID, is_local, date)"
 
         let faviconSites =
         "CREATE TABLE IF NOT EXISTS \(TableFaviconSites) (" +
@@ -251,6 +252,17 @@ public class BrowserTable: Table {
             "title TEXT" +
             ") "
             if !self.run(db, queries: [queue]) {
+                return false
+            }
+        }
+
+        if from < 6 {
+            let queries = [
+                "DROP INDEX IF EXISTS \(IndexVisitsSiteIDDate)",
+                "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDIsLocalDate) ON \(TableVisits) (siteID, is_local, date)",
+            ]
+
+            if !self.run(db, queries: queries) {
                 return false
             }
         }
