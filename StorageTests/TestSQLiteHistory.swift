@@ -13,6 +13,58 @@ extension Site {
 }
 
 class TestSQLiteHistory: XCTestCase {
+    // Test that our visit partitioning for frecency is correct.
+    func testHistoryLocalAndRemoteVisits() {
+        let files = MockFiles()
+        let db = BrowserDB(filename: "browser.db", files: files)
+        let history = SQLiteHistory(db: db)
+
+        let siteL = Site(url: "http://url1/", title: "title local only")
+        let siteR = Site(url: "http://url2/", title: "title remote only")
+        let siteB = Site(url: "http://url3/", title: "title local and remote")
+
+        siteL.guid = "locallocal12"
+        siteR.guid = "remoteremote"
+        siteB.guid = "bothbothboth"
+
+        let siteVisitL1 = SiteVisit(site: siteL, date: 1437088398461000, type: VisitType.Link)
+        let siteVisitL2 = SiteVisit(site: siteL, date: 1437088398462000, type: VisitType.Link)
+
+        let siteVisitR1 = SiteVisit(site: siteR, date: 1437088398461000, type: VisitType.Link)
+        let siteVisitR2 = SiteVisit(site: siteR, date: 1437088398462000, type: VisitType.Link)
+        let siteVisitR3 = SiteVisit(site: siteR, date: 1437088398463000, type: VisitType.Link)
+
+        let siteVisitBL1 = SiteVisit(site: siteB, date: 1437088398464000, type: VisitType.Link)
+        let siteVisitBR1 = SiteVisit(site: siteB, date: 1437088398465000, type: VisitType.Link)
+
+        XCTAssertEqual(LocalVisitFrecencyWeight, 5, "If you change the weight, you need to change this test.")
+
+        let deferred =
+        history.clearHistory()
+            >>> { history.addLocalVisit(siteVisitL1) }
+            >>> { history.addLocalVisit(siteVisitL2) }
+            >>> { history.addLocalVisit(siteVisitBL1) }
+            >>> { history.insertOrUpdatePlace(siteL.asPlace(), modified: 1437088398462) }
+            >>> { history.insertOrUpdatePlace(siteR.asPlace(), modified: 1437088398463) }
+            >>> { history.insertOrUpdatePlace(siteB.asPlace(), modified: 1437088398465) }
+            >>> { history.storeRemoteVisits([siteVisitR1, siteVisitR2, siteVisitR3], forGUID: siteR.guid!) }
+            >>> { history.storeRemoteVisits([siteVisitBR1], forGUID: siteB.guid!) }
+
+            >>> { history.getSitesByFrecencyWithLimit(3)
+                >>== { (sites: Cursor) -> Success in
+                    XCTAssertEqual(3, sites.count)
+
+                    // Two local visits beat a single later remote visit and one later local visit.
+                    // Two local visits beat three remote visits.
+                    XCTAssertEqual(siteL.guid!, sites[0]!.guid!)
+                    XCTAssertEqual(siteB.guid!, sites[1]!.guid!)
+                    XCTAssertEqual(siteR.guid!, sites[2]!.guid!)
+                    return succeed()
+            }
+        }
+
+        XCTAssertTrue(deferred.value.isSuccess)
+    }
 
     // This is a very basic test. Adds an entry, retrieves it, updates it,
     // and then clears the database.
@@ -20,7 +72,6 @@ class TestSQLiteHistory: XCTestCase {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         let history = SQLiteHistory(db: db)
-        let bookmarks = SQLiteBookmarks(db: db)
 
         let site1 = Site(url: "http://url1/", title: "title one")
         let site1Changed = Site(url: "http://url1/", title: "title one alt")
