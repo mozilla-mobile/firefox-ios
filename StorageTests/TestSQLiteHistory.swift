@@ -66,6 +66,42 @@ class TestSQLiteHistory: XCTestCase {
         XCTAssertTrue(deferred.value.isSuccess)
     }
 
+    func testDomains() {
+        let files = MockFiles()
+        let db = BrowserDB(filename: "browser.db", files: files)
+        let history = SQLiteHistory(db: db)
+
+        func checkSitesByFrecency(f: Cursor<Site> -> Success) -> () -> Success {
+            return {
+                history.getSitesByFrecencyWithLimit(10)
+                    >>== f
+            }
+        }
+
+        let site1 = Site(url: "http://www.example.com/test1", title: "title one")
+        let site2 = Site(url: "http://www.example.com/test2", title: "title one")
+        let expectation = self.expectationWithDescription("First.")
+        func done() -> Success {
+            expectation.fulfill()
+            return succeed()
+        }
+
+        // Add two sites with the same domain
+        history.addLocalVisit(SiteVisit(site: site1, date: NSDate.nowMicroseconds(), type: VisitType.Link)) >>> {
+            return history.addLocalVisit(SiteVisit(site: site2, date: NSDate.nowMicroseconds(), type: VisitType.Link))
+        } >>> checkSitesByFrecency { sites -> Success in
+                XCTAssertEqual(sites.count, 1)
+                return history.removeSiteFromTopSites(site1)
+        } >>> checkSitesByFrecency { sites -> Success in
+            XCTAssertEqual(sites.count, 0)
+            return succeed()
+        } >>> done
+
+        waitForExpectationsWithTimeout(10.0) { error in
+            return
+        }
+    }
+
     // This is a very basic test. Adds an entry, retrieves it, updates it,
     // and then clears the database.
     func testHistoryTable() {
@@ -88,16 +124,16 @@ class TestSQLiteHistory: XCTestCase {
             return succeed()
         }
 
-        func checkSitesByDate(f: Cursor<Site> -> Success) -> () -> Success {
-            return {
-                history.getSitesByLastVisit(10)
-                >>== f
-            }
-        }
-
         func checkSitesByFrecency(f: Cursor<Site> -> Success) -> () -> Success {
             return {
                 history.getSitesByFrecencyWithLimit(10)
+                    >>== f
+            }
+        }
+
+        func checkSitesByDate(f: Cursor<Site> -> Success) -> () -> Success {
+            return {
+                history.getSitesByLastVisit(10)
                 >>== f
             }
         }
