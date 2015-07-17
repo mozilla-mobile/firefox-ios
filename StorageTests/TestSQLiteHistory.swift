@@ -215,3 +215,39 @@ class TestSQLiteHistory: XCTestCase {
         }
     }
 }
+
+class TestSQLiteHistoryFrecencyPerf: XCTestCase {
+    func testFrecencyPerf() {
+        let files = MockFiles()
+        let db = BrowserDB(filename: "browser.db", files: files)
+        let history = SQLiteHistory(db: db)
+
+        let count = 500
+
+        history.clearHistory().value
+        for i in 0...count {
+            let site = Site(url: "http://s\(i)ite\(i)/foo", title: "A \(i)")
+            site.guid = "abc\(i)def"
+
+            history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).value
+
+            for j in 0...20 {
+                let local = SiteVisit(site: site, date: Timestamp(1000 * (1437088398461 + (1000 * i) + j)), type: VisitType.Link)
+                XCTAssertTrue(history.addLocalVisit(local).value.isSuccess)
+            }
+
+            var remotes = [Visit]()
+            for j in 0...20 {
+                remotes.append(SiteVisit(site: site, date: Timestamp(1000 * (1437088399461 + (1000 * i) + j)), type: VisitType.Link))
+            }
+            history.storeRemoteVisits(remotes, forGUID: site.guid!).value
+        }
+
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+            for i in 0...5 {
+                history.getSitesByFrecencyWithLimit(10).value
+            }
+            self.stopMeasuring()
+        }
+    }
+}
