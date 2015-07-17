@@ -1293,6 +1293,7 @@ extension BrowserViewController: WKNavigationDelegate {
         if let url = webView.URL {
             if !ReaderModeUtils.isReaderModeURL(url) {
                 urlBar.updateReaderModeState(ReaderModeState.Unavailable)
+                hideReaderModeBar(animated: false)
             }
         }
     }
