@@ -9,6 +9,7 @@ private let OrderedEngineNames = "search.orderedEngineNames"
 private let DisabledEngineNames = "search.disabledEngineNames"
 private let ShowSearchSuggestionsOptIn = "search.suggestions.showOptIn"
 private let ShowSearchSuggestions = "search.suggestions.show"
+private let ShowShouldDisableOldDefault = "search.shouldDisableOldDefault"
 
 /**
  * Manage a set of Open Search engines.
@@ -37,6 +38,7 @@ class SearchEngines {
         self.shouldShowSearchSuggestions = prefs.boolForKey(ShowSearchSuggestions) ?? false
         self.disabledEngineNames = getDisabledEngineNames()
         self.orderedEngines = getOrderedEngines()
+        self.shouldDisableOldDefault = false
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELdidResetPrompt:", name: "SearchEnginesPromptReset", object: nil)
     }
@@ -51,12 +53,20 @@ class SearchEngines {
         }
 
         set(defaultEngine) {
+            let previousEngine = self.orderedEngines[0]
+            let shouldDisablePrevious = shouldDisableOldDefault
+            if previousEngine.shortName != defaultEngine.shortName {
+                shouldDisableOldDefault = self.disabledEngineNames[defaultEngine.shortName] ?? false
+            }
             // The default engine is always enabled.
             self.enableEngine(defaultEngine)
             // The default engine is always first in the list.
             var orderedEngines = self.orderedEngines.filter({ engine in engine.shortName != defaultEngine.shortName })
             orderedEngines.insert(defaultEngine, atIndex: 0)
             self.orderedEngines = orderedEngines
+            if shouldDisablePrevious {
+                self.disableEngine(previousEngine)
+            }
         }
     }
 
@@ -87,6 +97,15 @@ class SearchEngines {
         get {
             return self.orderedEngines.filter({ (engine) in
                 !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
+        }
+    }
+
+    var shouldDisableOldDefault: Bool {
+        get {
+            return self.prefs.boolForKey(ShowShouldDisableOldDefault)!
+        }
+        set {
+            self.prefs.setBool(newValue, forKey: ShowShouldDisableOldDefault)
         }
     }
 
