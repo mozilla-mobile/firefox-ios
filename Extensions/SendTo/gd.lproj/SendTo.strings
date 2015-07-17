@@ -1,0 +1,12 @@
+/* Header for the list of devices table */
+"Available devices:" = "Uidheaman a tha ri làimh:";
+
+/* Close button in top navigation bar */
+"Close" = "Dùin";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Cuir";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Cuir an taba";
+

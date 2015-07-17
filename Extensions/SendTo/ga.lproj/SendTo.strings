@@ -1,0 +1,12 @@
+/* Header for the list of devices table */
+"Available devices:" = "Gléasanna ar fáil:";
+
+/* Close button in top navigation bar */
+"Close" = "Dún";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Seol";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Seol Cluaisín";
+

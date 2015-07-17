@@ -1,0 +1,12 @@
+/* Header for the list of devices table */
+"Available devices:" = "K dispoziciji stojece rědy:";
+
+/* Close button in top navigation bar */
+"Close" = "Zacyniś";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Pósłaś";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Rejtark słaś";
+

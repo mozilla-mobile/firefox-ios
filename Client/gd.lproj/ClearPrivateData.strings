@@ -1,0 +1,9 @@
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Sguir dheth";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Falamhaich";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Falamhaich a h-uile rud";
+

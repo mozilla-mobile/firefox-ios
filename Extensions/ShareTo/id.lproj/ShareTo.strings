@@ -1,0 +1,9 @@
+/* Add button in the share dialog */
+"Add" = "Tambahkan";
+
+/* On/off toggle to select adding this url to your bookmarks */
+"Add to Bookmarks" = "Tambahkan ke Markah";
+
+/* On/off toggle to select adding this url to your reading list */
+"Add to Reading List" = "Tambahkan ke Daftar Bacaan";
+

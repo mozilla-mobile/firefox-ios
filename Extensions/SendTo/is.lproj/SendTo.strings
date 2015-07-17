@@ -1,0 +1,12 @@
+/* Header for the list of devices table */
+"Available devices:" = "Tæki í boði:";
+
+/* Close button in top navigation bar */
+"Close" = "Loka";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Senda";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Senda til";
+

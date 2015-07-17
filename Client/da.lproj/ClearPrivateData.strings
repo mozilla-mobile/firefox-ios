@@ -1,0 +1,9 @@
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Annuller";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Ryd";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Ryd alt";
+

@@ -1,0 +1,12 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "Pesquisa %@";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "Não";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "Ativar as sugestões de pesquisa?";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "Sim";
+

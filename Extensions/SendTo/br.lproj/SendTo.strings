@@ -1,0 +1,12 @@
+/* Header for the list of devices table */
+"Available devices:" = "Trevnadoù hegerz :";
+
+/* Close button in top navigation bar */
+"Close" = "Serriñ";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Kas";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Kas an ivinell";
+
