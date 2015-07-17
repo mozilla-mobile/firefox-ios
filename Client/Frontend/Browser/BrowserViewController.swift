@@ -23,6 +23,8 @@ private let KVOURL = "URL"
 private let KVOCanGoBack = "canGoBack"
 private let KVOCanGoForward = "canGoForward"
 
+private let maxDialogURLLength = 225
+
 private struct BrowserViewControllerUX {
     private static let BackgroundColor = UIConstants.AppBackgroundColor
     private static let ShowHeaderTapAreaHeight: CGFloat = 32
@@ -1940,6 +1942,11 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             popoverPresentationController.sourceView = view
             popoverPresentationController.sourceRect = CGRect(origin: gestureRecognizer.locationInView(view), size: CGSizeMake(0, 16))
             popoverPresentationController.permittedArrowDirections = .Any
+        }
+
+        dialogTitle = dialogTitle ?? ""
+        if (count(dialogTitle!) >= maxDialogURLLength) {
+            dialogTitle = dialogTitle!.ellipsize(maxDialogURLLength)
         }
 
         actionSheetController.title = dialogTitle
