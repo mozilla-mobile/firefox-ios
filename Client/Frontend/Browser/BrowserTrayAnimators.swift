@@ -32,7 +32,8 @@ private extension TrayToBrowserAnimator {
         let readerModeBar = bvc.readerModeBar
 
         // Hiden browser components
-        bvc.webViewContainer.hidden = true
+
+        toggleWebViewVisibility(show: false, usingTabManager: tabManager)
         bvc.homePanelController?.view.hidden = true
 
         // Take a snapshot of the collection view that we can scale/fade out. We don't need to wait for screen updates since it's already rendered on the screen
@@ -42,11 +43,12 @@ private extension TrayToBrowserAnimator {
         container.insertSubview(tabCollectionViewSnapshot, aboveSubview: tabTray.view)
 
         // Create a fake cell to use for the upscaling animation
-        let cell = createTransitionCellFromBrowser(browser)
-        cell.backgroundHolder.layer.cornerRadius = 0
+        var cellFrame: CGRect?
         if let attr = tabCollectionView.collectionViewLayout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: tabIndex, inSection: 0)) {
-            cell.frame = tabCollectionView.convertRect(attr.frame, toView: container)
+            cellFrame = tabCollectionView.convertRect(attr.frame, toView: container)
         }
+        let cell = createTransitionCellFromBrowser(browser, withFrame: cellFrame!)
+        cell.backgroundHolder.layer.cornerRadius = 0
 
         container.insertSubview(bvc.view, aboveSubview: tabCollectionViewSnapshot)
         container.insertSubview(cell, aboveSubview: bvc.view)
@@ -73,7 +75,7 @@ private extension TrayToBrowserAnimator {
         UIView.animateWithDuration(self.transitionDuration(transitionContext),
             delay: 0, usingSpringWithDamping: 1,
             initialSpringVelocity: 0,
-            options: UIViewAnimationOptions.AllowUserInteraction |  UIViewAnimationOptions.CurveEaseInOut,
+            options: UIViewAnimationOptions.CurveEaseInOut,
             animations:
         {
             // Scale up the cell and reset the transforms for the header/footers
@@ -100,8 +102,9 @@ private extension TrayToBrowserAnimator {
             // Remove any of the views we used for the animation
             cell.removeFromSuperview()
             tabCollectionViewSnapshot.removeFromSuperview()
+
             bvc.startTrackingAccessibilityStatus()
-            bvc.webViewContainer.hidden = false
+            toggleWebViewVisibility(show: true, usingTabManager: tabManager)
             bvc.homePanelController?.view.hidden = false
             bvcFooter.hidden = false
             transitionContext.completeTransition(true)
@@ -136,76 +139,82 @@ private extension BrowserToTrayAnimator {
         let urlBar = bvc.urlBar
         let readerModeBar = bvc.readerModeBar
 
-        bvc.webViewContainer.hidden = true
-        bvc.homePanelController?.view.hidden = true
-
         // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
         container.insertSubview(tabTray.view, belowSubview: bvc.view)
         tabTray.view.layoutSubviews()
         tabCollectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: tabIndex, inSection: 0), atScrollPosition: .CenteredVertically, animated: false)
 
-        // Create a colored overlay to 'hide' the collection view. The reason we do this is because the snapshot we take requires it to be visible but we want it 'hidden'
-        let collectionViewOverlay = UIView(frame: tabCollectionView.frame)
-        collectionViewOverlay.backgroundColor = UIConstants.AppBackgroundColor
-        container.insertSubview(collectionViewOverlay, aboveSubview: tabTray.view)
+        // Build a tab cell that we will use to animate the scaling of the browser to the tab
+        let cell = createTransitionCellFromBrowser(browser, withFrame: tabCollectionView.frame)
 
         // Take a snapshot of the collection view to perform the scaling/alpha effect
         let tabCollectionViewSnapshot = tabCollectionView.snapshotViewAfterScreenUpdates(true)
         tabCollectionViewSnapshot.frame = tabCollectionView.frame
         tabCollectionViewSnapshot.transform = CGAffineTransformMakeScale(0.9, 0.9)
-        container.insertSubview(tabCollectionViewSnapshot, aboveSubview: collectionViewOverlay)
+        tabCollectionViewSnapshot.alpha = 0
+        tabTray.view.addSubview(tabCollectionViewSnapshot)
 
-        // Build a tab cell that we will use to animate the scaling of the browser to the tab
-        let cell = createTransitionCellFromBrowser(browser)
-        cell.frame = bvc.webViewContainer.frame
-        container.insertSubview(cell, aboveSubview: bvc.view)
-
-        // Calculate the end frame position of the cell
-        var finalCellFrame: CGRect? = nil
-        if let attr = tabCollectionView.collectionViewLayout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: tabIndex, inSection: 0)) {
-            finalCellFrame = tabCollectionView.convertRect(attr.frame, toView: container)
-        }
-
-        // Flush any pending layout/animation code in preperation of the animation call
-        container.layoutIfNeeded()
         cell.title.transform = CGAffineTransformMakeTranslation(0, -cell.title.frame.size.height)
+        container.addSubview(cell)
+        cell.layoutIfNeeded()
 
-        UIView.animateWithDuration(self.transitionDuration(transitionContext),
-            delay: 0, usingSpringWithDamping: 1,
-            initialSpringVelocity: 0,
-            options: UIViewAnimationOptions.AllowUserInteraction |  UIViewAnimationOptions.CurveEaseInOut,
-            animations:
-        {
-            // Transform cell/header/footer using the cell's final frame
-            if let finalFrame = finalCellFrame {
-                cell.frame = finalFrame
-                cell.title.transform = CGAffineTransformIdentity
-                bvcHeader.transform = transformForHeaderFrame(bvcHeader.frame, toCellFrame: finalFrame)
-                bvcFooter.transform = transformForFooterFrame(bvcFooter.frame, toCellFrame: finalFrame)
+        bvc.homePanelController?.view.hidden = true
+        toggleWebViewVisibility(show: false, usingTabManager: tabManager)
 
-                if let readerModeBar = readerModeBar {
-                    readerModeBar.transform = transformForReaderBarFrame(readerModeBar.frame, toCellFrame: finalFrame)
-                }
+        dispatch_async(dispatch_get_main_queue()) {
+            tabCollectionView.hidden = true
+            var finalFrame: CGRect?
+            if let attr = tabCollectionView.collectionViewLayout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: tabIndex, inSection: 0)) {
+                finalFrame = tabCollectionView.convertRect(attr.frame, toView: container)
             }
 
-            urlBar.updateAlphaForSubviews(0)
-            bvcFooter.alpha = 0
+            UIView.animateWithDuration(self.transitionDuration(transitionContext),
+                delay: 0, usingSpringWithDamping: 1,
+                initialSpringVelocity: 0,
+                options: UIViewAnimationOptions.CurveEaseInOut,
+                animations:
+            {
+                if let finalFrame = finalFrame {
+                    cell.frame = finalFrame
+                    cell.layoutIfNeeded()
 
-            tabCollectionViewSnapshot.transform = CGAffineTransformIdentity
-            tabCollectionViewSnapshot.alpha = 1
-            tabTrayAddTabButton.transform = CGAffineTransformIdentity
-            tabTraySettingsButton.transform = CGAffineTransformIdentity
-            container.layoutIfNeeded()
-        }, completion: { finished in
-            // Remove any of the views we used for the animation
-            collectionViewOverlay.removeFromSuperview()
-            cell.removeFromSuperview()
-            tabCollectionViewSnapshot.removeFromSuperview()
-            bvc.webViewContainer.hidden = false
-            bvc.homePanelController?.view.hidden = false
-            bvc.stopTrackingAccessibilityStatus()
-            transitionContext.completeTransition(true)
-        })
+                    cell.title.transform = CGAffineTransformIdentity
+                    bvcHeader.transform = transformForHeaderFrame(bvcHeader.frame, toCellFrame: finalFrame)
+                    bvcFooter.transform = transformForFooterFrame(bvcFooter.frame, toCellFrame: finalFrame)
+
+                    if let readerModeBar = readerModeBar {
+                        readerModeBar.transform = transformForReaderBarFrame(readerModeBar.frame, toCellFrame: finalFrame)
+                    }
+                }
+
+                urlBar.updateAlphaForSubviews(0)
+                bvcFooter.alpha = 0
+
+                tabCollectionViewSnapshot.transform = CGAffineTransformIdentity
+                tabCollectionViewSnapshot.alpha = 1
+                tabTrayAddTabButton.transform = CGAffineTransformIdentity
+                tabTraySettingsButton.transform = CGAffineTransformIdentity
+            }, completion: { finished in
+                // Remove any of the views we used for the animation
+                cell.removeFromSuperview()
+                tabCollectionViewSnapshot.removeFromSuperview()
+                tabCollectionView.hidden = false
+
+                toggleWebViewVisibility(show: true, usingTabManager: tabManager)
+                bvc.homePanelController?.view.hidden = false
+                bvc.stopTrackingAccessibilityStatus()
+
+                transitionContext.completeTransition(true)
+            })
+        }
+    }
+}
+
+private func toggleWebViewVisibility(#show: Bool, usingTabManager tabManager: TabManager) {
+    for i in 0..<tabManager.count {
+        if let tab = tabManager[i] {
+            tab.webView?.hidden = !show
+        }
     }
 }
 
@@ -234,8 +243,8 @@ private func transformForReaderBarFrame(readerBarFrame: CGRect, toCellFrame cell
     return CGAffineTransformScale(transform, scale, scale)
 }
 
-private func createTransitionCellFromBrowser(browser: Browser?) -> TabCell {
-    let cell = TabCell()
+private func createTransitionCellFromBrowser(browser: Browser?, withFrame frame: CGRect) -> TabCell {
+    let cell = TabCell(frame: frame)
     cell.background.image = browser?.screenshot
     cell.titleText.text = browser?.displayTitle
     if let favIcon = browser?.displayFavicon {

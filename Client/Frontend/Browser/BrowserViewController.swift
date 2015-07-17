@@ -410,6 +410,7 @@ class BrowserViewController: UIViewController {
 
     private func wrapInEffect(view: UIView, parent: UIView, backgroundColor: UIColor?) -> UIView {
         let effect = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
+        effect.clipsToBounds = true
         effect.setTranslatesAutoresizingMaskIntoConstraints(false)
         if let background = backgroundColor {
             view.backgroundColor = backgroundColor
