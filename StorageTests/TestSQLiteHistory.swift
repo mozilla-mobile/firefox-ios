@@ -6,6 +6,11 @@ import Foundation
 import Shared
 import XCTest
 
+extension Site {
+    func asPlace() -> Place {
+        return Place(guid: self.guid!, url: self.url, title: self.title)
+    }
+}
 
 class TestSQLiteHistory: XCTestCase {
 
