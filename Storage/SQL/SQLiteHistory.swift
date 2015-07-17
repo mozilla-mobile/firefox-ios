@@ -215,8 +215,14 @@ extension SQLiteHistory: BrowserHistory {
         site.guid = guid
         site.id = id
 
-        if let visitDate = row.getTimestamp("visitDate") {
-            site.latestVisit = Visit(date: visitDate, type: VisitType.Unknown)
+        // Find the most recent visit, regardless of which column it might be in.
+        let local = row.getTimestamp("localVisitDate") ?? 0
+        let remote = row.getTimestamp("remoteVisitDate") ?? 0
+        let either = row.getTimestamp("visitDate") ?? 0
+
+        let latest = max(local, remote, either)
+        if latest > 0 {
+            site.latestVisit = Visit(date: latest, type: VisitType.Unknown)
         }
 
         return site
