@@ -68,8 +68,10 @@ private extension TrayToBrowserAnimator {
         }
 
         var finalFrame = bvc.webViewContainer.frame
-        // Account for the lack of toolbar for home panel views during transition
-        if AboutUtils.isAboutURL(browser?.url) {
+
+        // If we're navigating to a home panel and we were expecting to show the toolbar, add more height to end frame since 
+        // there is no toolbar for home panels
+        if AboutUtils.isAboutURL(browser?.url) && bvc.shouldShowToolbarForTraitCollection(bvc.traitCollection) {
             bvcFooter.hidden = true
             finalFrame.size.height += UIConstants.ToolbarHeight
         }
