@@ -417,7 +417,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
 
         containerView.snp_makeConstraints({ (make) -> Void in
             // Let the container wrap around the content
-            make.top.equalTo(contentView).offset(20)
+            make.top.equalTo(contentView.snp_top).offset(20)
             make.bottom.equalTo(createAnAccountButton)
             make.left.equalTo(signInButton)
             make.right.equalTo(signInButton)
