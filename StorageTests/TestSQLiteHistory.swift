@@ -216,6 +216,23 @@ class TestSQLiteHistory: XCTestCase {
     }
 }
 
+class TestSQLiteHistoryTransactionUpdate: XCTestCase {
+    func testUpdateInTransaction() {
+        let files = MockFiles()
+        let db = BrowserDB(filename: "browser.db", files: files)
+        let history = SQLiteHistory(db: db)
+
+        history.clearHistory().value
+        let site = Site(url: "http://site/foo", title: "AA")
+        site.guid = "abcdefghiabc"
+
+        history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).value
+
+        let local = SiteVisit(site: site, date: Timestamp(1000 * 1437088398461), type: VisitType.Link)
+        XCTAssertTrue(history.addLocalVisit(local).value.isSuccess)
+    }
+}
+
 class TestSQLiteHistoryFrecencyPerf: XCTestCase {
     func testFrecencyPerf() {
         let files = MockFiles()
