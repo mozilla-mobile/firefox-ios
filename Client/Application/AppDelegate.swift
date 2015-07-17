@@ -9,6 +9,7 @@ import AVFoundation
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
+    var rootViewController: UINavigationController!
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
 
@@ -43,8 +44,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // will restore with.
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         browserViewController.restorationClass = AppDelegate.self
+        browserViewController.automaticallyAdjustsScrollViewInsets = false
 
-        self.window!.rootViewController = browserViewController
+        rootViewController = UINavigationController(rootViewController: browserViewController)
+        rootViewController.automaticallyAdjustsScrollViewInsets = false
+        rootViewController.delegate = self
+        rootViewController.navigationBarHidden = true
+
+        self.window!.rootViewController = rootViewController
         self.window!.backgroundColor = UIConstants.AppBackgroundColor
 
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
@@ -229,6 +236,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NSNotificationCenter.defaultCenter().postNotificationName(FSReadingListAddReadingListItemNotification, object: self, userInfo: ["URL": urlToOpen, "Title": title])
             }
         }
+    }
+}
+
+// MARK: - Root View Controller Animations
+extension AppDelegate: UINavigationControllerDelegate {
+    func navigationController(navigationController: UINavigationController,
+        animationControllerForOperation operation: UINavigationControllerOperation,
+        fromViewController fromVC: UIViewController,
+        toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+            if operation == UINavigationControllerOperation.Push {
+                return BrowserToTrayAnimator()
+            } else if operation == UINavigationControllerOperation.Pop {
+                return TrayToBrowserAnimator()
+            } else {
+                return nil
+            }
     }
 }
 

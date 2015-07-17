@@ -366,10 +366,10 @@ private class LicenseAndAcknowledgementsSetting: Setting {
     override func onClick(navigationController: UINavigationController?) {
         navigationController?.dismissViewControllerAnimated(true, completion: {
             if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-                appDelegate.browserViewController.dismissTabTrayController(animated: true) {
-                    if let url = NSURL(string: WebServer.sharedInstance.URLForResource("license", module: "about")) {
-                        appDelegate.browserViewController.openURLInNewTab(url)
-                    }
+                let rootNavigationController = appDelegate.rootViewController
+                rootNavigationController.popViewControllerAnimated(true)
+                if let url = NSURL(string: WebServer.sharedInstance.URLForResource("license", module: "about")) {
+                    appDelegate.browserViewController.openURLInNewTab(url)
                 }
             }
         })
@@ -388,9 +388,8 @@ private class ShowIntroductionSetting: Setting {
     override func onClick(navigationController: UINavigationController?) {
         navigationController?.dismissViewControllerAnimated(true, completion: {
             if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-                appDelegate.browserViewController.dismissTabTrayController(animated: true) {
-                    appDelegate.browserViewController.presentIntroViewController(force: true)
-                }
+                let rootNavigationController = appDelegate.rootViewController
+                appDelegate.browserViewController.presentIntroViewController(force: true)
             }
         })
     }
@@ -405,10 +404,10 @@ private class OpenSupportPageSetting: Setting {
     override func onClick(navigationController: UINavigationController?) {
         navigationController?.dismissViewControllerAnimated(true, completion: {
             if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-                appDelegate.browserViewController.dismissTabTrayController(animated: true) {
-                    if let url = NSURL(string: "https://support.mozilla.org/products/ios") {
-                        appDelegate.browserViewController.openURLInNewTab(url)
-                    }
+                let rootNavigationController = appDelegate.rootViewController
+                rootNavigationController.popViewControllerAnimated(true)
+                if let url = NSURL(string: "https://support.mozilla.org/products/ios") {
+                    appDelegate.browserViewController.openURLInNewTab(url)
                 }
             }
         })
