@@ -283,6 +283,15 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource {
         return tableView.bounds.height
     }
 
+    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        // Making the footer height as small as possible because it will disable button tappability if too high.
+        return 1
+    }
+
+    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
+    }
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch error {
         case .NotLoggedIn:
