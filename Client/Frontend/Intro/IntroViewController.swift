@@ -11,7 +11,7 @@ struct IntroViewControllerUX {
 
     static let NumberOfCards = 3
 
-    static let PagerCenterOffsetFromScrollViewBottom = 15
+    static let PagerCenterOffsetFromScrollViewBottom = 35
 
     static let StartBrowsingButtonTitle = NSLocalizedString("Start Browsing", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     static let StartBrowsingButtonColor = UIColor(rgb: 0x363B40)
@@ -39,8 +39,8 @@ struct IntroViewControllerUX {
     static let Card2ImageLabel = NSLocalizedString("The Settings button is at the beginning of the Tabs Tray.", tableName: "Intro", comment: "Accessibility label for an image. See http://mzl.la/1T8gxwo")
     static let Card3ImageLabel = NSLocalizedString("Firefox and the cloud", tableName: "Intro", comment: "Accessibility label for an image. See http://mzl.la/1T8gxwo")
 
-    static let Card3TextOffsetFromCenter = 10
-    static let Card3ButtonOffsetFromCenter = 10
+    static let Card3TextOffsetFromCenter = 25
+    static let Card3ButtonOffsetFromCenter = -10
 
     static let FadeDuration = 0.25
 
@@ -129,6 +129,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         pageControl.pageIndicatorTintColor = UIColor.blackColor().colorWithAlphaComponent(0.3)
         pageControl.currentPageIndicatorTintColor = UIColor.blackColor()
         pageControl.numberOfPages = IntroViewControllerUX.NumberOfCards
+        pageControl.addTarget(self, action: Selector("changePage"), forControlEvents: UIControlEvents.ValueChanged)
 
         view.addSubview(pageControl)
         pageControl.snp_makeConstraints { (make) -> Void in
@@ -136,12 +137,12 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             make.centerY.equalTo(self.startBrowsingButton.snp_top).offset(-IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
         }
 
+
         // Card1
 
         let introView1 = UIView()
         introViews.append(introView1)
         addLabelsToIntroView(introView1, text: IntroViewControllerUX.Card1Text, title: IntroViewControllerUX.Card1Title)
-        addForwardButtonToIntroView(introView1)
 
         // Card 2
 
@@ -196,6 +197,8 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
         // Make whole screen scrollable by bringing the scrollview to the top
         view.bringSubviewToFront(scrollView)
+        view.bringSubviewToFront(pageControl)
+
 
         // Activate the first card
         setActiveIntroView(introViews[0], forPage: 0)
@@ -269,6 +272,11 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         return String(format: NSLocalizedString("Introductory slide %@ of %@", tableName: "Intro", comment: "String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3"), NSNumberFormatter.localizedStringFromNumber(pageControl.currentPage+1, numberStyle: .DecimalStyle), NSNumberFormatter.localizedStringFromNumber(IntroViewControllerUX.NumberOfCards, numberStyle: .DecimalStyle))
     }
 
+    func changePage() {
+        let swipeCoordinate = CGFloat(pageControl.currentPage) * scrollView.frame.size.width
+        scrollView.setContentOffset(CGPointMake(swipeCoordinate, 0), animated: true)
+    }
+
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = page
@@ -326,15 +334,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
     private var scaledHeightOfSlide: CGFloat {
         return (view.frame.width / slides[0].size.width) * slides[0].size.height / slideVerticalScaleFactor
-    }
-
-    private func addForwardButtonToIntroView(introView: UIView) {
-        let button = UIImageView(image: UIImage(named: "intro-arrow"))
-        introView.addSubview(button)
-        button.snp_makeConstraints { (make) -> Void in
-            make.centerY.equalTo(introView)
-            make.right.equalTo(introView.snp_right).offset(-IntroViewControllerUX.BackForwardButtonEdgeInset)
-        }
     }
 
     private func attributedStringForLabel(text: String) -> NSMutableAttributedString {
