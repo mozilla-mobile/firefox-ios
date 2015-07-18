@@ -1406,6 +1406,9 @@ extension BrowserViewController: WKNavigationDelegate {
                     let thumbnail = Thumbnail(image: screenshot)
                     self.profile.thumbnails.set(url, thumbnail: thumbnail, complete: nil)
                 }
+                if let newBackgroundTabScreenshot = self.screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1) {
+                    tab.screenshot = newBackgroundTabScreenshot
+                }
             }
 
             // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
