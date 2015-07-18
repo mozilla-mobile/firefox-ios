@@ -737,7 +737,12 @@ extension BrowserViewController: URLBarDelegate {
         tabTrayController.modalPresentationStyle = .Custom
 
         if let tab = tabManager.selectedTab {
-            tab.screenshot = screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1)
+            if let readerUnwrapped = readerModeBar {
+                tab.screenshot = self.view.screenshot(CGFloat(0), offset: CGPoint(x: 0, y: -readerUnwrapped.frame.origin.y), quality: CGFloat(0))
+            }
+            else {
+                tab.screenshot = screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1)
+            }
         }
 
         presentViewController(tabTrayController, animated: true, completion: nil)
