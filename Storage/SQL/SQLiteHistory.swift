@@ -224,11 +224,12 @@ extension SQLiteHistory: BrowserHistory {
 
     private class func iconColumnFactory(row: SDRow) -> Favicon? {
         if let iconType = row["iconType"] as? Int,
-            let iconURL = row["iconURL"] as? String,
-            let iconDate = row["iconDate"] as? Double,
-            let iconID = row["iconID"] as? Int {
-                let date = NSDate(timeIntervalSince1970: iconDate)
-                return Favicon(url: iconURL, date: date, type: IconType(rawValue: iconType)!)
+           let iconURL = row["iconURL"] as? String,
+           let iconDate = row.getTimestamp("iconDate"),
+           let iconID = row["iconID"] as? Int {
+                let icon = Favicon(url: iconURL, type: IconType(rawValue: iconType)!)
+                icon._date = NSDate.fromTimestamp(iconDate)
+                return icon
         }
         return nil
     }
@@ -361,30 +362,29 @@ extension SQLiteHistory: Favicons {
 
         let siteSubselect = "(SELECT id FROM \(TableHistory) WHERE url = ?)"
         let iconSubselect = "(SELECT id FROM \(TableFavicons) WHERE url = ?)"
-        let insertOrIgnore = "INSERT OR IGNORE INTO \(TableFaviconSites)(siteID, faviconID) VALUES "
+        let insertOrIgnore = "INSERT OR IGNORE INTO \(TableFaviconSites)(siteID, faviconID, date) VALUES "
         if let iconID = icon.id {
             // Easy!
             if let siteID = site.id {
                 // So easy!
-                let args: Args? = [siteID, iconID]
-                return doChange("\(insertOrIgnore) (?, ?)", args)
+                let args: Args? = [siteID, iconID, NSDate.nowNumber()]
+                return doChange("\(insertOrIgnore) (?, ?, ?)", args)
             }
 
             // Nearly easy.
-            let args: Args? = [site.url, iconID]
-            return doChange("\(insertOrIgnore) (\(siteSubselect), ?)", args)
-
+            let args: Args? = [site.url, iconID, NSDate.nowNumber()]
+            return doChange("\(insertOrIgnore) (\(siteSubselect), ?, ?)", args)
         }
 
         // Sigh.
         if let siteID = site.id {
-            let args: Args? = [siteID, icon.url]
-            return doChange("\(insertOrIgnore) (?, \(iconSubselect))", args)
+            let args: Args? = [siteID, icon.url, NSDate.nowNumber()]
+            return doChange("\(insertOrIgnore) (?, \(iconSubselect), ?)", args)
         }
 
         // The worst.
-        let args: Args? = [site.url, icon.url]
-        return doChange("\(insertOrIgnore) (\(siteSubselect), \(iconSubselect))", args)
+        let args: Args? = [site.url, icon.url, NSDate.nowNumber()]
+        return doChange("\(insertOrIgnore) (\(siteSubselect), \(iconSubselect), ?)", args)
     }
 }
 

@@ -55,16 +55,108 @@ private let log = XCGLogger.defaultInstance()
  */
 public class BrowserTable: Table {
     var name: String { return "BROWSER" }
-    var version: Int { return 5 }
-    let sqliteVersion: Int32
+    var version: Int { return 7 }
     let supportsPartialIndices: Bool
+
+    let CreateHistoryTable =
+    "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
+        "url TEXT UNIQUE, " +                 // May only be null for deleted records.
+        "title TEXT NOT NULL, " +
+        "server_modified INTEGER, " +         // Can be null. Integer milliseconds.
+        "local_modified INTEGER, " +          // Can be null. Client clock. In extremis only.
+        "is_deleted TINYINT NOT NULL, " +     // Boolean. Locally deleted.
+        "should_upload TINYINT NOT NULL, " +  // Boolean. Set when changed or visits added.
+        "CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)" +
+    ") "
+
+    // Right now we don't need to track per-visit deletions: Sync can't
+    // represent them! See Bug 1157553 Comment 6.
+    // We flip the should_upload flag on the history item when we add a visit.
+    // If we ever want to support logic like not bothering to sync if we added
+    // and then rapidly removed a visit, then we need an 'is_new' flag on each visit.
+    let CreateVisitsTable =
+    "CREATE TABLE IF NOT EXISTS \(TableVisits) (" +
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "siteID INTEGER NOT NULL REFERENCES \(TableHistory)(id) ON DELETE CASCADE, " +
+        "date REAL NOT NULL, " +           // Microseconds since epoch.
+        "type INTEGER NOT NULL, " +
+        "is_local TINYINT NOT NULL, " +    // Some visits are local. Some are remote ('mirrored'). This boolean flag is the split.
+        "UNIQUE (siteID, date, type) " +
+    ") "
+
+    let CreateSiteIDDateIndex =
+    "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDDate) " +
+    "ON \(TableVisits) (siteID, date)"
+
+    let CreateFaviconSitesTable =
+    "CREATE TABLE IF NOT EXISTS \(TableFaviconSites) (" +
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "siteID INTEGER NOT NULL REFERENCES \(TableHistory)(id) ON DELETE CASCADE, " +
+        "faviconID INTEGER NOT NULL REFERENCES \(TableFavicons)(id) ON DELETE CASCADE, " +
+        "date REAL DEFAULT 0, " +
+        "UNIQUE (siteID, faviconID) " +
+    ") "
+
+    let CreateWidestFaviconsView =
+    "CREATE VIEW IF NOT EXISTS \(ViewWidestFaviconsForSites) AS " +
+        "SELECT " +
+        "\(TableFaviconSites).siteID AS siteID, " +
+        "\(TableFavicons).id AS iconID, " +
+        "\(TableFavicons).url AS iconURL, " +
+        "\(TableFaviconSites).date AS iconDate, " +
+        "\(TableFavicons).type AS iconType, " +
+        "MAX(\(TableFavicons).width) AS iconWidth " +
+        "FROM \(TableFaviconSites), \(TableFavicons) WHERE " +
+        "\(TableFaviconSites).faviconID = \(TableFavicons).id " +
+    "GROUP BY siteID "
+
+    let CreateHistoryIdWithIconView =
+    "CREATE VIEW IF NOT EXISTS \(ViewHistoryIDsWithWidestFavicons) AS " +
+        "SELECT \(TableHistory).id AS id, " +
+        "iconID, iconURL, iconDate, iconType, iconWidth " +
+        "FROM \(TableHistory) " +
+        "LEFT OUTER JOIN " +
+    "\(ViewWidestFaviconsForSites) ON history.id = \(ViewWidestFaviconsForSites).siteID "
+
+    let CreateIconForURLView =
+    "CREATE VIEW IF NOT EXISTS \(ViewIconForURL) AS " +
+        "SELECT history.url AS url, icons.iconID AS iconID FROM " +
+        "\(TableHistory), \(ViewWidestFaviconsForSites) AS icons WHERE " +
+    "\(TableHistory).id = icons.siteID "
+
+    let CreateBookmarksTable =
+    "CREATE TABLE IF NOT EXISTS \(TableBookmarks) (" +
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "guid TEXT NOT NULL UNIQUE, " +
+        "type TINYINT NOT NULL, " +
+        "url TEXT, " +
+        "parent INTEGER REFERENCES \(TableBookmarks)(id) NOT NULL, " +
+        "faviconID INTEGER REFERENCES \(TableFavicons)(id) ON DELETE SET NULL, " +
+        "title TEXT" +
+    ") "
+
+    let CreateQueueTable =
+    "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
+        "url TEXT NOT NULL UNIQUE, " +
+        "title TEXT" +
+    ") "
+
+    var CreateShouldUploadIndex: String {
+        if self.supportsPartialIndices {
+            // There's no point tracking rows that are not flagged for upload.
+            return "CREATE INDEX IF NOT EXISTS \(IndexHistoryShouldUpload) " +
+            "ON \(TableHistory) (should_upload) WHERE should_upload = 1"
+        } else {
+            return "CREATE INDEX IF NOT EXISTS \(IndexHistoryShouldUpload) " +
+            "ON \(TableHistory) (should_upload)"
+        }
+    }
 
     public init() {
         let v = sqlite3_libversion_number()
-        self.sqliteVersion = v
         self.supportsPartialIndices = v >= 3008000          // 3.8.0.
-        let ver = String.fromCString(sqlite3_libversion())!
-        log.info("SQLite version: \(ver) (\(v)).")
     }
 
     func run(db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
@@ -117,107 +209,17 @@ public class BrowserTable: Table {
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
         // We ignore the version.
 
-        let history =
-        "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
-        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
-        "url TEXT UNIQUE, " +                 // May only be null for deleted records.
-        "title TEXT NOT NULL, " +
-        "server_modified INTEGER, " +         // Can be null. Integer milliseconds.
-        "local_modified INTEGER, " +          // Can be null. Client clock. In extremis only.
-        "is_deleted TINYINT NOT NULL, " +     // Boolean. Locally deleted.
-        "should_upload TINYINT NOT NULL, " +  // Boolean. Set when changed or visits added.
-        "CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)" +
-        ") "
-
-        // Right now we don't need to track per-visit deletions: Sync can't
-        // represent them! See Bug 1157553 Comment 6.
-        // We flip the should_upload flag on the history item when we add a visit.
-        // If we ever want to support logic like not bothering to sync if we added
-        // and then rapidly removed a visit, then we need an 'is_new' flag on each visit.
-        let visits =
-        "CREATE TABLE IF NOT EXISTS \(TableVisits) (" +
-        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "siteID INTEGER NOT NULL REFERENCES \(TableHistory)(id) ON DELETE CASCADE, " +
-        "date REAL NOT NULL, " +           // Microseconds since epoch.
-        "type INTEGER NOT NULL, " +
-        "is_local TINYINT NOT NULL, " +    // Some visits are local. Some are remote ('mirrored'). This boolean flag is the split.
-        "UNIQUE (siteID, date, type) " +
-        ") "
-
-        let indexShouldUpload: String
-        if self.supportsPartialIndices {
-            // There's no point tracking rows that are not flagged for upload.
-            indexShouldUpload =
-            "CREATE INDEX IF NOT EXISTS \(IndexHistoryShouldUpload) " +
-            "ON \(TableHistory) (should_upload) WHERE should_upload = 1"
-        } else {
-            indexShouldUpload =
-            "CREATE INDEX IF NOT EXISTS \(IndexHistoryShouldUpload) " +
-            "ON \(TableHistory) (should_upload)"
-        }
-
-        let indexSiteIDDate =
-        "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDDate) " +
-        "ON \(TableVisits) (siteID, date)"
-
-        let faviconSites =
-        "CREATE TABLE IF NOT EXISTS \(TableFaviconSites) (" +
-        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "siteID INTEGER NOT NULL REFERENCES \(TableHistory)(id) ON DELETE CASCADE, " +
-        "faviconID INTEGER NOT NULL REFERENCES \(TableFavicons)(id) ON DELETE CASCADE, " +
-        "UNIQUE (siteID, faviconID) " +
-        ") "
-
-        let widestFavicons =
-        "CREATE VIEW IF NOT EXISTS \(ViewWidestFaviconsForSites) AS " +
-        "SELECT " +
-        "\(TableFaviconSites).siteID AS siteID, " +
-        "\(TableFavicons).id AS iconID, " +
-        "\(TableFavicons).url AS iconURL, " +
-        "\(TableFavicons).date AS iconDate, " +
-        "\(TableFavicons).type AS iconType, " +
-        "MAX(\(TableFavicons).width) AS iconWidth " +
-        "FROM \(TableFaviconSites), \(TableFavicons) WHERE " +
-        "\(TableFaviconSites).faviconID = \(TableFavicons).id " +
-        "GROUP BY siteID "
-
-        let historyIDsWithIcon =
-        "CREATE VIEW IF NOT EXISTS \(ViewHistoryIDsWithWidestFavicons) AS " +
-        "SELECT \(TableHistory).id AS id, " +
-        "iconID, iconURL, iconDate, iconType, iconWidth " +
-        "FROM \(TableHistory) " +
-        "LEFT OUTER JOIN " +
-        "\(ViewWidestFaviconsForSites) ON history.id = \(ViewWidestFaviconsForSites).siteID "
-
-        let iconForURL =
-        "CREATE VIEW IF NOT EXISTS \(ViewIconForURL) AS " +
-        "SELECT history.url AS url, icons.iconID AS iconID FROM " +
-        "\(TableHistory), \(ViewWidestFaviconsForSites) AS icons WHERE " +
-        "\(TableHistory).id = icons.siteID "
-
-        let bookmarks =
-        "CREATE TABLE IF NOT EXISTS \(TableBookmarks) (" +
-        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "guid TEXT NOT NULL UNIQUE, " +
-        "type TINYINT NOT NULL, " +
-        "url TEXT, " +
-        "parent INTEGER REFERENCES \(TableBookmarks)(id) NOT NULL, " +
-        "faviconID INTEGER REFERENCES \(TableFavicons)(id) ON DELETE SET NULL, " +
-        "title TEXT" +
-        ") "
-
-        let queue =
-        "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
-        "url TEXT NOT NULL UNIQUE, " +
-        "title TEXT" +
-        ") "
-
         let queries = [
-            history, visits, bookmarks, faviconSites,
-            indexShouldUpload, indexSiteIDDate,
-            widestFavicons, historyIDsWithIcon, iconForURL,
-            queue,
+            CreateHistoryTable,
+            CreateVisitsTable,
+            CreateBookmarksTable,
+            CreateFaviconSitesTable,
+            CreateShouldUploadIndex,
+            CreateSiteIDDateIndex,
+            CreateWidestFaviconsView,
+            CreateHistoryIdWithIconView,
+            CreateIconForURLView,
+            CreateQueueTable
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -240,17 +242,46 @@ public class BrowserTable: Table {
         }
 
         log.debug("Updating browser tables from \(from) to \(to).")
-        if from < 4 {
+        if from < 4 || to < from {
             return drop(db) && create(db, version: to)
         }
 
+        // Create the queue table
         if from < 5 {
-            let queue =
-            "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
-            "url TEXT NOT NULL UNIQUE, " +
-            "title TEXT" +
-            ") "
-            if !self.run(db, queries: [queue]) {
+            if !self.run(db, queries: [CreateQueueTable]) {
+                return false
+            }
+        }
+
+        // Moved the date column from the favicons table to the faviconSites table.
+        if (from < 6) {
+            if !run(db, queries: [
+                "PRAGMA foreign_keys=OFF",
+                "ALTER TABLE \(TableFaviconSites) ADD COLUMN date REAL DEFAULT 0",
+
+                // Create the new favicons table
+                "CREATE TABLE new_favicons (id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "url TEXT NOT NULL UNIQUE, " +
+                    "width INTEGER, " +
+                    "height INTEGER, " +
+                    "type INTEGER NOT NULL)",
+
+                // Copy the old data over
+                "INSERT INTO new_favicons SELECT id, url, width, height, type from \(TableFavicons)",
+
+                // Drop the old favicons table
+                "DROP TABLE \(TableFavicons)",
+                "ALTER TABLE new_favicons RENAME TO \(TableFavicons)",
+
+                // Now drop and recreate any views associated with it.
+                "DROP VIEW \(ViewWidestFaviconsForSites)",
+                "DROP VIEW \(ViewIconForURL)",
+                "DROP VIEW \(ViewHistoryIDsWithWidestFavicons)",
+                CreateWidestFaviconsView,
+                CreateIconForURLView,
+                CreateHistoryIdWithIconView,
+                "PRAGMA foreign_keys=ON",
+            ]) {
                 return false
             }
         }

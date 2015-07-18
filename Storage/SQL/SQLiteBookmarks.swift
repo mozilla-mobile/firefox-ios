@@ -48,10 +48,8 @@ public class SQLiteBookmarks: BookmarksModelFactory {
 
         // TODO: share this logic with SQLiteHistory.
         if let faviconUrl = row["iconURL"] as? String,
-           let date = row["iconDate"] as? Double,
            let faviconType = row["iconType"] as? Int {
             bookmark.favicon = Favicon(url: faviconUrl,
-                date: NSDate(timeIntervalSince1970: date),
                 type: IconType(rawValue: faviconType)!)
         }
 

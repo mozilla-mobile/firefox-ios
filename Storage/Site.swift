@@ -23,14 +23,15 @@ public class Favicon: Identifiable {
     var img: UIImage? = nil
 
     public let url: String
-    public let date: NSDate
     public var width: Int?
     public var height: Int?
     public let type: IconType
 
-    public init(url: String, date: NSDate = NSDate(), type: IconType) {
+    var _date: NSDate? = nil
+    public var date: NSDate { return _date ?? NSDate() }
+
+    public init(url: String, type: IconType) {
         self.url = url
-        self.date = date
         self.type = type
     }
 }
