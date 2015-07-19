@@ -163,7 +163,7 @@ class TestSQLiteHistory: XCTestCase {
             var fav = Favicon(url: "http://url2/", date: NSDate(), type: .Icon)
             fav.id = 1
             let site = Site(url: "http://bookmarkedurl/", title: "My Bookmark")
-            return history.addFavicon(fav, forSite: site) >>> { return succeed() }
+            return history.addFavicons([fav], forSite: site) >>> { return succeed() }
         }
 
         func checkFaviconForBookmarkIsNil() -> Success {

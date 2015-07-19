@@ -386,6 +386,8 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.backgroundImage.image = nil
 
         FaviconFetcher.getForUrl(site.url.asURL!, profile: profile) >>== { icons in
+            self.profile.favicons.addFavicons(icons, forSite: site)
+
             if (icons.count > 0) {
                 cell.imageView.sd_setImageWithURL(icons[0].url.asURL!) { (img, err, type, url) -> Void in
                     if let img = img {
@@ -393,7 +395,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
                         cell.image = img
                     } else {
                         let icon = Favicon(url: "", date: NSDate(), type: IconType.NoneFound)
-                        self.profile.favicons.addFavicon(icon, forSite: site)
+                        self.profile.favicons.addFavicons([icon], forSite: site)
                         self.setDefaultThumbnailBackground(cell)
                     }
                 }

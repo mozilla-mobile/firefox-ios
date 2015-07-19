@@ -42,24 +42,17 @@ class FaviconFetcher : NSObject, NSXMLParserDelegate {
                 self.loadFromHost()
             }
 
-            var filledCount = 0
-            for (i, icon) in enumerate(self._favicons) {
-                // For each icon we set of an async load of the data (in order to get the width/height.
-                self.getFavicon(icon, profile: profile).upon { result in
-                    if let icon = result.successValue {
-                        self._favicons[i] = icon
-                    }
-                    filledCount++
+            let deferreds = self._favicons.map({ icon in
+                return self.getFavicon(icon, profile: profile)
+            })
+            all(deferreds).upon { icons in
+                // When they've all completed, we can fill the deferred with the results
+                self._favicons = icons.filter { $0.isSuccess }.map { $0.successValue! }
+                self._favicons.sort({ (a, b) -> Bool in
+                    return a.width > b.width
+                })
 
-                    // When they've all completed, we can fill the deferred with the results
-                    if filledCount == self._favicons.count {
-                        self._favicons.sort({ (a, b) -> Bool in
-                            return a.width > b.width
-                        })
-
-                        deferred.fill(Result(success: self._favicons))
-                    }
-                }
+                deferred.fill(Result(success: self._favicons))
             }
         }
 
@@ -119,7 +112,6 @@ class FaviconFetcher : NSObject, NSXMLParserDelegate {
                 if let img = img {
                     fav.width = Int(img.size.width)
                     fav.height = Int(img.size.height)
-                    profile.favicons.addFavicon(fav, forSite: site)
                 } else {
                     fav.width = 0
                     fav.height = 0

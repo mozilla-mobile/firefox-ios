@@ -5,6 +5,17 @@
 import Foundation
 import WebKit
 import Storage
+import Shared
+
+class FaviconManagerError: ErrorType {
+    let description: String
+    init(description: String) {
+        self.description = description
+    }
+    init(err: NSError) {
+        self.description = err.description
+    }
+}
 
 class FaviconManager : BrowserHelper {
     let profile: Profile!
@@ -30,30 +41,50 @@ class FaviconManager : BrowserHelper {
         return "faviconsMessageHandler"
     }
 
+    func downloadIcon(icon: Favicon) -> Deferred<Result<Favicon>> {
+        let deferred = Deferred<Result<Favicon>>()
+        if let url = icon.url.asURL {
+            let manager = SDWebImageManager.sharedManager()
+            manager.downloadImageWithURL(url,
+                options: SDWebImageOptions.LowPriority,
+                progress: nil) { (img, err, cacheType, success, url) -> Void in
+                    if let err = err {
+                        deferred.fill(Result(failure: FaviconManagerError(err: err)))
+                        return
+                    }
+
+                    if let img = img {
+                        icon.width = Int(img.size.width)
+                        icon.height = Int(img.size.height)
+                        self.browser?.favicons.append(icon)
+                    }
+
+                    deferred.fill(Result(success: icon))
+            }
+        } else {
+            deferred.fill(Result(failure: FaviconManagerError(description: "Invalid url \(icon.url)")))
+        }
+        return deferred
+    }
+
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        let manager = SDWebImageManager.sharedManager()
         self.browser?.favicons.removeAll(keepCapacity: false)
         if let url = browser?.webView!.URL?.absoluteString {
             let site = Site(url: url, title: "")
             if let icons = message.body as? [String: Int] {
-                for icon in icons {
-                    if let iconUrl = NSURL(string: icon.0) {
-                        manager.downloadImageWithURL(iconUrl, options: SDWebImageOptions.LowPriority, progress: nil, completed: { (img, err, cacheType, success, url) -> Void in
-                            let fav = Favicon(url: url.absoluteString!,
-                                date: NSDate(),
-                                type: IconType(rawValue: icon.1)!)
-
-                            if let img = img {
-                                fav.width = Int(img.size.width)
-                                fav.height = Int(img.size.height)
-                            } else {
-                                return
-                            }
-                            self.browser?.favicons.append(fav)
-                            self.profile.favicons.addFavicon(fav, forSite: site)
-                        })
-                    }
+                // Download all the icons
+                let deferreds = map(icons) { (iconUrl, iconType) -> Deferred<Result<Favicon>> in
+                    let fav = Favicon(url: iconUrl,
+                        date: NSDate(),
+                        type: IconType(rawValue: iconType)!)
+                    return self.downloadIcon(fav)
                 }
+
+                // When downloading is done, save them all.
+                all(deferreds).upon({ results in
+                    let favicons = results.filter { $0.isSuccess }.map { $0.successValue! }
+                    self.profile.favicons.addFavicons(favicons, forSite: site)
+                })
             }
         }
     }
