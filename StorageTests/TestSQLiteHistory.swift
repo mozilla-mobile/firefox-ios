@@ -102,31 +102,26 @@ class TestSQLiteHistory: XCTestCase {
         let db = BrowserDB(filename: "browser.db", files: files)
         let history = SQLiteHistory(db: db)!
 
-        func checkSitesByFrecency(f: Cursor<Site> -> Success) -> () -> Success {
-            return {
-                history.getSitesByFrecencyWithLimit(10)
-                    >>== f
-            }
-        }
-
         let site1 = Site(url: "http://www.example.com/test1", title: "title one")
-        let site2 = Site(url: "http://www.example.com/test2", title: "title one")
+        let site2 = Site(url: "http://www.example.com/test2", title: "title two")
+        let site3 = Site(url: "http://www.example2.com/test1", title: "title three")
         let expectation = self.expectationWithDescription("First.")
-        func done() -> Success {
-            expectation.fulfill()
-            return succeed()
-        }
 
-        // Add two sites with the same domain
-        history.addLocalVisit(SiteVisit(site: site1, date: NSDate.nowMicroseconds(), type: VisitType.Link)) >>> {
-            return history.addLocalVisit(SiteVisit(site: site2, date: NSDate.nowMicroseconds(), type: VisitType.Link))
-        } >>> checkSitesByFrecency { sites -> Success in
-                XCTAssertEqual(sites.count, 1)
-                return history.removeSiteFromTopSites(site1)
-        } >>> checkSitesByFrecency { sites -> Success in
-            XCTAssertEqual(sites.count, 0)
-            return succeed()
-        } >>> done
+        all([history.addLocalVisit(SiteVisit(site: site1, date: NSDate.nowMicroseconds(), type: VisitType.Link)),
+             history.addLocalVisit(SiteVisit(site: site2, date: NSDate.nowMicroseconds(), type: VisitType.Link)),
+             history.addLocalVisit(SiteVisit(site: site3, date: NSDate.nowMicroseconds(), type: VisitType.Link))]
+        ).bind({ results in
+            return history.getSitesByFrecencyWithLimit(10)
+        }).bind({ (sites: Result<Cursor<Site>>) -> Success in
+            XCTAssert(sites.successValue!.count == 1, "1 site returned")
+            return history.removeSiteFromTopSites(site1)
+        }).bind({ success in
+            XCTAssertTrue(success.isSuccess, "Remove was successful")
+            return history.getSitesByFrecencyWithLimit(10)
+        }).upon({ (sites: Result<Cursor<Site>>) in
+            XCTAssert(sites.successValue!.count == 1, "1 site returned")
+            expectation.fulfill()
+        })
 
         waitForExpectationsWithTimeout(10.0) { error in
             return

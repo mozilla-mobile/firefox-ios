@@ -145,6 +145,7 @@ extension SQLiteHistory: BrowserHistory {
     public func clearHistory() -> Success {
         return db.run([("DELETE FROM \(TableVisits)", nil),
                        ("DELETE FROM \(TableHistory)", nil),
+                       ("DELETE FROM \(TableDomains)", nil),
                        self.favicons.getCleanupCommands()])
     }
 
