@@ -97,24 +97,59 @@ class TestSQLiteHistory: XCTestCase {
         }
     }
 
+    func testDomainUpgrade() {
+        let files = MockFiles()
+        let db = BrowserDB(filename: "browser.db", files: files)
+        let history = SQLiteHistory(db: db)!
+
+        let site = Site(url: "http://www.example.com/test1.1", title: "title one")
+        var err: NSError? = nil
+
+        // Insert something with an invalid domainId. We have to manually do this since domains are usually hidden.
+        db.withWritableConnection(&err, callback: { (connection, err) -> Int in
+            let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload, domainId) " +
+                         "?, ?, ?, ?, ?, ?, ?"
+            let args: Args = [Bytes.generateGUID(), site.url, site.title, NSDate.nowNumber(), 0, 0, -1]
+            err = connection.executeChange(insert, withArgs: args)
+            return 0
+        })
+
+        // Now insert it again. This should update the domain
+        history.addLocalVisit(SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: VisitType.Link))
+
+        // DomainID isn't normally exposed, so we manually query to get it
+        let results = db.withReadableConnection(&err, callback: { (connection, err) -> Cursor<Int> in
+            let sql = "SELECT domainId FROM \(TableHistory) WHERE url = ?"
+            let args: Args = [site.url]
+            return connection.executeQuery(sql, factory: IntFactory, withArgs: args)
+        })
+        XCTAssertNotEqual(results[0]!, -1, "Domain id was updated")
+    }
+
     func testDomains() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
         let history = SQLiteHistory(db: db)!
 
-        let site1 = Site(url: "http://www.example.com/test1", title: "title one")
-        let site2 = Site(url: "http://www.example.com/test2", title: "title two")
+        let initialGuid = Bytes.generateGUID()
+        let site11 = Site(url: "http://www.example.com/test1.1", title: "title one")
+        let site12 = Site(url: "http://www.example.com/test1.2", title: "title two")
+        let site13 = Place(guid: initialGuid, url: "http://www.example.com/test1.3", title: "title three")
         let site3 = Site(url: "http://www.example2.com/test1", title: "title three")
         let expectation = self.expectationWithDescription("First.")
 
-        all([history.addLocalVisit(SiteVisit(site: site1, date: NSDate.nowMicroseconds(), type: VisitType.Link)),
-             history.addLocalVisit(SiteVisit(site: site2, date: NSDate.nowMicroseconds(), type: VisitType.Link)),
-             history.addLocalVisit(SiteVisit(site: site3, date: NSDate.nowMicroseconds(), type: VisitType.Link))]
-        ).bind({ results in
+        history.clearHistory().bind({ success in
+            return all([history.addLocalVisit(SiteVisit(site: site11, date: NSDate.nowMicroseconds(), type: VisitType.Link)),
+                        history.addLocalVisit(SiteVisit(site: site12, date: NSDate.nowMicroseconds(), type: VisitType.Link)),
+                        history.addLocalVisit(SiteVisit(site: site3, date: NSDate.nowMicroseconds(), type: VisitType.Link))])
+        }).bind({ (results: [Result<()>]) in
+            return history.insertOrUpdatePlace(site13, modified: NSDate.nowMicroseconds())
+        }).bind({ guid in
+            XCTAssertEqual(guid.successValue!, initialGuid, "Guid is correct")
             return history.getSitesByFrecencyWithLimit(10)
         }).bind({ (sites: Result<Cursor<Site>>) -> Success in
-            XCTAssert(sites.successValue!.count == 1, "1 site returned")
-            return history.removeSiteFromTopSites(site1)
+            XCTAssert(sites.successValue!.count == 2, "2 sites returned")
+            return history.removeSiteFromTopSites(site11)
         }).bind({ success in
             XCTAssertTrue(success.isSuccess, "Remove was successful")
             return history.getSitesByFrecencyWithLimit(10)

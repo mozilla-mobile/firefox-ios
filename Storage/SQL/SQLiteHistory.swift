@@ -166,7 +166,7 @@ extension SQLiteHistory: BrowserHistory {
             }
 
             // Insert instead.
-            return self.insertSite(site, atTime: now, withConnection: conn)
+            return self.insertSite(site, atTime: now, isLocal: true, withConnection: conn)
         }
 
         return failOrSucceed(error, "Record site")
@@ -180,40 +180,45 @@ extension SQLiteHistory: BrowserHistory {
         //
         // Note that we will never match against a deleted item, because deleted items have no URL,
         // so we don't need to unset is_deleted here.
-        let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1 WHERE url = ?"
-        let updateArgs: Args? = [site.title, time, site.url]
-        if LogPII {
-            log.debug("Setting title to \(site.title) for URL \(site.url)")
+        if let url = site.url.asURL,
+           let host = url.host {
+            let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1, domainId = (SELECT id FROM \(TableDomains) where domain = ?) WHERE url = ?"
+            let updateArgs: Args? = [site.title, time, host, site.url]
+            if LogPII {
+                log.debug("Setting title to \(site.title) for URL \(site.url)")
+            }
+            var error = conn.executeChange(update, withArgs: updateArgs)
+            if error != nil {
+                log.warning("Update failed with \(error?.localizedDescription)")
+                return 0
+            }
+            return conn.numberOfRowsModified
         }
-        var error = conn.executeChange(update, withArgs: updateArgs)
-        if error != nil {
-            log.warning("Update failed with \(error?.localizedDescription)")
-            return 0
-        }
-        return conn.numberOfRowsModified
+        return 0
     }
 
 
-    private func insertSite(site: Site, atTime time: NSNumber, withConnection conn: SQLiteDBConnection) -> Int {
+    private func insertSite(site: Site, atTime time: NSNumber, isLocal: Bool, withConnection conn: SQLiteDBConnection) -> Int {
         var error: NSError? = nil
 
         if let url = site.url.asURL,
            let host = url.host {
             if let error = conn.executeChange("INSERT INTO \(TableDomains) (domain) VALUES (?)", withArgs: [host]) {
                 log.warning("Domain Insert failed with \(error.localizedDescription)")
-                // return 0
             }
 
             let insert = "INSERT INTO \(TableHistory) " +
-                "(guid, url, title, local_modified, is_deleted, should_upload, domainId) " +
+                "(guid, url, title, " + (isLocal ? "local_modified" : "server_modified") + ", is_deleted, should_upload, domainId) " +
                 "SELECT ?, ?, ?, ?, 0, 1, id FROM \(TableDomains) where domain = ?"
-            let insertArgs: Args? = [Bytes.generateGUID(), site.url, site.title, time, host]
+            let insertArgs: Args? = [site.guid ?? Bytes.generateGUID(), site.url, site.title, time, host]
             if let error = conn.executeChange(insert, withArgs: insertArgs) {
                 log.warning("Site Insert failed with \(error.localizedDescription)")
                 return 0
             }
 
             return 1
+        } else {
+            log.warning("Invalid url \(site.url). Not stored in history.")
         }
         return 0
     }
@@ -606,9 +611,19 @@ extension SQLiteHistory: SyncableHistory {
             if LogPII {
                 log.debug("Inserting: \(place.url).")
             }
-            let insert = "INSERT INTO \(TableHistory) (guid, url, title, server_modified, is_deleted, should_upload) VALUES (?, ?, ?, ?, 0, 0)"
-            let args: Args = [place.guid, place.url, place.title, serverModified]
-            return self.db.run(insert, withArgs: args) >>> always(place.guid)
+
+            if let url = place.url.asURL,
+               let host = url.host {
+                var err: NSError? = nil
+                return self.db.withWritableConnection(&err, callback: { (connection, err) -> Deferred<Result<GUID>> in
+                    let site = Site(url: place.url, title: place.title)
+                    site.guid = place.guid
+                    self.insertSite(site, atTime: serverModified, isLocal: false, withConnection: connection)
+                    return Deferred(value: Result(success: place.guid))
+                })
+            }
+
+            return deferResult(DatabaseError(description: "Invalid url \(place.url). Not stored"))
         }
 
         // Make sure that we only need to compare GUIDs by pre-merging on URL.
