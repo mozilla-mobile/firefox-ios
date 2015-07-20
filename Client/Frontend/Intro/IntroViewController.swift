@@ -11,7 +11,7 @@ struct IntroViewControllerUX {
 
     static let NumberOfCards = 3
 
-    static let PagerCenterOffsetFromScrollViewBottom = 35
+    static let PagerCenterOffsetFromScrollViewBottom = 30
 
     static let StartBrowsingButtonTitle = NSLocalizedString("Start Browsing", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     static let StartBrowsingButtonColor = UIColor(rgb: 0x363B40)
