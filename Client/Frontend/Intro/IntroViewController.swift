@@ -11,7 +11,7 @@ struct IntroViewControllerUX {
 
     static let NumberOfCards = 3
 
-    static let PagerCenterOffsetFromScrollViewBottom = 35
+    static let PagerCenterOffsetFromScrollViewBottom = 45
 
     static let StartBrowsingButtonTitle = NSLocalizedString("Start Browsing", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     static let StartBrowsingButtonColor = UIColor(rgb: 0x363B40)
@@ -39,8 +39,8 @@ struct IntroViewControllerUX {
     static let Card2ImageLabel = NSLocalizedString("The Settings button is at the beginning of the Tabs Tray.", tableName: "Intro", comment: "Accessibility label for an image. See http://mzl.la/1T8gxwo")
     static let Card3ImageLabel = NSLocalizedString("Firefox and the cloud", tableName: "Intro", comment: "Accessibility label for an image. See http://mzl.la/1T8gxwo")
 
-    static let Card3TextOffsetFromCenter = 25
-    static let Card3ButtonOffsetFromCenter = -10
+    static let Card3TextOffsetFromCenter = 40
+    static let Card3ButtonOffsetFromCenter = -20
 
     static let FadeDuration = 0.25
 
@@ -129,14 +129,12 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         pageControl.pageIndicatorTintColor = UIColor.blackColor().colorWithAlphaComponent(0.3)
         pageControl.currentPageIndicatorTintColor = UIColor.blackColor()
         pageControl.numberOfPages = IntroViewControllerUX.NumberOfCards
-        pageControl.addTarget(self, action: Selector("changePage"), forControlEvents: UIControlEvents.ValueChanged)
 
         view.addSubview(pageControl)
         pageControl.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(self.scrollView)
             make.centerY.equalTo(self.startBrowsingButton.snp_top).offset(-IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom)
         }
-
 
         // Card1
 
@@ -197,8 +195,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
         // Make whole screen scrollable by bringing the scrollview to the top
         view.bringSubviewToFront(scrollView)
-        view.bringSubviewToFront(pageControl)
-
 
         // Activate the first card
         setActiveIntroView(introViews[0], forPage: 0)
@@ -270,11 +266,6 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
     private var accessibilityScrollStatus: String {
         return String(format: NSLocalizedString("Introductory slide %@ of %@", tableName: "Intro", comment: "String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3"), NSNumberFormatter.localizedStringFromNumber(pageControl.currentPage+1, numberStyle: .DecimalStyle), NSNumberFormatter.localizedStringFromNumber(IntroViewControllerUX.NumberOfCards, numberStyle: .DecimalStyle))
-    }
-
-    func changePage() {
-        let swipeCoordinate = CGFloat(pageControl.currentPage) * scrollView.frame.size.width
-        scrollView.setContentOffset(CGPointMake(swipeCoordinate, 0), animated: true)
     }
 
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
