@@ -155,6 +155,25 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return Deferred(value: Result(success: clients))
     }
 
+    public func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Result<[RemoteTab]>> {
+        let tabsSQL: String
+        let clientArgs: Args?
+        if let clientGUID = guid {
+            tabsSQL = "SELECT * FROM \(TableTabs) where client_guid = ?"
+            clientArgs = [guid]
+        } else {
+            tabsSQL = "SELECT * FROM \(TableTabs) where client_guid IS NULL"
+            clientArgs = nil
+        }
+
+        log.debug("Looking for tabs for client with guid: \(guid)")
+        return db.runQuery(tabsSQL, args: clientArgs, factory: tabs.factory!) >>== {
+            let tabs = $0.asArray()
+            log.debug("Found \(tabs.count) tabs for client with guid: \(guid)")
+            return deferResult(tabs)
+        }
+    }
+
     public func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
         var err: NSError?
 
