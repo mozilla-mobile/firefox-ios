@@ -5,6 +5,7 @@
 import Foundation
 
 let TableClients = "clients"
+let TableTabs = "tabs"
 
 class RemoteClientsTable<T>: GenericTable<RemoteClient> {
     override var name: String { return TableClients }
@@ -69,7 +70,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
 }
 
 class RemoteTabsTable<T>: GenericTable<RemoteTab> {
-    override var name: String { return "tabs" }
+    override var name: String { return TableTabs }
     override var version: Int { return 2 }
 
     // TODO: index on id, client_guid, last_used, and position.
@@ -88,7 +89,8 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         args.append(item.clientGUID)
         args.append(item.URL.absoluteString!)
         args.append(item.title)
-        args.append(nil) // TODO: persist history.
+        let historyString = ",".join(item.history.filter { $0.absoluteString != nil }.map { $0.absoluteString! })
+        args.append(historyString)
         args.append(NSNumber(unsignedLongLong: item.lastUsed))
         return ("INSERT INTO \(name) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", args)
     }
@@ -96,7 +98,8 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
     override func getUpdateAndArgs(inout item: RemoteTab) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         args.append(item.title)
-        args.append(nil) // TODO: persist history.
+        let historyString = ",".join(item.history.filter { $0.absoluteString != nil }.map { $0.absoluteString! })
+        args.append(historyString)
         args.append(NSNumber(unsignedLongLong: item.lastUsed))
 
         // Key by (client_guid, url) rather than (transient) id.
@@ -115,11 +118,18 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
 
     override var factory: ((row: SDRow) -> RemoteTab)? {
         return { row -> RemoteTab in
+            let history: [NSURL]
+            if let historyString = row["history"] as? String {
+                let historyURLs = split(historyString ?? "") { $0 == "," }
+                history = historyURLs.filter { $0 != nil }.map { NSURL(string: $0)! }
+            } else {
+                history = []
+            }
             return RemoteTab(
                 clientGUID: row["client_guid"] as? String,
                 URL: NSURL(string: row["url"] as! String)!, // TODO: find a way to make this less dangerous.
                 title: row["title"] as! String,
-                history: [], // TODO: extract history.
+                history: history,
                 lastUsed: (row["last_used"] as! NSNumber).unsignedLongLongValue,
                 icon: nil      // TODO
             )

@@ -42,7 +42,7 @@ class Browser: NSObject {
             return RemoteTab(clientGUID: nil,
                 URL: displayURL,
                 title: browser.displayTitle,
-                history: browser.historyList,
+                history: [displayURL] + browser.historyList,
                 lastUsed: Timestamp(),
                 icon: nil)
         } else {
