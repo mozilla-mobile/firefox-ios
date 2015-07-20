@@ -235,7 +235,7 @@ class BrowserViewController: UIViewController {
 
         footer = UIView()
         self.view.addSubview(footer)
-        footer.addSubview(snackBars)
+        self.view.addSubview(snackBars)
         snackBars.backgroundColor = UIColor.clearColor()
 
         scrollController.urlBar = urlBar
