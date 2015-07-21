@@ -19,6 +19,7 @@ class FaviconFetcherErrorType: ErrorType {
 public class FaviconFetcher : NSObject, NSXMLParserDelegate {
     public static var userAgent: String = ""
     static let ExpirationTime = NSTimeInterval(60*60*24*7) // Only check for icons once a week
+    private var attemptedSubdomains = [String]()
 
     class func getForUrl(url: NSURL, profile: Profile) -> Deferred<Result<[Favicon]>> {
         let f = FaviconFetcher()
@@ -29,7 +30,8 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
         let deferred = Deferred<Result<[Favicon]>>()
 
         dispatch_async(queue) { _ in
-            self.parseHTMLForFavicons(url).bind({ (result: Result<[Favicon]>) -> Deferred<[Result<Favicon>]> in
+            var url = url
+            self.parseHTMLForFavicons(&url).bind({ (result: Result<[Favicon]>) -> Deferred<[Result<Favicon>]> in
                 var deferreds = [Deferred<Result<Favicon>>]()
                 if let icons = result.successValue {
                     deferreds = map(icons) { self.getFavicon(url, icon: $0, profile: profile) }
@@ -45,6 +47,31 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                 oldIcons.sort({ (a, b) -> Bool in
                     return a.width > b.width
                 })
+
+                // If we haven't found any sizable icons yet...
+                if oldIcons.count == 0 || oldIcons[0].width < 48 {
+                    // Try the base version of this subdomain. i.e. http://mail.google.com/u/22344 -> http://mail.google.com/
+                    if let newUrl = NSURL(scheme: url.scheme ?? "http", host: url.host, path: "/") where newUrl != url {
+                        return self.loadFavicons(newUrl, profile: profile, oldIcons: oldIcons)
+                    }
+
+                    // If we're alredy at the root of a domain and still haven't found anything big, lets try other subdomains.
+                    // NOTE: This could return something awful. i.e. mail.google.com != www.google.com, but at this point we're
+                    //       running out of options.
+                    if let base = url.baseDomain() {
+                        let subdomains = ["www", "m", "mobile"]
+                        for domain in subdomains {
+                            if let index = find(self.attemptedSubdomains, domain) {
+                                // do nothing
+                            } else {
+                                self.attemptedSubdomains.append(domain)
+                                if let newUrl = NSURL(scheme: url.scheme ?? "http", host: "\(domain).\(base)", path: "/") where newUrl != url {
+                                    return self.loadFavicons(newUrl, profile: profile, oldIcons: oldIcons)
+                                }
+                            }
+                        }
+                    }
+                }
 
                 return deferResult(oldIcons)
             }).upon({ (result: Result<[Favicon]>) in
@@ -67,13 +94,16 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
         return Alamofire.Manager(configuration: configuration)
     }()
 
-    private func fetchDataForUrl(url: NSURL) -> Deferred<Result<NSData>> {
+    private func fetchDataForUrl(inout url: NSURL) -> Deferred<Result<NSData>> {
         let deferred = Deferred<Result<NSData>>()
         alamofire.request(.GET, url).response { (request, response, data, error) in
             if let error = error {
                 deferred.fill(Result(failure: FaviconFetcherErrorType(description: error.description)))
             } else {
-                let loc = response?.URL
+                // Alamofire handles redirects for us. Update the url so that any new attempts use the resolved one.
+                if let newUrl = response?.URL {
+                    url = newUrl
+                }
                 deferred.fill(Result(success: data as! NSData))
             }
         }
@@ -81,10 +111,10 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
     }
 
     // Loads and parses an html document and tries to find any known favicon-type tags for the page
-    private func parseHTMLForFavicons(url: NSURL) -> Deferred<Result<[Favicon]>> {
+    private func parseHTMLForFavicons(inout url: NSURL) -> Deferred<Result<[Favicon]>> {
         var err: NSError?
 
-        return fetchDataForUrl(url).bind({ result -> Deferred<Result<[Favicon]>> in
+        return fetchDataForUrl(&url).bind({ result -> Deferred<Result<[Favicon]>> in
             var icons = [Favicon]()
 
             if let data = result.successValue,
@@ -99,8 +129,8 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                     }
                 }
 
-                if let url = reloadUrl {
-                    return self.loadFromLinks(url)
+                if var url = reloadUrl {
+                    return self.parseHTMLForFavicons(&url)
                 }
 
                 element.iterate("head.link") { link in
@@ -132,7 +162,6 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                 if let img = img {
                     fav.width = Int(img.size.width)
                     fav.height = Int(img.size.height)
-                    profile.favicons.addFavicon(fav, forSite: site)
                 } else {
                     fav.width = 0
                     fav.height = 0
