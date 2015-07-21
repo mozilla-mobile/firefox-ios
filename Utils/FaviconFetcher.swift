@@ -98,6 +98,13 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                         let url = NSURL(string: content.substringFromIndex(advance(index.startIndex,4))) {
                             reloadUrl = url
                     }
+
+                    if let property = meta.attribute("property") where property == "og:image",
+                        let content = meta.attribute("content"),
+                        let url = NSURL(string: content, relativeToURL: url) {
+                            let icon = Favicon(url: url.absoluteString!, date: NSDate(), type: IconType.OpenGraph)
+                            icons.append(icon)
+                    }
                 }
 
                 if let url = reloadUrl {
