@@ -45,11 +45,19 @@ func simulatedFrecency(now: MicrosecondTimestamp, then: MicrosecondTimestamp, vi
 }
 */
 
-func getMicrosecondFrecencySQL(visitDateColumn: String, visitCountColumn: String, multiplier: Int) -> String {
+func getRemoteFrecencySQL() -> String {
+    return getMicrosecondFrecencySQL("remoteVisitDate", "remoteVisitCount")
+}
+
+func getLocalFrecencySQL() -> String {
+    return getMicrosecondFrecencySQL("localVisitDate", "(localVisitCount * (\(LocalVisitFrecencyWeight) + localVisitCount))")
+}
+
+func getMicrosecondFrecencySQL(visitDateColumn: String, visitCountExpression: String) -> String {
     let now = NSDate.nowMicroseconds()
     let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
     let ageDays = "((\(now) - (\(visitDateColumn))) / \(microsecondsPerDay))"
-    return "\(visitCountColumn) * \(multiplier) * max(1, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
+    return "\(visitCountExpression) * max(1, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
 }
 
 extension SDRow {
@@ -191,16 +199,16 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
-        let localFrecencySQL = getMicrosecondFrecencySQL("localVisitDate", "localVisitCount", LocalVisitFrecencyWeight)
-        let remoteFrecencySQL = getMicrosecondFrecencySQL("remoteVisitDate", "remoteVisitCount", 1)
-        let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
-
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, includeIcon: true)
+        return self.getSitesByFrecency(limit: limit, filter: nil)
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
-        let localFrecencySQL = getMicrosecondFrecencySQL("localVisitDate", "localVisitCount", LocalVisitFrecencyWeight)
-        let remoteFrecencySQL = getMicrosecondFrecencySQL("remoteVisitDate", "remoteVisitCount", 1)
+        return self.getSitesByFrecency(limit: limit, filter: filter)
+    }
+
+    private func getSitesByFrecency(#limit: Int, filter: String? = nil) -> Deferred<Result<Cursor<Site>>> {
+        let localFrecencySQL = getLocalFrecencySQL()
+        let remoteFrecencySQL = getRemoteFrecencySQL()
         let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
 
         return self.getFilteredSitesWithLimit(limit, whereURLContains: filter, orderBy: orderBy, includeIcon: true)
