@@ -40,6 +40,8 @@ class Browser: NSObject {
 
     private(set) var screenshot: UIImage?
     var screenshotUUID: NSUUID?
+    var showDialog = false
+    var disableDialog = false
 
     private var helperManager: HelperManager? = nil
     private var configuration: WKWebViewConfiguration? = nil

@@ -673,6 +673,10 @@ class BrowserViewController: UIViewController {
             if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
                 updateUIForReaderHomeStateForTab(tab)
             }
+
+            if webView.UIDelegate == nil {
+                webView.UIDelegate = self
+            }
         case KVOCanGoBack:
             let canGoBack = change[NSKeyValueChangeNewKey] as! Bool
             navigationToolbar.updateBackStatus(canGoBack)
@@ -1347,6 +1351,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 urlBar.updateReaderModeState(ReaderModeState.Unavailable)
                 hideReaderModeBar(animated: false)
             }
+            tabManager.selectedTab?.disableDialog = false
+            tabManager.selectedTab?.showDialog = false
         }
     }
 
@@ -1476,51 +1482,152 @@ extension BrowserViewController: WKUIDelegate {
         return tab.webView
     }
 
+    func createDisableDialogPrompt(alertController: UIAlertController) {
+        let toggle = UISwitch()
+        toggle.transform = CGAffineTransformMakeScale(0.75, 0.75)
+        toggle.addTarget(self, action: "disableDialog:", forControlEvents: UIControlEvents.ValueChanged)
+
+        let disableDialog = UIView()
+        disableDialog.backgroundColor = UIColor.clearColor()
+
+        let label = UILabel()
+        label.text = "Disable additional page dialogs"
+        label.font = UIFont.systemFontOfSize(13)
+        disableDialog.addSubview(label)
+
+        let lineView = UIView()
+        lineView.backgroundColor = UIColor.blackColor()
+        disableDialog.addSubview(lineView)
+
+        alertController.view.addSubview(disableDialog)
+        alertController.view.addSubview(toggle)
+
+        lineView.snp_makeConstraints({ make in
+            make.left.equalTo(alertController.view.snp_left)
+            make.width.equalTo(alertController.view.snp_width)
+            make.height.equalTo(0.3)
+            make.bottom.equalTo(toggle.snp_top).offset(-5)
+        })
+
+        toggle.snp_makeConstraints({ make in
+            make.left.equalTo(disableDialog.snp_right).offset(10)
+            make.centerY.equalTo(disableDialog.snp_centerY)
+        })
+
+        label.snp_makeConstraints({ make in
+            make.center.equalTo(disableDialog)
+        })
+
+        disableDialog.snp_makeConstraints({ make in
+            make.width.equalTo(label.snp_width)
+            make.centerX.equalTo(alertController.view).offset(-30)
+            make.centerY.equalTo(alertController.view).offset(15)
+        })
+    }
+
+    func disableDialog(switchState: UISwitch) {
+        tabManager.selectedTab?.disableDialog = switchState.on
+    }
+
+    func removeDelegate() {
+    }
+
     func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
         tabManager.selectTab(tabManager[webView])
+        if let tab = tabManager.selectedTab {
+            var message = "\(message)"
 
-        // Show JavaScript alerts.
-        let title = frame.request.URL!.host
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
-            completionHandler()
-        }))
-        presentViewController(alertController, animated: true, completion: nil)
+            if tab.showDialog {
+                // Allow two extra spaces to show disable Dialog prompt
+                message = "\(message)\n\n"
+            }
+
+            // Show JavaScript alerts.
+            let title = frame.request.URL!.host
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
+                completionHandler()
+                if tab.disableDialog {
+                    webView.UIDelegate = nil
+                }
+            }))
+
+            if tab.showDialog {
+                createDisableDialogPrompt(alertController)
+            }
+
+            presentViewController(alertController, animated: true, completion: nil)
+            tab.showDialog = true
+        }
     }
 
     func webView(webView: WKWebView, runJavaScriptConfirmPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: (Bool) -> Void) {
         tabManager.selectTab(tabManager[webView])
+        if let tab = tabManager.selectedTab {
+            var message = "\(message)"
 
-        // Show JavaScript confirm dialogs.
-        let title = frame.request.URL!.host
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
-            completionHandler(true)
-        }))
-        alertController.addAction(UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: { _ in
-            completionHandler(false)
-        }))
-        presentViewController(alertController, animated: true, completion: nil)
+            if tab.showDialog {
+                // Allow two extra spaces to show disable Dialog prompt
+                message = "\(message)\n\n"
+            }
+
+            // Show JavaScript confirm dialogs.
+            let title = frame.request.URL!.host
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
+                completionHandler(true)
+            }))
+            alertController.addAction(UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: { _ in
+                completionHandler(false)
+                if tab.disableDialog {
+                    webView.UIDelegate = nil
+                }
+            }))
+
+            if tab.showDialog {
+                createDisableDialogPrompt(alertController)
+            }
+
+            presentViewController(alertController, animated: true, completion: nil)
+            tab.showDialog = true
+        }
     }
 
     func webView(webView: WKWebView, runJavaScriptTextInputPanelWithPrompt prompt: String, defaultText: String?, initiatedByFrame frame: WKFrameInfo, completionHandler: (String!) -> Void) {
         tabManager.selectTab(tabManager[webView])
+        if let tab = tabManager.selectedTab {
+            var prompt = "\(prompt)"
 
-        // Show JavaScript input dialogs.
-        let title = frame.request.URL!.host
-        let alertController = UIAlertController(title: title, message: prompt, preferredStyle: UIAlertControllerStyle.Alert)
-        var input: UITextField!
-        alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField!) in
-            textField.text = defaultText
-            input = textField
-        })
-        alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
-            completionHandler(input.text)
-        }))
-        alertController.addAction(UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: { _ in
-            completionHandler(nil)
-        }))
-        presentViewController(alertController, animated: true, completion: nil)
+            if tab.showDialog {
+                // Allow two extra spaces to show disable Dialog prompt
+                prompt = "\(prompt)\n\n"
+            }
+
+            // Show JavaScript input dialogs.
+            let title = frame.request.URL!.host
+            let alertController = UIAlertController(title: title, message: prompt, preferredStyle: UIAlertControllerStyle.Alert)
+            var input: UITextField!
+            alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField!) in
+                textField.text = defaultText
+                input = textField
+            })
+            alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
+                completionHandler(input.text)
+            }))
+            alertController.addAction(UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: { _ in
+                completionHandler(nil)
+                if tab.disableDialog {
+                    webView.UIDelegate = nil
+                }
+            }))
+
+            if tab.showDialog {
+                createDisableDialogPrompt(alertController)
+            }
+
+            presentViewController(alertController, animated: true, completion: nil)
+            tab.showDialog = true
+        }
     }
 
     /// Invoked when an error occurs during a committed main frame navigation.
