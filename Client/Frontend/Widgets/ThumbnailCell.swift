@@ -67,12 +67,39 @@ class ThumbnailCell: UICollectionViewCell {
                     imageView.layer.rasterizationScale = 2
                     imageView.layer.minificationFilter = kCAFilterNearest
                     imageView.layer.magnificationFilter = kCAFilterNearest
+
+                    imageView.snp_remakeConstraints({ make in
+                        let imagePadding: CGFloat = (UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact) ? ThumbnailCellUX.ImagePaddingCompact : ThumbnailCellUX.ImagePadding
+                        let insets = UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding)
+                        make.top.left.right.equalTo(self.imageWrapper).insets(insets)
+                        make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding) // .insets(insets)
+                    })
+
+                    backgroundImage.hidden = true
+                    textWrapper.hidden = false
+                } else {
+                    backgroundImage.hidden = true
+                    textWrapper.hidden = true
+                    imageView.snp_remakeConstraints({ make in
+                        let imagePadding: CGFloat = 0
+                        let insets = UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding)
+                        make.top.bottom.left.right.equalTo(self.imageWrapper).insets(insets)
+                    })
                 }
 
             } else {
                 imageView.image = ThumbnailCellUX.PlaceholderImage
                 imageView.contentMode = UIViewContentMode.Center
+                backgroundImage.hidden = true
+                textWrapper.hidden = false
+                imageView.snp_remakeConstraints({ make in
+                    let imagePadding: CGFloat = (UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact) ? ThumbnailCellUX.ImagePaddingCompact : ThumbnailCellUX.ImagePadding
+                    let insets = UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding)
+                    make.top.left.right.equalTo(self.imageWrapper).insets(insets)
+                    make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding) // .insets(insets)
+                })
             }
+            imageView.setNeedsLayout()
         }
     }
 
@@ -161,12 +188,14 @@ class ThumbnailCell: UICollectionViewCell {
         })
 
         imageView.snp_remakeConstraints({ make in
-            let imagePadding: CGFloat = (UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact) ? ThumbnailCellUX.ImagePaddingCompact : ThumbnailCellUX.ImagePadding
+            let imagePadding: CGFloat = 0 // (UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact) ? ThumbnailCellUX.ImagePaddingCompact : ThumbnailCellUX.ImagePadding
             let insets = UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding)
-            make.top.left.right.equalTo(self.imageWrapper).insets(insets)
-            make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding) // .insets(insets)
+            make.top.left.right.bottom.equalTo(self.imageWrapper).insets(insets)
+            // make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding) // .insets(insets)
         })
 
+        backgroundImage.hidden = true
+        textWrapper.hidden = true
         textWrapper.snp_makeConstraints({ make in
             make.bottom.equalTo(self.imageWrapper.snp_bottom) // .offset(ThumbnailCellUX.BorderWidth)
             make.left.right.equalTo(self.imageWrapper) // .offset(ThumbnailCellUX.BorderWidth)
