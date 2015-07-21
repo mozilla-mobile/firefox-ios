@@ -10,6 +10,8 @@ private let log = XCGLogger.defaultInstance()
 
 private let LogPII = false
 
+let LocalVisitFrecencyWeight = 5
+
 class NoSuchRecordError: ErrorType {
     let guid: GUID
     init(guid: GUID) {
@@ -43,11 +45,19 @@ func simulatedFrecency(now: MicrosecondTimestamp, then: MicrosecondTimestamp, vi
 }
 */
 
-func getMicrosecondFrecencySQL(visitDateColumn: String, visitCountColumn: String) -> String {
+func getRemoteFrecencySQL() -> String {
+    return getMicrosecondFrecencySQL("remoteVisitDate", "remoteVisitCount")
+}
+
+func getLocalFrecencySQL() -> String {
+    return getMicrosecondFrecencySQL("localVisitDate", "(localVisitCount * (\(LocalVisitFrecencyWeight) + localVisitCount))")
+}
+
+func getMicrosecondFrecencySQL(visitDateColumn: String, visitCountExpression: String) -> String {
     let now = NSDate.nowMicroseconds()
     let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
-    let ageDays = "(\(now) - (\(visitDateColumn))) / \(microsecondsPerDay)"
-    return "\(visitCountColumn) * max(1, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
+    let ageDays = "((\(now) - (\(visitDateColumn))) / \(microsecondsPerDay))"
+    return "\(visitCountExpression) * max(1, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
 }
 
 extension SDRow {
@@ -189,19 +199,23 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
-        let frecencySQL = getMicrosecondFrecencySQL("visitDate", "visitCount")
-        let orderBy = "ORDER BY \(frecencySQL) DESC "
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, includeIcon: true)
+        return self.getSitesByFrecency(limit: limit, filter: nil)
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
-        let frecencySQL = getMicrosecondFrecencySQL("visitDate", "visitCount")
-        let orderBy = "ORDER BY \(frecencySQL) DESC "
+        return self.getSitesByFrecency(limit: limit, filter: filter)
+    }
+
+    private func getSitesByFrecency(#limit: Int, filter: String? = nil) -> Deferred<Result<Cursor<Site>>> {
+        let localFrecencySQL = getLocalFrecencySQL()
+        let remoteFrecencySQL = getRemoteFrecencySQL()
+        let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
+
         return self.getFilteredSitesWithLimit(limit, whereURLContains: filter, orderBy: orderBy, includeIcon: true)
     }
 
     public func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
-        let orderBy = "ORDER BY visitDate DESC "
+        let orderBy = "ORDER BY max(localVisitDate, remoteVisitDate) DESC "
         return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, includeIcon: true)
     }
 
@@ -215,8 +229,14 @@ extension SQLiteHistory: BrowserHistory {
         site.guid = guid
         site.id = id
 
-        if let visitDate = row.getTimestamp("visitDate") {
-            site.latestVisit = Visit(date: visitDate, type: VisitType.Unknown)
+        // Find the most recent visit, regardless of which column it might be in.
+        let local = row.getTimestamp("localVisitDate") ?? 0
+        let remote = row.getTimestamp("remoteVisitDate") ?? 0
+        let either = row.getTimestamp("visitDate") ?? 0
+
+        let latest = max(local, remote, either)
+        if latest > 0 {
+            site.latestVisit = Visit(date: latest, type: VisitType.Unknown)
         }
 
         return site
@@ -252,10 +272,14 @@ extension SQLiteHistory: BrowserHistory {
             whereClause = " WHERE (\(TableHistory).is_deleted = 0)"
         }
 
+        // We partition the results to return local and remote visits separately. They contribute differently
+        // to frecency; see much earlier in this file.
         let historySQL =
         "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, " +
-        "max(\(TableVisits).date) AS visitDate, " +
-        "count(\(TableVisits).date) AS visitCount " +
+        "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate, " +
+        "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate, " +
+        "COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount, " +
+        "COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount " +
         "FROM \(TableHistory) INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
         whereClause +
         "GROUP BY \(TableHistory).id " +
@@ -266,7 +290,8 @@ extension SQLiteHistory: BrowserHistory {
             // We select the history items then immediately join to get the largest icon.
             // We do this so that we limit and filter *before* joining against icons.
             let sql = "SELECT " +
-                "historyID, url, title, guid, visitDate, visitCount " +
+                "historyID, url, title, guid, " +
+                "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount, " +
                 "iconID, iconURL, iconDate, iconType, iconWidth " +
                 "FROM (\(historySQL)) LEFT OUTER JOIN " +
                 "view_history_id_favicon ON historyID = view_history_id_favicon.id"
