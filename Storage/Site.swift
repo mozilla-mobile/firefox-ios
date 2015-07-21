@@ -16,6 +16,7 @@ public enum IconType: Int {
     case Guess = 3
     case Local = 4
     case NoneFound = 5
+    case OpenGraph = 6
 }
 
 public class Favicon: Identifiable {
