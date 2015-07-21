@@ -176,8 +176,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             firefoxUA = "\(mutableUA) Safari/\(webKitVersion)"
             NSUserDefaults.standardUserDefaults().setObject(firefoxUA, forKey: "UserAgent")
         }
+        FaviconFetcher.userAgent = firefoxUA!
         NSUserDefaults.standardUserDefaults().registerDefaults(["UserAgent": firefoxUA!])
-
         SDWebImageDownloader.sharedDownloader().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
     }
 
