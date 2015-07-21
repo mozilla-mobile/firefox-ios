@@ -483,7 +483,6 @@
 		E4BA8AAB1B4B15EF00BC2E95 /* FennecNightly.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = E4BA8AA41B4B15EF00BC2E95 /* FennecNightly.entitlements */; };
 		E4BA8AAC1B4B15EF00BC2E95 /* Firefox.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = E4BA8AA51B4B15EF00BC2E95 /* Firefox.entitlements */; };
 		E4BA8AAD1B4B15EF00BC2E95 /* ViewLater.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4BA8AA61B4B15EF00BC2E95 /* ViewLater.xcassets */; };
-		E4BA8AAE1B4B15EF00BC2E95 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E4BA8AA71B4B15EF00BC2E95 /* Info.plist */; };
 		E4BCAAB91B0537E300855D82 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BCAAB81B0537E300855D82 /* InstructionsViewController.swift */; };
 		E4BCAAD91B05380B00855D82 /* ClientPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BCAAD81B05380B00855D82 /* ClientPickerViewController.swift */; };
 		E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */ = {isa = PBXBuildFile; fileRef = E4C358541AF144BA00299F7E /* FSReadingList.m */; };
@@ -3622,7 +3621,6 @@
 			files = (
 				E4BA8AAA1B4B15EF00BC2E95 /* FennecAurora.entitlements in Resources */,
 				E4BA8AAD1B4B15EF00BC2E95 /* ViewLater.xcassets in Resources */,
-				E4BA8AAE1B4B15EF00BC2E95 /* Info.plist in Resources */,
 				E4BA8AAC1B4B15EF00BC2E95 /* Firefox.entitlements in Resources */,
 				E4BA8AA91B4B15EF00BC2E95 /* Fennec.entitlements in Resources */,
 				E4BA8AAB1B4B15EF00BC2E95 /* FennecNightly.entitlements in Resources */,
