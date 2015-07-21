@@ -111,13 +111,27 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                 }
 
                 element.iterate("head.link") { link in
-                    if let rel = link.attribute("rel") where (rel == "shortcut icon" || rel == "icon" || rel == "apple-touch-icon"),
+                    if let rel = link.attribute("rel") where (rel == "shortcut icon" || rel == "icon" || rel == "apple-touch-icon" || rel == "apple-touch-icon-precomposed"),
                         let href = link.attribute("href"),
                         let url = NSURL(string: href, relativeToURL: url) {
-                            let icon = Favicon(url: url.absoluteString!, date: NSDate(), type: IconType.Icon)
+                            let type: IconType
+                            switch rel {
+                                case "apple-touch-icon":
+                                    type = IconType.AppleIcon
+                                case "apple-touch-icon-precomposed":
+                                    type = IconType.AppleIconPrecomposed
+                                default:
+                                    type = IconType.Icon
+                            }
+                            let icon = Favicon(url: url.absoluteString!, date: NSDate(), type: type)
                             icons.append(icon)
                     }
                 }
+            }
+
+            if let url = NSURL(scheme: url.scheme ?? "http", host: url.host, path: "/favicon.ico"),
+               let urlString = url.absoluteString {
+                icons.append(Favicon(url: urlString, date: NSDate(), type: IconType.Guess))
             }
 
             return deferResult(icons)
