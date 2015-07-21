@@ -89,7 +89,8 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         self.addChildViewController(shareDialogController)
         shareDialogController.view.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.view.addSubview(shareDialogController.view)
-        
+        shareDialogController.didMoveToParentViewController(self)
+
         // Setup constraints for the dialog. We keep the dialog centered with 16 points of padding on both
         // sides. The dialog grows to max 380 points wide so that it does not look too big on landscape or
         // iPad devices.
