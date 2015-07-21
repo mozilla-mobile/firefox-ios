@@ -8,7 +8,7 @@ We encourage you to participate in this open source project. We love Pull Reques
 
 * IRC:            [#mobile](https://wiki.mozilla.org/IRC) for general discussion and [#mobistatus](https://wiki.mozilla.org/IRC) for team status updates.
 * Mailing list:   [mobile-firefox-dev@mozilla.org](https://mail.mozilla.org/listinfo/mobile-firefox-dev).
-* Bugs:           [File a new bug](https://bugzilla.mozilla.org/enter_bug.cgi?bug_file_loc=http%3A%2F%2F&bug_ignored=0&op_sys=iOS%208&product=Firefox%20for%20iOS&rep_platform=All) • [Existing bugs](https://bugzilla.mozilla.org/describecomponents.cgi?product=Firefox%20for%20iOS)
+* Bugs:           [File a new bug](https://bugzilla.mozilla.org/enter_bug.cgi?bug_file_loc=http%3A%2F%2F&bug_ignored=0&op_sys=iOS%20&product=Firefox%20for%20iOS&rep_platform=All) • [Existing bugs](https://bugzilla.mozilla.org/describecomponents.cgi?product=Firefox%20for%20iOS)
 
 This is a work in progress on some early ideas.  Don't get too attached to this code. Tomorrow everything will be different.
 
@@ -20,7 +20,7 @@ https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScroll
 Building the code
 -----------------
 
-> __As of July 2, 2015, this project requires Xcode 6.4. Make sure you upgrade, the App Store should offer you 6.4 already.__
+> __As of July 2, 2015, this project requires Xcode 6.4. Make sure you upgrade; the App Store should offer you 6.4 already.__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage).
@@ -94,4 +94,3 @@ Most of this is fixable and can be reported upstream.
 If you add a new dependency, ping @st3fan and he'll make sure things work correctly on our integration (xcode server) and dogfood builders.
 
 A command exists to make adding dependencies less painful: `./update.sh`.
-.
