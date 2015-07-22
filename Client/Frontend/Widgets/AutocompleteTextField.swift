@@ -31,17 +31,20 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        super.delegate = self
-        self.notifyTextChanged = debounce(0.1, {
-            self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.text)
-        })
+        commonInit()
     }
 
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        commonInit()
+    }
+
+    private func commonInit() {
         super.delegate = self
         notifyTextChanged = debounce(0.1, {
-            self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.text)
+            if self.editing {
+                self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.text)
+            }
         })
     }
 
