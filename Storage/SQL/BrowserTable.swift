@@ -56,9 +56,34 @@ private let log = XCGLogger.defaultInstance()
  */
 public class BrowserTable: Table {
     var name: String { return "BROWSER" }
-    var version: Int { return 6 }
+    var version: Int { return 7 }
     let sqliteVersion: Int32
     let supportsPartialIndices: Bool
+
+    let CreateWidestFaviconsView =
+    "CREATE VIEW IF NOT EXISTS \(ViewWidestFaviconsForSites) AS " +
+        "SELECT " +
+        "\(TableFaviconSites).siteID AS siteID, " +
+        "\(TableFavicons).id AS iconID, " +
+        "\(TableFavicons).url AS iconURL, " +
+        "\(TableFavicons).date AS iconDate, " +
+        "\(TableFavicons).type AS iconType, " +
+        // Prefer large icons over large OpenGraph images, but use OpenGraph if the icons are all small.
+        "MAX(CASE WHEN \(TableFavicons).type IS 6 THEN " +
+                "CASE WHEN \(TableFavicons).width > 48 THEN " +
+                "47 ELSE \(TableFavicons).width END " +
+            "ELSE \(TableFavicons).width END) AS iconWidth " +
+        "FROM \(TableFaviconSites), \(TableFavicons) WHERE " +
+        "\(TableFaviconSites).faviconID = \(TableFavicons).id " +
+    "GROUP BY siteID "
+
+    let CreateHistoryIDsWithIconView =
+    "CREATE VIEW IF NOT EXISTS \(ViewHistoryIDsWithWidestFavicons) AS " +
+        "SELECT \(TableHistory).id AS id, " +
+        "iconID, iconURL, iconDate, iconType, iconWidth " +
+        "FROM \(TableHistory) " +
+        "LEFT OUTER JOIN " +
+    "\(ViewWidestFaviconsForSites) ON history.id = \(ViewWidestFaviconsForSites).siteID "
 
     public init() {
         let v = sqlite3_libversion_number()
@@ -170,27 +195,6 @@ public class BrowserTable: Table {
         "UNIQUE (siteID, faviconID) " +
         ") "
 
-        let widestFavicons =
-        "CREATE VIEW IF NOT EXISTS \(ViewWidestFaviconsForSites) AS " +
-        "SELECT " +
-        "\(TableFaviconSites).siteID AS siteID, " +
-        "\(TableFavicons).id AS iconID, " +
-        "\(TableFavicons).url AS iconURL, " +
-        "\(TableFavicons).date AS iconDate, " +
-        "\(TableFavicons).type AS iconType, " +
-        "MAX(\(TableFavicons).width) AS iconWidth " +
-        "FROM \(TableFaviconSites), \(TableFavicons) WHERE " +
-        "\(TableFaviconSites).faviconID = \(TableFavicons).id " +
-        "GROUP BY siteID "
-
-        let historyIDsWithIcon =
-        "CREATE VIEW IF NOT EXISTS \(ViewHistoryIDsWithWidestFavicons) AS " +
-        "SELECT \(TableHistory).id AS id, " +
-        "iconID, iconURL, iconDate, iconType, iconWidth " +
-        "FROM \(TableHistory) " +
-        "LEFT OUTER JOIN " +
-        "\(ViewWidestFaviconsForSites) ON history.id = \(ViewWidestFaviconsForSites).siteID "
-
         let iconForURL =
         "CREATE VIEW IF NOT EXISTS \(ViewIconForURL) AS " +
         "SELECT history.url AS url, icons.iconID AS iconID FROM " +
@@ -217,7 +221,7 @@ public class BrowserTable: Table {
         let queries = [
             history, visits, bookmarks, faviconSites,
             indexShouldUpload, indexSiteIDDate,
-            widestFavicons, historyIDsWithIcon, iconForURL,
+            CreateWidestFaviconsView, CreateHistoryIDsWithIconView, iconForURL,
             queue,
         ]
 
@@ -232,6 +236,12 @@ public class BrowserTable: Table {
         if from == to {
             log.debug("Skipping update from \(from) to \(to).")
             return true
+        }
+
+        if to < from {
+            // This is likely an upgrade from before Bug 1160399.
+            log.debug("Downgrade from \(from) to \(to) isn't supported")
+            return drop(db) && create(db, version: to)
         }
 
         if from == 0 {
@@ -265,6 +275,15 @@ public class BrowserTable: Table {
             if !self.run(db, queries: queries) {
                 return false
             }
+        }
+
+        if from < 7 {
+            let queries = [
+                "DROP VIEW IF EXISTS \(ViewWidestFaviconsForSites)",
+                "DROP VIEW IF EXISTS \(ViewHistoryIDsWithWidestFavicons)",
+                CreateWidestFaviconsView,
+                CreateHistoryIDsWithIconView
+            ]
         }
 
         return true
