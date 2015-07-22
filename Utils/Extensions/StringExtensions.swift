@@ -52,6 +52,26 @@ public extension String {
         return str as! String
     }
 
+    /**
+    Ellipsizes a String only if it's longer than `maxLength`
+
+      "ABCDEF".ellipsize(4)
+      // "AB…EF"
+
+    :param: maxLength The maximum length of the String.
+
+    :returns: A String with `maxLength` characters or less
+    */
+    func ellipsize(var #maxLength: Int) -> String {
+        if (maxLength >= 2) && (count(self) > maxLength) {
+            let index1 = advance(self.startIndex, (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
+            let index2 = advance(self.endIndex, maxLength / -2)
+
+            return self.substringToIndex(index1) + "…\u{2060}" + self.substringFromIndex(index2)
+        }
+        return self
+    }
+
     public var asURL: NSURL? {
         return NSURL(string: self)
     }
