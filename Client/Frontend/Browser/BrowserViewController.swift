@@ -55,6 +55,7 @@ class BrowserViewController: UIViewController {
 
     private let profile: Profile
     private let tabManager: TabManager
+    unowned private let keyboardManager = BluetoothKeyboardManager.sharedManager
 
     // These views wrap the urlbar and toolbar to provide background effects on them
     private var header: UIView!
@@ -99,6 +100,7 @@ class BrowserViewController: UIViewController {
         screenshotHelper = BrowserScreenshotHelper(controller: self)
         tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
+        keyboardManager.addDelegate(self)
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -109,6 +111,22 @@ class BrowserViewController: UIViewController {
             return UIStatusBarStyle.LightContent
         }
         return UIStatusBarStyle.Default
+    }
+
+    // MARK: Bluetooth Keyboard Shortcuts Setup
+
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+
+    override var keyCommands: [AnyObject]? {
+        get {
+            return keyboardManager.keyCommands
+        }
+    }
+
+    func keyboardPressed(keyCommand: UIKeyCommand) {
+        keyboardManager.keyboardPressed(keyCommand)
     }
 
     func shouldShowToolbarForTraitCollection(previousTraitCollection: UITraitCollection) -> Bool {
@@ -688,6 +706,13 @@ class BrowserViewController: UIViewController {
     func openURLInNewTab(url: NSURL) {
         let tab = tabManager.addTab(request: NSURLRequest(URL: url))
         tabManager.selectTab(tab)
+    }
+}
+
+extension BrowserViewController: BluetoothKeyboardDelegate {
+    func openNewTab() {
+        urlBarDidPressTabs(self.urlBar)
+        NSNotificationCenter.defaultCenter().addObserver(self.tabTrayController, selector: "SELdidClickAddTab", name:BluetoothKeyboardNotification.TabTrayDidOpen, object: nil)
     }
 }
 
