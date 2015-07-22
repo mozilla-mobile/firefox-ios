@@ -16,6 +16,7 @@ public enum IconType: Int {
     case Guess = 3
     case Local = 4
     case NoneFound = 5
+    case OpenGraph = 6
 }
 
 public class Favicon: Identifiable {
@@ -37,7 +38,7 @@ public class Favicon: Identifiable {
 
 // TODO: Site shouldn't have all of these optional decorators. Include those in the
 // cursor results, perhaps as a tuple.
-public class Site : Identifiable {
+public class Site : Identifiable, Equatable {
     var id: Int? = nil
     var guid: String? = nil
 
@@ -51,4 +52,8 @@ public class Site : Identifiable {
         self.url = url
         self.title = title
     }
+}
+
+public func ==(a: Site, b: Site) -> Bool {
+    return a.url == b.url
 }
