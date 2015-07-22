@@ -27,8 +27,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private var enteredTextLength = 0
     private var notifyTextChanged: (() -> ())? = nil
 
-    var active = false
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -57,8 +55,11 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             enteredTextLength = 0
             completionActive = true
         }
+
+        selectedTextRange = textRangeFromPosition(beginningOfDocument, toPosition: beginningOfDocument)
     }
 
+    /// Commits the completion by setting the text and removing the highlight.
     private func applyCompletion() {
         if completionActive {
             self.attributedText = NSAttributedString(string: text)
@@ -66,6 +67,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
     }
 
+    /// Removes the autocomplete-highlighted text from the field.
     private func removeCompletion() {
         if completionActive {
             let enteredText = text.substringToIndex(advance(text.startIndex, enteredTextLength, text.endIndex))
@@ -91,7 +93,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     func setAutocompleteSuggestion(suggestion: String?) {
-        if let suggestion = suggestion {
+        if let suggestion = suggestion where editing {
             // Check that the length of the entered text is shorter than the length of the suggestion.
             // This ensures that completionActive is true only if there are remaining characters to
             // suggest (which will suppress the caret).
@@ -105,16 +107,13 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
     }
 
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-        return true
-    }
-
     func textFieldDidBeginEditing(textField: UITextField) {
         autocompleteDelegate?.autocompleteTextFieldDidBeginEditing(self)
     }
 
-    func textFieldDidEndEditing(textField: UITextField) {
-        active = false
+    func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+        applyCompletion()
+        return true
     }
 
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -145,11 +144,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         return completionActive ? CGRectZero : super.caretRectForPosition(position)
     }
 
-    override func resignFirstResponder() -> Bool {
-        applyCompletion()
-        return super.resignFirstResponder()
-    }
-
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         if !completionActive {
             super.touchesBegan(touches, withEvent: event)
@@ -163,7 +157,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if !active || !completionActive {
+        if !completionActive {
             super.touchesEnded(touches, withEvent: event)
         } else {
             applyCompletion()
@@ -171,6 +165,5 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             // Set the current position to the end of the text.
             selectedTextRange = textRangeFromPosition(endOfDocument, toPosition: endOfDocument)
         }
-        active = self.isFirstResponder()
     }
 }

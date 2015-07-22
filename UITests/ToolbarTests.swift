@@ -84,7 +84,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func testURLEntry() {
-        let textField = tester().waitForViewWithAccessibilityLabel("Address and Search") as! UITextField
+        let textField = tester().waitForViewWithAccessibilityIdentifier("url") as! UITextField
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().enterTextIntoCurrentFirstResponder("foobar")
         tester().tapViewWithAccessibilityLabel("Cancel")

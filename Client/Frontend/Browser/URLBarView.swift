@@ -8,8 +8,7 @@ import Shared
 import SnapKit
 
 private struct URLBarViewUX {
-    // The color shown behind the tabs count button, and underneath the (mostly transparent) status bar.
-    static let TextFieldBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.05)
+    static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
     static let TextFieldContentInset = UIOffsetMake(9, 5)
     static let LocationLeftPadding = 5
@@ -21,7 +20,6 @@ private struct URLBarViewUX {
     static let URLBarCurveOffset: CGFloat = 14
     // buffer so we dont see edges when animation overshoots with spring
     static let URLBarCurveBounceBuffer: CGFloat = 8
-
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
@@ -39,8 +37,8 @@ protocol URLBarDelegate: class {
     func urlBarDidLongPressReaderMode(urlBar: URLBarView) -> Bool
     func urlBarDidPressStop(urlBar: URLBarView)
     func urlBarDidPressReload(urlBar: URLBarView)
-    func urlBarDidBeginEditing(urlBar: URLBarView)
-    func urlBarDidEndEditing(urlBar: URLBarView)
+    func urlBarDidEnterOverlayMode(urlBar: URLBarView)
+    func urlBarDidLeaveOverlayMode(urlBar: URLBarView)
     func urlBarDidLongPressLocation(urlBar: URLBarView)
     func urlBarLocationAccessibilityActions(urlBar: URLBarView) -> [UIAccessibilityCustomAction]?
     func urlBarDidPressScrollToTop(urlBar: URLBarView)
@@ -55,32 +53,56 @@ class URLBarView: UIView {
 
     var toolbarIsShowing = false
 
+    /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
+    /// and the Cancel button is visible (allowing the user to leave overlay mode). Overlay mode
+    /// is *not* tied to the location text field's editing state; for instance, when selecting
+    /// a panel, the first responder will be resigned, yet the overlay mode UI is still active.
+    var inOverlayMode = false
+
     var backButtonLeftConstraint: Constraint?
 
     lazy var locationView: BrowserLocationView = {
-        var locationView = BrowserLocationView(frame: CGRectZero)
+        let locationView = BrowserLocationView()
         locationView.setTranslatesAutoresizingMaskIntoConstraints(false)
         locationView.readerModeState = ReaderModeState.Unavailable
         locationView.delegate = self
-
-        locationView.autocompleteDelegate = self
-        locationView.locationContentInset = URLBarViewUX.LocationContentOffset
-        locationView.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
-        locationView.cornerRadius = URLBarViewUX.TextFieldCornerRadius
-        locationView.borderWidth = URLBarViewUX.TextFieldBorderWidth
-        locationView.editingBorderColor = URLBarViewUX.TextFieldActiveBorderColor.CGColor
-
         return locationView
     }()
 
+    private lazy var locationTextField: ToolbarTextField = {
+        let locationTextField = ToolbarTextField()
+        locationTextField.setTranslatesAutoresizingMaskIntoConstraints(false)
+        locationTextField.autocompleteDelegate = self
+        locationTextField.keyboardType = UIKeyboardType.WebSearch
+        locationTextField.autocorrectionType = UITextAutocorrectionType.No
+        locationTextField.autocapitalizationType = UITextAutocapitalizationType.None
+        locationTextField.returnKeyType = UIReturnKeyType.Go
+        locationTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
+        locationTextField.backgroundColor = UIColor.whiteColor()
+        locationTextField.font = UIConstants.DefaultMediumFont
+        locationTextField.isAccessibilityElement = true
+//        locationTextField.accessibilityActionsSource = self
+        locationTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
+        locationTextField.attributedPlaceholder = self.locationView.placeholder
+        return locationTextField
+    }()
+
     private lazy var locationContainer: UIView = {
-        var locationContainer = UIView()
+        let locationContainer = UIView()
         locationContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
+
+        // Enable clipping to apply the rounded edges to subviews.
+        locationContainer.clipsToBounds = true
+
+        locationContainer.layer.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
+        locationContainer.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
+        locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
+
         return locationContainer
     }()
 
     private lazy var tabsButton: UIButton = {
-        var tabsButton = InsetButton()
+        let tabsButton = InsetButton()
         tabsButton.setTranslatesAutoresizingMaskIntoConstraints(false)
         tabsButton.setTitle("0", forState: UIControlState.Normal)
         tabsButton.setTitleColor(URLBarViewUX.backgroundColorWithAlpha(1), forState: UIControlState.Normal)
@@ -96,7 +118,7 @@ class URLBarView: UIView {
     }()
 
     private lazy var progressBar: UIProgressView = {
-        var progressBar = UIProgressView()
+        let progressBar = UIProgressView()
         progressBar.progressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
         progressBar.alpha = 0
         progressBar.hidden = true
@@ -104,7 +126,7 @@ class URLBarView: UIView {
     }()
 
     private lazy var cancelButton: UIButton = {
-        var cancelButton = InsetButton()
+        let cancelButton = InsetButton()
         cancelButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         let cancelTitle = NSLocalizedString("Cancel", comment: "Button label to cancel entering a URL or search query")
         cancelButton.setTitle(cancelTitle, forState: UIControlState.Normal)
@@ -144,18 +166,11 @@ class URLBarView: UIView {
     private var rightBarConstraint: Constraint?
     private let defaultRightOffset: CGFloat = URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer
 
-    var isEditing: Bool {
-        return locationView.active
-    }
-
-    var canCancel: Bool {
-        return !cancelButton.hidden
-    }
-
     var currentURL: NSURL? {
         get {
             return locationView.url
         }
+
         set(newURL) {
             locationView.url = newURL
         }
@@ -173,10 +188,11 @@ class URLBarView: UIView {
 
     private func commonInit() {
         backgroundColor = URLBarViewUX.backgroundColorWithAlpha(0)
-        addSubview(curveShape);
+        addSubview(curveShape)
         addSubview(scrollToTopButton)
 
         locationContainer.addSubview(locationView)
+        locationContainer.addSubview(locationTextField)
         addSubview(locationContainer)
 
         addSubview(progressBar)
@@ -192,8 +208,8 @@ class URLBarView: UIView {
         helper = BrowserToolbarHelper(toolbar: self)
         setupConstraints()
 
-        // Make sure we hide any views that shouldn't be showing in non-editing mode
-        finishEditingAnimation(false)
+        // Make sure we hide any views that shouldn't be showing in non-overlay mode.
+        updateViewsForOverlayModeAndToolbarChanges()
     }
 
     private func setupConstraints() {
@@ -208,10 +224,7 @@ class URLBarView: UIView {
         }
 
         locationView.snp_makeConstraints { make in
-            make.edges.equalTo(self.locationContainer).insets(EdgeInsetsMake(URLBarViewUX.TextFieldBorderWidth,
-                URLBarViewUX.TextFieldBorderWidth,
-                URLBarViewUX.TextFieldBorderWidth,
-                URLBarViewUX.TextFieldBorderWidth))
+            make.edges.equalTo(self.locationContainer)
         }
 
         cancelButton.snp_makeConstraints { make in
@@ -223,11 +236,23 @@ class URLBarView: UIView {
             make.size.equalTo(URLBarViewUX.TabsButtonHeight)
         }
 
+        tabsButton.snp_makeConstraints { make in
+            make.centerY.equalTo(self.locationContainer)
+            make.trailing.equalTo(self)
+            make.width.height.equalTo(UIConstants.ToolbarHeight)
+        }
+
         curveShape.snp_makeConstraints { make in
             make.top.left.bottom.equalTo(self)
             self.rightBarConstraint = make.right.equalTo(self).constraint
             self.rightBarConstraint?.updateOffset(defaultRightOffset)
         }
+
+        locationTextField.snp_makeConstraints { make in
+            make.edges.equalTo(self.locationView.urlTextField)
+        }
+
+        remakeLocationContainerConstraints()
     }
 
     private func updateToolbarConstraints() {
@@ -269,13 +294,7 @@ class URLBarView: UIView {
 
     override func updateConstraints() {
         updateToolbarConstraints()
-
-        tabsButton.snp_remakeConstraints { make in
-            make.centerY.equalTo(self.locationContainer)
-            make.trailing.equalTo(self)
-            make.width.height.equalTo(UIConstants.ToolbarHeight)
-        }
-        updateLayoutForEditing(editing: isEditing, animated: false)
+        remakeLocationContainerConstraints()
         super.updateConstraints()
     }
 
@@ -284,17 +303,7 @@ class URLBarView: UIView {
     // that can show in either mode.
     func setShowToolbar(shouldShow: Bool) {
         toolbarIsShowing = shouldShow
-        setNeedsUpdateConstraints()
-    }
-
-    func updateURLBarText(text: String) {
-        delegate?.urlBarDidBeginEditing(self)
-
-        locationView.text = text
-
-        updateLayoutForEditing(editing: true)
-
-        delegate?.urlBar(self, didEnterText: text)
+        updateViewsForOverlayModeAndToolbarChanges()
     }
 
     func updateAlphaForSubviews(alpha: CGFloat) {
@@ -379,30 +388,30 @@ class URLBarView: UIView {
     }
 
     func setAutocompleteSuggestion(suggestion: String?) {
-        locationView.editTextField.setAutocompleteSuggestion(suggestion)
+        locationTextField.setAutocompleteSuggestion(suggestion)
     }
 
-    func finishEditing() {
-        locationView.active = false
-        updateLayoutForEditing(editing: false)
-        delegate?.urlBarDidEndEditing(self)
+    func enterOverlayMode(locationText: String?) {
+        // Copy the current URL to the editable text field, then activate it.
+        locationTextField.text = locationText
+        locationTextField.becomeFirstResponder()
+
+        // Show the overlay mode UI, which includes hiding the locationView and replacing it
+        // with the editable locationTextField.
+        animateToOverlayState(true)
+
+        delegate?.urlBarDidEnterOverlayMode(self)
     }
 
-    func prepareEditingAnimation(editing: Bool) {
-        // Make sure everything is showing during the transition (we'll hide it afterwards).
-        self.progressBar.hidden = editing
-        self.tabsButton.hidden = false
-        self.cancelButton.hidden = false
-        self.forwardButton.hidden = !self.toolbarIsShowing
-        self.backButton.hidden = !self.toolbarIsShowing
-        self.stopReloadButton.hidden = !self.toolbarIsShowing
-        self.shareButton.hidden = !self.toolbarIsShowing
-        self.bookmarkButton.hidden = !self.toolbarIsShowing
+    func leaveOverlayMode() {
+        locationTextField.resignFirstResponder()
+        animateToOverlayState(false)
+        delegate?.urlBarDidLeaveOverlayMode(self)
+    }
 
-        // Update the location bar's size. If we're animating, we'll call layoutIfNeeded in the Animation
-        // and transition to this.
-        if editing {
-            // In editing mode, we always show the location view full width
+    func remakeLocationContainerConstraints() {
+        if inOverlayMode {
+            // In overlay mode, we always show the location view full width
             self.locationContainer.snp_remakeConstraints { make in
                 make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
                 make.trailing.equalTo(self.cancelButton.snp_leading)
@@ -427,12 +436,32 @@ class URLBarView: UIView {
         }
     }
 
-    func transitionToEditing(editing: Bool) {
-        self.cancelButton.alpha = editing ? 1 : 0
-        self.shareButton.alpha = editing ? 0 : 1
-        self.bookmarkButton.alpha = editing ? 0 : 1
+    func prepareOverlayAnimation() {
+        // Make sure everything is showing during the transition (we'll hide it afterwards).
+        self.cancelButton.hidden = false
+        self.progressBar.hidden = false
+        self.locationTextField.hidden = false
+        self.shareButton.hidden = !self.toolbarIsShowing
+        self.bookmarkButton.hidden = !self.toolbarIsShowing
+        self.forwardButton.hidden = !self.toolbarIsShowing
+        self.backButton.hidden = !self.toolbarIsShowing
+        self.stopReloadButton.hidden = !self.toolbarIsShowing
+    }
 
-        if editing {
+    func transitionToOverlay() {
+        self.cancelButton.alpha = inOverlayMode ? 1 : 0
+        self.progressBar.alpha = inOverlayMode ? 0 : 1
+        self.locationTextField.alpha = inOverlayMode ? 1 : 0
+        self.shareButton.alpha = inOverlayMode ? 0 : 1
+        self.bookmarkButton.alpha = inOverlayMode ? 0 : 1
+        self.forwardButton.alpha = inOverlayMode ? 0 : 1
+        self.backButton.alpha = inOverlayMode ? 0 : 1
+        self.stopReloadButton.alpha = inOverlayMode ? 0 : 1
+
+        let borderColor = inOverlayMode ? URLBarViewUX.TextFieldActiveBorderColor : URLBarViewUX.TextFieldBorderColor
+        locationContainer.layer.borderColor = borderColor.CGColor
+
+        if inOverlayMode {
             self.cancelButton.transform = CGAffineTransformIdentity
             let tabsButtonTransform = CGAffineTransformMakeTranslation(self.tabsButton.frame.width + URLBarViewUX.URLBarCurveOffset, 0)
             self.tabsButton.transform = tabsButtonTransform
@@ -440,6 +469,12 @@ class URLBarView: UIView {
             self.rightBarConstraint?.updateOffset(URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer + tabsButton.frame.width)
             if self.toolbarIsShowing {
                 self.backButtonLeftConstraint?.updateOffset(-3 * UIConstants.ToolbarHeight)
+            }
+
+            // Make the editable text field span the entire URL bar, covering the lock and reader icons.
+            self.locationTextField.snp_remakeConstraints { make in
+                make.leading.equalTo(self.locationContainer).offset(URLBarViewUX.LocationContentOffset)
+                make.top.bottom.trailing.equalTo(self.locationContainer)
             }
         } else {
             self.tabsButton.transform = CGAffineTransformIdentity
@@ -449,32 +484,38 @@ class URLBarView: UIView {
             if self.toolbarIsShowing {
                 self.backButtonLeftConstraint?.updateOffset(0)
             }
+
+            // Shrink the editable text field back to the size of the location view before hiding it.
+            self.locationTextField.snp_remakeConstraints { make in
+                make.edges.equalTo(self.locationView.urlTextField)
+            }
         }
     }
 
-    func finishEditingAnimation(editing: Bool) {
-        self.tabsButton.hidden = editing
-        self.cancelButton.hidden = !editing
-        self.forwardButton.hidden = !self.toolbarIsShowing || editing
-        self.backButton.hidden = !self.toolbarIsShowing || editing
-        self.shareButton.hidden = !self.toolbarIsShowing || editing
-        self.bookmarkButton.hidden = !self.toolbarIsShowing || editing
-        self.stopReloadButton.hidden = !self.toolbarIsShowing || editing
+    func updateViewsForOverlayModeAndToolbarChanges() {
+        self.cancelButton.hidden = !inOverlayMode
+        self.progressBar.hidden = inOverlayMode
+        self.locationTextField.hidden = !inOverlayMode
+        self.shareButton.hidden = !self.toolbarIsShowing || inOverlayMode
+        self.bookmarkButton.hidden = !self.toolbarIsShowing || inOverlayMode
+        self.forwardButton.hidden = !self.toolbarIsShowing || inOverlayMode
+        self.backButton.hidden = !self.toolbarIsShowing || inOverlayMode
+        self.stopReloadButton.hidden = !self.toolbarIsShowing || inOverlayMode
     }
 
-    func updateLayoutForEditing(#editing: Bool, animated: Bool = true) {
-        prepareEditingAnimation(editing)
+    func animateToOverlayState(overlay: Bool) {
+        prepareOverlayAnimation()
+        layoutIfNeeded()
 
-        if animated {
-            UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: nil, animations: { _ in
-                self.transitionToEditing(editing)
-                self.layoutIfNeeded()
-            }, completion: { _ in
-                self.finishEditingAnimation(editing)
-            })
-        } else {
-            finishEditingAnimation(editing)
-        }
+        inOverlayMode = overlay
+
+        UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: nil, animations: { _ in
+            self.transitionToOverlay()
+            self.setNeedsUpdateConstraints()
+            self.layoutIfNeeded()
+        }, completion: { _ in
+            self.updateViewsForOverlayModeAndToolbarChanges()
+        })
     }
 
     func SELdidClickAddTab() {
@@ -482,8 +523,7 @@ class URLBarView: UIView {
     }
 
     func SELdidClickCancel() {
-        locationView.cancel()
-        finishEditing()
+        leaveOverlayMode()
     }
 
     func SELtappedScrollToTopArea() {
@@ -522,8 +562,8 @@ extension URLBarView: BrowserToolbarProtocol {
 
     override var accessibilityElements: [AnyObject]! {
         get {
-            if canCancel {
-                return [locationView, cancelButton]
+            if inOverlayMode {
+                return [locationTextField, cancelButton]
             } else {
                 if toolbarIsShowing {
                     return [backButton, forwardButton, stopReloadButton, locationView, shareButton, bookmarkButton, tabsButton, progressBar]
@@ -544,12 +584,7 @@ extension URLBarView: BrowserLocationViewDelegate {
     }
 
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
-        delegate?.urlBarDidBeginEditing(self)
-
-//        locationView÷.editTextField.text = locationView.url?.absoluteString
-//        locationView.editTextField.becomeFirstResponder()
-
-        updateLayoutForEditing(editing: true)
+        enterOverlayMode(locationView.url?.absoluteString)
     }
 
     func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView) {
@@ -575,7 +610,7 @@ extension URLBarView: BrowserLocationViewDelegate {
 
 extension URLBarView: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldReturn(autocompleteTextField: AutocompleteTextField) -> Bool {
-        delegate?.urlBar(self, didSubmitText: locationView.text)
+        delegate?.urlBar(self, didSubmitText: locationTextField.text)
         return true
     }
 
@@ -584,7 +619,6 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextFieldDidBeginEditing(autocompleteTextField: AutocompleteTextField) {
-        delegate?.urlBarDidBeginEditing(self)
         autocompleteTextField.highlightAll()
     }
 
@@ -674,5 +708,29 @@ private class CurveView: UIView {
         leftCurvePath.fill()
         CGContextDrawPath(context, kCGPathFill)
         CGContextRestoreGState(context)
+    }
+}
+
+private class ToolbarTextField: AutocompleteTextField {
+    weak var accessibilityActionsSource: AccessibilityActionsSource?
+
+    override var accessibilityCustomActions: [AnyObject]! {
+        get {
+            if !editing {
+                return accessibilityActionsSource?.accessibilityCustomActionsForView(self)
+            }
+            return super.accessibilityCustomActions
+        }
+        set {
+            super.accessibilityCustomActions = newValue
+        }
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
