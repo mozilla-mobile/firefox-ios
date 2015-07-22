@@ -5,12 +5,18 @@
 import UIKit
 import SnapKit
 
-private let ToolbarBaseAnimationDuration: CGFloat = 0.3
+private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
 class BrowserScrollingController: NSObject {
     enum ScrollDirection {
         case Up
         case Down
+    }
+
+    enum ToolbarState {
+        case Collapsed
+        case Visible
+        case Animating
     }
 
     weak var browser: Browser? {
@@ -65,12 +71,14 @@ class BrowserScrollingController: NSObject {
 
     private var lastContentOffset: CGFloat = 0
     private var scrollDirection: ScrollDirection = .Down
+    private var toolbarState: ToolbarState = .Visible
 
     override init() {
         super.init()
     }
 
     func showToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
+        toolbarState = .Visible
         let durationRatio = abs(headerTopOffset / headerFrame.height)
         let actualDuration = NSTimeInterval(ToolbarBaseAnimationDuration * durationRatio)
         self.animateToolbarsWithOffsets(
@@ -83,8 +91,9 @@ class BrowserScrollingController: NSObject {
     }
 
     func hideToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
+        toolbarState = .Collapsed
         let animationDistance = headerFrame.height - abs(headerTopOffset)
-        let durationRatio = abs(headerTopOffset / headerFrame.height)
+        let durationRatio = abs((headerFrame.height + headerTopOffset) / headerFrame.height)
         let actualDuration = NSTimeInterval(ToolbarBaseAnimationDuration * durationRatio)
         self.animateToolbarsWithOffsets(
             animated: animated,
@@ -111,8 +120,18 @@ private extension BrowserScrollingController {
             }
 
             lastContentOffset = translation.y
-            if checkRubberbandingForDelta(delta) {
-                scrollWithDelta(delta)
+            if checkRubberbandingForDelta(delta) && checkScrollHeightIsLargeEnoughForScrolling() {
+                if toolbarState != .Collapsed || contentOffset.y <= 0 {
+                    scrollWithDelta(delta)
+                }
+
+                if headerTopOffset == -headerFrame.height {
+                    toolbarState = .Collapsed
+                } else if headerTopOffset == 0 {
+                    toolbarState = .Visible
+                } else {
+                    toolbarState = .Animating
+                }
             }
 
             if gesture.state == .Ended || gesture.state == .Cancelled {
@@ -175,6 +194,10 @@ private extension BrowserScrollingController {
             completion?(finished: true)
         }
     }
+
+    func checkScrollHeightIsLargeEnoughForScrolling() -> Bool {
+        return (scrollViewHeight + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height
+    }
 }
 
 extension BrowserScrollingController: UIGestureRecognizerDelegate {
@@ -185,15 +208,13 @@ extension BrowserScrollingController: UIGestureRecognizerDelegate {
 }
 
 extension BrowserScrollingController: UIScrollViewDelegate {
-    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if scrollViewHeight >= contentSize.height {
-            return
-        }
-
-        if scrollDirection == .Up {
-            showToolbars(animated: true)
-        } else if scrollDirection == .Down {
-            hideToolbars(animated: true)
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if (decelerate || (toolbarState == .Animating && !decelerate)) && checkScrollHeightIsLargeEnoughForScrolling() {
+            if scrollDirection == .Up {
+                showToolbars(animated: true)
+            } else if scrollDirection == .Down {
+                hideToolbars(animated: true)
+            }
         }
     }
 
