@@ -44,50 +44,32 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
     }
 
-    // annoyingly can't use direct comparison (==) as our tabs come from the DB with a null client ID as opposed to the remote server who sends us our remote client ID
-    // TODO: there must be a better way to do this but brain freeze right now
-    private func tabRecordsAreEqual(localTabs: [RemoteTab], remoteTabs: [RemoteTab]) -> Bool {
-        if localTabs.count != remoteTabs.count {
-            return false
-        }
-
-        func localTab(localTab: RemoteTab, isSameAsRemoteTab remoteTab: RemoteTab) -> Bool {
-            return remoteTab.URL == localTab.URL && remoteTab.lastUsed == localTab.lastUsed && remoteTab.title == localTab.title && remoteTab.history == localTab.history
-        }
-
-        for (index, tab) in enumerate(localTabs) {
-            // break from the loop the instant we find something has changed
-            if localTab(tab, isSameAsRemoteTab: remoteTabs[index]) {
-                return false
-            }
-        }
-
-        return true
-    }
-
     private func uploadOurTabs(localTabs: RemoteClientsAndTabs, toServer tabsClient: Sync15CollectionClient<TabsPayload>) -> Success{
         // check to see if our tabs have changed or we're in a fresh start
-        return tabsClient.get(self.scratchpad.clientGUID) >>== { response in
-            let record = response.value
-            log.debug(record.payload.toString(pretty: true))
-            // get tabs for our local client (no GUID in DB)
-            return localTabs.getTabsForClientWithGUID(nil) >>== { tabs in
-                // if our local version is the same as the one on the remote server, just don't bother uploading again
-                if self.tabRecordsAreEqual(tabs, remoteTabs: record.payload.remoteTabs) {
+        let iUS: Timestamp? = (self.tabsRecordLastUpload == 0) ? nil : self.tabsRecordLastUpload
+        let expired = iUS < (NSDate.now() - (OneMinuteInMilliseconds))
+        if !expired {
+            return succeed()
+        }
+        
+        return localTabs.getTabsForClientWithGUID(nil) >>== { tabs in
+            if let lastUploadTime = iUS {
+                let updatedTabs = tabs.filter { $0.lastUsed > lastUploadTime }
+                if updatedTabs.isEmpty {
                     return succeed()
                 }
-                // convert to JSON
-                let tabsRecord = self.createOwnTabsRecord(tabs)
-                // upload record
-                let iUS: Timestamp? = (self.tabsRecordLastUpload == 0) ? nil : self.tabsRecordLastUpload
-                return tabsClient.put(tabsRecord, ifUnmodifiedSince: iUS) >>== { resp in
-                    if let ts = resp.metadata.lastModifiedMilliseconds {
-                        // Protocol says this should always be present for success responses.
-                        log.debug("Tabs record upload succeeded. New timestamp: \(ts).")
-                        self.tabsRecordLastUpload = ts
-                    }
-                    return succeed()
+            }
+
+            // convert to JSON
+            let tabsRecord = self.createOwnTabsRecord(tabs)
+            // upload record
+            return tabsClient.put(tabsRecord, ifUnmodifiedSince: iUS) >>== { resp in
+                if let ts = resp.metadata.lastModifiedMilliseconds {
+                    // Protocol says this should always be present for success responses.
+                    log.debug("Tabs record upload succeeded. New timestamp: \(ts).")
+                    self.tabsRecordLastUpload = ts
                 }
+                return succeed()
             }
         }
     }
@@ -161,7 +143,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
 extension RemoteTab {
     public func toJSON() -> JSON? {
         let tabHistory = optFilter(history.map { $0.absoluteString })
-        if tabHistory.count > 0 {
+        if !tabHistory.isEmpty {
             return JSON([
                 "title": title,
                 "icon": icon?.absoluteString ?? NSNull(),

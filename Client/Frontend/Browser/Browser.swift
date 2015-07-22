@@ -43,7 +43,7 @@ class Browser: NSObject {
                 URL: displayURL,
                 title: browser.displayTitle,
                 history: [displayURL] + browser.historyList,
-                lastUsed: Timestamp(),
+                lastUsed: NSDate.now(),
                 icon: nil)
         } else {
             return nil
