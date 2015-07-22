@@ -11,6 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var browserViewController: BrowserViewController!
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
+    let keyboardManager = BluetoothKeyboardManager()
 
     let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 

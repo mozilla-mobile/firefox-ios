@@ -237,6 +237,8 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     var addTabButton: UIButton!
     var settingsButton: UIButton!
 
+    unowned private let keyboardManager = BluetoothKeyboardManager.sharedManager
+
     var statusBarFrame: CGRect {
         return UIApplication.sharedApplication().statusBarFrame
     }
@@ -247,11 +249,16 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         self.view.setNeedsUpdateConstraints()
     }
 
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
         tabManager.addDelegate(self)
+        keyboardManager.addDelegate(self)
 
         navBar = UIView()
         navBar.backgroundColor = TabTrayControllerUX.BackgroundColor
@@ -437,6 +444,12 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     }
 }
 
+extension TabTrayController: BluetoothKeyboardDelegate {
+    func openNewTab() {
+        SELdidClickAddTab()
+    }
+}
+
 extension TabTrayController: Transitionable {
     private func getTransitionCell(options: TransitionOptions, browser: Browser?) -> CustomCell {
         var transitionCell: CustomCell
@@ -540,6 +553,12 @@ extension TabTrayController: Transitionable {
     }
 
     func transitionableWillComplete(transitionable: Transitionable, options: TransitionOptions) {
+        // Transitioning to tab tray
+        if options.toView == self {
+            NSNotificationCenter.defaultCenter().postNotificationName(BluetoothKeyboardNotification.TabTrayDidOpen, object: nil)
+            NSNotificationCenter.defaultCenter().removeObserver(self, name: BluetoothKeyboardNotification.TabTrayDidOpen, object: nil)
+        }
+
         if let cell = options.moving as? CustomCell {
             cell.removeFromSuperview()
 
