@@ -391,6 +391,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
                     if let img = img {
                         cell.backgroundImage.image = img
                         cell.image = img
+                        self.profile.favicons.addFavicon(icons[0], forSite: site)
                     } else {
                         let icon = Favicon(url: "", date: NSDate(), type: IconType.NoneFound)
                         self.profile.favicons.addFavicon(icon, forSite: site)
