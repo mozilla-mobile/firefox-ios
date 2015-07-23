@@ -47,12 +47,12 @@ private struct ReadingListTableViewCellUX {
 private struct ReadingListPanelUX {
     // Welcome Screen
     static let WelcomeScreenTopPadding: CGFloat = 16
-    static let WelcomeScreenPadding: CGFloat = 12
+    static let WelcomeScreenPadding: CGFloat = 10
 
     static let WelcomeScreenHeaderFont = UIFont.boldSystemFontOfSize(14)
     static let WelcomeScreenHeaderTextColor = UIColor.darkGrayColor()
 
-    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(13)
+    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
     static let WelcomeScreenItemTextColor = UIColor.lightGrayColor()
     static let WelcomeScreenItemWidth = 220
     static let WelcomeScreenItemOffset = -20
