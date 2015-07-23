@@ -1,0 +1,10 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/breakpad
+
+Name: google-breakpad
+Description: An open-source multi-platform crash reporting system
+Version: 0.1
+Libs: -L${libdir} -lbreakpad 
+Cflags: -I${includedir} -D_THREAD_SAFE 

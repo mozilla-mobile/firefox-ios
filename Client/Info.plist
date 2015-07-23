@@ -2,17 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>firefox</string>
-			</array>
-			<key>CFBundleURLName</key>
-			<string>org.mozilla.Client</string>
-		</dict>
-	</array>
+	<key>BreakpadProduct</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>BreakpadProductDisplay</key>
+	<string>$(MOZ_BUNDLE_DISPLAY_NAME)</string>
+	<key>BreakpadReportInterval</key>
+	<string>$(BREAKPAD_UPLOAD_FREQUENCY)</string>
+	<key>BreakpadServerType</key>
+	<string>$(BREAKPAD_SERVER_TYPE)</string>
+	<key>BreakpadShouldUpload</key>
+	<string>$(BREAKPAD_SHOULD_UPLOAD)</string>
+	<key>BreakpadURL</key>
+	<string>https://$(BREAKPAD_URL)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -20,7 +21,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.mozilla.ios.$(MOZ_PRODUCT_NAME)</string>
+	<string>$(BUNDLE_ID)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -28,11 +29,22 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>org.mozilla.Client</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>firefox</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>15</string>
+	<string>$(BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -66,8 +78,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -75,5 +85,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
 </dict>
 </plist>
