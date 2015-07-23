@@ -37,3 +37,9 @@ public class CleartextPayloadJSON: JSON {
         return self.deleted == obj.deleted
     }
 }
+
+extension JSON {
+    public var isStringOrNull: Bool {
+        return self.isString || self.isNull
+    }
+}
