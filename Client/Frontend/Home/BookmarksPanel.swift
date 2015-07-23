@@ -79,7 +79,19 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     private func setupSuggestedSiteForCell(cell: UITableViewCell, indexPath: NSIndexPath) {
         let tile = suggestedSites[indexPath.row]
         cell.textLabel?.text = tile?.title
-        cell.imageView?.setIcon(tile?.icon, withPlaceholder: self.defaultIcon)
+
+        if let icon = tile?.icon?.url.asURL,
+           let host = icon.host {
+            if icon.scheme == "asset" {
+                cell.imageView?.image = UIImage(named: host)
+            } else {
+                cell.imageView?.sd_setImageWithURL(icon, completed: { img, err, type, key in
+                    if img == nil {
+                        cell.imageView?.image = self.defaultIcon
+                    }
+                })
+            }
+        }
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

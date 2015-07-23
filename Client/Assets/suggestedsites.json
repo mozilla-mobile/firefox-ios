@@ -3,6 +3,7 @@
   "url": "https://www.mozilla.org/",
   "bgcolor": "0xce4e41",
   "imageurl": "asset://suggestedsites_mozilla",
+  "faviconUrl": "asset://fxLogo",
   "trackingid": 632,
   "title": "The Mozilla Project"
   },
@@ -10,6 +11,7 @@
   "url": "https://support.mozilla.org/products/ios",
   "bgcolor": "0xf37c00",
   "imageurl": "asset://suggestedsites_fxsupport",
+  "faviconUrl": "asset://mozLogo",
   "trackingid": 631,
   "title": "Firefox Help and Support"
   }
