@@ -160,6 +160,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+        if source == nil {
+            return [AnyObject]()
+        } else if source!.current.count == 0 && source!.current.guid == BookmarkRoots.MobileFolderGUID {
+            return [AnyObject]()
+        }
+
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
