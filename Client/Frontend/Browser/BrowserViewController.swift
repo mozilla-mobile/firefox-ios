@@ -952,7 +952,10 @@ extension BrowserViewController: BrowserToolbarDelegate {
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         if let selected = tabManager.selectedTab {
             if let url = selected.displayURL {
-				OnePasswordExtension.sharedExtension().createExtensionItemForWebView(selected.webView, completion: {(extensionItem, error) -> Void in
+				let webView = tabManager.selectedTab?.webView
+				
+				// Create the 1Password extension item. Note that it will be created regardless: 1Password can be installed or not
+				OnePasswordExtension.sharedExtension().createExtensionItemForWebView(webView, completion: {(extensionItem, error) -> Void in
 					if extensionItem == nil {
 						log.error("Failed to create the 1Password extension item: \(error).")
 						return
@@ -974,7 +977,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
 								
 								if self.isPasswordManagerActivityType(activityType) {
 									if returnedItems != nil {
-										OnePasswordExtension.sharedExtension().fillReturnedItems(returnedItems, intoWebView: selected.webView, completion: { (success, returnedItemsError) -> Void in
+										OnePasswordExtension.sharedExtension().fillReturnedItems(returnedItems, intoWebView: webView, completion: { (success, returnedItemsError) -> Void in
 											if success == false {
 												log.error("Failed to fill item into webview: \(returnedItemsError).")
 											}
@@ -997,7 +1000,6 @@ extension BrowserViewController: BrowserToolbarDelegate {
 					}
 					self.presentViewController(activityViewController, animated: true, completion: nil)
 				})
-
             }
         }
     }
