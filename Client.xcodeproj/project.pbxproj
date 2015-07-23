@@ -38,7 +38,6 @@
 		0BA2E43C1A69EDAB000581FA /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
 		0BA84AE11AE57095009C4D0C /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BA84ADA1AE57095009C4D0C /* SnapKit.framework */; };
 		0BA84AE21AE570A1009C4D0C /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BA84ADA1AE57095009C4D0C /* SnapKit.framework */; };
-		0BA84AE31AE57147009C4D0C /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BA84ADA1AE57095009C4D0C /* SnapKit.framework */; };
 		0BA84AE41AE57147009C4D0C /* SnapKit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 0BA84ADA1AE57095009C4D0C /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0BA84AE71AE57172009C4D0C /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BA84ADA1AE57095009C4D0C /* SnapKit.framework */; };
 		0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA896491A250E6500C1010C /* ProfileTest.swift */; };
@@ -1613,7 +1612,6 @@
 				0B6544D31A96C5F0000DD202 /* libSDWebImage.a in Frameworks */,
 				288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */,
 				2FCAE2311ABB51F800877008 /* Storage.framework in Frameworks */,
-				0BA84AE31AE57147009C4D0C /* SnapKit.framework in Frameworks */,
 				2FA436121ABB83B4008031D1 /* Account.framework in Frameworks */,
 				D3589EF71A8D930000F28118 /* libz.dylib in Frameworks */,
 				E4D5672F1ADECE2800F1EFE7 /* ReadingList.framework in Frameworks */,
@@ -3158,7 +3156,7 @@
 		F84B21B61A090F8100AAB793 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					2827315D1ABC9BE600AA1954 = {
