@@ -140,6 +140,12 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         notifyTextChanged?()
     }
 
+    override func deleteBackward() {
+        removeCompletion()
+        super.deleteBackward()
+        autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.text)
+    }
+
     override func caretRectForPosition(position: UITextPosition!) -> CGRect {
         return completionActive ? CGRectZero : super.caretRectForPosition(position)
     }
