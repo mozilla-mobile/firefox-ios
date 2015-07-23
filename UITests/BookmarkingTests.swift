@@ -47,8 +47,6 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         // Check that it appears in the bookmarks home panel
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().tapViewWithAccessibilityLabel("Bookmarks")
-        let bookmarkRow = tester().waitForViewWithAccessibilityLabel("Page 1") as! UITableViewCell
-        XCTAssertNotNil(bookmarkRow.imageView?.image)
 
         // Tap to open it
         tester().tapViewWithAccessibilityLabel("Page 1")
@@ -64,7 +62,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForAbsenceOfViewWithAccessibilityLabel("Page 1")
 
         // The "default" bookmarks (suggested sites) should now show here.
-        tester().waitForAbsenceOfViewWithAccessibilityLabel("The Mozilla Project")
+        tester().waitForViewWithAccessibilityLabel("The Mozilla Project")
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
