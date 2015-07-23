@@ -35,7 +35,7 @@ class Tile: Site {
     }
 }
 
-private class SuggestedSitesData<T: Tile>: Cursor<T> {
+class SuggestedSitesData<T: Tile>: Cursor<T> {
     var tiles = [T]()
 
     init() {
