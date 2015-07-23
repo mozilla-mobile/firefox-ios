@@ -23,7 +23,7 @@ public class HistoryPayload: CleartextPayloadJSON {
             return true
         }
         return self["histUri"].isString &&      // TODO: validate URI.
-               self["title"].isString &&
+               self["title"].isStringOrNull &&
                self["visits"].isArray
     }
 
@@ -44,7 +44,7 @@ public class HistoryPayload: CleartextPayloadJSON {
     }
 
     var title: String {
-        return self["title"].asString!
+        return self["title"].asString ?? ""
     }
 
     override public func equalPayloads(obj: CleartextPayloadJSON) -> Bool {
