@@ -110,10 +110,10 @@ class ThumbnailCell: UICollectionViewCell {
         return backgroundImage
     }()
 
-    lazy var backgroundEffect: UIVisualEffectView = {
+    lazy var backgroundEffect: UIVisualEffectView? = {
         let blur = UIBlurEffect(style: UIBlurEffectStyle.Light)
         let vib = UIVibrancyEffect(forBlurEffect: blur)
-        return UIVisualEffectView(effect: blur)
+        return DeviceInfo.isBlurSupported() ? UIVisualEffectView(effect: blur) : nil
     }()
 
     lazy var imageWrapper: UIView = {
@@ -142,10 +142,12 @@ class ThumbnailCell: UICollectionViewCell {
 
         contentView.addSubview(imageWrapper)
         imageWrapper.addSubview(backgroundImage)
-        imageWrapper.addSubview(backgroundEffect)
         imageWrapper.addSubview(imageView)
         imageWrapper.addSubview(textWrapper)
         textWrapper.addSubview(textLabel)
+        if let backgroundEffect = backgroundEffect {
+            imageWrapper.addSubview(backgroundEffect)
+        }
         contentView.addSubview(removeButton)
 
         imageWrapper.snp_remakeConstraints({ make in
@@ -156,7 +158,7 @@ class ThumbnailCell: UICollectionViewCell {
             make.top.bottom.left.right.equalTo(self.imageWrapper)
         })
 
-        backgroundEffect.snp_remakeConstraints({ make in
+        backgroundEffect?.snp_remakeConstraints({ make in
             make.top.bottom.left.right.equalTo(self.imageWrapper)
         })
 

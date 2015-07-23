@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 import SnapKit
 import UIKit
 import Storage        // For VisitType.
@@ -54,8 +55,11 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     override func viewDidLoad() {
         view.backgroundColor = HomePanelViewControllerUX.BackgroundColor
 
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light))
-        view.addSubview(blur)
+        let blur: UIVisualEffectView? = DeviceInfo.isBlurSupported() ? UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light)) : nil
+
+        if let blur = blur {
+            view.addSubview(blur)
+        }
 
         buttonContainerView = UIView()
         buttonContainerView.backgroundColor = HomePanelViewControllerUX.BackgroundColor
@@ -71,7 +75,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         controllerContainerView = UIView()
         view.addSubview(controllerContainerView)
 
-        blur.snp_makeConstraints { make in
+        blur?.snp_makeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
