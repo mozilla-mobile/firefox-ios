@@ -54,6 +54,14 @@ class FaviconFetcher : NSObject, NSXMLParserDelegate {
                     // When they've all completed, we can fill the deferred with the results
                     if filledCount == self._favicons.count {
                         self._favicons.sort({ (a, b) -> Bool in
+                            // Large icons are always more favorable than large open-graph images.
+                            if a.width >= 48 && b.width >= 48 {
+                                if a.type == .OpenGraph && b.type != .OpenGraph {
+                                    return false
+                                } else if a.type == .OpenGraph && b.type != .OpenGraph {
+                                    return true
+                                }
+                            }
                             return a.width > b.width
                         })
 
@@ -89,6 +97,13 @@ class FaviconFetcher : NSObject, NSXMLParserDelegate {
                         self.siteUrl = url
                         self.loadFromDoc()
                         return
+                    }
+
+                    if let property = meta.attribute("property") where property == "og:image",
+                        let content = meta.attribute("content"),
+                        let url = NSURL(string: content, relativeToURL: url) {
+                            let icon = Favicon(url: url.absoluteString!, date: NSDate(), type: IconType.OpenGraph)
+                            self._favicons.append(icon)
                     }
                 }
             }

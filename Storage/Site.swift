@@ -15,7 +15,8 @@ public enum IconType: Int {
     case AppleIconPrecomposed = 2
     case Guess = 3
     case Local = 4
-    case NoneFound = 5
+    case NoneFound = 5 // Used to prevent looking up favicons on sites too often.
+    case OpenGraph = 6
 }
 
 public class Favicon: Identifiable {
