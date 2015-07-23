@@ -952,7 +952,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         if let selected = tabManager.selectedTab {
             if let url = selected.displayURL {
-				OnePasswordExtension.sharedExtension().createExtensionItemForWebView(webView, completion: {(extensionItem, error) -> Void in
+				OnePasswordExtension.sharedExtension().createExtensionItemForWebView(selected.webView, completion: {(extensionItem, error) -> Void in
 					if extensionItem == nil {
 						log.error("Failed to create the 1Password extension item: \(error).")
 						return
@@ -961,7 +961,6 @@ extension BrowserViewController: BrowserToolbarDelegate {
 					// Set the 1Password extension item property
 					self.onePasswordExtensionItem = extensionItem
 					
-					var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, url], applicationActivities: nil)
 					var activityViewController = UIActivityViewController(activityItems: [selected.title ?? url.absoluteString!, self], applicationActivities: nil)
 					// Hide 'Add to Reading List' which currently uses Safari
 					activityViewController.excludedActivityTypes = [UIActivityTypeAddToReadingList]
@@ -975,7 +974,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
 								
 								if self.isPasswordManagerActivityType(activityType) {
 									if returnedItems != nil {
-										OnePasswordExtension.sharedExtension().fillReturnedItems(returnedItems, intoWebView: webView, completion: { (success, returnedItemsError) -> Void in
+										OnePasswordExtension.sharedExtension().fillReturnedItems(returnedItems, intoWebView: selected.webView, completion: { (success, returnedItemsError) -> Void in
 											if success == false {
 												log.error("Failed to fill item into webview: \(returnedItemsError).")
 											}
@@ -991,12 +990,12 @@ extension BrowserViewController: BrowserToolbarDelegate {
 					
 					if let popoverPresentationController = activityViewController.popoverPresentationController {
 						// Using the button for the sourceView here results in this not showing on iPads.
-						popoverPresentationController.sourceView = toolbar ?? urlBar
+						popoverPresentationController.sourceView = self.toolbar ?? self.urlBar
 						popoverPresentationController.sourceRect = button.frame ?? button.frame
 						popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
 						popoverPresentationController.delegate = self
 					}
-					presentViewController(activityViewController, animated: true, completion: nil)
+					self.presentViewController(activityViewController, animated: true, completion: nil)
 				})
 
             }
