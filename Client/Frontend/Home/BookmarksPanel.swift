@@ -61,6 +61,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         self.source?.reloadData(self.onNewModel, failure: self.onModelFailure)
     }
 
+
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // Removes 'Recent Bookmarks' header
+        return 0
+    }
+
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let source = source {
             return source.current.count
@@ -93,9 +99,9 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return cell
     }
 
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return NSLocalizedString("Recent Bookmarks", comment: "Header for bookmarks list")
-    }
+//    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return NSLocalizedString("Recent Bookmarks", comment: "Header for bookmarks list")
+//    }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
