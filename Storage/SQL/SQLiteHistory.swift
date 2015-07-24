@@ -147,39 +147,62 @@ extension SQLiteHistory: BrowserHistory {
         db.withWritableConnection(&error) { (conn, inout err: NSError?) -> Int in
             let now = NSDate.nowNumber()
 
-            // We know we're adding a new visit, so we'll need to upload this record.
-            // If we ever switch to per-visit change flags, this should turn into a CASE statement like
-            //   CASE WHEN title IS ? THEN max(should_upload, 1) ELSE should_upload END
-            // so that we don't flag this as changed unless the title changed.
-            //
-            // Note that we will never match against a deleted item, because deleted items have no URL,
-            // so we don't need to unset is_deleted here.
-            let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1 WHERE url = ?"
-            let updateArgs: Args? = [site.title, now, site.url]
-            if LogPII {
-                log.debug("Setting title to \(site.title) for URL \(site.url)")
-            }
-            error = conn.executeChange(update, withArgs: updateArgs)
-            if error != nil {
-                log.warning("Update failed with \(err?.localizedDescription)")
-                return 0
-            }
-            if conn.numberOfRowsModified > 0 {
-                return conn.numberOfRowsModified
+            let i = self.updateSite(site, atTime: now, withConnection: conn)
+            if i > 0 {
+                return i
             }
 
             // Insert instead.
-            let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload) VALUES (?, ?, ?, ?, 0, 1)"
-            let insertArgs: Args? = [Bytes.generateGUID(), site.url, site.title, now]
-            error = conn.executeChange(insert, withArgs: insertArgs)
-            if error != nil {
-                log.warning("Insert failed with \(err?.localizedDescription)")
-                return 0
-            }
-            return 1
+            return self.insertSite(site, atTime: now, withConnection: conn)
         }
 
         return failOrSucceed(error, "Record site")
+    }
+
+    func updateSite(site: Site, atTime time: NSNumber, withConnection conn: SQLiteDBConnection) -> Int {
+        // We know we're adding a new visit, so we'll need to upload this record.
+        // If we ever switch to per-visit change flags, this should turn into a CASE statement like
+        //   CASE WHEN title IS ? THEN max(should_upload, 1) ELSE should_upload END
+        // so that we don't flag this as changed unless the title changed.
+        //
+        // Note that we will never match against a deleted item, because deleted items have no URL,
+        // so we don't need to unset is_deleted here.
+        let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1 WHERE url = ?"
+        let updateArgs: Args? = [site.title, time, site.url]
+        if LogPII {
+            log.debug("Setting title to \(site.title) for URL \(site.url)")
+        }
+        var error = conn.executeChange(update, withArgs: updateArgs)
+        if error != nil {
+            log.warning("Update failed with \(error?.localizedDescription)")
+            return 0
+        }
+        return conn.numberOfRowsModified
+    }
+
+
+    private func insertSite(site: Site, atTime time: NSNumber, withConnection conn: SQLiteDBConnection) -> Int {
+        var error: NSError? = nil
+
+        if let url = site.url.asURL,
+           let host = url.host {
+            if let error = conn.executeChange("INSERT INTO \(TableDomains) (domain) VALUES (?)", withArgs: [host]) {
+                log.warning("Domain Insert failed with \(error.localizedDescription)")
+                // return 0
+            }
+
+            let insert = "INSERT INTO \(TableHistory) " +
+                "(guid, url, title, local_modified, is_deleted, should_upload, domainId) " +
+                "SELECT ?, ?, ?, ?, 0, 1, id FROM \(TableDomains) where domain = ?"
+            let insertArgs: Args? = [Bytes.generateGUID(), site.url, site.title, time, host]
+            if let error = conn.executeChange(insert, withArgs: insertArgs) {
+                log.warning("Site Insert failed with \(error.localizedDescription)")
+                return 0
+            }
+
+            return 1
+        }
+        return 0
     }
 
     // TODO: thread siteID into this to avoid the need to do the lookup.

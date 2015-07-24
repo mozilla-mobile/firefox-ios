@@ -168,12 +168,10 @@ class TopSitesPanel: UIViewController {
     }
 
     private func deleteHistoryTileForURL(url: String, atIndexPath indexPath: NSIndexPath) {
-        profile.history.removeHistoryForURL(url) >>== {
-            self.profile.history.getSitesByFrecencyWithLimit(100).uponQueue(dispatch_get_main_queue(), block: { result in
-                self.updateDataSourceWithSites(result)
-                self.deleteOrUpdateSites(result, indexPath: indexPath)
-            })
-        }
+        self.profile.history.getSitesByFrecencyWithLimit(self.layout.thumbnailCount * 2).uponQueue(dispatch_get_main_queue(), block: { result in
+            self.updateDataSourceWithSites(result)
+            self.deleteOrUpdateSites(result, indexPath: indexPath)
+        })
     }
 
     private func refreshHistory(frequencyLimit: Int) {

@@ -12,6 +12,7 @@ let TableBookmarks = "bookmarks"
 
 let TableFavicons = "favicons"
 let TableHistory = "history"
+let TableDomains = "domains"
 let TableVisits = "visits"
 let TableFaviconSites = "favicon_sites"
 let TableQueuedTabs = "queue"
@@ -25,6 +26,7 @@ let IndexVisitsSiteIDDate = "idx_visits_siteID_date"                   // Remove
 let IndexVisitsSiteIDIsLocalDate = "idx_visits_siteID_is_local_date"   // Added in v6.
 
 private let AllTables: Args = [
+    TableDomains,
     TableFaviconSites,
 
     TableHistory,
@@ -115,11 +117,8 @@ public class BrowserTable: Table {
         return self.run(db, sql: sql, args: args)
     }
 
-    func create(db: SQLiteDBConnection, version: Int) -> Bool {
-        // We ignore the version.
-
-        let history =
-        "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
+    let CreateHistoryTable =
+    "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
         "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
         "url TEXT UNIQUE, " +                 // May only be null for deleted records.
@@ -128,9 +127,19 @@ public class BrowserTable: Table {
         "local_modified INTEGER, " +          // Can be null. Client clock. In extremis only.
         "is_deleted TINYINT NOT NULL, " +     // Boolean. Locally deleted.
         "should_upload TINYINT NOT NULL, " +  // Boolean. Set when changed or visits added.
+        "domainId INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE, " +
         "CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)" +
-        ") "
+    ")"
 
+    let CreateDomainsTable =
+    "CREATE TABLE IF NOT EXISTS \(TableDomains) (" +
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "domain TEXT NOT NULL UNIQUE, " +
+        "showOnTopSites TINYINT NOT NULL DEFAULT 1" +
+    ")"
+
+    func create(db: SQLiteDBConnection, version: Int) -> Bool {
+        // We ignore the version.
         // Right now we don't need to track per-visit deletions: Sync can't
         // represent them! See Bug 1157553 Comment 6.
         // We flip the should_upload flag on the history item when we add a visit.
@@ -215,7 +224,7 @@ public class BrowserTable: Table {
         ") "
 
         let queries = [
-            history, visits, bookmarks, faviconSites,
+            CreateDomainsTable, CreateHistoryTable, visits, bookmarks, faviconSites,
             indexShouldUpload, indexSiteIDDate,
             widestFavicons, historyIDsWithIcon, iconForURL,
             queue,
@@ -263,6 +272,14 @@ public class BrowserTable: Table {
             ]
 
             if !self.run(db, queries: queries) {
+                return false
+            }
+        }
+
+        if from < 7 {
+            if !self.run(db, queries: [
+                CreateDomainsTable,
+                "ALTER TABLE \(TableHistory) ADD COLUMN domainId INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE"]) {
                 return false
             }
         }
