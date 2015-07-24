@@ -1859,6 +1859,9 @@ extension BrowserViewController: KeyboardHelperDelegate {
         }
     }
 
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+    }
+
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         keyboardState = nil
         // if we are showing snack bars, adjust them so they are no longer sitting above the keyboard

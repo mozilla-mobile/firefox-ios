@@ -382,6 +382,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         animateSearchEnginesWithKeyboard(state)
     }
 
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+    }
+
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         animateSearchEnginesWithKeyboard(state)
     }

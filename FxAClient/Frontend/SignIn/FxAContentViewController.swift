@@ -306,6 +306,10 @@ extension FxAContentViewController: KeyboardHelperDelegate {
         animateInnerViewsWithKeyboard(state)
     }
 
+    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
+        animateInnerViewsWithKeyboard(state)
+    }
+
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         animateInnerViewsWithKeyboard(state)
     }
