@@ -156,6 +156,6 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
 
     override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
         // Per-client chunks, each chunk in client-order.
-        return ("SELECT * FROM \(name) ORDER BY client_guid DESC, last_used DESC", [])
+        return ("SELECT * FROM \(name) WHERE client_guid IS NOT NULL ORDER BY client_guid DESC, last_used DESC", [])
     }
 }
