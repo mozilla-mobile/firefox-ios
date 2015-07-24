@@ -47,12 +47,12 @@ private struct ReadingListTableViewCellUX {
 private struct ReadingListPanelUX {
     // Welcome Screen
     static let WelcomeScreenTopPadding: CGFloat = 16
-    static let WelcomeScreenPadding: CGFloat = 12
+    static let WelcomeScreenPadding: CGFloat = 10
 
     static let WelcomeScreenHeaderFont = UIFont.boldSystemFontOfSize(14)
     static let WelcomeScreenHeaderTextColor = UIColor.darkGrayColor()
 
-    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(13)
+    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
     static let WelcomeScreenItemTextColor = UIColor.lightGrayColor()
     static let WelcomeScreenItemWidth = 220
     static let WelcomeScreenItemOffset = -20
@@ -363,12 +363,12 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
         containerView.snp_makeConstraints({ (make) -> Void in
             // Let the container wrap around the content
-            make.top.equalTo(logoImageView.snp_top)
+            make.top.equalTo(overlayView.snp_top).offset(20)
             make.bottom.equalTo(readingListLabel.snp_bottom)
             make.left.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
             make.right.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenCircleOffset)
             // And then center it in the overlay view that sits on top of the UITableView
-            make.center.equalTo(overlayView)
+            make.centerX.equalTo(overlayView)
         })
 
         return overlayView
