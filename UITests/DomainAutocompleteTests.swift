@@ -21,6 +21,27 @@ class DomainAutocompleteTests: KIFTestCase {
         ensureAutocompletionResult(textField, prefix: "www.yahoo.com/", completion: "")
         tester().clearTextFromFirstResponder()
 
+        // Test that deleting characters works correctly with autocomplete
+        tester().enterTextIntoCurrentFirstResponder("www.yah")
+        ensureAutocompletionResult(textField, prefix: "www.yah", completion: "oo.com/")
+        tester().deleteCharacterFromFirstResponser()
+        ensureAutocompletionResult(textField, prefix: "www.yah", completion: "")
+        tester().deleteCharacterFromFirstResponser()
+        ensureAutocompletionResult(textField, prefix: "www.ya", completion: "")
+        tester().enterTextIntoCurrentFirstResponder("h")
+        ensureAutocompletionResult(textField, prefix: "www.yah", completion: "oo.com/")
+
+        // Delete the entire string, verify the home panels are shown again.
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().waitForViewWithAccessibilityLabel("Panel Chooser")
+
         // Ensure that the scheme is included in the autocompletion.
         tester().enterTextIntoCurrentFirstResponder("https")
         ensureAutocompletionResult(textField, prefix: "https", completion: "://foo.bar.baz.org/")
@@ -72,6 +93,11 @@ class DomainAutocompleteTests: KIFTestCase {
     }
 
     private func ensureAutocompletionResult(textField: UITextField, prefix: String, completion: String) {
+        // searches are async (and debounced), so we have to wait for the results to appear.
+        tester().runBlock({ (err) -> KIFTestStepResult in
+            (textField.text == prefix + completion) ? KIFTestStepResult.Success : KIFTestStepResult.Wait
+        })
+
         var range = NSRange()
         var attribute: AnyObject?
         let textLength = count(textField.text)
