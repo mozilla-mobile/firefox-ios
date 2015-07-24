@@ -77,6 +77,10 @@ extension KIFUITestActor {
         })
     }
 
+    public func deleteCharacterFromFirstResponser() {
+        enterTextIntoCurrentFirstResponder("\u{0008}")
+    }
+
     // TODO: Click element, etc.
 }
 
