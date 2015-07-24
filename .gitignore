@@ -30,3 +30,6 @@ Carthage/
 
 # Saved Sync credentials for tests.
 signedInUser.json
+
+# Generated config file
+MozBuildID.xcconfig

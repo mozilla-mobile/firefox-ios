@@ -19,9 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set the Firefox UA for browsing.
         setUserAgent()
 
-        // Listen for crashes
-        FXCrashDetector.sharedDetector().listenForCrashes()
-
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
 
@@ -53,6 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.window!.rootViewController = rootViewController
         self.window!.backgroundColor = UIConstants.AppBackgroundColor
+
+        configureCrashReporter()
 
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL, absoluteString = url.absoluteString {
@@ -252,6 +251,28 @@ extension AppDelegate: UINavigationControllerDelegate {
             } else {
                 return nil
             }
+    }
+}
+
+extension AppDelegate {
+    private func configureCrashReporter() {
+        let mainBundle = NSBundle.mainBundle()
+        let breakpad = BreakpadController.sharedInstance()
+
+        let addUploadParameterForKey: String -> Void = { key in
+            if let value = mainBundle.objectForInfoDictionaryKey(key) as? String {
+                breakpad.addUploadParameter(value, forKey: key)
+            }
+        }
+        breakpad.start(true)
+        // Add in custom crash-stats keys
+        if let shouldUploadCrashes = mainBundle.objectForInfoDictionaryKey("BreakpadShouldUpload") as? NSString where shouldUploadCrashes.boolValue {
+            addUploadParameterForKey("AppID")
+            addUploadParameterForKey("BuildID")
+            addUploadParameterForKey("ReleaseChannel")
+            addUploadParameterForKey("Vendor")
+            breakpad.setUploadingEnabled(shouldUploadCrashes.boolValue)
+        }
     }
 }
 

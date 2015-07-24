@@ -558,8 +558,8 @@
 		E65072A41B273824001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
 		E698FFDA1B4AADF40001F623 /* BrowserScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */; };
+		E69BBB7D1B66815C0049F494 /* MozBuildID.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E69BBB7C1B66815C0049F494 /* MozBuildID.xcconfig */; };
 		E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */; };
-		E6E079851B41E54A001645A6 /* FXCrashDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = E6E079841B41E54A001645A6 /* FXCrashDetector.m */; };
 		E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */; };
 		E6F965121B2F1CF20034B023 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */; };
@@ -1568,13 +1568,17 @@
 		E4ECCDAD1AB131770005E717 /* FiraSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Medium.ttf"; sourceTree = "<group>"; };
 		E4F21AA51A13C4A300B0FAAA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E60961821B62B68A00DD640F /* libstdc++.6.0.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.0.9.dylib"; path = "usr/lib/libstdc++.6.0.9.dylib"; sourceTree = SDKROOT; };
+		E60961851B62B89200DD640F /* BaseConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = BaseConfig.xcconfig; path = Configuration/BaseConfig.xcconfig; sourceTree = "<group>"; };
+		E60961861B62B8A700DD640F /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Configuration/Debug.xcconfig; sourceTree = "<group>"; };
+		E60961871B62B8B300DD640F /* FennecAurora.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FennecAurora.xcconfig; path = Configuration/FennecAurora.xcconfig; sourceTree = "<group>"; };
+		E60961881B62B8BE00DD640F /* FennecNightly.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FennecNightly.xcconfig; path = Configuration/FennecNightly.xcconfig; sourceTree = "<group>"; };
+		E60961891B62B8C800DD640F /* Firefox.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Firefox.xcconfig; path = Configuration/Firefox.xcconfig; sourceTree = "<group>"; };
 		E638F21D1B62B5E700B080C0 /* Breakpad.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Breakpad.xcodeproj; path = "ThirdParty/google-breakpad/src/client/ios/Breakpad.xcodeproj"; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserScrollController.swift; sourceTree = "<group>"; };
+		E69BBB7C1B66815C0049F494 /* MozBuildID.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = MozBuildID.xcconfig; path = Configuration/MozBuildID.xcconfig; sourceTree = "<group>"; };
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
 		E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTrayAnimators.swift; sourceTree = "<group>"; };
-		E6E079831B41E54A001645A6 /* FXCrashDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXCrashDetector.h; sourceTree = "<group>"; };
-		E6E079841B41E54A001645A6 /* FXCrashDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXCrashDetector.m; sourceTree = "<group>"; };
 		E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = scrollablePage.html; sourceTree = "<group>"; };
 		E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SharedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6F9650F1B2F1CF20034B023 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2533,6 +2537,19 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		E60961841B62B7E100DD640F /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				E69BBB7C1B66815C0049F494 /* MozBuildID.xcconfig */,
+				E60961851B62B89200DD640F /* BaseConfig.xcconfig */,
+				E60961861B62B8A700DD640F /* Debug.xcconfig */,
+				E60961871B62B8B300DD640F /* FennecAurora.xcconfig */,
+				E60961881B62B8BE00DD640F /* FennecNightly.xcconfig */,
+				E60961891B62B8C800DD640F /* Firefox.xcconfig */,
+			);
+			name = Configuration;
+			sourceTree = "<group>";
+		};
 		E638F21E1B62B5E700B080C0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -2634,6 +2651,7 @@
 				E448FC7B1AEE79C600869B6C /* Firefox.entitlements */,
 				F84B22431A09165600AAB793 /* Info.plist */,
 				E4D8F3B21ACDD5150005A2E4 /* InfoPlist.strings */,
+				E60961841B62B7E100DD640F /* Configuration */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
 				F84B21E41A0910F600AAB793 /* Application */,
 				28EADE5C1AFC3A6D007FB2FB /* Extensions */,
@@ -2683,8 +2701,6 @@
 				D3BE7B251B054D4400641031 /* main.swift */,
 				D3BE7B451B054F8600641031 /* TestAppDelegate.swift */,
 				D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */,
-				E6E079831B41E54A001645A6 /* FXCrashDetector.h */,
-				E6E079841B41E54A001645A6 /* FXCrashDetector.m */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -3107,8 +3123,8 @@
 				F84B21BA1A090F8100AAB793 /* Sources */,
 				F84B21BC1A090F8100AAB793 /* Resources */,
 				F84B22351A09144D00AAB793 /* Copy Frameworks */,
-				F84B22531A0920C600AAB793 /* Embed App Extensions */,
 				28CE83DE1A1D1E7C00576538 /* Frameworks */,
+				F84B22531A0920C600AAB793 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -3729,6 +3745,7 @@
 				E4B7B7641A793CF20022C5E0 /* CharisSILR.ttf in Resources */,
 				2F834D161A80629A006A0B7B /* FxASignIn.js in Resources */,
 				D3BA7E0C1B0E902A00153782 /* ContextMenu.js in Resources */,
+				E69BBB7D1B66815C0049F494 /* MozBuildID.xcconfig in Resources */,
 				E4B7B7681A793CF20022C5E0 /* FiraSans-Bold.ttf in Resources */,
 				E4B7B7781A793CF20022C5E0 /* FiraSans-Italic.ttf in Resources */,
 				0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */,
@@ -4193,7 +4210,6 @@
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
 				2F834D1A1A80629A006A0B7B /* FxAContentViewController.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
-				E6E079851B41E54A001645A6 /* FXCrashDetector.m in Sources */,
 				D38B2D3A1A8D96D00040E6B5 /* GCDWebServerResponse.m in Sources */,
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
 				0BD19A671A25309B0084FBA7 /* NSUserDefaultsPrefs.swift in Sources */,
@@ -5469,6 +5485,7 @@
 		};
 		E421F28B1A8D2BF300971276 /* FennecNightly */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E60961881B62B8BE00DD640F /* FennecNightly.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = NO;
@@ -5535,7 +5552,6 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MOZ_BUNDLE_DISPLAY_NAME = "Fennec Nightly";
 				MOZ_PRODUCT_NAME = FennecNightly;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_MODULE_NAME = Client;
@@ -5613,6 +5629,7 @@
 		};
 		E448FC9D1AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E60961891B62B8C800DD640F /* Firefox.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = NO;
@@ -5680,7 +5697,6 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MOZ_BUNDLE_DISPLAY_NAME = Firefox;
 				MOZ_PRODUCT_NAME = Firefox;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_MODULE_NAME = Client;
@@ -6780,6 +6796,7 @@
 		};
 		F84B21DB1A090F8100AAB793 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E60961861B62B8A700DD640F /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = NO;
@@ -6839,6 +6856,7 @@
 		};
 		F84B21DC1A090F8100AAB793 /* FennecAurora */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E60961871B62B8B300DD640F /* FennecAurora.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = NO;
@@ -6905,7 +6923,6 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MOZ_BUNDLE_DISPLAY_NAME = "Fennec ($(USER))";
 				MOZ_PRODUCT_NAME = Fennec;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_MODULE_NAME = Client;
@@ -6932,7 +6949,6 @@
 				);
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MOZ_BUNDLE_DISPLAY_NAME = "Fennec Aurora";
 				MOZ_PRODUCT_NAME = FennecAurora;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_MODULE_NAME = Client;

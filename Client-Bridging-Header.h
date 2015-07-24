@@ -11,7 +11,6 @@
 
 #import "GCDWebServer.h"
 #import "GCDWebServerDataResponse.h"
-#import "FXCrashDetector.h"
 #import "ThirdParty/UIImageViewAligned/UIImageViewAligned/UIImageViewAligned.h"
 #import "Carthage/Checkouts/SDWebImage/SDWebImage/UIImageView+WebCache.h"
 #import "Carthage/Checkouts/SDWebImage/SDWebImage/UIView+WebCacheOperation.h"
