@@ -916,11 +916,21 @@ extension BrowserViewController: BrowserToolbarDelegate {
                 printInfo.jobName = url.absoluteString
                 printInfo.outputType = .General
                 let renderer = BrowserPrintPageRenderer(browser: selected)
+
                 let activityItems = [printInfo, renderer, selected.title ?? url.absoluteString!, url]
+
                 var activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-                // Hide 'Add to Reading List' which currently uses Safari
-                activityViewController.excludedActivityTypes = [UIActivityTypeAddToReadingList]
-                activityViewController.completionWithItemsHandler = { _, completed, _, _ in
+
+                // Hide 'Add to Reading List' which currently uses Safari.
+                // Also hide our own View Later… after all, you're in the browser!
+                let viewLater = NSBundle.mainBundle().bundleIdentifier! + ".ViewLater"
+                activityViewController.excludedActivityTypes = [
+                    UIActivityTypeAddToReadingList,
+                    viewLater,                        // Doesn't work: rdar://19430419
+                ]
+
+                activityViewController.completionWithItemsHandler = { activityType, completed, _, _ in
+                    log.debug("Selected activity type: \(activityType).")
                     if completed {
                         if let selectedTab = self.tabManager.selectedTab {
                             // We don't know what share action the user has chosen so we simply always
