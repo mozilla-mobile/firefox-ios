@@ -184,7 +184,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         if let err = err {
             clientCursor.close()
-            return Deferred(value: Result(failure: DatabaseError(err: err)))
+            return deferResult(DatabaseError(err: err))
         }
 
         let clients = clientCursor.asArray()
@@ -200,7 +200,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         if let err = err {
             tabCursor.close()
-            return Deferred(value: Result(failure: DatabaseError(err: err)))
+            return deferResult(DatabaseError(err: err))
         }
 
         let deferred = Deferred<Result<[ClientAndTabs]>>(defaultQueue: dispatch_get_main_queue())
