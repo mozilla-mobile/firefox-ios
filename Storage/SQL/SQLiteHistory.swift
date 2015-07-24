@@ -232,24 +232,25 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
-        return self.getSitesByFrecency(limit: limit, filter: nil)
-    }
-
-    public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
-        return self.getSitesByFrecency(limit: limit, filter: filter)
-    }
-
-    private func getSitesByFrecency(#limit: Int, filter: String? = nil) -> Deferred<Result<Cursor<Site>>> {
         let localFrecencySQL = getLocalFrecencySQL()
         let remoteFrecencySQL = getRemoteFrecencySQL()
         let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
 
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: filter, orderBy: orderBy, includeIcon: true)
+        let groupBy = "GROUP BY \(TableHistory).domainId "
+        let whereData = "AND \(TableDomains).showOnTopSites = 1 "
+
+        return self.getFilteredSitesWithLimit(limit, groupClause: groupBy, orderBy: orderBy, whereData: whereData)
+    }
+
+    public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
+        let localFrecencySQL = getLocalFrecencySQL()
+        let remoteFrecencySQL = getRemoteFrecencySQL()
+        let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
+        return self.getFilteredSitesWithLimit(limit, whereURLContains: filter, orderBy: orderBy)
     }
 
     public func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
-        let orderBy = "ORDER BY max(localVisitDate, remoteVisitDate) DESC "
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, includeIcon: true)
+        return self.getFilteredSitesWithLimit(limit)
     }
 
     private class func basicHistoryColumnFactory(row: SDRow) -> Site {
@@ -292,17 +293,22 @@ extension SQLiteHistory: BrowserHistory {
         return site
     }
 
-    private func getFilteredSitesWithLimit(limit: Int, whereURLContains filter: String?, orderBy: String, includeIcon: Bool) -> Deferred<Result<Cursor<Site>>> {
+    private func getFilteredSitesWithLimit(limit: Int,
+            whereURLContains filter: String? = nil,
+            groupClause: String = "GROUP BY \(TableHistory).id ",
+            orderBy: String = "ORDER BY visitDate DESC ",
+            whereData: String = "",
+            includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
         let args: Args?
         let whereClause: String
         if let filter = filter {
             args = ["%\(filter)%", "%\(filter)%"]
 
             // No deleted item has a URL, so there is no need to explicitly add that here.
-            whereClause = " WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) "
+            whereClause = " WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) \(whereData)"
         } else {
             args = []
-            whereClause = " WHERE (\(TableHistory).is_deleted = 0)"
+            whereClause = " WHERE (\(TableHistory).is_deleted = 0) \(whereData)"
         }
 
         // We partition the results to return local and remote visits separately. They contribute differently
@@ -315,7 +321,7 @@ extension SQLiteHistory: BrowserHistory {
         "COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount " +
         "FROM \(TableHistory) INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
         whereClause +
-        "GROUP BY \(TableHistory).id " +
+        groupClause +
         orderBy +
         "LIMIT \(limit) "
 
