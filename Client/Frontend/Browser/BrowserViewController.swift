@@ -432,9 +432,10 @@ class BrowserViewController: UIViewController {
             homePanelController!.delegate = self
             homePanelController!.url = tabManager.selectedTab?.displayURL
             homePanelController!.view.alpha = 0
-            view.addSubview(homePanelController!.view)
 
             addChildViewController(homePanelController!)
+            view.addSubview(homePanelController!.view)
+            homePanelController!.didMoveToParentViewController(self)
         }
 
         var panelNumber = tabManager.selectedTab?.url?.fragment
@@ -462,6 +463,7 @@ class BrowserViewController: UIViewController {
                 controller.view.alpha = 0
             }, completion: { finished in
                 if finished {
+                    controller.willMoveToParentViewController(nil)
                     controller.view.removeFromSuperview()
                     controller.removeFromParentViewController()
                     self.homePanelController = nil
@@ -501,6 +503,7 @@ class BrowserViewController: UIViewController {
 
         searchLoader.addListener(searchController!)
 
+        addChildViewController(searchController!)
         view.addSubview(searchController!.view)
         searchController!.view.snp_makeConstraints { make in
             make.top.equalTo(self.urlBar.snp_bottom)
@@ -510,11 +513,12 @@ class BrowserViewController: UIViewController {
 
         homePanelController?.view?.hidden = true
 
-        addChildViewController(searchController!)
+        searchController!.didMoveToParentViewController(self)
     }
 
     private func hideSearchController() {
         if let searchController = searchController {
+            searchController.willMoveToParentViewController(nil)
             searchController.view.removeFromSuperview()
             searchController.removeFromParentViewController()
             self.searchController = nil
