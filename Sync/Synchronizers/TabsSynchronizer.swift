@@ -109,7 +109,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
             // If this is a fresh start, do a wipe.
             if self.lastFetched == 0 {
                 log.info("Last fetch was 0. Wiping tabs.")
-                return localTabs.wipeTabs()
+                return localTabs.wipeRemoteTabs()
                     >>== afterWipe
             }
 

@@ -46,6 +46,14 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
     }
 
+    public func wipeRemoteTabs() -> Deferred<Result<()>> {
+        return self.doWipe { (conn, inout err: NSError?) -> () in
+            if let error = conn.executeChange("DELETE FROM \(self.tabs.name) WHERE client_guid IS NOT NULL", withArgs: nil) {
+                err = error
+            }
+        }
+    }
+
     public func wipeTabs() -> Deferred<Result<()>> {
         return self.doWipe { (conn, inout err: NSError?) -> () in
             self.tabs.delete(conn, item: nil, err: &err)
