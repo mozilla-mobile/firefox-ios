@@ -54,6 +54,25 @@ public struct RemoteTab: Equatable {
     public let lastUsed: Timestamp
     public let icon: NSURL?
 
+    public static func shouldIncludeURL(url: NSURL) -> Bool {
+        if let scheme = url.scheme {
+            if scheme == "about" {
+                return false
+            }
+            if scheme == "javascript" {
+                return false
+            }
+
+            if let hostname = url.host?.lowercaseString {
+                if hostname == "localhost" {
+                    return false
+                }
+                return true
+            }
+        }
+        return false
+    }
+
     public init(clientGUID: String?, URL: NSURL, title: String, history: [NSURL], lastUsed: Timestamp, icon: NSURL?) {
         self.clientGUID = clientGUID
         self.URL = URL
