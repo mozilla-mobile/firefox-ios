@@ -39,15 +39,16 @@ class Browser: NSObject {
 
     class func toTab(browser: Browser) -> RemoteTab? {
         if let displayURL = browser.displayURL {
+            let history = browser.historyList.filter(RemoteTab.shouldIncludeURL).reverse()
             return RemoteTab(clientGUID: nil,
                 URL: displayURL,
                 title: browser.displayTitle,
-                history: browser.historyList,
-                lastUsed: Timestamp(),
+                history: history,
+                lastUsed: NSDate.now(),
                 icon: nil)
-        } else {
-            return nil
         }
+
+        return nil
     }
 
     weak var navigationDelegate: WKNavigationDelegate? {
