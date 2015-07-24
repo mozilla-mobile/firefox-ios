@@ -47,6 +47,10 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return succeed()
     }
 
+    public func wipeRemoteTabs() -> Deferred<Result<()>> {
+        return succeed()
+    }
+
     public func wipeTabs() -> Success {
         return succeed()
     }
