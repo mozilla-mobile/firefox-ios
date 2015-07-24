@@ -103,4 +103,10 @@ class DomainAutocompleteTests: KIFTestCase {
         XCTAssertEqual(prefix, actualPrefix, "Expected prefix matches actual prefix")
         XCTAssertEqual(completion, actualCompletion, "Expected completion matches actual completion")
     }
+
+    override func tearDown() {
+        if tester().tryFindingTappableViewWithAccessibilityLabel("Cancel", error: nil) {
+            tester().tapViewWithAccessibilityLabel("Cancel")
+        }
+    }
 }

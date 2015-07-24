@@ -83,6 +83,9 @@ extension KIFUITestActor {
 class BrowserUtils {
     /// Close all tabs to restore the browser to startup state.
     class func resetToAboutHome(tester: KIFUITestActor) {
+        if tester.tryFindingTappableViewWithAccessibilityLabel("Cancel", error: nil) {
+            tester.tapViewWithAccessibilityLabel("Cancel")
+        }
         tester.tapViewWithAccessibilityLabel("Show Tabs")
         let tabsView = tester.waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
         while tabsView.numberOfItemsInSection(0) > 1 {

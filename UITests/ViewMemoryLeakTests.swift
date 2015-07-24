@@ -16,6 +16,9 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
+        if tester().tryFindingTappableViewWithAccessibilityLabel("home", error: nil) {
+            tester().tapViewWithAccessibilityLabel("home")
+        }
         BrowserUtils.resetToAboutHome(tester())
     }
 

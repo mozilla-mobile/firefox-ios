@@ -55,6 +55,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         self.refreshControl = refresh
         self.tableView.addSubview(refresh)
+        self.tableView.accessibilityIdentifier = "History List"
     }
 
     required init(coder aDecoder: NSCoder) {

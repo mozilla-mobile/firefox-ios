@@ -65,7 +65,7 @@ class SyncCommandsTests: XCTestCase {
         XCTAssertNotNil(syncCommand.value)
         let jsonObj:[String: AnyObject] = [
             "command": action,
-            "args": [shareItem.url, shareItem.title ?? ""]
+            "args": [shareItem.url, "", shareItem.title ?? ""]
         ]
         XCTAssertEqual(JSON.stringify(jsonObj, pretty: false), syncCommand.value)
     }

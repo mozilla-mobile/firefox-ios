@@ -111,6 +111,13 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
+        let previousOrientation = UIDevice.currentDevice().valueForKey("orientation") as! Int
+        if previousOrientation == UIInterfaceOrientation.LandscapeLeft.rawValue {
+            // Rotate back to portrait
+            let value = UIInterfaceOrientation.Portrait.rawValue
+            UIDevice.currentDevice().setValue(value, forKey: "orientation")
+        }
+
         BrowserUtils.resetToAboutHome(tester())
     }
 }

@@ -62,4 +62,10 @@ class SearchTests: KIFTestCase {
     private func resetSuggestionsPrompt() {
         NSNotificationCenter.defaultCenter().postNotificationName("SearchEnginesPromptReset", object: nil)
     }
+
+    override func tearDown() {
+        if tester().tryFindingTappableViewWithAccessibilityLabel("Cancel", error: nil) {
+            tester().tapViewWithAccessibilityLabel("Cancel")
+        }
+    }
 }
