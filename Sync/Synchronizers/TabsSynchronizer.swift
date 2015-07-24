@@ -46,24 +46,26 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
 
     private func uploadOurTabs(localTabs: RemoteClientsAndTabs, toServer tabsClient: Sync15CollectionClient<TabsPayload>) -> Success{
         // check to see if our tabs have changed or we're in a fresh start
-        let iUS: Timestamp? = (self.tabsRecordLastUpload == 0) ? nil : self.tabsRecordLastUpload
-        let expired = iUS < (NSDate.now() - (OneMinuteInMilliseconds))
+        let lastUploadTime: Timestamp? = (self.tabsRecordLastUpload == 0) ? nil : self.tabsRecordLastUpload
+        let expired = lastUploadTime < (NSDate.now() - (OneMinuteInMilliseconds))
         if !expired {
             return succeed()
         }
 
         return localTabs.getTabsForClientWithGUID(nil) >>== { tabs in
-            if let lastUploadTime = iUS {
-                let updatedTabs = tabs.filter { $0.lastUsed > lastUploadTime }
-                if updatedTabs.isEmpty {
+            if let lastUploadTime = lastUploadTime {
+                // TODO: track this in memory so we don't have to hit the disk to figure out when our tabs have
+                // changed and need to be uploaded.
+                if tabs.every({ $0.lastUsed < lastUploadTime }) {
                     return succeed()
                 }
             }
 
-            // convert to JSON
             let tabsRecord = self.createOwnTabsRecord(tabs)
-            // upload record
-            return tabsClient.put(tabsRecord, ifUnmodifiedSince: iUS) >>== { resp in
+
+            // We explicitly don't send If-Unmodified-Since, because we always
+            // want our upload to succeed -- we own the record.
+            return tabsClient.put(tabsRecord, ifUnmodifiedSince: nil) >>== { resp in
                 if let ts = resp.metadata.lastModifiedMilliseconds {
                     // Protocol says this should always be present for success responses.
                     log.debug("Tabs record upload succeeded. New timestamp: \(ts).")

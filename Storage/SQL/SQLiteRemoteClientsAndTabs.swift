@@ -146,23 +146,23 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         if let err = err {
             clientCursor.close()
-            return Deferred(value: Result(failure: DatabaseError(err: err)))
+            return deferResult(DatabaseError(err: err))
         }
 
         let clients = clientCursor.asArray()
         clientCursor.close()
 
-        return Deferred(value: Result(success: clients))
+        return deferResult(clients)
     }
 
     public func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Result<[RemoteTab]>> {
         let tabsSQL: String
         let clientArgs: Args?
         if let clientGUID = guid {
-            tabsSQL = "SELECT * FROM \(TableTabs) where client_guid = ?"
+            tabsSQL = "SELECT * FROM \(TableTabs) WHERE client_guid = ?"
             clientArgs = [guid]
         } else {
-            tabsSQL = "SELECT * FROM \(TableTabs) where client_guid IS NULL"
+            tabsSQL = "SELECT * FROM \(TableTabs) WHERE client_guid IS NULL"
             clientArgs = nil
         }
 
