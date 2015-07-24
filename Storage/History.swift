@@ -21,6 +21,7 @@ public protocol BrowserHistory {
     func addLocalVisit(visit: SiteVisit) -> Success
     func clearHistory() -> Success
     func removeHistoryForURL(url: String) -> Success
+    func removeSiteFromTopSites(site: Site) -> Success
 
     func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>>
     func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>>
