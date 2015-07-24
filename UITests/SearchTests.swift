@@ -59,6 +59,48 @@ class SearchTests: KIFTestCase {
         resetSuggestionsPrompt()
     }
 
+    func testURLBarContextMenu() {
+        let webRoot = SimplePageServer.start()
+        let testURL = "\(webRoot)/numberedPage.html?page=1"
+
+        // Verify that Paste & Go goes to the URL.
+        UIPasteboard.generalPasteboard().string = testURL
+        tester().longPressViewWithAccessibilityIdentifier("url", duration: 1)
+        tester().tapViewWithAccessibilityLabel("Paste & Go")
+        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
+
+        // Verify that Paste shows the search controller with prompt.
+        var promptFound = tester().tryFindingViewWithAccessibilityLabel(LabelPrompt, error: nil)
+        XCTAssertFalse(promptFound, "Search prompt is not shown")
+        UIPasteboard.generalPasteboard().string = "foobar"
+        tester().longPressViewWithAccessibilityIdentifier("url", duration: 1)
+        tester().tapViewWithAccessibilityLabel("Paste")
+        promptFound = tester().waitForViewWithAccessibilityLabel(LabelPrompt) != nil
+        XCTAssertTrue(promptFound, "Search prompt is shown")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+
+        // Verify that Copy Address copies the text to the clipboard.
+        XCTAssertNotEqual(UIPasteboard.generalPasteboard().string!, testURL, "URL is not in clipboard")
+        tester().longPressViewWithAccessibilityIdentifier("url", duration: 1)
+        tester().tapViewWithAccessibilityLabel("Copy Address")
+        XCTAssertEqual(UIPasteboard.generalPasteboard().string!, testURL, "URL is in clipboard")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+
+        // Verify that in-editing Paste shows the search controller with prompt.
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().clearTextFromFirstResponder()
+        tester().tapViewWithAccessibilityLabel(LabelAddressAndSearch)
+        promptFound = tester().tryFindingViewWithAccessibilityLabel(LabelPrompt, error: nil)
+        XCTAssertFalse(promptFound, "Search prompt is not shown")
+        tester().tapViewWithAccessibilityLabel("Paste")
+        promptFound = tester().waitForViewWithAccessibilityLabel(LabelPrompt) != nil
+        XCTAssertTrue(promptFound, "Search prompt is shown")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+
+        // Clean up.
+        BrowserUtils.resetToAboutHome(tester())
+    }
+
     private func resetSuggestionsPrompt() {
         NSNotificationCenter.defaultCenter().postNotificationName("SearchEnginesPromptReset", object: nil)
     }
