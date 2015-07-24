@@ -63,6 +63,12 @@ private class SuggestedSitesData<T: Tile>: Cursor<T> {
     }
 }
 
+extension UIView {
+    public class func viewOrientationForSize(size: CGSize) -> UIInterfaceOrientation {
+        return size.width > size.height ? UIInterfaceOrientation.LandscapeRight : UIInterfaceOrientation.Portrait
+    }
+}
+
 class TopSitesPanel: UIViewController {
     weak var homePanelDelegate: HomePanelDelegate?
 
@@ -88,11 +94,16 @@ class TopSitesPanel: UIViewController {
 
     let profile: Profile
 
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        layout.setupForOrientation(toInterfaceOrientation)
-        collection?.setNeedsLayout()
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        self.refreshHistory(self.layout.thumbnailCount)
+        self.layout.setupForOrientation(UIView.viewOrientationForSize(size))
     }
-    
+
+    override func supportedInterfaceOrientations() -> Int {
+        return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
+    }
+
     init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
@@ -134,6 +145,10 @@ class TopSitesPanel: UIViewController {
         if let data = result.successValue {
             self.dataSource.data = data
             self.dataSource.profile = self.profile
+
+            // redraw now we've udpated our sources
+            self.collection?.collectionViewLayout.invalidateLayout()
+            self.collection?.setNeedsLayout()
         }
     }
 
@@ -243,7 +258,7 @@ private class TopSitesCollectionView: UICollectionView {
 
 private class TopSitesLayout: UICollectionViewLayout {
     private var thumbnailRows: Int {
-        return Int((self.collectionView?.frame.height ?? self.thumbnailHeight) / self.thumbnailHeight)
+        return max(2, Int((self.collectionView?.frame.height ?? self.thumbnailHeight) / self.thumbnailHeight))
     }
 
     private var thumbnailCols = 2
@@ -341,10 +356,6 @@ private class TopSitesLayout: UICollectionViewLayout {
         attr.frame = CGRectMake(ceil(x), ceil(y), thumbnailWidth, thumbnailHeight)
 
         return attr
-    }
-
-    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
-        return true
     }
 }
 
