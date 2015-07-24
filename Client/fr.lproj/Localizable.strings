@@ -1,0 +1,456 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Le site %@ demande un nom d’utilisateur et un mot de passe.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Le site %1$@ demande un nom d’utilisateur et un mot de passe. Le site indique : %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "À propos";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Ajouter un onglet";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Ajouter à la liste de lecture";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Page ajoutée à la liste de lecture";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Recherche ou adresse";
+
+/* Authentication prompt title */
+"Authentication required" = "Authentification requise";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "Retour";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Bloquer les fenêtres popup";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Marque-page";
+
+/* Panel accessibility label */
+"Bookmarks" = "Marque-pages";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Luminosité";
+
+/* Alert Call Button */
+"Call" = "Appeler";
+
+/* Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert */
+"Cancel" = "Annuler";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Changer les couleurs.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Changer la police.";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Clear Private Data" = "Effacer mes traces";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Fermer";
+
+/* No comment provided by engineer. */
+"Closing tab" = "Fermeture de l’onglet";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Copier l’adresse";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Copier l’image";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Copier le lien";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it\'s already there?" = "Impossible d’ajouter la page à la liste de lecture. La page s’y trouve peut-être déjà ?";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Impossible d’ajouter la page à la liste de lecture";
+
+/* Error message that is shown in settings when there was a problem connecting to Firefox Accounts */
+"Could not connect to Firefox Accounts." = "Impossible de se connecter à Firefox Accounts.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Créer un compte";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Sombre";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Déboguage : oublier le statut de l’authentification Sync";
+
+/* Debug option */
+"Debug: require password" = "Déboguage : demander le mot de passe";
+
+/* Debug option */
+"Debug: require upgrade" = "Déboguage : demander de mettre à jour";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Réduire la taille du texte";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Moteur de recherche par défaut";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Paramètres d’affichage";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Voulez-vous enregistrer le mot de passe pour %1$@ sur %2$@ ?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Voulez-vous enregistrer le mot de passe pour %@ ?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Voulez-vous mettre à jour le mot de passe pour %1$@ sur %2$@ ?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Voulez-vous mettre à jour le mot de passe enregistré pour %@ ?";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Terminé";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Appuyez deux fois puis maintenez votre doigt appuyé pour ouvrir l’historique";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Saisissez votre mot de passe pour vous connecter.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox ne se synchronisera plus avec votre compte, mais ne supprimera aucune donnée de navigation sur cet appareil.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Firefox would like to access your Photos" = "Firefox souhaite accéder à vos photos";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "Page suivante";
+
+/* General settings section title */
+"General" = "Général";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Aide";
+
+/* Panel accessibility label */
+"History" = "Historique";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Augmenter la taille du texte";
+
+/* History tableview section header */
+"Last month" = "Le mois dernier";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Dernière synchronisation : %@";
+
+/* History tableview section header */
+"Last week" = "La semaine dernière";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Licences";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Clair";
+
+/* Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert */
+"Log Out" = "Se déconnecter";
+
+/* Title of the 'log out firefox account' alert */
+"Log Out?" = "Se déconnecter ?";
+
+/* Authentication prompt log in button */
+"Log in" = "Se connecter";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Il semblerait que Firefox ait planté. Voulez-vous restaurer vos onglets ?";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Marquer comme lu";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Marquer comme non lu";
+
+/* Error for a missing remote error number */
+"Missing error" = "Erreur manquante";
+
+/* Error for a missing remote error message */
+"Missing message" = "Message manquant";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Barre de navigation";
+
+/* New tab [title] [url] */
+"New tab: %@: %@" = "Nouvel onglet : %1$@ : %2$@";
+
+/* Prompt title for application update */
+"New version available" = "Nouvelle version disponible";
+
+/* Restore Tabs Negative Action */
+"No" = "Non";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Aucun onglet";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Plus tard";
+
+/* Button to not save the user's password */
+"Not now" = "Plus tard";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "OK";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Ouvrir dans un nouvel onglet";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Ouvrir les paramètres";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Ouvrez des articles en mode lecture en appuyant sur l’icône de livre lorsqu’elle apparaît dans la barre de titre.";
+
+/* Opening an external URL */
+"Opening %@" = "Ouverture de %@";
+
+/* Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list). */
+"Panel Chooser" = "Sélecteur de panneau";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Mot de passe";
+
+/* Paste the URL into the location bar */
+"Paste" = "Coller";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Coller et ouvrir";
+
+/* Privacy section title */
+"Privacy" = "Vie privée";
+
+/* The pull-to-refresh string for syncing in the history panel. */
+"Pull to Sync" = "Tirer pour synchroniser";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Moteurs de recherches rapides";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Mode lecture";
+
+/* Panel accessibility label */
+"Reading list" = "Liste de lecture";
+
+/* Header for bookmarks list */
+"Recent Bookmarks" = "Marque-pages récents";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "Actualiser";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Retirer";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Retirer de la liste de lecture";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans serif";
+
+/* Button to save the user's password */
+"Save" = "Enregistrer";
+
+/* Context menu item for saving an image */
+"Save Image" = "Enregistrer l’image";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Enregistrez des pages dans votre liste de lecture en appuyant sur l’icône de livre possédant un signe « + » présente dans les contrôles du mode lecture.";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Recherche";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Recherche ou adresse";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Lancer une recherche à partir de cette suggestion";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Connexion sécurisée";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sépia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Paramètres";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "Partager";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "Afficher les onglets";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Lancer la visite guidée";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Afficher les suggestions";
+
+/* Button that leads to Sign in section of the Settings sheet.
+   See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Se connecter";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "Arrêter";
+
+/* Support section title */
+"Support" = "Assistance";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Faites glisser trois doigts vers la droite ou la gauche pour fermer l’onglet.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Sync your tabs, bookmarks, passwords and more." = "Synchronisez vos onglets, marque-pages, mots de passe et bien plus.";
+
+/* Panel accessibility label */
+"Synced tabs" = "Onglets synchronisés";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Onglet %1$@ sur %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Onglets %1$@ à %2$@ sur %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Liste des onglets";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Une nouvelle version de Firefox Aurora est disponible. Appuyez sur OK pour ouvrir la page de téléchargement.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Un problème s’est produit en accédant aux onglets d’autres appareils. Veuillez réessayer plus tard.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Une erreur s’est produite lors de la conversion de la page";
+
+/* See http://mzl.la/1G7uHo7 */
+"This allows you to save the image to your Camera Roll." = "Ceci vous permet d’enregistrer l’image dans Pellicule.";
+
+/* Opening an external app */
+"This will open in another application" = "Ceci va être ouvert dans une autre application";
+
+/* History tableview section header */
+"Today" = "Aujourd’hui";
+
+/* Panel accessibility label */
+"Top sites" = "Les plus visités";
+
+/* Accessibility label for the URL bar */
+"URL bar" = "Barre d’adresse";
+
+/* Button to update the user's password */
+"Update" = "Mettre à jour";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Veuillez mettre à jour Firefox pour vous connecter.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Utiliser les onglets compacts";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Nom d’utilisateur";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Veuillez confirmer votre adresse électronique.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Version %1$@ (%2$@)";
+
+/* View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"View" = "Afficher";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Contenu web";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "Bienvenue dans Sync";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Bienvenue dans votre liste de lecture";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Hum, c’est embarrassant.";
+
+/* History tableview section header */
+"Yesterday" = "Hier";
+
+/* Error message in the remote tabs panel */
+"You don\'t have any other devices connected to this Firefox Account available to sync." = "Vous n’avez aucun autre appareil prêt à être synchronisé et connecté à ce compte Firefox.";
+
+/* Error message in the remote tabs panel */
+"You don\'t have any tabs open in Firefox on your other devices." = "Vous n’avez aucun onglet ouvert dans Firefox sur vos autres appareils.";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "ordinateur";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "à l’instant";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "appareil mobile";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "il y a plus d’un mois";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "il y a plus d’une semaine";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "Lu";
+
+/* Relative date for date in past week. */
+"this week" = "cette semaine";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "aujourd’hui à %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "Non lu";
+
+/* Relative date for yesterday. */
+"yesterday" = "hier";
+

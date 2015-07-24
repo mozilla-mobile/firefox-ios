@@ -1,0 +1,356 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Nama pengguna dan sandi diminta oleh %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Nama pengguna dan sandi diminta oleh %1$@. Situs menyatakan: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Tentang";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Tambahkan Tab";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Tambahkan ke Daftar Bacaan";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Alamat dan Pencarian";
+
+/* Authentication prompt title */
+"Authentication required" = "Otentikasi dibutuhkan";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "Mundur";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Markah";
+
+/* Panel accessibility label */
+"Bookmarks" = "Markah";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Kecerahan";
+
+/* Alert Call Button */
+"Call" = "Panggil";
+
+/* Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert */
+"Cancel" = "Batal";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Ubah tema warna.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Ubah jenis huruf.";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Tutup.";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Salin Alamat";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Salin Gambar";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Salin Tautan";
+
+/* Error message that is shown in settings when there was a problem connecting to Firefox Accounts */
+"Could not connect to Firefox Accounts." = "Tidak dapat tersambung ke Firefox Account.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Buat akun";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Gelap";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Debug: lupakan status otentikasi Sync";
+
+/* Debug option */
+"Debug: require password" = "Debug: membutuhkan sandi";
+
+/* Debug option */
+"Debug: require upgrade" = "Debug: membutuhkan peningkatan";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Kecilkan ukuran teks";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Mesin Pencari Baku";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Setelan Tampilan";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "Ingin menyimpan sandi untuk %1$@ di %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "Ingin menyimpan sandi di %$@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "Ingin memperbarui sandi untuk %1$@ di %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "Ingin memperbarui sandi di %$@?";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Selesai";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Ketuk ganda dan tetap tekan untuk membuka riwayat";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Masukkan sandi untuk tersambung.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox akan berhenti menyinkronkan dengan akun Anda, tetapi tidak akan menghapus data penjelajahan pada perangkat ini.";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "Maju";
+
+/* General settings section title */
+"General" = "Umum";
+
+/* Panel accessibility label */
+"History" = "Riwayat";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Besarkan ukuran teks";
+
+/* History tableview section header */
+"Last month" = "Bulan sebelumnya";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Disinkronkan terakhir: %@";
+
+/* History tableview section header */
+"Last week" = "Minggu sebelumnya";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Terang";
+
+/* Authentication prompt log in button */
+"Log in" = "Masuk";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Tandai sebagai Dibaca";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Tandai sebagai Belum Dibaca";
+
+/* Error for a missing remote error number */
+"Missing error" = "Kesalahan tidak tersedia";
+
+/* Error for a missing remote error message */
+"Missing message" = "Pesan kesalahan tidak tersedia";
+
+/* Prompt title for application update */
+"New version available" = "Versi baru tersedia";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Jangan Sekarang";
+
+/* Button to not save the user's password */
+"Not now" = "Jangan sekarang";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "Oke";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Buka di Tab Baru";
+
+/* Opening an external URL */
+"Opening %@" = "Membuka %@";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Sandi";
+
+/* Paste the URL into the location bar */
+"Paste" = "Tempel";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Tempel & Buka";
+
+/* Privacy section title */
+"Privacy" = "Privasi";
+
+/* The pull-to-refresh string for syncing in the history panel. */
+"Pull to Sync" = "Seret untuk Menyinkronkan";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Mesin Cari Cepat";
+
+/* Panel accessibility label */
+"Reading list" = "Daftar bacaan";
+
+/* Header for bookmarks list */
+"Recent Bookmarks" = "Markah Terbaru";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "Muat Ulang";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Hapus";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Hapus dari Daftar Bacaan";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Button to save the user's password */
+"Save" = "Simpan";
+
+/* Context menu item for saving an image */
+"Save Image" = "Simpan Gambar";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Pencarian";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Cari atau masukkan alamat";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Cari dari saran";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Sambungan aman";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Setelan";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "Bagikan";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "Tampilkan Tab";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Tampilkan saran pencarian";
+
+/* Button that leads to Sign in section of the Settings sheet.
+   See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Masuk";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "Hentikan";
+
+/* Support section title */
+"Support" = "Dukungan";
+
+/* See http://mzl.la/1Qtkf0j */
+"Sync your tabs, bookmarks, passwords and more." = "Sinkronkan tab, markah, sandi, dan yang lain.";
+
+/* Panel accessibility label */
+"Synced tabs" = "Tab disinkronkan";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Baki Tab";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Tersedia versi baru Firefox Aurora. Ketuk Oke untuk membuka laman unduhannya.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Terjadi kesalahan saat mengonversi laman";
+
+/* Opening an external app */
+"This will open in another application" = "Ini akan membuka di aplikasi lainnya";
+
+/* History tableview section header */
+"Today" = "Hari Ini";
+
+/* Panel accessibility label */
+"Top sites" = "Situs teratas";
+
+/* Button to update the user's password */
+"Update" = "Perbarui";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Tingkatkan Firefox untuk menyambungkan.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Gunakan Tab Ringkas";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Nama pengguna";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Verifikasikan alamat email Anda.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Versi %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Isi web";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "Selamat Datang di Sync";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Selamat Datang di Daftar Bacaan Anda";
+
+/* History tableview section header */
+"Yesterday" = "Kemarin";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "komputer";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "baru saja";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "perangkat seluler";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "lebih dari sebulan lalu";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "lebih dari seminggu lalu";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "dibaca";
+
+/* Relative date for date in past week. */
+"this week" = "minggu ini";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "hari ini pada %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "belum dibaca";
+
+/* Relative date for yesterday. */
+"yesterday" = "kemarin";
+

@@ -1,0 +1,12 @@
+/* Header for the list of devices table */
+"Available devices:" = "Dispositivos disponibles:";
+
+/* Close button in top navigation bar */
+"Close" = "Cerrar";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Enviar";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Enviar pestaña";
+

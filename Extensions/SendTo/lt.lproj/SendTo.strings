@@ -1,0 +1,12 @@
+/* Header for the list of devices table */
+"Available devices:" = "Pieejamās ierīces:";
+
+/* Close button in top navigation bar */
+"Close" = "Aizvērt";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Sūtīt";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Sūtīt cilni";
+

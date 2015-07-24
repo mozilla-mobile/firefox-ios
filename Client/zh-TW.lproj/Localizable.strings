@@ -1,0 +1,356 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ 請您輸入使用者名稱與密碼。";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ 請您輸入使用者名稱與密碼。此網站說: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "關於";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "新增分頁";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "新增至閱讀清單";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "網址與搜尋";
+
+/* Authentication prompt title */
+"Authentication required" = "需要驗證";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "上一頁";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "書籤";
+
+/* Panel accessibility label */
+"Bookmarks" = "書籤";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "亮度";
+
+/* Alert Call Button */
+"Call" = "呼叫";
+
+/* Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert */
+"Cancel" = "取消";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "變更色彩主題。";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "變更字體。";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "關閉";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "複製網址";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "複製圖片";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "複製鏈結";
+
+/* Error message that is shown in settings when there was a problem connecting to Firefox Accounts */
+"Could not connect to Firefox Accounts." = "無法連線至 Firefox Accounts。";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "註冊帳號";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "暗色";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "除錯: 忘掉 Sync 的驗證狀態";
+
+/* Debug option */
+"Debug: require password" = "除錯: 要求密碼";
+
+/* Debug option */
+"Debug: require upgrade" = "除錯: 要求升級";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "縮小文字";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "預設搜尋引擎";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "顯示設定";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "您想要儲存 %1$@ 在 %2$@ 上的密碼嗎？";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "您想要儲存 %@ 上的密碼嗎？";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "您想要更新 %1$@ 在 %2$@ 上的密碼嗎？";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "您想要更新 %@ 上的密碼嗎？";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "完成";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "雙擊後按住以開啟瀏覽紀錄";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "請輸入密碼以連線。";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox 將會停止與您帳號間的同步，但不會刪除此裝置上的任何瀏覽資料。";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "下一頁";
+
+/* General settings section title */
+"General" = "一般";
+
+/* Panel accessibility label */
+"History" = "紀錄";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "放大文字";
+
+/* History tableview section header */
+"Last month" = "上個月";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "最近同步: %@";
+
+/* History tableview section header */
+"Last week" = "上週";
+
+/* Light theme setting in Reading View settings */
+"Light" = "亮色";
+
+/* Authentication prompt log in button */
+"Log in" = "登入";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "標示為已讀";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "標示為未讀";
+
+/* Error for a missing remote error number */
+"Missing error" = "缺少錯誤代碼";
+
+/* Error for a missing remote error message */
+"Missing message" = "缺少錯誤訊息";
+
+/* Prompt title for application update */
+"New version available" = "有新版本可以使用";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "現在不要";
+
+/* Button to not save the user's password */
+"Not now" = "現在不要";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "確定";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "用新分頁開啟";
+
+/* Opening an external URL */
+"Opening %@" = "正在開啟 %@";
+
+/* Password textbox in Authentication prompt */
+"Password" = "密碼";
+
+/* Paste the URL into the location bar */
+"Paste" = "貼上";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "貼上並開啟";
+
+/* Privacy section title */
+"Privacy" = "隱私";
+
+/* The pull-to-refresh string for syncing in the history panel. */
+"Pull to Sync" = "向下拉以進行同步";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "快速搜尋引擎";
+
+/* Panel accessibility label */
+"Reading list" = "閱讀清單";
+
+/* Header for bookmarks list */
+"Recent Bookmarks" = "最近使用的書籤";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "重新載入";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "移除";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "從閱讀清單移除";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "無襯線字型";
+
+/* Button to save the user's password */
+"Save" = "儲存";
+
+/* Context menu item for saving an image */
+"Save Image" = "儲存圖片";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "搜尋";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "搜尋或輸入網址";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "搜尋建議";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "安全連線";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "油畫風";
+
+/* Font type setting in the reading view settings */
+"Serif" = "襯線字型";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "設定";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "分享";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "顯示分頁";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "顯示搜尋建議";
+
+/* Button that leads to Sign in section of the Settings sheet.
+   See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "登入";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "停止";
+
+/* Support section title */
+"Support" = "技術支援";
+
+/* See http://mzl.la/1Qtkf0j */
+"Sync your tabs, bookmarks, passwords and more." = "同步您的分頁、書籤、密碼等資訊。";
+
+/* Panel accessibility label */
+"Synced tabs" = "已同步的分頁";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "分頁列";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "已有新版的 Firefox Aurora 可用，請點擊「確定」前往下載頁面。";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "轉換頁面時發生錯誤";
+
+/* Opening an external app */
+"This will open in another application" = "將在其他應用程式開啟";
+
+/* History tableview section header */
+"Today" = "今天";
+
+/* Panel accessibility label */
+"Top sites" = "最常開啟的網站";
+
+/* Button to update the user's password */
+"Update" = "更新";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "升級 Firefox 以連線。";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "使用精簡分頁";
+
+/* Username textbox in Authentication prompt */
+"Username" = "使用者名稱";
+
+/* Text message in the settings table view */
+"Verify your email address." = "驗證您的電子郵件地址。";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "版本 %1$@（%2$@）";
+
+/* Accessibility label for the main web content view */
+"Web content" = "網頁內容";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "歡迎使用 Sync";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "歡迎來到您的閱讀清單";
+
+/* History tableview section header */
+"Yesterday" = "昨天";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "電腦";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "剛剛";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "行動裝置";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "超過一個月前";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "超過一週前";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "已讀";
+
+/* Relative date for date in past week. */
+"this week" = "本週";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "今天 %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "未讀";
+
+/* Relative date for yesterday. */
+"yesterday" = "昨天";
+

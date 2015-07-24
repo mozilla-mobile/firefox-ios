@@ -1,0 +1,33 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Dzięki kartom przeglądaj wiele stron jednocześnie";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Łącz się z Firefoksem, gdziekolwiek jesteś";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "Dostosowywanie";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox w chmurach";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Wprowadzenie, strona %1$@ z %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "Organizacja";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Dostosuj Firefoksa do własnych upodobań poprzez Ustawienia";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Zaloguj się do Firefoksa";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Rozpocznij przeglądanie";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "Przycisk Ustawień znajduje się w lewym górnym rogu widoku otwartych kart.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Przycisk wyświetlający liczbę otwartych kart i umożliwiający ich przełączanie znajduje się zaraz za paskiem adresu i wyszukiwania.";
+

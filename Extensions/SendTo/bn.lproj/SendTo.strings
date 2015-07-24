@@ -1,0 +1,12 @@
+/* Header for the list of devices table */
+"Available devices:" = "উপলব্ধ ডিভাইসগুলি:";
+
+/* Close button in top navigation bar */
+"Close" = "বন্ধ";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "পাঠান";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "ট্যাবটি পাঠান";
+

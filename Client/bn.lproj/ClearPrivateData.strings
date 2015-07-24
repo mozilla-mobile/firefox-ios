@@ -1,0 +1,9 @@
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "বাতিল";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "মুছে ফেলুন";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "সব মুছুন";
+

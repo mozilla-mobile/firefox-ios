@@ -1,0 +1,12 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Ydych chi\'n siŵr eich bod eisiau clirio\'ch holl ddata? Bydd hyn hefyd yn caeu pob tag agored.";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Diddymu";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Clirio";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Clirio Popeth";
+

@@ -1,0 +1,356 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "ব্যবহারকারীর নাম ও পাসওয়ার্ড %@ দ্বারা অনুরোধ করা হচ্ছে।";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "ব্যবহারকারীর নাম ও পাসওয়ার্ড %1$@ দ্বারা অনুরোধ করা হচ্ছে। সাইটের বলেছে: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "সম্পর্কে";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ট্যাব যোগ করুন";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "পঠন তালিকায় সংযুক্ত";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "ঠিকানা এবং অনুসন্ধান";
+
+/* Authentication prompt title */
+"Authentication required" = "অনুমোদন প্রয়োজন";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "পূর্বে";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "বুকমার্ক্স";
+
+/* Panel accessibility label */
+"Bookmarks" = "বুকমার্কসমূহ";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "উজ্জ্বলতা";
+
+/* Alert Call Button */
+"Call" = "ফোন করুন";
+
+/* Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert */
+"Cancel" = "বাতিল";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "কালার থীম বদল করুন";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "ফন্টের টাইপ বদল করুন।";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "বন্ধ করুন";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "ঠিকানা কপি করুন";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "ছবি কপি করুন";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "লিংক কপি করুন";
+
+/* Error message that is shown in settings when there was a problem connecting to Firefox Accounts */
+"Could not connect to Firefox Accounts." = "Firefox অ্যাকাউন্টে সংযোগ করতে পারেনি।";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "একটি অ্যাকাউন্ট তৈরি করুন";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "অন্ধকার";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "ডিবাগ: সিঙ্ক প্রমাণীকরণ অবস্থা ভুলবেন";
+
+/* Debug option */
+"Debug: require password" = "ডিবাগ: প্রয়োজনীয় পাসওয়ার্ড";
+
+/* Debug option */
+"Debug: require upgrade" = "ডিবাগ: প্রয়োজনীয় আপগ্রেড";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "টেক্সট সাইজ কমান";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "ডিফল্ট অনুসন্ধান ইঞ্জিন";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "সেটিংস প্রদর্শন করুন";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "আপনি কি %2$@ তে %1$ এর জন্য পাসওয়ার্ড সংরক্ষণ করতে চান?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "আপনি কি %@ তে পাসওয়ার্ড সংরক্ষণ করতে চান?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "আপনি কি %2$@-তে %1$@-এর জন্য পাসওয়ার্ড সংরক্ষণ করতে চান?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "আপনি কি %@ তে পাসওয়ার্ডটি আপডেট করতে চান?";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "সম্পন্ন";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "পূর্ববর্তী তথ্য খুলতে ডাবল ট্যাপ করে ধরে রাখুন";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "সংযোগ করার জন্য আপনার পাসওয়ার্ড দিন।";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox আপনার অ্যাকাউন্টের সাথে সিঙ্ক করা বন্ধ করবে, কিন্তু এই ডিভাইসে আপনার ব্রাউজ করা কোন তথ্য মুছে ফেলা হবে না।";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "পরবর্তী";
+
+/* General settings section title */
+"General" = "সাধারণ";
+
+/* Panel accessibility label */
+"History" = "ব্রাউজিং ইতিহাস";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "টেক্সট সাইজ বাড়ান";
+
+/* History tableview section header */
+"Last month" = "গত মাস";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "শেষ সিঙ্ক হয়েছে: %@";
+
+/* History tableview section header */
+"Last week" = "গত সপ্তাহ";
+
+/* Light theme setting in Reading View settings */
+"Light" = "আলো";
+
+/* Authentication prompt log in button */
+"Log in" = "লগ ইন";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "পড়া হয়েছে হিসাবে চিহ্নিত করুন";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "পড়া হয়নি হিসাবে চিহ্নিত করা হবে";
+
+/* Error for a missing remote error number */
+"Missing error" = "অনুপস্থিত ত্রুটি";
+
+/* Error for a missing remote error message */
+"Missing message" = "অনুপস্থিত বার্তা";
+
+/* Prompt title for application update */
+"New version available" = "নতুন সংস্করণ উপলব্ধ";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "এখন নয়";
+
+/* Button to not save the user's password */
+"Not now" = "এখন নয়";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "ঠিক আছে";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "নতুন ট্যাবে খুলুন";
+
+/* Opening an external URL */
+"Opening %@" = "খুলছে %@";
+
+/* Password textbox in Authentication prompt */
+"Password" = "পাসওয়ার্ড";
+
+/* Paste the URL into the location bar */
+"Paste" = "পেস্ট";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "পেস্ট করুন এবং যান";
+
+/* Privacy section title */
+"Privacy" = "গোপনীয়তা";
+
+/* The pull-to-refresh string for syncing in the history panel. */
+"Pull to Sync" = "স্যিংকে টেনে আনুন";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "দ্রুত-সন্ধান ইঞ্জিন";
+
+/* Panel accessibility label */
+"Reading list" = "পঠন তালিকা";
+
+/* Header for bookmarks list */
+"Recent Bookmarks" = "সাম্প্রতিক বুকমার্ক";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "পুনরায় লোড";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "অপসারণ করুন";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "পঠন তালিকা থেকে মুছে ফেলুন";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Button to save the user's password */
+"Save" = "সংরক্ষণ করুন";
+
+/* Context menu item for saving an image */
+"Save Image" = "ছবি সংরক্ষণ করুন";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "অনুসন্ধান";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "অনুসন্ধান করুন অথবা ঠিকানা প্রবেশ করুন";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "পরামর্শের জন্য সন্ধান করুন";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "সুরক্ষিত সংযোগ";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "বাদামী রং";
+
+/* Font type setting in the reading view settings */
+"Serif" = "সেরিফ";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "বৈশিষ্ট্য";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "শেয়ার করুন";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "ট্যাব প্রদর্শন";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "অনুসন্ধান পরামর্শ দেখান";
+
+/* Button that leads to Sign in section of the Settings sheet.
+   See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "সাইন ইন";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "বন্ধ করুন";
+
+/* Support section title */
+"Support" = "সহায়তা";
+
+/* See http://mzl.la/1Qtkf0j */
+"Sync your tabs, bookmarks, passwords and more." = "আপনার ট্যাব, বুকমার্ক, পাসওয়ার্ড এবং বিশদ জিনিসপত্র সুসংগত করুন।";
+
+/* Panel accessibility label */
+"Synced tabs" = "সিঙ্ক করা ট্যাবসমূহ";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "ট্যাবগুলির ট্রে";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Firefox অররার নতুন সংস্করণ উপলব্ধ আছে। ডাউনলোড পাতা যেতে ট্যাপ করুন।";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "পাতা রূপান্তর করার সময় একটি ত্রুটি ছিল";
+
+/* Opening an external app */
+"This will open in another application" = "এটা আরেকটি অ্যাপ্লিকেশনে খুলবে";
+
+/* History tableview section header */
+"Today" = "আজ";
+
+/* Panel accessibility label */
+"Top sites" = "শীর্ষ সাইটগুলি";
+
+/* Button to update the user's password */
+"Update" = "আপডেট করুন";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "সংযোগ স্থাপন করতে ফায়ারফক্স আপগ্রেড করুন।";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "সংক্ষিপ্ত ট্যাব ব্যাবহার করুন";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ব্যবহারকারীর নাম";
+
+/* Text message in the settings table view */
+"Verify your email address." = "আপনার ইমেল যাচাই করুন।";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "সংস্করণ %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "ওয়েব সম্পর্কিত বিষয়বস্তু";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "সুসংগত বিভাগে আপনাকে স্বাগত";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "আপনার পঠন তালিকায় আপনাকে স্বাগত";
+
+/* History tableview section header */
+"Yesterday" = "গতকাল";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "কম্পিউটার";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "সবেমাত্র";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "মোবাইল ডিভাইস";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "এক মাসেরও অধিক সময় আগে";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "এক সপ্তাহেরও অধিক সময় আগে";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "পড়া";
+
+/* Relative date for date in past week. */
+"this week" = "এই সপ্তাহে";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "আজ %@ টায়";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "পড়া হয়নি";
+
+/* Relative date for yesterday. */
+"yesterday" = "গতকাল";
+
