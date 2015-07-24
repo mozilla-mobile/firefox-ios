@@ -116,6 +116,14 @@ public class SQLiteHistory {
 }
 
 extension SQLiteHistory: BrowserHistory {
+    public func removeSiteFromTopSites(site: Site) -> Success {
+        if let url = site.url.asURL,
+           let host = url.host {
+            return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
+        }
+        return deferResult(DatabaseError(description: "Invalid url for site \(site.url)"))
+    }
+
     public func removeHistoryForURL(url: String) -> Success {
         let visitArgs: Args = [url]
         let deleteVisits = "DELETE FROM \(TableVisits) WHERE siteID = (SELECT id FROM \(TableHistory) WHERE url = ?)"
@@ -237,8 +245,7 @@ extension SQLiteHistory: BrowserHistory {
         let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
 
         let groupBy = "GROUP BY \(TableHistory).domainId "
-        let whereData = "AND \(TableDomains).showOnTopSites = 1 "
-
+        let whereData = "AND \(TableDomains).showOnTopSites IS 1 "
         return self.getFilteredSitesWithLimit(limit, groupClause: groupBy, orderBy: orderBy, whereData: whereData)
     }
 
@@ -320,6 +327,7 @@ extension SQLiteHistory: BrowserHistory {
         "COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount, " +
         "COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount " +
         "FROM \(TableHistory) INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
+        "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domainId " +
         whereClause +
         groupClause +
         orderBy +
