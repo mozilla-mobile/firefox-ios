@@ -70,10 +70,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let source = source {
-            return source.current.count
-        }
-        return suggestedSites.count
+        return source?.current.count ?? suggestedSites.count
     }
 
     private func setupSuggestedSiteForCell(cell: UITableViewCell, indexPath: NSIndexPath) {
@@ -169,6 +166,14 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
+    }
+
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        if source == nil {
+            return .None
+        } else {
+            return .Delete
+        }
     }
 
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
