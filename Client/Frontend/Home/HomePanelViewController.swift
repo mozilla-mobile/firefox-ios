@@ -111,21 +111,27 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             }
 
             if let index = oldValue {
-                let currentButton = buttons[index]
-                currentButton.selected = false
+                if index < buttons.count {
+                    let currentButton = buttons[index]
+                    currentButton.selected = false
+                }
             }
 
             hideCurrentPanel()
 
             if let index = selectedButtonIndex {
-                let newButton = buttons[index]
-                newButton.selected = true
+                if index < buttons.count {
+                    let newButton = buttons[index]
+                    newButton.selected = true
+                }
 
-                let panel = self.panels[index].makeViewController(profile: profile)
-                (panel as! HomePanel).homePanelDelegate = self
-                panel.view.accessibilityNavigationStyle = .Combined
-                panel.view.accessibilityLabel = self.panels[index].accessibilityLabel
-                self.showPanel(panel)
+                if index < panels.count {
+                    let panel = self.panels[index].makeViewController(profile: profile)
+                    (panel as? HomePanel)?.homePanelDelegate = self
+                    panel.view.accessibilityNavigationStyle = .Combined
+                    panel.view.accessibilityLabel = self.panels[index].accessibilityLabel
+                    self.showPanel(panel)
+                }
             }
         }
     }

@@ -439,8 +439,15 @@ class BrowserViewController: UIViewController {
         }
 
         var panelNumber = tabManager.selectedTab?.url?.fragment
-        var numberArray = panelNumber?.componentsSeparatedByString("=")
-        homePanelController?.selectedButtonIndex = numberArray?.last?.toInt() ?? 0
+
+        // splitting this out to see if we can get better crash reports when this has a problem
+        var newSelectedButtonIndex = 0
+        if let numberArray = panelNumber?.componentsSeparatedByString("=") {
+            if let last = numberArray.last?.toInt() {
+                newSelectedButtonIndex = last
+            }
+        }
+        homePanelController?.selectedButtonIndex = newSelectedButtonIndex
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
