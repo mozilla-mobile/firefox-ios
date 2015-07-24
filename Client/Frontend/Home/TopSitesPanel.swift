@@ -14,13 +14,7 @@ private let ThumbnailIdentifier = "Thumbnail"
 class Tile: Site {
     let backgroundColor: UIColor
     let trackingId: Int
-
-    init(url: String, color: UIColor, image: String, trackingId: Int, title: String) {
-        self.backgroundColor = color
-        self.trackingId = trackingId
-        super.init(url: url, title: title)
-        self.icon = Favicon(url: image, date: NSDate(), type: IconType.Icon)
-    }
+    let wordmark: Favicon
 
     init(json: JSON) {
         let colorString = json["bgcolor"].asString!
@@ -28,14 +22,15 @@ class Tile: Site {
         NSScanner(string: colorString).scanHexInt(&colorInt)
         self.backgroundColor = UIColor(rgb: (Int) (colorInt ?? 0xaaaaaa))
         self.trackingId = json["trackingid"].asInt ?? 0
+        self.wordmark = Favicon(url: json["imageurl"].asString!, date: NSDate(), type: .Icon)
 
         super.init(url: json["url"].asString!, title: json["title"].asString!)
 
-        self.icon = Favicon(url: json["imageurl"].asString!, date: NSDate(), type: .Icon)
+        self.icon = Favicon(url: json["faviconUrl"].asString!, date: NSDate(), type: .Icon)
     }
 }
 
-private class SuggestedSitesData<T: Tile>: Cursor<T> {
+class SuggestedSitesData<T: Tile>: Cursor<T> {
     var tiles = [T]()
 
     init() {
@@ -44,7 +39,6 @@ private class SuggestedSitesData<T: Tile>: Cursor<T> {
         let path = NSBundle.mainBundle().pathForResource("suggestedsites", ofType: "json")
         let data = NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: &err)
         let json = JSON.parse(data as! String)
-        println("\(data) \(json)")
 
         for i in 0..<json.length {
             let t = T(json: json[i])
@@ -449,10 +443,10 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.imageWrapper.backgroundColor = tile.backgroundColor
         cell.backgroundImage.image = nil
 
-        if let iconString = tile.icon?.url {
-            let icon = NSURL(string: iconString)!
+        if let icon = tile.wordmark.url.asURL,
+           let host = icon.host {
             if icon.scheme == "asset" {
-                cell.imageView.image = UIImage(named: icon.host!)
+                cell.imageView.image = UIImage(named: host)
             } else {
                 cell.imageView.sd_setImageWithURL(icon, completed: { img, err, type, key in
                     if img == nil {
