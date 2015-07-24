@@ -103,7 +103,7 @@ class BrowserProfileSyncDelegate: SyncDelegate {
 /**
  * A Profile manages access to the user's data.
  */
-protocol Profile {
+protocol Profile: class {
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
     // var favicons: Favicons { get }
     var prefs: Prefs { get }
@@ -132,6 +132,8 @@ protocol Profile {
     func getClients() -> Deferred<Result<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
     func getCachedClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
+
+    func storeTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>>
 
     func sendItems(items: [ShareItem], toClients clients: [RemoteClient])
 
@@ -286,6 +288,9 @@ public class BrowserProfile: Profile {
         return self.remoteClientsAndTabs.getClientsAndTabs()
     }
 
+    func storeTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> {
+        return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
+    }
 
     public func sendItems(items: [ShareItem], toClients clients: [RemoteClient]) {
         let commands = items.map { item in

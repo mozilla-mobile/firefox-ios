@@ -3,8 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 let TableClients = "clients"
+let TableTabs = "tabs"
 
 class RemoteClientsTable<T>: GenericTable<RemoteClient> {
     override var name: String { return TableClients }
@@ -69,7 +71,7 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
 }
 
 class RemoteTabsTable<T>: GenericTable<RemoteTab> {
-    override var name: String { return "tabs" }
+    override var name: String { return TableTabs }
     override var version: Int { return 2 }
 
     // TODO: index on id, client_guid, last_used, and position.
@@ -83,12 +85,33 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
         ])
     }
 
+    private func convertHistoryToString(history: [NSURL]) -> String? {
+        let historyAsStrings = optFilter(history.map { $0.absoluteString })
+        if let data = NSJSONSerialization.dataWithJSONObject(historyAsStrings, options: NSJSONWritingOptions.allZeros, error: nil) {
+            return NSString(data: data, encoding: NSUTF8StringEncoding) as? String
+        }
+
+        return nil
+    }
+
+    private func convertStringToHistory(history: String?) -> [NSURL] {
+        if let historyString = history {
+            if let data = (historyString as NSString).dataUsingEncoding(NSUTF8StringEncoding) {
+                var err: NSError?
+                if let urlStrings = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &err) as? [String] {
+                    return optFilter(urlStrings.map { NSURL(string: $0) })
+                }
+            }
+        }
+        return []
+    }
+
     override func getInsertAndArgs(inout item: RemoteTab) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         args.append(item.clientGUID)
         args.append(item.URL.absoluteString!)
         args.append(item.title)
-        args.append(nil) // TODO: persist history.
+        args.append(convertHistoryToString(item.history))
         args.append(NSNumber(unsignedLongLong: item.lastUsed))
         return ("INSERT INTO \(name) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", args)
     }
@@ -96,7 +119,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
     override func getUpdateAndArgs(inout item: RemoteTab) -> (String, [AnyObject?])? {
         var args = [AnyObject?]()
         args.append(item.title)
-        args.append(nil) // TODO: persist history.
+        args.append(convertHistoryToString(item.history))
         args.append(NSNumber(unsignedLongLong: item.lastUsed))
 
         // Key by (client_guid, url) rather than (transient) id.
@@ -119,7 +142,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
                 clientGUID: row["client_guid"] as? String,
                 URL: NSURL(string: row["url"] as! String)!, // TODO: find a way to make this less dangerous.
                 title: row["title"] as! String,
-                history: [], // TODO: extract history.
+                history: self.convertStringToHistory(row["history"] as? String),
                 lastUsed: (row["last_used"] as! NSNumber).unsignedLongLongValue,
                 icon: nil      // TODO
             )

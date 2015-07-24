@@ -64,15 +64,19 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
     }
 
     public func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Result<Int>> {
-        return Deferred(value: Result(success: -1))
+        return deferResult(-1)
     }
 
     public func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
-        return Deferred(value: Result(success: self.clientsAndTabs))
+        return deferResult(self.clientsAndTabs)
     }
 
     public func getClients() -> Deferred<Result<[RemoteClient]>> {
-        return Deferred(value: Result(success: self.clientsAndTabs.map { $0.client }))
+        return deferResult(self.clientsAndTabs.map { $0.client })
+    }
+
+    public func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Result<[RemoteTab]>> {
+        return deferResult(optFilter(self.clientsAndTabs.map { $0.client.guid == guid ? $0.tabs : nil })[0])
     }
 
     public func deleteCommands() -> Success { return succeed() }
@@ -90,6 +94,10 @@ func removeLocalClient(a: ClientAndTabs) -> Bool {
 
 func byGUID(a: ClientAndTabs, b: ClientAndTabs) -> Bool {
     return a.client.guid < b.client.guid
+}
+
+func byURL(a: RemoteTab, b: RemoteTab) -> Bool {
+    return a.URL.absoluteString < b.URL.absoluteString
 }
 
 class SQLRemoteClientsAndTabsTests: XCTestCase {
@@ -180,6 +188,48 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
                 XCTFail("Expected clients!")
             }
             j.fulfill()
+        }
+
+        self.waitForExpectationsWithTimeout(10, handler: nil)
+    }
+
+    func testGetTabsForClient() {
+        for c in clients {
+            let e = self.expectationWithDescription("Insert.")
+            clientsAndTabs.insertOrUpdateClient(c.client).upon {
+                XCTAssertTrue($0.isSuccess)
+                e.fulfill()
+            }
+            clientsAndTabs.insertOrUpdateTabsForClientGUID(c.client.guid, tabs: c.tabs)
+        }
+
+
+        let e = self.expectationWithDescription("Get after insert.")
+        let ct = clients[0]
+        clientsAndTabs.getTabsForClientWithGUID(ct.client.guid).upon {
+            if let got = $0.successValue {
+                // This comparison will fail if the order of the tabs changes. We sort the result
+                // as part of the DB query, so it's not actively sorted in Swift.
+                XCTAssertEqual(ct.tabs.count, got.count)
+                XCTAssertEqual(ct.tabs.sorted(byURL), got.sorted(byURL))
+            } else {
+                XCTFail("Expected tabs!")
+            }
+            e.fulfill()
+        }
+
+        let f = self.expectationWithDescription("Get after insert.")
+        let localClient = clients[0]
+        clientsAndTabs.getTabsForClientWithGUID(localClient.client.guid).upon {
+            if let got = $0.successValue {
+                // This comparison will fail if the order of the tabs changes. We sort the result
+                // as part of the DB query, so it's not actively sorted in Swift.
+                XCTAssertEqual(localClient.tabs.count, got.count)
+                XCTAssertEqual(localClient.tabs.sorted(byURL), got.sorted(byURL))
+            } else {
+                XCTFail("Expected tabs!")
+            }
+            f.fulfill()
         }
 
         self.waitForExpectationsWithTimeout(10, handler: nil)
