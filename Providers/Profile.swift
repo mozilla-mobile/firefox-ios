@@ -228,7 +228,7 @@ public class BrowserProfile: Profile {
      * collection of tables.
      */
     private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory> = {
-        return SQLiteHistory(db: self.db)
+        return SQLiteHistory(db: self.db)!
     }()
 
     var favicons: Favicons {
