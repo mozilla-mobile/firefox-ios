@@ -17,7 +17,7 @@ class TestSQLiteHistory: XCTestCase {
     func testHistoryLocalAndRemoteVisits() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
-        let history = SQLiteHistory(db: db)
+        let history = SQLiteHistory(db: db)!
 
         let siteL = Site(url: "http://url1/", title: "title local only")
         let siteR = Site(url: "http://url2/", title: "title remote only")
@@ -66,10 +66,41 @@ class TestSQLiteHistory: XCTestCase {
         XCTAssertTrue(deferred.value.isSuccess)
     }
 
+    func testUpgrades() {
+        let files = MockFiles()
+        let db = BrowserDB(filename: "browser.db", files: files)
+
+        // This calls createOrUpdate. i.e. it may fail, but should not crash and should always return a valid SQLiteHistory object.
+        for i in 0...BrowserTable.DefaultVersion {
+            let history = SQLiteHistory(db: db, version: i)
+            XCTAssertNotNil(history)
+        }
+
+        // This checks to make sure updates actually work (or at least that they don't crash :))
+        var err: NSError? = nil
+        db.transaction(&err, callback: { (connection, err) -> Bool in
+            for i in 0...BrowserTable.DefaultVersion {
+                let table = BrowserTable(version: i)
+                switch db.updateTable(connection, table: table) {
+                case .Updated:
+                    XCTAssertTrue(true, "Update to \(i) succeeded")
+                default:
+                    XCTFail("Update to version \(i) failed")
+                    return false
+                }
+            }
+            return true
+        })
+
+        if err != nil {
+            XCTFail("Error creating a transaction \(err)")
+        }
+    }
+
     func testDomains() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
-        let history = SQLiteHistory(db: db)
+        let history = SQLiteHistory(db: db)!
 
         func checkSitesByFrecency(f: Cursor<Site> -> Success) -> () -> Success {
             return {
@@ -107,7 +138,8 @@ class TestSQLiteHistory: XCTestCase {
     func testHistoryTable() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
-        let history = SQLiteHistory(db: db)
+        let history = SQLiteHistory(db: db)!
+        let bookmarks = SQLiteBookmarks(db: db)
 
         let site1 = Site(url: "http://url1/", title: "title one")
         let site1Changed = Site(url: "http://url1/", title: "title one alt")
@@ -242,7 +274,7 @@ class TestSQLiteHistory: XCTestCase {
     func testFaviconTable() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
-        let history = SQLiteHistory(db: db)
+        let history = SQLiteHistory(db: db)!
         let bookmarks = SQLiteBookmarks(db: db)
 
         let expectation = self.expectationWithDescription("First.")

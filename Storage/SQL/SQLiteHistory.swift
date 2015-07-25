@@ -104,14 +104,18 @@ public class SQLiteHistory {
     let db: BrowserDB
     let favicons: FaviconsTable<Favicon>
 
-    required public init(db: BrowserDB) {
+    required public init?(db: BrowserDB, version: Int? = nil) {
         self.db = db
         self.favicons = FaviconsTable<Favicon>()
-        db.createOrUpdate(self.favicons)
+        if !db.createOrUpdate(self.favicons) {
+            return nil
+        }
 
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
-        db.createOrUpdate(BrowserTable())
+        if !db.createOrUpdate(BrowserTable(version: version ?? BrowserTable.DefaultVersion)) {
+            return nil
+        }
     }
 }
 
@@ -257,7 +261,8 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
-        return self.getFilteredSitesWithLimit(limit)
+        let orderBy = "ORDER BY max(localVisitDate, remoteVisitDate) DESC "
+        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, includeIcon: true)
     }
 
     private class func basicHistoryColumnFactory(row: SDRow) -> Site {
