@@ -37,15 +37,19 @@ class StringExtensionsTests: XCTestCase {
     }
 
     func testEllipsize() {
-        // Odd maxLength
-        XCTAssertEqual("abcd…fgh", "abcdefgh".ellipsize(maxLength: 7))
-        // Even maxLength
-        XCTAssertEqual("abcd…ijkl", "abcdefghijkl".ellipsize(maxLength: 8))
-        // String shorter than maxLength
+        // Odd maxLength. Note that we ellipsize with a Unicode join character to avoid wrapping.
+        XCTAssertEqual("abcd…\u{2060}fgh", "abcdefgh".ellipsize(maxLength: 7))
+
+        // Even maxLength.
+        XCTAssertEqual("abcd…\u{2060}ijkl", "abcdefghijkl".ellipsize(maxLength: 8))
+
+        // String shorter than maxLength.
         XCTAssertEqual("abcd", "abcd".ellipsize(maxLength: 7))
-        // Empty String
+
+        // Empty String.
         XCTAssertEqual("", "".ellipsize(maxLength: 8))
-        // maxLength < 2
+
+        // maxLength < 2.
         XCTAssertEqual("abcdefgh", "abcdefgh".ellipsize(maxLength: 0))
     }
 }
