@@ -56,6 +56,16 @@ struct ReaderModeHandlers {
                         ReadabilityService.sharedInstance.process(url)
                         if let readerViewLoadingPath = NSBundle.mainBundle().pathForResource("ReaderViewLoading", ofType: "html") {
                             if let readerViewLoading = NSMutableString(contentsOfFile: readerViewLoadingPath, encoding: NSUTF8StringEncoding, error: nil) {
+                                if let absoluteString = url.absoluteString {
+                                    readerViewLoading.replaceOccurrencesOfString("%ORIGINAL-URL%", withString: absoluteString,
+                                        options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
+                                    readerViewLoading.replaceOccurrencesOfString("%LOADING-TEXT%", withString: NSLocalizedString("Loading", comment: "See http://mzl.la/1JfRbWa"),
+                                        options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
+                                    readerViewLoading.replaceOccurrencesOfString("%LOADING-FAILED-TEXT%", withString: NSLocalizedString("The page could not be displayed in Reading View.", comment: "See http://mzl.la/1JfRbWa"),
+                                        options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
+                                    readerViewLoading.replaceOccurrencesOfString("%LOAD-ORIGINAL-TEXT%", withString: NSLocalizedString("Load the original page", comment: "See http://mzl.la/1JfRbWa"),
+                                        options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
+                                }
                                 return GCDWebServerDataResponse(HTML: readerViewLoading as String)
                             }
                         }
