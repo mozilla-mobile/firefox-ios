@@ -159,7 +159,11 @@ private class TwoLineCellHelper {
         let textLeft = ImageSize + 2 * ImageMargin
         let textLabelHeight = textLabel.intrinsicContentSize().height
         let detailTextLabelHeight = detailTextLabel.intrinsicContentSize().height
-        let contentHeight = textLabelHeight + detailTextLabelHeight + DetailTextTopMargin
+        var contentHeight = textLabelHeight
+        if detailTextLabelHeight > 0 {
+            contentHeight += detailTextLabelHeight + DetailTextTopMargin
+        }
+        
         imageView.frame = CGRectMake(ImageMargin, (height - ImageSize) / 2, ImageSize, ImageSize)
         textLabel.frame = CGRectMake(textLeft, (height - contentHeight) / 2,
             container.frame.width - textLeft - ImageMargin, textLabelHeight)
