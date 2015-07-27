@@ -21,7 +21,7 @@ private struct BrowserLocationViewUX {
     static let BaseURLFontColor = UIColor.lightGrayColor()
     static let BaseURLPitch = 0.75
     static let HostPitch = 1.0
-    static let LocationContentInset = 8
+    static let LocationContentInset: CGFloat = 8
 }
 
 class BrowserLocationView: UIView {
@@ -31,7 +31,7 @@ class BrowserLocationView: UIView {
         didSet {
             lockImageView.hidden = url?.scheme != "https"
             updateTextWithURL()
-            setNeedsUpdateConstraints()
+            self.setNeedsLayout()
         }
     }
 
@@ -49,8 +49,7 @@ class BrowserLocationView: UIView {
                     } else {
                         self.readerModeButton.alpha = 1.0
                     }
-                    self.setNeedsUpdateConstraints()
-                    self.layoutIfNeeded()
+                    self.setNeedsLayout()
                 })
             }
         }
@@ -103,16 +102,6 @@ class BrowserLocationView: UIView {
         addSubview(lockImageView)
         addSubview(readerModeButton)
 
-        lockImageView.snp_makeConstraints { make in
-            make.leading.centerY.equalTo(self)
-            make.width.equalTo(self.lockImageView.intrinsicContentSize().width + CGFloat(BrowserLocationViewUX.LocationContentInset * 2))
-        }
-
-        readerModeButton.snp_makeConstraints { make in
-            make.trailing.centerY.equalTo(self)
-            make.width.equalTo(self.readerModeButton.intrinsicContentSize().width + CGFloat(BrowserLocationViewUX.LocationContentInset * 2))
-        }
-
         accessibilityElements = [lockImageView, urlTextField, readerModeButton]
     }
 
@@ -120,24 +109,37 @@ class BrowserLocationView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func updateConstraints() {
-        urlTextField.snp_remakeConstraints { make in
-            make.top.bottom.equalTo(self)
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let centerY = frame.size.height / 2
 
-            if lockImageView.hidden {
-                make.leading.equalTo(self).offset(BrowserLocationViewUX.LocationContentInset)
-            } else {
-                make.leading.equalTo(self.lockImageView.snp_trailing)
-            }
-
-            if readerModeButton.hidden {
-                make.trailing.equalTo(self).offset(-BrowserLocationViewUX.LocationContentInset)
-            } else {
-                make.trailing.equalTo(self.readerModeButton.snp_leading)
-            }
+        var lockFrame = CGRect()
+        lockFrame.origin = CGPointZero
+        if !lockImageView.hidden  {
+            lockFrame.size = self.lockImageView.intrinsicContentSize()
+            lockFrame.size.width += CGFloat(BrowserLocationViewUX.LocationContentInset * 2)
+        } else {
+            lockFrame.size = CGSize(width: BrowserLocationViewUX.LocationContentInset, height: 0)
         }
+        lockFrame.center = CGPoint(x: lockFrame.size.width / 2, y: centerY)
 
-        super.updateConstraints()
+        var readerFrame = CGRect()
+        readerFrame.origin = CGPointZero
+        if !readerModeButton.hidden {
+            readerFrame.size = self.readerModeButton.intrinsicContentSize()
+            readerFrame.size.width += CGFloat(BrowserLocationViewUX.LocationContentInset * 2)
+        } else {
+            readerFrame.size = CGSize(width: BrowserLocationViewUX.LocationContentInset, height: 0)
+        }
+        readerFrame.center = CGPoint(x: self.frame.size.width - readerFrame.size.width / 2, y: centerY)
+
+        var urlFrame = CGRect()
+        urlFrame.origin = CGPoint(x: lockFrame.width, y: 0)
+        urlFrame.size = CGSize(width: self.frame.size.width - lockFrame.size.width - readerFrame.size.width, height: self.frame.size.height)
+
+        lockImageView.frame = lockFrame
+        readerModeButton.frame = readerFrame
+        urlTextField.frame = urlFrame
     }
 
     func SELtapReaderModeButton() {
