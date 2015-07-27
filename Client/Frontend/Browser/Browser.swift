@@ -177,7 +177,7 @@ class Browser: NSObject {
                     return nil
                 }
             }
-            
+
             if !AboutUtils.isAboutURL(url) {
                 return url
             }

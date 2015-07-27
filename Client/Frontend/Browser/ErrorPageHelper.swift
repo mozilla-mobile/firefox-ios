@@ -108,11 +108,6 @@ class ErrorPageHelper {
     class func register(server: WebServer) {
         server.registerHandlerForMethod("GET", module: "errors", resource: "error.html", handler: { (request) -> GCDWebServerResponse! in
             var url: NSURL? = ErrorPageHelper.decodeURL(request.URL)
-            // It shouldn't happen, but sometimes this url can be an error page url. If it is
-            // unwrap it as far as wel can.
-            while url != nil && ErrorPageHelper.isErrorPageURL(url!) {
-                url = ErrorPageHelper.decodeURL(url!)
-            }
 
             if url == nil {
                 return GCDWebServerResponse(statusCode: 404)
@@ -195,8 +190,11 @@ class ErrorPageHelper {
     class func decodeURL(url: NSURL) -> NSURL? {
         let query = url.getQuery()
         if let queryUrl = query["url"] {
-            let escaped = queryUrl.unescape()
-            return NSURL(string: escaped)
+            let escaped = NSURL(string: queryUrl.unescape())
+            if let escaped = escaped where isErrorPageURL(escaped) {
+                return decodeURL(escaped)
+            }
+            return escaped
         }
         return nil
     }
