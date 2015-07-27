@@ -57,7 +57,7 @@ private let log = XCGLogger.defaultInstance()
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 public class BrowserTable: Table {
-    static let DefaultVersion = 6
+    static let DefaultVersion = 7
     let version: Int
     var name: String { return "BROWSER" }
     let sqliteVersion: Int32
@@ -72,25 +72,20 @@ public class BrowserTable: Table {
         log.info("SQLite version: \(ver) (\(v)).")
     }
 
-    func run(db: SQLiteDBConnection, sql: String?, args: Args? = nil) -> Bool {
-        if let sql = sql {
-            let err = db.executeChange(sql, withArgs: args)
-            if err != nil {
-                log.error("Error running SQL in BrowserTable. \(err?.localizedDescription)")
-                log.error("SQL was \(sql)")
-            }
-            return err == nil
+    func run(db: SQLiteDBConnection, sql: String, args: Args? = nil) -> Bool {
+        let err = db.executeChange(sql, withArgs: args)
+        if err != nil {
+            log.error("Error running SQL in BrowserTable. \(err?.localizedDescription)")
+            log.error("SQL was \(sql)")
         }
-        return true
+        return err == nil
     }
 
     // TODO: transaction.
-    func run(db: SQLiteDBConnection, queries: [String?]) -> Bool {
+    func run(db: SQLiteDBConnection, queries: [String]) -> Bool {
         for sql in queries {
-            if let sql = sql {
-                if !run(db, sql: sql, args: nil) {
-                    return false
-                }
+            if !run(db, sql: sql, args: nil) {
+                return false
             }
         }
         return true
@@ -124,7 +119,7 @@ public class BrowserTable: Table {
         return self.run(db, sql: sql, args: args)
     }
 
-    func CreateHistoryTable(version: Int = BrowserTable.DefaultVersion) -> String? {
+    func getHistoryTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
         return "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
@@ -134,12 +129,12 @@ public class BrowserTable: Table {
             "local_modified INTEGER, " +          // Can be null. Client clock. In extremis only.
             "is_deleted TINYINT NOT NULL, " +     // Boolean. Locally deleted.
             "should_upload TINYINT NOT NULL, " +  // Boolean. Set when changed or visits added.
-            (version > 5 ? "domainId INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE, " : "") +
+            (version > 5 ? "domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE, " : "") +
             "CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)" +
             ")"
     }
 
-    func CreateDomainsTable(version: Int = BrowserTable.DefaultVersion) -> String? {
+    func getDomainsTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
         if version > 5 {
             return "CREATE TABLE IF NOT EXISTS \(TableDomains) (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -150,7 +145,7 @@ public class BrowserTable: Table {
         return nil
     }
 
-    func CreateQueueTable(version: Int = BrowserTable.DefaultVersion) -> String? {
+    func getQueueTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
         if version > 4 {
             return "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
                 "url TEXT NOT NULL UNIQUE, " +
@@ -162,7 +157,6 @@ public class BrowserTable: Table {
 
 
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
-        // We ignore the version.
         // Right now we don't need to track per-visit deletions: Sync can't
         // represent them! See Bug 1157553 Comment 6.
         // We flip the should_upload flag on the history item when we add a visit.
@@ -241,18 +235,19 @@ public class BrowserTable: Table {
         ") "
 
         let queries = [
-            CreateDomainsTable(version: version),
-            CreateHistoryTable(version: version),
+            getDomainsTableCreationString(forVersion: version),
+            getHistoryTableCreationString(forVersion: version),
             visits, bookmarks, faviconSites,
             indexShouldUpload, indexSiteIDDate,
             widestFavicons, historyIDsWithIcon, iconForURL,
-            CreateQueueTable(version: version),
+            getQueueTableCreationString(forVersion: version),
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
 
         log.debug("Creating \(queries.count) tables, views, and indices.")
-        return self.run(db, queries: queries) &&
+
+        return self.run(db, queries: queries.filter({ $0 != nil }).map({ $0! })) &&
                self.prepopulateRootFolders(db)
     }
 
@@ -279,7 +274,8 @@ public class BrowserTable: Table {
         }
 
         if from < 5 && to >= 5  {
-            if !self.run(db, queries: [CreateQueueTable(version: to)]) {
+            let queries = [getQueueTableCreationString(forVersion: to)]
+            if !self.run(db, queries: queries.filter({ $0 != nil }).map({ $0! })) {
                 return false
             }
         }
@@ -294,9 +290,11 @@ public class BrowserTable: Table {
         }
 
         if from < 7 && to >= 7 {
-            if !self.run(db, queries: [
-                CreateDomainsTable(version: to),
-                "ALTER TABLE \(TableHistory) ADD COLUMN domainId INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE"]) {
+            let queries = [
+                getDomainsTableCreationString(forVersion: to),
+                "ALTER TABLE \(TableHistory) ADD COLUMN domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE"
+            ]
+            if !self.run(db, queries: queries.filter({ $0 != nil }).map({ $0! })) {
                 return false
             }
         }
@@ -325,6 +323,6 @@ public class BrowserTable: Table {
                       AllTables.map { "DROP TABLE IF EXISTS \($0!)" } as [String?] +
                       additional
 
-        return self.run(db, queries: queries)
+        return self.run(db, queries: queries.filter({ $0 != nil }).map({ $0! }))
     }
 }

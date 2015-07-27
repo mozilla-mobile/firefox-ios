@@ -159,7 +159,7 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    private func deleteHistoryTileForURL(site: Site, atIndexPath indexPath: NSIndexPath) {
+    private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
         profile.history.removeSiteFromTopSites(site) >>== {
             self.profile.history.getSitesByFrecencyWithLimit(self.layout.thumbnailCount).uponQueue(dispatch_get_main_queue(), block: { result in
                 self.updateDataSourceWithSites(result)
@@ -169,8 +169,6 @@ class TopSitesPanel: UIViewController {
     }
 
     private func refreshHistory(frequencyLimit: Int) {
-        // We double the requested limit in order to generate some leeway for "grouping by domain". Hopefully
-        // that returns enough entries that we can group but still have frequencyLimit results.
         self.profile.history.getSitesByFrecencyWithLimit(frequencyLimit).uponQueue(dispatch_get_main_queue(), block: { result in
             self.updateDataSourceWithSites(result)
             self.collection?.reloadData()
@@ -232,7 +230,7 @@ extension TopSitesPanel: ThumbnailCellDelegate {
     func didRemoveThumbnail(thumbnailCell: ThumbnailCell) {
         if let indexPath = collection?.indexPathForCell(thumbnailCell) {
             if let site = dataSource[indexPath.item] {
-                self.deleteHistoryTileForURL(site, atIndexPath: indexPath)
+                self.deleteHistoryTileForSite(site, atIndexPath: indexPath)
             }
         }
         

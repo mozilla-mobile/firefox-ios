@@ -334,7 +334,7 @@ extension BrowserDB {
         db.close()
     }
 
-    func run(sql: String?, withArgs args: Args? = nil) -> Success {
+    func run(sql: String, withArgs args: Args? = nil) -> Success {
         return run([(sql, args)])
     }
 
@@ -343,15 +343,13 @@ extension BrowserDB {
      * the callers thread until they've finished. If any of them fail the operation will abort (no more
      * commands will be run) and the transaction will rollback, returning a DatabaseError.
      */
-    func run(sql: [(sql: String?, args: Args?)]) -> Success {
+    func run(sql: [(sql: String, args: Args?)]) -> Success {
         var err: NSError? = nil
         self.transaction(&err) { (conn, err) -> Bool in
             for (sql, args) in sql {
-                if let sql = sql {
-                    err = conn.executeChange(sql, withArgs: args)
-                    if err != nil {
-                        return false
-                    }
+                err = conn.executeChange(sql, withArgs: args)
+                if err != nil {
+                    return false
                 }
             }
             return true
