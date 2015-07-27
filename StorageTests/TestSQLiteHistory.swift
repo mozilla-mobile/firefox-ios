@@ -107,7 +107,7 @@ class TestSQLiteHistory: XCTestCase {
 
         // Insert something with an invalid domainId. We have to manually do this since domains are usually hidden.
         db.withWritableConnection(&err, callback: { (connection, err) -> Int in
-            let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload, domainId) " +
+            let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
                          "?, ?, ?, ?, ?, ?, ?"
             let args: Args = [Bytes.generateGUID(), site.url, site.title, NSDate.nowNumber(), 0, 0, -1]
             err = connection.executeChange(insert, withArgs: args)
@@ -119,7 +119,7 @@ class TestSQLiteHistory: XCTestCase {
 
         // DomainID isn't normally exposed, so we manually query to get it
         let results = db.withReadableConnection(&err, callback: { (connection, err) -> Cursor<Int> in
-            let sql = "SELECT domainId FROM \(TableHistory) WHERE url = ?"
+            let sql = "SELECT domain_id FROM \(TableHistory) WHERE url = ?"
             let args: Args = [site.url]
             return connection.executeQuery(sql, factory: IntFactory, withArgs: args)
         })
@@ -369,7 +369,7 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
     func testUpdateInTransaction() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
-        let history = SQLiteHistory(db: db)
+        let history = SQLiteHistory(db: db)!
 
         history.clearHistory().value
         let site = Site(url: "http://site/foo", title: "AA")
@@ -386,7 +386,7 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
     func testFrecencyPerf() {
         let files = MockFiles()
         let db = BrowserDB(filename: "browser.db", files: files)
-        let history = SQLiteHistory(db: db)
+        let history = SQLiteHistory(db: db)!
 
         let count = 500
 

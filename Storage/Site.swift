@@ -51,4 +51,15 @@ public class Site : Identifiable {
         self.url = url
         self.title = title
     }
+
+    // This method should be kept in sync with the one in Place (until this or Place are merged together)
+    public var domain: String? {
+        if var host = url.asURL?.host {
+            if let range = host.rangeOfString("^(www|mobile|m)\\.", options: .RegularExpressionSearch) {
+                host.replaceRange(range, with: "")
+            }
+            return host
+        }
+        return nil
+    }
 }

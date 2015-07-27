@@ -69,6 +69,17 @@ public class Place {
     public let url: String
     public let title: String
 
+    // This method should be kept in sync with the one in Site (until this or Site are merged together)
+    public var domain: String? {
+        if var host = url.asURL?.host {
+            if let range = host.rangeOfString("^(www|mobile|m)\\.", options: .RegularExpressionSearch) {
+                host.replaceRange(range, with: "")
+            }
+            return host
+        }
+        return nil
+    }
+
     public init(guid: GUID, url: String, title: String) {
         self.guid = guid
         self.url = url

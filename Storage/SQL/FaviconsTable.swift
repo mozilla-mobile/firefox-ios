@@ -94,7 +94,7 @@ class FaviconsTable<T>: GenericTable<Favicon> {
         return obj.id
     }
 
-    func getCleanupCommands() -> (String?, Args?) {
+    func getCleanupCommands() -> (String, Args?) {
         return ("DELETE FROM \(TableFavicons) " +
             "WHERE \(TableFavicons).id NOT IN (" +
                 "SELECT faviconID FROM \(TableFaviconSites) " +
