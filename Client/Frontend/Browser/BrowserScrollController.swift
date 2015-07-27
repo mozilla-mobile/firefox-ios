@@ -28,6 +28,7 @@ class BrowserScrollingController: NSObject {
     weak var header: UIView?
     weak var footer: UIView?
     weak var urlBar: URLBarView?
+    weak var snackBars: UIView?
 
     var footerBottomConstraint: Constraint?
     var headerTopConstraint: Constraint?
@@ -60,6 +61,7 @@ class BrowserScrollingController: NSObject {
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     private var headerFrame: CGRect { return header?.frame ?? CGRectZero }
     private var footerFrame: CGRect { return footer?.frame ?? CGRectZero }
+    private var snackBarsFrame: CGRect { return snackBars?.frame ?? CGRectZero }
 
     private var lastContentOffset: CGFloat = 0
     private var scrollDirection: ScrollDirection = .Down
@@ -88,7 +90,7 @@ class BrowserScrollingController: NSObject {
             animated: animated,
             duration: actualDuration,
             headerOffset: -headerFrame.height,
-            footerOffset: footerFrame.height,
+            footerOffset: footerFrame.height - snackBarsFrame.height,
             alpha: 0,
             completion: completion)
     }
@@ -137,7 +139,7 @@ private extension BrowserScrollingController {
         }
 
         updatedOffset = footerBottomOffset + delta
-        footerBottomOffset = clamp(updatedOffset, min: 0, max: footerFrame.height)
+        footerBottomOffset = clamp(updatedOffset, min: 0, max: footerFrame.height - snackBarsFrame.height)
 
         let alpha = 1 - abs(headerTopOffset / headerFrame.height)
         urlBar?.updateAlphaForSubviews(alpha)

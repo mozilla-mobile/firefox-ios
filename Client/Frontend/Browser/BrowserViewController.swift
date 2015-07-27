@@ -235,6 +235,7 @@ class BrowserViewController: UIViewController {
         scrollController.urlBar = urlBar
         scrollController.header = header
         scrollController.footer = footer
+        scrollController.snackBars = snackBars
 
         self.updateToolbarStateForTraitCollection(self.traitCollection)
 
