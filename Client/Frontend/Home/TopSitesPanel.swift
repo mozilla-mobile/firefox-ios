@@ -398,16 +398,18 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.imageView.image = nil
         cell.backgroundImage.image = nil
 
-        FaviconFetcher.getForUrl(site.url.asURL!, profile: profile) >>== { icons in
-            if (icons.count > 0) {
-                cell.imageView.sd_setImageWithURL(icons[0].url.asURL!) { (img, err, type, url) -> Void in
-                    if let img = img {
-                        cell.backgroundImage.image = img
-                        cell.image = img
-                    } else {
-                        let icon = Favicon(url: "", date: NSDate(), type: IconType.NoneFound)
-                        self.profile.favicons.addFavicon(icon, forSite: site)
-                        self.setDefaultThumbnailBackground(cell)
+        if let url = site.url.asURL {
+            FaviconFetcher.getForURL(url, profile: profile) >>== { icons in
+                if (icons.count > 0) {
+                    cell.imageView.sd_setImageWithURL(icons[0].url.asURL!) { (img, err, type, url) -> Void in
+                        if let img = img {
+                            cell.backgroundImage.image = img
+                            cell.image = img
+                        } else {
+                            let icon = Favicon(url: "", date: NSDate(), type: IconType.NoneFound)
+                            self.profile.favicons.addFavicon(icon, forSite: site)
+                            self.setDefaultThumbnailBackground(cell)
+                        }
                     }
                 }
             }
