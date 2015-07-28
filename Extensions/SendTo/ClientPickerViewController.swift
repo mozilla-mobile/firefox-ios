@@ -105,7 +105,6 @@ class ClientPickerViewController: UITableViewController {
                 })
 
                 cell.imageView?.image = UIImage(named: clients[indexPath.row].type == "mobile" ? "deviceTypeMobile" : "deviceTypeDesktop")
-                cell.imageView?.transform = CGAffineTransformMakeScale(0.5, 0.5)
 
                 cell.accessoryType = selectedClients.containsObject(indexPath) ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
                 cell.tintColor = ClientPickerViewControllerUX.DeviceRowTintColor
