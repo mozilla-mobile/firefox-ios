@@ -185,7 +185,7 @@ public class BrowserProfile: Profile {
     func onLocationChange(notification: NSNotification) {
         if let v = notification.userInfo!["visitType"] as? Int,
            let visitType = VisitType(rawValue: v),
-           let url = notification.userInfo!["url"] as? NSURL,
+           let url = notification.userInfo!["url"] as? NSURL where !isIgnoredURL(url),
            let title = notification.userInfo!["title"] as? NSString {
 
             // We don't record a visit if no type was specified -- that means "ignore me".

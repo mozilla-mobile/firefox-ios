@@ -78,6 +78,12 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
             // We have to reconcile on-the-fly: we're about to overwrite the server record, which
             // is our shared parent.
             let place = rec.payload.asPlace()
+
+            if isIgnoredURL(place.url) {
+                log.debug("Ignoring incoming record \(guid) because its URL is one we wish to ignore.")
+                return succeed()
+            }
+
             let placeThenVisits = storage.insertOrUpdatePlace(place, modified: modified)
                               >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
             return placeThenVisits.map({ result in
