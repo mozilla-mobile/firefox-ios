@@ -161,25 +161,16 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func SELstatusBarFrameWillChange(notification: NSNotification) {
-        if let statusBarFrame = notification.userInfo![UIApplicationStatusBarFrameUserInfoKey] as? NSValue {
-            scrollController.showToolbars(animated: false)
-            self.view.setNeedsUpdateConstraints()
-        }
-    }
-
     func SELtappedTopArea() {
         scrollController.showToolbars(animated: true)
     }
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: BookmarkStatusChangedNotification, object: nil)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELstatusBarFrameWillChange:", name: UIApplicationWillChangeStatusBarFrameNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELBookmarkStatusDidChange:", name: BookmarkStatusChangedNotification, object: nil)
         KeyboardHelper.defaultHelper.addDelegate(self)
 
@@ -331,9 +322,9 @@ class BrowserViewController: UIViewController {
         super.updateViewConstraints()
 
         statusBarOverlay.snp_remakeConstraints { make in
-            make.left.right.equalTo(self.view)
-            make.height.equalTo(UIApplication.sharedApplication().statusBarFrame.height)
-            make.bottom.equalTo(header.snp_top)
+            let topLayoutGuide = self.topLayoutGuide as! UIView
+            make.top.left.right.equalTo(self.view)
+            make.height.equalTo(topLayoutGuide)
         }
 
         topTouchArea.snp_remakeConstraints { make in
