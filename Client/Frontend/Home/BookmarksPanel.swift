@@ -95,9 +95,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         if let source = source {
             if let bookmark = source.current[indexPath.row] {
-                if let favicon = bookmark.favicon {
-                    cell.imageView?.setIcon(favicon, withPlaceholder: self.defaultIcon)
-                }
+                cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: self.defaultIcon)
 
                 switch (bookmark) {
                     case let item as BookmarkItem:
