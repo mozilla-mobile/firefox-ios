@@ -65,6 +65,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         if completionActive {
             self.attributedText = NSAttributedString(string: text)
             completionActive = false
+            // This is required to notify the SearchLoader that some text has changed and previous
+            // cached query will get updated.
+            notifyTextChanged?()
         }
     }
 
