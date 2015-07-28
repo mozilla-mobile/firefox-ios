@@ -82,9 +82,9 @@ public class BrowserTable: Table {
     }
 
     // TODO: transaction.
-    func run(db: SQLiteDBConnection, queries: [String]) -> Bool {
-        for sql in queries {
-            if !run(db, sql: sql, args: nil) {
+    func run(db: SQLiteDBConnection, queries: [(String, Args?)]) -> Bool {
+        for (sql, args) in queries {
+            if !run(db, sql: sql, args: args) {
                 return false
             }
         }
@@ -234,20 +234,25 @@ public class BrowserTable: Table {
         "title TEXT" +
         ") "
 
-        let queries = [
-            getDomainsTableCreationString(forVersion: version),
-            getHistoryTableCreationString(forVersion: version),
-            visits, bookmarks, faviconSites,
-            indexShouldUpload, indexSiteIDDate,
-            widestFavicons, historyIDsWithIcon, iconForURL,
-            getQueueTableCreationString(forVersion: version),
+        let queries: [(String?, Args?)] = [
+            (getDomainsTableCreationString(forVersion: version), nil),
+            (getHistoryTableCreationString(forVersion: version), nil),
+            (visits, nil),
+            (bookmarks, nil),
+            (faviconSites, nil),
+            (indexShouldUpload, nil),
+            (indexSiteIDDate, nil),
+            (widestFavicons, nil),
+            (historyIDsWithIcon, nil),
+            (iconForURL, nil),
+            (getQueueTableCreationString(forVersion: version), nil)
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
 
         log.debug("Creating \(queries.count) tables, views, and indices.")
 
-        return self.run(db, queries: queries.filter({ $0 != nil }).map({ $0! })) &&
+        return self.run(db, queries: queries.filter({ $0.0 != nil }).map({ ($0.0!, $0.1) })) &&
                self.prepopulateRootFolders(db)
     }
 
@@ -274,28 +279,45 @@ public class BrowserTable: Table {
         }
 
         if from < 5 && to >= 5  {
-            let queries = [getQueueTableCreationString(forVersion: to)]
-            if !self.run(db, queries: queries.filter({ $0 != nil }).map({ $0! })) {
+            let queries: [(String?, Args?)] = [(getQueueTableCreationString(forVersion: to), nil)]
+            if !self.run(db, queries: queries.filter({ $0.0 != nil }).map({ ($0.0!, $0.1) })) {
                 return false
             }
         }
 
         if from < 6 && to >= 6 {
             if !self.run(db, queries: [
-                "DROP INDEX IF EXISTS \(IndexVisitsSiteIDDate)",
-                "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDIsLocalDate) ON \(TableVisits) (siteID, is_local, date)",
+                ("DROP INDEX IF EXISTS \(IndexVisitsSiteIDDate)", nil),
+                ("CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDIsLocalDate) ON \(TableVisits) (siteID, is_local, date)", nil)
             ]) {
                 return false
             }
         }
 
         if from < 7 && to >= 7 {
-            let queries = [
-                getDomainsTableCreationString(forVersion: to),
-                "ALTER TABLE \(TableHistory) ADD COLUMN domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE"
+            let queries: [(String?, Args?)] = [
+                (getDomainsTableCreationString(forVersion: to), nil),
+                ("ALTER TABLE \(TableHistory) ADD COLUMN domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE", nil)
             ]
-            if !self.run(db, queries: queries.filter({ $0 != nil }).map({ $0! })) {
+
+            if !self.run(db, queries: queries.filter({ $0.0 != nil }).map({ ($0.0!, $0.1) })) {
                 return false
+            }
+
+            let cursor = db.executeQuery("SELECT * FROM \(TableHistory)", factory: { (row) -> (id: Int, url: String) in
+                return (row["id"] as! Int, row["url"] as! String)
+            }, withArgs: nil)
+
+            for row in cursor {
+                if let row = row,
+                   let host = row.url.asURL?.normalizedHost() {
+                    if !self.run(db, queries: [
+                        ("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", [host]),
+                        ("UPDATE \(TableHistory) SET domain_id = (SELECT id FROM \(TableDomains) WHERE domain = ?) WHERE id = ?", [host, row.id])
+                    ]) {
+                        return false
+                    }
+                }
             }
         }
 
@@ -315,14 +337,15 @@ public class BrowserTable: Table {
 
     func drop(db: SQLiteDBConnection) -> Bool {
         log.debug("Dropping all browser tables.")
-        let additional: [String?] = [
-            "DROP TABLE IF EXISTS faviconSites",  // We renamed it to match naming convention.
+        let additional: [(String, Args?)] = [
+            ("DROP TABLE IF EXISTS faviconSites", nil) // We renamed it to match naming convention.
         ]
-        let queries: [String?] = AllViews.map { "DROP VIEW IF EXISTS \($0!)" } as [String?] +
-                      AllIndices.map { "DROP INDEX IF EXISTS \($0!)" } as [String?] +
-                      AllTables.map { "DROP TABLE IF EXISTS \($0!)" } as [String?] +
+
+        let queries: [(String, Args?)] = AllViews.map { ("DROP VIEW IF EXISTS \($0!)", nil) } as [(String, Args?)] +
+                      AllIndices.map { ("DROP INDEX IF EXISTS \($0!)", nil) } as [(String, Args?)] +
+                      AllTables.map { ("DROP TABLE IF EXISTS \($0!)", nil) } as [(String, Args?)] +
                       additional
 
-        return self.run(db, queries: queries.filter({ $0 != nil }).map({ $0! }))
+        return self.run(db, queries: queries)
     }
 }

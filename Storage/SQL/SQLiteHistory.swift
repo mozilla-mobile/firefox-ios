@@ -121,8 +121,8 @@ public class SQLiteHistory {
 
 extension SQLiteHistory: BrowserHistory {
     public func removeSiteFromTopSites(site: Site) -> Success {
-        if let domain = site.domain {
-            return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [domain])])
+        if let host = site.url.asURL?.normalizedHost() {
+            return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
         }
         return deferResult(DatabaseError(description: "Invalid url for site \(site.url)"))
     }
@@ -179,9 +179,9 @@ extension SQLiteHistory: BrowserHistory {
         //
         // Note that we will never match against a deleted item, because deleted items have no URL,
         // so we don't need to unset is_deleted here.
-        if let domain = site.domain {
+        if let host = site.url.asURL?.normalizedHost() {
             let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1, domain_id = (SELECT id FROM \(TableDomains) where domain = ?) WHERE url = ?"
-            let updateArgs: Args? = [site.title, time, domain, site.url]
+            let updateArgs: Args? = [site.title, time, host, site.url]
             if LogPII {
                 log.debug("Setting title to \(site.title) for URL \(site.url)")
             }
@@ -198,8 +198,8 @@ extension SQLiteHistory: BrowserHistory {
     private func insertSite(site: Site, atTime time: NSNumber, withConnection conn: SQLiteDBConnection) -> Int {
         var error: NSError? = nil
 
-        if let domain = site.domain {
-            if let error = conn.executeChange("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", withArgs: [domain]) {
+        if let host = site.url.asURL?.normalizedHost() {
+            if let error = conn.executeChange("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", withArgs: [host]) {
                 log.warning("Domain Insert failed with \(error.localizedDescription)")
                 return 0
             }
@@ -207,7 +207,7 @@ extension SQLiteHistory: BrowserHistory {
             let insert = "INSERT INTO \(TableHistory) " +
                 "(guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
                 "SELECT ?, ?, ?, ?, 0, 1, id FROM \(TableDomains) where domain = ?"
-            let insertArgs: Args? = [site.guid ?? Bytes.generateGUID(), site.url, site.title, time, domain]
+            let insertArgs: Args? = [site.guid ?? Bytes.generateGUID(), site.url, site.title, time, host]
             if let error = conn.executeChange(insert, withArgs: insertArgs) {
                 log.warning("Site Insert failed with \(error.localizedDescription)")
                 return 0
@@ -606,7 +606,7 @@ extension SQLiteHistory: SyncableHistory {
 
             // The record doesn't exist locally. Insert it.
             log.debug("Inserting remote history item for guid \(place.guid).")
-            if let domain = place.domain {
+            if let host = place.url.asURL?.normalizedHost() {
                 if LogPII {
                     log.debug("Inserting: \(place.url).")
                 }
@@ -615,8 +615,8 @@ extension SQLiteHistory: SyncableHistory {
                 let insertHistory = "INSERT INTO \(TableHistory) (guid, url, title, server_modified, is_deleted, should_upload, domain_id) " +
                                     "SELECT ?, ?, ?, ?, 0, 0, id FROM \(TableDomains) where domain = ?"
                 return self.db.run([
-                    (insertDomain, [domain]),
-                    (insertHistory, [place.guid, place.url, place.title, serverModified, domain])
+                    (insertDomain, [host]),
+                    (insertHistory, [place.guid, place.url, place.title, serverModified, host])
                 ]) >>> always(place.guid)
             }
 
