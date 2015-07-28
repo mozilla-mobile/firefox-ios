@@ -13,19 +13,24 @@ class FaviconFetcherErrorType: ErrorType {
     }
 }
 
-/* A helper class to find the favicon associated with a url. This will load the page and parse any icons it finds out of it
- * If that fails, it will attempt to find a favicon.ico in the root host domain
+/* A helper class to find the favicon associated with a URL.
+ * This will load the page and parse any icons it finds out of it.
+ * If that fails, it will attempt to find a favicon.ico in the root host domain.
  */
 public class FaviconFetcher : NSObject, NSXMLParserDelegate {
     public static var userAgent: String = ""
     static let ExpirationTime = NSTimeInterval(60*60*24*7) // Only check for icons once a week
 
-    class func getForUrl(url: NSURL, profile: Profile) -> Deferred<Result<[Favicon]>> {
+    class func getForURL(url: NSURL, profile: Profile) -> Deferred<Result<[Favicon]>> {
         let f = FaviconFetcher()
         return f.loadFavicons(url, profile: profile)
     }
 
     private func loadFavicons(url: NSURL, profile: Profile, var oldIcons: [Favicon] = [Favicon]()) -> Deferred<Result<[Favicon]>> {
+        if isIgnoredURL(url) {
+            return deferResult(FaviconFetcherErrorType(description: "Not fetching ignored URL to find favicons."))
+        }
+
         let deferred = Deferred<Result<[Favicon]>>()
 
         dispatch_async(queue) { _ in
@@ -67,15 +72,17 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
         return Alamofire.Manager(configuration: configuration)
     }()
 
-    private func fetchDataForUrl(url: NSURL) -> Deferred<Result<NSData>> {
+    private func fetchDataForURL(url: NSURL) -> Deferred<Result<NSData>> {
         let deferred = Deferred<Result<NSData>>()
         alamofire.request(.GET, url).response { (request, response, data, error) in
-            if let error = error {
-                deferred.fill(Result(failure: FaviconFetcherErrorType(description: error.description)))
-            } else {
-                let loc = response?.URL
-                deferred.fill(Result(success: data as! NSData))
+            if error == nil {
+                if let data = data as? NSData {
+                    deferred.fill(Result(success: data))
+                    return
+                }
             }
+
+            deferred.fill(Result(failure: FaviconFetcherErrorType(description: error?.description ?? "No content.")))
         }
         return deferred
     }
@@ -84,11 +91,11 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
     private func parseHTMLForFavicons(url: NSURL) -> Deferred<Result<[Favicon]>> {
         var err: NSError?
 
-        return fetchDataForUrl(url).bind({ result -> Deferred<Result<[Favicon]>> in
+        return fetchDataForURL(url).bind({ result -> Deferred<Result<[Favicon]>> in
             var icons = [Favicon]()
 
-            if let data = result.successValue,
-               let element = RXMLElement(fromHTMLData: data) {
+            if let data = result.successValue where result.isSuccess,
+               let element = RXMLElement(fromHTMLData: data) where element.isValid {
                 var reloadUrl: NSURL? = nil
                 element.iterate("head.meta") { meta in
                     if let refresh = meta.attribute("http-equiv") where refresh == "Refresh",
@@ -141,7 +148,7 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                 deferred.fill(Result(success: fav))
             })
         } else {
-            return deferResult(FaviconFetcherErrorType(description: "Invalid url \(url)"))
+            return deferResult(FaviconFetcherErrorType(description: "Invalid URL \(url)"))
         }
 
         return deferred
