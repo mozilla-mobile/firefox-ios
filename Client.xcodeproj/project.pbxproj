@@ -301,6 +301,7 @@
 		744B0FFE1B4F172E00100422 /* ToolbarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B0FFD1B4F172E00100422 /* ToolbarTests.swift */; };
 		746B6A791B277C1800EA83E3 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = 746B6A781B277C1800EA83E3 /* SessionRestore.html */; };
 		74C027451B2A348C001B1E88 /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* SessionData.swift */; };
+		7B24DC9C1B67B3590005766B /* ClearPrivateDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */; };
 		7BF5A1CA1B4160EA00EA9DD8 /* SyncCommandsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1C91B4160EA00EA9DD8 /* SyncCommandsTable.swift */; };
 		7BF5A1EA1B41640500EA9DD8 /* SyncQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1E91B41640500EA9DD8 /* SyncQueue.swift */; };
 		7BF5A1EE1B429B3100EA9DD8 /* SyncCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1ED1B429B3100EA9DD8 /* SyncCommandsTests.swift */; };
@@ -1362,6 +1363,7 @@
 		744B0FFD1B4F172E00100422 /* ToolbarTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarTests.swift; sourceTree = "<group>"; };
 		746B6A781B277C1800EA83E3 /* SessionRestore.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = SessionRestore.html; sourceTree = "<group>"; };
 		74C027441B2A348C001B1E88 /* SessionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionData.swift; sourceTree = "<group>"; };
+		7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearPrivateDataTests.swift; sourceTree = "<group>"; };
 		7BF5A1C91B4160EA00EA9DD8 /* SyncCommandsTable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncCommandsTable.swift; sourceTree = "<group>"; };
 		7BF5A1E91B41640500EA9DD8 /* SyncQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncQueue.swift; sourceTree = "<group>"; };
 		7BF5A1ED1B429B3100EA9DD8 /* SyncCommandsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncCommandsTests.swift; sourceTree = "<group>"; };
@@ -2300,6 +2302,7 @@
 				E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */,
 				D3E171C11A841EAD00AB44CD /* KIFHelper.js */,
 				0BB5B35F1AC0D6360052877D /* BookmarkingTests.swift */,
+				7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */,
 				D313BE971B2F5096009EF241 /* DomainAutocompleteTests.swift */,
 				D39FA1801A83E84900EE869C /* Global.swift */,
 				4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */,
@@ -2345,15 +2348,12 @@
 				D34510871ACF415700EC27F0 /* SearchLoader.swift */,
 				D31A0FC61A65D6D000DC8C7E /* SearchSuggestClient.swift */,
 				59A68CCB63E2A565CB03F832 /* SearchViewController.swift */,
-				74C027441B2A348C001B1E88 /* SessionData.swift */,
 				74203E241B276B3D007D481D /* SessionRestoreHandler.swift */,
 				E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				D301AAED1A3A55B70078DD1D /* TabTrayController.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
 				0BF0DB931A8545800039F300 /* URLBarView.swift */,
-				746D4E361B1E699C008F789F /* HashchangeHelper.swift */,
-				74C295261B21152000862FE3 /* AboutHomeHandler.swift */,
 				74C027441B2A348C001B1E88 /* SessionData.swift */,
 				DD31E0FA1B382B520077078A /* BrowserPrintPageRenderer.swift */,
 			);
@@ -3986,6 +3986,7 @@
 				D38B2D331A8D96D00040E6B5 /* GCDWebServerConnection.m in Sources */,
 				D38B2D421A8D96D00040E6B5 /* GCDWebServerFileRequest.m in Sources */,
 				D38B2D3C1A8D96D00040E6B5 /* GCDWebServerResponse.m in Sources */,
+				7B24DC9C1B67B3590005766B /* ClearPrivateDataTests.swift in Sources */,
 				E42475E11AB73B9B00B23D33 /* SWLongPressGestureRecognizer.m in Sources */,
 				D38B2D391A8D96D00040E6B5 /* GCDWebServerRequest.m in Sources */,
 				D38B2D4E1A8D96D00040E6B5 /* GCDWebServerErrorResponse.m in Sources */,

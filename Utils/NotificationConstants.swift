@@ -6,3 +6,5 @@ public let NotificationDataLoginDidChange = "Data:Login:DidChange"
 
 // add a property to allow the observation of firefox accounts
 public let NotificationFirefoxAccountChanged = "FirefoxAccountChangedNotification"
+
+public let NotificationPrivateDataCleared = "PrivateDataClearedNotification"

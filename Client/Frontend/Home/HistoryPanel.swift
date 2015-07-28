@@ -54,7 +54,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataCleared, object: nil)
     }
 
     override func viewDidLoad() {
@@ -74,11 +75,18 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataCleared, object: nil)
     }
 
-    func firefoxAccountChanged(notification: NSNotification) {
-        if notification.name == NotificationFirefoxAccountChanged {
+    func notificationReceived(notification: NSNotification) {
+        switch notification.name {
+        case NotificationFirefoxAccountChanged, NotificationPrivateDataCleared:
             refresh()
+            break
+        default:
+            // no need to do anything at all
+            log.warning("Received unexpected notification \(notification.name)")
+            break
         }
     }
 
