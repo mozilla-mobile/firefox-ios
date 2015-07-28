@@ -296,7 +296,7 @@ public class BrowserProfile: Profile {
         let commands = items.map { item in
             SyncCommand.fromShareItem(item, withAction: "displayURI")
         }
-        self.remoteClientsAndTabs.insertCommands(commands, forClients: clients)
+        self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
     }
 
     lazy var logins: protocol<BrowserLogins, SyncableLogins> = {
