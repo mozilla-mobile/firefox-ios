@@ -24,6 +24,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     var autocompleteDelegate: AutocompleteTextFieldDelegate?
 
     private var completionActive = false
+    private var canAutocomplete = true
     private var enteredTextLength = 0
     private var notifyTextChanged: (() -> ())? = nil
 
@@ -93,7 +94,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     func setAutocompleteSuggestion(suggestion: String?) {
-        if let suggestion = suggestion where editing {
+        if let suggestion = suggestion where editing && canAutocomplete {
             // Check that the length of the entered text is shorter than the length of the suggestion.
             // This ensures that completionActive is true only if there are remaining characters to
             // suggest (which will suppress the caret).
@@ -133,6 +134,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override func insertText(text: String) {
+        canAutocomplete = true
         removeCompletion()
         super.insertText(text)
         enteredTextLength = count(self.text)
@@ -141,6 +143,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override func deleteBackward() {
+        canAutocomplete = false
+        enteredTextLength = count(self.text)
         removeCompletion()
         super.deleteBackward()
         autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.text)
