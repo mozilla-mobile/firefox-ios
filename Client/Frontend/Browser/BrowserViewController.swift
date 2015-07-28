@@ -112,10 +112,10 @@ class BrowserViewController: UIViewController {
                previousTraitCollection.horizontalSizeClass != .Regular
     }
 
-    private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection) {
+    private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator?) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
 
-        urlBar.setShowToolbar(!showToolbar)
+        urlBar.setShowToolbar(!showToolbar, withTransitionCoordinator: coordinator)
         toolbar?.removeFromSuperview()
         toolbar?.browserToolbarDelegate = nil
         footerBackground?.removeFromSuperview()
@@ -144,7 +144,7 @@ class BrowserViewController: UIViewController {
 
     override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
-        updateToolbarStateForTraitCollection(newCollection)
+        updateToolbarStateForTraitCollection(newCollection, withTransitionCoordinator: coordinator)
 
         // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
         // performs a device rotation. Since scrolling calls
@@ -237,8 +237,7 @@ class BrowserViewController: UIViewController {
         scrollController.footer = footer
         scrollController.snackBars = snackBars
 
-        self.updateToolbarStateForTraitCollection(self.traitCollection)
-
+        self.updateToolbarStateForTraitCollection(self.traitCollection, withTransitionCoordinator: nil)
     }
 
     func loadQueuedTabs() {
