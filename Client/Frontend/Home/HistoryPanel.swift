@@ -145,7 +145,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
-        welcomeLabel.text = NSLocalizedString("Pages you have visited recently will show up here.", comment: "See http://mzl.la/1LXbDOL")
+        welcomeLabel.text = NSLocalizedString("Pages you have visited recently will show up here.", comment: "See http://bit.ly/1I7Do4b")
         welcomeLabel.textAlignment = NSTextAlignment.Center
         welcomeLabel.font = HistoryPanelUX.WelcomeScreenItemFont
         welcomeLabel.textColor = HistoryPanelUX.WelcomeScreenItemTextColor
