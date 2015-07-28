@@ -71,6 +71,9 @@ class BrowserLocationView: UIView {
         self.tapRecognizer.delegate = self
         urlTextField.addGestureRecognizer(self.tapRecognizer)
 
+        // Prevent the field from compressing the toolbar buttons on the 4S in landscape.
+        urlTextField.setContentCompressionResistancePriority(250, forAxis: UILayoutConstraintAxis.Horizontal)
+
         urlTextField.attributedPlaceholder = self.placeholder
         urlTextField.accessibilityIdentifier = "url"
         urlTextField.font = UIConstants.DefaultMediumFont
