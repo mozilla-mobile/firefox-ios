@@ -100,7 +100,7 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                 }
 
                 if let url = reloadUrl {
-                    return self.parseHTMLForFavicons(url)
+                   return self.parseHTMLForFavicons(url)
                 }
 
                 element.iterate("head.link") { link in
