@@ -590,16 +590,6 @@ class URLBarView: UIView {
         self.backButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.stopReloadButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.callbackToAppButton.hidden = !self.toolbarIsShowing || inOverlayMode
-
-    func finishEditingAnimation(editing: Bool) {
-        self.tabsButton.hidden = editing
-        self.cancelButton.hidden = !editing
-        self.forwardButton.hidden = !self.toolbarIsShowing || editing
-        self.backButton.hidden = !self.toolbarIsShowing || editing
-        self.shareButton.hidden = !self.toolbarIsShowing || editing
-        self.bookmarkButton.hidden = !self.toolbarIsShowing || editing
-        self.stopReloadButton.hidden = !self.toolbarIsShowing || editing
-        self.callbackToAppButton.hidden = !self.toolbarIsShowing || editing
     }
 
     func animateToOverlayState(overlay: Bool) {

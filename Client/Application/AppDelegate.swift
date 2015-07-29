@@ -11,6 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var browserViewController: BrowserViewController!
     var rootViewController: UINavigationController!
     weak var profile: BrowserProfile?
+    var tabManager: TabManager!
 
     let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
@@ -36,9 +37,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.backgroundColor = UIColor.whiteColor()
 
         let defaultRequest = NSURLRequest(URL: UIConstants.AboutHomeURL)
-        let tabManager = TabManager(defaultNewTabRequest: defaultRequest, prefs: profile.prefs)
-        browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
-
+        self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, profile: profile)
+        browserViewController = BrowserViewController(profile: profile, tabManager: self.tabManager)
+        
         // Add restoration class, the factory that will return the ViewController we 
         // will restore with.
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
