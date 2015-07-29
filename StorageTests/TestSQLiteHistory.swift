@@ -71,30 +71,44 @@ class TestSQLiteHistory: XCTestCase {
         let db = BrowserDB(filename: "browser.db", files: files)
 
         // This calls createOrUpdate. i.e. it may fail, but should not crash and should always return a valid SQLiteHistory object.
-        for i in 0...BrowserTable.DefaultVersion {
-            let history = SQLiteHistory(db: db, version: i)
-            XCTAssertNotNil(history)
-        }
+        let history = SQLiteHistory(db: db, version: 0)
+        XCTAssertNotNil(history)
 
-        // This checks to make sure updates actually work (or at least that they don't crash :))
-        var err: NSError? = nil
-        db.transaction(&err, callback: { (connection, err) -> Bool in
-            for i in 0...BrowserTable.DefaultVersion {
-                let table = BrowserTable(version: i)
-                switch db.updateTable(connection, table: table) {
-                case .Updated:
-                    XCTAssertTrue(true, "Update to \(i) succeeded")
-                default:
-                    XCTFail("Update to version \(i) failed")
-                    return false
-                }
+        // Insert some basic data that we'll have to upgrade
+        let expectation = self.expectationWithDescription("First.")
+        db.run([("INSERT INTO history (guid, url, title, server_modified, local_modified, is_deleted, should_upload) VALUES (guid, http://www.example.com, title, 5, 10, 0, 1)", nil),
+                ("INSERT INTO visits (siteID, date, type, is_local) VALUES (1, 15, 1, 1)", nil),
+                ("INSERT INTO favicons (url, width, height, type, date) VALUES (http://www.example.com/favicon.ico, 10, 10, 1, 20)", nil),
+                ("INSERT INTO faviconSites (siteID, faviconID) VALUES (1, 1)", nil),
+                ("INSERT INTO bookmarks (guid, type, url, parent, faviconID, title) VALUES (guid, 1, http://www.example.com, 0, 1, title)", nil)
+        ]).upon { result in
+            for i in 1...BrowserTable.DefaultVersion {
+                let history = SQLiteHistory(db: db, version: i)
+                XCTAssertNotNil(history)
             }
-            return true
-        })
 
-        if err != nil {
-            XCTFail("Error creating a transaction \(err)")
+            // This checks to make sure updates actually work (or at least that they don't crash :))
+            var err: NSError? = nil
+            db.transaction(&err, callback: { (connection, err) -> Bool in
+                for i in 0...BrowserTable.DefaultVersion {
+                    let table = BrowserTable(version: i)
+                    switch db.updateTable(connection, table: table) {
+                    case .Updated:
+                        XCTAssertTrue(true, "Update to \(i) succeeded")
+                    default:
+                        XCTFail("Update to version \(i) failed")
+                        return false
+                    }
+                }
+                return true
+            })
+
+            if err != nil {
+                XCTFail("Error creating a transaction \(err)")
+            }
+            expectation.fulfill()
         }
+        waitForExpectationsWithTimeout(10, handler: nil)
     }
 
     func testDomainUpgrade() {
