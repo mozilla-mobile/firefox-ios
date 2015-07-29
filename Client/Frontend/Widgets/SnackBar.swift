@@ -238,36 +238,21 @@ class SnackBar: UIView {
 }
 
 /**
- * A special version of a snackbar that persists for maxCount page loads.
- * Defaults to waiting for 1 load (i.e. will persist over one page load),
- * which is useful for things like saving passwords.
+ * A special version of a snackbar that persists for at least a timeout. After that
+ * it will dismiss itself on the next page load.
  */
-class CountdownSnackBar: SnackBar {
-    private var maxCount: Int? = nil
-    private var count = 0
+class TimerSnackBar: SnackBar {
     private var prevURL: NSURL? = nil
-    private var timer: (() -> ())? = nil
+    private var timer: NSTimer? = nil
+    private var timeout: NSTimeInterval
 
-    init(maxCount: Int = 2, timeout: NSTimeInterval? = 1, attrText: NSAttributedString, img: UIImage?, buttons: [SnackButton]?) {
-        self.maxCount = maxCount
+    init(timeout: NSTimeInterval = 10, attrText: NSAttributedString, img: UIImage?, buttons: [SnackButton]?) {
+        self.timeout = timeout
         super.init(attrText: attrText, img: img, buttons: buttons)
-
-        // We debounce calls here to avoid sites that have lots of redirects after they're shown.
-        // GMail has a lot, and they can take a bit, so the default timeout is a little high (5 seconds).
-        if let timeout = timeout {
-            // Using a timer means that count isn't updated until AFTER the page has loaded.
-            // We decrease the count by 1 to account for this.
-            self.maxCount?--
-            self.timer = debounce(timeout, {
-                self.count++
-            })
-        }
     }
 
     override init(frame: CGRect) {
-        if maxCount == nil {
-            maxCount = 2
-        }
+        self.timeout = 0
         super.init(frame: frame)
     }
 
@@ -275,17 +260,20 @@ class CountdownSnackBar: SnackBar {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func show() {
+        self.timer = NSTimer(timeInterval: timeout, target: self, selector: "SELTimerDone", userInfo: nil, repeats: false)
+        NSRunLoop.currentRunLoop().addTimer(self.timer!, forMode: NSDefaultRunLoopMode)
+        super.show()
+    }
+
+    @objc
+    func SELTimerDone() {
+        self.timer = nil
+    }
+
     override func shouldPersist(browser: Browser) -> Bool {
-
         if browser.url != prevURL {
-            if let timer = self.timer {
-                timer()
-            } else {
-                self.count++
-            }
-
-            prevURL = browser.url
-            return count < maxCount
+            return timer != nil
         }
 
         return super.shouldPersist(browser)
