@@ -113,7 +113,10 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     func setAutocompleteSuggestion(suggestion: String?) {
-        if let suggestion = suggestion where editing && canAutocomplete {
+        // Setting the autocomplete suggestion during multi-stage input will break the session since the text
+        // is not fully entered. If `markedTextRange` is nil, that means the multi-stage input is complete, so
+        // it's safe to append the suggestion.
+        if let suggestion = suggestion where editing && canAutocomplete && markedTextRange == nil {
             // Check that the length of the entered text is shorter than the length of the suggestion.
             // This ensures that completionActive is true only if there are remaining characters to
             // suggest (which will suppress the caret).
