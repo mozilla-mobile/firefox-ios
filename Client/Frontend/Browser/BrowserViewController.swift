@@ -1090,16 +1090,17 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     func removeBar(bar: SnackBar, animated: Bool) {
-        let index = findSnackbar(bar)!
-        UIView.animateWithDuration(animated ? 0.25 : 0, animations: { () -> Void in
-            bar.hide()
-            self.view.layoutIfNeeded()
-        }) { success in
-            // Really remove the bar
-            self.finishRemovingBar(bar)
+        if let index = findSnackbar(bar) {
+            UIView.animateWithDuration(animated ? 0.25 : 0, animations: { () -> Void in
+                bar.hide()
+                self.view.layoutIfNeeded()
+            }) { success in
+                // Really remove the bar
+                self.finishRemovingBar(bar)
 
-            // Adjust the footer size to only contain the bars
-            self.adjustFooterSize()
+                // Adjust the footer size to only contain the bars
+                self.adjustFooterSize()
+            }
         }
     }
 
@@ -1363,8 +1364,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         let tab: Browser! = tabManager[webView]
-
-        tab.expireSnackbars()
+        tabManager.expireSnackbars()
 
         if let url = webView.URL where !ErrorPageHelper.isErrorPageURL(url) && !AboutUtils.isAboutHomeURL(url) {
             let notificationCenter = NSNotificationCenter.defaultCenter()

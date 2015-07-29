@@ -203,11 +203,15 @@ class SnackBar: UIView {
             make.bottom.equalTo(self.snp_bottom)
             make.left.right.equalTo(self)
             if self.buttonsView.subviews.count > 0 {
-		make.height.equalTo(UIConstants.ToolbarHeight)
+                make.height.equalTo(UIConstants.ToolbarHeight)
             } else {
                 make.height.equalTo(0)
             }
         })
+    }
+
+    var showing: Bool {
+        return alpha != 0 && self.superview != nil
     }
 
     /**
@@ -239,7 +243,8 @@ class SnackBar: UIView {
 
 /**
  * A special version of a snackbar that persists for at least a timeout. After that
- * it will dismiss itself on the next page load.
+ * it will dismiss itself on the next page load where this tab isn't showing. As long as
+ * you stay on the current tab though, it will persist until you interact with it.
  */
 class TimerSnackBar: SnackBar {
     private var prevURL: NSURL? = nil
@@ -272,7 +277,7 @@ class TimerSnackBar: SnackBar {
     }
 
     override func shouldPersist(browser: Browser) -> Bool {
-        if browser.url != prevURL {
+        if !showing {
             return timer != nil
         }
 
