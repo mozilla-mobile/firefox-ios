@@ -101,7 +101,8 @@ class TopSitesPanel: UIViewController {
     init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataCleared, object: nil)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -126,11 +127,18 @@ class TopSitesPanel: UIViewController {
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataCleared, object: nil)
     }
-
-    func firefoxAccountChanged(notification: NSNotification) {
-        if notification.name == NotificationFirefoxAccountChanged {
+    
+    func notificationReceived(notification: NSNotification) {
+        switch notification.name {
+        case NotificationFirefoxAccountChanged, NotificationPrivateDataCleared:
             refreshHistory(self.layout.thumbnailCount)
+            break
+        default:
+            // no need to do anything at all
+            log.warning("Received unexpected notification \(notification.name)")
+            break
         }
     }
 
