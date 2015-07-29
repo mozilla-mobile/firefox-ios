@@ -142,12 +142,12 @@ class ThumbnailCell: UICollectionViewCell {
 
         contentView.addSubview(imageWrapper)
         imageWrapper.addSubview(backgroundImage)
-        imageWrapper.addSubview(imageView)
-        imageWrapper.addSubview(textWrapper)
-        textWrapper.addSubview(textLabel)
         if let backgroundEffect = backgroundEffect {
             imageWrapper.addSubview(backgroundEffect)
         }
+        imageWrapper.addSubview(imageView)
+        imageWrapper.addSubview(textWrapper)
+        textWrapper.addSubview(textLabel)
         contentView.addSubview(removeButton)
 
         imageWrapper.snp_remakeConstraints({ make in
