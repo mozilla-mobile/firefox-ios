@@ -130,6 +130,16 @@ extension NSURL {
         }
     }
 
+    public func normalizedHost() -> String? {
+        if var host = self.host {
+            if let range = host.rangeOfString("^(www|mobile|m)\\.", options: .RegularExpressionSearch) {
+                host.replaceRange(range, with: "")
+            }
+            return host
+        }
+        return nil
+    }
+
     /**
     Returns the public portion of the host name determined by the public suffix list found here: https://publicsuffix.org/list/. 
     For example for the url www.bbc.co.uk, based on the entries in the TLD list, the public suffix would return co.uk.
