@@ -319,7 +319,11 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(animated: Bool) {
         startTrackingAccessibilityStatus()
-        presentIntroViewController()
+        // We want to load queued tabs here in case we need to execute any commands that were received while using a share extension,
+        // but no point even trying if this is the first time.
+        if !presentIntroViewController() {
+            loadQueuedTabs()
+        }
         super.viewDidAppear(animated)
     }
 
@@ -1748,7 +1752,7 @@ private class BrowserScreenshotHelper: ScreenshotHelper {
 }
 
 extension BrowserViewController: IntroViewControllerDelegate {
-    func presentIntroViewController(force: Bool = false) {
+    func presentIntroViewController(force: Bool = false) -> Bool{
         if force || profile.prefs.intForKey(IntroViewControllerSeenProfileKey) == nil {
             let introViewController = IntroViewController()
             introViewController.delegate = self
@@ -1760,7 +1764,11 @@ extension BrowserViewController: IntroViewControllerDelegate {
             presentViewController(introViewController, animated: true) {
                 self.profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
             }
+
+            return true
         }
+
+        return false
     }
 
     func introViewControllerDidFinish(introViewController: IntroViewController) {
