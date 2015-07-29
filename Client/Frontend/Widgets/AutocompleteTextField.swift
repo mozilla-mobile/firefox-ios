@@ -147,9 +147,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     override func deleteBackward() {
         canAutocomplete = false
-        enteredTextLength = count(self.text)
         removeCompletion()
         super.deleteBackward()
+        enteredTextLength = count(self.text)
         autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.text)
     }
 
