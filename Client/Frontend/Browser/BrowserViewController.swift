@@ -1517,7 +1517,6 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
         // If this reader mode availability state change is for the tab that we currently show, then update
         // the button. Otherwise do nothing and the button will be updated when the tab is made active.
         if tabManager.selectedTab === browser {
-            log.debug("New readerModeState: \(state.rawValue)")
             urlBar.updateReaderModeState(state)
         }
     }
