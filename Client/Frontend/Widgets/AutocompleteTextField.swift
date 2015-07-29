@@ -40,6 +40,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     private func commonInit() {
         super.delegate = self
+        super.addTarget(self, action: "SELtextDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         notifyTextChanged = debounce(0.1, {
             if self.editing {
                 self.autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.text)
@@ -86,13 +87,16 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
     }
 
+    // `shouldChangeCharactersInRange` is called before the text changes, and SELtextDidChange is called after.
+    // Since the text has changed, remove the completion here, and SELtextDidChange will fire the callback to
+    // get the new autocompletion.
+
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        removeCompletion()
         if completionActive && string.isEmpty {
             // Characters are being deleted, so clear the autocompletion, but don't change the text.
-            removeCompletion()
             return false
         }
-
         return true
     }
 
@@ -136,12 +140,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         super.setMarkedText(markedText, selectedRange: selectedRange)
     }
 
-    override func insertText(text: String) {
+    func SELtextDidChange(textField: UITextField) {
         canAutocomplete = true
-        removeCompletion()
-        super.insertText(text)
         enteredTextLength = count(self.text)
-
         notifyTextChanged?()
     }
 
@@ -150,7 +151,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         removeCompletion()
         super.deleteBackward()
         enteredTextLength = count(self.text)
-        autocompleteDelegate?.autocompleteTextField(self, didEnterText: self.text)
     }
 
     override func caretRectForPosition(position: UITextPosition!) -> CGRect {
