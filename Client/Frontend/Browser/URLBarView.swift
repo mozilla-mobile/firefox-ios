@@ -324,13 +324,6 @@ class URLBarView: UIView {
         updateToolbarConstraints()
         remakeLocationContainerConstraints()
         delegate?.urlBarUpdateCallbackToAppButtonBarState(self)
-        tabsButton.snp_remakeConstraints { make in
-            make.centerY.equalTo(self.locationContainer)
-            make.trailing.equalTo(self)
-            make.width.height.equalTo(UIConstants.ToolbarHeight)
-        }
-
-        updateLayoutForEditing(editing: isEditing, animated: false)
         super.updateConstraints()
     }
 
