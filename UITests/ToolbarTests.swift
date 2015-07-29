@@ -90,10 +90,12 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Cancel")
         XCTAssertEqual(textField.text, "", "Verify that the URL bar text clears on about:home")
 
-        let url = "\(webRoot)/numberedPage.html?page=1"
+        // 127.0.0.1 doesn't cause http:// to be hidden. localhost does. Both will work.
+        let localhostURL = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions.allZeros, range: nil)
+        let url = "\(localhostURL)/numberedPage.html?page=1"
 
         // URL without "http://".
-        let displayURL = "\(webRoot)/numberedPage.html?page=1".substringFromIndex(advance(url.startIndex, count("http://")))
+        let displayURL = "\(localhostURL)/numberedPage.html?page=1".substringFromIndex(advance(url.startIndex, count("http://")))
 
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().enterTextIntoCurrentFirstResponder("\(url)\n")
