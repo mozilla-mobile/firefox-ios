@@ -35,6 +35,30 @@ func failOrSucceed(err: NSError?, op: String) -> Success {
     return failOrSucceed(err, op, ())
 }
 
+private var ignoredSchemes = ["about"]
+
+public func isIgnoredURL(url: NSURL) -> Bool {
+    if let scheme = url.scheme {
+        if let index = find(ignoredSchemes, scheme) {
+            return true
+        }
+    }
+
+    if url.host == "localhost" {
+        return true
+    }
+
+    return false
+}
+
+public func isIgnoredURL(url: String) -> Bool {
+    if let url = NSURL(string: url) {
+        return isIgnoredURL(url)
+    }
+
+    return false
+}
+
 /*
 // Here's the Swift equivalent of the below.
 func simulatedFrecency(now: MicrosecondTimestamp, then: MicrosecondTimestamp, visitCount: Int) -> Double {
@@ -80,8 +104,6 @@ public class SQLiteHistory {
     let db: BrowserDB
     let favicons: FaviconsTable<Favicon>
 
-    private var ignoredSchemes = ["about"]
-
     required public init(db: BrowserDB) {
         self.db = db
         self.favicons = FaviconsTable<Favicon>()
@@ -112,18 +134,6 @@ extension SQLiteHistory: BrowserHistory {
         return db.run([("DELETE FROM \(TableVisits)", nil),
                        ("DELETE FROM \(TableHistory)", nil),
                        self.favicons.getCleanupCommands()])
-    }
-
-    private func isIgnoredURL(url: String) -> Bool {
-        if let url = NSURL(string: url) {
-            if let scheme = url.scheme {
-                if let index = find(ignoredSchemes, scheme) {
-                    return true
-                }
-            }
-        }
-
-        return false
     }
 
     func recordVisitedSite(site: Site) -> Success {
