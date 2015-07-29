@@ -19,6 +19,7 @@ protocol BrowserDelegate {
     func browser(browser: Browser, didRemoveSnackbar bar: SnackBar)
     optional func browser(browser: Browser, didCreateWebView webView: WKWebView)
     optional func browser(browser: Browser, willDeleteWebView webView: WKWebView)
+    func updateURLBarConstraintsAfterLoadRequest(browser: Browser)
 }
 
 class Browser: NSObject {
@@ -27,6 +28,8 @@ class Browser: NSObject {
     var bars = [SnackBar]()
     var favicons = [Favicon]()
     var sessionData: SessionData?
+    var callbackURL: NSURL? = nil
+    var callbackToAppName: String? = nil
 
     var screenshot: UIImage?
     private var helperManager: HelperManager? = nil

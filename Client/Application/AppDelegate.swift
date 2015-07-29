@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let defaultRequest = NSURLRequest(URL: UIConstants.AboutHomeURL)
         self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, profile: profile)
         browserViewController = BrowserViewController(profile: profile, tabManager: self.tabManager)
-
+        
         // Add restoration class, the factory that will return the ViewController we 
         // will restore with.
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
@@ -116,6 +116,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             if let url = url,
                    newURL = NSURL(string: url.unescape()) {
+                if let callbackScheme = callbackScheme,
+                       callbackURL = NSURL(string: callbackScheme),
+                       appName = appName {
+                    self.browserViewController.openCallbackURLWithBackToAppButton(newURL, callbackURL: callbackURL, appName: appName)
+                    return true
+                }
                 self.browserViewController.openURLInNewTab(newURL)
                 return true
             }

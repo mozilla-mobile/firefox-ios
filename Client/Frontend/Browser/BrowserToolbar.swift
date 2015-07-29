@@ -168,7 +168,6 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
         super.init(frame: frame)
 
         self.helper = BrowserToolbarHelper(toolbar: self)
-
         addButtons(backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton)
 
         accessibilityNavigationStyle = .Combined
