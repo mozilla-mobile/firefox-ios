@@ -161,7 +161,9 @@ class SimplePageServer {
             XCTFail("Can't start the GCDWebServer")
         }
 
-        let webRoot = "http://localhost:\(webServer.port)"
+        // We use 127.0.0.1 explicitly here, rather than localhost, in order to avoid our
+        // history exclusion code (Bug 1188626).
+        let webRoot = "http://127.0.0.1:\(webServer.port)"
         return webRoot
     }
 }
