@@ -84,7 +84,11 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         if let source = source {
             if let bookmark = source.current[indexPath.row] {
-                cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: self.defaultIcon)
+                if let url = bookmark.favicon?.url.asURL where url.scheme == "asset" {
+                    cell.imageView?.image = UIImage(named: url.host!)
+                } else {
+                    cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: self.defaultIcon)
+                }
 
                 switch (bookmark) {
                     case let item as BookmarkItem:
