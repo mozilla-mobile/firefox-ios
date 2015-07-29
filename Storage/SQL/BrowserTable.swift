@@ -4,6 +4,7 @@
 
 import Foundation
 import XCGLogger
+import Shared
 
 // To keep SwiftData happy.
 typealias Args = [AnyObject?]
@@ -113,6 +114,35 @@ public class BrowserTable: Table {
             "(?, ?, ?, NULL, ?, ?)  "      // Unsorted
 
         return self.run(db, sql: sql, args: args)
+    }
+
+    func prepopulateDefaultBookmarks(db: SQLiteDBConnection) -> Bool {
+        let type = BookmarkNodeType.Bookmark.rawValue
+        let root = BookmarkRoots.MobileID
+
+        var faviconSql = "INSERT INTO favicons (url, width, height, type, date) VALUES "
+        var faviconArgs = Args()
+        var bookmarkSql = "INSERT INTO bookmarks (guid, type, url, title, parent, faviconID) VALUES "
+        var bookmarkArgs = Args()
+        var first = true
+        for site in SuggestedSites {
+            if let site = site {
+                if !first {
+                    bookmarkSql += ", "
+                    faviconSql += ", "
+                }
+                first = false
+
+                faviconArgs += [site.icon?.url, 48, 48, IconType.Local.rawValue, NSDate.nowNumber()] as Args
+                faviconSql += "(?, ?, ?, ?, ?)"
+
+                bookmarkArgs += [Bytes.generateGUID(), type, site.url, site.title, root, site.icon?.url] as Args
+                bookmarkSql += "(?, ?, ?, ?, ?, (SELECT id FROM favicons WHERE favicons.url IS ?))"
+            }
+        }
+
+        return self.run(db, sql: faviconSql,  args: faviconArgs) &&
+               self.run(db, sql: bookmarkSql, args: bookmarkArgs)
     }
 
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
@@ -225,7 +255,8 @@ public class BrowserTable: Table {
 
         log.debug("Creating \(queries.count) tables, views, and indices.")
         return self.run(db, queries: queries) &&
-               self.prepopulateRootFolders(db)
+               self.prepopulateRootFolders(db) &&
+               self.prepopulateDefaultBookmarks(db)
     }
 
     func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
