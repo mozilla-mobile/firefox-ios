@@ -392,10 +392,18 @@ class URLBarView: UIView {
         locationTextField.setAutocompleteSuggestion(suggestion)
     }
 
-    func enterOverlayMode(locationText: String?) {
-        // Copy the current URL to the editable text field, then activate it.
-        locationTextField.text = locationText
-        locationTextField.becomeFirstResponder()
+    func enterOverlayMode(locationText: String?, pasted: Bool) {
+        if pasted {
+            // Clear any existing text, focus the field, then set the actual pasted text.
+            // This avoids highlighting all of the text.
+            locationTextField.text = ""
+            locationTextField.becomeFirstResponder()
+            locationTextField.text = locationText
+        } else {
+            // Copy the current URL to the editable text field, then activate it.
+            locationTextField.text = locationText
+            locationTextField.becomeFirstResponder()
+        }
 
         // Show the overlay mode UI, which includes hiding the locationView and replacing it
         // with the editable locationTextField.
@@ -585,7 +593,7 @@ extension URLBarView: BrowserLocationViewDelegate {
     }
 
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
-        enterOverlayMode(locationView.url?.absoluteString)
+        enterOverlayMode(locationView.url?.absoluteString, pasted: false)
     }
 
     func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView) {
@@ -620,7 +628,6 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     }
 
     func autocompleteTextFieldDidBeginEditing(autocompleteTextField: AutocompleteTextField) {
-        delegate?.urlBar(self, didEnterText: "")
         autocompleteTextField.highlightAll()
     }
 
