@@ -250,7 +250,7 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int, includeIcon: Bool) -> Deferred<Result<Cursor<Site>>> {
-        let groupBy = "GROUP BY \(TableHistory).domain_id "
+        let groupBy = "GROUP BY domain_id "
         let whereData = "\(TableDomains).showOnTopSites IS 1 "
 
         // Note: Because we're grouping by domain, these frecencys are also per domain, not per site.
@@ -315,7 +315,7 @@ extension SQLiteHistory: BrowserHistory {
 
     private func getFilteredSitesWithLimit(limit: Int,
                                            whereURLContains filter: String? = nil,
-                                           groupClause: String = "GROUP BY \(TableHistory).id ",
+                                           groupClause: String = "GROUP BY historyID ",
                                            orderBy: String = "ORDER BY visitDate DESC ",
                                            whereData: String? = nil,
                                            includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
@@ -332,20 +332,30 @@ extension SQLiteHistory: BrowserHistory {
             whereClause = " WHERE (\(TableHistory).is_deleted = 0) \(whereFragment)"
         }
 
-        // We partition the results to return local and remote visits separately. They contribute differently
-        // to frecency; see much earlier in this file.
-        let historySQL =
-        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, " +
+        let ungroupedSQL =
+        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, " +
         "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate, " +
         "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate, " +
         "COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount, " +
         "COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount " +
-        "FROM \(TableHistory) INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
+        "FROM \(TableHistory) " +
         "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
-        whereClause +
-        groupClause +
+        "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
+        whereClause + " GROUP BY historyID"
+
+        // We partition the results to return local and remote visits separately. They contribute differently
+        // to frecency; see much earlier in this file.
+        let historySQL =
+        "SELECT historyID, url, title, guid, domain_id, " +
+        "max(localVisitDate) AS localVisitDate, " +
+        "max(remoteVisitDate) AS remoteVisitDate, " +
+        "sum(localVisitCount) AS localVisitCount, " +
+        "sum(remoteVisitCount) AS remoteVisitCount " +
+        "FROM (" + ungroupedSQL + ") " +
+        "WHERE ((localVisitCount + remoteVisitCount) > 0) " +    // Eliminate dead rows from coalescing.
+        groupClause + " " +
         orderBy +
-        "LIMIT \(limit) "
+        " LIMIT \(limit) "
 
         if includeIcon {
             // We select the history items then immediately join to get the largest icon.
