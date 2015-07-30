@@ -91,6 +91,17 @@ public class BrowserTable: Table {
         return true
     }
 
+    func runValidQueries(db: SQLiteDBConnection, queries: [(String?, Args?)]) -> Bool {
+        for (sql, args) in queries {
+            if let sql = sql {
+                if !run(db, sql: sql, args: args) {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
     func prepopulateRootFolders(db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.Folder.rawValue
         let root = BookmarkRoots.RootID
@@ -135,24 +146,26 @@ public class BrowserTable: Table {
     }
 
     func getDomainsTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
-        if version > 5 {
-            return "CREATE TABLE IF NOT EXISTS \(TableDomains) (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "domain TEXT NOT NULL UNIQUE, " +
-                "showOnTopSites TINYINT NOT NULL DEFAULT 1" +
-            ")"
+        if version <= 5 {
+            return nil
         }
-        return nil
+
+        return "CREATE TABLE IF NOT EXISTS \(TableDomains) (" +
+                   "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                   "domain TEXT NOT NULL UNIQUE, " +
+                   "showOnTopSites TINYINT NOT NULL DEFAULT 1" +
+               ")"
     }
 
     func getQueueTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
-        if version > 4 {
-            return "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
-                "url TEXT NOT NULL UNIQUE, " +
-                "title TEXT" +
-            ") "
+        if version <= 4 {
+            return nil
         }
-        return nil
+
+        return "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
+                   "url TEXT NOT NULL UNIQUE, " +
+                   "title TEXT" +
+               ") "
     }
 
 
@@ -252,7 +265,7 @@ public class BrowserTable: Table {
 
         log.debug("Creating \(queries.count) tables, views, and indices.")
 
-        return self.run(db, queries: queries.filter({ $0.0 != nil }).map({ ($0.0!, $0.1) })) &&
+        return self.runValidQueries(db, queries: queries) &&
                self.prepopulateRootFolders(db)
     }
 
@@ -280,7 +293,7 @@ public class BrowserTable: Table {
 
         if from < 5 && to >= 5  {
             let queries: [(String?, Args?)] = [(getQueueTableCreationString(forVersion: to), nil)]
-            if !self.run(db, queries: queries.filter({ $0.0 != nil }).map({ ($0.0!, $0.1) })) {
+            if !self.runValidQueries(db, queries: queries) {
                 return false
             }
         }
@@ -300,7 +313,7 @@ public class BrowserTable: Table {
                 ("ALTER TABLE \(TableHistory) ADD COLUMN domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE", nil)
             ]
 
-            if !self.run(db, queries: queries.filter({ $0.0 != nil }).map({ ($0.0!, $0.1) })) {
+            if !self.runValidQueries(db, queries: queries) {
                 return false
             }
 
