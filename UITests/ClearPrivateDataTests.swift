@@ -54,31 +54,28 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     func testClearsTopSitesPanel() {
         let urls = visitSites(2)
 
-        // assert sites appear in top sites
         BrowserUtils.resetToAboutHome(tester())
         tester().tapViewWithAccessibilityLabel("Top sites")
+
+        // Only one will be found -- we collapse by domain.
         XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[0].title, error: nil), "Expected to have top site panel \(urls[0])")
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "Expected to have top site panel \(urls[1])")
 
         clearPrivateData(true)
 
         XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[0].title, error: nil), "Expected to have removed top site panel \(urls[0])")
-        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "Expected to have removed top site panel \(urls[1])")
+        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "We shouldn't find the other URL, either.")
     }
 
     func testCancelDoesNotClearTopSitesPanel() {
         let urls = visitSites(2)
 
-        // assert sites appear in top sites
         BrowserUtils.resetToAboutHome(tester())
         XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[0].title, error: nil), "Expected to have top site panel \(urls[0])")
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "Expected to have top site panel \(urls[1])")
 
-        // clear private data
         clearPrivateData(false)
 
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[0].title, error: nil), "Expected to have removed top site panel \(urls[0])")
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "Expected to have removed top site panel \(urls[1])")
+        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[0].title, error: nil), "Expected to have not removed top site panel \(urls[0])")
+        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "The other never existed.")
     }
 
     func testClearsHistoryPanel() {
@@ -86,7 +83,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         BrowserUtils.resetToAboutHome(tester())
 
-        // check history
         tester().tapViewWithAccessibilityLabel("History")
         let url1 = "\(urls[0].title), \(urls[0].url)", url2 = "\(urls[1].title), \(urls[1].url)"
         XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url1, error: nil), "Expected to have history row \(url1)")
@@ -94,7 +90,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         clearPrivateData(true)
 
-        // check history cleared
         tester().tapViewWithAccessibilityLabel("History")
         XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(url1, error: nil), "Expected to have removed history row \(url1)")
         XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(url2, error: nil), "Expected to have removed history row \(url2)")
@@ -106,7 +101,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         BrowserUtils.resetToAboutHome(tester())
 
-        // check history
         tester().tapViewWithAccessibilityLabel("History")
         let url1 = "\(urls[0].title), \(urls[0].url)", url2 = "\(urls[1].title), \(urls[1].url)"
         XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url1, error: nil), "Expected to have history row \(url1)")
@@ -114,7 +108,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         clearPrivateData(false)
 
-        // check history not cleared
         XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url1, error: nil), "Expected to not have removed history row \(url1)")
         XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url2, error: nil), "Expected to not have removed history row \(url2)")
     }
