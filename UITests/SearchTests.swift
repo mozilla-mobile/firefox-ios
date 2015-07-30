@@ -71,11 +71,18 @@ class SearchTests: KIFTestCase {
         // Verify that Paste shows the search controller with prompt.
         var promptFound = tester().tryFindingViewWithAccessibilityLabel(LabelPrompt, error: nil)
         XCTAssertFalse(promptFound, "Search prompt is not shown")
-        UIPasteboard.generalPasteboard().string = "foobar"
+        UIPasteboard.generalPasteboard().string = "http"
         tester().longPressViewWithAccessibilityIdentifier("url", duration: 1)
         tester().tapViewWithAccessibilityLabel("Paste")
         promptFound = tester().waitForViewWithAccessibilityLabel(LabelPrompt) != nil
         XCTAssertTrue(promptFound, "Search prompt is shown")
+
+        // Verify that Paste triggers an autocompletion, with the correct highlighted portion.
+        let textField = tester().waitForViewWithAccessibilityLabel(LabelAddressAndSearch) as! UITextField
+        let expectedString = "\(webRoot)/"
+        let endingString = expectedString.substringFromIndex(advance(expectedString.startIndex, count("http")))
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "http", completion: endingString)
+
         tester().tapViewWithAccessibilityLabel("Cancel", traits: UIAccessibilityTraitButton)
 
         // Verify that Copy Address copies the text to the clipboard.
@@ -87,9 +94,10 @@ class SearchTests: KIFTestCase {
         // Verify that in-editing Paste shows the search controller with prompt.
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().clearTextFromFirstResponder()
-        tester().tapViewWithAccessibilityLabel(LabelAddressAndSearch)
+        tester().waitForAbsenceOfViewWithAccessibilityLabel(LabelPrompt)
         promptFound = tester().tryFindingViewWithAccessibilityLabel(LabelPrompt, error: nil)
         XCTAssertFalse(promptFound, "Search prompt is not shown")
+        tester().tapViewWithAccessibilityLabel(LabelAddressAndSearch)
         tester().tapViewWithAccessibilityLabel("Paste")
         promptFound = tester().waitForViewWithAccessibilityLabel(LabelPrompt) != nil
         XCTAssertTrue(promptFound, "Search prompt is shown")
