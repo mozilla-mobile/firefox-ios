@@ -333,7 +333,7 @@ extension SQLiteHistory: BrowserHistory {
         }
 
         let ungroupedSQL =
-        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, " +
+        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain, " +
         "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate, " +
         "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate, " +
         "COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount, " +
@@ -346,7 +346,7 @@ extension SQLiteHistory: BrowserHistory {
         // We partition the results to return local and remote visits separately. They contribute differently
         // to frecency; see much earlier in this file.
         let historySQL =
-        "SELECT historyID, url, title, guid, domain_id, " +
+        "SELECT historyID, url, title, guid, domain_id, domain, " +
         "max(localVisitDate) AS localVisitDate, " +
         "max(remoteVisitDate) AS remoteVisitDate, " +
         "sum(localVisitCount) AS localVisitCount, " +
@@ -361,7 +361,7 @@ extension SQLiteHistory: BrowserHistory {
             // We select the history items then immediately join to get the largest icon.
             // We do this so that we limit and filter *before* joining against icons.
             let sql = "SELECT " +
-                "historyID, url, title, guid, " +
+                "historyID, url, title, guid, domain_id, domain, " +
                 "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount, " +
                 "iconID, iconURL, iconDate, iconType, iconWidth " +
                 "FROM (\(historySQL)) LEFT OUTER JOIN " +
