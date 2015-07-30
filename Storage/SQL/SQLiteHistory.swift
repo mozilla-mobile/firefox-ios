@@ -200,22 +200,22 @@ extension SQLiteHistory: BrowserHistory {
 
         if let host = site.url.asURL?.normalizedHost() {
             if let error = conn.executeChange("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", withArgs: [host]) {
-                log.warning("Domain Insert failed with \(error.localizedDescription)")
+                log.warning("Domain insertion failed with \(error.localizedDescription)")
                 return 0
             }
 
             let insert = "INSERT INTO \(TableHistory) " +
-                "(guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
-                "SELECT ?, ?, ?, ?, 0, 1, id FROM \(TableDomains) where domain = ?"
+                         "(guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
+                         "SELECT ?, ?, ?, ?, 0, 1, id FROM \(TableDomains) WHERE domain = ?"
             let insertArgs: Args? = [site.guid ?? Bytes.generateGUID(), site.url, site.title, time, host]
             if let error = conn.executeChange(insert, withArgs: insertArgs) {
-                log.warning("Site Insert failed with \(error.localizedDescription)")
+                log.warning("Site insertion failed with \(error.localizedDescription)")
                 return 0
             }
 
             return 1
         }
-        log.warning("Invalid url \(site.url). Not stored in history.")
+        log.warning("Invalid URL \(site.url). Not stored in history.")
         return 0
     }
 
@@ -231,7 +231,7 @@ extension SQLiteHistory: BrowserHistory {
             let insertArgs: Args? = [visit.site.url, realDate, visit.type.rawValue]
             error = conn.executeChange(insert, withArgs: insertArgs)
             if error != nil {
-                log.warning("Insert visit failed with \(err?.localizedDescription)")
+                log.warning("Visit insertion failed with \(err?.localizedDescription)")
                 return 0
             }
             return 1
@@ -247,7 +247,7 @@ extension SQLiteHistory: BrowserHistory {
 
     public func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
         let groupBy = "GROUP BY \(TableHistory).domain_id "
-        let whereData = "AND \(TableDomains).showOnTopSites IS 1 "
+        let whereData = "\(TableDomains).showOnTopSites IS 1 "
 
         // Note: Because we're grouping by domain, these frecencys are also per domain, not per site.
         let localFrecencySQL = getLocalFrecencySQL()
@@ -310,21 +310,22 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     private func getFilteredSitesWithLimit(limit: Int,
-            whereURLContains filter: String? = nil,
-            groupClause: String = "GROUP BY \(TableHistory).id ",
-            orderBy: String = "ORDER BY visitDate DESC ",
-            whereData: String = "",
-            includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
+                                           whereURLContains filter: String? = nil,
+                                           groupClause: String = "GROUP BY \(TableHistory).id ",
+                                           orderBy: String = "ORDER BY visitDate DESC ",
+                                           whereData: String? = nil,
+                                           includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
         let args: Args?
         let whereClause: String
+        let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
         if let filter = filter {
             args = ["%\(filter)%", "%\(filter)%"]
 
             // No deleted item has a URL, so there is no need to explicitly add that here.
-            whereClause = " WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) \(whereData)"
+            whereClause = " WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) \(whereFragment)"
         } else {
             args = []
-            whereClause = " WHERE (\(TableHistory).is_deleted = 0) \(whereData)"
+            whereClause = " WHERE (\(TableHistory).is_deleted = 0) \(whereFragment)"
         }
 
         // We partition the results to return local and remote visits separately. They contribute differently
