@@ -47,10 +47,18 @@ class ProfileFileAccessor: FileAccessor {
     }
 }
 
-class CommandDiscardingSyncDelegate: SyncDelegate {
+class CommandStoringSyncDelegate: SyncDelegate {
+    let profile: Profile
+
+    init() {
+        profile = BrowserProfile(localName: "profile", app: nil)
+    }
+
     func displaySentTabForURL(URL: NSURL, title: String) {
-        // TODO: do something else.
-        log.info("Discarding sent URL \(URL.absoluteString)")
+        if let urlString = URL.absoluteString {
+            let item = ShareItem(url: urlString, title: title, favicon: nil)
+            self.profile.queue.addToQueue(item)
+        }
     }
 }
 
@@ -271,7 +279,7 @@ public class BrowserProfile: Profile {
         if let app = self.app {
             return BrowserProfileSyncDelegate(app: app)
         }
-        return CommandDiscardingSyncDelegate()
+        return CommandStoringSyncDelegate()
     }
 
     public func getClients() -> Deferred<Result<[RemoteClient]>> {
@@ -296,7 +304,7 @@ public class BrowserProfile: Profile {
         let commands = items.map { item in
             SyncCommand.fromShareItem(item, withAction: "displayURI")
         }
-        self.remoteClientsAndTabs.insertCommands(commands, forClients: clients)
+        self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
     }
 
     lazy var logins: protocol<BrowserLogins, SyncableLogins> = {
