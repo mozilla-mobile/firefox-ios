@@ -489,6 +489,29 @@ private class ClearPrivateDataSetting: Setting {
     }
 }
 
+private class SendCrashReportsSetting: Setting {
+    let profile: Profile
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(title: NSAttributedString(string: NSLocalizedString("Send Crash Reports", comment: "Setting to enable the sending of crash reports"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        let control = UISwitch()
+        control.onTintColor = UIConstants.ControlTintColor
+        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        control.on = profile.prefs.boolForKey("crashreports.send.always") ?? false
+        cell.accessoryView = control
+    }
+
+    @objc func switchValueChanged(control: UISwitch) {
+        profile.prefs.setBool(control.on, forKey: "crashreports.send.always")
+        configureActiveCrashReporter(profile.prefs.boolForKey("crashreports.send.always"))
+    }
+}
+
 private class PopupBlockingSettings: Setting {
     let prefs: Prefs
     let tabManager: TabManager!
@@ -566,7 +589,8 @@ class SettingsTableViewController: UITableViewController {
 
         settings += [
             SettingSection(title: NSAttributedString(string: privacyTitle), children: [
-                ClearPrivateDataSetting(settings: self)
+                ClearPrivateDataSetting(settings: self),
+                SendCrashReportsSetting(settings: self)
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
                 ShowIntroductionSetting(settings: self),
