@@ -321,11 +321,12 @@ var LoginManagerContent = {
 
     // Somewhat gross hack - we don't want to show the "remember password"
     // notification on about:accounts for Firefox.
-    var topWin = win.top;
-    if (/^about:accounts($|\?)/i.test(topWin.document.documentURI)) {
-      log("(form submission ignored -- about:accounts)");
-      return;
-    }
+    // XXX: window.top.document throws on iOS, so this isn't worth even trying
+    // var topWin = win.top;
+    // if (/^about:accounts($|\?)/i.test(topWin.document.documentURI)) {
+      // log("(form submission ignored -- about:accounts)");
+      // return;
+    // }
 
     var formSubmitURL = LoginUtils._getActionOrigin(form);
 

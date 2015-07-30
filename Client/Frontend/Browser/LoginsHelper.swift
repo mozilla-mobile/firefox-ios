@@ -32,7 +32,7 @@ class LoginsHelper: BrowserHelper {
 
         if let path = NSBundle.mainBundle().pathForResource("LoginsHelper", ofType: "js") {
             if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) as? String {
-                var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+                var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
                 browser.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -45,8 +45,12 @@ class LoginsHelper: BrowserHelper {
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         var res = message.body as! [String: String]
         let type = res["type"]
-        if let url = browser?.url {
-            if type == "request" {
+
+        // We have to be careful to use the frame's url here. I also added a same-domain check, but it shouldn't
+        // be necessary. It makes me feel safer that a document won't be able to dig into unsafe frames and call something
+        // like var results = iframe.contentWindow.firefoxMethod();
+        if let url = message.frameInfo.request.URL {
+            if type == "request" && message.frameInfo.mainFrame {
                 res["username"] = ""
                 res["password"] = ""
                 let login = Login.fromScript(url, script: res)
