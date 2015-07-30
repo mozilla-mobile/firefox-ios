@@ -927,7 +927,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
                 let webView = tabManager.selectedTab?.webView
                 
                 // Create the 1Password extension item. Note that it will be created regardless: 1Password can be installed or not
-                OnePasswordExtension.sharedExtension().createExtensionItemForWebView(webView, completion: {(extensionItem, error) -> Void in
+                OnePasswordExtension.sharedExtension().createExtensionItemForWebView(webView!, completion: {(extensionItem, error) -> Void in
                     if extensionItem == nil {
                         log.error("Failed to create the 1Password extension item: \(error).")
                         return
@@ -963,7 +963,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
                                 
                                 if self.isPasswordManagerActivityType(activityType) {
                                     if returnedItems != nil {
-                                        OnePasswordExtension.sharedExtension().fillReturnedItems(returnedItems, intoWebView: webView, completion: { (success, returnedItemsError) -> Void in
+                                        OnePasswordExtension.sharedExtension().fillReturnedItems(returnedItems, intoWebView: webView!, completion: { (success, returnedItemsError) -> Void in
                                             if success == false {
                                                 log.error("Failed to fill item into webview: \(returnedItemsError).")
                                             }

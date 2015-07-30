@@ -918,13 +918,6 @@
 			remoteGlobalIDString = 9C3F4D8C1A59ACDC004B3ECE;
 			remoteInfo = OnePasswordExtension;
 		};
-		C01CCC061B16A0CA00972559 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C01CCBE01B16A0B900972559 /* OnePasswordExtension.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 9C3F4D8B1A59ACDC004B3ECE;
-			remoteInfo = OnePasswordExtension;
-		};
 		D31FC2301A8D908900BAF7EC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D31FC2291A8D908800BAF7EC /* Alamofire.xcodeproj */;
@@ -4526,11 +4519,6 @@
 			isa = PBXTargetDependency;
 			name = "XCGLogger (iOS)";
 			targetProxy = 39A362DB1AAF5ECE00F47390 /* PBXContainerItemProxy */;
-		};
-		C01CCC071B16A0CA00972559 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = OnePasswordExtension;
-			targetProxy = C01CCC061B16A0CA00972559 /* PBXContainerItemProxy */;
 		};
 		D31FC2481A8D910E00BAF7EC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
