@@ -30,11 +30,9 @@ class HistoryClearable : Clearable {
     func clear() -> Success {
         let deferred = Success()
         profile.history.clearHistory().upon { success in
-            self.profile.thumbnails.clear({ success in
-                SDImageCache.sharedImageCache().clearDisk()
-                SDImageCache.sharedImageCache().clearMemory()
-                deferred.fill(Result(success: ()))
-            })
+            SDImageCache.sharedImageCache().clearDisk()
+            SDImageCache.sharedImageCache().clearMemory()
+            deferred.fill(Result(success: ()))
         }
         return deferred
     }
