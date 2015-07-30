@@ -246,6 +246,10 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
+        return self.getSitesByFrecencyWithLimit(limit, includeIcon: true)
+    }
+
+    public func getSitesByFrecencyWithLimit(limit: Int, includeIcon: Bool) -> Deferred<Result<Cursor<Site>>> {
         let groupBy = "GROUP BY \(TableHistory).domain_id "
         let whereData = "\(TableDomains).showOnTopSites IS 1 "
 
@@ -254,7 +258,7 @@ extension SQLiteHistory: BrowserHistory {
         let remoteFrecencySQL = getRemoteFrecencySQL()
         let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
 
-        return self.getFilteredSitesWithLimit(limit, groupClause: groupBy, orderBy: orderBy, whereData: whereData)
+        return self.getFilteredSitesWithLimit(limit, groupClause: groupBy, orderBy: orderBy, whereData: whereData, includeIcon: includeIcon)
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
