@@ -63,6 +63,6 @@ public class DeviceInfo {
         // 1. http://stackoverflow.com/questions/21603475/how-can-i-detect-if-the-iphone-my-app-is-on-is-going-to-use-a-simple-transparen
         // 2. https://gist.github.com/conradev/8655650
         // Thus, testing has to take place on actual devices.
-        return !contains(lowGraphicsQualityModels, specificModelName)
+        return contains(lowGraphicsQualityModels, specificModelName)
     }
 }

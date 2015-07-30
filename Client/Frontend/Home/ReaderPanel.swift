@@ -23,7 +23,7 @@ private struct ReadingListTableViewCellUX {
     static let ReadIndicatorLeftOffset: CGFloat = 18
     static let ReadAccessibilitySpeechPitch: Float = 0.7 // 1.0 default, 0.0 lowest, 2.0 highest
 
-    static let TitleLabelFont = UIFont.systemFontOfSize(15, weight: UIFontWeightMedium)
+    static let TitleLabelFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightMedium)
     static let TitleLabelTopOffset: CGFloat = 14 - 4
     static let TitleLabelLeftOffset: CGFloat = 16 + 16 + 16
     static let TitleLabelRightOffset: CGFloat = -40
@@ -50,13 +50,13 @@ private struct ReadingListTableViewCellUX {
 private struct ReadingListPanelUX {
     // Welcome Screen
     static let WelcomeScreenTopPadding: CGFloat = 16
-    static let WelcomeScreenPadding: CGFloat = 10
+    static let WelcomeScreenPadding: CGFloat = 15
 
-    static let WelcomeScreenHeaderFont = UIFont.boldSystemFontOfSize(14)
+    static let WelcomeScreenHeaderFont = UIFont.boldSystemFontOfSize(UIConstants.DeviceFontSize - 1)
     static let WelcomeScreenHeaderTextColor = UIColor.darkGrayColor()
 
     static let WelcomeScreenItemFont = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
-    static let WelcomeScreenItemTextColor = UIColor.lightGrayColor()
+    static let WelcomeScreenItemTextColor = UIColor.grayColor()
     static let WelcomeScreenItemWidth = 220
     static let WelcomeScreenItemOffset = -20
 
@@ -322,8 +322,15 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         containerView.addSubview(logoImageView)
         logoImageView.snp_makeConstraints({ (make) -> Void in
             make.centerX.equalTo(containerView)
-            make.top.equalTo(containerView)
+            make.centerY.lessThanOrEqualTo(overlayView.snp_centerY).priorityHigh()
+
+            // Sets proper top constraint for iPhone 6 in portait and iPads.
+            make.centerY.equalTo(overlayView.snp_centerY).offset(-180).priorityMedium()
+
+            // Sets proper top constraint for iPhone 4, 5 in portrait.
+            make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50).priorityHigh()
         })
+
 
         let welcomeLabel = UILabel()
         containerView.addSubview(welcomeLabel)
@@ -336,6 +343,9 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
             make.centerX.equalTo(containerView)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)
             make.top.equalTo(logoImageView.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
+
+            // Sets proper center constraint for iPhones in landscape.
+            make.centerY.lessThanOrEqualTo(overlayView.snp_centerY).offset(-40).priorityHigh()
         })
 
         let readerModeLabel = UILabel()
@@ -378,10 +388,10 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
         containerView.snp_makeConstraints({ (make) -> Void in
             // Let the container wrap around the content
-            make.top.equalTo(overlayView.snp_top).offset(20)
-            make.bottom.equalTo(readingListLabel.snp_bottom)
+            make.top.equalTo(logoImageView.snp_top)
             make.left.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
             make.right.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenCircleOffset)
+
             // And then center it in the overlay view that sits on top of the UITableView
             make.centerX.equalTo(overlayView)
         })
