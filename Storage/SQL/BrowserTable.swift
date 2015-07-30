@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 import XCGLogger
 
 // To keep SwiftData happy.
@@ -317,21 +318,66 @@ public class BrowserTable: Table {
                 return false
             }
 
-            let cursor = db.executeQuery("SELECT * FROM \(TableHistory)", factory: { (row) -> (id: Int, url: String) in
-                return (row["id"] as! Int, row["url"] as! String)
-            }, withArgs: nil)
-
-            for row in cursor {
-                if let row = row,
-                   let host = row.url.asURL?.normalizedHost() {
-                    if !self.run(db, queries: [
-                        ("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", [host]),
-                        ("UPDATE \(TableHistory) SET domain_id = (SELECT id FROM \(TableDomains) WHERE domain = ?) WHERE id = ?", [host, row.id])
-                    ]) {
-                        return false
-                    }
-                }
+            let urls = db.executeQuery("SELECT DISTINCT url FROM \(TableHistory)", factory: { $0["url"] as! String })
+            if !fillDomainNamesFromCursor(urls, db: db) {
+                return false
             }
+        }
+
+        return true
+    }
+
+    private func fillDomainNamesFromCursor(cursor: Cursor<String>, db: SQLiteDBConnection) -> Bool {
+        if cursor.count == 0 {
+            return true
+        }
+
+        // URL -> hostname, flattened to make args.
+        var pairs = Args()
+        for url in cursor {
+            if let url = url, host = url.asURL?.normalizedHost() {
+                pairs.append(url)
+                pairs.append(host)
+            }
+        }
+
+        let tmpTable = "tmp_hostnames"
+        let table = "CREATE TEMP TABLE \(tmpTable) (url TEXT NOT NULL UNIQUE, domain TEXT NOT NULL, domain_id INT)"
+        if !self.run(db, sql: table, args: nil) {
+            log.error("Can't create temporary table. Unable to migrate domain names. Top Sites is likely to be broken.")
+            return false
+        }
+
+        // Now insert these into the temporary table. Chunk by an even number, for obvious reasons.
+        let chunks = chunk(pairs, by: BrowserDB.MaxVariableNumber - (BrowserDB.MaxVariableNumber % 2))
+        for chunk in chunks {
+            let ins = "INSERT INTO \(tmpTable) (url, domain) VALUES " +
+                      ", ".join(Array<String>(count: chunk.count / 2, repeatedValue: "(?, ?)"))
+            if !self.run(db, sql: ins, args: Array(chunk)) {
+                log.error("Couldn't insert domains into temporary table. Aborting migration.")
+                return false
+            }
+        }
+
+        // Now make those into domains.
+        let domains = "INSERT OR IGNORE INTO \(TableDomains) (domain) SELECT DISTINCT domain FROM \(tmpTable)"
+
+        // … and fill that temporary column.
+        let domainIDs = "UPDATE \(tmpTable) SET domain_id = (SELECT id FROM \(TableDomains) WHERE \(TableDomains).domain = \(tmpTable).domain)"
+
+        // Update the history table from the temporary table.
+        let updateHistory = "UPDATE \(TableHistory) SET domain_id = (SELECT domain_id FROM \(tmpTable) WHERE \(tmpTable).url = \(TableHistory).url)"
+
+        // Clean up.
+        let dropTemp = "DROP TABLE \(tmpTable)"
+
+        // Now run these.
+        if !self.run(db, queries: [(domains, nil),
+                                   (domainIDs, nil),
+                                   (updateHistory, nil),
+                                   (dropTemp, nil)]) {
+            log.error("Unable to migrate domains.")
+            return false
         }
 
         return true
