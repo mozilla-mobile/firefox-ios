@@ -242,7 +242,6 @@ class ReaderMode: BrowserHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        println("DEBUG: readerModeMessageHandler message: \(message.body)")
         if let msg = message.body as? Dictionary<String,String> {
             if let messageType = ReaderModeMessageType(rawValue: msg["Type"] ?? "") {
                 switch messageType {
