@@ -5,6 +5,9 @@
 import UIKit
 import Storage
 import Shared
+import XCGLogger
+
+private let log = XCGLogger.defaultInstance()
 
 let BookmarkStatusChangedNotification = "BookmarkStatusChangedNotification"
 
@@ -14,6 +17,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     private lazy var defaultIcon: UIImage = {
         return UIImage(named: "defaultFavicon")!
+    }()
+
+    lazy var suggestedSites: SuggestedSitesData<Tile> = {
+        return SuggestedSitesData<Tile>()
     }()
 
     override var profile: Profile! {
@@ -29,7 +36,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataCleared, object: nil)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -38,16 +46,27 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataCleared, object: nil)
     }
 
-    func firefoxAccountChanged(notification: NSNotification) {
-        if notification.name == NotificationFirefoxAccountChanged {
+    func notificationReceived(notification: NSNotification) {
+        switch notification.name {
+        case NotificationFirefoxAccountChanged, NotificationPrivateDataCleared:
             self.reloadData()
+            break
+        default:
+            // no need to do anything at all
+            log.warning("Received unexpected notification \(notification.name)")
+            break
         }
     }
 
     private func onNewModel(model: BookmarksModel) {
-        self.source = model
+        if model.current.count == 0 && model.current.guid == BookmarkRoots.MobileFolderGUID {
+            self.source = nil
+        } else {
+            self.source = model
+        }
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
         }
@@ -62,19 +81,32 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let source = source {
-            return source.current.count
+        return source?.current.count ?? suggestedSites.count
+    }
+
+    private func setupSuggestedSiteForCell(cell: UITableViewCell, indexPath: NSIndexPath) {
+        let tile = suggestedSites[indexPath.row]
+        cell.textLabel?.text = tile?.title
+
+        if let icon = tile?.icon?.url.asURL,
+           let host = icon.host {
+            if icon.scheme == "asset" {
+                cell.imageView?.image = UIImage(named: host)
+            } else {
+                cell.imageView?.sd_setImageWithURL(icon, completed: { img, err, type, key in
+                    if img == nil {
+                        cell.imageView?.image = self.defaultIcon
+                    }
+                })
+            }
         }
-        return super.tableView(tableView, numberOfRowsInSection: section)
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         if let source = source {
             if let bookmark = source.current[indexPath.row] {
-                if let favicon = bookmark.favicon {
-                    cell.imageView?.setIcon(favicon, withPlaceholder: self.defaultIcon)
-                }
+                cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: self.defaultIcon)
 
                 switch (bookmark) {
                     case let item as BookmarkItem:
@@ -88,13 +120,31 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                         cell.textLabel?.text = bookmark.title
                 }
             }
+        } else {
+            // If we don't have a source at all, show suggested sites
+            setupSuggestedSiteForCell(cell, indexPath: indexPath)
         }
 
         return cell
     }
 
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return NSLocalizedString("Recent Bookmarks", comment: "Header for bookmarks list")
+        // Don't show a header for the root
+        if source?.current.guid == BookmarkRoots.MobileFolderGUID {
+            return nil
+        }
+
+        // Note: If there's no root (i.e. source == nil), we'll also show no header.
+        return source?.current.title
+    }
+
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // Don't show a header for the root. If there's no root (i.e. source == nil), we'll also show no header.
+        if source == nil || source?.current.guid == BookmarkRoots.MobileFolderGUID {
+            return 0
+        }
+
+        return super.tableView(tableView, heightForHeaderInSection: section)
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -116,6 +166,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 // Weird.
                 break        // Just here until there's another executable statement (compiler requires one).
             }
+        } else {
+            if let tile = suggestedSites[indexPath.row] {
+                homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: tile.url)!, visitType: VisitType.Bookmark)
+            }
         }
     }
 
@@ -123,12 +177,25 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        if source == nil {
+            return .None
+        } else {
+            return .Delete
+        }
+    }
+
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+        if source == nil {
+            return [AnyObject]()
+        } else if source!.current.count == 0 && source!.current.guid == BookmarkRoots.MobileFolderGUID {
+            return [AnyObject]()
+        }
+
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
 
-            let start = NSDate.nowMicroseconds()
             if let bookmark = self.source?.current[indexPath.row] {
                 // Why the dispatches? Because we call success and failure on the DB
                 // queue, and so calling anything else that calls through to the DB will
@@ -143,11 +210,26 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                     dispatch_async(dispatch_get_main_queue()) {
                         self.source?.reloadData({ model in
                             dispatch_async(dispatch_get_main_queue()) {
-                                self.source = model
+                                tableView.beginUpdates()
                                 self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+
+                                if model.current.count == 0 && model.current.guid == BookmarkRoots.MobileFolderGUID {
+                                    // If the new model is the root, and its empty, set the source to nil so that we
+                                    // correctly show suggested sites.
+                                    self.source = nil
+                                    var indexPaths = [NSIndexPath]()
+                                    for i in 0..<self.suggestedSites.count {
+                                        let indexPath = NSIndexPath(forItem: i, inSection: 0)
+                                        indexPaths.append(indexPath)
+                                    }
+                                    self.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: UITableViewRowAnimation.Right)
+                                } else {
+                                    self.source = model
+                                }
+
+                                tableView.endUpdates()
+
                                 NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added":false])
-                                let end = NSDate.nowMicroseconds()
-                                println("Delete finished in \(end-start)")
                             }
                         }, failure: self.onModelFailure)
                     }

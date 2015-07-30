@@ -14,13 +14,7 @@ private let ThumbnailIdentifier = "Thumbnail"
 class Tile: Site {
     let backgroundColor: UIColor
     let trackingId: Int
-
-    init(url: String, color: UIColor, image: String, trackingId: Int, title: String) {
-        self.backgroundColor = color
-        self.trackingId = trackingId
-        super.init(url: url, title: title)
-        self.icon = Favicon(url: image, date: NSDate(), type: IconType.Icon)
-    }
+    let wordmark: Favicon
 
     init(json: JSON) {
         let colorString = json["bgcolor"].asString!
@@ -28,14 +22,15 @@ class Tile: Site {
         NSScanner(string: colorString).scanHexInt(&colorInt)
         self.backgroundColor = UIColor(rgb: (Int) (colorInt ?? 0xaaaaaa))
         self.trackingId = json["trackingid"].asInt ?? 0
+        self.wordmark = Favicon(url: json["imageurl"].asString!, date: NSDate(), type: .Icon)
 
         super.init(url: json["url"].asString!, title: json["title"].asString!)
 
-        self.icon = Favicon(url: json["imageurl"].asString!, date: NSDate(), type: .Icon)
+        self.icon = Favicon(url: json["faviconUrl"].asString!, date: NSDate(), type: .Icon)
     }
 }
 
-private class SuggestedSitesData<T: Tile>: Cursor<T> {
+class SuggestedSitesData<T: Tile>: Cursor<T> {
     var tiles = [T]()
 
     init() {
@@ -44,7 +39,6 @@ private class SuggestedSitesData<T: Tile>: Cursor<T> {
         let path = NSBundle.mainBundle().pathForResource("suggestedsites", ofType: "json")
         let data = NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: &err)
         let json = JSON.parse(data as! String)
-        println("\(data) \(json)")
 
         for i in 0..<json.length {
             let t = T(json: json[i])
@@ -60,6 +54,12 @@ private class SuggestedSitesData<T: Tile>: Cursor<T> {
         get {
             return tiles[index]
         }
+    }
+}
+
+extension UIView {
+    public class func viewOrientationForSize(size: CGSize) -> UIInterfaceOrientation {
+        return size.width > size.height ? UIInterfaceOrientation.LandscapeRight : UIInterfaceOrientation.Portrait
     }
 }
 
@@ -88,15 +88,21 @@ class TopSitesPanel: UIViewController {
 
     let profile: Profile
 
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        layout.setupForOrientation(toInterfaceOrientation)
-        collection?.setNeedsLayout()
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        self.refreshHistory(self.layout.thumbnailCount)
+        self.layout.setupForOrientation(UIView.viewOrientationForSize(size))
     }
-    
+
+    override func supportedInterfaceOrientations() -> Int {
+        return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
+    }
+
     init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataCleared, object: nil)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -121,11 +127,18 @@ class TopSitesPanel: UIViewController {
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataCleared, object: nil)
     }
-
-    func firefoxAccountChanged(notification: NSNotification) {
-        if notification.name == NotificationFirefoxAccountChanged {
+    
+    func notificationReceived(notification: NSNotification) {
+        switch notification.name {
+        case NotificationFirefoxAccountChanged, NotificationPrivateDataCleared:
             refreshHistory(self.layout.thumbnailCount)
+            break
+        default:
+            // no need to do anything at all
+            log.warning("Received unexpected notification \(notification.name)")
+            break
         }
     }
 
@@ -134,6 +147,10 @@ class TopSitesPanel: UIViewController {
         if let data = result.successValue {
             self.dataSource.data = data
             self.dataSource.profile = self.profile
+
+            // redraw now we've udpated our sources
+            self.collection?.collectionViewLayout.invalidateLayout()
+            self.collection?.setNeedsLayout()
         }
     }
 
@@ -243,7 +260,7 @@ private class TopSitesCollectionView: UICollectionView {
 
 private class TopSitesLayout: UICollectionViewLayout {
     private var thumbnailRows: Int {
-        return Int((self.collectionView?.frame.height ?? self.thumbnailHeight) / self.thumbnailHeight)
+        return max(2, Int((self.collectionView?.frame.height ?? self.thumbnailHeight) / self.thumbnailHeight))
     }
 
     private var thumbnailCols = 2
@@ -342,10 +359,6 @@ private class TopSitesLayout: UICollectionViewLayout {
 
         return attr
     }
-
-    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
-        return true
-    }
 }
 
 private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
@@ -385,16 +398,18 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.imageView.image = nil
         cell.backgroundImage.image = nil
 
-        FaviconFetcher.getForUrl(site.url.asURL!, profile: profile) >>== { icons in
-            if (icons.count > 0) {
-                cell.imageView.sd_setImageWithURL(icons[0].url.asURL!) { (img, err, type, url) -> Void in
-                    if let img = img {
-                        cell.backgroundImage.image = img
-                        cell.image = img
-                    } else {
-                        let icon = Favicon(url: "", date: NSDate(), type: IconType.NoneFound)
-                        self.profile.favicons.addFavicon(icon, forSite: site)
-                        self.setDefaultThumbnailBackground(cell)
+        if let url = site.url.asURL {
+            FaviconFetcher.getForURL(url, profile: profile) >>== { icons in
+                if (icons.count > 0) {
+                    cell.imageView.sd_setImageWithURL(icons[0].url.asURL!) { (img, err, type, url) -> Void in
+                        if let img = img {
+                            cell.backgroundImage.image = img
+                            cell.image = img
+                        } else {
+                            let icon = Favicon(url: "", date: NSDate(), type: IconType.NoneFound)
+                            self.profile.favicons.addFavicon(icon, forSite: site)
+                            self.setDefaultThumbnailBackground(cell)
+                        }
                     }
                 }
             }
@@ -438,10 +453,10 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.imageWrapper.backgroundColor = tile.backgroundColor
         cell.backgroundImage.image = nil
 
-        if let iconString = tile.icon?.url {
-            let icon = NSURL(string: iconString)!
+        if let icon = tile.wordmark.url.asURL,
+           let host = icon.host {
             if icon.scheme == "asset" {
-                cell.imageView.image = UIImage(named: icon.host!)
+                cell.imageView.image = UIImage(named: host)
             } else {
                 cell.imageView.sd_setImageWithURL(icon, completed: { img, err, type, key in
                     if img == nil {

@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 import SnapKit
 import UIKit
 import Storage        // For VisitType.
@@ -54,8 +55,11 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     override func viewDidLoad() {
         view.backgroundColor = HomePanelViewControllerUX.BackgroundColor
 
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light))
-        view.addSubview(blur)
+        let blur: UIVisualEffectView? = DeviceInfo.isBlurSupported() ? UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light)) : nil
+
+        if let blur = blur {
+            view.addSubview(blur)
+        }
 
         buttonContainerView = UIView()
         buttonContainerView.backgroundColor = HomePanelViewControllerUX.BackgroundColor
@@ -71,7 +75,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         controllerContainerView = UIView()
         view.addSubview(controllerContainerView)
 
-        blur.snp_makeConstraints { make in
+        blur?.snp_makeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
@@ -136,19 +140,20 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     private func hideCurrentPanel() {
         if let panel = childViewControllers.first as? UIViewController {
+            panel.willMoveToParentViewController(nil)
             panel.view.removeFromSuperview()
             panel.removeFromParentViewController()
         }
     }
 
     private func showPanel(panel: UIViewController) {
+        addChildViewController(panel)
         controllerContainerView.addSubview(panel.view)
         panel.view.snp_makeConstraints { make in
             make.top.equalTo(self.buttonContainerView.snp_bottom)
             make.left.right.bottom.equalTo(self.view)
         }
-
-        addChildViewController(panel)
+        panel.didMoveToParentViewController(self)
     }
 
     func SELtappedButton(sender: UIButton!) {

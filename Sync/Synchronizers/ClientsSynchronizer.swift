@@ -189,7 +189,7 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
         return storageClient.get(clientGUID) >>== { response in
             let record = response.value
             if var clientRecord = record.payload.asDictionary {
-                clientRecord["commands"] = JSON(record.payload.commands + commands.map { JSON($0.value) })
+                clientRecord["commands"] = JSON(record.payload.commands + commands.map { JSON.parse($0.value) })
                 return storageClient.put(Record(id: clientGUID, payload: ClientPayload(JSON(clientRecord)), ttl: ThreeWeeksInSeconds), ifUnmodifiedSince: record.modified)
                 >>== { resp in
                     log.debug("Client \(clientGUID) commands upload succeeded.")

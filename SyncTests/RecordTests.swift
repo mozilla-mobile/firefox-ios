@@ -182,6 +182,16 @@ class RecordTests: XCTestCase {
         }
     }
 
+    func testHistoryPayloadWithNoTitle() {
+        let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://foo.com/\",\"title\":null,\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
+        let json = JSON(string: payloadJSON)
+        if let payload = HistoryPayload.fromJSON(json) {
+            XCTAssertEqual("", payload.title)
+        } else {
+            XCTFail("Should have parsed.")
+        }
+    }
+
     func testLoginPayload() {
         let input = JSON([
             "id": "abcdefabcdef",

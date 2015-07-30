@@ -47,10 +47,18 @@ class ProfileFileAccessor: FileAccessor {
     }
 }
 
-class CommandDiscardingSyncDelegate: SyncDelegate {
+class CommandStoringSyncDelegate: SyncDelegate {
+    let profile: Profile
+
+    init() {
+        profile = BrowserProfile(localName: "profile", app: nil)
+    }
+
     func displaySentTabForURL(URL: NSURL, title: String) {
-        // TODO: do something else.
-        log.info("Discarding sent URL \(URL.absoluteString)")
+        if let urlString = URL.absoluteString {
+            let item = ShareItem(url: urlString, title: title, favicon: nil)
+            self.profile.queue.addToQueue(item)
+        }
     }
 }
 
@@ -103,7 +111,7 @@ class BrowserProfileSyncDelegate: SyncDelegate {
 /**
  * A Profile manages access to the user's data.
  */
-protocol Profile {
+protocol Profile: class {
     var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
     // var favicons: Favicons { get }
     var prefs: Prefs { get }
@@ -132,6 +140,8 @@ protocol Profile {
     func getClients() -> Deferred<Result<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
     func getCachedClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
+
+    func storeTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>>
 
     func sendItems(items: [ShareItem], toClients clients: [RemoteClient])
 
@@ -183,7 +193,7 @@ public class BrowserProfile: Profile {
     func onLocationChange(notification: NSNotification) {
         if let v = notification.userInfo!["visitType"] as? Int,
            let visitType = VisitType(rawValue: v),
-           let url = notification.userInfo!["url"] as? NSURL,
+           let url = notification.userInfo!["url"] as? NSURL where !isIgnoredURL(url),
            let title = notification.userInfo!["title"] as? NSString {
 
             // We don't record a visit if no type was specified -- that means "ignore me".
@@ -269,7 +279,7 @@ public class BrowserProfile: Profile {
         if let app = self.app {
             return BrowserProfileSyncDelegate(app: app)
         }
-        return CommandDiscardingSyncDelegate()
+        return CommandStoringSyncDelegate()
     }
 
     public func getClients() -> Deferred<Result<[RemoteClient]>> {
@@ -286,12 +296,15 @@ public class BrowserProfile: Profile {
         return self.remoteClientsAndTabs.getClientsAndTabs()
     }
 
+    func storeTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> {
+        return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
+    }
 
     public func sendItems(items: [ShareItem], toClients clients: [RemoteClient]) {
         let commands = items.map { item in
             SyncCommand.fromShareItem(item, withAction: "displayURI")
         }
-        self.remoteClientsAndTabs.insertCommands(commands, forClients: clients)
+        self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
     }
 
     lazy var logins: protocol<BrowserLogins, SyncableLogins> = {

@@ -21,8 +21,18 @@ private typealias SectionNumber = Int
 private typealias CategoryNumber = Int
 private typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: Int)
 
+private struct HistoryPanelUX {
+    static let WelcomeScreenTopPadding: CGFloat = 16
+    static let WelcomeScreenPadding: CGFloat = 10
+    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(14)
+    static let WelcomeScreenItemTextColor = UIColor.grayColor()
+    static let WelcomeScreenItemWidth = 170
+}
+
 class HistoryPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
+
+    private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
 
     private let QueryLimit = 100
     private let NumSections = 4
@@ -44,7 +54,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataCleared, object: nil)
     }
 
     override func viewDidLoad() {
@@ -55,6 +66,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         self.refreshControl = refresh
         self.tableView.addSubview(refresh)
+        self.tableView.accessibilityIdentifier = "History List"
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -63,11 +75,18 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataCleared, object: nil)
     }
 
-    func firefoxAccountChanged(notification: NSNotification) {
-        if notification.name == NotificationFirefoxAccountChanged {
+    func notificationReceived(notification: NSNotification) {
+        switch notification.name {
+        case NotificationFirefoxAccountChanged, NotificationPrivateDataCleared:
             refresh()
+            break
+        default:
+            // no need to do anything at all
+            log.warning("Received unexpected notification \(notification.name)")
+            break
         }
     }
 
@@ -97,6 +116,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             if let data = result.successValue {
                 self.setData(data)
                 self.tableView.reloadData()
+                self.updateEmptyPanelState()
             }
 
             // Always end refreshing, even if we failed!
@@ -106,6 +126,49 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
     }
 
+    private func updateEmptyPanelState() {
+        if data.count == 0 {
+            if self.emptyStateOverlayView.superview == nil {
+                self.tableView.addSubview(self.emptyStateOverlayView)
+                self.emptyStateOverlayView.snp_makeConstraints { make in
+                    make.edges.equalTo(self.tableView)
+                    make.width.equalTo(self.view)
+                }
+            }
+        } else {
+            self.emptyStateOverlayView.removeFromSuperview()
+        }
+    }
+
+    private func createEmptyStateOverview() -> UIView {
+        let overlayView = UIView()
+        overlayView.backgroundColor = UIColor.whiteColor()
+
+        let logoImageView = UIImageView(image: UIImage(named: "emptyHistory"))
+        overlayView.addSubview(logoImageView)
+        logoImageView.snp_makeConstraints({ (make) -> Void in
+            make.centerX.equalTo(overlayView)
+            make.top.equalTo(overlayView.snp_top).offset(20)
+        })
+
+        let welcomeLabel = UILabel()
+        overlayView.addSubview(welcomeLabel)
+        welcomeLabel.text = NSLocalizedString("Pages you have visited recently will show up here.", comment: "See http://bit.ly/1I7Do4b")
+        welcomeLabel.textAlignment = NSTextAlignment.Center
+        welcomeLabel.font = HistoryPanelUX.WelcomeScreenItemFont
+        welcomeLabel.textColor = HistoryPanelUX.WelcomeScreenItemTextColor
+        welcomeLabel.numberOfLines = 2
+        welcomeLabel.adjustsFontSizeToFitWidth = true
+
+        welcomeLabel.snp_makeConstraints({ (make) -> Void in
+            make.centerX.equalTo(overlayView)
+            make.top.equalTo(logoImageView.snp_bottom).offset(HistoryPanelUX.WelcomeScreenPadding)
+            make.width.equalTo(HistoryPanelUX.WelcomeScreenItemWidth)
+        })
+
+        return overlayView
+    }
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         let category = self.categories[indexPath.section]
@@ -312,6 +375,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                                 }
 
                                 tableView.endUpdates()
+                                self.updateEmptyPanelState()
                             }
                         }
                 }

@@ -277,6 +277,12 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         scrollView.setContentOffset(CGPointMake(swipeCoordinate, 0), animated: true)
     }
 
+    func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+        // Need to add this method so that tapping the pageControl will also change the card texts. 
+        // scrollViewDidEndDecelerating waits until the end of the animation to calculate what card it's on.
+        scrollViewDidEndDecelerating(scrollView)
+    }
+
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = page

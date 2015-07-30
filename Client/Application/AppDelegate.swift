@@ -9,6 +9,7 @@ import AVFoundation
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
+    var rootViewController: UINavigationController!
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
 
@@ -17,9 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Set the Firefox UA for browsing.
         setUserAgent()
-
-        // Listen for crashes
-        FXCrashDetector.sharedDetector().listenForCrashes()
 
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
@@ -36,16 +34,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.backgroundColor = UIColor.whiteColor()
 
         let defaultRequest = NSURLRequest(URL: UIConstants.AboutHomeURL)
-        self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, prefs: profile.prefs)
+        self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, profile: profile)
         browserViewController = BrowserViewController(profile: profile, tabManager: self.tabManager)
 
         // Add restoration class, the factory that will return the ViewController we 
         // will restore with.
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         browserViewController.restorationClass = AppDelegate.self
+        browserViewController.automaticallyAdjustsScrollViewInsets = false
 
-        self.window!.rootViewController = browserViewController
+        rootViewController = UINavigationController(rootViewController: browserViewController)
+        rootViewController.automaticallyAdjustsScrollViewInsets = false
+        rootViewController.delegate = self
+        rootViewController.navigationBarHidden = true
+
+        self.window!.rootViewController = rootViewController
         self.window!.backgroundColor = UIConstants.AppBackgroundColor
+
+        configureCrashReporter()
 
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL, absoluteString = url.absoluteString {
@@ -176,8 +182,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             firefoxUA = "\(mutableUA) Safari/\(webKitVersion)"
             NSUserDefaults.standardUserDefaults().setObject(firefoxUA, forKey: "UserAgent")
         }
+        FaviconFetcher.userAgent = firefoxUA!
         NSUserDefaults.standardUserDefaults().registerDefaults(["UserAgent": firefoxUA!])
-
         SDWebImageDownloader.sharedDownloader().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
     }
 
@@ -228,6 +234,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let urlToOpen = NSURL(string: alertURL) {
                 NSNotificationCenter.defaultCenter().postNotificationName(FSReadingListAddReadingListItemNotification, object: self, userInfo: ["URL": urlToOpen, "Title": title])
             }
+        }
+    }
+}
+
+// MARK: - Root View Controller Animations
+extension AppDelegate: UINavigationControllerDelegate {
+    func navigationController(navigationController: UINavigationController,
+        animationControllerForOperation operation: UINavigationControllerOperation,
+        fromViewController fromVC: UIViewController,
+        toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+            if operation == UINavigationControllerOperation.Push {
+                return BrowserToTrayAnimator()
+            } else if operation == UINavigationControllerOperation.Pop {
+                return TrayToBrowserAnimator()
+            } else {
+                return nil
+            }
+    }
+}
+
+extension AppDelegate {
+    private func configureCrashReporter() {
+        let mainBundle = NSBundle.mainBundle()
+        let breakpad = BreakpadController.sharedInstance()
+
+        let addUploadParameterForKey: String -> Void = { key in
+            if let value = mainBundle.objectForInfoDictionaryKey(key) as? String {
+                breakpad.addUploadParameter(value, forKey: key)
+            }
+        }
+        breakpad.start(true)
+        // Add in custom crash-stats keys
+        if let shouldUploadCrashes = mainBundle.objectForInfoDictionaryKey("BreakpadShouldUpload") as? NSString where shouldUploadCrashes.boolValue {
+            addUploadParameterForKey("AppID")
+            addUploadParameterForKey("BuildID")
+            addUploadParameterForKey("ReleaseChannel")
+            addUploadParameterForKey("Vendor")
+            breakpad.setUploadingEnabled(shouldUploadCrashes.boolValue)
         }
     }
 }

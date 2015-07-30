@@ -32,9 +32,11 @@ public func ==(lhs: ClientAndTabs, rhs: ClientAndTabs) -> Bool {
 
 public protocol RemoteClientsAndTabs: SyncCommands {
     func wipeClients() -> Deferred<Result<()>>
+    func wipeRemoteTabs() -> Deferred<Result<()>>
     func wipeTabs() -> Deferred<Result<()>>
     func getClients() -> Deferred<Result<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
+    func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Result<[RemoteTab]>>
     func insertOrUpdateClient(client: RemoteClient) -> Deferred<Result<()>>
     func insertOrUpdateClients(clients: [RemoteClient]) -> Deferred<Result<()>>
 
@@ -52,6 +54,25 @@ public struct RemoteTab: Equatable {
     public let history: [NSURL]
     public let lastUsed: Timestamp
     public let icon: NSURL?
+
+    public static func shouldIncludeURL(url: NSURL) -> Bool {
+        if let scheme = url.scheme {
+            if scheme == "about" {
+                return false
+            }
+            if scheme == "javascript" {
+                return false
+            }
+
+            if let hostname = url.host?.lowercaseString {
+                if hostname == "localhost" {
+                    return false
+                }
+                return true
+            }
+        }
+        return false
+    }
 
     public init(clientGUID: String?, URL: NSURL, title: String, history: [NSURL], lastUsed: Timestamp, icon: NSURL?) {
         self.clientGUID = clientGUID

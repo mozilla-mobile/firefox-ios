@@ -100,7 +100,7 @@ body {
   font-size: 16px;
 }
 
-.header {
+#reader-header {
   text-align: start;
   display: none;
 }
@@ -313,7 +313,7 @@ body {
   font-size: 50px;
 }
 
-.content {
+#reader-content {
   display: none;
 }
 

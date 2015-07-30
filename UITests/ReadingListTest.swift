@@ -9,7 +9,9 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     private var webRoot: String!
 
     override func setUp() {
+        // We undo the localhost/127.0.0.1 switch in order to get 'localhost' in accessibility labels.
         webRoot = SimplePageServer.start()
+                                  .stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions.allZeros, range: nil)
     }
 
     /**

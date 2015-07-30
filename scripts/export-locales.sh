@@ -46,7 +46,9 @@ cp /tmp/en.xliff firefox-ios-l10n/en-US/firefox-ios.xliff || exit 1
 
 # Copy the english base back into the templates and clean it up
 cp /tmp/en.xliff firefox-ios-l10n/templates/firefox-ios.xliff || exit 1
-scripts/clean-xliff.py firefox-ios-l10n/templates || exit 1
 
-# Update all locales
+# Update all locales (including 'templates')
 scripts/update-xliff.py firefox-ios-l10n || exit 1
+
+# Clean up /templates removing target-language and translations
+scripts/clean-xliff.py firefox-ios-l10n/templates || exit 1

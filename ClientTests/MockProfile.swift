@@ -150,6 +150,10 @@ public class MockProfile: Profile {
         return deferResult([])
     }
 
+    func storeTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> {
+        return deferResult(0)
+    }
+
     func sendItems(items: [ShareItem], toClients clients: [RemoteClient]) {
     }
 }

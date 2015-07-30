@@ -62,7 +62,7 @@ class HistoryTests: KIFTestCase {
         tester().swipeViewWithAccessibilityLabel(urls[0], inDirection: KIFSwipeDirection.Left)
         tester().tapViewWithAccessibilityLabel("Remove")
 
-        let secondHistoryRow = tester().waitForViewWithAccessibilityLabel(urls[1]) as! UITableViewCell
+        let secondHistoryRow = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), inTableViewWithAccessibilityIdentifier: "History List")
         XCTAssertNotNil(secondHistoryRow.imageView?.image)
 
         if let keyWindow = UIApplication.sharedApplication().keyWindow {
@@ -81,13 +81,11 @@ class HistoryTests: KIFTestCase {
 
         tester().tapViewWithAccessibilityLabel("History")
 
-        let firstHistoryRow = tester().waitForViewWithAccessibilityLabel(urlToDelete) as! UITableViewCell
         tester().swipeViewWithAccessibilityLabel(urlToDelete, inDirection: KIFSwipeDirection.Left)
         tester().tapViewWithAccessibilityLabel("Remove")
 
-        let secondHistoryRow = tester().waitForViewWithAccessibilityLabel(secondToLastUrl) as! UITableViewCell
+        let secondHistoryRow = tester().waitForCellAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), inTableViewWithAccessibilityIdentifier: "History List")
         XCTAssertNotNil(secondHistoryRow.imageView?.image)
-
         if let keyWindow = UIApplication.sharedApplication().keyWindow {
             XCTAssertNil(keyWindow.accessibilityElementWithLabel(urlToDelete), "page 102 should have been deleted")
         }
