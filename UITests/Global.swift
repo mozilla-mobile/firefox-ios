@@ -43,6 +43,22 @@ extension KIFUITestActor {
         return UIAccessibilityElement.viewContainingAccessibilityElement(element)
     }
 
+    /// There appears to be a KIF bug where waitForViewWithAccessibilityLabel returns the parent
+    /// UITableView instead of the UITableViewCell with the given label.
+    /// As a workaround, retry until KIF gives us a cell.
+    /// Open issue: https://github.com/kif-framework/KIF/issues/336
+    func waitForCellWithAccessibilityLabel(label: String) -> UITableViewCell {
+        var cell: UITableViewCell!
+
+        runBlock { _ in
+            let view = self.waitForViewWithAccessibilityLabel(label)
+            cell = view as? UITableViewCell
+            return (cell == nil) ? KIFTestStepResult.Wait : KIFTestStepResult.Success
+        }
+
+        return cell
+    }
+
     /**
      * Finding views by accessibility label doesn't currently work with WKWebView:
      *     https://github.com/kif-framework/KIF/issues/460
