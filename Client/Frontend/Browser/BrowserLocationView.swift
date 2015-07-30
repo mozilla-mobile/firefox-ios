@@ -26,6 +26,8 @@ private struct BrowserLocationViewUX {
 
 class BrowserLocationView: UIView {
     var delegate: BrowserLocationViewDelegate?
+    var longPressRecognizer: UILongPressGestureRecognizer!
+    var tapRecognizer: UITapGestureRecognizer!
 
     var url: NSURL? {
         didSet {
@@ -62,12 +64,13 @@ class BrowserLocationView: UIView {
     }()
 
     lazy var urlTextField: UITextField = {
-        let urlTextField = UITextField()
-        urlTextField.userInteractionEnabled = true
-        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: "SELlongPressLocation:")
-        gestureRecognizer.delegate = self
-        urlTextField.addGestureRecognizer(gestureRecognizer)
-        urlTextField.delegate = self
+        let urlTextField = DisplayTextField()
+
+        self.longPressRecognizer.delegate = self
+        urlTextField.addGestureRecognizer(self.longPressRecognizer)
+        self.tapRecognizer.delegate = self
+        urlTextField.addGestureRecognizer(self.tapRecognizer)
+
         urlTextField.attributedPlaceholder = self.placeholder
         urlTextField.accessibilityIdentifier = "url"
         urlTextField.font = UIConstants.DefaultMediumFont
@@ -96,6 +99,9 @@ class BrowserLocationView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: "SELlongPressLocation:")
+        tapRecognizer = UITapGestureRecognizer(target: self, action: "SELtapLocation:")
 
         self.backgroundColor = UIColor.whiteColor()
 
@@ -156,6 +162,10 @@ class BrowserLocationView: UIView {
         }
     }
 
+    func SELtapLocation(recognizer: UITapGestureRecognizer) {
+        delegate?.browserLocationViewDidTapLocation(self)
+    }
+
     func SELreaderModeCustomAction() -> Bool {
         return delegate?.browserLocationViewDidLongPressReaderMode(self) ?? false
     }
@@ -178,21 +188,13 @@ class BrowserLocationView: UIView {
 }
 
 extension BrowserLocationView: UIGestureRecognizerDelegate {
-    // Override the default UILongPressGestureRecognizer to suppress the text zoom magnifier.
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 
-    // Override the default UILongPressGestureRecognizer to suppress the text zoom magnifier.
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailByGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-}
-
-extension BrowserLocationView: UITextFieldDelegate {
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-        delegate?.browserLocationViewDidTapLocation(self)
-        return false
+        // If the longPressRecognizer is active, fail all other recognizers to avoid conflicts.
+        return gestureRecognizer == longPressRecognizer
     }
 }
 
@@ -236,5 +238,11 @@ private class ReaderModeButton: UIButton {
                 self.selected = true
             }
         }
+    }
+}
+
+private class DisplayTextField: UITextField {
+    private override func canBecomeFirstResponder() -> Bool {
+        return false
     }
 }
