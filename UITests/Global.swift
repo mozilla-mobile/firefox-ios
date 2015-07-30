@@ -28,6 +28,21 @@ extension KIFUITestActor {
         return element != nil
     }
 
+    /// Waits for and returns a view with the given accessibility value.
+    func waitForViewWithAccessibilityValue(value: String) -> UIView {
+        var element: UIAccessibilityElement!
+
+        runBlock { _ in
+            element = UIApplication.sharedApplication().accessibilityElementMatchingBlock { element in
+                return element.accessibilityValue == value
+            }
+
+            return (element == nil) ? KIFTestStepResult.Wait : KIFTestStepResult.Success
+        }
+
+        return UIAccessibilityElement.viewContainingAccessibilityElement(element)
+    }
+
     /**
      * Finding views by accessibility label doesn't currently work with WKWebView:
      *     https://github.com/kif-framework/KIF/issues/460
