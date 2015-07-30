@@ -417,7 +417,10 @@ extension TabTrayController: TabManagerDelegate {
         }, completion: { finished in
             if finished {
                 tabManager.selectTab(tabManager[index])
-                self.navigationController?.popViewControllerAnimated(true)
+                // don't pop the tab tray view controller if it is not in the foreground
+                if self.presentedViewController == nil {
+                    self.navigationController?.popViewControllerAnimated(true)
+                }
             }
         })
     }
