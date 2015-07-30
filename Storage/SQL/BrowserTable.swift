@@ -334,12 +334,14 @@ public class BrowserTable: Table {
 
         // URL -> hostname, flattened to make args.
         var pairs = Args()
+        pairs.reserveCapacity(cursor.count * 2)
         for url in cursor {
             if let url = url, host = url.asURL?.normalizedHost() {
                 pairs.append(url)
                 pairs.append(host)
             }
         }
+        cursor.close()
 
         let tmpTable = "tmp_hostnames"
         let table = "CREATE TEMP TABLE \(tmpTable) (url TEXT NOT NULL UNIQUE, domain TEXT NOT NULL, domain_id INT)"
