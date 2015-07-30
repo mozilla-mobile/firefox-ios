@@ -112,6 +112,23 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertEqual(textField.text, displayURL, "Verify that text reverts to page URL after clearing text")
     }
 
+    func testClearURLTextUsingBackspace() {
+        // 127.0.0.1 doesn't cause http:// to be hidden. localhost does. Both will work.
+        let localhostURL = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions.allZeros, range: nil)
+        let url = "\(localhostURL)/numberedPage.html?page=1"
+
+        var textField = tester().waitForViewWithAccessibilityIdentifier("url") as! UITextField
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().enterTextIntoCurrentFirstResponder(url+"\n")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().waitForKeyInputReady()
+        tester().enterTextIntoCurrentFirstResponder("\u{8}")
+
+        let autocompleteField = tester().waitForViewWithAccessibilityIdentifier("address") as! UITextField
+        XCTAssertEqual(autocompleteField.text, "", "Verify that backspace keypress deletes text when url is highlighted")
+    }
+
     override func tearDown() {
         let previousOrientation = UIDevice.currentDevice().valueForKey("orientation") as! Int
         if previousOrientation == UIInterfaceOrientation.LandscapeLeft.rawValue {
