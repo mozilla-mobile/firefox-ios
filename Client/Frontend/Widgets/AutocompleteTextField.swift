@@ -174,6 +174,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     override func deleteBackward() {
         canAutocomplete = false
+        removeCompletion()
         super.deleteBackward()
     }
 

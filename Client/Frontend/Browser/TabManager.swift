@@ -135,6 +135,12 @@ class TabManager : NSObject {
         }
     }
 
+    func expireSnackbars() {
+        for tab in tabs {
+            tab.expireSnackbars()
+        }
+    }
+
     // This method is duplicated to hide the flushToDisk option from consumers.
     func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Browser {
         return self.addTab(request: request, configuration: configuration, flushToDisk: true, zombie: false)

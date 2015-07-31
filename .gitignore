@@ -28,8 +28,11 @@ DerivedData
 
 Carthage/
 
+ThirdParty/google-breakpad
+
 # Saved Sync credentials for tests.
 signedInUser.json
 
 # Generated config file
 MozBuildID.xcconfig
+

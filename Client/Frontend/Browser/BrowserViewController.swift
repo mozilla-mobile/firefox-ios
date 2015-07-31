@@ -1136,16 +1136,17 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     func removeBar(bar: SnackBar, animated: Bool) {
-        let index = findSnackbar(bar)!
-        UIView.animateWithDuration(animated ? 0.25 : 0, animations: { () -> Void in
-            bar.hide()
-            self.view.layoutIfNeeded()
-        }) { success in
-            // Really remove the bar
-            self.finishRemovingBar(bar)
+        if let index = findSnackbar(bar) {
+            UIView.animateWithDuration(animated ? 0.25 : 0, animations: { () -> Void in
+                bar.hide()
+                self.view.layoutIfNeeded()
+            }) { success in
+                // Really remove the bar
+                self.finishRemovingBar(bar)
 
-            // Adjust the footer size to only contain the bars
-            self.adjustFooterSize()
+                // Adjust the footer size to only contain the bars
+                self.adjustFooterSize()
+            }
         }
     }
 
@@ -1409,8 +1410,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         let tab: Browser! = tabManager[webView]
-
-        tab.expireSnackbars()
+        tabManager.expireSnackbars()
 
         if let url = webView.URL where !ErrorPageHelper.isErrorPageURL(url) && !AboutUtils.isAboutHomeURL(url) {
             let notificationCenter = NSNotificationCenter.defaultCenter()
@@ -1421,22 +1421,6 @@ extension BrowserViewController: WKNavigationDelegate {
                 info["visitType"] = visitType
             }
             notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
-
-            // The screenshot immediately after didFinishNavigation is actually a screenshot of the
-            // previous page, presumably due to some iOS bug. Adding a small delay seems to fix this,
-            // and the current page gets captured as expected.
-            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(100 * NSEC_PER_MSEC))
-            dispatch_after(time, dispatch_get_main_queue()) {
-                if webView.URL != url {
-                    // The page changed during the delay, so we missed our chance to get a thumbnail.
-                    return
-                }
-
-                if let screenshot = self.screenshotHelper.takeScreenshot(tab, aspectRatio: CGFloat(ThumbnailCellUX.ImageAspectRatio), quality: 0.5) {
-                    let thumbnail = Thumbnail(image: screenshot)
-                    self.profile.thumbnails.set(url, thumbnail: thumbnail, complete: nil)
-                }
-            }
 
             // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
             // because that event wil not always fire due to unreliable page caching. This will either let us know that

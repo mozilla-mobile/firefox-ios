@@ -124,7 +124,7 @@ class LoginsHelper: BrowserHelper {
             browser?.removeSnackbar(snackBar!)
         }
 
-        snackBar = CountdownSnackBar(attrText: promptMessage,
+        snackBar = TimerSnackBar(attrText: promptMessage,
             img: UIImage(named: "lock_verified"),
             buttons: [
                 SnackButton(title: SaveButtonTitle, callback: { (bar: SnackBar) -> Void in
@@ -159,7 +159,7 @@ class LoginsHelper: BrowserHelper {
             browser?.removeSnackbar(snackBar!)
         }
 
-        snackBar = CountdownSnackBar(attrText: promptMessage,
+        snackBar = TimerSnackBar(attrText: promptMessage,
             img: UIImage(named: "lock_verified"),
             buttons: [
                 SnackButton(title: UpdateButtonTitle, callback: { (bar: SnackBar) -> Void in
