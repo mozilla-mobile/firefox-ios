@@ -69,6 +69,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             enteredText = text
             completionActive = false
             previousSuggestion = ""
+
             // This is required to notify the SearchLoader that some text has changed and previous
             // cached query will get updated.
             notifyTextChanged?()
@@ -92,6 +93,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // Since the text has changed, remove the completion here, and SELtextDidChange will fire the callback to
     // get the new autocompletion.
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        // Accept autocompletions if we're adding characters.
+        canAutocomplete = !string.isEmpty
+
         if completionActive {
             if string.isEmpty {
                 // Characters are being deleted, so clear the autocompletion, but don't change the text.
@@ -159,7 +163,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     func SELtextDidChange(textField: UITextField) {
-        canAutocomplete = true
         if completionActive {
             // Immediately reuse the previous suggestion if it's still valid.
             setAutocompleteSuggestion(previousSuggestion)
@@ -173,7 +176,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     override func deleteBackward() {
-        canAutocomplete = false
         removeCompletion()
         super.deleteBackward()
     }

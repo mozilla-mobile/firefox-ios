@@ -31,8 +31,8 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
     }
 
     var query: String = "" {
-        willSet {
-            if newValue.isEmpty {
+        didSet {
+            if query.isEmpty {
                 self.load(Cursor(status: .Success, msg: "Empty query"))
                 return
             }
@@ -42,9 +42,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 self.inProgress = nil
             }
 
-            // Cache the old value so that we can asynchronously use it
-            let query = self.query
-            let deferred = self.history.getSitesByFrecencyWithLimit(100, whereURLContains: newValue)
+            let deferred = self.history.getSitesByFrecencyWithLimit(100, whereURLContains: query)
             inProgress = deferred as? Cancellable
 
             deferred.uponQueue(dispatch_get_main_queue()) { result in
@@ -53,12 +51,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 // Failed cursors are excluded in .get().
                 if let cursor = result.successValue {
                     self.load(cursor)
-
-                    // If this newValue doesn't start with the old one, we're either backspacing or entering data somewhere
-                    // inside the string. In both cases, we don't want to update the autocomplete.
-                    if newValue.startsWith(query) {
-                        self.urlBar.setAutocompleteSuggestion(self.getAutocompleteSuggestion(cursor))
-                    }
+                    self.urlBar.setAutocompleteSuggestion(self.getAutocompleteSuggestion(cursor))
                 }
             }
         }
