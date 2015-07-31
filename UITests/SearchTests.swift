@@ -19,7 +19,7 @@ class SearchTests: KIFTestCase {
         XCTAssertTrue(found, "Prompt is shown")
 
         // Ensure that no suggestions are visible before answering the prompt.
-        found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
+        found = suggestionsAreVisible(tester())
         XCTAssertFalse(found, "No suggestion shown before prompt selection")
 
         // Ensure that suggestions are visible after selecting Yes.
@@ -34,9 +34,8 @@ class SearchTests: KIFTestCase {
         XCTAssertFalse(found, "Prompt is not shown")
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().clearTextFromAndThenEnterText("foobar", intoViewWithAccessibilityLabel: LabelAddressAndSearch)
-        found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
-        XCTAssertTrue(found, "Search suggestions are still enabled")
-
+        found = suggestionsAreVisible(tester())
+        XCTAssert(found, "Search suggestions are still enabled")
         tester().tapViewWithAccessibilityLabel("Cancel")
         resetSuggestionsPrompt()
 
@@ -47,12 +46,12 @@ class SearchTests: KIFTestCase {
         XCTAssertTrue(found, "Prompt is shown")
 
         // Ensure that no suggestions are visible before answering the prompt.
-        found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
+        found = suggestionsAreVisible(tester())
         XCTAssertFalse(found, "No suggestion buttons are shown")
 
         // Ensure that no suggestions are visible after selecting No.
         tester().tapViewWithAccessibilityLabel("No")
-        found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
+        found = suggestionsAreVisible(tester())
         XCTAssertFalse(found, "No suggestions after choosing No")
 
         tester().tapViewWithAccessibilityLabel("Cancel")
@@ -99,6 +98,13 @@ class SearchTests: KIFTestCase {
 
         // Clean up.
         BrowserUtils.resetToAboutHome(tester())
+    }
+
+    /// Checks whether suggestions are shown. Note that suggestions aren't shown immediately
+    /// due to debounce, so we wait for them to appear.
+    private func suggestionsAreVisible(tester: KIFUITestActor) -> Bool {
+        tester.waitForTimeInterval(0.3)
+        return tester.tryFindingViewWithAccessibilityHint(HintSuggestionButton)
     }
 
     private func resetSuggestionsPrompt() {
