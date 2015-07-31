@@ -265,6 +265,21 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         collectionView.reloadData()
     }
 
+    // MARK: Bluetooth Keyboard Shortcuts
+
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+
+    override var keyCommands: [AnyObject]? {
+        get {
+            return [
+                UIKeyCommand(input: "t", modifierFlags: .Command, action: "SELdidClickAddTab"), // CMD+T
+                UIKeyCommand(input: "b", modifierFlags: .Command, action: "SELdidClickAddTab") // CMD+N
+            ]
+        }
+    }
+
     private func makeConstraints() {
         navBar.snp_makeConstraints { make in
             let topLayoutGuide = self.topLayoutGuide as! UIView
