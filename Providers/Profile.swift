@@ -122,7 +122,6 @@ protocol Profile: class {
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
     var logins: protocol<BrowserLogins, SyncableLogins> { get }
-    var thumbnails: Thumbnails { get }
 
     func shutdown()
 
@@ -327,10 +326,6 @@ public class BrowserProfile: Profile {
     private lazy var loginsDB: BrowserDB = {
         self.loginsDBCreated = true
         return BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
-    }()
-
-    lazy var thumbnails: Thumbnails = {
-        return SDWebThumbnails(files: self.files)
     }()
 
     let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()

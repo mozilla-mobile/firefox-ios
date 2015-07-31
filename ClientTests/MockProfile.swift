@@ -116,10 +116,6 @@ public class MockProfile: Profile {
         return MockLogins(files: self.files)
     }()
 
-    lazy var thumbnails: Thumbnails = {
-        return SDWebThumbnails(files: self.files)
-    }()
-
     let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
     var account: FirefoxAccount? = nil
 
