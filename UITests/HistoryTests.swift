@@ -34,16 +34,15 @@ class HistoryTests: KIFTestCase {
      * Tests for listed history visits
      */
     func testHistoryUI() {
-
         let urls = addHistoryItems(2)
 
         // Check that both appear in the history home panel
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().tapViewWithAccessibilityLabel("History")
 
-        let firstHistoryRow = tester().waitForViewWithAccessibilityLabel(urls[0]) as! UITableViewCell
+        let firstHistoryRow = tester().waitForCellWithAccessibilityLabel(urls[0])
         XCTAssertNotNil(firstHistoryRow.imageView?.image)
-        let secondHistoryRow = tester().waitForViewWithAccessibilityLabel(urls[1]) as! UITableViewCell
+        let secondHistoryRow = tester().waitForCellWithAccessibilityLabel(urls[1])
         XCTAssertNotNil(secondHistoryRow.imageView?.image)
 
         tester().tapViewWithAccessibilityLabel("Cancel")
