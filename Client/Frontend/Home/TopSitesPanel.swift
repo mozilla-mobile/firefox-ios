@@ -167,9 +167,9 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    private func deleteHistoryTileForURL(url: String, atIndexPath indexPath: NSIndexPath) {
-        profile.history.removeHistoryForURL(url) >>== {
-            self.profile.history.getSitesByFrecencyWithLimit(100).uponQueue(dispatch_get_main_queue(), block: { result in
+    private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
+        profile.history.removeSiteFromTopSites(site) >>== {
+            self.profile.history.getSitesByFrecencyWithLimit(self.layout.thumbnailCount).uponQueue(dispatch_get_main_queue(), block: { result in
                 self.updateDataSourceWithSites(result)
                 self.deleteOrUpdateSites(result, indexPath: indexPath)
             })
@@ -237,9 +237,8 @@ extension TopSitesPanel: UICollectionViewDelegate {
 extension TopSitesPanel: ThumbnailCellDelegate {
     func didRemoveThumbnail(thumbnailCell: ThumbnailCell) {
         if let indexPath = collection?.indexPathForCell(thumbnailCell) {
-            let site = dataSource[indexPath.item]
-            if let url = site?.url {
-                self.deleteHistoryTileForURL(url, atIndexPath: indexPath)
+            if let site = dataSource[indexPath.item] {
+                self.deleteHistoryTileForSite(site, atIndexPath: indexPath)
             }
         }
         
