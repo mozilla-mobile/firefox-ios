@@ -8,8 +8,6 @@ import SnapKit
 import UIKit
 import WebKit
 
-let FxADefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on load times in the wild.
-
 protocol FxAContentViewControllerDelegate {
     func contentViewControllerDidSignIn(viewController: FxAContentViewController, data: JSON) -> Void
     func contentViewControllerDidCancel(viewController: FxAContentViewController)
@@ -23,7 +21,7 @@ protocol FxAContentViewControllerDelegate {
  * enough.  I reverse engineered it from the Desktop Firefox code and the
  * fxa-content-server git repository.
  */
-class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavigationDelegate {
+class FxAContentViewController: SettingsContentViewController, WKScriptMessageHandler {
     private enum RemoteCommand: String {
         case CanLinkAccount = "can_link_account"
         case Loaded = "loaded"
@@ -32,95 +30,22 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
         case SignOut = "sign_out"
     }
 
-    var url: NSURL!
-
     var delegate: FxAContentViewControllerDelegate?
-    var debug: Bool = false
 
-    private var timer: NSTimer?
-    private var isLoaded: Bool = false {
-        didSet {
-            if isLoaded {
-                 UIView.transitionFromView(interstitialView, toView: webView,
-                    duration: 0.5,
-                    options: UIViewAnimationOptions.TransitionCrossDissolve,
-                    completion: { finished in
-                        self.interstitialView.removeFromSuperview()
-                        self.interstitialSpinnerView.stopAnimating()
-                    })
-            }
-        }
+    init() {
+        super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
     }
 
-    private var isError: Bool = false {
-        didSet {
-            if isError {
-                interstitialErrorView.hidden = false
-                UIView.transitionFromView(interstitialSpinnerView, toView: interstitialErrorView,
-                    duration: 0.5,
-                    options: UIViewAnimationOptions.TransitionCrossDissolve,
-                    completion: { finished in
-                        self.interstitialSpinnerView.removeFromSuperview()
-                        self.interstitialSpinnerView.stopAnimating()
-                })
-            }
-        }
-    }
-
-    // The view shown while the content is loading in the background web view.
-    private var interstitialView: UIView!
-    private var interstitialSpinnerView: UIActivityIndicatorView!
-    private var interstitialErrorView: UILabel!
-
-    // The web view that displays content from the fxa-content-server.
-    private var webView: WKWebView!
-
-    func startLoading(timeout: Double = FxADefaultTimeoutTimeInterval) {
-        if self.isLoaded {
-            return
-        }
-        if timeout > 0 {
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(timeout, target: self, selector: "SELdidTimeOut", userInfo: nil, repeats: false)
-        } else {
-            self.timer = nil
-        }
-        self.webView.loadRequest(NSURLRequest(URL: url))
-        self.interstitialSpinnerView.startAnimating()
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
-        super.viewDidLoad()
-
         KeyboardHelper.defaultHelper.addDelegate(self)
-
-        // Don't extend under navigation bar.
-        self.edgesForExtendedLayout = UIRectEdge.None
-
-        // This background agrees with the content server background.
-        // Keeping the background constant prevents a pop of mismatched color.
-        view.backgroundColor = UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0)
-
-        self.webView = makeWebView()
-        view.addSubview(webView)
-
-        // Destructuring let causes problems.
-        let ret = makeInterstitialViews()
-        self.interstitialView = ret.0
-        self.interstitialSpinnerView = ret.1
-        self.interstitialErrorView = ret.2
-
-        view.addSubview(interstitialView)
-        if debug {
-            // This lets you see the underlying webview, but not interact with it.
-            interstitialView.alpha = 0.5
-        }
-
-        layoutInnerViews()
-
-        startLoading()
+        super.viewDidLoad()
     }
 
-    private func makeWebView() -> WKWebView {
+    override func makeWebView() -> WKWebView {
         // Inject  our setup code after the page loads.
         let source = getJS()
         let userScript = WKUserScript(
@@ -149,37 +74,6 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
         // Don't allow overscrolling.
         webView.scrollView.bounces = false
         return webView
-    }
-
-    private func makeInterstitialViews() -> (UIView, UIActivityIndicatorView, UILabel) {
-        let view = UIView()
-        // Keeping the background constant prevents a pop of mismatched color.
-        view.backgroundColor = UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0)
-
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
-        view.addSubview(spinner)
-
-        let error = UILabel()
-        error.text = NSLocalizedString("Could not connect to Firefox Accounts.", comment: "Error message that is shown in settings when there was a problem connecting to Firefox Accounts")
-        error.textColor = UIColor.redColor() // Firefox Orange!
-        error.textAlignment = NSTextAlignment.Center
-        error.hidden = true
-        view.addSubview(error)
-
-        spinner.snp_makeConstraints { make in
-            make.center.equalTo(view)
-            return
-        }
-
-        error.snp_makeConstraints { make in
-            make.center.equalTo(view)
-            make.left.equalTo(view.snp_left).offset(20)
-            make.right.equalTo(view.snp_right).offset(-20)
-            make.height.equalTo(44)
-            return
-        }
-
-        return (view, spinner, error)
     }
 
     // Send a message to the content server.
@@ -270,56 +164,11 @@ class FxAContentViewController: UIViewController, WKScriptMessageHandler, WKNavi
         return NSString(contentsOfFile: fileRoot!, encoding: NSUTF8StringEncoding, error: nil)! as String
     }
 
-    func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
-        self.timer = nil
-        self.isError = true
-    }
-
-    func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+    override func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         // Ignore for now.
     }
 
-    func SELdidTimeOut() {
-        self.timer = nil
-        self.isError = true
-    }
-}
-
-extension FxAContentViewController: KeyboardHelperDelegate {
-    private func layoutInnerViews() {
-        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.webView) ?? 0
-
-        self.webView.snp_remakeConstraints { make in
-            make.left.right.top.equalTo(self.view)
-            make.bottom.equalTo(self.view).offset(-keyboardHeight)
-        }
-        if !isLoaded {
-            // If the page has loaded, the interstitial view will have been removed.
-            self.interstitialView.snp_remakeConstraints { make in
-                make.left.right.top.equalTo(self.view)
-                make.bottom.equalTo(self.view).offset(-keyboardHeight)
-            }
-        }
-    }
-
-    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
-        animateInnerViewsWithKeyboard(state)
-    }
-
-    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
-        animateInnerViewsWithKeyboard(state)
-    }
-
-    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        animateInnerViewsWithKeyboard(state)
-    }
-
-    private func animateInnerViewsWithKeyboard(keyboardState: KeyboardState) {
-        layoutInnerViews()
-
-        UIView.animateWithDuration(keyboardState.animationDuration, animations: {
-            UIView.setAnimationCurve(keyboardState.animationCurve)
-            self.view.layoutIfNeeded()
-        })
+    override func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
+        // Ignore for now.
     }
 }

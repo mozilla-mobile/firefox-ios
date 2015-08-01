@@ -11,9 +11,6 @@ import XCGLogger
 private var ShowDebugSettings: Bool = false
 private var DebugSettingsClickCount: Int = 0
 
-private var TODOPrivacyTempString = NSLocalizedString("Privacy Policy", comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/")
-private var TODOPrivacyErrorString = NSLocalizedString("Could not load settings page.", comment: "Error message that is shown in settings when there was a problem loading")
-
 // A base TableViewCell, to help minimize initialization and allow recycling.
 class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -34,7 +31,10 @@ class Setting {
     private var cell: UITableViewCell?
     private var _title: NSAttributedString?
 
-    // The title shown on the pref
+    // The url the SettingsContentViewController will show, e.g. Licenses and Privacy Policy.
+    var url: NSURL? { return nil }
+
+    // The title shown on the pref.
     var title: NSAttributedString? { return _title }
 
     // An optional second line of text shown on the pref.
@@ -57,6 +57,16 @@ class Setting {
 
     // Called when the pref is tapped.
     func onClick(navigationController: UINavigationController?) { return }
+
+    // Helper method to set up and push a SettingsContentViewController
+    func setUpAndPushSettingsContentViewController(navigationController: UINavigationController?) {
+        if let url = self.url {
+            let viewController = SettingsContentViewController()
+            viewController.settingsTitle = self.title
+            viewController.url = url
+            navigationController?.pushViewController(viewController, animated: true)
+        }
+    }
 
     init(title: NSAttributedString? = nil) {
         self._title = title
@@ -405,20 +415,16 @@ private class VersionSetting : Setting {
 
 // Opens the the license page in a new tab
 private class LicenseAndAcknowledgementsSetting: Setting {
-    init() {
-        super.init(title: NSAttributedString(string: NSLocalizedString("Licenses", comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Licenses", comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override var url: NSURL? {
+        return NSURL(string: WebServer.sharedInstance.URLForResource("license", module: "about"))
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        navigationController?.dismissViewControllerAnimated(true, completion: {
-            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-                let rootNavigationController = appDelegate.rootViewController
-                rootNavigationController.popViewControllerAnimated(true)
-                if let url = NSURL(string: WebServer.sharedInstance.URLForResource("license", module: "about")) {
-                    appDelegate.browserViewController.openURLInNewTab(url)
-                }
-            }
-        })
+        setUpAndPushSettingsContentViewController(navigationController)
     }
 }
 
@@ -558,6 +564,20 @@ private class SendCrashReportsSetting: Setting {
     }
 }
 
+private class PrivacyPolicySetting: Setting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Privacy Policy", comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override var url: NSURL? {
+        return NSURL(string: "https://www.mozilla.org/privacy/firefox/")
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        setUpAndPushSettingsContentViewController(navigationController)
+    }
+}
+
 private class PopupBlockingSettings: Setting {
     let prefs: Prefs
     let tabManager: TabManager!
@@ -637,7 +657,8 @@ class SettingsTableViewController: UITableViewController {
         settings += [
             SettingSection(title: NSAttributedString(string: privacyTitle), children: [
                 ClearPrivateDataSetting(settings: self),
-                SendCrashReportsSetting(settings: self)
+                SendCrashReportsSetting(settings: self),
+                PrivacyPolicySetting(),
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
                 ShowIntroductionSetting(settings: self),
