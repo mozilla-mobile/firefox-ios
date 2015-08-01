@@ -594,6 +594,7 @@ extension TabTrayController: TabManagerDelegate {
         }, completion: { finished in
             if tabManager.count == 0 {
                 newTab = tabManager.addTab()
+                tabManager.selectTab(newTab)
             }
         })
     }

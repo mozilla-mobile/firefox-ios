@@ -247,7 +247,7 @@ class TabManager : NSObject {
         }
         storeChanges()
 
-        _selectedIndex = 0
+        _selectedIndex = -1
     }
 
     func getIndex(tab: Browser) -> Int {
