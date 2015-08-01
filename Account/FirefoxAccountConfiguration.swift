@@ -21,6 +21,8 @@ public enum FirefoxAccountConfigurationLabel: String {
 /**
  * In the URLs below, service=sync ensures that we always get the keys with signin messages,
  * and context=fx_desktop_v1 opts us in to the Desktop Sync postMessage interface.
+ *
+ * For the moment we add exclude_signup as a parameter to limit the UI; see Bug 1190097.
  */
 public protocol FirefoxAccountConfiguration {
     init()
@@ -90,8 +92,8 @@ public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration
     public let oauthEndpointURL = NSURL(string: "https://oauth.accounts.firefox.com/v1")!
     public let profileEndpointURL = NSURL(string: "https://profile.accounts.firefox.com/v1")!
 
-    public let signInURL = NSURL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_desktop_v1")!
-    public let settingsURL = NSURL(string: "https://accounts.firefox.com/settings?context=fx_desktop_v1")!
+    public let signInURL = NSURL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_desktop_v1&exclude_signup=1")!
+    public let settingsURL = NSURL(string: "https://accounts.firefox.com/settings?context=fx_desktop_v1&exclude_signup=1")!
     public let forceAuthURL = NSURL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_desktop_v1")!
 
     public let sync15Configuration: Sync15Configuration = ProductionSync15Configuration()
