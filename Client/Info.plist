@@ -12,8 +12,6 @@
 	<string>$(MOZ_BREAKPAD_UPLOAD_FREQUENCY)</string>
 	<key>BreakpadServerType</key>
 	<string>$(MOZ_BREAKPAD_SERVER_TYPE)</string>
-	<key>BreakpadShouldUpload</key>
-	<string>$(MOZ_BREAKPAD_SHOULD_UPLOAD)</string>
 	<key>BreakpadURL</key>
 	<string>https://$(MOZ_BREAKPAD_URL)</string>
 	<key>BreakpadVersion</key>

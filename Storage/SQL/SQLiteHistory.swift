@@ -104,18 +104,29 @@ public class SQLiteHistory {
     let db: BrowserDB
     let favicons: FaviconsTable<Favicon>
 
-    required public init(db: BrowserDB) {
+    required public init?(db: BrowserDB, version: Int? = nil) {
         self.db = db
         self.favicons = FaviconsTable<Favicon>()
-        db.createOrUpdate(self.favicons)
+        if !db.createOrUpdate(self.favicons) {
+            return nil
+        }
 
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
-        db.createOrUpdate(BrowserTable())
+        if !db.createOrUpdate(BrowserTable(version: version ?? BrowserTable.DefaultVersion)) {
+            return nil
+        }
     }
 }
 
 extension SQLiteHistory: BrowserHistory {
+    public func removeSiteFromTopSites(site: Site) -> Success {
+        if let host = site.url.asURL?.normalizedHost() {
+            return db.run([("UPDATE \(TableDomains) set showOnTopSites = 0 WHERE domain = ?", [host])])
+        }
+        return deferResult(DatabaseError(description: "Invalid url for site \(site.url)"))
+    }
+
     public func removeHistoryForURL(url: String) -> Success {
         let visitArgs: Args = [url]
         let deleteVisits = "DELETE FROM \(TableVisits) WHERE siteID = (SELECT id FROM \(TableHistory) WHERE url = ?)"
@@ -133,6 +144,7 @@ extension SQLiteHistory: BrowserHistory {
     public func clearHistory() -> Success {
         return db.run([("DELETE FROM \(TableVisits)", nil),
                        ("DELETE FROM \(TableHistory)", nil),
+                       ("DELETE FROM \(TableDomains)", nil),
                        self.favicons.getCleanupCommands()])
     }
 
@@ -147,39 +159,64 @@ extension SQLiteHistory: BrowserHistory {
         db.withWritableConnection(&error) { (conn, inout err: NSError?) -> Int in
             let now = NSDate.nowNumber()
 
-            // We know we're adding a new visit, so we'll need to upload this record.
-            // If we ever switch to per-visit change flags, this should turn into a CASE statement like
-            //   CASE WHEN title IS ? THEN max(should_upload, 1) ELSE should_upload END
-            // so that we don't flag this as changed unless the title changed.
-            //
-            // Note that we will never match against a deleted item, because deleted items have no URL,
-            // so we don't need to unset is_deleted here.
-            let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1 WHERE url = ?"
-            let updateArgs: Args? = [site.title, now, site.url]
-            if LogPII {
-                log.debug("Setting title to \(site.title) for URL \(site.url)")
-            }
-            error = conn.executeChange(update, withArgs: updateArgs)
-            if error != nil {
-                log.warning("Update failed with \(err?.localizedDescription)")
-                return 0
-            }
-            if conn.numberOfRowsModified > 0 {
-                return conn.numberOfRowsModified
+            let i = self.updateSite(site, atTime: now, withConnection: conn)
+            if i > 0 {
+                return i
             }
 
             // Insert instead.
-            let insert = "INSERT INTO \(TableHistory) (guid, url, title, local_modified, is_deleted, should_upload) VALUES (?, ?, ?, ?, 0, 1)"
-            let insertArgs: Args? = [Bytes.generateGUID(), site.url, site.title, now]
-            error = conn.executeChange(insert, withArgs: insertArgs)
-            if error != nil {
-                log.warning("Insert failed with \(err?.localizedDescription)")
-                return 0
-            }
-            return 1
+            return self.insertSite(site, atTime: now, withConnection: conn)
         }
 
         return failOrSucceed(error, "Record site")
+    }
+
+    func updateSite(site: Site, atTime time: NSNumber, withConnection conn: SQLiteDBConnection) -> Int {
+        // We know we're adding a new visit, so we'll need to upload this record.
+        // If we ever switch to per-visit change flags, this should turn into a CASE statement like
+        //   CASE WHEN title IS ? THEN max(should_upload, 1) ELSE should_upload END
+        // so that we don't flag this as changed unless the title changed.
+        //
+        // Note that we will never match against a deleted item, because deleted items have no URL,
+        // so we don't need to unset is_deleted here.
+        if let host = site.url.asURL?.normalizedHost() {
+            let update = "UPDATE \(TableHistory) SET title = ?, local_modified = ?, should_upload = 1, domain_id = (SELECT id FROM \(TableDomains) where domain = ?) WHERE url = ?"
+            let updateArgs: Args? = [site.title, time, host, site.url]
+            if LogPII {
+                log.debug("Setting title to \(site.title) for URL \(site.url)")
+            }
+            let error = conn.executeChange(update, withArgs: updateArgs)
+            if error != nil {
+                log.warning("Update failed with \(error?.localizedDescription)")
+                return 0
+            }
+            return conn.numberOfRowsModified
+        }
+        return 0
+    }
+
+    private func insertSite(site: Site, atTime time: NSNumber, withConnection conn: SQLiteDBConnection) -> Int {
+        var error: NSError? = nil
+
+        if let host = site.url.asURL?.normalizedHost() {
+            if let error = conn.executeChange("INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)", withArgs: [host]) {
+                log.warning("Domain insertion failed with \(error.localizedDescription)")
+                return 0
+            }
+
+            let insert = "INSERT INTO \(TableHistory) " +
+                         "(guid, url, title, local_modified, is_deleted, should_upload, domain_id) " +
+                         "SELECT ?, ?, ?, ?, 0, 1, id FROM \(TableDomains) WHERE domain = ?"
+            let insertArgs: Args? = [site.guid ?? Bytes.generateGUID(), site.url, site.title, time, host]
+            if let error = conn.executeChange(insert, withArgs: insertArgs) {
+                log.warning("Site insertion failed with \(error.localizedDescription)")
+                return 0
+            }
+
+            return 1
+        }
+        log.warning("Invalid URL \(site.url). Not stored in history.")
+        return 0
     }
 
     // TODO: thread siteID into this to avoid the need to do the lookup.
@@ -194,7 +231,7 @@ extension SQLiteHistory: BrowserHistory {
             let insertArgs: Args? = [visit.site.url, realDate, visit.type.rawValue]
             error = conn.executeChange(insert, withArgs: insertArgs)
             if error != nil {
-                log.warning("Insert visit failed with \(err?.localizedDescription)")
+                log.warning("Visit insertion failed with \(err?.localizedDescription)")
                 return 0
             }
             return 1
@@ -209,19 +246,26 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
-        return self.getSitesByFrecency(limit: limit, filter: nil)
+        return self.getSitesByFrecencyWithLimit(limit, includeIcon: true)
     }
 
-    public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
-        return self.getSitesByFrecency(limit: limit, filter: filter)
-    }
+    public func getSitesByFrecencyWithLimit(limit: Int, includeIcon: Bool) -> Deferred<Result<Cursor<Site>>> {
+        let groupBy = "GROUP BY domain_id "
+        let whereData = "\(TableDomains).showOnTopSites IS 1 "
 
-    private func getSitesByFrecency(#limit: Int, filter: String? = nil) -> Deferred<Result<Cursor<Site>>> {
+        // Note: Because we're grouping by domain, these frecencys are also per domain, not per site.
         let localFrecencySQL = getLocalFrecencySQL()
         let remoteFrecencySQL = getRemoteFrecencySQL()
         let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
 
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: filter, orderBy: orderBy, includeIcon: true)
+        return self.getFilteredSitesWithLimit(limit, groupClause: groupBy, orderBy: orderBy, whereData: whereData, includeIcon: includeIcon)
+    }
+
+    public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
+        let localFrecencySQL = getLocalFrecencySQL()
+        let remoteFrecencySQL = getRemoteFrecencySQL()
+        let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
+        return self.getFilteredSitesWithLimit(limit, whereURLContains: filter, orderBy: orderBy)
     }
 
     public func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
@@ -269,38 +313,55 @@ extension SQLiteHistory: BrowserHistory {
         return site
     }
 
-    private func getFilteredSitesWithLimit(limit: Int, whereURLContains filter: String?, orderBy: String, includeIcon: Bool) -> Deferred<Result<Cursor<Site>>> {
+    private func getFilteredSitesWithLimit(limit: Int,
+                                           whereURLContains filter: String? = nil,
+                                           groupClause: String = "GROUP BY historyID ",
+                                           orderBy: String = "ORDER BY visitDate DESC ",
+                                           whereData: String? = nil,
+                                           includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
         let args: Args?
         let whereClause: String
+        let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
         if let filter = filter {
             args = ["%\(filter)%", "%\(filter)%"]
 
             // No deleted item has a URL, so there is no need to explicitly add that here.
-            whereClause = " WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) "
+            whereClause = " WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) \(whereFragment)"
         } else {
             args = []
-            whereClause = " WHERE (\(TableHistory).is_deleted = 0)"
+            whereClause = " WHERE (\(TableHistory).is_deleted = 0) \(whereFragment)"
         }
 
-        // We partition the results to return local and remote visits separately. They contribute differently
-        // to frecency; see much earlier in this file.
-        let historySQL =
-        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, " +
+        let ungroupedSQL =
+        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain, " +
         "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate, " +
         "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate, " +
         "COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount, " +
         "COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount " +
-        "FROM \(TableHistory) INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
-        whereClause +
-        "GROUP BY \(TableHistory).id " +
+        "FROM \(TableHistory) " +
+        "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
+        "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
+        whereClause + " GROUP BY historyID"
+
+        // We partition the results to return local and remote visits separately. They contribute differently
+        // to frecency; see much earlier in this file.
+        let historySQL =
+        "SELECT historyID, url, title, guid, domain_id, domain, " +
+        "max(localVisitDate) AS localVisitDate, " +
+        "max(remoteVisitDate) AS remoteVisitDate, " +
+        "sum(localVisitCount) AS localVisitCount, " +
+        "sum(remoteVisitCount) AS remoteVisitCount " +
+        "FROM (" + ungroupedSQL + ") " +
+        "WHERE ((localVisitCount + remoteVisitCount) > 0) " +    // Eliminate dead rows from coalescing.
+        groupClause + " " +
         orderBy +
-        "LIMIT \(limit) "
+        " LIMIT \(limit) "
 
         if includeIcon {
             // We select the history items then immediately join to get the largest icon.
             // We do this so that we limit and filter *before* joining against icons.
             let sql = "SELECT " +
-                "historyID, url, title, guid, " +
+                "historyID, url, title, guid, domain_id, domain, " +
                 "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount, " +
                 "iconID, iconURL, iconDate, iconType, iconWidth " +
                 "FROM (\(historySQL)) LEFT OUTER JOIN " +
@@ -560,12 +621,21 @@ extension SQLiteHistory: SyncableHistory {
 
             // The record doesn't exist locally. Insert it.
             log.debug("Inserting remote history item for guid \(place.guid).")
-            if LogPII {
-                log.debug("Inserting: \(place.url).")
+            if let host = place.url.asURL?.normalizedHost() {
+                if LogPII {
+                    log.debug("Inserting: \(place.url).")
+                }
+
+                let insertDomain = "INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)"
+                let insertHistory = "INSERT INTO \(TableHistory) (guid, url, title, server_modified, is_deleted, should_upload, domain_id) " +
+                                    "SELECT ?, ?, ?, ?, 0, 0, id FROM \(TableDomains) where domain = ?"
+                return self.db.run([
+                    (insertDomain, [host]),
+                    (insertHistory, [place.guid, place.url, place.title, serverModified, host])
+                ]) >>> always(place.guid)
             }
-            let insert = "INSERT INTO \(TableHistory) (guid, url, title, server_modified, is_deleted, should_upload) VALUES (?, ?, ?, ?, 0, 0)"
-            let args: Args = [place.guid, place.url, place.title, serverModified]
-            return self.db.run(insert, withArgs: args) >>> always(place.guid)
+
+            return deferResult(DatabaseError(description: "Could not get a domain for \(place.url)"))
         }
 
         // Make sure that we only need to compare GUIDs by pre-merging on URL.

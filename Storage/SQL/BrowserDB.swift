@@ -101,7 +101,8 @@ public class BrowserDB {
     }
 
     // Updates a table and writes its table into the table-table database.
-    private func updateTable<T: Table>(db: SQLiteDBConnection, table: T) -> TableResult {
+    // Exposed internally for testing.
+    func updateTable<T: Table>(db: SQLiteDBConnection, table: T) -> TableResult {
         log.debug("Trying update \(table.name) version \(table.version)")
         var from = 0
         // Try to find the stored version of the table
