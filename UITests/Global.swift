@@ -145,6 +145,42 @@ class BrowserUtils {
         info["visitType"] = VisitType.Link.rawValue
         notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
     }
+
+    class func ensureAutocompletionResult(tester: KIFUITestActor, textField: UITextField, prefix: String, completion: String) {
+        // searches are async (and debounced), so we have to wait for the results to appear.
+        tester.waitForViewWithAccessibilityValue(prefix + completion)
+
+        var range = NSRange()
+        var attribute: AnyObject?
+        let textLength = count(textField.text)
+
+        attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, atIndex: 0, effectiveRange: &range)
+
+        if attribute != nil {
+            // If the background attribute exists for the first character, the entire string is highlighted.
+            XCTAssertEqual(prefix, "")
+            XCTAssertEqual(completion, textField.text)
+            return
+        }
+
+        let prefixLength = range.length
+
+        attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, atIndex: textLength - 1, effectiveRange: &range)
+
+        if attribute == nil {
+            // If the background attribute exists for the last character, the entire string is not highlighted.
+            XCTAssertEqual(prefix, textField.text)
+            XCTAssertEqual(completion, "")
+            return
+        }
+
+        let completionStartIndex = advance(textField.text.startIndex, prefixLength)
+        let actualPrefix = textField.text.substringToIndex(completionStartIndex)
+        let actualCompletion = textField.text.substringFromIndex(completionStartIndex)
+
+        XCTAssertEqual(prefix, actualPrefix, "Expected prefix matches actual prefix")
+        XCTAssertEqual(completion, actualCompletion, "Expected completion matches actual completion")
+    }
 }
 
 class SimplePageServer {

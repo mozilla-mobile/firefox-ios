@@ -204,7 +204,7 @@ class BrowserViewController: UIViewController {
         pasteAction = AccessibleAction(name: NSLocalizedString("Paste", comment: "Paste the URL into the location bar"), handler: { () -> Bool in
             if let pasteboardContents = UIPasteboard.generalPasteboard().string {
                 // Enter overlay mode and fire the text entered callback to make the search controller appear.
-                self.urlBar.enterOverlayMode(pasteboardContents)
+                self.urlBar.enterOverlayMode(pasteboardContents, pasted: true)
                 self.urlBar(self.urlBar, didEnterText: pasteboardContents)
                 return true
             }
