@@ -119,6 +119,14 @@ public class MockProfile: Profile {
     let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
     var account: FirefoxAccount? = nil
 
+    func hasAccount() -> Bool {
+        return account != nil
+    }
+
+    func hasSyncableAccount() -> Bool {
+        return account?.actionNeeded == FxAActionNeeded.None
+    }
+
     func getAccount() -> FirefoxAccount? {
         return account
     }

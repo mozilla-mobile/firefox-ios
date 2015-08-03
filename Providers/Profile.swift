@@ -132,6 +132,12 @@ protocol Profile: class {
     // URLs and account configuration.
     var accountConfiguration: FirefoxAccountConfiguration { get }
 
+    // Do we have an account at all?
+    func hasAccount() -> Bool
+
+    // Do we have an account that (as far as we know) is in a syncable state?
+    func hasSyncableAccount() -> Bool
+
     func getAccount() -> FirefoxAccount?
     func removeAccount()
     func setAccount(account: FirefoxAccount)
@@ -336,6 +342,14 @@ public class BrowserProfile: Profile {
         }
         return nil
     }()
+
+    func hasAccount() -> Bool {
+        return account != nil
+    }
+
+    func hasSyncableAccount() -> Bool {
+        return account?.actionNeeded == FxAActionNeeded.None
+    }
 
     func getAccount() -> FirefoxAccount? {
         return account
