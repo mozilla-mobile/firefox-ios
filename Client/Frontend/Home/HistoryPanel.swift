@@ -81,7 +81,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged, NotificationPrivateDataCleared:
-            refresh()
+            resyncHistory()
             break
         default:
             // no need to do anything at all
@@ -90,19 +90,30 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    @objc func refresh() {
-        self.refreshControl?.beginRefreshing()
+    /**
+    * sync history with the server and ensure that we update our view afterwards
+    **/
+    func resyncHistory(completion: (()->())? = nil) {
         profile.syncManager.syncHistory().uponQueue(dispatch_get_main_queue()) { result in
             if result.isSuccess {
                 self.reloadData()
             }
-
-            // Always end refreshing, even if we failed!
-            self.refreshControl?.endRefreshing()
+            completion?()
         }
     }
 
-    private func refetchData() -> Deferred<Result<Cursor<Site>>> {
+    /**
+    * called by the table view pull to refresh
+    **/
+    @objc func refresh() {
+        self.refreshControl?.beginRefreshing()
+        resyncHistory(completion: self.refreshControl?.endRefreshing)
+    }
+
+    /**
+    * fetch from the profile
+    **/
+    private func fetchData() -> Deferred<Result<Cursor<Site>>> {
         return profile.history.getSitesByLastVisit(QueryLimit)
     }
 
@@ -111,8 +122,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         self.computeSectionOffsets()
     }
 
+    /**
+    * Update our view after a data refresh
+    **/
     override func reloadData() {
-        self.refetchData().uponQueue(dispatch_get_main_queue()) { result in
+        self.fetchData().uponQueue(dispatch_get_main_queue()) { result in
             if let data = result.successValue {
                 self.setData(data)
                 self.tableView.reloadData()
@@ -305,7 +319,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 // Deferred instead of using callbacks.
                 self.profile.history.removeHistoryForURL(site.url)
                     .upon { res in
-                        self.refetchData().uponQueue(dispatch_get_main_queue()) { result in
+                        self.fetchData().uponQueue(dispatch_get_main_queue()) { result in
                             // If a section will be empty after removal, we must remove the section itself.
                             if let data = result.successValue {
 
