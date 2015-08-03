@@ -19,7 +19,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if profile.getAccount() == nil {
+        if !profile.hasAccount() {
             let instructionsViewController = InstructionsViewController()
             instructionsViewController.delegate = self
             let navigationController = UINavigationController(rootViewController: instructionsViewController)

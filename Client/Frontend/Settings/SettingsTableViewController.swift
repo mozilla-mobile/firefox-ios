@@ -134,11 +134,11 @@ private class AccountSetting: Setting, FxAContentViewControllerDelegate {
 }
 
 private class WithAccountSetting: AccountSetting {
-    override var hidden: Bool { return profile.getAccount() == nil }
+    override var hidden: Bool { return !profile.hasAccount() }
 }
 
 private class WithoutAccountSetting: AccountSetting {
-    override var hidden: Bool { return profile.getAccount() != nil }
+    override var hidden: Bool { return profile.hasAccount() }
 }
 
 // Sync setting for connecting a Firefox Account.  Shown when we don't have an account.
