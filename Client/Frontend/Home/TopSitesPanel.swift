@@ -376,7 +376,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
 
     @objc func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if data.status != .Success {
-            return 0
+            return suggestedSites.count
         }
 
         // If there aren't enough data items to fill the grid, look for items in suggested sites.
@@ -476,7 +476,12 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
 
     subscript(index: Int) -> Site? {
         if data.status != .Success {
-            return nil
+            if index < suggestedSites.count {
+                return suggestedSites[index]
+            }
+            else {
+                return nil
+            }
         }
 
         if index >= data.count {
