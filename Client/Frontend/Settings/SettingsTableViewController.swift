@@ -6,6 +6,7 @@ import Account
 import Base32
 import Shared
 import UIKit
+import XCGLogger
 
 private var ShowDebugSettings: Bool = false
 private var DebugSettingsClickCount: Int = 0
@@ -27,6 +28,7 @@ class SettingsTableViewCell: UITableViewCell {
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 class Setting {
+    private var cell: UITableViewCell?
     private var _title: NSAttributedString?
 
     // The title shown on the pref
@@ -184,6 +186,45 @@ private class DisconnectSetting: WithAccountSetting {
     }
 }
 
+private class SyncNowSetting: WithAccountSetting {
+    private let syncNowTitle = NSAttributedString(string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(UIConstants.DefaultStandardFontSize, weight: UIFontWeightRegular)])
+
+    private let log = XCGLogger.defaultInstance()
+
+    override var accessoryType: UITableViewCellAccessoryType { return .None }
+
+    override var style: UITableViewCellStyle { return .Value1 }
+
+    override var title: NSAttributedString? {
+        return syncNowTitle
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        cell.textLabel?.attributedText = title
+        cell.accessoryType = accessoryType
+        cell.accessoryView = nil
+        self.cell = cell
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        if let cell = self.cell {
+            cell.userInteractionEnabled = false
+            cell.textLabel?.attributedText = NSAttributedString(string: NSLocalizedString("Syncing...", comment: "Syncing Firefox Account"), attributes: [NSForegroundColorAttributeName: UIConstants.ControlTintColor])
+            profile.syncManager.syncEverything().uponQueue(dispatch_get_main_queue()) { result in
+                if result.isSuccess {
+                    self.log.debug("Sync succeeded.")
+                } else {
+                    self.log.debug("Sync failed.")
+                }
+            }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * Int64(NSEC_PER_SEC)), dispatch_get_main_queue(), { () -> Void in
+                cell.textLabel?.attributedText = self.syncNowTitle
+                cell.userInteractionEnabled = true
+            })
+        }
+    }
+}
+
 // Sync setting that shows the current Firefox Account status.
 private class AccountStatusSetting: WithAccountSetting {
     override var accessoryType: UITableViewCellAccessoryType {
@@ -255,10 +296,12 @@ private class AccountStatusSetting: WithAccountSetting {
                 viewController.url = cs?.URL
             case .None, .NeedsUpgrade:
                 // In future, we'll want to link to /settings and an upgrade page, respectively.
-                return
+                if let cs = NSURLComponents(URL: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false) {
+                    cs.queryItems?.append(NSURLQueryItem(name: "email", value: account.email))
+                    viewController.url = cs.URL
+                }
             }
         }
-
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -582,6 +625,7 @@ class SettingsTableViewController: UITableViewController {
                 ConnectSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
+                SyncNowSetting(settings: self)
             ] + accountDebugSettings),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)
         ]
