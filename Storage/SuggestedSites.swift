@@ -27,11 +27,11 @@ public class SuggestedSite: Site {
     }
 }
 
-public let SuggestedSites: Cursor<SuggestedSite> = SuggestedSitesData<SuggestedSite>()
+public let SuggestedSites: SuggestedSitesData<SuggestedSite> = SuggestedSitesData<SuggestedSite>()
 
-private class SuggestedSitesData<T>: ArrayCursor<SuggestedSite> {
+public class SuggestedSitesData<T>: ArrayCursor<SuggestedSite> {
     private init() {
-        // TODO: Make this list localized. That should be as simple as making sure its in the lproj directory.
+        // TODO: Make this list localized. That should be as simple as making sure it's in the lproj directory.
         var err: NSError? = nil
         let path = NSBundle.mainBundle().pathForResource("suggestedsites", ofType: "json")
         let data = NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: &err)

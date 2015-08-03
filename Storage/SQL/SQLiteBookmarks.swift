@@ -122,8 +122,11 @@ public class SQLiteBookmarks: BookmarksModelFactory {
             failure(children.statusMessage)
             return
         }
+
+        // We add some suggested sites to the mobile bookmarks folder.
         let f = SQLiteBookmarkFolder(guid: guid, title: title, children: children)
-        success(BookmarksModel(modelFactory: self, root: f))
+        let extended = BookmarkFolderWithDefaults(folder: f, sites: SuggestedSites)
+        success(BookmarksModel(modelFactory: self, root: extended))
     }
 
     public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {

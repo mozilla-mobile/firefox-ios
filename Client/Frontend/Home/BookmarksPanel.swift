@@ -58,11 +58,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     private func onNewModel(model: BookmarksModel) {
-        if model.current.count == 0 && model.current.guid == BookmarkRoots.MobileFolderGUID {
-            self.source = nil
-        } else {
-            self.source = model
-        }
+        self.source = model
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
         }
@@ -109,7 +105,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         // Don't show a header for the root
-        if source?.current.guid == BookmarkRoots.MobileFolderGUID {
+        if source == nil || source?.current.guid == BookmarkRoots.MobileFolderGUID {
             return nil
         }
 
@@ -163,14 +159,15 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
         if source == nil {
             return [AnyObject]()
-        } else if source!.current.count == 0 && source!.current.guid == BookmarkRoots.MobileFolderGUID {
+        }
+
+        if !(source?.current.itemIsEditableAtIndex(indexPath.row) ?? false) {
             return [AnyObject]()
         }
 
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
-
             if let bookmark = self.source?.current[indexPath.row] {
                 // Why the dispatches? Because we call success and failure on the DB
                 // queue, and so calling anything else that calls through to the DB will
