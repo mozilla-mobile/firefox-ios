@@ -260,11 +260,6 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         makeConstraints()
     }
 
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        collectionView.reloadData()
-    }
-
     private func makeConstraints() {
         navBar.snp_makeConstraints { make in
             let topLayoutGuide = self.topLayoutGuide as! UIView
@@ -310,6 +305,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         let controller = SettingsNavigationController()
         controller.profile = profile
         controller.tabManager = tabManager
+        controller.popoverDelegate = self
 		controller.modalPresentationStyle = UIModalPresentationStyle.FormSheet
         presentViewController(controller, animated: true, completion: nil)
     }
@@ -388,6 +384,12 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
+    }
+}
+
+extension TabTrayController: PresentingModalViewControllerDelegate {
+    func dismissPresentedModalViewController(modalViewController: UIViewController, animated: Bool) {
+        dismissViewControllerAnimated(animated, completion: { self.collectionView.reloadData() })
     }
 }
 
