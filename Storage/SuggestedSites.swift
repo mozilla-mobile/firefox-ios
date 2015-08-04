@@ -14,10 +14,7 @@ public class SuggestedSite: Site {
 
     let trackingId: Int
     init(json: JSON) {
-        let colorString = json["bgcolor"].asString!
-        var colorInt: UInt32 = 0
-        NSScanner(string: colorString).scanHexInt(&colorInt)
-        self.backgroundColor = UIColor(rgb: (Int) (colorInt ?? 0xaaaaaa))
+        self.backgroundColor = UIColor(colorString: json["bgcolor"].asString!)
         self.trackingId = json["trackingid"].asInt ?? 0
         self.wordmark = Favicon(url: json["imageurl"].asString!, date: NSDate(), type: .Icon)
 
