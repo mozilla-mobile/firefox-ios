@@ -518,7 +518,7 @@ public class BrowserProfile: Profile {
          */
         func endTimedSyncs() {
             if let t = self.syncTimer {
-                log.debug("Stopping history sync timer.")
+                log.debug("Stopping sync timer.")
                 self.syncTimer = nil
                 t.invalidate()
             }
@@ -614,6 +614,7 @@ public class BrowserProfile: Profile {
             return self.syncSeveral(
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate),
+                ("logins", self.syncLoginsWithDelegate),
                 ("history", self.syncHistoryWithDelegate)
             ) >>> succeed
         }
