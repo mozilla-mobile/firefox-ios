@@ -369,6 +369,9 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.textLabel.text = site.title.isEmpty ? site.url : site.title
         cell.imageWrapper.backgroundColor = UIColor.clearColor()
 
+        // Resets used cell's background image so that it doesn't get recycled when a tile doesn't update its background image.
+        cell.backgroundImage.image = nil
+
         if let icon = site.icon {
             // We've looked before recently and didn't find a favicon
             switch icon.type {

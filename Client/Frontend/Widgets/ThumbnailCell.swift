@@ -176,8 +176,10 @@ class ThumbnailCell: UICollectionViewCell {
 
         textLabel.snp_remakeConstraints({ make in
             make.edges.equalTo(self.textWrapper).insets(ThumbnailCellUX.LabelInsets)
-            return
         })
+        
+        // Prevents the textLabel from getting squished in relation to other view priorities.
+        textLabel.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
     }
 
     required init(coder aDecoder: NSCoder) {
