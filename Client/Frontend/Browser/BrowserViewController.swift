@@ -945,6 +945,12 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 }
 
+extension BrowserViewController: WindowCloseHelperDelegate {
+    func windowCloseHelper(helper: WindowCloseHelper, didRequestToCloseBrowser browser: Browser) {
+        tabManager.removeTab(browser)
+    }
+}
+
 extension BrowserViewController: BrowserDelegate {
 
     func browser(browser: Browser, didCreateWebView webView: WKWebView) {
@@ -980,6 +986,10 @@ extension BrowserViewController: BrowserDelegate {
 
         let errorHelper = ErrorPageHelper()
         browser.addHelper(errorHelper, name: ErrorPageHelper.name())
+
+        let windowCloseHelper = WindowCloseHelper(browser: browser)
+        windowCloseHelper.delegate = self
+        browser.addHelper(windowCloseHelper, name: WindowCloseHelper.name())
     }
 
     func browser(browser: Browser, willDeleteWebView webView: WKWebView) {
