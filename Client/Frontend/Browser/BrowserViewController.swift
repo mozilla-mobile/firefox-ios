@@ -1372,6 +1372,7 @@ extension BrowserViewController: WKNavigationDelegate {
             if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
                 info["visitType"] = visitType
             }
+            tab.lastExecutedTime = NSDate.now()
             notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
 
             // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
