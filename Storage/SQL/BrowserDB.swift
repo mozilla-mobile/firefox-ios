@@ -6,7 +6,7 @@ import Foundation
 import XCGLogger
 import Shared
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 public enum QuerySort {
     case None, LastVisit, Frecency

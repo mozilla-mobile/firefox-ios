@@ -12,7 +12,7 @@ import SnapKit
 import XCGLogger
 import Alamofire
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.browserLogger
 
 private let OKString = NSLocalizedString("OK", comment: "OK button")
 private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")

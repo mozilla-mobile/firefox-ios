@@ -202,7 +202,7 @@ private class DisconnectSetting: WithAccountSetting {
 private class SyncNowSetting: WithAccountSetting {
     private let syncNowTitle = NSAttributedString(string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.systemFontOfSize(UIConstants.DefaultStandardFontSize, weight: UIFontWeightRegular)])
 
-    private let log = XCGLogger.defaultInstance()
+    private let log = Logger.browserLogger
 
     override var accessoryType: UITableViewCellAccessoryType { return .None }
 

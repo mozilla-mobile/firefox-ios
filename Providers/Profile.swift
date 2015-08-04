@@ -10,8 +10,7 @@ import Storage
 import Sync
 import XCGLogger
 
-// TODO: same comment as for SyncAuthState.swift!
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 public protocol SyncManager {
     func syncClients() -> SyncResult

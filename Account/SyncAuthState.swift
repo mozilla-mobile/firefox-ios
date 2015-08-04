@@ -8,8 +8,7 @@ import XCGLogger
 
 private let CurrentSyncAuthStateCacheVersion = 1
 
-// TODO: manage this logging better.
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 public struct SyncAuthStateCache {
     let token: TokenServerToken

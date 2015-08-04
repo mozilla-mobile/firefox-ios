@@ -8,7 +8,7 @@ import Shared
 import Storage
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.browserLogger
 
 private func getDate(#dayOffset: Int) -> NSDate {
     let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
