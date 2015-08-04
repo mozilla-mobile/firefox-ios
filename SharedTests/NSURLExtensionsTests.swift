@@ -33,6 +33,42 @@ class NSURLExtensionsTests : XCTestCase {
             XCTFail("Actual url is nil")
         }
     }
+    
+    func testRemoveHTTPPartFromUrl() {
+        let url = NSURL(string: "http://google.com")
+        if let actual = url?.absoluteStringWithoutProtocol() {
+            XCTAssertEqual(actual, "google.com")
+        } else {
+            XCTFail("Actual url is nil")
+        }
+    }
+
+    func testRemoveHTTPSPartFromUrl() {
+        let url = NSURL(string: "https://google.com")
+        if let actual = url?.absoluteStringWithoutProtocol() {
+            XCTAssertEqual(actual, "google.com")
+        } else {
+            XCTFail("Actual url is nil")
+        }
+    }
+    
+    func testRemoveHTTPSWWWPartFromUrl() {
+        let url = NSURL(string: "https://www.google.com")
+        if let actual = url?.absoluteStringWithoutProtocol() {
+            XCTAssertEqual(actual, "google.com")
+        } else {
+            XCTFail("Actual url is nil")
+        }
+    }
+
+    func testRemoveHTTPWWWPartFromUrl() {
+        let url = NSURL(string: "http://www.google.com")
+        if let actual = url?.absoluteStringWithoutProtocol() {
+            XCTAssertEqual(actual, "google.com")
+        } else {
+            XCTFail("Actual url is nil")
+        }
+    }
 
     //MARK: Public Suffix
     func testNormalBaseDomainWithSingleSubdomain() {
