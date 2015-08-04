@@ -62,7 +62,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         super.viewDidLoad()
 
         let refresh = UIRefreshControl()
-        refresh.attributedTitle = NSAttributedString(string: NSLocalizedString("Pull to Sync", comment: "The pull-to-refresh string for syncing in the history panel."))
         refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         self.refreshControl = refresh
         self.tableView.addSubview(refresh)
