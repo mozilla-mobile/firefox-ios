@@ -26,6 +26,7 @@ class Browser: NSObject {
     var browserDelegate: BrowserDelegate? = nil
     var bars = [SnackBar]()
     var favicons = [Favicon]()
+    var lastExecutedTime: Timestamp?
     var sessionData: SessionData?
 
     var screenshot: UIImage?
@@ -45,6 +46,14 @@ class Browser: NSObject {
                 title: browser.displayTitle,
                 history: history,
                 lastUsed: NSDate.now(),
+                icon: nil)
+        } else if let sessionData = browser.sessionData {
+            let history = sessionData.urls.reverse()
+            return RemoteTab(clientGUID: nil,
+                URL: history[0],
+                title: browser.displayTitle,
+                history: history,
+                lastUsed: sessionData.lastUsedTime,
                 icon: nil)
         }
 
@@ -164,7 +173,7 @@ class Browser: NSObject {
     }
 
     var displayURL: NSURL? {
-        if let url = webView?.URL ?? lastRequest?.URL {
+        if let url = url {
             if ReaderModeUtils.isReaderModeURL(url) {
                 return ReaderModeUtils.decodeURL(url)
             }

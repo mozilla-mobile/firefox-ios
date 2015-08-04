@@ -298,7 +298,7 @@ extension TabManager {
                     updatedUrlList.append(url.URL)
                 }
                 var currentPage = -forwardList.count
-                self.sessionData = SessionData(currentPage: currentPage, urls: updatedUrlList)
+                self.sessionData = SessionData(currentPage: currentPage, urls: updatedUrlList, lastUsedTime: browser.lastExecutedTime ?? NSDate.now())
             } else {
                 self.sessionData = browser.sessionData
             }
@@ -412,7 +412,14 @@ extension TabManager : WKNavigationDelegate {
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         hideNetworkActivitySpinner()
-        storeChanges()
+        // only store changes if this is not an error page
+        // as we current handle tab restore as error page redirects then this ensures that we don't
+        // call storeChanges unnecessarily on startup
+        if let url = webView.URL {
+            if !ErrorPageHelper.isErrorPageURL(url) {
+                storeChanges()
+            }
+        }
     }
 
     func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
