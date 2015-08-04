@@ -151,17 +151,17 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
         if source == nil {
             return .None
-        } else {
+        }
+
+        if source!.current.itemIsEditableAtIndex(indexPath.row) ?? false {
             return .Delete
         }
+
+        return .None
     }
 
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
         if source == nil {
-            return [AnyObject]()
-        }
-
-        if !(source?.current.itemIsEditableAtIndex(indexPath.row) ?? false) {
             return [AnyObject]()
         }
 
