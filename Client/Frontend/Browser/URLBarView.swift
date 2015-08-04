@@ -59,8 +59,6 @@ class URLBarView: UIView {
     /// a panel, the first responder will be resigned, yet the overlay mode UI is still active.
     var inOverlayMode = false
 
-    var backButtonLeftConstraint: Constraint?
-
     lazy var locationView: BrowserLocationView = {
         let locationView = BrowserLocationView()
         locationView.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -253,49 +251,62 @@ class URLBarView: UIView {
             make.edges.equalTo(self.locationView.urlTextField)
         }
 
-        remakeLocationContainerConstraints()
-    }
+        backButton.snp_makeConstraints { make in
+            make.left.centerY.equalTo(self)
+            make.size.lessThanOrEqualTo(UIConstants.ToolbarHeight)
+        }
 
-    private func updateToolbarConstraints() {
-        if toolbarIsShowing {
-            backButton.snp_remakeConstraints { (make) -> () in
-                self.backButtonLeftConstraint = make.left.equalTo(self).constraint
-                make.centerY.equalTo(self)
-                make.size.equalTo(UIConstants.ToolbarHeight)
-            }
-            backButton.contentEdgeInsets = URLBarViewUX.ToolbarButtonInsets
+        forwardButton.snp_makeConstraints { make in
+            make.left.equalTo(self.backButton.snp_right)
+            make.centerY.equalTo(self)
+            make.size.equalTo(backButton)
+        }
 
-            forwardButton.snp_remakeConstraints { (make) -> () in
-                make.left.equalTo(self.backButton.snp_right)
-                make.centerY.equalTo(self)
-                make.size.equalTo(UIConstants.ToolbarHeight)
-            }
-            forwardButton.contentEdgeInsets = URLBarViewUX.ToolbarButtonInsets
+        stopReloadButton.snp_makeConstraints { make in
+            make.left.equalTo(self.forwardButton.snp_right)
+            make.centerY.equalTo(self)
+            make.size.equalTo(backButton)
+        }
 
-            stopReloadButton.snp_remakeConstraints { (make) -> () in
-                make.left.equalTo(self.forwardButton.snp_right)
-                make.centerY.equalTo(self)
-                make.size.equalTo(UIConstants.ToolbarHeight)
-            }
-            stopReloadButton.contentEdgeInsets = URLBarViewUX.ToolbarButtonInsets
+        shareButton.snp_makeConstraints { make in
+            make.right.equalTo(self.bookmarkButton.snp_left)
+            make.centerY.equalTo(self)
+            make.size.equalTo(backButton)
+        }
 
-            shareButton.snp_remakeConstraints { (make) -> () in
-                make.right.equalTo(self.bookmarkButton.snp_left)
-                make.centerY.equalTo(self)
-                make.size.equalTo(UIConstants.ToolbarHeight)
-            }
-
-            bookmarkButton.snp_remakeConstraints { (make) -> () in
-                make.right.equalTo(self.tabsButton.snp_left)
-                make.centerY.equalTo(self)
-                make.size.equalTo(UIConstants.ToolbarHeight)
-            }
+        bookmarkButton.snp_makeConstraints { make in
+            make.right.equalTo(self.tabsButton.snp_left)
+            make.centerY.equalTo(self)
+            make.size.equalTo(backButton)
         }
     }
 
     override func updateConstraints() {
-        updateToolbarConstraints()
-        remakeLocationContainerConstraints()
+        if inOverlayMode {
+            // In overlay mode, we always show the location view full width
+            self.locationContainer.snp_remakeConstraints { make in
+                make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
+                make.trailing.equalTo(self.cancelButton.snp_leading)
+                make.height.equalTo(URLBarViewUX.LocationHeight)
+                make.centerY.equalTo(self)
+            }
+        } else {
+            self.locationContainer.snp_remakeConstraints { make in
+                if self.toolbarIsShowing {
+                    // If we are showing a toolbar, show the text field next to the forward button
+                    make.leading.equalTo(self.stopReloadButton.snp_trailing)
+                    make.trailing.equalTo(self.shareButton.snp_leading)
+                } else {
+                    // Otherwise, left align the location view
+                    make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
+                    make.trailing.equalTo(self.tabsButton.snp_leading).offset(-14)
+                }
+
+                make.height.equalTo(URLBarViewUX.LocationHeight)
+                make.centerY.equalTo(self)
+            }
+        }
+
         super.updateConstraints()
     }
 
@@ -304,6 +315,8 @@ class URLBarView: UIView {
     // that can show in either mode.
     func setShowToolbar(shouldShow: Bool) {
         toolbarIsShowing = shouldShow
+        setNeedsUpdateConstraints()
+        updateConstraintsIfNeeded()
         updateViewsForOverlayModeAndToolbarChanges()
     }
 
@@ -418,33 +431,6 @@ class URLBarView: UIView {
         delegate?.urlBarDidLeaveOverlayMode(self)
     }
 
-    func remakeLocationContainerConstraints() {
-        if inOverlayMode {
-            // In overlay mode, we always show the location view full width
-            self.locationContainer.snp_remakeConstraints { make in
-                make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
-                make.trailing.equalTo(self.cancelButton.snp_leading)
-                make.height.equalTo(URLBarViewUX.LocationHeight)
-                make.centerY.equalTo(self)
-            }
-        } else {
-            self.locationContainer.snp_remakeConstraints { make in
-                if self.toolbarIsShowing {
-                    // If we are showing a toolbar, show the text field next to the forward button
-                    make.left.equalTo(self.stopReloadButton.snp_right)
-                    make.right.equalTo(self.shareButton.snp_left)
-                } else {
-                    // Otherwise, left align the location view
-                    make.leading.equalTo(self).offset(URLBarViewUX.LocationLeftPadding)
-                    make.trailing.equalTo(self.tabsButton.snp_leading).offset(-14)
-                }
-
-                make.height.equalTo(URLBarViewUX.LocationHeight)
-                make.centerY.equalTo(self)
-            }
-        }
-    }
-
     func prepareOverlayAnimation() {
         // Make sure everything is showing during the transition (we'll hide it afterwards).
         self.cancelButton.hidden = false
@@ -476,9 +462,6 @@ class URLBarView: UIView {
             self.tabsButton.transform = tabsButtonTransform
             self.clonedTabsButton?.transform = tabsButtonTransform
             self.rightBarConstraint?.updateOffset(URLBarViewUX.URLBarCurveOffset + URLBarViewUX.URLBarCurveBounceBuffer + tabsButton.frame.width)
-            if self.toolbarIsShowing {
-                self.backButtonLeftConstraint?.updateOffset(-3 * UIConstants.ToolbarHeight)
-            }
 
             // Make the editable text field span the entire URL bar, covering the lock and reader icons.
             self.locationTextField.snp_remakeConstraints { make in
@@ -490,9 +473,6 @@ class URLBarView: UIView {
             self.clonedTabsButton?.transform = CGAffineTransformIdentity
             self.cancelButton.transform = CGAffineTransformMakeTranslation(self.cancelButton.frame.width, 0)
             self.rightBarConstraint?.updateOffset(defaultRightOffset)
-            if self.toolbarIsShowing {
-                self.backButtonLeftConstraint?.updateOffset(0)
-            }
 
             // Shrink the editable text field back to the size of the location view before hiding it.
             self.locationTextField.snp_remakeConstraints { make in

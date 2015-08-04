@@ -232,7 +232,6 @@ class BrowserViewController: UIViewController {
         scrollController.snackBars = snackBars
 
         self.updateToolbarStateForTraitCollection(self.traitCollection)
-
     }
 
     func loadQueuedTabs() {
