@@ -416,7 +416,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     private func createTileForSite(cell: ThumbnailCell, site: Site) -> ThumbnailCell {
-        cell.textLabel.text = site.title.isEmpty ? site.url : site.title
+        cell.textLabel.text = site.title.isEmpty ? (NSURL(string: site.url) ?? NSURL()).baseDomainAndPath() ?? "" : site.title
         cell.imageWrapper.backgroundColor = UIColor.clearColor()
 
         if let icon = site.icon {

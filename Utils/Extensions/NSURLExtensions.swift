@@ -96,6 +96,14 @@ extension NSURL {
         }
         return nil
     }
+    
+    public func baseDomainAndPath() -> String? {
+        if let baseDomain = self.baseDomain() {
+            return self.baseDomain()! + (self.path ?? "/")
+        } else {
+            return nil
+        }
+    }
 
     public func absoluteStringWithoutHTTPScheme() -> String? {
         if let urlString = self.absoluteString {
