@@ -78,7 +78,6 @@ class URLBarView: UIView {
         locationTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
         locationTextField.backgroundColor = UIColor.whiteColor()
         locationTextField.font = UIConstants.DefaultMediumFont
-        locationTextField.isAccessibilityElement = true
         locationTextField.accessibilityIdentifier = "address"
         locationTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         locationTextField.attributedPlaceholder = self.locationView.placeholder
