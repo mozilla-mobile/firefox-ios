@@ -31,8 +31,16 @@ public class FirefoxAccount {
 
     public let configuration: FirefoxAccountConfiguration
 
-    public let stateCache: KeychainCache<FxAState>
+    private let stateCache: KeychainCache<FxAState>
     public var syncAuthState: SyncAuthState! // We can't give a reference to self if this is a let.
+
+    // To prevent advance() consumers racing, we maintain a shared advance() deferred (`advanceDeferred`).  If an
+    // advance() is in progress, the shared deferred will be returned.  (Multiple consumers can chain off a single
+    // deferred safely.)  If no advance() is in progress, a new shared deferred will be scheduled and returned.  To
+    // prevent data races against the shared deferred, advance() locks accesses to `advanceDeferred` using
+    // `advanceLock`.
+    private var advanceLock = OSSpinLock()
+    private var advanceDeferred: Deferred<FxAState>? = nil
 
     public var actionNeeded: FxAActionNeeded {
         return stateCache.value!.actionNeeded
@@ -156,13 +164,39 @@ public class FirefoxAccount {
     }
 
     public func advance() -> Deferred<FxAState> {
+        OSSpinLockLock(&advanceLock)
+        if let deferred = advanceDeferred {
+            // We already have an advance() in progress.  This consumer can chain from it.
+            log.debug("advance already in progress; returning shared deferred.")
+            OSSpinLockUnlock(&advanceLock)
+            return deferred
+        }
+
+        // Alright, we haven't an advance() in progress.  Schedule a new deferred to chain from.
         let client = FxAClient10(endpoint: configuration.authEndpointURL)
         let stateMachine = FxALoginStateMachine(client: client)
         let now = NSDate.now()
-        return stateMachine.advanceFromState(stateCache.value!, now: now).map { newState in
+        let deferred: Deferred<FxAState> = stateMachine.advanceFromState(stateCache.value!, now: now).map { newState in
             self.stateCache.value = newState
             return newState
         }
+        advanceDeferred = deferred
+        log.debug("no advance() in progress; setting and returning new shared deferred.")
+        OSSpinLockUnlock(&advanceLock)
+
+        deferred.upon { _ in
+            // This advance() is complete.  Clear the shared deferred.
+            OSSpinLockLock(&self.advanceLock)
+            if let existingDeferred = self.advanceDeferred where existingDeferred === deferred {
+                // The guard should not be needed, but should prevent trampling racing consumers.
+                self.advanceDeferred = nil
+                log.debug("advance() completed and shared deferred is existing deferred; clearing shared defered.")
+            } else {
+                log.warning("advance() completed but shared deferred is not existing deferred; ignoring potential bug!")
+            }
+            OSSpinLockUnlock(&self.advanceLock)
+        }
+        return deferred
     }
 
     public func marriedState() -> Deferred<Result<MarriedState>> {
