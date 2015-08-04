@@ -8,7 +8,7 @@ import FxA
 import Account
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 /**
  * Turns JSON of the form

@@ -8,8 +8,7 @@ import Shared
 import Account
 import XCGLogger
 
-// TODO: same comment as for SyncAuthState.swift!
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 
 // Not an error that indicates a server problem, but merely an

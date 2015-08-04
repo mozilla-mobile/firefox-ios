@@ -51,7 +51,7 @@ private let AllIndices: Args = [
 
 private let AllTablesIndicesAndViews: Args = AllViews + AllIndices + AllTables
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 /**
  * The monolithic class that manages the inter-related history etc. tables.

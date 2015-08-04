@@ -8,7 +8,7 @@ import Shared
 import XCGLogger
 
 // TODO: log to an FxA-only, persistent log file.
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 // TODO: fill this in!
 private let KeyUnwrappingError = NSError(domain: "org.mozilla", code: 1, userInfo: nil)

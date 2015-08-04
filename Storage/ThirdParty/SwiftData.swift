@@ -34,10 +34,11 @@
 
 import Foundation
 import UIKit
+import Shared
 import XCGLogger
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 /**
  * Handle to a SQLite database.

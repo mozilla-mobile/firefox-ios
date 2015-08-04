@@ -7,7 +7,7 @@ import WebKit
 import Shared
 import XCGLogger
 
-private var log = XCGLogger.defaultInstance()
+private var log = Logger.syncLogger
 
 public enum CommutativeLoginField {
     case TimesUsed(increment: Int)
