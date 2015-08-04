@@ -171,10 +171,10 @@ class BrowserLocationView: UIView {
     }
 
     private func updateTextWithURL() {
-        if let protocollessURL = url?.absoluteStringWithoutProtocol(), let baseDomain = url?.baseDomain() {
+        if let httplessURL = url?.absoluteStringWithoutHTTPScheme(), let baseDomain = url?.baseDomain() {
             // Highlight the base domain of the current URL.
-            var attributedString = NSMutableAttributedString(string: protocollessURL)
-            let nsRange = NSMakeRange(0, count(protocollessURL))
+            var attributedString = NSMutableAttributedString(string: httplessURL)
+            let nsRange = NSMakeRange(0, count(httplessURL))
             attributedString.addAttribute(NSForegroundColorAttributeName, value: BrowserLocationViewUX.BaseURLFontColor, range: nsRange)
             attributedString.colorSubstring(baseDomain, withColor: BrowserLocationViewUX.HostFontColor)
             attributedString.addAttribute(UIAccessibilitySpeechAttributePitch, value: NSNumber(double: BrowserLocationViewUX.BaseURLPitch), range: nsRange)

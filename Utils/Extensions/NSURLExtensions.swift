@@ -96,24 +96,6 @@ extension NSURL {
         }
         return nil
     }
-    
-    public func absoluteStringWithoutProtocol() -> String? {
-        if let urlString = self.absoluteString {
-            if urlString.hasPrefix("https://www.") ?? false {
-                return urlString.substringFromIndex(advance(urlString.startIndex, 12))
-            } else if urlString.hasPrefix("http://www.") ?? false {
-                return urlString.substringFromIndex(advance(urlString.startIndex, 11))
-            } else if urlString.hasPrefix("https://") ?? false {
-                return urlString.substringFromIndex(advance(urlString.startIndex, 8))
-            } else if urlString.hasPrefix("http://") ?? false {
-                return urlString.substringFromIndex(advance(urlString.startIndex, 7))
-            } else {
-                return urlString
-            }
-        } else {
-            return nil
-        }
-    }
 
     public func absoluteStringWithoutHTTPScheme() -> String? {
         if let urlString = self.absoluteString {
