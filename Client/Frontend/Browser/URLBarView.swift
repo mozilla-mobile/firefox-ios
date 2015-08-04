@@ -79,7 +79,6 @@ class URLBarView: UIView {
         locationTextField.backgroundColor = UIColor.whiteColor()
         locationTextField.font = UIConstants.DefaultMediumFont
         locationTextField.isAccessibilityElement = true
-//        locationTextField.accessibilityActionsSource = self
         locationTextField.accessibilityIdentifier = "address"
         locationTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         locationTextField.attributedPlaceholder = self.locationView.placeholder
@@ -701,20 +700,6 @@ private class CurveView: UIView {
 }
 
 private class ToolbarTextField: AutocompleteTextField {
-    weak var accessibilityActionsSource: AccessibilityActionsSource?
-
-    override var accessibilityCustomActions: [AnyObject]! {
-        get {
-            if !editing {
-                return accessibilityActionsSource?.accessibilityCustomActionsForView(self)
-            }
-            return super.accessibilityCustomActions
-        }
-        set {
-            super.accessibilityCustomActions = newValue
-        }
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
