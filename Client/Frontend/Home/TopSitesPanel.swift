@@ -11,52 +11,6 @@ private let log = XCGLogger.defaultInstance()
 
 private let ThumbnailIdentifier = "Thumbnail"
 
-class Tile: Site {
-    let backgroundColor: UIColor
-    let trackingId: Int
-    let wordmark: Favicon
-
-    init(json: JSON) {
-        let colorString = json["bgcolor"].asString!
-        var colorInt: UInt32 = 0
-        NSScanner(string: colorString).scanHexInt(&colorInt)
-        self.backgroundColor = UIColor(rgb: (Int) (colorInt ?? 0xaaaaaa))
-        self.trackingId = json["trackingid"].asInt ?? 0
-        self.wordmark = Favicon(url: json["imageurl"].asString!, date: NSDate(), type: .Icon)
-
-        super.init(url: json["url"].asString!, title: json["title"].asString!)
-
-        self.icon = Favicon(url: json["faviconUrl"].asString!, date: NSDate(), type: .Icon)
-    }
-}
-
-class SuggestedSitesData<T: Tile>: Cursor<T> {
-    var tiles = [T]()
-
-    init() {
-        // TODO: Make this list localized. That should be as simple as making sure its in the lproj directory.
-        var err: NSError? = nil
-        let path = NSBundle.mainBundle().pathForResource("suggestedsites", ofType: "json")
-        let data = NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: &err)
-        let json = JSON.parse(data as! String)
-
-        for i in 0..<json.length {
-            let t = T(json: json[i])
-            tiles.append(t)
-        }
-    }
-
-    override var count: Int {
-        return tiles.count
-    }
-
-    override subscript(index: Int) -> T? {
-        get {
-            return tiles[index]
-        }
-    }
-}
-
 extension UIView {
     public class func viewOrientationForSize(size: CGSize) -> UIInterfaceOrientation {
         return size.width > size.height ? UIInterfaceOrientation.LandscapeRight : UIInterfaceOrientation.Portrait
@@ -188,13 +142,13 @@ class TopSitesPanel: UIViewController {
             let numOfThumbnails = self.layout.thumbnailCount
             collection?.performBatchUpdates({
                 // If we have enough data to fill the tiles after the deletion, then delete and insert the next one from data
-                if (data.count + self.dataSource.suggestedSites.count >= numOfThumbnails) {
+                if (data.count + SuggestedSites.count >= numOfThumbnails) {
                     self.collection?.deleteItemsAtIndexPaths([indexPath])
                     self.collection?.insertItemsAtIndexPaths([NSIndexPath(forItem: numOfThumbnails - 1, inSection: 0)])
                 }
 
                 // If we don't have enough to fill the thumbnail tile area even with suggested tiles, just delete
-                else if (data.count + self.dataSource.suggestedSites.count) < numOfThumbnails {
+                else if (data.count + SuggestedSites.count) < numOfThumbnails {
                     self.collection?.deleteItemsAtIndexPaths([indexPath])
                 }
             }, completion: { _ in
@@ -365,10 +319,6 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var profile: Profile
     var editingThumbnails: Bool = false
 
-    lazy var suggestedSites: SuggestedSitesData<Tile> = {
-        return SuggestedSitesData<Tile>()
-    }()
-
     init(profile: Profile, data: Cursor<Site>) {
         self.data = data
         self.profile = profile
@@ -381,7 +331,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
 
         // If there aren't enough data items to fill the grid, look for items in suggested sites.
         if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
-            return min(data.count + suggestedSites.count, layout.thumbnailCount)
+            return min(data.count + SuggestedSites.count, layout.thumbnailCount)
         }
 
         return 0
@@ -447,12 +397,12 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         return cell
     }
 
-    private func createTileForSuggestedSite(cell: ThumbnailCell, tile: Tile) -> ThumbnailCell {
-        cell.textLabel.text = tile.title.isEmpty ? tile.url : tile.title
-        cell.imageWrapper.backgroundColor = tile.backgroundColor
+    private func createTileForSuggestedSite(cell: ThumbnailCell, site: SuggestedSite) -> ThumbnailCell {
+        cell.textLabel.text = site.title.isEmpty ? site.url : site.title
+        cell.imageWrapper.backgroundColor = site.backgroundColor
         cell.backgroundImage.image = nil
 
-        if let icon = tile.wordmark.url.asURL,
+        if let icon = site.wordmark.url.asURL,
            let host = icon.host {
             if icon.scheme == "asset" {
                 cell.imageView.image = UIImage(named: host)
@@ -480,7 +430,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         }
 
         if index >= data.count {
-            return suggestedSites[index - data.count]
+            return SuggestedSites[index - data.count]
         }
         return data[index] as Site?
     }
@@ -491,7 +441,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as! ThumbnailCell
 
         if indexPath.item >= data.count {
-            return createTileForSuggestedSite(cell, tile: site as! Tile)
+            return createTileForSuggestedSite(cell, site: site as! SuggestedSite)
         }
         return createTileForSite(cell, site: site)
     }

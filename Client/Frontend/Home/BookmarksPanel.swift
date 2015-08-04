@@ -19,10 +19,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return UIImage(named: "defaultFavicon")!
     }()
 
-    lazy var suggestedSites: SuggestedSitesData<Tile> = {
-        return SuggestedSitesData<Tile>()
-    }()
-
     override var profile: Profile! {
         didSet {
             // Until we have something useful to show for desktop bookmarks,
@@ -62,11 +58,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     private func onNewModel(model: BookmarksModel) {
-        if model.current.count == 0 && model.current.guid == BookmarkRoots.MobileFolderGUID {
-            self.source = nil
-        } else {
-            self.source = model
-        }
+        self.source = model
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
         }
@@ -81,32 +73,18 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return source?.current.count ?? suggestedSites.count
-    }
-
-    private func setupSuggestedSiteForCell(cell: UITableViewCell, indexPath: NSIndexPath) {
-        let tile = suggestedSites[indexPath.row]
-        cell.textLabel?.text = tile?.title
-
-        if let icon = tile?.icon?.url.asURL,
-           let host = icon.host {
-            if icon.scheme == "asset" {
-                cell.imageView?.image = UIImage(named: host)
-            } else {
-                cell.imageView?.sd_setImageWithURL(icon, completed: { img, err, type, key in
-                    if img == nil {
-                        cell.imageView?.image = self.defaultIcon
-                    }
-                })
-            }
-        }
+        return source?.current.count ?? 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         if let source = source {
             if let bookmark = source.current[indexPath.row] {
-                cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: self.defaultIcon)
+                if let url = bookmark.favicon?.url.asURL where url.scheme == "asset" {
+                    cell.imageView?.image = UIImage(named: url.host!)
+                } else {
+                    cell.imageView?.setIcon(bookmark.favicon, withPlaceholder: self.defaultIcon)
+                }
 
                 switch (bookmark) {
                     case let item as BookmarkItem:
@@ -120,9 +98,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                         cell.textLabel?.text = bookmark.title
                 }
             }
-        } else {
-            // If we don't have a source at all, show suggested sites
-            setupSuggestedSiteForCell(cell, indexPath: indexPath)
         }
 
         return cell
@@ -130,7 +105,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         // Don't show a header for the root
-        if source?.current.guid == BookmarkRoots.MobileFolderGUID {
+        if source == nil || source?.current.guid == BookmarkRoots.MobileFolderGUID {
             return nil
         }
 
@@ -166,10 +141,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 // Weird.
                 break        // Just here until there's another executable statement (compiler requires one).
             }
-        } else {
-            if let tile = suggestedSites[indexPath.row] {
-                homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: tile.url)!, visitType: VisitType.Bookmark)
-            }
         }
     }
 
@@ -180,22 +151,23 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
         if source == nil {
             return .None
-        } else {
+        }
+
+        if source!.current.itemIsEditableAtIndex(indexPath.row) ?? false {
             return .Delete
         }
+
+        return .None
     }
 
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
         if source == nil {
-            return [AnyObject]()
-        } else if source!.current.count == 0 && source!.current.guid == BookmarkRoots.MobileFolderGUID {
             return [AnyObject]()
         }
 
         let title = NSLocalizedString("Delete", tableName: "BookmarkPanel", comment: "Action button for deleting bookmarks in the bookmarks panel.")
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
-
             if let bookmark = self.source?.current[indexPath.row] {
                 // Why the dispatches? Because we call success and failure on the DB
                 // queue, and so calling anything else that calls through to the DB will
@@ -212,20 +184,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                             dispatch_async(dispatch_get_main_queue()) {
                                 tableView.beginUpdates()
                                 self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
-
-                                if model.current.count == 0 && model.current.guid == BookmarkRoots.MobileFolderGUID {
-                                    // If the new model is the root, and its empty, set the source to nil so that we
-                                    // correctly show suggested sites.
-                                    self.source = nil
-                                    var indexPaths = [NSIndexPath]()
-                                    for i in 0..<self.suggestedSites.count {
-                                        let indexPath = NSIndexPath(forItem: i, inSection: 0)
-                                        indexPaths.append(indexPath)
-                                    }
-                                    self.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: UITableViewRowAnimation.Right)
-                                } else {
-                                    self.source = model
-                                }
+                                self.source = model
 
                                 tableView.endUpdates()
 
