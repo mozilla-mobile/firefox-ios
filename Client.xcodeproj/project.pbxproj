@@ -450,8 +450,8 @@
 		E49943F51AE6879C00BF9DE4 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49943F41AE6879C00BF9DE4 /* IntroViewController.swift */; };
 		E49943F71AE69EDD00BF9DE4 /* Intro.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E49943F61AE69EDD00BF9DE4 /* Intro.xcassets */; };
 		E49BFF591B1F48C3009368CC /* Readability.js in Resources */ = {isa = PBXBuildFile; fileRef = E49BFF581B1F48C3009368CC /* Readability.js */; };
-		E49DF24C1B440D090049777A /* Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = E49DF24B1B440D090049777A /* Licenses.html */; };
 		E49C0EB11B46109C009092BB /* WindowCloseHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = E49C0EB01B46109C009092BB /* WindowCloseHelper.js */; };
+		E49DF24C1B440D090049777A /* Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = E49DF24B1B440D090049777A /* Licenses.html */; };
 		E4A888161A95679500CDC337 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; };
 		E4A888171A95679500CDC337 /* FxA.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */; };
@@ -1489,8 +1489,8 @@
 		E49943F41AE6879C00BF9DE4 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		E49943F61AE69EDD00BF9DE4 /* Intro.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Intro.xcassets; sourceTree = "<group>"; };
 		E49BFF581B1F48C3009368CC /* Readability.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = Readability.js; path = Carthage/Checkouts/readability/Readability.js; sourceTree = SOURCE_ROOT; };
-		E49DF24B1B440D090049777A /* Licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Licenses.html; sourceTree = "<group>"; };
 		E49C0EB01B46109C009092BB /* WindowCloseHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = WindowCloseHelper.js; sourceTree = "<group>"; };
+		E49DF24B1B440D090049777A /* Licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Licenses.html; sourceTree = "<group>"; };
 		E4A960051ABB9C450069AD6F /* ReaderModeUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeUtils.swift; sourceTree = "<group>"; };
 		E4A961171AC041C40069AD6F /* ReadabilityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadabilityService.swift; sourceTree = "<group>"; };
 		E4A961331AC051360069AD6F /* ReadabilityBrowserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadabilityBrowserHelper.swift; sourceTree = "<group>"; };
@@ -2713,10 +2713,7 @@
 			isa = PBXGroup;
 			children = (
 				D32075381B017DA400CA1CD2 /* SearchPlugins */,
-				0BA1E02F1B051A07007675AF /* NetError.css */,
 				E49DF24B1B440D090049777A /* Licenses.html */,
-				0BA1E00D1B03FB0B007675AF /* NetError.html */,
-				746B6A781B277C1800EA83E3 /* SessionRestore.html */,
 				D3BA7E0B1B0E902A00153782 /* ContextMenu.js */,
 				0BF42D381A7C0E8900889E28 /* Favicons.js */,
 				0BDA568A1B26B1BE008C9B96 /* LoginsHelper.js */,
@@ -2725,7 +2722,6 @@
 				F84B22391A0914A300AAB793 /* Fonts */,
 				0BA1E00D1B03FB0B007675AF /* NetError.html */,
 				0BA1E02F1B051A07007675AF /* NetError.css */,
-				746D4E561B1E7132008F789F /* HashchangeHelper.js */,
 				746B6A781B277C1800EA83E3 /* SessionRestore.html */,
 				E49C0EB01B46109C009092BB /* WindowCloseHelper.js */,
 			);
