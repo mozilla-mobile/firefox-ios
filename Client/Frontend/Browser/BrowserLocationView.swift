@@ -76,6 +76,7 @@ class BrowserLocationView: UIView {
 
         urlTextField.attributedPlaceholder = self.placeholder
         urlTextField.accessibilityIdentifier = "url"
+        urlTextField.accessibilityActionsSource = self
         urlTextField.font = UIConstants.DefaultMediumFont
         return urlTextField
     }()
@@ -245,6 +246,17 @@ private class ReaderModeButton: UIButton {
 }
 
 private class DisplayTextField: UITextField {
+    weak var accessibilityActionsSource: AccessibilityActionsSource?
+
+    override var accessibilityCustomActions: [AnyObject]! {
+        get {
+            return accessibilityActionsSource?.accessibilityCustomActionsForView(self)
+        }
+        set {
+            super.accessibilityCustomActions = newValue
+        }
+    }
+
     private override func canBecomeFirstResponder() -> Bool {
         return false
     }
