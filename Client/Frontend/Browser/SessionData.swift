@@ -11,10 +11,21 @@ class SessionData: NSObject, NSCoding {
     let urls: [NSURL]
     let lastUsedTime: Timestamp
 
+    /**
+        Creates a new SessionData object representing a serialized tab.
+
+        :param: currentPage     The active page index. Must be in the range of (-N, 0],
+                                where 1-N is the first page in history, and 0 is the last.
+        :param: urls            The sequence of URLs in this tab's session history.
+        :param: lastUsedTime    The last time this tab was modified.
+    **/
     init(currentPage: Int, urls: [NSURL], lastUsedTime: Timestamp) {
         self.currentPage = currentPage
         self.urls = urls
         self.lastUsedTime = lastUsedTime
+
+        assert(urls.count > 0, "Session has at least one entry")
+        assert(currentPage > -urls.count && currentPage <= 0, "Session index is valid")
     }
 
     required init(coder: NSCoder) {
