@@ -328,20 +328,29 @@ private class TopSitesLayout: UICollectionViewLayout {
         return CGSize(width: width, height: topSectionHeight + bottomSectionHeight)
     }
 
+    private var layoutAttributes:[UICollectionViewLayoutAttributes]?
+
+    private override func prepareLayout() {
+        var layoutAttributes = [UICollectionViewLayoutAttributes]()
+        for section in 0..<(self.collectionView?.numberOfSections() ?? 0) {
+            for item in 0..<(self.collectionView?.numberOfItemsInSection(section) ?? 0) {
+                let indexPath = NSIndexPath(forItem: item, inSection: section)
+                layoutAttributes.append(self.layoutAttributesForItemAtIndexPath(indexPath))
+            }
+        }
+        self.layoutAttributes = layoutAttributes
+    }
+
     override func layoutAttributesForElementsInRect(rect: CGRect) -> [AnyObject]? {
-        let start = getIndexAtPosition(y: rect.origin.y)
-        let end = getIndexAtPosition(y: rect.origin.y + rect.height)
-
         var attrs = [UICollectionViewLayoutAttributes]()
-        if start == -1 || end == -1 {
-            return attrs
+        if let layoutAttributes = self.layoutAttributes {
+            for attr in layoutAttributes {
+                if CGRectIntersectsRect(rect, attr.frame) {
+                    attrs.append(attr)
+                }
+            }
         }
 
-        for i in start...end {
-            let indexPath = NSIndexPath(forItem: i, inSection: 0)
-            let attr = layoutAttributesForItemAtIndexPath(indexPath)
-            attrs.append(attr)
-        }
         return attrs
     }
 
