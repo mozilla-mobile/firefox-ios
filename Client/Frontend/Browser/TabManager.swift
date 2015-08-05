@@ -126,7 +126,6 @@ class TabManager : NSObject {
                 break
             }
         }
-
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
 
@@ -229,6 +228,10 @@ class TabManager : NSObject {
             }
         }
         assert(count == prevCount - 1, "Tab removed")
+
+        if tab != selectedTab {
+            _selectedIndex = selectedTab == nil ? -1 : find(tabs, selectedTab!) ?? 0
+        }
 
         // There's still some time between this and the webView being destroyed.
         // We don't want to pick up any stray events.

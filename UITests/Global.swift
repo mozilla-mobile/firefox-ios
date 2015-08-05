@@ -131,9 +131,10 @@ class BrowserUtils {
 
         // When the last tab is closed, the tabs tray will automatically be closed
         // since a new about:home tab will be selected.
-        let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
-        tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
-        tester.waitForTappableViewWithAccessibilityLabel("Show Tabs")
+        if let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0)) {
+            tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
+            tester.waitForTappableViewWithAccessibilityLabel("Show Tabs")
+        }
     }
 
     /// Injects a URL and title into the browser's history database.

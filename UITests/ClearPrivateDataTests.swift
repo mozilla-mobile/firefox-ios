@@ -17,11 +17,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.resetToAboutHome(tester())
     }
 
-
-    override func beforeAll() {
-        BrowserUtils.resetToAboutHome(tester())
-    }
-
     func clearPrivateData(shouldClear: Bool) {
         // clear private data
         tester().tapViewWithAccessibilityLabel("Show Tabs")
