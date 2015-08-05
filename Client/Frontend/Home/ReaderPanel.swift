@@ -439,6 +439,8 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
         if let record = records?[indexPath.row], encodedURL = ReaderModeUtils.encodeURL(NSURL(string: record.url)!) {
+            // Mark the item as read
+            profile.readingList?.updateRecord(record, unread: false)
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.Bookmark
             homePanelDelegate?.homePanel(self, didSelectURL: encodedURL, visitType: visitType)

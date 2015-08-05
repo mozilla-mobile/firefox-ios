@@ -43,6 +43,26 @@ extension KIFUITestActor {
         return UIAccessibilityElement.viewContainingAccessibilityElement(element)
     }
 
+    /// Wait for and returns a view with the given accessibility label as an
+    /// attributed string. See the comment in ReadingListPanel.swift about
+    /// using attributed strings as labels. (It lets us set the pitch)
+    func waitForViewWithAttributedAccessibilityLabel(label: NSAttributedString) -> UIView {
+        var element: UIAccessibilityElement!
+
+        runBlock { _ in
+            element = UIApplication.sharedApplication().accessibilityElementMatchingBlock { element in
+                if let elementLabel = element.valueForKey("accessibilityLabel") as? NSAttributedString {
+                    return elementLabel.isEqualToAttributedString(label)
+                }
+                return false
+            }
+            
+            return (element == nil) ? KIFTestStepResult.Wait : KIFTestStepResult.Success
+        }
+
+        return UIAccessibilityElement.viewContainingAccessibilityElement(element)
+    }
+
     /// There appears to be a KIF bug where waitForViewWithAccessibilityLabel returns the parent
     /// UITableView instead of the UITableViewCell with the given label.
     /// As a workaround, retry until KIF gives us a cell.

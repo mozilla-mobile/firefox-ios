@@ -52,6 +52,36 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
+    func testReadingListAutoMarkAsRead() {
+        // Load a page
+        tester().tapViewWithAccessibilityIdentifier("url")
+        let url1 = "\(webRoot)/readablePage.html"
+        tester().clearTextFromAndThenEnterText("\(url1)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().waitForWebViewElementWithAccessibilityLabel("Readable Page")
+
+        // Add it to the reading list
+        tester().tapViewWithAccessibilityLabel("Reader View")
+        tester().tapViewWithAccessibilityLabel("Add to Reading List")
+
+        // Check that it appears in the reading list home panel and make sure it marked as unread
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapViewWithAccessibilityLabel("Reading list")
+        tester().waitForViewWithAccessibilityLabel("Readable page, unread, localhost")
+
+        // Tap to open it
+        tester().tapViewWithAccessibilityLabel("Readable page, unread, localhost")
+        tester().waitForWebViewElementWithAccessibilityLabel("Readable page")
+
+        // Go back to the reading list panel
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapViewWithAccessibilityLabel("Reading list")
+
+        // Make sure the article is marked as read
+        let labelString = NSMutableAttributedString(string: "Readable page, read, localhost")
+        labelString.addAttribute(UIAccessibilitySpeechAttributePitch, value: NSNumber(float: 0.7), range: NSMakeRange(0, labelString.length))
+        tester().waitForViewWithAttributedAccessibilityLabel(labelString)
+    }
+
     override func tearDown() {
         BrowserUtils.resetToAboutHome(tester())
     }
