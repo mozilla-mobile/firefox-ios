@@ -11,6 +11,9 @@ import XCGLogger
 private var ShowDebugSettings: Bool = false
 private var DebugSettingsClickCount: Int = 0
 
+private var TODOPrivacyTempString = NSLocalizedString("Privacy Policy", comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/")
+private var TODOPrivacyErrorString = NSLocalizedString("Could not load settings page.", comment: "Error message that is shown in settings when there was a problem loading")
+
 // A base TableViewCell, to help minimize initialization and allow recycling.
 class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
