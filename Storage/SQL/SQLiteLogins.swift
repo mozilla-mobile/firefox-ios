@@ -198,7 +198,7 @@ public class SQLiteLogins: BrowserLogins {
         "ORDER BY timeLastUsed DESC"
 
         let args: Args = [protectionSpace.host, protectionSpace.host]
-        log.debug("Looking for login: \(args[0])")
+        log.debug("Looking for login: \(protectionSpace.host)")
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
     }
 
