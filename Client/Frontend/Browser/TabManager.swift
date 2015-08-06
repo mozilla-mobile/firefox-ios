@@ -294,15 +294,15 @@ extension TabManager {
             self.isSelected = isSelected
             super.init()
 
-            let currentItem: WKBackForwardListItem! = browser.webView?.backForwardList.currentItem
-
-            // Freshly created web views won't have any history entries at all.
-            // If we have no history, abort.
-            if currentItem == nil {
-                return nil
-            }
-
             if browser.sessionData == nil {
+                let currentItem: WKBackForwardListItem! = browser.webView?.backForwardList.currentItem
+
+                // Freshly created web views won't have any history entries at all.
+                // If we have no history, abort.
+                if currentItem == nil {
+                    return nil
+                }
+
                 let backList = browser.webView?.backForwardList.backList as? [WKBackForwardListItem] ?? []
                 let forwardList = browser.webView?.backForwardList.forwardList as? [WKBackForwardListItem] ?? []
                 let urls = (backList + [currentItem] + forwardList).map { $0.URL }
