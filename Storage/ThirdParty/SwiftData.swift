@@ -112,7 +112,7 @@ public class SwiftData {
 
     /**
      * Helper for opening a connection, starting a transaction, and then running a block of code inside it.
-     * The code block can return true if the transaction should be commited. False if we should rollback.
+     * The code block can return true if the transaction should be committed. False if we should roll back.
      */
     public func transaction(transactionClosure: (db: SQLiteDBConnection)->Bool) -> NSError? {
         return withConnection(SwiftData.Flags.ReadWriteCreate) { db in
