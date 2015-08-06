@@ -26,13 +26,13 @@ Building the code
 1. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage).
 1. Clone the repository:
 
-  ```
+  ```shell
   git clone https://github.com/mozilla/firefox-ios
   ```
 
 1. Pull in the project dependencies:
 
-  ```
+  ```shell
   cd firefox-ios
   sh ./checkout.sh
   ```
