@@ -447,6 +447,21 @@ private class ShowIntroductionSetting: Setting {
     }
 }
 
+private class SendFeedbackSetting: Setting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Send Feedback", comment: "Show an input.mozilla.org page where people can submit feedback"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override var url: NSURL? {
+        let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
+        return NSURL(string: "https://input.mozilla.org/feedback/fxios/\(appVersion)")
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        setUpAndPushSettingsContentViewController(navigationController)
+    }
+}
+
 // Opens the the SUMO page in a new tab
 private class OpenSupportPageSetting: Setting {
     init() {
@@ -662,6 +677,7 @@ class SettingsTableViewController: UITableViewController {
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
                 ShowIntroductionSetting(settings: self),
+                SendFeedbackSetting(),
                 OpenSupportPageSetting()
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
