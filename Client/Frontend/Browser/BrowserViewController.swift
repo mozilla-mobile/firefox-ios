@@ -1354,7 +1354,7 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(webView: WKWebView,
         didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge,
         completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
-            if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPBasic || challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPDigest {
+            if challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodClientCertificate {
                 if let tab = tabManager[webView] {
                     let helper = tab.getHelper(name: LoginsHelper.name()) as! LoginsHelper
                     helper.handleAuthRequest(self, challenge: challenge).uponQueue(dispatch_get_main_queue()) { res in
