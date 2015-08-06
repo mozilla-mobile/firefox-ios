@@ -7,6 +7,7 @@ import UIKit
 class SettingsNavigationController: UINavigationController {
     var profile: Profile!
     var tabManager: TabManager!
+    var popoverDelegate: PresentingModalViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +19,14 @@ class SettingsNavigationController: UINavigationController {
     }
 
     func SELdone() {
-        NSLog("Done!")
-        self.dismissViewControllerAnimated(true, completion: nil)
+        if let delegate = popoverDelegate {
+            delegate.dismissPresentedModalViewController(self, animated: true)
+        } else {
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
+}
+
+protocol PresentingModalViewControllerDelegate {
+    func dismissPresentedModalViewController(modalViewController: UIViewController, animated: Bool)
 }

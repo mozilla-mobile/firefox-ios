@@ -13,7 +13,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         webRoot = SimplePageServer.start()
     }
 
-    override func tearDown() {
+    override func afterEach() {
         BrowserUtils.resetToAboutHome(tester())
     }
 
@@ -33,7 +33,10 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForAbsenceOfViewWithAccessibilityLabel("Clear Everything")
 
         tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel("home")
+        // on the ipad air sometimes we will find ourselves already out of the tab tray so no need to click 'home'
+        if tester().tryFindingViewWithAccessibilityLabel("home", error: nil) {
+            tester().tapViewWithAccessibilityLabel("home")
+        }
     }
 
     func visitSites(noOfSites: Int) -> [(title: String, url: String)] {
@@ -47,14 +50,13 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             let tuple: (title: String, url: String) = ("Page \(pageNo)", url)
             urls.append(tuple)
         }
-
+        BrowserUtils.resetToAboutHome(tester())
         return urls
     }
 
     func testClearsTopSitesPanel() {
         let urls = visitSites(2)
 
-        BrowserUtils.resetToAboutHome(tester())
         tester().tapViewWithAccessibilityLabel("Top sites")
 
         // Only one will be found -- we collapse by domain.
@@ -69,7 +71,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     func testCancelDoesNotClearTopSitesPanel() {
         let urls = visitSites(2)
 
-        BrowserUtils.resetToAboutHome(tester())
         XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[0].title, error: nil), "Expected to have top site panel \(urls[0])")
 
         clearPrivateData(false)
@@ -80,8 +81,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearsHistoryPanel() {
         let urls = visitSites(2)
-
-        BrowserUtils.resetToAboutHome(tester())
 
         tester().tapViewWithAccessibilityLabel("History")
         let url1 = "\(urls[0].title), \(urls[0].url)", url2 = "\(urls[1].title), \(urls[1].url)"
@@ -98,8 +97,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testCancelDoesNotClearHistoryPanel() {
         let urls = visitSites(2)
-
-        BrowserUtils.resetToAboutHome(tester())
 
         tester().tapViewWithAccessibilityLabel("History")
         let url1 = "\(urls[0].title), \(urls[0].url)", url2 = "\(urls[1].title), \(urls[1].url)"
