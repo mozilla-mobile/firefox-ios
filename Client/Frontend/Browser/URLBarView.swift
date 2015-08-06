@@ -18,6 +18,7 @@ private struct URLBarViewUX {
     static let TextFieldBorderWidth: CGFloat = 1
     // offset from edge of tabs button
     static let URLBarCurveOffset: CGFloat = 14
+    static let URLBarCurveOffsetLeft: CGFloat = -10
     // buffer so we dont see edges when animation overshoots with spring
     static let URLBarCurveBounceBuffer: CGFloat = 8
 
@@ -273,7 +274,7 @@ class URLBarView: UIView {
         }
 
         bookmarkButton.snp_makeConstraints { make in
-            make.right.equalTo(self.tabsButton.snp_left)
+            make.right.equalTo(self.tabsButton.snp_left).offset(URLBarViewUX.URLBarCurveOffsetLeft)
             make.centerY.equalTo(self)
             make.size.equalTo(backButton)
         }
