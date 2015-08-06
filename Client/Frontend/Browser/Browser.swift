@@ -47,7 +47,7 @@ class Browser: NSObject {
                 history: history,
                 lastUsed: NSDate.now(),
                 icon: nil)
-        } else if let sessionData = browser.sessionData {
+        } else if let sessionData = browser.sessionData where !sessionData.urls.isEmpty {
             let history = sessionData.urls.reverse()
             return RemoteTab(clientGUID: nil,
                 URL: history[0],
