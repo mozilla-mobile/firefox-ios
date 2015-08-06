@@ -61,10 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-        // Force a database upgrade by requesting a non-existent password
-        profile.logins.getLoginsForProtectionSpace(NSURLProtectionSpace(host: "example.com", port: 0, `protocol`: nil, realm: nil, authenticationMethod: nil))
-
-        // check to see if we started cos someone tapped on a notification
+        // check to see if we started 'cos someone tapped on a notification.
         if let localNotification = launchOptions?[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
             viewURLInNewTab(localNotification)
         }
