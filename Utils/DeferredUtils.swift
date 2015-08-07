@@ -169,3 +169,16 @@ public func chainResult<T, U>(a: Deferred<Result<T>>, f: T -> Result<U>) -> Defe
 public func chain<T, U>(a: Deferred<Result<T>>, f: T -> U) -> Deferred<Result<U>> {
     return chainResult(a, { Result<U>(success: f($0)) })
 }
+
+/// Defer-ifies a block to an async dispatch queue.
+public func deferDispatchAsync<T>(queue: dispatch_queue_attr_t, f: () -> Deferred<Result<T>>) -> Deferred<Result<T>> {
+    let deferred = Deferred<Result<T>>()
+
+    dispatch_async(queue, {
+        f().upon { result in
+            deferred.fill(result)
+        }
+    })
+
+    return deferred
+}
