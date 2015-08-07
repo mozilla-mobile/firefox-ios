@@ -41,7 +41,6 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     override func viewDidLoad() {
-        KeyboardHelper.defaultHelper.addDelegate(self)
         super.viewDidLoad()
     }
 

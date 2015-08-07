@@ -90,15 +90,20 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
 
         self.webView = makeWebView()
         view.addSubview(webView)
+        self.webView.snp_remakeConstraints { make in
+            make.edges.equalTo(self.view)
+        }
 
         // Destructuring let causes problems.
         let ret = makeInterstitialViews()
         self.interstitialView = ret.0
         self.interstitialSpinnerView = ret.1
         self.interstitialErrorView = ret.2
-
         view.addSubview(interstitialView)
-        layoutInnerViews()
+        self.interstitialView.snp_remakeConstraints { make in
+            make.edges.equalTo(self.view)
+        }
+
         startLoading()
     }
 
@@ -165,42 +170,3 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         self.isLoaded = true
     }
 }
-
-extension SettingsContentViewController: KeyboardHelperDelegate {
-    private func layoutInnerViews() {
-        let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.webView) ?? 0
-
-        self.webView.snp_remakeConstraints { make in
-            make.left.right.top.equalTo(self.view)
-            make.bottom.equalTo(self.view).offset(-keyboardHeight)
-        }
-        if !isLoaded {
-            // If the page has loaded, the interstitial view will have been removed.
-            self.interstitialView.snp_remakeConstraints { make in
-                make.left.right.top.equalTo(self.view)
-                make.bottom.equalTo(self.view).offset(-keyboardHeight)
-            }
-        }
-    }
-
-    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
-        animateInnerViewsWithKeyboard(state)
-    }
-
-    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {
-        animateInnerViewsWithKeyboard(state)
-    }
-
-    func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
-        animateInnerViewsWithKeyboard(state)
-    }
-
-    private func animateInnerViewsWithKeyboard(keyboardState: KeyboardState) {
-        layoutInnerViews()
-
-        UIView.animateWithDuration(keyboardState.animationDuration, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
-                self.view.layoutIfNeeded()
-            }, completion: nil)
-    }
-}
-
