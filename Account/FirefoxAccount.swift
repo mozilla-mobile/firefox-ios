@@ -6,8 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 
-// TODO: same comment as for SyncAuthState.swift!
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 // The version of the account schema we persist.
 let AccountSchemaVersion = 1

@@ -8,7 +8,7 @@ import Storage
 import XCGLogger
 import WebKit
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.browserLogger
 
 private let SaveButtonTitle = NSLocalizedString("Save", comment: "Button to save the user's password")
 private let NotNowButtonTitle = NSLocalizedString("Not now", comment: "Button to not save the user's password")

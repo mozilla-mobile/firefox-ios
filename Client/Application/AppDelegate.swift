@@ -5,6 +5,7 @@
 import Shared
 import Storage
 import AVFoundation
+import XCGLogger
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -21,6 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
+
+        // Create a new sync log file on cold app launch
+        Logger.syncLogger.newLogWithDate(NSDate())
 
         let profile = getProfile(application)
 

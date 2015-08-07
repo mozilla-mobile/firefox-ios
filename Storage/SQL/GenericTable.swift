@@ -4,8 +4,9 @@
 
 import Foundation
 import XCGLogger
+import Shared
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 class GenericTable<T>: BaseTable {
     typealias Type = T

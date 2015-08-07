@@ -9,7 +9,7 @@ import ReadingList
 import Shared
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.browserLogger
 
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
