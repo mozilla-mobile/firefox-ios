@@ -375,7 +375,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     private func createTileForSite(cell: ThumbnailCell, site: Site) -> ThumbnailCell {
-        cell.textLabel.text = site.title.isEmpty ? site.url : site.title
+        cell.textLabel.text = site.title.isEmpty ? (NSURL(string: site.url)?.baseDomainAndPath() ?? site.url) : site.title
         cell.imageWrapper.backgroundColor = UIColor.clearColor()
 
         // Resets used cell's background image so that it doesn't get recycled when a tile doesn't update its background image.
