@@ -59,14 +59,14 @@ class TestHistory : ProfileTest {
     func testHistory() {
         withTestProfile { profile -> Void in
             let h = profile.history
-            self.addSite(h, url: "url1", title: "title")
-            self.addSite(h, url: "url1", title: "title")
-            self.addSite(h, url: "url1", title: "title 2")
-            self.addSite(h, url: "url2", title: "title")
-            self.addSite(h, url: "url2", title: "title")
-            self.checkSites(h, urls: ["url1": "title 2", "url2": "title"])
-            self.checkVisits(h, url: "url1")
-            self.checkVisits(h, url: "url2")
+            self.addSite(h, url: "http://url1/", title: "title")
+            self.addSite(h, url: "http://url1/", title: "title")
+            self.addSite(h, url: "http://url1/", title: "title 2")
+            self.addSite(h, url: "https://url2/", title: "title")
+            self.addSite(h, url: "https://url2/", title: "title")
+            self.checkSites(h, urls: ["http://url1/": "title 2", "https://url2/": "title"])
+            self.checkVisits(h, url: "http://url1/")
+            self.checkVisits(h, url: "https://url2/")
             self.clear(h)
         }
     }
@@ -89,7 +89,7 @@ class TestHistory : ProfileTest {
 
             self.measureBlock({ () -> Void in
                 for i in 0...self.NumCmds {
-                    self.addSite(h, url: "url \(j)", title: "title \(j)")
+                    self.addSite(h, url: "https://someurl\(j).com/", title: "title \(j)")
                     j++
                 }
                 self.clear(h)
@@ -105,8 +105,8 @@ class TestHistory : ProfileTest {
 
             self.clear(h)
             for i in 0...self.NumCmds {
-                self.addSite(h, url: "url \(j)", title: "title \(j)")
-                urls["url \(j)"] = "title \(j)"
+                self.addSite(h, url: "https://someurl\(j).com/", title: "title \(j)")
+                urls["https://someurl\(j).com/"] = "title \(j)"
                 j++
             }
 
@@ -171,7 +171,7 @@ class TestHistory : ProfileTest {
 
         switch cmd {
         case 0...1:
-            let url = "url \(rand() % 100)"
+            let url = "https://randomurl.com/\(rand() % 100)"
             let title = "title \(rand() % 100)"
             addSite(history, url: url, title: title)
             cb()
