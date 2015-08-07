@@ -3,22 +3,10 @@ import XCTest
 import Storage
 
 class TestHistory : ProfileTest {
-
-    private func innerAddSite(history: BrowserHistory, url: String, title: String, callback: (success: Bool) -> Void) {
-        // Add an entry
+    private func addSite(history: BrowserHistory, url: String, title: String, s: Bool = true) {
         let site = Site(url: url, title: title)
         let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds())
-        history.addLocalVisit(visit).upon {
-            callback(success: $0.isSuccess)
-        }
-    }
-
-    private func addSite(history: BrowserHistory, url: String, title: String, s: Bool = true) {
-        let expectation = self.expectationWithDescription("Wait for history")
-        innerAddSite(history, url: url, title: title) { success in
-            XCTAssertEqual(success, s, "Site added \(url)")
-            expectation.fulfill()
-        }
+        XCTAssertEqual(s, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
     }
 
     private func innerCheckSites(history: BrowserHistory, callback: (cursor: Cursor<Site>) -> Void) {
@@ -31,39 +19,25 @@ class TestHistory : ProfileTest {
 
 
     private func checkSites(history: BrowserHistory, urls: [String: String], s: Bool = true) {
-        let expectation = self.expectationWithDescription("Wait for history")
-
-        // Retrieve the entry
-        innerCheckSites(history) { cursor in
-            XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
-            XCTAssertEqual(cursor.count, urls.count, "cursor has \(urls.count) entries")
+        // Retrieve the entry.
+        if let cursor = history.getSitesByLastVisit(100).value.successValue {
+            XCTAssertEqual(cursor.status, CursorStatus.Success, "Returned success \(cursor.statusMessage).")
+            XCTAssertEqual(cursor.count, urls.count, "Cursor has \(urls.count) entries.")
 
             for index in 0..<cursor.count {
                 let s = cursor[index]!
-                XCTAssertNotNil(s, "cursor has a site for entry")
+                XCTAssertNotNil(s, "Cursor has a site for entry.")
                 let title = urls[s.url]
-                XCTAssertNotNil(title, "Found right url")
-                XCTAssertEqual(s.title, title!, "Found right title")
+                XCTAssertNotNil(title, "Found right URL.")
+                XCTAssertEqual(s.title, title!, "Found right title.")
             }
-            expectation.fulfill()
+        } else {
+            XCTFail("Couldn't get cursor.")
         }
-
-        self.waitForExpectationsWithTimeout(100, handler: nil)
     }
 
-    private func innerClear(history: BrowserHistory, callback: (s: Bool) -> Void) {
-        history.clearHistory().upon { callback(s: $0.isSuccess) }
-    }
-
-    private func clear(history: BrowserHistory, s: Bool = true) {
-        let expectation = self.expectationWithDescription("Wait for history")
-
-        innerClear(history) { success in
-            XCTAssertEqual(s, success, "Sites cleared")
-            expectation.fulfill()
-        }
-
-        self.waitForExpectationsWithTimeout(100, handler: nil)
+    private func clear(history: BrowserHistory) {
+        XCTAssertTrue(history.clearHistory().value.isSuccess, "History cleared.")
     }
 
     private func checkVisits(history: BrowserHistory, url: String) {
@@ -199,7 +173,8 @@ class TestHistory : ProfileTest {
         case 0...1:
             let url = "url \(rand() % 100)"
             let title = "title \(rand() % 100)"
-            innerAddSite(history, url: url, title: title) { success in cb() }
+            addSite(history, url: url, title: title)
+            cb()
         case 2...3:
             innerCheckSites(history) { cursor in
                 for site in cursor {
@@ -208,7 +183,7 @@ class TestHistory : ProfileTest {
             }
             cb()
         default:
-            innerClear(history) { success in cb() }
+            history.clearHistory().upon() { success in cb() }
         }
     }
 
