@@ -5,7 +5,7 @@
 import Foundation
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.keychainLogger
 
 public protocol JSONLiteralConvertible {
     func asJSON() -> JSON

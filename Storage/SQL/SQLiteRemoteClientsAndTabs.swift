@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     let db: BrowserDB

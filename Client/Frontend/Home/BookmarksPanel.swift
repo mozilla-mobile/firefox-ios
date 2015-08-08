@@ -7,7 +7,7 @@ import Storage
 import Shared
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.browserLogger
 
 let BookmarkStatusChangedNotification = "BookmarkStatusChangedNotification"
 

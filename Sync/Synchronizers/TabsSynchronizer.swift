@@ -7,8 +7,7 @@ import Shared
 import Storage
 import XCGLogger
 
-// TODO: same comment as for SyncAuthState.swift!
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 private let TabsStorageVersion = 1
 
 public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {

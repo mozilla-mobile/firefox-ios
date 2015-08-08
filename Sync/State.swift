@@ -6,8 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 
-// TODO: same comment as for SyncAuthState.swift!
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 /*
  * This file includes types that manage intra-sync and inter-sync metadata

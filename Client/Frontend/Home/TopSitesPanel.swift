@@ -7,7 +7,7 @@ import Shared
 import XCGLogger
 import Storage
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.browserLogger
 
 private let ThumbnailIdentifier = "Thumbnail"
 

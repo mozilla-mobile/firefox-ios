@@ -7,7 +7,7 @@ import Shared
 import Storage
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 private let HistoryTTLInSeconds = 5184000                   // 60 days.
 private let HistoryStorageVersion = 1
 
