@@ -48,7 +48,6 @@ public class UserAgent {
         let firefoxUA = "\(mutableUA) Safari/\(webKitVersion)"
 
         defaults.setObject(firefoxUA, forKey: "UserAgent")
-        defaults.registerDefaults(["UserAgent": firefoxUA])      // Not strictly necessary, but v1 isn't the time to change things.
 
         return firefoxUA
     }

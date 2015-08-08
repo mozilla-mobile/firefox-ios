@@ -154,6 +154,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func setUserAgent() {
         let firefoxUA = UserAgent.defaultUserAgent()
+
+        // Set the UA for WKWebView (via defaults), the favicon fetcher, and the image loader.
+        // This only needs to be done once per runtime.
+
+        NSUserDefaults.standardUserDefaults().registerDefaults(["UserAgent": firefoxUA])
         FaviconFetcher.userAgent = firefoxUA
         SDWebImageDownloader.sharedDownloader().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
     }
