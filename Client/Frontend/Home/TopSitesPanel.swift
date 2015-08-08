@@ -432,6 +432,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.imageView.contentMode = UIViewContentMode.ScaleAspectFit
         cell.isAccessibilityElement = true
         cell.accessibilityLabel = cell.textLabel.text
+        cell.removeButton.hidden = true
 
         return cell
     }
