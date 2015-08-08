@@ -154,7 +154,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func setUserAgent() {
-        var firefoxUA = getUserAgent()
+        var firefoxUA = UserAgent.defaultUserAgent()
         FaviconFetcher.userAgent = firefoxUA
         NSUserDefaults.standardUserDefaults().registerDefaults(["UserAgent": firefoxUA])
         SDWebImageDownloader.sharedDownloader().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")

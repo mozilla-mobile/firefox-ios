@@ -261,7 +261,6 @@ public protocol BackoffStorage {
 
 // Don't forget to batch downloads.
 public class Sync15StorageClient {
-    private static var userAgent: String = getUserAgent()
     private let authorizer: Authorizer
     private let serverURI: NSURL
 
@@ -353,7 +352,7 @@ public class Sync15StorageClient {
 
     lazy private var alamofire: Alamofire.Manager = {
         var defaultHeaders = Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders ?? [:]
-        defaultHeaders["User-Agent"] = userAgent
+        defaultHeaders["User-Agent"] = UserAgent.defaultUserAgent()
         
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.HTTPAdditionalHeaders = defaultHeaders
