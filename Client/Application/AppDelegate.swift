@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Sync
 import Shared
 import Storage
 import AVFoundation
@@ -185,6 +186,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSUserDefaults.standardUserDefaults().setObject(firefoxUA, forKey: "UserAgent")
         }
         FaviconFetcher.userAgent = firefoxUA!
+        Sync15StorageClient.userAgent = firefoxUA!
         NSUserDefaults.standardUserDefaults().registerDefaults(["UserAgent": firefoxUA!])
         SDWebImageDownloader.sharedDownloader().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
     }

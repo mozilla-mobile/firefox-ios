@@ -261,6 +261,7 @@ public protocol BackoffStorage {
 
 // Don't forget to batch downloads.
 public class Sync15StorageClient {
+    public static var userAgent: String = ""
     private let authorizer: Authorizer
     private let serverURI: NSURL
 
@@ -350,12 +351,22 @@ public class Sync15StorageClient {
         }
     }
 
+    lazy private var alamofire: Alamofire.Manager = {
+        var defaultHeaders = Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = userAgent
+        
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        configuration.HTTPAdditionalHeaders = defaultHeaders
+        
+        return Alamofire.Manager(configuration: configuration)
+    }()
+
     func requestGET(url: NSURL) -> Request {
         let req = NSMutableURLRequest(URL: url)
         req.HTTPMethod = Method.GET.rawValue
         req.setValue("application/json", forHTTPHeaderField: "Accept")
         let authorized: NSMutableURLRequest = self.authorizer(req)
-        return Alamofire.request(authorized)
+        return alamofire.request(authorized)
                         .validate(contentType: ["application/json"])
     }
 
@@ -364,7 +375,7 @@ public class Sync15StorageClient {
         req.HTTPMethod = Method.DELETE.rawValue
         req.setValue("1", forHTTPHeaderField: "X-Confirm-Delete")
         let authorized: NSMutableURLRequest = self.authorizer(req)
-        return Alamofire.request(authorized)
+        return alamofire.request(authorized)
     }
 
     func requestWrite(url: NSURL, method: String, body: String, contentType: String, ifUnmodifiedSince: Timestamp?) -> Request {
@@ -379,7 +390,7 @@ public class Sync15StorageClient {
         }
 
         req.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding)!
-        return Alamofire.request(authorized)
+        return alamofire.request(authorized)
     }
 
     func requestPUT(url: NSURL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {
