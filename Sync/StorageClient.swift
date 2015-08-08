@@ -261,7 +261,7 @@ public protocol BackoffStorage {
 
 // Don't forget to batch downloads.
 public class Sync15StorageClient {
-    public static var userAgent: String = ""
+    private static var userAgent: String = getUserAgent()
     private let authorizer: Authorizer
     private let serverURI: NSURL
 
