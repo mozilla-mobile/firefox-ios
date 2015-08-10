@@ -106,8 +106,14 @@ class BrowserScrollingController: NSObject {
 }
 
 private extension BrowserScrollingController {
+    func browserIsLoading() -> Bool {
+        return browser?.loading ?? true
+    }
+
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
-        if let loading = browser?.loading where loading { return }
+        if browserIsLoading() {
+            return
+        }
 
         if let containerView = scrollView?.superview {
             let translation = gesture.translationInView(containerView)
@@ -209,6 +215,10 @@ extension BrowserScrollingController: UIGestureRecognizerDelegate {
 
 extension BrowserScrollingController: UIScrollViewDelegate {
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if browserIsLoading() {
+            return
+        }
+
         if (decelerate || (toolbarState == .Animating && !decelerate)) && checkScrollHeightIsLargeEnoughForScrolling() {
             if scrollDirection == .Up {
                 showToolbars(animated: true)
