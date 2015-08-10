@@ -56,6 +56,7 @@ class ClientTests: XCTestCase {
 
     // Simple test to make sure the WKWebView UA matches the expected FxiOS pattern.
     func testUserAgent() {
+        let defaults = NSUserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
         let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
         let compare: String -> Bool = { ua in
@@ -63,7 +64,8 @@ class ClientTests: XCTestCase {
             return range != nil
         }
 
-        XCTAssertTrue(compare(UserAgent.defaultUserAgent()), "User agent computes correctly.")
+        XCTAssertTrue(compare(UserAgent.defaultUserAgent(defaults)), "User agent computes correctly.")
+        XCTAssertTrue(compare(UserAgent.cachedUserAgent(defaults, checkiOSVersion: true)!), "User agent is cached correctly.")
 
         let expectation = expectationWithDescription("Found Firefox user agent")
 
