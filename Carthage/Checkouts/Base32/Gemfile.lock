@@ -1,0 +1,20 @@
+GIT
+  remote: https://github.com/norio-nomura/xcjobs.git
+  revision: ed10d05caf1d7f74d4efa109e1f79228539e5571
+  branch: subclass-of-rake-task
+  specs:
+    xcjobs (0.0.7)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rake (10.4.2)
+    xcpretty (0.1.8)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rake
+  xcjobs!
+  xcpretty

@@ -1,0 +1,24 @@
+SWIFT_WHOLE_MODULE_OPTIMIZATION      = YES
+
+// Universal Framework
+
+SUPPORTED_PLATFORMS                  = iphoneos iphonesimulator macosx
+
+VALID_ARCHS[sdk=iphone*]             = arm64 armv7 armv7s
+VALID_ARCHS[sdk=macosx*]             = i386 x86_64
+
+LD_RUNPATH_SEARCH_PATHS[sdk=iphone*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks
+LD_RUNPATH_SEARCH_PATHS[sdk=macosx*] = $(inherited) @executable_path/../Frameworks @loader_path/Frameworks @loader_path/../Frameworks
+
+FRAMEWORK_SEARCH_PATHS[sdk=iphone*]  = $(inherited) $(SDKROOT)/Developer/Library/Frameworks
+FRAMEWORK_SEARCH_PATHS[sdk=macosx*]  = $(inherited) $(DEVELOPER_FRAMEWORKS_DIR)
+
+// Platform-specific
+
+// iOS
+CODE_SIGN_IDENTITY[sdk=iphoneos*]    = iPhone Developer
+TARGETED_DEVICE_FAMILY[sdk=iphone*]  = 1,2
+
+// OS X
+FRAMEWORK_VERSION[sdk=macosx*]       = A
+COMBINE_HIDPI_IMAGES[sdk=macosx*]    = YES
