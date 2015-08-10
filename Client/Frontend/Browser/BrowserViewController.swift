@@ -235,11 +235,20 @@ class BrowserViewController: UIViewController {
     }
 
     func loadQueuedTabs() {
-        log.debug("Loading queued tabs.")
+        log.debug("Loading queued tabs in the background.")
 
-        // This assumes that the DB returns rows in some kind of sane order.
-        // It does in practice, so WFM.
+        // Chain off of a trivial deferred in order to run on the background queue.
+        succeed().upon() { res in
+            self.dequeueQueuedTabs()
+        }
+    }
+
+    private func dequeueQueuedTabs() {
+        assert(!NSThread.currentThread().isMainThread, "This must be called in the background.")
         self.profile.queue.getQueuedTabs() >>== { c in
+
+            // This assumes that the DB returns rows in some kind of sane order.
+            // It does in practice, so WFM.
             log.debug("Queue. Count: \(c.count).")
             if c.count > 0 {
                 var urls = [NSURL]()
