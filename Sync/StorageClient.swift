@@ -353,10 +353,11 @@ public class Sync15StorageClient {
     lazy private var alamofire: Alamofire.Manager = {
         var defaultHeaders = Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders ?? [:]
 
-        // Must be called from the main thread. Bug 1192826.
-        // defaultHeaders["User-Agent"] = UserAgent.defaultUserAgent()
+        let ua = UserAgent.syncUserAgent
+        log.debug("Setting Sync User-Agent to \(ua).")
+        defaultHeaders["User-Agent"] = ua
         
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
         configuration.HTTPAdditionalHeaders = defaultHeaders
         
         return Alamofire.Manager(configuration: configuration)
