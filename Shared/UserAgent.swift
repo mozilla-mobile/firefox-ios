@@ -6,6 +6,20 @@ import AVFoundation
 import UIKit
 
 public class UserAgent {
+    public static var syncUserAgent: String {
+        let appName = DeviceInfo.appName()
+        return "Firefox-iOS-Sync/\(AppInfo.appVersion) (\(appName))"
+    }
+
+    public static var tokenServerClientUserAgent: String {
+        let appName = DeviceInfo.appName()
+        return "Firefox-iOS-Token/\(AppInfo.appVersion) (\(appName))"
+    }
+
+    public static var fxaUserAgent: String {
+        let appName = DeviceInfo.appName()
+        return "Firefox-iOS-FxA/\(AppInfo.appVersion) (\(appName))"
+    }
 
     /**
      * Use this if you know that a value must have been computed before your
