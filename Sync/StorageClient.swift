@@ -351,16 +351,9 @@ public class Sync15StorageClient {
     }
 
     lazy private var alamofire: Alamofire.Manager = {
-        var defaultHeaders = Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders ?? [:]
-
         let ua = UserAgent.syncUserAgent
-        log.debug("Setting Sync User-Agent to \(ua).")
-        defaultHeaders["User-Agent"] = ua
-        
         let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
-        configuration.HTTPAdditionalHeaders = defaultHeaders
-        
-        return Alamofire.Manager(configuration: configuration)
+        return Alamofire.Manager.managerWithUserAgent(ua, configuration: configuration)
     }()
 
     func requestGET(url: NSURL) -> Request {

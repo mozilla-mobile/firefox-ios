@@ -213,13 +213,9 @@ public class FxAClient10 {
     }
 
     lazy private var alamofire: Alamofire.Manager = {
-        var defaultHeaders = Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders ?? [:]
-        defaultHeaders["User-Agent"] = UserAgent.fxaUserAgent
-
+        let ua = UserAgent.fxaUserAgent
         let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
-        configuration.HTTPAdditionalHeaders = defaultHeaders
-
-        return Alamofire.Manager(configuration: configuration)
+        return Alamofire.Manager.managerWithUserAgent(ua, configuration: configuration)
     }()
 
     public func login(emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool) -> Deferred<Result<FxALoginResponse>> {

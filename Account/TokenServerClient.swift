@@ -130,13 +130,9 @@ public class TokenServerClient {
     }
 
     lazy private var alamofire: Alamofire.Manager = {
-        var defaultHeaders = Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders ?? [:]
-        defaultHeaders["User-Agent"] = UserAgent.tokenServerClientUserAgent
-
+        let ua = UserAgent.tokenServerClientUserAgent
         let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
-        configuration.HTTPAdditionalHeaders = defaultHeaders
-
-        return Alamofire.Manager(configuration: configuration)
+        return Alamofire.Manager.managerWithUserAgent(ua, configuration: configuration)
     }()
 
     public func token(assertion: String, clientState: String? = nil) -> Deferred<Result<TokenServerToken>> {
