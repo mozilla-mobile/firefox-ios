@@ -1,0 +1,12 @@
+/* Header for the list of devices table */
+"Available devices:" = "可用裝置:";
+
+/* Close button in top navigation bar */
+"Close" = "關閉";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "傳送";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "傳送分頁";
+

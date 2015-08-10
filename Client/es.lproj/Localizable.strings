@@ -1,0 +1,347 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ está solicitando un nombre de usuario y contraseña.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ está solicitando un nombre de usuario y una contraseña. El sitio dice: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Acerca de";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Añadir pestaña";
+
+/* Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Add to Reading List" = "Añadir a la Lista de lectura";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Direcciones y búsqueda";
+
+/* Authentication prompt title */
+"Authentication required" = "Identificación requerida";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "Atrás";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "Añadir a marcadores";
+
+/* Panel accessibility label */
+"Bookmarks" = "Marcadores";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Brillo";
+
+/* Alert Call Button */
+"Call" = "Llamar";
+
+/* Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert */
+"Cancel" = "Cancelar";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Cambia el tema de colores.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Cambia la fuente.";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Cerrar";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "Copiar dirección";
+
+/* Context menu item for copying an image to the clipboard */
+"Copy Image" = "Copiar imagen";
+
+/* Context menu item for copying a link URL to the clipboard */
+"Copy Link" = "Copiar enlace";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Crear una cuenta";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Oscuro";
+
+/* Debug option */
+"Debug: forget Sync auth state" = "Depurar: olvidar estado de autenticación de Sync";
+
+/* Debug option */
+"Debug: require password" = "Depurar: requerir contraseña";
+
+/* Debug option */
+"Debug: require upgrade" = "Depurar: requerir actualización";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Reducir tamaño del texto";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Motor de búsqueda predeterminado";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Preferencias de visualización";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "¿Quieres guardar la contraseña para %1$@ en %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"Do you want to save the password on %@?" = "¿Quieres guardar la contraseña en %@?";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "¿Quieres actualizar la contraseña para %1$@ en %2$@?";
+
+/* Prompt for updating a password with on username. The parameter is the hostname of the site. */
+"Do you want to update the password on %@?" = "¿Quieres actualizar la contraseña en %@?";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Listo";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Toca dos veces y deja mantenido para abrir el historial";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Escribe tu contraseña para conectarte.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox detendrá la sincronización con tu cuenta, pero no borrará ninguno de tus datos de navegación en este dispositivo.";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "Adelante";
+
+/* General settings section title */
+"General" = "General";
+
+/* Panel accessibility label */
+"History" = "Historial";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Aumentar tamaño del texto";
+
+/* History tableview section header */
+"Last month" = "Último mes";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "Última vez sincronizado: %@";
+
+/* History tableview section header */
+"Last week" = "Última semana";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Claro";
+
+/* Authentication prompt log in button */
+"Log in" = "Conectarse";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Marcar como leído";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Marcar como no leído";
+
+/* Error for a missing remote error number */
+"Missing error" = "Error faltante";
+
+/* Error for a missing remote error message */
+"Missing message" = "Mensaje faltante";
+
+/* Prompt title for application update */
+"New version available" = "Nueva versión disponible";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "Ahora no";
+
+/* Button to not save the user's password */
+"Not now" = "Ahora no";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "Aceptar";
+
+/* Context menu item for opening a link in a new tab */
+"Open In New Tab" = "Abrir en pestaña nueva";
+
+/* Opening an external URL */
+"Opening %@" = "Abriendo %@";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Contraseña";
+
+/* Paste the URL into the location bar */
+"Paste" = "Pegar";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "Pegar e ir";
+
+/* Privacy section title */
+"Privacy" = "Privacidad";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Motores de búsqueda rápida";
+
+/* Panel accessibility label */
+"Reading list" = "Lista de lectura";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "Recargar";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Quitar";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Quitar de la Lista de lectura";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Button to save the user's password */
+"Save" = "Guardar";
+
+/* Context menu item for saving an image */
+"Save Image" = "Guardar imagen";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Búsqueda";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Término de búsqueda o dirección";
+
+/* Accessibility hint describing the action performed when a search suggestion is clicked */
+"Searches for the suggestion" = "Búsquedas para la sugerencia";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Conexión segura";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Preferencias";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "Compartir";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "Mostrar pestañas";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Mostrar sugerencias de búsqueda";
+
+/* Button that leads to Sign in section of the Settings sheet.
+   See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Conectarse";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "Detener";
+
+/* Support section title */
+"Support" = "Ayuda";
+
+/* See http://mzl.la/1Qtkf0j */
+"Sync your tabs, bookmarks, passwords and more." = "Sincroniza tus pestañas, marcadores, contraseñas y más.";
+
+/* Panel accessibility label */
+"Synced tabs" = "Pestañas sincronizadas";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Bandeja de pestañas";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Hay una nueva versión disponible de Firefox Aurora. Toca Aceptar para ir a la página de descargas.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Hubo un error al convertir la página";
+
+/* Opening an external app */
+"This will open in another application" = "Esto abrirá en otra aplicación";
+
+/* History tableview section header */
+"Today" = "Hoy";
+
+/* Panel accessibility label */
+"Top sites" = "Sitios frecuentes";
+
+/* Button to update the user's password */
+"Update" = "Actualizar";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "Actualiza Firefox para conectarte.";
+
+/* Setting to enable compact tabs in the tab overview */
+"Use Compact Tabs" = "Usar pestañas compactas";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Nombre de usuario";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Verifica tu correo electrónico.";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "Versión %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Contenido Web";
+
+/* See http://mzl.la/1Qtkf0j */
+"Welcome to Sync" = "Bienvenido a Sync";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Bienvenido a tu Lista de lectura";
+
+/* History tableview section header */
+"Yesterday" = "Ayer";
+
+/* Accessibility label for Desktop Computer (PC) image in remote tabs list */
+"computer" = "equipo";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ahora mismo";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "dispositivo móvil";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "hace más de un mes";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "hace más de una semana";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "leído";
+
+/* Relative date for date in past week. */
+"this week" = "esta semana";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "hoy a las %@";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "no leído";
+
+/* Relative date for yesterday. */
+"yesterday" = "ayer";
+

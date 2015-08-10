@@ -1,0 +1,131 @@
+/* About settings section title */
+"About" = "Относно";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Адреси и търсене";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "Назад";
+
+/* Panel accessibility label */
+"Bookmarks" = "Отметки";
+
+/* Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert */
+"Cancel" = "Отказ";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "Стандартна търсеща машина";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "Готово";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "Докоснете два пъти и задръжте, за да отворите историята";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "Въведете паролата си, за да се свържете.";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox ще спре синхронизацията с вашия профил, но няма да изтрива данни за сърфирането от устройството.";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "Напред";
+
+/* Panel accessibility label */
+"History" = "История";
+
+/* History tableview section header */
+"Last month" = "Миналия месец";
+
+/* History tableview section header */
+"Last week" = "Миналата седмица";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "Отбелязване като прочетено";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Отбелязване като непрочетено";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "Добре";
+
+/* Opening an external URL */
+"Opening %@" = "Отваряне %@";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "Търсещи машини";
+
+/* Panel accessibility label */
+"Reading list" = "Списък за четене";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Премахване";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "Търсене";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Търсене или въведжане адрес";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "Защитена връзка";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "Настройки";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "Споделяне";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "Показване на подпрозорци";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "Показване на подсказки";
+
+/* Button that leads to Sign in section of the Settings sheet.
+   See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "Вписване";
+
+/* Panel accessibility label */
+"Synced tabs" = "Синхр. на подпрозорци";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Лента с подпрозорци";
+
+/* Opening an external app */
+"This will open in another application" = "Така ще отворите друго приложение";
+
+/* History tableview section header */
+"Today" = "Днес";
+
+/* Panel accessibility label */
+"Top sites" = "Най-посещавани";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "За да се свържете обновете Firefox.";
+
+/* Text message in the settings table view */
+"Verify your email address." = "Потвърдете своя адрес на ел. поща.";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Съдържание от Мрежата";
+
+/* History tableview section header */
+"Yesterday" = "Вчера";
+

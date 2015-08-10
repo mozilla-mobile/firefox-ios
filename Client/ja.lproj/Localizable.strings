@@ -1,0 +1,212 @@
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "製品情報";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "アドレスと検索";
+
+/* Accessibility Label for the browser toolbar Back button */
+"Back" = "戻る";
+
+/* Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440 */
+"Bookmark" = "ブックマーク";
+
+/* Panel accessibility label */
+"Bookmarks" = "ブックマーク";
+
+/* Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert */
+"Cancel" = "キャンセル";
+
+/* Copy the URL from the location bar */
+"Copy Address" = "URL をコピー";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "ダーク";
+
+/* Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section. */
+"Default Search Engine" = "デフォルト検索エンジン";
+
+/* Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to save the password for %@ on %@?" = "%2$@ サイトの %1$@ のパスワードを保存しますか？";
+
+/* Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"Do you want to update the password for %@ on %@?" = "%2$@ サイトの %1$@ のパスワードを更新しますか？";
+
+/* Done button on left side of the Settings view controller title bar
+   Done editing button */
+"Done" = "完了";
+
+/* No comment provided by engineer. */
+"Double tap and hold to open history" = "ダブルタップして長押しで履歴を開きます";
+
+/* Text message in the settings table view */
+"Enter your password to connect." = "接続のためパスワードを入力してください。";
+
+/* Text of the 'log out firefox account' alert */
+"Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." = "Firefox はあなたのアカウントとの同期を中止しますが、この端末上のブラウズ履歴は削除されません。";
+
+/* Accessibility Label for the browser toolbar Forward button */
+"Forward" = "進む";
+
+/* Panel accessibility label */
+"History" = "履歴";
+
+/* History tableview section header */
+"Last month" = "先月";
+
+/* Remote tabs last synced time. Argument is the relative date string. */
+"Last synced: %@" = "最終同期日: %@";
+
+/* History tableview section header */
+"Last week" = "先週";
+
+/* Light theme setting in Reading View settings */
+"Light" = "ライト";
+
+/* Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read */
+"Mark as Read" = "既読にする";
+
+/* Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "未読にする";
+
+/* Error for a missing remote error number */
+"Missing error" = "不足エラー";
+
+/* Error for a missing remote error message */
+"Missing message" = "不足メッセージ";
+
+/* Prompt title for application update */
+"New version available" = "新しいバージョンに更新できます";
+
+/* Label for button to cancel application update prompt */
+"Not Now" = "後で";
+
+/* Button to not save the user's password */
+"Not now" = "後で";
+
+/* Alert OK Button
+   Label for OK button in the application update prompt
+   OK button */
+"OK" = "OK";
+
+/* Opening an external URL */
+"Opening %@" = "%@ を開く";
+
+/* Paste the URL into the location bar */
+"Paste" = "ペースト";
+
+/* Paste the URL into the location bar and visit */
+"Paste & Go" = "ペーストして移動";
+
+/* Title for quick-search engines settings section. */
+"Quick-search Engines" = "クイック検索エンジン";
+
+/* Panel accessibility label */
+"Reading list" = "リーディングリスト";
+
+/* Accessibility Label for the browser toolbar Reload button */
+"Reload" = "再読み込み";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "削除";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* Button to save the user's password */
+"Save" = "保存";
+
+/* Navigation title for search settings.
+   Open search section of settings */
+"Search" = "検索";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "検索語またはアドレスを入力";
+
+/* Accessibility label for the lock icon, which is only present if the connection is secure */
+"Secure connection" = "安全な接続";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "セピア";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Accessibility label for the Settings button in the Tab Tray.
+   Settings */
+"Settings" = "設定";
+
+/* Accessibility Label for the browser toolbar Share button */
+"Share" = "共有";
+
+/* Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar */
+"Show Tabs" = "タブを表示";
+
+/* Label for show search suggestions setting. */
+"Show search suggestions" = "検索候補を表示";
+
+/* Button that leads to Sign in section of the Settings sheet.
+   See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view */
+"Sign in" = "サインイン";
+
+/* Accessibility Label for the browser toolbar Stop button */
+"Stop" = "中止";
+
+/* Panel accessibility label */
+"Synced tabs" = "同期したタブ";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "タブトレイ";
+
+/* Prompt message for application update */
+"There is a new version available of Firefox Aurora. Tap OK to go to the download page." = "Firefox Aurora の新しいバージョンに更新できます。OK をタップするとダウンロードページを開きます。";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "ページの変換中にエラーが発生しました";
+
+/* Opening an external app */
+"This will open in another application" = "この操作は別のアプリケーションを開きます";
+
+/* History tableview section header */
+"Today" = "今日";
+
+/* Panel accessibility label */
+"Top sites" = "よく見るサイト";
+
+/* Button to update the user's password */
+"Update" = "更新";
+
+/* Text message in the settings table view */
+"Upgrade Firefox to connect." = "接続するには Firefox をアップグレードしてください。";
+
+/* Text message in the settings table view */
+"Verify your email address." = "メールアドレスを確認してください。";
+
+/* Version number of Firefox shown in settings */
+"Version %@ (%@)" = "バージョン %1$@ (%2$@)";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Web コンテンツ";
+
+/* History tableview section header */
+"Yesterday" = "昨日";
+

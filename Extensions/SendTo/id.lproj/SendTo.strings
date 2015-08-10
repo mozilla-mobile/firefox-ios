@@ -1,0 +1,12 @@
+/* Header for the list of devices table */
+"Available devices:" = "Perangkat tersedia";
+
+/* Close button in top navigation bar */
+"Close" = "Tutup";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Kirim";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Kirim Tab";
+
