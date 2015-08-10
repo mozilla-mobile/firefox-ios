@@ -318,7 +318,8 @@ public class BrowserTable: Table {
                 return false
             }
 
-            let urls = db.executeQuery("SELECT DISTINCT url FROM \(TableHistory)", factory: { $0["url"] as! String })
+            let urls = db.executeQuery("SELECT DISTINCT url FROM \(TableHistory) WHERE url IS NOT NULL",
+                                       factory: { $0["url"] as! String })
             if !fillDomainNamesFromCursor(urls, db: db) {
                 return false
             }
