@@ -1,11 +1,11 @@
 Building Firefox for iOS
 ========================
 
-Prerequisites, as of *May 11 2015*:
+Prerequisites, as of *August 10 2015*:
 
-* Mac OS X 10.10.3
-* Xcode 6.3.1 with the iOS 8.3 SDK
-* Carthage 0.7.1 via Homebrew
+* Mac OS X 10.10.4
+* Xcode 6.4 with the iOS 8.4 SDK
+* Carthage 0.7.4 via Homebrew
 
 (We try to keep up to date with the most recent production versions of OS X, Xcode and the iOS SDK.)
 
