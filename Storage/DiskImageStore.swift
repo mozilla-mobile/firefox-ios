@@ -20,11 +20,13 @@ public class DiskImageStore {
     private let files: FileAccessor
     private let filesDir: String
     private let queue = dispatch_queue_create("DiskImageStore", DISPATCH_QUEUE_CONCURRENT)
+    private let quality: CGFloat
     private var keys: Set<String>
 
-    required public init(files: FileAccessor, namespace: String) {
+    required public init(files: FileAccessor, namespace: String, quality: Float) {
         self.files = files
         self.filesDir = files.getAndEnsureDirectory(relativeDir: namespace)!
+        self.quality = CGFloat(quality)
 
         // Build an in-memory set of keys from the existing images on disk.
         var keys = [String]()
@@ -65,7 +67,7 @@ public class DiskImageStore {
 
         return deferDispatchAsync(queue, {
             let imagePath = self.filesDir.stringByAppendingPathComponent(key)
-            let data = UIImagePNGRepresentation(image)
+            let data = UIImageJPEGRepresentation(image, self.quality)
 
             if data.writeToFile(imagePath, atomically: false) {
                 self.keys.insert(key)

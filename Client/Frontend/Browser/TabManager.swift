@@ -68,7 +68,7 @@ class TabManager : NSObject {
 
         self.defaultNewTabRequest = defaultNewTabRequest
         self.navDelegate = TabManagerNavDelegate()
-        self.imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots")
+        self.imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
         super.init()
 
         addNavigationDelegate(self)
