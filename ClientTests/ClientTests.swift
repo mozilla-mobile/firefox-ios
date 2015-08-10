@@ -57,7 +57,7 @@ class ClientTests: XCTestCase {
     func testSyncUA() {
         let ua = UserAgent.syncUserAgent
         let loc = ua.rangeOfString("^Firefox-iOS-Sync/[0-9\\.]+ \\([A-Za-z0-9 \\(\\)]+\\)$", options: NSStringCompareOptions.RegularExpressionSearch)
-        XCTAssertTrue(loc != nil, "Sync UA is very simple.")
+        XCTAssertTrue(loc != nil, "Sync UA is as expected. Was <\(ua)>")
     }
 
     // Simple test to make sure the WKWebView UA matches the expected FxiOS pattern.
