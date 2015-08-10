@@ -252,7 +252,7 @@ class URLBarView: UIView {
 
         backButton.snp_makeConstraints { make in
             make.left.centerY.equalTo(self)
-            make.size.lessThanOrEqualTo(UIConstants.ToolbarHeight)
+            make.size.equalTo(UIConstants.ToolbarHeight)
         }
 
         forwardButton.snp_makeConstraints { make in
@@ -281,6 +281,7 @@ class URLBarView: UIView {
     }
 
     override func updateConstraints() {
+        super.updateConstraints()
         if inOverlayMode {
             // In overlay mode, we always show the location view full width
             self.locationContainer.snp_remakeConstraints { make in
@@ -306,7 +307,6 @@ class URLBarView: UIView {
             }
         }
 
-        super.updateConstraints()
     }
 
     // Ideally we'd split this implementation in two, one URLBarView with a toolbar and one without
@@ -315,7 +315,11 @@ class URLBarView: UIView {
     func setShowToolbar(shouldShow: Bool) {
         toolbarIsShowing = shouldShow
         setNeedsUpdateConstraints()
-        updateConstraintsIfNeeded()
+        // when we transition from portrait to landscape, calling this here causes
+        // the constraints to be calculated too early and there are constraint errors
+        if !toolbarIsShowing {
+            updateConstraintsIfNeeded()
+        }
         updateViewsForOverlayModeAndToolbarChanges()
     }
 
