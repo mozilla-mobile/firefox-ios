@@ -26,7 +26,6 @@ public class UserAgent {
      * code runs, or you don't mind failure.
      */
     public static func cachedUserAgent(defaults: NSUserDefaults, checkiOSVersion: Bool = true) -> String? {
-        let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
         let currentiOSVersion = UIDevice.currentDevice().systemVersion
         let lastiOSVersion = defaults.stringForKey("LastDeviceSystemVersionNumber")
 
