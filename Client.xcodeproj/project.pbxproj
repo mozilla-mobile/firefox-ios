@@ -162,6 +162,7 @@
 		28E23C121AC5A5EE00F5AC85 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E23C111AC5A5EE00F5AC85 /* State.swift */; };
 		28E8BE7F1B792A89002CC733 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E8BE7E1B792A89002CC733 /* AppInfo.swift */; };
 		28E8BE9D1B792B23002CC733 /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42CCE001A24C4E300B794D3 /* ExtensionUtils.swift */; };
+		28E8BEC91B79449B002CC733 /* AlamofireExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E8BEC81B79449B002CC733 /* AlamofireExtensions.swift */; };
 		28E91E751B443AD5009DF274 /* SyncConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E91E741B443AD5009DF274 /* SyncConstants.swift */; };
 		28E91E761B443AD5009DF274 /* SyncConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E91E741B443AD5009DF274 /* SyncConstants.swift */; };
 		28EADE5D1AFC3A78007FB2FB /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EADE381AFC3898007FB2FB /* UIImageViewExtensions.swift */; };
@@ -1285,6 +1286,7 @@
 		28D158AC1AFD90E500F9C065 /* TestSQLiteBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSQLiteBookmarks.swift; sourceTree = "<group>"; };
 		28E23C111AC5A5EE00F5AC85 /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		28E8BE7E1B792A89002CC733 /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
+		28E8BEC81B79449B002CC733 /* AlamofireExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireExtensions.swift; sourceTree = "<group>"; };
 		28E91E741B443AD5009DF274 /* SyncConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncConstants.swift; sourceTree = "<group>"; };
 		28EADE381AFC3898007FB2FB /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Extensions/UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		28ED02011B26123E003948B2 /* LoginPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginPayload.swift; sourceTree = "<group>"; };
@@ -1866,18 +1868,19 @@
 		287DA9D51AE06D220055AC35 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */,
+				E6F9659B1B2F5F800034B023 /* effective_tld_names.dat */,
+				28E8BEC81B79449B002CC733 /* AlamofireExtensions.swift */,
+				E6A99D761B20D95800006EDD /* GeometryExtensions.swift */,
 				2F44FA171A9D425700FD20CC /* HashExtensions.swift */,
 				2F44FA1C1A9D460500FD20CC /* HexExtensions.swift */,
+				E6F9653D1B2F235A0034B023 /* NSMutableAttributedStringExtensions.swift */,
 				288501FA1AC0F63800E7F670 /* NSScannerExtensions.swift */,
+				E6F9659D1B2F63A20034B023 /* NSStringExtensions.swift */,
 				2891CEC31ADC7F2900427D3C /* NSURLExtensions.swift */,
-				E6F9659B1B2F5F800034B023 /* effective_tld_names.dat */,
 				2F13E77E1AC0BFF200D75081 /* StringExtensions.swift */,
 				D35275151AA8D13B00E9C906 /* UIColorExtensions.swift */,
 				0BB5B2BB1AC0AB9F0052877D /* UIImage+Extensions.swift */,
-				E6A99D761B20D95800006EDD /* GeometryExtensions.swift */,
-				E6F9653D1B2F235A0034B023 /* NSMutableAttributedStringExtensions.swift */,
-				E6F9659D1B2F63A20034B023 /* NSStringExtensions.swift */,
+				0B5142CB1AE1BAF50014D0B3 /* UIViewExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3930,6 +3933,7 @@
 				2F0624D51AE58C7800FA022C /* KeychainCache.swift in Sources */,
 				E635D25E1B729DEE0078962F /* Logger.swift in Sources */,
 				288A2DB51AB8B38D0023ABC3 /* Error.swift in Sources */,
+				28E8BEC91B79449B002CC733 /* AlamofireExtensions.swift in Sources */,
 				0B36E4CA1B34CC74000E79BD /* Deferred.swift in Sources */,
 				285D3B331B4332C00035FD22 /* NotificationConstants.swift in Sources */,
 				288A2DB61AB8B38D0023ABC3 /* Result.swift in Sources */,
