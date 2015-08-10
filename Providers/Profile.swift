@@ -36,7 +36,7 @@ class ProfileFileAccessor: FileAccessor {
 
         // Bug 1147262: First option is for device, second is for simulator.
         var rootPath: String?
-        if let sharedContainerIdentifier = ExtensionUtils.sharedContainerIdentifier(), url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(sharedContainerIdentifier), path = url.path {
+        if let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier(), url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(sharedContainerIdentifier), path = url.path {
             rootPath = path
         } else {
             log.error("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
@@ -165,7 +165,7 @@ public class BrowserProfile: Profile {
         let mainQueue = NSOperationQueue.mainQueue()
         notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: "LocationChange", object: nil)
 
-        if let baseBundleIdentifier = ExtensionUtils.baseBundleIdentifier() {
+        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
             KeychainWrapper.serviceName = baseBundleIdentifier
         } else {
             log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
