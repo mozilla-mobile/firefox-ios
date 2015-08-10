@@ -49,12 +49,14 @@ class Browser: NSObject {
                 icon: nil)
         } else if let sessionData = browser.sessionData where !sessionData.urls.isEmpty {
             let history = sessionData.urls.reverse()
-            return RemoteTab(clientGUID: nil,
-                URL: history[0],
-                title: browser.displayTitle,
-                history: history,
-                lastUsed: sessionData.lastUsedTime,
-                icon: nil)
+            if count(history) > 0 {
+                return RemoteTab(clientGUID: nil,
+                    URL: history[0],
+                    title: browser.displayTitle,
+                    history: history,
+                    lastUsed: sessionData.lastUsedTime,
+                    icon: nil)
+            }
         }
 
         return nil
