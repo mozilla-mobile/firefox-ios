@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 import Storage
 import Shared
 import Alamofire
@@ -62,14 +66,10 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
     }
 
     lazy private var alamofire: Alamofire.Manager = {
-        var defaultHeaders = Alamofire.Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders ?? [:]
-        defaultHeaders["User-Agent"] = userAgent
-
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.timeoutIntervalForRequest = 5
-        configuration.HTTPAdditionalHeaders = defaultHeaders
 
-        return Alamofire.Manager(configuration: configuration)
+        return Alamofire.Manager.managerWithUserAgent(userAgent, configuration: configuration)
     }()
 
     private func fetchDataForURL(url: NSURL) -> Deferred<Result<NSData>> {

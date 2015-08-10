@@ -54,8 +54,15 @@ class ClientTests: XCTestCase {
         XCTAssertFalse(ran, "for...in didn't run for failed cursor");
     }
 
+    func testSyncUA() {
+        let ua = UserAgent.syncUserAgent
+        let loc = ua.rangeOfString("^Firefox-iOS-Sync/[0-9\\.]+ \\([A-Za-z0-9 \\(\\)]+\\)$", options: NSStringCompareOptions.RegularExpressionSearch)
+        XCTAssertTrue(loc != nil, "Sync UA is very simple.")
+    }
+
     // Simple test to make sure the WKWebView UA matches the expected FxiOS pattern.
     func testUserAgent() {
+        let defaults = NSUserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
         let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
         let compare: String -> Bool = { ua in
@@ -63,7 +70,8 @@ class ClientTests: XCTestCase {
             return range != nil
         }
 
-        XCTAssertTrue(compare(UserAgent.defaultUserAgent()), "User agent computes correctly.")
+        XCTAssertTrue(compare(UserAgent.defaultUserAgent(defaults)), "User agent computes correctly.")
+        XCTAssertTrue(compare(UserAgent.cachedUserAgent(defaults, checkiOSVersion: true)!), "User agent is cached correctly.")
 
         let expectation = expectationWithDescription("Found Firefox user agent")
 

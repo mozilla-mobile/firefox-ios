@@ -129,6 +129,12 @@ public class TokenServerClient {
         return nil
     }
 
+    lazy private var alamofire: Alamofire.Manager = {
+        let ua = UserAgent.tokenServerClientUserAgent
+        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
+        return Alamofire.Manager.managerWithUserAgent(ua, configuration: configuration)
+    }()
+
     public func token(assertion: String, clientState: String? = nil) -> Deferred<Result<TokenServerToken>> {
         let deferred = Deferred<Result<TokenServerToken>>()
 
@@ -138,7 +144,7 @@ public class TokenServerClient {
             mutableURLRequest.setValue(clientState, forHTTPHeaderField: "X-Client-State")
         }
 
-        Alamofire.request(mutableURLRequest)
+        alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (_, response, data, error) in
                 if let error = error {

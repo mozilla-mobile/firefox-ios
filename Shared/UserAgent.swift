@@ -6,21 +6,53 @@ import AVFoundation
 import UIKit
 
 public class UserAgent {
-    public static func defaultUserAgent() -> String {
-        let defaults = NSUserDefaults.standardUserDefaults()
+    public static var syncUserAgent: String {
+        let appName = DeviceInfo.appName()
+        return "Firefox-iOS-Sync/\(AppInfo.appVersion) (\(appName))"
+    }
 
-        let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
+    public static var tokenServerClientUserAgent: String {
+        let appName = DeviceInfo.appName()
+        return "Firefox-iOS-Token/\(AppInfo.appVersion) (\(appName))"
+    }
+
+    public static var fxaUserAgent: String {
+        let appName = DeviceInfo.appName()
+        return "Firefox-iOS-FxA/\(AppInfo.appVersion) (\(appName))"
+    }
+
+    /**
+     * Use this if you know that a value must have been computed before your
+     * code runs, or you don't mind failure.
+     */
+    public static func cachedUserAgent(defaults: NSUserDefaults, checkiOSVersion: Bool = true) -> String? {
         let currentiOSVersion = UIDevice.currentDevice().systemVersion
         let lastiOSVersion = defaults.stringForKey("LastDeviceSystemVersionNumber")
 
         if let firefoxUA = defaults.stringForKey("UserAgent") {
-            if lastiOSVersion == currentiOSVersion {
+            if !checkiOSVersion || (lastiOSVersion == currentiOSVersion) {
                 return firefoxUA
             }
         }
 
+        return nil
+    }
+
+    /**
+     * This will typically return quickly, but can require creation of a UIWebView.
+     * As a result, it must be called on the UI thread.
+     */
+    public static func defaultUserAgent(defaults: NSUserDefaults) -> String {
+        assert(NSThread.currentThread().isMainThread, "This method must be called on the main thread.")
+
+        if let firefoxUA = UserAgent.cachedUserAgent(defaults, checkiOSVersion: true) {
+            return firefoxUA
+        }
+
         let webView = UIWebView()
 
+        let appVersion = AppInfo.appVersion
+        let currentiOSVersion = UIDevice.currentDevice().systemVersion
         defaults.setObject(currentiOSVersion,forKey: "LastDeviceSystemVersionNumber")
         let userAgent = webView.stringByEvaluatingJavaScriptFromString("navigator.userAgent")!
 
