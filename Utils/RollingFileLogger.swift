@@ -13,7 +13,6 @@ public class RollingFileLogger: XCGLogger {
     private let logDirectoryPath: String?
 
     let fileLogIdentifierPrefix = "com.mozilla.firefox.filelogger."
-    let consoleLogIdentifierPrefix = "com.mozilla.firefox.consolelogger."
 
     private static let DateFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
@@ -28,7 +27,6 @@ public class RollingFileLogger: XCGLogger {
         self.sizeLimit = sizeLimit
         self.logDirectoryPath = logDirectoryPath
         super.init()
-        addLogDestination(XCGConsoleLogDestination(owner: self, identifier: consoleLogIdentifierWithRoot(root)))
     }
 
     /**
@@ -97,9 +95,5 @@ public class RollingFileLogger: XCGLogger {
 
     private func fileLogIdentifierWithRoot(root: String) -> String {
         return "\(fileLogIdentifierPrefix).\(root)"
-    }
-
-    private func consoleLogIdentifierWithRoot(root: String) -> String {
-        return "\(consoleLogIdentifierPrefix).\(root)"
     }
 }

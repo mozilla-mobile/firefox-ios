@@ -45,7 +45,6 @@ public extension Logger {
 
     static private func fileLoggerWithName(filename: String) -> XCGLogger {
         var log = XCGLogger()
-        log.addLogDestination(XCGConsoleLogDestination(owner: log, identifier: "com.mozilla.firefox.consolelogger.\(filename)"))
         if let logDir = Logger.logFileDirectoryPath() {
             let fileDestination = XCGFileLogDestination(owner: log, writeToFile: "\(logDir)/\(filename).log", identifier: "com.mozilla.firefox.filelogger.\(filename)")
             log.addLogDestination(fileDestination)
