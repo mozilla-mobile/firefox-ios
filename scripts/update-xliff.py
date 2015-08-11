@@ -75,10 +75,13 @@ def main():
         # Using locale folder as locale code. In some cases we need to map this
         # value to a different locale code
         # http://www.ibabbleon.com/iOS-Language-Codes-ISO-639.html
+        # See Bug 1193530, Bug 1160467.
         locale_code = file_path.split(os.sep)[-2]
         locale_mapping = {
             'bn-IN': 'bn',
             'ga-IE': 'ga',
+            'nb-NO': 'nb',
+            'nn-NO': 'nn',
             'sv-SE': 'sv'
         }
         if locale_code in locale_mapping:
