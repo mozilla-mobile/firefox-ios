@@ -23,10 +23,12 @@ class BrowserScrollingController: NSObject {
         willSet {
             self.scrollView?.delegate = nil
             self.scrollView?.removeGestureRecognizer(panGesture)
+            self.scrollView?.removeObserver(self, forKeyPath: "contentSize")
         }
 
         didSet {
             self.scrollView?.addGestureRecognizer(panGesture)
+            self.scrollView?.addObserver(self, forKeyPath: "contentSize", options: NSKeyValueObservingOptions.New, context: nil)
             scrollView?.delegate = self
         }
     }
@@ -102,6 +104,14 @@ class BrowserScrollingController: NSObject {
             footerOffset: footerFrame.height - snackBarsFrame.height,
             alpha: 0,
             completion: completion)
+    }
+
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        if keyPath == "contentSize" {
+            if !checkScrollHeightIsLargeEnoughForScrolling() && !toolbarsShowing {
+                showToolbars(animated: true, completion: nil)
+            }
+        }
     }
 }
 
