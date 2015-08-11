@@ -60,12 +60,20 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
-        self.refreshControl = refresh
-        self.tableView.addSubview(refresh)
         self.tableView.accessibilityIdentifier = "History List"
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // Add a refresh control if the user is logged in and the control was not added before. If the user is not
+        // logged in, remove any existing control but only when it is not currently refreshing. Otherwise, wait for
+        // the refresh to finish before removing the control.
+        if profile.hasSyncableAccount() && self.refreshControl == nil {
+            addRefreshControl()
+        } else if self.refreshControl?.refreshing == false {
+            removeRefreshControl()
+        }
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -89,15 +97,38 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
     }
 
+    func addRefreshControl() {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl = refresh
+        self.tableView.addSubview(refresh)
+    }
+
+    func removeRefreshControl() {
+        self.refreshControl?.removeFromSuperview()
+        self.refreshControl = nil
+    }
+
+    func endRefreshing() {
+        // Always end refreshing, even if we failed!
+        self.refreshControl?.endRefreshing()
+
+        // Remove the refresh control if the user has logged out in the meantime
+        if !self.profile.hasSyncableAccount() {
+            self.removeRefreshControl()
+        }
+    }
+
     /**
     * sync history with the server and ensure that we update our view afterwards
     **/
-    func resyncHistory(completion: (()->())? = nil) {
+    func resyncHistory() {
         profile.syncManager.syncHistory().uponQueue(dispatch_get_main_queue()) { result in
             if result.isSuccess {
                 self.reloadData()
+            } else {
+                self.endRefreshing()
             }
-            completion?()
         }
     }
 
@@ -106,7 +137,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     **/
     @objc func refresh() {
         self.refreshControl?.beginRefreshing()
-        resyncHistory(completion: self.refreshControl?.endRefreshing)
+        resyncHistory()
     }
 
     /**
@@ -132,8 +163,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 self.updateEmptyPanelState()
             }
 
-            // Always end refreshing, even if we failed!
-            self.refreshControl?.endRefreshing()
+            self.endRefreshing()
 
             // TODO: error handling.
         }
