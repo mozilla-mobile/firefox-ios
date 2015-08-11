@@ -13,7 +13,7 @@ class DiskImageStoreTests: XCTestCase {
 
     override func setUp() {
         files = MockFiles()
-        store = DiskImageStore(files: files, namespace: "DiskImageStoreTests")
+        store = DiskImageStore(files: files, namespace: "DiskImageStoreTests", quality: 1)
 
         store.clearExcluding(Set())
     }
@@ -22,24 +22,34 @@ class DiskImageStoreTests: XCTestCase {
         var success = false
 
         let redImage = makeImageWithColor(UIColor.redColor())
+        let blueImage = makeImageWithColor(UIColor.blueColor())
+
+        // Sanity checks.
+        XCTAssertNotEqual(redImage, blueImage, "Images are not equal")
+        XCTAssertNotEqual(toJPEGImage(redImage), toJPEGImage(blueImage), "JPEG images are not equal")
+
         XCTAssertNil(getImage("red"), "Red key is nil")
         success = putImage("red", image: redImage)
         XCTAssert(success, "Red image added to store")
-        ensureImagesAreEqual(getImage("red")!, otherImage: redImage)
+        ensureImagesAreEqual(getImage("red")!, otherImage: toJPEGImage(redImage))
         success = putImage("red", image: redImage)
         XCTAssertFalse(success, "Red image not added again")
 
-        let blueImage = makeImageWithColor(UIColor.blueColor())
         XCTAssertNil(getImage("blue"), "Blue key is nil")
         success = putImage("blue", image: blueImage)
         XCTAssert(success, "Blue image added to store")
-        ensureImagesAreEqual(getImage("blue")!, otherImage: blueImage)
+        ensureImagesAreEqual(getImage("blue")!, otherImage: toJPEGImage(blueImage))
         success = putImage("blue", image: blueImage)
         XCTAssertFalse(success, "Blue image not added again")
 
         store.clearExcluding(Set(["red"]))
         XCTAssertNotNil(getImage("red"), "Red image still exists")
         XCTAssertNil(getImage("blue"), "Blue image cleared")
+    }
+
+    /// Converts the image to a JPEG so it matches the image in the store.
+    private func toJPEGImage(image: UIImage) -> UIImage {
+        return UIImage(data: UIImageJPEGRepresentation(image, 1))!
     }
 
     private func makeImageWithColor(color: UIColor) -> UIImage {
