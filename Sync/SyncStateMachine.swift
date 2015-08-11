@@ -685,6 +685,9 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
 
         if let keys = self.scratchpad.keys where keys.value.valid {
             if let cryptoModified = self.info.modified("crypto") {
+                // Both of these are server timestamps. If the record we stored has the
+                // same modified time as the server collection, and we're fetching from the
+                // same server, then the record must be identical, and we can use it directly.
                 // If the server timestamp is newer, there might be new keys.
                 // If the server timestamp is older, something horribly wrong has occurred.
                 if cryptoModified == keys.timestamp {
@@ -703,7 +706,8 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
                 return Deferred(value: Result(failure: InvalidKeysError(keys.value)))
             } else {
                 // No known modified time for crypto/. That likely means the server has no keys.
-                // Drop our cached value and fall through; we'll fetch and fail.
+                // Drop our cached value and fall through; we'll try to fetch, fail, and
+                // go through the usual failure flow.
                 log.warning("Local keys found timestamped \(keys.timestamp), but no crypto collection on server. Dropping cached keys.")
                 self.scratchpad = self.scratchpad.evolve().setKeys(nil).build().checkpoint()
 
