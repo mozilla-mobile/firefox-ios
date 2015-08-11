@@ -165,15 +165,6 @@ class TabCell: UICollectionViewCell {
         backgroundHolder.alpha = 1
     }
 
-    var tab: Browser? {
-        didSet {
-            titleText.text = tab?.title
-            if let favIcon = tab?.displayFavicon {
-                favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
-            }
-        }
-    }
-
     override func accessibilityScroll(direction: UIAccessibilityScrollDirection) -> Bool {
         var right: Bool
         switch direction {
