@@ -42,6 +42,18 @@ class NSURLExtensionsTests : XCTestCase {
         XCTAssertEqual("co.uk", expected)
     }
 
+    func testCanadaComputers() {
+        let url = "http://m.canadacomputers.com".asURL!
+        let actual = url.baseDomain()!
+        XCTAssertEqual("canadacomputers.com", actual)
+    }
+
+    func testMultipleSuffixesInsideURL() {
+        let url = "http://com:org@m.canadacomputers.co.uk".asURL!
+        let actual = url.baseDomain()!
+        XCTAssertEqual("canadacomputers.co.uk", actual)
+    }
+
     func testNormalBaseDomainWithManySubdomains() {
         // TLD Entry: co.uk
         let url = "http://a.b.c.d.bbc.co.uk".asURL!
