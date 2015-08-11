@@ -51,11 +51,13 @@ class TabManager : NSObject {
 
     private var tabs: [Browser] = []
     private var _selectedIndex = -1
-    var selectedIndex: Int { return _selectedIndex }
     private let defaultNewTabRequest: NSURLRequest
     private let navDelegate: TabManagerNavDelegate
     private var configuration: WKWebViewConfiguration
+    private let imageStore: DiskImageStore
+
     unowned let profile: Profile
+    var selectedIndex: Int { return _selectedIndex }
 
     init(defaultNewTabRequest: NSURLRequest, profile: Profile) {
         self.profile = profile
@@ -66,6 +68,7 @@ class TabManager : NSObject {
 
         self.defaultNewTabRequest = defaultNewTabRequest
         self.navDelegate = TabManagerNavDelegate()
+        self.imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots")
         super.init()
 
         addNavigationDelegate(self)
@@ -286,11 +289,11 @@ class TabManager : NSObject {
 extension TabManager {
     class SavedTab: NSObject, NSCoding {
         let isSelected: Bool
-        let screenshot: UIImage?
         var sessionData: SessionData?
+        var screenshotUUID: NSUUID?
 
         init?(browser: Browser, isSelected: Bool) {
-            self.screenshot = browser.screenshot
+            self.screenshotUUID = browser.screenshotUUID
             self.isSelected = isSelected
             super.init()
 
@@ -315,13 +318,13 @@ extension TabManager {
 
         required init(coder: NSCoder) {
             self.sessionData = coder.decodeObjectForKey("sessionData") as? SessionData
-            self.screenshot = coder.decodeObjectForKey("screenshot") as? UIImage
+            self.screenshotUUID = coder.decodeObjectForKey("screenshotUUID") as? NSUUID
             self.isSelected = coder.decodeBoolForKey("isSelected")
         }
 
         func encodeWithCoder(coder: NSCoder) {
             coder.encodeObject(sessionData, forKey: "sessionData")
-            coder.encodeObject(screenshot, forKey: "screenshot")
+            coder.encodeObject(screenshotUUID, forKey: "screenshotUUID")
             coder.encodeBool(isSelected, forKey: "isSelected")
         }
     }
@@ -336,11 +339,22 @@ extension TabManager {
     private func preserveTabsInternal() {
         if let path = tabsStateArchivePath() {
             var savedTabs = [SavedTab]()
+            var savedUUIDs = Set<String>()
             for (tabIndex, tab) in enumerate(tabs) {
                 if let savedTab = SavedTab(browser: tab, isSelected: tabIndex == selectedIndex) {
                     savedTabs.append(savedTab)
+
+                    if let screenshot = tab.screenshot,
+                       let screenshotUUID = tab.screenshotUUID
+                    {
+                        savedUUIDs.insert(screenshotUUID.UUIDString)
+                        imageStore.put(screenshotUUID.UUIDString, image: screenshot)
+                    }
                 }
             }
+
+            // Clean up any screenshots that are no longer associated with a tab.
+            imageStore.clearExcluding(savedUUIDs)
 
             let tabStateData = NSMutableData()
             let archiver = NSKeyedArchiver(forWritingWithMutableData: tabStateData)
@@ -372,10 +386,22 @@ extension TabManager {
 
                         for (tabIndex, savedTab) in enumerate(savedTabs) {
                             let tab = self.addTab(flushToDisk: false, zombie: true, restoring: true)
-                            tab.screenshot = savedTab.screenshot
+
+                            // Set the UUID for the tab, asynchronously fetch the UIImage, then store
+                            // the screenshot in the tab as long as long as a newer one hasn't been taken.
+                            if let screenshotUUID = savedTab.screenshotUUID {
+                                tab.screenshotUUID = screenshotUUID
+                                imageStore.get(screenshotUUID.UUIDString) >>== { screenshot in
+                                    if tab.screenshotUUID == screenshotUUID {
+                                        tab.setScreenshot(screenshot, revUUID: false)
+                                    }
+                                }
+                            }
+
                             if savedTab.isSelected {
                                 tabToSelect = tab
                             }
+
                             tab.sessionData = savedTab.sessionData
                         }
 

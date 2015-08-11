@@ -28,10 +28,12 @@ class Browser: NSObject {
     var favicons = [Favicon]()
     var lastExecutedTime: Timestamp?
     var sessionData: SessionData?
-
-    var screenshot: UIImage?
-    private var helperManager: HelperManager? = nil
     var lastRequest: NSURLRequest? = nil
+
+    private(set) var screenshot: UIImage?
+    var screenshotUUID: NSUUID?
+
+    private var helperManager: HelperManager? = nil
     private var configuration: WKWebViewConfiguration? = nil
 
     init(configuration: WKWebViewConfiguration) {
@@ -287,6 +289,13 @@ class Browser: NSObject {
             if !bar.shouldPersist(self) {
                 removeSnackbar(bar)
             }
+        }
+    }
+
+    func setScreenshot(screenshot: UIImage?, revUUID: Bool = true) {
+        self.screenshot = screenshot
+        if revUUID {
+            self.screenshotUUID = NSUUID()
         }
     }
 }
