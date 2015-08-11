@@ -202,7 +202,7 @@ private extension BrowserScrollingController {
     }
 
     func checkScrollHeightIsLargeEnoughForScrolling() -> Bool {
-        return (scrollViewHeight + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height
+        return (UIScreen.mainScreen().bounds.size.height + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height
     }
 }
 
