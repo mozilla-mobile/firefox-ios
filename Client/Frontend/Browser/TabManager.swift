@@ -129,6 +129,9 @@ class TabManager : NSObject {
                 break
             }
         }
+
+        preserveTabs()
+
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
 
