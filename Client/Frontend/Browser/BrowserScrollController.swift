@@ -23,12 +23,10 @@ class BrowserScrollingController: NSObject {
         willSet {
             self.scrollView?.delegate = nil
             self.scrollView?.removeGestureRecognizer(panGesture)
-            self.scrollView?.removeObserver(self, forKeyPath: "contentSize")
         }
 
         didSet {
             self.scrollView?.addGestureRecognizer(panGesture)
-            self.scrollView?.addObserver(self, forKeyPath: "contentSize", options: NSKeyValueObservingOptions.New, context: nil)
             scrollView?.delegate = self
         }
     }

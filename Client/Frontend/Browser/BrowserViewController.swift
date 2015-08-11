@@ -22,6 +22,7 @@ private let KVOEstimatedProgress = "estimatedProgress"
 private let KVOURL = "URL"
 private let KVOCanGoBack = "canGoBack"
 private let KVOCanGoForward = "canGoForward"
+private let KVOContentSize = "contentSize"
 
 private let ActionSheetTitleMaxLength = 120
 
@@ -974,6 +975,7 @@ extension BrowserViewController: BrowserDelegate {
         webView.addObserver(self, forKeyPath: KVOURL, options: .New, context: nil)
         webView.addObserver(self, forKeyPath: KVOCanGoBack, options: .New, context: nil)
         webView.addObserver(self, forKeyPath: KVOCanGoForward, options: .New, context: nil)
+        webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOContentSize, options: .New, context: nil)
 
         webView.UIDelegate = self
 
@@ -1006,6 +1008,7 @@ extension BrowserViewController: BrowserDelegate {
         webView.removeObserver(self, forKeyPath: KVOURL)
         webView.removeObserver(self, forKeyPath: KVOCanGoBack)
         webView.removeObserver(self, forKeyPath: KVOCanGoForward)
+        webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOContentSize)
 
         webView.UIDelegate = nil
         webView.scrollView.delegate = nil
