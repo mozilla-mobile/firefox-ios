@@ -527,6 +527,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     private let client: Sync15StorageClient
     private let encrypter: RecordEncrypter<T>
     private let collectionURI: NSURL
+    private let collectionQueue = dispatch_queue_create("com.mozilla.sync.collectionclient", DISPATCH_QUEUE_SERIAL)
 
     init(client: Sync15StorageClient, serverURI: NSURL, collection: String, encrypter: RecordEncrypter<T>) {
         self.client = client
@@ -550,7 +551,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         let json = optFilter(records.map(self.encrypter.serializer))
 
         let req = client.requestPOST(self.collectionURI, body: json, ifUnmodifiedSince: nil)
-        req.responseParsedJSON(self.client.errorWrap(deferred) { (_, response, data, error) in
+        req.responseParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, data, error) in
             if let json: JSON = data as? JSON,
                let result = POSTResult.fromJSON(json) {
                 let storageResponse = StorageResponse(value: result, response: response!)
@@ -582,7 +583,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         }
 
         let req = client.requestGET(uriForRecord(guid))
-        req.responseParsedJSON(self.client.errorWrap(deferred) { (_, response, data, error) in
+        req.responseParsedJSON(queue:collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, data, error) in
 
             if let json: JSON = data as? JSON {
                 let envelope = EnvelopeJSON(json)
@@ -618,7 +619,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
             NSURLQueryItem(name: "full", value: "1"),
             NSURLQueryItem(name: "newer", value: millisecondsToDecimalSeconds(since))]))
 
-        req.responseParsedJSON(self.client.errorWrap(deferred) { (_, response, data, error) in
+        req.responseParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, data, error) in
 
             if let json: JSON = data as? JSON {
                 func recordify(json: JSON) -> Record<T>? {
