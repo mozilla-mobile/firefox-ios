@@ -13,6 +13,12 @@ extension Request {
         })
     }
 
+    public func responseParsedJSON(#queue: dispatch_queue_t, completionHandler: ResponseHandler) -> Self {
+        return response(queue: queue, serializer: Request.ParsedJSONResponseSerializer(), completionHandler: { (request, response, JSON, error) in
+            completionHandler(request, response, JSON, error)
+        })
+    }
+
     public class func ParsedJSONResponseSerializer() -> Serializer {
         return { (request, response, data) in
             if data == nil || data?.length == 0 {
