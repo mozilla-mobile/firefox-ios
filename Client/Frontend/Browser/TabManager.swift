@@ -289,12 +289,14 @@ class TabManager : NSObject {
 extension TabManager {
     class SavedTab: NSObject, NSCoding {
         let isSelected: Bool
+        let title: String?
         var sessionData: SessionData?
         var screenshotUUID: NSUUID?
 
         init?(browser: Browser, isSelected: Bool) {
             self.screenshotUUID = browser.screenshotUUID
             self.isSelected = isSelected
+            self.title = browser.displayTitle
             super.init()
 
             if browser.sessionData == nil {
@@ -320,12 +322,14 @@ extension TabManager {
             self.sessionData = coder.decodeObjectForKey("sessionData") as? SessionData
             self.screenshotUUID = coder.decodeObjectForKey("screenshotUUID") as? NSUUID
             self.isSelected = coder.decodeBoolForKey("isSelected")
+            self.title = coder.decodeObjectForKey("title") as? String
         }
 
         func encodeWithCoder(coder: NSCoder) {
             coder.encodeObject(sessionData, forKey: "sessionData")
             coder.encodeObject(screenshotUUID, forKey: "screenshotUUID")
             coder.encodeBool(isSelected, forKey: "isSelected")
+            coder.encodeObject(title, forKey: "title")
         }
     }
 
@@ -403,6 +407,7 @@ extension TabManager {
                             }
 
                             tab.sessionData = savedTab.sessionData
+                            tab.lastTitle = savedTab.title
                         }
 
                         if tabToSelect == nil {

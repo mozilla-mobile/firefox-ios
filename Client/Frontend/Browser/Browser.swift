@@ -30,6 +30,9 @@ class Browser: NSObject {
     var sessionData: SessionData?
     var lastRequest: NSURLRequest? = nil
 
+    /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
+    var lastTitle: String?
+
     private(set) var screenshot: UIImage?
     var screenshotUUID: NSUUID?
 
@@ -113,6 +116,10 @@ class Browser: NSObject {
 
             self.webView = webView
             browserDelegate?.browser?(self, didCreateWebView: webView)
+
+            // lastTitle is used only when showing zombie tabs after a session restore.
+            // Since we now have a web view, lastTitle is no longer useful.
+            lastTitle = nil
         }
     }
 
@@ -155,7 +162,7 @@ class Browser: NSObject {
                 return title
             }
         }
-        return displayURL?.absoluteString ?? ""
+        return displayURL?.absoluteString ?? lastTitle ?? ""
     }
 
     var displayFavicon: Favicon? {
