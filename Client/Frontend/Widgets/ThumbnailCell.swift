@@ -142,8 +142,8 @@ class ThumbnailCell: UICollectionViewCell {
 
         contentView.addSubview(imageWrapper)
         if let backgroundEffect = backgroundEffect {
-            imageWrapper.addSubview(backgroundEffect)
             imageWrapper.addSubview(backgroundImage)
+            imageWrapper.addSubview(backgroundEffect)
             backgroundImage.snp_remakeConstraints({ make in
                 make.top.bottom.left.right.equalTo(self.imageWrapper)
             })
