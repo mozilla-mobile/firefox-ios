@@ -28,7 +28,7 @@ public struct UIConstants {
     static let HighlightColor = UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9)
     static let HighlightText = UIColor(red: 42/255, green: 121/255, blue: 213/255, alpha: 1.0)
 
-    static let PanelBackgroundColor = DeviceInfo.isBlurSupported() ? UIColor.whiteColor().colorWithAlphaComponent(0.6) : UIColor.whiteColor()
+    static let PanelBackgroundColor = UIColor.whiteColor()
     static let SeparatorColor = UIColor(rgb: 0xcccccc)
     static let HighlightBlue = UIColor(red:0.3, green:0.62, blue:1, alpha:1)
     static let DestructiveRed = UIColor(red: 255/255, green: 64/255, blue: 0/255, alpha: 1.0)
