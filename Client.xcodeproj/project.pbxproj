@@ -113,6 +113,7 @@
 		2868FA231ADF7B70000D9B1D /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		287AC8661AF4776D00101515 /* TestSQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27D1ABB533A00877008 /* TestSQLiteHistory.swift */; };
 		287DAA1F1AE06E5D0055AC35 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287DAA1E1AE06E5D0055AC35 /* DeviceInfo.swift */; };
+		2880BE9A1B79936900B79944 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D31FC2311A8D908900BAF7EC /* Alamofire.framework */; };
 		288501DE1AC0F61D00E7F670 /* RequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */; };
 		288501F91AC0F62200E7F670 /* RequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */; };
 		288501FB1AC0F63800E7F670 /* NSScannerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288501FA1AC0F63800E7F670 /* NSScannerExtensions.swift */; };
@@ -1647,6 +1648,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2880BE9A1B79936900B79944 /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
