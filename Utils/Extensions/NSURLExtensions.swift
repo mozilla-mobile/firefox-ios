@@ -165,10 +165,14 @@ extension NSURL {
 //MARK: Private Helpers
 private extension NSURL {
     private func publicSuffixFromHost(var host: String, withAdditionalParts additionalPartCount: Int) -> String? {
-        if host.isEmpty { return nil }
+        if host.isEmpty {
+            return nil
+        }
 
-        // Check edge cast where host is either a single or double .
-        if host.isEmpty || host.lastPathComponent == "." { return "" }
+        // Check edge case where the host is either a single or double '.'.
+        if host.isEmpty || host.lastPathComponent == "." {
+            return ""
+        }
 
         /**
         *  The following algorithm breaks apart the domain and checks each sub domain against the effective TLD
@@ -226,8 +230,11 @@ private extension NSURL {
         var baseDomain: String?
         if additionalPartCount > 0 {
             if let suffix = suffix {
-                // Take out the public suffixed and add in the additional parts we want
-                let suffixlessHost = host.stringByReplacingOccurrencesOfString(suffix, withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                // Take out the public suffixed and add in the additional parts we want.
+                let literalFromEnd = NSStringCompareOptions.LiteralSearch |        // Match the string exactly.
+                                     NSStringCompareOptions.BackwardsSearch |      // Search from the end.
+                                     NSStringCompareOptions.AnchoredSearch         // Stick to the end.
+                let suffixlessHost = host.stringByReplacingOccurrencesOfString(suffix, withString: "", options: literalFromEnd, range: nil)
                 let suffixlessTokens = suffixlessHost.componentsSeparatedByString(".").filter { $0 != "" }
                 let maxAdditionalCount = max(0, suffixlessTokens.count - additionalPartCount)
                 let additionalParts = suffixlessTokens[maxAdditionalCount..<suffixlessTokens.count]
