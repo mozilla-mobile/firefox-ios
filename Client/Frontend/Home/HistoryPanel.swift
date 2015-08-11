@@ -22,9 +22,8 @@ private typealias CategoryNumber = Int
 private typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: Int)
 
 private struct HistoryPanelUX {
-    static let WelcomeScreenTopPadding: CGFloat = 16
-    static let WelcomeScreenPadding: CGFloat = 10
-    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(14)
+    static let WelcomeScreenPadding: CGFloat = 15
+    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightLight) // Changes font size based on device.
     static let WelcomeScreenItemTextColor = UIColor.grayColor()
     static let WelcomeScreenItemWidth = 170
 }
@@ -173,9 +172,9 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         if data.count == 0 {
             if self.emptyStateOverlayView.superview == nil {
                 self.tableView.addSubview(self.emptyStateOverlayView)
-                self.emptyStateOverlayView.snp_makeConstraints { make in
+                self.emptyStateOverlayView.snp_makeConstraints { make -> Void in
                     make.edges.equalTo(self.tableView)
-                    make.width.equalTo(self.view)
+                    make.size.equalTo(self.view)
                 }
             }
         } else {
@@ -191,7 +190,12 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         overlayView.addSubview(logoImageView)
         logoImageView.snp_makeConstraints({ (make) -> Void in
             make.centerX.equalTo(overlayView)
-            make.top.equalTo(overlayView.snp_top).offset(20)
+
+            // Sets proper top constraint for iPhone 6 in portait and for iPad.
+            make.centerY.equalTo(overlayView.snp_centerY).offset(-160).priorityMedium()
+
+            // Sets proper top constraint for iPhone 4, 5 in portrait.
+            make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50).priorityHigh()
         })
 
         let welcomeLabel = UILabel()

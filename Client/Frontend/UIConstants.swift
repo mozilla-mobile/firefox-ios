@@ -14,6 +14,7 @@ public struct UIConstants {
     static let DefaultRowHeight: CGFloat = 58
     static let DefaultPadding: CGFloat = 10
 
+    static let DeviceFontSize: CGFloat = DeviceInfo.deviceModel().rangeOfString("iPad") != nil ? 18 : 15
     static let DefaultMediumFontSize: CGFloat = 14
     static let DefaultMediumFont = UIFont.systemFontOfSize(DefaultMediumFontSize, weight: UIFontWeightRegular)
     static let DefaultMediumBoldFont = UIFont.boldSystemFontOfSize(DefaultMediumFontSize)
