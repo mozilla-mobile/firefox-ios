@@ -31,6 +31,9 @@ private struct RemoteTabsPanelUX {
     static let EmptyStateSignInButtonHeight = 44
     static let EmptyStateSignInButtonWidth = 200
     static let EmptyStateCreateAccountButtonFont = UIFont.systemFontOfSize(12)
+
+    // Temporary placeholder for strings removed in Bug 1193456.
+    private let CreateAccountString = NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j")
 }
 
 private let RemoteClientIdentifier = "RemoteClient"
