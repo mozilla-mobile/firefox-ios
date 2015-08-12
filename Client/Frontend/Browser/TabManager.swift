@@ -287,6 +287,10 @@ class TabManager : NSObject {
             tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
         }
     }
+
+    func resetProcessPool() {
+        configuration.processPool = WKProcessPool()
+    }
 }
 
 extension TabManager {
