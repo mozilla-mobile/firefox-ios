@@ -682,7 +682,39 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
 
     func advance() -> ReadyDeferred {
         // Fetch crypto/keys, unless it's present in the cache already.
-        // For now, just fetch.
+
+        if let keys = self.scratchpad.keys where keys.value.valid {
+            if let cryptoModified = self.info.modified("crypto") {
+                // Both of these are server timestamps. If the record we stored has the
+                // same modified time as the server collection, and we're fetching from the
+                // same server, then the record must be identical, and we can use it directly.
+                // If the server timestamp is newer, there might be new keys.
+                // If the server timestamp is older, something horribly wrong has occurred.
+                if cryptoModified == keys.timestamp {
+                    log.debug("Using cached collection keys for ready state.")
+                    let ready = Ready(client: self.client, scratchpad: self.scratchpad, token: self.token, info: self.info, keys: keys.value)
+                    return Deferred(value: Result(success: ready))
+                }
+
+                log.warning("Cached keys with timestamp \(keys.timestamp) disagree with server modified \(cryptoModified).")
+
+                // Re-fetch keys and check to see if the actual contents differ.
+                // If the keys are the same, we can ignore this change. If they differ,
+                // we need to re-sync any collection whose keys just changed.
+                // TODO TODO TODO: do that work.
+                log.error("Unable to handle key evolution. Sorry.")
+                return Deferred(value: Result(failure: InvalidKeysError(keys.value)))
+            } else {
+                // No known modified time for crypto/. That likely means the server has no keys.
+                // Drop our cached value and fall through; we'll try to fetch, fail, and
+                // go through the usual failure flow.
+                log.warning("Local keys found timestamped \(keys.timestamp), but no crypto collection on server. Dropping cached keys.")
+                self.scratchpad = self.scratchpad.evolve().setKeys(nil).build().checkpoint()
+
+                // TODO: we need to do a full sync when we have new keys.
+            }
+        }
+
         //
         // N.B., we assume that if the server has a meta/global, we don't have a cached crypto/keys,
         // and the server doesn't have crypto/keys, that the server was wiped.
