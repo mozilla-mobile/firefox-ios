@@ -17,6 +17,7 @@
   <Param name="p" value="{searchTerms}" />
   <Param name="ei" value="UTF-8" />
   <Param name="fr" value="mozmob1" />
+  <Param name="type" value="ios" />
 </Url>
 <SearchForm>https://uk.search.yahoo.com/</SearchForm>
 </SearchPlugin>
