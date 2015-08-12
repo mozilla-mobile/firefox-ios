@@ -388,7 +388,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         super.init(style: .Default, reuseIdentifier: RemoteTabsErrorCell.Identifier)
 
         self.homePanel = homePanel
-        let createAnAccountButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
         let imageView = UIImageView()
 
         imageView.image = UIImage(named: "emptySync")
@@ -416,11 +415,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         signInButton.addTarget(self, action: "SELsignIn", forControlEvents: UIControlEvents.TouchUpInside)
         contentView.addSubview(signInButton)
 
-        createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), forState: .Normal)
-        createAnAccountButton.titleLabel?.font = RemoteTabsPanelUX.EmptyStateCreateAccountButtonFont
-        createAnAccountButton.addTarget(self, action: "SELcreateAnAccount", forControlEvents: UIControlEvents.TouchUpInside)
-        contentView.addSubview(createAnAccountButton)
-
         imageView.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(instructionsLabel)
 
@@ -435,11 +429,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
             make.top.equalTo(imageView.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(imageView)
         })
-
-        createAnAccountButton.snp_makeConstraints({ (make) -> Void in
-            make.centerX.equalTo(signInButton)
-            make.top.equalTo(signInButton.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
-        })
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -449,12 +438,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
     @objc private func SELsignIn() {
         if let homePanel = self.homePanel {
             homePanel.homePanelDelegate?.homePanelDidRequestToSignIn(homePanel)
-        }
-    }
-
-    @objc private func SELcreateAnAccount() {
-        if let homePanel = self.homePanel {
-            homePanel.homePanelDelegate?.homePanelDidRequestToCreateAccount(homePanel)
         }
     }
 
