@@ -74,6 +74,9 @@ class CacheClearable : Clearable {
         // First ensure we close all open tabs first.
         tabManager.removeAll()
 
+        // Reset the process pool to ensure no cached data is written back
+        tabManager.resetProcessPool()
+
         // Remove the basic cache.
         NSURLCache.sharedURLCache().removeAllCachedResponses()
 
