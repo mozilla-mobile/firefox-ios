@@ -29,6 +29,7 @@ class Browser: NSObject {
     var lastExecutedTime: Timestamp?
     var sessionData: SessionData?
     var lastRequest: NSURLRequest? = nil
+    var restoring: Bool = false
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
@@ -97,6 +98,8 @@ class Browser: NSObject {
             // we extract the information needed to restore the tabs and create a NSURLRequest with the custom session restore URL
             // to trigger the session restore via custom handlers
             if let sessionData = self.sessionData {
+                restoring = true
+                
                 var updatedURLs = [String]()
                 for url in sessionData.urls {
                     let updatedURL = WebServer.sharedInstance.updateLocalURL(url)!.absoluteString!

@@ -47,6 +47,7 @@
       // so wait until the next tick when the location points to the correct index and URL.
       setTimeout(function () {
           document.location.reload();
+          webkit.messageHandlers.sessionRestoreHelper.postMessage({ name: "didRestoreSession" });
       }, 0);
   }) ();
 </script>
