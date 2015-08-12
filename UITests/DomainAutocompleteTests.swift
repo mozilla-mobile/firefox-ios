@@ -96,5 +96,6 @@ class DomainAutocompleteTests: KIFTestCase {
         if tester().tryFindingTappableViewWithAccessibilityLabel("Cancel", error: nil) {
             tester().tapViewWithAccessibilityLabel("Cancel")
         }
+        BrowserUtils.clearHistoryItems(tester())
     }
 }

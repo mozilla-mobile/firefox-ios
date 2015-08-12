@@ -106,6 +106,6 @@ class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
     // TODO: Add a reader view display settings test
 
     override func tearDown() {
-        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearHistoryItems(tester(), numberOfTests: 5)
     }
 }
