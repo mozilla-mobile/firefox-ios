@@ -1,7 +1,6 @@
 amazondotcom
 azerdict
 bing
+duckduckgo
 google
-twitter
 wikipedia-az
-yandex-az
