@@ -436,7 +436,7 @@ public class Sync15StorageClient {
             deferred.fill(Result(failure: RecordParseError()))
         }
 
-        req.responseParsedJSON(handler)
+        req.responseParsedJSON(true, completionHandler: handler)
         return deferred
     }
 
@@ -551,7 +551,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         let json = optFilter(records.map(self.encrypter.serializer))
 
         let req = client.requestPOST(self.collectionURI, body: json, ifUnmodifiedSince: nil)
-        req.responseParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, data, error) in
+        req.responseParsedJSON(queue: collectionQueue, partial: true, completionHandler: self.client.errorWrap(deferred) { (_, response, data, error) in
             if let json: JSON = data as? JSON,
                let result = POSTResult.fromJSON(json) {
                 let storageResponse = StorageResponse(value: result, response: response!)
@@ -583,7 +583,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         }
 
         let req = client.requestGET(uriForRecord(guid))
-        req.responseParsedJSON(queue:collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, data, error) in
+        req.responseParsedJSON(queue:collectionQueue, partial: true, completionHandler: self.client.errorWrap(deferred) { (_, response, data, error) in
 
             if let json: JSON = data as? JSON {
                 let envelope = EnvelopeJSON(json)
@@ -619,7 +619,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
             NSURLQueryItem(name: "full", value: "1"),
             NSURLQueryItem(name: "newer", value: millisecondsToDecimalSeconds(since))]))
 
-        req.responseParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, data, error) in
+        req.responseParsedJSON(queue: collectionQueue, partial: true, completionHandler: self.client.errorWrap(deferred) { (_, response, data, error) in
 
             if let json: JSON = data as? JSON {
                 func recordify(json: JSON) -> Record<T>? {

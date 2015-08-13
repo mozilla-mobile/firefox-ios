@@ -8,6 +8,12 @@ import XCTest
 
 class StorageClientTests: XCTestCase {
 
+    func testPartialJSON() {
+        let body = "0"
+        let o: AnyObject? = NSJSONSerialization.JSONObjectWithData(body.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: nil)
+        XCTAssertTrue(JSON(o!).isInt)
+    }
+
     func testPOSTResult() {
         // Pulled straight from <http://docs.services.mozilla.com/storage/apis-1.5.html>.
         let r = "{" +
