@@ -222,7 +222,7 @@ private class SyncNowSetting: WithAccountSetting {
     override func onClick(navigationController: UINavigationController?) {
         if let cell = self.cell {
             cell.userInteractionEnabled = false
-            cell.textLabel?.attributedText = NSAttributedString(string: NSLocalizedString("Syncing…", comment: "Syncing Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+            cell.textLabel?.attributedText = NSAttributedString(string: NSLocalizedString("Syncing…", comment: "Syncing Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(UIConstants.DefaultStandardFontSize, weight: UIFontWeightRegular)])
             profile.syncManager.syncEverything().uponQueue(dispatch_get_main_queue()) { result in
                 if result.isSuccess {
                     self.log.debug("Sync succeeded.")
