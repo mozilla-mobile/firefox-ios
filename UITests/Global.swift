@@ -99,7 +99,7 @@ extension KIFUITestActor {
 
         let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
         webView.evaluateJavaScript("KIFHelper.selectElementWithAccessibilityLabel(\"\(escaped)\");", completionHandler: { (result: AnyObject!, error: NSError!) in
-            stepResult = result as! Bool ? KIFTestStepResult.Success : KIFTestStepResult.Failure
+            stepResult = result != nil ? (result as! Bool ? KIFTestStepResult.Success : KIFTestStepResult.Failure) : KIFTestStepResult.Failure
         })
 
         runBlock({ (error: NSErrorPointer) in
