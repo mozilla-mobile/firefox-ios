@@ -113,6 +113,15 @@ class BrowserViewController: UIViewController {
                previousTraitCollection.horizontalSizeClass != .Regular
     }
 
+
+    func toggleSnackBarVisibility(#show: Bool) {
+        if show {
+            UIView.animateWithDuration(0.1, animations: { self.snackBars.hidden = false })
+        } else {
+            snackBars.hidden = true
+        }
+    }
+
     private func updateToolbarStateForTraitCollection(newCollection: UITraitCollection) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
 
@@ -525,6 +534,7 @@ class BrowserViewController: UIViewController {
             homePanelController?.view?.hidden = false
         }
     }
+
 
     private func finishEditingAndSubmit(var url: NSURL, visitType: VisitType) {
         urlBar.currentURL = url
