@@ -453,7 +453,6 @@ class BrowserViewController: UIViewController {
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             }
         })
-        toolbar?.hidden = !inline
         view.setNeedsUpdateConstraints()
     }
 
@@ -468,7 +467,6 @@ class BrowserViewController: UIViewController {
                     controller.removeFromParentViewController()
                     self.homePanelController = nil
                     self.webViewContainer.accessibilityElementsHidden = false
-                    self.toolbar?.hidden = false
                     self.startTrackingAccessibilityStatus()
                     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
 
