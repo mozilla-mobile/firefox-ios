@@ -168,7 +168,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
             if nonEmptyClientAndTabs.count == 0 {
                 self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: self, error: .NoTabs)
             } else {
-                self.tableViewDelegate = RemoteTabsPanelClientAndTabsDataSource(homePanel: self, clientAndTabs: nonEmptyClientAndTabs)
+                self.tableViewDelegate = RemoteTabsPanelClientAndTabsDataSource(homePanel: self, clientAndTabs: nonEmptyClientAndTabs, tableView: tableView, profile: profile)
                 self.tableView.allowsSelection = true
             }
         }
@@ -206,10 +206,17 @@ protocol RemoteTabsPanelDataSource: UITableViewDataSource, UITableViewDelegate {
 class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
     weak var homePanel: HomePanel?
     private var clientAndTabs: [ClientAndTabs]
+    var tableView: UITableView
+    var profile: Profile!
 
-    init(homePanel: HomePanel, clientAndTabs: [ClientAndTabs]) {
+    init(homePanel: HomePanel, clientAndTabs: [ClientAndTabs], tableView: UITableView, profile: Profile!) {
         self.homePanel = homePanel
         self.clientAndTabs = clientAndTabs
+        self.tableView = tableView
+        self.profile = profile
+        if profile.prefs.stringArrayForKey("collapsedGuids") == nil {
+            profile.prefs.setObject([], forKey: "collapsedGuids")
+        }
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -217,7 +224,11 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.clientAndTabs[section].tabs.count
+        var collapsed = false
+        if let guid = self.clientAndTabs[section].client.guid {
+            collapsed = isCollapsed(guid)
+        }
+        return collapsed ? 0 : self.clientAndTabs[section].tabs.count
     }
 
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -260,6 +271,11 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         view.imageView.image = image
 
         view.mergeAccessibilityLabels()
+
+        view.caret.tag = section
+        view.caret.addTarget(self, action: "expandOrCollapse:", forControlEvents: UIControlEvents.TouchUpInside)
+
+        updateCaretStatus(view.caret, section: section)
         return view
     }
 
@@ -282,6 +298,38 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
             // It's not a bookmark, so let's call it Typed (which means History, too).
             homePanel.homePanelDelegate?.homePanel(homePanel, didSelectURL: tab.URL, visitType: VisitType.Typed)
         }
+    }
+
+    func expandOrCollapse(sender: UIButton) {
+        let section = sender.tag
+        if let prefsList = self.profile.prefs.stringArrayForKey("collapsedGuids"),
+               guid = self.clientAndTabs[section].client.guid {
+            var shouldCollapse = !isCollapsed(guid)
+            if shouldCollapse {
+                self.profile.prefs.setObject(prefsList + [guid], forKey: "collapsedGuids")
+            } else {
+                self.profile.prefs.setObject(prefsList.filter({ $0 != guid }), forKey: "collapsedGuids")
+            }
+        }
+        self.tableView.beginUpdates()
+        self.tableView.reloadSections(NSIndexSet(index: section), withRowAnimation: UITableViewRowAnimation.None)
+        UIView.animateWithDuration(0.25, animations: { () -> Void in
+            self.updateCaretStatus(sender, section: section)
+        })
+        self.tableView.endUpdates()
+
+    }
+
+    func updateCaretStatus(button: UIButton, section: Int) {
+        if let guid = self.clientAndTabs[section].client.guid where isCollapsed(guid) {
+            button.transform = CGAffineTransformMakeRotation(-1 * CGFloat(M_PI_2))
+        } else {
+            button.transform = CGAffineTransformIdentity
+        }
+    }
+
+    func isCollapsed(guid: GUID) -> Bool {
+        return contains(self.profile.prefs.stringArrayForKey("collapsedGuids")!, guid)
     }
 }
 

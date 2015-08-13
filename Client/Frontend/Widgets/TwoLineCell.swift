@@ -79,7 +79,7 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
 }
 
 class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
-    private let twoLineHelper = TwoLineCellHelper()
+    private let twoLineHelper = TwoLineCollapsableCellHeader()
 
     // UITableViewHeaderFooterView includes textLabel and detailTextLabel, so we can't override
     // them.  Unfortunately, they're also used in ways that interfere with us just using them: I get
@@ -89,6 +89,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
     let _detailTextLabel = UILabel()
 
     let imageView = UIImageView()
+    var caret = UIButton()
 
     // Yes, this is strange.
     override var textLabel: UILabel {
@@ -107,11 +108,12 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        twoLineHelper.setUpViews(self, textLabel: _textLabel, detailTextLabel: _detailTextLabel, imageView: imageView)
+        twoLineHelper.setUpViews(self, textLabel: _textLabel, detailTextLabel: _detailTextLabel, imageView: imageView, caret: caret)
 
         contentView.addSubview(_textLabel)
         contentView.addSubview(_detailTextLabel)
         contentView.addSubview(imageView)
+        contentView.addSubview(caret)
 
         layoutMargins = UIEdgeInsetsZero
     }
@@ -212,5 +214,51 @@ private class TwoLineCellHelper {
 
         container.isAccessibilityElement = true
         container.setValue(NSAttributedString(attributedString: label), forKey: "accessibilityLabel")
+    }
+}
+
+private class TwoLineCollapsableCellHeader: TwoLineCellHelper {
+    var caret: UIButton!
+
+    func setUpViews(container: UIView, textLabel: UILabel, detailTextLabel: UILabel, imageView: UIImageView, caret: UIButton) {
+        self.container = container
+        self.textLabel = textLabel
+        self.detailTextLabel = detailTextLabel
+        self.imageView = imageView
+        self.caret = caret
+        caret.setImage(UIImage(named: "syncCaret"), forState: UIControlState.Normal)
+
+        if let headerView = self.container as? UITableViewHeaderFooterView {
+            headerView.contentView.backgroundColor = UIColor.clearColor()
+        } else {
+            self.container.backgroundColor = UIColor.clearColor()
+        }
+
+        textLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
+        textLabel.textColor = TextColor
+
+        detailTextLabel.font = UIFont.systemFontOfSize(10, weight: UIFontWeightRegular)
+        detailTextLabel.textColor = DetailTextColor
+
+        imageView.contentMode = .ScaleAspectFill
+        caret.contentMode = .ScaleAspectFill
+    }
+
+    override func layoutSubviews() {
+        let height = container.frame.height
+        let textLeft = ImageSize + 2 * ImageMargin
+        let textLabelHeight = textLabel.intrinsicContentSize().height
+        let detailTextLabelHeight = detailTextLabel.intrinsicContentSize().height
+        var contentHeight = textLabelHeight
+        if detailTextLabelHeight > 0 {
+            contentHeight += detailTextLabelHeight + DetailTextTopMargin
+        }
+
+        imageView.frame = CGRectMake(ImageMargin, (height - ImageSize) / 2, ImageSize, ImageSize)
+        textLabel.frame = CGRectMake(textLeft, (height - contentHeight) / 2,
+            container.frame.width - textLeft - 32, textLabelHeight)
+        detailTextLabel.frame = CGRectMake(textLeft, textLabel.frame.maxY + DetailTextTopMargin,
+            container.frame.width - textLeft - ImageMargin, detailTextLabelHeight)
+        caret.frame = CGRectMake(container.frame.width - 32, container.frame.center.y, ImageSize, ImageSize)
     }
 }
