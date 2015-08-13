@@ -122,5 +122,6 @@ class SearchTests: KIFTestCase {
         if tester().tryFindingTappableViewWithAccessibilityLabel("Cancel", error: nil) {
             tester().tapViewWithAccessibilityLabel("Cancel")
         }
+        BrowserUtils.clearHistoryItems(tester(), numberOfTests: 5)
     }
 }

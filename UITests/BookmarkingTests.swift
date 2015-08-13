@@ -90,6 +90,6 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
-        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearHistoryItems(tester())
     }
 }

@@ -83,6 +83,6 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
-        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearHistoryItems(tester(), numberOfTests: 5)
     }
 }

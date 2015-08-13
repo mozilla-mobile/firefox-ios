@@ -167,6 +167,30 @@ class BrowserUtils {
         notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
     }
 
+    private class func clearHistoryItemAtIndex(index: NSIndexPath, tester: KIFUITestActor) {
+        if let row = tester.waitForCellAtIndexPath(index, inTableViewWithAccessibilityIdentifier: "History List") {
+            tester.swipeViewWithAccessibilityLabel(row.accessibilityLabel, value: row.accessibilityValue, inDirection: KIFSwipeDirection.Left)
+            tester.tapViewWithAccessibilityLabel("Remove")
+        }
+    }
+
+    class func clearHistoryItems(tester: KIFUITestActor, numberOfTests: Int = -1) {
+        resetToAboutHome(tester)
+        tester.tapViewWithAccessibilityLabel("History")
+
+        let historyTable = tester.waitForViewWithAccessibilityIdentifier("History List") as! UITableView
+        var index = 0
+        for section in 0 ..< historyTable.numberOfSections() {
+            for rowIdx in 0 ..< historyTable.numberOfRowsInSection(0) {
+                clearHistoryItemAtIndex(NSIndexPath(forRow: 0, inSection: 0), tester: tester)
+                if numberOfTests > -1 && ++index == numberOfTests {
+                    return
+                }
+            }
+        }
+        tester.tapViewWithAccessibilityLabel("Top sites")
+    }
+
     class func ensureAutocompletionResult(tester: KIFUITestActor, textField: UITextField, prefix: String, completion: String) {
         // searches are async (and debounced), so we have to wait for the results to appear.
         tester.waitForViewWithAccessibilityValue(prefix + completion)

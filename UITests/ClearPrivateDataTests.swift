@@ -13,10 +13,10 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         webRoot = SimplePageServer.start()
     }
 
-    override func afterEach() {
-        BrowserUtils.resetToAboutHome(tester())
+    override func tearDown() {
+        BrowserUtils.clearHistoryItems(tester())
     }
-
+    
     func clearPrivateData(shouldClear: Bool) {
         // clear private data
         tester().tapViewWithAccessibilityLabel("Show Tabs")
