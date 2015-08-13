@@ -386,6 +386,49 @@ private class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
     }
 }
 
+// For great debugging!
+private class HiddenSetting: Setting {
+    let settings: SettingsTableViewController
+
+    init(settings: SettingsTableViewController) {
+        self.settings = settings
+        super.init(title: nil)
+    }
+
+    override var hidden: Bool {
+        return !ShowDebugSettings
+    }
+}
+
+private class DeleteExportedDataSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        // Not localized for now.
+        return NSAttributedString(string: "Debug: delete exported databases", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        if let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as? String {
+            let browserDB = documentsPath.stringByAppendingPathComponent("browser.db")
+            var err: NSError?
+            NSFileManager.defaultManager().removeItemAtPath(browserDB, error: &err)
+        }
+    }
+}
+
+private class ExportBrowserDataSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        // Not localized for now.
+        return NSAttributedString(string: "Debug: copy databases to app container", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        if let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as? String {
+            let browserDB = documentsPath.stringByAppendingPathComponent("browser.db")
+            self.settings.profile.files.copy("browser.db", toAbsolutePath: browserDB)
+        }
+    }
+}
+
 // Show the current version of Firefox
 private class VersionSetting : Setting {
     let settings: SettingsTableViewController
@@ -683,7 +726,9 @@ class SettingsTableViewController: UITableViewController {
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
                 VersionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
-                DisconnectSetting(settings: self)
+                DisconnectSetting(settings: self),
+                ExportBrowserDataSetting(settings: self),
+                DeleteExportedDataSetting(settings: self),
             ])
         ]
 
