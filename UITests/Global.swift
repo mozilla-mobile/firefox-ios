@@ -179,21 +179,12 @@ class BrowserUtils {
         tester.tapViewWithAccessibilityLabel("History")
 
         let historyTable = tester.waitForViewWithAccessibilityIdentifier("History List") as! UITableView
-        if numberOfTests == -1 {
-            for section in 0 ..< historyTable.numberOfSections() {
-                for rowIdx in 0 ..< historyTable.numberOfRowsInSection(0) {
-                    clearHistoryItemAtIndex(NSIndexPath(forRow: 0, inSection: 0), tester: tester)
-                }
-            }
-        } else {
-            var index = 0
-            for section in 0 ..< historyTable.numberOfSections() {
-                for rowIdx in 0 ..< historyTable.numberOfRowsInSection(0) {
-                    clearHistoryItemAtIndex(NSIndexPath(forRow: 0, inSection: 0), tester: tester)
-//                    index++
-                    if ++index == numberOfTests {
-                        return
-                    }
+        var index = 0
+        for section in 0 ..< historyTable.numberOfSections() {
+            for rowIdx in 0 ..< historyTable.numberOfRowsInSection(0) {
+                clearHistoryItemAtIndex(NSIndexPath(forRow: 0, inSection: 0), tester: tester)
+                if numberOfTests > -1 && ++index == numberOfTests {
+                    return
                 }
             }
         }
