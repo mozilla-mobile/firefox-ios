@@ -352,9 +352,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     private func getFavicon(cell: ThumbnailCell, site: Site) {
-        // TODO: This won't work well with recycled views. Thankfully, TopSites doesn't really recycle much.'
-        cell.imageView.image = nil
-        cell.backgroundImage.image = nil
+        self.setDefaultThumbnailBackground(cell)
 
         if let url = site.url.asURL {
             FaviconFetcher.getForURL(url, profile: profile) >>== { icons in
@@ -384,11 +382,8 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         if let icon = site.icon {
             // We've looked before recently and didn't find a favicon
             switch icon.type {
-            case .NoneFound:
-                let t = NSDate().timeIntervalSinceDate(icon.date)
-                if t < FaviconFetcher.ExpirationTime {
-                    self.setDefaultThumbnailBackground(cell)
-                }
+            case .NoneFound where NSDate().timeIntervalSinceDate(icon.date) < FaviconFetcher.ExpirationTime:
+                self.setDefaultThumbnailBackground(cell)
             default:
                 cell.imageView.sd_setImageWithURL(icon.url.asURL, completed: { (img, err, type, url) -> Void in
                     if let img = img {
