@@ -81,6 +81,17 @@ public class FileAccessor {
         return NSFileManager.defaultManager().moveItemAtPath(fromPath, toPath: toPath, error: error)
     }
 
+    public func copy(fromRelativePath: String, toAbsolutePath: String, error: NSErrorPointer = nil) -> Bool {
+        let fromPath = rootPath.stringByAppendingPathComponent(fromRelativePath)
+        let toDir = toAbsolutePath.stringByDeletingLastPathComponent
+
+        if !createDir(toDir, error: error) {
+            return false
+        }
+
+        return NSFileManager.defaultManager().copyItemAtPath(fromPath, toPath: toAbsolutePath, error: error)
+    }
+
     /**
      * Creates a directory with the given path, including any intermediate directories.
      * Does nothing if the directory already exists.
