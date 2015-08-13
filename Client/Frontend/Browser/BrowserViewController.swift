@@ -535,7 +535,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-
     private func finishEditingAndSubmit(var url: NSURL, visitType: VisitType) {
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
