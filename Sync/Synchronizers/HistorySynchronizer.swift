@@ -53,6 +53,22 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         return HistoryStorageVersion
     }
 
+    private func mask(maxFailures: Int) -> Result<()> -> Success {
+        var failures = 0
+        return { result in
+            if result.isSuccess {
+                return Deferred(value: result)
+            }
+
+            if ++failures > maxFailures {
+                return Deferred(value: result)
+            }
+
+            log.debug("Masking failure \(failures).")
+            return succeed()
+        }
+    }
+
     // TODO: this function should establish a transaction at suitable points.
     // TODO: a much more efficient way to do this is to:
     // 1. Start a transaction.
@@ -60,6 +76,9 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
     // 3. bulkInsert all failed updates in one go.
     // 4. Store all remote visits for all places in one go, constructing a single sequence of visits.
     func applyIncomingToStorage(storage: SyncableHistory, records: [Record<HistoryPayload>], fetched: Timestamp) -> Success {
+
+        // Skip over at most this many failing records before aborting the sync.
+        let maskSomeFailures = self.mask(3)
 
         // TODO: it'd be nice to put this in an extension on SyncableHistory. Waiting for Swift 2.0...
         func applyRecord(rec: Record<HistoryPayload>) -> Success {
@@ -70,7 +89,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
             // We apply deletions immediately. Yes, this will throw away local visits
             // that haven't yet been synced. That's how Sync works, alas.
             if payload.deleted {
-                return storage.deleteByGUID(guid, deletedAt: modified)
+                return storage.deleteByGUID(guid, deletedAt: modified).bind(maskSomeFailures)
             }
 
             // It's safe to apply other remote records, too -- even if we re-download, we know
@@ -88,10 +107,11 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                               >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
             return placeThenVisits.map({ result in
                 if result.isFailure {
-                    log.error("Record application failed: \(result.failureValue)")
+                    let reason = result.failureValue?.description ?? "unknown reason"
+                    log.error("Record application failed: \(reason)")
                 }
                 return result
-            })
+            }).bind(maskSomeFailures)
         }
 
         return self.applyIncomingToStorage(records, fetched: fetched, apply: applyRecord)
