@@ -124,4 +124,14 @@ class NSURLExtensionsTests : XCTestCase {
         let expected = url.baseDomain()!
         XCTAssertEqual("city.kawasaki.jp", expected)
     }
+
+    func testBugzillaURLDomain() {
+        let url = "https://bugzilla.mozilla.org/enter_bug.cgi?format=guided#h=dupes|Data%20%26%20BI%20Services%20Team|"
+        let nsURL = url.asURL
+        XCTAssertNotNil(nsURL, "URL parses.")
+
+        let host = nsURL!.normalizedHost()
+        XCTAssertEqual(host!, "bugzilla.mozilla.org")
+        XCTAssertEqual(nsURL!.fragment!, "h=dupes%7CData%20%26%20BI%20Services%20Team%7C")
+    }
 }
