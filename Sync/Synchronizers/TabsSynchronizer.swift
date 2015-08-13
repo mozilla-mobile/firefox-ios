@@ -48,6 +48,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
         let lastUploadTime: Timestamp? = (self.tabsRecordLastUpload == 0) ? nil : self.tabsRecordLastUpload
         let expired = lastUploadTime < (NSDate.now() - (OneMinuteInMilliseconds))
         if !expired {
+            log.debug("Not uploading tabs: already did so at \(lastUploadTime).")
             return succeed()
         }
 
@@ -61,6 +62,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
             }
 
             let tabsRecord = self.createOwnTabsRecord(tabs)
+            log.debug("Uploading our tabs: \(tabs.count).")
 
             // We explicitly don't send If-Unmodified-Since, because we always
             // want our upload to succeed -- we own the record.

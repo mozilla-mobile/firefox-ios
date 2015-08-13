@@ -308,7 +308,7 @@ public class Sync15StorageClient {
             log.verbose("Response is \(response).")
 
             if let error = error {
-                log.error("Got error \(error). Response: \(response?.statusCode)")
+                log.error("Response: \(response?.statusCode ?? 0). Got error \(error).")
                 deferred.fill(Result<T>(failure: RequestError(error)))
                 return
             }
