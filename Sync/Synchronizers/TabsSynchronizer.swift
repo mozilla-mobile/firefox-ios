@@ -104,14 +104,25 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
 
                 log.debug("Got \(records.count) tab records.")
 
-                let allDone = all(records.filter({ $0.id != ourGUID }).map(doInsert))
-                return allDone.bind { (results) -> Success in
-                    if let failure = find(results, { $0.isFailure }) {
-                        return deferResult(failure.failureValue!)
-                    }
+                // We can only insert tabs for clients that we know locally, so
+                // first we fetch the list of IDs and intersect the two.
+                // TODO: there's a much more efficient way of doing this.
+                return localTabs.getClientGUIDs()
+                    >>== { clientGUIDs in
+                        let filtered = records.filter({ $0.id != ourGUID && clientGUIDs.contains($0.id) })
+                        if filtered.count != records.count {
+                            log.debug("Filtered \(records.count) records down to \(filtered.count).")
+                        }
 
-                    self.lastFetched = responseTimestamp!
-                    return succeed()
+                        let allDone = all(filtered.map(doInsert))
+                        return allDone.bind { (results) -> Success in
+                            if let failure = find(results, { $0.isFailure }) {
+                                return deferResult(failure.failureValue!)
+                            }
+
+                            self.lastFetched = responseTimestamp!
+                            return succeed()
+                        }
                 }
             }
 
