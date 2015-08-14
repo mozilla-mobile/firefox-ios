@@ -68,12 +68,18 @@ class GenericTable<T>: BaseTable {
     func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int {
         if var site = item {
             if let (query, args) = getInsertAndArgs(&site) {
+                let previous = db.lastInsertedRowID
                 if let error = db.executeChange(query, withArgs: args) {
                     err = error
                     return -1
                 }
 
-                return db.lastInsertedRowID
+                let now = db.lastInsertedRowID
+                if previous == now {
+                    log.debug("INSERT did not change last inserted row ID.")
+                    return 0
+                }
+                return now
             }
         }
 
