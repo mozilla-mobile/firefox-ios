@@ -37,7 +37,7 @@ protocol Table: TableInfo {
  */
 protocol BaseTable: Table {
     typealias Type
-    func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
+    func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int?
     func update(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
     func delete(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
     func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<Type>
