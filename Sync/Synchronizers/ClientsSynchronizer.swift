@@ -209,14 +209,14 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             } else {
                 if let failure = result.failureValue {
                     log.warning("Failed to fetch record with GUID \(clientGUID).")
-                    if failure is NotFound<ClientPayload> {
+                    if failure is NotFound<NSHTTPURLResponse> {
                         log.debug("Waiting to see if the client comes back.")
 
                         // TODO: expire outbound commands.
                         return succeed()
                     }
 
-                    if failure is BadRequestError<ClientPayload> {
+                    if failure is BadRequestError<NSHTTPURLResponse> {
                         log.debug("We made a bad request. Throwing away queued commands.")
                         return deleteCommands()
                     }

@@ -9,7 +9,7 @@ class TestFaviconsTable : XCTestCase {
     var db: SwiftData!
 
     private func addIcon(favicons: FaviconsTable<Favicon>, url: String, s: Bool = true) -> Favicon {
-        var inserted = -1;
+        var inserted: Int? = -1;
         var icon: Favicon!
         db.withConnection(.ReadWrite) { connection -> NSError? in
             icon = Favicon(url: url, type: IconType.Icon)
@@ -18,9 +18,9 @@ class TestFaviconsTable : XCTestCase {
             return err
         }
         if s {
-            XCTAssert(inserted >= 0, "Inserted succeeded")
+            XCTAssert(inserted >= 0, "Insert succeeded")
         } else {
-            XCTAssert(inserted == -1, "Inserted failed")
+            XCTAssert(inserted == nil, "Insert failed")
         }
         return icon
     }

@@ -63,7 +63,7 @@ public class ServerError<T>: StorageResponseError<T> {
 
 public class NotFound<T>: StorageResponseError<T> {
     override public var description: String {
-        return "Not found."
+        return "Not found. (\(T.self))"
     }
 
     override public init(_ response: StorageResponse<T>) {
@@ -307,46 +307,73 @@ public class Sync15StorageClient {
         return { (request, response, data, error) in
             log.verbose("Response is \(response).")
 
+            /**
+             * Returns true if handled.
+             */
+            func failFromResponse(response: NSHTTPURLResponse?) -> Bool {
+                // TODO: Swift 2.0 guards.
+                if response == nil {
+                    // TODO: better error.
+                    log.error("No response")
+                    let result = Result<T>(failure: RecordParseError())
+                    deferred.fill(result)
+                    return true
+                }
+
+                let response = response!
+                log.debug("Status code: \(response.statusCode).")
+
+                let storageResponse = StorageResponse(value: response, metadata: ResponseMetadata(response: response))
+
+                self.updateBackoffFromResponse(storageResponse)
+
+                if response.statusCode >= 500 {
+                    log.debug("ServerError.")
+                    let result = Result<T>(failure: ServerError(storageResponse))
+                    deferred.fill(result)
+                    return true
+                }
+
+                if response.statusCode == 404 {
+                    log.debug("NotFound<\(T.self)>.")
+                    let result = Result<T>(failure: NotFound(storageResponse))
+                    deferred.fill(result)
+                    return true
+                }
+
+                if response.statusCode >= 400 {
+                    log.debug("BadRequestError.")
+                    let result = Result<T>(failure: BadRequestError(request: request, response: storageResponse))
+                    deferred.fill(result)
+                    return true
+                }
+
+                return false
+            }
+
+            // Check for an error from the request processor.
             if let error = error {
                 log.error("Response: \(response?.statusCode ?? 0). Got error \(error).")
+
+                // If we got one, we don't want to hit the response nil case above and
+                // return a RecordParseError, because a RequestError is more fitting.
+                if let response = response {
+                    if failFromResponse(response) {
+                        log.error("This was a failure response. Filled specific error type.")
+                        return
+                    }
+                }
+
+                log.error("Filling generic RequestError.")
                 deferred.fill(Result<T>(failure: RequestError(error)))
                 return
             }
 
-            if response == nil {
-                // TODO: better error.
-                log.error("No response")
-                let result = Result<T>(failure: RecordParseError())
-                deferred.fill(result)
+            if failFromResponse(response) {
                 return
             }
 
-            let response = response!
-
-            log.debug("Status code: \(response.statusCode)")
-            let storageResponse = StorageResponse(value: response, metadata: ResponseMetadata(response: response))
-
-            self.updateBackoffFromResponse(storageResponse)
-
-            if response.statusCode >= 500 {
-                let result = Result<T>(failure: ServerError(storageResponse))
-                deferred.fill(result)
-                return
-            }
-
-            if response.statusCode == 404 {
-                let result = Result<T>(failure: NotFound(storageResponse))
-                deferred.fill(result)
-                return
-            }
-
-            if response.statusCode >= 400 {
-                let result = Result<T>(failure: BadRequestError(request: request, response: storageResponse))
-                deferred.fill(result)
-                return
-            }
-
-            handler(request, response, data, error)
+            handler(request, response!, data, error)
         }
     }
 
