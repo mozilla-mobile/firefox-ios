@@ -307,8 +307,45 @@ public class Sync15StorageClient {
         return { (request, response, data, error) in
             log.verbose("Response is \(response).")
 
+            func failFromResponse(response: NSHTTPURLResponse) -> Bool {
+                let storageResponse = StorageResponse(value: response, metadata: ResponseMetadata(response: response))
+
+                self.updateBackoffFromResponse(storageResponse)
+
+                if response.statusCode >= 500 {
+                    log.debug("ServerError.")
+                    let result = Result<T>(failure: ServerError(storageResponse))
+                    deferred.fill(result)
+                    return true
+                }
+
+                if response.statusCode == 404 {
+                    log.debug("NotFound<\(T.self)>.")
+                    let result = Result<T>(failure: NotFound(storageResponse))
+                    deferred.fill(result)
+                    return true
+                }
+
+                if response.statusCode >= 400 {
+                    log.debug("BadRequestError.")
+                    let result = Result<T>(failure: BadRequestError(request: request, response: storageResponse))
+                    deferred.fill(result)
+                    return true
+                }
+
+                return false
+            }
+
             if let error = error {
                 log.error("Response: \(response?.statusCode ?? 0). Got error \(error).")
+                if let response = response {
+                    if failFromResponse(response) {
+                        log.error("This was a failure response. Filled specific error type.")
+                        return
+                    }
+                }
+
+                log.error("Filling generic RequestError.")
                 deferred.fill(Result<T>(failure: RequestError(error)))
                 return
             }
@@ -324,25 +361,7 @@ public class Sync15StorageClient {
             let response = response!
 
             log.debug("Status code: \(response.statusCode)")
-            let storageResponse = StorageResponse(value: response, metadata: ResponseMetadata(response: response))
-
-            self.updateBackoffFromResponse(storageResponse)
-
-            if response.statusCode >= 500 {
-                let result = Result<T>(failure: ServerError(storageResponse))
-                deferred.fill(result)
-                return
-            }
-
-            if response.statusCode == 404 {
-                let result = Result<T>(failure: NotFound(storageResponse))
-                deferred.fill(result)
-                return
-            }
-
-            if response.statusCode >= 400 {
-                let result = Result<T>(failure: BadRequestError(request: request, response: storageResponse))
-                deferred.fill(result)
+            if failFromResponse(response) {
                 return
             }
 
