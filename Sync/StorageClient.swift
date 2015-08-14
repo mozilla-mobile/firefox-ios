@@ -307,7 +307,22 @@ public class Sync15StorageClient {
         return { (request, response, data, error) in
             log.verbose("Response is \(response).")
 
-            func failFromResponse(response: NSHTTPURLResponse) -> Bool {
+            /**
+             * Returns true if handled.
+             */
+            func failFromResponse(response: NSHTTPURLResponse?) -> Bool {
+                // TODO: Swift 2.0 guards.
+                if response == nil {
+                    // TODO: better error.
+                    log.error("No response")
+                    let result = Result<T>(failure: RecordParseError())
+                    deferred.fill(result)
+                    return true
+                }
+
+                let response = response!
+                log.debug("Status code: \(response.statusCode).")
+
                 let storageResponse = StorageResponse(value: response, metadata: ResponseMetadata(response: response))
 
                 self.updateBackoffFromResponse(storageResponse)
@@ -336,8 +351,12 @@ public class Sync15StorageClient {
                 return false
             }
 
+            // Check for an error from the request processor.
             if let error = error {
                 log.error("Response: \(response?.statusCode ?? 0). Got error \(error).")
+
+                // If we got one, we don't want to hit the response nil case above and
+                // return a RecordParseError, because a RequestError is more fitting.
                 if let response = response {
                     if failFromResponse(response) {
                         log.error("This was a failure response. Filled specific error type.")
@@ -350,22 +369,11 @@ public class Sync15StorageClient {
                 return
             }
 
-            if response == nil {
-                // TODO: better error.
-                log.error("No response")
-                let result = Result<T>(failure: RecordParseError())
-                deferred.fill(result)
-                return
-            }
-
-            let response = response!
-
-            log.debug("Status code: \(response.statusCode)")
             if failFromResponse(response) {
                 return
             }
 
-            handler(request, response, data, error)
+            handler(request, response!, data, error)
         }
     }
 
