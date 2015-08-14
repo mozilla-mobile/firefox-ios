@@ -61,7 +61,9 @@ class BrowserViewController: UIViewController {
 
     // These views wrap the urlbar and toolbar to provide background effects on them
     var header: UIView!
+    var headerBackdrop: UIView!
     var footer: UIView!
+    var footerBackdrop: UIView!
     private var footerBackground: UIView!
     private var topTouchArea: UIButton!
 
@@ -174,6 +176,13 @@ class BrowserViewController: UIViewController {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELBookmarkStatusDidChange:", name: BookmarkStatusChangedNotification, object: nil)
         KeyboardHelper.defaultHelper.addDelegate(self)
+
+        footerBackdrop = UIView()
+        footerBackdrop.backgroundColor = UIColor.whiteColor()
+        view.addSubview(footerBackdrop)
+        headerBackdrop = UIView()
+        headerBackdrop.backgroundColor = UIColor.whiteColor()
+        view.addSubview(headerBackdrop)
 
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
@@ -344,6 +353,9 @@ class BrowserViewController: UIViewController {
             make.left.right.equalTo(self.view)
         }
         header.setNeedsUpdateConstraints()
+        headerBackdrop.snp_remakeConstraints { make in
+            make.edges.equalTo(self.header)
+        }
 
         readerModeBar?.snp_remakeConstraints { make in
             make.top.equalTo(self.header.snp_bottom).constraint
@@ -377,6 +389,10 @@ class BrowserViewController: UIViewController {
             scrollController.footerBottomConstraint = make.bottom.equalTo(self.view.snp_bottom).constraint
             make.top.equalTo(self.snackBars.snp_top)
             make.leading.trailing.equalTo(self.view)
+        }
+
+        footerBackdrop.snp_remakeConstraints { make in
+            make.edges.equalTo(self.footer)
         }
 
         adjustFooterSize(top: nil)

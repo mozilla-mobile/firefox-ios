@@ -42,7 +42,7 @@ private extension TrayToBrowserAnimator {
         container.layoutIfNeeded()
 
         // Reset any transform we had previously on the header and transform them to where the cell will be animating from
-        transformToolbarsToFrame([bvc.header, bvc.footer, bvc.readerModeBar], toRect: cell.frame)
+        transformToolbarsToFrame([bvc.header, bvc.footer, bvc.readerModeBar, bvc.footerBackdrop, bvc.headerBackdrop], toRect: cell.frame)
 
         let finalFrame = calculateExpandedCellFrameFromBVC(bvc)
         bvc.footer.alpha = shouldDisplayFooterForBVC(bvc) ? 1 : 0
@@ -57,7 +57,7 @@ private extension TrayToBrowserAnimator {
             cell.frame = finalFrame
             container.layoutIfNeeded()
             cell.title.transform = CGAffineTransformMakeTranslation(0, -cell.title.frame.height)
-            resetTransformsForViews([bvc.header, bvc.footer, bvc.readerModeBar])
+            resetTransformsForViews([bvc.header, bvc.footer, bvc.readerModeBar, bvc.footerBackdrop, bvc.headerBackdrop])
 
             bvc.urlBar.updateAlphaForSubviews(1)
 
@@ -146,7 +146,7 @@ private extension BrowserToTrayAnimator {
                 cell.frame = finalFrame
                 cell.title.transform = CGAffineTransformIdentity
                 cell.layoutIfNeeded()
-                transformToolbarsToFrame([bvc.header, bvc.footer, bvc.readerModeBar], toRect: finalFrame)
+                transformToolbarsToFrame([bvc.header, bvc.footer, bvc.readerModeBar, bvc.footerBackdrop, bvc.headerBackdrop], toRect: finalFrame)
 
                 bvc.urlBar.updateAlphaForSubviews(0)
                 bvc.footer.alpha = 0
