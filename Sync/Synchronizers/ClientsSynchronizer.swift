@@ -185,17 +185,44 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
     }
 
     private func syncClientCommands(clientGUID: GUID, commands: [SyncCommand], clientsAndTabs: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
-        return storageClient.get(clientGUID) >>== { response in
-            let record = response.value
-            if var clientRecord = record.payload.asDictionary {
-                clientRecord["commands"] = JSON(record.payload.commands + commands.map { JSON.parse($0.value) })
-                return storageClient.put(Record(id: clientGUID, payload: ClientPayload(JSON(clientRecord)), ttl: ThreeWeeksInSeconds), ifUnmodifiedSince: record.modified)
-                >>== { resp in
-                    log.debug("Client \(clientGUID) commands upload succeeded.")
-                    clientsAndTabs.deleteCommands(clientGUID)
-                    return succeed()
+
+        let deleteCommands: () -> Success = {
+            return clientsAndTabs.deleteCommands(clientGUID).bind({ x in return succeed() })
+        }
+
+        log.debug("Fetching current client record for client \(clientGUID).")
+        let fetch = storageClient.get(clientGUID)
+        return fetch.bind() { result in
+            if let response = result.successValue {
+                let record = response.value
+                if var clientRecord = record.payload.asDictionary {
+                    clientRecord["commands"] = JSON(record.payload.commands + commands.map { JSON.parse($0.value) })
+                    let uploadRecord = Record(id: clientGUID, payload: ClientPayload(JSON(clientRecord)), ttl: ThreeWeeksInSeconds)
+                    return storageClient.put(uploadRecord, ifUnmodifiedSince: record.modified)
+                        >>== { resp in
+                            log.debug("Client \(clientGUID) commands upload succeeded.")
+
+                            // Always succeed, even if we couldn't delete the commands.
+                            return deleteCommands()
+                    }
+                }
+            } else {
+                if let failure = result.failureValue {
+                    log.warning("Failed to fetch record with GUID \(clientGUID).")
+                    if failure is NotFound<ClientPayload> {
+                        log.debug("Waiting to see if the client comes back.")
+
+                        // TODO: expire outbound commands.
+                        return succeed()
+                    }
+
+                    if failure is BadRequestError<ClientPayload> {
+                        log.debug("We made a bad request. Throwing away queued commands.")
+                        return deleteCommands()
+                    }
                 }
             }
+
             log.error("Client \(clientGUID) commands upload failed: No remote client for GUID")
             return deferResult(UnknownError())
         }
