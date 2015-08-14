@@ -44,8 +44,8 @@ class TopSitesPanel: UIViewController {
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        self.layout.transistionToOrientation(UIView.viewOrientationForSize(size), atSize: size)
         self.refreshHistory(self.layout.thumbnailCount)
-        self.layout.setupForOrientation(UIView.viewOrientationForSize(size))
     }
 
     override func supportedInterfaceOrientations() -> Int {
@@ -213,14 +213,19 @@ private class TopSitesCollectionView: UICollectionView {
 
 private class TopSitesLayout: UICollectionViewLayout {
     private var thumbnailRows: Int {
-        return max(2, Int((self.collectionView?.frame.height ?? self.thumbnailHeight) / self.thumbnailHeight))
+        return max(2, Int((self.height ?? self.thumbnailHeight) / self.thumbnailHeight))
     }
 
     private var thumbnailCols = 2
     private var thumbnailCount: Int {
         return thumbnailRows * thumbnailCols
     }
-    private var width: CGFloat { return self.collectionView?.frame.width ?? 0 }
+
+    private lazy var width: CGFloat = { return self.collectionView?.frame.width ?? 0 }()
+
+    private lazy var height: CGFloat? = {
+        return self.collectionView?.frame.height
+        }()
 
     // The width and height of the thumbnail here are the width and height of the tile itself, not the image inside the tile.
     private var thumbnailWidth: CGFloat {
@@ -252,6 +257,12 @@ private class TopSitesLayout: UICollectionViewLayout {
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    private func transistionToOrientation(orientation: UIInterfaceOrientation, atSize size: CGSize) {
+        setupForOrientation(orientation)
+        height = size.height
+        width = size.width
     }
 
     private func setupForOrientation(orientation: UIInterfaceOrientation) {
