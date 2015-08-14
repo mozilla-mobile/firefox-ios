@@ -67,7 +67,7 @@ Before you can run the application on your device, you need to setup a few thing
 3. Create a new App Id. Name it 'Fennec ShareTo'. Give it an Explicit App ID and set its Bundle Identifier to `YOURREVERSEDOMAIN.Fennec.ShareTo`. In the App Services section, select *App Groups*.
 4. Create a new App Id. Name it 'Fennec SendTo'. Give it an Explicit App ID and set its Bundle Identifier to `YOURREVERSEDOMAIN.Fennec.SendTo`. In the App Services section, select *App Groups*.
 5. Create a new App Id. Name it 'Fennec ViewLater'. Give it an Explicit App ID and set its Bundle Identifier to `YOURREVERSEDOMAIN.Fennec.ViewLater`. In the App Services section, select *App Groups*.
-5. For all App Ids that you just created, edit their App Groups and make sure they are all part of the Fennec App Group that you created in step 1.
+6. For all App Ids that you just created, edit their App Groups and make sure they are all part of the Fennec App Group that you created in step 1.
 
 Now we are going to create three Provisioning Profiles that are linked to the App Ids that we just created:
 
