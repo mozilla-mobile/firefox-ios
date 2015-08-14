@@ -630,7 +630,7 @@ class BrowserViewController: UIViewController {
             urlBar.updateReloadStatus(loading)
             auralProgress.progress = loading ? 0 : nil
         case KVOURL:
-            if let tab = tabManager.selectedTab where tab.webView === webView {
+            if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
                 updateUIForReaderHomeStateForTab(tab)
             }
         case KVOCanGoBack:
@@ -976,10 +976,7 @@ extension BrowserViewController: BrowserDelegate {
         webView.addObserver(self, forKeyPath: KVOLoading, options: .New, context: nil)
         webView.addObserver(self, forKeyPath: KVOCanGoBack, options: .New, context: nil)
         webView.addObserver(self, forKeyPath: KVOCanGoForward, options: .New, context: nil)
-
-        if !browser.restoring {
-            browser.webView?.addObserver(self, forKeyPath: KVOURL, options: .New, context: nil)
-        }
+        browser.webView?.addObserver(self, forKeyPath: KVOURL, options: .New, context: nil)
 
         webView.scrollView.addObserver(self.scrollController, forKeyPath: KVOContentSize, options: .New, context: nil)
 
@@ -1018,10 +1015,7 @@ extension BrowserViewController: BrowserDelegate {
         webView.removeObserver(self, forKeyPath: KVOCanGoBack)
         webView.removeObserver(self, forKeyPath: KVOCanGoForward)
         webView.scrollView.removeObserver(self.scrollController, forKeyPath: KVOContentSize)
-
-        if !browser.restoring {
-            webView.removeObserver(self, forKeyPath: KVOURL)
-        }
+        webView.removeObserver(self, forKeyPath: KVOURL)
 
         webView.UIDelegate = nil
         webView.scrollView.delegate = nil
@@ -1907,7 +1901,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 extension BrowserViewController: SessionRestoreHelperDelegate {
     func sessionRestoreHelper(helper: SessionRestoreHelper, didRestoreSessionForBrowser browser: Browser) {
         browser.restoring = false
-        browser.webView?.addObserver(self, forKeyPath: KVOURL, options: .New, context: nil)
+
         if let tab = tabManager.selectedTab where tab.webView === browser.webView {
             updateUIForReaderHomeStateForTab(tab)
         }
