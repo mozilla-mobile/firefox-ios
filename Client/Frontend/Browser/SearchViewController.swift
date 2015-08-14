@@ -609,8 +609,11 @@ private class SuggestionCell: UITableViewCell {
         // The maximum width of the container, after which suggestions will wrap to the next line.
         let maxWidth = contentView.frame.width
 
+        let imageSize = CGFloat(OpenSearchEngine.PreferredIconSize)
+
         // The height of the suggestions container (minus margins), used to determine the frame.
-        var height: CGFloat = 0
+        // We set it to imageSize.height as a minimum since we don't want the cell to be shorter than the icon
+        var height: CGFloat = imageSize
 
         var currentLeft = textLeft
         var currentTop = SearchViewControllerUX.SuggestionCellVerticalPadding
@@ -620,8 +623,10 @@ private class SuggestionCell: UITableViewCell {
             let button = view as! UIButton
             var buttonSize = button.intrinsicContentSize()
 
-            if height == 0 {
-                height = buttonSize.height
+            // Update our base frame height by the max size of either the image or the button so we never 
+            // make the cell smaller than any of the two
+            if height == imageSize {
+                height = max(buttonSize.height, imageSize)
             }
 
             var width = currentLeft + buttonSize.width + SearchViewControllerUX.SuggestionMargin
@@ -656,7 +661,6 @@ private class SuggestionCell: UITableViewCell {
         contentView.frame = frame
         container.frame = frame
 
-        let imageSize = CGFloat(OpenSearchEngine.PreferredIconSize)
         let imageX = (48 - imageSize) / 2
         let imageY = (frame.size.height - imageSize) / 2
         imageView!.frame = CGRectMake(imageX, imageY, imageSize, imageSize)
