@@ -44,6 +44,13 @@ class LoginsHelper: BrowserHelper {
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         let frameInfo = message.frameInfo
+
+        // We don't currently inject the helper into iframes.
+        // Don't listen for messages from iframes, either.
+        if !frameInfo.mainFrame {
+            return
+        }
+
         var res = message.body as! [String: String]
         let type = res["type"]
 
