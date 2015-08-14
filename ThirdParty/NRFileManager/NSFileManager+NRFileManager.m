@@ -9,16 +9,7 @@
 
 @implementation NSFileManager (NRFileManager)
 
-// This method calculates the accumulated size of a directory on the volume in bytes.
-//
-// As there's no simple way to get this information from the file system it has to crawl the entire hierarchy,
-// accumulating the overall sum on the way. The resulting value is roughly equivalent with the amount of bytes
-// that would become available on the volume if the directory would be deleted.
-//
-// Caveat: There are a couple of oddities that are not taken into account (like symbolic links, meta data of
-// directories, hard links, ...).
-
-- (BOOL)nr_getAllocatedSize:(unsigned long long *)size ofDirectoryAtURL:(NSURL *)directoryURL error:(NSError * __autoreleasing *)error
+- (BOOL)moz_getAllocatedSize:(unsigned long long *)size ofDirectoryAtURL:(NSURL *)directoryURL forFilesPrefixedWith:(NSString *)prefix error:(NSError * __autoreleasing *)error
 {
     NSParameterAssert(size != NULL);
     NSParameterAssert(directoryURL != nil);
@@ -59,6 +50,13 @@
         NSNumber *isRegularFile;
         if (! [contentItemURL getResourceValue:&isRegularFile forKey:NSURLIsRegularFileKey error:error])
             return NO;
+
+        // MODIFIED FROM ORIGINAL SOURCE
+        NSString *filename = [contentItemURL.pathComponents lastObject];
+        if (! [filename hasPrefix:prefix])
+            continue;
+        // END MODIFICATION
+
         if (! [isRegularFile boolValue])
             continue; // Ignore anything except regular files.
 
@@ -88,6 +86,21 @@
     // We finally got it.
     *size = accumulatedSize;
     return YES;
+}
+
+// This method calculates the accumulated size of a directory on the volume in bytes.
+//
+// As there's no simple way to get this information from the file system it has to crawl the entire hierarchy,
+// accumulating the overall sum on the way. The resulting value is roughly equivalent with the amount of bytes
+// that would become available on the volume if the directory would be deleted.
+//
+// Caveat: There are a couple of oddities that are not taken into account (like symbolic links, meta data of
+// directories, hard links, ...).
+
+// Refactored original contents of this method up into moz_ method
+- (BOOL)nr_getAllocatedSize:(unsigned long long *)size ofDirectoryAtURL:(NSURL *)directoryURL error:(NSError * __autoreleasing *)error
+{
+    return [self moz_getAllocatedSize:size ofDirectoryAtURL:directoryURL forFilesPrefixedWith:@"" error:error];
 }
 
 @end

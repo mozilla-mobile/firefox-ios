@@ -12,5 +12,7 @@
 
 - (BOOL)nr_getAllocatedSize:(unsigned long long *)size ofDirectoryAtURL:(NSURL *)url error:(NSError * __autoreleasing *)error;
 
+- (BOOL)moz_getAllocatedSize:(unsigned long long *)size ofDirectoryAtURL:(NSURL *)url forFilesPrefixedWith:(NSString *)prefix error:(NSError * __autoreleasing *)error;
+
 @end
 
