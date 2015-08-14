@@ -79,6 +79,10 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferResult(self.clientsAndTabs.map { $0.client })
     }
 
+    public func getClientGUIDs() -> Deferred<Result<Set<GUID>>> {
+        return deferResult(Set<GUID>(optFilter(self.clientsAndTabs.map { $0.client.guid })))
+    }
+
     public func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Result<[RemoteTab]>> {
         return deferResult(optFilter(self.clientsAndTabs.map { $0.client.guid == guid ? $0.tabs : nil })[0])
     }

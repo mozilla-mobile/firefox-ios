@@ -168,6 +168,14 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferResult(clients)
     }
 
+    public func getClientGUIDs() -> Deferred<Result<Set<GUID>>> {
+        let c = db.runQuery("SELECT guid FROM \(TableClients) WHERE guid IS NOT NULL", args: nil, factory: { $0["guid"] as! String })
+        return c >>== { cursor in
+            let guids = Set<GUID>(cursor.asArray())
+            return deferResult(guids)
+        }
+    }
+
     public func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Result<[RemoteTab]>> {
         let tabsSQL: String
         let clientArgs: Args?
