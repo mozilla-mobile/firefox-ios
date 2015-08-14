@@ -63,7 +63,7 @@ public class ServerError<T>: StorageResponseError<T> {
 
 public class NotFound<T>: StorageResponseError<T> {
     override public var description: String {
-        return "Not found."
+        return "Not found. (\(T.self))"
     }
 
     override public init(_ response: StorageResponse<T>) {
