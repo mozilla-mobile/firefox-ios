@@ -93,15 +93,15 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             for tab in tabs {
                 // We trust that each tab's clientGUID matches the supplied client!
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
-                if 0 < self.tabs.insert(connection, item: tab, err: &err) {
+                if self.tabs.insert(connection, item: tab, err: &err) > 0 {
                     ++inserted
                 } else {
+                    if let err = err {
+                        log.warning("Got error \(err).")
+                        deferred.fill(Result(failure: DatabaseError(err: err)))
+                        return false
+                    }
                     log.debug("Didn't insert tab!")
-                }
-                if let err = err {
-                    log.warning("Got error \(err).")
-                    deferred.fill(Result(failure: DatabaseError(err: err)))
-                    return false
                 }
             }
 
@@ -312,14 +312,16 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             // Update or insert client records.
             for command in commands {
                 for client in clients {
-                    var commandID = self.commands.insert(connection, item: command.withClientGUID(client.guid), err: &err)
-
-                    if let err = err {
-                        log.debug("insertCommands:forClients failed: \(err)")
-                        return false
+                    if let commandID = self.commands.insert(connection, item: command.withClientGUID(client.guid), err: &err) {
+                        log.info("Inserted command: \(commandID)")
+                        ++numberOfInserts
+                    } else {
+                        if let err = err {
+                            log.debug("insertCommands:forClients failed: \(err)")
+                            return false
+                        }
+                        log.warning("Command not inserted, but no error!")
                     }
-                    log.info("Inserted command: \(commandID)")
-                    ++numberOfInserts
                 }
             }
             return true
