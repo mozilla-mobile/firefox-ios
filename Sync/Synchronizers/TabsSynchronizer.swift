@@ -82,11 +82,19 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
 
             func afterWipe() -> Success {
                 log.info("Fetching tabs.")
-                func doInsert(record: Record<TabsPayload>) -> Deferred<Result<(Int)>> {
+                let doInsert: (Record<TabsPayload>) -> Deferred<Result<(Int)>> = { record in
                     let remotes = record.payload.remoteTabs
                     log.debug("\(remotes)")
                     log.info("Inserting \(remotes.count) tabs for client \(record.id).")
-                    return localTabs.insertOrUpdateTabsForClientGUID(record.id, tabs: remotes)
+                    let ins = localTabs.insertOrUpdateTabsForClientGUID(record.id, tabs: remotes)
+                    ins.upon() { res in
+                        if let inserted = res.successValue {
+                            if inserted != remotes.count {
+                                log.warning("Only inserted \(inserted) tabs, not \(remotes.count). Malformed or missing client?")
+                            }
+                        }
+                    }
+                    return ins
                 }
 
                 let ourGUID = self.scratchpad.clientGUID

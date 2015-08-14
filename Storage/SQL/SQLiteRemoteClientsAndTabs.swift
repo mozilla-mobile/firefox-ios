@@ -82,6 +82,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         db.transaction(&err) { connection, _ in
             // Delete any existing tabs.
             if let error = connection.executeChange(deleteQuery, withArgs: deleteArgs) {
+                log.warning("Deleting existing tabs failed.")
                 deferred.fill(Result(failure: DatabaseError(err: err)))
                 return false
             }
@@ -92,12 +93,16 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             for tab in tabs {
                 // We trust that each tab's clientGUID matches the supplied client!
                 // Really tabs shouldn't have a GUID at all. Future cleanup!
-                self.tabs.insert(connection, item: tab, err: &err)
+                if 0 < self.tabs.insert(connection, item: tab, err: &err) {
+                    ++inserted
+                } else {
+                    log.debug("Didn't insert tab!")
+                }
                 if let err = err {
+                    log.warning("Got error \(err).")
                     deferred.fill(Result(failure: DatabaseError(err: err)))
                     return false
                 }
-                inserted++;
             }
 
             deferred.fill(Result(success: inserted))
