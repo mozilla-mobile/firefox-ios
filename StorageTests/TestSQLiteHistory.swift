@@ -448,3 +448,55 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
         }
     }
 }
+
+class TestSQLiteHistoryFilterSplitting: XCTestCase {
+    
+    let history: SQLiteHistory = {
+        let files = MockFiles()
+        let db = BrowserDB(filename: "browser.db", files: files)
+        return SQLiteHistory(db: db)!
+    }()
+    
+    func testWithSingleWord() {
+        let (fragment, args) = history.computeWhereFragmentWithFilter("foo", perWordFragment: "?", perWordArgs: { [$0] })
+        XCTAssertEqual(fragment, "?")
+        XCTAssert(stringArgsEqual(args, ["foo"]))
+    }
+    
+    func testWithIdenticalWords() {
+        let (fragment, args) = history.computeWhereFragmentWithFilter("foo foo foo", perWordFragment: "?", perWordArgs: { [$0] })
+        XCTAssertEqual(fragment, "? OR ?")
+        XCTAssert(stringArgsEqual(args, ["foo foo foo", "foo"]))
+    }
+    
+    func testWithDistinctWords() {
+        let (fragment, args) = history.computeWhereFragmentWithFilter("foo bar", perWordFragment: "?", perWordArgs: { [$0] })
+        XCTAssertEqual(fragment, "? OR ? AND ?")
+        XCTAssert(stringArgsEqual(args, ["foo bar", "foo", "bar"]))
+    }
+    
+    func testWithDistinctWordsAndWhitespace() {
+        let (fragment, args) = history.computeWhereFragmentWithFilter("  foo    bar  ", perWordFragment: "?", perWordArgs: { [$0] })
+        XCTAssertEqual(fragment, "? OR ? AND ?")
+        XCTAssert(stringArgsEqual(args, ["  foo    bar  ", "foo", "bar"]))
+    }
+    
+    func testWithSubstrings() {
+        let (fragment, args) = history.computeWhereFragmentWithFilter("foo bar foobar", perWordFragment: "?", perWordArgs: { [$0] })
+        XCTAssertEqual(fragment, "? OR ?")
+        XCTAssert(stringArgsEqual(args, ["foo bar foobar", "foobar"]))
+    }
+    
+    func testWithSubstringsAndIdenticalWords() {
+        let (fragment, args) = history.computeWhereFragmentWithFilter("foo bar foobar foobar", perWordFragment: "?", perWordArgs: { [$0] })
+        XCTAssertEqual(fragment, "? OR ?")
+        XCTAssert(stringArgsEqual(args, ["foo bar foobar foobar", "foobar"]))
+    }
+    
+    private func stringArgsEqual(one: Args, _ other: Args) -> Bool {
+        return one.elementsEqual(other, isEquivalent: { (oneElement: AnyObject?, otherElement: AnyObject?) -> Bool in
+            return (oneElement as! String) == (otherElement as! String)
+        })
+    }
+    
+}
