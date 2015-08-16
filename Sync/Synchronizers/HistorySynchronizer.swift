@@ -80,6 +80,18 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         // Skip over at most this many failing records before aborting the sync.
         let maskSomeFailures = self.mask(3)
 
+        let logAndIgnoreMissingDomains: (Result<()>) -> Result<()> = { result in
+            if result.isFailure {
+                if let why = result.failureValue as? Storage.NoDomainError {
+                    log.debug("No domain: dropping history record.")
+                    return Result(success: ())
+                }
+                let reason = result.failureValue?.description ?? "unknown reason"
+                log.error("Record application failed: \(reason)")
+            }
+            return result
+        }
+
         // TODO: it'd be nice to put this in an extension on SyncableHistory. Waiting for Swift 2.0...
         func applyRecord(rec: Record<HistoryPayload>) -> Success {
             let guid = rec.id
@@ -105,13 +117,8 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
             let placeThenVisits = storage.insertOrUpdatePlace(place, modified: modified)
                               >>> { storage.storeRemoteVisits(payload.visits, forGUID: guid) }
-            return placeThenVisits.map({ result in
-                if result.isFailure {
-                    let reason = result.failureValue?.description ?? "unknown reason"
-                    log.error("Record application failed: \(reason)")
-                }
-                return result
-            }).bind(maskSomeFailures)
+            return placeThenVisits.map(logAndIgnoreMissingDomains)
+                                  .bind(maskSomeFailures)
         }
 
         return self.applyIncomingToStorage(records, fetched: fetched, apply: applyRecord)
