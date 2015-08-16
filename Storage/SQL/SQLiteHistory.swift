@@ -35,7 +35,7 @@ func failOrSucceed(err: NSError?, op: String) -> Success {
     return failOrSucceed(err, op, ())
 }
 
-private var ignoredSchemes = ["about"]
+private var ignoredSchemes = ["about", "file", "chrome", "wyciwyg"]
 
 public func isIgnoredURL(url: NSURL) -> Bool {
     if let scheme = url.scheme {
