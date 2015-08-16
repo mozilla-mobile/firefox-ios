@@ -633,9 +633,19 @@ extension SQLiteHistory: SyncableHistory {
                     (insertDomain, [host]),
                     (insertHistory, [place.guid, place.url, place.title, serverModified, host])
                 ]) >>> always(place.guid)
-            }
+            } else {
+                // This is a URL with no domain. Insert it directly.
+                if LogPII {
+                    log.debug("Inserting: \(place.url) with no domain.")
+                }
 
-            return deferResult(DatabaseError(description: "Could not get a domain for \(place.url)"))
+                let insertDomain = "INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)"
+                let insertHistory = "INSERT INTO \(TableHistory) (guid, url, title, server_modified, is_deleted, should_upload, domain_id) " +
+                                    "(?, ?, ?, ?, 0, 0, NULL)"
+                return self.db.run([
+                    (insertHistory, [place.guid, place.url, place.title, serverModified])
+                ]) >>> always(place.guid)
+            }
         }
 
         // Make sure that we only need to compare GUIDs by pre-merging on URL.
