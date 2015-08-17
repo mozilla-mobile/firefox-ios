@@ -11,18 +11,13 @@
   <Param name="output" value="fxjson" />
   <Param name="appid" value="ffm" />
   <Param name="command" value="{searchTerms}" />
-  <MozParam name="nresults" condition="pref" pref="maxSuggestions" />
+  <Param name="nresults" value="8" />
 </Url>
-<Url type="text/html" method="GET" template="https://search.yahoo.com/search">
-  <Param name="p" value="{searchTerms}" />
-  <Param name="ei" value="UTF-8" />
-  <Param name="fr" value="mozmob1" />
+<Url type="text/html" method="GET" template="https://search.yahoo.com/yhs/search" rel="searchform">
+  <Param name="ei"     value="UTF-8" />
+  <Param name="hspart" value="mozilla" />
+  <Param name="hsimp"  value="yhsm-002" />
+  <Param name="type"   value="ios" />
+  <Param name="p"      value="{searchTerms}" />
 </Url>
-<!-- Search activity -->
-<Url type="text/html" method="GET" rel="mobile" template="https://search.yahoo.com/search">
-  <Param name="p" value="{searchTerms}" />
-  <Param name="ei" value="UTF-8" />
-  <Param name="fr" value="mozmob2" />
-</Url>
-<SearchForm>https://search.yahoo.com/</SearchForm>
 </SearchPlugin>
