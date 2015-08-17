@@ -12,6 +12,17 @@ private let LogPII = false
 
 let LocalVisitFrecencyWeight = 5
 
+public class NoDomainError: ErrorType {
+    let url: String
+    init(url: String) {
+        self.url = url
+    }
+
+    public var description: String {
+        return "Could not compute domain for URL."
+    }
+}
+
 class NoSuchRecordError: ErrorType {
     let guid: GUID
     init(guid: GUID) {
@@ -35,7 +46,7 @@ func failOrSucceed(err: NSError?, op: String) -> Success {
     return failOrSucceed(err, op, ())
 }
 
-private var ignoredSchemes = ["about"]
+private var ignoredSchemes = ["about", "file", "chrome", "wyciwyg"]
 
 public func isIgnoredURL(url: NSURL) -> Bool {
     if let scheme = url.scheme {
@@ -635,7 +646,7 @@ extension SQLiteHistory: SyncableHistory {
                 ]) >>> always(place.guid)
             }
 
-            return deferResult(DatabaseError(description: "Could not get a domain for \(place.url)"))
+            return deferResult(NoDomainError(url: place.url))
         }
 
         // Make sure that we only need to compare GUIDs by pre-merging on URL.
