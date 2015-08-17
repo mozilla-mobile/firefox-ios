@@ -34,6 +34,7 @@ public protocol RemoteClientsAndTabs: SyncCommands {
     func wipeClients() -> Deferred<Result<()>>
     func wipeRemoteTabs() -> Deferred<Result<()>>
     func wipeTabs() -> Deferred<Result<()>>
+    func getClientGUIDs() -> Deferred<Result<Set<GUID>>>
     func getClients() -> Deferred<Result<[RemoteClient]>>
     func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
     func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Result<[RemoteTab]>>

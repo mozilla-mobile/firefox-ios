@@ -29,6 +29,13 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private var previousSuggestion = ""
     private var notifyTextChanged: (() -> ())? = nil
 
+    override var text: String! {
+        didSet {
+            // SELtextDidChange is not called when directly setting the text property, so fire it manually.
+            SELtextDidChange(self)
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()

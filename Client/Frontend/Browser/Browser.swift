@@ -26,11 +26,18 @@ class Browser: NSObject {
     var browserDelegate: BrowserDelegate? = nil
     var bars = [SnackBar]()
     var favicons = [Favicon]()
+    var lastExecutedTime: Timestamp?
     var sessionData: SessionData?
-
-    var screenshot: UIImage?
-    private var helperManager: HelperManager? = nil
     var lastRequest: NSURLRequest? = nil
+    var restoring: Bool = false
+
+    /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
+    var lastTitle: String?
+
+    private(set) var screenshot: UIImage?
+    var screenshotUUID: NSUUID?
+
+    private var helperManager: HelperManager? = nil
     private var configuration: WKWebViewConfiguration? = nil
 
     init(configuration: WKWebViewConfiguration) {
@@ -45,6 +52,14 @@ class Browser: NSObject {
                 title: browser.displayTitle,
                 history: history,
                 lastUsed: NSDate.now(),
+                icon: nil)
+        } else if let sessionData = browser.sessionData where !sessionData.urls.isEmpty {
+            let history = sessionData.urls.reverse()
+            return RemoteTab(clientGUID: nil,
+                URL: history[0],
+                title: browser.displayTitle,
+                history: history,
+                lastUsed: sessionData.lastUsedTime,
                 icon: nil)
         }
 
@@ -83,6 +98,8 @@ class Browser: NSObject {
             // we extract the information needed to restore the tabs and create a NSURLRequest with the custom session restore URL
             // to trigger the session restore via custom handlers
             if let sessionData = self.sessionData {
+                restoring = true
+                
                 var updatedURLs = [String]()
                 for url in sessionData.urls {
                     let updatedURL = WebServer.sharedInstance.updateLocalURL(url)!.absoluteString!
@@ -102,6 +119,10 @@ class Browser: NSObject {
 
             self.webView = webView
             browserDelegate?.browser?(self, didCreateWebView: webView)
+
+            // lastTitle is used only when showing zombie tabs after a session restore.
+            // Since we now have a web view, lastTitle is no longer useful.
+            lastTitle = nil
         }
     }
 
@@ -144,7 +165,7 @@ class Browser: NSObject {
                 return title
             }
         }
-        return displayURL?.absoluteString ?? ""
+        return displayURL?.absoluteString ?? lastTitle ?? ""
     }
 
     var displayFavicon: Favicon? {
@@ -164,7 +185,7 @@ class Browser: NSObject {
     }
 
     var displayURL: NSURL? {
-        if let url = webView?.URL ?? lastRequest?.URL {
+        if let url = url {
             if ReaderModeUtils.isReaderModeURL(url) {
                 return ReaderModeUtils.decodeURL(url)
             }
@@ -278,6 +299,13 @@ class Browser: NSObject {
             if !bar.shouldPersist(self) {
                 removeSnackbar(bar)
             }
+        }
+    }
+
+    func setScreenshot(screenshot: UIImage?, revUUID: Bool = true) {
+        self.screenshot = screenshot
+        if revUUID {
+            self.screenshotUUID = NSUUID()
         }
     }
 }

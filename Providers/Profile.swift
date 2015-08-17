@@ -10,14 +10,14 @@ import Storage
 import Sync
 import XCGLogger
 
-// TODO: same comment as for SyncAuthState.swift!
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 public protocol SyncManager {
     func syncClients() -> SyncResult
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
     func syncLogins() -> SyncResult
+    func syncEverything() -> Success
 
     // The simplest possible approach.
     func beginTimedSyncs()
@@ -36,7 +36,7 @@ class ProfileFileAccessor: FileAccessor {
 
         // Bug 1147262: First option is for device, second is for simulator.
         var rootPath: String?
-        if let sharedContainerIdentifier = ExtensionUtils.sharedContainerIdentifier(), url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(sharedContainerIdentifier), path = url.path {
+        if let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier(), url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(sharedContainerIdentifier), path = url.path {
             rootPath = path
         } else {
             log.error("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
@@ -132,6 +132,12 @@ protocol Profile: class {
     // URLs and account configuration.
     var accountConfiguration: FirefoxAccountConfiguration { get }
 
+    // Do we have an account at all?
+    func hasAccount() -> Bool
+
+    // Do we have an account that (as far as we know) is in a syncable state?
+    func hasSyncableAccount() -> Bool
+
     func getAccount() -> FirefoxAccount?
     func removeAccount()
     func setAccount(account: FirefoxAccount)
@@ -159,7 +165,7 @@ public class BrowserProfile: Profile {
         let mainQueue = NSOperationQueue.mainQueue()
         notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: "LocationChange", object: nil)
 
-        if let baseBundleIdentifier = ExtensionUtils.baseBundleIdentifier() {
+        if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
             KeychainWrapper.serviceName = baseBundleIdentifier
         } else {
             log.error("Unable to get the base bundle identifier. Keychain data will not be shared.")
@@ -247,6 +253,10 @@ public class BrowserProfile: Profile {
     }
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
+        // Make sure the rest of our tables are initialized before we try to read them!
+        // This expression is for side-effects only.
+        let p = self.places
+
         return SQLiteBookmarks(db: self.db)
     }()
 
@@ -336,6 +346,14 @@ public class BrowserProfile: Profile {
         }
         return nil
     }()
+
+    func hasAccount() -> Bool {
+        return account != nil
+    }
+
+    func hasSyncableAccount() -> Bool {
+        return account?.actionNeeded == FxAActionNeeded.None
+    }
 
     func getAccount() -> FirefoxAccount? {
         return account
@@ -466,19 +484,21 @@ public class BrowserProfile: Profile {
 
         func onRemovedAccount(account: FirefoxAccount?) -> Success {
             let h: SyncableHistory = self.profile.history
-            let flagHistory = h.onRemovedAccount()
-            let clearTabs = self.profile.remoteClientsAndTabs.onRemovedAccount()
-            let done = allSucceed(flagHistory, clearTabs)
+            let flagHistory = { h.onRemovedAccount() }
+            let clearTabs = { self.profile.remoteClientsAndTabs.onRemovedAccount() }
 
-            // Clear prefs after we're done clearing everything else -- just in case
-            // one of them needs the prefs and we race. Clear regardless of success
-            // or failure.
-            done.upon { result in
+            // Run these in order, because they both write to the same DB!
+            return accumulate([flagHistory, clearTabs])
+                >>> {
+                // Clear prefs after we're done clearing everything else -- just in case
+                // one of them needs the prefs and we race. Clear regardless of success
+                // or failure.
+
                 // This will remove keys from the Keychain if they exist, as well
                 // as wiping the Sync prefs.
                 SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
+                return succeed()
             }
-            return done
         }
 
         private func repeatingTimerAtInterval(interval: NSTimeInterval, selector: Selector) -> NSTimer {
@@ -503,7 +523,7 @@ public class BrowserProfile: Profile {
          */
         func endTimedSyncs() {
             if let t = self.syncTimer {
-                log.debug("Stopping history sync timer.")
+                log.debug("Stopping sync timer.")
                 self.syncTimer = nil
                 t.invalidate()
             }
@@ -599,6 +619,7 @@ public class BrowserProfile: Profile {
             return self.syncSeveral(
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate),
+                ("logins", self.syncLoginsWithDelegate),
                 ("history", self.syncHistoryWithDelegate)
             ) >>> succeed
         }

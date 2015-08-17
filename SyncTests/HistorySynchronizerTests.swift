@@ -7,7 +7,7 @@ import Storage
 import XCGLogger
 import XCTest
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 class MockSyncDelegate: SyncDelegate {
     func displaySentTabForURL(URL: NSURL, title: String) {

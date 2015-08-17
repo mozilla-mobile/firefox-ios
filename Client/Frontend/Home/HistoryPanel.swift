@@ -8,7 +8,7 @@ import Shared
 import Storage
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.browserLogger
 
 private func getDate(#dayOffset: Int) -> NSDate {
     let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
@@ -22,9 +22,8 @@ private typealias CategoryNumber = Int
 private typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: Int)
 
 private struct HistoryPanelUX {
-    static let WelcomeScreenTopPadding: CGFloat = 16
-    static let WelcomeScreenPadding: CGFloat = 10
-    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(14)
+    static let WelcomeScreenPadding: CGFloat = 15
+    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightLight) // Changes font size based on device.
     static let WelcomeScreenItemTextColor = UIColor.grayColor()
     static let WelcomeScreenItemWidth = 170
 }
@@ -60,13 +59,20 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let refresh = UIRefreshControl()
-        refresh.attributedTitle = NSAttributedString(string: NSLocalizedString("Pull to Sync", comment: "The pull-to-refresh string for syncing in the history panel."))
-        refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
-        self.refreshControl = refresh
-        self.tableView.addSubview(refresh)
         self.tableView.accessibilityIdentifier = "History List"
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // Add a refresh control if the user is logged in and the control was not added before. If the user is not
+        // logged in, remove any existing control but only when it is not currently refreshing. Otherwise, wait for
+        // the refresh to finish before removing the control.
+        if profile.hasSyncableAccount() && self.refreshControl == nil {
+            addRefreshControl()
+        } else if self.refreshControl?.refreshing == false {
+            removeRefreshControl()
+        }
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -81,7 +87,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged, NotificationPrivateDataCleared:
-            refresh()
+            resyncHistory()
             break
         default:
             // no need to do anything at all
@@ -90,19 +96,53 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    @objc func refresh() {
-        self.refreshControl?.beginRefreshing()
-        profile.syncManager.syncHistory().uponQueue(dispatch_get_main_queue()) { result in
-            if result.isSuccess {
-                self.reloadData()
-            }
+    func addRefreshControl() {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl = refresh
+        self.tableView.addSubview(refresh)
+    }
 
-            // Always end refreshing, even if we failed!
-            self.refreshControl?.endRefreshing()
+    func removeRefreshControl() {
+        self.refreshControl?.removeFromSuperview()
+        self.refreshControl = nil
+    }
+
+    func endRefreshing() {
+        // Always end refreshing, even if we failed!
+        self.refreshControl?.endRefreshing()
+
+        // Remove the refresh control if the user has logged out in the meantime
+        if !self.profile.hasSyncableAccount() {
+            self.removeRefreshControl()
         }
     }
 
-    private func refetchData() -> Deferred<Result<Cursor<Site>>> {
+    /**
+    * sync history with the server and ensure that we update our view afterwards
+    **/
+    func resyncHistory() {
+        profile.syncManager.syncHistory().uponQueue(dispatch_get_main_queue()) { result in
+            if result.isSuccess {
+                self.reloadData()
+            } else {
+                self.endRefreshing()
+            }
+        }
+    }
+
+    /**
+    * called by the table view pull to refresh
+    **/
+    @objc func refresh() {
+        self.refreshControl?.beginRefreshing()
+        resyncHistory()
+    }
+
+    /**
+    * fetch from the profile
+    **/
+    private func fetchData() -> Deferred<Result<Cursor<Site>>> {
         return profile.history.getSitesByLastVisit(QueryLimit)
     }
 
@@ -111,16 +151,18 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         self.computeSectionOffsets()
     }
 
+    /**
+    * Update our view after a data refresh
+    **/
     override func reloadData() {
-        self.refetchData().uponQueue(dispatch_get_main_queue()) { result in
+        self.fetchData().uponQueue(dispatch_get_main_queue()) { result in
             if let data = result.successValue {
                 self.setData(data)
                 self.tableView.reloadData()
                 self.updateEmptyPanelState()
             }
 
-            // Always end refreshing, even if we failed!
-            self.refreshControl?.endRefreshing()
+            self.endRefreshing()
 
             // TODO: error handling.
         }
@@ -130,9 +172,9 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         if data.count == 0 {
             if self.emptyStateOverlayView.superview == nil {
                 self.tableView.addSubview(self.emptyStateOverlayView)
-                self.emptyStateOverlayView.snp_makeConstraints { make in
+                self.emptyStateOverlayView.snp_makeConstraints { make -> Void in
                     make.edges.equalTo(self.tableView)
-                    make.width.equalTo(self.view)
+                    make.size.equalTo(self.view)
                 }
             }
         } else {
@@ -148,7 +190,12 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         overlayView.addSubview(logoImageView)
         logoImageView.snp_makeConstraints({ (make) -> Void in
             make.centerX.equalTo(overlayView)
-            make.top.equalTo(overlayView.snp_top).offset(20)
+
+            // Sets proper top constraint for iPhone 6 in portait and for iPad.
+            make.centerY.equalTo(overlayView.snp_centerY).offset(-160).priorityMedium()
+
+            // Sets proper top constraint for iPhone 4, 5 in portrait.
+            make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50).priorityHigh()
         })
 
         let welcomeLabel = UILabel()
@@ -305,7 +352,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 // Deferred instead of using callbacks.
                 self.profile.history.removeHistoryForURL(site.url)
                     .upon { res in
-                        self.refetchData().uponQueue(dispatch_get_main_queue()) { result in
+                        self.fetchData().uponQueue(dispatch_get_main_queue()) { result in
                             // If a section will be empty after removal, we must remove the section itself.
                             if let data = result.successValue {
 

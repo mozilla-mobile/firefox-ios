@@ -51,11 +51,13 @@ class TabManager : NSObject {
 
     private var tabs: [Browser] = []
     private var _selectedIndex = -1
-    var selectedIndex: Int { return _selectedIndex }
     private let defaultNewTabRequest: NSURLRequest
     private let navDelegate: TabManagerNavDelegate
     private var configuration: WKWebViewConfiguration
+    private let imageStore: DiskImageStore
+
     unowned let profile: Profile
+    var selectedIndex: Int { return _selectedIndex }
 
     init(defaultNewTabRequest: NSURLRequest, profile: Profile) {
         self.profile = profile
@@ -66,6 +68,7 @@ class TabManager : NSObject {
 
         self.defaultNewTabRequest = defaultNewTabRequest
         self.navDelegate = TabManagerNavDelegate()
+        self.imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
         super.init()
 
         addNavigationDelegate(self)
@@ -126,6 +129,8 @@ class TabManager : NSObject {
                 break
             }
         }
+
+        preserveTabs()
 
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
@@ -230,6 +235,10 @@ class TabManager : NSObject {
         }
         assert(count == prevCount - 1, "Tab removed")
 
+        if tab != selectedTab {
+            _selectedIndex = selectedTab == nil ? -1 : find(tabs, selectedTab!) ?? 0
+        }
+
         // There's still some time between this and the webView being destroyed.
         // We don't want to pick up any stray events.
         tab.webView?.navigationDelegate = nil
@@ -278,46 +287,56 @@ class TabManager : NSObject {
             tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
         }
     }
+
+    func resetProcessPool() {
+        configuration.processPool = WKProcessPool()
+    }
 }
 
 extension TabManager {
     class SavedTab: NSObject, NSCoding {
         let isSelected: Bool
-        let screenshot: UIImage?
+        let title: String?
         var sessionData: SessionData?
+        var screenshotUUID: NSUUID?
 
         init?(browser: Browser, isSelected: Bool) {
-            let currentItem = browser.webView?.backForwardList.currentItem
+            self.screenshotUUID = browser.screenshotUUID
+            self.isSelected = isSelected
+            self.title = browser.displayTitle
+            super.init()
+
             if browser.sessionData == nil {
+                let currentItem: WKBackForwardListItem! = browser.webView?.backForwardList.currentItem
+
+                // Freshly created web views won't have any history entries at all.
+                // If we have no history, abort.
+                if currentItem == nil {
+                    return nil
+                }
+
                 let backList = browser.webView?.backForwardList.backList as? [WKBackForwardListItem] ?? []
                 let forwardList = browser.webView?.backForwardList.forwardList as? [WKBackForwardListItem] ?? []
-                let currentList = (currentItem != nil) ? [currentItem!] : []
-                var urlList = backList + currentList + forwardList
-                var updatedUrlList = [NSURL]()
-                for url in urlList {
-                    updatedUrlList.append(url.URL)
-                }
+                let urls = (backList + [currentItem] + forwardList).map { $0.URL }
                 var currentPage = -forwardList.count
-                self.sessionData = SessionData(currentPage: currentPage, urls: updatedUrlList)
+                self.sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: browser.lastExecutedTime ?? NSDate.now())
             } else {
                 self.sessionData = browser.sessionData
             }
-            self.screenshot = browser.screenshot
-            self.isSelected = isSelected
-
-            super.init()
         }
 
         required init(coder: NSCoder) {
             self.sessionData = coder.decodeObjectForKey("sessionData") as? SessionData
-            self.screenshot = coder.decodeObjectForKey("screenshot") as? UIImage
+            self.screenshotUUID = coder.decodeObjectForKey("screenshotUUID") as? NSUUID
             self.isSelected = coder.decodeBoolForKey("isSelected")
+            self.title = coder.decodeObjectForKey("title") as? String
         }
 
         func encodeWithCoder(coder: NSCoder) {
             coder.encodeObject(sessionData, forKey: "sessionData")
-            coder.encodeObject(screenshot, forKey: "screenshot")
+            coder.encodeObject(screenshotUUID, forKey: "screenshotUUID")
             coder.encodeBool(isSelected, forKey: "isSelected")
+            coder.encodeObject(title, forKey: "title")
         }
     }
 
@@ -331,11 +350,22 @@ extension TabManager {
     private func preserveTabsInternal() {
         if let path = tabsStateArchivePath() {
             var savedTabs = [SavedTab]()
+            var savedUUIDs = Set<String>()
             for (tabIndex, tab) in enumerate(tabs) {
                 if let savedTab = SavedTab(browser: tab, isSelected: tabIndex == selectedIndex) {
                     savedTabs.append(savedTab)
+
+                    if let screenshot = tab.screenshot,
+                       let screenshotUUID = tab.screenshotUUID
+                    {
+                        savedUUIDs.insert(screenshotUUID.UUIDString)
+                        imageStore.put(screenshotUUID.UUIDString, image: screenshot)
+                    }
                 }
             }
+
+            // Clean up any screenshots that are no longer associated with a tab.
+            imageStore.clearExcluding(savedUUIDs)
 
             let tabStateData = NSMutableData()
             let archiver = NSKeyedArchiver(forWritingWithMutableData: tabStateData)
@@ -367,19 +397,35 @@ extension TabManager {
 
                         for (tabIndex, savedTab) in enumerate(savedTabs) {
                             let tab = self.addTab(flushToDisk: false, zombie: true, restoring: true)
-                            tab.screenshot = savedTab.screenshot
+
+                            // Set the UUID for the tab, asynchronously fetch the UIImage, then store
+                            // the screenshot in the tab as long as long as a newer one hasn't been taken.
+                            if let screenshotUUID = savedTab.screenshotUUID {
+                                tab.screenshotUUID = screenshotUUID
+                                imageStore.get(screenshotUUID.UUIDString) >>== { screenshot in
+                                    if tab.screenshotUUID == screenshotUUID {
+                                        tab.setScreenshot(screenshot, revUUID: false)
+                                    }
+                                }
+                            }
+
                             if savedTab.isSelected {
                                 tabToSelect = tab
                             }
+
                             tab.sessionData = savedTab.sessionData
+                            tab.lastTitle = savedTab.title
                         }
 
                         if tabToSelect == nil {
                             tabToSelect = tabs.first
                         }
 
-                        for delegate in delegates {
-                            delegate.get()?.tabManagerDidRestoreTabs(self)
+                        // Only tell our delegates that we restored tabs if we actually restored a tab(s)
+                        if savedTabs.count > 0 {
+                            for delegate in delegates {
+                                delegate.get()?.tabManagerDidRestoreTabs(self)
+                            }
                         }
 
                         if let tab = tabToSelect {
@@ -412,7 +458,14 @@ extension TabManager : WKNavigationDelegate {
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         hideNetworkActivitySpinner()
-        storeChanges()
+        // only store changes if this is not an error page
+        // as we current handle tab restore as error page redirects then this ensures that we don't
+        // call storeChanges unnecessarily on startup
+        if let url = webView.URL {
+            if !ErrorPageHelper.isErrorPageURL(url) {
+                storeChanges()
+            }
+        }
     }
 
     func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {

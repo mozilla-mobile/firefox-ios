@@ -6,6 +6,8 @@ import Foundation
 import UIKit
 import Shared
 
+/// Small structure to encapsulate all the possible data that we can get
+// from an application sharing a web page or a URL.
 public struct ShareItem {
     public let url: String
     public let title: String?
@@ -94,6 +96,10 @@ public class BookmarkItem: BookmarkNode {
 public class BookmarkFolder: BookmarkNode {
     public var count: Int { return 0 }
     public subscript(index: Int) -> BookmarkNode? { return nil }
+
+    public func itemIsEditableAtIndex(index: Int) -> Bool {
+        return false
+    }
 }
 
 /**
@@ -208,6 +214,10 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
         }
     }
 
+    override public func itemIsEditableAtIndex(index: Int) -> Bool {
+        return true
+    }
+
     public func generate() -> BookmarkNodeGenerator {
         return BookmarkNodeGenerator(children: self.children)
     }
@@ -241,6 +251,46 @@ public class MemoryBookmarksSink: ShareToDestination {
         if (!contains(queue, exists)) {
             queue.append(BookmarkItem(guid: Bytes.generateGUID(), title: title, url: item.url))
         }
+    }
+}
+
+
+private extension SuggestedSite {
+    func asBookmark() -> BookmarkNode {
+        let b = BookmarkItem(guid: self.guid ?? Bytes.generateGUID(), title: self.title, url: self.url)
+        b.favicon = self.icon
+        return b
+    }
+}
+
+public class BookmarkFolderWithDefaults: BookmarkFolder {
+    private let folder: BookmarkFolder
+    private let sites: SuggestedSitesData<SuggestedSite>
+
+    init(folder: BookmarkFolder, sites: SuggestedSitesData<SuggestedSite>) {
+        self.folder = folder
+        self.sites = sites
+        super.init(guid: folder.guid, title: folder.title)
+    }
+
+    override public var count: Int {
+        return self.folder.count + self.sites.count
+    }
+
+    override public subscript(index: Int) -> BookmarkNode? {
+        if index < self.folder.count {
+            return self.folder[index]
+        }
+
+        if let site = self.sites[index - self.folder.count] {
+            return site.asBookmark()
+        }
+
+        return nil
+    }
+
+    override public func itemIsEditableAtIndex(index: Int) -> Bool {
+        return index < self.folder.count
     }
 }
 

@@ -7,7 +7,7 @@ import Shared
 import Storage
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 private let PasswordsStorageVersion = 1
 
 private func makeDeletedLoginRecord(guid: GUID) -> Record<LoginPayload> {

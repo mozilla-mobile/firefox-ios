@@ -43,6 +43,26 @@ extension KIFUITestActor {
         return UIAccessibilityElement.viewContainingAccessibilityElement(element)
     }
 
+    /// Wait for and returns a view with the given accessibility label as an
+    /// attributed string. See the comment in ReadingListPanel.swift about
+    /// using attributed strings as labels. (It lets us set the pitch)
+    func waitForViewWithAttributedAccessibilityLabel(label: NSAttributedString) -> UIView {
+        var element: UIAccessibilityElement!
+
+        runBlock { _ in
+            element = UIApplication.sharedApplication().accessibilityElementMatchingBlock { element in
+                if let elementLabel = element.valueForKey("accessibilityLabel") as? NSAttributedString {
+                    return elementLabel.isEqualToAttributedString(label)
+                }
+                return false
+            }
+            
+            return (element == nil) ? KIFTestStepResult.Wait : KIFTestStepResult.Success
+        }
+
+        return UIAccessibilityElement.viewContainingAccessibilityElement(element)
+    }
+
     /// There appears to be a KIF bug where waitForViewWithAccessibilityLabel returns the parent
     /// UITableView instead of the UITableViewCell with the given label.
     /// As a workaround, retry until KIF gives us a cell.
@@ -79,7 +99,7 @@ extension KIFUITestActor {
 
         let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
         webView.evaluateJavaScript("KIFHelper.selectElementWithAccessibilityLabel(\"\(escaped)\");", completionHandler: { (result: AnyObject!, error: NSError!) in
-            stepResult = result as! Bool ? KIFTestStepResult.Success : KIFTestStepResult.Failure
+            stepResult = result != nil ? (result as! Bool ? KIFTestStepResult.Success : KIFTestStepResult.Failure) : KIFTestStepResult.Failure
         })
 
         runBlock({ (error: NSErrorPointer) in
@@ -131,9 +151,10 @@ class BrowserUtils {
 
         // When the last tab is closed, the tabs tray will automatically be closed
         // since a new about:home tab will be selected.
-        let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
-        tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
-        tester.waitForTappableViewWithAccessibilityLabel("Show Tabs")
+        if let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0)) {
+            tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
+            tester.waitForTappableViewWithAccessibilityLabel("Show Tabs")
+        }
     }
 
     /// Injects a URL and title into the browser's history database.
@@ -144,6 +165,66 @@ class BrowserUtils {
         info["title"] = title
         info["visitType"] = VisitType.Link.rawValue
         notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
+    }
+
+    private class func clearHistoryItemAtIndex(index: NSIndexPath, tester: KIFUITestActor) {
+        if let row = tester.waitForCellAtIndexPath(index, inTableViewWithAccessibilityIdentifier: "History List") {
+            tester.swipeViewWithAccessibilityLabel(row.accessibilityLabel, value: row.accessibilityValue, inDirection: KIFSwipeDirection.Left)
+            tester.tapViewWithAccessibilityLabel("Remove")
+        }
+    }
+
+    class func clearHistoryItems(tester: KIFUITestActor, numberOfTests: Int = -1) {
+        resetToAboutHome(tester)
+        tester.tapViewWithAccessibilityLabel("History")
+
+        let historyTable = tester.waitForViewWithAccessibilityIdentifier("History List") as! UITableView
+        var index = 0
+        for section in 0 ..< historyTable.numberOfSections() {
+            for rowIdx in 0 ..< historyTable.numberOfRowsInSection(0) {
+                clearHistoryItemAtIndex(NSIndexPath(forRow: 0, inSection: 0), tester: tester)
+                if numberOfTests > -1 && ++index == numberOfTests {
+                    return
+                }
+            }
+        }
+        tester.tapViewWithAccessibilityLabel("Top sites")
+    }
+
+    class func ensureAutocompletionResult(tester: KIFUITestActor, textField: UITextField, prefix: String, completion: String) {
+        // searches are async (and debounced), so we have to wait for the results to appear.
+        tester.waitForViewWithAccessibilityValue(prefix + completion)
+
+        var range = NSRange()
+        var attribute: AnyObject?
+        let textLength = count(textField.text)
+
+        attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, atIndex: 0, effectiveRange: &range)
+
+        if attribute != nil {
+            // If the background attribute exists for the first character, the entire string is highlighted.
+            XCTAssertEqual(prefix, "")
+            XCTAssertEqual(completion, textField.text)
+            return
+        }
+
+        let prefixLength = range.length
+
+        attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, atIndex: textLength - 1, effectiveRange: &range)
+
+        if attribute == nil {
+            // If the background attribute exists for the last character, the entire string is not highlighted.
+            XCTAssertEqual(prefix, textField.text)
+            XCTAssertEqual(completion, "")
+            return
+        }
+
+        let completionStartIndex = advance(textField.text.startIndex, prefixLength)
+        let actualPrefix = textField.text.substringToIndex(completionStartIndex)
+        let actualCompletion = textField.text.substringFromIndex(completionStartIndex)
+
+        XCTAssertEqual(prefix, actualPrefix, "Expected prefix matches actual prefix")
+        XCTAssertEqual(completion, actualCompletion, "Expected completion matches actual completion")
     }
 }
 

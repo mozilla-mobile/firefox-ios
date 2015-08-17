@@ -141,9 +141,13 @@ class ThumbnailCell: UICollectionViewCell {
         addGestureRecognizer(longPressGesture)
 
         contentView.addSubview(imageWrapper)
-        imageWrapper.addSubview(backgroundImage)
         if let backgroundEffect = backgroundEffect {
+            imageWrapper.addSubview(backgroundImage)
             imageWrapper.addSubview(backgroundEffect)
+            backgroundImage.snp_remakeConstraints({ make in
+                make.top.bottom.left.right.equalTo(self.imageWrapper)
+            })
+
         }
         imageWrapper.addSubview(imageView)
         imageWrapper.addSubview(textWrapper)
@@ -152,10 +156,6 @@ class ThumbnailCell: UICollectionViewCell {
 
         imageWrapper.snp_remakeConstraints({ make in
             make.top.bottom.left.right.equalTo(self.contentView).insets(ThumbnailCellUX.Insets)
-        })
-
-        backgroundImage.snp_remakeConstraints({ make in
-            make.top.bottom.left.right.equalTo(self.imageWrapper)
         })
 
         backgroundEffect?.snp_remakeConstraints({ make in
@@ -176,8 +176,10 @@ class ThumbnailCell: UICollectionViewCell {
 
         textLabel.snp_remakeConstraints({ make in
             make.edges.equalTo(self.textWrapper).insets(ThumbnailCellUX.LabelInsets)
-            return
         })
+        
+        // Prevents the textLabel from getting squished in relation to other view priorities.
+        textLabel.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
     }
 
     required init(coder aDecoder: NSCoder) {

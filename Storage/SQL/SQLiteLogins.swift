@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 let TableLoginsMirror = "loginsM"
 let TableLoginsLocal = "loginsL"
@@ -198,7 +198,7 @@ public class SQLiteLogins: BrowserLogins {
         "ORDER BY timeLastUsed DESC"
 
         let args: Args = [protectionSpace.host, protectionSpace.host]
-        log.debug("Looking for login: \(args[0])")
+        log.debug("Looking for login: \(protectionSpace.host)")
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
     }
 

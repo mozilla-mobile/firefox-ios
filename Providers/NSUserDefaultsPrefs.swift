@@ -16,7 +16,7 @@ public class NSUserDefaultsPrefs: Prefs {
 
     init(prefix: String) {
         self.prefixWithDot = prefix + (prefix.endsWith(".") ? "" : ".")
-        self.userDefaults = NSUserDefaults(suiteName: ExtensionUtils.sharedContainerIdentifier())!
+        self.userDefaults = NSUserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
     }
 
     public func branch(branch: String) -> Prefs {

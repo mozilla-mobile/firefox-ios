@@ -212,6 +212,12 @@ public class FxAClient10 {
         return nil
     }
 
+    lazy private var alamofire: Alamofire.Manager = {
+        let ua = UserAgent.fxaUserAgent
+        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
+        return Alamofire.Manager.managerWithUserAgent(ua, configuration: configuration)
+    }()
+
     public func login(emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool) -> Deferred<Result<FxALoginResponse>> {
         let deferred = Deferred<Result<FxALoginResponse>>()
         let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: FxAClient10.KW("authPW")!, length: 32)
@@ -233,7 +239,7 @@ public class FxAClient10 {
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.HTTPBody = JSON(parameters).toString(pretty: false).utf8EncodedData
 
-        let request = Alamofire.request(mutableURLRequest)
+        let request = alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, data, error) in
                 if let error = error {
@@ -277,7 +283,7 @@ public class FxAClient10 {
         let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
         mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
 
-        Alamofire.request(mutableURLRequest)
+        alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, data, error) in
                 if let error = error {
@@ -328,7 +334,7 @@ public class FxAClient10 {
         let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
         mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
 
-        Alamofire.request(mutableURLRequest)
+        alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, data, error) in
                 if let error = error {

@@ -22,6 +22,7 @@ private extension TrayToBrowserAnimator {
         let container = transitionContext.containerView()
 
         // Hide browser components
+        bvc.toggleSnackBarVisibility(show: false)
         toggleWebViewVisibility(show: false, usingTabManager: bvc.tabManager)
         bvc.homePanelController?.view.hidden = true
 
@@ -42,7 +43,7 @@ private extension TrayToBrowserAnimator {
         container.layoutIfNeeded()
 
         // Reset any transform we had previously on the header and transform them to where the cell will be animating from
-        transformToolbarsToFrame([bvc.header, bvc.footer, bvc.readerModeBar], toRect: cell.frame)
+        transformToolbarsToFrame([bvc.header, bvc.footer, bvc.readerModeBar, bvc.footerBackdrop, bvc.headerBackdrop], toRect: cell.frame)
 
         let finalFrame = calculateExpandedCellFrameFromBVC(bvc)
         bvc.footer.alpha = shouldDisplayFooterForBVC(bvc) ? 1 : 0
@@ -57,7 +58,7 @@ private extension TrayToBrowserAnimator {
             cell.frame = finalFrame
             container.layoutIfNeeded()
             cell.title.transform = CGAffineTransformMakeTranslation(0, -cell.title.frame.height)
-            resetTransformsForViews([bvc.header, bvc.footer, bvc.readerModeBar])
+            resetTransformsForViews([bvc.header, bvc.footer, bvc.readerModeBar, bvc.footerBackdrop, bvc.headerBackdrop])
 
             bvc.urlBar.updateAlphaForSubviews(1)
 
@@ -74,6 +75,7 @@ private extension TrayToBrowserAnimator {
             tabCollectionViewSnapshot.removeFromSuperview()
             bvc.footer.alpha = 1
             bvc.startTrackingAccessibilityStatus()
+            bvc.toggleSnackBarVisibility(show: true)
             toggleWebViewVisibility(show: true, usingTabManager: bvc.tabManager)
             bvc.homePanelController?.view.hidden = false
             transitionContext.completeTransition(true)
@@ -103,7 +105,10 @@ private extension BrowserToTrayAnimator {
 
         // Force subview layout on the collection view so we can calculate the correct end frame for the animation
         tabTray.view.layoutSubviews()
-        tabTray.collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: bvc.tabManager.selectedIndex, inSection: 0), atScrollPosition: .CenteredVertically, animated: false)
+        // don't select anything if the selected index == -1 as that is the non-select value
+        if bvc.tabManager.selectedIndex >= 0 {
+            tabTray.collectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: bvc.tabManager.selectedIndex, inSection: 0), atScrollPosition: .CenteredVertically, animated: false)
+        }
 
         // Build a tab cell that we will use to animate the scaling of the browser to the tab
         let expandedFrame = calculateExpandedCellFrameFromBVC(bvc)
@@ -124,6 +129,7 @@ private extension BrowserToTrayAnimator {
 
         // Hide views we don't want to show during the animation in the BVC
         bvc.homePanelController?.view.hidden = true
+        bvc.toggleSnackBarVisibility(show: false)
         toggleWebViewVisibility(show: false, usingTabManager: bvc.tabManager)
 
         // Since we are hiding the collection view and the snapshot API takes the snapshot after the next screen update,
@@ -143,7 +149,7 @@ private extension BrowserToTrayAnimator {
                 cell.frame = finalFrame
                 cell.title.transform = CGAffineTransformIdentity
                 cell.layoutIfNeeded()
-                transformToolbarsToFrame([bvc.header, bvc.footer, bvc.readerModeBar], toRect: finalFrame)
+                transformToolbarsToFrame([bvc.header, bvc.footer, bvc.readerModeBar, bvc.footerBackdrop, bvc.headerBackdrop], toRect: finalFrame)
 
                 bvc.urlBar.updateAlphaForSubviews(0)
                 bvc.footer.alpha = 0
@@ -156,6 +162,7 @@ private extension BrowserToTrayAnimator {
                 tabCollectionViewSnapshot.removeFromSuperview()
                 tabTray.collectionView.hidden = false
 
+                bvc.toggleSnackBarVisibility(show: true)
                 toggleWebViewVisibility(show: true, usingTabManager: bvc.tabManager)
                 bvc.homePanelController?.view.hidden = false
                 bvc.stopTrackingAccessibilityStatus()

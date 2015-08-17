@@ -5,6 +5,7 @@
 import Shared
 import Storage
 import AVFoundation
+import XCGLogger
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -21,6 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
+
+        // Create a new sync log file on cold app launch
+        Logger.syncLogger.newLogWithDate(NSDate())
 
         let profile = getProfile(application)
 
@@ -61,10 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-        // Force a database upgrade by requesting a non-existent password
-        profile.logins.getLoginsForProtectionSpace(NSURLProtectionSpace(host: "example.com", port: 0, `protocol`: nil, realm: nil, authenticationMethod: nil))
-
-        // check to see if we started cos someone tapped on a notification
+        // check to see if we started 'cos someone tapped on a notification.
         if let localNotification = launchOptions?[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
             viewURLInNewTab(localNotification)
         }
@@ -152,39 +153,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func setUserAgent() {
-        let currentiOSVersion = UIDevice.currentDevice().systemVersion
-        let lastiOSVersion = NSUserDefaults.standardUserDefaults().stringForKey("LastDeviceSystemVersionNumber")
-        var firefoxUA = NSUserDefaults.standardUserDefaults().stringForKey("UserAgent")
-        if firefoxUA == nil
-            || lastiOSVersion != currentiOSVersion {
-            let webView = UIWebView()
+        // Note that we use defaults here that are readable from extensions, so they
+        // can just used the cached identifier.
+        let defaults = NSUserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
+        let firefoxUA = UserAgent.defaultUserAgent(defaults)
 
-            NSUserDefaults.standardUserDefaults().setObject(currentiOSVersion,forKey: "LastDeviceSystemVersionNumber")
-            let userAgent = webView.stringByEvaluatingJavaScriptFromString("navigator.userAgent")!
+        // Set the UA for WKWebView (via defaults), the favicon fetcher, and the image loader.
+        // This only needs to be done once per runtime.
 
-            // Extract the WebKit version and use it as the Safari version.
-            let webKitVersionRegex = NSRegularExpression(pattern: "AppleWebKit/([^ ]+) ", options: nil, error: nil)!
-            let match = webKitVersionRegex.firstMatchInString(userAgent, options: nil, range: NSRange(location: 0, length: count(userAgent)))
-            if match == nil {
-                println("Error: Unable to determine WebKit version")
-                return
-            }
-            let webKitVersion = (userAgent as NSString).substringWithRange(match!.rangeAtIndex(1))
-
-            // Insert "FxiOS/<version>" before the Mobile/ section.
-            let mobileRange = (userAgent as NSString).rangeOfString("Mobile/")
-            if mobileRange.location == NSNotFound {
-                println("Error: Unable to find Mobile section")
-                return
-            }
-
-            let mutableUA = NSMutableString(string: userAgent)
-            mutableUA.insertString("FxiOS/\(appVersion) ", atIndex: mobileRange.location)
-            firefoxUA = "\(mutableUA) Safari/\(webKitVersion)"
-            NSUserDefaults.standardUserDefaults().setObject(firefoxUA, forKey: "UserAgent")
-        }
-        FaviconFetcher.userAgent = firefoxUA!
-        NSUserDefaults.standardUserDefaults().registerDefaults(["UserAgent": firefoxUA!])
+        defaults.registerDefaults(["UserAgent": firefoxUA])
+        FaviconFetcher.userAgent = firefoxUA
         SDWebImageDownloader.sharedDownloader().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
     }
 

@@ -51,7 +51,7 @@ private let AllIndices: Args = [
 
 private let AllTablesIndicesAndViews: Args = AllViews + AllIndices + AllTables
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 /**
  * The monolithic class that manages the inter-related history etc. tables.
@@ -318,7 +318,8 @@ public class BrowserTable: Table {
                 return false
             }
 
-            let urls = db.executeQuery("SELECT DISTINCT url FROM \(TableHistory)", factory: { $0["url"] as! String })
+            let urls = db.executeQuery("SELECT DISTINCT url FROM \(TableHistory) WHERE url IS NOT NULL",
+                                       factory: { $0["url"] as! String })
             if !fillDomainNamesFromCursor(urls, db: db) {
                 return false
             }

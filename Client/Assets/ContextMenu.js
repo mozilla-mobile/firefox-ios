@@ -67,7 +67,8 @@ function createHighlightOverlay(element) {
 function handleTouchEnd(event) {
   cancel();
 
-  event.target.removeEventListener("touchend", handleTouchEnd, true);
+  event.target.removeEventListener("touchend", handleTouchEnd);
+  event.target.removeEventListener("mouseup", handleTouchEnd);
   event.target.removeEventListener("touchmove", handleTouchMove);
 
   // If we're showing the context menu, prevent the page from handling the click event.
@@ -98,7 +99,11 @@ addEventListener("touchstart", function (event) {
   var data = {};
   var element = event.target;
 
-  element.addEventListener("touchend", handleTouchEnd, true);
+  // Listen for touchend or move events to cancel the context menu timeout.
+  // Also listen for mouseup due to touchend not being fired with VoiceOver enabled.
+  // Open bug filed as rdar://22256909.
+  element.addEventListener("touchend", handleTouchEnd);
+  element.addEventListener("mouseup", handleTouchEnd);
   element.addEventListener("touchmove", handleTouchMove);
 
   do {

@@ -56,7 +56,7 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(detailTextLabel)
         contentView.addSubview(imageView)
 
-        backgroundColor = UIColor.clearColor()
+        contentView.backgroundColor = UIColor.clearColor()
         layoutMargins = UIEdgeInsetsZero
     }
 
@@ -143,7 +143,11 @@ private class TwoLineCellHelper {
         self.detailTextLabel = detailTextLabel
         self.imageView = imageView
 
-        self.container.backgroundColor = UIColor.clearColor()
+        if let headerView = self.container as? UITableViewHeaderFooterView {
+            headerView.contentView.backgroundColor = UIColor.clearColor()
+        } else {
+            self.container.backgroundColor = UIColor.clearColor()
+        }
 
         textLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
         textLabel.textColor = TextColor

@@ -6,6 +6,7 @@ import Account
 import Base32
 import Shared
 import UIKit
+import XCGLogger
 
 private var ShowDebugSettings: Bool = false
 private var DebugSettingsClickCount: Int = 0
@@ -27,9 +28,13 @@ class SettingsTableViewCell: UITableViewCell {
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 class Setting {
+    private var cell: UITableViewCell?
     private var _title: NSAttributedString?
 
-    // The title shown on the pref
+    // The url the SettingsContentViewController will show, e.g. Licenses and Privacy Policy.
+    var url: NSURL? { return nil }
+
+    // The title shown on the pref.
     var title: NSAttributedString? { return _title }
 
     // An optional second line of text shown on the pref.
@@ -52,6 +57,16 @@ class Setting {
 
     // Called when the pref is tapped.
     func onClick(navigationController: UINavigationController?) { return }
+
+    // Helper method to set up and push a SettingsContentViewController
+    func setUpAndPushSettingsContentViewController(navigationController: UINavigationController?) {
+        if let url = self.url {
+            let viewController = SettingsContentViewController()
+            viewController.settingsTitle = self.title
+            viewController.url = url
+            navigationController?.pushViewController(viewController, animated: true)
+        }
+    }
 
     init(title: NSAttributedString? = nil) {
         self._title = title
@@ -134,11 +149,11 @@ private class AccountSetting: Setting, FxAContentViewControllerDelegate {
 }
 
 private class WithAccountSetting: AccountSetting {
-    override var hidden: Bool { return profile.getAccount() == nil }
+    override var hidden: Bool { return !profile.hasAccount() }
 }
 
 private class WithoutAccountSetting: AccountSetting {
-    override var hidden: Bool { return profile.getAccount() != nil }
+    override var hidden: Bool { return profile.hasAccount() }
 }
 
 // Sync setting for connecting a Firefox Account.  Shown when we don't have an account.
@@ -181,6 +196,45 @@ private class DisconnectSetting: WithAccountSetting {
                 self.settings.SELrefresh()
             })
         navigationController?.presentViewController(alertController, animated: true, completion: nil)
+    }
+}
+
+private class SyncNowSetting: WithAccountSetting {
+    private let syncNowTitle = NSAttributedString(string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.systemFontOfSize(UIConstants.DefaultStandardFontSize, weight: UIFontWeightRegular)])
+
+    private let log = Logger.browserLogger
+
+    override var accessoryType: UITableViewCellAccessoryType { return .None }
+
+    override var style: UITableViewCellStyle { return .Value1 }
+
+    override var title: NSAttributedString? {
+        return syncNowTitle
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        cell.textLabel?.attributedText = title
+        cell.accessoryType = accessoryType
+        cell.accessoryView = nil
+        self.cell = cell
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        if let cell = self.cell {
+            cell.userInteractionEnabled = false
+            cell.textLabel?.attributedText = NSAttributedString(string: NSLocalizedString("Syncing…", comment: "Syncing Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(UIConstants.DefaultStandardFontSize, weight: UIFontWeightRegular)])
+            profile.syncManager.syncEverything().uponQueue(dispatch_get_main_queue()) { result in
+                if result.isSuccess {
+                    self.log.debug("Sync succeeded.")
+                } else {
+                    self.log.debug("Sync failed.")
+                }
+            }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * Int64(NSEC_PER_SEC)), dispatch_get_main_queue(), { () -> Void in
+                cell.textLabel?.attributedText = self.syncNowTitle
+                cell.userInteractionEnabled = true
+            })
+        }
     }
 }
 
@@ -255,10 +309,12 @@ private class AccountStatusSetting: WithAccountSetting {
                 viewController.url = cs?.URL
             case .None, .NeedsUpgrade:
                 // In future, we'll want to link to /settings and an upgrade page, respectively.
-                return
+                if let cs = NSURLComponents(URL: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false) {
+                    cs.queryItems?.append(NSURLQueryItem(name: "email", value: account.email))
+                    viewController.url = cs.URL
+                }
             }
         }
-
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -330,6 +386,49 @@ private class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
     }
 }
 
+// For great debugging!
+private class HiddenSetting: Setting {
+    let settings: SettingsTableViewController
+
+    init(settings: SettingsTableViewController) {
+        self.settings = settings
+        super.init(title: nil)
+    }
+
+    override var hidden: Bool {
+        return !ShowDebugSettings
+    }
+}
+
+private class DeleteExportedDataSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        // Not localized for now.
+        return NSAttributedString(string: "Debug: delete exported databases", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        if let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as? String {
+            let browserDB = documentsPath.stringByAppendingPathComponent("browser.db")
+            var err: NSError?
+            NSFileManager.defaultManager().removeItemAtPath(browserDB, error: &err)
+        }
+    }
+}
+
+private class ExportBrowserDataSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        // Not localized for now.
+        return NSAttributedString(string: "Debug: copy databases to app container", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        if let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as? String {
+            let browserDB = documentsPath.stringByAppendingPathComponent("browser.db")
+            self.settings.profile.files.copy("browser.db", toAbsolutePath: browserDB)
+        }
+    }
+}
+
 // Show the current version of Firefox
 private class VersionSetting : Setting {
     let settings: SettingsTableViewController
@@ -359,20 +458,16 @@ private class VersionSetting : Setting {
 
 // Opens the the license page in a new tab
 private class LicenseAndAcknowledgementsSetting: Setting {
-    init() {
-        super.init(title: NSAttributedString(string: NSLocalizedString("Licenses", comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Licenses", comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override var url: NSURL? {
+        return NSURL(string: WebServer.sharedInstance.URLForResource("license", module: "about"))
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        navigationController?.dismissViewControllerAnimated(true, completion: {
-            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-                let rootNavigationController = appDelegate.rootViewController
-                rootNavigationController.popViewControllerAnimated(true)
-                if let url = NSURL(string: WebServer.sharedInstance.URLForResource("license", module: "about")) {
-                    appDelegate.browserViewController.openURLInNewTab(url)
-                }
-            }
-        })
+        setUpAndPushSettingsContentViewController(navigationController)
     }
 }
 
@@ -392,6 +487,21 @@ private class ShowIntroductionSetting: Setting {
                 appDelegate.browserViewController.presentIntroViewController(force: true)
             }
         })
+    }
+}
+
+private class SendFeedbackSetting: Setting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Send Feedback", comment: "Show an input.mozilla.org page where people can submit feedback"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override var url: NSURL? {
+        let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
+        return NSURL(string: "https://input.mozilla.org/feedback/fxios/\(appVersion)")
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        setUpAndPushSettingsContentViewController(navigationController)
     }
 }
 
@@ -512,6 +622,20 @@ private class SendCrashReportsSetting: Setting {
     }
 }
 
+private class PrivacyPolicySetting: Setting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Privacy Policy", comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override var url: NSURL? {
+        return NSURL(string: "https://www.mozilla.org/privacy/firefox/")
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        setUpAndPushSettingsContentViewController(navigationController)
+    }
+}
+
 private class PopupBlockingSettings: Setting {
     let prefs: Prefs
     let tabManager: TabManager!
@@ -582,6 +706,7 @@ class SettingsTableViewController: UITableViewController {
                 ConnectSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
+                SyncNowSetting(settings: self)
             ] + accountDebugSettings),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)
         ]
@@ -590,16 +715,20 @@ class SettingsTableViewController: UITableViewController {
         settings += [
             SettingSection(title: NSAttributedString(string: privacyTitle), children: [
                 ClearPrivateDataSetting(settings: self),
-                SendCrashReportsSetting(settings: self)
+                SendCrashReportsSetting(settings: self),
+                PrivacyPolicySetting(),
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
                 ShowIntroductionSetting(settings: self),
+                SendFeedbackSetting(),
                 OpenSupportPageSetting()
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
                 VersionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
-                DisconnectSetting(settings: self)
+                DisconnectSetting(settings: self),
+                ExportBrowserDataSetting(settings: self),
+                DeleteExportedDataSetting(settings: self),
             ])
         ]
 
@@ -624,26 +753,12 @@ class SettingsTableViewController: UITableViewController {
     @objc private func SELrefresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
         if let account = self.profile.getAccount() {
-            // Add the refresh control right away.
-            if refreshControl == nil {
-                refreshControl = UIRefreshControl()
-                refreshControl?.addTarget(self, action: "SELrefresh", forControlEvents: UIControlEvents.ValueChanged)
-            }
-
-            refreshControl?.beginRefreshing()
             account.advance().upon { _ in
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     self.tableView.reloadData()
-                    self.refreshControl?.endRefreshing()
                 }
             }
         } else {
-            // Remove the refresh control immediately after ending the refresh.
-            refreshControl?.endRefreshing()
-            if let refreshControl = self.refreshControl {
-                refreshControl.removeFromSuperview()
-            }
-            refreshControl = nil
             self.tableView.reloadData()
         }
     }

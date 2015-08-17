@@ -103,11 +103,25 @@ class BrowserScrollingController: NSObject {
             alpha: 0,
             completion: completion)
     }
+
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        if keyPath == "contentSize" {
+            if !checkScrollHeightIsLargeEnoughForScrolling() && !toolbarsShowing {
+                showToolbars(animated: true, completion: nil)
+            }
+        }
+    }
 }
 
 private extension BrowserScrollingController {
+    func browserIsLoading() -> Bool {
+        return browser?.loading ?? true
+    }
+
     @objc func handlePan(gesture: UIPanGestureRecognizer) {
-        if let loading = browser?.loading where loading { return }
+        if browserIsLoading() {
+            return
+        }
 
         if let containerView = scrollView?.superview {
             let translation = gesture.translationInView(containerView)
@@ -196,7 +210,7 @@ private extension BrowserScrollingController {
     }
 
     func checkScrollHeightIsLargeEnoughForScrolling() -> Bool {
-        return (scrollViewHeight + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height
+        return (UIScreen.mainScreen().bounds.size.height + 2 * UIConstants.ToolbarHeight) < scrollView?.contentSize.height
     }
 }
 
@@ -209,6 +223,10 @@ extension BrowserScrollingController: UIGestureRecognizerDelegate {
 
 extension BrowserScrollingController: UIScrollViewDelegate {
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if browserIsLoading() {
+            return
+        }
+
         if (decelerate || (toolbarState == .Animating && !decelerate)) && checkScrollHeightIsLargeEnoughForScrolling() {
             if scrollDirection == .Up {
                 showToolbars(animated: true)

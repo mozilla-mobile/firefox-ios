@@ -15,6 +15,9 @@ public class MockSyncManager: SyncManager {
     public func syncClientsThenTabs() -> SyncResult { return deferResult(.Completed) }
     public func syncHistory() -> SyncResult { return deferResult(.Completed) }
     public func syncLogins() -> SyncResult { return deferResult(.Completed) }
+    public func syncEverything() -> Success {
+        return succeed()
+    }
 
     public func beginTimedSyncs() {}
     public func endTimedSyncs() {}
@@ -118,6 +121,14 @@ public class MockProfile: Profile {
 
     let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
     var account: FirefoxAccount? = nil
+
+    func hasAccount() -> Bool {
+        return account != nil
+    }
+
+    func hasSyncableAccount() -> Bool {
+        return account?.actionNeeded == FxAActionNeeded.None
+    }
 
     func getAccount() -> FirefoxAccount? {
         return account

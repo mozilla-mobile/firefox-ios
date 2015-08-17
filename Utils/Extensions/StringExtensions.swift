@@ -72,7 +72,16 @@ public extension String {
         return self
     }
 
+    private var stringWithAdditionalEscaping: String {
+        return self.stringByReplacingOccurrencesOfString("|", withString: "%7C", options: NSStringCompareOptions.allZeros, range: nil)
+    }
+
     public var asURL: NSURL? {
-        return NSURL(string: self)
+        // Firefox and NSURL disagree about the valid contents of a URL.
+        // Let's escape | for them.
+        // We'd love to use one of the more sophisticated CFURL* or NSString.* functions, but
+        // none seem to be quite suitable.
+        return NSURL(string: self) ??
+               NSURL(string: self.stringWithAdditionalEscaping)
     }
 }
