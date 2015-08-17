@@ -198,10 +198,6 @@ class URLBarView: UIView {
         addSubview(curveShape)
         addSubview(scrollToTopButton)
 
-        locationContainer.addSubview(locationView)
-        locationContainer.addSubview(locationTextField)
-        addSubview(locationContainer)
-
         addSubview(progressBar)
         addSubview(tabsButton)
         addSubview(cancelButton)
@@ -211,6 +207,10 @@ class URLBarView: UIView {
         addSubview(forwardButton)
         addSubview(backButton)
         addSubview(stopReloadButton)
+
+        locationContainer.addSubview(locationView)
+        locationContainer.addSubview(locationTextField)
+        addSubview(locationContainer)
 
         helper = BrowserToolbarHelper(toolbar: self)
         setupConstraints()
