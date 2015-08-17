@@ -22,6 +22,7 @@ private extension TrayToBrowserAnimator {
         let container = transitionContext.containerView()
 
         // Hide browser components
+        bvc.toggleSnackBarVisibility(show: false)
         toggleWebViewVisibility(show: false, usingTabManager: bvc.tabManager)
         bvc.homePanelController?.view.hidden = true
 
@@ -74,6 +75,7 @@ private extension TrayToBrowserAnimator {
             tabCollectionViewSnapshot.removeFromSuperview()
             bvc.footer.alpha = 1
             bvc.startTrackingAccessibilityStatus()
+            bvc.toggleSnackBarVisibility(show: true)
             toggleWebViewVisibility(show: true, usingTabManager: bvc.tabManager)
             bvc.homePanelController?.view.hidden = false
             transitionContext.completeTransition(true)
@@ -127,6 +129,7 @@ private extension BrowserToTrayAnimator {
 
         // Hide views we don't want to show during the animation in the BVC
         bvc.homePanelController?.view.hidden = true
+        bvc.toggleSnackBarVisibility(show: false)
         toggleWebViewVisibility(show: false, usingTabManager: bvc.tabManager)
 
         // Since we are hiding the collection view and the snapshot API takes the snapshot after the next screen update,
@@ -159,6 +162,7 @@ private extension BrowserToTrayAnimator {
                 tabCollectionViewSnapshot.removeFromSuperview()
                 tabTray.collectionView.hidden = false
 
+                bvc.toggleSnackBarVisibility(show: true)
                 toggleWebViewVisibility(show: true, usingTabManager: bvc.tabManager)
                 bvc.homePanelController?.view.hidden = false
                 bvc.stopTrackingAccessibilityStatus()
