@@ -44,7 +44,7 @@ class TopSitesPanel: UIViewController {
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        self.layout.transistionToOrientation(UIView.viewOrientationForSize(size), atSize: size)
+        self.layout.transitionToOrientation(UIView.viewOrientationForSize(size), atSize: size)
         self.refreshHistory(self.layout.thumbnailCount)
     }
 
@@ -221,11 +221,8 @@ private class TopSitesLayout: UICollectionViewLayout {
         return thumbnailRows * thumbnailCols
     }
 
-    private lazy var width: CGFloat = { return self.collectionView?.frame.width ?? 0 }()
-
-    private lazy var height: CGFloat? = {
-        return self.collectionView?.frame.height
-        }()
+    private var width: CGFloat
+    private var height: CGFloat
 
     // The width and height of the thumbnail here are the width and height of the tile itself, not the image inside the tile.
     private var thumbnailWidth: CGFloat {
@@ -251,15 +248,17 @@ private class TopSitesLayout: UICollectionViewLayout {
     }
 
     override init() {
+        width = 0; height = 0
         super.init()
-        setupForOrientation(UIApplication.sharedApplication().statusBarOrientation)
+        let size = self.collectionView?.bounds.size ?? UIScreen.mainScreen().bounds.size
+        transitionToOrientation(UIView.viewOrientationForSize(size), atSize: size)
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func transistionToOrientation(orientation: UIInterfaceOrientation, atSize size: CGSize) {
+    private func transitionToOrientation(orientation: UIInterfaceOrientation, atSize size: CGSize) {
         setupForOrientation(orientation)
         height = size.height
         width = size.width
@@ -268,10 +267,10 @@ private class TopSitesLayout: UICollectionViewLayout {
     private func setupForOrientation(orientation: UIInterfaceOrientation) {
         if orientation.isLandscape {
             thumbnailCols = 5
-        } else if UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact {
-            thumbnailCols = 3
-        } else {
+        } else if UIScreen.mainScreen().traitCollection.userInterfaceIdiom == .Pad  {
             thumbnailCols = 4
+        } else {
+            thumbnailCols = 3
         }
     }
 
