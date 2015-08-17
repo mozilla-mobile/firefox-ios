@@ -8,7 +8,7 @@ import XCGLogger
 //// A rolling file loggers that saves to a different log file based on given timestamp
 public class RollingFileLogger: XCGLogger {
 
-    private static let FiveMBsInBytes: UInt64 = 5 * 100000
+    private static let TwoMBsInBytes: UInt64 = 2 * 100000
     private let sizeLimit: UInt64
     private let logDirectoryPath: String?
 
@@ -22,7 +22,7 @@ public class RollingFileLogger: XCGLogger {
 
     let root: String
 
-    public init(filenameRoot: String, logDirectoryPath: String?, sizeLimit: UInt64 = FiveMBsInBytes) {
+    public init(filenameRoot: String, logDirectoryPath: String?, sizeLimit: UInt64 = TwoMBsInBytes) {
         root = filenameRoot
         self.sizeLimit = sizeLimit
         self.logDirectoryPath = logDirectoryPath
@@ -77,7 +77,7 @@ public class RollingFileLogger: XCGLogger {
         let logDirURL = NSURL(fileURLWithPath: logDirectoryPath!)
         var dirSize: UInt64 = 0
         var errorValue: NSError?
-        if !NSFileManager.defaultManager().nr_getAllocatedSize(&dirSize, ofDirectoryAtURL: logDirURL, error: &errorValue) {
+        if !NSFileManager.defaultManager().moz_getAllocatedSize(&dirSize, ofDirectoryAtURL: logDirURL, forFilesPrefixedWith: self.root, error: &errorValue) {
             if let errorValue = errorValue {
                 error("Error determining log directory size: \(errorValue)")
             }
