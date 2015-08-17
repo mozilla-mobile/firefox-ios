@@ -51,6 +51,15 @@ class URLBarView: UIView {
     weak var delegate: URLBarDelegate?
     weak var browserToolbarDelegate: BrowserToolbarDelegate?
     var helper: BrowserToolbarHelper?
+    var isTransitioning: Bool = false {
+        didSet {
+            if isTransitioning {
+                // Cancel any pending/in-progress animations related to the progress bar
+                self.progressBar.setProgress(1, animated: false)
+                self.progressBar.alpha = 0.0
+            }
+        }
+    }
 
     var toolbarIsShowing = false
 
@@ -391,8 +400,10 @@ class URLBarView: UIView {
             self.progressBar.setProgress(progress, animated: true)
             UIView.animateWithDuration(1.5, animations: {
                 self.progressBar.alpha = 0.0
-            }, completion: { _ in
-                self.progressBar.setProgress(0.0, animated: false)
+            }, completion: { finished in
+                if finished {
+                    self.progressBar.setProgress(0.0, animated: false)
+                }
             })
         } else {
             self.progressBar.alpha = 1.0
