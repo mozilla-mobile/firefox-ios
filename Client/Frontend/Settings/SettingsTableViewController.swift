@@ -646,7 +646,8 @@ private class PopupBlockingSettings: Setting {
         self.prefs = settings.profile.prefs
         self.tabManager = settings.tabManager
         let title = NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")
-        super.init(title: NSAttributedString(string: title))
+        let attributes = [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]
+        super.init(title: NSAttributedString(string: title, attributes: attributes))
     }
 
     override func onConfigureCell(cell: UITableViewCell) {
