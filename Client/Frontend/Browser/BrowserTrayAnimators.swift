@@ -46,6 +46,7 @@ private extension TrayToBrowserAnimator {
 
         let finalFrame = calculateExpandedCellFrameFromBVC(bvc)
         bvc.footer.alpha = shouldDisplayFooterForBVC(bvc) ? 1 : 0
+        bvc.urlBar.isTransitioning = true
 
         UIView.animateWithDuration(self.transitionDuration(transitionContext),
             delay: 0, usingSpringWithDamping: 1,
@@ -76,6 +77,7 @@ private extension TrayToBrowserAnimator {
             bvc.startTrackingAccessibilityStatus()
             toggleWebViewVisibility(show: true, usingTabManager: bvc.tabManager)
             bvc.homePanelController?.view.hidden = false
+            bvc.urlBar.isTransitioning = false
             transitionContext.completeTransition(true)
         })
     }
@@ -128,6 +130,7 @@ private extension BrowserToTrayAnimator {
         // Hide views we don't want to show during the animation in the BVC
         bvc.homePanelController?.view.hidden = true
         toggleWebViewVisibility(show: false, usingTabManager: bvc.tabManager)
+        bvc.urlBar.isTransitioning = true
 
         // Since we are hiding the collection view and the snapshot API takes the snapshot after the next screen update,
         // the screenshot ends up being blank unless we set the collection view hidden after the screen update happens. 
@@ -163,6 +166,7 @@ private extension BrowserToTrayAnimator {
                 bvc.homePanelController?.view.hidden = false
                 bvc.stopTrackingAccessibilityStatus()
 
+                bvc.urlBar.isTransitioning = false
                 transitionContext.completeTransition(true)
             })
         }
