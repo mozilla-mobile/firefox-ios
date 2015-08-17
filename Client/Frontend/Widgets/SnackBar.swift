@@ -127,10 +127,10 @@ class SnackBar: UIView {
 
         self.backgroundColor = UIColor.clearColor()
         buttonsView.drawTopBorder = true
-        buttonsView.drawBottomBorder = true
+        buttonsView.drawBottomBorder = false
         buttonsView.drawSeperators = true
 
-        imageView.contentMode = UIViewContentMode.TopLeft
+        imageView.contentMode = UIViewContentMode.Left
 
         textLabel.font = UIConstants.DefaultMediumFont
         textLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
@@ -154,6 +154,19 @@ class SnackBar: UIView {
         super.layoutSubviews()
     }
 
+    private func drawLine(context: CGContextRef, start: CGPoint, end: CGPoint) {
+        CGContextSetStrokeColorWithColor(context, UIConstants.BorderColor.CGColor)
+        CGContextSetLineWidth(context, 1)
+        CGContextMoveToPoint(context, start.x, start.y)
+        CGContextAddLineToPoint(context, end.x, end.y)
+        CGContextStrokePath(context)
+    }
+
+    override func drawRect(rect: CGRect) {
+        let context = UIGraphicsGetCurrentContext()
+        drawLine(context, start: CGPoint(x: 0, y: 1), end: CGPoint(x: frame.size.width, y: 1))
+    }
+
     /**
      * Called to check if the snackbar should be removed or not. By default, Snackbars persist forever.
      * Override this class or use a class like CountdownSnackbar if you want things expire
@@ -167,7 +180,9 @@ class SnackBar: UIView {
         super.updateConstraints()
 
         backgroundView.snp_remakeConstraints { make in
-            make.edges.equalTo(self)
+            make.bottom.left.right.equalTo(self)
+            // Offset it by the width of the top border line so we can see the line from the super view
+            make.top.equalTo(self).offset(1)
         }
 
         contentView.snp_remakeConstraints { make in
@@ -176,12 +191,11 @@ class SnackBar: UIView {
 
         if let img = imageView.image {
             imageView.snp_remakeConstraints({ make in
-                make.top.left.equalTo(contentView)
+                make.left.centerY.equalTo(contentView)
                 // To avoid doubling the padding, the textview doesn't have an inset on its left side.
                 // Instead, it relies on the imageView to tell it where its left side should be.
                 make.width.equalTo(img.size.width + UIConstants.DefaultPadding)
                 make.height.equalTo(img.size.height + UIConstants.DefaultPadding)
-                make.bottom.lessThanOrEqualTo(contentView.snp_bottom)
             })
         } else {
             imageView.snp_remakeConstraints({ make in
@@ -203,7 +217,7 @@ class SnackBar: UIView {
             make.bottom.equalTo(self.snp_bottom)
             make.left.right.equalTo(self)
             if self.buttonsView.subviews.count > 0 {
-                make.height.equalTo(UIConstants.ToolbarHeight)
+                make.height.equalTo(UIConstants.SnackbarButtonHeight)
             } else {
                 make.height.equalTo(0)
             }
