@@ -70,17 +70,20 @@ func simulatedFrecency(now: MicrosecondTimestamp, then: MicrosecondTimestamp, vi
 */
 
 func getRemoteFrecencySQL() -> String {
-    return getMicrosecondFrecencySQL("remoteVisitDate", "remoteVisitCount")
+    let visitCountExpression = "remoteVisitCount"
+    let now = NSDate.nowMicroseconds()
+    let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
+    let ageDays = "((\(now) - remoteVisitDate)) / \(microsecondsPerDay))"
+
+    return "\(visitCountExpression) * max(1, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
 }
 
 func getLocalFrecencySQL() -> String {
-    return getMicrosecondFrecencySQL("localVisitDate", "(localVisitCount * (\(LocalVisitFrecencyWeight) + localVisitCount))")
-}
-
-func getMicrosecondFrecencySQL(visitDateColumn: String, visitCountExpression: String) -> String {
+    let visitCountExpression = "(localVisitCount * (\(LocalVisitFrecencyWeight) + localVisitCount))"
     let now = NSDate.nowMicroseconds()
     let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
-    let ageDays = "((\(now) - (\(visitDateColumn))) / \(microsecondsPerDay))"
+    let ageDays = "((\(now) - localVisitDate) / \(microsecondsPerDay))"
+
     return "\(visitCountExpression) * max(1, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
 }
 
