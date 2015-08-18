@@ -1375,7 +1375,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 case "about", "http", "https":
                     if isWhitelistedUrl(url) {
                         // If the url is whitelisted, we open it without prompting.
-                        openExternal(url, prompt: false)
+                        // Except when the NavigationType is Other, which means it is JavaScript or Redirect initiated.
+                        openExternal(url, prompt: navigationAction.navigationType == WKNavigationType.Other)
                         decisionHandler(WKNavigationActionPolicy.Cancel)
                     } else {
                         decisionHandler(WKNavigationActionPolicy.Allow)
