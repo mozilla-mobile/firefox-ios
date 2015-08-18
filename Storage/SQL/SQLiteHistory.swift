@@ -306,42 +306,36 @@ extension SQLiteHistory: BrowserHistory {
 
     private func getFilteredSitesByVisitDateWithLimit(limit: Int,
                                                       whereURLContains filter: String? = nil,
-                                                      whereData: String? = nil,
                                                       includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
         let args: Args?
         let whereClause: String
-        let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
         if let filter = filter {
             args = ["%\(filter)%", "%\(filter)%"]
 
             // No deleted item has a URL, so there is no need to explicitly add that here.
-            whereClause = " WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) \(whereFragment)"
+            whereClause = "WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) " +
+                          "AND (\(TableHistory).is_deleted = 0)"
         } else {
             args = []
-            whereClause = " WHERE (\(TableHistory).is_deleted = 0) \(whereFragment)"
+            whereClause = "WHERE (\(TableHistory).is_deleted = 0)"
         }
 
         let ungroupedSQL =
         "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain, " +
         "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate, " +
         "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate, " +
-        "COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount, " +
-        "COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount " +
+        "COALESCE(count(\(TableVisits).is_local), 0) AS visitCount " +
         "FROM \(TableHistory) " +
         "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
         "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
         whereClause + " GROUP BY historyID"
 
-        // We partition the results to return local and remote visits separately. They contribute differently
-        // to frecency; see much earlier in this file.
         let historySQL =
-        "SELECT historyID, url, title, guid, domain_id, domain, " +
+        "SELECT historyID, url, title, guid, domain_id, domain, visitCount, " +
         "max(localVisitDate) AS localVisitDate, " +
-        "max(remoteVisitDate) AS remoteVisitDate, " +
-        "sum(localVisitCount) AS localVisitCount, " +
-        "sum(remoteVisitCount) AS remoteVisitCount " +
+        "max(remoteVisitDate) AS remoteVisitDate " +
         "FROM (" + ungroupedSQL + ") " +
-        "WHERE ((localVisitCount + remoteVisitCount) > 0) " +    // Eliminate dead rows from coalescing.
+        "WHERE (visitCount > 0) " +    // Eliminate dead rows from coalescing.
         "GROUP BY historyID " +
         "ORDER BY max(localVisitDate, remoteVisitDate) DESC " +
         "LIMIT \(limit) "
@@ -351,7 +345,7 @@ extension SQLiteHistory: BrowserHistory {
             // We do this so that we limit and filter *before* joining against icons.
             let sql = "SELECT " +
                 "historyID, url, title, guid, domain_id, domain, " +
-                "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount, " +
+                "localVisitDate, remoteVisitDate, visitCount, " +
                 "iconID, iconURL, iconDate, iconType, iconWidth " +
                 "FROM (\(historySQL)) LEFT OUTER JOIN " +
                 "view_history_id_favicon ON historyID = view_history_id_favicon.id"
