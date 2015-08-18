@@ -42,16 +42,6 @@ class TopSitesPanel: UIViewController {
 
     let profile: Profile
 
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        self.layout.transitionToOrientation(UIView.viewOrientationForSize(size), atSize: size)
-        self.refreshHistory(self.layout.thumbnailCount)
-    }
-
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
-    }
-
     init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
@@ -61,6 +51,11 @@ class TopSitesPanel: UIViewController {
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataCleared, object: nil)
     }
 
     override func viewDidLoad() {
@@ -76,12 +71,26 @@ class TopSitesPanel: UIViewController {
             make.edges.equalTo(self.view)
         }
         self.collection = collection
+        let collectionSize = collection.bounds.size
+        self.layout.setupForOrientation(UIView.viewOrientationForSize(collectionSize), atSize: collectionSize)
         self.refreshHistory(layout.thumbnailCount)
     }
 
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataCleared, object: nil)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if let collectionSize = collection?.bounds.size {
+            self.layout.setupForOrientation(UIView.viewOrientationForSize(collectionSize), atSize: collectionSize)
+        }
+    }
+
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        self.layout.setupForOrientation(UIView.viewOrientationForSize(size), atSize: size)
+        self.refreshHistory(self.layout.thumbnailCount)
+    }
+
+    override func supportedInterfaceOrientations() -> Int {
+        return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
     }
     
     func notificationReceived(notification: NSNotification) {
@@ -250,21 +259,13 @@ private class TopSitesLayout: UICollectionViewLayout {
     override init() {
         width = 0; height = 0
         super.init()
-        let size = self.collectionView?.bounds.size ?? UIScreen.mainScreen().bounds.size
-        transitionToOrientation(UIView.viewOrientationForSize(size), atSize: size)
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func transitionToOrientation(orientation: UIInterfaceOrientation, atSize size: CGSize) {
-        setupForOrientation(orientation)
-        height = size.height
-        width = size.width
-    }
-
-    private func setupForOrientation(orientation: UIInterfaceOrientation) {
+    private func setupForOrientation(orientation: UIInterfaceOrientation, atSize size: CGSize) {
         if orientation.isLandscape {
             thumbnailCols = 5
         } else if UIScreen.mainScreen().traitCollection.userInterfaceIdiom == .Pad  {
@@ -272,6 +273,8 @@ private class TopSitesLayout: UICollectionViewLayout {
         } else {
             thumbnailCols = 3
         }
+        height = size.height
+        width = size.width
     }
 
     private func getIndexAtPosition(#y: CGFloat) -> Int {
