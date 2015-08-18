@@ -253,8 +253,9 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int, includeIcon: Bool) -> Deferred<Result<Cursor<Site>>> {
+        // Exclude redirect domains. Bug 1194852.
+        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
         let groupBy = "GROUP BY domain_id "
-        let whereData = "\(TableDomains).showOnTopSites IS 1 "
 
         return self.getFilteredSitesByFrecencyWithLimit(limit, groupClause: groupBy, whereData: whereData, includeIcon: includeIcon)
     }
