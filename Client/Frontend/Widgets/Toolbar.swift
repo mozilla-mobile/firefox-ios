@@ -9,18 +9,15 @@ class Toolbar : UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
-
-        // Allow the view to redraw itself on rotation changes
-        contentMode = UIViewContentMode.Redraw
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func drawLine(context: CGContextRef, width: CGFloat, start: CGPoint, end: CGPoint) {
+    private func drawLine(context: CGContextRef, start: CGPoint, end: CGPoint) {
         CGContextSetStrokeColorWithColor(context, UIConstants.BorderColor.CGColor)
-        CGContextSetLineWidth(context, width * (1 / UIScreen.mainScreen().scale) )
+        CGContextSetLineWidth(context, 1)
         CGContextMoveToPoint(context, start.x, start.y)
         CGContextAddLineToPoint(context, end.x, end.y)
         CGContextStrokePath(context)
@@ -29,11 +26,11 @@ class Toolbar : UIView {
     override func drawRect(rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         if drawTopBorder {
-            drawLine(context, width: 1, start: CGPoint(x: 0, y: 0), end: CGPoint(x: frame.width, y: 0))
+            drawLine(context, start: CGPoint(x: 0, y: 0), end: CGPoint(x: frame.width, y: 0))
         }
 
         if drawBottomBorder {
-            drawLine(context, width: 1, start: CGPoint(x: 0, y: frame.height), end: CGPoint(x: frame.width, y: frame.height))
+            drawLine(context, start: CGPoint(x: 0, y: frame.height), end: CGPoint(x: frame.width, y: frame.height))
         }
 
         if drawSeperators {
@@ -43,9 +40,8 @@ class Toolbar : UIView {
                     if skippedFirst {
                         let frame = view.frame
                         drawLine(context,
-                            width: 0.5,
-                            start: CGPoint(x: floor(frame.origin.x), y: 0),
-                            end: CGPoint(x: floor(frame.origin.x), y: self.frame.height))
+                            start: CGPoint(x: frame.origin.x, y: frame.origin.y),
+                            end: CGPoint(x: frame.origin.x, y: frame.origin.y + view.frame.height))
                     } else {
                         skippedFirst = true
                     }

@@ -43,17 +43,11 @@ class ClientPickerViewController: UITableViewController {
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "ClientCell")
         tableView.tableFooterView = UIView(frame: CGRectZero)
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if let refreshControl = refreshControl {
-            refreshControl.beginRefreshing()
-            let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))
-            self.tableView.contentOffset = CGPointMake(0, height)
-        }
         reloadClients()
     }
 
@@ -78,7 +72,7 @@ class ClientPickerViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ClientCell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = UITableViewCell()
 
         if clients.count > 0 {
             if indexPath.section == 0 {
@@ -161,6 +155,7 @@ class ClientPickerViewController: UITableViewController {
         reloading = true
         profile?.getClients().upon({ result in
             self.reloading = false
+            self.refreshControl?.endRefreshing()
             if let c = result.successValue {
                 self.clients = c
                 dispatch_async(dispatch_get_main_queue()) {
@@ -172,7 +167,6 @@ class ClientPickerViewController: UITableViewController {
                     }
                     self.selectedClients.removeAllObjects()
                     self.tableView.reloadData()
-                    self.refreshControl?.endRefreshing()
                 }
             }
         })

@@ -16,9 +16,6 @@ private let UpdateButtonTitle = NSLocalizedString("Update", comment: "Button to 
 private let CancelButtonTitle = NSLocalizedString("Cancel", comment: "Authentication prompt cancel button")
 private let LogInButtonTitle  = NSLocalizedString("Log in", comment: "Authentication prompt log in button")
 
-// Copied from SearchViewController.swift PromptYes
-private let PromptYes = NSLocalizedString("Yes", tableName: "Search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
-
 class LoginsHelper: BrowserHelper {
     private weak var browser: Browser?
     private let profile: Profile
@@ -139,20 +136,19 @@ class LoginsHelper: BrowserHelper {
         }
 
         snackBar = TimerSnackBar(attrText: promptMessage,
-            img: UIImage(named: "key"),
+            img: UIImage(named: "lock_verified"),
             buttons: [
+                SnackButton(title: SaveButtonTitle, callback: { (bar: SnackBar) -> Void in
+                    self.browser?.removeSnackbar(bar)
+                    self.snackBar = nil
+                    self.profile.logins.addLogin(login)
+                }),
+
                 SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     return
-                }),
-
-                SnackButton(title: PromptYes, callback: { (bar: SnackBar) -> Void in
-                    self.browser?.removeSnackbar(bar)
-                    self.snackBar = nil
-                    self.profile.logins.addLogin(login)
                 })
-
             ])
         browser?.addSnackbar(snackBar!)
     }
@@ -175,19 +171,18 @@ class LoginsHelper: BrowserHelper {
         }
 
         snackBar = TimerSnackBar(attrText: promptMessage,
-            img: UIImage(named: "key"),
+            img: UIImage(named: "lock_verified"),
             buttons: [
-                SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
-                    self.browser?.removeSnackbar(bar)
-                    self.snackBar = nil
-                    return
-                }),
-
                 SnackButton(title: UpdateButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.logins.updateLoginByGUID(guid, new: new,
                                                           significant: new.isSignificantlyDifferentFrom(old))
+                }),
+                SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
+                    self.browser?.removeSnackbar(bar)
+                    self.snackBar = nil
+                    return
                 })
             ])
         browser?.addSnackbar(snackBar!)

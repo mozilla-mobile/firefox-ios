@@ -120,12 +120,6 @@ private class AccountSetting: Setting, FxAContentViewControllerDelegate {
         self.settings = settings
         super.init(title: nil)
     }
-    private override func onConfigureCell(cell: UITableViewCell) {
-        super.onConfigureCell(cell)
-        if settings.profile.getAccount() != nil {
-            cell.selectionStyle = .None
-        }
-    }
 
     override var accessoryType: UITableViewCellAccessoryType { return .None }
 
@@ -449,10 +443,6 @@ private class VersionSetting : Setting {
         let buildNumber = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleVersion") as! String
         return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"), appVersion, buildNumber), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
-    private override func onConfigureCell(cell: UITableViewCell) {
-        super.onConfigureCell(cell)
-        cell.selectionStyle = .None
-    }
 
     override func onClick(navigationController: UINavigationController?) {
         if AppConstants.BuildChannel != .Aurora {
@@ -549,7 +539,6 @@ class UseCompactTabLayoutSetting: Setting {
         control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         control.on = profile.prefs.boolForKey("CompactTabLayout") ?? true
         cell.accessoryView = control
-        cell.selectionStyle = .None
     }
 
     @objc func switchValueChanged(control: UISwitch) {
@@ -668,7 +657,6 @@ private class PopupBlockingSettings: Setting {
         control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
         control.on = prefs.boolForKey(prefKey) ?? true
         cell.accessoryView = control
-        cell.selectionStyle = .None
     }
 
     @objc func switchValueChanged(toggle: UISwitch) {

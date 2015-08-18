@@ -42,6 +42,16 @@ class TopSitesPanel: UIViewController {
 
     let profile: Profile
 
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        self.refreshHistory(self.layout.thumbnailCount)
+        self.layout.setupForOrientation(UIView.viewOrientationForSize(size))
+    }
+
+    override func supportedInterfaceOrientations() -> Int {
+        return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
+    }
+
     init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
@@ -51,11 +61,6 @@ class TopSitesPanel: UIViewController {
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataCleared, object: nil)
     }
 
     override func viewDidLoad() {
@@ -71,26 +76,12 @@ class TopSitesPanel: UIViewController {
             make.edges.equalTo(self.view)
         }
         self.collection = collection
-        let collectionSize = collection.bounds.size
-        self.layout.setupForOrientation(UIView.viewOrientationForSize(collectionSize), atSize: collectionSize)
         self.refreshHistory(layout.thumbnailCount)
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if let collectionSize = collection?.bounds.size {
-            self.layout.setupForOrientation(UIView.viewOrientationForSize(collectionSize), atSize: collectionSize)
-        }
-    }
-
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        self.layout.setupForOrientation(UIView.viewOrientationForSize(size), atSize: size)
-        self.refreshHistory(self.layout.thumbnailCount)
-    }
-
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataCleared, object: nil)
     }
     
     func notificationReceived(notification: NSNotification) {
@@ -222,16 +213,14 @@ private class TopSitesCollectionView: UICollectionView {
 
 private class TopSitesLayout: UICollectionViewLayout {
     private var thumbnailRows: Int {
-        return max(2, Int((self.height ?? self.thumbnailHeight) / self.thumbnailHeight))
+        return max(2, Int((self.collectionView?.frame.height ?? self.thumbnailHeight) / self.thumbnailHeight))
     }
 
     private var thumbnailCols = 2
     private var thumbnailCount: Int {
         return thumbnailRows * thumbnailCols
     }
-
-    private var width: CGFloat
-    private var height: CGFloat
+    private var width: CGFloat { return self.collectionView?.frame.width ?? 0 }
 
     // The width and height of the thumbnail here are the width and height of the tile itself, not the image inside the tile.
     private var thumbnailWidth: CGFloat {
@@ -257,24 +246,22 @@ private class TopSitesLayout: UICollectionViewLayout {
     }
 
     override init() {
-        width = 0; height = 0
         super.init()
+        setupForOrientation(UIApplication.sharedApplication().statusBarOrientation)
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupForOrientation(orientation: UIInterfaceOrientation, atSize size: CGSize) {
+    private func setupForOrientation(orientation: UIInterfaceOrientation) {
         if orientation.isLandscape {
             thumbnailCols = 5
-        } else if UIScreen.mainScreen().traitCollection.userInterfaceIdiom == .Pad  {
-            thumbnailCols = 4
-        } else {
+        } else if UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact {
             thumbnailCols = 3
+        } else {
+            thumbnailCols = 4
         }
-        height = size.height
-        width = size.width
     }
 
     private func getIndexAtPosition(#y: CGFloat) -> Int {

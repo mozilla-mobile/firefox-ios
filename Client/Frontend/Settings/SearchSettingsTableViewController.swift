@@ -62,7 +62,6 @@ class SearchSettingsTableViewController: UITableViewController {
                 toggle.addTarget(self, action: "SELdidToggleSearchSuggestions:", forControlEvents: UIControlEvents.ValueChanged)
                 toggle.on = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
-                cell.selectionStyle = .None
 
             default:
                 // Should not happen.
@@ -87,8 +86,6 @@ class SearchSettingsTableViewController: UITableViewController {
 
             cell.textLabel?.text = engine.shortName
             cell.imageView?.image = engine.image?.createScaled(IconSize)
-
-            cell.selectionStyle = .None
         }
 
         // So that the seperator line goes all the way to the left edge.

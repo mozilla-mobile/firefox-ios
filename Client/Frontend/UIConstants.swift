@@ -13,7 +13,6 @@ public struct UIConstants {
     static let ToolbarHeight: CGFloat = 44
     static let DefaultRowHeight: CGFloat = 58
     static let DefaultPadding: CGFloat = 10
-    static let SnackbarButtonHeight: CGFloat = 48
 
     static let DeviceFontSize: CGFloat = DeviceInfo.deviceModel().rangeOfString("iPad") != nil ? 18 : 15
     static let DefaultMediumFontSize: CGFloat = 14

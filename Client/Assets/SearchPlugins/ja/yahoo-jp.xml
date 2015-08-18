@@ -11,7 +11,6 @@
   <Param name="p" value="{searchTerms}"/>
   <Param name="ei" value="UTF-8"/>
   <MozParam name="fr" condition="pref" pref="yahoo-fr-ja" />
-  <Param name="type" value="ios" />
 </Url>
 <SearchForm>http://search.yahoo.co.jp/</SearchForm>
 </SearchPlugin>

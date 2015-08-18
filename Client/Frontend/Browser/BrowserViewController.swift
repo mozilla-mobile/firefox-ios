@@ -1251,8 +1251,7 @@ extension BrowserViewController: TabManagerDelegate {
             } else {
                 // The web view can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
-                log.info("reloading zombified tab from origin")
-                webView.reloadFromOrigin()
+                webView.reload()
             }
         }
 
