@@ -447,6 +447,7 @@ class URLBarView: UIView {
 
     func prepareOverlayAnimation() {
         // Make sure everything is showing during the transition (we'll hide it afterwards).
+        self.bringSubviewToFront(self.locationContainer)
         self.cancelButton.hidden = false
         self.progressBar.hidden = false
         self.locationTextField.hidden = false
