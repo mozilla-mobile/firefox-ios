@@ -368,7 +368,8 @@ extension SQLiteHistory: BrowserHistory {
                                                      includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
         let localFrecencySQL = getLocalFrecencySQL()
         let remoteFrecencySQL = getRemoteFrecencySQL()
-        let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
+        let sixMonthsInMicroseconds: UInt64 = 15_724_800_000_000      // 182 * 1000 * 1000 * 60 * 60 * 24
+        let sixMonthsAgo = NSDate.nowMicroseconds() - sixMonthsInMicroseconds
 
         let args: Args?
         let whereClause: String
@@ -383,40 +384,55 @@ extension SQLiteHistory: BrowserHistory {
             whereClause = " WHERE (\(TableHistory).is_deleted = 0) \(whereFragment)"
         }
 
+        // Innermost: grab history items and basic visit/domain metadata.
         let ungroupedSQL =
-        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain, " +
-        "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate, " +
-        "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate, " +
-        "COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount, " +
-        "COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount " +
-        "FROM \(TableHistory) " +
+        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain" +
+        ", COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate" +
+        ", COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate" +
+        ", COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount" +
+        ", COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount" +
+        " FROM \(TableHistory) " +
         "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
         "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
         whereClause + " GROUP BY historyID"
 
-        // We partition the results to return local and remote visits separately. They contribute differently
-        // to frecency; see much earlier in this file.
-        let historySQL =
-        "SELECT historyID, url, title, guid, domain_id, domain, " +
-        "max(localVisitDate) AS localVisitDate, " +
-        "max(remoteVisitDate) AS remoteVisitDate, " +
-        "sum(localVisitCount) AS localVisitCount, " +
-        "sum(remoteVisitCount) AS remoteVisitCount " +
-        "FROM (" + ungroupedSQL + ") " +
-        "WHERE ((localVisitCount + remoteVisitCount) > 0) " +    // Eliminate dead rows from coalescing.
-        groupClause + " " +
-        orderBy +
-        " LIMIT \(limit) "
+        // Next: limit to only those that have been visited at all within the last six months.
+        // (Don't do that in the innermost: we want to get the full count, even if some visits are older.)
+        // Discard all but the 1000 most frecent.
+        // Compute and return the frecency for all 1000 URLs.
+        let frecenciedSQL =
+        "SELECT *, (\(localFrecencySQL) + \(remoteFrecencySQL)) AS frecency" +
+        " FROM (" + ungroupedSQL + ")" +
+        " WHERE (" +
+        "((localVisitCount > 0) OR (remoteVisitCount > 0)) AND " +                         // Eliminate dead rows from coalescing.
+        "((localVisitDate > \(sixMonthsAgo)) OR (remoteVisitDate > \(sixMonthsAgo)))" +    // Exclude really old items.
+        ") ORDER BY frecency DESC" +
+        " LIMIT 1000"                                 // Don't even look at a huge set. This avoids work.
 
+        // Next: merge by domain and sum frecency, ordering by that sum and reducing to a (typically much lower) limit.
+        let historySQL =
+        "SELECT historyID, url, title, guid, domain_id, domain" +
+        ", max(localVisitDate) AS localVisitDate" +
+        ", max(remoteVisitDate) AS remoteVisitDate" +
+        ", sum(localVisitCount) AS localVisitCount" +
+        ", sum(remoteVisitCount) AS remoteVisitCount" +
+        ", sum(frecency) AS frecencies" +
+        " FROM (" + frecenciedSQL + ") " +
+        groupClause + " " +
+        "ORDER BY frecencies DESC " +
+        "LIMIT \(limit) "
+
+log.info("QUERY: \n\(historySQL)")
+        // Finally: join this small list to the favicon data.
         if includeIcon {
             // We select the history items then immediately join to get the largest icon.
             // We do this so that we limit and filter *before* joining against icons.
-            let sql = "SELECT " +
-                "historyID, url, title, guid, domain_id, domain, " +
-                "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount, " +
-                "iconID, iconURL, iconDate, iconType, iconWidth " +
-                "FROM (\(historySQL)) LEFT OUTER JOIN " +
-                "view_history_id_favicon ON historyID = view_history_id_favicon.id"
+            let sql = "SELECT" +
+                      " historyID, url, title, guid, domain_id, domain" +
+                      ", localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount" +
+                      ", iconID, iconURL, iconDate, iconType, iconWidth" +
+                      " FROM (\(historySQL)) LEFT OUTER JOIN " +
+                      "view_history_id_favicon ON historyID = view_history_id_favicon.id"
             let factory = SQLiteHistory.iconHistoryColumnFactory
             return db.runQuery(sql, args: args, factory: factory)
         }
