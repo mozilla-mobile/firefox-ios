@@ -173,7 +173,8 @@ extension TopSitesPanel: UICollectionViewDelegate {
         if let site = dataSource[indexPath.item] {
             // We're gonna call Top Sites bookmarks for now.
             let visitType = VisitType.Bookmark
-            homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: site.url)!, visitType: visitType)
+            let destination = NSURL(string: site.url)?.domainURL() ?? NSURL(string: "about:blank")!
+            homePanelDelegate?.homePanel(self, didSelectURL: destination, visitType: visitType)
         }
     }
 
