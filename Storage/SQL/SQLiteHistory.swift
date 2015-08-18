@@ -10,8 +10,6 @@ private let log = Logger.syncLogger
 
 private let LogPII = false
 
-let LocalVisitFrecencyWeight = 5
-
 class NoSuchRecordError: ErrorType {
     let guid: GUID
     init(guid: GUID) {
@@ -69,22 +67,24 @@ func simulatedFrecency(now: MicrosecondTimestamp, then: MicrosecondTimestamp, vi
 }
 */
 
+// The constants in these functions were arrived at by utterly unscientific experimentation.
+
 func getRemoteFrecencySQL() -> String {
     let visitCountExpression = "remoteVisitCount"
     let now = NSDate.nowMicroseconds()
     let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
-    let ageDays = "((\(now) - remoteVisitDate)) / \(microsecondsPerDay))"
+    let ageDays = "((\(now) - remoteVisitDate) / \(microsecondsPerDay))"
 
-    return "\(visitCountExpression) * max(1, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
+    return "\(visitCountExpression) * max(1, 100 * 110 / (\(ageDays) * \(ageDays) + 110))"
 }
 
 func getLocalFrecencySQL() -> String {
-    let visitCountExpression = "(localVisitCount * (\(LocalVisitFrecencyWeight) + localVisitCount))"
+    let visitCountExpression = "((2 + localVisitCount) * (2 + localVisitCount))"
     let now = NSDate.nowMicroseconds()
     let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
     let ageDays = "((\(now) - localVisitDate) / \(microsecondsPerDay))"
 
-    return "\(visitCountExpression) * max(1, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
+    return "\(visitCountExpression) * max(2, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
 }
 
 extension SDRow {
