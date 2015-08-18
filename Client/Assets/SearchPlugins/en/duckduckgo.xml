@@ -13,11 +13,11 @@
 <!-- this is effectively x-moz-phonesearch, but search service expects a text/html entry -->
 <Url type="text/html" method="GET" template="https://duckduckgo.com/">
   <Param name="q" value="{searchTerms}" />
-  <Param name="t" value="fpas" />
+  <Param name="t" value="ffip" />
 </Url>
 <Url type="application/x-moz-tabletsearch" method="GET" template="https://duckduckgo.com/">
   <Param name="q" value="{searchTerms}" />
-  <Param name="t" value="ftas" />
+  <Param name="t" value="ffit" />
 </Url>
 <SearchForm>https://duckduckgo.com</SearchForm>
 </SearchPlugin>

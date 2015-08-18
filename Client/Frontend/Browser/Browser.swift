@@ -7,6 +7,10 @@ import WebKit
 import Storage
 import Shared
 
+import XCGLogger
+
+private let log = Logger.browserLogger
+
 protocol BrowserHelper {
     static func name() -> String
     func scriptMessageHandlerName() -> String?
@@ -115,6 +119,8 @@ class Browser: NSObject {
                 webView.loadRequest(NSURLRequest(URL: restoreURL!))
             } else if let request = lastRequest {
                 webView.loadRequest(request)
+            } else {
+                log.error("creating webview with no lastRequest and no session data: \(self.url)")
             }
 
             self.webView = webView
