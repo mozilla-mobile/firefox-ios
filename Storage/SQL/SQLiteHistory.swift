@@ -306,7 +306,6 @@ extension SQLiteHistory: BrowserHistory {
 
     private func getFilteredSitesByVisitDateWithLimit(limit: Int,
                                                       whereURLContains filter: String? = nil,
-                                                      groupClause: String = "GROUP BY historyID ",
                                                       whereData: String? = nil,
                                                       includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
         let args: Args?
@@ -343,9 +342,9 @@ extension SQLiteHistory: BrowserHistory {
         "sum(remoteVisitCount) AS remoteVisitCount " +
         "FROM (" + ungroupedSQL + ") " +
         "WHERE ((localVisitCount + remoteVisitCount) > 0) " +    // Eliminate dead rows from coalescing.
-        groupClause + " " +
-        " ORDER BY max(localVisitDate, remoteVisitDate) DESC " +
-        " LIMIT \(limit) "
+        "GROUP BY historyID " +
+        "ORDER BY max(localVisitDate, remoteVisitDate) DESC " +
+        "LIMIT \(limit) "
 
         if includeIcon {
             // We select the history items then immediately join to get the largest icon.
