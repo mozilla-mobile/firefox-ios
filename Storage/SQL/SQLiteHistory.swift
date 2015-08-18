@@ -316,7 +316,7 @@ extension SQLiteHistory: BrowserHistory {
     private func getFilteredSitesWithLimit(limit: Int,
                                            whereURLContains filter: String? = nil,
                                            groupClause: String = "GROUP BY historyID ",
-                                           orderBy: String = "ORDER BY visitDate DESC ",
+                                           orderBy: String,
                                            whereData: String? = nil,
                                            includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
         let args: Args?
