@@ -253,24 +253,15 @@ extension SQLiteHistory: BrowserHistory {
         let groupBy = "GROUP BY domain_id "
         let whereData = "\(TableDomains).showOnTopSites IS 1 "
 
-        // Note: Because we're grouping by domain, these frecencys are also per domain, not per site.
-        let localFrecencySQL = getLocalFrecencySQL()
-        let remoteFrecencySQL = getRemoteFrecencySQL()
-        let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
-
-        return self.getFilteredSitesWithLimit(limit, groupClause: groupBy, orderBy: orderBy, whereData: whereData, includeIcon: includeIcon)
+        return self.getFilteredSitesByFrecencyWithLimit(limit, groupClause: groupBy, whereData: whereData, includeIcon: includeIcon)
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
-        let localFrecencySQL = getLocalFrecencySQL()
-        let remoteFrecencySQL = getRemoteFrecencySQL()
-        let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: filter, orderBy: orderBy)
+        return self.getFilteredSitesByFrecencyWithLimit(limit, whereURLContains: filter)
     }
 
     public func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
-        let orderBy = "ORDER BY max(localVisitDate, remoteVisitDate) DESC "
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, includeIcon: true)
+        return self.getFilteredSitesByVisitDateWithLimit(limit, whereURLContains: nil, includeIcon: true)
     }
 
     private class func basicHistoryColumnFactory(row: SDRow) -> Site {
@@ -313,12 +304,75 @@ extension SQLiteHistory: BrowserHistory {
         return site
     }
 
-    private func getFilteredSitesWithLimit(limit: Int,
-                                           whereURLContains filter: String? = nil,
-                                           groupClause: String = "GROUP BY historyID ",
-                                           orderBy: String,
-                                           whereData: String? = nil,
-                                           includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
+    private func getFilteredSitesByVisitDateWithLimit(limit: Int,
+                                                      whereURLContains filter: String? = nil,
+                                                      groupClause: String = "GROUP BY historyID ",
+                                                      whereData: String? = nil,
+                                                      includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
+        let args: Args?
+        let whereClause: String
+        let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
+        if let filter = filter {
+            args = ["%\(filter)%", "%\(filter)%"]
+
+            // No deleted item has a URL, so there is no need to explicitly add that here.
+            whereClause = " WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) \(whereFragment)"
+        } else {
+            args = []
+            whereClause = " WHERE (\(TableHistory).is_deleted = 0) \(whereFragment)"
+        }
+
+        let ungroupedSQL =
+        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain, " +
+        "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate, " +
+        "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate, " +
+        "COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount, " +
+        "COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount " +
+        "FROM \(TableHistory) " +
+        "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
+        "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
+        whereClause + " GROUP BY historyID"
+
+        // We partition the results to return local and remote visits separately. They contribute differently
+        // to frecency; see much earlier in this file.
+        let historySQL =
+        "SELECT historyID, url, title, guid, domain_id, domain, " +
+        "max(localVisitDate) AS localVisitDate, " +
+        "max(remoteVisitDate) AS remoteVisitDate, " +
+        "sum(localVisitCount) AS localVisitCount, " +
+        "sum(remoteVisitCount) AS remoteVisitCount " +
+        "FROM (" + ungroupedSQL + ") " +
+        "WHERE ((localVisitCount + remoteVisitCount) > 0) " +    // Eliminate dead rows from coalescing.
+        groupClause + " " +
+        " ORDER BY max(localVisitDate, remoteVisitDate) DESC " +
+        " LIMIT \(limit) "
+
+        if includeIcon {
+            // We select the history items then immediately join to get the largest icon.
+            // We do this so that we limit and filter *before* joining against icons.
+            let sql = "SELECT " +
+                "historyID, url, title, guid, domain_id, domain, " +
+                "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount, " +
+                "iconID, iconURL, iconDate, iconType, iconWidth " +
+                "FROM (\(historySQL)) LEFT OUTER JOIN " +
+                "view_history_id_favicon ON historyID = view_history_id_favicon.id"
+            let factory = SQLiteHistory.iconHistoryColumnFactory
+            return db.runQuery(sql, args: args, factory: factory)
+        }
+
+        let factory = SQLiteHistory.basicHistoryColumnFactory
+        return db.runQuery(historySQL, args: args, factory: factory)
+    }
+
+    private func getFilteredSitesByFrecencyWithLimit(limit: Int,
+                                                     whereURLContains filter: String? = nil,
+                                                     groupClause: String = "GROUP BY historyID ",
+                                                     whereData: String? = nil,
+                                                     includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
+        let localFrecencySQL = getLocalFrecencySQL()
+        let remoteFrecencySQL = getRemoteFrecencySQL()
+        let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
+
         let args: Args?
         let whereClause: String
         let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
