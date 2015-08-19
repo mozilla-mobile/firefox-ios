@@ -60,7 +60,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Top sites")
 
         // Only one will be found -- we collapse by domain.
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[0].title, error: nil), "Expected to have top site panel \(urls[0])")
+        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "Expected to have top site panel \(urls[1])")
 
         clearPrivateData(true)
 
@@ -71,12 +71,12 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     func testCancelDoesNotClearTopSitesPanel() {
         let urls = visitSites(2)
 
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[0].title, error: nil), "Expected to have top site panel \(urls[0])")
+        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "Expected to have top site panel \(urls[1])")
 
         clearPrivateData(false)
 
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[0].title, error: nil), "Expected to have not removed top site panel \(urls[0])")
-        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "The other never existed.")
+        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "Expected to have not removed top site panel \(urls[1])")
+        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[0].title, error: nil), "The other never existed.")
     }
 
     func testClearsHistoryPanel() {
