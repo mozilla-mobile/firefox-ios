@@ -78,11 +78,6 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if let refreshControl = refreshControl {
-            refreshControl.beginRefreshing()
-            let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))
-            self.tableView.contentOffset = CGPointMake(0, height)
-        }
         refresh()
     }
 
@@ -126,6 +121,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
             // Otherwise, fetch the tabs cloud if its been more than 1 minute since last sync
             let lastSyncTime = self.profile.prefs.timestampForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
             if NSDate.now() - (lastSyncTime ?? 0) > OneMinuteInMilliseconds {
+                self.startRefreshing()
                 self.profile.getClientsAndTabs().uponQueue(dispatch_get_main_queue()) { result in
                     if let clientAndTabs = result.successValue {
                         self.profile.prefs.setTimestamp(NSDate.now(), forKey: PrefsKeys.KeyLastRemoteTabSyncTime)
@@ -140,6 +136,16 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
                 }
 
                 self.endRefreshing()
+            }
+        }
+    }
+
+    private func startRefreshing() {
+        if let refreshControl = self.refreshControl {
+            if !refreshControl.refreshing {
+                let height = -refreshControl.bounds.size.height
+                self.tableView.setContentOffset(CGPointMake(0, height), animated: true)
+                refreshControl.beginRefreshing()
             }
         }
     }
