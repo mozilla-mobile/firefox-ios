@@ -37,8 +37,6 @@ class TestSQLiteHistory: XCTestCase {
         let siteVisitBL1 = SiteVisit(site: siteB, date: 1437088398464000, type: VisitType.Link)
         let siteVisitBR1 = SiteVisit(site: siteB, date: 1437088398465000, type: VisitType.Link)
 
-        XCTAssertEqual(LocalVisitFrecencyWeight, 5, "If you change the weight, you need to change this test.")
-
         let deferred =
         history.clearHistory()
             >>> { history.addLocalVisit(siteVisitL1) }

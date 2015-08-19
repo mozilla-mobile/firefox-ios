@@ -137,6 +137,20 @@ extension NSURL {
         }
     }
 
+    /**
+     * Returns just the domain, but with the same scheme, and a trailing '/'.
+     *
+     * E.g., https://m.foo.com/bar/baz?noo=abc#123  => https://foo.com/
+     *
+     * Any failure? Return this URL.
+     */
+    public func domainURL() -> NSURL {
+        if let scheme = self.scheme, normalized = self.normalizedHost() {
+            return NSURL(scheme: scheme, host: normalized, path: "/") ?? self
+        }
+        return self
+    }
+
     public func normalizedHost() -> String? {
         if var host = self.host {
             if let range = host.rangeOfString("^(www|mobile|m)\\.", options: .RegularExpressionSearch) {

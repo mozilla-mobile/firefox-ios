@@ -10,8 +10,6 @@ private let log = Logger.syncLogger
 
 private let LogPII = false
 
-let LocalVisitFrecencyWeight = 5
-
 class NoSuchRecordError: ErrorType {
     let guid: GUID
     init(guid: GUID) {
@@ -69,19 +67,24 @@ func simulatedFrecency(now: MicrosecondTimestamp, then: MicrosecondTimestamp, vi
 }
 */
 
+// The constants in these functions were arrived at by utterly unscientific experimentation.
+
 func getRemoteFrecencySQL() -> String {
-    return getMicrosecondFrecencySQL("remoteVisitDate", "remoteVisitCount")
+    let visitCountExpression = "remoteVisitCount"
+    let now = NSDate.nowMicroseconds()
+    let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
+    let ageDays = "((\(now) - remoteVisitDate) / \(microsecondsPerDay))"
+
+    return "\(visitCountExpression) * max(1, 100 * 110 / (\(ageDays) * \(ageDays) + 110))"
 }
 
 func getLocalFrecencySQL() -> String {
-    return getMicrosecondFrecencySQL("localVisitDate", "(localVisitCount * (\(LocalVisitFrecencyWeight) + localVisitCount))")
-}
-
-func getMicrosecondFrecencySQL(visitDateColumn: String, visitCountExpression: String) -> String {
+    let visitCountExpression = "((2 + localVisitCount) * (2 + localVisitCount))"
     let now = NSDate.nowMicroseconds()
     let microsecondsPerDay = 86_400_000_000.0      // 1000 * 1000 * 60 * 60 * 24
-    let ageDays = "((\(now) - (\(visitDateColumn))) / \(microsecondsPerDay))"
-    return "\(visitCountExpression) * max(1, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
+    let ageDays = "((\(now) - localVisitDate) / \(microsecondsPerDay))"
+
+    return "\(visitCountExpression) * max(2, 100 * 225 / (\(ageDays) * \(ageDays) + 225))"
 }
 
 extension SDRow {
@@ -250,27 +253,19 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int, includeIcon: Bool) -> Deferred<Result<Cursor<Site>>> {
+        // Exclude redirect domains. Bug 1194852.
+        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
         let groupBy = "GROUP BY domain_id "
-        let whereData = "\(TableDomains).showOnTopSites IS 1 "
 
-        // Note: Because we're grouping by domain, these frecencys are also per domain, not per site.
-        let localFrecencySQL = getLocalFrecencySQL()
-        let remoteFrecencySQL = getRemoteFrecencySQL()
-        let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
-
-        return self.getFilteredSitesWithLimit(limit, groupClause: groupBy, orderBy: orderBy, whereData: whereData, includeIcon: includeIcon)
+        return self.getFilteredSitesByFrecencyWithLimit(limit, groupClause: groupBy, whereData: whereData, includeIcon: includeIcon)
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>> {
-        let localFrecencySQL = getLocalFrecencySQL()
-        let remoteFrecencySQL = getRemoteFrecencySQL()
-        let orderBy = "ORDER BY \(localFrecencySQL) + \(remoteFrecencySQL) DESC "
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: filter, orderBy: orderBy)
+        return self.getFilteredSitesByFrecencyWithLimit(limit, whereURLContains: filter)
     }
 
     public func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>> {
-        let orderBy = "ORDER BY max(localVisitDate, remoteVisitDate) DESC "
-        return self.getFilteredSitesWithLimit(limit, whereURLContains: nil, orderBy: orderBy, includeIcon: true)
+        return self.getFilteredSitesByVisitDateWithLimit(limit, whereURLContains: nil, includeIcon: true)
     }
 
     private class func basicHistoryColumnFactory(row: SDRow) -> Site {
@@ -313,12 +308,69 @@ extension SQLiteHistory: BrowserHistory {
         return site
     }
 
-    private func getFilteredSitesWithLimit(limit: Int,
-                                           whereURLContains filter: String? = nil,
-                                           groupClause: String = "GROUP BY historyID ",
-                                           orderBy: String = "ORDER BY visitDate DESC ",
-                                           whereData: String? = nil,
-                                           includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
+    private func getFilteredSitesByVisitDateWithLimit(limit: Int,
+                                                      whereURLContains filter: String? = nil,
+                                                      includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
+        let args: Args?
+        let whereClause: String
+        if let filter = filter {
+            args = ["%\(filter)%", "%\(filter)%"]
+
+            // No deleted item has a URL, so there is no need to explicitly add that here.
+            whereClause = "WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) " +
+                          "AND (\(TableHistory).is_deleted = 0)"
+        } else {
+            args = []
+            whereClause = "WHERE (\(TableHistory).is_deleted = 0)"
+        }
+
+        let ungroupedSQL =
+        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain, " +
+        "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate, " +
+        "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate, " +
+        "COALESCE(count(\(TableVisits).is_local), 0) AS visitCount " +
+        "FROM \(TableHistory) " +
+        "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
+        "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
+        whereClause + " GROUP BY historyID"
+
+        let historySQL =
+        "SELECT historyID, url, title, guid, domain_id, domain, visitCount, " +
+        "max(localVisitDate) AS localVisitDate, " +
+        "max(remoteVisitDate) AS remoteVisitDate " +
+        "FROM (" + ungroupedSQL + ") " +
+        "WHERE (visitCount > 0) " +    // Eliminate dead rows from coalescing.
+        "GROUP BY historyID " +
+        "ORDER BY max(localVisitDate, remoteVisitDate) DESC " +
+        "LIMIT \(limit) "
+
+        if includeIcon {
+            // We select the history items then immediately join to get the largest icon.
+            // We do this so that we limit and filter *before* joining against icons.
+            let sql = "SELECT " +
+                "historyID, url, title, guid, domain_id, domain, " +
+                "localVisitDate, remoteVisitDate, visitCount, " +
+                "iconID, iconURL, iconDate, iconType, iconWidth " +
+                "FROM (\(historySQL)) LEFT OUTER JOIN " +
+                "view_history_id_favicon ON historyID = view_history_id_favicon.id"
+            let factory = SQLiteHistory.iconHistoryColumnFactory
+            return db.runQuery(sql, args: args, factory: factory)
+        }
+
+        let factory = SQLiteHistory.basicHistoryColumnFactory
+        return db.runQuery(historySQL, args: args, factory: factory)
+    }
+
+    private func getFilteredSitesByFrecencyWithLimit(limit: Int,
+                                                     whereURLContains filter: String? = nil,
+                                                     groupClause: String = "GROUP BY historyID ",
+                                                     whereData: String? = nil,
+                                                     includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
+        let localFrecencySQL = getLocalFrecencySQL()
+        let remoteFrecencySQL = getRemoteFrecencySQL()
+        let sixMonthsInMicroseconds: UInt64 = 15_724_800_000_000      // 182 * 1000 * 1000 * 60 * 60 * 24
+        let sixMonthsAgo = NSDate.nowMicroseconds() - sixMonthsInMicroseconds
+
         let args: Args?
         let whereClause: String
         let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
@@ -332,40 +384,55 @@ extension SQLiteHistory: BrowserHistory {
             whereClause = " WHERE (\(TableHistory).is_deleted = 0) \(whereFragment)"
         }
 
+        // Innermost: grab history items and basic visit/domain metadata.
         let ungroupedSQL =
-        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain, " +
-        "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate, " +
-        "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate, " +
-        "COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount, " +
-        "COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount " +
-        "FROM \(TableHistory) " +
+        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain" +
+        ", COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate" +
+        ", COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate" +
+        ", COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount" +
+        ", COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount" +
+        " FROM \(TableHistory) " +
         "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
         "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
         whereClause + " GROUP BY historyID"
 
-        // We partition the results to return local and remote visits separately. They contribute differently
-        // to frecency; see much earlier in this file.
-        let historySQL =
-        "SELECT historyID, url, title, guid, domain_id, domain, " +
-        "max(localVisitDate) AS localVisitDate, " +
-        "max(remoteVisitDate) AS remoteVisitDate, " +
-        "sum(localVisitCount) AS localVisitCount, " +
-        "sum(remoteVisitCount) AS remoteVisitCount " +
-        "FROM (" + ungroupedSQL + ") " +
-        "WHERE ((localVisitCount + remoteVisitCount) > 0) " +    // Eliminate dead rows from coalescing.
-        groupClause + " " +
-        orderBy +
-        " LIMIT \(limit) "
+        // Next: limit to only those that have been visited at all within the last six months.
+        // (Don't do that in the innermost: we want to get the full count, even if some visits are older.)
+        // Discard all but the 1000 most frecent.
+        // Compute and return the frecency for all 1000 URLs.
+        let frecenciedSQL =
+        "SELECT *, (\(localFrecencySQL) + \(remoteFrecencySQL)) AS frecency" +
+        " FROM (" + ungroupedSQL + ")" +
+        " WHERE (" +
+        "((localVisitCount > 0) OR (remoteVisitCount > 0)) AND " +                         // Eliminate dead rows from coalescing.
+        "((localVisitDate > \(sixMonthsAgo)) OR (remoteVisitDate > \(sixMonthsAgo)))" +    // Exclude really old items.
+        ") ORDER BY frecency DESC" +
+        " LIMIT 1000"                                 // Don't even look at a huge set. This avoids work.
 
+        // Next: merge by domain and sum frecency, ordering by that sum and reducing to a (typically much lower) limit.
+        let historySQL =
+        "SELECT historyID, url, title, guid, domain_id, domain" +
+        ", max(localVisitDate) AS localVisitDate" +
+        ", max(remoteVisitDate) AS remoteVisitDate" +
+        ", sum(localVisitCount) AS localVisitCount" +
+        ", sum(remoteVisitCount) AS remoteVisitCount" +
+        ", sum(frecency) AS frecencies" +
+        " FROM (" + frecenciedSQL + ") " +
+        groupClause + " " +
+        "ORDER BY frecencies DESC " +
+        "LIMIT \(limit) "
+
+log.info("QUERY: \n\(historySQL)")
+        // Finally: join this small list to the favicon data.
         if includeIcon {
             // We select the history items then immediately join to get the largest icon.
             // We do this so that we limit and filter *before* joining against icons.
-            let sql = "SELECT " +
-                "historyID, url, title, guid, domain_id, domain, " +
-                "localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount, " +
-                "iconID, iconURL, iconDate, iconType, iconWidth " +
-                "FROM (\(historySQL)) LEFT OUTER JOIN " +
-                "view_history_id_favicon ON historyID = view_history_id_favicon.id"
+            let sql = "SELECT" +
+                      " historyID, url, title, guid, domain_id, domain" +
+                      ", localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount" +
+                      ", iconID, iconURL, iconDate, iconType, iconWidth" +
+                      " FROM (\(historySQL)) LEFT OUTER JOIN " +
+                      "view_history_id_favicon ON historyID = view_history_id_favicon.id"
             let factory = SQLiteHistory.iconHistoryColumnFactory
             return db.runQuery(sql, args: args, factory: factory)
         }
