@@ -78,7 +78,9 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        refresh()
+        if !(refreshControl?.refreshing ?? false) {
+            refresh()
+        }
     }
 
     func notificationReceived(notification: NSNotification) {
