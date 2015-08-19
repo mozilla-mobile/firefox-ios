@@ -422,7 +422,6 @@ extension SQLiteHistory: BrowserHistory {
         "ORDER BY frecencies DESC " +
         "LIMIT \(limit) "
 
-log.info("QUERY: \n\(historySQL)")
         // Finally: join this small list to the favicon data.
         if includeIcon {
             // We select the history items then immediately join to get the largest icon.
