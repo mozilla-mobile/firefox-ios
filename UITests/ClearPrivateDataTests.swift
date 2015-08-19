@@ -39,51 +39,61 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         }
     }
 
-    func visitSites(noOfSites: Int) -> [(title: String, url: String)] {
-        var urls: [(title: String, url: String)] = []
+    func visitSites(noOfSites: Int) -> [(title: String, domain: String, url: String)] {
+        var urls: [(title: String, domain: String, url: String)] = []
         for pageNo in 1...noOfSites {
             // visit 2 sites
             tester().tapViewWithAccessibilityIdentifier("url")
             let url = "\(webRoot)/numberedPage.html?page=\(pageNo)"
             tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
-            let tuple: (title: String, url: String) = ("Page \(pageNo)", url)
+            let tuple: (title: String, domain: String, url: String) = ("Page \(pageNo)", NSURL(string: url)!.baseDomain() ?? url, url)
             urls.append(tuple)
         }
         BrowserUtils.resetToAboutHome(tester())
         return urls
     }
 
+    func anyDomainsExistOnTopSites(domains: Set<String>) {
+        for domain in domains {
+            if self.tester().tryFindingViewWithAccessibilityLabel(domain, error: nil) {
+                return
+            }
+        }
+        XCTFail("Couldn't find any domains in top sites.")
+    }
+
     func testClearsTopSitesPanel() {
         let urls = visitSites(2)
+        let domains = Set<String>(urls.map { $0.domain })
 
         tester().tapViewWithAccessibilityLabel("Top sites")
 
         // Only one will be found -- we collapse by domain.
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "Expected to have top site panel \(urls[1])")
+        anyDomainsExistOnTopSites(domains)
 
         clearPrivateData(true)
 
-        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[0].title, error: nil), "Expected to have removed top site panel \(urls[0])")
-        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "We shouldn't find the other URL, either.")
+        for domain in domains {
+            XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(domain, error: nil), "Expected to have removed top site panel \(domain)")
+        }
     }
 
     func testCancelDoesNotClearTopSitesPanel() {
         let urls = visitSites(2)
+        let domains = Set<String>(urls.map { $0.domain })
 
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "Expected to have top site panel \(urls[1])")
-
+        anyDomainsExistOnTopSites(domains)
         clearPrivateData(false)
-
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[1].title, error: nil), "Expected to have not removed top site panel \(urls[1])")
-        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[0].title, error: nil), "The other never existed.")
+        anyDomainsExistOnTopSites(domains)
     }
 
     func testClearsHistoryPanel() {
         let urls = visitSites(2)
 
         tester().tapViewWithAccessibilityLabel("History")
-        let url1 = "\(urls[0].title), \(urls[0].url)", url2 = "\(urls[1].title), \(urls[1].url)"
+        let url1 = "\(urls[0].title), \(urls[0].url)"
+        let url2 = "\(urls[1].title), \(urls[1].url)"
         XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url1, error: nil), "Expected to have history row \(url1)")
         XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url2, error: nil), "Expected to have history row \(url2)")
 
@@ -99,7 +109,8 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let urls = visitSites(2)
 
         tester().tapViewWithAccessibilityLabel("History")
-        let url1 = "\(urls[0].title), \(urls[0].url)", url2 = "\(urls[1].title), \(urls[1].url)"
+        let url1 = "\(urls[0].title), \(urls[0].url)"
+        let url2 = "\(urls[1].title), \(urls[1].url)"
         XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url1, error: nil), "Expected to have history row \(url1)")
         XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url2, error: nil), "Expected to have history row \(url2)")
 
