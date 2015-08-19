@@ -374,7 +374,21 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     private func createTileForSite(cell: ThumbnailCell, site: Site) -> ThumbnailCell {
-        cell.textLabel.text = site.title.isEmpty ? (NSURL(string: site.url)?.baseDomainAndPath() ?? site.url) : site.title
+
+        // We always want to show the domain URL, not the title.
+        //
+        // Eventually we can do something more sophisticated — e.g., if the site only consists of one
+        // history item, show it, and otherwise use the longest common sub-URL (and take its title
+        // if you visited that exact URL), etc. etc. — but not yet.
+        //
+        // The obvious solution here and in collectionView:didSelectItemAtIndexPath: is for the cursor
+        // to return domain sites, not history sites -- that is, with the right icon, title, and URL --
+        // and for this code to just use what it gets.
+        //
+        // Instead we'll painstakingly re-extract those things here.
+
+        let domainURL = NSURL(string: site.url)?.baseDomain() ?? site.url
+        cell.textLabel.text = domainURL
         cell.imageWrapper.backgroundColor = UIColor.clearColor()
 
         // Resets used cell's background image so that it doesn't get recycled when a tile doesn't update its background image.
@@ -406,7 +420,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     private func createTileForSuggestedSite(cell: ThumbnailCell, site: SuggestedSite) -> ThumbnailCell {
-        cell.textLabel.text = site.title.isEmpty ? site.url : site.title
+        cell.textLabel.text = site.title.isEmpty ? NSURL(string: site.url)?.baseDomainAndPath() : site.title
         cell.imageWrapper.backgroundColor = site.backgroundColor
         cell.backgroundImage.image = nil
 
