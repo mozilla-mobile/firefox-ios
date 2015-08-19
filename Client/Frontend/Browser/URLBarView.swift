@@ -406,7 +406,9 @@ class URLBarView: UIView {
                 }
             })
         } else {
-            self.progressBar.alpha = 1.0
+            if self.progressBar.alpha < 1.0 {
+                self.progressBar.alpha = 1.0
+            }
             self.progressBar.setProgress(progress, animated: (progress > progressBar.progress))
         }
     }
@@ -434,14 +436,14 @@ class URLBarView: UIView {
 
         // Show the overlay mode UI, which includes hiding the locationView and replacing it
         // with the editable locationTextField.
-        animateToOverlayState(true)
+        animateToOverlayState(overlayMode: true)
 
         delegate?.urlBarDidEnterOverlayMode(self)
     }
 
-    func leaveOverlayMode() {
+    func leaveOverlayMode(didCancel cancel: Bool = false) {
         locationTextField.resignFirstResponder()
-        animateToOverlayState(false)
+        animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)
     }
 
@@ -458,9 +460,9 @@ class URLBarView: UIView {
         self.stopReloadButton.hidden = !self.toolbarIsShowing
     }
 
-    func transitionToOverlay() {
+    func transitionToOverlay(didCancel: Bool = false) {
         self.cancelButton.alpha = inOverlayMode ? 1 : 0
-        self.progressBar.alpha = inOverlayMode ? 0 : 1
+        self.progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
         self.locationTextField.alpha = inOverlayMode ? 1 : 0
         self.shareButton.alpha = inOverlayMode ? 0 : 1
         self.bookmarkButton.alpha = inOverlayMode ? 0 : 1
@@ -507,14 +509,14 @@ class URLBarView: UIView {
         self.stopReloadButton.hidden = !self.toolbarIsShowing || inOverlayMode
     }
 
-    func animateToOverlayState(overlay: Bool) {
+    func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
         prepareOverlayAnimation()
         layoutIfNeeded()
 
         inOverlayMode = overlay
 
         UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: nil, animations: { _ in
-            self.transitionToOverlay()
+            self.transitionToOverlay(didCancel: cancel)
             self.setNeedsUpdateConstraints()
             self.layoutIfNeeded()
         }, completion: { _ in
@@ -527,7 +529,7 @@ class URLBarView: UIView {
     }
 
     func SELdidClickCancel() {
-        leaveOverlayMode()
+        leaveOverlayMode(didCancel: true)
     }
 
     func SELtappedScrollToTopArea() {
