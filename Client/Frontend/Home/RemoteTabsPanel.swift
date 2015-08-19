@@ -78,6 +78,11 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        if let refreshControl = refreshControl {
+            refreshControl.beginRefreshing()
+            let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))
+            self.tableView.contentOffset = CGPointMake(0, height)
+        }
         refresh()
     }
 
@@ -109,6 +114,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         if !profile.hasAccount() {
             self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: self, error: .NotLoggedIn)
             self.tableView.reloadData()
+            self.endRefreshing()
             return
         }
 
