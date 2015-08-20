@@ -128,7 +128,8 @@ class Browser: NSObject {
             jsonDict["currentPage"] = currentPage
             let escapedJSON = JSON.stringify(jsonDict, pretty: false).stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
             let restoreURL = NSURL(string: "\(WebServer.sharedInstance.base)/about/sessionrestore?history=\(escapedJSON)")
-            webView.loadRequest(NSURLRequest(URL: restoreURL!))
+            lastRequest = NSURLRequest(URL: restoreURL!)
+            webView.loadRequest(lastRequest!)
         } else if let request = lastRequest {
             webView.loadRequest(request)
         } else {
@@ -237,8 +238,8 @@ class Browser: NSObject {
     }
 
     func loadRequest(request: NSURLRequest) -> WKNavigation? {
-        lastRequest = request
         if let webView = webView {
+            lastRequest = request
             return webView.loadRequest(request)
         }
         return nil
@@ -249,7 +250,15 @@ class Browser: NSObject {
     }
 
     func reload() {
-        webView?.reload()
+        if let navigation = webView?.reloadFromOrigin() {
+            log.info("reloaded zombified tab from origin")
+            return
+        }
+
+        if let webView = self.webView {
+            log.info("restoring webView from scratch")
+            restore(webView)
+        }
     }
 
     func addHelper(helper: BrowserHelper, name: String) {
