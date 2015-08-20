@@ -97,31 +97,7 @@ class Browser: NSObject {
             webView.navigationDelegate = navigationDelegate
             helperManager = HelperManager(webView: webView)
 
-            // Pulls restored session data from a previous SavedTab to load into the Browser. If it's nil, a session restore 
-            // has already been triggered via custom URL, so we use the last request to trigger it again; otherwise,
-            // we extract the information needed to restore the tabs and create a NSURLRequest with the custom session restore URL
-            // to trigger the session restore via custom handlers
-            if let sessionData = self.sessionData {
-                restoring = true
-                
-                var updatedURLs = [String]()
-                for url in sessionData.urls {
-                    let updatedURL = WebServer.sharedInstance.updateLocalURL(url)!.absoluteString!
-                    updatedURLs.append(updatedURL)
-                }
-                let currentPage = sessionData.currentPage
-                self.sessionData = nil
-                var jsonDict = [String: AnyObject]()
-                jsonDict["history"] = updatedURLs
-                jsonDict["currentPage"] = currentPage
-                let escapedJSON = JSON.stringify(jsonDict, pretty: false).stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-                let restoreURL = NSURL(string: "\(WebServer.sharedInstance.base)/about/sessionrestore?history=\(escapedJSON)")
-                webView.loadRequest(NSURLRequest(URL: restoreURL!))
-            } else if let request = lastRequest {
-                webView.loadRequest(request)
-            } else {
-                log.error("creating webview with no lastRequest and no session data: \(self.url)")
-            }
+            restore(webView)
 
             self.webView = webView
             browserDelegate?.browser?(self, didCreateWebView: webView)
@@ -129,6 +105,34 @@ class Browser: NSObject {
             // lastTitle is used only when showing zombie tabs after a session restore.
             // Since we now have a web view, lastTitle is no longer useful.
             lastTitle = nil
+        }
+    }
+
+    func restore(webView: WKWebView) {
+        // Pulls restored session data from a previous SavedTab to load into the Browser. If it's nil, a session restore
+        // has already been triggered via custom URL, so we use the last request to trigger it again; otherwise,
+        // we extract the information needed to restore the tabs and create a NSURLRequest with the custom session restore URL
+        // to trigger the session restore via custom handlers
+        if let sessionData = self.sessionData {
+            restoring = true
+
+            var updatedURLs = [String]()
+            for url in sessionData.urls {
+                let updatedURL = WebServer.sharedInstance.updateLocalURL(url)!.absoluteString!
+                updatedURLs.append(updatedURL)
+            }
+            let currentPage = sessionData.currentPage
+            self.sessionData = nil
+            var jsonDict = [String: AnyObject]()
+            jsonDict["history"] = updatedURLs
+            jsonDict["currentPage"] = currentPage
+            let escapedJSON = JSON.stringify(jsonDict, pretty: false).stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+            let restoreURL = NSURL(string: "\(WebServer.sharedInstance.base)/about/sessionrestore?history=\(escapedJSON)")
+            webView.loadRequest(NSURLRequest(URL: restoreURL!))
+        } else if let request = lastRequest {
+            webView.loadRequest(request)
+        } else {
+            log.error("creating webview with no lastRequest and no session data: \(self.url)")
         }
     }
 
