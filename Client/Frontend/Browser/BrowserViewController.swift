@@ -656,6 +656,10 @@ class BrowserViewController: UIViewController {
             auralProgress.progress = loading ? 0 : nil
         case KVOURL:
             if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
+                if webView.URL == nil {
+                    log.debug("restoring nulled WebView")
+                    tab.restore(webView)
+                }
                 updateUIForReaderHomeStateForTab(tab)
             }
         case KVOCanGoBack:
