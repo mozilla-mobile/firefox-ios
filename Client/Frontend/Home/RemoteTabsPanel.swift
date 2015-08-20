@@ -66,8 +66,6 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         tableView.dataSource = nil
 
         refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: "SELrefresh", forControlEvents: UIControlEvents.ValueChanged)
-
         view.backgroundColor = UIConstants.PanelBackgroundColor
     }
 
@@ -78,13 +76,19 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        refresh()
+        refreshControl?.addTarget(self, action: "SELrefreshTabs", forControlEvents: UIControlEvents.ValueChanged)
+        refreshTabs()
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        refreshControl?.removeTarget(self, action: "SELrefreshTabs", forControlEvents: UIControlEvents.ValueChanged)
     }
 
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged, NotificationPrivateDataCleared:
-            refresh()
+            refreshTabs()
             break
         default:
             // no need to do anything at all
@@ -100,7 +104,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         }
     }
 
-    func refresh() {
+    func refreshTabs() {
         tableView.scrollEnabled = false
         tableView.allowsSelection = false
         tableView.tableFooterView = UIView(frame: CGRectZero)
@@ -108,7 +112,6 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         // Short circuit if the user is not logged in
         if !profile.hasAccount() {
             self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: self, error: .NotLoggedIn)
-            self.tableView.reloadData()
             self.endRefreshing()
             return
         }
@@ -120,7 +123,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
             // Otherwise, fetch the tabs cloud if its been more than 1 minute since last sync
             let lastSyncTime = self.profile.prefs.timestampForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-            if NSDate.now() - (lastSyncTime ?? 0) > OneMinuteInMilliseconds {
+            if NSDate.now() - (lastSyncTime ?? 0) > OneMinuteInMilliseconds && !(self.refreshControl?.refreshing ?? false) {
                 self.startRefreshing()
                 self.profile.getClientsAndTabs().uponQueue(dispatch_get_main_queue()) { result in
                     if let clientAndTabs = result.successValue {
@@ -142,16 +145,17 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     private func startRefreshing() {
         if let refreshControl = self.refreshControl {
-            if !refreshControl.refreshing {
-                let height = -refreshControl.bounds.size.height
-                self.tableView.setContentOffset(CGPointMake(0, height), animated: true)
-                refreshControl.beginRefreshing()
-            }
+            let height = -refreshControl.bounds.size.height
+            self.tableView.setContentOffset(CGPointMake(0, height), animated: true)
+            refreshControl.beginRefreshing()
         }
     }
 
     func endRefreshing() {
-        self.refreshControl?.endRefreshing()
+        if self.refreshControl?.refreshing ?? false {
+            self.refreshControl?.endRefreshing()
+        }
+
         self.tableView.scrollEnabled = true
         self.tableView.reloadData()
     }
@@ -170,9 +174,8 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         }
     }
 
-    @objc private func SELrefresh() {
-        self.refreshControl?.beginRefreshing()
-        refresh()
+    @objc private func SELrefreshTabs() {
+        refreshTabs()
     }
 
 }
