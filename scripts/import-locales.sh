@@ -19,19 +19,7 @@ svn co --non-interactive --trust-server-cert https://svn.mozilla.org/projects/l1
 
 INCOMPLETE_LOCALES=(
     "da"
-    "eo"
-    "es"
-    "gl"
-    "is"
-    "ko"
     "lt"
-    "ru"
-    "sk"
-    "son"
-    "tl"
-    "uz"
-    "zh-CN"
-    "zh-TW"
 )
 
 if [ $1 == "--only-complete" ]; then
