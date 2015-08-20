@@ -656,10 +656,6 @@ class BrowserViewController: UIViewController {
             auralProgress.progress = loading ? 0 : nil
         case KVOURL:
             if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
-                if webView.URL == nil {
-                    log.debug("restoring nulled WebView")
-                    tab.restore(webView)
-                }
                 updateUIForReaderHomeStateForTab(tab)
             }
         case KVOCanGoBack:
@@ -1255,8 +1251,7 @@ extension BrowserViewController: TabManagerDelegate {
             } else {
                 // The web view can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
-                log.info("reloading zombified tab from origin")
-                webView.reloadFromOrigin()
+                tab.reload()
             }
         }
 
