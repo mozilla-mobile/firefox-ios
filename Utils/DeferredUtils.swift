@@ -171,10 +171,9 @@ public func chain<T, U>(a: Deferred<Maybe<T>>, f: T -> U) -> Deferred<Maybe<U>> 
 }
 
 /// Defer-ifies a block to an async dispatch queue.
-public func deferDispatchAsync<T>(queue: dispatch_queue_attr_t, f: () -> Deferred<Maybe<T>>) -> Deferred<Maybe<T>> {
+public func deferDispatchAsync<T>(queue: dispatch_queue_t, f: () -> Deferred<Maybe<T>>) -> Deferred<Maybe<T>> {
     let deferred = Deferred<Maybe<T>>()
-    let dispatchQueue = dispatch_queue_create("com.mozilla.client.utils.deferredutils", queue)
-    dispatch_async(dispatchQueue, {
+    dispatch_async(queue, {
         f().upon { result in
             deferred.fill(result)
         }
