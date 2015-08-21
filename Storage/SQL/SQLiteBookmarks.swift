@@ -69,6 +69,13 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         return folder
     }
 
+    private class func nodeFactory(row: SDRow) -> BookmarkNode {
+        let guid = row["guid"] as! String
+        let title = row["title"] as? String ??
+            NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark nodes without titles.")
+        return BookmarkNode(guid: guid, title: title)
+    }
+
     private class func factory(row: SDRow) -> BookmarkNode {
         if let typeCode = row["type"] as? Int, type = BookmarkNodeType(rawValue: typeCode) {
             switch type {
@@ -84,6 +91,7 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         }
 
         assert(false, "Invalid bookmark data.")
+        return nodeFactory(row)
     }
 
     private func getChildrenWhere(whereClause: String, args: Args, includeIcon: Bool) -> Cursor<BookmarkNode> {
