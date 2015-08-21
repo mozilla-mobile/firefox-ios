@@ -7,7 +7,6 @@ import Shared
 import XCGLogger
 
 // To keep SwiftData happy.
-typealias Args = [AnyObject?]
 
 let TableBookmarks = "bookmarks"
 

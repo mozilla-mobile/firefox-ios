@@ -8,6 +8,86 @@ import Shared
 
 private let log = Logger.syncLogger
 
+// A protocol for informationa about a particular table. This is used as a type to be stored by TableTable.
+protocol TableInfo {
+    var name: String { get }
+    var version: Int { get }
+}
+
+// A wrapper class for table info coming from the TableTable. This should ever only be used internally.
+class TableInfoWrapper: TableInfo {
+    let name: String
+    let version: Int
+    init(name: String, version: Int) {
+        self.name = name
+        self.version = version
+    }
+}
+
+/**
+ * Something that knows how to build and maintain part of a database.
+ * This should really be called "Section" or something like that.
+ */
+protocol Table: TableInfo {
+    func create(db: SQLiteDBConnection, version: Int) -> Bool
+    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool
+    func exists(db: SQLiteDBConnection) -> Bool
+    func drop(db: SQLiteDBConnection) -> Bool
+}
+
+/**
+ * A table in our database. Note this doesn't have to be a real table. It might be backed by a join
+ * or something else interesting.
+ */
+protocol BaseTable: Table {
+    typealias Type
+    func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
+    func update(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
+    func delete(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
+    func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<Type>
+}
+
+
+public enum QuerySort {
+    case None, LastVisit, Frecency
+}
+
+public class QueryOptions {
+    // A filter string to apploy to the query
+    public var filter: AnyObject? = nil
+
+    // Allows for customizing how the filter is applied (i.e. only urls or urls and titles?)
+    public var filterType: FilterType = .None
+
+    // The way to sort the query
+    public var sort: QuerySort = .None
+
+    public init(filter: AnyObject? = nil, filterType: FilterType = .None, sort: QuerySort = .None) {
+        self.filter = filter
+        self.filterType = filterType
+        self.sort = sort
+    }
+}
+
+
+public enum FilterType {
+    case ExactUrl
+    case Url
+    case Guid
+    case Id
+    case None
+}
+
+let DBCouldNotOpenErrorCode = 200
+
+enum TableResult {
+    case Exists
+    case Created
+    case Updated
+    case Failed
+}
+
+
 class GenericTable<T>: BaseTable {
     typealias Type = T
 

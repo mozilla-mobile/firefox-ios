@@ -8,43 +8,7 @@ import Shared
 
 private let log = Logger.syncLogger
 
-public enum QuerySort {
-    case None, LastVisit, Frecency
-}
-
-public enum FilterType {
-    case ExactUrl
-    case Url
-    case Guid
-    case Id
-    case None
-}
-
-public class QueryOptions {
-    // A filter string to apploy to the query
-    public var filter: AnyObject? = nil
-
-    // Allows for customizing how the filter is applied (i.e. only urls or urls and titles?)
-    public var filterType: FilterType = .None
-
-    // The way to sort the query
-    public var sort: QuerySort = .None
-
-    public init(filter: AnyObject? = nil, filterType: FilterType = .None, sort: QuerySort = .None) {
-        self.filter = filter
-        self.filterType = filterType
-        self.sort = sort
-    }
-}
-
-let DBCouldNotOpenErrorCode = 200
-
-enum TableResult {
-    case Exists
-    case Created
-    case Updated
-    case Failed
-}
+typealias Args = [AnyObject?]
 
 /* This is a base interface into our browser db. It holds arrays of tables and handles basic creation/updating of them. */
 // Version 1 - Basic history table.
