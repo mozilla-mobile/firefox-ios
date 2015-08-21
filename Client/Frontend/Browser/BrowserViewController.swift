@@ -100,6 +100,12 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    override func didReceiveMemoryWarning() {
+        println("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
+        super.didReceiveMemoryWarning()
+        tabManager.resetProcessPool()
+    }
+
     private func didInit() {
         screenshotHelper = BrowserScreenshotHelper(controller: self)
         tabManager.addDelegate(self)
