@@ -212,14 +212,13 @@ private class SQLiteDBStatement {
             } else if obj is Bool {
                 status = sqlite3_bind_int(pointer, Int32(index+1), (obj as! Bool) ? 1 : 0)
             } else if obj is String {
-                let negativeOne = UnsafeMutablePointer<Int>(bitPattern: -1)
-                let opaquePointer = COpaquePointer(negativeOne)
-                let transient = CFunctionPointer<((UnsafeMutablePointer<()>) -> Void)>(opaquePointer)
+                typealias CFunction = @convention(c) (UnsafeMutablePointer<()>) -> Void
+                let transient = unsafeBitCast(-1, CFunction.self)
                 status = sqlite3_bind_text(pointer, Int32(index+1), (obj as! String).cStringUsingEncoding(NSUTF8StringEncoding)!, -1, transient)
             } else if obj is NSData {
                 status = sqlite3_bind_blob(pointer, Int32(index+1), (obj as! NSData).bytes, -1, nil)
             } else if obj is NSDate {
-                var timestamp = (obj as! NSDate).timeIntervalSince1970
+                let timestamp = (obj as! NSDate).timeIntervalSince1970
                 status = sqlite3_bind_double(pointer, Int32(index+1), timestamp)
             } else if obj === nil {
                 status = sqlite3_bind_null(pointer, Int32(index+1))
