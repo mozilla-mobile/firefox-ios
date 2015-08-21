@@ -102,6 +102,8 @@ class BrowserViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         println("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
+        log.debug("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
+        NSLog("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
         super.didReceiveMemoryWarning()
         tabManager.resetProcessPool()
     }
@@ -661,6 +663,13 @@ class BrowserViewController: UIViewController {
             urlBar.updateReloadStatus(loading)
             auralProgress.progress = loading ? 0 : nil
         case KVOURL:
+            if let tab = tabManager.selectedTab where tab.webView?.URL == nil {
+                log.debug("URL IS NIL! WE ARE RESETTING PROCESS POOL")
+                NSLog("URL IS NIL! WE ARE RESETTING PROCESS POOL")
+                println("URL IS NIL! WE ARE RESETTING PROCESS POOL")
+                tabManager.resetProcessPool()
+            }
+
             if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
                 updateUIForReaderHomeStateForTab(tab)
             }
