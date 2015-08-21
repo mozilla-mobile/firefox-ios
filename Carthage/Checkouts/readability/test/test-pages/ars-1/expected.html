@@ -1,0 +1,48 @@
+<div id="readability-page-1" class="page">
+    <div itemprop="articleBody" class="article-content clearfix">
+        <figure class="intro-image image center full-width"> <img src="http://cdn.arstechnica.net/wp-content/uploads/2015/04/server-crash-640x426.jpg" width="640" height="331">
+            <figcaption class="caption"> </figcaption>
+        </figure>
+        <p>A flaw in the wildly popular online game <em>Minecraft</em> makes it easy for just about anyone to crash the server hosting the game, according to a computer programmer who has released proof-of-concept code that exploits the vulnerability.</p>
+        <p>"I thought a lot before writing this post," Pakistan-based developer Ammar Askar wrote in a <a href="http://blog.ammaraskar.com/minecraft-vulnerability-advisory">blog post published Thursday</a>, 21 months, he said, after privately reporting the bug to <em>Minecraft</em> developer Mojang. "On the one hand I don't want to expose thousands of servers to a major vulnerability, yet on the other hand Mojang has failed to act on it."</p>
+        <p>The bug resides in the <a href="https://github.com/ammaraskar/pyCraft">networking internals of the <em>Minecraft </em>protocol</a>. It allows the contents of inventory slots to be exchanged, so that, among other things, items in players' hotbars are displayed automatically after logging in. <em>Minecraft</em> items can also store arbitrary metadata in a file format known as <a href="http://wiki.vg/NBT">Named Binary Tag (NBT)</a>, which allows complex data structures to be kept in hierarchical nests. Askar has released <a href="https://github.com/ammaraskar/pyCraft/tree/nbt_exploit">proof-of-concept attack code</a> he said exploits the vulnerability to crash any server hosting the game. Here's how it works.</p>
+        <blockquote>
+            <p>The vulnerability stems from the fact that the client is allowed to send the server information about certain slots. This, coupled with the NBT format’s nesting allows us to <em>craft</em> a packet that is incredibly complex for the server to deserialize but trivial for us to generate.</p>
+            <p>In my case, I chose to create lists within lists, down to five levels. This is a json representation of what it looks like.</p>
+            <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">rekt</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+        <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+            <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                    <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="p">]</span>
+                        <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="p">]</span>
+                        <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="p">]</span>
+                        <span class="nx">list</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="p">]</span>
+                        <span class="p">...</span>
+                    <span class="p">]</span>
+                    <span class="p">...</span>
+                <span class="p">]</span>
+                <span class="p">...</span>
+            <span class="p">]</span>
+            <span class="p">...</span>
+        <span class="p">]</span>
+        <span class="p">...</span>
+    <span class="p">]</span>
+    <span class="p">...</span>
+<span class="p">}</span></code></pre></div>
+            <p>The root of the object, <code>rekt</code>, contains 300 lists. Each list has a list with 10 sublists, and each of those sublists has 10 of their own, up until 5 levels of recursion. That’s a total of <code>10^5 * 300 = 30,000,000</code> lists.</p>
+            <p>And this isn’t even the theoretical maximum for this attack. Just the nbt data for this payload is 26.6 megabytes. But luckily Minecraft implements a way to compress large packets, lucky us! zlib shrinks down our evil data to a mere 39 kilobytes.</p>
+            <p>Note: in previous versions of Minecraft, there was no protocol wide compression for big packets. Previously, NBT was sent compressed with gzip and prefixed with a signed short of its length, which reduced our maximum payload size to <code>2^15 - 1</code>. Now that the length is a varint capable of storing integers up to <code>2^28</code>, our potential for attack has increased significantly.</p>
+            <p>When the server will decompress our data, it’ll have 27 megs in a buffer somewhere in memory, but that isn’t the bit that’ll kill it. When it attempts to parse it into NBT, it’ll create java representations of the objects meaning suddenly, the sever is having to create several million java objects including ArrayLists. This runs the server out of memory and causes tremendous CPU load.</p>
+            <p>This vulnerability exists on almost all previous and current Minecraft versions as of 1.8.3, the packets used as attack vectors are the <a href="http://wiki.vg/Protocol#Player_Block_Placement">0x08: Block Placement Packet</a> and <a href="http://wiki.vg/Protocol#Creative_Inventory_Action">0x10: Creative Inventory Action</a>.</p>
+            <p>The fix for this vulnerability isn’t exactly that hard, the client should never really send a data structure as complex as NBT of arbitrary size and if it must, some form of recursion and size limits should be implemented.</p>
+            <p>These were the fixes that I recommended to Mojang 2 years ago.</p>
+        </blockquote>
+        <p>Ars is asking Mojang for comment and will update this post if company officials respond.</p>
+    </div>
+</div>

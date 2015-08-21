@@ -1,0 +1,5 @@
+#include "../SQLite/SQLite.xcconfig"
+
+MODULEMAP_FILE[sdk=iphoneos*]        = $(SRCROOT)/sqlite3/iphoneos.modulemap
+MODULEMAP_FILE[sdk=iphonesimulator*] = $(SRCROOT)/sqlite3/iphonesimulator.modulemap
+MODULEMAP_FILE[sdk=macosx*]          = $(SRCROOT)/sqlite3/macosx.modulemap

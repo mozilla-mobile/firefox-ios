@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>E427014D-8915-4E3B-859D-5EB72D455321</string>
+	<key>IDESourceControlProjectName</key>
+	<string>SQLite</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>3AE8ED2E684071AF4FB151FA51BF266B82FF45BD</key>
+		<string>github.com:stephencelis/SQLite.swift.git</string>
+		<key>55011AEBD444630C0E9DF47BD2E18FDBBDCC285D</key>
+		<string>https://github.com/sqlcipher/sqlcipher.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>SQLite.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>3AE8ED2E684071AF4FB151FA51BF266B82FF45BD</key>
+		<string>../..</string>
+		<key>55011AEBD444630C0E9DF47BD2E18FDBBDCC285D</key>
+		<string>../../Vendor/sqlcipher</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:stephencelis/SQLite.swift.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>3AE8ED2E684071AF4FB151FA51BF266B82FF45BD</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>55011AEBD444630C0E9DF47BD2E18FDBBDCC285D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>sqlcipher</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>3AE8ED2E684071AF4FB151FA51BF266B82FF45BD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>SQLite</string>
+		</dict>
+	</array>
+</dict>
+</plist>
