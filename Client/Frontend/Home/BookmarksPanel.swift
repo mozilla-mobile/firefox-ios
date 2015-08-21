@@ -36,7 +36,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataCleared, object: nil)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -65,7 +65,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     private func onModelFailure(e: Any) {
-        println("Error: failed to get data: \(e)")
+        print("Error: failed to get data: \(e)")
     }
 
     override func reloadData() {

@@ -37,13 +37,25 @@ class SessionRestoreTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
         tester().tapViewWithAccessibilityLabel("Back")
         tester().waitForViewWithAccessibilityLabel("Top sites")
-        let canGoBack = tester().tryFindingTappableViewWithAccessibilityLabel("Back", error: nil)
+        let canGoBack: Bool
+        do {
+            try tester().tryFindingTappableViewWithAccessibilityLabel("Back")
+            canGoBack = true
+        } catch _ {
+            canGoBack = false
+        }
         XCTAssertFalse(canGoBack, "Reached the beginning of browser history")
         tester().tapViewWithAccessibilityLabel("Forward")
         tester().tapViewWithAccessibilityLabel("Forward")
         tester().tapViewWithAccessibilityLabel("Forward")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 3")
-        let canGoForward = tester().tryFindingTappableViewWithAccessibilityLabel("Forward", error: nil)
+        let canGoForward: Bool
+        do {
+            try tester().tryFindingTappableViewWithAccessibilityLabel("Forward")
+            canGoForward = true
+        } catch _ {
+            canGoForward = false
+        }
         XCTAssertFalse(canGoBack, "Reached the end of browser history")
     }
 

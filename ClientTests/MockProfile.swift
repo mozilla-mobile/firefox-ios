@@ -11,10 +11,10 @@ import Sync
 import XCTest
 
 public class MockSyncManager: SyncManager {
-    public func syncClients() -> SyncResult { return deferResult(.Completed) }
-    public func syncClientsThenTabs() -> SyncResult { return deferResult(.Completed) }
-    public func syncHistory() -> SyncResult { return deferResult(.Completed) }
-    public func syncLogins() -> SyncResult { return deferResult(.Completed) }
+    public func syncClients() -> SyncResult { return deferMaybe(.Completed) }
+    public func syncClientsThenTabs() -> SyncResult { return deferMaybe(.Completed) }
+    public func syncHistory() -> SyncResult { return deferMaybe(.Completed) }
+    public func syncLogins() -> SyncResult { return deferMaybe(.Completed) }
     public func syncEverything() -> Success {
         return succeed()
     }
@@ -35,8 +35,8 @@ public class MockTabQueue: TabQueue {
         return succeed()
     }
 
-    public func getQueuedTabs() -> Deferred<Result<Cursor<ShareItem>>> {
-        return deferResult(ArrayCursor<ShareItem>(data: []))
+    public func getQueuedTabs() -> Deferred<Maybe<Cursor<ShareItem>>> {
+        return deferMaybe(ArrayCursor<ShareItem>(data: []))
     }
 
     public func clearQueuedTabs() -> Success {
@@ -145,20 +145,20 @@ public class MockProfile: Profile {
         self.syncManager.onRemovedAccount(old)
     }
 
-    func getClients() -> Deferred<Result<[RemoteClient]>> {
-        return deferResult([])
+    func getClients() -> Deferred<Maybe<[RemoteClient]>> {
+        return deferMaybe([])
     }
 
-    func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
-        return deferResult([])
+    func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
+        return deferMaybe([])
     }
 
-    func getCachedClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
-        return deferResult([])
+    func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
+        return deferMaybe([])
     }
 
-    func storeTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> {
-        return deferResult(0)
+    func storeTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
+        return deferMaybe(0)
     }
 
     func sendItems(items: [ShareItem], toClients clients: [RemoteClient]) {

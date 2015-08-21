@@ -29,7 +29,10 @@ class SyncCommandsTests: XCTestCase {
 
     override func setUp() {
         let files = MockFiles()
-        files.remove("browser.db")
+        do {
+            try files.remove("browser.db")
+        } catch _ {
+        }
         db = BrowserDB(filename: "browser.db", files: files)
         // create clients
 
@@ -140,7 +143,7 @@ class SyncCommandsTests: XCTestCase {
         let action = "testcommand"
         let syncCommands = shareItems.map { item in
             return SyncCommand.fromShareItem(item, withAction: action)
-        }.sorted(byValue)
+        }.sort(byValue)
         clientsAndTabs.insertCommands(syncCommands, forClients: clients)
 
         let b = self.expectationWithDescription("Get for invalid client.")
@@ -163,7 +166,7 @@ class SyncCommandsTests: XCTestCase {
         let action = "testcommand"
         let syncCommands = shareItems.map { item in
             return SyncCommand.fromShareItem(item, withAction: action)
-        }.sorted(byValue)
+        }.sort(byValue)
 
         var client = self.clients[0]
         let a = self.expectationWithDescription("delete for client.")

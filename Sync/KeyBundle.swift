@@ -54,7 +54,7 @@ public class KeyBundle: Equatable {
 
     public func hmac(ciphertext: NSData) -> NSData {
         let (result, digestLen) = _hmac(ciphertext)
-        var data = NSMutableData(bytes: result, length: digestLen)
+        let data = NSMutableData(bytes: result, length: digestLen)
 
         result.destroy()
         return data
@@ -65,7 +65,7 @@ public class KeyBundle: Equatable {
      */
     public func hmacString(ciphertext: NSData) -> String {
         let (result, digestLen) = _hmac(ciphertext)
-        var hash = NSMutableString()
+        let hash = NSMutableString()
         for i in 0..<digestLen {
             hash.appendFormat("%02x", result[i])
         }
@@ -127,7 +127,7 @@ public class KeyBundle: Equatable {
         return (success, result, copied)
     }
 
-    public func verify(#hmac: NSData, ciphertextB64: NSData) -> Bool {
+    public func verify(hmac hmac: NSData, ciphertextB64: NSData) -> Bool {
         let expectedHMAC = hmac
         let computedHMAC = self.hmac(ciphertextB64)
         return expectedHMAC.isEqualToData(computedHMAC)

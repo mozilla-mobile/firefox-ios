@@ -174,7 +174,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         accessibilityCustomActions = [deleteAction, markAsReadAction]
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -184,7 +184,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         let hostname = url.host ?? ""
         for prefix in prefixesToSimplify {
             if hostname.hasPrefix(prefix) {
-                return hostname.substringFromIndex(advance(hostname.startIndex, count(prefix)))
+                return hostname.substringFromIndex(advance(hostname.startIndex, prefix.characters.count))
             }
         }
         return hostname
@@ -242,7 +242,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataCleared, object: nil)
     }
 
-    required init!(coder aDecoder: NSCoder!) {
+    required init!(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -313,7 +313,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         let overlayView = UIView(frame: tableView.bounds)
         overlayView.backgroundColor = UIColor.whiteColor()
         // Unknown why this does not work with autolayout
-        overlayView.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+        overlayView.autoresizingMask = [UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleWidth]
 
         let containerView = UIView()
         overlayView.addSubview(containerView)

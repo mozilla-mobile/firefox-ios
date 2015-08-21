@@ -122,7 +122,7 @@ extension AuroraAppDelegate: MFMailComposeViewControllerDelegate {
         }
     }
 
-    func mailComposeController(mailComposeViewController: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+    func mailComposeController(mailComposeViewController: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
         mailComposeViewController.dismissViewControllerAnimated(true, completion: nil)
     }
 }

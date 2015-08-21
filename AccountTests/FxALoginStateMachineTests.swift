@@ -12,50 +12,50 @@ class MockFxALoginClient: FxALoginClient {
     let kA = NSData.randomOfLength(UInt(KeyLength))!
     let wrapkB = NSData.randomOfLength(UInt(KeyLength))!
 
-    func keyPair() -> Deferred<Result<KeyPair>> {
+    func keyPair() -> Deferred<Maybe<KeyPair>> {
         let keyPair: KeyPair = RSAKeyPair.generateKeyPairWithModulusSize(512)
-        return Deferred(value: Result(success: keyPair))
+        return Deferred(value: Maybe(success: keyPair))
     }
 
-    func keys(keyFetchToken: NSData) -> Deferred<Result<FxAKeysResponse>> {
+    func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
         let response = FxAKeysResponse(kA: kA, wrapkB: wrapkB)
-        return Deferred(value: Result(success: response))
+        return Deferred(value: Maybe(success: response))
     }
 
-    func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Result<FxASignResponse>> {
+    func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
         let response = FxASignResponse(certificate: "certificate")
-        return Deferred(value: Result(success: response))
+        return Deferred(value: Maybe(success: response))
     }
 }
 
 // A mock client that responds to keys and sign with 401 errors.
 class MockFxALoginClientAfterPasswordChange: MockFxALoginClient {
-    override func keys(keyFetchToken: NSData) -> Deferred<Result<FxAKeysResponse>> {
+    override func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
         let response = FxAClientError.Remote(RemoteError(code: 401, errno: 103, error: "Bad auth", message: "Bad auth message", info: "Bad auth info"))
-        return Deferred(value: Result(failure: response))
+        return Deferred(value: Maybe(failure: response))
     }
 
-    override func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Result<FxASignResponse>> {
+    override func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
         let response = FxAClientError.Remote(RemoteError(code: 401, errno: 103, error: "Bad auth", message: "Bad auth message", info: "Bad auth info"))
-        return Deferred(value: Result(failure: response))
+        return Deferred(value: Maybe(failure: response))
     }
 }
 
 // A mock client that responds to keys with 400/104 (needs verification responses).
 class MockFxALoginClientBeforeVerification: MockFxALoginClient {
-    override func keys(keyFetchToken: NSData) -> Deferred<Result<FxAKeysResponse>> {
+    override func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
         let response = FxAClientError.Remote(RemoteError(code: 400, errno: 104,
             error: "Unverified", message: "Unverified message", info: "Unverified info"))
-        return Deferred(value: Result(failure: response))
+        return Deferred(value: Maybe(failure: response))
     }
 }
 
 // A mock client that responds to sign with 503/999 (unknown server error).
 class MockFxALoginClientDuringOutage: MockFxALoginClient {
-    override func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Result<FxASignResponse>> {
+    override func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
         let response = FxAClientError.Remote(RemoteError(code: 503, errno: 999,
             error: "Unknown", message: "Unknown error", info: "Unknown err info"))
-        return Deferred(value: Result(failure: response))
+        return Deferred(value: Maybe(failure: response))
     }
 }
 

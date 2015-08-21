@@ -54,8 +54,8 @@ public protocol SyncCommands {
     func deleteCommands() -> Success
     func deleteCommands(clientGUID: GUID) -> Success
 
-    func getCommands() -> Deferred<Result<[GUID: [SyncCommand]]>>
+    func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>>
 
-    func insertCommand(command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Result<Int>>
-    func insertCommands(commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Result<Int>>
+    func insertCommand(command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>
+    func insertCommands(commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>
 }

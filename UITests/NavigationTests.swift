@@ -56,7 +56,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
 
         // now open another tab and test it works too
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        var addTabButton = tester().waitForViewWithAccessibilityLabel("Add Tab") as? UIButton
+        let addTabButton = tester().waitForViewWithAccessibilityLabel("Add Tab") as? UIButton
         addTabButton?.tap()
         tester().waitForViewWithAccessibilityLabel("Web content")
         let url2 = "\(webRoot)/scrollablePage.html?page=2"

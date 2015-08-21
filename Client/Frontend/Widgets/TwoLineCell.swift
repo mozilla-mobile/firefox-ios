@@ -23,7 +23,7 @@ class TwoLineTableViewCell: UITableViewCell {
         separatorInset = UIEdgeInsetsMake(0, ImageSize + 2 * ImageMargin, 0, 0)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -60,7 +60,7 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
         layoutMargins = UIEdgeInsetsZero
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -91,12 +91,12 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
     let imageView = UIImageView()
 
     // Yes, this is strange.
-    override var textLabel: UILabel {
+    override var textLabel: UILabel? {
         return _textLabel
     }
 
     // Yes, this is strange.
-    override var detailTextLabel: UILabel {
+    override var detailTextLabel: UILabel? {
         return _detailTextLabel
     }
 
@@ -116,7 +116,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
         layoutMargins = UIEdgeInsetsZero
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 

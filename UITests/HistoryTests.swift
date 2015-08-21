@@ -79,8 +79,10 @@ class HistoryTests: KIFTestCase {
     }
 
     func testDeleteHistoryItemFromListWithMoreThan100Items() {
-        if tester().tryFindingTappableViewWithAccessibilityLabel("Top sites", error: nil) {
+        do {
+            try tester().tryFindingTappableViewWithAccessibilityLabel("Top sites")
             tester().tapViewWithAccessibilityLabel("Top sites")
+        } catch _ {
         }
         for pageNo in 1...102 {
             BrowserUtils.addHistoryEntry("Page \(pageNo)", url: NSURL(string: "\(webRoot)/numberedPage.html?page=\(pageNo)")!)

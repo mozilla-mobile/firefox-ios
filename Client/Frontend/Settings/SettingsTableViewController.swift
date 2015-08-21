@@ -21,7 +21,7 @@ class SettingsTableViewCell: UITableViewCell {
         separatorInset = UIEdgeInsetsZero
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
@@ -441,7 +441,7 @@ private class ShowIntroductionSetting: Setting {
         navigationController?.dismissViewControllerAnimated(true, completion: {
             if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
                 let rootNavigationController = appDelegate.rootViewController
-                appDelegate.browserViewController.presentIntroViewController(force: true)
+                appDelegate.browserViewController.presentIntroViewController(true)
             }
         })
     }
@@ -728,12 +728,12 @@ class SettingsTableViewController: UITableViewController {
                 // Be aware that dequeing and then ignoring a cell appears to cause issues; only deque a cell if you're going to return it.
                 cell = SettingsTableViewCell(style: setting.style, reuseIdentifier: nil)
             } else {
-                cell = tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath) as! UITableViewCell
+                cell = tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath) 
             }
             setting.onConfigureCell(cell)
             return cell
         }
-        return tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath) as! UITableViewCell
+        return tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath) 
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -806,7 +806,7 @@ class SettingsTableFooterView: UITableViewHeaderFooterView {
         }
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
@@ -835,7 +835,7 @@ class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
     }
 
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 

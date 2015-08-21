@@ -210,7 +210,7 @@ extension SQLiteBookmarks: ShareToDestination {
         return self.db.withWritableConnection(&err) {  (conn, err) -> Success in
             func insertBookmark(icon: Int) -> Success {
                 log.debug("Inserting bookmark with specified icon \(icon).")
-                let urlString = url.absoluteString!
+                let urlString = url.absoluteString
                 var args: Args = [
                     Bytes.generateGUID(),
                     BookmarkNodeType.Bookmark.rawValue,
@@ -234,7 +234,7 @@ extension SQLiteBookmarks: ShareToDestination {
                 err = conn.executeChange(sql, withArgs: args)
                 if let err = err {
                     log.error("Error inserting \(urlString). Got \(err).")
-                    return deferResult(DatabaseError(err: err))
+                    return deferMaybe(DatabaseError(err: err))
                 }
                 return succeed()
             }
@@ -252,14 +252,14 @@ extension SQLiteBookmarks: ShareToDestination {
     public func shareItem(item: ShareItem) {
         // We parse here in anticipation of getting real URLs at some point.
         if let url = item.url.asURL {
-            let title = item.title ?? url.absoluteString!
+            let title = item.title ?? url.absoluteString
             self.addToMobileBookmarks(url, title: title, favicon: item.favicon)
         }
     }
 }
 
 extension SQLiteBookmarks: SearchableBookmarks {
-    public func bookmarksByURL(url: NSURL) -> Deferred<Result<Cursor<BookmarkItem>>> {
+    public func bookmarksByURL(url: NSURL) -> Deferred<Maybe<Cursor<BookmarkItem>>> {
         let inner = "SELECT id, type, guid, url, title, faviconID FROM \(TableBookmarks) WHERE type = \(BookmarkNodeType.Bookmark.rawValue) AND url = ?"
         let sql =
         "SELECT bookmarks.id AS id, bookmarks.type AS type, guid, bookmarks.url AS url, title, " +

@@ -107,16 +107,16 @@ class ErrorPageHelper {
 
     class func register(server: WebServer) {
         server.registerHandlerForMethod("GET", module: "errors", resource: "error.html", handler: { (request) -> GCDWebServerResponse! in
-            var url: NSURL? = ErrorPageHelper.decodeURL(request.URL)
+            let url: NSURL? = ErrorPageHelper.decodeURL(request.URL)
 
             if url == nil {
                 return GCDWebServerResponse(statusCode: 404)
             }
 
-            if let index = find(self.redirecting, url!) {
+            if let index = self.redirecting.indexOf(url!) {
                 self.redirecting.removeAtIndex(index)
 
-                let errCode = (request.query["code"] as! String).toInt()
+                let errCode = Int((request.query["code"] as! String))
                 let errDescription = request.query["description"] as! String
                 var errDomain = request.query["domain"] as! String
 
@@ -156,7 +156,7 @@ class ErrorPageHelper {
 
         server.registerHandlerForMethod("GET", module: "errors", resource: "NetError.css", handler: { (request) -> GCDWebServerResponse! in
             let path = NSBundle(forClass: self).pathForResource("NetError", ofType: "css")!
-            let data = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil)! as String
+            let data = (try! NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding)) as String
             return GCDWebServerDataResponse(data: NSData(contentsOfFile: path), contentType: "text/css")
         })
     }
@@ -165,7 +165,7 @@ class ErrorPageHelper {
         // Don't show error pages for error pages.
         if ErrorPageHelper.isErrorPageURL(url) {
             if let previousUrl = ErrorPageHelper.decodeURL(url),
-               let index = find(ErrorPageHelper.redirecting, previousUrl) {
+               let index = ErrorPageHelper.redirecting.indexOf(previousUrl) {
                 ErrorPageHelper.redirecting.removeAtIndex(index)
             }
             return
@@ -175,7 +175,7 @@ class ErrorPageHelper {
         // (instead of redirecting to the original URL).
         ErrorPageHelper.redirecting.append(url)
 
-        let errorUrl = "\(WebServer.sharedInstance.base)/errors/error.html?url=\(url.absoluteString?.escape() ?? String())&code=\(error.code)&domain=\(error.domain)&description=\(error.localizedDescription.escape())"
+        let errorUrl = "\(WebServer.sharedInstance.base)/errors/error.html?url=\(url.absoluteString.escape() ?? String())&code=\(error.code)&domain=\(error.domain)&description=\(error.localizedDescription.escape())"
         let request = NSURLRequest(URL: errorUrl.asURL!)
         webView.loadRequest(request)
     }

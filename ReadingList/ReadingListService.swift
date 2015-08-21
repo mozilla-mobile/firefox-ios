@@ -16,27 +16,27 @@ public class ReadingListService {
         storage = ReadingListSQLStorage(path: "\(profileStoragePath)/ReadingList.db")
     }
 
-    public func getAvailableRecords() -> Result<[ReadingListClientRecord]> {
+    public func getAvailableRecords() -> Maybe<[ReadingListClientRecord]> {
         return storage.getAvailableRecords()
     }
 
-    public func deleteRecord(record: ReadingListClientRecord) -> Result<Void> {
+    public func deleteRecord(record: ReadingListClientRecord) -> Maybe<Void> {
         return storage.deleteRecord(record)
     }
 
-    public func deleteAllRecords() -> Result<Void>{
+    public func deleteAllRecords() -> Maybe<Void>{
         return storage.deleteAllRecords()
     }
 
-    public func createRecordWithURL(url: String, title: String, addedBy: String) -> Result<ReadingListClientRecord> {
+    public func createRecordWithURL(url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
         return storage.createRecordWithURL(url, title: title, addedBy: addedBy)
     }
 
-    public func getRecordWithURL(url: String) -> Result<ReadingListClientRecord?> {
+    public func getRecordWithURL(url: String) -> Maybe<ReadingListClientRecord?> {
         return storage.getRecordWithURL(url)
     }
 
-    public func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Result<ReadingListClientRecord?> {
+    public func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
         return storage.updateRecord(record, unread: unread)
     }
 }

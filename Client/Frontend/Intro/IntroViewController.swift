@@ -230,10 +230,10 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         return false
     }
 
-    override func supportedInterfaceOrientations() -> Int {
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         // This actually does the right thing on iPad where the modally
         // presented version happily rotates with the iPad orientation.
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+        return UIInterfaceOrientationMask.Portrait
     }
 
     func SELstartBrowsing() {
@@ -343,11 +343,11 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
     }
 
     private func attributedStringForLabel(text: String) -> NSMutableAttributedString {
-        var paragraphStyle = NSMutableParagraphStyle()
+        let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = IntroViewControllerUX.CardTextLineHeight
         paragraphStyle.alignment = .Center
 
-        var string = NSMutableAttributedString(string: text)
+        let string = NSMutableAttributedString(string: text)
         string.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, string.length))
         return string
     }

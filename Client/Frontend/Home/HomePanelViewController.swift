@@ -163,7 +163,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     func SELtappedButton(sender: UIButton!) {
-        for (index, button) in enumerate(buttons) {
+        for (index, button) in buttons.enumerate() {
             if (button == sender) {
                 selectedButtonIndex = index
                 delegate?.homePanelViewController(self, didSelectPanel: index)
@@ -233,7 +233,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         let translateDown = CGAffineTransformMakeTranslation(0, UIConstants.ToolbarHeight)
 
         if editing {
-            let button = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+            let button = UIButton(type: UIButtonType.System)
             button.setTitle(NSLocalizedString("Done", comment: "Done editing button"), forState: UIControlState.Normal)
             button.addTarget(self, action: "endEditing:", forControlEvents: UIControlEvents.TouchUpInside)
             button.transform = translateDown
@@ -247,7 +247,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             finishEditingButton = button
         }
 
-        UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: UIViewAnimationOptions.AllowUserInteraction |  UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
+        UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [UIViewAnimationOptions.AllowUserInteraction, UIViewAnimationOptions.CurveEaseInOut], animations: { () -> Void in
             self.buttons.map { $0.transform = editing ? translateUp : CGAffineTransformIdentity }
             self.finishEditingButton?.transform = editing ? CGAffineTransformIdentity : translateDown
         }, completion: { _ in

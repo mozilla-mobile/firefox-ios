@@ -14,8 +14,10 @@ struct SessionRestoreHandler {
         // Register the handler that accepts /about/sessionrestore?history=...&currentpage=... requests.
         webServer.registerHandlerForMethod("GET", module: "about", resource: "sessionrestore") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
             if let sessionRestorePath = NSBundle.mainBundle().pathForResource("SessionRestore", ofType: "html") {
-                if let sessionRestoreString = NSMutableString(contentsOfFile: sessionRestorePath, encoding: NSUTF8StringEncoding, error: nil) {
+                do {
+                    let sessionRestoreString = try NSMutableString(contentsOfFile: sessionRestorePath, encoding: NSUTF8StringEncoding)
                     return GCDWebServerDataResponse(HTML: sessionRestoreString as String)
+                } catch _ {
                 }
             }
             return GCDWebServerResponse(statusCode: 404)

@@ -93,8 +93,10 @@ class DomainAutocompleteTests: KIFTestCase {
     }
 
     override func tearDown() {
-        if tester().tryFindingTappableViewWithAccessibilityLabel("Cancel", error: nil) {
+        do {
+            try tester().tryFindingTappableViewWithAccessibilityLabel("Cancel")
             tester().tapViewWithAccessibilityLabel("Cancel")
+        } catch _ {
         }
         BrowserUtils.clearHistoryItems(tester())
     }

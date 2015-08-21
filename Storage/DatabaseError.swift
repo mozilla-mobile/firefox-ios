@@ -7,7 +7,7 @@ import Shared
 /**
  * Used to bridge the NSErrors we get here into something that Result is happy with.
  */
-public class DatabaseError: ErrorType {
+public class DatabaseError: MaybeErrorType {
     let err: NSError?
 
     public var description: String {

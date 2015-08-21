@@ -10,11 +10,11 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-private func getDate(#dayOffset: Int) -> NSDate {
+private func getDate(dayOffset dayOffset: Int) -> NSDate {
     let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-    let nowComponents = calendar.components(NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay, fromDate: NSDate())
+    let nowComponents = calendar.components([NSCalendarUnit.Year, NSCalendarUnit.Month, NSCalendarUnit.Day], fromDate: NSDate())
     let today = calendar.dateFromComponents(nowComponents)!
-    return calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitDay, value: dayOffset, toDate: today, options: nil)!
+    return calendar.dateByAddingUnit(NSCalendarUnit.Day, value: dayOffset, toDate: today, options: [])!
 }
 
 private typealias SectionNumber = Int
@@ -75,7 +75,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -142,7 +142,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     /**
     * fetch from the profile
     **/
-    private func fetchData() -> Deferred<Result<Cursor<Site>>> {
+    private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
         return profile.history.getSitesByLastVisit(QueryLimit)
     }
 

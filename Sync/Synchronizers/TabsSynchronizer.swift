@@ -80,7 +80,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
 
             func afterWipe() -> Success {
                 log.info("Fetching tabs.")
-                func doInsert(record: Record<TabsPayload>) -> Deferred<Result<(Int)>> {
+                func doInsert(record: Record<TabsPayload>) -> Deferred<Maybe<(Int)>> {
                     let remotes = record.payload.remoteTabs
                     log.debug("\(remotes)")
                     log.info("Inserting \(remotes.count) tabs for client \(record.id).")
@@ -97,7 +97,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
                 let allDone = all(records.filter({ $0.id != ourGUID }).map(doInsert))
                 return allDone.bind { (results) -> Success in
                     if let failure = find(results, { $0.isFailure }) {
-                        return deferResult(failure.failureValue!)
+                        return deferMaybe(failure.failureValue!)
                     }
 
                     self.lastFetched = responseTimestamp!
@@ -116,7 +116,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
         }
 
         if let reason = self.reasonToNotSync(storageClient) {
-            return deferResult(SyncStatus.NotStarted(reason))
+            return deferMaybe(SyncStatus.NotStarted(reason))
         }
 
         let keys = self.scratchpad.keys?.value
@@ -127,17 +127,17 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
             if !self.remoteHasChanges(info) {
                 // upload local tabs if they've changed or we're in a fresh start.
                 uploadOurTabs(localTabs, toServer: tabsClient)
-                return deferResult(.Completed)
+                return deferMaybe(.Completed)
             }
 
             return tabsClient.getSince(self.lastFetched)
                 >>== onResponseReceived
                 >>> { self.uploadOurTabs(localTabs, toServer: tabsClient) }
-                >>> { deferResult(.Completed) }
+                >>> { deferMaybe(.Completed) }
         }
 
         log.error("Couldn't make tabs factory.")
-        return deferResult(FatalError(message: "Couldn't make tabs factory."))
+        return deferMaybe(FatalError(message: "Couldn't make tabs factory."))
     }
 }
 

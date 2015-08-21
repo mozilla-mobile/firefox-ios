@@ -34,7 +34,7 @@ private struct URLBarViewUX {
 protocol URLBarDelegate: class {
     func urlBarDidPressTabs(urlBar: URLBarView)
     func urlBarDidPressReaderMode(urlBar: URLBarView)
-    /// :returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
+    /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     func urlBarDidLongPressReaderMode(urlBar: URLBarView) -> Bool
     func urlBarDidPressStop(urlBar: URLBarView)
     func urlBarDidPressReload(urlBar: URLBarView)
@@ -62,7 +62,7 @@ class URLBarView: UIView {
 
     lazy var locationView: BrowserLocationView = {
         let locationView = BrowserLocationView()
-        locationView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        locationView.translatesAutoresizingMaskIntoConstraints = false
         locationView.readerModeState = ReaderModeState.Unavailable
         locationView.delegate = self
         return locationView
@@ -70,7 +70,7 @@ class URLBarView: UIView {
 
     private lazy var locationTextField: ToolbarTextField = {
         let locationTextField = ToolbarTextField()
-        locationTextField.setTranslatesAutoresizingMaskIntoConstraints(false)
+        locationTextField.translatesAutoresizingMaskIntoConstraints = false
         locationTextField.autocompleteDelegate = self
         locationTextField.keyboardType = UIKeyboardType.WebSearch
         locationTextField.autocorrectionType = UITextAutocorrectionType.No
@@ -87,7 +87,7 @@ class URLBarView: UIView {
 
     private lazy var locationContainer: UIView = {
         let locationContainer = UIView()
-        locationContainer.setTranslatesAutoresizingMaskIntoConstraints(false)
+        locationContainer.translatesAutoresizingMaskIntoConstraints = false
 
         // Enable clipping to apply the rounded edges to subviews.
         locationContainer.clipsToBounds = true
@@ -101,7 +101,7 @@ class URLBarView: UIView {
 
     private lazy var tabsButton: UIButton = {
         let tabsButton = InsetButton()
-        tabsButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+        tabsButton.translatesAutoresizingMaskIntoConstraints = false
         tabsButton.setTitle("0", forState: UIControlState.Normal)
         tabsButton.setTitleColor(URLBarViewUX.backgroundColorWithAlpha(1), forState: UIControlState.Normal)
         tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
@@ -179,7 +179,7 @@ class URLBarView: UIView {
         commonInit()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
     }
@@ -501,7 +501,7 @@ class URLBarView: UIView {
 
         inOverlayMode = overlay
 
-        UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: nil, animations: { _ in
+        UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: { _ in
             self.transitionToOverlay()
             self.setNeedsUpdateConstraints()
             self.layoutIfNeeded()
@@ -546,13 +546,13 @@ extension URLBarView: BrowserToolbarProtocol {
         }
     }
 
-    func updatePageStatus(#isWebPage: Bool) {
+    func updatePageStatus(isWebPage isWebPage: Bool) {
         bookmarkButton.enabled = isWebPage
         stopReloadButton.enabled = isWebPage
         shareButton.enabled = isWebPage
     }
 
-    override var accessibilityElements: [AnyObject]! {
+    override var accessibilityElements: [AnyObject]? {
         get {
             if inOverlayMode {
                 return [locationTextField, cancelButton]
@@ -652,7 +652,7 @@ private class CurveView: UIView {
         commonInit()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
     }
@@ -669,7 +669,7 @@ private class CurveView: UIView {
     private func drawFromTop(path: UIBezierPath) {
         let height: Double = Double(UIConstants.ToolbarHeight)
         let width = getWidthForHeight(height)
-        var from = (Double(self.frame.width) - width * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(0))
+        let from = (Double(self.frame.width) - width * 2 - Double(URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer), Double(0))
 
         path.moveToPoint(CGPoint(x: from.0, y: from.1))
         path.addCurveToPoint(CGPoint(x: from.0 + width * W_M2, y: from.1 + height * H_M2),
@@ -698,7 +698,7 @@ private class CurveView: UIView {
         CGContextSetFillColorWithColor(context, URLBarViewUX.backgroundColorWithAlpha(1).CGColor)
         getPath().fill()
         leftCurvePath.fill()
-        CGContextDrawPath(context, kCGPathFill)
+        CGContextDrawPath(context, CGPathDrawingMode.Fill)
         CGContextRestoreGState(context)
     }
 }
@@ -708,7 +708,7 @@ private class ToolbarTextField: AutocompleteTextField {
         super.init(frame: frame)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

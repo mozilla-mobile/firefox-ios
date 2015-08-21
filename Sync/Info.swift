@@ -53,11 +53,11 @@ public class InfoCollections {
 
 extension Array {
     // Laughably inefficient, but good enough for a handful of items.
-    func sameElements(arr: [T], f: (T, T) -> Bool) -> Bool {
+    func sameElements(arr: [Element], f: (Element, T) -> Bool) -> Bool {
         return self.count == arr.count && every { arr.contains($0, f: f) }
     }
 
-    func contains(x: T, f: (T, T) -> Bool) -> Bool {
+    func contains(x: Element, f: (Element, T) -> Bool) -> Bool {
         for y in self {
             if f(x, y) {
                 return true
@@ -66,7 +66,7 @@ extension Array {
         return false
     }
 
-    func every(f: (T) -> Bool) -> Bool {
+    func every(f: (Element) -> Bool) -> Bool {
         for x in self {
             if !f(x) {
                 return false
