@@ -77,7 +77,8 @@ extension NSDate {
 }
 
 public func decimalSecondsStringToTimestamp(input: String) -> Timestamp? {
-    if let double = NSScanner(string: input).scanDouble() {
+    var double = 0.0
+    if NSScanner(string: input).scanDouble(&double) {
         return Timestamp(double * 1000)
     }
     return nil

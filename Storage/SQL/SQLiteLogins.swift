@@ -12,16 +12,6 @@ let TableLoginsMirror = "loginsM"
 let TableLoginsLocal = "loginsL"
 let AllLoginTables: Args = [TableLoginsMirror, TableLoginsLocal]
 
-enum SyncStatus: Int {
-    // Ordinarily not needed; synced items are removed from the overlay. But they start here when cloned.
-    case Synced = 0
-
-    // A material change that we want to upload on next sync.
-    case Changed = 1
-
-    // Created locally.
-    case New = 2
-}
 
 private class LoginsTable: Table {
     var name: String { return "LOGINS" }
@@ -112,7 +102,11 @@ private class LoginsTable: Table {
 }
 
 public class SQLiteLogins: BrowserLogins {
+
     private let db: BrowserDB
+    private static let MainColumns = "guid, username, password, hostname, httpRealm, formSubmitURL, usernameField, passwordField"
+    private static let MainWithLastUsedColumns = MainColumns + ", timeLastUsed, timesUsed"
+    private static let LoginColumns = MainColumns + ", timeCreated, timeLastUsed, timePasswordChanged, timesUsed"
 
     public init(db: BrowserDB) {
         self.db = db
@@ -182,9 +176,31 @@ public class SQLiteLogins: BrowserLogins {
         return LoginFactory(row) as LoginUsageData
     }
 
-    private static let MainColumns = "guid, username, password, hostname, httpRealm, formSubmitURL, usernameField, passwordField"
-    private static let MainWithLastUsedColumns = MainColumns + ", timeLastUsed, timesUsed"
-    private static let LoginColumns = MainColumns + ", timeCreated, timeLastUsed, timePasswordChanged, timesUsed"
+    func notifyLoginDidChange() {
+        log.debug("Notifying login did change.")
+
+        // For now we don't care about the contents.
+        // This posts immediately to the shared notification center.
+        let notification = NSNotification(name: NotificationDataLoginDidChange, object: nil)
+        NSNotificationCenter.defaultCenter().postNotification(notification)
+    }
+
+    public func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Maybe<LoginUsageData>> {
+        let projection = SQLiteLogins.LoginColumns
+        let sql =
+        "SELECT \(projection) FROM " +
+        "\(TableLoginsLocal) WHERE is_deleted = 0 AND guid = ? " +
+        "UNION ALL " +
+        "SELECT \(projection) FROM " +
+        "\(TableLoginsMirror) WHERE is_overridden = 0 AND guid = ? " +
+        "LIMIT 1"
+
+        let args: Args = [guid, guid]
+        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginUsageDataFactory)
+            >>== { value in
+            deferMaybe(value[0]!)
+        }
+    }
 
     public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>> {
         let projection = SQLiteLogins.MainWithLastUsedColumns
@@ -228,23 +244,6 @@ public class SQLiteLogins: BrowserLogins {
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
     }
 
-    public func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Maybe<LoginUsageData>> {
-        let projection = SQLiteLogins.LoginColumns
-        let sql =
-        "SELECT \(projection) FROM " +
-        "\(TableLoginsLocal) WHERE is_deleted = 0 AND guid = ? " +
-        "UNION ALL " +
-        "SELECT \(projection) FROM " +
-        "\(TableLoginsMirror) WHERE is_overridden = 0 AND guid = ? " +
-        "LIMIT 1"
-
-        let args: Args = [guid, guid]
-        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginUsageDataFactory)
-            >>== { value in
-            deferMaybe(value[0]!)
-        }
-    }
-
     public func addLogin(login: LoginData) -> Success {
         let nowMicro = NSDate.nowMicroseconds()
         let nowMilli = nowMicro / 1000
@@ -257,14 +256,12 @@ public class SQLiteLogins: BrowserLogins {
             login.formSubmitURL,
             login.usernameField,
             login.passwordField,
-
+            login.username,
+            login.password,
+            login.guid,
             dateMicro,            // timeCreated
             dateMicro,            // timeLastUsed
             dateMicro,            // timePasswordChanged
-            login.username,
-            login.password,
-
-            login.guid,
             dateMilli,            // localModified
         ]
 
@@ -276,15 +273,14 @@ public class SQLiteLogins: BrowserLogins {
         ", formSubmitURL" +
         ", usernameField" +
         ", passwordField" +
-        ", timeCreated" +
-        ", timeLastUsed" +
-        ", timePasswordChanged" +
         ", timesUsed" +
         ", username" +
         ", password " +
-
         // Local metadata.
         ", guid " +
+        ", timeCreated" +
+        ", timeLastUsed" +
+        ", timePasswordChanged" +
         ", local_modified " +
         ", is_deleted " +
         ", sync_status " +
@@ -294,14 +290,7 @@ public class SQLiteLogins: BrowserLogins {
         ")"
 
         return db.run(sql, withArgs: args)
-            >>> effect(self.notifyLoginDidChange)
-    }
-
-    private func cloneMirrorToOverlay(guid: GUID) -> Deferred<Maybe<Int>> {
-        let whereClause = "WHERE guid = ?"
-        let args: Args = [guid]
-
-        return self.cloneMirrorToOverlay(whereClause: whereClause, args: args)
+                >>> effect(self.notifyLoginDidChange)
     }
 
     private func cloneMirrorToOverlay(whereClause whereClause: String?, args: Args?) -> Deferred<Maybe<Int>> {
@@ -358,6 +347,13 @@ public class SQLiteLogins: BrowserLogins {
         }
     }
 
+    private func cloneMirrorToOverlay(guid: GUID) -> Deferred<Maybe<Int>> {
+        let whereClause = "WHERE guid = ?"
+        let args: Args = [guid]
+
+        return self.cloneMirrorToOverlay(whereClause: whereClause, args: args)
+    }
+
     private func markMirrorAsOverridden(guid: GUID) -> Success {
         let args: Args = [guid]
         let sql =
@@ -366,23 +362,6 @@ public class SQLiteLogins: BrowserLogins {
         "WHERE guid = ?"
 
         return self.db.run(sql, withArgs: args)
-    }
-
-    public func addUseOfLoginByGUID(guid: GUID) -> Success {
-        let sql =
-        "UPDATE \(TableLoginsLocal) SET " +
-        "timesUsed = timesUsed + 1, timeLastUsed = ?, local_modified = ? " +
-        "WHERE guid = ? AND is_deleted = 0"
-
-        // For now, mere use is not enough to flip sync_status to Changed.
-
-        let nowMicro = NSDate.nowMicroseconds()
-        let nowMilli = nowMicro / 1000
-        let args: Args = [NSNumber(unsignedLongLong: nowMicro), NSNumber(unsignedLongLong: nowMilli), guid]
-
-        return self.ensureLocalOverlayExistsForGUID(guid)
-           >>> { self.markMirrorAsOverridden(guid) }
-           >>> { self.db.run(sql, withArgs: args) }
     }
 
     /**
@@ -407,12 +386,12 @@ public class SQLiteLogins: BrowserLogins {
 
         let args: Args = [
             dateMilli,            // local_modified
+            dateMicro,            // timeLastUsed
+            dateMicro,            // timePasswordChanged
             new.httpRealm,
             new.formSubmitURL,
             new.usernameField,
             new.passwordField,
-            dateMicro,            // timeLastUsed
-            dateMicro,            // timePasswordChanged
             new.password,
             new.hostname,
             new.username,
@@ -421,11 +400,10 @@ public class SQLiteLogins: BrowserLogins {
 
         let update =
         "UPDATE \(TableLoginsLocal) SET " +
-        "  local_modified = ?" +
+        "  local_modified = ?, timeLastUsed = ?, timePasswordChanged = ?" +
         ", httpRealm = ?, formSubmitURL = ?, usernameField = ?" +
         ", passwordField = ?, timesUsed = timesUsed + 1" +
-        ", timeLastUsed = ?, timePasswordChanged = ?, password = ?" +
-        ", hostname = ?, username = ?" +
+        ", password = ?, hostname = ?, username = ?" +
 
         // We keep rows marked as New in preference to marking them as changed. This allows us to
         // delete them immediately if they don't reach the server.
@@ -435,7 +413,24 @@ public class SQLiteLogins: BrowserLogins {
         return self.ensureLocalOverlayExistsForGUID(guid)
            >>> { self.markMirrorAsOverridden(guid) }
            >>> { self.db.run(update, withArgs: args) }
-           >>> effect(self.notifyLoginDidChange)
+            >>> effect(self.notifyLoginDidChange)
+    }
+
+    public func addUseOfLoginByGUID(guid: GUID) -> Success {
+        let sql =
+        "UPDATE \(TableLoginsLocal) SET " +
+        "timesUsed = timesUsed + 1, timeLastUsed = ?, local_modified = ? " +
+        "WHERE guid = ? AND is_deleted = 0"
+
+        // For now, mere use is not enough to flip sync_status to Changed.
+
+        let nowMicro = NSDate.nowMicroseconds()
+        let nowMilli = nowMicro / 1000
+        let args: Args = [NSNumber(unsignedLongLong: nowMicro), NSNumber(unsignedLongLong: nowMilli), guid]
+
+        return self.ensureLocalOverlayExistsForGUID(guid)
+           >>> { self.markMirrorAsOverridden(guid) }
+           >>> { self.db.run(sql, withArgs: args) }
     }
 
     public func removeLoginByGUID(guid: GUID) -> Success {
@@ -468,7 +463,7 @@ public class SQLiteLogins: BrowserLogins {
            >>> { self.db.run(update, withArgs: args) }
            >>> { self.markMirrorAsOverridden(guid) }
            >>> { self.db.run(insert, withArgs: args) }
-           >>> effect(self.notifyLoginDidChange)
+            >>> effect(self.notifyLoginDidChange)
     }
 
     public func removeAll() -> Success {
@@ -495,7 +490,7 @@ public class SQLiteLogins: BrowserLogins {
            >>> { self.db.run(update) }
            >>> { self.db.run("UPDATE \(TableLoginsMirror) SET is_overridden = 1") }
            >>> { self.db.run(insert) }
-           >>> effect(self.notifyLoginDidChange)
+            >>> effect(self.notifyLoginDidChange)
     }
 }
 
@@ -873,16 +868,5 @@ extension SQLiteLogins: SyncableLogins {
 
         // Mark all of the local data as new.
         >>> { self.db.run("UPDATE \(TableLoginsLocal) SET sync_status = \(SyncStatus.New.rawValue)") }
-    }
-}
-
-extension SQLiteLogins {
-    func notifyLoginDidChange() {
-        log.debug("Notifying login did change.")
-
-        // For now we don't care about the contents.
-        // This posts immediately to the shared notification center.
-        let notification = NSNotification(name: NotificationDataLoginDidChange, object: nil)
-        NSNotificationCenter.defaultCenter().postNotification(notification)
     }
 }
