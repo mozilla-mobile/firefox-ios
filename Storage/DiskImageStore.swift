@@ -45,7 +45,7 @@ public class DiskImageStore {
         }
 
         return deferDispatchAsync(queue) { () -> Deferred<Maybe<UIImage>> in
-            let imagePath = self.filesDir.stringByAppendingPathComponent(key)
+            let imagePath = (self.filesDir as NSString).stringByAppendingPathComponent(key)
             if let data = NSData(contentsOfFile: imagePath),
                 let image = UIImage(data: data)
             {
@@ -65,12 +65,12 @@ public class DiskImageStore {
         }
 
         return deferDispatchAsync(queue) { () -> Success in
-            let imagePath = self.filesDir.stringByAppendingPathComponent(key)
-            let data = UIImageJPEGRepresentation(image, self.quality)
-
-            if data.writeToFile(imagePath, atomically: false) {
-                self.keys.insert(key)
-                return succeed()
+            let imagePath = (self.filesDir as NSString).stringByAppendingPathComponent(key)
+            if let data = UIImageJPEGRepresentation(image, self.quality) {
+                if data.writeToFile(imagePath, atomically: false) {
+                    self.keys.insert(key)
+                    return succeed()
+                }
             }
 
             return deferMaybe(DiskImageStoreErrorType(description: "Could not write image to file"))
