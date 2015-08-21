@@ -1,0 +1,1080 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
+  <file original="Account/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>1.0</source>
+        <target state="translated">1.0</target> </trans-unit>
+    </body>
+  </file>
+  <file original="AccountTests/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>1.0</source>
+        <target state="translated">1.0</target> </trans-unit>
+    </body>
+  </file>
+  <file original="Client/BookmarkPanel.strings" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="Delete" approved="yes">
+        <source>Delete</source>
+        <target state="translated">Вилучити</target> <note>Action button for deleting bookmarks in the bookmarks panel.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/ClearPrivateData.strings" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="Are you sure you want to clear all of your data? This will also close all open tabs." approved="yes">
+        <source>Are you sure you want to clear all of your data? This will also close all open tabs.</source>
+        <target state="translated">Ви дійсно хочете стерти всі свої дані? Це також спричинить закриття всіх відкритих вкладок.</target> <note>Message shown in the dialog prompting users if they want to clear everything</note>
+      </trans-unit>
+      <trans-unit id="Cancel" approved="yes">
+        <source>Cancel</source>
+        <target state="translated">Скасувати</target> <note>Used as a button label in the dialog to cancel clear private data dialog</note>
+      </trans-unit>
+      <trans-unit id="Clear" approved="yes">
+        <source>Clear</source>
+        <target state="translated">Стерти</target> <note>Used as a button label in the dialog to Clear private data dialog</note>
+      </trans-unit>
+      <trans-unit id="Clear Everything" approved="yes">
+        <source>Clear Everything</source>
+        <target state="translated">Стерти все</target> <note>Title of the Clear private data dialog.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/ErrorPages.strings" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="Open in Safari" approved="yes">
+        <source>Open in Safari</source>
+        <target state="translated">Відкрити у Safari</target> <note>Shown in error pages for files that can't be shown and need to be downloaded.</note>
+      </trans-unit>
+      <trans-unit id="Try again" approved="yes">
+        <source>Try again</source>
+        <target state="translated">Спробувати знову</target> <note>Shown in error pages on a button that will try to load the page again</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/HistoryPanel.strings" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="Remove" approved="yes">
+        <source>Remove</source>
+        <target state="translated">Вилучити</target> <note>Action button for deleting history entries in the history panel.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName" approved="yes">
+        <source>$(MOZ_BUNDLE_DISPLAY_NAME)</source>
+        <target state="translated">$(MOZ_BUNDLE_DISPLAY_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(MOZ_PRODUCT_NAME)</source>
+        <target state="translated">$(MOZ_PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>$(MOZ_VERSION)</source>
+        <target state="translated">$(MOZ_VERSION)</target> </trans-unit>
+      <trans-unit id="NSLocationWhenInUseUsageDescription" approved="yes">
+        <source>Websites you visit may request your location.</source>
+        <target state="translated">Відвідувані вами сайти можуть запитувати ваше розташування.</target> </trans-unit>
+    </body>
+  </file>
+  <file original="Client/Intro.strings" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="Browse multiple Web pages at the same time with tabs." approved="yes">
+        <source>Browse multiple Web pages at the same time with tabs.</source>
+        <target state="translated">Переглядайте одночасно багато веб-сторінок за допомогою вкладок.</target> <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Connect Firefox everywhere you use it." approved="yes">
+        <source>Connect Firefox everywhere you use it.</source>
+        <target state="translated">З'єднуйтесь з Firefox всюди, де ви його використовуєте.</target> <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Customize" approved="yes">
+        <source>Customize</source>
+        <target state="translated">Налаштовуйте</target> <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Firefox and the cloud" approved="yes">
+        <source>Firefox and the cloud</source>
+        <target state="translated">Firefox і хмара</target> <note>Accessibility label for an image. See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Introductory slide %@ of %@" approved="yes">
+        <source>Introductory slide %1$@ of %2$@</source>
+        <target state="translated">Вступний слайд %1$@ із %2$@</target> <note>String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3</note>
+      </trans-unit>
+      <trans-unit id="Organize" approved="yes">
+        <source>Organize</source>
+        <target state="translated">Організовуйте</target> <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Personalize your Firefox just the way you like in Settings." approved="yes">
+        <source>Personalize your Firefox just the way you like in Settings.</source>
+        <target state="translated">Персоналізуйте свій Firefox так, як вам зручно в Налаштуваннях.</target> <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Sign in to Firefox" approved="yes">
+        <source>Sign in to Firefox</source>
+        <target state="translated">Увійти в Firefox</target> <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="Start Browsing" approved="yes">
+        <source>Start Browsing</source>
+        <target state="translated">Почати перегляд</target> <note>See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="The Settings button is at the beginning of the Tabs Tray." approved="yes">
+        <source>The Settings button is at the beginning of the Tabs Tray.</source>
+        <target state="translated">Кнопка налаштувань знаходиться на початку лотка вкладок.</target> <note>Accessibility label for an image. See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+      <trans-unit id="The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." approved="yes">
+        <source>The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs.</source>
+        <target state="translated">Кнопка показу вкладок знаходиться поруч з текстовим полем адреси та пошуку і показує поточну кількість відкритих вкладок.</target> <note>Accessibility label for an image. See http://mzl.la/1T8gxwo</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/Localizable.strings" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="+" approved="yes">
+        <source>+</source>
+        <target state="translated">+</target> <note>Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar.</note>
+      </trans-unit>
+      <trans-unit id="-" approved="yes">
+        <source>-</source>
+        <target state="translated">-</target> <note>Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar.</note>
+      </trans-unit>
+      <trans-unit id="A username and password are being requested by %@." approved="yes">
+        <source>A username and password are being requested by %@.</source>
+        <target state="translated">Ім'я користувача та пароль наразі запитані %@.</target> <note>Authentication prompt message with no realm. Parameter is the hostname of the site</note>
+      </trans-unit>
+      <trans-unit id="A username and password are being requested by %@. The site says: %@" approved="yes">
+        <source>A username and password are being requested by %1$@. The site says: %2$@</source>
+        <target state="translated">Ім'я користувача і пароль наразі запитані %1$@. Сайт каже: %2$@</target> <note>Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string</note>
+      </trans-unit>
+      <trans-unit id="Aa" approved="yes">
+        <source>Aa</source>
+        <target state="translated">Aa</target> <note>Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar.</note>
+      </trans-unit>
+      <trans-unit id="About" approved="yes">
+        <source>About</source>
+        <target state="translated">Про</target> <note>About settings section title</note>
+      </trans-unit>
+      <trans-unit id="Add Tab" approved="yes">
+        <source>Add Tab</source>
+        <target state="translated">Додати вкладку</target> <note>Accessibility label for the Add Tab button in the Tab Tray.</note>
+      </trans-unit>
+      <trans-unit id="Add to Reading List" approved="yes">
+        <source>Add to Reading List</source>
+        <target state="translated">Додати до списку читання</target> <note>Add URL to the reading list - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440</note>
+      </trans-unit>
+      <trans-unit id="Added page to Reading List" approved="yes">
+        <source>Added page to Reading List</source>
+        <target state="translated">Сторінку додано до списку читання</target> <note>Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action.</note>
+      </trans-unit>
+      <trans-unit id="Address and Search" approved="yes">
+        <source>Address and Search</source>
+        <target state="translated">Адреса і пошук</target> <note>Accessibility label for address and search field, both words (Address, Search) are therefore nouns.</note>
+      </trans-unit>
+      <trans-unit id="Authentication required" approved="yes">
+        <source>Authentication required</source>
+        <target state="translated">Потрібна перевірка</target> <note>Authentication prompt title</note>
+      </trans-unit>
+      <trans-unit id="Back" approved="yes">
+        <source>Back</source>
+        <target state="translated">Назад</target> <note>Accessibility Label for the browser toolbar Back button</note>
+      </trans-unit>
+      <trans-unit id="Block Pop-up Windows" approved="yes">
+        <source>Block Pop-up Windows</source>
+        <target state="translated">Блокувати виринаючі вікна</target> <note>Block pop-up windows setting</note>
+      </trans-unit>
+      <trans-unit id="Bookmark" approved="yes">
+        <source>Bookmark</source>
+        <target state="translated">Закладка</target> <note>Bookmark a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440</note>
+      </trans-unit>
+      <trans-unit id="Bookmarks" approved="yes">
+        <source>Bookmarks</source>
+        <target state="translated">Закладки</target> <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Brightness" approved="yes">
+        <source>Brightness</source>
+        <target state="translated">Яскравість</target> <note>Accessibility label for brightness adjustment slider in Reader Mode display settings</note>
+      </trans-unit>
+      <trans-unit id="Call" approved="yes">
+        <source>Call</source>
+        <target state="translated">Виклик</target> <note>Alert Call Button</note>
+      </trans-unit>
+      <trans-unit id="Cancel" approved="yes">
+        <source>Cancel</source>
+        <target state="translated">Скасувати</target> <note>Alert Cancel Button
+   Authentication prompt cancel button
+   Button label to cancel entering a URL or search query
+   Cancel alert view
+   Cancel button
+   Cancel button in the 'log out firefox account' alert</note>
+      </trans-unit>
+      <trans-unit id="Changes color theme." approved="yes">
+        <source>Changes color theme.</source>
+        <target state="translated">Змінює тему кольору.</target> <note>Accessibility hint for the color theme setting buttons in reader mode display settings</note>
+      </trans-unit>
+      <trans-unit id="Changes font type." approved="yes">
+        <source>Changes font type.</source>
+        <target state="translated">Змінює тип шрифту.</target> <note>Accessibility hint for the font type buttons in reader mode display settings</note>
+      </trans-unit>
+      <trans-unit id="Clear Private Data" approved="yes">
+        <source>Clear Private Data</source>
+        <target state="translated">Стерти особисті дані</target> <note>Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data.</note>
+      </trans-unit>
+      <trans-unit id="Close" approved="yes">
+        <source>Close</source>
+        <target state="translated">Закрити</target> <note>Accessibility label for action denoting closing a tab in tab list (tray)</note>
+      </trans-unit>
+      <trans-unit id="Closing tab" approved="yes">
+        <source>Closing tab</source>
+        <target state="translated">Закриття вкладки</target> <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Copy Address" approved="yes">
+        <source>Copy Address</source>
+        <target state="translated">Копіювати адресу</target> <note>Copy the URL from the location bar</note>
+      </trans-unit>
+      <trans-unit id="Copy Image" approved="yes">
+        <source>Copy Image</source>
+        <target state="translated">Копіювати зображення</target> <note>Context menu item for copying an image to the clipboard</note>
+      </trans-unit>
+      <trans-unit id="Copy Link" approved="yes">
+        <source>Copy Link</source>
+        <target state="translated">Копіювати посилання</target> <note>Context menu item for copying a link URL to the clipboard</note>
+      </trans-unit>
+      <trans-unit id="Could not add page to Reading List. Maybe it's already there?" approved="yes">
+        <source>Could not add page to Reading List. Maybe it's already there?</source>
+        <target state="translated">Не вдалося додати сторінку до списку читання. Можливо вона вже там?</target> <note>Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures.</note>
+      </trans-unit>
+      <trans-unit id="Could not add page to Reading list" approved="yes">
+        <source>Could not add page to Reading list</source>
+        <target state="translated">Не вдалося додати сторінку до списку читання</target> <note>Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed.</note>
+      </trans-unit>
+      <trans-unit id="Could not load page." approved="yes">
+        <source>Could not load page.</source>
+        <target state="translated">Не вдалося завантажити сторінку.</target><note>Error message that is shown in settings when there was a problem loading</note>
+      </trans-unit>
+      <trans-unit id="Create an account" approved="yes">
+        <source>Create an account</source>
+        <target state="translated">Створити обліковий запис</target> <note>See http://mzl.la/1Qtkf0j</note>
+      </trans-unit>
+      <trans-unit id="Dark" approved="yes">
+        <source>Dark</source>
+        <target state="translated">Темна</target> <note>Dark theme setting in Reading View settings</note>
+      </trans-unit>
+      <trans-unit id="Debug: forget Sync auth state" approved="yes">
+        <source>Debug: forget Sync auth state</source>
+        <target state="translated">Зневадження: забути стан авторизації синхронізації</target> <note>Debug option</note>
+      </trans-unit>
+      <trans-unit id="Debug: require password" approved="yes">
+        <source>Debug: require password</source>
+        <target state="translated">Зневадження: вимагати пароль</target> <note>Debug option</note>
+      </trans-unit>
+      <trans-unit id="Debug: require upgrade" approved="yes">
+        <source>Debug: require upgrade</source>
+        <target state="translated">Зневадження: вимагати оновлення</target> <note>Debug option</note>
+      </trans-unit>
+      <trans-unit id="Decrease text size" approved="yes">
+        <source>Decrease text size</source>
+        <target state="translated">Зменшити розмір тексту</target> <note>Accessibility label for button decreasing font size in display settings of reader mode</note>
+      </trans-unit>
+      <trans-unit id="Default Search Engine" approved="yes">
+        <source>Default Search Engine</source>
+        <target state="translated">Типовий засіб пошуку</target> <note>Accessibility label for default search engine setting.
+   Title for default search engine picker.
+   Title for default search engine settings section.</note>
+      </trans-unit>
+      <trans-unit id="Display Settings" approved="yes">
+        <source>Display Settings</source>
+        <target state="translated">Показати налаштування</target> <note>Name for display settings button in reader mode. Display in the meaning of presentation, not monitor.</note>
+      </trans-unit>
+      <trans-unit id="Do you want to save the password for %@ on %@?" approved="yes">
+        <source>Do you want to save the password for %1$@ on %2$@?</source>
+        <target state="translated">Ви хочете зберегти пароль для %1$@ на %2$@?</target> <note>Prompt for saving a password. The first parameter is the username being saved. The second parameter is the hostname of the site.</note>
+      </trans-unit>
+      <trans-unit id="Do you want to save the password on %@?" approved="yes">
+        <source>Do you want to save the password on %@?</source>
+        <target state="translated">Ви хочете зберегти пароль на %@?</target> <note>Prompt for saving a password with no username. The parameter is the hostname of the site.</note>
+      </trans-unit>
+      <trans-unit id="Do you want to update the password for %@ on %@?" approved="yes">
+        <source>Do you want to update the password for %1$@ on %2$@?</source>
+        <target state="translated">Ви хочете оновити пароль для %1$@ на %2$@?</target> <note>Prompt for updating a password. The first parameter is the username being saved. The second parameter is the hostname of the site.</note>
+      </trans-unit>
+      <trans-unit id="Do you want to update the password on %@?" approved="yes">
+        <source>Do you want to update the password on %@?</source>
+        <target state="translated">Ви хочете оновити пароль на %@?</target> <note>Prompt for updating a password with on username. The parameter is the hostname of the site.</note>
+      </trans-unit>
+      <trans-unit id="Done" approved="yes">
+        <source>Done</source>
+        <target state="translated">Готово</target> <note>Done button on left side of the Settings view controller title bar
+   Done editing button</note>
+      </trans-unit>
+      <trans-unit id="Double tap and hold to open history" approved="yes">
+        <source>Double tap and hold to open history</source>
+        <target state="translated">Подвійний дотик і затримка для відкриття історії</target> <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Enter your password to connect." approved="yes">
+        <source>Enter your password to connect.</source>
+        <target state="translated">Введіть свій пароль, щоб з'єднатися.</target> <note>Text message in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device." approved="yes">
+        <source>Firefox will stop syncing with your account, but won’t delete any of your browsing data on this device.</source>
+        <target state="translated">Firefox припинить синхронізацію з вашим обліковим записом, але не вилучить жодних даних перегляду на цьому пристрої.</target> <note>Text of the 'log out firefox account' alert</note>
+      </trans-unit>
+      <trans-unit id="Firefox would like to access your Photos" approved="yes">
+        <source>Firefox would like to access your Photos</source>
+        <target state="translated">Firefox бажає отримати доступ до ваших фотографій</target> <note>See http://mzl.la/1G7uHo7</note>
+      </trans-unit>
+      <trans-unit id="Forward" approved="yes">
+        <source>Forward</source>
+        <target state="translated">Вперед</target> <note>Accessibility Label for the browser toolbar Forward button</note>
+      </trans-unit>
+      <trans-unit id="General" approved="yes">
+        <source>General</source>
+        <target state="translated">Загальні</target> <note>General settings section title</note>
+      </trans-unit>
+      <trans-unit id="Help" approved="yes">
+        <source>Help</source>
+        <target state="translated">Довідка</target> <note>Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ</note>
+      </trans-unit>
+      <trans-unit id="History" approved="yes">
+        <source>History</source>
+        <target state="translated">Історія</target> <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Increase text size" approved="yes">
+        <source>Increase text size</source>
+        <target state="translated">Збільшити розмір шрифту</target> <note>Accessibility label for button increasing font size in display settings of reader mode</note>
+      </trans-unit>
+      <trans-unit id="Last month" approved="yes">
+        <source>Last month</source>
+        <target state="translated">Останній місяць</target> <note>History tableview section header</note>
+      </trans-unit>
+      <trans-unit id="Last synced: %@" approved="yes">
+        <source>Last synced: %@</source>
+        <target state="translated">Востаннє синхронізовано: %@</target> <note>Remote tabs last synced time. Argument is the relative date string.</note>
+      </trans-unit>
+      <trans-unit id="Last week" approved="yes">
+        <source>Last week</source>
+        <target state="translated">Останній тиждень</target> <note>History tableview section header</note>
+      </trans-unit>
+      <trans-unit id="Licenses" approved="yes">
+        <source>Licenses</source>
+        <target state="translated">Ліцензії</target> <note>Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG</note>
+      </trans-unit>
+      <trans-unit id="Light" approved="yes">
+        <source>Light</source>
+        <target state="translated">Світла</target> <note>Light theme setting in Reading View settings</note>
+      </trans-unit>
+      <trans-unit id="Load original page" approved="yes">
+        <source>Load original page</source>
+        <target state="translated">Завантажити оригінальну сторінку</target><note>Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app.</note>
+      </trans-unit>
+      <trans-unit id="Loading content…" approved="yes">
+        <source>Loading content…</source>
+        <target state="translated">Завантаження вмісту…</target><note>Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app.</note>
+      </trans-unit>
+      <trans-unit id="Log Out" approved="yes">
+        <source>Log Out</source>
+        <target state="translated">Вийти</target> <note>Button in settings screen to disconnect from your account
+   Disconnect button in the 'log out firefox account' alert</note>
+      </trans-unit>
+      <trans-unit id="Log Out?" approved="yes">
+        <source>Log Out?</source>
+        <target state="translated">Вийти?</target> <note>Title of the 'log out firefox account' alert</note>
+      </trans-unit>
+      <trans-unit id="Log in" approved="yes">
+        <source>Log in</source>
+        <target state="translated">Увійти</target> <note>Authentication prompt log in button</note>
+      </trans-unit>
+      <trans-unit id="Looks like Firefox crashed previously. Would you like to restore your tabs?" approved="yes">
+        <source>Looks like Firefox crashed previously. Would you like to restore your tabs?</source>
+        <target state="translated">Схоже, минулого разу Firefox впав. Бажаєте відновити свої вкладки?</target> <note>Restore Tabs Prompt Description</note>
+      </trans-unit>
+      <trans-unit id="Mark as Read" approved="yes">
+        <source>Mark as Read</source>
+        <target state="translated">Позначити, як прочитане</target> <note>Name for Mark as read button in reader mode
+   Title for the button that marks a reading list item as read</note>
+      </trans-unit>
+      <trans-unit id="Mark as Unread" approved="yes">
+        <source>Mark as Unread</source>
+        <target state="translated">Позначити, як непрочитане</target> <note>Name for Mark as unread button in reader mode
+   Title for the button that marks a reading list item as unread</note>
+      </trans-unit>
+      <trans-unit id="Missing error" approved="yes">
+        <source>Missing error</source>
+        <target state="translated">Відсутня помилка</target> <note>Error for a missing remote error number</note>
+      </trans-unit>
+      <trans-unit id="Missing message" approved="yes">
+        <source>Missing message</source>
+        <target state="translated">Відсутнє повідомлення</target> <note>Error for a missing remote error message</note>
+      </trans-unit>
+      <trans-unit id="Navigation Toolbar" approved="yes">
+        <source>Navigation Toolbar</source>
+        <target state="translated">Панель навігації</target> <note>Accessibility label for the navigation toolbar displayed at the bottom of the screen.</note>
+      </trans-unit>
+      <trans-unit id="New tab: %@: %@" approved="yes">
+        <source>New tab: %1$@: %2$@</source>
+        <target state="translated">Нова вкладка: %1$@: %2$@</target> <note>New tab [title] [url]</note>
+      </trans-unit>
+      <trans-unit id="New version available" approved="yes">
+        <source>New version available</source>
+        <target state="translated">Доступна нова версія</target> <note>Prompt title for application update</note>
+      </trans-unit>
+      <trans-unit id="No" approved="yes">
+        <source>No</source>
+        <target state="translated">Ні</target> <note>Restore Tabs Negative Action</note>
+      </trans-unit>
+      <trans-unit id="No tabs" approved="yes">
+        <source>No tabs</source>
+        <target state="translated">Немає вкладок</target> <note>Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray</note>
+      </trans-unit>
+      <trans-unit id="Not Now" approved="yes">
+        <source>Not Now</source>
+        <target state="translated">Не зараз</target> <note>Label for button to cancel application update prompt</note>
+      </trans-unit>
+      <trans-unit id="Not now" approved="yes">
+        <source>Not now</source>
+        <target state="translated">Не зараз</target> <note>Button to not save the user's password</note>
+      </trans-unit>
+      <trans-unit id="OK" approved="yes">
+        <source>OK</source>
+        <target state="translated">OK</target> <note>Alert OK Button
+   Label for OK button in the application update prompt
+   OK button</note>
+      </trans-unit>
+      <trans-unit id="Okay" approved="yes">
+        <source>Okay</source>
+        <target state="translated">Згода</target> <note>Restore Tabs Affirmative Action</note>
+      </trans-unit>
+      <trans-unit id="Open In New Tab" approved="yes">
+        <source>Open In New Tab</source>
+        <target state="translated">Відкрити у новій вкладці</target> <note>Context menu item for opening a link in a new tab</note>
+      </trans-unit>
+      <trans-unit id="Open Settings" approved="yes">
+        <source>Open Settings</source>
+        <target state="translated">Налаштування</target> <note>See http://mzl.la/1G7uHo7</note>
+      </trans-unit>
+      <trans-unit id="Open articles in Reader View by tapping the book icon when it appears in the title bar." approved="yes">
+        <source>Open articles in Reader View by tapping the book icon when it appears in the title bar.</source>
+        <target state="translated">Відкривайте статті в режимі читача, торкнувшись іконки книги, коли вона з'являється в панелі заголовка.</target> <note>See http://mzl.la/1LXbDOL</note>
+      </trans-unit>
+      <trans-unit id="Opening %@" approved="yes">
+        <source>Opening %@</source>
+        <target state="translated">Відкриваю %@</target> <note>Opening an external URL</note>
+      </trans-unit>
+      <trans-unit id="Pages you have visited recently will show up here." approved="yes">
+        <source>Pages you have visited recently will show up here.</source>
+        <target state="translated">Ваші недавно відвідані сторінки з'являтимуться тут.</target><note>See http://bit.ly/1I7Do4b</note>
+      </trans-unit>
+      <trans-unit id="Panel Chooser" approved="yes">
+        <source>Panel Chooser</source>
+        <target state="translated">Вибір панелей</target> <note>Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).</note>
+      </trans-unit>
+      <trans-unit id="Password" approved="yes">
+        <source>Password</source>
+        <target state="translated">Пароль</target> <note>Password textbox in Authentication prompt</note>
+      </trans-unit>
+      <trans-unit id="Paste" approved="yes">
+        <source>Paste</source>
+        <target state="translated">Вставити</target> <note>Paste the URL into the location bar</note>
+      </trans-unit>
+      <trans-unit id="Paste &amp; Go" approved="yes">
+        <source>Paste &amp; Go</source>
+        <target state="translated">Вставити і перейти</target> <note>Paste the URL into the location bar and visit</note>
+      </trans-unit>
+      <trans-unit id="Privacy" approved="yes">
+        <source>Privacy</source>
+        <target state="translated">Приватність</target> <note>Privacy section title</note>
+      </trans-unit>
+      <trans-unit id="Privacy Policy" approved="yes">
+        <source>Privacy Policy</source>
+        <target state="translated">Політика приватності</target><note>Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/</note>
+      </trans-unit>
+      <trans-unit id="Quick-search Engines" approved="yes">
+        <source>Quick-search Engines</source>
+        <target state="translated">Швидкі засоби пошуку</target> <note>Title for quick-search engines settings section.</note>
+      </trans-unit>
+      <trans-unit id="Reader View" approved="yes">
+        <source>Reader View</source>
+        <target state="translated">Режим читача</target> <note>Accessibility label for the Reader View button</note>
+      </trans-unit>
+      <trans-unit id="Reading list" approved="yes">
+        <source>Reading list</source>
+        <target state="translated">Список читання</target> <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Reload" approved="yes">
+        <source>Reload</source>
+        <target state="translated">Перезавантажити</target> <note>Accessibility Label for the browser toolbar Reload button</note>
+      </trans-unit>
+      <trans-unit id="Remove" approved="yes">
+        <source>Remove</source>
+        <target state="translated">Вилучити</target> <note>Title for the button that removes a reading list item</note>
+      </trans-unit>
+      <trans-unit id="Remove from Reading List" approved="yes">
+        <source>Remove from Reading List</source>
+        <target state="translated">Прибрати зі списку читання</target> <note>Name for button removing current article from reading list in reader mode</note>
+      </trans-unit>
+      <trans-unit id="Sans-serif" approved="yes">
+        <source>Sans-serif</source>
+        <target state="translated">Без зарубок</target> <note>Font type setting in the reading view settings</note>
+      </trans-unit>
+      <trans-unit id="Save" approved="yes">
+        <source>Save</source>
+        <target state="translated">Зберегти</target> <note>Button to save the user's password</note>
+      </trans-unit>
+      <trans-unit id="Save Image" approved="yes">
+        <source>Save Image</source>
+        <target state="translated">Зберегти зображення</target> <note>Context menu item for saving an image</note>
+      </trans-unit>
+      <trans-unit id="Save pages to your Reading List by tapping the book plus icon in the Reader View controls." approved="yes">
+        <source>Save pages to your Reading List by tapping the book plus icon in the Reader View controls.</source>
+        <target state="translated">Зберігайте статті до свого списку читання, торкнувшись іконки книги з плюсом в керуванні режиму читача.</target> <note>See http://mzl.la/1LXbDOL</note>
+      </trans-unit>
+      <trans-unit id="Search" approved="yes">
+        <source>Search</source>
+        <target state="translated">Пошук</target> <note>Navigation title for search settings.
+   Open search section of settings</note>
+      </trans-unit>
+      <trans-unit id="Search or enter address" approved="yes">
+        <source>Search or enter address</source>
+        <target state="translated">Введіть запит чи адресу</target> <note>The text shown in the URL bar on about:home</note>
+      </trans-unit>
+      <trans-unit id="Searches for the suggestion" approved="yes">
+        <source>Searches for the suggestion</source>
+        <target state="translated">Пошук пропозиції</target> <note>Accessibility hint describing the action performed when a search suggestion is clicked</note>
+      </trans-unit>
+      <trans-unit id="Secure connection" approved="yes">
+        <source>Secure connection</source>
+        <target state="translated">Безпечне з'єднання</target> <note>Accessibility label for the lock icon, which is only present if the connection is secure</note>
+      </trans-unit>
+      <trans-unit id="Send Crash Reports" approved="yes">
+        <source>Send Crash Reports</source>
+        <target state="translated">Надсилати звіти про падіння</target><note>Setting to enable the sending of crash reports</note>
+      </trans-unit>
+      <trans-unit id="Send Feedback" approved="yes">
+        <source>Send Feedback</source>
+        <target state="translated">Надіслати відгук</target><note>Show an input.mozilla.org page where people can submit feedback</note>
+      </trans-unit>
+      <trans-unit id="Sepia" approved="yes">
+        <source>Sepia</source>
+        <target state="translated">Сепія</target> <note>Sepia theme setting in Reading View settings</note>
+      </trans-unit>
+      <trans-unit id="Serif" approved="yes">
+        <source>Serif</source>
+        <target state="translated">Із зарубками</target> <note>Font type setting in the reading view settings</note>
+      </trans-unit>
+      <trans-unit id="Settings" approved="yes">
+        <source>Settings</source>
+        <target state="translated">Налаштування</target> <note>Accessibility label for the Settings button in the Tab Tray.
+   Settings</note>
+      </trans-unit>
+      <trans-unit id="Share" approved="yes">
+        <source>Share</source>
+        <target state="translated">Поділитися</target> <note>Accessibility Label for the browser toolbar Share button</note>
+      </trans-unit>
+      <trans-unit id="Show Tabs" approved="yes">
+        <source>Show Tabs</source>
+        <target state="translated">Показати вкладки</target> <note>Accessibility label for the tabs button in the (top) browser toolbar
+   Accessibility Label for the tabs button in the browser toolbar</note>
+      </trans-unit>
+      <trans-unit id="Show Tour" approved="yes">
+        <source>Show Tour</source>
+        <target state="translated">Показати знайомство</target> <note>Show the on-boarding screen again from the settings</note>
+      </trans-unit>
+      <trans-unit id="Show search suggestions" approved="yes">
+        <source>Show search suggestions</source>
+        <target state="translated">Показувати пошукові пропозиції</target> <note>Label for show search suggestions setting.</note>
+      </trans-unit>
+      <trans-unit id="Sign in" approved="yes">
+        <source>Sign in</source>
+        <target state="translated">Увійти</target> <note>Button that leads to Sign in section of the Settings sheet.
+   See http://mzl.la/1Qtkf0j
+   Text message / button in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Stop" approved="yes">
+        <source>Stop</source>
+        <target state="translated">Стоп</target> <note>Accessibility Label for the browser toolbar Stop button</note>
+      </trans-unit>
+      <trans-unit id="Support" approved="yes">
+        <source>Support</source>
+        <target state="translated">Підтримка</target> <note>Support section title</note>
+      </trans-unit>
+      <trans-unit id="Swipe right or left with three fingers to close the tab." approved="yes">
+        <source>Swipe right or left with three fingers to close the tab.</source>
+        <target state="translated">Проведіть трьома пальцями вправо чи вліво для закриття вкладки.</target> <note>Accessibility hint for tab tray's displayed tab.</note>
+      </trans-unit>
+      <trans-unit id="Sync Now" approved="yes">
+        <source>Sync Now</source>
+        <target state="translated">Синхронізувати зараз</target><note>Sync Firefox Account</note>
+      </trans-unit>
+      <trans-unit id="Sync your tabs, bookmarks, passwords and more." approved="yes">
+        <source>Sync your tabs, bookmarks, passwords and more.</source>
+        <target state="translated">Синхронізуйте свої вкладки, закладки, паролі та інше.</target> <note>See http://mzl.la/1Qtkf0j</note>
+      </trans-unit>
+      <trans-unit id="Synced tabs" approved="yes">
+        <source>Synced tabs</source>
+        <target state="translated">Синхронізовані вкладки</target> <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Syncing…" approved="yes">
+        <source>Syncing…</source>
+        <target state="translated">Синхронізація…</target><note>Syncing Firefox Account</note>
+      </trans-unit>
+      <trans-unit id="Tab %@ of %@" approved="yes">
+        <source>Tab %1$@ of %2$@</source>
+        <target state="translated">Вкладка %1$@ із %2$@</target> <note>Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total.</note>
+      </trans-unit>
+      <trans-unit id="Tabs %@ to %@ of %@" approved="yes">
+        <source>Tabs %1$@ to %2$@ of %3$@</source>
+        <target state="translated">Вкладки від %1$@ до %2$@ із %3$@</target> <note>Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total.</note>
+      </trans-unit>
+      <trans-unit id="Tabs Tray" approved="yes">
+        <source>Tabs Tray</source>
+        <target state="translated">Лоток вкладок</target> <note>Accessibility label for the Tabs Tray view.</note>
+      </trans-unit>
+      <trans-unit id="The page could not be displayed in Reader View." approved="yes">
+        <source>The page could not be displayed in Reader View.</source>
+        <target state="translated">Сторінка не може бути показана в режимі читача.</target><note>Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app.</note>
+      </trans-unit>
+      <trans-unit id="There is a new version available of Firefox Aurora. Tap OK to go to the download page." approved="yes">
+        <source>There is a new version available of Firefox Aurora. Tap OK to go to the download page.</source>
+        <target state="translated">Доступна нова версія Firefox Aurora. Натисніть OK для переходу на сторінку завантаження.</target> <note>Prompt message for application update</note>
+      </trans-unit>
+      <trans-unit id="There was a problem accessing tabs from your other devices. Try again in a few moments." approved="yes">
+        <source>There was a problem accessing tabs from your other devices. Try again in a few moments.</source>
+        <target state="translated">Сталася помилка при отриманні доступу до вкладок з ваших інших пристроїв. Спробуйте знову пізніше.</target> <note>Error message in the remote tabs panel</note>
+      </trans-unit>
+      <trans-unit id="There was an error converting the page" approved="yes">
+        <source>There was an error converting the page</source>
+        <target state="translated">При конвертуванні сторінки сталася помилка</target> <note>Error displayed when reader mode cannot be enabled</note>
+      </trans-unit>
+      <trans-unit id="This allows you to save the image to your Camera Roll." approved="yes">
+        <source>This allows you to save the image to your Camera Roll.</source>
+        <target state="translated">Це дозволяє вам зберігати зображення до своєї фотоплівки.</target> <note>See http://mzl.la/1G7uHo7</note>
+      </trans-unit>
+      <trans-unit id="This will open in another application" approved="yes">
+        <source>This will open in another application</source>
+        <target state="translated">Це буде відкрито в іншій програмі</target> <note>Opening an external app</note>
+      </trans-unit>
+      <trans-unit id="Today" approved="yes">
+        <source>Today</source>
+        <target state="translated">Сьогодні</target> <note>History tableview section header</note>
+      </trans-unit>
+      <trans-unit id="Top sites" approved="yes">
+        <source>Top sites</source>
+        <target state="translated">Популярні сайти</target> <note>Panel accessibility label</note>
+      </trans-unit>
+      <trans-unit id="Update" approved="yes">
+        <source>Update</source>
+        <target state="translated">Оновити</target> <note>Button to update the user's password</note>
+      </trans-unit>
+      <trans-unit id="Upgrade Firefox to connect." approved="yes">
+        <source>Upgrade Firefox to connect.</source>
+        <target state="translated">Оновіть Firefox, щоб з'єднатись.</target> <note>Text message in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Use Compact Tabs" approved="yes">
+        <source>Use Compact Tabs</source>
+        <target state="translated">Показати стислі вкладки</target> <note>Setting to enable compact tabs in the tab overview</note>
+      </trans-unit>
+      <trans-unit id="Username" approved="yes">
+        <source>Username</source>
+        <target state="translated">Ім'я користувача</target> <note>Username textbox in Authentication prompt</note>
+      </trans-unit>
+      <trans-unit id="Verify your email address." approved="yes">
+        <source>Verify your email address.</source>
+        <target state="translated">Підтвердіть свою адресу ел. пошти.</target> <note>Text message in the settings table view</note>
+      </trans-unit>
+      <trans-unit id="Version %@ (%@)" approved="yes">
+        <source>Version %1$@ (%2$@)</source>
+        <target state="translated">Версія %1$@ (%2$@)</target> <note>Version number of Firefox shown in settings</note>
+      </trans-unit>
+      <trans-unit id="View" approved="yes">
+        <source>View</source>
+        <target state="translated">Переглянути</target> <note>View a URL - https://bugzilla.mozilla.org/attachment.cgi?id=8624438, https://bug1157303.bugzilla.mozilla.org/attachment.cgi?id=8624440</note>
+      </trans-unit>
+      <trans-unit id="Web content" approved="yes">
+        <source>Web content</source>
+        <target state="translated">Веб-вміст</target> <note>Accessibility label for the main web content view</note>
+      </trans-unit>
+      <trans-unit id="Welcome to Sync" approved="yes">
+        <source>Welcome to Sync</source>
+        <target state="translated">Вітаємо в Синхронізації</target> <note>See http://mzl.la/1Qtkf0j</note>
+      </trans-unit>
+      <trans-unit id="Welcome to your Reading List" approved="yes">
+        <source>Welcome to your Reading List</source>
+        <target state="translated">Вітаємо у вашому списку читання</target> <note>See http://mzl.la/1LXbDOL</note>
+      </trans-unit>
+      <trans-unit id="Well, this is embarrassing." approved="yes">
+        <source>Well, this is embarrassing.</source>
+        <target state="translated">Ой, оце так халепа.</target> <note>Restore Tabs Prompt Title</note>
+      </trans-unit>
+      <trans-unit id="Yesterday" approved="yes">
+        <source>Yesterday</source>
+        <target state="translated">Вчора</target> <note>History tableview section header</note>
+      </trans-unit>
+      <trans-unit id="You don't have any other devices connected to this Firefox Account available to sync." approved="yes">
+        <source>You don't have any other devices connected to this Firefox Account available to sync.</source>
+        <target state="translated">У вас немає інших доступних для синхронізації пристроїв, підключених до цього облікового запису Firefox.</target> <note>Error message in the remote tabs panel</note>
+      </trans-unit>
+      <trans-unit id="You don't have any tabs open in Firefox on your other devices." approved="yes">
+        <source>You don't have any tabs open in Firefox on your other devices.</source>
+        <target state="translated">У вас немає вкладок, відкритих в Firefox на інших пристроях.</target> <note>Error message in the remote tabs panel</note>
+      </trans-unit>
+      <trans-unit id="computer" approved="yes">
+        <source>computer</source>
+        <target state="translated">комп'ютер</target> <note>Accessibility label for Desktop Computer (PC) image in remote tabs list</note>
+      </trans-unit>
+      <trans-unit id="just now" approved="yes">
+        <source>just now</source>
+        <target state="translated">щойно</target> <note>Relative time for a tab that was visited within the last few moments.</note>
+      </trans-unit>
+      <trans-unit id="mobile device" approved="yes">
+        <source>mobile device</source>
+        <target state="translated">мобільний пристрій</target> <note>Accessibility label for Mobile Device image in remote tabs list</note>
+      </trans-unit>
+      <trans-unit id="more than a month ago" approved="yes">
+        <source>more than a month ago</source>
+        <target state="translated">більш ніж місяць тому</target> <note>Relative date for dates older than a month and less than two months.</note>
+      </trans-unit>
+      <trans-unit id="more than a week ago" approved="yes">
+        <source>more than a week ago</source>
+        <target state="translated">більш ніж тиждень тому</target> <note>Description for a date more than a week ago, but less than a month ago.</note>
+      </trans-unit>
+      <trans-unit id="read" approved="yes">
+        <source>read</source>
+        <target state="translated">прочитане</target> <note>Accessibility label for read article in reading list. It's a past participle - functions as an adjective.</note>
+      </trans-unit>
+      <trans-unit id="this week" approved="yes">
+        <source>this week</source>
+        <target state="translated">цього тижня</target> <note>Relative date for date in past week.</note>
+      </trans-unit>
+      <trans-unit id="today at %@" approved="yes">
+        <source>today at %@</source>
+        <target state="translated">сьогодні %@</target> <note>Relative date for date older than a minute.</note>
+      </trans-unit>
+      <trans-unit id="unread" approved="yes">
+        <source>unread</source>
+        <target state="translated">непрочитане</target> <note>Accessibility label for unread article in reading list. It's a past participle - functions as an adjective.</note>
+      </trans-unit>
+      <trans-unit id="yesterday" approved="yes">
+        <source>yesterday</source>
+        <target state="translated">вчора</target> <note>Relative date for yesterday.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Client/Search.strings" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="%@ search" approved="yes">
+        <source>%@ search</source>
+        <target state="translated">Пошук %@</target> <note>Label for search engine buttons. The argument corresponds to the name of the search engine.</note>
+      </trans-unit>
+      <trans-unit id="No" approved="yes">
+        <source>No</source>
+        <target state="translated">Ні</target> <note>For search suggestions prompt. This string should be short so it fits nicely on the prompt row.</note>
+      </trans-unit>
+      <trans-unit id="Search Settings" approved="yes">
+        <source>Search Settings</source>
+        <target state="translated">Налаштування пошуку</target> <note>Label for search settings button.</note>
+      </trans-unit>
+      <trans-unit id="Search suggestions from %@" approved="yes">
+        <source>Search suggestions from %@</source>
+        <target state="translated">Пошукові пропозиції від %@</target> <note>Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google</note>
+      </trans-unit>
+      <trans-unit id="Turn on search suggestions?" approved="yes">
+        <source>Turn on search suggestions?</source>
+        <target state="translated">Увімкнути пошукові пропозиції?</target> <note>Prompt shown before enabling provider search queries</note>
+      </trans-unit>
+      <trans-unit id="Yes" approved="yes">
+        <source>Yes</source>
+        <target state="translated">Так</target> <note>For search suggestions prompt. This string should be short so it fits nicely on the prompt row.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="ClientTests/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>1.0</source>
+        <target state="translated">1.0</target> </trans-unit>
+    </body>
+  </file>
+  <file original="Extensions/SendTo/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName" approved="yes">
+        <source>Send Tab</source>
+        <target state="translated">Надіслати вкладку</target> </trans-unit>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>$(MOZ_VERSION)</source>
+        <target state="translated">$(MOZ_VERSION)</target> </trans-unit>
+    </body>
+  </file>
+  <file original="Extensions/SendTo/SendTo.strings" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="Available devices:" approved="yes">
+        <source>Available devices:</source>
+        <target state="translated">Доступні пристрої:</target> <note>Header for the list of devices table</note>
+      </trans-unit>
+      <trans-unit id="Close" approved="yes">
+        <source>Close</source>
+        <target state="translated">Закрити</target> <note>Close button in top navigation bar</note>
+      </trans-unit>
+      <trans-unit id="Please open Firefox, go to Settings and sign in to continue." approved="yes">
+        <source>Please open Firefox, go to Settings and sign in to continue.</source>
+        <target state="translated">Для продовження, відкрийте Firefox, перейдіть в Налаштування та увійдіть.</target> <note>See http://mzl.la/1ISlXnU</note>
+      </trans-unit>
+      <trans-unit id="Send" approved="yes">
+        <source>Send</source>
+        <target state="translated">Надіслати</target> <note>Navigation bar button to Send the current page to a device</note>
+      </trans-unit>
+      <trans-unit id="Send Tab" approved="yes">
+        <source>Send Tab</source>
+        <target state="translated">Надіслати вкладку</target> <note>Title of the dialog that allows you to send a tab to a different device</note>
+      </trans-unit>
+      <trans-unit id="You are not signed in to your Firefox Account." approved="yes">
+        <source>You are not signed in to your Firefox Account.</source>
+        <target state="translated">Ви не увійшли в свій обліковий запис Firefox.</target> <note>See http://mzl.la/1ISlXnU</note>
+      </trans-unit>
+      <trans-unit id="You don't have any other devices connected to this Firefox Account available to sync." approved="yes">
+        <source>You don't have any other devices connected to this Firefox Account available to sync.</source>
+        <target state="translated">У вас немає інших доступних для синхронізації пристроїв, підключених до цього облікового запису Firefox.</target> <note>Error message shown in the remote tabs panel</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Extensions/ShareTo/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName" approved="yes">
+        <source>$(MOZ_BUNDLE_DISPLAY_NAME)</source>
+        <target state="translated">$(MOZ_BUNDLE_DISPLAY_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>$(MOZ_VERSION)</source>
+        <target state="translated">$(MOZ_VERSION)</target> </trans-unit>
+    </body>
+  </file>
+  <file original="Extensions/ShareTo/ShareTo.strings" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="Add" approved="yes">
+        <source>Add</source>
+        <target state="translated">Додати</target> <note>Add button in the share dialog</note>
+      </trans-unit>
+      <trans-unit id="Add to Bookmarks" approved="yes">
+        <source>Add to Bookmarks</source>
+        <target state="translated">Додати в закладки</target> <note>On/off toggle to select adding this url to your bookmarks</note>
+      </trans-unit>
+      <trans-unit id="Add to Reading List" approved="yes">
+        <source>Add to Reading List</source>
+        <target state="translated">Додати в список читання</target> <note>On/off toggle to select adding this url to your reading list</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Extensions/ViewLater/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName" approved="yes">
+        <source>View Later</source>
+        <target state="translated">Переглянути пізніше</target> </trans-unit>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>$(MOZ_VERSION)</source>
+        <target state="translated">$(MOZ_VERSION)</target> </trans-unit>
+    </body>
+  </file>
+  <file original="ReadingList/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>1.0</source>
+        <target state="translated">1.0</target> </trans-unit>
+    </body>
+  </file>
+  <file original="ReadingListTests/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>1.0</source>
+        <target state="translated">1.0</target> </trans-unit>
+    </body>
+  </file>
+  <file original="Shared/Supporting Files/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>1.0</source>
+        <target state="translated">1.0</target> </trans-unit>
+    </body>
+  </file>
+  <file original="Shared/Supporting Files/Shared.strings" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="%@ on %@" approved="yes">
+        <source>%1$@ on %2$@</source>
+        <target state="translated">%1$@ на %2$@</target> <note>A brief descriptive name for this app on this device, used for Send Tab and Synced Tabs. The first argument is the app name. The second argument is the device name.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="SharedTests/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>1.0</source>
+        <target state="translated">1.0</target> </trans-unit>
+    </body>
+  </file>
+  <file original="Storage.strings" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="Bookmarks Menu" approved="yes">
+        <source>Bookmarks Menu</source>
+        <target state="translated">Меню закладок</target> <note>The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.</note>
+      </trans-unit>
+      <trans-unit id="Bookmarks Toolbar" approved="yes">
+        <source>Bookmarks Toolbar</source>
+        <target state="translated">Панель закладок</target> <note>The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.</note>
+      </trans-unit>
+      <trans-unit id="Mobile Bookmarks" approved="yes">
+        <source>Mobile Bookmarks</source>
+        <target state="translated">Мобільні закладки</target> <note>The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.</note>
+      </trans-unit>
+      <trans-unit id="Unsorted Bookmarks" approved="yes">
+        <source>Unsorted Bookmarks</source>
+        <target state="translated">Несортовані закладки</target> <note>The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.</note>
+      </trans-unit>
+      <trans-unit id="Untitled" approved="yes">
+        <source>Untitled</source>
+        <target state="translated">Нова тека</target> <note>The default name for bookmark folders without titles.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="StorageTests/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>1.0</source>
+        <target state="translated">1.0</target> </trans-unit>
+    </body>
+  </file>
+  <file original="Sync/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>1.0</source>
+        <target state="translated">1.0</target> </trans-unit>
+    </body>
+  </file>
+  <file original="SyncTests/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>1.0</source>
+        <target state="translated">1.0</target> </trans-unit>
+    </body>
+  </file>
+  <file original="UITests/Info.plist" source-language="en" datatype="plaintext" target-language="uk">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="6.4" build-num="6E35b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" approved="yes">
+        <source>$(PRODUCT_NAME)</source>
+        <target state="translated">$(PRODUCT_NAME)</target> </trans-unit>
+      <trans-unit id="CFBundleShortVersionString" approved="yes">
+        <source>1.0</source>
+        <target state="translated">1.0</target> </trans-unit>
+    </body>
+  </file>
+</xliff>

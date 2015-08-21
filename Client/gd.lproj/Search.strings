@@ -1,0 +1,18 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "Lorg air %@";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "Chan eil";
+
+/* Label for search settings button. */
+"Search Settings" = "Roghainnean luirg";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "Molaidhean luirg o %@";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "A bheil thu airson na molaidhean luirg a chur air?";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "Tha";
+
