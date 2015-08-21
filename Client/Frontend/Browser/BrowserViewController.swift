@@ -1520,6 +1520,10 @@ extension BrowserViewController: WKUIDelegate {
             return
         }
 
+        if checkIfWebContentProcessHasCrashed(webView, error: error) {
+            return
+        }
+
         if let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
@@ -1535,6 +1539,10 @@ extension BrowserViewController: WKUIDelegate {
             return
         }
 
+        if checkIfWebContentProcessHasCrashed(webView, error: error) {
+            return
+        }
+
         if error.code == Int(CFNetworkErrors.CFURLErrorCancelled.rawValue) {
             if let browser = tabManager[webView] where browser === tabManager.selectedTab {
                 urlBar.currentURL = browser.displayURL
@@ -1545,6 +1553,16 @@ extension BrowserViewController: WKUIDelegate {
         if let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
+    }
+
+    private func checkIfWebContentProcessHasCrashed(webView: WKWebView, error: NSError) -> Bool {
+        if error.code == WKErrorCode.WebContentProcessTerminated.rawValue && error.domain == "WebKitErrorDomain" {
+            log.debug("WebContent process has crashed. Trying to reloadFromOrigin to restart it.")
+            webView.reloadFromOrigin()
+            return true
+        }
+
+        return false
     }
 
     func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
