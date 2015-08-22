@@ -1051,7 +1051,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
                     
                     self.presentViewController(activityViewController, animated: true, completion: nil)
                 })
-			}
+	    }
         }
     }
 }
