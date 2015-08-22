@@ -103,6 +103,14 @@ class BrowserViewController: UIViewController, UIActivityItemSource {
         }
     }
 
+    override func didReceiveMemoryWarning() {
+        println("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
+        log.debug("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
+        NSLog("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
+        super.didReceiveMemoryWarning()
+        tabManager.resetProcessPool()
+    }
+
     private func didInit() {
         screenshotHelper = BrowserScreenshotHelper(controller: self)
         tabManager.addDelegate(self)
@@ -658,6 +666,13 @@ class BrowserViewController: UIViewController, UIActivityItemSource {
             urlBar.updateReloadStatus(loading)
             auralProgress.progress = loading ? 0 : nil
         case KVOURL:
+            if let tab = tabManager.selectedTab where tab.webView?.URL == nil {
+                log.debug("URL IS NIL! WE ARE RESETTING PROCESS POOL")
+                NSLog("URL IS NIL! WE ARE RESETTING PROCESS POOL")
+                println("URL IS NIL! WE ARE RESETTING PROCESS POOL")
+                tabManager.resetProcessPool()
+            }
+
             if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
                 updateUIForReaderHomeStateForTab(tab)
             }
@@ -1311,7 +1326,7 @@ extension BrowserViewController: TabManagerDelegate {
             } else {
                 // The web view can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
-                webView.reload()
+                tab.reload()
             }
         }
 
@@ -1435,7 +1450,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 case "about", "http", "https":
                     if isWhitelistedUrl(url) {
                         // If the url is whitelisted, we open it without prompting.
-                        openExternal(url, prompt: false)
+                        // Except when the NavigationType is Other, which means it is JavaScript or Redirect initiated.
+                        openExternal(url, prompt: navigationAction.navigationType == WKNavigationType.Other)
                         decisionHandler(WKNavigationActionPolicy.Cancel)
                     } else {
                         decisionHandler(WKNavigationActionPolicy.Allow)
@@ -1579,6 +1595,10 @@ extension BrowserViewController: WKUIDelegate {
             return
         }
 
+        if checkIfWebContentProcessHasCrashed(webView, error: error) {
+            return
+        }
+
         if let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
@@ -1586,6 +1606,18 @@ extension BrowserViewController: WKUIDelegate {
 
     /// Invoked when an error occurs while starting to load data for the main frame.
     func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
+        // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
+        // to open an external application and hand it over to UIApplication.openURL(). The result
+        // will be that we switch to the external app, for example the app store, while keeping the
+        // original web page in the tab instead of replacing it with an error page.
+        if error.domain == "WebKitErrorDomain" && error.code == 102 {
+            return
+        }
+
+        if checkIfWebContentProcessHasCrashed(webView, error: error) {
+            return
+        }
+
         if error.code == Int(CFNetworkErrors.CFURLErrorCancelled.rawValue) {
             if let browser = tabManager[webView] where browser === tabManager.selectedTab {
                 urlBar.currentURL = browser.displayURL
@@ -1596,6 +1628,16 @@ extension BrowserViewController: WKUIDelegate {
         if let url = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
             ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
         }
+    }
+
+    private func checkIfWebContentProcessHasCrashed(webView: WKWebView, error: NSError) -> Bool {
+        if error.code == WKErrorCode.WebContentProcessTerminated.rawValue && error.domain == "WebKitErrorDomain" {
+            log.debug("WebContent process has crashed. Trying to reloadFromOrigin to restart it.")
+            webView.reloadFromOrigin()
+            return true
+        }
+
+        return false
     }
 
     func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {

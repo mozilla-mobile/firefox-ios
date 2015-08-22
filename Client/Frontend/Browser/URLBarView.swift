@@ -51,6 +51,15 @@ class URLBarView: UIView {
     weak var delegate: URLBarDelegate?
     weak var browserToolbarDelegate: BrowserToolbarDelegate?
     var helper: BrowserToolbarHelper?
+    var isTransitioning: Bool = false {
+        didSet {
+            if isTransitioning {
+                // Cancel any pending/in-progress animations related to the progress bar
+                self.progressBar.setProgress(1, animated: false)
+                self.progressBar.alpha = 0.0
+            }
+        }
+    }
 
     var toolbarIsShowing = false
 
@@ -189,10 +198,6 @@ class URLBarView: UIView {
         addSubview(curveShape)
         addSubview(scrollToTopButton)
 
-        locationContainer.addSubview(locationView)
-        locationContainer.addSubview(locationTextField)
-        addSubview(locationContainer)
-
         addSubview(progressBar)
         addSubview(tabsButton)
         addSubview(cancelButton)
@@ -203,11 +208,16 @@ class URLBarView: UIView {
         addSubview(backButton)
         addSubview(stopReloadButton)
 
+        locationContainer.addSubview(locationView)
+        locationContainer.addSubview(locationTextField)
+        addSubview(locationContainer)
+
         helper = BrowserToolbarHelper(toolbar: self)
         setupConstraints()
 
         // Make sure we hide any views that shouldn't be showing in non-overlay mode.
         updateViewsForOverlayModeAndToolbarChanges()
+        self.locationTextField.hidden = !inOverlayMode
     }
 
     private func setupConstraints() {
@@ -388,15 +398,19 @@ class URLBarView: UIView {
 
     func updateProgressBar(progress: Float) {
         if progress == 1.0 {
-            self.progressBar.setProgress(progress, animated: true)
+            self.progressBar.setProgress(progress, animated: !isTransitioning)
             UIView.animateWithDuration(1.5, animations: {
                 self.progressBar.alpha = 0.0
-            }, completion: { _ in
-                self.progressBar.setProgress(0.0, animated: false)
+            }, completion: { finished in
+                if finished {
+                    self.progressBar.setProgress(0.0, animated: false)
+                }
             })
         } else {
-            self.progressBar.alpha = 1.0
-            self.progressBar.setProgress(progress, animated: (progress > progressBar.progress))
+            if self.progressBar.alpha < 1.0 {
+                self.progressBar.alpha = 1.0
+            }
+            self.progressBar.setProgress(progress, animated: (progress > progressBar.progress) && !isTransitioning)
         }
     }
 
@@ -409,36 +423,46 @@ class URLBarView: UIView {
     }
 
     func enterOverlayMode(locationText: String?, pasted: Bool) {
-        if pasted {
-            // Clear any existing text, focus the field, then set the actual pasted text.
-            // This avoids highlighting all of the text.
-            locationTextField.text = ""
-            locationTextField.becomeFirstResponder()
-            locationTextField.text = locationText
-        } else {
-            // Copy the current URL to the editable text field, then activate it.
-            locationTextField.text = locationText
-            locationTextField.becomeFirstResponder()
-        }
 
         // Show the overlay mode UI, which includes hiding the locationView and replacing it
         // with the editable locationTextField.
-        animateToOverlayState(true)
+        animateToOverlayState(overlayMode: true)
 
         delegate?.urlBarDidEnterOverlayMode(self)
+
+        // Bug 1193755 Workaround - Calling become first responder before the animation happens
+        // does this weird thing where it won't take in the initial frame of the label into consideration
+        // which makes the label look squished at the start of the animation and expand to be correct. As a workaround,
+        // I've pushed the become first responder as the next event on UI thread so the animation starts before we 
+        // set a first responder
+        if pasted {
+            // Clear any existing text, focus the field, then set the actual pasted text.
+            // This avoids highlighting all of the text.
+            self.locationTextField.text = ""
+            dispatch_async(dispatch_get_main_queue()) {
+                self.locationTextField.becomeFirstResponder()
+                self.locationTextField.text = locationText
+            }
+        } else {
+            // Copy the current URL to the editable text field, then activate it.
+            self.locationTextField.text = locationText
+            dispatch_async(dispatch_get_main_queue()) {
+                self.locationTextField.becomeFirstResponder()
+            }
+        }
     }
 
-    func leaveOverlayMode() {
+    func leaveOverlayMode(didCancel cancel: Bool = false) {
         locationTextField.resignFirstResponder()
-        animateToOverlayState(false)
+        animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)
     }
 
     func prepareOverlayAnimation() {
         // Make sure everything is showing during the transition (we'll hide it afterwards).
+        self.bringSubviewToFront(self.locationContainer)
         self.cancelButton.hidden = false
         self.progressBar.hidden = false
-        self.locationTextField.hidden = false
         self.shareButton.hidden = !self.toolbarIsShowing
         self.bookmarkButton.hidden = !self.toolbarIsShowing
         self.forwardButton.hidden = !self.toolbarIsShowing
@@ -446,10 +470,9 @@ class URLBarView: UIView {
         self.stopReloadButton.hidden = !self.toolbarIsShowing
     }
 
-    func transitionToOverlay() {
+    func transitionToOverlay(didCancel: Bool = false) {
         self.cancelButton.alpha = inOverlayMode ? 1 : 0
-        self.progressBar.alpha = inOverlayMode ? 0 : 1
-        self.locationTextField.alpha = inOverlayMode ? 1 : 0
+        self.progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
         self.shareButton.alpha = inOverlayMode ? 0 : 1
         self.bookmarkButton.alpha = inOverlayMode ? 0 : 1
         self.forwardButton.alpha = inOverlayMode ? 0 : 1
@@ -487,7 +510,6 @@ class URLBarView: UIView {
     func updateViewsForOverlayModeAndToolbarChanges() {
         self.cancelButton.hidden = !inOverlayMode
         self.progressBar.hidden = inOverlayMode
-        self.locationTextField.hidden = !inOverlayMode
         self.shareButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.bookmarkButton.hidden = !self.toolbarIsShowing || inOverlayMode
         self.forwardButton.hidden = !self.toolbarIsShowing || inOverlayMode
@@ -495,14 +517,17 @@ class URLBarView: UIView {
         self.stopReloadButton.hidden = !self.toolbarIsShowing || inOverlayMode
     }
 
-    func animateToOverlayState(overlay: Bool) {
+    func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
         prepareOverlayAnimation()
         layoutIfNeeded()
 
         inOverlayMode = overlay
 
+        locationView.urlTextField.hidden = inOverlayMode
+        locationTextField.hidden = !inOverlayMode
+
         UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: nil, animations: { _ in
-            self.transitionToOverlay()
+            self.transitionToOverlay(didCancel: cancel)
             self.setNeedsUpdateConstraints()
             self.layoutIfNeeded()
         }, completion: { _ in
@@ -515,7 +540,7 @@ class URLBarView: UIView {
     }
 
     func SELdidClickCancel() {
-        leaveOverlayMode()
+        leaveOverlayMode(didCancel: true)
     }
 
     func SELtappedScrollToTopArea() {

@@ -16,6 +16,9 @@ private let UpdateButtonTitle = NSLocalizedString("Update", comment: "Button to 
 private let CancelButtonTitle = NSLocalizedString("Cancel", comment: "Authentication prompt cancel button")
 private let LogInButtonTitle  = NSLocalizedString("Log in", comment: "Authentication prompt log in button")
 
+// Copied from SearchViewController.swift PromptYes
+private let PromptYes = NSLocalizedString("Yes", tableName: "Search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
+
 class LoginsHelper: BrowserHelper {
     private weak var browser: Browser?
     private let profile: Profile
@@ -43,9 +46,20 @@ class LoginsHelper: BrowserHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        let frameInfo = message.frameInfo
+
+        // We don't currently inject the helper into iframes.
+        // Don't listen for messages from iframes, either.
+        if !frameInfo.mainFrame {
+            return
+        }
+
         var res = message.body as! [String: String]
         let type = res["type"]
-        if let url = browser?.url {
+
+        // We don't use the WKWebView's URL since the page can spoof the URL by using document.location
+        // right before requesting login data. See bug 1194567 for more context.
+        if let url = frameInfo.request.URL {
             if type == "request" {
                 res["username"] = ""
                 res["password"] = ""
@@ -125,19 +139,20 @@ class LoginsHelper: BrowserHelper {
         }
 
         snackBar = TimerSnackBar(attrText: promptMessage,
-            img: UIImage(named: "lock_verified"),
+            img: UIImage(named: "key"),
             buttons: [
-                SnackButton(title: SaveButtonTitle, callback: { (bar: SnackBar) -> Void in
-                    self.browser?.removeSnackbar(bar)
-                    self.snackBar = nil
-                    self.profile.logins.addLogin(login)
-                }),
-
                 SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     return
+                }),
+
+                SnackButton(title: PromptYes, callback: { (bar: SnackBar) -> Void in
+                    self.browser?.removeSnackbar(bar)
+                    self.snackBar = nil
+                    self.profile.logins.addLogin(login)
                 })
+
             ])
         browser?.addSnackbar(snackBar!)
     }
@@ -160,18 +175,19 @@ class LoginsHelper: BrowserHelper {
         }
 
         snackBar = TimerSnackBar(attrText: promptMessage,
-            img: UIImage(named: "lock_verified"),
+            img: UIImage(named: "key"),
             buttons: [
+                SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
+                    self.browser?.removeSnackbar(bar)
+                    self.snackBar = nil
+                    return
+                }),
+
                 SnackButton(title: UpdateButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.logins.updateLoginByGUID(guid, new: new,
                                                           significant: new.isSignificantlyDifferentFrom(old))
-                }),
-                SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
-                    self.browser?.removeSnackbar(bar)
-                    self.snackBar = nil
-                    return
                 })
             ])
         browser?.addSnackbar(snackBar!)
