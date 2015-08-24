@@ -12,7 +12,12 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
+public let ProfileDidStartSyncingNotification = "ProfileDidStartSyncingNotification"
+public let ProfileDidFinishSyncingNotification = "ProfileDidFinishSyncingNotification"
+
 public protocol SyncManager {
+    var isSyncing: Bool { get }
+
     func syncClients() -> SyncResult
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
@@ -434,14 +439,28 @@ public class BrowserProfile: Profile {
          * Locking is managed by withSyncInputs. Make sure you take and release these
          * whenever you do anything Sync-ey.
          */
-        var syncLock = OSSpinLock()
+        var syncLock = OSSpinLock() {
+            didSet {
+                if oldValue == syncLock {
+                    return
+                }
+                let notification = syncLock == 0 ? ProfileDidFinishSyncingNotification : ProfileDidStartSyncingNotification
+                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: nil))
+            }
+        }
+
+        // According to the OSAtomic header documentation, the convention for an unlocked lock is a zero value
+        // and a locked lock is a non-zero value
+        var isSyncing: Bool {
+            return syncLock != 0
+        }
 
         private func beginSyncing() -> Bool {
             return OSSpinLockTry(&syncLock)
         }
 
         private func endSyncing() {
-            return OSSpinLockUnlock(&syncLock)
+            OSSpinLockUnlock(&syncLock)
         }
 
         init(profile: BrowserProfile) {
