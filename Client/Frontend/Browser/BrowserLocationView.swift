@@ -31,7 +31,11 @@ class BrowserLocationView: UIView {
 
     var url: NSURL? {
         didSet {
+            let wasHidden = lockImageView.hidden
             lockImageView.hidden = url?.scheme != "https"
+            if wasHidden != lockImageView.hidden {
+                UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+            }
             updateTextWithURL()
             setNeedsUpdateConstraints()
         }
@@ -43,8 +47,12 @@ class BrowserLocationView: UIView {
         }
         set (newReaderModeState) {
             if newReaderModeState != self.readerModeButton.readerModeState {
+                let wasHidden = readerModeButton.hidden
                 self.readerModeButton.readerModeState = newReaderModeState
                 readerModeButton.hidden = (newReaderModeState == ReaderModeState.Unavailable)
+                if wasHidden != readerModeButton.hidden {
+                    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+                }
                 UIView.animateWithDuration(0.1, animations: { () -> Void in
                     if newReaderModeState == ReaderModeState.Unavailable {
                         self.readerModeButton.alpha = 0.0
@@ -122,8 +130,15 @@ class BrowserLocationView: UIView {
             make.trailing.centerY.equalTo(self)
             make.width.equalTo(self.readerModeButton.intrinsicContentSize().width + CGFloat(BrowserLocationViewUX.LocationContentInset * 2))
         }
+    }
 
-        accessibilityElements = [lockImageView, urlTextField, readerModeButton]
+    override var accessibilityElements: [AnyObject]! {
+        get {
+            return [lockImageView, urlTextField, readerModeButton].filter { !$0.hidden }
+        }
+        set {
+            super.accessibilityElements = newValue
+        }
     }
 
     required init(coder aDecoder: NSCoder) {
