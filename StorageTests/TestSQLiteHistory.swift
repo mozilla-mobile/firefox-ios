@@ -45,7 +45,11 @@ class TestSQLiteHistory: XCTestCase {
             >>> { history.insertOrUpdatePlace(siteL.asPlace(), modified: 1437088398462) }
             >>> { history.insertOrUpdatePlace(siteR.asPlace(), modified: 1437088398463) }
             >>> { history.insertOrUpdatePlace(siteB.asPlace(), modified: 1437088398465) }
+
+            // Do this step twice, so we exercise the dupe-visit handling.
             >>> { history.storeRemoteVisits([siteVisitR1, siteVisitR2, siteVisitR3], forGUID: siteR.guid!) }
+            >>> { history.storeRemoteVisits([siteVisitR1, siteVisitR2, siteVisitR3], forGUID: siteR.guid!) }
+
             >>> { history.storeRemoteVisits([siteVisitBR1], forGUID: siteB.guid!) }
 
             >>> { history.getSitesByFrecencyWithLimit(3)
@@ -58,6 +62,21 @@ class TestSQLiteHistory: XCTestCase {
                     XCTAssertEqual(siteB.guid!, sites[1]!.guid!)
                     XCTAssertEqual(siteR.guid!, sites[2]!.guid!)
                     return succeed()
+            }
+
+            // This marks everything as modified so we can fetch it.
+            >>> history.onRemovedAccount
+
+            // Now check that we have no duplicate visits.
+            >>> { history.getModifiedHistoryToUpload()
+                >>== { (places) -> Success in
+                    if let (place, visits) = find(places, {$0.0.guid == siteR.guid!}) {
+                        XCTAssertEqual(3, visits.count)
+                    } else {
+                        XCTFail("Couldn't find site R.")
+                    }
+                    return succeed()
+                }
             }
         }
 
