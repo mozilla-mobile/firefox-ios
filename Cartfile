@@ -1,7 +1,7 @@
 github "Alamofire/Alamofire" "swift-2.0"
 github "Masonry/Snap" "Swift-2.0"
 github "swisspol/GCDWebServer"
-github "kif-framework/KIF" "v3.2.1"
+github "kif-framework/KIF" "master"
 github "drmohundro/SWXMLHash" "xcode-7.0"           # So we get Swift 2.0 fixes.
 github "rs/SDWebImage" "master"              # To get the fix for libwebp
 github "yageek/Base32"
