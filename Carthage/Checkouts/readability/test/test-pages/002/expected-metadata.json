@@ -1,0 +1,6 @@
+{
+  "title": "This API is so Fetching!",
+  "byline": "Nikhil Marathe",
+  "excerpt": "For more than a decade the Web has used XMLHttpRequest (XHR) to achieve asynchronous requests in JavaScript. While very useful, XHR is not a very ...",
+  "readerable": true
+}

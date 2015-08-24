@@ -1,0 +1,37 @@
+language: objective-c
+cache:
+  directories:
+  - vendor/bundle
+before_install:
+- curl 'https://developer.apple.com/certificationauthority/AppleWWDRCA.cer' -o certificates/AppleWWDRCA.cer
+- brew update
+- brew install carthage
+install:
+- bundle install --path=vendor/bundle --binstubs=vendor/bin
+- bundle exec rake certificates:install
+- carthage checkout
+- carthage build --no-skip-current
+script:
+- bundle exec rake test:ios test:osx test:SecEncodeTransformTests
+branches:
+  only:
+  - master
+  - "/^v\\d+\\.\\d+\\.\\d+$/"
+env:
+  global:
+  - LANG=en_US.UTF-8
+  - LC_ALL=en_US.UTF-8
+  - secure: IP57b/yOhCM+IRcOrnlWZAauuqWTtz6k/a3QTyUXGFyryyLJC1sQSD5wzDIP7YfgM9MrnjUihZEuyR/PSyD/GNQFk5hHNToLBScJg4p0eKQaLoxFeT9twFF4AxwUo4eaYEcgodLDm/1LMe+KwX27QOpb8BboAwg0NychgoVy/dw=
+before_deploy:
+- carthage archive Base32
+deploy:
+  provider: releases
+  api_key:
+    secure: dzODt3i8Ta8CtN1phcOpVxhzpgRbVJ129VLCKZfPfBHwCVbPC17k8mwotKbZ85bqD9rWoqAaRRNLCHL4j57fkbb+vXYVIsv1LT9xQNTYJkbWQNUYCylnHUaKgf7Pef+ZcHeXxGZXX0Jg27TaenTsujg+nILHY2ivz1nVmb92rzk=
+  file: Base32.framework.zip
+  on:
+    tags: true
+  skip_cleanup: true
+notifications:
+  webhooks:
+    secure: TKFWG5dDRlNK/XbsC7eKDEh7vnydCUYjGc1Sv9DUOfRjvxYBMq+ys8R9iHAotNNtnCdacohM0bcwT1ZXQcRTYKEd6vKtY1XkkPA2xBogLVfhu17DCDMhJ3iTtati1mMK1rVeSgseXffOKVq1ZjNGjBVCIHl0PZoj5jFiOwYKKO8=
