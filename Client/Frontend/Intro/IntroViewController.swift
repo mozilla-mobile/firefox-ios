@@ -104,6 +104,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
 
         scrollView = IntroOverlayScrollView()
         scrollView.backgroundColor = UIColor.clearColor()
+        scrollView.accessibilityLabel = NSLocalizedString("Intro Tour Carousel", comment: "Accessibility label for the introduction tour carousel")
         scrollView.delegate = self
         scrollView.bounces = false
         scrollView.pagingEnabled = true

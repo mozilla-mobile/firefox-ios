@@ -11,6 +11,7 @@ import Storage
 import SnapKit
 import XCGLogger
 import Alamofire
+import Account
 
 private let log = Logger.browserLogger
 
@@ -1855,18 +1856,57 @@ extension BrowserViewController: IntroViewControllerDelegate {
     }
 
     func presentSignInViewController() {
-        // TODO When bug 1161151 has been resolved we can jump directly to the sign in screen
-        let settingsNavigationController = SettingsNavigationController()
-        settingsNavigationController.profile = self.profile
-        settingsNavigationController.tabManager = self.tabManager
+        // Show the settings page if we have already signed in. If we haven't then show the signin page
+        let vcToPresent: UIViewController
+        if profile.hasAccount() {
+            let settingsTableViewController = SettingsTableViewController()
+            settingsTableViewController.profile = profile
+            settingsTableViewController.tabManager = tabManager
+            vcToPresent = settingsTableViewController
+        } else {
+            let signInVC = FxAContentViewController()
+            signInVC.delegate = self
+            signInVC.url = profile.accountConfiguration.signInURL
+            signInVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "dismissSignInViewController")
+            vcToPresent = signInVC
+        }
+
+        let settingsNavigationController = SettingsNavigationController(rootViewController: vcToPresent)
 		settingsNavigationController.modalPresentationStyle = .FormSheet
         self.presentViewController(settingsNavigationController, animated: true, completion: nil)
+    }
+
+    func dismissSignInViewController() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 
     func introViewControllerDidRequestToLogin(introViewController: IntroViewController) {
         introViewController.dismissViewControllerAnimated(true, completion: { () -> Void in
             self.presentSignInViewController()
         })
+    }
+}
+
+extension BrowserViewController: FxAContentViewControllerDelegate {
+    func contentViewControllerDidSignIn(viewController: FxAContentViewController, data: JSON) -> Void {
+        if data["keyFetchToken"].asString == nil || data["unwrapBKey"].asString == nil {
+            // The /settings endpoint sends a partial "login"; ignore it entirely.
+            log.debug("Ignoring didSignIn with keyFetchToken or unwrapBKey missing.")
+            return
+        }
+
+        // TODO: Error handling.
+        let account = FirefoxAccount.fromConfigurationAndJSON(profile.accountConfiguration, data: data)!
+        profile.setAccount(account)
+        if let account = self.profile.getAccount() {
+            account.advance()
+        }
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    func contentViewControllerDidCancel(viewController: FxAContentViewController) {
+        log.info("Did cancel out of FxA signin")
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 
