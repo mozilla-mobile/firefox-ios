@@ -71,6 +71,49 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForWebViewElementWithAccessibilityLabel("Top")
     }
 
+    func testTapSignInShowsFxAFromRemoteTabPanel() {
+        tester().tapViewWithAccessibilityLabel("Synced tabs")
+        tester().tapViewWithAccessibilityLabel("Sign in")
+        tester().waitForViewWithAccessibilityLabel("Web content")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().waitForViewWithAccessibilityLabel("Sign in")
+    }
+
+    func testTapSignInShowsFxAFromTour() {
+        // Launch the tour from the settings
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("Show Tour")
+        tester().waitForAnimationsToFinish()
+
+        // Swipe to the end of the tour
+        tester().swipeViewWithAccessibilityLabel("Intro Tour Carousel", inDirection: KIFSwipeDirection.Left)
+        tester().swipeViewWithAccessibilityLabel("Intro Tour Carousel", inDirection: KIFSwipeDirection.Left)
+
+        tester().tapViewWithAccessibilityLabel("Sign in to Firefox")
+        tester().waitForViewWithAccessibilityLabel("Web content")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("home")
+    }
+
+    func testTapSigninShowsFxAFromSettings() {
+        // Navigation to the settings to select the signin option
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("Sign in")
+        tester().waitForViewWithAccessibilityLabel("Web content")
+
+        // Go back to the home screen
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
+    }
+
     override func tearDown() {
         BrowserUtils.clearHistoryItems(tester(), numberOfTests: 5)
     }
