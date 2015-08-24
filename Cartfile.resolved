@@ -1,6 +1,6 @@
 github "Alamofire/Alamofire" "e489c5fece971352b05b6ef185eca53f68bee1bc"
 github "yageek/Base32" "v0.3.1"
-github "wesj/Deferred" "ef8e95954196c815aff79f0b4471219ab2885692"
+github "mozilla/Deferred" "f3d9a179cfa96a0d9b82dd575c95c29c026248bd"
 github "swisspol/GCDWebServer" "3.2.5"
 github "kif-framework/KIF" "d2567a99a14414949fe8217211cda54a3e9f3f92"
 github "ZaBlanc/RaptureXML" "76b59ec0abf68c06d27cc027d7750b6a4da08650"
