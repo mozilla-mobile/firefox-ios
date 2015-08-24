@@ -28,7 +28,6 @@ class SettingsTableViewCell: UITableViewCell {
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 class Setting {
-    private var cell: UITableViewCell?
     private var _title: NSAttributedString?
 
     // The url the SettingsContentViewController will show, e.g. Licenses and Privacy Policy.
@@ -109,7 +108,8 @@ class SettingSection : Setting {
 // A helper class for prefs that deal with sync. Handles reloading the tableView data if changes to
 // the fxAccount happen.
 private class AccountSetting: Setting, FxAContentViewControllerDelegate {
-    let settings: SettingsTableViewController
+    unowned var settings: SettingsTableViewController
+
     var profile: Profile {
         return settings.profile
     }
@@ -120,6 +120,7 @@ private class AccountSetting: Setting, FxAContentViewControllerDelegate {
         self.settings = settings
         super.init(title: nil)
     }
+
     private override func onConfigureCell(cell: UITableViewCell) {
         super.onConfigureCell(cell)
         if settings.profile.getAccount() != nil {
@@ -208,39 +209,25 @@ private class DisconnectSetting: WithAccountSetting {
 private class SyncNowSetting: WithAccountSetting {
     private let syncNowTitle = NSAttributedString(string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.systemFontOfSize(UIConstants.DefaultStandardFontSize, weight: UIFontWeightRegular)])
 
-    private let log = Logger.browserLogger
+    private let syncingTitle = NSAttributedString(string: NSLocalizedString("Syncing…", comment: "Syncing Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(UIConstants.DefaultStandardFontSize, weight: UIFontWeightRegular)])
 
     override var accessoryType: UITableViewCellAccessoryType { return .None }
 
     override var style: UITableViewCellStyle { return .Value1 }
 
     override var title: NSAttributedString? {
-        return syncNowTitle
+        return profile.syncManager.isSyncing ? syncingTitle : syncNowTitle
     }
 
     override func onConfigureCell(cell: UITableViewCell) {
         cell.textLabel?.attributedText = title
         cell.accessoryType = accessoryType
         cell.accessoryView = nil
-        self.cell = cell
+        cell.userInteractionEnabled = !profile.syncManager.isSyncing
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        if let cell = self.cell {
-            cell.userInteractionEnabled = false
-            cell.textLabel?.attributedText = NSAttributedString(string: NSLocalizedString("Syncing…", comment: "Syncing Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(UIConstants.DefaultStandardFontSize, weight: UIFontWeightRegular)])
-            profile.syncManager.syncEverything().uponQueue(dispatch_get_main_queue()) { result in
-                if result.isSuccess {
-                    self.log.debug("Sync succeeded.")
-                } else {
-                    self.log.debug("Sync failed.")
-                }
-            }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * Int64(NSEC_PER_SEC)), dispatch_get_main_queue(), { () -> Void in
-                cell.textLabel?.attributedText = self.syncNowTitle
-                cell.userInteractionEnabled = true
-            })
-        }
+        profile.syncManager.syncEverything()
     }
 }
 
@@ -758,9 +745,27 @@ class SettingsTableViewController: UITableViewController {
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELsyncDidChangeState", name: ProfileDidStartSyncingNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELsyncDidChangeState", name: ProfileDidFinishSyncingNotification, object: nil)
+    }
+
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         SELrefresh()
+    }
+
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: ProfileDidStartSyncingNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: ProfileDidFinishSyncingNotification, object: nil)
+    }
+
+    @objc private func SELsyncDidChangeState() {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.tableView.reloadData()
+        }
     }
 
     @objc private func SELrefresh() {

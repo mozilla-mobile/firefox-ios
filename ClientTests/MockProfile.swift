@@ -11,6 +11,8 @@ import Sync
 import XCTest
 
 public class MockSyncManager: SyncManager {
+    public var isSyncing = false
+
     public func syncClients() -> SyncResult { return deferResult(.Completed) }
     public func syncClientsThenTabs() -> SyncResult { return deferResult(.Completed) }
     public func syncHistory() -> SyncResult { return deferResult(.Completed) }
