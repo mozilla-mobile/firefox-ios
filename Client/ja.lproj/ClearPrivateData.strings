@@ -1,0 +1,12 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "データをすべて消去してもよろしいですか？消去すると、開いているタブはすべて閉じられます。";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "キャンセル";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "消去する";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "全データの消去";
+

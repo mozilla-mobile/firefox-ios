@@ -1,0 +1,12 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Czy na pewno usunąć wszystkie dane? Wszystkie otwarte karty zostaną również zamknięte.";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Anuluj";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Wyczyść";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Usuwanie danych";
+

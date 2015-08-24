@@ -1,0 +1,12 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Er du sikker på at du vil fjerna alle data? Dette vil òg late att alle opne faner.";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Avbryt";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Tøm";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Tøm alt";
+

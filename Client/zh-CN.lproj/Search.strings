@@ -1,0 +1,18 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "%@ 搜索";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"No" = "否";
+
+/* Label for search settings button. */
+"Search Settings" = "搜索设置";
+
+/* Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google */
+"Search suggestions from %@" = "%@ 提供的搜索建议";
+
+/* Prompt shown before enabling provider search queries */
+"Turn on search suggestions?" = "开启搜索建议？";
+
+/* For search suggestions prompt. This string should be short so it fits nicely on the prompt row. */
+"Yes" = "是";
+
