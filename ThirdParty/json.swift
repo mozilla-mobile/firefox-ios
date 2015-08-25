@@ -374,7 +374,7 @@ extension JSON : SequenceType {
                 return (i, JSON(o[i]))
             }
         case let o as NSDictionary:
-            var ks = o.allKeys.reverse()
+            let ks = o.allKeys.reverse()
             return anyGenerator() {
                 if ks.isEmpty { return nil }
                 if let k = ks.last as? String {

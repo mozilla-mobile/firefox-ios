@@ -37,7 +37,7 @@ public class AppInfo {
             if let baseBundleIdentifier = bundle.bundleIdentifier {
                 if packageType == "XPC!" {
                     let components = baseBundleIdentifier.componentsSeparatedByString(".")
-                    return ".".join(components[0..<components.count-1])
+                    return components[0..<components.count-1].joinWithSeparator(".")
                 }
                 return baseBundleIdentifier
             }

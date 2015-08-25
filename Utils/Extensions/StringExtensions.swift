@@ -64,8 +64,8 @@ public extension String {
     */
     func ellipsize(let maxLength maxLength: Int) -> String {
         if (maxLength >= 2) && (self.characters.count > maxLength) {
-            let index1 = advance(self.startIndex, (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
-            let index2 = advance(self.endIndex, maxLength / -2)
+            let index1 = self.startIndex.advancedBy((maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
+            let index2 = self.endIndex.advancedBy(maxLength / -2)
 
             return self.substringToIndex(index1) + "…\u{2060}" + self.substringFromIndex(index2)
         }

@@ -35,10 +35,10 @@ private func loadEntriesFromDisk() -> TLDEntryMap? {
             let key: String
             if entry.isWild {
                 // Trim off the '*.' part of the line
-                key = line.substringFromIndex(advance(line.startIndex, 2))
+                key = line.substringFromIndex(line.startIndex.advancedBy(2))
             } else if entry.isException {
                 // Trim off the '!' part of the line
-                key = line.substringFromIndex(advance(line.startIndex, 1))
+                key = line.substringFromIndex(line.startIndex.advancedBy(1))
             } else {
                 key = line
             }
@@ -73,7 +73,7 @@ extension NSURL {
 
     public func getQuery() -> [String: String] {
         var results = [String: String]()
-        var keyValues = self.query?.componentsSeparatedByString("&")
+        let keyValues = self.query?.componentsSeparatedByString("&")
 
         if keyValues?.count > 0 {
             for pair in keyValues! {
@@ -107,7 +107,7 @@ extension NSURL {
     public func absoluteStringWithoutHTTPScheme() -> String? {
         // If it's basic http, strip out the string but leave anything else in
         if self.absoluteString.hasPrefix("http://") ?? false {
-            return self.absoluteString.substringFromIndex(advance(self.absoluteString.startIndex, 7))
+            return self.absoluteString.substringFromIndex(self.absoluteString.startIndex.advancedBy(7))
         } else {
             return self.absoluteString
         }
@@ -174,7 +174,7 @@ extension NSURL {
 
 //MARK: Private Helpers
 private extension NSURL {
-    private func publicSuffixFromHost(var host: String, withAdditionalParts additionalPartCount: Int) -> String? {
+    private func publicSuffixFromHost( host: String, withAdditionalParts additionalPartCount: Int) -> String? {
         if host.isEmpty {
             return nil
         }
@@ -214,7 +214,7 @@ private extension NSURL {
 
         for offset in 0..<tokenCount {
             // Store the offset for use outside of this scope so we can add additional parts if needed
-            let nextDot: String? = offset + 1 < tokenCount ? ".".join(tokens[offset + 1..<tokenCount]) : nil
+            let nextDot: String? = offset + 1 < tokenCount ? tokens[offset + 1..<tokenCount].joinWithSeparator(".") : nil
 
             if let entry = etldEntries?[currentDomain] {
                 if entry.isWild && (previousDomain != nil) {
@@ -248,8 +248,8 @@ private extension NSURL {
                 let suffixlessTokens = suffixlessHost.componentsSeparatedByString(".").filter { $0 != "" }
                 let maxAdditionalCount = max(0, suffixlessTokens.count - additionalPartCount)
                 let additionalParts = suffixlessTokens[maxAdditionalCount..<suffixlessTokens.count]
-                let partsString = ".".join(additionalParts)
-                baseDomain = ".".join([partsString, suffix])
+                let partsString = additionalParts.joinWithSeparator(".")
+                baseDomain = [partsString, suffix].joinWithSeparator(".")
             } else {
                 return nil
             }
