@@ -707,7 +707,7 @@ extension SQLiteHistory: SyncableHistory {
 
                 let insertDomain = "INSERT OR IGNORE INTO \(TableDomains) (domain) VALUES (?)"
                 let insertHistory = "INSERT INTO \(TableHistory) (guid, url, title, server_modified, is_deleted, should_upload, domain_id) " +
-                                    "(?, ?, ?, ?, 0, 0, NULL)"
+                                    "VALUES (?, ?, ?, ?, 0, 0, NULL)"
                 return self.db.run([
                     (insertHistory, [place.guid, place.url, place.title, serverModified])
                 ]) >>> always(place.guid)
