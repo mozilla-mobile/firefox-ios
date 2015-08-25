@@ -14,7 +14,7 @@ import XCTest
 public class LiveAccountTest: XCTestCase {
     lazy var signedInUser: JSON? = {
         if let path = NSBundle(forClass: self.dynamicType).pathForResource("signedInUser.json", ofType: nil) {
-            if let contents = String(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) {
+            if let contents = try? String(contentsOfFile: path, encoding: NSUTF8StringEncoding) {
                 let json = JSON.parse(contents)
                 if json.isError {
                     return nil
@@ -142,7 +142,7 @@ public class LiveAccountTest: XCTestCase {
         let account = self.getTestAccount()
         print("Got test account.")
         return account.map { result in
-            println("Result was successful? \(result.isSuccess)")
+            print("Result was successful? \(result.isSuccess)")
             if let account = result.successValue {
                 return Maybe(success: account.syncAuthState)
             }
