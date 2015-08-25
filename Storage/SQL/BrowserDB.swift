@@ -25,7 +25,7 @@ public class BrowserDB {
     private let files: FileAccessor
     private let filename: String
     private let secretKey: String?
-    private let schemaTable: SchemaTable<TableInfo>
+    private let schemaTable: SchemaTable
 
     private var initialized = [String]()
 
@@ -52,7 +52,7 @@ public class BrowserDB {
     }
 
     // Creates a table and writes its table info into the table-table database.
-    private func createTable<T: Table>(db: SQLiteDBConnection, table: T) -> TableResult {
+    private func createTable(db: SQLiteDBConnection, table: Table) -> TableResult {
         log.debug("Try create \(table.name) version \(table.version)")
         if !table.create(db, version: table.version) {
             // If creating failed, we'll bail without storing the table info
@@ -66,7 +66,7 @@ public class BrowserDB {
 
     // Updates a table and writes its table into the table-table database.
     // Exposed internally for testing.
-    func updateTable<T: Table>(db: SQLiteDBConnection, table: T) -> TableResult {
+    func updateTable(db: SQLiteDBConnection, table: Table) -> TableResult {
         log.debug("Trying update \(table.name) version \(table.version)")
         var from = 0
         // Try to find the stored version of the table
@@ -102,7 +102,7 @@ public class BrowserDB {
 
     // Utility for table classes. They should call this when they're initialized to force
     // creation of the table in the database.
-    func createOrUpdate<T: Table>(table: T) -> Bool {
+    func createOrUpdate(table: Table) -> Bool {
         log.debug("Create or update \(table.name) version \(table.version).")
         var success = true
         db = SwiftData(filename: ((try! files.getAndEnsureDirectory()) as NSString).stringByAppendingPathComponent(self.filename), key: secretKey)
