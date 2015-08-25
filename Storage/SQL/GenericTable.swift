@@ -8,7 +8,7 @@ import Shared
 
 private let log = Logger.syncLogger
 
-// A protocol for informationa about a particular table. This is used as a type to be stored by TableTable.
+// A protocol for information about a particular table. This is used as a type to be stored by TableTable.
 protocol TableInfo {
     var name: String { get }
     var version: Int { get }
