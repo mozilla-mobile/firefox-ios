@@ -354,7 +354,7 @@ public class BrowserTable: Table {
         let chunks = chunk(pairs, by: BrowserDB.MaxVariableNumber - (BrowserDB.MaxVariableNumber % 2))
         for chunk in chunks {
             let ins = "INSERT INTO \(tmpTable) (url, domain) VALUES " +
-                      ", ".join(Array<String>(count: chunk.count / 2, repeatedValue: "(?, ?)"))
+                      Array<String>(count: chunk.count / 2, repeatedValue: "(?, ?)").joinWithSeparator(", ")
             if !self.run(db, sql: ins, args: Array(chunk)) {
                 log.error("Couldn't insert domains into temporary table. Aborting migration.")
                 return false

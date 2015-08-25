@@ -147,7 +147,7 @@ public class TokenServerClient {
         alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (_, response, result) in
-            if let error = result.error {
+            if let error = result.error as? NSError{
                 deferred.fill(Maybe(failure: TokenServerError.Local(error)))
                 return
             }
