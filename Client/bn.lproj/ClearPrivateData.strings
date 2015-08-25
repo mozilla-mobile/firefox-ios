@@ -1,0 +1,12 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "আপনি কি নিশ্চিত যে আপনি আপনার সব তথ্য মুছে দিতে চান? এর ফলে আপনার সব কটি ট্যাব বন্ধ হয়ে যাবে।";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "বাতিল";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "মুছে ফেলুন";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "সব মুছুন";
+

@@ -1,0 +1,33 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Сърфирайте из няколко уеб страници едновременно, чрез подпрозорци.";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Свържете се с Firefox, навсякъде където го използвате.";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "Персонализирайте";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox и облака";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Кадър с въведение %1$@ от %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "Организирайте";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Направете вашия Firefox точно такъв, какъвто го искате в Настройки.";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Вписване във Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Начало на сърфирането";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "Бутонът Настройки е най-отпред на лентата с подпрозорците.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Бутонът Показване на подпрозорците е до лентата за адрес и търсене и показва текущия брой отворени подпрозорци.";
+

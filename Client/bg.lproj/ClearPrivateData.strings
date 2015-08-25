@@ -1,0 +1,12 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Сигурни ли сте, че искате да заличите всичките данни? Отворените подпрозорци ще бъдат затворени.";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Отказ";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Изчистване";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Изчистване всичко";
+
