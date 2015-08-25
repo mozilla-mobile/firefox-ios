@@ -12,7 +12,7 @@ public class ReadingListService {
     var storage: ReadingListStorage
 
     public init?(profileStoragePath: String) {
-        databasePath = profileStoragePath.stringByAppendingPathComponent("ReadingList.db")
+        databasePath = (profileStoragePath as NSString).stringByAppendingPathComponent("ReadingList.db")
         storage = ReadingListSQLStorage(path: "\(profileStoragePath)/ReadingList.db")
     }
 

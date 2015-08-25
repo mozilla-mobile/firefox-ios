@@ -15,7 +15,7 @@ class ReadingListBatchRecordResponse: ReadingListResponse {
                     if let statusCode = response.valueForKeyPath("status") as? Int {
                         if let path = response.valueForKeyPath("path") as? String {
                             if let url = NSURL(string: path, relativeToURL: self.response.URL) {
-                                if let headers = response.valueForKeyPath("headers") as? [String:AnyObject] {
+                                if let headers = response.valueForKeyPath("headers") as? [String:String] {
                                     if let r = NSHTTPURLResponse(URL: url, statusCode: statusCode, HTTPVersion: "1.1", headerFields: headers) {
                                         if let recordResponse = ReadingListRecordResponse(response: r, json: body) {
                                             self.responses.append(recordResponse)

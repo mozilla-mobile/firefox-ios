@@ -116,8 +116,6 @@ func stateFromJSONV1(json: JSON) -> FxAState? {
 
             case .Doghouse:
                 return DoghouseState()
-
-            default: return nil
             }
         }
     }
