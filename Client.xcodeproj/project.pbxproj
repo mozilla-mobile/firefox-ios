@@ -1034,6 +1034,13 @@
 			remoteGlobalIDString = F8111E3219A95C8B0040E7D1;
 			remoteInfo = "Alamofire iOS";
 		};
+		D357E4021B8D0B850070BD90 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D38B2D621A8D976A0040E6B5 /* KIF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9CC9673B1AD4B1B600576D13;
+			remoteInfo = KIFFramework;
+		};
 		D38B2D6B1A8D976A0040E6B5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D38B2D621A8D976A0040E6B5 /* KIF.xcodeproj */;
@@ -2391,6 +2398,7 @@
 				D38B2D701A8D976A0040E6B5 /* Test Host.app */,
 				D38B2D721A8D976A0040E6B5 /* KIF Tests - XCTest.xctest */,
 				D38B2D741A8D976A0040E6B5 /* KIF Tests-OCUnit.octest */,
+				D357E4031B8D0B850070BD90 /* KIF.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3726,6 +3734,13 @@
 			fileType = wrapper.cfbundle;
 			path = "Alamofire OSX Tests.xctest";
 			remoteRef = D31FC2361A8D908900BAF7EC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D357E4031B8D0B850070BD90 /* KIF.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = KIF.framework;
+			remoteRef = D357E4021B8D0B850070BD90 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		D38B2D6C1A8D976A0040E6B5 /* libKIF.a */ = {

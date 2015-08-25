@@ -167,7 +167,7 @@ public class KeyBundle: Equatable {
         return { (record: Record<T>) -> JSON? in
             let json = f(record.payload)
 
-            if let data = json.toString(pretty: false).utf8EncodedData,
+            if let data = json.toString(false).utf8EncodedData,
                // We pass a null IV, which means "generate me a new one".
                // We then include the generated IV in the resulting record.
                let (ciphertext, iv) = self.encrypt(data, iv: nil) {
@@ -185,7 +185,7 @@ public class KeyBundle: Equatable {
                         "ciphertext": ciphertext,
                         "IV": iv,
                         "hmac": hmac,
-                    ]).toString(pretty: false)
+                    ]).toString(false)
 
                     return JSON([
                         "id": record.id,
@@ -255,7 +255,7 @@ public class Keys: Equatable {
         let json: JSON = JSON([
             "collection": "crypto",
             "default": self.defaultBundle.asPair(),
-            "collections": mapValues(self.collectionKeys, { $0.asPair() })
+            "collections": mapValues(self.collectionKeys, f: { $0.asPair() })
         ])
         return KeysPayload(json)
     }

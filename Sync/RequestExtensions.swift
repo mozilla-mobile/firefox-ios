@@ -8,28 +8,38 @@ import Shared
 
 extension Request {
     public func responseParsedJSON(completionHandler: ResponseHandler) -> Self {
-        return response(serializer: Request.ParsedJSONResponseSerializer(), completionHandler: { (request, response, JSON, error) in
-            completionHandler(request, response, JSON, error)
-        })
+        return response(responseSerializer: ParsedJSONResponseSerializer()) { (request, response, result) in
+            completionHandler(request, response, result)
+        }
     }
 
     public func responseParsedJSON(queue queue: dispatch_queue_t, completionHandler: ResponseHandler) -> Self {
-        return response(queue: queue, serializer: Request.ParsedJSONResponseSerializer(), completionHandler: { (request, response, JSON, error) in
-            completionHandler(request, response, JSON, error)
-        })
+        return response(queue: queue, responseSerializer: ParsedJSONResponseSerializer()) { (request, response, result) in
+            completionHandler(request, response, result)
+        }
     }
+}
 
-    public class func ParsedJSONResponseSerializer() -> Serializer {
-        return { (request, response, data) in
+private enum JSONSerializeError: ErrorType {
+    case NoData
+    case ParseError
+}
+
+private struct ParsedJSONResponseSerializer: ResponseSerializer {
+    private var serializeResponse: (NSURLRequest?, NSHTTPURLResponse?, NSData?) -> Result<AnyObject>
+
+    private init() {
+        self.serializeResponse = { (request, response, data) in
             if data == nil || data?.length == 0 {
-                return (nil, nil)
+                return Result.Failure(nil, JSONSerializeError.NoData)
             }
 
             let json = JSON(data: data!)
             if json.isError {
-                return (nil, json.asError)
+                return Result.Failure(data, JSONSerializeError.ParseError)
             }
-            return (json, nil)
+
+            return Result.Success(json)
         }
     }
 }

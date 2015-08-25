@@ -60,7 +60,7 @@ public class Record<T: CleartextPayloadJSON> {
             return Record<T>(envelope: envelope, payload: payload!)
         }
 
-        log.error("Invalid payload \(payload!.toString(pretty: true)).")
+        log.error("Invalid payload \(payload!.toString(true)).")
         return nil
     }
 

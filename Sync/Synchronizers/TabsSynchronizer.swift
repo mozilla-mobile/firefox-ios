@@ -38,7 +38,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
             "clientName": self.scratchpad.clientName,
             "tabs": jsonTabs
         ])
-        log.debug("Sending tabs JSON \(tabsJSON.toString(pretty: true))")
+        log.debug("Sending tabs JSON \(tabsJSON.toString(true))")
         let payload = TabsPayload(tabsJSON)
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
     }
@@ -96,7 +96,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
 
                 let allDone = all(records.filter({ $0.id != ourGUID }).map(doInsert))
                 return allDone.bind { (results) -> Success in
-                    if let failure = find(results, { $0.isFailure }) {
+                    if let failure = find(results, f: { $0.isFailure }) {
                         return deferMaybe(failure.failureValue!)
                     }
 

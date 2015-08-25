@@ -31,7 +31,7 @@ class Uploader {
             return storageOp(records, timestamp)
         }
 
-        return walk(chunks, start, perChunk)
+        return walk(chunks, start: start, f: perChunk)
     }
 }
 
@@ -48,7 +48,7 @@ public class IndependentRecordSynchronizer: BaseSingleCollectionSynchronizer {
             return done()
         }
 
-        return walk(records, apply) >>> done
+        return walk(records, f: apply) >>> done
     }
 
     /*
