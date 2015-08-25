@@ -91,9 +91,10 @@ public func optArrayEqual<T: Equatable>(lhs: [T]?, rhs: [T]?) -> Bool {
 public func chunk<T>(arr: [T], by: Int) -> [ArraySlice<T>] {
     let count = arr.count
     let step = max(1, by)     // Handle out-of-range 'by'.
-    let s = stride(from: 0, to: count, by: step)
+
+    let s = 0.stride(to: count, by: step)
     return s.map {
-        arr[$0..<advance($0, step, count)]
+        arr[$0..<$0.advancedBy(step, limit: count)]
     }
 }
 
