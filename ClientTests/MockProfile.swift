@@ -90,6 +90,10 @@ public class MockProfile: Profile {
     }()
 
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
+        // Make sure the rest of our tables are initialized before we try to read them!
+        // This expression is for side-effects only.
+        let p = self.places
+
         return SQLiteBookmarks(db: self.db)
     }()
 
