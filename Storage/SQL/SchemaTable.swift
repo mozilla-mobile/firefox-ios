@@ -7,7 +7,7 @@ import Foundation
 // A table for holding info about other tables (also holds info about itself :)). This is used
 // to let us handle table upgrades when the table is first accessed, rather than when the database
 // itself is created.
-class SchemaTable<T: TableInfo>: GenericTable<TableInfo> {
+class SchemaTable: GenericTable<TableInfo> {
     override var name: String { return "tableList" }
     override var version: Int { return 1 }
 
