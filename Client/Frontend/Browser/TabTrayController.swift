@@ -235,7 +235,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         settingsButton.addTarget(self, action: "SELdidClickSettingsItem", forControlEvents: .TouchUpInside)
         settingsButton.accessibilityLabel = NSLocalizedString("Settings", comment: "Accessibility label for the Settings button in the Tab Tray.")
 
-        let flowLayout = UICollectionViewFlowLayout()
+        let flowLayout = TabTrayCollectionViewLayout()
         collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flowLayout)
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -420,13 +420,8 @@ extension TabTrayController: TabManagerDelegate {
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int) {
         var newTab: Browser? = nil
-        self.collectionView.performBatchUpdates({ _ in
-            self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
-        }, completion: { finished in
-            if tabManager.count == 0 {
-                newTab = tabManager.addTab()
-            }
-        })
+        self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
+        self.collectionView.reloadItemsAtIndexPaths(self.collectionView.indexPathsForVisibleItems())
     }
 
     func tabManagerDidAddTabs(tabManager: TabManager) {
@@ -473,6 +468,22 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
             let format = NSLocalizedString("Tabs %@ to %@ of %@", comment: "Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total.")
             return String(format: format, NSNumber(integer: firstTab), NSNumber(integer: lastTab), NSNumber(integer: tabCount))
         }
+    }
+}
+
+// There seems to be a bug with UIKit where when the UICollectionView changes it's contentSize 
+// from > frame.size to <= frame.size: the contentSet animation doesn't properly happen and 'jumps' to the
+// final state. This workaround forces the contentSize to always be larger than the frame size so the animation happens more 
+// smoothly. This also makes the tabs be able to 'bounce' when there are not enough to fill the screen which I 
+// think is fine but if needed we can disable user scrolling in this case
+private class TabTrayCollectionViewLayout: UICollectionViewFlowLayout {
+    private override func collectionViewContentSize() -> CGSize {
+        var calculatedSize = super.collectionViewContentSize()
+        let collectionViewHeight = collectionView?.bounds.size.height ?? 0
+        if calculatedSize.height < collectionViewHeight && collectionViewHeight > 0 {
+            calculatedSize.height = collectionViewHeight + 1
+        }
+        return calculatedSize
     }
 }
 

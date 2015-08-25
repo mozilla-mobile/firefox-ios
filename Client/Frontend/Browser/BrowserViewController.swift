@@ -1308,7 +1308,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex: Int) {
-        urlBar.updateTabCount(tabManager.count)
+        urlBar.updateTabCount(max(tabManager.count, 1))
         // browserDelegate is a weak ref (and the tab's webView may not be destroyed yet)
         // so we don't expcitly unset it.
     }
