@@ -242,7 +242,7 @@ public class FxAClient10 {
         _ = alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, result) in
-                if let error = result.error {
+                if let error = result.error as? NSError {
                     deferred.fill(Maybe(failure: FxAClientError.Local(error)))
                     return
                 }
@@ -286,7 +286,7 @@ public class FxAClient10 {
         alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, result) in
-                if let error = result.error {
+                if let error = result.error as? NSError {
                     deferred.fill(Maybe(failure: FxAClientError.Local(error)))
                     return
                 }
@@ -337,7 +337,7 @@ public class FxAClient10 {
         alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, result) in
-                if let error = result.error {
+                if let error = result.error as? NSError {
                     deferred.fill(Maybe(failure: FxAClientError.Local(error)))
                     return
                 }

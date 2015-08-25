@@ -344,7 +344,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let allCommands = commandCursor.asArray()
         commandCursor.close()
 
-        var clientSyncCommands = clientsFromCommands(allCommands)
+        let clientSyncCommands = clientsFromCommands(allCommands)
 
         log.info("Found \(clientSyncCommands.count) client sync commands in the DB.")
         return failOrSucceed(err, op: "get commands", val: clientSyncCommands)

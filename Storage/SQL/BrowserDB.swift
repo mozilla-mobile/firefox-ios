@@ -215,7 +215,7 @@ public class BrowserDB {
 
 extension BrowserDB {
     public class func varlist(count: Int) -> String {
-        return "(" + ", ".join(Array(count: count, repeatedValue: "?")) + ")"
+        return "(" + Array(count: count, repeatedValue: "?").joinWithSeparator(", ") + ")"
     }
 
     enum InsertOperation: String {
@@ -257,13 +257,13 @@ extension BrowserDB {
         // Sanity check.
         assert(values[0].count == variablesPerRow)
 
-        let cols = ", ".join(columns)
+        let cols = columns.joinWithSeparator(", ")
         let queryStart = "\(op.rawValue) INTO \(table) (\(cols)) VALUES "
 
         let varString = BrowserDB.varlist(variablesPerRow)
 
         let insertChunk: [Args] -> Success = { vals -> Success in
-            let valuesString = ", ".join(Array(count: vals.count, repeatedValue: varString))
+            let valuesString = Array(count: vals.count, repeatedValue: varString).joinWithSeparator(", ")
             let args: Args = vals.flatMap { $0 }
             return self.run(queryStart + valuesString, withArgs: args)
         }
@@ -341,7 +341,7 @@ extension BrowserDB {
 extension SQLiteDBConnection {
     func tablesExist(names: Args) -> Bool {
         let count = names.count
-        let orClause = " OR ".join(Array(count: count, repeatedValue: "name = ?"))
+        let orClause = Array(count: count, repeatedValue: "name = ?").joinWithSeparator(" OR ")
         let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND (\(orClause))"
 
         let res = self.executeQuery(tablesSQL, factory: StringFactory, withArgs: names)

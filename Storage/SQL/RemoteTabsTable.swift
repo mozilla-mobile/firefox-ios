@@ -13,14 +13,14 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
     override var version: Int { return 1 }
 
     // TODO: index on guid and last_modified.
-    override var rows: String { return ",".join([
+    override var rows: String { return [
             "guid TEXT PRIMARY KEY",
             "name TEXT NOT NULL",
             "modified INTEGER NOT NULL",
             "type TEXT",
             "formfactor TEXT",
             "os TEXT",
-        ])
+        ].joinWithSeparator(",")
     }
 
     // TODO: this won't work correctly with NULL fields.
@@ -78,14 +78,14 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
     override var version: Int { return 2 }
 
     // TODO: index on id, client_guid, last_used, and position.
-    override var rows: String { return ",".join([
+    override var rows: String { return [
             "id INTEGER PRIMARY KEY AUTOINCREMENT", // An individual tab has no GUID from Sync.
             "client_guid TEXT REFERENCES clients(guid) ON DELETE CASCADE",
             "url TEXT NOT NULL",
             "title TEXT", // TODO: NOT NULL throughout.
             "history TEXT",
             "last_used INTEGER",
-        ])
+        ].joinWithSeparator(",")
     }
 
     private static func convertHistoryToString(history: [NSURL]) -> String? {
