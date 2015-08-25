@@ -65,7 +65,7 @@ class ReadingListSQLStorage: ReadingListStorage {
 
     func deleteRecord(record: ReadingListClientRecord) -> Maybe<Void> {
         let items = db["items"]
-        println("Trying to delete record with id \(record.clientMetadata.id)")
+        print("Trying to delete record with id \(record.clientMetadata.id)\n")
         let query = items.filter(ItemColumns.ClientId == record.clientMetadata.id)
         if query.delete() > 0 {
             return Maybe(success: Void())
