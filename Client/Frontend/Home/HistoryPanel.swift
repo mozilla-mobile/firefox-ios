@@ -365,7 +365,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                                 let sectionsToAdd = NSMutableIndexSet()
                                 var rowsToAdd = [NSIndexPath]()
 
-                                for (index, category) in enumerate(self.categories) {
+                                for (index, category) in self.categories.enumerate() {
                                     let oldCategory = oldCategories[index]
 
                                     // don't bother if we're not displaying this category
