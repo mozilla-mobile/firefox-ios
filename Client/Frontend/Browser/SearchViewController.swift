@@ -243,7 +243,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         promptLabel.snp_makeConstraints { make in
             make.left.equalTo(promptImage.snp_right).offset(SearchViewControllerUX.PromptInsets.left)
             let insets = SearchViewControllerUX.PromptInsets
-            make.top.bottom.equalTo(prompt).insets(insets)
+            make.top.equalTo(prompt).inset(insets.top)
+            make.bottom.equalTo(prompt).inset(insets.bottom)
             make.right.lessThanOrEqualTo(promptYesButton.snp_left)
             return
         }
