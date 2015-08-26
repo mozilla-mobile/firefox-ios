@@ -57,7 +57,7 @@ extension UIImageView {
         }
 
         operation.cacheOperation = cache!.queryDiskCacheForKey(key, done: { (var image, cacheType) -> Void in
-            let err = NSError()
+            let err = NSError(domain: "UIImage+Extensions.runBlockIfNotInCache", code: 0, userInfo: nil)
             // If this was cancelled, don't bother notifying the caller
             if operation.cancelled {
                 return

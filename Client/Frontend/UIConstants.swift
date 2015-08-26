@@ -18,21 +18,44 @@ public struct UIConstants {
     static let DeviceFontSize: CGFloat = DeviceInfo.deviceModel().rangeOfString("iPad") != nil ? 18 : 15
     static let DefaultMediumFontSize: CGFloat = 14
 
-    @available(iOSApplicationExtension 8.2, *)
-    static let DefaultMediumFont = UIFont.systemFontOfSize(DefaultMediumFontSize, weight: UIFontWeightRegular)
-    static let DefaultMediumFontUnweighted = UIFont.systemFontOfSize(DefaultMediumFontSize)
+    static let DefaultMediumFont: UIFont = {
+        let font: UIFont
+        if #available(iOS 8.2, *) {
+            font = UIFont.systemFontOfSize(DefaultMediumFontSize, weight: UIFontWeightRegular)
+        } else {
+            font = UIFont.systemFontOfSize(DefaultMediumFontSize)
+        }
+        return font
+    }()
     static let DefaultMediumBoldFont = UIFont.boldSystemFontOfSize(DefaultMediumFontSize)
     static let DefaultSmallFontSize: CGFloat = 11
 
-    @available(iOSApplicationExtension 8.2, *)
-    static let DefaultSmallFont = UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightRegular)
-    static let DefaultSmallFontUnweighted = UIFont.systemFontOfSize(DefaultSmallFontSize)
+    static let DefaultSmallFont: UIFont = {
+        if #available(iOS 8.2, *) {
+            return UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightRegular)
+        } else {
+            return UIFont.systemFontOfSize(DefaultSmallFontSize)
+        }
+    }()
 
-    @available(iOSApplicationExtension 8.2, *)
-    static let DefaultSmallFontBold = UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightBold)
-    static let DefaultSmallFontBoldUnweighted = UIFont.systemFontOfSize(DefaultSmallFontSize)
+    static let DefaultSmallFontBold: UIFont = {
+        if #available(iOS 8.2, *) {
+            return UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightBold)
+        } else {
+            return UIFont.systemFontOfSize(DefaultSmallFontSize)
+        }
+    }()
+
     static let DefaultStandardFontSize: CGFloat = 17
     static let DefaultStandardFontBold = UIFont.boldSystemFontOfSize(DefaultStandardFontSize)
+
+    static let DefaultStandardFont: UIFont = {
+        if #available(iOS 8.2, *) {
+            return UIFont.systemFontOfSize(DefaultStandardFontSize, weight: UIFontWeightRegular)
+        } else {
+            return UIFont.systemFontOfSize(DefaultStandardFontSize)
+        }
+        }()
 
     // These highlight colors are currently only used on Snackbar buttons when they're pressed
     static let HighlightColor = UIColor(red: 205/255, green: 223/255, blue: 243/255, alpha: 0.9)

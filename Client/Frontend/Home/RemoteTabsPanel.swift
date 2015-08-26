@@ -18,9 +18,26 @@ private struct RemoteTabsPanelUX {
     static let RowHeight: CGFloat = SiteTableViewControllerUX.RowHeight
     static let HeaderBackgroundColor = UIColor(rgb: 0xf8f8f8)
 
-    static let EmptyStateTitleFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightMedium)
+    static let EmptyStateTitleFont: UIFont = {
+        let font: UIFont
+        if #available(iOS 8.2, *) {
+            font = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightMedium)
+        } else {
+            font = UIFont.systemFontOfSize(UIConstants.DeviceFontSize)
+        }
+        return font
+    }()
     static let EmptyStateTitleTextColor = UIColor.darkGrayColor()
-    static let EmptyStateInstructionsFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize - 1, weight: UIFontWeightLight)
+
+    static let EmptyStateInstructionsFont: UIFont = {
+        let font: UIFont
+        if #available(iOS 8.2, *) {
+            font = UIFont.systemFontOfSize(UIConstants.DeviceFontSize - 1, weight: UIFontWeightLight)
+        } else {
+            font = UIFont.systemFontOfSize(UIConstants.DeviceFontSize - 1)
+        }
+        return font
+        }()
     static let EmptyStateInstructionsTextColor = UIColor.grayColor()
     static let EmptyStateInstructionsWidth = 226
     static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape
@@ -134,7 +151,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
                 }
             } else {
                 // If we failed before and didn't sync, show the failure delegate
-                if let failed = result.failureValue {
+                if let _ = result.failureValue {
                     self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: self, error: .FailedToSync)
                 }
 
@@ -229,7 +246,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let client = clientTabs.client
         let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(RemoteClientIdentifier) as! TwoLineHeaderFooterView
         view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
-        view.textLabel.text = client.name
+        view.textLabel?.text = client.name
         view.contentView.backgroundColor = RemoteTabsPanelUX.HeaderBackgroundColor
 
         /*
@@ -247,7 +264,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
 
         let timestamp = clientTabs.approximateLastSyncTime()
         let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time. Argument is the relative date string.")
-        view.detailTextLabel.text = String(format: label, NSDate.fromTimestamp(timestamp).toRelativeTimeString())
+        view.detailTextLabel?.text = String(format: label, NSDate.fromTimestamp(timestamp).toRelativeTimeString())
 
         let image: UIImage?
         if client.type == "desktop" {

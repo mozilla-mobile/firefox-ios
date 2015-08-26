@@ -49,7 +49,7 @@ class AuralProgressBar {
 
         func start() {
             do {
-                try engine.startAndReturnError()
+                try engine.start()
             } catch _ {
             }
             tickPlayer.play()

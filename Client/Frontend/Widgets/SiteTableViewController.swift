@@ -19,8 +19,8 @@ private class SiteTableViewHeader : UITableViewHeaderFooterView {
     let topBorder = UIView()
     let bottomBorder = UIView()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        super.init(reuseIdentifier: nil)
         didLoad()
     }
 
@@ -45,9 +45,13 @@ private class SiteTableViewHeader : UITableViewHeaderFooterView {
         bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
         super.layoutSubviews()
 
-        textLabel.font = UIFont.systemFontOfSize(11, weight: UIFontWeightMedium)
-        textLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : SiteTableViewControllerUX.HeaderTextColor
-        textLabel.textAlignment = .Center
+        if #available(iOS 8.2, *) {
+            textLabel?.font = UIFont.systemFontOfSize(11, weight: UIFontWeightMedium)
+        } else {
+            textLabel?.font = UIFont.systemFontOfSize(11)
+        }
+        textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : SiteTableViewControllerUX.HeaderTextColor
+        textLabel?.textAlignment = .Center
         contentView.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
     }
 }
@@ -102,13 +106,11 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as! UITableViewCell
-        // Callers should override this to fill in the cell returned here
+        return tableView.dequeueReusableCellWithIdentifier(CellIdentifier, forIndexPath: indexPath)
     }
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return tableView.dequeueReusableHeaderFooterViewWithIdentifier(HeaderIdentifier) as? UIView
-        // Callers should override this to fill in the cell returned here
+        return tableView.dequeueReusableHeaderFooterViewWithIdentifier(HeaderIdentifier)
     }
 
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

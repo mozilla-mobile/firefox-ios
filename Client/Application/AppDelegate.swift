@@ -62,9 +62,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         configureActiveCrashReporter(profile.prefs.boolForKey("crashreports.send.always"))
 
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
-            if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL, absoluteString = url.absoluteString {
+            if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL {
                 let title = (userInfo["Title"] as? String) ?? ""
-                profile.readingList?.createRecordWithURL(absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
+                profile.readingList?.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
             }
         }
 
@@ -105,16 +105,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return false
             }
             var url: String?
-            var appName: String?
-            var callbackScheme: String?
-            for item in components.queryItems as? [NSURLQueryItem] ?? [] {
+            for item in (components.queryItems ?? []) as [NSURLQueryItem] {
                 switch item.name {
                 case "url":
                     url = item.value
-                case "x-source":
-                    callbackScheme = item.value
-                case "x-source-name":
-                    appName = item.value
                 default: ()
                 }
             }

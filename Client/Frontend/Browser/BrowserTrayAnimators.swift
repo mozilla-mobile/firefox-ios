@@ -30,18 +30,18 @@ private extension TrayToBrowserAnimator {
         let tabCollectionViewSnapshot = tabTray.collectionView.snapshotViewAfterScreenUpdates(false)
         tabTray.collectionView.alpha = 0
         tabCollectionViewSnapshot.frame = tabTray.collectionView.frame
-        container.insertSubview(tabCollectionViewSnapshot, aboveSubview: tabTray.view)
+        container?.insertSubview(tabCollectionViewSnapshot, aboveSubview: tabTray.view)
 
         // Create a fake cell to use for the upscaling animation
         let startingFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView, atIndex: bvc.tabManager.selectedIndex)
         let cell = createTransitionCellFromBrowser(bvc.tabManager.selectedTab, withFrame: startingFrame)
         cell.backgroundHolder.layer.cornerRadius = 0
 
-        container.insertSubview(bvc.view, aboveSubview: tabCollectionViewSnapshot)
-        container.insertSubview(cell, aboveSubview: bvc.view)
+        container?.insertSubview(bvc.view, aboveSubview: tabCollectionViewSnapshot)
+        container?.insertSubview(cell, aboveSubview: bvc.view)
 
         // Flush any pending layout/animation code in preperation of the animation call
-        container.layoutIfNeeded()
+        container?.layoutIfNeeded()
 
 
         let finalFrame = calculateExpandedCellFrameFromBVC(bvc)
@@ -60,7 +60,7 @@ private extension TrayToBrowserAnimator {
         {
             // Scale up the cell and reset the transforms for the header/footers
             cell.frame = finalFrame
-            container.layoutIfNeeded()
+            container?.layoutIfNeeded()
             cell.title.transform = CGAffineTransformMakeTranslation(0, -cell.title.frame.height)
 
             resetTransformsForViews([bvc.header, bvc.footer, bvc.readerModeBar, bvc.footerBackdrop, bvc.headerBackdrop])
@@ -103,7 +103,7 @@ class BrowserToTrayAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
 private extension BrowserToTrayAnimator {
     func transitionFromBrowser(bvc: BrowserViewController, toTabTray tabTray: TabTrayController, usingContext transitionContext: UIViewControllerContextTransitioning) {
-        let container = transitionContext.containerView()
+        guard let container = transitionContext.containerView() else { return }
 
         // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
         container.insertSubview(tabTray.view, belowSubview: bvc.view)
@@ -222,7 +222,6 @@ private func headerTransform(var frame: CGRect, toFrame finalFrame: CGRect, cont
 
 //MARK: Private Helper Methods
 private func calculateCollapsedCellFrameUsingCollectionView(collectionView: UICollectionView, atIndex index: Int) -> CGRect {
-    var frame: CGRect?
     if let attr = collectionView.collectionViewLayout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) {
         return collectionView.convertRect(attr.frame, toView: collectionView.superview)
     } else {

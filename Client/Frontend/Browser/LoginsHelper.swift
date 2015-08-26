@@ -33,11 +33,10 @@ class LoginsHelper: BrowserHelper {
         self.browser = browser
         self.profile = profile
 
-        if let path = NSBundle.mainBundle().pathForResource("LoginsHelper", ofType: "js") {
-            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as? String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
-                browser.webView!.configuration.userContentController.addUserScript(userScript)
-            }
+        if let path = NSBundle.mainBundle().pathForResource("LoginsHelper", ofType: "js"),
+            let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
+            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+            browser.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
 
@@ -81,17 +80,27 @@ class LoginsHelper: BrowserHelper {
                 range: nil,
                 locale: nil)!
             string.replaceRange(range, with: replace)
-            let nsRange = NSMakeRange(distance(string.startIndex, range.startIndex),
+            let nsRange = NSMakeRange(string.startIndex.distanceTo(range.startIndex),
                 replace.characters.count)
             ranges.append(nsRange)
         }
 
-        var attributes = [NSObject: AnyObject]()
-        attributes[NSFontAttributeName] = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
+        var attributes = [String: AnyObject]()
+        if #available(iOS 8.2, *) {
+            attributes[NSFontAttributeName] = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
+        } else {
+            attributes[NSFontAttributeName] = UIFont.systemFontOfSize(13)
+        }
         attributes[NSForegroundColorAttributeName] = UIColor.darkGrayColor()
-        var attr = NSMutableAttributedString(string: string, attributes: attributes)
-        for (index, range) in ranges.enumerate() {
-            attr.addAttribute(NSFontAttributeName, value: UIFont.systemFontOfSize(13, weight: UIFontWeightMedium), range: range)
+        let attr = NSMutableAttributedString(string: string, attributes: attributes)
+        for (_, range) in ranges.enumerate() {
+            let font: UIFont
+            if #available(iOS 8.2, *) {
+                font = UIFont.systemFontOfSize(13, weight: UIFontWeightMedium)
+            } else {
+                font = UIFont.systemFontOfSize(13)
+            }
+            attr.addAttribute(NSFontAttributeName, value: font, range: range)
         }
         return attr
     }
@@ -235,7 +244,6 @@ class LoginsHelper: BrowserHelper {
         }
 
         // Otherwise, try to look one up
-        let options = QueryOptions(filter: challenge.protectionSpace.host, filterType: .None, sort: .None)
         return profile.logins.getLoginsForProtectionSpace(challenge.protectionSpace).bindQueue(dispatch_get_main_queue()) { res in
             let credentials = res.successValue?[0]?.credentials
             return self.promptForUsernamePassword(viewController, credentials: credentials, protectionSpace: challenge.protectionSpace)
@@ -264,8 +272,7 @@ class LoginsHelper: BrowserHelper {
         // Add a button to log in.
         let action = UIAlertAction(title: LogInButtonTitle,
             style: UIAlertActionStyle.Default) { (action) -> Void in
-                let user = (alert.textFields?[0] as! UITextField).text
-                let pass = (alert.textFields?[1] as! UITextField).text
+                guard let user = alert.textFields?[0].text, let pass = alert.textFields?[1].text else { deferred.fill(Maybe(failure: LoginDataError(description: "Username and Password required"))); return }
 
                 let login = Login.createWithCredential(NSURLCredential(user: user, password: pass, persistence: .ForSession), protectionSpace: protectionSpace)
                 deferred.fill(Maybe(success: login))

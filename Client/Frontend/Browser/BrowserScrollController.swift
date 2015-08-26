@@ -92,7 +92,6 @@ class BrowserScrollingController: NSObject {
 
     func hideToolbars(animated animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
         toolbarState = .Collapsed
-        let animationDistance = headerFrame.height - abs(headerTopOffset)
         let durationRatio = abs((headerFrame.height + headerTopOffset) / headerFrame.height)
         let actualDuration = NSTimeInterval(ToolbarBaseAnimationDuration * durationRatio)
         self.animateToolbarsWithOffsets(
