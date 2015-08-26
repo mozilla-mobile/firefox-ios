@@ -35,7 +35,7 @@ private struct SearchViewControllerUX {
     static let SuggestionBorderWidth: CGFloat = 1
     static let SuggestionCornerRadius: CGFloat = 4
     static let SuggestionFont = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
-    static let SuggestionInsets = UIEdgeInsetsMake(8, 8, 8, 8)
+    static let SuggestionInsets = UIEdgeInsetsMake(top: 8, left: 8, bottom: 8, right: 8)
     static let SuggestionMargin: CGFloat = 8
     static let SuggestionCellVerticalPadding: CGFloat = 10
     static let SuggestionCellMaxRows = 2
@@ -44,7 +44,7 @@ private struct SearchViewControllerUX {
     static let PromptFont = UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)
     static let PromptYesFont = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
     static let PromptNoFont = UIFont.systemFontOfSize(15, weight: UIFontWeightRegular)
-    static let PromptInsets = UIEdgeInsetsMake(15, 12, 15, 12)
+    static let PromptInsets = UIEdgeInsetsMake(top: 15, left: 12, bottom: 15, right: 12)
     static let PromptButtonColor = UIColor(rgb: 0x007aff)
 }
 
@@ -242,7 +242,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         promptLabel.snp_makeConstraints { make in
             make.left.equalTo(promptImage.snp_right).offset(SearchViewControllerUX.PromptInsets.left)
-            make.top.bottom.equalTo(prompt).insets(SearchViewControllerUX.PromptInsets)
+            let insets = SearchViewControllerUX.PromptInsets
+            make.top.bottom.equalTo(prompt).insets(insets)
             make.right.lessThanOrEqualTo(promptYesButton.snp_left)
             return
         }
