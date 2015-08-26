@@ -15,7 +15,7 @@ class SnackBarUX {
  * spaced in the bottom of the bar. The main convenience of these is that you can pass
  * in a callback in the constructor (although these also style themselves appropriately).
  *
- *``SnackButton(title: "OK", { _ in println("OK") })``
+ *``SnackButton(title: "OK", { _ in print("OK", terminator: "\n") })``
  */
 class SnackButton : UIButton {
     let callback: (bar: SnackBar) -> Void
@@ -63,9 +63,9 @@ class SnackButton : UIButton {
  * ``let bar = SnackBar(text: "This is some text in the snackbar.",
  *     img: UIImage(named: "bookmark"),
  *     buttons: [
- *         SnackButton(title: "OK", { _ in println("OK") }),
- *         SnackButton(title: "Cancel", { _ in println("Cancel") }),
- *         SnackButton(title: "Maybe", { _ in println("Maybe") })
+ *         SnackButton(title: "OK", { _ in print("OK", terminator: "\n") }),
+ *         SnackButton(title: "Cancel", { _ in print("Cancel", terminator: "\n") }),
+ *         SnackButton(title: "Maybe", { _ in print("Maybe", terminator: "\n") })
  *     ]
  * )``
  */
