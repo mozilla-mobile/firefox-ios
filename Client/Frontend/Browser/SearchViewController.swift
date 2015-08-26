@@ -35,7 +35,7 @@ private struct SearchViewControllerUX {
     static let SuggestionBorderWidth: CGFloat = 1
     static let SuggestionCornerRadius: CGFloat = 4
     static let SuggestionFont = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
-    static let SuggestionInsets = UIEdgeInsetsMake(top: 8, left: 8, bottom: 8, right: 8)
+    static let SuggestionInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
     static let SuggestionMargin: CGFloat = 8
     static let SuggestionCellVerticalPadding: CGFloat = 10
     static let SuggestionCellMaxRows = 2
@@ -44,7 +44,7 @@ private struct SearchViewControllerUX {
     static let PromptFont = UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)
     static let PromptYesFont = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
     static let PromptNoFont = UIFont.systemFontOfSize(15, weight: UIFontWeightRegular)
-    static let PromptInsets = UIEdgeInsetsMake(top: 15, left: 12, bottom: 15, right: 12)
+    static let PromptInsets = UIEdgeInsets(top: 15, left: 12, bottom: 15, right: 12)
     static let PromptButtonColor = UIColor(rgb: 0x007aff)
 }
 
@@ -249,12 +249,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
 
         promptNoButton.snp_makeConstraints { make in
-            make.right.equalTo(prompt).insets(SearchViewControllerUX.PromptInsets)
+            make.right.equalTo(prompt).inset(SearchViewControllerUX.PromptInsets.right)
             make.centerY.equalTo(prompt)
         }
 
         promptYesButton.snp_makeConstraints { make in
-            make.right.equalTo(promptNoButton.snp_leading).insets(SearchViewControllerUX.PromptInsets)
+            make.right.equalTo(promptNoButton.snp_leading).inset(SearchViewControllerUX.PromptInsets.right)
             make.centerY.equalTo(prompt)
         }
 
@@ -451,7 +451,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 }
 
-extension SearchViewController: UITableViewDelegate {
+extension SearchViewController {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let section = SearchListSection(rawValue: indexPath.section)!
         if section == SearchListSection.BookmarksAndHistory {
@@ -484,7 +484,7 @@ extension SearchViewController: UITableViewDelegate {
     }
 }
 
-extension SearchViewController: UITableViewDataSource {
+extension SearchViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch SearchListSection(rawValue: indexPath.section)! {
         case .SearchSuggestions:
