@@ -156,7 +156,7 @@ class SearchSettingsTableViewController: UITableViewController {
         } else {
             sectionTitle = NSLocalizedString("Quick-search Engines", comment: "Title for quick-search engines settings section.")
         }
-        headerView.titleLabel.text = sectionTitle.uppercaseString
+        headerView.titleLabel.text = sectionTitle
 
         return headerView
     }

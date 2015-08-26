@@ -812,7 +812,7 @@ class SettingsTableViewController: UITableViewController {
         let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderView
         let section = settings[section]
         if let sectionTitle = section.title?.string {
-            headerView.titleLabel.text = sectionTitle.uppercaseString
+            headerView.titleLabel.text = sectionTitle
         }
 
         return headerView
