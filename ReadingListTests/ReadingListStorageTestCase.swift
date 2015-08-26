@@ -11,7 +11,7 @@ class ReadingListStorageTestCase: XCTestCase {
     var storage: ReadingListStorage!
 
     override func setUp() {
-        let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first as! String
+        let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first!
         if NSFileManager.defaultManager().fileExistsAtPath("\(path)/ReadingList.db") {
             do {
                 try NSFileManager.defaultManager().removeItemAtPath("\(path)/ReadingList.db")
