@@ -28,10 +28,10 @@ func compareScratchpads(lhs: Scratchpad, rhs: Scratchpad) {
     XCTAssertTrue(lhs.global == rhs.global)
 }
 
-func roundtrip(s: Scratchpad) -> (Scratchpad, Scratchpad) {
+func roundtrip(s: Scratchpad) -> (Scratchpad, rhs: Scratchpad) {
     let prefs = MockProfilePrefs()
     s.pickle(prefs)
-    return (s, Scratchpad.restoreFromPrefs(prefs, syncKeyBundle: s.syncKeyBundle)!)
+    return (s, rhs: Scratchpad.restoreFromPrefs(prefs, syncKeyBundle: s.syncKeyBundle)!)
 }
 
 class StateTests: XCTestCase {

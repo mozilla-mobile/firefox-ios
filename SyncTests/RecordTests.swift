@@ -11,7 +11,7 @@ import Sync
 class RecordTests: XCTestCase {
     func testGUIDs() {
         let s = Bytes.generateGUID()
-        println("Got GUID: \(s)")
+        print("Got GUID: \(s)", terminator: "\n")
         XCTAssertEqual(12, s.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
     }
 
@@ -45,30 +45,21 @@ class RecordTests: XCTestCase {
         let emptyPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"{}\"}"
 
         let clientBody: [String: AnyObject] = ["name": "Foobar", "commands": [], "type": "mobile"]
-        let clientBodyString = JSON(clientBody).toString(pretty: false)
+        let clientBodyString = JSON(clientBody).toString(false)
         let clientRecord: [String : AnyObject] = ["id": "abcdefghijkl", "collection": "clients", "payload": clientBodyString]
-        let clientPayload = JSON(clientRecord).toString(pretty: false)
+        let clientPayload = JSON(clientRecord).toString(false)
 
         let cleartextClientsFactory: (String) -> ClientPayload? = {
             (s: String) -> ClientPayload? in
             return ClientPayload(s)
         }
 
-        let f: (JSON) -> ClientPayload = {
-            j in
-            return ClientPayload(j)
-        }
-
-        let encoder = RecordEncoder<ClientPayload>(decode: { ClientPayload($0) }, encode: { $0 })
-        let encrypter = Keys(defaultBundle: KeyBundle.random()).encrypter("clients", encoder: encoder)
-        let ciphertextClientsFactory = encrypter.factory
-
         let clearFactory: (String) -> CleartextPayloadJSON? = {
             (s: String) -> CleartextPayloadJSON? in
             return CleartextPayloadJSON(s)
         }
 
-        println(clientPayload)
+        print(clientPayload, terminator: "\n")
 
         // Only payloads that parse as JSON are valid.
         XCTAssertNil(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: clearFactory))
