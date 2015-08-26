@@ -327,7 +327,6 @@ class URLBarView: UIView {
         self.tabsButton.alpha = alpha
         self.locationContainer.alpha = alpha
         self.backgroundColor = URLBarViewUX.backgroundColorWithAlpha(1 - alpha)
-        self.actionButtons.map { $0.alpha = alpha }
     }
 
     func updateTabCount(count: Int) {
@@ -602,7 +601,8 @@ extension URLBarView: BrowserLocationViewDelegate {
 
 extension URLBarView: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldReturn(autocompleteTextField: AutocompleteTextField) -> Bool {
-        delegate?.urlBar(self, didSubmitText: locationTextField.text)
+        guard let text = locationTextField.text else { return true }
+        delegate?.urlBar(self, didSubmitText: text)
         return true
     }
 

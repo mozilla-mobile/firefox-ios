@@ -24,19 +24,18 @@ class Toolbar : UIView {
     }
 
     override func drawRect(rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
-        if drawTopBorder {
-            drawLine(context, start: CGPoint(x: 0, y: 0), end: CGPoint(x: frame.width, y: 0))
-        }
+        if let context = UIGraphicsGetCurrentContext() {
+            if drawTopBorder {
+                drawLine(context, start: CGPoint(x: 0, y: 0), end: CGPoint(x: frame.width, y: 0))
+            }
 
-        if drawBottomBorder {
-            drawLine(context, start: CGPoint(x: 0, y: frame.height), end: CGPoint(x: frame.width, y: frame.height))
-        }
+            if drawBottomBorder {
+                drawLine(context, start: CGPoint(x: 0, y: frame.height), end: CGPoint(x: frame.width, y: frame.height))
+            }
 
-        if drawSeperators {
-            var skippedFirst = false
-            for view in subviews {
-                if let view = view as? UIView {
+            if drawSeperators {
+                var skippedFirst = false
+                for view in subviews {
                     if skippedFirst {
                         let frame = view.frame
                         drawLine(context,
@@ -62,19 +61,17 @@ class Toolbar : UIView {
     override func updateConstraints() {
         var prev: UIView? = nil
         for view in self.subviews {
-            if let view = view as? UIView {
-                view.snp_remakeConstraints { make in
-                    if let prev = prev {
-                        make.left.equalTo(prev.snp_right)
-                    } else {
-                        make.left.equalTo(self)
-                    }
-                    prev = view
-
-                    make.centerY.equalTo(self)
-                    make.height.equalTo(UIConstants.ToolbarHeight)
-                    make.width.equalTo(self).dividedBy(self.subviews.count)
+            view.snp_remakeConstraints { make in
+                if let prev = prev {
+                    make.left.equalTo(prev.snp_right)
+                } else {
+                    make.left.equalTo(self)
                 }
+                prev = view
+
+                make.centerY.equalTo(self)
+                make.height.equalTo(UIConstants.ToolbarHeight)
+                make.width.equalTo(self).dividedBy(self.subviews.count)
             }
         }
         super.updateConstraints()
