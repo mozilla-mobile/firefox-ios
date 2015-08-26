@@ -7,6 +7,7 @@ import WebKit
 
 private let LabelPrompt = "Turn on search suggestions?"
 private let HintSuggestionButton = "Searches for the suggestion"
+private let LabelYahooSearchIcon = "Search suggestions from Yahoo"
 
 class SearchTests: KIFTestCase {
     func testOptInPrompt() {
@@ -56,6 +57,47 @@ class SearchTests: KIFTestCase {
 
         tester().tapViewWithAccessibilityLabel("Cancel")
         resetSuggestionsPrompt()
+    }
+
+    func testTurnOffSuggestionsWhenEnteringURL() {
+        var found: Bool
+
+        // Ensure that the prompt appears.
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("foobar")
+        found = tester().tryFindingViewWithAccessibilityLabel(LabelPrompt, error: nil)
+        XCTAssertTrue(found, "Prompt is shown")
+
+        // Ensure that no suggestions are visible before answering the prompt.
+        found = suggestionsAreVisible(tester())
+        XCTAssertFalse(found, "No suggestion shown before prompt selection")
+
+        // Ensure that suggestions are visible after selecting Yes.
+        tester().tapViewWithAccessibilityLabel("Yes")
+        found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
+        XCTAssertTrue(found, "Found suggestions after choosing Yes")
+        found = tester().tryFindingViewWithAccessibilityLabel(LabelYahooSearchIcon, error: nil)
+        XCTAssertTrue(found, "Found search provider icon")
+
+        tester().tapViewWithAccessibilityLabel("Address and Search")
+        tester().enterTextIntoCurrentFirstResponder("/")
+
+        // Wait for debounce in case
+        tester().waitForTimeInterval(0.3)
+
+        found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
+        XCTAssertFalse(found, "Found suggestions after adding / to url")
+        found = tester().tryFindingViewWithAccessibilityLabel(LabelYahooSearchIcon, error: nil)
+        XCTAssertFalse(found, "Found no search provider icon")
+
+        tester().tapViewWithAccessibilityLabel("Address and Search")
+        tester().enterTextIntoCurrentFirstResponder(" ")
+
+        // Wait for debounce in case
+        tester().waitForTimeInterval(0.3)
+
+        found = tester().tryFindingViewWithAccessibilityLabel(LabelYahooSearchIcon, error: nil)
+        XCTAssertTrue(found, "Found search provider icon after making input url invalid")
     }
 
     func testURLBarContextMenu() {
