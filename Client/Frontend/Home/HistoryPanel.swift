@@ -188,7 +188,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         let logoImageView = UIImageView(image: UIImage(named: "emptyHistory"))
         overlayView.addSubview(logoImageView)
-        logoImageView.snp_makeConstraints({ (make) -> Void in
+        logoImageView.snp_makeConstraints(closure: { (make) -> Void in
             make.centerX.equalTo(overlayView)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
@@ -207,7 +207,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         welcomeLabel.numberOfLines = 2
         welcomeLabel.adjustsFontSizeToFitWidth = true
 
-        welcomeLabel.snp_makeConstraints({ (make) -> Void in
+        welcomeLabel.snp_makeConstraints(closure: { (make) -> Void in
             make.centerX.equalTo(overlayView)
             make.top.equalTo(logoImageView.snp_bottom).offset(HistoryPanelUX.WelcomeScreenPadding)
             make.width.equalTo(HistoryPanelUX.WelcomeScreenItemWidth)

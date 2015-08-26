@@ -48,7 +48,7 @@ class ClientTests: XCTestCase {
         // Test that generator doesn't work with failed cursors
         var ran = false;
         for s in t2 {
-            println("Got \(s)")
+            print("Got \(s)", terminator: "\n")
             ran = true;
         }
         XCTAssertFalse(ran, "for...in didn't run for failed cursor");

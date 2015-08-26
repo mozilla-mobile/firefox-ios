@@ -107,7 +107,7 @@ class OpenSearchParser {
         }
         let description = descriptionIndexer.element?.text
 
-        var urlIndexers = docIndexer["Url"].all
+        let urlIndexers = docIndexer["Url"].all
         if urlIndexers.isEmpty {
             print("Url must appear at least once")
             return nil
@@ -118,7 +118,7 @@ class OpenSearchParser {
         for urlIndexer in urlIndexers {
             let type = urlIndexer.element?.attributes["type"]
             if type == nil {
-                println("Url element requires a type attribute")
+                print("Url element requires a type attribute", terminator: "\n")
                 return nil
             }
 
@@ -129,12 +129,12 @@ class OpenSearchParser {
 
             var template = urlIndexer.element?.attributes["template"]
             if template == nil {
-                println("Url element requires a template attribute")
+                print("Url element requires a template attribute", terminator: "\n")
                 return nil
             }
 
             if pluginMode {
-                var paramIndexers = urlIndexer["Param"].all
+                let paramIndexers = urlIndexer["Param"].all
 
                 if !paramIndexers.isEmpty {
                     template! += "?"
@@ -149,7 +149,7 @@ class OpenSearchParser {
                         let name = paramIndexer.element?.attributes["name"]
                         let value = paramIndexer.element?.attributes["value"]
                         if name == nil || value == nil {
-                            println("Param element must have name and value attributes")
+                            print("Param element must have name and value attributes", terminator: "\n")
                             return nil
                         }
                         template! += name! + "=" + value!
@@ -175,8 +175,8 @@ class OpenSearchParser {
 
         // TODO: For now, just use the largest icon.
         for imageIndexer in imageIndexers {
-            let imageWidth = imageIndexer.element?.attributes["width"]?.toInt()
-            let imageHeight = imageIndexer.element?.attributes["height"]?.toInt()
+            let imageWidth = Int(imageIndexer.element?.attributes["width"] ?? "")
+            let imageHeight = Int(imageIndexer.element?.attributes["height"] ?? "")
 
             // Only accept square images.
             if imageWidth != imageHeight {

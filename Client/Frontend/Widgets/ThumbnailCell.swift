@@ -169,7 +169,7 @@ class ThumbnailCell: UICollectionViewCell {
             make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding) // .insets(insets)
         })
 
-        textWrapper.snp_makeConstraints({ make in
+        textWrapper.snp_makeConstraints(closure: { make in
             make.bottom.equalTo(self.imageWrapper.snp_bottom) // .offset(ThumbnailCellUX.BorderWidth)
             make.left.right.equalTo(self.imageWrapper) // .offset(ThumbnailCellUX.BorderWidth)
         })

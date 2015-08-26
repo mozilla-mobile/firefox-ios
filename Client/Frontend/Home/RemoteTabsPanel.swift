@@ -365,13 +365,13 @@ class RemoteTabsErrorCell: UITableViewCell {
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
         instructionsLabel.numberOfLines = 0
         containerView.addSubview(instructionsLabel)
-        instructionsLabel.snp_makeConstraints({ (make) -> Void in
+        instructionsLabel.snp_makeConstraints(closure: { (make) -> Void in
             make.top.equalTo(imageView.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(containerView)
             make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
         })
 
-        containerView.snp_makeConstraints({ (make) -> Void in
+        containerView.snp_makeConstraints(closure: { (make) -> Void in
             // Let the container wrap around the content
             make.top.equalTo(imageView.snp_top)
             make.left.bottom.right.equalTo(instructionsLabel)
@@ -443,7 +443,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
             make.top.greaterThanOrEqualTo(contentView.snp_top).offset(50).priorityHigh()
         }
 
-        titleLabel.snp_makeConstraints({ (make) -> Void in
+        titleLabel.snp_makeConstraints(closure: { (make) -> Void in
             make.top.equalTo(imageView.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(imageView)
         })
