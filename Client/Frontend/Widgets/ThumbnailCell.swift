@@ -19,7 +19,7 @@ struct ThumbnailCellUX {
     static let InsetSizeCompact: CGFloat = 6
     static var Insets: UIEdgeInsets {
         let inset: CGFloat = (UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact) ? ThumbnailCellUX.InsetSizeCompact : ThumbnailCellUX.InsetSize
-        return UIEdgeInsetsMake(inset, inset, inset, inset)
+        return UIEdgeInsetsMake(top: inset, left: inset, bottom: inset, right: inset)
     }
     static let ImagePadding: CGFloat = 20
     static let ImagePaddingCompact: CGFloat = 10
@@ -47,7 +47,7 @@ class ThumbnailCell: UICollectionViewCell {
     var imagePadding: CGFloat = 0 {
         didSet {
             imageView.snp_remakeConstraints(closure: { make in
-                let insets = UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding)
+                let insets = UIEdgeInsetsMake(top: imagePadding, left: imagePadding, bottom: imagePadding, right: imagePadding)
                 make.top.left.right.equalTo(self.imageWrapper).insets(insets)
                 make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding)
             })
@@ -155,7 +155,10 @@ class ThumbnailCell: UICollectionViewCell {
         contentView.addSubview(removeButton)
 
         imageWrapper.snp_remakeConstraints(closure: { make in
-            make.top.bottom.left.right.equalTo(self.contentView).insets(ThumbnailCellUX.Insets)
+            make.top.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.top)
+            make.left.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.left)
+            make.bottom.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.bottom)
+            make.right.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.right)
         })
 
         backgroundEffect?.snp_remakeConstraints(closure: { make in
@@ -165,7 +168,9 @@ class ThumbnailCell: UICollectionViewCell {
         imageView.snp_remakeConstraints(closure: { make in
             let imagePadding: CGFloat = (UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact) ? ThumbnailCellUX.ImagePaddingCompact : ThumbnailCellUX.ImagePadding
             let insets = UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding)
-            make.top.left.right.equalTo(self.imageWrapper).insets(insets)
+            make.top.equalTo(self.imageWrapper).inset(insets.top)
+            make.left.right.equalTo(self.imageWrapper).inset(insets.left)
+            make.right.equalTo(self.imageWrapper).inset(insets.right)
             make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding) // .insets(insets)
         })
 
@@ -175,7 +180,7 @@ class ThumbnailCell: UICollectionViewCell {
         })
 
         textLabel.snp_remakeConstraints(closure: { make in
-            make.edges.equalTo(self.textWrapper).insets(ThumbnailCellUX.LabelInsets)
+            make.edges.equalTo(self.textWrapper).inset(ThumbnailCellUX.LabelInsets) // TODO swift-2.0 I changes insets to inset - how can that be right?
         })
         
         // Prevents the textLabel from getting squished in relation to other view priorities.
