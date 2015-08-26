@@ -19,7 +19,7 @@ struct ThumbnailCellUX {
     static let InsetSizeCompact: CGFloat = 6
     static var Insets: UIEdgeInsets {
         let inset: CGFloat = (UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact) ? ThumbnailCellUX.InsetSizeCompact : ThumbnailCellUX.InsetSize
-        return UIEdgeInsetsMake(top: inset, left: inset, bottom: inset, right: inset)
+        return UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
     }
     static let ImagePadding: CGFloat = 20
     static let ImagePaddingCompact: CGFloat = 10
@@ -47,8 +47,10 @@ class ThumbnailCell: UICollectionViewCell {
     var imagePadding: CGFloat = 0 {
         didSet {
             imageView.snp_remakeConstraints(closure: { make in
-                let insets = UIEdgeInsetsMake(top: imagePadding, left: imagePadding, bottom: imagePadding, right: imagePadding)
-                make.top.left.right.equalTo(self.imageWrapper).insets(insets)
+                let insets = UIEdgeInsets(top: imagePadding, left: imagePadding, bottom: imagePadding, right: imagePadding)
+                make.top.equalTo(self.imageWrapper).inset(insets.top)
+                make.left.equalTo(self.imageWrapper).inset(insets.left)
+                make.right.equalTo(self.imageWrapper).inset(insets.right)
                 make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding)
             })
             imageView.setNeedsUpdateConstraints()
