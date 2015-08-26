@@ -82,8 +82,8 @@ extension AuroraAppDelegate: UIAlertViewDelegate {
     }
 
     private func fetchLatestAuroraVersion(completionHandler: NSString? -> Void) {
-        Alamofire.request(.GET, AuroraPropertyListURL).responsePropertyList(options: NSPropertyListReadOptions.allZeros, completionHandler: { (_, _, object, _) -> Void in
-            if let plist = object as? NSDictionary {
+        Alamofire.request(.GET, AuroraPropertyListURL).responsePropertyList(options: NSPropertyListReadOptions(), completionHandler: { (_, _, object) -> Void in
+            if let plist = object.value as? NSDictionary {
                 if let items = plist["items"] as? NSArray {
                     if let item = items[0] as? NSDictionary {
                         if let metadata = item["metadata"] as? NSDictionary {
@@ -115,9 +115,10 @@ extension AuroraAppDelegate: MFMailComposeViewControllerDelegate {
                 mailComposeViewController.setSubject("Feedback on iOS client version v\(appVersion) (\(buildNumber))")
                 mailComposeViewController.setToRecipients(["ios-feedback@mozilla.com"])
 
-                let imageData = UIImagePNGRepresentation(image)
-                mailComposeViewController.addAttachmentData(imageData, mimeType: "image/png", fileName: "feedback.png")
-                window?.rootViewController?.presentViewController(mailComposeViewController, animated: true, completion: nil)
+                if let imageData = UIImagePNGRepresentation(image) {
+                    mailComposeViewController.addAttachmentData(imageData, mimeType: "image/png", fileName: "feedback.png")
+                    window?.rootViewController?.presentViewController(mailComposeViewController, animated: true, completion: nil)
+                }
             }
         }
     }

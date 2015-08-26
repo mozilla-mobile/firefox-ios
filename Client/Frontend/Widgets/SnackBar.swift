@@ -80,7 +80,7 @@ class SnackBar: UIView {
     var bottom: Constraint?
 
     convenience init(text: String, img: UIImage?, buttons: [SnackButton]?) {
-        var attributes = [NSObject: AnyObject]()
+        var attributes = [String: AnyObject]()
         attributes[NSFontAttributeName] = UIConstants.DefaultMediumFont
         attributes[NSBackgroundColorAttributeName] = UIColor.clearColor()
         let attrText = NSAttributedString(string: text, attributes: attributes)

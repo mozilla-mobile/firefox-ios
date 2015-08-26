@@ -154,7 +154,7 @@ class TabCell: UICollectionViewCell {
             make.trailing.centerY.equalTo(title)
         }
 
-        var top = (TabTrayControllerUX.TextBoxHeight - titleText.bounds.height) / 2.0
+        let top = (TabTrayControllerUX.TextBoxHeight - titleText.bounds.height) / 2.0
         titleText.frame.origin = CGPoint(x: titleText.frame.origin.x, y: max(0, top))
     }
 
@@ -441,7 +441,7 @@ extension TabTrayController: TabCellDelegate {
 }
 
 extension TabTrayController: UIScrollViewAccessibilityDelegate {
-    func accessibilityScrollStatusForScrollView(scrollView: UIScrollView) -> String! {
+    func accessibilityScrollStatusForScrollView(scrollView: UIScrollView) -> String? {
         var visibleCells = collectionView.visibleCells() as! [TabCell]
         var bounds = collectionView.bounds
         bounds = CGRectOffset(bounds, collectionView.contentInset.left, collectionView.contentInset.top)

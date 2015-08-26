@@ -47,14 +47,13 @@ class PasswordsClearable : Clearable {
     }
 
     func clear() -> Success {
-        let deferred = Success()
         // Clear our storage
         return profile.logins.removeAll() >>== { res in
             let storage = NSURLCredentialStorage.sharedCredentialStorage()
             let credentials = storage.allCredentials
             for (space, credentials) in credentials {
-                for (username, credential) in credentials as! [String: NSURLCredential] {
-                    storage.removeCredential(credential, forProtectionSpace: space as! NSURLProtectionSpace)
+                for (_, credential) in credentials {
+                    storage.removeCredential(credential, forProtectionSpace: space)
                 }
             }
             return succeed()
@@ -111,7 +110,7 @@ class SiteDataClearable : Clearable {
         let url = manager.URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: .UserDomainMask)[0]
         let file = url.path!.stringByAppendingPathComponent("WebKit")
         var error: NSError? = nil
-        NSFileManager.defaultManager().removeItemAtPath(file, error: &error)
+        try! NSFileManager.defaultManager().removeItemAtPath(file)
 
         return succeed()
     }
@@ -140,11 +139,12 @@ class CookiesClearable : Clearable {
         let manager = NSFileManager.defaultManager()
         var url = manager.URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: .UserDomainMask)[0]
         var file = url.path!.stringByAppendingPathComponent("Cookies")
-        var error: NSError? = nil
-        if let contents = NSFileManager.defaultManager().contentsOfDirectoryAtPath(file, error: nil) {
+        if let contents = try? NSFileManager.defaultManager().contentsOfDirectoryAtPath(file) {
             for content in contents {
-                let filePath = file.stringByAppendingPathComponent(content as! String)
-                NSFileManager.defaultManager().removeItemAtPath(filePath, error: &error)
+                url = url.URLByAppendingPathComponent(content)
+                if let filePath = url.path {
+                    try! NSFileManager.defaultManager().removeItemAtPath(filePath)
+                }
             }
         }
 

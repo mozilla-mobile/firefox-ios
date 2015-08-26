@@ -17,14 +17,17 @@ public struct UIConstants {
 
     static let DeviceFontSize: CGFloat = DeviceInfo.deviceModel().rangeOfString("iPad") != nil ? 18 : 15
     static let DefaultMediumFontSize: CGFloat = 14
+
     @available(iOSApplicationExtension 8.2, *)
     static let DefaultMediumFont = UIFont.systemFontOfSize(DefaultMediumFontSize, weight: UIFontWeightRegular)
     static let DefaultMediumFontUnweighted = UIFont.systemFontOfSize(DefaultMediumFontSize)
     static let DefaultMediumBoldFont = UIFont.boldSystemFontOfSize(DefaultMediumFontSize)
     static let DefaultSmallFontSize: CGFloat = 11
+
     @available(iOSApplicationExtension 8.2, *)
     static let DefaultSmallFont = UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightRegular)
     static let DefaultSmallFontUnweighted = UIFont.systemFontOfSize(DefaultSmallFontSize)
+
     @available(iOSApplicationExtension 8.2, *)
     static let DefaultSmallFontBold = UIFont.systemFontOfSize(DefaultSmallFontSize, weight: UIFontWeightBold)
     static let DefaultSmallFontBoldUnweighted = UIFont.systemFontOfSize(DefaultSmallFontSize)
