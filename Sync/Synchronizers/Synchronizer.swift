@@ -161,7 +161,7 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
             return .Backoff(remainingSeconds: Int(remaining))
         }
 
-        if let global = self.scratchpad.global?.value {
+        if let _ = self.scratchpad.global?.value {
             // There's no need to check the global storage format here; the state machine will already have
             // done so.
             if let engineMeta = self.scratchpad.global?.value.engines?[collection] {
