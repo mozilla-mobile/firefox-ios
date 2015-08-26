@@ -181,8 +181,8 @@ class ErrorPageHelper {
     }
 
     class func isErrorPageURL(url: NSURL) -> Bool {
-        if let scheme = url.scheme, host = url.host, path = url.path {
-            return scheme == "http" && host == "localhost" && path == "/errors/error.html"
+        if let host = url.host, path = url.path {
+            return url.scheme == "http" && host == "localhost" && path == "/errors/error.html"
         }
         return false
     }
