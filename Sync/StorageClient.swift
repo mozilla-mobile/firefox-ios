@@ -470,31 +470,31 @@ public class Sync15StorageClient {
 
         let deferred = Deferred<Maybe<StorageResponse<T>>>(defaultQueue: self.resultQueue)
 
-        if self.checkBackoff(deferred) {
-            return deferred
-        }
-
-        let req = self.requestPUT(URL, body: body, ifUnmodifiedSince: ifUnmodifiedSince)
-        let handler = self.errorWrap(deferred) { (_, response, result) in
-            if let data = result.value as? String {
-                if let v = parser(data) {
-                    let storageResponse = StorageResponse<T>(value: v, response: response!)
-                    deferred.fill(Maybe(success: storageResponse))
-                } else {
-                    deferred.fill(Maybe(failure: RecordParseError()))
-                }
-                return
-            }
-
-            deferred.fill(Maybe(failure: RecordParseError()))
-        }
-
-        // Yay Swift.
-        let stringHandler = { (a, b, c: Result<String>) in
-            return handler(a, b, c)
-        }
-
-        req.responseString(encoding: nil, completionHandler: stringHandler)
+//        if self.checkBackoff(deferred) {
+//            return deferred
+//        }
+//
+//        let req = self.requestPUT(URL, body: body, ifUnmodifiedSince: ifUnmodifiedSince)
+//        let handler = self.errorWrap(deferred) { (_, response, result) in
+//            if let data = result.value as? String {
+//                if let v = parser(data) {
+//                    let storageResponse = StorageResponse<T>(value: v, response: response!)
+//                    deferred.fill(Maybe(success: storageResponse))
+//                } else {
+//                    deferred.fill(Maybe(failure: RecordParseError()))
+//                }
+//                return
+//            }
+//
+//            deferred.fill(Maybe(failure: RecordParseError()))
+//        }
+//
+//        // Yay Swift.
+//        let stringHandler = { (a, b, c: Result<String>) in
+//            return handler(a, b, c)
+//        }
+//
+//        req.responseString(encoding: nil, completionHandler: stringHandler)
         return deferred
     }
 

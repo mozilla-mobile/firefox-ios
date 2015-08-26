@@ -87,9 +87,9 @@ class LiveStorageClientTests : LiveAccountTest {
                 XCTAssert(rec.id == "keys", "GUID is correct.")
                 XCTAssert(rec.modified > 1000, "modified is sane.")
                 let payload: KeysPayload = rec.payload as KeysPayload
-                println("Body: \(payload.toString(pretty: false))")
+                print("Body: \(payload.toString(false))", terminator: "\n")
                 XCTAssert(rec.id == "keys", "GUID inside is correct.")
-                let arr = payload["default"].asArray![0].asString
+                _ = payload["default"].asArray![0].asString
                 if let keys = payload.defaultKeys {
                     // Extracting the token like this is not great, but...
                     result.fill(Maybe(success: (authState.value.successValue!.token, keys)))
@@ -107,8 +107,8 @@ class LiveStorageClientTests : LiveAccountTest {
         let deferred = getTokenAndDefaultKeys()
         deferred.upon {
             res in
-            if let (token, keyBundle) = res.successValue {
-                println("Yay")
+            if let (_, _) = res.successValue {
+                print("Yay", terminator: "\n")
             } else {
                 XCTAssertEqual(res.failureValue!.description, "")
             }
@@ -125,14 +125,14 @@ class LiveStorageClientTests : LiveAccountTest {
         let expectation = expectationWithDescription("Waiting on value.")
         let authState = self.getAuthState(NSDate.now())
 
-        let d = chainDeferred(authState, { SyncStateMachine.toReady($0, prefs: MockProfilePrefs()) })
+        let d = chainDeferred(authState, f: { SyncStateMachine.toReady($0, prefs: MockProfilePrefs()) })
 
         d.upon { result in
             if let ready = result.successValue {
                 XCTAssertTrue(ready.collectionKeys.defaultBundle.encKey.length == 32)
                 XCTAssertTrue(ready.scratchpad.global != nil)
                 if let clients = ready.scratchpad.global?.value.engines?["clients"] {
-                    XCTAssertTrue(count(clients.syncID) == 12)
+                    XCTAssertTrue(clients.syncID.characters.count == 12)
                 }
             }
             XCTAssertTrue(result.isSuccess)

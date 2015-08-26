@@ -16,7 +16,7 @@ class UtilsTests: XCTestCase {
             return (v > 200) ? 999 : nil
         }
 
-        let o = mapValues(m, f)
+        let o = mapValues(m, f: f)
         XCTAssertEqual(2, o.count)
         XCTAssertTrue(o["foo"]! == nil)
         XCTAssertTrue(o["bar"]! == 999)
@@ -38,12 +38,12 @@ class UtilsTests: XCTestCase {
         let y: [String]? = ["a", "b", "c"]
         let z: [String]? = nil
 
-        XCTAssertTrue(optArrayEqual(x, y))
-        XCTAssertTrue(optArrayEqual(x, x))
-        XCTAssertTrue(optArrayEqual(y, y))
-        XCTAssertTrue(optArrayEqual(z, z))
-        XCTAssertFalse(optArrayEqual(x, z))
-        XCTAssertFalse(optArrayEqual(z, y))
+        XCTAssertTrue(optArrayEqual(x, rhs: y))
+        XCTAssertTrue(optArrayEqual(x, rhs: x))
+        XCTAssertTrue(optArrayEqual(y, rhs: y))
+        XCTAssertTrue(optArrayEqual(z, rhs: z))
+        XCTAssertFalse(optArrayEqual(x, rhs: z))
+        XCTAssertFalse(optArrayEqual(z, rhs: y))
     }
 
     func testWithQueryParam() {
@@ -53,9 +53,9 @@ class UtilsTests: XCTestCase {
         let urlD = urlB.withQueryParam("qqq", value: "123")
         let urlE = urlC.withQueryParam("rrr", value: "aaa")
 
-        XCTAssertEqual("http://foo.com/bar/?ppp=123", urlC.absoluteString!)
-        XCTAssertEqual("http://bar.com/noo?qqq=123", urlD.absoluteString!)
-        XCTAssertEqual("http://foo.com/bar/?ppp=123&rrr=aaa", urlE.absoluteString!)
+        XCTAssertEqual("http://foo.com/bar/?ppp=123", urlC.absoluteString)
+        XCTAssertEqual("http://bar.com/noo?qqq=123", urlD.absoluteString)
+        XCTAssertEqual("http://foo.com/bar/?ppp=123&rrr=aaa", urlE.absoluteString)
     }
 
     func testChunk() {
