@@ -202,8 +202,9 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
     }
 
     override func drawRect(rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
-        drawLine(context, start: CGPoint(x: 0, y: 0), end: CGPoint(x: frame.width, y: 0))
+        if let context = UIGraphicsGetCurrentContext() {
+            drawLine(context, start: CGPoint(x: 0, y: 0), end: CGPoint(x: frame.width, y: 0))
+        }
     }
 
     private func drawLine(context: CGContextRef, start: CGPoint, end: CGPoint) {

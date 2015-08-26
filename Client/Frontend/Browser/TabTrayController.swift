@@ -154,7 +154,7 @@ class TabCell: UICollectionViewCell {
             make.trailing.centerY.equalTo(title)
         }
 
-        var top = (TabTrayControllerUX.TextBoxHeight - titleText.bounds.height) / 2.0
+        let top = (TabTrayControllerUX.TextBoxHeight - titleText.bounds.height) / 2.0
         titleText.frame.origin = CGPoint(x: titleText.frame.origin.x, y: max(0, top))
     }
 
@@ -419,12 +419,11 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int) {
-        var newTab: Browser? = nil
         self.collectionView.performBatchUpdates({ _ in
             self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
         }, completion: { finished in
             if tabManager.count == 0 {
-                newTab = tabManager.addTab()
+                tabManager.addTab()
             }
         })
     }
@@ -446,7 +445,7 @@ extension TabTrayController: TabCellDelegate {
 }
 
 extension TabTrayController: UIScrollViewAccessibilityDelegate {
-    func accessibilityScrollStatusForScrollView(scrollView: UIScrollView) -> String! {
+    func accessibilityScrollStatusForScrollView(scrollView: UIScrollView) -> String? {
         var visibleCells = collectionView.visibleCells() as! [TabCell]
         var bounds = collectionView.bounds
         bounds = CGRectOffset(bounds, collectionView.contentInset.left, collectionView.contentInset.top)
