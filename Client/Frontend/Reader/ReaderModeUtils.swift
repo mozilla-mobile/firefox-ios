@@ -11,7 +11,7 @@ struct ReaderModeUtils {
     static func simplifyDomain(domain: String) -> String {
         for prefix in DomainPrefixesToSimplify {
             if domain.hasPrefix(prefix) {
-                return domain.substringFromIndex(advance(domain.startIndex, prefix.characters.count))
+                return domain.substringFromIndex(domain.startIndex.advancedBy(prefix.characters.count))
             }
         }
         return domain
@@ -56,16 +56,14 @@ struct ReaderModeUtils {
     }
 
     static func isReaderModeURL(url: NSURL) -> Bool {
-        if let scheme = url.scheme, host = url.host, path = url.path {
-            return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
-        }
-        return false
+        let scheme = url.scheme, host = url.host, path = url.path
+        return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
     }
 
     static func decodeURL(url: NSURL) -> NSURL? {
         if ReaderModeUtils.isReaderModeURL(url) {
             if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false), queryItems = components.queryItems where queryItems.count == 1 {
-                if let queryItem = queryItems.first as? NSURLQueryItem, value = queryItem.value {
+                if let queryItem = queryItems.first, value = queryItem.value {
                     return NSURL(string: value)
                 }
             }

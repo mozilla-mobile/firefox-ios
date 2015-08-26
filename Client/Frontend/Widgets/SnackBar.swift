@@ -80,7 +80,7 @@ class SnackBar: UIView {
     var bottom: Constraint?
 
     convenience init(text: String, img: UIImage?, buttons: [SnackButton]?) {
-        var attributes = [NSObject: AnyObject]()
+        var attributes = [String: AnyObject]()
         attributes[NSFontAttributeName] = UIConstants.DefaultMediumFont
         attributes[NSBackgroundColorAttributeName] = UIColor.clearColor()
         let attrText = NSAttributedString(string: text, attributes: attributes)
@@ -175,7 +175,7 @@ class SnackBar: UIView {
         }
 
         if let img = imageView.image {
-            imageView.snp_remakeConstraints({ make in
+            imageView.snp_remakeConstraints(closure: { make in
                 make.top.left.equalTo(contentView)
                 // To avoid doubling the padding, the textview doesn't have an inset on its left side.
                 // Instead, it relies on the imageView to tell it where its left side should be.
@@ -184,21 +184,21 @@ class SnackBar: UIView {
                 make.bottom.lessThanOrEqualTo(contentView.snp_bottom)
             })
         } else {
-            imageView.snp_remakeConstraints({ make in
+            imageView.snp_remakeConstraints(closure: { make in
                 make.width.height.equalTo(0)
                 make.top.left.equalTo(self)
                 make.bottom.lessThanOrEqualTo(contentView.snp_bottom)
             })
         }
 
-        textLabel.snp_remakeConstraints({ make in
+        textLabel.snp_remakeConstraints(closure: { make in
             make.top.equalTo(contentView)
             make.left.equalTo(self.imageView.snp_right)
             make.trailing.equalTo(contentView)
             make.bottom.lessThanOrEqualTo(contentView.snp_bottom)
         })
 
-        buttonsView.snp_remakeConstraints({ make in
+        buttonsView.snp_remakeConstraints(closure: { make in
             make.top.equalTo(contentView.snp_bottom).offset(UIConstants.DefaultPadding)
             make.bottom.equalTo(self.snp_bottom)
             make.left.right.equalTo(self)
