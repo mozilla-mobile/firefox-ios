@@ -46,7 +46,7 @@ class ThumbnailCell: UICollectionViewCell {
 
     var imagePadding: CGFloat = 0 {
         didSet {
-            imageView.snp_remakeConstraints({ make in
+            imageView.snp_remakeConstraints(closure: { make in
                 let insets = UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding)
                 make.top.left.right.equalTo(self.imageWrapper).insets(insets)
                 make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding)
@@ -144,7 +144,7 @@ class ThumbnailCell: UICollectionViewCell {
         if let backgroundEffect = backgroundEffect {
             imageWrapper.addSubview(backgroundImage)
             imageWrapper.addSubview(backgroundEffect)
-            backgroundImage.snp_remakeConstraints({ make in
+            backgroundImage.snp_remakeConstraints(closure: { make in
                 make.top.bottom.left.right.equalTo(self.imageWrapper)
             })
 
@@ -154,15 +154,15 @@ class ThumbnailCell: UICollectionViewCell {
         textWrapper.addSubview(textLabel)
         contentView.addSubview(removeButton)
 
-        imageWrapper.snp_remakeConstraints({ make in
+        imageWrapper.snp_remakeConstraints(closure: { make in
             make.top.bottom.left.right.equalTo(self.contentView).insets(ThumbnailCellUX.Insets)
         })
 
-        backgroundEffect?.snp_remakeConstraints({ make in
+        backgroundEffect?.snp_remakeConstraints(closure: { make in
             make.top.bottom.left.right.equalTo(self.imageWrapper)
         })
 
-        imageView.snp_remakeConstraints({ make in
+        imageView.snp_remakeConstraints(closure: { make in
             let imagePadding: CGFloat = (UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact) ? ThumbnailCellUX.ImagePaddingCompact : ThumbnailCellUX.ImagePadding
             let insets = UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding)
             make.top.left.right.equalTo(self.imageWrapper).insets(insets)
@@ -174,7 +174,7 @@ class ThumbnailCell: UICollectionViewCell {
             make.left.right.equalTo(self.imageWrapper) // .offset(ThumbnailCellUX.BorderWidth)
         })
 
-        textLabel.snp_remakeConstraints({ make in
+        textLabel.snp_remakeConstraints(closure: { make in
             make.edges.equalTo(self.textWrapper).insets(ThumbnailCellUX.LabelInsets)
         })
         
