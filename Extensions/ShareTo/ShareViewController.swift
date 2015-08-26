@@ -34,7 +34,9 @@ private struct ShareDialogControllerUX {
     static let NavigationBarIconSize = 38                                                           // Width and height of the icon
     static let NavigationBarBottomPadding = 12
 
-    static let ItemTitleFont = UIFont.systemFontOfSize(15, weight: UIFontWeightMedium)
+    @available(iOSApplicationExtension 8.2, *)
+    static let ItemTitleFontMedium = UIFont.systemFontOfSize(15, weight: UIFontWeightMedium)
+    static let ItemTitleFont = UIFont.systemFontOfSize(15)
     static let ItemTitleMaxNumberOfLines = 2
     static let ItemTitleLeftPadding = 44
     static let ItemTitleRightPadding = 44
@@ -106,7 +108,12 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         titleView.numberOfLines = ShareDialogControllerUX.ItemTitleMaxNumberOfLines
         titleView.lineBreakMode = NSLineBreakMode.ByTruncatingTail
         titleView.text = item.title
-        titleView.font = ShareDialogControllerUX.ItemTitleFont
+        if #available(iOSApplicationExtension 8.2, *) {
+            titleView.font = ShareDialogControllerUX.ItemTitleFontMedium
+        } else {
+            // Fallback on earlier versions
+            titleView.font = ShareDialogControllerUX.ItemTitleFont
+        }
         view.addSubview(titleView)
 
         // Setup the link view
