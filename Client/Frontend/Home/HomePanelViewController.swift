@@ -145,7 +145,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     private func hideCurrentPanel() {
-        if let panel = childViewControllers.first as? UIViewController {
+        if let panel = childViewControllers.first {
             panel.willMoveToParentViewController(nil)
             panel.view.removeFromSuperview()
             panel.removeFromParentViewController()
@@ -248,7 +248,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         }
 
         UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [UIViewAnimationOptions.AllowUserInteraction, UIViewAnimationOptions.CurveEaseInOut], animations: { () -> Void in
-            self.buttons.map { $0.transform = editing ? translateUp : CGAffineTransformIdentity }
             self.finishEditingButton?.transform = editing ? CGAffineTransformIdentity : translateDown
         }, completion: { _ in
             if !editing {

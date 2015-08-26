@@ -127,7 +127,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         view.addSubview(spinner)
 
         let error = UILabel()
-        if let settingsTitle = settingsTitle {
+        if let _ = settingsTitle {
             error.text = TODOPageLoadErrorString
             error.textColor = UIColor.redColor() // Firefox Orange!
             error.textAlignment = NSTextAlignment.Center
