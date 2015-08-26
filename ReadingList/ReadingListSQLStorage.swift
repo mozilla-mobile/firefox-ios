@@ -8,8 +8,8 @@ import SQLite
 import Shared
 
 class ReadingListSQLStorage: ReadingListStorage {
-    var db: Database!
-
+    var db: Connection!
+    let items: Table!
     struct ItemColumns {
         // Client Metadata
         static let ClientId = Expression<Int64>("client_id")
@@ -27,10 +27,10 @@ class ReadingListSQLStorage: ReadingListStorage {
     }
 
     init(path: String) {
-        db = Database(path)
+        db = try! Connection(path)
 
-        let items = db["items"]
-        db.create(table: items, ifNotExists: true) { t in
+        items = Table("items")
+        items.create(temporary: false, ifNotExists: true, block: { t in
             // Client Metadata
             t.column(ItemColumns.ClientId, primaryKey: .Autoincrement)
             t.column(ItemColumns.ClientLastModified)
@@ -44,48 +44,51 @@ class ReadingListSQLStorage: ReadingListStorage {
             t.column(ItemColumns.Archived, defaultValue: false)
             t.column(ItemColumns.Favorite, defaultValue: false)
             t.column(ItemColumns.Unread, defaultValue: true)
-        }
+        })
     }
 
     func getAllRecords() -> Maybe<[ReadingListClientRecord]> {
-        return Maybe(success: Array(db["items"]).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+        return Maybe(success: Array(db.prepare(items)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
     }
 
     func getNewRecords() -> Maybe<[ReadingListClientRecord]> {
-        return Maybe(success: Array(db["items"].filter(ItemColumns.Id == nil)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+        return Maybe(success: Array(db.prepare(items.filter(ItemColumns.Id == nil))).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
     }
 
     func getUnreadRecords() -> Maybe<[ReadingListClientRecord]> {
-        return Maybe(success: Array(db["items"].filter(ItemColumns.Unread == true)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+        return Maybe(success: Array(db.prepare(items.filter(ItemColumns.Unread == true))).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
     }
 
     func getAvailableRecords() -> Maybe<[ReadingListClientRecord]> {
-        return Maybe(success: Array(db["items"].order(ItemColumns.ClientLastModified.desc)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+        return Maybe(success: Array(db.prepare(items.order(ItemColumns.ClientLastModified.desc))).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
     }
 
     func deleteRecord(record: ReadingListClientRecord) -> Maybe<Void> {
-        let items = db["items"]
         print("Trying to delete record with id \(record.clientMetadata.id)\n")
         let query = items.filter(ItemColumns.ClientId == record.clientMetadata.id)
-        if query.delete() > 0 {
+        do {
+            try db.run(query.delete())
             return Maybe(success: Void())
+        } catch {
+            return Maybe(failure: ReadingListStorageError("Failed to delete"))
         }
-        return Maybe(failure: ReadingListStorageError("Failed to delete"))
     }
 
     func deleteAllRecords() -> Maybe<Void> {
-        let items = db["items"]
-        if items.delete() >= 0 {
+        do {
+            try db.run(self.items.delete())
             return Maybe(success: Void())
+        } catch {
+            return Maybe(failure: ReadingListStorageError("Failed to delete"))
         }
-        return Maybe(failure: ReadingListStorageError("Failed to delete"))
     }
 
     func createRecordWithURL(url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
-        let items = db["items"]
-        let (id, statement) = items.insert(ItemColumns.ClientLastModified <- ReadingListNow(), ItemColumns.Url <- url, ItemColumns.Title <- title, ItemColumns.AddedBy <- addedBy)
-        if let id = id {
-            if let item = items.filter(ItemColumns.ClientId == id).first {
+        let insert = items.insert(ItemColumns.ClientLastModified <- ReadingListNow(), ItemColumns.Url <- url, ItemColumns.Title <- title, ItemColumns.AddedBy <- addedBy)
+
+        do {
+            let id = try db.run(insert)
+            if let item = Array(db.prepare(items.filter(ItemColumns.ClientId == id))).first {
                 if let record = ReadingListClientRecord(row: rowToDictionary(item)) {
                     return Maybe(success: record)
                 } else {
@@ -94,17 +97,13 @@ class ReadingListSQLStorage: ReadingListStorage {
             } else {
                 return Maybe(failure: ReadingListStorageError("Can't get first item from results"))
             }
-        } else {
-            if let reason = statement.reason {
-                return Maybe(failure: ReadingListStorageError("Can't insert: \(reason)"))
-            }
-            return Maybe(failure: ReadingListStorageError("Can't insert"))
+        } catch {
+            return Maybe(failure: ReadingListStorageError("Can't insert: \(error)"))
         }
     }
 
     func getRecordWithURL(url: String) -> Maybe<ReadingListClientRecord?> {
-        let items = db["items"]
-        if let item = items.filter(ItemColumns.Url == url).first {
+        if let item = Array(db.prepare(items.filter(ItemColumns.Url == url))).first {
             if let record = ReadingListClientRecord(row: rowToDictionary(item)) {
                 return Maybe(success: record)
             } else {
@@ -116,10 +115,10 @@ class ReadingListSQLStorage: ReadingListStorage {
     }
 
     func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
-        let items = db["items"]
-        let query = items.filter(ItemColumns.ClientId == record.clientMetadata.id)
-        if query.update(ItemColumns.Unread <- unread) > 0 {
-            if let item = items.filter(ItemColumns.ClientId == record.clientMetadata.id).first {
+        let query = items.filter(ItemColumns.ClientId == record.clientMetadata.id).update(ItemColumns.Unread <- unread)
+        do {
+            try db.run(query)
+            if let item = Array(db.prepare(items.filter(ItemColumns.ClientId == record.clientMetadata.id))).first {
                 if let record = ReadingListClientRecord(row: rowToDictionary(item)) {
                     return Maybe(success: record)
                 } else {
@@ -128,8 +127,9 @@ class ReadingListSQLStorage: ReadingListStorage {
             } else {
                 return Maybe(success: nil)
             }
+        } catch {
+            return Maybe(success: nil)
         }
-        return Maybe(success: nil)
     }
 
     private func rowToDictionary(row: Row) -> AnyObject {

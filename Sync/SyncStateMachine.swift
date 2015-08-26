@@ -584,7 +584,7 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
             return MissingMetaGlobalAndUnwillingError()
         }
 
-        if let failure = failure as? NotFound<StorageResponse<GlobalEnvelope>> {
+        if let _ = failure as? NotFound<StorageResponse<GlobalEnvelope>> {
             // OK, this is easy.
             // This state is responsible for creating the new m/g, uploading it, and
             // restarting with a clean scratchpad.
@@ -657,7 +657,7 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
             return MissingCryptoKeysAndUnwillingError()
         }
 
-        if let failure = failure as? NotFound<StorageResponse<KeysPayload>> {
+        if let _ = failure as? NotFound<StorageResponse<KeysPayload>> {
             // This state is responsible for creating the new c/k, uploading it, and
             // restarting with a clean scratchpad.
             // But we haven't implemented it yet.
