@@ -576,7 +576,6 @@ extension SQLiteLogins: SyncableLogins {
     private func applyChangedLogin(upstream: ServerLogin, local: LocalLogin?, mirror: MirrorLogin?) -> Success {
         // Once we have the server record, the mirror record (if any), and the local overlay (if any),
         // we can always know which state a record is in.
-        _ = upstream.serverModified
 
         // If it's present in the mirror, then we can proceed directly to handling the change;
         // we assume that once a record makes it into the mirror, that the local record association

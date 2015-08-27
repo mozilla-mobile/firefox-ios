@@ -78,8 +78,6 @@ class ClientTests: XCTestCase {
         let webView = WKWebView()
         webView.evaluateJavaScript("navigator.userAgent") { result, error in
             let userAgent = result as! String
-            _ = userAgent.rangeOfString("^Mozilla/5\\.0 \\(.+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\) FxiOS/\(appVersion) Mobile/[A-Z0-9]+ Safari/[0-9\\.]+$", options: NSStringCompareOptions.RegularExpressionSearch)
-
             if compare(userAgent) {
                 expectation.fulfill()
             } else {

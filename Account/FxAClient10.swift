@@ -239,7 +239,7 @@ public class FxAClient10 {
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.HTTPBody = JSON(parameters).toString(false).utf8EncodedData
 
-        _ = alamofire.request(mutableURLRequest)
+        alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
             .responseJSON { (request, response, result) in
                 if let error = result.error as? NSError {
