@@ -45,7 +45,7 @@ public protocol Synchronizer {
      * Return a reason if the current state of this synchronizer -- particularly prefs and scratchpad --
      * prevent a routine sync from occurring.
      */
-    func reasonToNotSync(Sync15StorageClient) -> SyncNotStartedReason?
+    func reasonToNotSync(_: Sync15StorageClient) -> SyncNotStartedReason?
 }
 
 /**
@@ -72,8 +72,8 @@ public enum SyncStatus {
 }
 
 
-typealias DeferredTimestamp = Deferred<Result<Timestamp>>
-public typealias SyncResult = Deferred<Result<SyncStatus>>
+typealias DeferredTimestamp = Deferred<Maybe<Timestamp>>
+public typealias SyncResult = Deferred<Maybe<SyncStatus>>
 
 public enum SyncNotStartedReason {
     case NoAccount

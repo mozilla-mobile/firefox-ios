@@ -152,7 +152,7 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
      * needs to be uploaded). Also returns the commands: we run them after we
      * upload a replacement record.
      */
-    private func processCommandsFromRecord(record: Record<ClientPayload>?, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Deferred<Result<(Bool, [Command])>> {
+    private func processCommandsFromRecord(record: Record<ClientPayload>?, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Deferred<Maybe<(Bool, [Command])>> {
         log.debug("Processing commands from downloaded record.")
 
         // TODO: short-circuit based on the modified time of the record we uploaded, so we don't need to skip ahead.
@@ -169,11 +169,11 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
                 }
 
                 // TODO: can we do anything better if a command fails?
-                return deferResult((true, optFilter(commands.map(parse))))
+                return deferMaybe((true, optFilter(commands.map(parse))))
             }
         }
 
-        return deferResult((false, []))
+        return deferMaybe((false, []))
     }
 
     private func uploadClientCommands(toLocalClients localClients: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
@@ -225,7 +225,7 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             }
 
             log.error("Client \(clientGUID) commands upload failed: No remote client for GUID")
-            return deferResult(UnknownError())
+            return deferMaybe(UnknownError())
         }
     }
 
@@ -306,9 +306,9 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             switch reason {
             case .EngineRemotelyNotEnabled:
                 // This is a hard error for us.
-                return deferResult(FatalError(message: "clients not mentioned in meta/global. Server wiped?"))
+                return deferMaybe(FatalError(message: "clients not mentioned in meta/global. Server wiped?"))
             default:
-                return deferResult(SyncStatus.NotStarted(reason))
+                return deferMaybe(SyncStatus.NotStarted(reason))
             }
         }
 
@@ -317,7 +317,7 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
         let encrypter = keys?.encrypter(self.collection, encoder: encoder)
         if encrypter == nil {
             log.error("Couldn't make clients encrypter.")
-            return deferResult(FatalError(message: "Couldn't make clients encrypter."))
+            return deferMaybe(FatalError(message: "Couldn't make clients encrypter."))
         }
 
         let clientsClient = storageClient.clientForCollection(self.collection, encrypter: encrypter!)
@@ -326,7 +326,7 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
             log.debug("No remote changes for clients. (Last fetched \(self.lastFetched).)")
             return self.maybeUploadOurRecord(false, ifUnmodifiedSince: nil, toServer: clientsClient)
                 >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: clientsClient) }
-                >>> { deferResult(.Completed) }
+                >>> { deferMaybe(.Completed) }
         }
 
         // TODO: some of the commands we process might involve wiping collections or the
@@ -337,6 +337,6 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
                 return self.wipeIfNecessary(localClients)
                     >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient) }
             }
-            >>> { deferResult(.Completed) }
+            >>> { deferMaybe(.Completed) }
     }
 }

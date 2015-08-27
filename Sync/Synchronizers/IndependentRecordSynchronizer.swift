@@ -19,7 +19,7 @@ class Uploader {
         // for the types to line up.
         let chunks = chunk(items, by: by).map { Array($0) }
 
-        let start = deferResult(lastTimestamp)
+        let start = deferMaybe(lastTimestamp)
 
         let perChunk: ([T], Timestamp) -> DeferredTimestamp = { (records, timestamp) in
             // TODO: detect interruptions -- clients uploading records during our sync --
@@ -71,7 +71,7 @@ public class IndependentRecordSynchronizer: BaseSingleCollectionSynchronizer {
     func uploadRecords<T>(records: [Record<T>], by: Int, lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: ([GUID], Timestamp) -> DeferredTimestamp) -> DeferredTimestamp {
         if records.isEmpty {
             log.debug("No modified records to upload.")
-            return deferResult(lastTimestamp)
+            return deferMaybe(lastTimestamp)
         }
 
         let storageOp: ([Record<T>], Timestamp) -> DeferredTimestamp = { records, timestamp in

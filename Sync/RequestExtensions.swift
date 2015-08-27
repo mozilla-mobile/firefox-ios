@@ -15,7 +15,7 @@ extension Request {
         })
     }
 
-    public func responseParsedJSON(#queue: dispatch_queue_t, partial: Bool, completionHandler: ResponseHandler) -> Self {
+    public func responseParsedJSON(queue queue: dispatch_queue_t, partial: Bool, completionHandler: ResponseHandler) -> Self {
         let serializer = partial ? Request.PartialParsedJSONResponseSerializer() :
                                    Request.ParsedJSONResponseSerializer()
         return response(queue: queue, serializer: serializer, completionHandler: { (request, response, JSON, error) in

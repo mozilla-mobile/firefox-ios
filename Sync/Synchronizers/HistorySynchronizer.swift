@@ -145,7 +145,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
             }
         }
 
-        return deferResult(lastTimestamp)
+        return deferMaybe(lastTimestamp)
           >>== uploadDeleted
           >>== uploadModified
            >>> effect({ log.debug("Done syncing.") })
@@ -154,7 +154,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
     public func synchronizeLocalHistory(history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
         if let reason = self.reasonToNotSync(storageClient) {
-            return deferResult(.NotStarted(reason))
+            return deferMaybe(.NotStarted(reason))
         }
 
         let encoder = RecordEncoder<HistoryPayload>(decode: { HistoryPayload($0) }, encode: { $0 })
@@ -179,10 +179,10 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                 // to the last successfully applied record timestamp, no matter where we fail.
                 // There's no need to do the upload before bumping -- the storage of local changes is stable.
                >>> { self.uploadOutgoingFromStorage(history, lastTimestamp: 0, withServer: historyClient) }
-               >>> { return deferResult(.Completed) }
+               >>> { return deferMaybe(.Completed) }
         }
 
         log.error("Couldn't make history factory.")
-        return deferResult(FatalError(message: "Couldn't make history factory."))
+        return deferMaybe(FatalError(message: "Couldn't make history factory."))
     }
 }
