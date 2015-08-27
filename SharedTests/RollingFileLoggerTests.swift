@@ -19,7 +19,7 @@ class RollingFileLoggerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        logDir = (NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true).first as! String) + "/Logs"
+        logDir = (NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true).first!) + "/Logs"
         do {
             try NSFileManager.defaultManager().createDirectoryAtPath(logDir, withIntermediateDirectories: false, attributes: nil)
         } catch _ {
