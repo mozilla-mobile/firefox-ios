@@ -86,7 +86,9 @@ class ReadingListTableViewCell: SWTableViewCell {
             titleLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
             hostnameLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
             markAsReadButton.setTitle(unread ? ReadingListTableViewCellUX.MarkAsReadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText, forState: UIControlState.Normal)
-            markAsReadAction.name = markAsReadButton.titleLabel!.text
+            if let text = markAsReadButton.titleLabel?.text {
+                markAsReadAction.name = text
+            }
             updateAccessibilityLabel()
         }
     }
@@ -153,7 +155,9 @@ class ReadingListTableViewCell: SWTableViewCell {
         deleteButton.setTitle(ReadingListTableViewCellUX.DeleteButtonTitleText, forState: UIControlState.Normal)
         deleteButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         deleteButton.titleEdgeInsets = ReadingListTableViewCellUX.DeleteButtonTitleEdgeInsets
-        deleteAction.name = deleteButton.titleLabel!.text
+        if let text = deleteButton.titleLabel?.text {
+            deleteAction.name = text
+        }
         deleteAction.target = self
         deleteAction.selector = "deleteActionActivated"
         rightUtilityButtons = [deleteButton]
@@ -166,7 +170,9 @@ class ReadingListTableViewCell: SWTableViewCell {
         markAsReadButton.setTitle(ReadingListTableViewCellUX.MarkAsReadButtonTitleText, forState: UIControlState.Normal)
         markAsReadButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         markAsReadButton.titleEdgeInsets = ReadingListTableViewCellUX.MarkAsReadButtonTitleEdgeInsets
-        markAsReadAction.name = markAsReadButton.titleLabel!.text
+        if let text = markAsReadButton.titleLabel?.text {
+            markAsReadAction.name = text
+        }
         markAsReadAction.target = self
         markAsReadAction.selector = "markAsReadActionActivated"
         leftUtilityButtons = [markAsReadButton]
@@ -184,7 +190,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         let hostname = url.host ?? ""
         for prefix in prefixesToSimplify {
             if hostname.hasPrefix(prefix) {
-                return hostname.substringFromIndex(advance(hostname.startIndex, prefix.characters.count))
+                return hostname.substringFromIndex(hostname.startIndex.advancedBy(prefix.characters.count))
             }
         }
         return hostname
