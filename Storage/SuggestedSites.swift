@@ -30,12 +30,7 @@ public class SuggestedSitesData<T>: ArrayCursor<SuggestedSite> {
     private init() {
         // TODO: Make this list localized. That should be as simple as making sure it's in the lproj directory.
         let path = NSBundle.mainBundle().pathForResource("suggestedsites", ofType: "json")
-        let data: NSString?
-        do {
-            data = try NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
-        } catch _ as NSError {
-            data = nil
-        }
+        let data = try? NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
         let json = JSON.parse(data as! String)
 
         var tiles = [SuggestedSite]()

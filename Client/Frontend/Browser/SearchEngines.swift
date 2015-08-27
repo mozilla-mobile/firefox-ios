@@ -133,8 +133,6 @@ class SearchEngines {
     // Get all known search engines, with the default search engine first, but the others in no
     // particular order.
     class func getUnorderedEngines() -> [OpenSearchEngine] {
-        var error: NSError?
-
         let pluginBasePath: NSString = (NSBundle.mainBundle().resourcePath! as NSString).stringByAppendingPathComponent("SearchPlugins")
         let language = NSLocale.preferredLanguages().first!
         let fallbackDirectory: NSString = pluginBasePath.stringByAppendingPathComponent("en")
@@ -154,17 +152,12 @@ class SearchEngines {
         }
 
         let index = (searchDirectory as NSString).stringByAppendingPathComponent("list.txt")
-        let listFile: String?
-        do {
-            listFile = try String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
-        } catch let error1 as NSError {
-            error = error1
-            listFile = nil
-        }
+        let listFile = try? String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
+        assert(listFile == nil, "Read the list of search engines")
+
         let engineNames = listFile!
             .stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
             .componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
-        assert(error == nil, "Read the list of search engines")
 
         var engines = [OpenSearchEngine]()
         let parser = OpenSearchParser(pluginMode: true)
