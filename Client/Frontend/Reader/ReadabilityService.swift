@@ -66,14 +66,14 @@ class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityBrowse
                 var error: NSError? = nil
                 do {
                     try ReaderModeCache.sharedInstance.put(url, readabilityResult)
-                } catch var error1 as NSError {
+                } catch let error1 as NSError {
                     error = error1
                     if error != nil {
                         print("Failed to store readability results in the cache: \(error?.localizedDescription)")
                         // TODO Fail
                     }
                 }
-            case .Error(let error):
+            case .Error(_):
                 // TODO Not entitely sure what to do on error. Needs UX discussion and followup bug.
                 break
             }
