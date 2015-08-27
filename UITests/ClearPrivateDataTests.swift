@@ -76,8 +76,17 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         clearPrivateData(true)
 
-        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[0].title), "Expected to have removed top site panel \(urls[0])")
-        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[1].title), "We shouldn't find the other URL, either.")
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel(urls[0].title)
+        } catch {
+            XCTFail("Expected to have removed top site panel \(urls[0]) \(error)")
+        }
+
+        do{
+            try tester().tryFindingViewWithAccessibilityLabel(urls[1].title)
+        } catch {
+            XCTFail("We shouldn't find the other URL, either. \(error)")
+        }
     }
 
     func testCancelDoesNotClearTopSitesPanel() {
@@ -103,7 +112,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("History")
         XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(url1, error: nil), "Expected to have removed history row \(url1)")
         XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(url2, error: nil), "Expected to have removed history row \(url2)")
-
     }
 
     func testCancelDoesNotClearHistoryPanel() {
