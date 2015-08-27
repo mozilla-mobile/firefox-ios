@@ -137,8 +137,8 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         let f = self.expectationWithDescription("Get after insert.")
         clientsAndTabs.getClientsAndTabs().upon {
             if let got = $0.successValue {
-                let expected = self.clients.sorted(byGUID).filter(removeLocalClient)
-                let actual = got.sorted(byGUID)
+                let expected = self.clients.sort(byGUID).filter(removeLocalClient)
+                let actual = got.sort(byGUID)
 
                 // This comparison will fail if the order of the tabs changes. We sort the result
                 // as part of the DB query, so it's not actively sorted in Swift.
@@ -155,7 +155,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
         let expected = [
             ClientAndTabs(client: clients[0].client, tabs: client0NewTabs),
             ClientAndTabs(client: clients[1].client, tabs: client1NewTabs),
-        ].sorted(byGUID)
+        ].sort(byGUID)
 
         func doUpdate(guid: String?, tabs: [RemoteTab]) {
             let g0 = self.expectationWithDescription("Update client \(guid).")
@@ -169,15 +169,15 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
             }
         }
 
-        doUpdate(clients[0].client.guid, client0NewTabs)
-        doUpdate(clients[1].client.guid, client1NewTabs)
+        doUpdate(clients[0].client.guid, tabs: client0NewTabs)
+        doUpdate(clients[1].client.guid, tabs: client1NewTabs)
         // Also update the local tabs list. It should still not appear in the expected tabs below.
-        doUpdate(clients[2].client.guid, client1NewTabs)
+        doUpdate(clients[2].client.guid, tabs: client1NewTabs)
 
         let h = self.expectationWithDescription("Get after update.")
         clientsAndTabs.getClientsAndTabs().upon {
             if let clients = $0.successValue {
-                XCTAssertEqual(expected, clients.sorted(byGUID))
+                XCTAssertEqual(expected, clients.sort(byGUID))
             } else {
                 XCTFail("Expected clients!")
             }
@@ -222,7 +222,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
                 // This comparison will fail if the order of the tabs changes. We sort the result
                 // as part of the DB query, so it's not actively sorted in Swift.
                 XCTAssertEqual(ct.tabs.count, got.count)
-                XCTAssertEqual(ct.tabs.sorted(byURL), got.sorted(byURL))
+                XCTAssertEqual(ct.tabs.sort(byURL), got.sort(byURL))
             } else {
                 XCTFail("Expected tabs!")
             }
@@ -236,7 +236,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
                 // This comparison will fail if the order of the tabs changes. We sort the result
                 // as part of the DB query, so it's not actively sorted in Swift.
                 XCTAssertEqual(localClient.tabs.count, got.count)
-                XCTAssertEqual(localClient.tabs.sorted(byURL), got.sorted(byURL))
+                XCTAssertEqual(localClient.tabs.sort(byURL), got.sort(byURL))
             } else {
                 XCTFail("Expected tabs!")
             }

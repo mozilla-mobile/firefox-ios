@@ -20,9 +20,9 @@ class TestSwiftData: XCTestCase {
             try files.remove("testSwiftData.db")
         } catch _ {
         }
-        testDB = (try! files.getAndEnsureDirectory()).stringByAppendingPathComponent("testSwiftData.db")
+        testDB = (try! (files.getAndEnsureDirectory() as NSString)).stringByAppendingPathComponent("testSwiftData.db")
         swiftData = SwiftData(filename: testDB)
-        var table = BrowserTable()
+        let table = BrowserTable()
 
         // Ensure static flags match expected values.
         XCTAssert(SwiftData.ReuseConnections, "Reusing database connections")
@@ -32,7 +32,6 @@ class TestSwiftData: XCTestCase {
             let f = FaviconsTable<Favicon>()
             f.create(db, version: 1)    // Because BrowserTable needs it.
             table.create(db, version: 1)
-            var err: NSError?
             return nil
         }
 
@@ -121,7 +120,6 @@ class TestSwiftData: XCTestCase {
 
     private func addSite(table: BrowserTable, url: String, title: String) -> NSError? {
         return swiftData!.withConnection(SwiftData.Flags.ReadWrite) { connection -> NSError? in
-            var err: NSError?
             let args: Args = [Bytes.generateGUID(), url, title]
             return connection.executeChange("INSERT INTO history (guid, url, title, is_deleted, should_upload) VALUES (?, ?, ?, 0, 0)", withArgs: args)
         }

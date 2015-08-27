@@ -345,7 +345,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func updateFavicon() -> Success {
-            var fav = Favicon(url: "http://url2/", date: NSDate(), type: .Icon)
+            let fav = Favicon(url: "http://url2/", date: NSDate(), type: .Icon)
             fav.id = 1
             let site = Site(url: "http://bookmarkedurl/", title: "My Bookmark")
             return history.addFavicon(fav, forSite: site) >>> { return succeed() }
@@ -441,7 +441,7 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
         }
 
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
-            for i in 0...5 {
+            for _ in 0...5 {
                 history.getSitesByFrecencyWithLimit(10, includeIcon: false).value
             }
             self.stopMeasuring()
