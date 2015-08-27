@@ -7,7 +7,7 @@ import XCTest
 
 class MockFiles: FileAccessor {
     init() {
-        let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0] as! String
+        let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0]
         super.init(rootPath: docPath.stringByAppendingPathComponent("testing"))
     }
 }

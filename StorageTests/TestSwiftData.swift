@@ -16,8 +16,11 @@ class TestSwiftData: XCTestCase {
 
     override func setUp() {
         let files = MockFiles()
-        files.remove("testSwiftData.db")
-        testDB = files.getAndEnsureDirectory()!.stringByAppendingPathComponent("testSwiftData.db")
+        do {
+            try files.remove("testSwiftData.db")
+        } catch _ {
+        }
+        testDB = (try! files.getAndEnsureDirectory()).stringByAppendingPathComponent("testSwiftData.db")
         swiftData = SwiftData(filename: testDB)
         var table = BrowserTable()
 
@@ -63,35 +66,35 @@ class TestSwiftData: XCTestCase {
     func testNoWAL() {
         SwiftData.EnableWAL = false
         SwiftData.ReuseConnections = true
-        var error = writeDuringRead()
+        let error = writeDuringRead()
         XCTAssertNil(error, "Insertion succeeded")
     }
 
     func testDefaultSettings() {
         SwiftData.EnableWAL = true
         SwiftData.ReuseConnections = true
-        var error = writeDuringRead()
+        let error = writeDuringRead()
         XCTAssertNil(error, "Insertion succeeded")
     }
 
     func testBusyTimeout() {
         SwiftData.EnableWAL = false
         SwiftData.ReuseConnections = false
-        var error = writeDuringRead(closeTimeout: 1)
+        let error = writeDuringRead(closeTimeout: 1)
         XCTAssertNil(error, "Insertion succeeded")
     }
 
     func testFilledCursor() {
         SwiftData.ReuseConnections = false
         SwiftData.EnableWAL = false
-        XCTAssertNil(writeDuringRead(safeQuery: true), "Insertion succeeded")
+        XCTAssertNil(writeDuringRead(true), "Insertion succeeded")
     }
 
     private func writeDuringRead(safeQuery: Bool = false, closeTimeout: UInt64? = nil) -> NSError? {
 
         // Query the database and hold the cursor.
         var c: Cursor<SDRow>!
-        var error = swiftData!.withConnection(SwiftData.Flags.ReadOnly) { db in
+        let error = swiftData!.withConnection(SwiftData.Flags.ReadOnly) { db in
             if safeQuery {
                 c = db.executeQuery("SELECT * FROM history", factory: { $0 })
             } else {
@@ -128,7 +131,10 @@ class TestSwiftData: XCTestCase {
         // XXX: Something is holding an open connection to the normal database, making it impossible
         // to change its encryption. This kills it so that we can move on.
         let files = MockFiles()
-        files.remove("testSwiftData.db")
+        do {
+            try files.remove("testSwiftData.db")
+        } catch _ {
+        }
         let path = testDB
         func verifyData(swiftData: SwiftData) -> NSError? {
             return swiftData.withConnection(SwiftData.Flags.ReadOnly) { db in

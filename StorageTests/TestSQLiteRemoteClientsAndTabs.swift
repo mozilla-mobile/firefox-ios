@@ -47,7 +47,7 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return succeed()
     }
 
-    public func wipeRemoteTabs() -> Deferred<Result<()>> {
+    public func wipeRemoteTabs() -> Deferred<Maybe<()>> {
         return succeed()
     }
 
@@ -63,37 +63,37 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return succeed()
     }
 
-    public func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> {
+    public func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return insertOrUpdateTabsForClientGUID(nil, tabs: [RemoteTab]())
     }
 
-    public func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Result<Int>> {
-        return deferResult(-1)
+    public func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
+        return deferMaybe(-1)
     }
 
-    public func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
-        return deferResult(self.clientsAndTabs)
+    public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
+        return deferMaybe(self.clientsAndTabs)
     }
 
-    public func getClients() -> Deferred<Result<[RemoteClient]>> {
-        return deferResult(self.clientsAndTabs.map { $0.client })
+    public func getClients() -> Deferred<Maybe<[RemoteClient]>> {
+        return deferMaybe(self.clientsAndTabs.map { $0.client })
     }
 
     public func getClientGUIDs() -> Deferred<Result<Set<GUID>>> {
-        return deferResult(Set<GUID>(optFilter(self.clientsAndTabs.map { $0.client.guid })))
+        return deferMaybe(Set<GUID>(optFilter(self.clientsAndTabs.map { $0.client.guid })))
     }
 
     public func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Result<[RemoteTab]>> {
-        return deferResult(optFilter(self.clientsAndTabs.map { $0.client.guid == guid ? $0.tabs : nil })[0])
+        return deferMaybe(optFilter(self.clientsAndTabs.map { $0.client.guid == guid ? $0.tabs : nil })[0])
     }
 
     public func deleteCommands() -> Success { return succeed() }
     public func deleteCommands(clientGUID: GUID) -> Success { return succeed() }
 
-    public func getCommands() -> Deferred<Result<[GUID: [SyncCommand]]>>  { return deferResult([GUID: [SyncCommand]]()) }
+    public func getCommands() -> Deferred<Maybe<[GUID: [SyncCommand]]>>  { return deferMaybe([GUID: [SyncCommand]]()) }
 
-    public func insertCommand(command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Result<Int>>  { return deferResult(0) }
-    public func insertCommands(commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Result<Int>>  { return deferResult(0) }
+    public func insertCommand(command: SyncCommand, forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>  { return deferMaybe(0) }
+    public func insertCommands(commands: [SyncCommand], forClients clients: [RemoteClient]) -> Deferred<Maybe<Int>>  { return deferMaybe(0) }
 }
 
 func removeLocalClient(a: ClientAndTabs) -> Bool {
@@ -115,7 +115,10 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
 
     override func setUp() {
         let files = MockFiles()
-        files.remove("browser.db")
+        do {
+            try files.remove("browser.db")
+        } catch _ {
+        }
         clientsAndTabs = SQLiteRemoteClientsAndTabs(db: BrowserDB(filename: "browser.db", files: files))
     }
 

@@ -173,18 +173,18 @@ class TestSQLiteHistory: XCTestCase {
             return all([history.addLocalVisit(SiteVisit(site: site11, date: NSDate.nowMicroseconds(), type: VisitType.Link)),
                         history.addLocalVisit(SiteVisit(site: site12, date: NSDate.nowMicroseconds(), type: VisitType.Link)),
                         history.addLocalVisit(SiteVisit(site: site3, date: NSDate.nowMicroseconds(), type: VisitType.Link))])
-        }).bind({ (results: [Result<()>]) in
+        }).bind({ (results: [Maybe<()>]) in
             return history.insertOrUpdatePlace(site13, modified: NSDate.nowMicroseconds())
         }).bind({ guid in
             XCTAssertEqual(guid.successValue!, initialGuid, "Guid is correct")
             return history.getSitesByFrecencyWithLimit(10)
-        }).bind({ (sites: Result<Cursor<Site>>) -> Success in
+        }).bind({ (sites: Maybe<Cursor<Site>>) -> Success in
             XCTAssert(sites.successValue!.count == 2, "2 sites returned")
             return history.removeSiteFromTopSites(site11)
         }).bind({ success in
             XCTAssertTrue(success.isSuccess, "Remove was successful")
             return history.getSitesByFrecencyWithLimit(10)
-        }).upon({ (sites: Result<Cursor<Site>>) in
+        }).upon({ (sites: Maybe<Cursor<Site>>) in
             XCTAssert(sites.successValue!.count == 1, "1 site returned")
             expectation.fulfill()
         })
