@@ -35,8 +35,8 @@ class FirefoxAccountTests: XCTestCase {
         for (k, v) in d {
             // Skip version, which is an Int.
             if let s = v as? String {
-                XCTAssertEqual(s, d1[k] as! String, "Value for '\(k)' does not agree for manually created account.")
-                XCTAssertEqual(s, d2[k] as! String, "Value for '\(k)' does not agree for deserialized account.")
+                XCTAssertEqual(s, d1[k] as? String, "Value for '\(k)' does not agree for manually created account.")
+                XCTAssertEqual(s, d2[k] as? String, "Value for '\(k)' does not agree for deserialized account.")
             }
         }
     }
