@@ -618,7 +618,7 @@ class BrowserViewController: UIViewController {
         if webView !== tabManager.selectedTab?.webView {
             return
         }
-        guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath)") }
+        guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath)"); return }
         switch path {
         case KVOEstimatedProgress:
             guard let progress = change?[NSKeyValueChangeNewKey] as? Float else { break }
@@ -1089,7 +1089,7 @@ extension BrowserViewController: BrowserDelegate {
             // Add the bar on top of the stack
             // We're the new top bar in the stack, so make sure we ignore ourself
             if bars.count > 1 {
-                let view = bars[bars.count - 2] as! UIView
+                let view = bars[bars.count - 2] 
                 bar.bottom = make.bottom.equalTo(view.snp_top).offset(0).constraint
             } else {
                 bar.bottom = make.bottom.equalTo(self.snackBars.snp_bottom).offset(0).constraint
@@ -1111,7 +1111,7 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     func removeBar(bar: SnackBar, animated: Bool) {
-        if let index = findSnackbar(bar) {
+        if let _ = findSnackbar(bar) {
             UIView.animateWithDuration(animated ? 0.25 : 0, animations: { () -> Void in
                 bar.hide()
                 self.view.layoutIfNeeded()
@@ -1278,9 +1278,8 @@ extension BrowserViewController: TabManagerDelegate {
     private func isWebPage(url: NSURL) -> Bool {
         let httpSchemes = ["http", "https"]
 
-        if let scheme = url.scheme,
-            index = httpSchemes.indexOf(scheme) {
-                return true
+        if let _ = httpSchemes.indexOf(url.scheme) {
+            return true
         }
 
         return false
@@ -1327,7 +1326,7 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     private func callExternal(url: NSURL) {
-        if let phoneNumber = url.resourceSpecifier.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding) {
+        if let phoneNumber = url.resourceSpecifier.stringByRemovingPercentEncoding {
             let alert = UIAlertController(title: phoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Alert Cancel Button"), style: UIAlertActionStyle.Cancel, handler: nil))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Call", comment:"Alert Call Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
@@ -1339,25 +1338,23 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
         if let url = navigationAction.request.URL {
-            if let scheme = url.scheme {
-                switch scheme {
-                case "about", "http", "https":
-                    if isWhitelistedUrl(url) {
-                        // If the url is whitelisted, we open it without prompting.
-                        openExternal(url, prompt: false)
-                        decisionHandler(WKNavigationActionPolicy.Cancel)
-                    } else {
-                        decisionHandler(WKNavigationActionPolicy.Allow)
-                    }
-                case "tel":
-                    callExternal(url)
+            switch url.scheme {
+            case "about", "http", "https":
+                if isWhitelistedUrl(url) {
+                    // If the url is whitelisted, we open it without prompting.
+                    openExternal(url, prompt: false)
                     decisionHandler(WKNavigationActionPolicy.Cancel)
-                default:
-                    if UIApplication.sharedApplication().canOpenURL(url) {
-                        openExternal(url)
-                    }
-                    decisionHandler(WKNavigationActionPolicy.Cancel)
+                } else {
+                    decisionHandler(WKNavigationActionPolicy.Allow)
                 }
+            case "tel":
+                callExternal(url)
+                decisionHandler(WKNavigationActionPolicy.Cancel)
+            default:
+                if UIApplication.sharedApplication().canOpenURL(url) {
+                    openExternal(url)
+                }
+                decisionHandler(WKNavigationActionPolicy.Cancel)
             }
         } else {
             decisionHandler(WKNavigationActionPolicy.Cancel)
@@ -1704,8 +1701,8 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
         case .AddToReadingList:
             if let tab = tabManager.selectedTab,
                let url = tab.url where ReaderModeUtils.isReaderModeURL(url) {
-                if let url = ReaderModeUtils.decodeURL(url), let absoluteString = url.absoluteString {
-                    let result = profile.readingList?.createRecordWithURL(absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name) // TODO Check result, can this fail?
+                if let url = ReaderModeUtils.decodeURL(url) {
+                    _ = profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name) // TODO Check result, can this fail?
                     readerModeBar.added = true
                 }
             }
@@ -1806,7 +1803,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let copyTitle = NSLocalizedString("Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
             let copyAction = UIAlertAction(title: copyTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) -> Void in
-                var pasteBoard = UIPasteboard.generalPasteboard()
+                let pasteBoard = UIPasteboard.generalPasteboard()
                 pasteBoard.string = url.absoluteString
             }
             actionSheetController.addAction(copyAction)
@@ -1853,7 +1850,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         }
 
         actionSheetController.title = dialogTitle?.ellipsize(maxLength: ActionSheetTitleMaxLength)
-        var cancelAction = UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: CancelString, style: UIAlertActionStyle.Cancel, handler: nil)
         actionSheetController.addAction(cancelAction)
         self.presentViewController(actionSheetController, animated: true, completion: nil)
     }
@@ -1862,7 +1859,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         Alamofire.request(.GET, url)
             .validate(statusCode: 200..<300)
             .response { _, _, data, _ in
-                if let data = data as? NSData,
+                if let data = data,
                    let image = UIImage(data: data) {
                     success(image)
                 }

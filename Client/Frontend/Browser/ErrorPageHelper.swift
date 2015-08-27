@@ -156,7 +156,6 @@ class ErrorPageHelper {
 
         server.registerHandlerForMethod("GET", module: "errors", resource: "NetError.css", handler: { (request) -> GCDWebServerResponse! in
             let path = NSBundle(forClass: self).pathForResource("NetError", ofType: "css")!
-            let data = (try! NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding)) as String
             return GCDWebServerDataResponse(data: NSData(contentsOfFile: path), contentType: "text/css")
         })
     }
