@@ -66,7 +66,7 @@ class ReaderModeCache {
     func contains(url: NSURL) throws {
         let error: NSError! = NSError(domain: "Migrator", code: 0, userInfo: nil)
         let cacheDirectoryURL = url.URLByAppendingPathComponent("content.json")
-        guard let contentFilePath = cacheDirectoryForURL(cacheDirectoryURL) else { throw error; return }
+        guard let contentFilePath = cacheDirectoryForURL(cacheDirectoryURL) else { throw error }
         if !NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
             throw error
         }
