@@ -18,26 +18,10 @@ private struct RemoteTabsPanelUX {
     static let RowHeight: CGFloat = SiteTableViewControllerUX.RowHeight
     static let HeaderBackgroundColor = UIColor(rgb: 0xf8f8f8)
 
-    static let EmptyStateTitleFont: UIFont = {
-        let font: UIFont
-        if #available(iOS 8.2, *) {
-            font = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightMedium)
-        } else {
-            font = UIFont.systemFontOfSize(UIConstants.DeviceFontSize)
-        }
-        return font
-    }()
+    static let EmptyStateTitleFont: UIFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightMedium)
     static let EmptyStateTitleTextColor = UIColor.darkGrayColor()
 
-    static let EmptyStateInstructionsFont: UIFont = {
-        let font: UIFont
-        if #available(iOS 8.2, *) {
-            font = UIFont.systemFontOfSize(UIConstants.DeviceFontSize - 1, weight: UIFontWeightLight)
-        } else {
-            font = UIFont.systemFontOfSize(UIConstants.DeviceFontSize - 1)
-        }
-        return font
-        }()
+    static let EmptyStateInstructionsFont: UIFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize - 1, weight: UIFontWeightLight)
     static let EmptyStateInstructionsTextColor = UIColor.grayColor()
     static let EmptyStateInstructionsWidth = 226
     static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape

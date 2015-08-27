@@ -341,11 +341,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
             if let site = self.siteForIndexPath(indexPath) {
-                // Compute the section in advance -- if we try to do this below, naturally the category
-                // will be empty, and so there will be no section in the CategorySpec!
-                let category = self.categoryForDate(site.latestVisit!.date)
-                let section = self.categoryToUISection(category)!
-
                 // Why the dispatches? Because we call success and failure on the DB
                 // queue, and so calling anything else that calls through to the DB will
                 // deadlock. This problem will go away when the history API switches to
