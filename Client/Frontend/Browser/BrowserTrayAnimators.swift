@@ -19,7 +19,7 @@ class TrayToBrowserAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
 private extension TrayToBrowserAnimator {
     func transitionFromTray(tabTray: TabTrayController, toBrowser bvc: BrowserViewController, usingContext transitionContext: UIViewControllerContextTransitioning) {
-        let container = transitionContext.containerView()
+        guard let container = transitionContext.containerView() else { return }
 
         // Hide browser components
         toggleWebViewVisibility(show: false, usingTabManager: bvc.tabManager)
@@ -29,17 +29,17 @@ private extension TrayToBrowserAnimator {
         let tabCollectionViewSnapshot = tabTray.collectionView.snapshotViewAfterScreenUpdates(false)
         tabTray.collectionView.alpha = 0
         tabCollectionViewSnapshot.frame = tabTray.collectionView.frame
-        container?.insertSubview(tabCollectionViewSnapshot, aboveSubview: tabTray.view)
+        container.insertSubview(tabCollectionViewSnapshot, aboveSubview: tabTray.view)
 
         // Create a fake cell to use for the upscaling animation
         let cell = createTransitionCellFromBrowser(bvc.tabManager.selectedTab, withFrame: calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView, atIndex: bvc.tabManager.selectedIndex))
         cell.backgroundHolder.layer.cornerRadius = 0
 
-        container?.insertSubview(bvc.view, aboveSubview: tabCollectionViewSnapshot)
-        container?.insertSubview(cell, aboveSubview: bvc.view)
+        container.insertSubview(bvc.view, aboveSubview: tabCollectionViewSnapshot)
+        container.insertSubview(cell, aboveSubview: bvc.view)
 
         // Flush any pending layout/animation code in preperation of the animation call
-        container?.layoutIfNeeded()
+        container.layoutIfNeeded()
 
         // Reset any transform we had previously on the header and transform them to where the cell will be animating from
         transformToolbarsToFrame([bvc.header, bvc.footer, bvc.readerModeBar], toRect: cell.frame)
@@ -55,7 +55,7 @@ private extension TrayToBrowserAnimator {
         {
             // Scale up the cell and reset the transforms for the header/footers
             cell.frame = finalFrame
-            container?.layoutIfNeeded()
+            container.layoutIfNeeded()
             cell.title.transform = CGAffineTransformMakeTranslation(0, -cell.title.frame.height)
             resetTransformsForViews([bvc.header, bvc.footer, bvc.readerModeBar])
 
