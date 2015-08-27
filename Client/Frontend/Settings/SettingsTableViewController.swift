@@ -266,17 +266,17 @@ private class AccountStatusSetting: WithAccountSetting {
                 return NSAttributedString(string: NSLocalizedString("Verify your email address.", comment: "Text message in the settings table view"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
             case .NeedsPassword:
                 let string = NSLocalizedString("Enter your password to connect.", comment: "Text message in the settings table view")
-                let range = NSRange(location: 0, length: count(string))
+                let range = NSRange(location: 0, length: string.characters.count)
                 let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
-                let attrs : [NSObject : AnyObject]? = [NSForegroundColorAttributeName : orange]
+                let attrs : [String : AnyObject]? = [NSForegroundColorAttributeName : orange]
                 let res = NSMutableAttributedString(string: string)
                 res.setAttributes(attrs, range: range)
                 return res
             case .NeedsUpgrade:
                 let string = NSLocalizedString("Upgrade Firefox to connect.", comment: "Text message in the settings table view")
-                let range = NSRange(location: 0, length: count(string))
+                let range = NSRange(location: 0, length: string.characters.count)
                 let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
-                let attrs : [NSObject : AnyObject]? = [NSForegroundColorAttributeName : orange]
+                let attrs : [String : AnyObject]? = [NSForegroundColorAttributeName : orange]
 
                 let res = NSMutableAttributedString(string: string)
                 res.setAttributes(attrs, range: range)
@@ -363,7 +363,7 @@ private class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
         if !ShowDebugSettings {
             return true
         }
-        if let account = profile.getAccount() {
+        if let _ = profile.getAccount() {
             return false
         }
         return true
@@ -480,7 +480,6 @@ private class ShowIntroductionSetting: Setting {
     override func onClick(navigationController: UINavigationController?) {
         navigationController?.dismissViewControllerAnimated(true, completion: {
             if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-                let rootNavigationController = appDelegate.rootViewController
                 appDelegate.browserViewController.presentIntroViewController(true)
             }
         })
@@ -785,7 +784,7 @@ class SettingsTableViewController: UITableViewController {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
             var cell: UITableViewCell!
-            if let status = setting.status {
+            if let _ = setting.status {
                 // Work around http://stackoverflow.com/a/9999821 and http://stackoverflow.com/a/25901083 by using a new cell.
                 // I could not make any setNeedsLayout solution work in the case where we disconnect and then connect a new account.
                 // Be aware that dequeing and then ignoring a cell appears to cause issues; only deque a cell if you're going to return it.
@@ -856,10 +855,11 @@ class SettingsTableFooterView: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        super.init(reuseIdentifier: nil)
+        self.frame = frame
         self.contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-        var topBorder = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: 0.5))
+        let topBorder = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: 0.5))
         topBorder.backgroundColor = UIConstants.TableViewSeparatorColor
         addSubview(topBorder)
         addSubview(logo)
@@ -890,8 +890,9 @@ class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        super.init(reuseIdentifier: nil)
+        self.frame = frame
         self.contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
         self.clipsToBounds = true
