@@ -137,7 +137,7 @@ class SearchEngines {
 
         let pluginBasePath: NSString = (NSBundle.mainBundle().resourcePath! as NSString).stringByAppendingPathComponent("SearchPlugins")
         let language = NSLocale.preferredLanguages().first!
-        let fallbackDirectory:NSString = pluginBasePath.stringByAppendingPathComponent("en")
+        let fallbackDirectory: NSString = pluginBasePath.stringByAppendingPathComponent("en")
 
         // Look for search plugins in the following order:
         //   1) the full language ID
