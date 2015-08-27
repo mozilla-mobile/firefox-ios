@@ -110,7 +110,7 @@ public class MockProfile: Profile {
     }()
 
     lazy var readingList: ReadingListService? = {
-        return ReadingListService(profileStoragePath: self.files.rootPath)
+        return ReadingListService(profileStoragePath: self.files.rootPath as String)
     }()
 
     private lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
