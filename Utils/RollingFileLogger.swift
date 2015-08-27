@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import XCGLogger
@@ -8,7 +8,7 @@ import XCGLogger
 //// A rolling file loggers that saves to a different log file based on given timestamp
 public class RollingFileLogger: XCGLogger {
 
-    private static let FiveMBsInBytes: UInt64 = 5 * 100000
+    private static let TwoMBsInBytes: UInt64 = 2 * 100000
     private let sizeLimit: UInt64
     private let logDirectoryPath: String?
 
@@ -18,11 +18,11 @@ public class RollingFileLogger: XCGLogger {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyyMMdd'T'HHmmssZ"
         return formatter
-    }()
+        }()
 
     let root: String
 
-    public init(filenameRoot: String, logDirectoryPath: String?, sizeLimit: UInt64 = FiveMBsInBytes) {
+    public init(filenameRoot: String, logDirectoryPath: String?, sizeLimit: UInt64 = TwoMBsInBytes) {
         root = filenameRoot
         self.sizeLimit = sizeLimit
         self.logDirectoryPath = logDirectoryPath
@@ -59,17 +59,13 @@ public class RollingFileLogger: XCGLogger {
             return
         }
 
-        do {
-            var logFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(logDirectoryPath!)
+        if var logFiles = try? NSFileManager.defaultManager().contentsOfDirectoryAtPath(logDirectoryPath!) as [String] {
             logFiles = logFiles.filter { $0.startsWith("\(self.root).") }
             logFiles.sortInPlace { $0 < $1 }
 
             if let oldestLogFilename = logFiles.first {
-                try NSFileManager.defaultManager().removeItemAtPath("\(logDirectoryPath!)/\(oldestLogFilename)")
+                try! NSFileManager.defaultManager().removeItemAtPath("\(logDirectoryPath!)/\(oldestLogFilename)")
             }
-        } catch _ as NSError{
-            error("Shouldn't get here")
-            return
         }
     }
 
@@ -81,10 +77,11 @@ public class RollingFileLogger: XCGLogger {
         let logDirURL = NSURL(fileURLWithPath: logDirectoryPath!)
         var dirSize: UInt64 = 0
         do {
-            try NSFileManager.defaultManager().nr_getAllocatedSize(&dirSize, ofDirectoryAtURL: logDirURL)
-        } catch let errorValue as NSError {
-            error("Error determining log directory size: \(errorValue)")
-
+            try NSFileManager.defaultManager().moz_getAllocatedSize(&dirSize, ofDirectoryAtURL: logDirURL, forFilesPrefixedWith: self.root)
+        } catch let err as NSError {
+            error("Error determining log directory size: \(err)")
+        } catch _ {
+            error("Unexpected error determining log directory size")
         }
         return dirSize
     }
