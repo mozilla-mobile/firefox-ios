@@ -7,6 +7,8 @@ import Storage
 import AVFoundation
 import XCGLogger
 
+private let log = Logger.browserLogger
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
@@ -35,6 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: AVAudioSessionCategoryOptions.MixWithOthers)
         } catch _ {
+            log.error("Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
         }
 
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
