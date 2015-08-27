@@ -42,7 +42,7 @@ class ReadingListStorageTestCase: XCTestCase {
         switch result1 {
         case .Failure(let error):
             XCTFail(error.description)
-        case .Success(let record):
+        case .Success( _):
             break
         }
 
@@ -50,16 +50,16 @@ class ReadingListStorageTestCase: XCTestCase {
         switch result2 {
         case .Failure(let error):
             XCTFail(error.description)
-        case .Success(let record):
+        case .Success( _):
             XCTAssert(result1.successValue == result2.successValue!)
         }
     }
 
     func testGetUnreadRecords() {
         // Create 3 records, mark the 2nd as read.
-        let createResult1 = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
         let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        let createResult3 = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
         if let record = createResult2.successValue {
             updateRecord(record, unread: false)
         }
@@ -76,9 +76,9 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testGetAllRecords() {
-        let createResult1 = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
         let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        let createResult3 = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
         if let record = createResult2.successValue {
             updateRecord(record, unread: false)
         }
@@ -90,9 +90,9 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testGetNewRecords() {
-        let createResult1 = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        let createResult3 = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
         let getAllResult = getAllRecords()
         if let records = getAllResult.successValue {
             XCTAssertEqual(3, records.count)
@@ -105,7 +105,7 @@ class ReadingListStorageTestCase: XCTestCase {
         switch result1 {
         case .Failure(let error):
             XCTFail(error.description)
-        case .Success(let record):
+        case .Success(_):
             break
         }
 
@@ -127,16 +127,16 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testDeleteAllRecords() {
-        let createResult1 = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        let createResult3 = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
+        _ = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
 
         let getAllResult1 = storage.getAllRecords()
         if let records = getAllResult1.successValue {
             XCTAssertEqual(3, records.count)
         }
 
-        let deleteResult = deleteAllRecords()
+        _ = deleteAllRecords()
 
         let getAllResult2 = getAllRecords()
         if let records = getAllResult2.successValue {
