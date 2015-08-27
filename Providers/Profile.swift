@@ -229,6 +229,9 @@ public class BrowserProfile: Profile {
     }
 
     lazy var queue: TabQueue = {
+        if !self.dbCreated {
+            _ = self.history
+        }
         return SQLiteQueue(db: self.db)
     }()
 
