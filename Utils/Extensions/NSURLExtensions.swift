@@ -4,7 +4,7 @@
 
 import UIKit
 
-private struct ETLDEntry: Printable {
+private struct ETLDEntry: CustomStringConvertible {
     let entry: String
 
     var isNormal: Bool { return isWild || !isException }
@@ -26,8 +26,8 @@ private typealias TLDEntryMap = [String:ETLDEntry]
 
 private func loadEntriesFromDisk() -> TLDEntryMap? {
     if let data = NSString.contentsOfFileWithResourceName("effective_tld_names", ofType: "dat", fromBundle: NSBundle(identifier: "org.mozilla.Shared")!, encoding: NSUTF8StringEncoding, error: nil) {
-        var lines = data.componentsSeparatedByString("\n") as! [String]
-        var trimmedLines = filter(lines) { !$0.hasPrefix("//") && $0 != "\n" && $0 != "" }
+        let lines = data.componentsSeparatedByString("\n")
+        let trimmedLines = lines.filter { !$0.hasPrefix("//") && $0 != "\n" && $0 != "" }
 
         var entries = TLDEntryMap()
         for line in trimmedLines {
@@ -105,15 +105,11 @@ extension NSURL {
     }
 
     public func absoluteStringWithoutHTTPScheme() -> String? {
-        if let urlString = self.absoluteString {
-            // If it's basic http, strip out the string but leave anything else in
-            if urlString.hasPrefix("http://") ?? false {
-                return urlString.substringFromIndex(advance(urlString.startIndex, 7))
-            } else {
-                return urlString
-            }
+        // If it's basic http, strip out the string but leave anything else in
+        if self.absoluteString.hasPrefix("http://") ?? false {
+            return self.absoluteString.substringFromIndex(advance(self.absoluteString.startIndex, 7))
         } else {
-            return nil
+            return self.absoluteString
         }
     }
 
@@ -184,7 +180,7 @@ private extension NSURL {
         }
 
         // Check edge case where the host is either a single or double '.'.
-        if host.isEmpty || host.lastPathComponent == "." {
+        if host.isEmpty || NSString(string: host).lastPathComponent == "." {
             return ""
         }
 
@@ -211,14 +207,14 @@ private extension NSURL {
         */
 
         let tokens = host.componentsSeparatedByString(".")
-        let tokenCount = count(tokens)
+        let tokenCount = tokens.count
         var suffix: String?
         var previousDomain: String? = nil
         var currentDomain: String = host
 
         for offset in 0..<tokenCount {
             // Store the offset for use outside of this scope so we can add additional parts if needed
-            let nextDot: String? = offset + 1 < tokenCount ? join(".", tokens[offset + 1..<tokenCount]) : nil
+            let nextDot: String? = offset + 1 < tokenCount ? ".".join(tokens[offset + 1..<tokenCount]) : nil
 
             if let entry = etldEntries?[currentDomain] {
                 if entry.isWild && (previousDomain != nil) {
@@ -245,15 +241,15 @@ private extension NSURL {
         if additionalPartCount > 0 {
             if let suffix = suffix {
                 // Take out the public suffixed and add in the additional parts we want.
-                let literalFromEnd = NSStringCompareOptions.LiteralSearch |        // Match the string exactly.
-                                     NSStringCompareOptions.BackwardsSearch |      // Search from the end.
-                                     NSStringCompareOptions.AnchoredSearch         // Stick to the end.
+                let literalFromEnd: NSStringCompareOptions = [NSStringCompareOptions.LiteralSearch,        // Match the string exactly.
+                                     NSStringCompareOptions.BackwardsSearch,      // Search from the end.
+                                     NSStringCompareOptions.AnchoredSearch]         // Stick to the end.
                 let suffixlessHost = host.stringByReplacingOccurrencesOfString(suffix, withString: "", options: literalFromEnd, range: nil)
                 let suffixlessTokens = suffixlessHost.componentsSeparatedByString(".").filter { $0 != "" }
                 let maxAdditionalCount = max(0, suffixlessTokens.count - additionalPartCount)
                 let additionalParts = suffixlessTokens[maxAdditionalCount..<suffixlessTokens.count]
-                let partsString = join(".", additionalParts)
-                baseDomain = join(".", [partsString, suffix])
+                let partsString = ".".join(additionalParts)
+                baseDomain = ".".join([partsString, suffix])
             } else {
                 return nil
             }

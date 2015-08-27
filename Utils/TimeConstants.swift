@@ -34,15 +34,13 @@ extension NSDate {
 
     public func toRelativeTimeString() -> String {
         let now = NSDate()
-        let units = NSCalendarUnit.CalendarUnitSecond |
-                    NSCalendarUnit.CalendarUnitMinute |
-                    NSCalendarUnit.CalendarUnitDay |
-                    NSCalendarUnit.CalendarUnitWeekOfYear |
-                    NSCalendarUnit.CalendarUnitMonth |
-                    NSCalendarUnit.CalendarUnitYear |
-                    NSCalendarUnit.CalendarUnitHour
 
-        let components = NSCalendar.currentCalendar().components(units, fromDate: self, toDate: now, options: NSCalendarOptions.allZeros)
+        let units: NSCalendarUnit = [NSCalendarUnit.Second, NSCalendarUnit.Minute, NSCalendarUnit.Day, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.Hour]
+
+        let components = NSCalendar.currentCalendar().components(units,
+            fromDate: self,
+            toDate: now,
+            options: [])
         
         if components.year > 0 {
             return String(format: NSDateFormatter.localizedStringFromDate(self, dateStyle: NSDateFormatterStyle.ShortStyle, timeStyle: NSDateFormatterStyle.ShortStyle))

@@ -59,13 +59,17 @@ public class RollingFileLogger: XCGLogger {
             return
         }
 
-        if var logFiles = NSFileManager.defaultManager().contentsOfDirectoryAtPath(logDirectoryPath!, error: nil) as? [String] {
+        do {
+            var logFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(logDirectoryPath!)
             logFiles = logFiles.filter { $0.startsWith("\(self.root).") }
-            logFiles.sort { $0 < $1 }
+            logFiles.sortInPlace { $0 < $1 }
 
             if let oldestLogFilename = logFiles.first {
-                NSFileManager.defaultManager().removeItemAtPath("\(logDirectoryPath!)/\(oldestLogFilename)", error: nil)
+                try NSFileManager.defaultManager().removeItemAtPath("\(logDirectoryPath!)/\(oldestLogFilename)")
             }
+        } catch _ as NSError{
+            error("Shouldn't get here")
+            return
         }
     }
 
@@ -76,11 +80,10 @@ public class RollingFileLogger: XCGLogger {
 
         let logDirURL = NSURL(fileURLWithPath: logDirectoryPath!)
         var dirSize: UInt64 = 0
-        var errorValue: NSError?
-        if !NSFileManager.defaultManager().moz_getAllocatedSize(&dirSize, ofDirectoryAtURL: logDirURL, forFilesPrefixedWith: self.root, error: &errorValue) {
-            if let errorValue = errorValue {
-                error("Error determining log directory size: \(errorValue)")
-            }
+        do {
+            try NSFileManager.defaultManager().nr_getAllocatedSize(&dirSize, ofDirectoryAtURL: logDirURL, forFilesPrefixedWith: self.root)
+        } catch let errorValue as NSError {
+            error("Error determining log directory size: \(errorValue)")
         }
         return dirSize
     }
