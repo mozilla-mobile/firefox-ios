@@ -265,7 +265,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         default:
             assertionFailure("Invalid history section \(section)")
         }
-        return title.uppercaseString
+        return title
     }
 
     func categoryForDate(date: MicrosecondTimestamp) -> Int {
