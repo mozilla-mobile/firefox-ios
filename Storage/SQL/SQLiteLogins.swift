@@ -152,7 +152,7 @@ public class SQLiteLogins: BrowserLogins {
     }
 
     class func LocalLoginFactory(row: SDRow) -> LocalLogin {
-        var login = self.constructLogin(row, c: LocalLogin.self)
+        let login = self.constructLogin(row, c: LocalLogin.self)
 
         login.localModified = row.getTimestamp("local_modified")!
         login.isDeleted = row.getBoolean("is_deleted")
@@ -162,7 +162,7 @@ public class SQLiteLogins: BrowserLogins {
     }
 
     class func MirrorLoginFactory(row: SDRow) -> MirrorLogin {
-        var login = self.constructLogin(row, c: MirrorLogin.self)
+        let login = self.constructLogin(row, c: MirrorLogin.self)
 
         login.serverModified = row.getTimestamp("server_modified")!
         login.isOverridden = row.getBoolean("is_overridden")
@@ -186,7 +186,7 @@ public class SQLiteLogins: BrowserLogins {
     private static let MainWithLastUsedColumns = MainColumns + ", timeLastUsed, timesUsed"
     private static let LoginColumns = MainColumns + ", timeCreated, timeLastUsed, timePasswordChanged, timesUsed"
 
-    public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Result<Cursor<LoginData>>> {
+    public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>> {
         let projection = SQLiteLogins.MainWithLastUsedColumns
 
         let sql =
@@ -203,7 +203,7 @@ public class SQLiteLogins: BrowserLogins {
     }
 
     // username is really Either<String, NULL>; we explicitly match no username.
-    public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace, withUsername username: String?) -> Deferred<Result<Cursor<LoginData>>> {
+    public func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace, withUsername username: String?) -> Deferred<Maybe<Cursor<LoginData>>> {
         let projection = SQLiteLogins.MainWithLastUsedColumns
 
         let args: Args
@@ -228,7 +228,7 @@ public class SQLiteLogins: BrowserLogins {
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
     }
 
-    public func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Result<LoginUsageData>> {
+    public func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Maybe<LoginUsageData>> {
         let projection = SQLiteLogins.LoginColumns
         let sql =
         "SELECT \(projection) FROM " +
@@ -241,7 +241,7 @@ public class SQLiteLogins: BrowserLogins {
         let args: Args = [guid, guid]
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginUsageDataFactory)
             >>== { value in
-            deferResult(value[0]!)
+            deferMaybe(value[0]!)
         }
     }
 
@@ -297,14 +297,14 @@ public class SQLiteLogins: BrowserLogins {
             >>> effect(self.notifyLoginDidChange)
     }
 
-    private func cloneMirrorToOverlay(guid: GUID) -> Deferred<Result<Int>> {
+    private func cloneMirrorToOverlay(guid: GUID) -> Deferred<Maybe<Int>> {
         let whereClause = "WHERE guid = ?"
         let args: Args = [guid]
 
         return self.cloneMirrorToOverlay(whereClause: whereClause, args: args)
     }
 
-    private func cloneMirrorToOverlay(#whereClause: String?, args: Args?) -> Deferred<Result<Int>> {
+    private func cloneMirrorToOverlay(whereClause whereClause: String?, args: Args?) -> Deferred<Maybe<Int>> {
         let shared =
         "guid " +
         ", hostname" +
@@ -353,7 +353,7 @@ public class SQLiteLogins: BrowserLogins {
                         return succeed()
                     }
                     log.warning("Failed to create local overlay for GUID \(guid).")
-                    return deferResult(NoSuchRecordError(guid: guid))
+                    return deferMaybe(NoSuchRecordError(guid: guid))
             }
         }
     }
@@ -517,16 +517,16 @@ extension SQLiteLogins: SyncableLogins {
         return self.db.run(local, withArgs: args) >>> { self.db.run(remote, withArgs: args) }
     }
 
-    func getExistingMirrorRecordByGUID(guid: GUID) -> Deferred<Result<MirrorLogin?>> {
+    func getExistingMirrorRecordByGUID(guid: GUID) -> Deferred<Maybe<MirrorLogin?>> {
         let sql = "SELECT * FROM \(TableLoginsMirror) WHERE guid = ? LIMIT 1"
         let args: Args = [guid]
-        return self.db.runQuery(sql, args: args, factory: SQLiteLogins.MirrorLoginFactory) >>== { deferResult($0[0]) }
+        return self.db.runQuery(sql, args: args, factory: SQLiteLogins.MirrorLoginFactory) >>== { deferMaybe($0[0]) }
     }
 
-    func getExistingLocalRecordByGUID(guid: GUID) -> Deferred<Result<LocalLogin?>> {
+    func getExistingLocalRecordByGUID(guid: GUID) -> Deferred<Maybe<LocalLogin?>> {
         let sql = "SELECT * FROM \(TableLoginsLocal) WHERE guid = ? LIMIT 1"
         let args: Args = [guid]
-        return self.db.runQuery(sql, args: args, factory: SQLiteLogins.LocalLoginFactory) >>== { deferResult($0[0]) }
+        return self.db.runQuery(sql, args: args, factory: SQLiteLogins.LocalLoginFactory) >>== { deferMaybe($0[0]) }
     }
 
     private func storeReconciledLogin(login: Login) -> Success {
@@ -581,7 +581,7 @@ extension SQLiteLogins: SyncableLogins {
     private func applyChangedLogin(upstream: ServerLogin, local: LocalLogin?, mirror: MirrorLogin?) -> Success {
         // Once we have the server record, the mirror record (if any), and the local overlay (if any),
         // we can always know which state a record is in.
-        let timestamp = upstream.serverModified
+        _ = upstream.serverModified
 
         // If it's present in the mirror, then we can proceed directly to handling the change;
         // we assume that once a record makes it into the mirror, that the local record association
@@ -708,7 +708,7 @@ extension SQLiteLogins: SyncableLogins {
      * This is roughly the same as desktop's .matches():
      * <https://mxr.mozilla.org/mozilla-central/source/toolkit/components/passwordmgr/nsLoginInfo.js#41>
      */
-    private func findLocalRecordByContent(login: Login) -> Deferred<Result<LocalLogin?>> {
+    private func findLocalRecordByContent(login: Login) -> Deferred<Maybe<LocalLogin?>> {
         let primary =
         "SELECT * FROM \(TableLoginsLocal) WHERE " +
         "hostname IS ? AND httpRealm IS ? AND username IS ?"
@@ -727,7 +727,7 @@ extension SQLiteLogins: SyncableLogins {
                 args.append(hostPort)
             } else {
                 log.warning("Incoming formSubmitURL is non-empty but is not a valid URL with a host. Not matching local.")
-                return deferResult(nil)
+                return deferMaybe(nil)
             }
         }
 
@@ -735,21 +735,21 @@ extension SQLiteLogins: SyncableLogins {
           >>== { cursor in
             switch (cursor.count) {
             case 0:
-                return deferResult(nil)
+                return deferMaybe(nil)
             case 1:
                 // Great!
-                return deferResult(cursor[0])
+                return deferMaybe(cursor[0])
             default:
                 // TODO: join against the mirror table to exclude local logins that
                 // already match a server record.
                 // Right now just take the first.
                 log.warning("Got \(cursor.count) local logins with matching details! This is most unexpected.")
-                return deferResult(cursor[0])
+                return deferMaybe(cursor[0])
             }
         }
     }
 
-    private func resolveConflictBetween(#local: LocalLogin, upstream: ServerLogin, shared: Login) -> Success {
+    private func resolveConflictBetween(local local: LocalLogin, upstream: ServerLogin, shared: Login) -> Success {
         // Attempt to compute two delta sets by comparing each new record to the shared record.
         // Then we can merge the two delta sets -- either perfectly or by picking a winner in the case
         // of a true conflict -- and produce a resultant record.
@@ -778,7 +778,7 @@ extension SQLiteLogins: SyncableLogins {
             >>> { self.storeReconciledLogin(resultant) }
     }
 
-    private func resolveConflictWithoutParentBetween(#local: LocalLogin, upstream: ServerLogin) -> Success {
+    private func resolveConflictWithoutParentBetween(local local: LocalLogin, upstream: ServerLogin) -> Success {
         // Do the best we can. Either the local wins and will be
         // uploaded, or the remote wins and we delete our overlay.
         if local.timePasswordChanged > upstream.timePasswordChanged {
@@ -792,17 +792,17 @@ extension SQLiteLogins: SyncableLogins {
             >>> { self.db.run("DELETE FROM \(TableLoginsLocal) WHERE guid = ?", withArgs: args) }
     }
 
-    public func getModifiedLoginsToUpload() -> Deferred<Result<[Login]>> {
+    public func getModifiedLoginsToUpload() -> Deferred<Maybe<[Login]>> {
         let sql =
         "SELECT * FROM \(TableLoginsLocal) " +
         "WHERE sync_status IS NOT \(SyncStatus.Synced.rawValue) AND is_deleted = 0"
 
         // Swift 2.0: use Cursor.asArray directly.
         return self.db.runQuery(sql, args: nil, factory: SQLiteLogins.LoginFactory)
-          >>== { deferResult($0.asArray()) }
+          >>== { deferMaybe($0.asArray()) }
     }
 
-    public func getDeletedLoginsToUpload() -> Deferred<Result<[GUID]>> {
+    public func getDeletedLoginsToUpload() -> Deferred<Maybe<[GUID]>> {
         // There are no logins that are marked as deleted that were not originally synced --
         // others are deleted immediately.
         let sql =
@@ -811,13 +811,13 @@ extension SQLiteLogins: SyncableLogins {
 
         // Swift 2.0: use Cursor.asArray directly.
         return self.db.runQuery(sql, args: nil, factory: { return $0["guid"] as! GUID })
-            >>== { deferResult($0.asArray()) }
+            >>== { deferMaybe($0.asArray()) }
     }
 
     /**
      * Chains through the provided timestamp.
      */
-    public func markAsSynchronized(guids: [GUID], modified: Timestamp) -> Deferred<Result<Timestamp>> {
+    public func markAsSynchronized(guids: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>> {
         // Update the mirror from the local record that we just uploaded.
         // sqlite doesn't support UPDATE FROM, so instead of running 10 subqueries * n GUIDs,
         // we issue a single DELETE and a single INSERT on the mirror, then throw away the

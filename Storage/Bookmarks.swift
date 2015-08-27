@@ -25,7 +25,7 @@ public protocol ShareToDestination {
 }
 
 public protocol SearchableBookmarks {
-    func bookmarksByURL(url: NSURL) -> Deferred<Result<Cursor<BookmarkItem>>>
+    func bookmarksByURL(url: NSURL) -> Deferred<Maybe<Cursor<BookmarkItem>>>
 }
 
 public struct BookmarkRoots {
@@ -178,7 +178,7 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
     }
 
     public struct BookmarkNodeGenerator: GeneratorType {
-        typealias Element = BookmarkNode
+        public typealias Element = BookmarkNode
         let children: [BookmarkNode]
         var index: Int = 0
 
@@ -194,9 +194,8 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
     override public var favicon: Favicon? {
         get {
             if let path = NSBundle.mainBundle().pathForResource("bookmark_folder_closed", ofType: "png") {
-                if let url = NSURL(fileURLWithPath: path) {
-                    return Favicon(url: url.absoluteString!, date: NSDate(), type: IconType.Local)
-                }
+                let url = NSURL(fileURLWithPath: path)
+                return Favicon(url: url.absoluteString, date: NSDate(), type: IconType.Local)
             }
             return nil
         }
@@ -248,7 +247,7 @@ public class MemoryBookmarksSink: ShareToDestination {
         }
 
         // Don't create duplicates.
-        if (!contains(queue, exists)) {
+        if (!queue.contains(exists)) {
             queue.append(BookmarkItem(guid: Bytes.generateGUID(), title: title, url: item.url))
         }
     }
@@ -305,7 +304,7 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
     let sink: MemoryBookmarksSink
 
     public init() {
-        var res = [BookmarkItem]()
+        let res = [BookmarkItem]()
 
         mobile = MemoryBookmarkFolder(guid: BookmarkRoots.MobileFolderGUID, title: "Mobile Bookmarks", children: res)
 
@@ -361,11 +360,11 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
     }
 
     public func remove(bookmark: BookmarkNode) -> Success {
-        return deferResult(DatabaseError(description: "Not implemented"))
+        return deferMaybe(DatabaseError(description: "Not implemented"))
     }
 
     public func removeByURL(url: String) -> Success {
-        return deferResult(DatabaseError(description: "Not implemented"))
+        return deferMaybe(DatabaseError(description: "Not implemented"))
     }
 
     public func clearBookmarks() -> Success {

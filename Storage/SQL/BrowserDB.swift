@@ -76,7 +76,7 @@ public class BrowserDB {
         self.schemaTable = SchemaTable()
         self.secretKey = secretKey
 
-        let file = files.getAndEnsureDirectory()!.stringByAppendingPathComponent(filename)
+        let file = ((try! files.getAndEnsureDirectory()) as NSString).stringByAppendingPathComponent(filename)
         db = SwiftData(filename: file, key: secretKey, prevKey: nil)
 
         if AppConstants.BuildChannel == .Developer && secretKey != nil {
@@ -141,7 +141,7 @@ public class BrowserDB {
     func createOrUpdate<T: Table>(table: T) -> Bool {
         log.debug("Create or update \(table.name) version \(table.version).")
         var success = true
-        db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent(self.filename), key: secretKey)
+        db = SwiftData(filename: ((try! files.getAndEnsureDirectory()) as NSString).stringByAppendingPathComponent(self.filename), key: secretKey)
         let doCreate = { (connection: SQLiteDBConnection) -> () in
             switch self.createTable(connection, table: table) {
             case .Created:
@@ -157,7 +157,7 @@ public class BrowserDB {
             }
         }
 
-        if let err = db.transaction({ connection -> Bool in
+        if let _ = db.transaction({ connection -> Bool in
             // If the table doesn't exist, we'll create it
             if !table.exists(connection) {
                 doCreate(connection)
@@ -198,14 +198,19 @@ public class BrowserDB {
             // Note that a backup file might already exist! We append a counter to avoid this.
             var bakCounter = 0
             var bak: String
-            do {
+            repeat {
                 bak = "\(self.filename).bak.\(++bakCounter)"
             } while self.files.exists(bak)
 
-            success = self.files.move(self.filename, toRelativePath: bak)
+            do {
+                try self.files.move(self.filename, toRelativePath: bak)
+                success = true
+            } catch _ {
+                success = false
+            }
             assert(success)
 
-            if let err = db.transaction({ connection -> Bool in
+            if let _ = db.transaction({ connection -> Bool in
                 doCreate(connection)
                 return success
             }) {
@@ -218,7 +223,7 @@ public class BrowserDB {
 
     typealias IntCallback = (connection: SQLiteDBConnection, inout err: NSError?) -> Int
 
-    func withConnection<T>(#flags: SwiftData.Flags, inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> T {
+    func withConnection<T>(flags flags: SwiftData.Flags, inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> T {
         var res: T!
         err = db.withConnection(flags) { connection in
             var err: NSError? = nil
@@ -311,14 +316,14 @@ extension BrowserDB {
 
         // There's no real reason why we can't pass the ArraySlice here, except that I don't
         // want to keep fighting Swift.
-        return walk(chunks, { insertChunk(Array($0)) })
+        return walk(chunks, f: { insertChunk(Array($0)) })
     }
 
-    func runWithConnection<T>(block: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> Deferred<Result<T>> {
+    func runWithConnection<T>(block: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> Deferred<Maybe<T>> {
         return DeferredDBOperation(db: db, block: block).start()
     }
 
-    func write(sql: String, withArgs args: Args? = nil) -> Deferred<Result<Int>> {
+    func write(sql: String, withArgs args: Args? = nil) -> Deferred<Maybe<Int>> {
         return self.runWithConnection() { (connection, err) -> Int in
             err = connection.executeChange(sql, withArgs: args)
             if err == nil {
@@ -356,13 +361,13 @@ extension BrowserDB {
         }
 
         if let err = err {
-            return deferResult(DatabaseError(err: err))
+            return deferMaybe(DatabaseError(err: err))
         }
 
         return succeed()
     }
 
-    func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
+    func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Maybe<Cursor<T>>> {
         return runWithConnection { (connection, err) -> Cursor<T> in
             return connection.executeQuery(sql, factory: factory, withArgs: args)
         }
@@ -372,7 +377,7 @@ extension BrowserDB {
 extension SQLiteDBConnection {
     func tablesExist(names: Args) -> Bool {
         let count = names.count
-        let orClause = join(" OR ", Array(count: count, repeatedValue: "name = ?"))
+        let orClause = " OR ".join(Array(count: count, repeatedValue: "name = ?"))
         let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND (\(orClause))"
 
         let res = self.executeQuery(tablesSQL, factory: StringFactory, withArgs: names)

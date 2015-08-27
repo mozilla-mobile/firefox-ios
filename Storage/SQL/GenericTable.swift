@@ -113,12 +113,10 @@ class GenericTable<T>: BaseTable {
     }
 
     func delete(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int {
-        var numDeleted: Int = 0
-
         if var item: Type? = item {
             if let (query, args) = getDeleteAndArgs(&item) {
                 if let error = db.executeChange(query, withArgs: args) {
-                    println(error.description)
+                    print(error.description)
                     err = error
                     return 0
                 }
@@ -130,7 +128,7 @@ class GenericTable<T>: BaseTable {
     }
 
     func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<T> {
-        if var (query, args) = getQueryAndArgs(options) {
+        if let (query, args) = getQueryAndArgs(options) {
             if let factory = self.factory {
                 let c =  db.executeQuery(query, factory: factory, withArgs: args)
                 return c

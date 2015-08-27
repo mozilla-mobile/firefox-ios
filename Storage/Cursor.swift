@@ -62,9 +62,9 @@ public class Cursor<T>: TypedCursor {
         return acc
     }
 
-    public func generate() -> GeneratorOf<T?> {
+    public func generate() -> AnyGenerator<T?> {
         var nextIndex = 0
-        return GeneratorOf<T?>() {
+        return anyGenerator() {
             if (nextIndex >= self.count || self.status != CursorStatus.Success) {
                 return nil
             }

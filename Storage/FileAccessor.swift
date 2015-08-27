@@ -11,50 +11,59 @@ import Foundation
  * the path using ".." or symlinks.
  */
 public class FileAccessor {
-    public let rootPath: String
+    public let rootPath: NSString
 
     public init(rootPath: String) {
-        self.rootPath = rootPath
+        self.rootPath = NSString(string:rootPath)
     }
 
     /**
      * Gets the absolute directory path at the given relative path, creating it if it does not exist.
      */
-    public func getAndEnsureDirectory(relativeDir: String? = nil, error: NSErrorPointer = nil) -> String? {
+    public func getAndEnsureDirectory(relativeDir: String? = nil) throws -> String {
+        var error: NSError! = NSError(domain: "Migrator", code: 0, userInfo: nil)
         var absolutePath = rootPath
 
         if let relativeDir = relativeDir {
             absolutePath = absolutePath.stringByAppendingPathComponent(relativeDir)
         }
 
-        return createDir(absolutePath, error: error) ? absolutePath : nil
+        do {
+            let absPath = absolutePath as String
+            try createDir(absPath)
+            return absPath
+        } catch let err as NSError {
+            error = err
+        }
+        throw error
     }
 
     /**
      * Gets the file or directory at the given path, relative to the root.
      */
-    public func remove(relativePath: String, error: NSErrorPointer = nil) -> Bool {
+    public func remove(relativePath: String) throws {
         let path = rootPath.stringByAppendingPathComponent(relativePath)
-        return NSFileManager.defaultManager().removeItemAtPath(path, error: error)
+        try NSFileManager.defaultManager().removeItemAtPath(path)
     }
 
     /**
      * Removes the contents of the directory without removing the directory itself.
      */
-    public func removeFilesInDirectory(relativePath: String = "", error: NSErrorPointer = nil) -> Bool {
+    public func removeFilesInDirectory(relativePath: String = "") throws {
+        var error: NSError! = NSError(domain: "Migrator", code: 0, userInfo: nil)
         let fileManager = NSFileManager.defaultManager()
         let path = rootPath.stringByAppendingPathComponent(relativePath)
-        if let files = fileManager.contentsOfDirectoryAtPath(path, error: error) {
-            var success = true
+        do {
+            let files = try fileManager.contentsOfDirectoryAtPath(path)
             for file in files {
-                if let filename = file as? String {
-                    success = success && remove(relativePath.stringByAppendingPathComponent(filename), error: error)
-                }
+                try remove(NSString(string:relativePath).stringByAppendingPathComponent(file))
             }
-            return success
+            return
+        } catch let err as NSError {
+            error = err
         }
 
-        return false
+        throw error
     }
 
     /**
@@ -69,16 +78,14 @@ public class FileAccessor {
      * Moves the file or directory to the given destination, with both paths relative to the root.
      * The destination directory is created if it does not exist.
      */
-    public func move(fromRelativePath: String, toRelativePath: String, error: NSErrorPointer = nil) -> Bool {
+    public func move(fromRelativePath: String, toRelativePath: String) throws {
         let fromPath = rootPath.stringByAppendingPathComponent(fromRelativePath)
-        let toPath = rootPath.stringByAppendingPathComponent(toRelativePath)
+        let toPath = rootPath.stringByAppendingPathComponent(toRelativePath) as NSString
         let toDir = toPath.stringByDeletingLastPathComponent
 
-        if !createDir(toDir, error: error) {
-            return false
-        }
+        try createDir(toDir)
 
-        return NSFileManager.defaultManager().moveItemAtPath(fromPath, toPath: toPath, error: error)
+        try NSFileManager.defaultManager().moveItemAtPath(fromPath, toPath: toPath as String)
     }
 
     public func copy(fromRelativePath: String, toAbsolutePath: String, error: NSErrorPointer = nil) -> Bool {
@@ -96,7 +103,7 @@ public class FileAccessor {
      * Creates a directory with the given path, including any intermediate directories.
      * Does nothing if the directory already exists.
      */
-    private func createDir(absolutePath: String, error: NSErrorPointer = nil) -> Bool {
-        return NSFileManager.defaultManager().createDirectoryAtPath(absolutePath, withIntermediateDirectories: true, attributes: nil, error: error)
+    private func createDir(absolutePath: String) throws {
+        try NSFileManager.defaultManager().createDirectoryAtPath(absolutePath, withIntermediateDirectories: true, attributes: nil)
     }
 }

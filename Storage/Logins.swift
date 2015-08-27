@@ -106,7 +106,7 @@ public protocol LoginUsageData {
     var timePasswordChanged: MicrosecondTimestamp { get set }
 }
 
-public class Login: Printable, LoginData, LoginUsageData, Equatable {
+public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable {
     public var guid: String
 
     public let credentials: NSURLCredential
@@ -209,7 +209,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
     }
 
     public class func fromScript(url: NSURL, script: [String: String]) -> LoginData {
-        let login = Login(hostname: getPasswordOrigin(url.absoluteString!)!, username: script["username"]!, password: script["password"]!)
+        let login = Login(hostname: getPasswordOrigin(url.absoluteString)!, username: script["username"]!, password: script["password"]!)
 
         if let formSubmit = script["formSubmitURL"] {
             login.formSubmitURL = formSubmit
@@ -233,11 +233,11 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
                 return "javascript:"
             }
 
-            realm = "\(uri.scheme!)://\(uri.host!)"
+            realm = "\(uri.scheme)://\(uri.host!)"
 
             // If the URI explicitly specified a port, only include it when
             // it's not the default. (We never want "http://foo.com:80")
-            if var port = uri.port {
+            if let port = uri.port {
                 realm? += ":\(port)"
             }
         } else {
@@ -268,7 +268,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
      * 3. Applying a merged delta stream to a record. Again, this is unordered, but we
      *    use arrays for convenience.
      */
-    public func deltas(#from: Login) -> LoginDeltas {
+    public func deltas(from from: Login) -> LoginDeltas {
         let commutative: [CommutativeLoginField]
 
         if self.timesUsed > 0 && self.timesUsed != from.timesUsed {
@@ -320,12 +320,12 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         var deltas = Array<T?>(count: count, repeatedValue: nil)
 
         // Let's start with the 'a's.
-        for (let f) in a {
+        for f in a {
             deltas[f.index] = f
         }
 
         // Then detect any conflicts and fill out the rest.
-        for (let f) in b {
+        for f in b {
             let index = f.index
             if deltas[index] != nil {
                 log.warning("Collision in \(T.self) \(f.index). Using latest.")
@@ -340,7 +340,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         return optFilter(deltas)
     }
 
-    public class func mergeDeltas(#a: TimestampedLoginDeltas, b: TimestampedLoginDeltas) -> LoginDeltas {
+    public class func mergeDeltas(a a: TimestampedLoginDeltas, b: TimestampedLoginDeltas) -> LoginDeltas {
         let (aAt, aChanged) = a
         let (bAt, bChanged) = b
         let (aCommutative, aNonCommutative, aNonConflicting) = aChanged
@@ -394,14 +394,14 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         var timeLastUsed = self.timeLastUsed
         var timePasswordChanged = self.timePasswordChanged
 
-        for (let delta) in deltas.commutative {
+        for delta in deltas.commutative {
             switch delta {
             case let .TimesUsed(increment):
                 timesUsed += increment
             }
         }
 
-        for (let delta) in deltas.nonCommutative {
+        for delta in deltas.nonCommutative {
             switch delta {
             case let .Hostname(to):
                 hostname = to
@@ -430,7 +430,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
             }
         }
 
-        for (let delta) in deltas.nonConflicting {
+        for delta in deltas.nonConflicting {
             switch delta {
             case let .UsernameField(to):
                 usernameField = to
@@ -441,7 +441,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
             }
         }
 
-        var out = Login(guid: guid, hostname: hostname, username: username!, password: password)
+        let out = Login(guid: guid, hostname: hostname, username: username!, password: password)
         out.timesUsed = timesUsed
         out.httpRealm = httpRealm
         out.formSubmitURL = formSubmitURL
@@ -483,9 +483,9 @@ class LocalLogin: Login {
 }
 
 public protocol BrowserLogins {
-    func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Result<LoginUsageData>>
-    func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Result<Cursor<LoginData>>>
-    func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace, withUsername username: String?) -> Deferred<Result<Cursor<LoginData>>>
+    func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Maybe<LoginUsageData>>
+    func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>>
+    func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace, withUsername username: String?) -> Deferred<Maybe<Cursor<LoginData>>>
 
     // Add a new login regardless of whether other logins might match some fields. Callers
     // are responsible for querying first if they care.
@@ -508,13 +508,13 @@ public protocol SyncableLogins {
 
     func applyChangedLogin(upstream: ServerLogin) -> Success
 
-    func getModifiedLoginsToUpload() -> Deferred<Result<[Login]>>
-    func getDeletedLoginsToUpload() -> Deferred<Result<[GUID]>>
+    func getModifiedLoginsToUpload() -> Deferred<Maybe<[Login]>>
+    func getDeletedLoginsToUpload() -> Deferred<Maybe<[GUID]>>
 
     /**
      * Chains through the provided timestamp.
      */
-    func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>>
+    func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>>
     func markAsDeleted(guids: [GUID]) -> Success
 
     /**
@@ -523,7 +523,7 @@ public protocol SyncableLogins {
     func onRemovedAccount() -> Success
 }
 
-public class LoginDataError: ErrorType {
+public class LoginDataError: MaybeErrorType {
     public let description: String
     public init(description: String) {
         self.description = description
