@@ -229,7 +229,6 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     func toggleEditingMode(editing: Bool) {
-        let translateUp = CGAffineTransformMakeTranslation(0, -UIConstants.ToolbarHeight)
         let translateDown = CGAffineTransformMakeTranslation(0, UIConstants.ToolbarHeight)
 
         if editing {
