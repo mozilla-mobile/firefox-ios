@@ -2,12 +2,12 @@ github "Alamofire/Alamofire" "swift-2.0"
 github "Masonry/Snap" "Swift-2.0"
 github "swisspol/GCDWebServer"
 github "kif-framework/KIF" "master"
-github "fluffyemily/SWXMLHash" "xcode-7.0"           # So we get Swift 2.0 fixes.
+github "drmohundro/SWXMLHash" "xcode-7.0"           # So we get Swift 2.0 fixes.
 github "rs/SDWebImage" "master"              # To get the fix for libwebp
 github "mozilla/Base32"
 github "DaveWoodCom/XCGLogger" "swift_2.0"   # Previously: swift_1.2
 github "mozilla/Deferred" "master"   # Making Deferred extensible in swift 2.0
 github "CEWendel/SWTableViewCell"
-github "mozilla/SQLite.swift" "swift-2"
+github "stephencelis/SQLite.swift" "swift-2"
 github "mozilla/readability" "master"
 github "ZaBlanc/RaptureXML" "master"
