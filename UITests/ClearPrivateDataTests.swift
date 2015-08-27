@@ -34,8 +34,10 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         tester().tapViewWithAccessibilityLabel("Done")
         // on the ipad air sometimes we will find ourselves already out of the tab tray so no need to click 'home'
-        if tester().tryFindingViewWithAccessibilityLabel("home", error: nil) {
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel("home")
             tester().tapViewWithAccessibilityLabel("home")
+        } catch _ {
         }
     }
 
@@ -74,9 +76,8 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         clearPrivateData(true)
 
-        for domain in domains {
-            XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(domain, error: nil), "Expected to have removed top site panel \(domain)")
-        }
+        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[0].title), "Expected to have removed top site panel \(urls[0])")
+        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[1].title), "We shouldn't find the other URL, either.")
     }
 
     func testCancelDoesNotClearTopSitesPanel() {

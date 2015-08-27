@@ -91,11 +91,11 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertEqual(textField.text, "", "Verify that the URL bar text clears on about:home")
 
         // 127.0.0.1 doesn't cause http:// to be hidden. localhost does. Both will work.
-        let localhostURL = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions.allZeros, range: nil)
+        let localhostURL = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions(), range: nil)
         let url = "\(localhostURL)/numberedPage.html?page=1"
 
         // URL without "http://".
-        let displayURL = "\(localhostURL)/numberedPage.html?page=1".substringFromIndex(advance(url.startIndex, count("http://")))
+        let displayURL = "\(localhostURL)/numberedPage.html?page=1".substringFromIndex(advance(url.startIndex, "http://".characters.count))
 
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().enterTextIntoCurrentFirstResponder("\(url)\n")
@@ -114,7 +114,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearURLTextUsingBackspace() {
         // 127.0.0.1 doesn't cause http:// to be hidden. localhost does. Both will work.
-        let localhostURL = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions.allZeros, range: nil)
+        let localhostURL = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions(), range: nil)
         let url = "\(localhostURL)/numberedPage.html?page=1"
 
         var textField = tester().waitForViewWithAccessibilityIdentifier("url") as! UITextField
