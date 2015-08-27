@@ -671,7 +671,6 @@ class BrowserViewController: UIViewController {
             if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
                 updateUIForReaderHomeStateForTab(tab)
             }
-            updateInContentHomePanel(tab.url)
         case KVOCanGoBack:
             guard let canGoBack = change?[NSKeyValueChangeNewKey] as? Bool else { break }
             navigationToolbar.updateBackStatus(canGoBack)
