@@ -31,7 +31,7 @@ class SessionRestoreTests: KIFTestCase {
         //   about:home, page1, *page2*, page3
         // where page2 is active.
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(restoreURL!.absoluteString!)\n")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(restoreURL!.absoluteString)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
         tester().tapViewWithAccessibilityLabel("Back")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
@@ -56,7 +56,7 @@ class SessionRestoreTests: KIFTestCase {
         } catch _ {
             canGoForward = false
         }
-        XCTAssertFalse(canGoBack, "Reached the end of browser history")
+        XCTAssertFalse(canGoForward, "Reached the end of browser history")
     }
 
     override func tearDown() {
