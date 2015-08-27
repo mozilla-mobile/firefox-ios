@@ -265,7 +265,7 @@ private class TopSitesLayout: UICollectionViewLayout {
         }
     }
 
-    private func getIndexAtPosition(y y: CGFloat) -> Int {
+    private func getIndexAtPosition(y: CGFloat) -> Int {
         if y < topSectionHeight {
             let row = Int(y / thumbnailHeight)
             return min(count - 1, max(0, row * thumbnailCols))

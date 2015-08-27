@@ -147,7 +147,7 @@ class TabManager : NSObject {
     }
 
     // This method is duplicated to hide the flushToDisk option from consumers.
-    func addTab( request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Browser {
+    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Browser {
         return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false)
     }
 
@@ -173,7 +173,7 @@ class TabManager : NSObject {
         }
     }
 
-    func addTab( request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, restoring: Bool = false) -> Browser {
+    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, restoring: Bool = false) -> Browser {
         assert(NSThread.isMainThread())
 
         configuration?.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
@@ -319,8 +319,8 @@ extension TabManager {
                     return nil
                 }
 
-                let backList: [WKBackForwardListItem] = browser.webView?.backForwardList.backList ?? []
-                let forwardList: [WKBackForwardListItem] = browser.webView?.backForwardList.forwardList ?? []
+                let backList = browser.webView?.backForwardList.backList ?? []
+                let forwardList = browser.webView?.backForwardList.forwardList ?? []
                 let urls = (backList + [currentItem] + forwardList).map { $0.URL }
                 let currentPage = -forwardList.count
                 self.sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: browser.lastExecutedTime ?? NSDate.now())

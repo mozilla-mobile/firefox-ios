@@ -467,8 +467,7 @@ class BrowserViewController: UIViewController {
         // splitting this out to see if we can get better crash reports when this has a problem
         var newSelectedButtonIndex = 0
         if let numberArray = panelNumber?.componentsSeparatedByString("=") {
-            if let last = numberArray.last,
-            let lastInt = Int(last){
+            if let last = numberArray.last, lastInt = Int(last) {
                 newSelectedButtonIndex = lastInt
             }
         }
@@ -556,7 +555,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func finishEditingAndSubmit( url: NSURL, visitType: VisitType) {
+    private func finishEditingAndSubmit(url: NSURL, visitType: VisitType) {
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
@@ -1686,7 +1685,7 @@ extension BrowserViewController {
     /// of the current page is there. And if so, we go there.
 
     func enableReaderMode() {
-        guard let tab = tabManager.selectedTab, let webView = tab.webView  else { return }
+        guard let tab = tabManager.selectedTab, webView = tab.webView else { return }
 
         let backList = webView.backForwardList.backList
         let forwardList = webView.backForwardList.forwardList

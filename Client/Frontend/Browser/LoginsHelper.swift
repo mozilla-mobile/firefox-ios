@@ -33,8 +33,7 @@ class LoginsHelper: BrowserHelper {
         self.browser = browser
         self.profile = profile
 
-        if let path = NSBundle.mainBundle().pathForResource("LoginsHelper", ofType: "js"),
-            let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
+        if let path = NSBundle.mainBundle().pathForResource("LoginsHelper", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
             let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
             browser.webView!.configuration.userContentController.addUserScript(userScript)
         }
@@ -263,7 +262,7 @@ class LoginsHelper: BrowserHelper {
         // Add a button to log in.
         let action = UIAlertAction(title: LogInButtonTitle,
             style: UIAlertActionStyle.Default) { (action) -> Void in
-                guard let user = alert.textFields?[0].text, let pass = alert.textFields?[1].text else { deferred.fill(Maybe(failure: LoginDataError(description: "Username and Password required"))); return }
+                guard let user = alert.textFields?[0].text, pass = alert.textFields?[1].text else { deferred.fill(Maybe(failure: LoginDataError(description: "Username and Password required"))); return }
 
                 let login = Login.createWithCredential(NSURLCredential(user: user, password: pass, persistence: .ForSession), protectionSpace: protectionSpace)
                 deferred.fill(Maybe(success: login))
