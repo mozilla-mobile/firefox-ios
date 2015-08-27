@@ -44,12 +44,7 @@ private class SiteTableViewHeader : UITableViewHeaderFooterView {
         topBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
         bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
         super.layoutSubviews()
-
-        if #available(iOS 8.2, *) {
-            textLabel?.font = UIFont.systemFontOfSize(11, weight: UIFontWeightMedium)
-        } else {
-            textLabel?.font = UIFont.systemFontOfSize(11)
-        }
+        textLabel?.font = UIFont.systemFontOfSize(11, weight: UIFontWeightMedium)
         textLabel?.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : SiteTableViewControllerUX.HeaderTextColor
         textLabel?.textAlignment = .Center
         contentView.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
