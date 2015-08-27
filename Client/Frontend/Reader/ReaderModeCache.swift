@@ -19,15 +19,32 @@ class ReaderModeCache {
     }
 
     func put(url: NSURL, _ readabilityResult: ReadabilityResult) throws {
+        let error: NSError! = NSError(domain: "Migrator", code: 0, userInfo: nil)
+        guard let cacheDirectoryPath = cacheDirectoryForURL(url) else { throw error }
+        do {
+            try NSFileManager.defaultManager().createDirectoryAtPath(cacheDirectoryPath, withIntermediateDirectories: true, attributes: nil)
+            let contentFilePath = (cacheDirectoryPath as NSString).stringByAppendingPathComponent("content.json")
+            let string: NSString = readabilityResult.encode()
+            try string.writeToFile(contentFilePath, atomically: true, encoding: NSUTF8StringEncoding)
+            return
+        } catch let error1 as NSError {
+            throw error1
+        }
+    }
+
+    func get(url: NSURL) throws -> ReadabilityResult {
         var error: NSError! = NSError(domain: "Migrator", code: 0, userInfo: nil)
-        if let cacheDirectoryPath = cacheDirectoryForURL(url) {
+        let cacheDirectoryURL = url.URLByAppendingPathComponent("content.json")
+        guard let contentFilePath = cacheDirectoryForURL(cacheDirectoryURL) else {
+            throw error
+        }
+
+        if NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
             do {
-                try NSFileManager.defaultManager().createDirectoryAtPath(cacheDirectoryPath as String, withIntermediateDirectories: true, attributes: nil)
-                let contentFilePath = cacheDirectoryPath.stringByAppendingPathComponent("content.json")
-                let string: NSString = readabilityResult.encode()
-                # /* TODO: Finish migration: rewrite code to move the next statement out of enclosing do/catch */
-                try string.writeToFile(contentFilePath, atomically: true, encoding: NSUTF8StringEncoding)
-                return
+                let string = try NSString(contentsOfFile: contentFilePath, encoding: NSUTF8StringEncoding)
+                if let value = ReadabilityResult(string: string as String) {
+                    return value
+                }
             } catch let error1 as NSError {
                 error = error1
             }
@@ -35,74 +52,43 @@ class ReaderModeCache {
         throw error
     }
 
-    func get(url: NSURL) throws -> ReadabilityResult {
-        var error: NSError! = NSError(domain: "Migrator", code: 0, userInfo: nil)
-        if let cacheDirectoryPath = cacheDirectoryForURL(url) {
-            let contentFilePath = cacheDirectoryPath.stringByAppendingPathComponent("content.json")
-            if NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
-                do {
-                    let string = try NSString(contentsOfFile: contentFilePath, encoding: NSUTF8StringEncoding)
-                    if let value = ReadabilityResult(string: string as String) {
-                        return value
-                    }
-                    # /* TODO: Finish migration: rewrite code to move the next statement out of enclosing do/catch */
-                    throw error
-                } catch let error1 as NSError {
-                    error = error1
-                }
-            }
-        }
-        throw error
-    }
-
     func delete(url: NSURL, error: NSErrorPointer) {
-        if let cacheDirectoryPath = cacheDirectoryForURL(url) {
-            if NSFileManager.defaultManager().fileExistsAtPath(cacheDirectoryPath) {
-                do {
-                    try NSFileManager.defaultManager().removeItemAtPath(cacheDirectoryPath)
-                } catch let error1 as NSError {
-                    error.memory = error1
-                }
+        guard let cacheDirectoryPath = cacheDirectoryForURL(url) else { return }
+        if NSFileManager.defaultManager().fileExistsAtPath(cacheDirectoryPath) {
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(cacheDirectoryPath)
+            } catch let error1 as NSError {
+                error.memory = error1
             }
         }
     }
 
     func contains(url: NSURL) throws {
         let error: NSError! = NSError(domain: "Migrator", code: 0, userInfo: nil)
-        if let cacheDirectoryPath = cacheDirectoryForURL(url) {
-            let contentFilePath = cacheDirectoryPath.stringByAppendingPathComponent("content.json")
-            if NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
-                return
-            }
+        let cacheDirectoryURL = url.URLByAppendingPathComponent("content.json")
+        guard let contentFilePath = cacheDirectoryForURL(cacheDirectoryURL) else { throw error; return }
+        if !NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
             throw error
         }
-        throw error
     }
 
     private func cacheDirectoryForURL(url: NSURL) -> String? {
-        if let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true) as? [String] {
-            if paths.count > 0 {
-                if let hashedPath = hashedPathForURL(url) {
-                   return NSString.pathWithComponents([paths[0], "ReaderView", hashedPath]) as String
-                }
+        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+        if paths.count > 0 {
+            if let hashedPath = hashedPathForURL(url) {
+               return NSString.pathWithComponents([paths[0], "ReaderView", hashedPath]) as String
             }
         }
         return nil
     }
 
     private func hashedPathForURL(url: NSURL) -> String? {
-        if let hash = hashForURL(url) {
-            return NSString.pathWithComponents([hash.substringWithRange(NSMakeRange(0, 2)), hash.substringWithRange(NSMakeRange(2, 2)), hash.substringFromIndex(4)]) as String
-        }
-        return nil
+        guard let hash = hashForURL(url) else { return nil }
+        return NSString.pathWithComponents([hash.substringWithRange(NSMakeRange(0, 2)), hash.substringWithRange(NSMakeRange(2, 2)), hash.substringFromIndex(4)]) as String
     }
 
     private func hashForURL(url: NSURL) -> NSString? {
-        if let absoluteString = url.absoluteString {
-            if let data = absoluteString.dataUsingEncoding(NSUTF8StringEncoding) {
-                return data.sha1.hexEncodedString
-            }
-        }
-        return nil
+        guard let data = url.absoluteString.dataUsingEncoding(NSUTF8StringEncoding) else { return nil }
+        return data.sha1.hexEncodedString
     }
 }

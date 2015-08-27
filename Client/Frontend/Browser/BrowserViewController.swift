@@ -272,15 +272,15 @@ class BrowserViewController: UIViewController {
 
     private func dequeueQueuedTabs() {
         assert(!NSThread.currentThread().isMainThread, "This must be called in the background.")
-        self.profile.queue.getQueuedTabs() >>== { c in
+        self.profile.queue.getQueuedTabs() >>== { cursor in
 
             // This assumes that the DB returns rows in some kind of sane order.
             // It does in practice, so WFM.
-            log.debug("Queue. Count: \(c.count).")
-            if c.count > 0 {
+            log.debug("Queue. Count: \(cursor.count).")
+            if cursor.count > 0 {
                 var urls = [NSURL]()
-                for (let r) in c {
-                    if let url = r?.url.asURL {
+                for row in cursor {
+                    if let url = row?.url.asURL {
                         log.debug("Queuing \(url).")
                         urls.append(url)
                     }
@@ -440,7 +440,7 @@ class BrowserViewController: UIViewController {
         let effect = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
         effect.clipsToBounds = false
         effect.translatesAutoresizingMaskIntoConstraints = false
-        if let background = backgroundColor {
+        if let _ = backgroundColor {
             view.backgroundColor = backgroundColor
         }
         effect.addSubview(view)
@@ -464,13 +464,14 @@ class BrowserViewController: UIViewController {
             homePanelController!.didMoveToParentViewController(self)
         }
 
-        var panelNumber = tabManager.selectedTab?.url?.fragment
+        let panelNumber = tabManager.selectedTab?.url?.fragment
 
         // splitting this out to see if we can get better crash reports when this has a problem
         var newSelectedButtonIndex = 0
         if let numberArray = panelNumber?.componentsSeparatedByString("=") {
-            if let last = Int(numberArray.last?) {
-                newSelectedButtonIndex = last
+            if let last = numberArray.last,
+            let lastInt = Int(last){
+                newSelectedButtonIndex = lastInt
             }
         }
         homePanelController?.selectedButtonIndex = newSelectedButtonIndex
@@ -557,7 +558,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    private func finishEditingAndSubmit(var url: NSURL, visitType: VisitType) {
+    private func finishEditingAndSubmit( url: NSURL, visitType: VisitType) {
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
@@ -648,17 +649,17 @@ class BrowserViewController: UIViewController {
         if webView !== tabManager.selectedTab?.webView {
             return
         }
-
-        switch keyPath {
+        guard let path = keyPath else { assertionFailure("Unhandled KVO key: \(keyPath)") }
+        switch path {
         case KVOEstimatedProgress:
-            let progress = change[NSKeyValueChangeNewKey] as! Float
+            guard let progress = change?[NSKeyValueChangeNewKey] as? Float else { break }
             urlBar.updateProgressBar(progress)
             // when loading is stopped, KVOLoading is fired first, and only then KVOEstimatedProgress with progress 1.0 which would leave the progress bar running
             if progress != 1.0 || tabManager.selectedTab?.loading ?? false {
                 auralProgress.progress = Double(progress)
             }
         case KVOLoading:
-            let loading = change[NSKeyValueChangeNewKey] as! Bool
+            guard let loading = change?[NSKeyValueChangeNewKey] as? Bool else { break }
             toolbar?.updateReloadStatus(loading)
             urlBar.updateReloadStatus(loading)
             auralProgress.progress = loading ? 0 : nil
@@ -673,11 +674,12 @@ class BrowserViewController: UIViewController {
             if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
                 updateUIForReaderHomeStateForTab(tab)
             }
+            updateInContentHomePanel(tab.url)
         case KVOCanGoBack:
-            let canGoBack = change[NSKeyValueChangeNewKey] as! Bool
+            guard let canGoBack = change?[NSKeyValueChangeNewKey] as? Bool else { break }
             navigationToolbar.updateBackStatus(canGoBack)
         case KVOCanGoForward:
-            let canGoForward = change[NSKeyValueChangeNewKey] as! Bool
+            guard let canGoForward = change?[NSKeyValueChangeNewKey] as? Bool else { break }
             navigationToolbar.updateForwardStatus(canGoForward)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath)")
@@ -701,7 +703,7 @@ class BrowserViewController: UIViewController {
 
     private func isWhitelistedUrl(url: NSURL) -> Bool {
         for entry in WhiteListedUrls {
-            if let match = url.absoluteString.rangeOfString(entry, options: .RegularExpressionSearch) {
+            if let _ = url.absoluteString.rangeOfString(entry, options: .RegularExpressionSearch) {
                 return UIApplication.sharedApplication().canOpenURL(url)
             }
         }
@@ -748,15 +750,16 @@ extension BrowserViewController {
      * Untrack and do the right thing.
      */
     func getVisitTypeForTab(tab: Browser, navigation: WKNavigation?) -> VisitType? {
-        if let navigation = navigation {
-            if let ignored = self.ignoredNavigation.remove(navigation) {
-                return nil
-            }
-            return self.typedNavigation.removeValueForKey(navigation) ?? VisitType.Link
-        } else {
+        guard let navigation = navigation else {
             // See https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/Cocoa/NavigationState.mm#L390
             return VisitType.Link
         }
+
+        if let _ = self.ignoredNavigation.remove(navigation) {
+            return nil
+        }
+
+        return self.typedNavigation.removeValueForKey(navigation) ?? VisitType.Link
     }
 }
 
@@ -798,23 +801,23 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressReaderMode(urlBar: URLBarView) -> Bool {
-        if let tab = tabManager.selectedTab,
+        guard let tab = tabManager.selectedTab,
                url = tab.displayURL,
-               absoluteString = url.absoluteString,
-               result = profile.readingList?.createRecordWithURL(absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name)
-        {
-            switch result {
-            case .Success:
-                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Added page to Reading List", comment: "Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action."))
-                // TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1158503 provide some form of 'this has been added' visual feedback?
-            case .Failure(let error):
-                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading List. Maybe it's already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
-                log.error("readingList.createRecordWithURL(url: \"\(absoluteString)\", ...) failed with error: \(error)")
-            }
-            return true
+               result = profile.readingList?.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.currentDevice().name)
+            else {
+                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading list", comment: "Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed."))
+                return false
         }
-        UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading list", comment: "Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed."))
-        return false
+
+        switch result {
+        case .Success:
+            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Added page to Reading List", comment: "Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action."))
+            // TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1158503 provide some form of 'this has been added' visual feedback?
+        case .Failure(let error):
+            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading List. Maybe it's already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
+            log.error("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
+        }
+        return true
     }
 
     func locationActionsForURLBar(urlBar: URLBarView) -> [AccessibleAction] {
@@ -961,7 +964,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
 
                 let activityItems = [printInfo, renderer, selected.title ?? url.absoluteString, url]
 
-                var activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+                let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
 
                 // Hide 'Add to Reading List' which currently uses Safari.
                 // Also hide our own View Later… after all, you're in the browser!
@@ -1073,11 +1076,11 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     private func adjustFooterSize(top: UIView? = nil) {
-        snackBars.snp_remakeConstraints({ make in
+        snackBars.snp_remakeConstraints(closure: { make in
             let bars = self.snackBars.subviews
             // if the keyboard is showing then ensure that the snackbars are positioned above it, otherwise position them above the toolbar/view bottom
             if bars.count > 0 {
-                let view = bars[bars.count-1] as! UIView
+                let view = bars[bars.count-1]
                 make.top.equalTo(view.snp_top)
                 if let state = keyboardState {
                     make.bottom.equalTo(-(state.intersectionHeightForView(self.view)))
@@ -1108,7 +1111,7 @@ extension BrowserViewController: BrowserDelegate {
             let bars = snackBars.subviews
             if index < bars.count-1 {
                 // Move the bar above this one
-                var nextbar = bars[index+1] as! SnackBar
+                let nextbar = bars[index+1] as! SnackBar
                 nextbar.snp_updateConstraints { make in
                     // If this wasn't the bottom bar, attach to the bar below it
                     if index > 0 {
@@ -1128,7 +1131,7 @@ extension BrowserViewController: BrowserDelegate {
 
     private func finishAddingBar(bar: SnackBar) {
         snackBars.addSubview(bar)
-        bar.snp_remakeConstraints({ make in
+        bar.snp_remakeConstraints(closure: { make in
             // If there are already bars showing, add this on top of them
             let bars = self.snackBars.subviews
 
@@ -1676,33 +1679,30 @@ extension BrowserViewController {
     /// of the current page is there. And if so, we go there.
 
     func enableReaderMode() {
-        if let tab = tabManager.selectedTab,
-            let webView = tab.webView,
-            let backList = webView.backForwardList.backList as? [WKBackForwardListItem],
-            let forwardList = webView.backForwardList.forwardList as? [WKBackForwardListItem] {
+        guard let tab = tabManager.selectedTab, let webView = tab.webView  else { return }
 
-            if let currentURL = webView.backForwardList.currentItem?.URL {
-                if let readerModeURL = ReaderModeUtils.encodeURL(currentURL) {
-                    if backList.count > 1 && backList.last?.URL == readerModeURL {
-                        webView.goToBackForwardListItem(backList.last!)
-                    } else if forwardList.count > 0 && forwardList.first?.URL == readerModeURL {
-                        webView.goToBackForwardListItem(forwardList.first!)
-                    } else {
-                        // Store the readability result in the cache and load it. This will later move to the ReadabilityHelper.
-                        webView.evaluateJavaScript("\(ReaderModeNamespace).readerize()", completionHandler: { (object, error) -> Void in
-                            if let readabilityResult = ReadabilityResult(object: object) {
-                                do {
-                                    try ReaderModeCache.sharedInstance.put(currentURL, readabilityResult)
-                                } catch _ {
-                                }
-                                if let nav = webView.loadRequest(NSURLRequest(URL: readerModeURL)) {
-                                    self.ignoreNavigationInTab(tab, navigation: nav)
-                                }
-                            }
-                        })
+        let backList = webView.backForwardList.backList
+        let forwardList = webView.backForwardList.forwardList
+
+        guard let currentURL = webView.backForwardList.currentItem?.URL, let readerModeURL = ReaderModeUtils.encodeURL(currentURL) else { return }
+
+        if backList.count > 1 && backList.last?.URL == readerModeURL {
+            webView.goToBackForwardListItem(backList.last!)
+        } else if forwardList.count > 0 && forwardList.first?.URL == readerModeURL {
+            webView.goToBackForwardListItem(forwardList.first!)
+        } else {
+            // Store the readability result in the cache and load it. This will later move to the ReadabilityHelper.
+            webView.evaluateJavaScript("\(ReaderModeNamespace).readerize()", completionHandler: { (object, error) -> Void in
+                if let readabilityResult = ReadabilityResult(object: object) {
+                    do {
+                        try ReaderModeCache.sharedInstance.put(currentURL, readabilityResult)
+                    } catch _ {
+                    }
+                    if let nav = webView.loadRequest(NSURLRequest(URL: readerModeURL)) {
+                        self.ignoreNavigationInTab(tab, navigation: nav)
                     }
                 }
-            }
+            })
         }
     }
 

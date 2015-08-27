@@ -65,7 +65,7 @@ class TopSitesPanel: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        var collection = TopSitesCollectionView(frame: self.view.frame, collectionViewLayout: layout)
+        let collection = TopSitesCollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collection.backgroundColor = UIConstants.PanelBackgroundColor
         collection.delegate = self
         collection.dataSource = dataSource
@@ -275,7 +275,6 @@ private class TopSitesLayout: UICollectionViewLayout {
 
     override func collectionViewContentSize() -> CGSize {
         if count <= thumbnailCount {
-            let row = floor(Double(count / thumbnailCols))
             return CGSize(width: width, height: topSectionHeight)
         }
 
@@ -290,7 +289,8 @@ private class TopSitesLayout: UICollectionViewLayout {
         for section in 0..<(self.collectionView?.numberOfSections() ?? 0) {
             for item in 0..<(self.collectionView?.numberOfItemsInSection(section) ?? 0) {
                 let indexPath = NSIndexPath(forItem: item, inSection: section)
-                layoutAttributes.append(self.layoutAttributesForItemAtIndexPath(indexPath))
+                guard let attrs = self.layoutAttributesForItemAtIndexPath(indexPath) else { continue }
+                layoutAttributes.append(attrs)
             }
         }
         self.layoutAttributes = layoutAttributes
@@ -309,7 +309,7 @@ private class TopSitesLayout: UICollectionViewLayout {
         return attrs
     }
 
-    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
+    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
         let attr = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
 
         // Set the top thumbnail frames.

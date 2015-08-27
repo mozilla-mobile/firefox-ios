@@ -461,7 +461,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
 
     override func updateConstraints() {
         if UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation) && !(DeviceInfo.deviceModel().rangeOfString("iPad") != nil) {
-            instructionsLabel.snp_remakeConstraints({ (make) -> Void in
+            instructionsLabel.snp_remakeConstraints(closure: { (make) -> Void in
                 make.top.equalTo(titleLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
 
@@ -484,7 +484,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
                 make.left.greaterThanOrEqualTo(contentView.snp_centerX).offset(10).priorityHigh()
             }
         } else {
-            instructionsLabel.snp_remakeConstraints({ (make) -> Void in
+            instructionsLabel.snp_remakeConstraints(closure: { (make) -> Void in
                 make.top.equalTo(titleLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
                 make.centerX.equalTo(contentView)
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)

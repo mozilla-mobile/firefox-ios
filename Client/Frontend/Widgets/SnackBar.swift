@@ -190,7 +190,7 @@ class SnackBar: UIView {
         }
 
         if let img = imageView.image {
-            imageView.snp_remakeConstraints({ make in
+            imageView.snp_remakeConstraints(closure: { make in
                 make.left.centerY.equalTo(contentView)
                 // To avoid doubling the padding, the textview doesn't have an inset on its left side.
                 // Instead, it relies on the imageView to tell it where its left side should be.
@@ -198,21 +198,21 @@ class SnackBar: UIView {
                 make.height.equalTo(img.size.height + UIConstants.DefaultPadding)
             })
         } else {
-            imageView.snp_remakeConstraints({ make in
+            imageView.snp_remakeConstraints(closure: { make in
                 make.width.height.equalTo(0)
                 make.top.left.equalTo(self)
                 make.bottom.lessThanOrEqualTo(contentView.snp_bottom)
             })
         }
 
-        textLabel.snp_remakeConstraints({ make in
+        textLabel.snp_remakeConstraints(closure: { make in
             make.top.equalTo(contentView)
             make.left.equalTo(self.imageView.snp_right)
             make.trailing.equalTo(contentView)
             make.bottom.lessThanOrEqualTo(contentView.snp_bottom)
         })
 
-        buttonsView.snp_remakeConstraints({ make in
+        buttonsView.snp_remakeConstraints(closure: { make in
             make.top.equalTo(contentView.snp_bottom).offset(UIConstants.DefaultPadding)
             make.bottom.equalTo(self.snp_bottom)
             make.left.right.equalTo(self)
