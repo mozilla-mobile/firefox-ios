@@ -89,7 +89,6 @@ class LiveStorageClientTests : LiveAccountTest {
                 let payload: KeysPayload = rec.payload as KeysPayload
                 print("Body: \(payload.toString(false))", terminator: "\n")
                 XCTAssert(rec.id == "keys", "GUID inside is correct.")
-                _ = payload["default"].asArray![0].asString
                 if let keys = payload.defaultKeys {
                     // Extracting the token like this is not great, but...
                     result.fill(Maybe(success: (authState.value.successValue!.token, keys)))
