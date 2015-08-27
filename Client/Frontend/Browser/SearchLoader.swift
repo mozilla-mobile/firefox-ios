@@ -9,7 +9,7 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-private let URLBeforePathRegex = NSRegularExpression(pattern: "^https?://([^/]+/)", options: nil, error: nil)!
+private let URLBeforePathRegex = try! NSRegularExpression(pattern: "^https?://([^/]+/)", options: [])
 
 // TODO: Swift currently requires that classes extending generic classes must also be generic.
 // This is a workaround until that requirement is fixed.

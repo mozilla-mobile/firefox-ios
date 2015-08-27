@@ -34,8 +34,8 @@ class LoginsHelper: BrowserHelper {
         self.profile = profile
 
         if let path = NSBundle.mainBundle().pathForResource("LoginsHelper", ofType: "js") {
-            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) as? String {
-                var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as? String {
+                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
                 browser.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -74,7 +74,7 @@ class LoginsHelper: BrowserHelper {
     class func replace(base: String, keys: [String], replacements: [String]) -> NSMutableAttributedString {
         var ranges = [NSRange]()
         var string = base
-        for (index, key) in enumerate(keys) {
+        for (index, key) in keys.enumerate() {
             let replace = replacements[index]
             let range = string.rangeOfString(key,
                 options: NSStringCompareOptions.LiteralSearch,
@@ -82,7 +82,7 @@ class LoginsHelper: BrowserHelper {
                 locale: nil)!
             string.replaceRange(range, with: replace)
             let nsRange = NSMakeRange(distance(string.startIndex, range.startIndex),
-                count(replace))
+                replace.characters.count)
             ranges.append(nsRange)
         }
 
@@ -90,7 +90,7 @@ class LoginsHelper: BrowserHelper {
         attributes[NSFontAttributeName] = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
         attributes[NSForegroundColorAttributeName] = UIColor.darkGrayColor()
         var attr = NSMutableAttributedString(string: string, attributes: attributes)
-        for (index, range) in enumerate(ranges) {
+        for (index, range) in ranges.enumerate() {
             attr.addAttribute(NSFontAttributeName, value: UIFont.systemFontOfSize(13, weight: UIFontWeightMedium), range: range)
         }
         return attr
@@ -210,10 +210,10 @@ class LoginsHelper: BrowserHelper {
         }
     }
 
-    func handleAuthRequest(viewController: UIViewController, challenge: NSURLAuthenticationChallenge) -> Deferred<Result<LoginData>> {
+    func handleAuthRequest(viewController: UIViewController, challenge: NSURLAuthenticationChallenge) -> Deferred<Maybe<LoginData>> {
         // If there have already been too many login attempts, we'll just fail.
         if challenge.previousFailureCount >= LoginsHelper.MaxAuthenticationAttempts {
-            return deferResult(LoginDataError(description: "Too many attempts to open site"))
+            return deferMaybe(LoginDataError(description: "Too many attempts to open site"))
         }
 
         var credential = challenge.proposedCredential
@@ -222,7 +222,7 @@ class LoginsHelper: BrowserHelper {
         if let proposed = credential {
             if !(proposed.user?.isEmpty ?? true) {
                 if challenge.previousFailureCount == 0 {
-                    return deferResult(Login.createWithCredential(credential!, protectionSpace: challenge.protectionSpace))
+                    return deferMaybe(Login.createWithCredential(credential!, protectionSpace: challenge.protectionSpace))
                 }
             } else {
                 credential = nil
@@ -242,13 +242,13 @@ class LoginsHelper: BrowserHelper {
         }
     }
 
-    private func promptForUsernamePassword(viewController: UIViewController, credentials: NSURLCredential?, protectionSpace: NSURLProtectionSpace) -> Deferred<Result<LoginData>> {
+    private func promptForUsernamePassword(viewController: UIViewController, credentials: NSURLCredential?, protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<LoginData>> {
         if protectionSpace.host.isEmpty {
-            println("Unable to show a password prompt without a hostname")
-            return deferResult(LoginDataError(description: "Unable to show a password prompt without a hostname"))
+            print("Unable to show a password prompt without a hostname")
+            return deferMaybe(LoginDataError(description: "Unable to show a password prompt without a hostname"))
         }
 
-        let deferred = Deferred<Result<LoginData>>()
+        let deferred = Deferred<Maybe<LoginData>>()
         let alert: UIAlertController
         let title = NSLocalizedString("Authentication required", comment: "Authentication prompt title")
         if !(protectionSpace.realm?.isEmpty ?? true) {
@@ -268,14 +268,14 @@ class LoginsHelper: BrowserHelper {
                 let pass = (alert.textFields?[1] as! UITextField).text
 
                 let login = Login.createWithCredential(NSURLCredential(user: user, password: pass, persistence: .ForSession), protectionSpace: protectionSpace)
-                deferred.fill(Result(success: login))
+                deferred.fill(Maybe(success: login))
                 self.setCredentials(login)
         }
         alert.addAction(action)
 
         // Add a cancel button.
         let cancel = UIAlertAction(title: CancelButtonTitle, style: UIAlertActionStyle.Cancel) { (action) -> Void in
-            deferred.fill(Result(failure: LoginDataError(description: "Save password cancelled")))
+            deferred.fill(Maybe(failure: LoginDataError(description: "Save password cancelled")))
         }
         alert.addAction(cancel)
 

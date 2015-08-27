@@ -36,7 +36,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -160,7 +160,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     private func getJS() -> String {
         let fileRoot = NSBundle.mainBundle().pathForResource("FxASignIn", ofType: "js")
-        return NSString(contentsOfFile: fileRoot!, encoding: NSUTF8StringEncoding, error: nil)! as String
+        return (try! NSString(contentsOfFile: fileRoot!, encoding: NSUTF8StringEncoding)) as String
     }
 
     override func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {

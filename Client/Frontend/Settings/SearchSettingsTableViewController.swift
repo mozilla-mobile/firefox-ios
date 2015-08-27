@@ -115,7 +115,7 @@ class SearchSettingsTableViewController: UITableViewController {
             let searchEnginePicker = SearchEnginePicker()
             // Order alphabetically, so that picker is always consistently ordered.
             // Every engine is a valid choice for the default engine, even the current default engine.
-            searchEnginePicker.engines = model.orderedEngines.sorted { e, f in e.shortName < f.shortName }
+            searchEnginePicker.engines = model.orderedEngines.sort { e, f in e.shortName < f.shortName }
             searchEnginePicker.delegate = self
             searchEnginePicker.selectedSearchEngineName = model.defaultEngine.shortName
             navigationController?.pushViewController(searchEnginePicker, animated: true)
@@ -136,7 +136,7 @@ class SearchSettingsTableViewController: UITableViewController {
     // Hide a thin vertical line that iOS renders between the accessoryView and the reordering control.
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if cell.editing {
-            for v in cell.subviews as! [UIView] {
+            for v in cell.subviews {
                 if v.frame.width == 1.0 {
                     v.backgroundColor = UIColor.clearColor()
                 }

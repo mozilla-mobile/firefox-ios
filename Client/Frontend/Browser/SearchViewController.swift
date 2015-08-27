@@ -81,7 +81,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
@@ -426,9 +426,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                     // Engine does not support search suggestions. Do nothing.
                     break
                 case SearchSuggestClientErrorInvalidResponse where isSuggestClientError:
-                    println("Error: Invalid search suggestion data")
+                    print("Error: Invalid search suggestion data")
                 default:
-                    println("Error: \(error.description)")
+                    print("Error: \(error.description)")
                 }
             } else {
                 self.suggestionCell.suggestions = suggestions!
@@ -548,7 +548,7 @@ private extension String {
  * UIScrollView that prevents buttons from interfering with scroll.
  */
 private class ButtonScrollView: UIScrollView {
-    private override func touchesShouldCancelInContentView(view: UIView!) -> Bool {
+    private override func touchesShouldCancelInContentView(view: UIView) -> Bool {
         return true
     }
 }
@@ -579,7 +579,7 @@ private class SuggestionCell: UITableViewCell {
         contentView.addSubview(container)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -699,7 +699,7 @@ private class SuggestionButton: InsetButton {
         accessibilityHint = NSLocalizedString("Searches for the suggestion", comment: "Accessibility hint describing the action performed when a search suggestion is clicked")
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 

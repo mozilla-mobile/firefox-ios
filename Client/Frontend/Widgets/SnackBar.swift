@@ -47,7 +47,7 @@ class SnackButton : UIButton {
         super.init(frame: frame)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -138,7 +138,7 @@ class SnackBar: UIView {
         textLabel.backgroundColor = UIColor.clearColor()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -170,7 +170,7 @@ class SnackBar: UIView {
     /**
      * Called to check if the snackbar should be removed or not. By default, Snackbars persist forever.
      * Override this class or use a class like CountdownSnackbar if you want things expire
-     * :returns: true if the snackbar should be kept alive
+     * - returns: true if the snackbar should be kept alive
      */
     func shouldPersist(browser: Browser) -> Bool {
         return true
@@ -275,7 +275,7 @@ class TimerSnackBar: SnackBar {
         super.init(frame: frame)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 

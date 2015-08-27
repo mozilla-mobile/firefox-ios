@@ -154,7 +154,13 @@ class SearchEngines {
         }
 
         let index = searchDirectory.stringByAppendingPathComponent("list.txt")
-        let listFile = String(contentsOfFile: index, encoding: NSUTF8StringEncoding, error: &error)
+        let listFile: String?
+        do {
+            listFile = try String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
+        } catch var error1 as NSError {
+            error = error1
+            listFile = nil
+        }
         let engineNames = listFile!
             .stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
             .componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
@@ -178,9 +184,9 @@ class SearchEngines {
         }
 
         let defaultEngineFile = searchDirectory.stringByAppendingPathComponent("default.txt")
-        let defaultEngineName = String(contentsOfFile: defaultEngineFile, encoding: NSUTF8StringEncoding, error: nil)?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        let defaultEngineName = String(contentsOfFile: defaultEngineFile, encoding: NSUTF8StringEncoding)?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
 
-        return engines.sorted({ e, _ in e.shortName == defaultEngineName })
+        return engines.sort({ e, _ in e.shortName == defaultEngineName })
     }
 
     // Get all known search engines, possibly as ordered by the user.

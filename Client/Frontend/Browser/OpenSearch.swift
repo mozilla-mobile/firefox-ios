@@ -76,7 +76,7 @@ class OpenSearchParser {
         let data = NSData(contentsOfFile: file)
 
         if data == nil {
-            println("Invalid search file")
+            print("Invalid search file")
             return nil
         }
 
@@ -84,32 +84,32 @@ class OpenSearchParser {
         let docIndexer: XMLIndexer! = SWXMLHash.parse(data!)[rootName][0]
 
         if docIndexer.element == nil {
-            println("Invalid XML document")
+            print("Invalid XML document")
             return nil
         }
 
         let shortNameIndexer = docIndexer["ShortName"]
         if shortNameIndexer.all.count != 1 {
-            println("ShortName must appear exactly once")
+            print("ShortName must appear exactly once")
             return nil
         }
 
         let shortName = shortNameIndexer.element?.text
         if shortName == nil {
-            println("ShortName must contain text")
+            print("ShortName must contain text")
             return nil
         }
 
         let descriptionIndexer = docIndexer["Description"]
         if !pluginMode && descriptionIndexer.all.count != 1 {
-            println("Description must appear exactly once")
+            print("Description must appear exactly once")
             return nil
         }
         let description = descriptionIndexer.element?.text
 
         var urlIndexers = docIndexer["Url"].all
         if urlIndexers.isEmpty {
-            println("Url must appear at least once")
+            print("Url must appear at least once")
             return nil
         }
 
@@ -165,7 +165,7 @@ class OpenSearchParser {
         }
 
         if searchTemplate == nil {
-            println("Search engine must have a text/html type")
+            print("Search engine must have a text/html type")
             return nil
         }
 
@@ -201,7 +201,7 @@ class OpenSearchParser {
                image = UIImage(data: imageData) {
             uiImage = image
         } else {
-            println("Error: Invalid search image data")
+            print("Error: Invalid search image data")
         }
 
         return OpenSearchEngine(shortName: shortName!, description: description, image: uiImage, searchTemplate: searchTemplate, suggestTemplate: suggestTemplate)

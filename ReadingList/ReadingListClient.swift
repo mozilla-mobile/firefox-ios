@@ -191,7 +191,11 @@ class ReadingListClient {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         if let json: AnyObject = json {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.HTTPBody = NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted, error: nil) // TODO Handle errors here
+            do {
+                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
+            } catch _ {
+                request.HTTPBody = nil
+            } // TODO Handle errors here
         }
         return request
     }

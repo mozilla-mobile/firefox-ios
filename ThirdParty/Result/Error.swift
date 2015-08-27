@@ -8,5 +8,5 @@
 
 import Foundation
 
-public protocol ErrorType: Printable {
+public protocol MaybeErrorType: CustomStringConvertible {
 }

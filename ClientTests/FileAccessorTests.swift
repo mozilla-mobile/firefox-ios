@@ -11,7 +11,7 @@ class FileAccessorTests: XCTestCase {
     private var files: FileAccessor!
 
     override func setUp() {
-        let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0] as! String
+        let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0]
         files = FileAccessor(rootPath: docPath.stringByAppendingPathComponent("filetest"))
 
         testDir = files.getAndEnsureDirectory()
@@ -50,7 +50,13 @@ class FileAccessorTests: XCTestCase {
 
     private func createFile(filename: String) {
         let path = testDir.stringByAppendingPathComponent(filename)
-        let success = "foo".writeToFile(path, atomically: false, encoding: NSUTF8StringEncoding)
+        let success: Bool
+        do {
+            try "foo".writeToFile(path, atomically: false, encoding: NSUTF8StringEncoding)
+            success = true
+        } catch _ {
+            success = false
+        }
         XCTAssertTrue(success, "Wrote to \(path)")
     }
 }

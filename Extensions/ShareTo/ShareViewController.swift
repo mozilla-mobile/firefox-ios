@@ -78,7 +78,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         // Setup the NavigationBar
 
         navBar = UINavigationBar()
-        navBar.setTranslatesAutoresizingMaskIntoConstraints(false)
+        navBar.translatesAutoresizingMaskIntoConstraints = false
         navBar.tintColor = ShareDialogControllerUX.NavigationBarTintColor
         navBar.translucent = false
         self.view.addSubview(navBar)
@@ -102,7 +102,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         // Setup the title view
 
         let titleView = UILabel()
-        titleView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        titleView.translatesAutoresizingMaskIntoConstraints = false
         titleView.numberOfLines = ShareDialogControllerUX.ItemTitleMaxNumberOfLines
         titleView.lineBreakMode = NSLineBreakMode.ByTruncatingTail
         titleView.text = item.title
@@ -112,7 +112,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         // Setup the link view
 
         let linkView = UILabel()
-        linkView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        linkView.translatesAutoresizingMaskIntoConstraints = false
         linkView.numberOfLines = ShareDialogControllerUX.ItemLinkMaxNumberOfLines
         linkView.lineBreakMode = NSLineBreakMode.ByTruncatingTail
         linkView.text = item.url
@@ -122,21 +122,21 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         // Setup the icon
 
         let iconView = UIImageView()
-        iconView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        iconView.translatesAutoresizingMaskIntoConstraints = false
         iconView.image = UIImage(named: "defaultFavicon")
         view.addSubview(iconView)
 
         // Setup the divider
 
         let dividerView = UIView()
-        dividerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        dividerView.translatesAutoresizingMaskIntoConstraints = false
         dividerView.backgroundColor = ShareDialogControllerUX.DividerColor
         view.addSubview(dividerView)
 
         // Setup the table with destinations
 
         let tableView = UITableView()
-        tableView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.userInteractionEnabled = true
@@ -179,7 +179,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         ]
 
         for constraint in constraints {
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(constraint, options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(constraint, options: NSLayoutFormatOptions(), metrics: nil, views: views))
         }
     }
 

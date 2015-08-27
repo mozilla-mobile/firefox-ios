@@ -31,8 +31,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
 
-        // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
-        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: AVAudioSessionCategoryOptions.MixWithOthers, error: nil)
+        do {
+            // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: AVAudioSessionCategoryOptions.MixWithOthers)
+        } catch _ {
+        }
 
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
@@ -96,7 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) {
             if components.scheme != "firefox" && components.scheme != "firefox-x-callback" {
                 return false
@@ -181,10 +184,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     break
                 }
             } else {
-                println("ERROR: Unknown notification action received")
+                print("ERROR: Unknown notification action received")
             }
         } else {
-            println("ERROR: Unknown notification received")
+            print("ERROR: Unknown notification received")
         }
     }
 
@@ -240,7 +243,7 @@ func configureActiveCrashReporter(optedIn: Bool?) {
     }
 }
 
-public func configureCrashReporter(reporter: CrashReporter, #optedIn: Bool?) {
+public func configureCrashReporter(reporter: CrashReporter, optedIn: Bool?) {
     let configureReporter: () -> () = {
         let addUploadParameterForKey: String -> Void = { key in
             if let value = NSBundle.mainBundle().objectForInfoDictionaryKey(key) as? String {

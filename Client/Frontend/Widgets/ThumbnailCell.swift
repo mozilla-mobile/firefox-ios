@@ -182,7 +182,7 @@ class ThumbnailCell: UICollectionViewCell {
         textLabel.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -221,7 +221,7 @@ class ThumbnailCell: UICollectionViewCell {
             delay: 0,
             usingSpringWithDamping: ThumbnailCellUX.RemoveButtonAnimationDamping,
             initialSpringVelocity: 0,
-            options: UIViewAnimationOptions.AllowUserInteraction |  UIViewAnimationOptions.CurveEaseInOut,
+            options: [UIViewAnimationOptions.AllowUserInteraction, UIViewAnimationOptions.CurveEaseInOut],
             animations: {
                 self.removeButton.transform = show ? CGAffineTransformIdentity : scaleTransform
             }, completion: { _ in

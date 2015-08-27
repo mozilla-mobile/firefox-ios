@@ -152,7 +152,7 @@ public class FirefoxAccount {
         return nil
     }
 
-    public enum AccountError: Printable, ErrorType {
+    public enum AccountError: CustomStringConvertible, MaybeErrorType {
         case NotMarried
 
         public var description: String {
@@ -198,14 +198,14 @@ public class FirefoxAccount {
         return deferred
     }
 
-    public func marriedState() -> Deferred<Result<MarriedState>> {
+    public func marriedState() -> Deferred<Maybe<MarriedState>> {
         return advance().map { newState in
             if newState.label == FxAStateLabel.Married {
                 if let married = newState as? MarriedState {
-                    return Result(success: married)
+                    return Maybe(success: married)
                 }
             }
-            return Result(failure: AccountError.NotMarried)
+            return Maybe(failure: AccountError.NotMarried)
         }
     }
 

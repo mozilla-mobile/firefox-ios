@@ -11,7 +11,7 @@ protocol BrowserLocationViewDelegate {
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView)
     func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView)
     func browserLocationViewDidTapReaderMode(browserLocationView: BrowserLocationView)
-    /// :returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
+    /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     func browserLocationViewDidLongPressReaderMode(browserLocationView: BrowserLocationView) -> Bool
     func browserLocationViewLocationAccessibilityActions(browserLocationView: BrowserLocationView) -> [UIAccessibilityCustomAction]?
 }
@@ -141,7 +141,7 @@ class BrowserLocationView: UIView {
         }
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -233,7 +233,7 @@ private class ReaderModeButton: UIButton {
         setImage(UIImage(named: "reader_active.png"), forState: UIControlState.Selected)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -263,7 +263,7 @@ private class ReaderModeButton: UIButton {
 private class DisplayTextField: UITextField {
     weak var accessibilityActionsSource: AccessibilityActionsSource?
 
-    override var accessibilityCustomActions: [AnyObject]! {
+    override var accessibilityCustomActions: [UIAccessibilityCustomAction]? {
         get {
             return accessibilityActionsSource?.accessibilityCustomActionsForView(self)
         }

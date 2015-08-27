@@ -16,8 +16,8 @@ class WindowCloseHelper: BrowserHelper {
     required init(browser: Browser) {
         self.browser = browser
         if let path = NSBundle.mainBundle().pathForResource("WindowCloseHelper", ofType: "js") {
-            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) as? String {
-                var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as? String {
+                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
                 browser.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }

@@ -47,89 +47,89 @@ class ReadingListSQLStorage: ReadingListStorage {
         }
     }
 
-    func getAllRecords() -> Result<[ReadingListClientRecord]> {
-        return Result(success: Array(db["items"]).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+    func getAllRecords() -> Maybe<[ReadingListClientRecord]> {
+        return Maybe(success: Array(db["items"]).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
     }
 
-    func getNewRecords() -> Result<[ReadingListClientRecord]> {
-        return Result(success: Array(db["items"].filter(ItemColumns.Id == nil)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+    func getNewRecords() -> Maybe<[ReadingListClientRecord]> {
+        return Maybe(success: Array(db["items"].filter(ItemColumns.Id == nil)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
     }
 
-    func getUnreadRecords() -> Result<[ReadingListClientRecord]> {
-        return Result(success: Array(db["items"].filter(ItemColumns.Unread == true)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+    func getUnreadRecords() -> Maybe<[ReadingListClientRecord]> {
+        return Maybe(success: Array(db["items"].filter(ItemColumns.Unread == true)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
     }
 
-    func getAvailableRecords() -> Result<[ReadingListClientRecord]> {
-        return Result(success: Array(db["items"].order(ItemColumns.ClientLastModified.desc)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
+    func getAvailableRecords() -> Maybe<[ReadingListClientRecord]> {
+        return Maybe(success: Array(db["items"].order(ItemColumns.ClientLastModified.desc)).map {ReadingListClientRecord(row: self.rowToDictionary($0))!})
     }
 
-    func deleteRecord(record: ReadingListClientRecord) -> Result<Void> {
+    func deleteRecord(record: ReadingListClientRecord) -> Maybe<Void> {
         let items = db["items"]
         println("Trying to delete record with id \(record.clientMetadata.id)")
         let query = items.filter(ItemColumns.ClientId == record.clientMetadata.id)
         if query.delete() > 0 {
-            return Result(success: Void())
+            return Maybe(success: Void())
         }
-        return Result(failure: ReadingListStorageError("Failed to delete"))
+        return Maybe(failure: ReadingListStorageError("Failed to delete"))
     }
 
-    func deleteAllRecords() -> Result<Void> {
+    func deleteAllRecords() -> Maybe<Void> {
         let items = db["items"]
         if items.delete() >= 0 {
-            return Result(success: Void())
+            return Maybe(success: Void())
         }
-        return Result(failure: ReadingListStorageError("Failed to delete"))
+        return Maybe(failure: ReadingListStorageError("Failed to delete"))
     }
 
-    func createRecordWithURL(url: String, title: String, addedBy: String) -> Result<ReadingListClientRecord> {
+    func createRecordWithURL(url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
         let items = db["items"]
         let (id, statement) = items.insert(ItemColumns.ClientLastModified <- ReadingListNow(), ItemColumns.Url <- url, ItemColumns.Title <- title, ItemColumns.AddedBy <- addedBy)
         if let id = id {
             if let item = items.filter(ItemColumns.ClientId == id).first {
                 if let record = ReadingListClientRecord(row: rowToDictionary(item)) {
-                    return Result(success: record)
+                    return Maybe(success: record)
                 } else {
-                    return Result(failure: ReadingListStorageError("Can't create RLCR from row"))
+                    return Maybe(failure: ReadingListStorageError("Can't create RLCR from row"))
                 }
             } else {
-                return Result(failure: ReadingListStorageError("Can't get first item from results"))
+                return Maybe(failure: ReadingListStorageError("Can't get first item from results"))
             }
         } else {
             if let reason = statement.reason {
-                return Result(failure: ReadingListStorageError("Can't insert: \(reason)"))
+                return Maybe(failure: ReadingListStorageError("Can't insert: \(reason)"))
             }
-            return Result(failure: ReadingListStorageError("Can't insert"))
+            return Maybe(failure: ReadingListStorageError("Can't insert"))
         }
     }
 
-    func getRecordWithURL(url: String) -> Result<ReadingListClientRecord?> {
+    func getRecordWithURL(url: String) -> Maybe<ReadingListClientRecord?> {
         let items = db["items"]
         if let item = items.filter(ItemColumns.Url == url).first {
             if let record = ReadingListClientRecord(row: rowToDictionary(item)) {
-                return Result(success: record)
+                return Maybe(success: record)
             } else {
-                return Result(failure: ReadingListStorageError("Can't create RLCR from row"))
+                return Maybe(failure: ReadingListStorageError("Can't create RLCR from row"))
             }
         } else {
-            return Result(success: nil)
+            return Maybe(success: nil)
         }
     }
 
-    func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Result<ReadingListClientRecord?> {
+    func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
         let items = db["items"]
         let query = items.filter(ItemColumns.ClientId == record.clientMetadata.id)
         if query.update(ItemColumns.Unread <- unread) > 0 {
             if let item = items.filter(ItemColumns.ClientId == record.clientMetadata.id).first {
                 if let record = ReadingListClientRecord(row: rowToDictionary(item)) {
-                    return Result(success: record)
+                    return Maybe(success: record)
                 } else {
-                    return Result(failure: ReadingListStorageError("Can't create RLCR from row"))
+                    return Maybe(failure: ReadingListStorageError("Can't create RLCR from row"))
                 }
             } else {
-                return Result(success: nil)
+                return Maybe(success: nil)
             }
         }
-        return Result(success: nil)
+        return Maybe(success: nil)
     }
 
     private func rowToDictionary(row: Row) -> AnyObject {

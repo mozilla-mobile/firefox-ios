@@ -29,7 +29,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private var previousSuggestion = ""
     private var notifyTextChanged: (() -> ())? = nil
 
-    override var text: String! {
+    override var text: String? {
         didSet {
             // SELtextDidChange is not called when directly setting the text property, so fire it manually.
             SELtextDidChange(self)
@@ -41,7 +41,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         commonInit()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
     }
@@ -59,7 +59,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     func highlightAll() {
         if !text.isEmpty {
             let attributedString = NSMutableAttributedString(string: text)
-            attributedString.addAttribute(NSBackgroundColorAttributeName, value: AutocompleteTextFieldUX.HighlightColor, range: NSMakeRange(0, count(text)))
+            attributedString.addAttribute(NSBackgroundColorAttributeName, value: AutocompleteTextFieldUX.HighlightColor, range: NSMakeRange(0, (text).characters.count))
             attributedText = attributedString
 
             enteredText = ""
@@ -87,7 +87,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     private func removeCompletion() {
         if completionActive {
             // Workaround for stuck highlight bug.
-            if count(enteredText) == 0 {
+            if enteredText.characters.count == 0 {
                 attributedText = NSAttributedString(string: " ")
             }
 
@@ -131,7 +131,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             // Check that the length of the entered text is shorter than the length of the suggestion.
             // This ensures that completionActive is true only if there are remaining characters to
             // suggest (which will suppress the caret).
-            if suggestion.startsWith(enteredText) && count(enteredText) < count(suggestion) {
+            if suggestion.startsWith(enteredText) && (enteredText).characters.count < suggestion.characters.count {
                 let endingString = suggestion.substringFromIndex(advance(suggestion.startIndex, count(enteredText)))
                 let completedAndMarkedString = NSMutableAttributedString(string: suggestion)
                 completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: AutocompleteTextFieldUX.HighlightColor, range: NSMakeRange(count(enteredText), count(endingString)))
@@ -162,7 +162,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         return autocompleteDelegate?.autocompleteTextFieldShouldClear(self) ?? true
     }
 
-    override func setMarkedText(markedText: String!, selectedRange: NSRange) {
+    override func setMarkedText(markedText: String?, selectedRange: NSRange) {
         // Clear the autocompletion if any provisionally inserted text has been
         // entered (e.g., a partial composition from a Japanese keyboard).
         removeCompletion()
@@ -187,23 +187,23 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         super.deleteBackward()
     }
 
-    override func caretRectForPosition(position: UITextPosition!) -> CGRect {
+    override func caretRectForPosition(position: UITextPosition) -> CGRect {
         return completionActive ? CGRectZero : super.caretRectForPosition(position)
     }
 
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if !completionActive {
             super.touchesBegan(touches, withEvent: event)
         }
     }
 
-    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if !completionActive {
             super.touchesMoved(touches, withEvent: event)
         }
     }
 
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         if !completionActive {
             super.touchesEnded(touches, withEvent: event)
         } else {

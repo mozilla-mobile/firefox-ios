@@ -41,7 +41,7 @@ class TabManager : NSObject {
     func removeDelegate(delegate: TabManagerDelegate) {
         assert(NSThread.isMainThread())
         for var i = 0; i < delegates.count; i++ {
-            var del = delegates[i]
+            let del = delegates[i]
             if delegate === del.get() {
                 delegates.removeAtIndex(i)
                 return
@@ -148,7 +148,7 @@ class TabManager : NSObject {
 
     // This method is duplicated to hide the flushToDisk option from consumers.
     func addTab(var request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Browser {
-        return self.addTab(request: request, configuration: configuration, flushToDisk: true, zombie: false)
+        return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false)
     }
 
     func addTabsForURLs(urls: [NSURL], zombie: Bool) {
@@ -158,7 +158,7 @@ class TabManager : NSObject {
 
         var tab: Browser!
         for (let url) in urls {
-            tab = self.addTab(request: NSURLRequest(URL: url), flushToDisk: false, zombie: zombie, restoring: true)
+            tab = self.addTab(NSURLRequest(URL: url), flushToDisk: false, zombie: zombie, restoring: true)
         }
 
         // Flush.
@@ -236,7 +236,7 @@ class TabManager : NSObject {
         assert(count == prevCount - 1, "Tab removed")
 
         if tab != selectedTab {
-            _selectedIndex = selectedTab == nil ? -1 : find(tabs, selectedTab!) ?? 0
+            _selectedIndex = selectedTab == nil ? -1 : tabs.indexOf(selectedTab!) ?? 0
         }
 
         // There's still some time between this and the webView being destroyed.
@@ -329,7 +329,7 @@ extension TabManager {
             }
         }
 
-        required init(coder: NSCoder) {
+        required init?(coder: NSCoder) {
             self.sessionData = coder.decodeObjectForKey("sessionData") as? SessionData
             self.screenshotUUID = coder.decodeObjectForKey("screenshotUUID") as? NSUUID
             self.isSelected = coder.decodeBoolForKey("isSelected")
@@ -355,7 +355,7 @@ extension TabManager {
         if let path = tabsStateArchivePath() {
             var savedTabs = [SavedTab]()
             var savedUUIDs = Set<String>()
-            for (tabIndex, tab) in enumerate(tabs) {
+            for (tabIndex, tab) in tabs.enumerate() {
                 if let savedTab = SavedTab(browser: tab, isSelected: tabIndex == selectedIndex) {
                     savedTabs.append(savedTab)
 
@@ -382,11 +382,11 @@ extension TabManager {
     func preserveTabs() {
         // This is wrapped in an Objective-C @try/@catch handler because NSKeyedArchiver may throw exceptions which Swift cannot handle
         Try(
-            try: { () -> Void in
+            `withTry`: { () -> Void in
                 self.preserveTabsInternal()
             },
-            catch: { exception in
-                println("Failed to preserve tabs: \(exception)")
+            `catch`: { exception in
+                print("Failed to preserve tabs: \(exception)")
             }
         )
     }
@@ -399,7 +399,7 @@ extension TabManager {
                     if let savedTabs = unarchiver.decodeObjectForKey("tabs") as? [SavedTab] {
                         var tabToSelect: Browser?
 
-                        for (tabIndex, savedTab) in enumerate(savedTabs) {
+                        for (tabIndex, savedTab) in savedTabs.enumerate() {
                             let tab = self.addTab(flushToDisk: false, zombie: true, restoring: true)
 
                             // Set the UUID for the tab, asynchronously fetch the UIImage, then store
@@ -445,11 +445,11 @@ extension TabManager {
     func restoreTabs() {
         // This is wrapped in an Objective-C @try/@catch handler because NSKeyedUnarchiver may throw exceptions which Swift cannot handle
         Try(
-            try: { () -> Void in
+            `withTry`: { () -> Void in
                 self.restoreTabsInternal()
             },
-            catch: { exception in
-                println("Failed to restore tabs: \(exception)")
+            `catch`: { exception in
+                print("Failed to restore tabs: \(exception)")
             }
         )
     }
@@ -524,7 +524,7 @@ class TabManagerNavDelegate : NSObject, WKNavigationDelegate {
 
     func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge,
         completionHandler: (NSURLSessionAuthChallengeDisposition,
-        NSURLCredential!) -> Void) {
+        NSURLCredential?) -> Void) {
             var disp: NSURLSessionAuthChallengeDisposition? = nil
             for delegate in delegates {
                 delegate.webView?(webView, didReceiveAuthenticationChallenge: challenge) { (disposition, credential) in

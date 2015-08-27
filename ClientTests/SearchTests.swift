@@ -18,10 +18,10 @@ class SearchTests: XCTestCase {
         XCTAssertNil(engine.description)
 
         // Test regular search queries.
-        XCTAssertEqual(engine.searchURLForQuery("foobar")!.absoluteString!, "https://www.google.com/search?q=foobar&ie=utf-8&oe=utf-8")
+        XCTAssertEqual(engine.searchURLForQuery("foobar")!.absoluteString, "https://www.google.com/search?q=foobar&ie=utf-8&oe=utf-8")
 
         // Test search suggestion queries.
-        XCTAssertEqual(engine.suggestURLForQuery("foobar")!.absoluteString!, "https://www.google.com/complete/search?client=firefox&q=foobar")
+        XCTAssertEqual(engine.suggestURLForQuery("foobar")!.absoluteString, "https://www.google.com/complete/search?client=firefox&q=foobar")
     }
 
     func testURIFixup() {
@@ -45,7 +45,7 @@ class SearchTests: XCTestCase {
     }
 
     private func checkValidURL(beforeFixup: String, afterFixup: String) {
-        XCTAssertEqual(uriFixup.getURL(beforeFixup)!.absoluteString!, afterFixup)
+        XCTAssertEqual(uriFixup.getURL(beforeFixup)!.absoluteString, afterFixup)
     }
 
     private func checkInvalidURL(beforeFixup: String) {

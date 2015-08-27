@@ -12,7 +12,7 @@ class TrayToBrowserAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         }
     }
 
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
+    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
         return 0.4
     }
 }
@@ -96,7 +96,7 @@ class BrowserToTrayAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         }
     }
 
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
+    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
         return 0.4
     }
 }
@@ -248,7 +248,7 @@ private func shouldDisplayFooterForBVC(bvc: BrowserViewController) -> Bool {
     return bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) && !AboutUtils.isAboutURL(bvc.tabManager.selectedTab?.url)
 }
 
-private func toggleWebViewVisibility(#show: Bool, usingTabManager tabManager: TabManager) {
+private func toggleWebViewVisibility(show show: Bool, usingTabManager tabManager: TabManager) {
     for i in 0..<tabManager.count {
         if let tab = tabManager[i] {
             tab.webView?.hidden = !show
@@ -260,6 +260,18 @@ private func resetTransformsForViews(views: [UIView?]) {
     for view in views {
         // Reset back to origin
         view?.transform = CGAffineTransformIdentity
+    }
+}
+
+private func transformToolbarsToFrame(toolbars: [UIView?], toRect endRect: CGRect) {
+    for toolbar in toolbars {
+        // Reset back to origin
+        toolbar?.transform = CGAffineTransformIdentity
+
+        // Transform from origin to where we want them to end up
+        if let toolbarFrame = toolbar?.frame {
+            toolbar?.transform = CGAffineTransformMakeRectToRect(toolbarFrame, toFrame: endRect)
+        }
     }
 }
 

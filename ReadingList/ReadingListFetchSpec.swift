@@ -13,7 +13,7 @@ class ReadingListFetchSpec {
         self.queryString = queryString
     }
 
-    func getURL(#serviceURL: NSURL) -> NSURL? {
+    func getURL(serviceURL serviceURL: NSURL) -> NSURL? {
         if let components = NSURLComponents(URL: serviceURL, resolvingAgainstBaseURL: true) {
             components.query = queryString
             return components.URL
@@ -21,7 +21,7 @@ class ReadingListFetchSpec {
         return nil
     }
 
-    func getURL(#serviceURL: NSURL, path: String) -> NSURL? {
+    func getURL(serviceURL serviceURL: NSURL, path: String) -> NSURL? {
         if let components = NSURLComponents(URL: serviceURL, resolvingAgainstBaseURL: true) {
             components.path = path
             components.query = queryString

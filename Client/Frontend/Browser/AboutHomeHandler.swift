@@ -17,7 +17,7 @@ struct AboutLicenseHandler {
     static func register(webServer: WebServer) {
         webServer.registerHandlerForMethod("GET", module: "about", resource: "license") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
             let path = NSBundle.mainBundle().pathForResource("Licenses", ofType: "html")
-            if let html = NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: nil) as? String {
+            if let html = NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding) as? String {
                 return GCDWebServerDataResponse(HTML: html)
             }
             return GCDWebServerResponse(statusCode: 200)

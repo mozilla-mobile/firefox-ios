@@ -43,16 +43,16 @@ public class HawkHelper {
             s.appendString(value)
             s.appendString("\", ")
         }
-        append("id", id)
-        append("ts", timestampString)
-        append("nonce", nonce)
+        append("id", value: id)
+        append("ts", value: timestampString)
+        append("nonce", value: nonce)
         if !hashString.isEmpty {
-            append("hash", hashString)
+            append("hash", value: hashString)
         }
         if !extra.isEmpty {
-            append("ext", HawkHelper.escapeExtraHeaderAttribute(extra))
+            append("ext", value: HawkHelper.escapeExtraHeaderAttribute(extra))
         }
-        append("mac", macString)
+        append("mac", value: macString)
         // Drop the trailing "\",".
         return s.substringToIndex(s.length - 2)
     }
@@ -85,7 +85,7 @@ public class HawkHelper {
         if let port = url.port {
             append(port.stringValue)
         } else {
-            if url.scheme?.lowercaseString == "https" {
+            if url.scheme.lowercaseString == "https" {
                 append("443")
             } else {
                 append("80")
@@ -120,7 +120,7 @@ public class HawkHelper {
 
     class func getBaseContentTypeFor(contentType: String?) -> String {
         if let contentType = contentType {
-            if let index = find(contentType, ";") {
+            if let index = contentType.characters.indexOf(";") {
                 return contentType.substringToIndex(index).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             } else {
                 return contentType.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
