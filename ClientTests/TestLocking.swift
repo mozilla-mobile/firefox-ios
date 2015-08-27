@@ -10,7 +10,6 @@ class TestLocking: XCTestCase {
     func testReadLock() {
         let lock = Lock(name: "MyLock")
         var reading = false
-        var writing = false
         var passed = false
 
         let expectation = expectationWithDescription("main thread")
