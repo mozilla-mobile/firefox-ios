@@ -293,7 +293,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     private func reloadSearchEngines() {
-        searchEngineScrollViewContent.subviews.map({ $0.removeFromSuperview() })
+        searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
         var leftEdge = searchEngineScrollViewContent.snp_left
 
         //search settings icon

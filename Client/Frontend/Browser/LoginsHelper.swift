@@ -86,20 +86,11 @@ class LoginsHelper: BrowserHelper {
         }
 
         var attributes = [String: AnyObject]()
-        if #available(iOS 8.2, *) {
-            attributes[NSFontAttributeName] = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
-        } else {
-            attributes[NSFontAttributeName] = UIFont.systemFontOfSize(13)
-        }
+        attributes[NSFontAttributeName] = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
         attributes[NSForegroundColorAttributeName] = UIColor.darkGrayColor()
         let attr = NSMutableAttributedString(string: string, attributes: attributes)
+        let font: UIFont = UIFont.systemFontOfSize(13, weight: UIFontWeightMedium)
         for (_, range) in ranges.enumerate() {
-            let font: UIFont
-            if #available(iOS 8.2, *) {
-                font = UIFont.systemFontOfSize(13, weight: UIFontWeightMedium)
-            } else {
-                font = UIFont.systemFontOfSize(13)
-            }
             attr.addAttribute(NSFontAttributeName, value: font, range: range)
         }
         return attr
@@ -209,7 +200,7 @@ class LoginsHelper: BrowserHelper {
                 log.debug("Found \(cursor.count) logins.")
                 jsonObj["requestId"] = requestId
                 jsonObj["name"] = "RemoteLogins:loginsFound"
-                jsonObj["logins"] = map(cursor, { $0!.toDict() })
+                jsonObj["logins"] = cursor.map { $0!.toDict() }
             }
 
             let json = JSON(jsonObj)
