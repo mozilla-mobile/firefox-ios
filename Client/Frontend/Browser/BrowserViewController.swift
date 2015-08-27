@@ -1074,7 +1074,7 @@ extension BrowserViewController: BrowserDelegate {
     }
 
     private func adjustFooterSize(top: UIView? = nil) {
-        snackBars.snp_remakeConstraints(closure: { make in
+        snackBars.snp_remakeConstraints { make in
             let bars = self.snackBars.subviews
             // if the keyboard is showing then ensure that the snackbars are positioned above it, otherwise position them above the toolbar/view bottom
             if bars.count > 0 {
@@ -1098,7 +1098,7 @@ extension BrowserViewController: BrowserDelegate {
                 self.snackBars.layer.borderColor = UIConstants.BorderColor.CGColor
                 self.snackBars.layer.borderWidth = 1
             }
-        })
+        }
     }
 
     // This removes the bar from its superview and updates constraints appropriately
@@ -1129,7 +1129,7 @@ extension BrowserViewController: BrowserDelegate {
 
     private func finishAddingBar(bar: SnackBar) {
         snackBars.addSubview(bar)
-        bar.snp_remakeConstraints(closure: { make in
+        bar.snp_remakeConstraints { make in
             // If there are already bars showing, add this on top of them
             let bars = self.snackBars.subviews
 
@@ -1142,7 +1142,7 @@ extension BrowserViewController: BrowserDelegate {
                 bar.bottom = make.bottom.equalTo(self.snackBars.snp_bottom).offset(0).constraint
             }
             make.leading.trailing.equalTo(self.snackBars)
-        })
+        }
     }
 
     func showBar(bar: SnackBar, animated: Bool) {

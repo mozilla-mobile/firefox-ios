@@ -87,11 +87,11 @@ class ClientPickerViewController: UITableViewController {
                 textLabel.font = ClientPickerViewControllerUX.TableHeaderTextFont
                 textLabel.text = NSLocalizedString("Available devices:", tableName: "SendTo", comment: "Header for the list of devices table")
                 textLabel.textColor = ClientPickerViewControllerUX.TableHeaderTextColor
-                textLabel.snp_makeConstraints(closure: { (make) -> Void in
+                textLabel.snp_makeConstraints { make in
                     make.left.equalTo(ClientPickerViewControllerUX.TableHeaderTextPaddingLeft)
                     make.centerY.equalTo(cell.snp_centerY)
                     make.right.equalTo(cell.snp_right)
-                })
+                }
 
                 cell.accessoryType = UITableViewCellAccessoryType.None
                 cell.preservesSuperviewLayoutMargins = false
@@ -104,11 +104,11 @@ class ClientPickerViewController: UITableViewController {
                 textLabel.text = clients[indexPath.row].name
                 textLabel.numberOfLines = 2
                 textLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
-                textLabel.snp_makeConstraints(closure: { (make) -> Void in
+                textLabel.snp_makeConstraints { make in
                     make.left.equalTo(ClientPickerViewControllerUX.DeviceRowTextPaddingLeft)
                     make.centerY.equalTo(cell.snp_centerY)
                     make.right.equalTo(cell.snp_right).offset(-ClientPickerViewControllerUX.DeviceRowTextPaddingRight)
-                })
+                }
 
                 cell.imageView?.image = UIImage(named: clients[indexPath.row].type == "mobile" ? "deviceTypeMobile" : "deviceTypeDesktop")
 

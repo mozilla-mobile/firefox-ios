@@ -366,19 +366,19 @@ class RemoteTabsErrorCell: UITableViewCell {
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
         instructionsLabel.numberOfLines = 0
         containerView.addSubview(instructionsLabel)
-        instructionsLabel.snp_makeConstraints(closure: { (make) -> Void in
+        instructionsLabel.snp_makeConstraints { make in
             make.top.equalTo(imageView.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(containerView)
             make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
-        })
+        }
 
-        containerView.snp_makeConstraints(closure: { (make) -> Void in
+        containerView.snp_makeConstraints { make in
             // Let the container wrap around the content
             make.top.equalTo(imageView.snp_top)
             make.left.bottom.right.equalTo(instructionsLabel)
             // And then center it in the overlay view that sits on top of the UITableView
             make.center.equalTo(contentView)
-        })
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -444,10 +444,10 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
             make.top.greaterThanOrEqualTo(contentView.snp_top).offset(50).priorityHigh()
         }
 
-        titleLabel.snp_makeConstraints(closure: { (make) -> Void in
+        titleLabel.snp_makeConstraints { make in
             make.top.equalTo(imageView.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(imageView)
-        })
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -462,7 +462,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
 
     override func updateConstraints() {
         if UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation) && !(DeviceInfo.deviceModel().rangeOfString("iPad") != nil) {
-            instructionsLabel.snp_remakeConstraints(closure: { (make) -> Void in
+            instructionsLabel.snp_remakeConstraints { make in
                 make.top.equalTo(titleLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
 
@@ -471,9 +471,9 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
 
                 // Sets proper landscape layout for smaller phones: iPhone 4 & 5.
                 make.right.lessThanOrEqualTo(contentView.snp_centerX).offset(-10).priorityHigh()
-            })
+            }
 
-            signInButton.snp_remakeConstraints { (make) -> Void in
+            signInButton.snp_remakeConstraints { make in
                 make.height.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonHeight)
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonWidth)
                 make.centerY.equalTo(titleLabel.snp_centerY)
@@ -485,13 +485,13 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
                 make.left.greaterThanOrEqualTo(contentView.snp_centerX).offset(10).priorityHigh()
             }
         } else {
-            instructionsLabel.snp_remakeConstraints(closure: { (make) -> Void in
+            instructionsLabel.snp_remakeConstraints { make in
                 make.top.equalTo(titleLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
                 make.centerX.equalTo(contentView)
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
-            })
+            }
 
-            signInButton.snp_remakeConstraints { (make) -> Void in
+            signInButton.snp_remakeConstraints { make in
                 make.centerX.equalTo(contentView)
                 make.top.equalTo(instructionsLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
                 make.height.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonHeight)
