@@ -408,8 +408,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     private func querySuggestClient() {
         suggestClient?.cancelPendingRequest()
 
-        if searchQuery.isEmpty || !searchEngines.shouldShowSearchSuggestions {
+        if searchQuery.isEmpty || !searchEngines.shouldShowSearchSuggestions || searchQuery.looksLikeAURL() {
             suggestionCell.suggestions = []
+            tableView.reloadData()
             return
         }
 
@@ -506,7 +507,7 @@ extension SearchViewController: UITableViewDataSource {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch SearchListSection(rawValue: section)! {
         case .SearchSuggestions:
-            return searchEngines.shouldShowSearchSuggestions ? 1 : 0
+            return searchEngines.shouldShowSearchSuggestions && !searchQuery.looksLikeAURL() ? 1 : 0
         case .BookmarksAndHistory:
             return data.count
         }
@@ -528,6 +529,18 @@ extension SearchViewController: SuggestionCellDelegate {
         if let url = url {
             searchDelegate?.searchViewController(self, didSelectURL: url)
         }
+    }
+}
+
+/**
+ * Private extension containing string operations specific to this view controller
+ */
+private extension String {
+    func looksLikeAURL() -> Bool {
+        // The assumption here is that if the user is typing in a forward slash and there are no spaces
+        // involved, it's going to be a URL. If we type a space, any url would be invalid.
+        // See https://bugzilla.mozilla.org/show_bug.cgi?id=1192155 for additional details.
+        return self.contains("/") && !self.contains(" ")
     }
 }
 
