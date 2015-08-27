@@ -9,11 +9,11 @@ import WebKit
 let LabelAddressAndSearch = "Address and Search"
 
 extension XCTestCase {
-    func tester(_ file: String = __FILE__, _ line: Int = __LINE__) -> KIFUITestActor {
+    func tester(file: String = __FILE__, _ line: Int = __LINE__) -> KIFUITestActor {
         return KIFUITestActor(inFile: file, atLine: line, delegate: self)
     }
 
-    func system(_ file: String = __FILE__, _ line: Int = __LINE__) -> KIFSystemTestActor {
+    func system(file: String = __FILE__, _ line: Int = __LINE__) -> KIFSystemTestActor {
         return KIFSystemTestActor(inFile: file, atLine: line, delegate: self)
     }
 }
@@ -182,8 +182,8 @@ class BrowserUtils {
 
         let historyTable = tester.waitForViewWithAccessibilityIdentifier("History List") as! UITableView
         var index = 0
-        for section in 0 ..< historyTable.numberOfSections {
-            for rowIdx in 0 ..< historyTable.numberOfRowsInSection(0) {
+        for _ in 0 ..< historyTable.numberOfSections {
+            for _ in 0 ..< historyTable.numberOfRowsInSection(0) {
                 clearHistoryItemAtIndex(NSIndexPath(forRow: 0, inSection: 0), tester: tester)
                 if numberOfTests > -1 && ++index == numberOfTests {
                     return
@@ -199,7 +199,7 @@ class BrowserUtils {
 
         var range = NSRange()
         var attribute: AnyObject?
-        let textLength = textField.text.characters.count
+        let textLength = textField.text!.characters.count
 
         attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, atIndex: 0, effectiveRange: &range)
 
@@ -221,9 +221,9 @@ class BrowserUtils {
             return
         }
 
-        let completionStartIndex = advance(textField.text.startIndex, prefixLength)
-        let actualPrefix = textField.text.substringToIndex(completionStartIndex)
-        let actualCompletion = textField.text.substringFromIndex(completionStartIndex)
+        let completionStartIndex = textField.text!.startIndex.advancedBy(prefixLength)
+        let actualPrefix = textField.text!.substringToIndex(completionStartIndex)
+        let actualCompletion = textField.text!.substringFromIndex(completionStartIndex)
 
         XCTAssertEqual(prefix, actualPrefix, "Expected prefix matches actual prefix")
         XCTAssertEqual(completion, actualCompletion, "Expected completion matches actual completion")
@@ -240,7 +240,7 @@ class SimplePageServer {
         let webServer: GCDWebServer = GCDWebServer()
 
         webServer.addHandlerForMethod("GET", path: "/image.png", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-            let img = UIImagePNGRepresentation(UIImage(named: "back"))
+            let img = UIImagePNGRepresentation(UIImage(named: "back")!)
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 

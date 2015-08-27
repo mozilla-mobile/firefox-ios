@@ -144,7 +144,7 @@ class SearchTests: KIFTestCase {
         // Verify that Paste triggers an autocompletion, with the correct highlighted portion.
         let textField = tester().waitForViewWithAccessibilityLabel(LabelAddressAndSearch) as! UITextField
         let expectedString = "\(webRoot)/"
-        let endingString = expectedString.substringFromIndex(advance(expectedString.startIndex, "http".characters.count))
+        let endingString = expectedString.substringFromIndex(expectedString.startIndex.advancedBy("http".characters.count))
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "http", completion: endingString)
 
         tester().tapViewWithAccessibilityLabel("Cancel", traits: UIAccessibilityTraitButton)
