@@ -326,7 +326,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
         let logoImageView = UIImageView(image: UIImage(named: "ReadingListEmptyPanel"))
         containerView.addSubview(logoImageView)
-        logoImageView.snp_makeConstraints(closure: { (make) -> Void in
+        logoImageView.snp_makeConstraints { make in
             make.centerX.equalTo(containerView)
             make.centerY.lessThanOrEqualTo(overlayView.snp_centerY).priorityHigh()
 
@@ -335,8 +335,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50).priorityHigh()
-        })
-
+        }
 
         let welcomeLabel = UILabel()
         containerView.addSubview(welcomeLabel)
@@ -345,14 +344,14 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         welcomeLabel.font = ReadingListPanelUX.WelcomeScreenHeaderFont
         welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
         welcomeLabel.adjustsFontSizeToFitWidth = true
-        welcomeLabel.snp_makeConstraints(closure: { (make) -> Void in
+        welcomeLabel.snp_makeConstraints { make in
             make.centerX.equalTo(containerView)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)
             make.top.equalTo(logoImageView.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
 
             // Sets proper center constraint for iPhones in landscape.
             make.centerY.lessThanOrEqualTo(overlayView.snp_centerY).offset(-40).priorityHigh()
-        })
+        }
 
         let readerModeLabel = UILabel()
         containerView.addSubview(readerModeLabel)
@@ -360,18 +359,18 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         readerModeLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
         readerModeLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
         readerModeLabel.numberOfLines = 0
-        readerModeLabel.snp_makeConstraints(closure: { (make) -> Void in
+        readerModeLabel.snp_makeConstraints { make in
             make.top.equalTo(welcomeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
             make.left.equalTo(welcomeLabel.snp_left)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
-        })
+        }
 
         let readerModeImageView = UIImageView(image: UIImage(named: "ReaderModeCircle"))
         containerView.addSubview(readerModeImageView)
-        readerModeImageView.snp_makeConstraints(closure: { (make) -> Void in
+        readerModeImageView.snp_makeConstraints { make in
             make.centerY.equalTo(readerModeLabel)
             make.right.equalTo(welcomeLabel.snp_right)
-        })
+        }
 
         let readingListLabel = UILabel()
         containerView.addSubview(readingListLabel)
@@ -379,20 +378,20 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         readingListLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
         readingListLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
         readingListLabel.numberOfLines = 0
-        readingListLabel.snp_makeConstraints(closure: { (make) -> Void in
+        readingListLabel.snp_makeConstraints { make in
             make.top.equalTo(readerModeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
             make.left.equalTo(welcomeLabel.snp_left)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
-        })
+        }
 
         let readingListImageView = UIImageView(image: UIImage(named: "AddToReadingListCircle"))
         containerView.addSubview(readingListImageView)
-        readingListImageView.snp_makeConstraints(closure: { (make) -> Void in
+        readingListImageView.snp_makeConstraints { make in
             make.centerY.equalTo(readingListLabel)
             make.right.equalTo(welcomeLabel.snp_right)
-        })
+        }
 
-        containerView.snp_makeConstraints(closure: { (make) -> Void in
+        containerView.snp_makeConstraints { make in
             // Let the container wrap around the content
             make.top.equalTo(logoImageView.snp_top)
             make.left.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
@@ -400,7 +399,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
             // And then center it in the overlay view that sits on top of the UITableView
             make.centerX.equalTo(overlayView)
-        })
+        }
 
         return overlayView
     }
