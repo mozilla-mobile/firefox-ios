@@ -34,7 +34,7 @@ class HistoryTests: KIFTestCase {
      * Tests for listed history visits
      */
     func testAddHistoryUI() {
-        let urls = addHistoryItems(2)
+        _ = addHistoryItems(2)
 
         // Check that both appear in the history home panel
         tester().tapViewWithAccessibilityIdentifier("url")
@@ -88,7 +88,6 @@ class HistoryTests: KIFTestCase {
             BrowserUtils.addHistoryEntry("Page \(pageNo)", url: NSURL(string: "\(webRoot)/numberedPage.html?page=\(pageNo)")!)
         }
         let urlToDelete = "Page \(102), \(webRoot)/numberedPage.html?page=\(102)"
-        let secondToLastUrl = "Page \(101), \(webRoot)/numberedPage.html?page=\(101)"
 
         tester().tapViewWithAccessibilityLabel("History")
 

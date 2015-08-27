@@ -106,6 +106,6 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
             return description.containsString(childClass)
         }
         XCTAssertEqual(childControllers.count, 1, "Found 1 child controller of type: \(childClass)")
-        return childControllers.first as! UIViewController
+        return childControllers.first!
     }
 }
