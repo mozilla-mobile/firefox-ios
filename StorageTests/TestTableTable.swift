@@ -17,7 +17,7 @@ class TestSchemaTable: XCTestCase {
 
         // Now make sure the item is in the table-table
         var err: NSError? = nil
-        let table = SchemaTable<TableInfo>()
+        let table = SchemaTable()
         var cursor = db.withReadableConnection(&err) { (connection, err) -> Cursor<TableInfo> in
             return table.query(connection, options: QueryOptions(filter: testTable.name))
         }

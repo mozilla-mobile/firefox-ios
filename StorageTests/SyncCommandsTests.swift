@@ -152,7 +152,7 @@ class SyncCommandsTests: XCTestCase {
             if let clientCommands = result.successValue {
                 XCTAssertEqual(clientCommands.count, self.clients.count)
                 for client in clientCommands.keys {
-                    XCTAssertEqual(syncCommands, clientCommands[client]!.sorted(byValue))
+                    XCTAssertEqual(syncCommands, clientCommands[client]!.sort(byValue))
                 }
             } else {
                 XCTFail("Expected no commands!")

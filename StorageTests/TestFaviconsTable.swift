@@ -61,7 +61,7 @@ class TestFaviconsTable : XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testFaviconsTable() {
         let files = MockFiles()
-        self.db = SwiftData(filename: (try! files.getAndEnsureDirectory()).stringByAppendingPathComponent("test.db"))
+        self.db = SwiftData(filename: (try! (files.getAndEnsureDirectory() as NSString)).stringByAppendingPathComponent("test.db"))
         let f = FaviconsTable<Favicon>()
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
@@ -80,7 +80,7 @@ class TestFaviconsTable : XCTestCase {
         options.filter = "url2"
         self.checkIcons(f, options: options, urls: ["url2"])
 
-        var site = Favicon(url: "url1", type: IconType.Icon)
+        _ = Favicon(url: "url1", type: IconType.Icon)
         self.clear(f, icon: icon, s: true)
         self.checkIcons(f, options: nil, urls: ["url2"])
         self.clear(f)
