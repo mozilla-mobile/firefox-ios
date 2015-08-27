@@ -38,7 +38,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
             "clientName": self.scratchpad.clientName,
             "tabs": jsonTabs
         ])
-        log.debug("Sending tabs JSON \(tabsJSON.toString(pretty: true))")
+        log.debug("Sending tabs JSON \(tabsJSON.toString(true))")
         let payload = TabsPayload(tabsJSON)
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
     }

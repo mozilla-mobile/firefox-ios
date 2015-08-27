@@ -272,7 +272,7 @@ public class Scratchpad {
 
         // Do this first so that the meta/global and crypto/keys unpickling can overwrite the timestamps.
         if let lastFetched: [String: AnyObject] = prefs.dictionaryForKey(PrefLastFetched) {
-            b.collectionLastFetched = optFilter(mapValues(lastFetched, { ($0 as? NSNumber)?.unsignedLongLongValue }))
+            b.collectionLastFetched = optFilter(mapValues(lastFetched, f: { ($0 as? NSNumber)?.unsignedLongLongValue }))
         }
 
         if let mg = prefs.stringForKey(PrefGlobal) {
@@ -369,7 +369,7 @@ public class Scratchpad {
         // We store the meat of your keys in the Keychain, using a random identifier that we persist in prefs.
         prefs.setString(self.keyLabel, forKey: PrefKeyLabel)
         if let keys = self.keys {
-            let payload = keys.value.asPayload().toString(pretty: false)
+            let payload = keys.value.asPayload().toString(false)
             let label = "keys." + self.keyLabel
             log.debug("Storing keys in Keychain with label \(label).")
             prefs.setString(self.keyLabel, forKey: PrefKeyLabel)
@@ -388,7 +388,7 @@ public class Scratchpad {
         prefs.setString(clientGUID, forKey: PrefClientGUID)
 
         // Thanks, Swift.
-        let dict = mapValues(collectionLastFetched, { NSNumber(unsignedLongLong: $0) }) as NSDictionary
+        let dict = mapValues(collectionLastFetched, f: { NSNumber(unsignedLongLong: $0) }) as NSDictionary
         prefs.setObject(dict, forKey: PrefLastFetched)
 
         return self

@@ -10,23 +10,51 @@ extension Request {
     public func responseParsedJSON(partial: Bool, completionHandler: ResponseHandler) -> Self {
         let serializer = partial ? Request.PartialParsedJSONResponseSerializer() :
                                    Request.ParsedJSONResponseSerializer()
-        return response(serializer: serializer, completionHandler: { (request, response, JSON, error) in
-            completionHandler(request, response, JSON, error)
+        return response(serializer: serializer, completionHandler: { (request, response, error) in
+            completionHandler(request, response, error)
         })
     }
 
     public func responseParsedJSON(queue queue: dispatch_queue_t, partial: Bool, completionHandler: ResponseHandler) -> Self {
         let serializer = partial ? Request.PartialParsedJSONResponseSerializer() :
                                    Request.ParsedJSONResponseSerializer()
-        return response(queue: queue, serializer: serializer, completionHandler: { (request, response, JSON, error) in
-            completionHandler(request, response, JSON, error)
+        return response(queue: queue, serializer: serializer, completionHandler: { (request, response, error) in
+            completionHandler(request, response, error)
         })
     }
+}
 
-    public class func PartialParsedJSONResponseSerializer() -> Serializer {
-        return { (request, response, data) in
+private enum JSONSerializeError: ErrorType {
+    case NoData
+    case ParseError
+}
+
+private struct ParsedJSONResponseSerializer: ResponseSerializer {
+    private var serializeResponse: (NSURLRequest?, NSHTTPURLResponse?, NSData?) -> Result<AnyObject>
+
+    private init() {
+        self.serializeResponse = { (request, response, data) in
             if data == nil || data?.length == 0 {
-                return (nil, nil)
+                return Result.Failure(nil, JSONSerializeError.NoData)
+            }
+
+            let json = JSON(data: data!)
+            if json.isError {
+                return Result.Failure(data, JSONSerializeError.ParseError)
+            }
+
+            return Result.Success(json)
+        }
+    }
+}
+
+private struct PartialParsedJSONResponseSerializer: ResponseSerializer {
+    private var serializeResponse: (NSURLRequest?, NSHTTPURLResponse?, NSData?) -> Result<AnyObject>
+
+    private init() {
+        self.serializeResponse = { (request, response, data) in
+            if data == nil || data?.length == 0 {
+                return Result.Failure(nil, JSONSerializeError.NoData)
             }
 
             var err: NSError?
@@ -40,26 +68,12 @@ extension Request {
                 return (nil, nil)
             }
 
-            let json = JSON(o!)
+            let json = JSON(data: o!)
             if json.isError {
-                return (nil, json.asError)
+                return Result.Failure(nil, json.asError)
             }
 
-            return (json, nil)
-        }
-    }
-
-    public class func ParsedJSONResponseSerializer() -> Serializer {
-        return { (request, response, data) in
-            if data == nil || data?.length == 0 {
-                return (nil, nil)
-            }
-
-            let json = JSON(data: data!)
-            if json.isError {
-                return (nil, json.asError)
-            }
-            return (json, nil)
+            return Result.Success(json)
         }
     }
 }

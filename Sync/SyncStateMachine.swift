@@ -17,7 +17,7 @@ private let DefaultEngines: [String: Int] = ["tabs": 1]
 private let DefaultDeclined: [String] = [String]()
 
 private func getDefaultEngines() -> [String: EngineMeta] {
-    return mapValues(DefaultEngines, { EngineMeta(version: $0, syncID: Bytes.generateGUID()) })
+    return mapValues(DefaultEngines, f: { EngineMeta(version: $0, syncID: Bytes.generateGUID()) })
 }
 
 public typealias TokenSource = () -> Deferred<Maybe<TokenServerToken>>
@@ -38,7 +38,7 @@ public class SyncStateMachine {
     public class func getInfoCollections(authState: SyncAuthState, prefs: Prefs) -> Deferred<Maybe<InfoCollections>> {
         log.debug("Fetching info/collections in state machine.")
         let token = authState.token(NSDate.now(), canBeExpired: true)
-        return chainDeferred(token, { (token, kB) in
+        return chainDeferred(token, f: { (token, kB) in
             // TODO: the token might not be expired! Check and selectively advance.
             log.debug("Got token from auth state. Advancing to InitialWithExpiredToken.")
             let state = InitialWithExpiredToken(scratchpad: Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: self.scratchpadPrefs(prefs)), token: token)
@@ -54,7 +54,7 @@ public class SyncStateMachine {
 
     public class func toReady(authState: SyncAuthState, prefs: Prefs) -> ReadyDeferred {
         let token = authState.token(NSDate.now(), canBeExpired: false)
-        return chainDeferred(token, { (token, kB) in
+        return chainDeferred(token, f: { (token, kB) in
             log.debug("Got token from auth state. Server is \(token.api_endpoint).")
             let scratchpadPrefs = self.scratchpadPrefs(prefs)
             let prior = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKB(kB))
@@ -146,7 +146,7 @@ public class BaseSyncState: SyncState {
 
     // TODO: 304 for i/c.
     public func getInfoCollections() -> Deferred<Maybe<InfoCollections>> {
-        return chain(self.client.getInfoCollections(), {
+        return chain(self.client.getInfoCollections(), f: {
             return $0.value
         })
     }
@@ -350,7 +350,7 @@ public class MissingMetaGlobalError: RecoverableSyncState {
         // Note that we discard the previous global and keys -- after all, we just wiped storage.
 
         let s = self.previousState.scratchpad.evolve().setGlobal(nil).setKeys(nil).build().checkpoint()
-        return chainDeferred(wipe, { self.onWiped($0, s: s) })
+        return chainDeferred(wipe, f: { self.onWiped($0, s: s) })
     }
 
     public func advance() -> Deferred<Maybe<SyncState>> {
@@ -388,7 +388,7 @@ public class InitialWithExpiredToken: BaseSyncState {
     }
 
     public func advanceIfNeeded(previous: InfoCollections?, collections: [String]?) -> Deferred<Maybe<InitialWithExpiredTokenAndInfo?>> {
-        return chain(getInfoCollections(), { info in
+        return chain(getInfoCollections(), f: { info in
             // Unchanged or no previous state? Short-circuit.
             if let previous = previous {
                 if info.same(previous, collections: collections) {
@@ -406,7 +406,7 @@ public class InitialWithExpiredTokenAndInfo: BaseSyncStateWithInfo {
     public override var label: SyncStateLabel { return SyncStateLabel.InitialWithExpiredTokenAndInfo }
 
     public func advanceWithToken(liveTokenSource: TokenSource) -> Deferred<Maybe<InitialWithLiveTokenAndInfo>> {
-        return chainResult(liveTokenSource(), { token in
+        return chainResult(liveTokenSource(), f: { token in
             if self.token.sameDestination(token) {
                 return Maybe(success: InitialWithLiveTokenAndInfo(scratchpad: self.scratchpad, token: token, info: self.info))
             }
@@ -436,7 +436,7 @@ public class InitialWithLiveToken: BaseSyncState {
     }
 
     public func advance() -> Deferred<Maybe<InitialWithLiveTokenAndInfo>> {
-        return chain(getInfoCollections(), self.advanceWithInfo)
+        return chain(getInfoCollections(), f: self.advanceWithInfo)
     }
 }
 
@@ -499,7 +499,7 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
             //       to salvage old preferences from the old meta/global -- e.g., datatype elections.
             //       This doesn't need to be implemented until we rev the storage format, which
             //       might never happen.
-            return chainDeferred(client.wipeStorage(), self.advanceAfterWipe)
+            return chainDeferred(client.wipeStorage(), f: self.advanceAfterWipe)
         }
 
         // Second: check syncID and contents.
@@ -541,15 +541,15 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
         // scratchpad, and optionally a meta/global to upload.
         // If this upload fails, we abort, of course.
         let previousMetaGlobal = self.scratchpad.global?.value
-        let engine: (withEnginesApplied: Scratchpad, toUpload: MetaGlobal?) = newScratchpad.applyEngineChoices(previousMetaGlobal)
+        let (withEnginesApplied, toUpload) = newScratchpad.applyEngineChoices(previousMetaGlobal)
 
         if let toUpload = toUpload {
             // Upload the new meta/global.
             // The provided scratchpad *does not reflect this new meta/global*: you need to
             // get the timestamp from the upload!
-            let upload = self.client.uploadMetaGlobal(engine.toUpload, ifUnmodifiedSince: fetched.timestamp)
-            return chainDeferred(upload, { resp in
-                let postUpload = engine.withEnginesApplied.checkpoint()    // TODO: add the timestamp!
+            let upload = self.client.uploadMetaGlobal(toUpload, ifUnmodifiedSince: fetched.timestamp)
+            return chainDeferred(upload, f: { resp in
+                let postUpload = withEnginesApplied.checkpoint()    // TODO: add the timestamp!
                 return HasMetaGlobal.fromState(self, scratchpad: postUpload).advance()
             })
         }
@@ -775,7 +775,7 @@ public class Ready: BaseSyncStateWithInfo {
  * we use function dispatch to ape a protocol.
  */
 func advanceSyncState(s: InitialWithLiveToken) -> ReadyDeferred {
-    return chainDeferred(s.advance(), { $0.advance() })
+    return chainDeferred(s.advance(), f: { $0.advance() })
 }
 
 func advanceSyncState(s: HasMetaGlobal) -> ReadyDeferred {
