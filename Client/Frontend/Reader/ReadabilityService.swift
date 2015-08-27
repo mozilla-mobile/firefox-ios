@@ -63,15 +63,11 @@ class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityBrowse
                 // Don't do anything on timeout
                 break
             case .Success(let readabilityResult):
-                var error: NSError? = nil
                 do {
                     try ReaderModeCache.sharedInstance.put(url, readabilityResult)
-                } catch let error1 as NSError {
-                    error = error1
-                    if error != nil {
-                        print("Failed to store readability results in the cache: \(error?.localizedDescription)")
-                        // TODO Fail
-                    }
+                } catch let error as NSError {
+                    print("Failed to store readability results in the cache: \(error.localizedDescription)")
+                    // TODO Fail
                 }
             case .Error(_):
                 // TODO Not entitely sure what to do on error. Needs UX discussion and followup bug.
