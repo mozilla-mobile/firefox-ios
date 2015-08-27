@@ -62,7 +62,7 @@ enum TokenServerError {
     case Local(NSError)
 }
 
-extension TokenServerError: CustomStringConvertible, MaybeErrorType {
+extension TokenServerError: MaybeErrorType {
     var description: String {
         switch self {
         case let Remote(code: code, status: status, remoteTimestamp: _):
