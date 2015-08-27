@@ -152,7 +152,7 @@ public class FirefoxAccount {
         return nil
     }
 
-    public enum AccountError: CustomStringConvertible, MaybeErrorType {
+    public enum AccountError: MaybeErrorType {
         case NotMarried
 
         public var description: String {

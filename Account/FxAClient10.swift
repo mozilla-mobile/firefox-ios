@@ -62,7 +62,7 @@ public enum FxAClientError {
 }
 
 // Be aware that string interpolation doesn't work: rdar://17318018, much good that it will do.
-extension FxAClientError: CustomStringConvertible, MaybeErrorType {
+extension FxAClientError: MaybeErrorType {
     public var description: String {
         switch self {
         case let .Remote(error):
