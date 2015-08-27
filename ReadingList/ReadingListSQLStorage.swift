@@ -30,21 +30,25 @@ class ReadingListSQLStorage: ReadingListStorage {
         db = try! Connection(path)
 
         items = Table("items")
-        items.create(temporary: false, ifNotExists: true, block: { t in
-            // Client Metadata
-            t.column(ItemColumns.ClientId, primaryKey: .Autoincrement)
-            t.column(ItemColumns.ClientLastModified)
-            // Server Metadata
-            t.column(ItemColumns.Id) // TODO Unique but may be null?
-            t.column(ItemColumns.LastModified)
-            // Properties
-            t.column(ItemColumns.Url, unique: true)
-            t.column(ItemColumns.Title)
-            t.column(ItemColumns.AddedBy)
-            t.column(ItemColumns.Archived, defaultValue: false)
-            t.column(ItemColumns.Favorite, defaultValue: false)
-            t.column(ItemColumns.Unread, defaultValue: true)
-        })
+        do {
+            try db.run(items.create(temporary: false, ifNotExists: true, block: { t in
+                // Client Metadata
+                t.column(ItemColumns.ClientId, primaryKey: .Autoincrement)
+                t.column(ItemColumns.ClientLastModified)
+                // Server Metadata
+                t.column(ItemColumns.Id) // TODO Unique but may be null?
+                t.column(ItemColumns.LastModified)
+                // Properties
+                t.column(ItemColumns.Url, unique: true)
+                t.column(ItemColumns.Title)
+                t.column(ItemColumns.AddedBy)
+                t.column(ItemColumns.Archived, defaultValue: false)
+                t.column(ItemColumns.Favorite, defaultValue: false)
+                t.column(ItemColumns.Unread, defaultValue: true)
+            }))
+        } catch {
+            print("Unable to create items database '\(error)")
+        }
     }
 
     func getAllRecords() -> Maybe<[ReadingListClientRecord]> {
