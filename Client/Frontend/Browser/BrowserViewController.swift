@@ -641,8 +641,9 @@ class BrowserViewController: UIViewController {
                 } else {
                     hideReaderModeBar(animated: false)
                 }
+
+                updateInContentHomePanel(tab.url)
             }
-            updateInContentHomePanel(tab.url)
         case KVOCanGoBack:
             guard let canGoBack = change?[NSKeyValueChangeNewKey] as? Bool else { break }
             navigationToolbar.updateBackStatus(canGoBack)
