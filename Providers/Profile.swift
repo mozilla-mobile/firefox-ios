@@ -40,15 +40,15 @@ class ProfileFileAccessor: FileAccessor {
         let profileDirName = "profile.\(profile.localName())"
 
         // Bug 1147262: First option is for device, second is for simulator.
-        var rootPath: String?
+        var rootPath: NSString
         if let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier(), url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(sharedContainerIdentifier), path = url.path {
-            rootPath = path
+            rootPath = path as NSString
         } else {
             log.error("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
-            rootPath = String(NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as NSString)
+            rootPath = (NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0]) as NSString
         }
 
-        super.init(rootPath: rootPath!.stringByAppendingPathComponent(profileDirName))
+        super.init(rootPath: rootPath.stringByAppendingPathComponent(profileDirName))
     }
 }
 
@@ -60,10 +60,8 @@ class CommandStoringSyncDelegate: SyncDelegate {
     }
 
     func displaySentTabForURL(URL: NSURL, title: String) {
-        if let urlString = URL.absoluteString {
-            let item = ShareItem(url: urlString, title: title, favicon: nil)
-            self.profile.queue.addToQueue(item)
-        }
+        let item = ShareItem(url: URL.absoluteString, title: title, favicon: nil)
+        self.profile.queue.addToQueue(item)
     }
 }
 
@@ -96,19 +94,20 @@ class BrowserProfileSyncDelegate: SyncDelegate {
     func displaySentTabForURL(URL: NSURL, title: String) {
         // check to see what the current notification settings are and only try and send a notification if
         // the user has agreed to them
-        let currentSettings = app.currentUserNotificationSettings()
-        if currentSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
-            log.info("Displaying notification for URL \(URL.absoluteString)")
+        if let currentSettings = app.currentUserNotificationSettings() {
+            if currentSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
+                log.info("Displaying notification for URL \(URL.absoluteString)")
 
-            let notification = UILocalNotification()
-            notification.fireDate = NSDate()
-            notification.timeZone = NSTimeZone.defaultTimeZone()
-            notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString)
-            notification.userInfo = [TabSendURLKey: URL.absoluteString, TabSendTitleKey: title]
-            notification.alertAction = nil
-            notification.category = TabSendCategory
+                let notification = UILocalNotification()
+                notification.fireDate = NSDate()
+                notification.timeZone = NSTimeZone.defaultTimeZone()
+                notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString)
+                notification.userInfo = [TabSendURLKey: URL.absoluteString, TabSendTitleKey: title]
+                notification.alertAction = nil
+                notification.category = TabSendCategory
 
-            app.presentLocalNotificationNow(notification)
+                app.presentLocalNotificationNow(notification)
+            }
         }
     }
 }
@@ -167,7 +166,6 @@ public class BrowserProfile: Profile {
         self.app = app
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        let mainQueue = NSOperationQueue.mainQueue()
         notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: "LocationChange", object: nil)
 
         if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
@@ -207,7 +205,7 @@ public class BrowserProfile: Profile {
            let title = notification.userInfo!["title"] as? NSString {
 
             // We don't record a visit if no type was specified -- that means "ignore me".
-            let site = Site(url: url.absoluteString!, title: title as String)
+            let site = Site(url: url.absoluteString, title: title as String)
             let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
             log.debug("Recording visit for \(url) with type \(v).")
             history.addLocalVisit(visit)
@@ -278,7 +276,7 @@ public class BrowserProfile: Profile {
     }()
 
     lazy var readingList: ReadingListService? = {
-        return ReadingListService(profileStoragePath: self.files.rootPath)
+        return ReadingListService(profileStoragePath: self.files.rootPath as String)
     }()
 
     private lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
@@ -610,7 +608,7 @@ public class BrowserProfile: Profile {
          * Runs the single provided synchronization function and returns its status.
          */
         private func sync(label: EngineIdentifier, function: (SyncDelegate, Prefs, Ready) -> SyncResult) -> SyncResult {
-            return self.withSyncInputs(label: label, function: function) ??
+            return self.withSyncInputs(label, function: function) ??
                    deferMaybe(.NotStarted(.NoAccount))
         }
 
@@ -630,7 +628,7 @@ public class BrowserProfile: Profile {
                 return accumulate(thunks)
             }
 
-            return self.withSyncInputs(label: nil, function: combined) ??
+            return self.withSyncInputs(nil, function: combined) ??
                    deferMaybe(synchronizers.map { ($0.0, .NotStarted(.NoAccount)) })
         }
 
@@ -682,7 +680,7 @@ public class BrowserProfile: Profile {
                 ("tabs", self.syncTabsWithDelegate)
             ) >>== { statuses in
                 let tabsStatus = statuses[1].1
-                return deferResult(tabsStatus)
+                return deferMaybe(tabsStatus)
             }
         }
 

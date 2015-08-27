@@ -98,7 +98,7 @@ public class NSUserDefaultsPrefs: Prefs {
 
     public func stringArrayForKey(defaultName: String) -> [String]? {
         let objects = userDefaults.stringArrayForKey(qualifyKey(defaultName))
-        if let strings = objects as? [String] {
+        if let strings = objects {
             return strings
         }
         return nil
@@ -109,7 +109,7 @@ public class NSUserDefaultsPrefs: Prefs {
     }
 
     public func dictionaryForKey(defaultName: String) -> [String : AnyObject]? {
-        return userDefaults.dictionaryForKey(qualifyKey(defaultName)) as? [String:AnyObject]
+        return userDefaults.dictionaryForKey(qualifyKey(defaultName))
     }
 
     public func removeObjectForKey(defaultName: String) {
