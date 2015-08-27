@@ -45,7 +45,7 @@ class Browser: NSObject {
 
     class func toTab(browser: Browser) -> RemoteTab? {
         if let displayURL = browser.displayURL {
-            let history = browser.historyList.filter(RemoteTab.shouldIncludeURL).reverse()
+            let history = Array(browser.historyList.filter(RemoteTab.shouldIncludeURL).reverse())
             return RemoteTab(clientGUID: nil,
                 URL: displayURL,
                 title: browser.displayTitle,
@@ -53,7 +53,7 @@ class Browser: NSObject {
                 lastUsed: NSDate.now(),
                 icon: nil)
         } else if let sessionData = browser.sessionData where !sessionData.urls.isEmpty {
-            let history = sessionData.urls.reverse()
+            let history = Array(sessionData.urls.reverse())
             return RemoteTab(clientGUID: nil,
                 URL: history[0],
                 title: browser.displayTitle,
@@ -138,11 +138,11 @@ class Browser: NSObject {
     }
 
     var backList: [WKBackForwardListItem]? {
-        return webView?.backForwardList.backList as? [WKBackForwardListItem]
+        return webView?.backForwardList.backList
     }
 
     var forwardList: [WKBackForwardListItem]? {
-        return webView?.backForwardList.forwardList as? [WKBackForwardListItem]
+        return webView?.backForwardList.forwardList
     }
 
     var historyList: [NSURL] {
@@ -327,7 +327,7 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
     }
 
     func addHelper(helper: BrowserHelper, name: String) {
-        if let existingHelper = helpers[name] {
+        if let _ = helpers[name] {
             assertionFailure("Duplicate helper added: \(name)")
         }
 
@@ -348,7 +348,7 @@ private class HelperManager: NSObject, WKScriptMessageHandler {
 extension WKWebView {
     func runScriptFunction(function: String, fromScript: String, callback: (AnyObject?) -> Void) {
         if let path = NSBundle.mainBundle().pathForResource(fromScript, ofType: "js") {
-            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as? String {
+            if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
                 evaluateJavaScript(source, completionHandler: { (obj, err) -> Void in
                     if let err = err {
                         print("Error injecting \(err)")
