@@ -62,23 +62,48 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Top sites")
 
         // Only one will be found -- we collapse by domain.
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[0].title), "Expected to have top site panel \(urls[0])")
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel(urls[0].title)
+        } catch {
+            XCTFail("Expected to have top site panel \(urls[0]) \(error)")
+        }
 
         clearPrivateData(true)
 
-        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[0].title), "Expected to have removed top site panel \(urls[0])")
-        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[1].title), "We shouldn't find the other URL, either.")
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel(urls[0].title)
+        } catch {
+            XCTFail("Expected to have removed top site panel \(urls[0]) \(error)")
+        }
+
+        do{
+            try tester().tryFindingViewWithAccessibilityLabel(urls[1].title)
+        } catch {
+            XCTFail("We shouldn't find the other URL, either. \(error)")
+        }
     }
 
     func testCancelDoesNotClearTopSitesPanel() {
         let urls = visitSites(2)
-
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[0].title), "Expected to have top site panel \(urls[0])")
+        do{
+            try tester().tryFindingViewWithAccessibilityLabel(urls[0].title)
+        } catch {
+            XCTFail("Expected to have top site panel \(urls[0]) \(error)")
+        }
 
         clearPrivateData(false)
 
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(urls[0].title), "Expected to have not removed top site panel \(urls[0])")
-        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(urls[1].title), "The other never existed.")
+        do{
+            try tester().tryFindingViewWithAccessibilityLabel(urls[0].title)
+        } catch {
+            XCTFail("Expected to have not removed top site panel \(urls[0]) \(error)")
+        }
+
+        do{
+            try tester().tryFindingViewWithAccessibilityLabel(urls[1].title)
+        } catch {
+            XCTFail("The other never existed. \(error)")
+        }
     }
 
     func testClearsHistoryPanel() {
@@ -86,14 +111,34 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         tester().tapViewWithAccessibilityLabel("History")
         let url1 = "\(urls[0].title), \(urls[0].url)", url2 = "\(urls[1].title), \(urls[1].url)"
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url1), "Expected to have history row \(url1)")
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url2), "Expected to have history row \(url2)")
+
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel(url1)
+        } catch {
+            XCTFail("Expected to have history row \(url1) \(error)")
+        }
+
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel(url2)
+        } catch {
+            XCTFail("Expected to have history row \(url2) \(error)")
+        }
 
         clearPrivateData(true)
 
         tester().tapViewWithAccessibilityLabel("History")
-        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(url1), "Expected to have removed history row \(url1)")
-        XCTAssertFalse(tester().tryFindingViewWithAccessibilityLabel(url2), "Expected to have removed history row \(url2)")
+
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel(url1)
+        } catch {
+            XCTFail("Expected to have removed history row \(url1) \(error)")
+        }
+
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel(url2)
+        } catch {
+            XCTFail("Expected to have removed history row \(url2) \(error)")
+        }
 
     }
 
@@ -102,12 +147,29 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         tester().tapViewWithAccessibilityLabel("History")
         let url1 = "\(urls[0].title), \(urls[0].url)", url2 = "\(urls[1].title), \(urls[1].url)"
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url1), "Expected to have history row \(url1)")
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url2), "Expected to have history row \(url2)")
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel(url1)
+        } catch {
+            XCTFail("Expected to have history row \(url1) \(error)")
+        }
+
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel(url2)
+        } catch {
+            XCTFail("Expected to have history row \(url2) \(error)")
+        }
 
         clearPrivateData(false)
 
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url1), "Expected to not have removed history row \(url1)")
-        XCTAssertTrue(tester().tryFindingViewWithAccessibilityLabel(url2), "Expected to not have removed history row \(url2)")
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel(url1)
+        } catch {
+            XCTFail("Expected to not have removed history row \(url1) \(error)")
+        }
+        do {
+            try tester().tryFindingViewWithAccessibilityLabel(url2)
+        } catch {
+            XCTFail("Expected to not have removed history row \(url2) \(error)")
+        }
     }
 }
