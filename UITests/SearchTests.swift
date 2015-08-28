@@ -16,12 +16,7 @@ class SearchTests: KIFTestCase {
         // Ensure that the prompt appears.
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("foobar")
-        do {
-            try tester().tryFindingViewWithAccessibilityLabel(LabelPrompt)
-            found = true
-        } catch _ {
-            found = false
-        }
+        found = tester().viewExistsWithLabel(LabelPrompt)
         XCTAssertTrue(found, "Prompt is shown")
 
         // Ensure that no suggestions are visible before answering the prompt.
@@ -35,14 +30,9 @@ class SearchTests: KIFTestCase {
 
         tester().tapViewWithAccessibilityLabel("Cancel")
 
-        do {
-            // Return to the search screen, and make sure our choice was remembered.
-            try tester().tryFindingViewWithAccessibilityLabel(LabelPrompt)
-            // Return to the search screen, and make sure our choice was remembered.
-            found = true
-        } catch _ {
-            found = false
-        }
+        // Return to the search screen, and make sure our choice was remembered.
+        found = tester().viewExistsWithLabel(LabelPrompt)
+
         XCTAssertFalse(found, "Prompt is not shown")
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().clearTextFromAndThenEnterText("foobar", intoViewWithAccessibilityLabel: LabelAddressAndSearch)
@@ -54,12 +44,8 @@ class SearchTests: KIFTestCase {
         // Ensure that the prompt appears.
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().clearTextFromAndThenEnterText("foobar", intoViewWithAccessibilityLabel: LabelAddressAndSearch)
-        do {
-            try tester().tryFindingViewWithAccessibilityLabel(LabelPrompt)
-            found = true
-        } catch _ {
-            found = false
-        }
+
+        found = tester().viewExistsWithLabel(LabelPrompt)
         XCTAssertTrue(found, "Prompt is shown")
 
         // Ensure that no suggestions are visible before answering the prompt.
@@ -81,7 +67,7 @@ class SearchTests: KIFTestCase {
         // Ensure that the prompt appears.
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("foobar")
-        found = tester().tryFindingViewWithAccessibilityLabel(LabelPrompt, error: nil)
+        found = tester().viewExistsWithLabel(LabelPrompt)
         XCTAssertTrue(found, "Prompt is shown")
 
         // Ensure that no suggestions are visible before answering the prompt.
@@ -92,7 +78,7 @@ class SearchTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Yes")
         found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
         XCTAssertTrue(found, "Found suggestions after choosing Yes")
-        found = tester().tryFindingViewWithAccessibilityLabel(LabelYahooSearchIcon, error: nil)
+        found = tester().viewExistsWithLabel(LabelYahooSearchIcon)
         XCTAssertTrue(found, "Found search provider icon")
 
         tester().tapViewWithAccessibilityLabel("Address and Search")
@@ -103,7 +89,7 @@ class SearchTests: KIFTestCase {
 
         found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
         XCTAssertFalse(found, "Found suggestions after adding / to url")
-        found = tester().tryFindingViewWithAccessibilityLabel(LabelYahooSearchIcon, error: nil)
+        found = tester().viewExistsWithLabel(LabelYahooSearchIcon)
         XCTAssertFalse(found, "Found no search provider icon")
 
         tester().tapViewWithAccessibilityLabel("Address and Search")
@@ -112,7 +98,7 @@ class SearchTests: KIFTestCase {
         // Wait for debounce in case
         tester().waitForTimeInterval(0.3)
 
-        found = tester().tryFindingViewWithAccessibilityLabel(LabelYahooSearchIcon, error: nil)
+        found = tester().viewExistsWithLabel(LabelYahooSearchIcon)
         XCTAssertTrue(found, "Found search provider icon after making input url invalid")
     }
 
@@ -127,13 +113,8 @@ class SearchTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Verify that Paste shows the search controller with prompt.
-        var promptFound: Bool
-        do {
-            try tester().tryFindingViewWithAccessibilityLabel(LabelPrompt)
-            promptFound = true
-        } catch _ {
-            promptFound = false
-        }
+        var promptFound = tester().viewExistsWithLabel(LabelPrompt)
+
         XCTAssertFalse(promptFound, "Search prompt is not shown")
         UIPasteboard.generalPasteboard().string = "http"
         tester().longPressViewWithAccessibilityIdentifier("url", duration: 1)
@@ -159,12 +140,7 @@ class SearchTests: KIFTestCase {
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().clearTextFromFirstResponder()
         tester().waitForAbsenceOfViewWithAccessibilityLabel(LabelPrompt)
-        do {
-            try tester().tryFindingViewWithAccessibilityLabel(LabelPrompt)
-            promptFound = true
-        } catch _ {
-            promptFound = false
-        }
+        promptFound = tester().viewExistsWithLabel(LabelPrompt)
         XCTAssertFalse(promptFound, "Search prompt is not shown")
         tester().tapViewWithAccessibilityLabel(LabelAddressAndSearch)
         tester().tapViewWithAccessibilityLabel("Paste")
