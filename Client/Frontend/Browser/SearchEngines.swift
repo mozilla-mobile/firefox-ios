@@ -153,7 +153,7 @@ class SearchEngines {
 
         let index = (searchDirectory as NSString).stringByAppendingPathComponent("list.txt")
         let listFile = try? String(contentsOfFile: index, encoding: NSUTF8StringEncoding)
-        assert(listFile == nil, "Read the list of search engines")
+        assert(listFile != nil, "Read the list of search engines")
 
         let engineNames = listFile!
             .stringByTrimmingCharactersInSet(NSCharacterSet.newlineCharacterSet())
