@@ -1,6 +1,15 @@
 Firefox for iOS
 ===============
 
+This branch
+-----------
+
+This is the __v1.0__ branch. Here lives work that intends to ship in v1.0.\* releases after v1.0 and before v1.1.
+
+If you're doing work for v1.1 or later, or need Swift 2.0 support, go look at __master__.
+
+This branch uses Xcode 6.4 and Swift 1.2, targeting iOS 8.2 and supporting iOS 9.
+
 Getting involved
 ----------------
 
