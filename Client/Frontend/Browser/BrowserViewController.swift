@@ -1382,39 +1382,29 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
-        if let url = navigationAction.request.URL {
-            if let scheme = url.scheme {
-                switch url.scheme {
-                case "about", "http", "https":
-                    if isWhitelistedUrl(url) {
-                        // If the url is whitelisted, we open it without prompting.
-                        // Except when the NavigationType is Other, which means it is JavaScript or Redirect initiated.
-                        openExternal(url, prompt: navigationAction.navigationType == WKNavigationType.Other)
-                        decisionHandler(WKNavigationActionPolicy.Cancel)
-                    } else {
-                        decisionHandler(WKNavigationActionPolicy.Allow)
-                    }
-                case "tel":
-                    callExternal(url)
-                    decisionHandler(WKNavigationActionPolicy.Cancel)
-                default:
-                    if UIApplication.sharedApplication().canOpenURL(url) {
-                        openExternal(url)
-                    }
-                    decisionHandler(WKNavigationActionPolicy.Cancel)
-                } else {
-                    decisionHandler(WKNavigationActionPolicy.Allow)
-                }
-            case "tel":
-                callExternal(url)
+
+        guard let url = navigationAction.request.URL else {
+            decisionHandler(WKNavigationActionPolicy.Cancel)
+            return
+        }
+
+        switch url.scheme {
+        case "about", "http", "https":
+            if isWhitelistedUrl(url) {
+                // If the url is whitelisted, we open it without prompting…
+                // … unless the NavigationType is Other, which means it is JavaScript- or Redirect-initiated.
+                openExternal(url, prompt: navigationAction.navigationType == WKNavigationType.Other)
                 decisionHandler(WKNavigationActionPolicy.Cancel)
-            default:
-                if UIApplication.sharedApplication().canOpenURL(url) {
-                    openExternal(url)
-                }
-                decisionHandler(WKNavigationActionPolicy.Cancel)
+            } else {
+                decisionHandler(WKNavigationActionPolicy.Allow)
             }
-        } else {
+        case "tel":
+            callExternal(url)
+            decisionHandler(WKNavigationActionPolicy.Cancel)
+        default:
+            if UIApplication.sharedApplication().canOpenURL(url) {
+                openExternal(url)
+            }
             decisionHandler(WKNavigationActionPolicy.Cancel)
         }
     }

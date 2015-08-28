@@ -392,6 +392,16 @@ private class HiddenSetting: Setting {
     }
 }
 
+extension NSFileManager {
+    public func removeItemInDirectory(directory: String, named: String) throws {
+        if let file = NSURL.fileURLWithPath(directory).URLByAppendingPathComponent(named).path {
+            try self.removeItemAtPath(file)
+        } else {
+            // This should never occur.
+        }
+    }
+}
+
 private class DeleteExportedDataSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
@@ -399,10 +409,11 @@ private class DeleteExportedDataSetting: HiddenSetting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        if let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as? String {
-            let browserDB = documentsPath.stringByAppendingPathComponent("browser.db")
-            var err: NSError?
-            NSFileManager.defaultManager().removeItemAtPath(browserDB, error: &err)
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        do {
+            try NSFileManager.defaultManager().removeItemInDirectory(documentsPath, named: "browser.db")
+        } catch {
+            print("Couldn't delete exported data: \(error).")
         }
     }
 }
@@ -414,9 +425,13 @@ private class ExportBrowserDataSetting: HiddenSetting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        if let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as? String {
-            let browserDB = documentsPath.stringByAppendingPathComponent("browser.db")
-            self.settings.profile.files.copy("browser.db", toAbsolutePath: browserDB)
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        if let browserDB = NSURL.fileURLWithPath(documentsPath).URLByAppendingPathComponent("browser.db").path {
+            do {
+                try self.settings.profile.files.copy("browser.db", toAbsolutePath: browserDB)
+            } catch {
+                print("Couldn't export browser data: \(error).")
+            }
         }
     }
 }

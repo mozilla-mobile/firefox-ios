@@ -61,6 +61,18 @@ class PasswordsClearable : Clearable {
     }
 }
 
+struct ClearableErrorType: MaybeErrorType {
+    let err: ErrorType
+
+    init(err: ErrorType) {
+        self.err = err
+    }
+
+    var description: String {
+        return "Couldn't clear: \(err)."
+    }
+}
+
 // Clear the web cache. Note, this has to close all open tabs in order to ensure the data
 // cached in them isn't flushed to disk.
 class CacheClearable : Clearable {
@@ -80,18 +92,32 @@ class CacheClearable : Clearable {
         NSURLCache.sharedURLCache().removeAllCachedResponses()
 
         // Now lets finish up by destroying our Cache directory.
-        let manager = NSFileManager.defaultManager()
-        var url = manager.URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: .UserDomainMask)[0]
-        var file = url.path!.stringByAppendingPathComponent("Caches")
-        var error: NSError? = nil
-        if let contents = NSFileManager.defaultManager().contentsOfDirectoryAtPath(file, error: nil) {
-            for content in contents {
-                let filePath = file.stringByAppendingPathComponent(content as! String)
-                NSFileManager.defaultManager().removeItemAtPath(filePath, error: &error)
-            }
+        do {
+            try deleteLibraryFolderContents("Caches")
+        } catch {
+            return deferMaybe(ClearableErrorType(err: error))
         }
+
         return succeed()
     }
+}
+
+private func deleteLibraryFolderContents(folder: String) throws {
+    let manager = NSFileManager.defaultManager()
+    let library = manager.URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: .UserDomainMask)[0]
+    let dir = library.URLByAppendingPathComponent(folder)
+    let contents = try manager.contentsOfDirectoryAtPath(dir.path!)
+    for content in contents {
+        try manager.removeItemAtURL(dir.URLByAppendingPathComponent(content))
+    }
+}
+
+// I don't know why this is different. Preserving behavior across refactor.
+private func deleteLibraryFolder(folder: String) throws {
+    let manager = NSFileManager.defaultManager()
+    let library = manager.URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: .UserDomainMask)[0]
+    let dir = library.URLByAppendingPathComponent(folder)
+    try manager.removeItemAtURL(dir)
 }
 
 // Removes all site data stored for sites. This should include things like IndexedDB or websql storage.
@@ -106,11 +132,7 @@ class SiteDataClearable : Clearable {
         tabManager.removeAll()
 
         // Then we just wipe the WebKit directory from our Library.
-        let manager = NSFileManager.defaultManager()
-        let url = manager.URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: .UserDomainMask)[0]
-        let file = url.path!.stringByAppendingPathComponent("WebKit")
-        var error: NSError? = nil
-        try! NSFileManager.defaultManager().removeItemAtPath(file)
+        try! deleteLibraryFolder("WebKit")
 
         return succeed()
     }
@@ -136,16 +158,10 @@ class CookiesClearable : Clearable {
         }
 
         // And just to be safe, we also wipe the Cookies directory.
-        let manager = NSFileManager.defaultManager()
-        var url = manager.URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: .UserDomainMask)[0]
-        var file = url.path!.stringByAppendingPathComponent("Cookies")
-        if let contents = try? NSFileManager.defaultManager().contentsOfDirectoryAtPath(file) {
-            for content in contents {
-                url = url.URLByAppendingPathComponent(content)
-                if let filePath = url.path {
-                    try! NSFileManager.defaultManager().removeItemAtPath(filePath)
-                }
-            }
+        do {
+            try deleteLibraryFolderContents("Cookies")
+        } catch {
+            return deferMaybe(ClearableErrorType(err: error))
         }
 
         return succeed()
