@@ -7,20 +7,24 @@ import Alamofire
 import Shared
 
 extension Request {
-    public func responseParsedJSON(partial: Bool, completionHandler: ResponseHandler) -> Self {
-        let serializer = partial ? Request.PartialParsedJSONResponseSerializer() :
-                                   Request.ParsedJSONResponseSerializer()
-        return response(serializer: serializer, completionHandler: { (request, response, error) in
-            completionHandler(request, response, error)
-        })
+    public func responsePartialParsedJSON(completionHandler: ResponseHandler) -> Self {
+        let serializer = PartialParsedJSONResponseSerializer()
+        return self.response(responseSerializer: serializer, completionHandler: completionHandler)
     }
 
-    public func responseParsedJSON(queue queue: dispatch_queue_t, partial: Bool, completionHandler: ResponseHandler) -> Self {
-        let serializer = partial ? Request.PartialParsedJSONResponseSerializer() :
-                                   Request.ParsedJSONResponseSerializer()
-        return response(queue: queue, serializer: serializer, completionHandler: { (request, response, error) in
-            completionHandler(request, response, error)
-        })
+    public func responsePartialParsedJSON(queue queue: dispatch_queue_t, completionHandler: ResponseHandler) -> Self {
+        let serializer = PartialParsedJSONResponseSerializer()
+        return self.response(queue: queue, responseSerializer: serializer, completionHandler: completionHandler)
+    }
+
+    public func responseParsedJSON(partial: Bool, completionHandler: ResponseHandler) -> Self {
+        let serializer = ParsedJSONResponseSerializer()
+        return self.response(responseSerializer: serializer, completionHandler: completionHandler)
+    }
+
+    public func responseParsedJSON(queue queue: dispatch_queue_t, completionHandler: ResponseHandler) -> Self {
+        let serializer = ParsedJSONResponseSerializer()
+        return self.response(queue: queue, responseSerializer: serializer, completionHandler: completionHandler)
     }
 }
 
@@ -57,20 +61,20 @@ private struct PartialParsedJSONResponseSerializer: ResponseSerializer {
                 return Result.Failure(nil, JSONSerializeError.NoData)
             }
 
-            var err: NSError?
-            let o: AnyObject? = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments, error: &err)
-
-            if let err = err {
-                return (nil, err)
+            let o: AnyObject?
+            do {
+                try o = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments)
+            } catch {
+                return Result.Failure(nil, error)
             }
 
-            if (o == nil) {
-                return (nil, nil)
+            guard let object = o else {
+                return Result.Failure(nil, JSONSerializeError.NoData)
             }
 
-            let json = JSON(data: o!)
+            let json = JSON(object)
             if json.isError {
-                return Result.Failure(nil, json.asError)
+                return Result.Failure(nil, json.asError ?? JSONSerializeError.ParseError)
             }
 
             return Result.Success(json)
