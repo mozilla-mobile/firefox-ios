@@ -345,8 +345,8 @@ public class Sync15StorageClient {
             }
 
             // Check for an error from the request processor.
-            if let error = error {
-                log.error("Response: \(response?.statusCode ?? 0). Got error \(error).")
+            if result.isFailure {
+                log.error("Response: \(response?.statusCode ?? 0). Got error \(result.error).")
 
                 // If we got one, we don't want to hit the response nil case above and
                 // return a RecordParseError, because a RequestError is more fitting.
@@ -358,7 +358,7 @@ public class Sync15StorageClient {
                 }
 
                 log.error("Filling generic RequestError.")
-                deferred.fill(Maybe<T>(failure: RequestError(error)))
+                deferred.fill(Maybe<T>(failure: RequestError()))
                 return
             }
 
