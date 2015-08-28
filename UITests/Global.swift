@@ -28,6 +28,15 @@ extension KIFUITestActor {
         return element != nil
     }
 
+    func viewExistsWithLabel(label: String) -> Bool {
+        do {
+            try self.tryFindingViewWithAccessibilityLabel(label)
+            return true
+        } catch {
+            return false
+        }
+    }
+
     /// Waits for and returns a view with the given accessibility value.
     func waitForViewWithAccessibilityValue(value: String) -> UIView {
         var element: UIAccessibilityElement!
