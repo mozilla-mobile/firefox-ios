@@ -638,7 +638,7 @@ private class SuggestionCell: UITableViewCell {
             let button = view as! UIButton
             var buttonSize = button.intrinsicContentSize()
 
-            // Update our base frame height by the max size of either the image or the button so we never 
+            // Update our base frame height by the max size of either the image or the button so we never
             // make the cell smaller than any of the two
             if height == imageSize {
                 height = max(buttonSize.height, imageSize)

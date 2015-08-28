@@ -470,11 +470,12 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
     }
 }
 
-// There seems to be a bug with UIKit where when the UICollectionView changes it's contentSize 
+// There seems to be a bug with UIKit where when the UICollectionView changes its contentSize
 // from > frame.size to <= frame.size: the contentSet animation doesn't properly happen and 'jumps' to the
-// final state. This workaround forces the contentSize to always be larger than the frame size so the animation happens more 
-// smoothly. This also makes the tabs be able to 'bounce' when there are not enough to fill the screen which I 
-// think is fine but if needed we can disable user scrolling in this case
+// final state.
+// This workaround forces the contentSize to always be larger than the frame size so the animation happens more
+// smoothly. This also makes the tabs be able to 'bounce' when there are not enough to fill the screen, which I
+// think is fine, but if needed we can disable user scrolling in this case.
 private class TabTrayCollectionViewLayout: UICollectionViewFlowLayout {
     private override func collectionViewContentSize() -> CGSize {
         var calculatedSize = super.collectionViewContentSize()

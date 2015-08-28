@@ -246,7 +246,7 @@ class TabManager : NSObject {
         for delegate in delegates {
             delegate.get()?.tabManager(self, didRemoveTab: tab, atIndex: index)
         }
-        
+
         if count == 0 {
             addTab()
         }

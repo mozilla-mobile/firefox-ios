@@ -429,11 +429,11 @@ class URLBarView: UIView {
 
         delegate?.urlBarDidEnterOverlayMode(self)
 
-        // Bug 1193755 Workaround - Calling become first responder before the animation happens
-        // does this weird thing where it won't take in the initial frame of the label into consideration
-        // which makes the label look squished at the start of the animation and expand to be correct. As a workaround,
-        // I've pushed the become first responder as the next event on UI thread so the animation starts before we 
-        // set a first responder
+        // Bug 1193755 Workaround - Calling becomeFirstResponder before the animation happens
+        // won't take the initial frame of the label into consideration, which makes the label
+        // look squished at the start of the animation and expand to be correct. As a workaround,
+        // we becomeFirstResponder as the next event on UI thread, so the animation starts before we
+        // set a first responder.
         if pasted {
             // Clear any existing text, focus the field, then set the actual pasted text.
             // This avoids highlighting all of the text.
