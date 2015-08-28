@@ -252,9 +252,15 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     }
 
     private func makeConstraints() {
+        let viewBindings: [String: AnyObject] = [
+            "topLayoutGuide" : topLayoutGuide,
+            "navBar" : navBar
+        ]
+
+        let topConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|[topLayoutGuide][navBar]", options: [], metrics: nil, views: viewBindings)
+        view.addConstraints(topConstraints)
+
         navBar.snp_makeConstraints { make in
-            let topLayoutGuide = self.topLayoutGuide as! UIView
-            make.top.equalTo(topLayoutGuide.snp_bottom)
             make.height.equalTo(UIConstants.ToolbarHeight)
             make.left.right.equalTo(self.view)
         }
