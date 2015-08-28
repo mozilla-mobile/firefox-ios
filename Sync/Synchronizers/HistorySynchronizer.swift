@@ -53,7 +53,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         return HistoryStorageVersion
     }
 
-    private func mask(maxFailures: Int) -> Result<()> -> Success {
+    private func mask(maxFailures: Int) -> Maybe<()> -> Success {
         var failures = 0
         return { result in
             if result.isSuccess {
