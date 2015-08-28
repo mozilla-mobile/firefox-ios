@@ -363,7 +363,7 @@ extension SQLiteHistory: BrowserHistory {
                                                      whereURLContains filter: String? = nil,
                                                      groupClause: String = "GROUP BY historyID ",
                                                      whereData: String? = nil,
-                                                     includeIcon: Bool = true) -> Deferred<Result<Cursor<Site>>> {
+                                                     includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
         let localFrecencySQL = getLocalFrecencySQL()
         let remoteFrecencySQL = getRemoteFrecencySQL()
         let sixMonthsInMicroseconds: UInt64 = 15_724_800_000_000      // 182 * 1000 * 1000 * 60 * 60 * 24
