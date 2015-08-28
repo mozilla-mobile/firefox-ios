@@ -74,15 +74,15 @@ public class FileAccessor {
         try NSFileManager.defaultManager().moveItemAtPath(fromPath, toPath: toPath as String)
     }
 
-    public func copy(fromRelativePath: String, toAbsolutePath: String, error: NSErrorPointer = nil) -> Bool {
+    public func copy(fromRelativePath: String, toAbsolutePath: String) throws -> Bool {
         let fromPath = rootPath.stringByAppendingPathComponent(fromRelativePath)
-        let toDir = toAbsolutePath.stringByDeletingLastPathComponent
-
-        if !createDir(toDir, error: error) {
+        guard let dest = NSURL.fileURLWithPath(toAbsolutePath).URLByDeletingLastPathComponent?.path else {
             return false
         }
 
-        return NSFileManager.defaultManager().copyItemAtPath(fromPath, toPath: toAbsolutePath, error: error)
+        try createDir(dest)
+        try NSFileManager.defaultManager().copyItemAtPath(fromPath, toPath: toAbsolutePath)
+        return true
     }
 
     /**
