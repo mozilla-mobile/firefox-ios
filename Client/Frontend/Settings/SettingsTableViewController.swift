@@ -396,8 +396,6 @@ extension NSFileManager {
     public func removeItemInDirectory(directory: String, named: String) throws {
         if let file = NSURL.fileURLWithPath(directory).URLByAppendingPathComponent(named).path {
             try self.removeItemAtPath(file)
-        } else {
-            // This should never occur.
         }
     }
 }
