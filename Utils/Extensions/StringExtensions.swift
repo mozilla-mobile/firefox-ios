@@ -73,7 +73,7 @@ public extension String {
     }
 
     private var stringWithAdditionalEscaping: String {
-        return self.stringByReplacingOccurrencesOfString("|", withString: "%7C", options: NSStringCompareOptions.allZeros, range: nil)
+        return self.stringByReplacingOccurrencesOfString("|", withString: "%7C", options: NSStringCompareOptions(), range: nil)
     }
 
     public var asURL: NSURL? {

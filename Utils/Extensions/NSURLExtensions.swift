@@ -141,8 +141,8 @@ extension NSURL {
      * Any failure? Return this URL.
      */
     public func domainURL() -> NSURL {
-        if let scheme = self.scheme, normalized = self.normalizedHost() {
-            return NSURL(scheme: scheme, host: normalized, path: "/") ?? self
+        if let normalized = self.normalizedHost() {
+            return NSURL(scheme: self.scheme, host: normalized, path: "/") ?? self
         }
         return self
     }
