@@ -13,10 +13,10 @@ import XCTest
 public class MockSyncManager: SyncManager {
     public var isSyncing = false
 
-    public func syncClients() -> SyncMaybe { return deferMaybe(.Completed) }
-    public func syncClientsThenTabs() -> SyncMaybe { return deferMaybe(.Completed) }
-    public func syncHistory() -> SyncMaybe { return deferMaybe(.Completed) }
-    public func syncLogins() -> SyncMaybe { return deferMaybe(.Completed) }
+    public func syncClients() -> SyncResult { return deferMaybe(.Completed) }
+    public func syncClientsThenTabs() -> SyncResult { return deferMaybe(.Completed) }
+    public func syncHistory() -> SyncResult { return deferMaybe(.Completed) }
+    public func syncLogins() -> SyncResult { return deferMaybe(.Completed) }
     public func syncEverything() -> Success {
         return succeed()
     }
