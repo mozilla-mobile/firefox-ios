@@ -17,11 +17,11 @@ private let DefaultEngines: [String: Int] = ["tabs": 1]
 private let DefaultDeclined: [String] = [String]()
 
 private func getDefaultEngines() -> [String: EngineMeta] {
-    return mapValues(DefaultEngines, { EngineMeta(version: $0, syncID: Bytes.generateGUID()) })
+    return mapValues(DefaultEngines, f: { EngineMeta(version: $0, syncID: Bytes.generateGUID()) })
 }
 
-public typealias TokenSource = () -> Deferred<Result<TokenServerToken>>
-public typealias ReadyDeferred = Deferred<Result<Ready>>
+public typealias TokenSource = () -> Deferred<Maybe<TokenServerToken>>
+public typealias ReadyDeferred = Deferred<Maybe<Ready>>
 
 // See docs in docs/sync.md.
 
@@ -35,10 +35,10 @@ public class SyncStateMachine {
         return prefs.branch("scratchpad")
     }
 
-    public class func getInfoCollections(authState: SyncAuthState, prefs: Prefs) -> Deferred<Result<InfoCollections>> {
+    public class func getInfoCollections(authState: SyncAuthState, prefs: Prefs) -> Deferred<Maybe<InfoCollections>> {
         log.debug("Fetching info/collections in state machine.")
         let token = authState.token(NSDate.now(), canBeExpired: true)
-        return chainDeferred(token, { (token, kB) in
+        return chainDeferred(token, f: { (token, kB) in
             // TODO: the token might not be expired! Check and selectively advance.
             log.debug("Got token from auth state. Advancing to InitialWithExpiredToken.")
             let state = InitialWithExpiredToken(scratchpad: Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: self.scratchpadPrefs(prefs)), token: token)
@@ -54,7 +54,7 @@ public class SyncStateMachine {
 
     public class func toReady(authState: SyncAuthState, prefs: Prefs) -> ReadyDeferred {
         let token = authState.token(NSDate.now(), canBeExpired: false)
-        return chainDeferred(token, { (token, kB) in
+        return chainDeferred(token, f: { (token, kB) in
             log.debug("Got token from auth state. Server is \(token.api_endpoint).")
             let scratchpadPrefs = self.scratchpadPrefs(prefs)
             let prior = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKB(kB))
@@ -145,8 +145,8 @@ public class BaseSyncState: SyncState {
     var scratchpad: Scratchpad
 
     // TODO: 304 for i/c.
-    public func getInfoCollections() -> Deferred<Result<InfoCollections>> {
-        return chain(self.client.getInfoCollections(), {
+    public func getInfoCollections() -> Deferred<Maybe<InfoCollections>> {
+        return chain(self.client.getInfoCollections(), f: {
             return $0.value
         })
     }
@@ -192,7 +192,7 @@ public class BaseSyncStateWithInfo: BaseSyncState {
 /*
  * Error types.
  */
-public protocol SyncError: ErrorType {}
+public protocol SyncError: MaybeErrorType {}
 
 public class UnknownError: SyncError {
     public var description: String {
@@ -260,7 +260,7 @@ public class MissingCryptoKeysAndUnwillingError: SyncError {
 
 public protocol RecoverableSyncState: SyncState, SyncError {
     // All error states must be able to advance to a usable state.
-    func advance() -> Deferred<Result<SyncState>>
+    func advance() -> Deferred<Maybe<SyncState>>
 }
 
 /**
@@ -284,10 +284,10 @@ public class ChangedServerError: RecoverableSyncState {
         self.newScratchpad = Scratchpad(b: scratchpad.syncKeyBundle, persistingTo: scratchpad.prefs)
     }
 
-    public func advance() -> Deferred<Result<SyncState>> {
+    public func advance() -> Deferred<Maybe<SyncState>> {
         // TODO: mutate local storage to allow for a fresh start.
         let state = InitialWithLiveToken(scratchpad: newScratchpad.checkpoint(), token: newToken)
-        return Deferred(value: Result(success: state))
+        return Deferred(value: Maybe(success: state))
     }
 }
 
@@ -309,11 +309,11 @@ public class SyncIDChangedError: RecoverableSyncState {
         self.newMetaGlobal = newMetaGlobal
     }
 
-    public func advance() -> Deferred<Result<SyncState>> {
+    public func advance() -> Deferred<Maybe<SyncState>> {
         // TODO: mutate local storage to allow for a fresh start.
         let s = self.previousState.scratchpad.evolve().setGlobal(self.newMetaGlobal).setKeys(nil).build().checkpoint()
         let state = HasMetaGlobal(client: self.previousState.client, scratchpad: s, token: self.previousState.token, info: self.previousState.info)
-        return Deferred(value: Result(success: state))
+        return Deferred(value: Maybe(success: state))
     }
 }
 
@@ -339,21 +339,21 @@ public class MissingMetaGlobalError: RecoverableSyncState {
         return MetaGlobal(syncID: Bytes.generateGUID(), storageVersion: StorageVersionCurrent, engines: getDefaultEngines(), declined: DefaultDeclined)
     }
 
-    private func onWiped(resp: StorageResponse<JSON>, s: Scratchpad) -> Deferred<Result<SyncState>> {
+    private func onWiped(resp: StorageResponse<JSON>, s: Scratchpad) -> Deferred<Maybe<SyncState>> {
         // Upload a new meta/global.
         // Note that we discard info/collections -- we just wiped storage.
-        return Deferred(value: Result(success: InitialWithLiveToken(client: self.previousState.client, scratchpad: s, token: self.previousState.token)))
+        return Deferred(value: Maybe(success: InitialWithLiveToken(client: self.previousState.client, scratchpad: s, token: self.previousState.token)))
     }
 
-    private func advanceFromWiped(wipe: Deferred<Result<StorageResponse<JSON>>>) -> Deferred<Result<SyncState>> {
+    private func advanceFromWiped(wipe: Deferred<Maybe<StorageResponse<JSON>>>) -> Deferred<Maybe<SyncState>> {
         // TODO: mutate local storage to allow for a fresh start.
         // Note that we discard the previous global and keys -- after all, we just wiped storage.
 
         let s = self.previousState.scratchpad.evolve().setGlobal(nil).setKeys(nil).build().checkpoint()
-        return chainDeferred(wipe, { self.onWiped($0, s: s) })
+        return chainDeferred(wipe, f: { self.onWiped($0, s: s) })
     }
 
-    public func advance() -> Deferred<Result<SyncState>> {
+    public func advance() -> Deferred<Maybe<SyncState>> {
         return self.advanceFromWiped(self.previousState.client.wipeStorage())
     }
 }
@@ -366,8 +366,8 @@ public class MissingCryptoKeysError: RecoverableSyncState {
         return "Missing crypto/keys."
     }
 
-    public func advance() -> Deferred<Result<SyncState>> {
-        return Deferred(value: Result(failure: MissingCryptoKeysAndUnwillingError()))
+    public func advance() -> Deferred<Maybe<SyncState>> {
+        return Deferred(value: Maybe(failure: MissingCryptoKeysAndUnwillingError()))
     }
 }
 
@@ -387,8 +387,8 @@ public class InitialWithExpiredToken: BaseSyncState {
         return InitialWithExpiredTokenAndInfo(scratchpad: self.scratchpad, token: self.token, info: info)
     }
 
-    public func advanceIfNeeded(previous: InfoCollections?, collections: [String]?) -> Deferred<Result<InitialWithExpiredTokenAndInfo?>> {
-        return chain(getInfoCollections(), { info in
+    public func advanceIfNeeded(previous: InfoCollections?, collections: [String]?) -> Deferred<Maybe<InitialWithExpiredTokenAndInfo?>> {
+        return chain(getInfoCollections(), f: { info in
             // Unchanged or no previous state? Short-circuit.
             if let previous = previous {
                 if info.same(previous, collections: collections) {
@@ -405,15 +405,15 @@ public class InitialWithExpiredToken: BaseSyncState {
 public class InitialWithExpiredTokenAndInfo: BaseSyncStateWithInfo {
     public override var label: SyncStateLabel { return SyncStateLabel.InitialWithExpiredTokenAndInfo }
 
-    public func advanceWithToken(liveTokenSource: TokenSource) -> Deferred<Result<InitialWithLiveTokenAndInfo>> {
-        return chainResult(liveTokenSource(), { token in
+    public func advanceWithToken(liveTokenSource: TokenSource) -> Deferred<Maybe<InitialWithLiveTokenAndInfo>> {
+        return chainResult(liveTokenSource(), f: { token in
             if self.token.sameDestination(token) {
-                return Result(success: InitialWithLiveTokenAndInfo(scratchpad: self.scratchpad, token: token, info: self.info))
+                return Maybe(success: InitialWithLiveTokenAndInfo(scratchpad: self.scratchpad, token: token, info: self.info))
             }
 
             // Otherwise, we're screwed: we need to start over.
             // Pass in the new token, of course.
-            return Result(failure: ChangedServerError(scratchpad: self.scratchpad, token: token))
+            return Maybe(failure: ChangedServerError(scratchpad: self.scratchpad, token: token))
         })
     }
 }
@@ -435,8 +435,8 @@ public class InitialWithLiveToken: BaseSyncState {
         return InitialWithLiveTokenAndInfo(scratchpad: self.scratchpad, token: self.token, info: info)
     }
 
-    public func advance() -> Deferred<Result<InitialWithLiveTokenAndInfo>> {
-        return chain(getInfoCollections(), self.advanceWithInfo)
+    public func advance() -> Deferred<Maybe<InitialWithLiveTokenAndInfo>> {
+        return chain(getInfoCollections(), f: self.advanceWithInfo)
     }
 }
 
@@ -488,7 +488,7 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
         let v = fetched.value.storageVersion
         if v > StorageVersionCurrent {
             log.info("Client upgrade required for storage version \(v)")
-            return Deferred(value: Result(failure: UpgradeRequiredError(target: v)))
+            return Deferred(value: Maybe(failure: UpgradeRequiredError(target: v)))
         }
 
         if v < StorageVersionCurrent {
@@ -499,7 +499,7 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
             //       to salvage old preferences from the old meta/global -- e.g., datatype elections.
             //       This doesn't need to be implemented until we rev the storage format, which
             //       might never happen.
-            return chainDeferred(client.wipeStorage(), self.advanceAfterWipe)
+            return chainDeferred(client.wipeStorage(), f: self.advanceAfterWipe)
         }
 
         // Second: check syncID and contents.
@@ -541,14 +541,14 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
         // scratchpad, and optionally a meta/global to upload.
         // If this upload fails, we abort, of course.
         let previousMetaGlobal = self.scratchpad.global?.value
-        let (withEnginesApplied: Scratchpad, toUpload: MetaGlobal?) = newScratchpad.applyEngineChoices(previousMetaGlobal)
+        let (withEnginesApplied, toUpload) = newScratchpad.applyEngineChoices(previousMetaGlobal)
 
         if let toUpload = toUpload {
             // Upload the new meta/global.
             // The provided scratchpad *does not reflect this new meta/global*: you need to
             // get the timestamp from the upload!
             let upload = self.client.uploadMetaGlobal(toUpload, ifUnmodifiedSince: fetched.timestamp)
-            return chainDeferred(upload, { resp in
+            return chainDeferred(upload, f: { resp in
                 let postUpload = withEnginesApplied.checkpoint()    // TODO: add the timestamp!
                 return HasMetaGlobal.fromState(self, scratchpad: postUpload).advance()
             })
@@ -562,7 +562,7 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
 public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
     public override var label: SyncStateLabel { return SyncStateLabel.InitialWithLiveTokenAndInfo }
 
-    private func processFailure(failure: ErrorType?) -> ErrorType {
+    private func processFailure(failure: MaybeErrorType?) -> MaybeErrorType {
         if let failure = failure as? ServerInBackoffError {
             return failure
         }
@@ -584,7 +584,7 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
             return MissingMetaGlobalAndUnwillingError()
         }
 
-        if let failure = failure as? NotFound<StorageResponse<GlobalEnvelope>> {
+        if let _ = failure as? NotFound<StorageResponse<GlobalEnvelope>> {
             // OK, this is easy.
             // This state is responsible for creating the new m/g, uploading it, and
             // restarting with a clean scratchpad.
@@ -635,7 +635,7 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
             }
 
             // Otherwise, we have a failure state.
-            return Deferred(value: Result(failure: self.processFailure(result.failureValue)))
+            return Deferred(value: Maybe(failure: self.processFailure(result.failureValue)))
         }
     }
 }
@@ -651,13 +651,13 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
         return HasMetaGlobal(client: state.client, scratchpad: scratchpad, token: state.token, info: state.info)
     }
 
-    private func processFailure(failure: ErrorType?) -> ErrorType {
+    private func processFailure(failure: MaybeErrorType?) -> MaybeErrorType {
         // For now, avoid the risky stuff.
         if ShortCircuitMissingCryptoKeys {
             return MissingCryptoKeysAndUnwillingError()
         }
 
-        if let failure = failure as? NotFound<StorageResponse<KeysPayload>> {
+        if let _ = failure as? NotFound<StorageResponse<KeysPayload>> {
             // This state is responsible for creating the new c/k, uploading it, and
             // restarting with a clean scratchpad.
             // But we haven't implemented it yet.
@@ -693,7 +693,7 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
                 if cryptoModified == keys.timestamp {
                     log.debug("Using cached collection keys for ready state.")
                     let ready = Ready(client: self.client, scratchpad: self.scratchpad, token: self.token, info: self.info, keys: keys.value)
-                    return Deferred(value: Result(success: ready))
+                    return Deferred(value: Maybe(success: ready))
                 }
 
                 log.warning("Cached keys with timestamp \(keys.timestamp) disagree with server modified \(cryptoModified).")
@@ -703,7 +703,7 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
                 // we need to re-sync any collection whose keys just changed.
                 // TODO TODO TODO: do that work.
                 log.error("Unable to handle key evolution. Sorry.")
-                return Deferred(value: Result(failure: InvalidKeysError(keys.value)))
+                return Deferred(value: Maybe(failure: InvalidKeysError(keys.value)))
             } else {
                 // No known modified time for crypto/. That likely means the server has no keys.
                 // Drop our cached value and fall through; we'll try to fetch, fail, and
@@ -739,7 +739,7 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
                 let collectionKeys = Keys(payload: resp.value.payload)
                 if (!collectionKeys.valid) {
                     log.error("Unexpectedly invalid crypto/keys during a successful fetch.")
-                    return Deferred(value: Result(failure: InvalidKeysError(collectionKeys)))
+                    return Deferred(value: Maybe(failure: InvalidKeysError(collectionKeys)))
                 }
 
                 // setKeys bumps the crypto/ timestamp because, though in theory there might be
@@ -749,12 +749,12 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
                 let ready = Ready(client: self.client, scratchpad: s, token: self.token, info: self.info, keys: collectionKeys)
 
                 log.info("Arrived in Ready state.")
-                return Deferred(value: Result(success: ready))
+                return Deferred(value: Maybe(success: ready))
             }
 
             // Otherwise, we have a failure state.
             // Much of this logic is shared with the meta/global fetch.
-            return Deferred(value: Result(failure: self.processFailure(result.failureValue)))
+            return Deferred(value: Maybe(failure: self.processFailure(result.failureValue)))
         }
     }
 }
@@ -775,7 +775,7 @@ public class Ready: BaseSyncStateWithInfo {
  * we use function dispatch to ape a protocol.
  */
 func advanceSyncState(s: InitialWithLiveToken) -> ReadyDeferred {
-    return chainDeferred(s.advance(), { $0.advance() })
+    return chainDeferred(s.advance(), f: { $0.advance() })
 }
 
 func advanceSyncState(s: HasMetaGlobal) -> ReadyDeferred {

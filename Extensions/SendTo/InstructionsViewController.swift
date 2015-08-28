@@ -31,7 +31,7 @@ private func highlightLink(var s: NSString, withColor color: UIColor) -> NSAttri
     return a
 }
 
-func setupHelpView(view: UIView, #introText: String, #showMeText: String) {
+func setupHelpView(view: UIView, introText: String, showMeText: String) {
     let imageView = UIImageView()
     imageView.image = UIImage(named: "emptySync")
     view.addSubview(imageView)
@@ -87,6 +87,6 @@ class InstructionsViewController: UIViewController {
     }
 
     func showMeHow() {
-        println("Show me how") // TODO Not sure what to do or if to keep this. Waiting for UX feedback.
+        print("Show me how") // TODO Not sure what to do or if to keep this. Waiting for UX feedback.
     }
 }

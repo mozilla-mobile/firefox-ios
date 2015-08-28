@@ -64,7 +64,7 @@ public class SyncAuthState {
     // It's tricky to get Swift to recurse into a closure that captures from the environment without
     // segfaulting the compiler, so we pass everything around, like barbarians.
     private func generateAssertionAndFetchTokenAt(audience: String, client: TokenServerClient, clientState: String?, married: MarriedState,
-            now: Timestamp, retryCount: Int) -> Deferred<Result<TokenServerToken>> {
+            now: Timestamp, retryCount: Int) -> Deferred<Maybe<TokenServerToken>> {
         let assertion = married.generateAssertionForAudience(audience, now: now)
         return client.token(assertion, clientState: clientState).bind { result in
             if retryCount > 0 {
@@ -86,7 +86,7 @@ public class SyncAuthState {
         }
     }
 
-    public func token(now: Timestamp, canBeExpired: Bool) -> Deferred<Result<(token: TokenServerToken, forKey: NSData)>> {
+    public func token(now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
         if let value = cache.value {
             // Give ourselves some room to do work.
             let isExpired = value.expiresAt < now + 5 * OneMinuteInMilliseconds
@@ -96,12 +96,12 @@ public class SyncAuthState {
                 } else {
                     log.info("Returning cached token, which should be valid.")
                 }
-                return deferResult((token: value.token, forKey: value.forKey))
+                return deferMaybe((token: value.token, forKey: value.forKey))
             }
 
             if !isExpired {
                 log.info("Returning cached token, which should be valid.")
-                return deferResult((token: value.token, forKey: value.forKey))
+                return deferMaybe((token: value.token, forKey: value.forKey))
             }
         }
 
@@ -126,9 +126,9 @@ public class SyncAuthState {
                         self.cache.value = newCache
                     }
                 }
-                return chain(deferred, { (token: $0, forKey: married.kB) })
+                return chain(deferred, f: { (token: $0, forKey: married.kB) })
             }
-            return deferResult(result.failureValue!)
+            return deferMaybe(result.failureValue!)
         }
     }
 }

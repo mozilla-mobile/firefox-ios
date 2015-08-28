@@ -16,9 +16,10 @@ struct ReaderModeHandlers {
         webServer.registerHandlerForMethod("GET", module: "reader-mode", resource: "page-exists") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
             if let url = request.query["url"] as? String {
                 if let url = NSURL(string: url) {
-                    if ReaderModeCache.sharedInstance.contains(url, error: nil) {
+                    do {
+                        try ReaderModeCache.sharedInstance.contains(url)
                         return GCDWebServerResponse(statusCode: 200)
-                    } else {
+                    } catch _ {
                         return GCDWebServerResponse(statusCode: 404)
                     }
                 }
@@ -30,7 +31,8 @@ struct ReaderModeHandlers {
         webServer.registerHandlerForMethod("GET", module: "reader-mode", resource: "page") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
             if let url = request.query["url"] as? String {
                 if let url = NSURL(string: url) {
-                    if let readabilityResult = ReaderModeCache.sharedInstance.get(url, error: nil) {
+                    do {
+                        let readabilityResult = try ReaderModeCache.sharedInstance.get(url)
                         // We have this page in our cache, so we can display it. Just grab the correct style from the
                         // profile and then generate HTML from the Readability results.
                         var readerModeStyle = DefaultReaderModeStyle
@@ -45,7 +47,7 @@ struct ReaderModeHandlers {
                             response.setValue("default-src 'none'; img-src *; style-src http://localhost:*; font-src http://localhost:*", forAdditionalHeader: "Content-Security-Policy")
                             return response
                         }
-                    } else {
+                    } catch _ {
                         // This page has not been converted to reader mode yet. This happens when you for example add an
                         // item via the app extension and the application has not yet had a change to readerize that
                         // page in the background.
@@ -55,18 +57,18 @@ struct ReaderModeHandlers {
                         // become available.
                         ReadabilityService.sharedInstance.process(url)
                         if let readerViewLoadingPath = NSBundle.mainBundle().pathForResource("ReaderViewLoading", ofType: "html") {
-                            if let readerViewLoading = NSMutableString(contentsOfFile: readerViewLoadingPath, encoding: NSUTF8StringEncoding, error: nil) {
-                                if let absoluteString = url.absoluteString {
-                                    readerViewLoading.replaceOccurrencesOfString("%ORIGINAL-URL%", withString: absoluteString,
-                                        options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
-                                    readerViewLoading.replaceOccurrencesOfString("%LOADING-TEXT%", withString: NSLocalizedString("Loading content…", comment: "Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app."),
-                                        options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
-                                    readerViewLoading.replaceOccurrencesOfString("%LOADING-FAILED-TEXT%", withString: NSLocalizedString("The page could not be displayed in Reader View.", comment: "Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app."),
-                                        options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
-                                    readerViewLoading.replaceOccurrencesOfString("%LOAD-ORIGINAL-TEXT%", withString: NSLocalizedString("Load original page", comment: "Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app."),
-                                        options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
-                                }
+                            do {
+                                let readerViewLoading = try NSMutableString(contentsOfFile: readerViewLoadingPath, encoding: NSUTF8StringEncoding)
+                                readerViewLoading.replaceOccurrencesOfString("%ORIGINAL-URL%", withString: url.absoluteString,
+                                    options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
+                                readerViewLoading.replaceOccurrencesOfString("%LOADING-TEXT%", withString: NSLocalizedString("Loading content…", comment: "Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app."),
+                                    options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
+                                readerViewLoading.replaceOccurrencesOfString("%LOADING-FAILED-TEXT%", withString: NSLocalizedString("The page could not be displayed in Reader View.", comment: "Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app."),
+                                    options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
+                                readerViewLoading.replaceOccurrencesOfString("%LOAD-ORIGINAL-TEXT%", withString: NSLocalizedString("Load original page", comment: "Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app."),
+                                    options: NSStringCompareOptions.LiteralSearch, range: NSMakeRange(0, readerViewLoading.length))
                                 return GCDWebServerDataResponse(HTML: readerViewLoading as String)
+                            } catch _ {
                             }
                         }
                     }

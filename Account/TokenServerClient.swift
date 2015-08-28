@@ -62,10 +62,10 @@ enum TokenServerError {
     case Local(NSError)
 }
 
-extension TokenServerError: Printable, ErrorType {
+extension TokenServerError: MaybeErrorType {
     var description: String {
         switch self {
-        case let Remote(code: code, status: status, remoteTimestamp: remoteTimestamp):
+        case let Remote(code: code, status: status, remoteTimestamp: _):
             if let status = status {
                 return "<TokenServerError.Remote \(code): \(status)>"
             } else {
@@ -86,9 +86,9 @@ public class TokenServerClient {
 
     public class func getAudienceForURL(URL: NSURL) -> String {
         if let port = URL.port {
-            return "\(URL.scheme!)://\(URL.host!):\(port)"
+            return "\(URL.scheme)://\(URL.host!):\(port)"
         } else {
-            return "\(URL.scheme!)://\(URL.host!)"
+            return "\(URL.scheme)://\(URL.host!)"
         }
     }
 
@@ -135,10 +135,10 @@ public class TokenServerClient {
         return Alamofire.Manager.managerWithUserAgent(ua, configuration: configuration)
     }()
 
-    public func token(assertion: String, clientState: String? = nil) -> Deferred<Result<TokenServerToken>> {
-        let deferred = Deferred<Result<TokenServerToken>>()
+    public func token(assertion: String, clientState: String? = nil) -> Deferred<Maybe<TokenServerToken>> {
+        let deferred = Deferred<Maybe<TokenServerToken>>()
 
-        var mutableURLRequest = NSMutableURLRequest(URL: URL)
+        let mutableURLRequest = NSMutableURLRequest(URL: URL)
         mutableURLRequest.setValue("BrowserID " + assertion, forHTTPHeaderField: "Authorization")
         if let clientState = clientState {
             mutableURLRequest.setValue(clientState, forHTTPHeaderField: "X-Client-State")
@@ -146,30 +146,29 @@ public class TokenServerClient {
 
         alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
-            .responseJSON { (_, response, data, error) in
-                if let error = error {
-                    deferred.fill(Result(failure: TokenServerError.Local(error)))
+            .responseJSON { (_, response, result) in
+            if let error = result.error as? NSError{
+                deferred.fill(Maybe(failure: TokenServerError.Local(error)))
+                return
+            }
+            if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                let json = JSON(data)
+                let remoteTimestampHeader = response?.allHeaderFields["x-timestamp"] as? String
+
+                if let remoteError = TokenServerClient.remoteErrorFromJSON(json, statusCode: response!.statusCode,
+                    remoteTimestampHeader: remoteTimestampHeader) {
+                        deferred.fill(Maybe(failure: remoteError))
+                        return
+                }
+
+                if let token = TokenServerClient.tokenFromJSON(json, remoteTimestampHeader: remoteTimestampHeader) {
+                    deferred.fill(Maybe(success: token))
                     return
                 }
-
-                if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
-                    let json = JSON(data)
-                    let remoteTimestampHeader = response?.allHeaderFields["x-timestamp"] as? String
-
-                    if let remoteError = TokenServerClient.remoteErrorFromJSON(json, statusCode: response!.statusCode,
-                        remoteTimestampHeader: remoteTimestampHeader) {
-                        deferred.fill(Result(failure: remoteError))
-                        return
-                    }
-
-                    if let token = TokenServerClient.tokenFromJSON(json, remoteTimestampHeader: remoteTimestampHeader) {
-                        deferred.fill(Result(success: token))
-                        return
-                    }
-                }
-
-                deferred.fill(Result(failure: TokenServerClientUnknownError))
             }
+
+            deferred.fill(Maybe(failure: TokenServerClientUnknownError))
+        }
         return deferred
     }
 }

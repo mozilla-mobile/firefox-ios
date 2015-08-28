@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import UIKit
 
-private class DiskImageStoreErrorType: ErrorType {
+private class DiskImageStoreErrorType: MaybeErrorType {
     let description: String
     init(description: String) {
         self.description = description
@@ -25,12 +25,11 @@ public class DiskImageStore {
 
     required public init(files: FileAccessor, namespace: String, quality: Float) {
         self.files = files
-        self.filesDir = files.getAndEnsureDirectory(relativeDir: namespace)!
+        self.filesDir = try! files.getAndEnsureDirectory(namespace)
         self.quality = CGFloat(quality)
 
         // Build an in-memory set of keys from the existing images on disk.
         var keys = [String]()
-        let manager = NSFileManager()
         if let fileEnumerator = NSFileManager.defaultManager().enumeratorAtPath(filesDir) {
             for file in fileEnumerator {
                 keys.append(file as! String)
@@ -40,21 +39,21 @@ public class DiskImageStore {
     }
 
     /// Gets an image for the given key if it is in the store.
-    public func get(key: String) -> Deferred<Result<UIImage>> {
+    public func get(key: String) -> Deferred<Maybe<UIImage>> {
         if !keys.contains(key) {
-            return deferResult(DiskImageStoreErrorType(description: "Image key not found"))
+            return deferMaybe(DiskImageStoreErrorType(description: "Image key not found"))
         }
 
-        return deferDispatchAsync(queue, {
-            let imagePath = self.filesDir.stringByAppendingPathComponent(key)
+        return deferDispatchAsync(queue) { () -> Deferred<Maybe<UIImage>> in
+            let imagePath = (self.filesDir as NSString).stringByAppendingPathComponent(key)
             if let data = NSData(contentsOfFile: imagePath),
-               let image = UIImage(data: data)
+                let image = UIImage(data: data)
             {
-                return deferResult(image)
+                return deferMaybe(image)
             }
 
-            return deferResult(DiskImageStoreErrorType(description: "Invalid image data"))
-        })
+            return deferMaybe(DiskImageStoreErrorType(description: "Invalid image data"))
+        }
     }
 
     /// Adds an image for the given key.
@@ -62,20 +61,20 @@ public class DiskImageStore {
     /// Does nothing if this key already exists in the store.
     public func put(key: String, image: UIImage) -> Success {
         if keys.contains(key) {
-            return deferResult(DiskImageStoreErrorType(description: "Key already in store"))
+            return deferMaybe(DiskImageStoreErrorType(description: "Key already in store"))
         }
 
-        return deferDispatchAsync(queue, {
-            let imagePath = self.filesDir.stringByAppendingPathComponent(key)
-            let data = UIImageJPEGRepresentation(image, self.quality)
-
-            if data.writeToFile(imagePath, atomically: false) {
-                self.keys.insert(key)
-                return succeed()
+        return deferDispatchAsync(queue) { () -> Success in
+            let imagePath = (self.filesDir as NSString).stringByAppendingPathComponent(key)
+            if let data = UIImageJPEGRepresentation(image, self.quality) {
+                if data.writeToFile(imagePath, atomically: false) {
+                    self.keys.insert(key)
+                    return succeed()
+                }
             }
 
-            return deferResult(DiskImageStoreErrorType(description: "Could not write image to file"))
-        })
+            return deferMaybe(DiskImageStoreErrorType(description: "Could not write image to file"))
+        }
     }
 
     /// Clears all images from the cache, excluding the given set of keys.
@@ -83,8 +82,8 @@ public class DiskImageStore {
         let keysToDelete = self.keys.subtract(keys)
 
         for key in keysToDelete {
-            let path = filesDir.stringByAppendingPathComponent(key)
-            NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
+            let path = NSString(string: filesDir).stringByAppendingPathComponent(key)
+            try! NSFileManager.defaultManager().removeItemAtPath(path)
         }
 
         self.keys = self.keys.intersect(keys)

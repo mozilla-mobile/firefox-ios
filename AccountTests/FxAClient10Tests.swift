@@ -98,8 +98,8 @@ class FxAClient10Tests: LiveAccountTest {
             let e = self.expectationWithDescription("")
 
             let client = FxAClient10()
-            let login: Deferred<Result<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
-            let keys: Deferred<Result<FxAKeysResponse>> = login.bind { (result: Result<FxALoginResponse>) in
+            let login: Deferred<Maybe<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
+            let keys: Deferred<Maybe<FxAKeysResponse>> = login.bind { (result: Maybe<FxALoginResponse>) in
                 switch result {
                 case let .Failure(error):
                     return Deferred(value: .Failure(error))
@@ -125,8 +125,8 @@ class FxAClient10Tests: LiveAccountTest {
             let e = self.expectationWithDescription("")
 
             let client = FxAClient10()
-            let login: Deferred<Result<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
-            let sign: Deferred<Result<FxASignResponse>> = login.bind { (result: Result<FxALoginResponse>) in
+            let login: Deferred<Maybe<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
+            let sign: Deferred<Maybe<FxASignResponse>> = login.bind { (result: Maybe<FxALoginResponse>) in
                 switch result {
                 case let .Failure(error):
                     return Deferred(value: .Failure(error))

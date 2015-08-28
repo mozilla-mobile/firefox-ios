@@ -10,7 +10,7 @@ import XCGLogger
 private let log = Logger.browserLogger
 private let queue = dispatch_queue_create("FaviconFetcher", DISPATCH_QUEUE_CONCURRENT)
 
-class FaviconFetcherErrorType: ErrorType {
+class FaviconFetcherErrorType: MaybeErrorType {
     let description: String
     init(description: String) {
         self.description = description
@@ -25,38 +25,38 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
     public static var userAgent: String = ""
     static let ExpirationTime = NSTimeInterval(60*60*24*7) // Only check for icons once a week
 
-    class func getForURL(url: NSURL, profile: Profile) -> Deferred<Result<[Favicon]>> {
+    class func getForURL(url: NSURL, profile: Profile) -> Deferred<Maybe<[Favicon]>> {
         let f = FaviconFetcher()
         return f.loadFavicons(url, profile: profile)
     }
 
-    private func loadFavicons(url: NSURL, profile: Profile, var oldIcons: [Favicon] = [Favicon]()) -> Deferred<Result<[Favicon]>> {
+    private func loadFavicons(url: NSURL, profile: Profile, var oldIcons: [Favicon] = [Favicon]()) -> Deferred<Maybe<[Favicon]>> {
         if isIgnoredURL(url) {
-            return deferResult(FaviconFetcherErrorType(description: "Not fetching ignored URL to find favicons."))
+            return deferMaybe(FaviconFetcherErrorType(description: "Not fetching ignored URL to find favicons."))
         }
 
-        let deferred = Deferred<Result<[Favicon]>>()
+        let deferred = Deferred<Maybe<[Favicon]>>()
 
         dispatch_async(queue) { _ in
-            self.parseHTMLForFavicons(url).bind({ (result: Result<[Favicon]>) -> Deferred<[Result<Favicon>]> in
-                var deferreds = [Deferred<Result<Favicon>>]()
+            self.parseHTMLForFavicons(url).bind({ (result: Maybe<[Favicon]>) -> Deferred<[Maybe<Favicon>]> in
+                var deferreds = [Deferred<Maybe<Favicon>>]()
                 if let icons = result.successValue {
-                    deferreds = map(icons) { self.getFavicon(url, icon: $0, profile: profile) }
+                    deferreds = icons.map { self.getFavicon(url, icon: $0, profile: profile) }
                 }
                 return all(deferreds)
-            }).bind({ (results: [Result<Favicon>]) -> Deferred<Result<[Favicon]>> in
+            }).bind({ (results: [Maybe<Favicon>]) -> Deferred<Maybe<[Favicon]>> in
                 for result in results {
                     if let icon = result.successValue {
                         oldIcons.append(icon)
                     }
                 }
 
-                oldIcons.sort({ (a, b) -> Bool in
+                oldIcons.sortInPlace({ (a, b) -> Bool in
                     return a.width > b.width
                 })
 
-                return deferResult(oldIcons)
-            }).upon({ (result: Result<[Favicon]>) in
+                return deferMaybe(oldIcons)
+            }).upon({ (result: Maybe<[Favicon]>) in
                 deferred.fill(result)
                 return
             })
@@ -72,26 +72,24 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
         return Alamofire.Manager.managerWithUserAgent(userAgent, configuration: configuration)
     }()
 
-    private func fetchDataForURL(url: NSURL) -> Deferred<Result<NSData>> {
-        let deferred = Deferred<Result<NSData>>()
+    private func fetchDataForURL(url: NSURL) -> Deferred<Maybe<NSData>> {
+        let deferred = Deferred<Maybe<NSData>>()
         alamofire.request(.GET, url).response { (request, response, data, error) in
             if error == nil {
-                if let data = data as? NSData {
-                    deferred.fill(Result(success: data))
+                if let data = data {
+                    deferred.fill(Maybe(success: data))
                     return
                 }
             }
 
-            deferred.fill(Result(failure: FaviconFetcherErrorType(description: error?.description ?? "No content.")))
+            deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: error?.description ?? "No content.")))
         }
         return deferred
     }
 
     // Loads and parses an html document and tries to find any known favicon-type tags for the page
-    private func parseHTMLForFavicons(url: NSURL) -> Deferred<Result<[Favicon]>> {
-        var err: NSError?
-
-        return fetchDataForURL(url).bind({ result -> Deferred<Result<[Favicon]>> in
+    private func parseHTMLForFavicons(url: NSURL) -> Deferred<Maybe<[Favicon]>> {
+        return fetchDataForURL(url).bind({ result -> Deferred<Maybe<[Favicon]>> in
             var icons = [Favicon]()
 
             if let data = result.successValue where result.isSuccess,
@@ -101,7 +99,7 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                     if let refresh = meta.attribute("http-equiv") where refresh == "Refresh",
                         let content = meta.attribute("content"),
                         let index = content.rangeOfString("URL="),
-                        let url = NSURL(string: content.substringFromIndex(advance(index.startIndex,4))) {
+                        let url = NSURL(string: content.substringFromIndex(index.startIndex.advancedBy(4))) {
                             reloadUrl = url
                     }
                 }
@@ -114,26 +112,26 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                     if let rel = link.attribute("rel") where (rel == "shortcut icon" || rel == "icon" || rel == "apple-touch-icon"),
                         let href = link.attribute("href"),
                         let url = NSURL(string: href, relativeToURL: url) {
-                            let icon = Favicon(url: url.absoluteString!, date: NSDate(), type: IconType.Icon)
+                            let icon = Favicon(url: url.absoluteString, date: NSDate(), type: IconType.Icon)
                             icons.append(icon)
                     }
                 }
             }
 
-            return deferResult(icons)
+            return deferMaybe(icons)
         })
     }
 
-    private func getFavicon(siteUrl: NSURL, icon: Favicon, profile: Profile) -> Deferred<Result<Favicon>> {
-        let deferred = Deferred<Result<Favicon>>()
+    private func getFavicon(siteUrl: NSURL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
+        let deferred = Deferred<Maybe<Favicon>>()
         let url = icon.url
         let manager = SDWebImageManager.sharedManager()
-        let site = Site(url: siteUrl.absoluteString!, title: "")
+        let site = Site(url: siteUrl.absoluteString, title: "")
 
         var fav = Favicon(url: url, type: icon.type)
         if let url = url.asURL {
             manager.downloadImageWithURL(url, options: SDWebImageOptions.LowPriority, progress: nil, completed: { (img, err, cacheType, success, url) -> Void in
-                fav = Favicon(url: url.absoluteString!,
+                fav = Favicon(url: url.absoluteString,
                     type: icon.type)
 
                 if let img = img {
@@ -145,10 +143,10 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                     fav.height = 0
                 }
 
-                deferred.fill(Result(success: fav))
+                deferred.fill(Maybe(success: fav))
             })
         } else {
-            return deferResult(FaviconFetcherErrorType(description: "Invalid URL \(url)"))
+            return deferMaybe(FaviconFetcherErrorType(description: "Invalid URL \(url)"))
         }
 
         return deferred

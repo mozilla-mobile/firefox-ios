@@ -22,7 +22,7 @@ public struct ExtensionUtils {
                                     } else {
                                         let title = inputItem.attributedContentText?.string as String?
                                         if let url = obj as? NSURL {
-                                            completionHandler(ShareItem(url: url.absoluteString!, title: title, favicon: nil), nil)
+                                            completionHandler(ShareItem(url: url.absoluteString, title: title, favicon: nil), nil)
                                         } else {
                                             completionHandler(nil, NSError(domain: "org.mozilla.fennec", code: 999, userInfo: ["Problem": "Non-URL result."]))
                                         }

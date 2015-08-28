@@ -48,8 +48,8 @@ class TopSitesPanel: UIViewController {
         self.layout.setupForOrientation(UIView.viewOrientationForSize(size))
     }
 
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.AllButUpsideDown
     }
 
     init(profile: Profile) {
@@ -59,13 +59,13 @@ class TopSitesPanel: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataCleared, object: nil)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        var collection = TopSitesCollectionView(frame: self.view.frame, collectionViewLayout: layout)
+        let collection = TopSitesCollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collection.backgroundColor = UIConstants.PanelBackgroundColor
         collection.delegate = self
         collection.dataSource = dataSource
@@ -97,7 +97,7 @@ class TopSitesPanel: UIViewController {
     }
 
     //MARK: Private Helpers
-    private func updateDataSourceWithSites(result: Result<Cursor<Site>>) {
+    private func updateDataSourceWithSites(result: Maybe<Cursor<Site>>) {
         if let data = result.successValue {
             self.dataSource.data = data
             self.dataSource.profile = self.profile
@@ -137,7 +137,7 @@ class TopSitesPanel: UIViewController {
         })
     }
 
-    private func deleteOrUpdateSites(result: Result<Cursor<Site>>, indexPath: NSIndexPath) {
+    private func deleteOrUpdateSites(result: Maybe<Cursor<Site>>, indexPath: NSIndexPath) {
         if let data = result.successValue {
             let numOfThumbnails = self.layout.thumbnailCount
             collection?.performBatchUpdates({
@@ -205,7 +205,7 @@ extension TopSitesPanel: ThumbnailCellDelegate {
 }
 
 private class TopSitesCollectionView: UICollectionView {
-    private override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    private override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         // Hide the keyboard if this view is touched.
         window?.rootViewController?.view.endEditing(true)
         super.touchesBegan(touches, withEvent: event)
@@ -251,7 +251,7 @@ private class TopSitesLayout: UICollectionViewLayout {
         setupForOrientation(UIApplication.sharedApplication().statusBarOrientation)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -265,7 +265,7 @@ private class TopSitesLayout: UICollectionViewLayout {
         }
     }
 
-    private func getIndexAtPosition(#y: CGFloat) -> Int {
+    private func getIndexAtPosition(y: CGFloat) -> Int {
         if y < topSectionHeight {
             let row = Int(y / thumbnailHeight)
             return min(count - 1, max(0, row * thumbnailCols))
@@ -275,7 +275,6 @@ private class TopSitesLayout: UICollectionViewLayout {
 
     override func collectionViewContentSize() -> CGSize {
         if count <= thumbnailCount {
-            let row = floor(Double(count / thumbnailCols))
             return CGSize(width: width, height: topSectionHeight)
         }
 
@@ -290,13 +289,14 @@ private class TopSitesLayout: UICollectionViewLayout {
         for section in 0..<(self.collectionView?.numberOfSections() ?? 0) {
             for item in 0..<(self.collectionView?.numberOfItemsInSection(section) ?? 0) {
                 let indexPath = NSIndexPath(forItem: item, inSection: section)
-                layoutAttributes.append(self.layoutAttributesForItemAtIndexPath(indexPath))
+                guard let attrs = self.layoutAttributesForItemAtIndexPath(indexPath) else { continue }
+                layoutAttributes.append(attrs)
             }
         }
         self.layoutAttributes = layoutAttributes
     }
 
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [AnyObject]? {
+    override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var attrs = [UICollectionViewLayoutAttributes]()
         if let layoutAttributes = self.layoutAttributes {
             for attr in layoutAttributes {
@@ -309,7 +309,7 @@ private class TopSitesLayout: UICollectionViewLayout {
         return attrs
     }
 
-    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
+    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
         let attr = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
 
         // Set the top thumbnail frames.

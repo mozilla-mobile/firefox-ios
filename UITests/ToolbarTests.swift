@@ -25,7 +25,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
 
         tester().tapViewWithAccessibilityIdentifier("url")
         let textView = tester().waitForViewWithAccessibilityLabel("Address and Search") as! UITextField
-        XCTAssertTrue(textView.text.isEmpty, "Text is empty")
+        XCTAssertTrue(textView.text!.isEmpty, "Text is empty")
         XCTAssertNotNil(textView.placeholder, "Text view has a placeholder to show when it's empty")
 
         // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
@@ -91,11 +91,11 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertEqual(textField.text, "", "Verify that the URL bar text clears on about:home")
 
         // 127.0.0.1 doesn't cause http:// to be hidden. localhost does. Both will work.
-        let localhostURL = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions.allZeros, range: nil)
+        let localhostURL = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions(), range: nil)
         let url = "\(localhostURL)/numberedPage.html?page=1"
 
         // URL without "http://".
-        let displayURL = "\(localhostURL)/numberedPage.html?page=1".substringFromIndex(advance(url.startIndex, count("http://")))
+        let displayURL = "\(localhostURL)/numberedPage.html?page=1".substringFromIndex(url.startIndex.advancedBy("http://".characters.count))
 
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().enterTextIntoCurrentFirstResponder("\(url)\n")
@@ -114,10 +114,10 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearURLTextUsingBackspace() {
         // 127.0.0.1 doesn't cause http:// to be hidden. localhost does. Both will work.
-        let localhostURL = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions.allZeros, range: nil)
+        let localhostURL = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions(), range: nil)
         let url = "\(localhostURL)/numberedPage.html?page=1"
 
-        var textField = tester().waitForViewWithAccessibilityIdentifier("url") as! UITextField
+        _ = tester().waitForViewWithAccessibilityIdentifier("url") as! UITextField
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().enterTextIntoCurrentFirstResponder(url+"\n")
         tester().waitForAnimationsToFinish()

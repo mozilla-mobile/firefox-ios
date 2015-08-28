@@ -16,8 +16,10 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
-        if tester().tryFindingTappableViewWithAccessibilityLabel("home", error: nil) {
+        do {
+            try tester().tryFindingTappableViewWithAccessibilityLabel("home")
             tester().tapViewWithAccessibilityLabel("home")
+        } catch _ {
         }
         BrowserUtils.resetToAboutHome(tester())
     }
@@ -104,6 +106,6 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
             return description.containsString(childClass)
         }
         XCTAssertEqual(childControllers.count, 1, "Found 1 child controller of type: \(childClass)")
-        return childControllers.first as! UIViewController
+        return childControllers.first!
     }
 }

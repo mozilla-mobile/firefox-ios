@@ -15,8 +15,8 @@ class FaviconManager : BrowserHelper {
         self.browser = browser
 
         if let path = NSBundle.mainBundle().pathForResource("Favicons", ofType: "js") {
-            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) as? String {
-                var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+            if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
+                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
                 browser.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -39,7 +39,7 @@ class FaviconManager : BrowserHelper {
                 for icon in icons {
                     if let iconUrl = NSURL(string: icon.0) {
                         manager.downloadImageWithURL(iconUrl, options: SDWebImageOptions.LowPriority, progress: nil, completed: { (img, err, cacheType, success, url) -> Void in
-                            let fav = Favicon(url: url.absoluteString!,
+                            let fav = Favicon(url: url.absoluteString,
                                 date: NSDate(),
                                 type: IconType(rawValue: icon.1)!)
 

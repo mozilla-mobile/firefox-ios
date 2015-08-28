@@ -136,7 +136,7 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
             }
         }
 
-        return deferResult(lastTimestamp)
+        return deferMaybe(lastTimestamp)
             >>== uploadDeleted
             >>== uploadModified
             >>> effect({ log.debug("Done syncing.") })
@@ -145,7 +145,7 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
     public func synchronizeLocalLogins(logins: SyncableLogins, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
         if let reason = self.reasonToNotSync(storageClient) {
-            return deferResult(.NotStarted(reason))
+            return deferMaybe(.NotStarted(reason))
         }
 
         let encoder = RecordEncoder<LoginPayload>(decode: { LoginPayload($0) }, encode: { $0 })
@@ -166,10 +166,10 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
                 // to the last successfully applied record timestamp, no matter where we fail.
                 // There's no need to do the upload before bumping -- the storage of local changes is stable.
                 >>> { self.uploadOutgoingFromStorage(logins, lastTimestamp: 0, withServer: passwordsClient) }
-                >>> { return deferResult(.Completed) }
+                >>> { return deferMaybe(.Completed) }
         }
 
         log.error("Couldn't make logins factory.")
-        return deferResult(FatalError(message: "Couldn't make logins factory."))
+        return deferMaybe(FatalError(message: "Couldn't make logins factory."))
     }
 }

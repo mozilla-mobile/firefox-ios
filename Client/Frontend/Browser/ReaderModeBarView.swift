@@ -73,7 +73,7 @@ class ReaderModeBarView: UIView {
         }
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -89,7 +89,7 @@ class ReaderModeBarView: UIView {
         CGContextStrokePath(context)
     }
 
-    private func createButton(#type: ReaderModeBarButtonType, action: Selector) -> UIButton {
+    private func createButton(type type: ReaderModeBarButtonType, action: Selector) -> UIButton {
         let button = UIButton()
         addSubview(button)
         button.setImage(type.image, forState: .Normal)

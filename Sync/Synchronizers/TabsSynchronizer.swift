@@ -38,7 +38,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
             "clientName": self.scratchpad.clientName,
             "tabs": jsonTabs
         ])
-        log.debug("Sending tabs JSON \(tabsJSON.toString(pretty: true))")
+        log.debug("Sending tabs JSON \(tabsJSON.toString(true))")
         let payload = TabsPayload(tabsJSON)
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
     }
@@ -82,7 +82,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
 
             func afterWipe() -> Success {
                 log.info("Fetching tabs.")
-                let doInsert: (Record<TabsPayload>) -> Deferred<Result<(Int)>> = { record in
+                let doInsert: (Record<TabsPayload>) -> Deferred<Maybe<(Int)>> = { record in
                     let remotes = record.payload.remoteTabs
                     log.debug("\(remotes)")
                     log.info("Inserting \(remotes.count) tabs for client \(record.id).")
@@ -116,8 +116,8 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
 
                         let allDone = all(filtered.map(doInsert))
                         return allDone.bind { (results) -> Success in
-                            if let failure = find(results, { $0.isFailure }) {
-                                return deferResult(failure.failureValue!)
+                            if let failure = find(results, f: { $0.isFailure }) {
+                                return deferMaybe(failure.failureValue!)
                             }
 
                             self.lastFetched = responseTimestamp!
@@ -137,7 +137,7 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
         }
 
         if let reason = self.reasonToNotSync(storageClient) {
-            return deferResult(SyncStatus.NotStarted(reason))
+            return deferMaybe(SyncStatus.NotStarted(reason))
         }
 
         let keys = self.scratchpad.keys?.value
@@ -148,17 +148,17 @@ public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
             if !self.remoteHasChanges(info) {
                 // upload local tabs if they've changed or we're in a fresh start.
                 uploadOurTabs(localTabs, toServer: tabsClient)
-                return deferResult(.Completed)
+                return deferMaybe(.Completed)
             }
 
             return tabsClient.getSince(self.lastFetched)
                 >>== onResponseReceived
                 >>> { self.uploadOurTabs(localTabs, toServer: tabsClient) }
-                >>> { deferResult(.Completed) }
+                >>> { deferMaybe(.Completed) }
         }
 
         log.error("Couldn't make tabs factory.")
-        return deferResult(FatalError(message: "Couldn't make tabs factory."))
+        return deferMaybe(FatalError(message: "Couldn't make tabs factory."))
     }
 }
 

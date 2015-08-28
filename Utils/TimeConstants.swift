@@ -34,15 +34,13 @@ extension NSDate {
 
     public func toRelativeTimeString() -> String {
         let now = NSDate()
-        let units = NSCalendarUnit.CalendarUnitSecond |
-                    NSCalendarUnit.CalendarUnitMinute |
-                    NSCalendarUnit.CalendarUnitDay |
-                    NSCalendarUnit.CalendarUnitWeekOfYear |
-                    NSCalendarUnit.CalendarUnitMonth |
-                    NSCalendarUnit.CalendarUnitYear |
-                    NSCalendarUnit.CalendarUnitHour
 
-        let components = NSCalendar.currentCalendar().components(units, fromDate: self, toDate: now, options: NSCalendarOptions.allZeros)
+        let units: NSCalendarUnit = [NSCalendarUnit.Second, NSCalendarUnit.Minute, NSCalendarUnit.Day, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Month, NSCalendarUnit.Year, NSCalendarUnit.Hour]
+
+        let components = NSCalendar.currentCalendar().components(units,
+            fromDate: self,
+            toDate: now,
+            options: [])
         
         if components.year > 0 {
             return String(format: NSDateFormatter.localizedStringFromDate(self, dateStyle: NSDateFormatterStyle.ShortStyle, timeStyle: NSDateFormatterStyle.ShortStyle))
@@ -79,7 +77,8 @@ extension NSDate {
 }
 
 public func decimalSecondsStringToTimestamp(input: String) -> Timestamp? {
-    if let double = NSScanner(string: input).scanDouble() {
+    var double = 0.0
+    if NSScanner(string: input).scanDouble(&double) {
         return Timestamp(double * 1000)
     }
     return nil

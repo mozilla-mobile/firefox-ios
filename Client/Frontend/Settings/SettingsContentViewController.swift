@@ -77,7 +77,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -127,7 +127,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         view.addSubview(spinner)
 
         let error = UILabel()
-        if let settingsTitle = settingsTitle {
+        if let _ = settingsTitle {
             error.text = TODOPageLoadErrorString
             error.textColor = UIColor.redColor() // Firefox Orange!
             error.textAlignment = NSTextAlignment.Center

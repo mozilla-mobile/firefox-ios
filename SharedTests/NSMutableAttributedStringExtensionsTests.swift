@@ -8,11 +8,10 @@ import Shared
 
 class NSMutableAttributedStringExtensionsTests: XCTestCase {
     private func checkCharacterAtPosition(position: Int, isColored color: UIColor, inString string: NSAttributedString) -> Bool {
-        if let attributes = string.attributesAtIndex(position, effectiveRange: nil) as? [String:AnyObject] {
-            if let foregroundColor = attributes[NSForegroundColorAttributeName] as? UIColor {
-                if foregroundColor == color {
-                    return true
-                }
+        let attributes = string.attributesAtIndex(position, effectiveRange: NSRangePointer())
+        if let foregroundColor = attributes[NSForegroundColorAttributeName] as? UIColor {
+            if foregroundColor == color {
+                return true
             }
         }
         return false
@@ -34,7 +33,7 @@ class NSMutableAttributedStringExtensionsTests: XCTestCase {
         let substring = ""
         let example = NSMutableAttributedString(string: "abcd")
         example.colorSubstring(substring, withColor: UIColor.redColor())
-        for position in 0..<count(example.string) {
+        for position in 0..<example.string.characters.count {
             XCTAssertFalse(checkCharacterAtPosition(position, isColored: UIColor.redColor(), inString: example))
         }
     }
@@ -43,7 +42,7 @@ class NSMutableAttributedStringExtensionsTests: XCTestCase {
         let substring = "yyz"
         let example = NSMutableAttributedString(string: "abcd")
         example.colorSubstring(substring, withColor: UIColor.redColor())
-        for position in 0..<count(example.string) {
+        for position in 0..<example.string.characters.count {
             XCTAssertFalse(checkCharacterAtPosition(position, isColored: UIColor.redColor(), inString: example))
         }
     }

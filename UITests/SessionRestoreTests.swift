@@ -31,20 +31,32 @@ class SessionRestoreTests: KIFTestCase {
         //   about:home, page1, *page2*, page3
         // where page2 is active.
         tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(restoreURL!.absoluteString!)\n")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(restoreURL!.absoluteString)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
         tester().tapViewWithAccessibilityLabel("Back")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
         tester().tapViewWithAccessibilityLabel("Back")
         tester().waitForViewWithAccessibilityLabel("Top sites")
-        let canGoBack = tester().tryFindingTappableViewWithAccessibilityLabel("Back", error: nil)
+        let canGoBack: Bool
+        do {
+            try tester().tryFindingTappableViewWithAccessibilityLabel("Back")
+            canGoBack = true
+        } catch _ {
+            canGoBack = false
+        }
         XCTAssertFalse(canGoBack, "Reached the beginning of browser history")
         tester().tapViewWithAccessibilityLabel("Forward")
         tester().tapViewWithAccessibilityLabel("Forward")
         tester().tapViewWithAccessibilityLabel("Forward")
         tester().waitForWebViewElementWithAccessibilityLabel("Page 3")
-        let canGoForward = tester().tryFindingTappableViewWithAccessibilityLabel("Forward", error: nil)
-        XCTAssertFalse(canGoBack, "Reached the end of browser history")
+        let canGoForward: Bool
+        do {
+            try tester().tryFindingTappableViewWithAccessibilityLabel("Forward")
+            canGoForward = true
+        } catch _ {
+            canGoForward = false
+        }
+        XCTAssertFalse(canGoForward, "Reached the end of browser history")
     }
 
     override func tearDown() {

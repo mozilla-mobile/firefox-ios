@@ -10,11 +10,11 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-private func getDate(#dayOffset: Int) -> NSDate {
+private func getDate(dayOffset dayOffset: Int) -> NSDate {
     let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-    let nowComponents = calendar.components(NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay, fromDate: NSDate())
+    let nowComponents = calendar.components([NSCalendarUnit.Year, NSCalendarUnit.Month, NSCalendarUnit.Day], fromDate: NSDate())
     let today = calendar.dateFromComponents(nowComponents)!
-    return calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitDay, value: dayOffset, toDate: today, options: nil)!
+    return calendar.dateByAddingUnit(NSCalendarUnit.Day, value: dayOffset, toDate: today, options: [])!
 }
 
 private typealias SectionNumber = Int
@@ -75,7 +75,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -142,7 +142,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     /**
     * fetch from the profile
     **/
-    private func fetchData() -> Deferred<Result<Cursor<Site>>> {
+    private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
         return profile.history.getSitesByLastVisit(QueryLimit)
     }
 
@@ -188,7 +188,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         let logoImageView = UIImageView(image: UIImage(named: "emptyHistory"))
         overlayView.addSubview(logoImageView)
-        logoImageView.snp_makeConstraints({ (make) -> Void in
+        logoImageView.snp_makeConstraints { make in
             make.centerX.equalTo(overlayView)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
@@ -196,7 +196,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50).priorityHigh()
-        })
+        }
 
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
@@ -207,11 +207,11 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         welcomeLabel.numberOfLines = 2
         welcomeLabel.adjustsFontSizeToFitWidth = true
 
-        welcomeLabel.snp_makeConstraints({ (make) -> Void in
+        welcomeLabel.snp_makeConstraints { make in
             make.centerX.equalTo(overlayView)
             make.top.equalTo(logoImageView.snp_bottom).offset(HistoryPanelUX.WelcomeScreenPadding)
             make.width.equalTo(HistoryPanelUX.WelcomeScreenItemWidth)
-        })
+        }
 
         return overlayView
     }
@@ -341,11 +341,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
             if let site = self.siteForIndexPath(indexPath) {
-                // Compute the section in advance -- if we try to do this below, naturally the category
-                // will be empty, and so there will be no section in the CategorySpec!
-                let category = self.categoryForDate(site.latestVisit!.date)
-                let section = self.categoryToUISection(category)!
-
                 // Why the dispatches? Because we call success and failure on the DB
                 // queue, and so calling anything else that calls through to the DB will
                 // deadlock. This problem will go away when the history API switches to
@@ -365,7 +360,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                                 let sectionsToAdd = NSMutableIndexSet()
                                 var rowsToAdd = [NSIndexPath]()
 
-                                for (index, category) in enumerate(self.categories) {
+                                for (index, category) in self.categories.enumerate() {
                                     let oldCategory = oldCategories[index]
 
                                     // don't bother if we're not displaying this category

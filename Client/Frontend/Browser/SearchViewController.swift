@@ -35,7 +35,7 @@ private struct SearchViewControllerUX {
     static let SuggestionBorderWidth: CGFloat = 1
     static let SuggestionCornerRadius: CGFloat = 4
     static let SuggestionFont = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
-    static let SuggestionInsets = UIEdgeInsetsMake(8, 8, 8, 8)
+    static let SuggestionInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
     static let SuggestionMargin: CGFloat = 8
     static let SuggestionCellVerticalPadding: CGFloat = 10
     static let SuggestionCellMaxRows = 2
@@ -44,7 +44,7 @@ private struct SearchViewControllerUX {
     static let PromptFont = UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)
     static let PromptYesFont = UIFont.systemFontOfSize(15, weight: UIFontWeightBold)
     static let PromptNoFont = UIFont.systemFontOfSize(15, weight: UIFontWeightRegular)
-    static let PromptInsets = UIEdgeInsetsMake(15, 12, 15, 12)
+    static let PromptInsets = UIEdgeInsets(top: 15, left: 12, bottom: 15, right: 12)
     static let PromptButtonColor = UIColor(rgb: 0x007aff)
 }
 
@@ -81,7 +81,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
@@ -242,18 +242,20 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         promptLabel.snp_makeConstraints { make in
             make.left.equalTo(promptImage.snp_right).offset(SearchViewControllerUX.PromptInsets.left)
-            make.top.bottom.equalTo(prompt).insets(SearchViewControllerUX.PromptInsets)
+            let insets = SearchViewControllerUX.PromptInsets
+            make.top.equalTo(prompt).inset(insets.top)
+            make.bottom.equalTo(prompt).inset(insets.bottom)
             make.right.lessThanOrEqualTo(promptYesButton.snp_left)
             return
         }
 
         promptNoButton.snp_makeConstraints { make in
-            make.right.equalTo(prompt).insets(SearchViewControllerUX.PromptInsets)
+            make.right.equalTo(prompt).inset(SearchViewControllerUX.PromptInsets.right)
             make.centerY.equalTo(prompt)
         }
 
         promptYesButton.snp_makeConstraints { make in
-            make.right.equalTo(promptNoButton.snp_leading).insets(SearchViewControllerUX.PromptInsets)
+            make.right.equalTo(promptNoButton.snp_leading).inset(SearchViewControllerUX.PromptInsets.right)
             make.centerY.equalTo(prompt)
         }
 
@@ -291,7 +293,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     private func reloadSearchEngines() {
-        searchEngineScrollViewContent.subviews.map({ $0.removeFromSuperview() })
+        searchEngineScrollViewContent.subviews.forEach { $0.removeFromSuperview() }
         var leftEdge = searchEngineScrollViewContent.snp_left
 
         //search settings icon
@@ -426,9 +428,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                     // Engine does not support search suggestions. Do nothing.
                     break
                 case SearchSuggestClientErrorInvalidResponse where isSuggestClientError:
-                    println("Error: Invalid search suggestion data")
+                    print("Error: Invalid search suggestion data")
                 default:
-                    println("Error: \(error.description)")
+                    print("Error: \(error.description)")
                 }
             } else {
                 self.suggestionCell.suggestions = suggestions!
@@ -450,7 +452,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 }
 
-extension SearchViewController: UITableViewDelegate {
+extension SearchViewController {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let section = SearchListSection(rawValue: indexPath.section)!
         if section == SearchListSection.BookmarksAndHistory {
@@ -483,7 +485,7 @@ extension SearchViewController: UITableViewDelegate {
     }
 }
 
-extension SearchViewController: UITableViewDataSource {
+extension SearchViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch SearchListSection(rawValue: indexPath.section)! {
         case .SearchSuggestions:
@@ -548,7 +550,7 @@ private extension String {
  * UIScrollView that prevents buttons from interfering with scroll.
  */
 private class ButtonScrollView: UIScrollView {
-    private override func touchesShouldCancelInContentView(view: UIView!) -> Bool {
+    private override func touchesShouldCancelInContentView(view: UIView) -> Bool {
         return true
     }
 }
@@ -579,7 +581,7 @@ private class SuggestionCell: UITableViewCell {
         contentView.addSubview(container)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -636,7 +638,7 @@ private class SuggestionCell: UITableViewCell {
             let button = view as! UIButton
             var buttonSize = button.intrinsicContentSize()
 
-            // Update our base frame height by the max size of either the image or the button so we never 
+            // Update our base frame height by the max size of either the image or the button so we never
             // make the cell smaller than any of the two
             if height == imageSize {
                 height = max(buttonSize.height, imageSize)
@@ -699,7 +701,7 @@ private class SuggestionButton: InsetButton {
         accessibilityHint = NSLocalizedString("Searches for the suggestion", comment: "Accessibility hint describing the action performed when a search suggestion is clicked")
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 

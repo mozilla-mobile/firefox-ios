@@ -28,7 +28,7 @@ public class SQLiteQueue: TabQueue {
         return ShareItem(url: row["url"] as! String, title: row["title"] as? String, favicon: nil)
     }
 
-    public func getQueuedTabs() -> Deferred<Result<Cursor<ShareItem>>> {
+    public func getQueuedTabs() -> Deferred<Maybe<Cursor<ShareItem>>> {
         return db.runQuery("SELECT url, title FROM \(TableQueuedTabs)", args: nil, factory: self.factory)
     }
 

@@ -86,7 +86,9 @@ class ReadingListTableViewCell: SWTableViewCell {
             titleLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
             hostnameLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
             markAsReadButton.setTitle(unread ? ReadingListTableViewCellUX.MarkAsReadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText, forState: UIControlState.Normal)
-            markAsReadAction.name = markAsReadButton.titleLabel!.text
+            if let text = markAsReadButton.titleLabel?.text {
+                markAsReadAction.name = text
+            }
             updateAccessibilityLabel()
         }
     }
@@ -153,7 +155,9 @@ class ReadingListTableViewCell: SWTableViewCell {
         deleteButton.setTitle(ReadingListTableViewCellUX.DeleteButtonTitleText, forState: UIControlState.Normal)
         deleteButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         deleteButton.titleEdgeInsets = ReadingListTableViewCellUX.DeleteButtonTitleEdgeInsets
-        deleteAction.name = deleteButton.titleLabel!.text
+        if let text = deleteButton.titleLabel?.text {
+            deleteAction.name = text
+        }
         deleteAction.target = self
         deleteAction.selector = "deleteActionActivated"
         rightUtilityButtons = [deleteButton]
@@ -166,7 +170,9 @@ class ReadingListTableViewCell: SWTableViewCell {
         markAsReadButton.setTitle(ReadingListTableViewCellUX.MarkAsReadButtonTitleText, forState: UIControlState.Normal)
         markAsReadButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         markAsReadButton.titleEdgeInsets = ReadingListTableViewCellUX.MarkAsReadButtonTitleEdgeInsets
-        markAsReadAction.name = markAsReadButton.titleLabel!.text
+        if let text = markAsReadButton.titleLabel?.text {
+            markAsReadAction.name = text
+        }
         markAsReadAction.target = self
         markAsReadAction.selector = "markAsReadActionActivated"
         leftUtilityButtons = [markAsReadButton]
@@ -174,7 +180,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         accessibilityCustomActions = [deleteAction, markAsReadAction]
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -184,7 +190,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         let hostname = url.host ?? ""
         for prefix in prefixesToSimplify {
             if hostname.hasPrefix(prefix) {
-                return hostname.substringFromIndex(advance(hostname.startIndex, count(prefix)))
+                return hostname.substringFromIndex(hostname.startIndex.advancedBy(prefix.characters.count))
             }
         }
         return hostname
@@ -242,7 +248,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataCleared, object: nil)
     }
 
-    required init!(coder aDecoder: NSCoder!) {
+    required init!(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -313,14 +319,14 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         let overlayView = UIView(frame: tableView.bounds)
         overlayView.backgroundColor = UIColor.whiteColor()
         // Unknown why this does not work with autolayout
-        overlayView.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+        overlayView.autoresizingMask = [UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleWidth]
 
         let containerView = UIView()
         overlayView.addSubview(containerView)
 
         let logoImageView = UIImageView(image: UIImage(named: "ReadingListEmptyPanel"))
         containerView.addSubview(logoImageView)
-        logoImageView.snp_makeConstraints({ (make) -> Void in
+        logoImageView.snp_makeConstraints { make in
             make.centerX.equalTo(containerView)
             make.centerY.lessThanOrEqualTo(overlayView.snp_centerY).priorityHigh()
 
@@ -329,8 +335,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50).priorityHigh()
-        })
-
+        }
 
         let welcomeLabel = UILabel()
         containerView.addSubview(welcomeLabel)
@@ -339,14 +344,14 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         welcomeLabel.font = ReadingListPanelUX.WelcomeScreenHeaderFont
         welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
         welcomeLabel.adjustsFontSizeToFitWidth = true
-        welcomeLabel.snp_makeConstraints({ (make) -> Void in
+        welcomeLabel.snp_makeConstraints { make in
             make.centerX.equalTo(containerView)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)
             make.top.equalTo(logoImageView.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
 
             // Sets proper center constraint for iPhones in landscape.
             make.centerY.lessThanOrEqualTo(overlayView.snp_centerY).offset(-40).priorityHigh()
-        })
+        }
 
         let readerModeLabel = UILabel()
         containerView.addSubview(readerModeLabel)
@@ -354,18 +359,18 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         readerModeLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
         readerModeLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
         readerModeLabel.numberOfLines = 0
-        readerModeLabel.snp_makeConstraints({ (make) -> Void in
+        readerModeLabel.snp_makeConstraints { make in
             make.top.equalTo(welcomeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
             make.left.equalTo(welcomeLabel.snp_left)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
-        })
+        }
 
         let readerModeImageView = UIImageView(image: UIImage(named: "ReaderModeCircle"))
         containerView.addSubview(readerModeImageView)
-        readerModeImageView.snp_makeConstraints({ (make) -> Void in
+        readerModeImageView.snp_makeConstraints { make in
             make.centerY.equalTo(readerModeLabel)
             make.right.equalTo(welcomeLabel.snp_right)
-        })
+        }
 
         let readingListLabel = UILabel()
         containerView.addSubview(readingListLabel)
@@ -373,20 +378,20 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         readingListLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
         readingListLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
         readingListLabel.numberOfLines = 0
-        readingListLabel.snp_makeConstraints({ (make) -> Void in
+        readingListLabel.snp_makeConstraints { make in
             make.top.equalTo(readerModeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
             make.left.equalTo(welcomeLabel.snp_left)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
-        })
+        }
 
         let readingListImageView = UIImageView(image: UIImage(named: "AddToReadingListCircle"))
         containerView.addSubview(readingListImageView)
-        readingListImageView.snp_makeConstraints({ (make) -> Void in
+        readingListImageView.snp_makeConstraints { make in
             make.centerY.equalTo(readingListLabel)
             make.right.equalTo(welcomeLabel.snp_right)
-        })
+        }
 
-        containerView.snp_makeConstraints({ (make) -> Void in
+        containerView.snp_makeConstraints { make in
             // Let the container wrap around the content
             make.top.equalTo(logoImageView.snp_top)
             make.left.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
@@ -394,7 +399,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
             // And then center it in the overlay view that sits on top of the UITableView
             make.centerX.equalTo(overlayView)
-        })
+        }
 
         return overlayView
     }

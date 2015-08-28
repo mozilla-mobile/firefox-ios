@@ -9,11 +9,11 @@ import WebKit
 let LabelAddressAndSearch = "Address and Search"
 
 extension XCTestCase {
-    func tester(_ file: String = __FILE__, _ line: Int = __LINE__) -> KIFUITestActor {
+    func tester(file: String = __FILE__, _ line: Int = __LINE__) -> KIFUITestActor {
         return KIFUITestActor(inFile: file, atLine: line, delegate: self)
     }
 
-    func system(_ file: String = __FILE__, _ line: Int = __LINE__) -> KIFSystemTestActor {
+    func system(file: String = __FILE__, _ line: Int = __LINE__) -> KIFSystemTestActor {
         return KIFSystemTestActor(inFile: file, atLine: line, delegate: self)
     }
 }
@@ -26,6 +26,15 @@ extension KIFUITestActor {
         }
 
         return element != nil
+    }
+
+    func viewExistsWithLabel(label: String) -> Bool {
+        do {
+            try self.tryFindingViewWithAccessibilityLabel(label)
+            return true
+        } catch {
+            return false
+        }
     }
 
     /// Waits for and returns a view with the given accessibility value.
@@ -98,7 +107,7 @@ extension KIFUITestActor {
         var stepResult = KIFTestStepResult.Wait
 
         let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
-        webView.evaluateJavaScript("KIFHelper.selectElementWithAccessibilityLabel(\"\(escaped)\");", completionHandler: { (result: AnyObject!, error: NSError!) in
+        webView.evaluateJavaScript("KIFHelper.selectElementWithAccessibilityLabel(\"\(escaped)\");", completionHandler: { (result: AnyObject?, error: NSError?) in
             stepResult = result != nil ? (result as! Bool ? KIFTestStepResult.Success : KIFTestStepResult.Failure) : KIFTestStepResult.Failure
         })
 
@@ -113,11 +122,11 @@ extension KIFUITestActor {
     private func lazilyInjectKIFHelper(webView: WKWebView) {
         var stepResult = KIFTestStepResult.Wait
 
-        webView.evaluateJavaScript("typeof KIFHelper;", completionHandler: { (result: AnyObject!, error: NSError!) in
+        webView.evaluateJavaScript("typeof KIFHelper;", completionHandler: { (result: AnyObject?, error: NSError?) in
             if result as! String == "undefined" {
                 let bundle = NSBundle(forClass: NavigationTests.self)
                 let path = bundle.pathForResource("KIFHelper", ofType: "js")!
-                let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil)!
+                let source = try! NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding)
                 webView.evaluateJavaScript(source as String, completionHandler: nil)
             }
             stepResult = KIFTestStepResult.Success
@@ -138,8 +147,10 @@ extension KIFUITestActor {
 class BrowserUtils {
     /// Close all tabs to restore the browser to startup state.
     class func resetToAboutHome(tester: KIFUITestActor) {
-        if tester.tryFindingTappableViewWithAccessibilityLabel("Cancel", error: nil) {
+        do {
+            try tester.tryFindingTappableViewWithAccessibilityLabel("Cancel")
             tester.tapViewWithAccessibilityLabel("Cancel")
+        } catch _ {
         }
         tester.tapViewWithAccessibilityLabel("Show Tabs")
         let tabsView = tester.waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
@@ -180,8 +191,8 @@ class BrowserUtils {
 
         let historyTable = tester.waitForViewWithAccessibilityIdentifier("History List") as! UITableView
         var index = 0
-        for section in 0 ..< historyTable.numberOfSections() {
-            for rowIdx in 0 ..< historyTable.numberOfRowsInSection(0) {
+        for _ in 0 ..< historyTable.numberOfSections {
+            for _ in 0 ..< historyTable.numberOfRowsInSection(0) {
                 clearHistoryItemAtIndex(NSIndexPath(forRow: 0, inSection: 0), tester: tester)
                 if numberOfTests > -1 && ++index == numberOfTests {
                     return
@@ -197,7 +208,7 @@ class BrowserUtils {
 
         var range = NSRange()
         var attribute: AnyObject?
-        let textLength = count(textField.text)
+        let textLength = textField.text!.characters.count
 
         attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, atIndex: 0, effectiveRange: &range)
 
@@ -219,9 +230,9 @@ class BrowserUtils {
             return
         }
 
-        let completionStartIndex = advance(textField.text.startIndex, prefixLength)
-        let actualPrefix = textField.text.substringToIndex(completionStartIndex)
-        let actualCompletion = textField.text.substringFromIndex(completionStartIndex)
+        let completionStartIndex = textField.text!.startIndex.advancedBy(prefixLength)
+        let actualPrefix = textField.text!.substringToIndex(completionStartIndex)
+        let actualCompletion = textField.text!.substringFromIndex(completionStartIndex)
 
         XCTAssertEqual(prefix, actualPrefix, "Expected prefix matches actual prefix")
         XCTAssertEqual(completion, actualCompletion, "Expected completion matches actual completion")
@@ -230,15 +241,15 @@ class BrowserUtils {
 
 class SimplePageServer {
     class func getPageData(name: String, ext: String = "html") -> String {
-        var pageDataPath = NSBundle(forClass: self).pathForResource(name, ofType: ext)!
-        return NSString(contentsOfFile: pageDataPath, encoding: NSUTF8StringEncoding, error: nil)! as String
+        let pageDataPath = NSBundle(forClass: self).pathForResource(name, ofType: ext)!
+        return (try! NSString(contentsOfFile: pageDataPath, encoding: NSUTF8StringEncoding)) as String
     }
 
     class func start() -> String {
         let webServer: GCDWebServer = GCDWebServer()
 
         webServer.addHandlerForMethod("GET", path: "/image.png", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-            let img = UIImagePNGRepresentation(UIImage(named: "back"))
+            let img = UIImagePNGRepresentation(UIImage(named: "back")!)
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
@@ -251,7 +262,7 @@ class SimplePageServer {
         // we may create more than one of these but we need to give them uniquie accessibility ids in the tab manager so we'll pass in a page number
         webServer.addHandlerForMethod("GET", path: "/scrollablePage.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var pageData = self.getPageData("scrollablePage")
-            let page = (request.query["page"] as! String).toInt()!
+            let page = Int((request.query["page"] as! String))!
             pageData = pageData.stringByReplacingOccurrencesOfString("{page}", withString: page.description)
             return GCDWebServerDataResponse(HTML: pageData as String)
         }
@@ -259,7 +270,7 @@ class SimplePageServer {
         webServer.addHandlerForMethod("GET", path: "/numberedPage.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var pageData = self.getPageData("numberedPage")
 
-            let page = (request.query["page"] as! String).toInt()!
+            let page = Int((request.query["page"] as! String))!
             pageData = pageData.stringByReplacingOccurrencesOfString("{page}", withString: page.description)
 
             return GCDWebServerDataResponse(HTML: pageData as String)

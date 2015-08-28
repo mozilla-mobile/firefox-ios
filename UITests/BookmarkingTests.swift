@@ -75,7 +75,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
 
         // Bookmark it using the bookmark button
         tester().tapViewWithAccessibilityLabel("Bookmark")
-        var bookmarkButton = tester().waitForViewWithAccessibilityLabel("Bookmark") as! UIButton
+        let bookmarkButton = tester().waitForViewWithAccessibilityLabel("Bookmark") as! UIButton
         XCTAssertTrue(bookmarkButton.selected, "Bookmark button is marked selected")
 
         // Check that its row in the bookmarks panel has a url instead of a title

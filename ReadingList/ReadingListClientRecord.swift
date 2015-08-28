@@ -23,10 +23,6 @@ public struct ReadingListClientRecord: Equatable {
         }
 
         let serverMetadata = ReadingListServerMetadata(row: row)
-
-        let id = row.valueForKeyPath("id") as? String
-        let lastModified = row.valueForKeyPath("last_modified") as? NSNumber
-
         let url = row.valueForKeyPath("url") as? String
         let title = row.valueForKeyPath("title") as? String
         let addedBy = row.valueForKeyPath("added_by") as? String

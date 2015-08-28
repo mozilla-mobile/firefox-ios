@@ -27,14 +27,14 @@ class TestFaviconsTable : XCTestCase {
 
     private func checkIcons(favicons: FaviconsTable<Favicon>, options: QueryOptions?, urls: [String], s: Bool = true) {
         db.withConnection(.ReadOnly) { connection -> NSError? in
-            var cursor = favicons.query(connection, options: options)
+            let cursor = favicons.query(connection, options: options)
             XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
             XCTAssertEqual(cursor.count, urls.count, "cursor has right num of entries")
 
             for index in 0..<cursor.count {
                 if let s = cursor[index] {
                     XCTAssertNotNil(s, "cursor has an icon for entry")
-                    let index = find(urls, s.url)
+                    let index = urls.indexOf(s.url)
                     XCTAssert(index > -1, "Found right url")
                 } else {
                     XCTAssertFalse(true, "Should not be nil...")
@@ -61,7 +61,7 @@ class TestFaviconsTable : XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testFaviconsTable() {
         let files = MockFiles()
-        self.db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent("test.db"))
+        self.db = SwiftData(filename: (try! (files.getAndEnsureDirectory() as NSString)).stringByAppendingPathComponent("test.db"))
         let f = FaviconsTable<Favicon>()
 
         self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
@@ -80,12 +80,15 @@ class TestFaviconsTable : XCTestCase {
         options.filter = "url2"
         self.checkIcons(f, options: options, urls: ["url2"])
 
-        var site = Favicon(url: "url1", type: IconType.Icon)
+        _ = Favicon(url: "url1", type: IconType.Icon)
         self.clear(f, icon: icon, s: true)
         self.checkIcons(f, options: nil, urls: ["url2"])
         self.clear(f)
         self.checkIcons(f, options: nil, urls: [String]())
         
-        files.remove("test.db")
+        do {
+            try files.remove("test.db")
+        } catch _ {
+        }
     }
 }

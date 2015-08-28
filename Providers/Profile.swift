@@ -40,15 +40,15 @@ class ProfileFileAccessor: FileAccessor {
         let profileDirName = "profile.\(profile.localName())"
 
         // Bug 1147262: First option is for device, second is for simulator.
-        var rootPath: String?
+        var rootPath: NSString
         if let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier(), url = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(sharedContainerIdentifier), path = url.path {
-            rootPath = path
+            rootPath = path as NSString
         } else {
             log.error("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
-            rootPath = String(NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! NSString)
+            rootPath = (NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0]) as NSString
         }
 
-        super.init(rootPath: rootPath!.stringByAppendingPathComponent(profileDirName))
+        super.init(rootPath: rootPath.stringByAppendingPathComponent(profileDirName))
     }
 }
 
@@ -60,10 +60,8 @@ class CommandStoringSyncDelegate: SyncDelegate {
     }
 
     func displaySentTabForURL(URL: NSURL, title: String) {
-        if let urlString = URL.absoluteString {
-            let item = ShareItem(url: urlString, title: title, favicon: nil)
-            self.profile.queue.addToQueue(item)
-        }
+        let item = ShareItem(url: URL.absoluteString, title: title, favicon: nil)
+        self.profile.queue.addToQueue(item)
     }
 }
 
@@ -96,19 +94,20 @@ class BrowserProfileSyncDelegate: SyncDelegate {
     func displaySentTabForURL(URL: NSURL, title: String) {
         // check to see what the current notification settings are and only try and send a notification if
         // the user has agreed to them
-        let currentSettings = app.currentUserNotificationSettings()
-        if currentSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
-            log.info("Displaying notification for URL \(URL.absoluteString)")
+        if let currentSettings = app.currentUserNotificationSettings() {
+            if currentSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
+                log.info("Displaying notification for URL \(URL.absoluteString)")
 
-            let notification = UILocalNotification()
-            notification.fireDate = NSDate()
-            notification.timeZone = NSTimeZone.defaultTimeZone()
-            notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString!)
-            notification.userInfo = [TabSendURLKey: URL.absoluteString!, TabSendTitleKey: title]
-            notification.alertAction = nil
-            notification.category = TabSendCategory
+                let notification = UILocalNotification()
+                notification.fireDate = NSDate()
+                notification.timeZone = NSTimeZone.defaultTimeZone()
+                notification.alertBody = String(format: NSLocalizedString("New tab: %@: %@", comment:"New tab [title] [url]"), title, URL.absoluteString)
+                notification.userInfo = [TabSendURLKey: URL.absoluteString, TabSendTitleKey: title]
+                notification.alertAction = nil
+                notification.category = TabSendCategory
 
-            app.presentLocalNotificationNow(notification)
+                app.presentLocalNotificationNow(notification)
+            }
         }
     }
 }
@@ -147,11 +146,11 @@ protocol Profile: class {
     func removeAccount()
     func setAccount(account: FirefoxAccount)
 
-    func getClients() -> Deferred<Result<[RemoteClient]>>
-    func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
-    func getCachedClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
+    func getClients() -> Deferred<Maybe<[RemoteClient]>>
+    func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
+    func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
-    func storeTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>>
+    func storeTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
     func sendItems(items: [ShareItem], toClients clients: [RemoteClient])
 
@@ -167,7 +166,6 @@ public class BrowserProfile: Profile {
         self.app = app
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        let mainQueue = NSOperationQueue.mainQueue()
         notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: "LocationChange", object: nil)
 
         if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
@@ -207,7 +205,7 @@ public class BrowserProfile: Profile {
            let title = notification.userInfo!["title"] as? NSString {
 
             // We don't record a visit if no type was specified -- that means "ignore me".
-            let site = Site(url: url.absoluteString!, title: title as String)
+            let site = Site(url: url.absoluteString, title: title as String)
             let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
             log.debug("Recording visit for \(url) with type \(v).")
             history.addLocalVisit(visit)
@@ -278,7 +276,7 @@ public class BrowserProfile: Profile {
     }()
 
     lazy var readingList: ReadingListService? = {
-        return ReadingListService(profileStoragePath: self.files.rootPath)
+        return ReadingListService(profileStoragePath: self.files.rootPath as String)
     }()
 
     private lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
@@ -296,21 +294,21 @@ public class BrowserProfile: Profile {
         return CommandStoringSyncDelegate()
     }
 
-    public func getClients() -> Deferred<Result<[RemoteClient]>> {
+    public func getClients() -> Deferred<Maybe<[RemoteClient]>> {
         return self.syncManager.syncClients()
            >>> { self.remoteClientsAndTabs.getClients() }
     }
 
-    public func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
+    public func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
         return self.syncManager.syncClientsThenTabs()
            >>> { self.remoteClientsAndTabs.getClientsAndTabs() }
     }
 
-    public func getCachedClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>> {
+    public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
         return self.remoteClientsAndTabs.getClientsAndTabs()
     }
 
-    func storeTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> {
+    func storeTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
 
@@ -575,11 +573,11 @@ public class BrowserProfile: Profile {
         /**
          * Returns nil if there's no account.
          */
-        private func withSyncInputs<T>(label: EngineIdentifier? = nil, function: (SyncDelegate, Prefs, Ready) -> Deferred<Result<T>>) -> Deferred<Result<T>>? {
+        private func withSyncInputs<T>(label: EngineIdentifier? = nil, function: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<T>>) -> Deferred<Maybe<T>>? {
             if let account = profile.account {
                 if !beginSyncing() {
                     log.info("Not syncing \(label); already syncing something.")
-                    return deferResult(AlreadySyncingError())
+                    return deferMaybe(AlreadySyncingError())
                 }
 
                 if let label = label {
@@ -610,28 +608,28 @@ public class BrowserProfile: Profile {
          * Runs the single provided synchronization function and returns its status.
          */
         private func sync(label: EngineIdentifier, function: (SyncDelegate, Prefs, Ready) -> SyncResult) -> SyncResult {
-            return self.withSyncInputs(label: label, function: function) ??
-                   deferResult(.NotStarted(.NoAccount))
+            return self.withSyncInputs(label, function: function) ??
+                   deferMaybe(.NotStarted(.NoAccount))
         }
 
         /**
          * Runs each of the provided synchronization functions with the same inputs.
          * Returns an array of IDs and SyncStatuses the same length as the input.
          */
-        private func syncSeveral(synchronizers: (EngineIdentifier, SyncFunction)...) -> Deferred<Result<[(EngineIdentifier, SyncStatus)]>> {
+        private func syncSeveral(synchronizers: (EngineIdentifier, SyncFunction)...) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             typealias Pair = (EngineIdentifier, SyncStatus)
-            let combined: (SyncDelegate, Prefs, Ready) -> Deferred<Result<[Pair]>> = { delegate, syncPrefs, ready in
+            let combined: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<[Pair]>> = { delegate, syncPrefs, ready in
                 let thunks = synchronizers.map { (i, f) in
-                    return { () -> Deferred<Result<Pair>> in
+                    return { () -> Deferred<Maybe<Pair>> in
                         log.debug("Syncing \(i)…")
-                        return f(delegate, syncPrefs, ready) >>== { deferResult((i, $0)) }
+                        return f(delegate, syncPrefs, ready) >>== { deferMaybe((i, $0)) }
                     }
                 }
                 return accumulate(thunks)
             }
 
-            return self.withSyncInputs(label: nil, function: combined) ??
-                   deferResult(synchronizers.map { ($0.0, .NotStarted(.NoAccount)) })
+            return self.withSyncInputs(nil, function: combined) ??
+                   deferMaybe(synchronizers.map { ($0.0, .NotStarted(.NoAccount)) })
         }
 
         func syncEverything() -> Success {
@@ -682,7 +680,7 @@ public class BrowserProfile: Profile {
                 ("tabs", self.syncTabsWithDelegate)
             ) >>== { statuses in
                 let tabsStatus = statuses[1].1
-                return deferResult(tabsStatus)
+                return deferMaybe(tabsStatus)
             }
         }
 
@@ -697,7 +695,7 @@ public class BrowserProfile: Profile {
     }
 }
 
-class AlreadySyncingError: ErrorType {
+class AlreadySyncingError: MaybeErrorType {
     var description: String {
         return "Already syncing."
     }

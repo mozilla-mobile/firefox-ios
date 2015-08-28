@@ -48,7 +48,7 @@ class ClientTests: XCTestCase {
         // Test that generator doesn't work with failed cursors
         var ran = false;
         for s in t2 {
-            println("Got \(s)")
+            print("Got \(s)", terminator: "\n")
             ran = true;
         }
         XCTAssertFalse(ran, "for...in didn't run for failed cursor");
@@ -78,8 +78,6 @@ class ClientTests: XCTestCase {
         let webView = WKWebView()
         webView.evaluateJavaScript("navigator.userAgent") { result, error in
             let userAgent = result as! String
-            let range = userAgent.rangeOfString("^Mozilla/5\\.0 \\(.+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\) FxiOS/\(appVersion) Mobile/[A-Z0-9]+ Safari/[0-9\\.]+$", options: NSStringCompareOptions.RegularExpressionSearch)
-
             if compare(userAgent) {
                 expectation.fulfill()
             } else {

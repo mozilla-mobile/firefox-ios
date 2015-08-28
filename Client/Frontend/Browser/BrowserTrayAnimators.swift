@@ -12,14 +12,14 @@ class TrayToBrowserAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         }
     }
 
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
+    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
         return 0.4
     }
 }
 
 private extension TrayToBrowserAnimator {
     func transitionFromTray(tabTray: TabTrayController, toBrowser bvc: BrowserViewController, usingContext transitionContext: UIViewControllerContextTransitioning) {
-        let container = transitionContext.containerView()
+        guard let container = transitionContext.containerView() else { return }
 
         // Hide browser components
         bvc.toggleSnackBarVisibility(show: false)
@@ -50,7 +50,7 @@ private extension TrayToBrowserAnimator {
 
         // Re-calculate the starting transforms for header/footer views in case we switch orientation
         resetTransformsForViews([bvc.header, bvc.headerBackdrop, bvc.readerModeBar, bvc.footer, bvc.footerBackdrop])
-        transformHeaderFooterForBVC(bvc, toFrame: startingFrame, container)
+        transformHeaderFooterForBVC(bvc, toFrame: startingFrame, container: container)
 
         UIView.animateWithDuration(self.transitionDuration(transitionContext),
             delay: 0, usingSpringWithDamping: 1,
@@ -96,14 +96,14 @@ class BrowserToTrayAnimator: NSObject, UIViewControllerAnimatedTransitioning {
         }
     }
 
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning) -> NSTimeInterval {
+    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
         return 0.4
     }
 }
 
 private extension BrowserToTrayAnimator {
     func transitionFromBrowser(bvc: BrowserViewController, toTabTray tabTray: TabTrayController, usingContext transitionContext: UIViewControllerContextTransitioning) {
-        let container = transitionContext.containerView()
+        guard let container = transitionContext.containerView() else { return }
 
         // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
         container.insertSubview(tabTray.view, belowSubview: bvc.view)
@@ -156,7 +156,7 @@ private extension BrowserToTrayAnimator {
                 cell.title.transform = CGAffineTransformIdentity
                 cell.layoutIfNeeded()
 
-                transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container)
+                transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)
 
                 bvc.urlBar.updateAlphaForSubviews(0)
                 bvc.footer.alpha = 0
@@ -182,8 +182,8 @@ private extension BrowserToTrayAnimator {
 }
 
 private func transformHeaderFooterForBVC(bvc: BrowserViewController, toFrame finalFrame: CGRect, container: UIView) {
-    let footerForTransform = footerTransform(bvc.footer.frame, toFrame: finalFrame, container)
-    let headerForTransform = headerTransform(bvc.header.frame, toFrame: finalFrame, container)
+    let footerForTransform = footerTransform(bvc.footer.frame, toFrame: finalFrame, container: container)
+    let headerForTransform = headerTransform(bvc.header.frame, toFrame: finalFrame, container: container)
 
     bvc.footer.transform = footerForTransform
     bvc.footerBackdrop.transform = footerForTransform
@@ -222,7 +222,6 @@ private func headerTransform(var frame: CGRect, toFrame finalFrame: CGRect, cont
 
 //MARK: Private Helper Methods
 private func calculateCollapsedCellFrameUsingCollectionView(collectionView: UICollectionView, atIndex index: Int) -> CGRect {
-    var frame: CGRect?
     if let attr = collectionView.collectionViewLayout.layoutAttributesForItemAtIndexPath(NSIndexPath(forItem: index, inSection: 0)) {
         return collectionView.convertRect(attr.frame, toView: collectionView.superview)
     } else {
@@ -248,7 +247,7 @@ private func shouldDisplayFooterForBVC(bvc: BrowserViewController) -> Bool {
     return bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) && !AboutUtils.isAboutURL(bvc.tabManager.selectedTab?.url)
 }
 
-private func toggleWebViewVisibility(#show: Bool, usingTabManager tabManager: TabManager) {
+private func toggleWebViewVisibility(show show: Bool, usingTabManager tabManager: TabManager) {
     for i in 0..<tabManager.count {
         if let tab = tabManager[i] {
             tab.webView?.hidden = !show
@@ -260,6 +259,18 @@ private func resetTransformsForViews(views: [UIView?]) {
     for view in views {
         // Reset back to origin
         view?.transform = CGAffineTransformIdentity
+    }
+}
+
+private func transformToolbarsToFrame(toolbars: [UIView?], toRect endRect: CGRect) {
+    for toolbar in toolbars {
+        // Reset back to origin
+        toolbar?.transform = CGAffineTransformIdentity
+
+        // Transform from origin to where we want them to end up
+        if let toolbarFrame = toolbar?.frame {
+            toolbar?.transform = CGAffineTransformMakeRectToRect(toolbarFrame, toFrame: endRect)
+        }
     }
 }
 

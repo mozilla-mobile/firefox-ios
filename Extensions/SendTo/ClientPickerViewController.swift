@@ -78,7 +78,7 @@ class ClientPickerViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ClientCell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("ClientCell", forIndexPath: indexPath)
 
         if clients.count > 0 {
             if indexPath.section == 0 {
@@ -87,11 +87,11 @@ class ClientPickerViewController: UITableViewController {
                 textLabel.font = ClientPickerViewControllerUX.TableHeaderTextFont
                 textLabel.text = NSLocalizedString("Available devices:", tableName: "SendTo", comment: "Header for the list of devices table")
                 textLabel.textColor = ClientPickerViewControllerUX.TableHeaderTextColor
-                textLabel.snp_makeConstraints({ (make) -> Void in
+                textLabel.snp_makeConstraints { make in
                     make.left.equalTo(ClientPickerViewControllerUX.TableHeaderTextPaddingLeft)
                     make.centerY.equalTo(cell.snp_centerY)
                     make.right.equalTo(cell.snp_right)
-                })
+                }
 
                 cell.accessoryType = UITableViewCellAccessoryType.None
                 cell.preservesSuperviewLayoutMargins = false
@@ -104,11 +104,11 @@ class ClientPickerViewController: UITableViewController {
                 textLabel.text = clients[indexPath.row].name
                 textLabel.numberOfLines = 2
                 textLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
-                textLabel.snp_makeConstraints({ (make) -> Void in
+                textLabel.snp_makeConstraints { make in
                     make.left.equalTo(ClientPickerViewControllerUX.DeviceRowTextPaddingLeft)
                     make.centerY.equalTo(cell.snp_centerY)
                     make.right.equalTo(cell.snp_right).offset(-ClientPickerViewControllerUX.DeviceRowTextPaddingRight)
-                })
+                }
 
                 cell.imageView?.image = UIImage(named: clients[indexPath.row].type == "mobile" ? "deviceTypeMobile" : "deviceTypeDesktop")
 

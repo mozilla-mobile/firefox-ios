@@ -13,74 +13,80 @@ private let ReaderModeCacheSharedInstance = ReaderModeCache()
 /// more space. Whether that is a good idea or not is not sure. We have a bug on file to investigate
 /// and improve at a later time.
 
+let ReaderModeCacheErrorDomain = "com.mozilla.client.readermodecache."
+enum ReaderModeCacheErrorCode: Int {
+    case NoPathsFound = 0
+}
+
 class ReaderModeCache {
     class var sharedInstance: ReaderModeCache {
         return ReaderModeCacheSharedInstance
     }
 
-    func put(url: NSURL, _ readabilityResult: ReadabilityResult, error: NSErrorPointer) -> Bool {
-        if let cacheDirectoryPath = cacheDirectoryForURL(url) {
-            if NSFileManager.defaultManager().createDirectoryAtPath(cacheDirectoryPath as String, withIntermediateDirectories: true, attributes: nil, error: error) {
-                let contentFilePath = cacheDirectoryPath.stringByAppendingPathComponent("content.json")
-                let string: NSString = readabilityResult.encode()
-                return string.writeToFile(contentFilePath, atomically: true, encoding: NSUTF8StringEncoding, error: error)
-            }
-        }
-        return false
+    func put(url: NSURL, _ readabilityResult: ReadabilityResult) throws {
+        guard let cacheDirectoryPath = cacheDirectoryForURL(url) else { throw NSError(domain: ReaderModeCacheErrorDomain, code: ReaderModeCacheErrorCode.NoPathsFound.rawValue, userInfo: nil) }
+
+        try NSFileManager.defaultManager().createDirectoryAtPath(cacheDirectoryPath, withIntermediateDirectories: true, attributes: nil)
+        let contentFilePath = (cacheDirectoryPath as NSString).stringByAppendingPathComponent("content.json")
+        let string: NSString = readabilityResult.encode()
+        try string.writeToFile(contentFilePath, atomically: true, encoding: NSUTF8StringEncoding)
+        return
     }
 
-    func get(url: NSURL, error: NSErrorPointer) -> ReadabilityResult? {
-        if let cacheDirectoryPath = cacheDirectoryForURL(url) {
-            let contentFilePath = cacheDirectoryPath.stringByAppendingPathComponent("content.json")
-            if NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
-                if let string = NSString(contentsOfFile: contentFilePath, encoding: NSUTF8StringEncoding, error: error) {
-                    return ReadabilityResult(string: string as String)
-                }
+    func get(url: NSURL) throws -> ReadabilityResult {
+        let error: NSError! = NSError(domain: ReaderModeCacheErrorDomain, code: ReaderModeCacheErrorCode.NoPathsFound.rawValue, userInfo: nil)
+        let cacheDirectoryURL = url.URLByAppendingPathComponent("content.json")
+        guard let contentFilePath = cacheDirectoryForURL(cacheDirectoryURL) else {
+            throw error
+        }
+
+        if NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
+            let string = try NSString(contentsOfFile: contentFilePath, encoding: NSUTF8StringEncoding)
+            if let value = ReadabilityResult(string: string as String) {
+                return value
             }
         }
-        return nil
+
+        throw error
     }
 
     func delete(url: NSURL, error: NSErrorPointer) {
-        if let cacheDirectoryPath = cacheDirectoryForURL(url) {
-            if NSFileManager.defaultManager().fileExistsAtPath(cacheDirectoryPath) {
-                NSFileManager.defaultManager().removeItemAtPath(cacheDirectoryPath, error: error)
+        guard let cacheDirectoryPath = cacheDirectoryForURL(url) else { return }
+        if NSFileManager.defaultManager().fileExistsAtPath(cacheDirectoryPath) {
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(cacheDirectoryPath)
+            } catch let error1 as NSError {
+                error.memory = error1
             }
         }
     }
 
-    func contains(url: NSURL, error: NSErrorPointer) -> Bool {
-        if let cacheDirectoryPath = cacheDirectoryForURL(url) {
-            let contentFilePath = cacheDirectoryPath.stringByAppendingPathComponent("content.json")
-            return NSFileManager.defaultManager().fileExistsAtPath(contentFilePath)
+    func contains(url: NSURL) throws {
+        let error: NSError! = NSError(domain: ReaderModeCacheErrorDomain, code: ReaderModeCacheErrorCode.NoPathsFound.rawValue, userInfo: nil)
+        let cacheDirectoryURL = url.URLByAppendingPathComponent("content.json")
+        guard let contentFilePath = cacheDirectoryForURL(cacheDirectoryURL) else { throw error }
+        if !NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
+            throw error
         }
-        return false
     }
 
     private func cacheDirectoryForURL(url: NSURL) -> String? {
-        if let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true) as? [String] {
-            if paths.count > 0 {
-                if let hashedPath = hashedPathForURL(url) {
-                   return NSString.pathWithComponents([paths[0], "ReaderView", hashedPath]) as String
-                }
+        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+        if paths.count > 0 {
+            if let hashedPath = hashedPathForURL(url) {
+               return NSString.pathWithComponents([paths[0], "ReaderView", hashedPath]) as String
             }
         }
         return nil
     }
 
     private func hashedPathForURL(url: NSURL) -> String? {
-        if let hash = hashForURL(url) {
-            return NSString.pathWithComponents([hash.substringWithRange(NSMakeRange(0, 2)), hash.substringWithRange(NSMakeRange(2, 2)), hash.substringFromIndex(4)]) as String
-        }
-        return nil
+        guard let hash = hashForURL(url) else { return nil }
+        return NSString.pathWithComponents([hash.substringWithRange(NSMakeRange(0, 2)), hash.substringWithRange(NSMakeRange(2, 2)), hash.substringFromIndex(4)]) as String
     }
 
     private func hashForURL(url: NSURL) -> NSString? {
-        if let absoluteString = url.absoluteString {
-            if let data = absoluteString.dataUsingEncoding(NSUTF8StringEncoding) {
-                return data.sha1.hexEncodedString
-            }
-        }
-        return nil
+        guard let data = url.absoluteString.dataUsingEncoding(NSUTF8StringEncoding) else { return nil }
+        return data.sha1.hexEncodedString
     }
 }

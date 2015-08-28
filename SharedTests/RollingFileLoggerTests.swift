@@ -19,8 +19,11 @@ class RollingFileLoggerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        logDir = (NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true).first as! String) + "/Logs"
-        NSFileManager.defaultManager().createDirectoryAtPath(logDir, withIntermediateDirectories: false, attributes: nil, error: nil)
+        logDir = (NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true).first!) + "/Logs"
+        do {
+            try NSFileManager.defaultManager().createDirectoryAtPath(logDir, withIntermediateDirectories: false, attributes: nil)
+        } catch _ {
+        }
         logger = RollingFileLogger(filenameRoot: "test", logDirectoryPath: logDir, sizeLimit: sizeLimit)
     }
 
@@ -43,7 +46,10 @@ class RollingFileLoggerTests: XCTestCase {
         let expectedPath = createNewLogFileWithSize(5001)
 
         var directorySize: UInt64 = 0
-        NSFileManager.defaultManager().moz_getAllocatedSize(&directorySize, ofDirectoryAtURL: NSURL(fileURLWithPath: logDir)!, forFilesPrefixedWith: "test", error: nil)
+        do {
+            try NSFileManager.defaultManager().moz_getAllocatedSize(&directorySize, ofDirectoryAtURL: NSURL(fileURLWithPath: logDir), forFilesPrefixedWith: "test")
+        } catch _ {
+        }
 
         // Pre-condition: Folder needs to be larger than the size limit
         XCTAssertGreaterThan(directorySize, sizeLimit, "Log folder should be larger than size limit")
@@ -62,10 +68,13 @@ class RollingFileLoggerTests: XCTestCase {
         var logFilePaths = [0,1,2,3,4].map { self.createNewLogFileWithSize(200, withDate: NSDate().dateByAddingTimeInterval(60 * 60 * $0)) }
 
         // Reorder paths so oldest is first
-        logFilePaths.sort { $0 < $1 }
+        logFilePaths.sortInPlace { $0 < $1 }
 
         var directorySize: UInt64 = 0
-        NSFileManager.defaultManager().moz_getAllocatedSize(&directorySize, ofDirectoryAtURL: NSURL(fileURLWithPath: logDir)!, forFilesPrefixedWith: "test", error: nil)
+        do {
+            try NSFileManager.defaultManager().moz_getAllocatedSize(&directorySize, ofDirectoryAtURL: NSURL(fileURLWithPath: logDir), forFilesPrefixedWith: "test")
+        } catch _ {
+        }
 
         // Pre-condition: Folder needs to be larger than the size limit
         XCTAssertGreaterThan(directorySize, sizeLimit, "Log folder should be larger than size limit")
@@ -82,9 +91,9 @@ class RollingFileLoggerTests: XCTestCase {
     /**
     Create a log file using the test logger and returns the path to that log file
 
-    :param: size Size to make the log file
+    - parameter size: Size to make the log file
 
-    :returns: Path to log file
+    - returns: Path to log file
     */
     private func createNewLogFileWithSize(size: Int, withDate date: NSDate = NSDate()) -> String {
         let expected = "test.\(formatter.stringFromDate(date)).log"

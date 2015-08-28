@@ -7,6 +7,8 @@ import Storage
 import AVFoundation
 import XCGLogger
 
+private let log = Logger.browserLogger
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
@@ -31,8 +33,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
 
-        // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
-        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: AVAudioSessionCategoryOptions.MixWithOthers, error: nil)
+        do {
+            // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: AVAudioSessionCategoryOptions.MixWithOthers)
+        } catch _ {
+            log.error("Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
+        }
 
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
@@ -59,9 +65,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         configureActiveCrashReporter(profile.prefs.boolForKey("crashreports.send.always"))
 
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
-            if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL, absoluteString = url.absoluteString {
+            if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL {
                 let title = (userInfo["Title"] as? String) ?? ""
-                profile.readingList?.createRecordWithURL(absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
+                profile.readingList?.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
             }
         }
 
@@ -96,22 +102,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) {
             if components.scheme != "firefox" && components.scheme != "firefox-x-callback" {
                 return false
             }
             var url: String?
-            var appName: String?
-            var callbackScheme: String?
-            for item in components.queryItems as? [NSURLQueryItem] ?? [] {
+            for item in (components.queryItems ?? []) as [NSURLQueryItem] {
                 switch item.name {
                 case "url":
                     url = item.value
-                case "x-source":
-                    callbackScheme = item.value
-                case "x-source-name":
-                    appName = item.value
                 default: ()
                 }
             }
@@ -181,10 +181,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     break
                 }
             } else {
-                println("ERROR: Unknown notification action received")
+                print("ERROR: Unknown notification action received")
             }
         } else {
-            println("ERROR: Unknown notification received")
+            print("ERROR: Unknown notification received")
         }
     }
 
@@ -240,7 +240,7 @@ func configureActiveCrashReporter(optedIn: Bool?) {
     }
 }
 
-public func configureCrashReporter(reporter: CrashReporter, #optedIn: Bool?) {
+public func configureCrashReporter(reporter: CrashReporter, optedIn: Bool?) {
     let configureReporter: () -> () = {
         let addUploadParameterForKey: String -> Void = { key in
             if let value = NSBundle.mainBundle().objectForInfoDictionaryKey(key) as? String {

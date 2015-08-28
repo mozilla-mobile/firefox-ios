@@ -31,7 +31,7 @@ public class KeysPayload: CleartextPayloadJSON {
 
     var collectionKeys: [String: KeyBundle] {
         if let collections: [String: JSON] = self["collections"].asDictionary {
-            return optFilter(mapValues(collections, self.keyBundleFromPair))
+            return optFilter(mapValues(collections, f: self.keyBundleFromPair))
         }
         return [:]
     }

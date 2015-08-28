@@ -21,7 +21,7 @@ class SettingsTableViewCell: UITableViewCell {
         separatorInset = UIEdgeInsetsZero
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
@@ -207,7 +207,7 @@ private class DisconnectSetting: WithAccountSetting {
 }
 
 private class SyncNowSetting: WithAccountSetting {
-    private let syncNowTitle = NSAttributedString(string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.systemFontOfSize(UIConstants.DefaultStandardFontSize, weight: UIFontWeightRegular)])
+    private let syncNowTitle = NSAttributedString(string: NSLocalizedString("Sync Now", comment: "Sync Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIConstants.DefaultStandardFont])
 
     private let syncingTitle = NSAttributedString(string: NSLocalizedString("Syncing…", comment: "Syncing Firefox Account"), attributes: [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(UIConstants.DefaultStandardFontSize, weight: UIFontWeightRegular)])
 
@@ -266,18 +266,17 @@ private class AccountStatusSetting: WithAccountSetting {
                 return NSAttributedString(string: NSLocalizedString("Verify your email address.", comment: "Text message in the settings table view"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
             case .NeedsPassword:
                 let string = NSLocalizedString("Enter your password to connect.", comment: "Text message in the settings table view")
-                let range = NSRange(location: 0, length: count(string))
+                let range = NSRange(location: 0, length: string.characters.count)
                 let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
-                let attrs : [NSObject : AnyObject]? = [NSForegroundColorAttributeName : orange]
+                let attrs = [NSForegroundColorAttributeName : orange]
                 let res = NSMutableAttributedString(string: string)
                 res.setAttributes(attrs, range: range)
                 return res
             case .NeedsUpgrade:
                 let string = NSLocalizedString("Upgrade Firefox to connect.", comment: "Text message in the settings table view")
-                let range = NSRange(location: 0, length: count(string))
+                let range = NSRange(location: 0, length: string.characters.count)
                 let orange = UIColor(red: 255.0 / 255, green: 149.0 / 255, blue: 0.0 / 255, alpha: 1)
-                let attrs : [NSObject : AnyObject]? = [NSForegroundColorAttributeName : orange]
-
+                let attrs = [NSForegroundColorAttributeName : orange]
                 let res = NSMutableAttributedString(string: string)
                 res.setAttributes(attrs, range: range)
                 return res
@@ -363,7 +362,7 @@ private class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
         if !ShowDebugSettings {
             return true
         }
-        if let account = profile.getAccount() {
+        if let _ = profile.getAccount() {
             return false
         }
         return true
@@ -393,6 +392,14 @@ private class HiddenSetting: Setting {
     }
 }
 
+extension NSFileManager {
+    public func removeItemInDirectory(directory: String, named: String) throws {
+        if let file = NSURL.fileURLWithPath(directory).URLByAppendingPathComponent(named).path {
+            try self.removeItemAtPath(file)
+        }
+    }
+}
+
 private class DeleteExportedDataSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.
@@ -400,10 +407,11 @@ private class DeleteExportedDataSetting: HiddenSetting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        if let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as? String {
-            let browserDB = documentsPath.stringByAppendingPathComponent("browser.db")
-            var err: NSError?
-            NSFileManager.defaultManager().removeItemAtPath(browserDB, error: &err)
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        do {
+            try NSFileManager.defaultManager().removeItemInDirectory(documentsPath, named: "browser.db")
+        } catch {
+            print("Couldn't delete exported data: \(error).")
         }
     }
 }
@@ -415,9 +423,13 @@ private class ExportBrowserDataSetting: HiddenSetting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        if let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as? String {
-            let browserDB = documentsPath.stringByAppendingPathComponent("browser.db")
-            self.settings.profile.files.copy("browser.db", toAbsolutePath: browserDB)
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        if let browserDB = NSURL.fileURLWithPath(documentsPath).URLByAppendingPathComponent("browser.db").path {
+            do {
+                try self.settings.profile.files.copy("browser.db", toAbsolutePath: browserDB)
+            } catch {
+                print("Couldn't export browser data: \(error).")
+            }
         }
     }
 }
@@ -480,8 +492,7 @@ private class ShowIntroductionSetting: Setting {
     override func onClick(navigationController: UINavigationController?) {
         navigationController?.dismissViewControllerAnimated(true, completion: {
             if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-                let rootNavigationController = appDelegate.rootViewController
-                appDelegate.browserViewController.presentIntroViewController(force: true)
+                appDelegate.browserViewController.presentIntroViewController(true)
             }
         })
     }
@@ -785,18 +796,18 @@ class SettingsTableViewController: UITableViewController {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
             var cell: UITableViewCell!
-            if let status = setting.status {
+            if let _ = setting.status {
                 // Work around http://stackoverflow.com/a/9999821 and http://stackoverflow.com/a/25901083 by using a new cell.
                 // I could not make any setNeedsLayout solution work in the case where we disconnect and then connect a new account.
                 // Be aware that dequeing and then ignoring a cell appears to cause issues; only deque a cell if you're going to return it.
                 cell = SettingsTableViewCell(style: setting.style, reuseIdentifier: nil)
             } else {
-                cell = tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath) as! UITableViewCell
+                cell = tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath)
             }
             setting.onConfigureCell(cell)
             return cell
         }
-        return tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath) as! UITableViewCell
+        return tableView.dequeueReusableCellWithIdentifier(Identifier, forIndexPath: indexPath)
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -856,10 +867,11 @@ class SettingsTableFooterView: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        super.init(reuseIdentifier: nil)
+        self.frame = frame
         self.contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-        var topBorder = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: 0.5))
+        let topBorder = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: 0.5))
         topBorder.backgroundColor = UIConstants.TableViewSeparatorColor
         addSubview(topBorder)
         addSubview(logo)
@@ -869,7 +881,7 @@ class SettingsTableFooterView: UITableViewHeaderFooterView {
         }
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
@@ -890,15 +902,16 @@ class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(frame: CGRect) {
+        super.init(reuseIdentifier: nil)
+        self.frame = frame
         self.contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
         self.clipsToBounds = true
     }
 
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 

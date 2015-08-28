@@ -76,7 +76,7 @@ class OpenSearchParser {
         let data = NSData(contentsOfFile: file)
 
         if data == nil {
-            println("Invalid search file")
+            print("Invalid search file")
             return nil
         }
 
@@ -84,32 +84,32 @@ class OpenSearchParser {
         let docIndexer: XMLIndexer! = SWXMLHash.parse(data!)[rootName][0]
 
         if docIndexer.element == nil {
-            println("Invalid XML document")
+            print("Invalid XML document")
             return nil
         }
 
         let shortNameIndexer = docIndexer["ShortName"]
         if shortNameIndexer.all.count != 1 {
-            println("ShortName must appear exactly once")
+            print("ShortName must appear exactly once")
             return nil
         }
 
         let shortName = shortNameIndexer.element?.text
         if shortName == nil {
-            println("ShortName must contain text")
+            print("ShortName must contain text")
             return nil
         }
 
         let descriptionIndexer = docIndexer["Description"]
         if !pluginMode && descriptionIndexer.all.count != 1 {
-            println("Description must appear exactly once")
+            print("Description must appear exactly once")
             return nil
         }
         let description = descriptionIndexer.element?.text
 
-        var urlIndexers = docIndexer["Url"].all
+        let urlIndexers = docIndexer["Url"].all
         if urlIndexers.isEmpty {
-            println("Url must appear at least once")
+            print("Url must appear at least once")
             return nil
         }
 
@@ -118,7 +118,7 @@ class OpenSearchParser {
         for urlIndexer in urlIndexers {
             let type = urlIndexer.element?.attributes["type"]
             if type == nil {
-                println("Url element requires a type attribute")
+                print("Url element requires a type attribute", terminator: "\n")
                 return nil
             }
 
@@ -129,12 +129,12 @@ class OpenSearchParser {
 
             var template = urlIndexer.element?.attributes["template"]
             if template == nil {
-                println("Url element requires a template attribute")
+                print("Url element requires a template attribute", terminator: "\n")
                 return nil
             }
 
             if pluginMode {
-                var paramIndexers = urlIndexer["Param"].all
+                let paramIndexers = urlIndexer["Param"].all
 
                 if !paramIndexers.isEmpty {
                     template! += "?"
@@ -149,7 +149,7 @@ class OpenSearchParser {
                         let name = paramIndexer.element?.attributes["name"]
                         let value = paramIndexer.element?.attributes["value"]
                         if name == nil || value == nil {
-                            println("Param element must have name and value attributes")
+                            print("Param element must have name and value attributes", terminator: "\n")
                             return nil
                         }
                         template! += name! + "=" + value!
@@ -165,7 +165,7 @@ class OpenSearchParser {
         }
 
         if searchTemplate == nil {
-            println("Search engine must have a text/html type")
+            print("Search engine must have a text/html type")
             return nil
         }
 
@@ -175,8 +175,8 @@ class OpenSearchParser {
 
         // TODO: For now, just use the largest icon.
         for imageIndexer in imageIndexers {
-            let imageWidth = imageIndexer.element?.attributes["width"]?.toInt()
-            let imageHeight = imageIndexer.element?.attributes["height"]?.toInt()
+            let imageWidth = Int(imageIndexer.element?.attributes["width"] ?? "")
+            let imageHeight = Int(imageIndexer.element?.attributes["height"] ?? "")
 
             // Only accept square images.
             if imageWidth != imageHeight {
@@ -201,7 +201,7 @@ class OpenSearchParser {
                image = UIImage(data: imageData) {
             uiImage = image
         } else {
-            println("Error: Invalid search image data")
+            print("Error: Invalid search image data")
         }
 
         return OpenSearchEngine(shortName: shortName!, description: description, image: uiImage, searchTemplate: searchTemplate, suggestTemplate: suggestTemplate)

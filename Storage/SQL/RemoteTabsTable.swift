@@ -13,14 +13,14 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
     override var version: Int { return 1 }
 
     // TODO: index on guid and last_modified.
-    override var rows: String { return join(",", [
+    override var rows: String { return [
             "guid TEXT PRIMARY KEY",
             "name TEXT NOT NULL",
             "modified INTEGER NOT NULL",
             "type TEXT",
             "formfactor TEXT",
             "os TEXT",
-        ])
+        ].joinWithSeparator(",")
     }
 
     // TODO: this won't work correctly with NULL fields.
@@ -78,29 +78,26 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
     override var version: Int { return 2 }
 
     // TODO: index on id, client_guid, last_used, and position.
-    override var rows: String { return join(",", [
+    override var rows: String { return [
             "id INTEGER PRIMARY KEY AUTOINCREMENT", // An individual tab has no GUID from Sync.
             "client_guid TEXT REFERENCES clients(guid) ON DELETE CASCADE",
             "url TEXT NOT NULL",
             "title TEXT", // TODO: NOT NULL throughout.
             "history TEXT",
             "last_used INTEGER",
-        ])
+        ].joinWithSeparator(",")
     }
 
     private static func convertHistoryToString(history: [NSURL]) -> String? {
         let historyAsStrings = optFilter(history.map { $0.absoluteString })
-        if let data = NSJSONSerialization.dataWithJSONObject(historyAsStrings, options: NSJSONWritingOptions.allZeros, error: nil) {
-            return NSString(data: data, encoding: NSUTF8StringEncoding) as? String
-        }
 
-        return nil
+        let data = try! NSJSONSerialization.dataWithJSONObject(historyAsStrings, options: [])
+        return NSString(data: data, encoding: NSUTF8StringEncoding) as? String
     }
 
     private func convertStringToHistory(history: String?) -> [NSURL] {
         if let data = history?.dataUsingEncoding(NSUTF8StringEncoding) {
-            var err: NSError?
-            if let urlStrings = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &err) as? [String] {
+            if let urlStrings = try! NSJSONSerialization.JSONObjectWithData(data, options: [NSJSONReadingOptions.AllowFragments]) as? [String] {
                 return optFilter(urlStrings.map { NSURL(string: $0) })
             }
         }
@@ -110,7 +107,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
     override func getInsertAndArgs(inout item: RemoteTab) -> (String, [AnyObject?])? {
         let args: Args = [
             item.clientGUID,
-            item.URL.absoluteString!,
+            item.URL.absoluteString,
             item.title,
             RemoteTabsTable.convertHistoryToString(item.history),
             NSNumber(unsignedLongLong: item.lastUsed),
@@ -127,7 +124,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
 
             // Key by (client_guid, url) rather than (transient) id.
             item.clientGUID,
-            item.URL.absoluteString!,
+            item.URL.absoluteString,
         ]
 
         return ("UPDATE \(name) SET title = ?, history = ?, last_used = ? WHERE client_guid IS ? AND url = ?", args)
@@ -135,7 +132,7 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
 
     override func getDeleteAndArgs(inout item: RemoteTab?) -> (String, [AnyObject?])? {
         if let item = item {
-            return ("DELETE FROM \(name) WHERE client_guid = IS AND url = ?", [item.clientGUID, item.URL.absoluteString!])
+            return ("DELETE FROM \(name) WHERE client_guid = IS AND url = ?", [item.clientGUID, item.URL.absoluteString])
         }
 
         return ("DELETE FROM \(name)", [])

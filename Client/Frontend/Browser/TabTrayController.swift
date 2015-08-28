@@ -116,7 +116,7 @@ class TabCell: UICollectionViewCell {
         ]
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -154,7 +154,7 @@ class TabCell: UICollectionViewCell {
             make.trailing.centerY.equalTo(title)
         }
 
-        var top = (TabTrayControllerUX.TextBoxHeight - titleText.bounds.height) / 2.0
+        let top = (TabTrayControllerUX.TextBoxHeight - titleText.bounds.height) / 2.0
         titleText.frame.origin = CGPoint(x: titleText.frame.origin.x, y: max(0, top))
     }
 
@@ -210,7 +210,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         navBar = UIView()
         navBar.backgroundColor = TabTrayControllerUX.BackgroundColor
 
-        let signInButton = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
+        let signInButton = UIButton(type: UIButtonType.Custom)
         signInButton.addTarget(self, action: "SELdidClickDone", forControlEvents: UIControlEvents.TouchUpInside)
         signInButton.setTitle(NSLocalizedString("Sign in", comment: "Button that leads to Sign in section of the Settings sheet."), forState: UIControlState.Normal)
         signInButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
@@ -419,7 +419,6 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int) {
-        var newTab: Browser? = nil
         self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
         self.collectionView.reloadItemsAtIndexPaths(self.collectionView.indexPathsForVisibleItems())
     }
@@ -441,7 +440,7 @@ extension TabTrayController: TabCellDelegate {
 }
 
 extension TabTrayController: UIScrollViewAccessibilityDelegate {
-    func accessibilityScrollStatusForScrollView(scrollView: UIScrollView!) -> String! {
+    func accessibilityScrollStatusForScrollView(scrollView: UIScrollView) -> String? {
         var visibleCells = collectionView.visibleCells() as! [TabCell]
         var bounds = collectionView.bounds
         bounds = CGRectOffset(bounds, collectionView.contentInset.left, collectionView.contentInset.top)
@@ -451,7 +450,7 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
         visibleCells = visibleCells.filter { !CGRectIsEmpty(CGRectIntersection($0.frame, bounds)) }
 
         var indexPaths = visibleCells.map { self.collectionView.indexPathForCell($0)! }
-        indexPaths.sort { $0.section < $1.section || ($0.section == $1.section && $0.row < $1.row) }
+        indexPaths.sortInPlace { $0.section < $1.section || ($0.section == $1.section && $0.row < $1.row) }
 
         if indexPaths.count == 0 {
             return NSLocalizedString("No tabs", comment: "Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray")
@@ -471,11 +470,12 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
     }
 }
 
-// There seems to be a bug with UIKit where when the UICollectionView changes it's contentSize 
+// There seems to be a bug with UIKit where when the UICollectionView changes its contentSize
 // from > frame.size to <= frame.size: the contentSet animation doesn't properly happen and 'jumps' to the
-// final state. This workaround forces the contentSize to always be larger than the frame size so the animation happens more 
-// smoothly. This also makes the tabs be able to 'bounce' when there are not enough to fill the screen which I 
-// think is fine but if needed we can disable user scrolling in this case
+// final state.
+// This workaround forces the contentSize to always be larger than the frame size so the animation happens more
+// smoothly. This also makes the tabs be able to 'bounce' when there are not enough to fill the screen, which I
+// think is fine, but if needed we can disable user scrolling in this case.
 private class TabTrayCollectionViewLayout: UICollectionViewFlowLayout {
     private override func collectionViewContentSize() -> CGSize {
         var calculatedSize = super.collectionViewContentSize()
@@ -495,7 +495,7 @@ class InnerStrokedView: UIView {
         self.backgroundColor = UIColor.clearColor()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 

@@ -18,7 +18,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
     func testNavigation() {
         tester().tapViewWithAccessibilityIdentifier("url")
         var textView = tester().waitForViewWithAccessibilityLabel("Address and Search") as? UITextField
-        XCTAssertTrue(textView!.text.isEmpty, "Text is empty")
+        XCTAssertTrue(textView!.text!.isEmpty, "Text is empty")
         XCTAssertNotNil(textView!.placeholder, "Text view has a placeholder to show when its empty")
 
         let url1 = "\(webRoot)/numberedPage.html?page=1"
@@ -56,7 +56,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
 
         // now open another tab and test it works too
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        var addTabButton = tester().waitForViewWithAccessibilityLabel("Add Tab") as? UIButton
+        let addTabButton = tester().waitForViewWithAccessibilityLabel("Add Tab") as? UIButton
         addTabButton?.tap()
         tester().waitForViewWithAccessibilityLabel("Web content")
         let url2 = "\(webRoot)/scrollablePage.html?page=2"

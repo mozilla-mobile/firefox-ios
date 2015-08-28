@@ -14,15 +14,15 @@ private let log = Logger.syncLogger
 private let KeyUnwrappingError = NSError(domain: "org.mozilla", code: 1, userInfo: nil)
 
 protocol FxALoginClient {
-    func keyPair() -> Deferred<Result<KeyPair>>
-    func keys(keyFetchToken: NSData) -> Deferred<Result<FxAKeysResponse>>
-    func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Result<FxASignResponse>>
+    func keyPair() -> Deferred<Maybe<KeyPair>>
+    func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>>
+    func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>>
 }
 
 extension FxAClient10: FxALoginClient {
-    func keyPair() -> Deferred<Result<KeyPair>> {
+    func keyPair() -> Deferred<Maybe<KeyPair>> {
         let result = RSAKeyPair.generateKeyPairWithModulusSize(2048) // TODO: debate key size and extract this constant.
-        return Deferred(value: Result(success: result))
+        return Deferred(value: Maybe(success: result))
     }
 }
 

@@ -4,7 +4,7 @@
 
 import UIKit
 
-private struct ETLDEntry: Printable {
+private struct ETLDEntry: CustomStringConvertible {
     let entry: String
 
     var isNormal: Bool { return isWild || !isException }
@@ -26,8 +26,8 @@ private typealias TLDEntryMap = [String:ETLDEntry]
 
 private func loadEntriesFromDisk() -> TLDEntryMap? {
     if let data = NSString.contentsOfFileWithResourceName("effective_tld_names", ofType: "dat", fromBundle: NSBundle(identifier: "org.mozilla.Shared")!, encoding: NSUTF8StringEncoding, error: nil) {
-        var lines = data.componentsSeparatedByString("\n") as! [String]
-        var trimmedLines = filter(lines) { !$0.hasPrefix("//") && $0 != "\n" && $0 != "" }
+        let lines = data.componentsSeparatedByString("\n")
+        let trimmedLines = lines.filter { !$0.hasPrefix("//") && $0 != "\n" && $0 != "" }
 
         var entries = TLDEntryMap()
         for line in trimmedLines {
@@ -35,10 +35,10 @@ private func loadEntriesFromDisk() -> TLDEntryMap? {
             let key: String
             if entry.isWild {
                 // Trim off the '*.' part of the line
-                key = line.substringFromIndex(advance(line.startIndex, 2))
+                key = line.substringFromIndex(line.startIndex.advancedBy(2))
             } else if entry.isException {
                 // Trim off the '!' part of the line
-                key = line.substringFromIndex(advance(line.startIndex, 1))
+                key = line.substringFromIndex(line.startIndex.advancedBy(1))
             } else {
                 key = line
             }
@@ -73,7 +73,7 @@ extension NSURL {
 
     public func getQuery() -> [String: String] {
         var results = [String: String]()
-        var keyValues = self.query?.componentsSeparatedByString("&")
+        let keyValues = self.query?.componentsSeparatedByString("&")
 
         if keyValues?.count > 0 {
             for pair in keyValues! {
@@ -105,15 +105,11 @@ extension NSURL {
     }
 
     public func absoluteStringWithoutHTTPScheme() -> String? {
-        if let urlString = self.absoluteString {
-            // If it's basic http, strip out the string but leave anything else in
-            if urlString.hasPrefix("http://") ?? false {
-                return urlString.substringFromIndex(advance(urlString.startIndex, 7))
-            } else {
-                return urlString
-            }
+        // If it's basic http, strip out the string but leave anything else in
+        if self.absoluteString.hasPrefix("http://") ?? false {
+            return self.absoluteString.substringFromIndex(self.absoluteString.startIndex.advancedBy(7))
         } else {
-            return nil
+            return self.absoluteString
         }
     }
 
@@ -145,8 +141,8 @@ extension NSURL {
      * Any failure? Return this URL.
      */
     public func domainURL() -> NSURL {
-        if let scheme = self.scheme, normalized = self.normalizedHost() {
-            return NSURL(scheme: scheme, host: normalized, path: "/") ?? self
+        if let normalized = self.normalizedHost() {
+            return NSURL(scheme: self.scheme, host: normalized, path: "/") ?? self
         }
         return self
     }
@@ -178,13 +174,13 @@ extension NSURL {
 
 //MARK: Private Helpers
 private extension NSURL {
-    private func publicSuffixFromHost(var host: String, withAdditionalParts additionalPartCount: Int) -> String? {
+    private func publicSuffixFromHost( host: String, withAdditionalParts additionalPartCount: Int) -> String? {
         if host.isEmpty {
             return nil
         }
 
         // Check edge case where the host is either a single or double '.'.
-        if host.isEmpty || host.lastPathComponent == "." {
+        if host.isEmpty || NSString(string: host).lastPathComponent == "." {
             return ""
         }
 
@@ -211,14 +207,14 @@ private extension NSURL {
         */
 
         let tokens = host.componentsSeparatedByString(".")
-        let tokenCount = count(tokens)
+        let tokenCount = tokens.count
         var suffix: String?
         var previousDomain: String? = nil
         var currentDomain: String = host
 
         for offset in 0..<tokenCount {
             // Store the offset for use outside of this scope so we can add additional parts if needed
-            let nextDot: String? = offset + 1 < tokenCount ? join(".", tokens[offset + 1..<tokenCount]) : nil
+            let nextDot: String? = offset + 1 < tokenCount ? tokens[offset + 1..<tokenCount].joinWithSeparator(".") : nil
 
             if let entry = etldEntries?[currentDomain] {
                 if entry.isWild && (previousDomain != nil) {
@@ -245,15 +241,15 @@ private extension NSURL {
         if additionalPartCount > 0 {
             if let suffix = suffix {
                 // Take out the public suffixed and add in the additional parts we want.
-                let literalFromEnd = NSStringCompareOptions.LiteralSearch |        // Match the string exactly.
-                                     NSStringCompareOptions.BackwardsSearch |      // Search from the end.
-                                     NSStringCompareOptions.AnchoredSearch         // Stick to the end.
+                let literalFromEnd: NSStringCompareOptions = [NSStringCompareOptions.LiteralSearch,        // Match the string exactly.
+                                     NSStringCompareOptions.BackwardsSearch,      // Search from the end.
+                                     NSStringCompareOptions.AnchoredSearch]         // Stick to the end.
                 let suffixlessHost = host.stringByReplacingOccurrencesOfString(suffix, withString: "", options: literalFromEnd, range: nil)
                 let suffixlessTokens = suffixlessHost.componentsSeparatedByString(".").filter { $0 != "" }
                 let maxAdditionalCount = max(0, suffixlessTokens.count - additionalPartCount)
                 let additionalParts = suffixlessTokens[maxAdditionalCount..<suffixlessTokens.count]
-                let partsString = join(".", additionalParts)
-                baseDomain = join(".", [partsString, suffix])
+                let partsString = additionalParts.joinWithSeparator(".")
+                baseDomain = [partsString, suffix].joinWithSeparator(".")
             } else {
                 return nil
             }

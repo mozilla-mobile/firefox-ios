@@ -49,7 +49,7 @@ class DiskImageStoreTests: XCTestCase {
 
     /// Converts the image to a JPEG so it matches the image in the store.
     private func toJPEGImage(image: UIImage) -> UIImage {
-        return UIImage(data: UIImageJPEGRepresentation(image, 1))!
+        return UIImage(data: UIImageJPEGRepresentation(image, 1)!)!
     }
 
     private func makeImageWithColor(color: UIColor) -> UIImage {

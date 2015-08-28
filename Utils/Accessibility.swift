@@ -34,7 +34,7 @@ extension AccessibleAction { // UIAlertAction
         return { (_: UIAlertAction!) -> Void in self.handler() }
     }
 
-    public func alertAction(#style: UIAlertActionStyle) -> UIAlertAction {
+    public func alertAction(style style: UIAlertActionStyle) -> UIAlertAction {
         return UIAlertAction(title: name, style: style, handler: alertActionHandler)
     }
 }

@@ -31,25 +31,25 @@ public extension String {
             return true
         }
         if let range = self.rangeOfString(other,
-                options: NSStringCompareOptions.AnchoredSearch | NSStringCompareOptions.BackwardsSearch) {
+                options: [NSStringCompareOptions.AnchoredSearch, NSStringCompareOptions.BackwardsSearch]) {
             return range.endIndex == self.endIndex
         }
         return false
     }
 
     func escape() -> String {
-        var raw: NSString = self
-        var str = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+        let raw: NSString = self
+        let str = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
             raw,
             "[].",":/?&=;+!@#$()',*",
             CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding))
-        return str as! String
+        return str as String
     }
 
     func unescape() -> String {
-        var raw: NSString = self
-        var str = CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, raw, "[].")
-        return str as! String
+        let raw: NSString = self
+        let str = CFURLCreateStringByReplacingPercentEscapes(kCFAllocatorDefault, raw, "[].")
+        return str as String
     }
 
     /**
@@ -62,10 +62,10 @@ public extension String {
 
     :returns: A String with `maxLength` characters or less
     */
-    func ellipsize(var #maxLength: Int) -> String {
-        if (maxLength >= 2) && (count(self) > maxLength) {
-            let index1 = advance(self.startIndex, (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
-            let index2 = advance(self.endIndex, maxLength / -2)
+    func ellipsize(let maxLength maxLength: Int) -> String {
+        if (maxLength >= 2) && (self.characters.count > maxLength) {
+            let index1 = self.startIndex.advancedBy((maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
+            let index2 = self.endIndex.advancedBy(maxLength / -2)
 
             return self.substringToIndex(index1) + "…\u{2060}" + self.substringFromIndex(index2)
         }
@@ -73,7 +73,7 @@ public extension String {
     }
 
     private var stringWithAdditionalEscaping: String {
-        return self.stringByReplacingOccurrencesOfString("|", withString: "%7C", options: NSStringCompareOptions.allZeros, range: nil)
+        return self.stringByReplacingOccurrencesOfString("|", withString: "%7C", options: NSStringCompareOptions(), range: nil)
     }
 
     public var asURL: NSURL? {

@@ -80,8 +80,8 @@ extension SwipeAnimator {
         let totalRotationInRadians = CGFloat(params.totalRotationInDegrees / 180.0 * M_PI)
 
         // Determine rotation / scaling amounts by the distance to the edge
-        var rotation = (translation / swipeWidth) * totalRotationInRadians
-        var scale = 1 - (abs(translation) / swipeWidth) * (1 - params.totalScale)
+        let rotation = (translation / swipeWidth) * totalRotationInRadians
+        let scale = 1 - (abs(translation) / swipeWidth) * (1 - params.totalScale)
 
         let rotationTransform = CGAffineTransformMakeRotation(rotation)
         let scaleTransform = CGAffineTransformMakeScale(scale, scale)
@@ -123,7 +123,7 @@ extension SwipeAnimator {
         }
     }
 
-    func close(#right: Bool) {
+    func close(right right: Bool) {
         let direction = CGFloat(right ? -1 : 1)
         animateAwayWithVelocity(CGPoint(x: -direction * params.minExitVelocity, y: 0), speed: direction * params.minExitVelocity)
     }
