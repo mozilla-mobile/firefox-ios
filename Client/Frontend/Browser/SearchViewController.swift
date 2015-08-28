@@ -255,7 +255,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
 
         promptYesButton.snp_makeConstraints { make in
-            make.right.equalTo(promptNoButton.snp_leading).inset(SearchViewControllerUX.PromptInsets.right)
+            make.right.equalTo(promptNoButton.snp_left).inset(SearchViewControllerUX.PromptInsets.right)
             make.centerY.equalTo(prompt)
         }
 
@@ -267,7 +267,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         prompt.snp_makeConstraints { make in
             make.top.leading.trailing.equalTo(self.view)
-            return
         }
 
         layoutTable()
