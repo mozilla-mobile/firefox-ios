@@ -8,6 +8,11 @@
 	<string>$(MOZ_SOCORRO_PRODUCT_NAME)</string>
 	<key>BreakpadProductDisplay</key>
 	<string>$(MOZ_BUNDLE_DISPLAY_NAME)</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>BreakpadReportInterval</key>
 	<string>$(MOZ_BREAKPAD_UPLOAD_FREQUENCY)</string>
 	<key>BreakpadServerType</key>

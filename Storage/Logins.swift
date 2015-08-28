@@ -239,7 +239,7 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
 
     private class func getPasswordOrigin(uriString: String, allowJS: Bool = false) -> String? {
         var realm: String? = nil
-        if let uri = NSURL(string: uriString) {
+        if let uri = NSURL(string: uriString) where !uri.scheme.isEmpty {
             if allowJS && uri.scheme == "javascript" {
                 return "javascript:"
             }
