@@ -37,12 +37,14 @@ class BrowserScrollingController: NSObject {
     weak var snackBars: UIView?
 
     var footerBottomConstraint: Constraint?
-    var headerTopConstraint: Constraint?
+    // TODO: Since SnapKit hasn't added support yet (Swift 2.0/iOS 9) for handling layoutGuides,
+    // this constraint uses the system abstraction instead of SnapKit's Constraint class
+    var headerTopConstraint: NSLayoutConstraint?
     var toolbarsShowing: Bool { return headerTopOffset == 0 }
 
     private var headerTopOffset: CGFloat = 0 {
         didSet {
-            headerTopConstraint?.updateOffset(headerTopOffset)
+            headerTopConstraint?.constant = headerTopOffset
             header?.superview?.setNeedsLayout()
         }
     }

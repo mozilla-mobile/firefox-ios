@@ -259,6 +259,31 @@ class BrowserViewController: UIViewController {
         scrollController.snackBars = snackBars
 
         self.updateToolbarStateForTraitCollection(self.traitCollection)
+
+        setupConstraints()
+    }
+
+    private func setupConstraints() {
+        urlBar.snp_makeConstraints { make in
+            make.edges.equalTo(self.header)
+        }
+
+        let viewBindings: [String: AnyObject] = [
+            "header": header,
+            "topLayoutGuide": topLayoutGuide
+        ]
+        let topConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:[topLayoutGuide][header]", options: [], metrics: nil, views: viewBindings)
+        view.addConstraints(topConstraint)
+        scrollController.headerTopConstraint = topConstraint.first
+
+        header.snp_makeConstraints { make in
+            make.height.equalTo(UIConstants.ToolbarHeight)
+            make.left.right.equalTo(self.view)
+        }
+
+        headerBackdrop.snp_makeConstraints { make in
+            make.edges.equalTo(self.header)
+        }
     }
 
     func loadQueuedTabs() {
@@ -350,26 +375,12 @@ class BrowserViewController: UIViewController {
 
         statusBarOverlay.snp_remakeConstraints { make in
             make.top.left.right.equalTo(self.view)
-            make.height.equalTo(self.topLayoutGuide)
+            make.height.equalTo(self.topLayoutGuide.length)
         }
 
         topTouchArea.snp_remakeConstraints { make in
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(BrowserViewControllerUX.ShowHeaderTapAreaHeight)
-        }
-
-        urlBar.snp_remakeConstraints { make in
-            make.edges.equalTo(self.header)
-        }
-
-        header.snp_remakeConstraints { make in
-            scrollController.headerTopConstraint = make.top.equalTo(self.topLayoutGuide).constraint
-            make.height.equalTo(UIConstants.ToolbarHeight)
-            make.left.right.equalTo(self.view)
-        }
-        header.setNeedsUpdateConstraints()
-        headerBackdrop.snp_remakeConstraints { make in
-            make.edges.equalTo(self.header)
         }
 
         readerModeBar?.snp_remakeConstraints { make in
