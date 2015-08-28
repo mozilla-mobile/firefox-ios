@@ -112,7 +112,6 @@ private func deleteLibraryFolderContents(folder: String) throws {
     }
 }
 
-// I don't know why this is different. Preserving behavior across refactor.
 private func deleteLibraryFolder(folder: String) throws {
     let manager = NSFileManager.defaultManager()
     let library = manager.URLsForDirectory(NSSearchPathDirectory.LibraryDirectory, inDomains: .UserDomainMask)[0]
@@ -132,7 +131,11 @@ class SiteDataClearable : Clearable {
         tabManager.removeAll()
 
         // Then we just wipe the WebKit directory from our Library.
-        try! deleteLibraryFolder("WebKit")
+        do {
+            try deleteLibraryFolder("WebKit")
+        } catch {
+            return deferMaybe(ClearableErrorType(err: error))
+        }
 
         return succeed()
     }
