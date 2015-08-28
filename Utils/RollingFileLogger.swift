@@ -81,7 +81,7 @@ public class RollingFileLogger: XCGLogger {
         let logDirURL = NSURL(fileURLWithPath: logDirectoryPath!)
         var dirSize: UInt64 = 0
         do {
-            try NSFileManager.defaultManager().nr_getAllocatedSize(&dirSize, ofDirectoryAtURL: logDirURL, forFilesPrefixedWith: self.root)
+            try NSFileManager.defaultManager().moz_getAllocatedSize(&dirSize, ofDirectoryAtURL: logDirURL, forFilesPrefixedWith: self.root)
         } catch let errorValue as NSError {
             error("Error determining log directory size: \(errorValue)")
         }

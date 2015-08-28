@@ -47,7 +47,7 @@ class RollingFileLoggerTests: XCTestCase {
 
         var directorySize: UInt64 = 0
         do {
-            try NSFileManager.defaultManager().nr_getAllocatedSize(&directorySize, ofDirectoryAtURL: NSURL(fileURLWithPath: logDir), forFilesPrefixedWith: "test")
+            try NSFileManager.defaultManager().moz_getAllocatedSize(&directorySize, ofDirectoryAtURL: NSURL(fileURLWithPath: logDir), forFilesPrefixedWith: "test")
         } catch _ {
         }
 
@@ -72,7 +72,7 @@ class RollingFileLoggerTests: XCTestCase {
 
         var directorySize: UInt64 = 0
         do {
-            try NSFileManager.defaultManager().nr_getAllocatedSize(&directorySize, ofDirectoryAtURL: NSURL(fileURLWithPath: logDir), forFilesPrefixedWith: "test")
+            try NSFileManager.defaultManager().moz_getAllocatedSize(&directorySize, ofDirectoryAtURL: NSURL(fileURLWithPath: logDir), forFilesPrefixedWith: "test")
         } catch _ {
         }
 
