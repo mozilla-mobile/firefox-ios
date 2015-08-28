@@ -50,7 +50,7 @@ private extension TrayToBrowserAnimator {
 
         // Re-calculate the starting transforms for header/footer views in case we switch orientation
         resetTransformsForViews([bvc.header, bvc.headerBackdrop, bvc.readerModeBar, bvc.footer, bvc.footerBackdrop])
-        transformHeaderFooterForBVC(bvc, toFrame: startingFrame, container)
+        transformHeaderFooterForBVC(bvc, toFrame: startingFrame, container: container)
 
         UIView.animateWithDuration(self.transitionDuration(transitionContext),
             delay: 0, usingSpringWithDamping: 1,
@@ -156,7 +156,7 @@ private extension BrowserToTrayAnimator {
                 cell.title.transform = CGAffineTransformIdentity
                 cell.layoutIfNeeded()
 
-                transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container)
+                transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)
 
                 bvc.urlBar.updateAlphaForSubviews(0)
                 bvc.footer.alpha = 0
@@ -182,8 +182,8 @@ private extension BrowserToTrayAnimator {
 }
 
 private func transformHeaderFooterForBVC(bvc: BrowserViewController, toFrame finalFrame: CGRect, container: UIView) {
-    let footerForTransform = footerTransform(bvc.footer.frame, toFrame: finalFrame, container)
-    let headerForTransform = headerTransform(bvc.header.frame, toFrame: finalFrame, container)
+    let footerForTransform = footerTransform(bvc.footer.frame, toFrame: finalFrame, container: container)
+    let headerForTransform = headerTransform(bvc.header.frame, toFrame: finalFrame, container: container)
 
     bvc.footer.transform = footerForTransform
     bvc.footerBackdrop.transform = footerForTransform

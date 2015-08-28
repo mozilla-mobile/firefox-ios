@@ -250,7 +250,7 @@ class Browser: NSObject {
     }
 
     func reload() {
-        if let navigation = webView?.reloadFromOrigin() {
+        if let _ = webView?.reloadFromOrigin() {
             log.info("reloaded zombified tab from origin")
             return
         }

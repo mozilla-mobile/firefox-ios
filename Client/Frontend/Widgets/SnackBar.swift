@@ -164,7 +164,7 @@ class SnackBar: UIView {
 
     override func drawRect(rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
-        drawLine(context, start: CGPoint(x: 0, y: 1), end: CGPoint(x: frame.size.width, y: 1))
+        drawLine(context!, start: CGPoint(x: 0, y: 1), end: CGPoint(x: frame.size.width, y: 1))
     }
 
     /**

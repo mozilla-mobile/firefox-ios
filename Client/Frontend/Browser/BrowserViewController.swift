@@ -101,7 +101,7 @@ class BrowserViewController: UIViewController {
     }
 
     override func didReceiveMemoryWarning() {
-        println("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
+        print("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
         log.debug("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
         NSLog("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
         super.didReceiveMemoryWarning()
@@ -124,7 +124,7 @@ class BrowserViewController: UIViewController {
     }
 
 
-    func toggleSnackBarVisibility(#show: Bool) {
+    func toggleSnackBarVisibility(show show: Bool) {
         if show {
             UIView.animateWithDuration(0.1, animations: { self.snackBars.hidden = false })
         } else {
@@ -410,7 +410,7 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(self.footer)
         }
 
-        adjustFooterSize(top: nil)
+        adjustFooterSize(nil)
         footerBackground?.snp_remakeConstraints { make in
             make.bottom.left.right.equalTo(self.footer)
             make.height.equalTo(UIConstants.ToolbarHeight)
@@ -664,7 +664,7 @@ class BrowserViewController: UIViewController {
             if let tab = tabManager.selectedTab where tab.webView?.URL == nil {
                 log.debug("URL IS NIL! WE ARE RESETTING PROCESS POOL")
                 NSLog("URL IS NIL! WE ARE RESETTING PROCESS POOL")
-                println("URL IS NIL! WE ARE RESETTING PROCESS POOL")
+                print("URL IS NIL! WE ARE RESETTING PROCESS POOL")
                 tabManager.resetProcessPool()
             }
 

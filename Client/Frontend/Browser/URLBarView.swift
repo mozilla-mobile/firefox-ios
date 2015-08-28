@@ -526,7 +526,7 @@ class URLBarView: UIView {
         locationTextField.hidden = !inOverlayMode
 
         UIView.animateWithDuration(0.3, delay: 0.0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0.0, options: [], animations: { _ in
-            self.transitionToOverlay(didCancel: cancel)
+            self.transitionToOverlay(cancel)
             self.setNeedsUpdateConstraints()
             self.layoutIfNeeded()
         }, completion: { _ in

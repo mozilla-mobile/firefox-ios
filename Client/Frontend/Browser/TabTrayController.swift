@@ -419,7 +419,6 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int) {
-        var newTab: Browser? = nil
         self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
         self.collectionView.reloadItemsAtIndexPaths(self.collectionView.indexPathsForVisibleItems())
     }
