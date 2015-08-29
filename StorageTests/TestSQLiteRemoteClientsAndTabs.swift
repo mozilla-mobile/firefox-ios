@@ -79,11 +79,11 @@ public class MockRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferMaybe(self.clientsAndTabs.map { $0.client })
     }
 
-    public func getClientGUIDs() -> Deferred<Result<Set<GUID>>> {
+    public func getClientGUIDs() -> Deferred<Maybe<Set<GUID>>> {
         return deferMaybe(Set<GUID>(optFilter(self.clientsAndTabs.map { $0.client.guid })))
     }
 
-    public func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Result<[RemoteTab]>> {
+    public func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Maybe<[RemoteTab]>> {
         return deferMaybe(optFilter(self.clientsAndTabs.map { $0.client.guid == guid ? $0.tabs : nil })[0])
     }
 
