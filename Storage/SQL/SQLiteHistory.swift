@@ -109,9 +109,6 @@ public class SQLiteHistory {
     required public init?(db: BrowserDB, version: Int? = nil) {
         self.db = db
         self.favicons = FaviconsTable<Favicon>()
-        if !db.createOrUpdate(self.favicons) {
-            return nil
-        }
 
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.

@@ -27,6 +27,7 @@ let IndexVisitsSiteIDIsLocalDate = "idx_visits_siteID_is_local_date"   // Added 
 
 private let AllTables: Args = [
     TableDomains,
+    TableFavicons,
     TableFaviconSites,
 
     TableHistory,
@@ -57,7 +58,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 public class BrowserTable: Table {
-    static let DefaultVersion = 7
+    static let DefaultVersion = 8
     let version: Int
     var name: String { return "BROWSER" }
     let sqliteVersion: Int32
@@ -170,6 +171,16 @@ public class BrowserTable: Table {
 
 
     func create(db: SQLiteDBConnection, version: Int) -> Bool {
+        let favicons =
+        "CREATE TABLE IF NOT EXISTS \(TableFavicons) (" +
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "url TEXT NOT NULL UNIQUE, " +
+        "width INTEGER, " +
+        "height INTEGER, " +
+        "type INTEGER NOT NULL, " +
+        "date REAL NOT NULL" +
+        ") "
+
         // Right now we don't need to track per-visit deletions: Sync can't
         // represent them! See Bug 1157553 Comment 6.
         // We flip the should_upload flag on the history item when we add a visit.
@@ -250,6 +261,7 @@ public class BrowserTable: Table {
         let queries: [(String?, Args?)] = [
             (getDomainsTableCreationString(forVersion: version), nil),
             (getHistoryTableCreationString(forVersion: version), nil),
+            (favicons, nil),
             (visits, nil),
             (bookmarks, nil),
             (faviconSites, nil),
@@ -322,6 +334,11 @@ public class BrowserTable: Table {
             if !fillDomainNamesFromCursor(urls, db: db) {
                 return false
             }
+        }
+
+        if from < 8 && to == 8 {
+            // Nothing to do: we're just shifting the favicon table to be owned by this class.
+            return true
         }
 
         return true
