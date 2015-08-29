@@ -12,11 +12,10 @@ public class SQLiteQueue: TabQueue {
     let db: BrowserDB
 
     public init(db: BrowserDB) {
-        self.db = db
-
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
         db.createOrUpdate(BrowserTable())
+        self.db = db
     }
 
     public func addToQueue(tab: ShareItem) -> Success {

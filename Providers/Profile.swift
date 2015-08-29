@@ -242,6 +242,9 @@ public class BrowserProfile: Profile {
     /**
      * Favicons, history, and bookmarks are all stored in one intermeshed
      * collection of tables.
+     *
+     * Any other class that needs to access any one of these should ensure
+     * that this is initialized first.
      */
     private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory> = {
         return SQLiteHistory(db: self.db)!
@@ -258,7 +261,7 @@ public class BrowserProfile: Profile {
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
-        let p = self.places
+        let _ = self.places
 
         return SQLiteBookmarks(db: self.db)
     }()
