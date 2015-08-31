@@ -107,7 +107,3 @@ Updating SQLCipher.
 As of bug https://bugzilla.mozilla.org/show_bug.cgi?id=1182620 we do not run the SQLCipher 'amalgamation' phase anymore. Instead we have simply included generated copies of `sqlite3.c`, `sqlite3.h` and `sqlite3ext.h` in the project. This works around problems where the amalgamation phase did not work for production builds. It also speeds up things.
 
 To update to a newer version of SQLCipher: check out the original SQLCipher project and build it. Do not copy the project or anything in the Firefox project. Just follow their instructions. Then copy the above three `.c` and `.h` files back into the Firefox project. Also update the `README`, `VERION` and `CHANGELOG` files from the original distribution so that we know what version we have included.
-
-MozBuildID.xcconfig
-
-By default, .xcconfig files are cached after building a Xcode project. We generate a build identifier from the timestamp of when a build is made and a copy of the MozBuildID.xcconfig.template is filled in with the timestamp and renamed MozBuildID.xcconfig. Because of this, to generate a correct build identifier for a build, you will need to not just do a basic Clean of the project, but also a Clean Build Folder (Cmd+Alt+Shift+K)
