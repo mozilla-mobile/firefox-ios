@@ -14,17 +14,13 @@ struct ReaderModeHandlers {
         // reader view interstitial page to find out when it can stop showing the 'Loading...' page and instead load
         // the readerized content.
         webServer.registerHandlerForMethod("GET", module: "reader-mode", resource: "page-exists") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
-            if let url = request.query["url"] as? String {
-                if let url = NSURL(string: url) {
-                    do {
-                        try ReaderModeCache.sharedInstance.contains(url)
-                        return GCDWebServerResponse(statusCode: 200)
-                    } catch _ {
-                        return GCDWebServerResponse(statusCode: 404)
-                    }
-                }
+            guard let stringURL = request.query["url"] as? String,
+                  let url = NSURL(string: stringURL) else {
+                return GCDWebServerResponse(statusCode: 500)
             }
-            return GCDWebServerResponse(statusCode: 500)
+
+            let status = ReaderModeCache.sharedInstance.contains(url) ? 200 : 404
+            return GCDWebServerResponse(statusCode: status)
         }
 
         // Register the handler that accepts /reader-mode/page?url=http://www.example.com requests.

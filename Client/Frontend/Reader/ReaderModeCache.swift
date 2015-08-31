@@ -24,34 +24,30 @@ class ReaderModeCache {
     }
 
     func put(url: NSURL, _ readabilityResult: ReadabilityResult) throws {
-        guard let cacheDirectoryPath = cacheDirectoryForURL(url) else { throw NSError(domain: ReaderModeCacheErrorDomain, code: ReaderModeCacheErrorCode.NoPathsFound.rawValue, userInfo: nil) }
+        guard let (cacheDirectoryPath, contentFilePath) = cachePathsForURL(url) else {
+            throw NSError(domain: ReaderModeCacheErrorDomain, code: ReaderModeCacheErrorCode.NoPathsFound.rawValue, userInfo: nil)
+        }
 
         try NSFileManager.defaultManager().createDirectoryAtPath(cacheDirectoryPath, withIntermediateDirectories: true, attributes: nil)
-        let contentFilePath = (cacheDirectoryPath as NSString).stringByAppendingPathComponent("content.json")
         let string: NSString = readabilityResult.encode()
         try string.writeToFile(contentFilePath, atomically: true, encoding: NSUTF8StringEncoding)
         return
     }
 
     func get(url: NSURL) throws -> ReadabilityResult {
-        let error: NSError! = NSError(domain: ReaderModeCacheErrorDomain, code: ReaderModeCacheErrorCode.NoPathsFound.rawValue, userInfo: nil)
-        let cacheDirectoryURL = url.URLByAppendingPathComponent("content.json")
-        guard let contentFilePath = cacheDirectoryForURL(cacheDirectoryURL) else {
-            throw error
-        }
-
-        if NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
+        if let (_, contentFilePath) = cachePathsForURL(url) where NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
             let string = try NSString(contentsOfFile: contentFilePath, encoding: NSUTF8StringEncoding)
             if let value = ReadabilityResult(string: string as String) {
                 return value
             }
         }
 
-        throw error
+        throw NSError(domain: ReaderModeCacheErrorDomain, code: ReaderModeCacheErrorCode.NoPathsFound.rawValue, userInfo: nil)
     }
 
     func delete(url: NSURL, error: NSErrorPointer) {
-        guard let cacheDirectoryPath = cacheDirectoryForURL(url) else { return }
+        guard let (cacheDirectoryPath, _) = cachePathsForURL(url) else { return }
+
         if NSFileManager.defaultManager().fileExistsAtPath(cacheDirectoryPath) {
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(cacheDirectoryPath)
@@ -61,32 +57,36 @@ class ReaderModeCache {
         }
     }
 
-    func contains(url: NSURL) throws {
-        let error: NSError! = NSError(domain: ReaderModeCacheErrorDomain, code: ReaderModeCacheErrorCode.NoPathsFound.rawValue, userInfo: nil)
-        let cacheDirectoryURL = url.URLByAppendingPathComponent("content.json")
-        guard let contentFilePath = cacheDirectoryForURL(cacheDirectoryURL) else { throw error }
-        if !NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
-            throw error
+    func contains(url: NSURL) -> Bool {
+        if let (_, contentFilePath) = cachePathsForURL(url) where NSFileManager.defaultManager().fileExistsAtPath(contentFilePath) {
+            return true
         }
+
+        return false
     }
 
-    private func cacheDirectoryForURL(url: NSURL) -> String? {
+    private func cachePathsForURL(url: NSURL) -> (cacheDirectoryPath: String, contentFilePath: String)? {
         let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        if paths.count > 0 {
-            if let hashedPath = hashedPathForURL(url) {
-               return NSString.pathWithComponents([paths[0], "ReaderView", hashedPath]) as String
+        if !paths.isEmpty, let hashedPath = hashedPathForURL(url) {
+            let cacheDirectoryURL = NSURL(fileURLWithPath: NSString.pathWithComponents([paths[0], "ReaderView", hashedPath]))
+            if let cacheDirectoryPath = cacheDirectoryURL.path,
+                   contentFilePath = cacheDirectoryURL.URLByAppendingPathComponent("content.json").path {
+                return (cacheDirectoryPath, contentFilePath)
             }
         }
+
         return nil
     }
 
     private func hashedPathForURL(url: NSURL) -> String? {
         guard let hash = hashForURL(url) else { return nil }
+
         return NSString.pathWithComponents([hash.substringWithRange(NSMakeRange(0, 2)), hash.substringWithRange(NSMakeRange(2, 2)), hash.substringFromIndex(4)]) as String
     }
 
     private func hashForURL(url: NSURL) -> NSString? {
         guard let data = url.absoluteString.dataUsingEncoding(NSUTF8StringEncoding) else { return nil }
+
         return data.sha1.hexEncodedString
     }
 }
