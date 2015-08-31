@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd" [
+{brandDTD}
+{aboutRightsDTD}
+]>
+
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+ - License, v. 2.0. If a copy of the MPL was not distributed with this
+ - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <title>&rights.pagetitle;</title>
+        <link rel="stylesheet" href="about.css" type="text/css"/>
+    </head>
+
+    <body id="your-rights" dir="&rights.locale-direction;" class="aboutPageWideContainer">
+
+        <h1>&rights.intro-header;</h1>
+
+        <p>&rights.intro;</p>
+
+        <ul>
+            <li>&rights.intro-point1a;<a href="http://www.mozilla.org/MPL/">&rights.intro-point1b;</a>&rights.intro-point1c;</li>
+            <!-- Point 2 discusses Mozilla trademarks, and isn't needed when the build is unbranded.
+             Point 3 discusses privacy policy, unbranded builds get a placeholder (for the vendor to replace)
+             Point 4 discusses web service terms, unbranded builds gets a placeholder (for the vendor to replace) -->
+            <li>&rights.intro-point2-a;<a href="http://www.mozilla.org/foundation/trademarks/policy.html">&rights.intro-point2-b;</a>&rights.intro-point2-c;</li>
+            <li>&rights.intro-point2.5;</li>
+            <li>&rights2.intro-point3a;<a href="https://www.mozilla.org/privacy/firefox/">&rights2.intro-point3b;</a>&rights.intro-point3c;</li>
+            <li>&rights2.intro-point4a;<a href="about:rights#webservices" onclick="showServices();">&rights.intro-point4b;</a>&rights.intro-point4c;</li>
+        </ul>
+
+        <div id="webservices-container">
+            <a name="webservices"/>
+            <h3>&rights2.webservices-header;</h3>
+
+            <p>&rights2.webservices-a;<a href="about:rights#disabling-webservices" onclick="showDisablingServices();">&rights2.webservices-b;</a>&rights3.webservices-c;</p>
+
+            <div id="disabling-webservices-container" style="margin-left:40px;">
+                <a name="disabling-webservices"/>
+                <!-- Safe Browsing cannot be disabled in Firefox Mobile; these instructions show how to do it on desktop
+                 <p><strong>&rights.safebrowsing-a;</strong>&rights.safebrowsing-b;</p>
+                 <ul>
+                 <li>&rights.safebrowsing-term1;</li>
+                 <li>&rights.safebrowsing-term2;</li>
+                 <li>&rights.safebrowsing-term3;</li>
+                 <li>&rights.safebrowsing-term4;</li>
+                 </ul>
+                 -->
+
+                <p><strong>&rights.locationawarebrowsing-a;</strong>&rights.locationawarebrowsing-b;</p>
+                <ul>
+                    <li>&rights.locationawarebrowsing-term1a;<code>&rights.locationawarebrowsing-term1b;</code></li>
+                    <li>&rights.locationawarebrowsing-term2;</li>
+                    <li>&rights.locationawarebrowsing-term3;</li>
+                    <li>&rights.locationawarebrowsing-term4;</li>
+                </ul>
+            </div>
+
+            <ol>
+                <!-- Terms only apply to official builds, unbranded builds get a placeholder. -->
+                <li>&rights2.webservices-term1;</li>
+                <li>&rights.webservices-term2;</li>
+                <li>&rights2.webservices-term3;</li>
+                <li><strong>&rights.webservices-term4;</strong></li>
+                <li><strong>&rights.webservices-term5;</strong></li>
+                <li>&rights.webservices-term6;</li>
+                <li>&rights.webservices-term7;</li>
+            </ol>
+        </div>
+    </body>
+</html>

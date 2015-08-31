@@ -24,6 +24,35 @@ struct AboutLicenseHandler {
                 print("Unable to register webserver \(error)")
             }
             return GCDWebServerResponse(statusCode: 200)
-       }
+        }
+
+        webServer.registerHandlerForMethod("GET", module: "about", resource: "rights") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
+            let path = NSBundle.mainBundle().pathForResource("aboutRights", ofType: "xhtml")!
+            var xhtml = try! NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding)
+
+            // Inject aboutRights.dtd definitions
+            var dtdPath = NSBundle.mainBundle().pathForResource("aboutRights", ofType: "dtd")!
+            var data = try! NSString(contentsOfFile: dtdPath, encoding: NSUTF8StringEncoding) as String
+            xhtml = xhtml.stringByReplacingOccurrencesOfString("{aboutRightsDTD}", withString: data)
+
+            // Inject brand.dtd definitions
+            dtdPath = NSBundle.mainBundle().pathForResource("brand", ofType: "dtd")!
+            data = try! NSString(contentsOfFile: dtdPath, encoding: NSUTF8StringEncoding) as String
+            xhtml = xhtml.stringByReplacingOccurrencesOfString("{brandDTD}", withString: data)
+
+            return GCDWebServerDataResponse(XHTML: xhtml as String)
+        }
+
+        webServer.registerHandlerForMethod("GET", module: "about", resource: "about.css", handler: { (request) -> GCDWebServerResponse! in
+            let path = NSBundle.mainBundle().pathForResource("about", ofType: "css")!
+            return GCDWebServerDataResponse(data: NSData(contentsOfFile: path), contentType: "text/css")
+        })
+    }
+}
+
+extension GCDWebServerDataResponse {
+    convenience init(XHTML: String) {
+        let data = XHTML.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        self.init(data: data, contentType: "application/xhtml+xml; charset=utf-8")
     }
 }
