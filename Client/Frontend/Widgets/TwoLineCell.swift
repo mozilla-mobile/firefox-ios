@@ -102,11 +102,6 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-    }
-
-    init(frame: CGRect) {
-        super.init(reuseIdentifier: nil)
-        self.frame = frame
         twoLineHelper.setUpViews(self, textLabel: _textLabel, detailTextLabel: _detailTextLabel, imageView: imageView)
 
         contentView.addSubview(_textLabel)
