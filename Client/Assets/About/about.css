@@ -1,0 +1,50 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+html {
+  background: #f0f0f0;
+  padding: 0 1em;
+  font-family: "Clear Sans", sans-serif !important;
+  font-size: 100% !important;
+}
+
+body {
+  color: black;
+  position: relative;
+  min-width: 330px;
+  max-width: 50em;
+  margin: 1em auto;
+  border: 1px solid gray;
+  border-radius: 10px;
+  padding: 3em;
+  -moz-padding-start: 30px;
+  background: white;
+}
+
+.aboutPageWideContainer {
+  max-width: 80%;
+}
+
+#aboutLogoContainer {
+  border: 1px solid lightgray;
+  width: 300px;
+  margin-bottom: 2em;
+}
+
+img {
+  border: 0;
+}
+
+#version {
+  font-weight: bold;
+  color: #909090;
+  margin: -24px 0 9px 17px;
+}
+
+ul {
+  margin: 0;
+  -moz-margin-start: 1.5em;
+  padding: 0;
+  list-style: square;
+}
