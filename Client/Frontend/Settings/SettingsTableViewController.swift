@@ -468,6 +468,21 @@ private class LicenseAndAcknowledgementsSetting: Setting {
     }
 }
 
+// Opens about:rights page in the content view controller
+private class YourRightsSetting: Setting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Your Rights", comment: "Your Rights settings section title"))
+    }
+
+    override var url: NSURL? {
+        return NSURL(string: WebServer.sharedInstance.URLForResource("rights", module: "about"))
+    }
+
+    private override func onClick(navigationController: UINavigationController?) {
+        setUpAndPushSettingsContentViewController(navigationController)
+    }
+}
+
 // Opens the on-boarding screen again
 private class ShowIntroductionSetting: Setting {
     let profile: Profile
@@ -726,6 +741,7 @@ class SettingsTableViewController: UITableViewController {
             SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
                 VersionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
+                YourRightsSetting(),
                 DisconnectSetting(settings: self),
                 ExportBrowserDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
