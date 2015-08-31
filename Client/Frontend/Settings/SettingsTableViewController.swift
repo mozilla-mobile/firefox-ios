@@ -821,9 +821,16 @@ class SettingsTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderView
-        let section = settings[section]
-        if let sectionTitle = section.title?.string {
+        let sectionSetting = settings[section]
+        if let sectionTitle = sectionSetting.title?.string {
             headerView.titleLabel.text = sectionTitle
+        }
+
+        // Hide the top border for the top section to avoid having a double line at the top
+        if section == 0 {
+            headerView.showTopBorder = false
+        } else {
+            headerView.showTopBorder = true
         }
 
         return headerView
@@ -855,38 +862,50 @@ class SettingsTableViewController: UITableViewController {
     }
 }
 
-class SettingsTableFooterView: UITableViewHeaderFooterView {
-
+class SettingsTableFooterView: UIView {
     var logo: UIImageView = {
         var image =  UIImageView(image: UIImage(named: "settingsFlatfox"))
         image.contentMode = UIViewContentMode.Center
         return image
     }()
 
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-    }
+    private lazy var topBorder: CALayer = {
+        let topBorder = CALayer()
+        topBorder.backgroundColor = UIConstants.SeparatorColor.CGColor
+        return topBorder
+    }()
 
-    init(frame: CGRect) {
-        super.init(reuseIdentifier: nil)
-        self.frame = frame
-        self.contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-        let topBorder = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: 0.5))
-        topBorder.backgroundColor = UIConstants.TableViewSeparatorColor
-        addSubview(topBorder)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        layer.addSublayer(topBorder)
         addSubview(logo)
-
-        logo.snp_makeConstraints { (make) -> Void in
-            make.centerY.centerX.equalTo(self)
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        topBorder.frame = CGRectMake(0.0, 0.0, frame.size.width, 0.5)
+        logo.center = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+    }
 }
 
 class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
+    var showTopBorder: Bool = true {
+        didSet {
+            topBorder.hidden = !showTopBorder
+        }
+    }
+
+    var showBottomBorder: Bool = true {
+        didSet {
+            bottomBorder.hidden = !showBottomBorder
+        }
+    }
+
     var titleLabel: UILabel = {
         var headerLabel = UILabel()
         var frame = headerLabel.frame
@@ -898,36 +917,35 @@ class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
         return headerLabel
     }()
 
+    private lazy var topBorder: CALayer = {
+        let topBorder = CALayer()
+        topBorder.backgroundColor = UIConstants.SeparatorColor.CGColor
+        return topBorder
+    }()
+
+    private lazy var bottomBorder: CALayer = {
+        let bottomBorder = CALayer()
+        bottomBorder.backgroundColor = UIConstants.SeparatorColor.CGColor
+        return bottomBorder
+    }()
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-    }
-
-    init(frame: CGRect) {
-        super.init(reuseIdentifier: nil)
-        self.frame = frame
-        self.contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        contentView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
         addSubview(titleLabel)
-        self.clipsToBounds = true
+        clipsToBounds = true
+        layer.addSublayer(topBorder)
+        layer.addSublayer(bottomBorder)
     }
-
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func drawRect(rect: CGRect) {
-        let topBorder = CALayer()
-        topBorder.frame = CGRectMake(0.0, 0.0, rect.size.width, 0.5)
-        topBorder.backgroundColor = UIConstants.SeparatorColor.CGColor
-        layer.addSublayer(topBorder)
-        let bottomBorder = CALayer()
-        bottomBorder.frame = CGRectMake(0.0, rect.size.height - 0.5, rect.size.width, 0.5)
-        bottomBorder.backgroundColor = UIConstants.SeparatorColor.CGColor
-        layer.addSublayer(bottomBorder)
-    }
-
-   override func layoutSubviews() {
+    override func layoutSubviews() {
         super.layoutSubviews()
+        bottomBorder.frame = CGRectMake(0.0, frame.size.height - 0.5, frame.size.width, 0.5)
+        topBorder.frame = CGRectMake(0.0, 0.0, frame.size.width, 0.5)
         titleLabel.sizeToFit()
     }
 }
