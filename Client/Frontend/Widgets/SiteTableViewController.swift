@@ -19,16 +19,8 @@ private class SiteTableViewHeader : UITableViewHeaderFooterView {
     let topBorder = UIView()
     let bottomBorder = UIView()
 
-    init(frame: CGRect) {
-        super.init(reuseIdentifier: nil)
-        didLoad()
-    }
-
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-    }
-
-    private func didLoad() {
         addSubview(topBorder)
         addSubview(bottomBorder)
         backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .ExtraLight))
