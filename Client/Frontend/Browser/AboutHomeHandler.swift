@@ -24,6 +24,40 @@ struct AboutLicenseHandler {
                 print("Unable to register webserver \(error)")
             }
             return GCDWebServerResponse(statusCode: 200)
-       }
+        }
+
+        webServer.registerHandlerForMethod("GET", module: "about", resource: "rights") { (request: GCDWebServerRequest!) -> GCDWebServerResponse! in
+            let path = NSBundle.mainBundle().pathForResource("aboutRights", ofType: "xhtml")
+
+            if var xhtml = NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: nil) as? String {
+
+                // Inject aboutRights.dtd definitions
+                var dtdPath = NSBundle.mainBundle().pathForResource("aboutRights", ofType: "dtd")!
+                var data = NSString(contentsOfFile: dtdPath, encoding: NSUTF8StringEncoding, error: nil)! as String
+                xhtml = xhtml.stringByReplacingOccurrencesOfString("{aboutRightsDTD}", withString: data, options: nil, range: nil)
+
+                // Inject brand.dtd definitions
+                dtdPath = NSBundle.mainBundle().pathForResource("brand", ofType: "dtd")!
+                data = NSString(contentsOfFile: dtdPath, encoding: NSUTF8StringEncoding, error: nil)! as String
+                xhtml = xhtml.stringByReplacingOccurrencesOfString("{brandDTD}", withString: data, options: nil, range: nil)
+
+                return GCDWebServerDataResponse(XHTML: xhtml)
+            }
+
+            return GCDWebServerResponse(statusCode: 200)
+        }
+
+        webServer.registerHandlerForMethod("GET", module: "about", resource: "about.css", handler: { (request) -> GCDWebServerResponse! in
+            let path = NSBundle.mainBundle().pathForResource("about", ofType: "css")!
+            let data = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil)! as String
+            return GCDWebServerDataResponse(data: NSData(contentsOfFile: path), contentType: "text/css")
+        })
+    }
+}
+
+extension GCDWebServerDataResponse {
+    convenience init(XHTML: String) {
+        let data = XHTML.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        self.init(data: data, contentType: "application/xhtml+xml; charset=utf-8")
     }
 }
