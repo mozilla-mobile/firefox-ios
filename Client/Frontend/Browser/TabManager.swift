@@ -346,7 +346,7 @@ extension TabManager {
 
     private func tabsStateArchivePath() -> String {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
-        return NSURL(fileURLWithPath: documentsPath).URLByAppendingPathComponent("tabsState.archive").absoluteString
+        return NSURL(fileURLWithPath: documentsPath).URLByAppendingPathComponent("tabsState.archive").path!
     }
 
     private func preserveTabsInternal() {
