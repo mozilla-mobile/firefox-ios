@@ -230,6 +230,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     func toggleEditingMode(editing: Bool) {
         let translateDown = CGAffineTransformMakeTranslation(0, UIConstants.ToolbarHeight)
+        let translateUp = CGAffineTransformMakeTranslation(0, -UIConstants.ToolbarHeight)
 
         if editing {
             let button = UIButton(type: UIButtonType.System)
@@ -247,6 +248,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         }
 
         UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [UIViewAnimationOptions.AllowUserInteraction, UIViewAnimationOptions.CurveEaseInOut], animations: { () -> Void in
+            self.buttons.forEach { $0.transform = editing ? translateUp : CGAffineTransformIdentity }
             self.finishEditingButton?.transform = editing ? CGAffineTransformIdentity : translateDown
         }, completion: { _ in
             if !editing {
