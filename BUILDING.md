@@ -9,7 +9,9 @@ Prerequisites, as of *August 10 2015*:
 * Xcode 7b6 with the iOS 9 SDK (All beta at this time)
 * Carthage 0.8 via Homebrew
 
-(We try to keep up to date with the most recent production versions of OS X, Xcode and the iOS SDK.)
+> There are issues with Carthage on OS X 10.11 El Capitan. We recommend to use OS X 10.10 Yosemite instead.
+
+(For the v1.1 release, we try to keep up to date with the most recent beta versions of Xcode and the iOS SDK.)
 
 When running on a device:
 
