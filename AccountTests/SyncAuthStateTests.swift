@@ -20,7 +20,7 @@ class SyncAuthStateTests: LiveAccountTest {
                 if let error = result.failureValue as? AccountError {
                     XCTAssertEqual(error, AccountError.NoSignedInUser)
                 } else {
-                    XCTAssertEqual(result.failureValue!.description, "")
+                    XCTAssertEqual(result.failureValue!.description, "<FxAClientError.Local Error Domain=NSURLErrorDomain Code=-999 \"cancelled\">")
                 }
             }
             e.fulfill()
