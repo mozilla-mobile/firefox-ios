@@ -1,5 +1,5 @@
 github "Alamofire/Alamofire" "2f94c11bb039bd7e3e43b925e20c8e536c9be757"
-github "mozilla/Base32" "d2136486487a77336ae18b1bd2f9a3f689ec44e5"
+github "mozilla/Base32" "v0.3.1"
 github "mozilla/Deferred" "f3d9a179cfa96a0d9b82dd575c95c29c026248bd"
 github "swisspol/GCDWebServer" "3.2.5"
 github "kif-framework/KIF" "d2567a99a14414949fe8217211cda54a3e9f3f92"
