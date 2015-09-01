@@ -93,8 +93,8 @@ class ReadingListTableViewCell: SWTableViewCell {
         }
     }
 
-    private let deleteAction: UIAccessibilityCustomAction
-    private let markAsReadAction: UIAccessibilityCustomAction
+    private var deleteAction: UIAccessibilityCustomAction!
+    private var markAsReadAction: UIAccessibilityCustomAction!
 
     let readStatusImageView: UIImageView!
     let titleLabel: UILabel!
@@ -108,8 +108,6 @@ class ReadingListTableViewCell: SWTableViewCell {
         hostnameLabel = UILabel()
         deleteButton = UIButton()
         markAsReadButton = UIButton()
-        deleteAction = UIAccessibilityCustomAction()
-        markAsReadAction = UIAccessibilityCustomAction()
 
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -155,11 +153,8 @@ class ReadingListTableViewCell: SWTableViewCell {
         deleteButton.setTitle(ReadingListTableViewCellUX.DeleteButtonTitleText, forState: UIControlState.Normal)
         deleteButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         deleteButton.titleEdgeInsets = ReadingListTableViewCellUX.DeleteButtonTitleEdgeInsets
-        if let text = deleteButton.titleLabel?.text {
-            deleteAction.name = text
-        }
-        deleteAction.target = self
-        deleteAction.selector = "deleteActionActivated"
+        deleteAction = UIAccessibilityCustomAction(name: ReadingListTableViewCellUX.DeleteButtonTitleText, target: self, selector: "deleteActionActivated")
+
         rightUtilityButtons = [deleteButton]
 
         markAsReadButton.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
@@ -170,11 +165,8 @@ class ReadingListTableViewCell: SWTableViewCell {
         markAsReadButton.setTitle(ReadingListTableViewCellUX.MarkAsReadButtonTitleText, forState: UIControlState.Normal)
         markAsReadButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         markAsReadButton.titleEdgeInsets = ReadingListTableViewCellUX.MarkAsReadButtonTitleEdgeInsets
-        if let text = markAsReadButton.titleLabel?.text {
-            markAsReadAction.name = text
-        }
-        markAsReadAction.target = self
-        markAsReadAction.selector = "markAsReadActionActivated"
+        markAsReadAction = UIAccessibilityCustomAction(name: ReadingListTableViewCellUX.MarkAsReadButtonTitleText, target: self, selector: "markAsReadActionActivated")
+
         leftUtilityButtons = [markAsReadButton]
 
         accessibilityCustomActions = [deleteAction, markAsReadAction]
@@ -225,12 +217,6 @@ class ReadingListTableViewCell: SWTableViewCell {
             // also this combined with Swift's strictness is why we cannot simply override accessibilityLabel and return the label directly...
             setValue(label, forKey: "accessibilityLabel")
         }
-    }
-}
-
-class ReadingListEmptyStateView: UIView {
-    convenience init() {
-        self.init(frame: CGRectZero)
     }
 }
 
