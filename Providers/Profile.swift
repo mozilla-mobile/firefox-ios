@@ -442,9 +442,6 @@ public class BrowserProfile: Profile {
          */
         var syncLock = OSSpinLock() {
             didSet {
-                if oldValue == syncLock {
-                    return
-                }
                 let notification = syncLock == 0 ? ProfileDidFinishSyncingNotification : ProfileDidStartSyncingNotification
                 NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: notification, object: nil))
             }
@@ -470,11 +467,14 @@ public class BrowserProfile: Profile {
 
             let center = NSNotificationCenter.defaultCenter()
             center.addObserver(self, selector: "onLoginDidChange:", name: NotificationDataLoginDidChange, object: nil)
+            center.addObserver(self, selector: "onFinishSyncing:", name: ProfileDidFinishSyncingNotification, object: nil)
         }
 
         deinit {
             // Remove 'em all.
-            NSNotificationCenter.defaultCenter().removeObserver(self)
+            let center = NSNotificationCenter.defaultCenter()
+            center.removeObserver(self, name: NotificationDataLoginDidChange, object: nil)
+            center.removeObserver(self, name: ProfileDidFinishSyncingNotification, object: nil)
         }
 
         // Simple in-memory rate limiting.
@@ -492,6 +492,10 @@ public class BrowserProfile: Profile {
                     self.syncLogins()
                 }
             }
+        }
+
+        @objc func onFinishSyncing(notification: NSNotification) {
+            profile.prefs.setTimestamp(NSDate.now(), forKey: PrefsKeys.KeyLastSyncFinishTime)
         }
 
         var prefsForSync: Prefs {
