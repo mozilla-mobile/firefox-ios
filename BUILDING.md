@@ -1,17 +1,19 @@
+> These are the instructions for building the *master* branch which is focussed on iOS 9 and Xcode 7 for our upcoming v1.1 and v2.0 releases. If you instead want to work on v1.0 then please follow the README.md in that branch.
+
 Building Firefox for iOS
 ========================
 
 Prerequisites, as of *August 10 2015*:
 
-* Mac OS X 10.10.4
-* Xcode 6.4 with the iOS 8.4 SDK
-* Carthage 0.7.4 via Homebrew
+* Mac OS X 10.10.5
+* Xcode 7b6 with the iOS 9 SDK (All beta at this time)
+* Carthage 0.8 via Homebrew
 
 (We try to keep up to date with the most recent production versions of OS X, Xcode and the iOS SDK.)
 
 When running on a device:
 
-* A device that supports iOS 8.0 or newer
+* A device that supports iOS 8.2 or newer
 * A developer account and Admin access to the *Certificates, Identifiers & Profiles* section of the *iOS Dev Center*
 
 Get the Code
