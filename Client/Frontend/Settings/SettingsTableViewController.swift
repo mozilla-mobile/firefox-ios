@@ -219,8 +219,17 @@ private class SyncNowSetting: WithAccountSetting {
         return profile.syncManager.isSyncing ? syncingTitle : syncNowTitle
     }
 
+    override var status: NSAttributedString? {
+        let attributedString = NSMutableAttributedString(string: "Last synced 4 minutes ago")
+        let attributes = [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)]
+        let range = NSMakeRange(0, attributedString.length)
+        attributedString.setAttributes(attributes, range: range)
+        return attributedString
+    }
+
     override func onConfigureCell(cell: UITableViewCell) {
         cell.textLabel?.attributedText = title
+        cell.detailTextLabel?.attributedText = status
         cell.accessoryType = accessoryType
         cell.accessoryView = nil
         cell.userInteractionEnabled = !profile.syncManager.isSyncing
