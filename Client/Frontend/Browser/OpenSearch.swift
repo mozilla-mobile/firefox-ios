@@ -61,9 +61,16 @@ class OpenSearchEngine {
     private func getURLFromTemplate(searchTemplate: String, query: String) -> NSURL? {
         let allowedCharacters = NSCharacterSet(charactersInString: SearchTermsAllowedCharacters)
         if let escapedQuery = query.stringByAddingPercentEncodingWithAllowedCharacters(allowedCharacters) {
-            let urlString = searchTemplate.stringByReplacingOccurrencesOfString("{searchTerms}", withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
-            if let encodedUrlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLAllowedCharacterSet()) {
-                return NSURL(string: encodedUrlString)
+            // Escape the search template as well in case it contains not-safe characters like symbols
+            let templateAllowedSet = NSMutableCharacterSet()
+            templateAllowedSet.formUnionWithCharacterSet(NSCharacterSet.URLAllowedCharacterSet())
+
+            // Allow brackets since we use them in our template as our insertion point
+            templateAllowedSet.formUnionWithCharacterSet(NSCharacterSet(charactersInString: "{}"))
+
+            if let encodedSearchTemplate = searchTemplate.stringByAddingPercentEncodingWithAllowedCharacters(templateAllowedSet) {
+                let urlString = encodedSearchTemplate.stringByReplacingOccurrencesOfString("{searchTerms}", withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                return NSURL(string: urlString)
             }
         }
 
