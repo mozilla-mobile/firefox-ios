@@ -299,9 +299,11 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     }
 
     func SELdidClickSettingsItem() {
-        let controller = SettingsNavigationController()
-        controller.profile = profile
-        controller.tabManager = tabManager
+        let settingsTableViewController = SettingsTableViewController()
+        settingsTableViewController.profile = profile
+        settingsTableViewController.tabManager = tabManager
+
+        let controller = SettingsNavigationController(rootViewController: settingsTableViewController)
         controller.popoverDelegate = self
 		controller.modalPresentationStyle = UIModalPresentationStyle.FormSheet
         presentViewController(controller, animated: true, completion: nil)
