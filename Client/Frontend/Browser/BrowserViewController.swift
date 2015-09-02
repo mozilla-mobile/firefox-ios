@@ -460,19 +460,7 @@ class BrowserViewController: UIViewController {
 
     private func showHomePanelController(inline inline: Bool) {
         homePanelIsInline = inline
-
-        if homePanelController == nil {
-            homePanelController = HomePanelViewController()
-            homePanelController!.profile = profile
-            homePanelController!.delegate = self
-            homePanelController!.url = tabManager.selectedTab?.displayURL
-            homePanelController!.view.alpha = 0
-
-            addChildViewController(homePanelController!)
-            view.addSubview(homePanelController!.view)
-            homePanelController!.didMoveToParentViewController(self)
-        }
-
+        
         let panelNumber = tabManager.selectedTab?.url?.fragment
 
         // splitting this out to see if we can get better crash reports when this has a problem
@@ -482,7 +470,21 @@ class BrowserViewController: UIViewController {
                 newSelectedButtonIndex = lastInt
             }
         }
-        homePanelController?.selectedButtonIndex = newSelectedButtonIndex
+
+        // Create a new instance of the home panel if we don't have one or else just update it's selected index
+        if homePanelController == nil {
+            let viewController = HomePanelViewController(profile: profile)
+            viewController.delegate = self
+            viewController.view.alpha = 0
+
+            addChildViewController(viewController)
+            view.addSubview(viewController.view)
+            viewController.didMoveToParentViewController(self)
+
+            homePanelController = viewController
+        } else {
+            homePanelController?.selectedIndex = newSelectedButtonIndex
+        }
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
