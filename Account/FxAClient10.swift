@@ -229,7 +229,7 @@ public class FxAClient10 {
 
         var URL: NSURL = self.URL.URLByAppendingPathComponent("/account/login")
         if getKeys {
-            let components = NSURLComponents(URL: self.URL.URLByAppendingPathComponent("/account/login"), resolvingAgainstBaseURL: false)!
+            let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)!
             components.query = "keys=true"
             URL = components.URL!
         }

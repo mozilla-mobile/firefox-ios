@@ -6,16 +6,18 @@ import Foundation
 import XCTest
 
 class TestFaviconsTable : XCTestCase {
-    var db: SwiftData!
+    var db: BrowserDB!
 
     private func addIcon(favicons: FaviconsTable<Favicon>, url: String, s: Bool = true) -> Favicon {
         var inserted: Int? = -1;
         var icon: Favicon!
-        db.withConnection(.ReadWrite) { connection -> NSError? in
+        var err: NSError?
+        self.db.withConnection(flags: SwiftData.Flags.ReadWrite, err: &err) { (connection, err) -> Int? in
+            XCTAssertNil(err)
             icon = Favicon(url: url, type: IconType.Icon)
-            var err: NSError? = nil
-            inserted = favicons.insert(connection, item: icon, err: &err)
-            return err
+            var error: NSError? = nil
+            inserted = favicons.insert(connection, item: icon, err: &error)
+            return inserted
         }
         if s {
             XCTAssert(inserted >= 0, "Insert succeeded")
@@ -26,7 +28,9 @@ class TestFaviconsTable : XCTestCase {
     }
 
     private func checkIcons(favicons: FaviconsTable<Favicon>, options: QueryOptions?, urls: [String], s: Bool = true) {
-        db.withConnection(.ReadOnly) { connection -> NSError? in
+        var err: NSError?
+        self.db.withConnection(flags: SwiftData.Flags.ReadOnly, err: &err) { (connection, err) -> Bool in
+            XCTAssertNil(err)
             let cursor = favicons.query(connection, options: options)
             XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
             XCTAssertEqual(cursor.count, urls.count, "cursor has right num of entries")
@@ -40,17 +44,18 @@ class TestFaviconsTable : XCTestCase {
                     XCTAssertFalse(true, "Should not be nil...")
                 }
             }
-            return nil
+            return true
         }
     }
 
     private func clear(favicons: FaviconsTable<Favicon>, icon: Favicon? = nil, s: Bool = true) {
         var deleted = -1;
-        db.withConnection(.ReadWrite) { connection -> NSError? in
-            var err: NSError? = nil
-            deleted = favicons.delete(connection, item: icon, err: &err)
-            return nil
+        var err: NSError?
+        self.db.withConnection(flags: SwiftData.Flags.ReadWriteCreate, err: &err) { (db, err) -> Int in
+            deleted = favicons.delete(db, item: icon, err: &err)
+            return deleted
         }
+        XCTAssertNil(err)
         if s {
             XCTAssert(deleted >= 0, "Delete worked")
         } else {
@@ -61,13 +66,17 @@ class TestFaviconsTable : XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testFaviconsTable() {
         let files = MockFiles()
-        self.db = SwiftData(filename: (try! (files.getAndEnsureDirectory() as NSString)).stringByAppendingPathComponent("test.db"))
+        db = BrowserDB(filename: "test.db", files: files)
+        XCTAssertTrue(db.createOrUpdate(BrowserTable()))
         let f = FaviconsTable<Favicon>()
 
-        self.db.withConnection(SwiftData.Flags.ReadWriteCreate, cb: { (db) -> NSError? in
-            f.create(db, version: 1)
-            return nil
-        })
+        var err: NSError?
+        self.db.withConnection(flags: SwiftData.Flags.ReadWriteCreate, err: &err) { (db, err) -> Bool in
+            let result = f.create(db, version: 1)
+            XCTAssertTrue(result)
+            return result
+        }
+        XCTAssertNil(err)
 
         let icon = self.addIcon(f, url: "url1")
         self.addIcon(f, url: "url1", s: false)

@@ -285,7 +285,7 @@ public class SQLiteLogins: BrowserLogins {
         ", is_deleted " +
         ", sync_status " +
         ") " +
-        "VALUES (?,?,?,?,?,?,?,?, 1, ?,?, " +
+        "VALUES (?,?,?,?,?,1,?,?,?,?,?, " +
         "?, ?, 0, \(SyncStatus.New.rawValue)" +         // Metadata.
         ")"
 
