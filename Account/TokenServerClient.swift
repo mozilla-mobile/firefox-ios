@@ -72,7 +72,7 @@ extension TokenServerError: MaybeErrorType {
                 return "<TokenServerError.Remote \(code)>"
             }
         case let .Local(error):
-            return "<TokenServerError.Local \(error.description)>"
+            return "<TokenServerError.Local Error Domain=\(error.domain) Code=\(error.code) \"\(error.localizedDescription)\">"
         }
     }
 }

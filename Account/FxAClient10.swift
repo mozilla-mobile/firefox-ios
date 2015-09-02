@@ -70,7 +70,7 @@ extension FxAClientError: MaybeErrorType {
             let messageString = error.message ?? NSLocalizedString("Missing message", comment: "Error for a missing remote error message")
             return "<FxAClientError.Remote \(error.code)/\(error.errno): \(errorString) (\(messageString))>"
         case let .Local(error):
-            return "<FxAClientError.Local \(error.description)>"
+            return "<FxAClientError.Local Error Domain=\(error.domain) Code=\(error.code) \"\(error.localizedDescription)\">"
         }
     }
 }
