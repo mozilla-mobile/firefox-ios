@@ -94,13 +94,16 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             make.left.right.bottom.equalTo(self.view)
         }
 
-        self.panels = HomePanels().enabledPanels
-        updateButtons()
-
         // Gesture recognizer to dismiss the keyboard in the URLBarView when the buttonContainerView is tapped
         let dismissKeyboardGestureRecognizer = UITapGestureRecognizer(target: self, action: "SELhandleDismissKeyboardGestureRecognizer:")
         dismissKeyboardGestureRecognizer.cancelsTouchesInView = false
         buttonContainerView.addGestureRecognizer(dismissKeyboardGestureRecognizer)
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.panels = HomePanels.enabledPanelsForProfile(profile)
+        updateButtons()
     }
 
     func SELhandleDismissKeyboardGestureRecognizer(gestureRecognizer: UITapGestureRecognizer) {
