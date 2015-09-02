@@ -607,6 +607,7 @@ private class CustomizeHomePanelsSetting: Setting {
 
     override func onClick(navigationController: UINavigationController?) {
         let viewController = PanelSettingsViewController()
+        viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
