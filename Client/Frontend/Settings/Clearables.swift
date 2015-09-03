@@ -10,7 +10,7 @@ protocol Clearable {
     func clear() -> Success
 }
 
-class ClearableError : MaybeErrorType {
+class ClearableError: MaybeErrorType {
     private let msg: String
     init(msg: String) {
         self.msg = msg
@@ -20,28 +20,25 @@ class ClearableError : MaybeErrorType {
 }
 
 // Clears our browsing history, including favicons and thumbnails.
-class HistoryClearable : Clearable {
+class HistoryClearable: Clearable {
     let profile: Profile
     init(profile: Profile) {
         self.profile = profile
     }
 
-    // TODO: This can be cleaned up!
     func clear() -> Success {
-        let deferred = Success()
-        profile.history.clearHistory().upon { success in
+        return profile.history.clearHistory().bind { success in
             SDImageCache.sharedImageCache().clearDisk()
             SDImageCache.sharedImageCache().clearMemory()
             NSNotificationCenter.defaultCenter().postNotificationName(NotificationPrivateDataClearedHistory, object: nil)
-            deferred.fill(Maybe(success: ()))
+            return Deferred(value: success)
         }
-        return deferred
     }
 }
 
 // Clear all stored passwords. This will clear both Firefox's SQLite storage and the system shared
 // Credential storage.
-class PasswordsClearable : Clearable {
+class PasswordsClearable: Clearable {
     let profile: Profile
     init(profile: Profile) {
         self.profile = profile
@@ -76,7 +73,7 @@ struct ClearableErrorType: MaybeErrorType {
 
 // Clear the web cache. Note, this has to close all open tabs in order to ensure the data
 // cached in them isn't flushed to disk.
-class CacheClearable : Clearable {
+class CacheClearable: Clearable {
     let tabManager: TabManager
     init(tabManager: TabManager) {
         self.tabManager = tabManager
@@ -143,7 +140,7 @@ class SiteDataClearable : Clearable {
 }
 
 // Remove all cookies stored by the site.
-class CookiesClearable : Clearable {
+class CookiesClearable: Clearable {
     let tabManager: TabManager
     init(tabManager: TabManager) {
         self.tabManager = tabManager
