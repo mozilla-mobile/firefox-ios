@@ -198,4 +198,46 @@ class RecordTests: XCTestCase {
         // fromJSON returns nil if not valid.
         XCTAssertNotNil(LoginPayload.fromJSON(input))
     }
+
+    func testSeparators() {
+        // Mistyped parentid.
+        let invalidSeparator = JSON(["type": "separator", "arentid": "toolbar", "parentName": "Bookmarks Toolbar", "pos": 3])
+        XCTAssertNil(BookmarkType.payloadFromJSON(invalidSeparator))
+
+        // This one's right.
+        let validSeparator = JSON(["type": "separator", "parentid": "toolbar", "parentName": "Bookmarks Toolbar", "pos": 3])
+        let separator = BookmarkType.payloadFromJSON(validSeparator)!
+        XCTAssertTrue(separator is SeparatorPayload)
+        XCTAssertTrue(separator.isValid())
+        XCTAssertEqual(3, separator["pos"].asInt!)
+    }
+
+    func testFolders() {
+        let validFolder = JSON([
+            "type": "folder",
+            "parentid": "toolbar",
+            "parentName": "Bookmarks Toolbar",
+            "title": "Sóme stüff",
+            "description": "",
+            "children": ["foo", "bar"],
+        ])
+        let folder = BookmarkType.payloadFromJSON(validFolder)!
+        XCTAssertTrue(folder is FolderPayload)
+        XCTAssertEqual((folder as! FolderPayload).children, ["foo", "bar"])
+    }
+
+    func testBookmarks() {
+        let validBookmark = JSON([
+            "type": "bookmark",
+            "parentid": "menu",
+            "parentName": "Bookmarks Menu",
+            "title": "Anøther",
+            "bmkUri": "http://terrible.sync/naming",
+            "description": "",
+            "tags": "",
+            "keyword": "",
+            ])
+        let bookmark = BookmarkType.payloadFromJSON(validBookmark)!
+        XCTAssertTrue(bookmark is BookmarkPayload)
+    }
 }
