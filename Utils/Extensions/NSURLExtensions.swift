@@ -97,9 +97,9 @@ extension NSURL {
         return nil
     }
     
-    public func baseDomainAndPath() -> String? {
-        if let baseDomain = self.baseDomain() {
-            return baseDomain + (self.path ?? "/")
+    public func normalizedHostAndPath() -> String? {
+        if let normalizedHost = self.normalizedHost() {
+            return normalizedHost + (self.path ?? "/")
         }
         return nil
     }

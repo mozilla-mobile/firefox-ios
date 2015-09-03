@@ -387,7 +387,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         //
         // Instead we'll painstakingly re-extract those things here.
 
-        let domainURL = NSURL(string: site.url)?.baseDomain() ?? site.url
+        let domainURL = NSURL(string: site.url)?.normalizedHost() ?? site.url
         cell.textLabel.text = domainURL
         cell.imageWrapper.backgroundColor = UIColor.clearColor()
 
@@ -420,7 +420,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     private func createTileForSuggestedSite(cell: ThumbnailCell, site: SuggestedSite) -> ThumbnailCell {
-        cell.textLabel.text = site.title.isEmpty ? NSURL(string: site.url)?.baseDomainAndPath() : site.title
+        cell.textLabel.text = site.title.isEmpty ? NSURL(string: site.url)?.normalizedHostAndPath() : site.title
         cell.imageWrapper.backgroundColor = site.backgroundColor
         cell.backgroundImage.image = nil
 
