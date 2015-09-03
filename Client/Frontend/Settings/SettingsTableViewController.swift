@@ -614,7 +614,7 @@ private class ClearPrivateDataSetting: Setting {
 
         let clearString = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to Clear private data dialog")
         alert.addAction(UIAlertAction(title: clearString, style: UIAlertActionStyle.Destructive, handler: { (action) -> Void in
-            clearable.clear() >>== { NSNotificationCenter.defaultCenter().postNotificationName(NotificationPrivateDataCleared, object: nil) }
+            clearable.clear() >>== { NSNotificationCenter.defaultCenter().postNotificationName(NotificationPrivateDataClearedHistory, object: nil) }
         }))
 
         let cancelString = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")

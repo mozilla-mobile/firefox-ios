@@ -32,6 +32,7 @@ class HistoryClearable : Clearable {
         profile.history.clearHistory().upon { success in
             SDImageCache.sharedImageCache().clearDisk()
             SDImageCache.sharedImageCache().clearMemory()
+            NSNotificationCenter.defaultCenter().postNotificationName(NotificationPrivateDataClearedHistory, object: nil)
             deferred.fill(Maybe(success: ()))
         }
         return deferred
