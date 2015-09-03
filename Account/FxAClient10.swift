@@ -240,27 +240,30 @@ public class FxAClient10 {
         mutableURLRequest.HTTPBody = JSON(parameters).toString(false).utf8EncodedData
 
         alamofire.request(mutableURLRequest)
-            .validate(contentType: ["application/json"])
-            .responseJSON { (request, response, result) in
-                if let error = result.error as? NSError {
-                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
-                    return
-                }
+                 .validate(contentType: ["application/json"])
+                 .responseJSON { (request, response, result) in
 
-                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
-                    let json = JSON(data)
-                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
-                        return
+                    // Don't cancel requests just because our Manager is deallocated.
+                    withExtendedLifetime(self.alamofire) {
+                        if let error = result.error as? NSError {
+                            deferred.fill(Maybe(failure: FxAClientError.Local(error)))
+                            return
+                        }
+
+                        if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                            let json = JSON(data)
+                            if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
+                                deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                                return
+                            }
+
+                            if let response = FxAClient10.loginResponseFromJSON(json) {
+                                deferred.fill(Maybe(success: response))
+                                return
+                            }
+                        }
+                        deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
                     }
-
-                    if let response = FxAClient10.loginResponseFromJSON(json) {
-                        deferred.fill(Maybe(success: response))
-                        return
-                    }
-                }
-
-                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
         }
         return deferred
     }

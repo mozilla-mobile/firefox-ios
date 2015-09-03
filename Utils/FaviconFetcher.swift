@@ -75,14 +75,17 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
     private func fetchDataForURL(url: NSURL) -> Deferred<Maybe<NSData>> {
         let deferred = Deferred<Maybe<NSData>>()
         alamofire.request(.GET, url).response { (request, response, data, error) in
-            if error == nil {
-                if let data = data {
-                    deferred.fill(Maybe(success: data))
-                    return
+            // Don't cancel requests just because our Manager is deallocated.
+            withExtendedLifetime(self.alamofire) {
+                if error == nil {
+                    if let data = data {
+                        deferred.fill(Maybe(success: data))
+                        return
+                    }
                 }
-            }
 
-            deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: error?.description ?? "No content.")))
+                deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: error?.description ?? "No content.")))
+            }
         }
         return deferred
     }
