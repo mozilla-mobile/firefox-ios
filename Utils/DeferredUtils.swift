@@ -126,25 +126,15 @@ public func walk<T, U>(items: [T], start: Deferred<Maybe<U>>, f: (T, U) -> Defer
 /**
  * Like `all`, but doesn't accrue individual values.
  */
-public func allSucceed(deferreds: Success...) -> Success {
-    return all(deferreds).bind {
-        (results) -> Success in
-        if let failure = find(results, f: { $0.isFailure }) {
-            return deferMaybe(failure.failureValue!)
+extension Array where Element: Success {
+    public func allSucceed() -> Success {
+        return all(self).bind { results -> Success in
+            if let failure = find(results, f: { $0.isFailure }) {
+                return deferMaybe(failure.failureValue!)
+            }
+
+            return succeed()
         }
-
-        return succeed()
-    }
-}
-
-public func allSucceed(deferreds: [Success]) -> Success {
-    return all(deferreds).bind {
-        (results) -> Success in
-        if let failure = find(results, f: { $0.isFailure }) {
-            return deferMaybe(failure.failureValue!)
-        }
-
-        return succeed()
     }
 }
 

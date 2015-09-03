@@ -178,9 +178,9 @@ public class ClientsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer
 
     private func uploadClientCommands(toLocalClients localClients: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
         return localClients.getCommands() >>== { clientCommands in
-            return allSucceed(clientCommands.map { (clientGUID, commands) -> Success in
+            return clientCommands.map { (clientGUID, commands) -> Success in
                 self.syncClientCommands(clientGUID, commands: commands, clientsAndTabs: localClients, withServer: storageClient)
-            })
+            }.allSucceed()
         }
     }
 
