@@ -8,6 +8,7 @@ import Shared
 // A base protocol for something that can be cleared.
 protocol Clearable {
     func clear() -> Success
+    var label: String { get }
 }
 
 class ClearableError: MaybeErrorType {
@@ -26,6 +27,10 @@ class HistoryClearable: Clearable {
         self.profile = profile
     }
 
+    var label: String {
+        return NSLocalizedString("Browsing History", comment: "Settings item for clearing browsing history")
+    }
+
     func clear() -> Success {
         return profile.history.clearHistory().bind { success in
             SDImageCache.sharedImageCache().clearDisk()
@@ -42,6 +47,10 @@ class PasswordsClearable: Clearable {
     let profile: Profile
     init(profile: Profile) {
         self.profile = profile
+    }
+
+    var label: String {
+        return NSLocalizedString("Saved Logins", comment: "Settings item for clearing passwords and login data")
     }
 
     func clear() -> Success {
@@ -77,6 +86,10 @@ class CacheClearable: Clearable {
     let tabManager: TabManager
     init(tabManager: TabManager) {
         self.tabManager = tabManager
+    }
+
+    var label: String {
+        return NSLocalizedString("Cache", comment: "Settings item for clearing the cache")
     }
 
     func clear() -> Success {
@@ -124,6 +137,10 @@ class SiteDataClearable : Clearable {
         self.tabManager = tabManager
     }
 
+    var label: String {
+        return NSLocalizedString("Offline Website Data", comment: "Settings item for clearing website data")
+    }
+
     func clear() -> Success {
         // First, close all tabs to make sure they don't hold any thing in memory.
         tabManager.removeAll()
@@ -146,6 +163,10 @@ class CookiesClearable: Clearable {
         self.tabManager = tabManager
     }
 
+    var label: String {
+        return NSLocalizedString("Cookies", comment: "Settings item for clearing cookies")
+    }
+
     func clear() -> Success {
         // First close all tabs to make sure they aren't holding anything in memory.
         tabManager.removeAll()
@@ -166,30 +187,5 @@ class CookiesClearable: Clearable {
         }
 
         return succeed()
-    }
-}
-
-// A Clearable designed to clear all of the locally stored data for our app.
-class EverythingClearable: Clearable {
-    private let clearables: [Clearable]
-
-    init(profile: Profile, tabmanager: TabManager) {
-        clearables = [
-            HistoryClearable(profile: profile),
-            CacheClearable(tabManager: tabmanager),
-            CookiesClearable(tabManager: tabmanager),
-            SiteDataClearable(tabManager: tabmanager),
-            PasswordsClearable(profile: profile),
-        ]
-    }
-
-    func clear() -> Success {
-        let deferred = Success()
-        all(clearables.map({ clearable in
-            clearable.clear()
-        })).upon({ result in
-            deferred.fill(Maybe(success: ()))
-        })
-        return deferred
     }
 }
