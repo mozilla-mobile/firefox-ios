@@ -47,7 +47,6 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
     init() {
         super.init(nibName: nil, bundle: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataCleared, object: nil)
     }
 
     required init!(coder aDecoder: NSCoder) {
@@ -72,7 +71,6 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataCleared, object: nil)
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -88,7 +86,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationPrivateDataCleared:
+        case NotificationFirefoxAccountChanged:
             refreshTabs()
             break
         default:
