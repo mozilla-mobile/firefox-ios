@@ -8,3 +8,6 @@ public let NotificationDataLoginDidChange = "Data:Login:DidChange"
 public let NotificationFirefoxAccountChanged = "FirefoxAccountChangedNotification"
 
 public let NotificationPrivateDataCleared = "PrivateDataClearedNotification"
+
+// Fired when the user finishes navigating to a page and the location has changed
+public let NotificationOnLocationChange = "OnLocationChange"

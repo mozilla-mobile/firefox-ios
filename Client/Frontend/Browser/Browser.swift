@@ -26,6 +26,12 @@ protocol BrowserDelegate {
 }
 
 class Browser: NSObject {
+    @available(iOS 9, *)
+    func isPrivate() -> Bool {
+        return _isPrivate
+    }
+    private let _isPrivate: Bool
+
     var webView: WKWebView? = nil
     var browserDelegate: BrowserDelegate? = nil
     var bars = [SnackBar]()
@@ -46,6 +52,13 @@ class Browser: NSObject {
 
     init(configuration: WKWebViewConfiguration) {
         self.configuration = configuration
+        self._isPrivate = false
+    }
+
+    @available(iOS 9, *)
+    init(configuration: WKWebViewConfiguration, isPrivate: Bool) {
+        self.configuration = configuration
+        self._isPrivate = isPrivate
     }
 
     class func toTab(browser: Browser) -> RemoteTab? {
