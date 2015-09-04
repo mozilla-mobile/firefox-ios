@@ -3,7 +3,7 @@
 Building Firefox for iOS
 ========================
 
-Prerequisites, as of *August 10 2015*:
+Prerequisites, as of *September 4, 2015*:
 
 * Mac OS X 10.10.5
 * Xcode 7b6 with the iOS 9 SDK (All beta at this time)
@@ -16,7 +16,9 @@ Prerequisites, as of *August 10 2015*:
 When running on a device:
 
 * A device that supports iOS 8.2 or newer
-* A developer account and Admin access to the *Certificates, Identifiers & Profiles* section of the *iOS Dev Center*
+* One of the following:
+ * A developer account and Admin access to the *Certificates, Identifiers & Profiles* section of the *iOS DevCenter*
+ * A free developer account, new with Xcode 7
 
 Get the Code
 -----------
@@ -39,11 +41,15 @@ brew upgrade
 brew install carthage
 ```
 
+> OS X 10.11 El Capitan note: At time of writing it was not possible to install Carthage via homebrew. Instead, install the latest Carthage release manually from their [https://github.com/Carthage/Carthage/releases](releases page)
+
 You can now execute our `checkout.sh` script:
 
 ```
 ./checkout.sh
 ```
+
+> If checkout fails with an error like `fatal: Not a git repository (or any of the parent directories): .git` you may have to remove the `~/Library/Caches/org.carthage.CarthageKit` directory first. See [this Carthage issue](https://github.com/Carthage/Carthage/issues/407)
 
 At this point you have checked out the source code for both the Firefox for iOS project and it's dependencies. You can now build and run the application.
 
@@ -52,8 +58,31 @@ Everything after this point is done from within Xcode.
 Run on the Simulator
 -----------------
 
-* Open `Client.xcodeproj` and make sure you have the Client scheme and a simulated device selected. The app should run on any simulator. We just have not tested very well on the *Resizable iPad* and *Resizable iPhone* simulators.
+* Open `Client.xcodeproj` and make sure you have the *Client* scheme and a simulated device selected. The app should run on any simulator. We just have not tested very well on the *Resizable iPad* and *Resizable iPhone* simulators.
 * Select *Product -> Run* and the application should build and run on the selected simulator.
+
+Run on a Device with Xcode 7 and a Free Developer Account
+---------------
+
+> Only follow these instructions if you are using the new free personal developer accounts that Apple enabled with Xcode 7.
+
+In the following files, replace occurrences of `org.mozilla.ios` with `YOURREVERSEDOMAIN`. Make sure you expand all the fields of the `.entitlements` files. Make sure you just replace the `org.mozilla.ios` part and keep prefixes like `group.` that some files contain.
+
+* `Client/Configuration/BaseConfig.xcconfig`
+* `Client/Info.plist`
+* `Client/Fennec.entitlements`
+* `Extensions/ShareTo/Info.plist`
+* `Extensions/ShareTo/Fennec.entitlements`
+* `Extensions/SendTo/Info.plist`
+* `Extensions/SendTo/Fennec.entitlements`
+* `Extensions/ViewLater/Info.plist`
+* `Extensions/ViewLater/Fennec.entitlements`
+
+If you submit a patch, be sure to exclude these files.
+
+Now when you run the app for the first time on your device, Xcode will tell you that it does not have a provisioning profile for the four application components. Select *Fix This* to let Xcode resolve this. You may have to go through this process a couple of times, it is buggy. But then the app should properly build and run.
+
+> If Xcode fails to run the app with a vague `Security` error, open Settings -> Profiles on your iOS Device and Trust your personal developer profile. This may only happen on iOS 9.
 
 Run on a Device
 ---------------
