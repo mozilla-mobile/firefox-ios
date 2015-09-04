@@ -66,7 +66,9 @@ Run on a Device with Xcode 7 and a Free Developer Account
 
 > Only follow these instructions if you are using the new free personal developer accounts that Apple enabled with Xcode 7.
 
-In the following files, replace occurrences of `org.mozilla.ios` with `YOURREVERSEDOMAIN`. Make sure you expand all the fields of the `.entitlements` files. Make sure you just replace the `org.mozilla.ios` part and keep prefixes like `group.` that some files contain.
+In the following files, replace occurrences of `org.mozilla.ios` with your own unique reverse domain like for example `se.mydomain.ios`. If you do not own a domain, just use your full name like for example `jane.appleseed`.  
+
+Make sure you expand all the fields of the `.entitlements` files. Make sure you just replace the `org.mozilla.ios` part and keep prefixes like `group.` that some files contain.
 
 * `Client/Configuration/BaseConfig.xcconfig`
 * `Client/Info.plist`
@@ -78,11 +80,13 @@ In the following files, replace occurrences of `org.mozilla.ios` with `YOURREVER
 * `Extensions/ViewLater/Info.plist`
 * `Extensions/ViewLater/Fennec.entitlements`
 
-If you submit a patch, be sure to exclude these files.
+If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
 
-Now when you run the app for the first time on your device, Xcode will tell you that it does not have a provisioning profile for the four application components. Select *Fix This* to let Xcode resolve this. You may have to go through this process a couple of times, it is buggy. But then the app should properly build and run.
+Now when you run the app for the first time on your device, Xcode will tell you that it does not have a provisioning profile for the four application components and it will specifically mention a bundle identifier that contains your unique reverse domain.
 
-> If Xcode fails to run the app with a vague `Security` error, open Settings -> Profiles on your iOS Device and Trust your personal developer profile. This may only happen on iOS 9.
+For each component it complains about, select *Fix This* to let Xcode resolve this. You may have to go through this process a couple of times. It is buggy. But then the app should properly build and run.
+
+> If after building, Xcode fails to run the app with a vague `Security` error, open Settings -> Profiles on your iOS Device and Trust your personal developer profile. This may only happen on iOS 9.
 
 Run on a Device
 ---------------
