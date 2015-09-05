@@ -592,6 +592,26 @@ private class SearchSetting: Setting {
     }
 }
 
+// Home panel configuration setting
+private class CustomizeHomePanelsSetting: Setting {
+    let profile: Profile
+
+    override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
+
+    override var style: UITableViewCellStyle { return .Value1 }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(title: NSAttributedString(string: NSLocalizedString("Customize Home Panels", comment: "Title for custom home panels setting option"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+        let viewController = PanelSettingsViewController()
+        viewController.profile = profile
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
 private class ClearPrivateDataSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
@@ -725,6 +745,8 @@ class SettingsTableViewController: UITableViewController {
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
             generalSettings +=  [UseCompactTabLayoutSetting(settings: self)]
         }
+
+        generalSettings += [CustomizeHomePanelsSetting(settings: self)]
 
         settings += [
             SettingSection(title: nil, children: [

@@ -55,6 +55,10 @@ public class NSUserDefaultsPrefs: Prefs {
         setObject(value, forKey: defaultName)
     }
 
+    public func setStringArray(value: [String], forKey defaultName: String) {
+        setObject(value, forKey: defaultName)
+    }
+
     public func setObject(value: AnyObject?, forKey defaultName: String) {
         userDefaults.setObject(value, forKey: qualifyKey(defaultName))
     }
