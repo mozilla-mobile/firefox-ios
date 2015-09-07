@@ -62,30 +62,29 @@ function createHighlightOverlay(element) {
 
     highlightDiv.appendChild(rectDiv);
   }
-}
+ }
 
-function handleTouchEnd(event) {
+var handleTouchMove = function (event) {
+  if (longPressTimeout) {
+       var { screenX, screenY } = event.touches[0];
+        // Cancel the context menu if finger has moved beyond the maximum allowed distance.
+       if (Math.abs(touchDownX - screenX) > MAX_RADIUS || Math.abs(touchDownY - screenY) > MAX_RADIUS) {
+         cancel();
+      }
+   }
+ }
+
+var handleTouchEnd = function (event) {
   cancel();
 
-  event.target.removeEventListener("touchend", handleTouchEnd);
-  event.target.removeEventListener("mouseup", handleTouchEnd);
-  event.target.removeEventListener("touchmove", handleTouchMove);
+  removeEventListener("touchend", handleTouchEnd);
+  removeEventListener("mouseup", handleTouchEnd);
+  removeEventListener("touchmove", handleTouchMove);
 
   // If we're showing the context menu, prevent the page from handling the click event.
   if (touchHandled) {
     touchHandled = false;
     event.preventDefault();
-  }
-}
-
-function handleTouchMove(event) {
-  if (longPressTimeout) {
-    var { screenX, screenY } = event.touches[0];
-
-    // Cancel the context menu if finger has moved beyond the maximum allowed distance.
-    if (Math.abs(touchDownX - screenX) > MAX_RADIUS || Math.abs(touchDownY - screenY) > MAX_RADIUS) {
-      cancel();
-    }
   }
 }
 
