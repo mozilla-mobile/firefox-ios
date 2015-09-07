@@ -502,6 +502,13 @@ extension SearchViewController {
                 if let cell = cell as? TwoLineTableViewCell {
                     cell.setLines(site.title, detailText: site.url)
                     cell.imageView?.setIcon(site.icon, withPlaceholder: self.defaultIcon)
+
+                    cell.rightBadge.image = nil
+                    if let bookmarked = site.bookmarked {
+                        if bookmarked {
+                            cell.rightBadge.image = UIImage(named: "bookmarked")
+                        }
+                    }
                 }
             }
             return cell
