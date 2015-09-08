@@ -166,7 +166,7 @@ public class BrowserProfile: Profile {
         self.app = app
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: "LocationChange", object: nil)
+        notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: NotificationOnLocationChange, object: nil)
 
         if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
             KeychainWrapper.serviceName = baseBundleIdentifier
@@ -202,13 +202,16 @@ public class BrowserProfile: Profile {
         if let v = notification.userInfo!["visitType"] as? Int,
            let visitType = VisitType(rawValue: v),
            let url = notification.userInfo!["url"] as? NSURL where !isIgnoredURL(url),
-           let title = notification.userInfo!["title"] as? NSString {
-
-            // We don't record a visit if no type was specified -- that means "ignore me".
-            let site = Site(url: url.absoluteString, title: title as String)
-            let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
-            log.debug("Recording visit for \(url) with type \(v).")
-            history.addLocalVisit(visit)
+           let title = notification.userInfo!["title"] as? NSString,
+           let tabIsPrivate = notification.userInfo!["isPrivate"] as? Bool {
+            // Only record local vists if the change notification originated from a non-private tab
+            if !tabIsPrivate {
+                // We don't record a visit if no type was specified -- that means "ignore me".
+                let site = Site(url: url.absoluteString, title: title as String)
+                let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
+                log.debug("Recording visit for \(url) with type \(v).")
+                history.addLocalVisit(visit)
+            }
         } else {
             let url = notification.userInfo!["url"] as? NSURL
             log.debug("Ignoring navigation for \(url).")

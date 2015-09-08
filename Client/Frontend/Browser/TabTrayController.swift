@@ -198,6 +198,16 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
 
     var navBar: UIView!
     var addTabButton: UIButton!
+
+    @available(iOS 9, *)
+    lazy var addPrivateTabButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("P", forState: .Normal)
+        button.addTarget(self, action: "SELdidClickAddPrivateTab", forControlEvents: .TouchUpInside)
+        button.accessibilityLabel = NSLocalizedString("Add Private Tab", comment: "Accessibility labe for the Add Private Tab button in the Tab Tray.")
+        return button
+    }()
+
     var settingsButton: UIButton!
     var collectionViewTransitionSnapshot: UIView?
 
@@ -249,6 +259,15 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         view.addSubview(settingsButton)
 
         makeConstraints()
+
+        if #available(iOS 9, *) {
+            view.addSubview(addPrivateTabButton)
+            addPrivateTabButton.snp_makeConstraints { make in
+                make.right.equalTo(addTabButton.snp_left).offset(-10)
+                make.size.equalTo(UIConstants.ToolbarHeight)
+                make.centerY.equalTo(self.navBar)
+            }
+        }
     }
 
     private func makeConstraints() {
@@ -314,6 +333,18 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         // until after its insert animation finishes.
         self.collectionView.performBatchUpdates({ _ in
             let tab = self.tabManager.addTab()
+            self.tabManager.selectTab(tab)
+        }, completion: { finished in
+            if finished {
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+        })
+    }
+
+    @available(iOS 9, *)
+    func SELdidClickAddPrivateTab() {
+        self.collectionView.performBatchUpdates({ _ in
+            let tab = self.tabManager.addTab(isPrivate: true)
             self.tabManager.selectTab(tab)
         }, completion: { finished in
             if finished {

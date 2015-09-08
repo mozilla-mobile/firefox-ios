@@ -146,6 +146,11 @@ class TabManager : NSObject {
         }
     }
 
+    @available(iOS 9, *)
+    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, isPrivate: Bool) -> Browser {
+        return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false, isPrivate: isPrivate)
+    }
+
     // This method is duplicated to hide the flushToDisk option from consumers.
     func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Browser {
         return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false)
@@ -173,13 +178,27 @@ class TabManager : NSObject {
         }
     }
 
-    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, restoring: Bool = false) -> Browser {
+    @available(iOS 9, *)
+    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, restoring: Bool = false, isPrivate: Bool) -> Browser {
+        assert(NSThread.isMainThread())
+        configuration?.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
+
+        let tab = Browser(configuration: configuration ?? self.configuration, isPrivate: isPrivate)
+        configureTab(tab, request: request, flushToDisk: flushToDisk, zombie: zombie, restoring: restoring)
+        return tab
+    }
+
+    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, restoring: Bool = false) -> Browser {
         assert(NSThread.isMainThread())
 
         configuration?.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
 
         let tab = Browser(configuration: configuration ?? self.configuration)
+        configureTab(tab, request: request, flushToDisk: flushToDisk, zombie: zombie, restoring: restoring)
+        return tab
+    }
 
+    private func configureTab(tab: Browser, request: NSURLRequest?, flushToDisk: Bool, zombie: Bool, restoring: Bool) {
         for delegate in delegates {
             delegate.get()?.tabManager(self, didCreateTab: tab, restoring: restoring)
         }
@@ -199,8 +218,6 @@ class TabManager : NSObject {
         if flushToDisk {
         	storeChanges()
         }
-
-        return tab
     }
 
     // This method is duplicated to hide the flushToDisk option from consumers.

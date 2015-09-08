@@ -1448,15 +1448,9 @@ extension BrowserViewController: WKNavigationDelegate {
         tabManager.expireSnackbars()
 
         if let url = webView.URL where !ErrorPageHelper.isErrorPageURL(url) && !AboutUtils.isAboutHomeURL(url) {
-            let notificationCenter = NSNotificationCenter.defaultCenter()
-            var info = [NSObject: AnyObject]()
-            info["url"] = tab.displayURL
-            info["title"] = tab.title
-            if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
-                info["visitType"] = visitType
-            }
             tab.lastExecutedTime = NSDate.now()
-            notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
+
+            postLocationChangeNotificationForTab(tab, navigation: navigation)
 
             // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
             // because that event wil not always fire due to unreliable page caching. This will either let us know that
@@ -1473,6 +1467,18 @@ extension BrowserViewController: WKNavigationDelegate {
             // forward/backward. Strange, but LayoutChanged fixes that.
             UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
         }
+    }
+
+    private func postLocationChangeNotificationForTab(tab: Browser, navigation: WKNavigation) {
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        var info = [NSObject: AnyObject]()
+        info["url"] = tab.displayURL
+        info["title"] = tab.title
+        if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
+            info["visitType"] = visitType
+        }
+        info["isPrivate"] = tab.isPrivate
+        notificationCenter.postNotificationName(NotificationOnLocationChange, object: self, userInfo: info)
     }
 }
 

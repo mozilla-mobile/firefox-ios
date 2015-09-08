@@ -175,7 +175,7 @@ class BrowserUtils {
         info["url"] = url
         info["title"] = title
         info["visitType"] = VisitType.Link.rawValue
-        notificationCenter.postNotificationName("LocationChange", object: self, userInfo: info)
+        notificationCenter.postNotificationName("OnLocationChange", object: self, userInfo: info)
     }
 
     private class func clearHistoryItemAtIndex(index: NSIndexPath, tester: KIFUITestActor) {
