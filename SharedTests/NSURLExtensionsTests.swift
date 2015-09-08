@@ -9,8 +9,26 @@ import Shared
 class NSURLExtensionsTests : XCTestCase {
     func testRemovesHTTPFromURL() {
         let url = NSURL(string: "http://google.com")
-        if let actual = url?.absoluteStringWithoutHTTPScheme() {
+        if let actual = url?.absoluteDisplayString() {
             XCTAssertEqual(actual, "google.com")
+        } else {
+            XCTFail("Actual url is nil")
+        }
+    }
+
+    func testRemovesHTTPAndTrailingSlashFromURL() {
+        let url = NSURL(string: "http://google.com/")
+        if let actual = url?.absoluteDisplayString() {
+            XCTAssertEqual(actual, "google.com")
+        } else {
+            XCTFail("Actual url is nil")
+        }
+    }
+
+    func testRemovesHTTPButNotTrailingSlashFromURL() {
+        let url = NSURL(string: "http://google.com/foo/")
+        if let actual = url?.absoluteDisplayString() {
+            XCTAssertEqual(actual, "google.com/foo/")
         } else {
             XCTFail("Actual url is nil")
         }
@@ -18,8 +36,26 @@ class NSURLExtensionsTests : XCTestCase {
 
     func testKeepsHTTPSInURL() {
         let url = NSURL(string: "https://google.com")
-        if let actual = url?.absoluteStringWithoutHTTPScheme() {
+        if let actual = url?.absoluteDisplayString() {
             XCTAssertEqual(actual, "https://google.com")
+        } else {
+            XCTFail("Actual url is nil")
+        }
+    }
+
+    func testKeepsHTTPSAndRemovesTrailingSlashInURL() {
+        let url = NSURL(string: "https://google.com/")
+        if let actual = url?.absoluteDisplayString() {
+            XCTAssertEqual(actual, "https://google.com")
+        } else {
+            XCTFail("Actual url is nil")
+        }
+    }
+
+    func testKeepsHTTPSAndTrailingSlashInURL() {
+        let url = NSURL(string: "https://google.com/foo/")
+        if let actual = url?.absoluteDisplayString() {
+            XCTAssertEqual(actual, "https://google.com/foo/")
         } else {
             XCTFail("Actual url is nil")
         }
@@ -27,7 +63,7 @@ class NSURLExtensionsTests : XCTestCase {
 
     func testKeepsAboutSchemeInURL() {
         let url = NSURL(string: "about:home")
-        if let actual = url?.absoluteStringWithoutHTTPScheme() {
+        if let actual = url?.absoluteDisplayString() {
             XCTAssertEqual(actual, "about:home")
         } else {
             XCTFail("Actual url is nil")
