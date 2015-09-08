@@ -113,7 +113,7 @@ public protocol SingleCollectionSynchronizer {
     func remoteHasChanges(info: InfoCollections) -> Bool
 }
 
-public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
+public class BaseCollectionSynchronizer {
     let collection: String
 
     let scratchpad: Scratchpad
@@ -133,25 +133,6 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
     var storageVersion: Int {
         assert(false, "Override me!")
         return 0
-    }
-
-    var lastFetched: Timestamp {
-        set(value) {
-            self.prefs.setLong(value, forKey: "lastFetched")
-        }
-
-        get {
-            return self.prefs.unsignedLongForKey("lastFetched") ?? 0
-        }
-    }
-
-    func setTimestamp(timestamp: Timestamp) {
-        log.debug("Setting post-upload lastFetched to \(timestamp).")
-        self.lastFetched = timestamp
-    }
-
-    public func remoteHasChanges(info: InfoCollections) -> Bool {
-        return info.modified(self.collection) > self.lastFetched
     }
 
     public func reasonToNotSync(client: Sync15StorageClient) -> SyncNotStartedReason? {
@@ -192,5 +173,31 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
             return storageClient.clientForCollection(self.collection, encrypter: encrypter)
         }
         return nil
+    }
+}
+
+/**
+ * Tracks a lastFetched timestamp, uses it to decide if there are any
+ * remote changes, and exposes a method to fast-forward after upload.
+ */
+public class TimestampedSingleCollectionSynchronizer: BaseCollectionSynchronizer, SingleCollectionSynchronizer {
+
+    var lastFetched: Timestamp {
+        set(value) {
+            self.prefs.setLong(value, forKey: "lastFetched")
+        }
+
+        get {
+            return self.prefs.unsignedLongForKey("lastFetched") ?? 0
+        }
+    }
+
+    func setTimestamp(timestamp: Timestamp) {
+        log.debug("Setting post-upload lastFetched to \(timestamp).")
+        self.lastFetched = timestamp
+    }
+
+    public func remoteHasChanges(info: InfoCollections) -> Bool {
+        return info.modified(self.collection) > self.lastFetched
     }
 }

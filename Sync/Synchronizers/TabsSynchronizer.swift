@@ -10,7 +10,7 @@ import XCGLogger
 private let log = Logger.syncLogger
 private let TabsStorageVersion = 1
 
-public class TabsSynchronizer: BaseSingleCollectionSynchronizer, Synchronizer {
+public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
     public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "tabs")
     }
