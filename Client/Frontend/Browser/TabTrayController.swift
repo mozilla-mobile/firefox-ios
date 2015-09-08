@@ -199,6 +199,7 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
     var navBar: UIView!
     var addTabButton: UIButton!
 
+    @available(iOS 9, *)
     lazy var addPrivateTabButton: UIButton = {
         let button = UIButton()
         button.setTitle("P", forState: .Normal)
@@ -340,17 +341,16 @@ class TabTrayController: UIViewController, UITabBarDelegate, UICollectionViewDel
         })
     }
 
+    @available(iOS 9, *)
     func SELdidClickAddPrivateTab() {
-        if #available(iOS 9, *) {
-            self.collectionView.performBatchUpdates({ _ in
-                let tab = self.tabManager.addTab(isPrivate: true)
-                self.tabManager.selectTab(tab)
-            }, completion: { finished in
-                if finished {
-                    self.navigationController?.popViewControllerAnimated(true)
-                }
-            })
-        }
+        self.collectionView.performBatchUpdates({ _ in
+            let tab = self.tabManager.addTab(isPrivate: true)
+            self.tabManager.selectTab(tab)
+        }, completion: { finished in
+            if finished {
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+        })
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {

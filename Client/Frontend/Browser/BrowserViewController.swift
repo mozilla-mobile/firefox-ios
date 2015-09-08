@@ -1450,13 +1450,7 @@ extension BrowserViewController: WKNavigationDelegate {
         if let url = webView.URL where !ErrorPageHelper.isErrorPageURL(url) && !AboutUtils.isAboutHomeURL(url) {
             tab.lastExecutedTime = NSDate.now()
 
-            if #available(iOS 9, *) {
-                if !tab.isPrivate() {
-                    postLocationChangeNotificationForTab(tab, navigation: navigation)
-                }
-            } else {
-                postLocationChangeNotificationForTab(tab, navigation: navigation)
-            }
+            postLocationChangeNotificationForTab(tab, navigation: navigation)
 
             // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
             // because that event wil not always fire due to unreliable page caching. This will either let us know that
@@ -1483,6 +1477,7 @@ extension BrowserViewController: WKNavigationDelegate {
         if let visitType = self.getVisitTypeForTab(tab, navigation: navigation)?.rawValue {
             info["visitType"] = visitType
         }
+        info["isPrivate"] = tab.isPrivate
         notificationCenter.postNotificationName(NotificationOnLocationChange, object: self, userInfo: info)
     }
 }
