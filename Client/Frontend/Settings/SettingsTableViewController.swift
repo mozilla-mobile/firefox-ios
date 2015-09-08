@@ -596,6 +596,8 @@ private class ClearPrivateDataSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
 
+    override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
+
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
@@ -605,21 +607,10 @@ private class ClearPrivateDataSetting: Setting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
-        let clearable = EverythingClearable(profile: profile, tabmanager: tabManager)
-
-        var title: String { return NSLocalizedString("Clear Everything", tableName: "ClearPrivateData", comment: "Title of the Clear private data dialog.") }
-        var message: String { return NSLocalizedString("Are you sure you want to clear all of your data? This will also close all open tabs.", tableName: "ClearPrivateData", comment: "Message shown in the dialog prompting users if they want to clear everything") }
-
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-
-        let clearString = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to Clear private data dialog")
-        alert.addAction(UIAlertAction(title: clearString, style: UIAlertActionStyle.Destructive, handler: { (action) -> Void in
-            clearable.clear() >>== { NSNotificationCenter.defaultCenter().postNotificationName(NotificationPrivateDataCleared, object: nil) }
-        }))
-
-        let cancelString = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")
-        alert.addAction(UIAlertAction(title: cancelString, style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in }))
-        navigationController?.presentViewController(alert, animated: true) { () -> Void in }
+        let viewController = ClearPrivateDataTableViewController()
+        viewController.profile = profile
+        viewController.tabManager = tabManager
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

@@ -231,7 +231,6 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     init() {
         super.init(nibName: nil, bundle: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataCleared, object: nil)
     }
 
     required init!(coder aDecoder: NSCoder) {
@@ -266,12 +265,11 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataCleared, object: nil)
     }
 
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationPrivateDataCleared:
+        case NotificationFirefoxAccountChanged:
             refreshReadingList()
             break
         default:

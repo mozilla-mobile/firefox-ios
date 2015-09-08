@@ -8,9 +8,10 @@ import Shared
 // A base protocol for something that can be cleared.
 protocol Clearable {
     func clear() -> Success
+    var label: String { get }
 }
 
-class ClearableError : MaybeErrorType {
+class ClearableError: MaybeErrorType {
     private let msg: String
     init(msg: String) {
         self.msg = msg
@@ -20,30 +21,36 @@ class ClearableError : MaybeErrorType {
 }
 
 // Clears our browsing history, including favicons and thumbnails.
-class HistoryClearable : Clearable {
+class HistoryClearable: Clearable {
     let profile: Profile
     init(profile: Profile) {
         self.profile = profile
     }
 
-    // TODO: This can be cleaned up!
+    var label: String {
+        return NSLocalizedString("Browsing History", comment: "Settings item for clearing browsing history")
+    }
+
     func clear() -> Success {
-        let deferred = Success()
-        profile.history.clearHistory().upon { success in
+        return profile.history.clearHistory().bind { success in
             SDImageCache.sharedImageCache().clearDisk()
             SDImageCache.sharedImageCache().clearMemory()
-            deferred.fill(Maybe(success: ()))
+            NSNotificationCenter.defaultCenter().postNotificationName(NotificationPrivateDataClearedHistory, object: nil)
+            return Deferred(value: success)
         }
-        return deferred
     }
 }
 
 // Clear all stored passwords. This will clear both Firefox's SQLite storage and the system shared
 // Credential storage.
-class PasswordsClearable : Clearable {
+class PasswordsClearable: Clearable {
     let profile: Profile
     init(profile: Profile) {
         self.profile = profile
+    }
+
+    var label: String {
+        return NSLocalizedString("Saved Logins", comment: "Settings item for clearing passwords and login data")
     }
 
     func clear() -> Success {
@@ -75,10 +82,14 @@ struct ClearableErrorType: MaybeErrorType {
 
 // Clear the web cache. Note, this has to close all open tabs in order to ensure the data
 // cached in them isn't flushed to disk.
-class CacheClearable : Clearable {
+class CacheClearable: Clearable {
     let tabManager: TabManager
     init(tabManager: TabManager) {
         self.tabManager = tabManager
+    }
+
+    var label: String {
+        return NSLocalizedString("Cache", comment: "Settings item for clearing the cache")
     }
 
     func clear() -> Success {
@@ -126,6 +137,10 @@ class SiteDataClearable : Clearable {
         self.tabManager = tabManager
     }
 
+    var label: String {
+        return NSLocalizedString("Offline Website Data", comment: "Settings item for clearing website data")
+    }
+
     func clear() -> Success {
         // First, close all tabs to make sure they don't hold any thing in memory.
         tabManager.removeAll()
@@ -142,10 +157,14 @@ class SiteDataClearable : Clearable {
 }
 
 // Remove all cookies stored by the site.
-class CookiesClearable : Clearable {
+class CookiesClearable: Clearable {
     let tabManager: TabManager
     init(tabManager: TabManager) {
         self.tabManager = tabManager
+    }
+
+    var label: String {
+        return NSLocalizedString("Cookies", comment: "Settings item for clearing cookies")
     }
 
     func clear() -> Success {
@@ -168,30 +187,5 @@ class CookiesClearable : Clearable {
         }
 
         return succeed()
-    }
-}
-
-// A Clearable designed to clear all of the locally stored data for our app.
-class EverythingClearable: Clearable {
-    private let clearables: [Clearable]
-
-    init(profile: Profile, tabmanager: TabManager) {
-        clearables = [
-            HistoryClearable(profile: profile),
-            CacheClearable(tabManager: tabmanager),
-            CookiesClearable(tabManager: tabmanager),
-            SiteDataClearable(tabManager: tabmanager),
-            PasswordsClearable(profile: profile),
-        ]
-    }
-
-    func clear() -> Success {
-        let deferred = Success()
-        all(clearables.map({ clearable in
-            clearable.clear()
-        })).upon({ result in
-            deferred.fill(Maybe(success: ()))
-        })
-        return deferred
     }
 }
