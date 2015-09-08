@@ -2870,18 +2870,18 @@
 		F84B21EB1A0910F600AAB793 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				E699220D1B94E3EF007C480D /* About */,
 				D32075381B017DA400CA1CD2 /* SearchPlugins */,
+				0BA1E02F1B051A07007675AF /* NetError.css */,
+				0BA1E00D1B03FB0B007675AF /* NetError.html */,
+				746B6A781B277C1800EA83E3 /* SessionRestore.html */,
 				D3BA7E0B1B0E902A00153782 /* ContextMenu.js */,
 				0BF42D381A7C0E8900889E28 /* Favicons.js */,
 				0BDA568A1B26B1BE008C9B96 /* LoginsHelper.js */,
+				E49C0EB01B46109C009092BB /* WindowCloseHelper.js */,
 				0BD75AD21AF2EE5A00B48915 /* suggestedsites.json */,
 				F84B21EF1A0910F600AAB793 /* Images.xcassets */,
+				E699220D1B94E3EF007C480D /* About */,
 				F84B22391A0914A300AAB793 /* Fonts */,
-				0BA1E00D1B03FB0B007675AF /* NetError.html */,
-				0BA1E02F1B051A07007675AF /* NetError.css */,
-				746B6A781B277C1800EA83E3 /* SessionRestore.html */,
-				E49C0EB01B46109C009092BB /* WindowCloseHelper.js */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
