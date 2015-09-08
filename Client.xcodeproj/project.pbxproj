@@ -2456,9 +2456,9 @@
 				D33B5B7B1AF1AFC100F4DDE6 /* SearchTests.swift */,
 				D3C3EB641B6FF44000388E9A /* SessionRestoreTests.swift */,
 				744B0FFD1B4F172E00100422 /* ToolbarTests.swift */,
+				7BB20B6C1B71160200F1657F /* TopSitesTests.swift */,
 				D375A91F1AE71675001B30D5 /* ViewMemoryLeakTests.swift */,
 				D39FA1611A83E0EC00EE869C /* Supporting Files */,
-				7BB20B6C1B71160200F1657F /* TopSitesTests.swift */,
 			);
 			path = UITests;
 			sourceTree = "<group>";
