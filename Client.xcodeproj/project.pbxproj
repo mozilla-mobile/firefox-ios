@@ -307,6 +307,7 @@
 		74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */; };
 		74E36E151B716BAF00D69DA1 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */; };
 		7B24DC9C1B67B3590005766B /* ClearPrivateDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */; };
+		7B7A5FFE1B9EEAA500CF65CA /* SQLite.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E69920B51B94C16B007C480D /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7BB20B6D1B71160200F1657F /* TopSitesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB20B6C1B71160200F1657F /* TopSitesTests.swift */; };
 		7BF5A1CA1B4160EA00EA9DD8 /* SyncCommandsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1C91B4160EA00EA9DD8 /* SyncCommandsTable.swift */; };
 		7BF5A1EA1B41640500EA9DD8 /* SyncQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1E91B41640500EA9DD8 /* SyncQueue.swift */; };
@@ -565,7 +566,6 @@
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
 		E698FFDA1B4AADF40001F623 /* BrowserScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */; };
 		E69921611B94C40B007C480D /* (null) in CopyFiles */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E69921E71B94C60C007C480D /* SQLite.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E69920B51B94C16B007C480D /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E69922131B94E3EF007C480D /* about.css in Resources */ = {isa = PBXBuildFile; fileRef = E699220E1B94E3EF007C480D /* about.css */; };
 		E69922141B94E3EF007C480D /* aboutRights.dtd in Resources */ = {isa = PBXBuildFile; fileRef = E699220F1B94E3EF007C480D /* aboutRights.dtd */; };
 		E69922151B94E3EF007C480D /* aboutRights.xhtml in Resources */ = {isa = PBXBuildFile; fileRef = E69922101B94E3EF007C480D /* aboutRights.xhtml */; };
@@ -1158,7 +1158,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E69921611B94C40B007C480D /* SQLite.framework in CopyFiles */,
+				7B7A5FFE1B9EEAA500CF65CA /* SQLite.framework in CopyFiles */,
+				E69921611B94C40B007C480D /* (null) in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1752,7 +1753,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E69920BF1B94C28C007C480D /* SQLite.framework in Frameworks */,
 				E4483B5A1ADED63300B485A7 /* Shared.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
