@@ -102,11 +102,8 @@ class BrowserViewController: UIViewController {
     }
 
     override func didReceiveMemoryWarning() {
-        print("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
-        log.debug("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
-        NSLog("THIS IS BROWSERVIEWCONTROLLER.DIDRECEIVEMEMORYWARNING - WE ARE GOING TO TABMANAGER.RESETPROCESSPOOL()")
         super.didReceiveMemoryWarning()
-        tabManager.resetProcessPool()
+        log.debug("BVC received memory warning")
     }
 
     private func didInit() {
@@ -677,10 +674,7 @@ class BrowserViewController: UIViewController {
             auralProgress.progress = loading ? 0 : nil
         case KVOURL:
             if let tab = tabManager.selectedTab where tab.webView?.URL == nil {
-                log.debug("URL IS NIL! WE ARE RESETTING PROCESS POOL")
-                NSLog("URL IS NIL! WE ARE RESETTING PROCESS POOL")
-                print("URL IS NIL! WE ARE RESETTING PROCESS POOL")
-                tabManager.resetProcessPool()
+                log.debug("URL is nil!")
             }
 
             if let tab = tabManager.selectedTab where tab.webView === webView && !tab.restoring {
