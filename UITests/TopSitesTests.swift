@@ -37,6 +37,28 @@ class TopSitesTests: KIFTestCase {
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
     }
 
+    func testBasicUI() {
+        // Load a page
+        tester().tapViewWithAccessibilityIdentifier("url")
+        let url1 = "\(webRoot)/numberedPage.html?page=1"
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
+        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
+
+        // Now load another
+        tester().tapViewWithAccessibilityIdentifier("url")
+        let url2 = "\(webRoot)/numberedPage.html?page=2"
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url2)\n")
+        tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
+
+        // Open top sites and tap the entry for Page 1
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapViewWithAccessibilityLabel("Top sites")
+        tester().tapViewWithAccessibilityLabel("Page 1")
+
+        // Verify that Page 1 loads
+        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
+    }
+
     func testRotatingOnTopSites() {
         // go to top sites. rotate to landscape, rotate back again. ensure it doesn't crash
         createNewTab()
@@ -55,6 +77,32 @@ class TopSitesTests: KIFTestCase {
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().waitForViewWithAccessibilityLabel("Top sites")
         rotateToPortrait()
+        tester().tapViewWithAccessibilityLabel("Cancel")
+    }
+
+    func testRemovingSite() {
+        // Load a page
+        tester().tapViewWithAccessibilityIdentifier("url")
+        let url1 = "\(webRoot)/numberedPage.html?page=1"
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
+        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
+
+        // Open top sites
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapViewWithAccessibilityLabel("Top sites")
+
+        // Verify the row exists and that the Remove Page button is hidden
+        let row = tester().waitForViewWithAccessibilityLabel("Page 1")
+        tester().waitForAbsenceOfViewWithAccessibilityLabel("Remove page")
+
+        // Long press the row and click the remove button
+        row.longPressAtPoint(CGPointZero, duration: 1)
+        tester().tapViewWithAccessibilityLabel("Remove page")
+
+        // Close editing mode
+        tester().tapViewWithAccessibilityLabel("Done")
+
+        // Close top sites
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
