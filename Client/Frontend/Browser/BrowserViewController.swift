@@ -51,6 +51,8 @@ class BrowserViewController: UIViewController {
     private let snackBars = UIView()
     private let auralProgress = AuralProgressBar()
 
+    private var openInHelper: OpenInHelper?
+
     // location label actions
     private var pasteGoAction: AccessibleAction!
     private var pasteAction: AccessibleAction!
@@ -1419,6 +1421,9 @@ extension BrowserViewController: WKNavigationDelegate {
                 urlBar.updateReaderModeState(ReaderModeState.Unavailable)
                 hideReaderModeBar(animated: false)
             }
+
+            // remove the open in overlay view if it is present
+            openInHelper?.hideOpenInView(forWebView: webView)
         }
     }
 
@@ -1530,6 +1535,11 @@ extension BrowserViewController: WKNavigationDelegate {
             // forward/backward. Strange, but LayoutChanged fixes that.
             UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
         }
+
+        // add the open in overlay view if it is required
+        guard let url = webView.URL, let openInHelper = OpenInHelperFactory.helperForURL(url) else { return }
+        openInHelper.showOpenInView(inView: webViewContainer, forWebView: webView)
+        self.openInHelper = openInHelper
     }
 
     private func postLocationChangeNotificationForTab(tab: Browser, navigation: WKNavigation?) {
