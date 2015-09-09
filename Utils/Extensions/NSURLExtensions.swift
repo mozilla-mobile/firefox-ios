@@ -104,8 +104,12 @@ extension NSURL {
         return nil
     }
 
-    public func absoluteStringWithoutHTTPScheme() -> String? {
-        if let urlString = self.absoluteString {
+    public func absoluteDisplayString() -> String? {
+        if var urlString = self.absoluteString {
+            // For http URLs, get rid of the trailing slash if the path is empty or '/'
+            if (self.scheme == "http" || self.scheme == "https") && (self.path == "/" || self.path == nil) && urlString.endsWith("/") {
+                urlString = urlString.substringToIndex(advance(urlString.endIndex, -1))
+            }
             // If it's basic http, strip out the string but leave anything else in
             if urlString.hasPrefix("http://") ?? false {
                 return urlString.substringFromIndex(advance(urlString.startIndex, 7))
