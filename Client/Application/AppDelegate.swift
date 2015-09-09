@@ -137,7 +137,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(application: UIApplication) {
         self.profile?.syncManager.endTimedSyncs()
 
-        let taskId = application.beginBackgroundTaskWithExpirationHandler { _ in }
+        var taskId: UIBackgroundTaskIdentifier = 0
+        taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
+            log.warning("Running out of background time, but we have a profile shutdown pending.")
+            application.endBackgroundTask(taskId)
+        }
         self.profile?.shutdown()
         application.endBackgroundTask(taskId)
     }
