@@ -4,17 +4,31 @@
 
 import Alamofire
 import Foundation
+import Shared
 
 let SearchSuggestClientErrorDomain = "org.mozilla.firefox.SearchSuggestClient"
 let SearchSuggestClientErrorInvalidEngine = 0
 let SearchSuggestClientErrorInvalidResponse = 1
 
+/*
+ * Clients of SearchSuggestionClient should retain the object during the 
+ * lifetime of the search suggestion query, as requests are canceled during destruction.
+ * 
+ * Query callbacks that must run even if they are cancelled should wrap their contents in `withExtendendLifetime`.
+ */
 class SearchSuggestClient {
     private let searchEngine: OpenSearchEngine
     private weak var request: Request?
+    private let userAgent: String
 
-    init(searchEngine: OpenSearchEngine) {
+    lazy private var alamofire: Alamofire.Manager = {
+        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
+        return Alamofire.Manager.managerWithUserAgent(self.userAgent, configuration: configuration)
+    }()
+
+    init(searchEngine: OpenSearchEngine, userAgent: String) {
         self.searchEngine = searchEngine
+        self.userAgent = userAgent
     }
 
     func query(query: String, callback: (response: [String]?, error: NSError?) -> ()) {
@@ -25,7 +39,7 @@ class SearchSuggestClient {
             return
         }
 
-        request = Alamofire.request(.GET, url!)
+        request = alamofire.request(.GET, url!)
             .validate(statusCode: 200..<300)
             .responseJSON { (request, response, result) in
                 if let error = result.error as? NSError {
@@ -52,6 +66,7 @@ class SearchSuggestClient {
 
                 callback(response: suggestions!, error: nil)
         }
+
     }
 
     func cancelPendingRequest() {
