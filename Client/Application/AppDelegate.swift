@@ -142,8 +142,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             log.warning("Running out of background time, but we have a profile shutdown pending.")
             application.endBackgroundTask(taskId)
         }
-        self.profile?.shutdown()
-        application.endBackgroundTask(taskId)
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+            self.profile?.shutdown()
+            application.endBackgroundTask(taskId)
+        }
     }
 
     private func setUpWebServer(profile: Profile) {
