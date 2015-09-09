@@ -164,6 +164,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         defaults.registerDefaults(["UserAgent": firefoxUA])
         FaviconFetcher.userAgent = firefoxUA
         SDWebImageDownloader.sharedDownloader().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
+
+        // Record the user agent for use by search suggestion clients.
+        SearchViewController.userAgent = firefoxUA
     }
 
     func application(application: UIApplication, handleActionWithIdentifier identifier: String?, forLocalNotification notification: UILocalNotification, completionHandler: () -> Void) {

@@ -73,6 +73,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     private var suggestionPrompt: UIView?
 
+    static var userAgent: String?
+
     convenience init() {
         self.init(nibName: nil, bundle: nil)
     }
@@ -152,7 +154,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             querySuggestClient()
 
             // Show the default search engine first.
-            suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine)
+            let ua = SearchViewController.userAgent as String! ?? "FxSearch"
+            suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine, userAgent: ua)
 
             // Reload the footer list of search engines.
             reloadSearchEngines()
