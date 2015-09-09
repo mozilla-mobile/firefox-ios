@@ -219,8 +219,22 @@ private class SyncNowSetting: WithAccountSetting {
         return profile.syncManager.isSyncing ? syncingTitle : syncNowTitle
     }
 
+    override var status: NSAttributedString? {
+        if let timestamp = profile.prefs.timestampForKey(PrefsKeys.KeyLastSyncFinishTime) {
+            let lastSyncPrefix = NSLocalizedString("Last synced", comment: "Last synced prefix beside Sync Now setting option")
+            let attributedString = NSMutableAttributedString(string: "\(lastSyncPrefix) \(NSDate.fromTimestamp(timestamp).toRelativeTimeString())")
+            let attributes = [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)]
+            let range = NSMakeRange(0, attributedString.length)
+            attributedString.setAttributes(attributes, range: range)
+            return attributedString
+        }
+
+        return nil
+    }
+
     override func onConfigureCell(cell: UITableViewCell) {
         cell.textLabel?.attributedText = title
+        cell.detailTextLabel?.attributedText = status
         cell.accessoryType = accessoryType
         cell.accessoryView = nil
         cell.userInteractionEnabled = !profile.syncManager.isSyncing
