@@ -6,6 +6,7 @@ import Shared
 import Storage
 import AVFoundation
 import XCGLogger
+import Breakpad
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
