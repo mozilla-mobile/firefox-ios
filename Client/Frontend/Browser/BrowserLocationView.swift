@@ -18,7 +18,7 @@ protocol BrowserLocationViewDelegate {
 
 private struct BrowserLocationViewUX {
     static let HostFontColor = UIColor.blackColor()
-    static let BaseURLFontColor = UIColor.lightGrayColor()
+    static let BaseURLFontColor = UIColor.grayColor()
     static let BaseURLPitch = 0.75
     static let HostPitch = 1.0
     static let LocationContentInset = 8
