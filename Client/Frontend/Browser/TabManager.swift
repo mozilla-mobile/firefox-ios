@@ -53,7 +53,25 @@ class TabManager : NSObject {
     private var _selectedIndex = -1
     private let defaultNewTabRequest: NSURLRequest
     private let navDelegate: TabManagerNavDelegate
-    private var configuration: WKWebViewConfiguration
+
+    // A WKWebViewConfiguration used for normal tabs
+    lazy private var configuration: WKWebViewConfiguration = {
+        let configuration = WKWebViewConfiguration()
+        configuration.processPool = WKProcessPool()
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
+        return configuration
+    }()
+
+    // A WKWebViewConfiguration used for private mode tabs
+    @available(iOS 9, *)
+    lazy private var privateConfiguration: WKWebViewConfiguration = {
+        let configuration = WKWebViewConfiguration()
+        configuration.processPool = WKProcessPool()
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
+        configuration.websiteDataStore = WKWebsiteDataStore.nonPersistentDataStore()
+        return configuration
+    }()
+
     private let imageStore: DiskImageStore
 
     unowned let profile: Profile
@@ -61,11 +79,6 @@ class TabManager : NSObject {
 
     init(defaultNewTabRequest: NSURLRequest, profile: Profile) {
         self.profile = profile
-        // Create a common webview configuration with a shared process pool.
-        configuration = WKWebViewConfiguration()
-        configuration.processPool = WKProcessPool()
-        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
-
         self.defaultNewTabRequest = defaultNewTabRequest
         self.navDelegate = TabManagerNavDelegate()
         self.imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
@@ -148,7 +161,7 @@ class TabManager : NSObject {
 
     @available(iOS 9, *)
     func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, isPrivate: Bool) -> Browser {
-        return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false, isPrivate: isPrivate)
+        return self.addTab(request, configuration: isPrivate ? privateConfiguration : configuration, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
 
     // This method is duplicated to hide the flushToDisk option from consumers.
