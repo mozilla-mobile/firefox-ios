@@ -173,14 +173,6 @@ class BrowserViewController: UIViewController {
             coordinator.animateAlongsideTransition({ context in
                 scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y + 1), animated: true)
                 self.scrollController.showToolbars(animated: false)
-
-                // Update overlay that sits behind the status bar to reflect the new topLayoutGuide length. It seems that
-                // when updateViewConstraints is invoked during rotation, the UILayoutSupport instance hasn't updated
-                // to reflect the new orientation which is why we do it here instead of in updateViewConstraints.
-                self.statusBarOverlay.snp_remakeConstraints { make in
-                    make.top.left.right.equalTo(self.view)
-                    make.height.equalTo(self.topLayoutGuide.length)
-                }
             }, completion: { context in
                 scrollView.setContentOffset(CGPoint(x: contentOffset.x, y: contentOffset.y), animated: false)
             })
@@ -289,6 +281,14 @@ class BrowserViewController: UIViewController {
 
         headerBackdrop.snp_makeConstraints { make in
             make.edges.equalTo(self.header)
+        }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        statusBarOverlay.snp_remakeConstraints { make in
+            make.top.left.right.equalTo(self.view)
+            make.height.equalTo(self.topLayoutGuide.length)
         }
     }
 
