@@ -6,10 +6,13 @@ import Foundation
 import Breakpad
 
 public protocol CrashReporter {
+    var previouslyCrashed: Bool { get }
+
     func start(onCurrentThread: Bool)
     func stop()
     func addUploadParameter(value: String!, forKey: String!)
     func setUploadingEnabled(enabled: Bool)
+    func resetPreviousCrashState()
 }
 
 /**
@@ -17,6 +20,14 @@ public protocol CrashReporter {
 */
 struct BreakpadCrashReporter: CrashReporter {
     let breakpadInstance: BreakpadController
+
+    var previouslyCrashed: Bool {
+        return breakpadInstance.didCrashLastSession()
+    }
+
+    func resetPreviousCrashState() {
+        breakpadInstance.resetLastSessionCrashState()
+    }
 
     func start(onCurrentThread: Bool) {
         breakpadInstance.start(onCurrentThread)
