@@ -352,6 +352,24 @@ class BrowserViewController: UIViewController {
             self.view.alpha = (profile.prefs.intForKey(IntroViewControllerSeenProfileKey) != nil) ? 1.0 : 0.0
         }
 
+        if activeCrashReporter?.previouslyCrashed ?? false {
+            // Reset previous crash state
+            activeCrashReporter?.resetPreviousCrashState()
+
+            let crashPrompt = UIAlertView(
+                title: CrashPromptMessaging.Title,
+                message: CrashPromptMessaging.Description,
+                delegate: self,
+                cancelButtonTitle: CrashPromptMessaging.Negative,
+                otherButtonTitles: CrashPromptMessaging.Affirmative
+            )
+            crashPrompt.show()
+        } else {
+            restoreTabs()
+        }
+    }
+
+    private func restoreTabs() {
         if tabManager.count == 0 && !AppConstants.IsRunningTest {
             tabManager.restoreTabs()
         }
@@ -2028,10 +2046,10 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 }
 
 private struct CrashPromptMessaging {
-    static let CrashPromptTitle = NSLocalizedString("Well, this is embarrassing.", comment: "Restore Tabs Prompt Title")
-    static let CrashPromptDescription = NSLocalizedString("Looks like Firefox crashed previously. Would you like to restore your tabs?", comment: "Restore Tabs Prompt Description")
-    static let CrashPromptAffirmative = NSLocalizedString("Okay", comment: "Restore Tabs Affirmative Action")
-    static let CrashPromptNegative = NSLocalizedString("No", comment: "Restore Tabs Negative Action")
+    static let Title = NSLocalizedString("Well, this is embarrassing.", comment: "Restore Tabs Prompt Title")
+    static let Description = NSLocalizedString("Looks like Firefox crashed previously. Would you like to restore your tabs?", comment: "Restore Tabs Prompt Description")
+    static let Affirmative = NSLocalizedString("Okay", comment: "Restore Tabs Affirmative Action")
+    static let Negative = NSLocalizedString("No", comment: "Restore Tabs Negative Action")
 }
 
 extension BrowserViewController: UIAlertViewDelegate {
@@ -2042,11 +2060,8 @@ extension BrowserViewController: UIAlertViewDelegate {
 
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if buttonIndex == CrashPromptIndex.Restore.rawValue {
-            tabManager.restoreTabs()
-        }
-
-        // In case restore fails, launch at least one tab
-        if tabManager.count == 0 {
+            self.restoreTabs()
+        } else {
             let tab = tabManager.addTab()
             tabManager.selectTab(tab)
         }
