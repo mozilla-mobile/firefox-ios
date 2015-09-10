@@ -497,7 +497,8 @@ private class LicenseAndAcknowledgementsSetting: Setting {
 // Opens about:rights page in the content view controller
 private class YourRightsSetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Your Rights", comment: "Your Rights settings section title"))
+        return NSAttributedString(string: NSLocalizedString("Your Rights", comment: "Your Rights settings section title"), attributes:
+            [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
     }
 
     override var url: NSURL? {
