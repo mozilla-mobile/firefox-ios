@@ -183,13 +183,37 @@ class BrowserViewController: UIViewController {
         scrollController.showToolbars(animated: true)
     }
 
+    func SELappWillResignActiveNotification() {
+        // If we are displying a private tab, hide any elements in the browser that we wouldn't want shown 
+        // when the app is in the home switcher
+        guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
+            return
+        }
+
+        privateTab.webView?.alpha = 0
+        urlBar.locationView.alpha = 0
+    }
+
+    func SELappDidBecomeActiveNotification() {
+        // Re-show any components that might have been hidden because they were being displayed
+        // as part of a private mode tab
+        UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+            self.tabManager.selectedTab?.webView?.alpha = 1
+            self.urlBar.locationView.alpha = 1
+        }, completion: nil)
+    }
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: BookmarkStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELBookmarkStatusDidChange:", name: BookmarkStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappWillResignActiveNotification", name: UIApplicationWillResignActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappDidBecomeActiveNotification", name: UIApplicationDidBecomeActiveNotification, object: nil)
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         footerBackdrop = UIView()
