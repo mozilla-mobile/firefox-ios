@@ -2041,11 +2041,18 @@ extension BrowserViewController: UIAlertViewDelegate {
     }
 
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if buttonIndex == CrashPromptIndex.Restore.rawValue {
-            self.restoreTabs()
-        } else {
+        func addAndSelect() {
             let tab = tabManager.addTab()
             tabManager.selectTab(tab)
+        }
+
+        if buttonIndex == CrashPromptIndex.Restore.rawValue {
+            self.restoreTabs()
+            if tabManager.count == 0 {
+                addAndSelect()
+            }
+        } else {
+            addAndSelect()
         }
     }
 }
