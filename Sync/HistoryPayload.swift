@@ -20,7 +20,7 @@ public class HistoryPayload: CleartextPayloadJSON {
             return false
         }
 
-        if self["deleted"].isBool && self["deleted"].asBool ?? false {
+        if self["deleted"].asBool ?? false {
             return true
         }
 
