@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "উপলব্ধ ডিভাইসগুলি:";
+
+/* Close button in top navigation bar */
+"Close" = "বন্ধ";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "দয়া করে Firefox খুলুন, সেটিংসে যান এবং অবিরত রাখার জন্য সাইন ইন করুন।";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "পাঠান";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "ট্যাবটি পাঠান";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "আপনি আপনার Firefox অ্যাকাউন্ট থেকে সাইন ইন করেননি।";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "এই Firefox Account-এর সাথে আপনার কোন ডিভাইস যুক্ত নেই যেটি সিঙ্ক করা যাবে।";
+

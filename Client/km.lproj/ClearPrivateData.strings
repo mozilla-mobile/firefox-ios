@@ -1,0 +1,12 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "តើ​អ្នក​ពិត​ជា​ចង់​សម្អាត​ទិន្នន័យ​របស់​អ្នក​ទាំងអស់​មែន​ទេ? វា​នឹង​បិទ​ផ្ទាំង​ដែល​បើក​ទាំងអស់​ផង​ដែរ។";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "បោះបង់ចោល";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "សម្អាត";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "សម្អាត​អ្វី​គ្រប់យ៉ាង";
+

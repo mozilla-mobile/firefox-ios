@@ -1,0 +1,12 @@
+/* Message shown in the dialog prompting users if they want to clear everything */
+"Are you sure you want to clear all of your data? This will also close all open tabs." = "Ar tikrai norite išvalyti visus savo duomenis? Tuo pačiu bus užvertos visos atidarytos kortelės.";
+
+/* Used as a button label in the dialog to cancel clear private data dialog */
+"Cancel" = "Atsisakyti";
+
+/* Used as a button label in the dialog to Clear private data dialog */
+"Clear" = "Valyti";
+
+/* Title of the Clear private data dialog. */
+"Clear Everything" = "Valyti viską";
+

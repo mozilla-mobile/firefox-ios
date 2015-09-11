@@ -1,0 +1,21 @@
+/* Header for the list of devices table */
+"Available devices:" = "Mevcut cihazlar:";
+
+/* Close button in top navigation bar */
+"Close" = "Yopish";
+
+/* See http://mzl.la/1ISlXnU */
+"Please open Firefox, go to Settings and sign in to continue." = "Davom etish uchun Firefox’ni oching, \"Sozlamalar\"ga o‘ting va hisobingizga kiring.";
+
+/* Navigation bar button to Send the current page to a device */
+"Send" = "Gönder";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"Send Tab" = "Sekmeyi gönder";
+
+/* See http://mzl.la/1ISlXnU */
+"You are not signed in to your Firefox Account." = "Siz Firefox hisobiga kirmagansiz.";
+
+/* Error message shown in the remote tabs panel */
+"You don't have any other devices connected to this Firefox Account available to sync." = "Sizning sinxronlash uchun ushbu Firefox hisobi’ga ulanadigan boshqa qurilmalaringiz yo‘q.";
+

@@ -1,0 +1,33 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "រក​មើល​ទំព័រ​បណ្ដាញ​ច្រើន​​នៅ​ពេល​ជាមួយ​គ្នា​ដោយ​ប្រើ​ផ្ទាំង។";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "ភ្ជាប់ Firefox គ្រប់​កន្លែង​ដែល​អ្នក​​ប្រើ​វា។";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "ប្ដូរ​តាម​បំណង";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox និង​ពពក";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "ស្លាយ​ណែនាំ %1$@ of %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "រៀបចំ";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "ប្ដូរ​លក្ខណៈ Firefox ផ្ទាល់ខ្លួន​​តាម​មធ្យោបាយ​ដែល​អ្នក​ចូល​ចិត្ត​នៅ​ក្នុង​ការ​កំណត់។";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "ចូល​ទៅ Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "ចាប់ផ្ដើម​រក​មើល";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "ប៊ូតុង​ការ​កំណត់​គឺ​ស្ថិត​នៅ​​បន្ទះ​​ផ្ទាំង​ចាប់ផ្ដើម។";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "ប៊ូតុង​បង្ហាញ​ផ្ទាំង​គឺ​នៅ​បន្ទាប់​ប្រឡោះ​អត្ថបទ​ស្វែងរក និង​អាសយដ្ឋាន និង​បង្ហាញ​ចំនួន​​ផ្ទាំង​ដែល​បើក​បច្ចុប្បន្ន។";
+

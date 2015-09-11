@@ -1,0 +1,33 @@
+/* See http://mzl.la/1T8gxwo */
+"Browse multiple Web pages at the same time with tabs." = "Brabhsáil leathanaigh éagsúla i gcluaisíní.";
+
+/* See http://mzl.la/1T8gxwo */
+"Connect Firefox everywhere you use it." = "Ceangail Firefox gach áit a n-úsáideann tú é.";
+
+/* See http://mzl.la/1T8gxwo */
+"Customize" = "Saincheapadh";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"Firefox and the cloud" = "Firefox agus an néal";
+
+/* String spoken by assistive technology (like VoiceOver) stating on which page of the intro wizard we currently are. E.g. Introductory slide 1 of 3 */
+"Introductory slide %@ of %@" = "Sleamhnán fáilte %1$@ as %2$@";
+
+/* See http://mzl.la/1T8gxwo */
+"Organize" = "Eagrú";
+
+/* See http://mzl.la/1T8gxwo */
+"Personalize your Firefox just the way you like in Settings." = "Cuir Firefox in oiriúint duit féin sna Socruithe.";
+
+/* See http://mzl.la/1T8gxwo */
+"Sign in to Firefox" = "Logáil isteach i bhFirefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Tosaigh Brabhsáil";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Settings button is at the beginning of the Tabs Tray." = "Tá cnaipe na Socruithe ag barr Thráidire na gCluaisíní.";
+
+/* Accessibility label for an image. See http://mzl.la/1T8gxwo */
+"The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs." = "Tá an cnaipe 'Taispeáin Cluaisíní' in aice leis an mbosca Seoladh agus Cuardach, agus taispeánann sé líon na gcluaisíní oscailte.";
+
