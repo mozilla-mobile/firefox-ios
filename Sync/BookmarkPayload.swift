@@ -32,19 +32,14 @@ public enum BookmarkType: String {
             fallthrough
         case microsummary:
             result = BookmarkPayload(json)
-            break
         case folder:
             result = FolderPayload(json)
-            break
         case livemark:
             result = LivemarkPayload(json)
-            break
         case separator:
             result = SeparatorPayload(json)
-            break
         case query:
             result = BookmarkQueryPayload(json)
-            break
         case item:
             return nil
         }
@@ -301,7 +296,7 @@ public class BookmarkBasePayload: CleartextPayloadJSON {
             return false
         }
 
-        if self["deleted"].isBool && self["deleted"].asBool ?? false {
+        if self["deleted"].asBool ?? false {
             return true
         }
 
