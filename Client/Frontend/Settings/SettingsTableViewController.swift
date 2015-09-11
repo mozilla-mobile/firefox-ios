@@ -221,8 +221,9 @@ private class SyncNowSetting: WithAccountSetting {
 
     override var status: NSAttributedString? {
         if let timestamp = profile.prefs.timestampForKey(PrefsKeys.KeyLastSyncFinishTime) {
-            let lastSyncPrefix = NSLocalizedString("Last synced", comment: "Last synced prefix beside Sync Now setting option")
-            let attributedString = NSMutableAttributedString(string: "\(lastSyncPrefix) \(NSDate.fromTimestamp(timestamp).toRelativeTimeString())")
+            let label = NSLocalizedString("Last synced: %@", comment: "Last synced time title beside Sync Now setting option. Argument is the relative date string.")
+            let formattedLabel = String(format: label, NSDate.fromTimestamp(timestamp).toRelativeTimeString())
+            let attributedString = NSMutableAttributedString(string: formattedLabel)
             let attributes = [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)]
             let range = NSMakeRange(0, attributedString.length)
             attributedString.setAttributes(attributes, range: range)
