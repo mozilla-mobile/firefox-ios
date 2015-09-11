@@ -137,9 +137,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(application: UIApplication) {
         self.profile?.syncManager.endTimedSyncs()
 
-        let taskId = application.beginBackgroundTaskWithExpirationHandler { _ in }
-        self.profile?.shutdown()
-        application.endBackgroundTask(taskId)
+        var taskId: UIBackgroundTaskIdentifier = 0
+        taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
+            log.warning("Running out of background time, but we have a profile shutdown pending.")
+            application.endBackgroundTask(taskId)
+        }
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+            self.profile?.shutdown()
+            application.endBackgroundTask(taskId)
+        }
     }
 
     private func setUpWebServer(profile: Profile) {
