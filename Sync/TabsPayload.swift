@@ -59,8 +59,15 @@ public class TabsPayload: CleartextPayloadJSON {
     }
 
     override public func isValid() -> Bool {
-        return super.isValid() &&
-               self["clientName"].isString &&
+        if !super.isValid() {
+            return false
+        }
+
+        if self["deleted"].asBool ?? false {
+            return true
+        }
+
+        return self["clientName"].isString &&
                self["tabs"].isArray
     }
 
