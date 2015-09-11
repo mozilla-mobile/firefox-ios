@@ -68,6 +68,9 @@ class BrowserViewController: UIViewController {
     private var footerBackground: UIView!
     private var topTouchArea: UIButton!
 
+    // Backdrop used for displaying greyed background for private tabs
+    private var webViewContainerBackdrop: UIView!
+
     private var scrollController = BrowserScrollingController()
 
     private var keyboardState: KeyboardState?
@@ -190,7 +193,8 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        privateTab.webView?.alpha = 0
+        webViewContainerBackdrop.alpha = 1
+        webViewContainer.alpha = 0
         urlBar.locationView.alpha = 0
     }
 
@@ -198,9 +202,12 @@ class BrowserViewController: UIViewController {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
         UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-            self.tabManager.selectedTab?.webView?.alpha = 1
+            self.webViewContainer.alpha = 1
             self.urlBar.locationView.alpha = 1
-        }, completion: nil)
+            self.view.backgroundColor = UIColor.clearColor()
+        }, completion: { _ in
+            self.webViewContainerBackdrop.alpha = 0
+        })
     }
 
     deinit {
@@ -222,6 +229,11 @@ class BrowserViewController: UIViewController {
         headerBackdrop = UIView()
         headerBackdrop.backgroundColor = UIColor.whiteColor()
         view.addSubview(headerBackdrop)
+
+        webViewContainerBackdrop = UIView()
+        webViewContainerBackdrop.backgroundColor = UIColor.grayColor()
+        webViewContainerBackdrop.alpha = 0
+        view.addSubview(webViewContainerBackdrop)
 
         webViewContainer = UIView()
         view.addSubview(webViewContainer)
@@ -305,6 +317,10 @@ class BrowserViewController: UIViewController {
 
         headerBackdrop.snp_makeConstraints { make in
             make.edges.equalTo(self.header)
+        }
+
+        webViewContainerBackdrop.snp_makeConstraints { make in
+            make.edges.equalTo(webViewContainer)
         }
     }
 
