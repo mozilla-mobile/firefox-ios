@@ -8,6 +8,8 @@ import AVFoundation
 import XCGLogger
 import Breakpad
 
+private let log = Logger.browserLogger
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
