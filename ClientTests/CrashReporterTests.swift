@@ -7,6 +7,8 @@ import XCTest
 import Client
 
 class MockCrashReporter: CrashReporter {
+    var previouslyCrashed = false
+
     var didStart = false
     var didStop = false
     var uploadParameters = [String: String]()
@@ -14,6 +16,10 @@ class MockCrashReporter: CrashReporter {
 
     func start(onCurrentThread: Bool) {
         didStart = true
+    }
+
+    func resetPreviousCrashState() {
+        previouslyCrashed = false
     }
 
     func stop() {

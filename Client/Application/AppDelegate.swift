@@ -6,6 +6,7 @@ import Shared
 import Storage
 import AVFoundation
 import XCGLogger
+import Breakpad
 
 private let log = Logger.browserLogger
 
