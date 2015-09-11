@@ -1,0 +1,3 @@
+[submodule "Externals/Nimble"]
+	path = Externals/Nimble
+	url = https://github.com/quick-bdd/Nimble.git

@@ -1,0 +1,59 @@
+<team id="8">
+    <players>
+        <coach>
+            <name>Terry Collins</name>
+            <experience>
+                <years>1</years>
+                <teams>
+                    <team>53</team>
+                    <team>12</team>
+                </teams>
+            </experience>
+        </coach>
+        
+        <player number="7">
+            <name>Jose Reyes</name>
+            <position>SS</position>
+        </player>
+        
+        <player number="16">
+            <name>Angel Pagan</name>
+            <position>CF</position>
+        </player>
+        
+        <player number="5">
+            <name>David Wright</name>
+            <position>3B</position>
+        </player>
+        
+        <player number="29">
+            <name>Ike Davis</name>
+            <position>1B</position>
+        </player>
+        
+        <player number="21">
+            <name>Lucas Duda</name>
+            <position>RF</position>
+        </player>
+        
+        <player number="44">
+            <name>Jason Bay</name>
+            <position>LF</position>
+        </player>
+        
+        <player number="30">
+            <name>Josh Thole</name>
+            <position>C</position>
+        </player>
+        
+        <player number="2">
+            <name>Justin Turner</name>
+            <position>2B</position>
+        </player>
+        
+        <player number="43">
+            <name>R.A. Dickey</name>
+            <position>SP</position>
+        </player>
+    </players>
+</team>
