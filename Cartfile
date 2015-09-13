@@ -9,6 +9,6 @@ github "rs/SDWebImage"              "master"           # To get the fix for libw
 github "Masonry/Snap"               "Swift-2.0"
 github "st3fanSQLite.swift"  "swift-2"
 github "CEWendel/SWTableViewCell"                      # Implicit: latest tag.
-github "drmohundro/SWXMLHash"       "xcode-7.0"        # So we get Swift 2.0 fixes.
+github "st3fan/SWXMLHash"       "xcode-7.0"        # So we get Swift 2.0 fixes.
 github "DaveWoodCom/XCGLogger"      "swift_2.0"        # Previously: swift_1.2
 github "sleroux/google-breakpad-ios" "master"
