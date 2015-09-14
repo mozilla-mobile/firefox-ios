@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 import WebKit
 import UIKit
 
@@ -29,6 +30,9 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     private func clearPrivateData(clearables: Set<Clearable>) {
+        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+        let lastTabLabel = webView.title!.isEmpty ? "home" : webView.title!
+
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Clear Private Data")
@@ -45,7 +49,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel("home")
+        tester().tapViewWithAccessibilityLabel(lastTabLabel)
     }
 
     func visitSites(noOfSites noOfSites: Int) -> [(title: String, domain: String, url: String)] {
@@ -124,5 +128,55 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
         XCTAssertTrue(tester().viewExistsWithLabel(url1), "Expected to not have removed history row \(url1)")
         XCTAssertTrue(tester().viewExistsWithLabel(url2), "Expected to not have removed history row \(url2)")
+    }
+
+    func testClearsCookies() {
+        tester().tapViewWithAccessibilityIdentifier("url")
+        let url = "\(webRoot)/numberedPage.html?page=1"
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
+
+        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+
+        // Set and verify a dummy cookie value.
+        setCookies(webView, cookie: "foo=bar")
+        var cookies = getCookies(webView)
+        XCTAssertEqual(cookies.cookie, "foo=bar")
+        XCTAssertEqual(cookies.localStorage, "foo=bar")
+        XCTAssertEqual(cookies.sessionStorage, "foo=bar")
+
+        // Verify that cookies are not cleared when Cookies is deselected.
+        clearPrivateData(AllClearables.subtract([Clearable.Cookies]))
+        cookies = getCookies(webView)
+        XCTAssertEqual(cookies.cookie, "foo=bar")
+        XCTAssertEqual(cookies.localStorage, "foo=bar")
+        XCTAssertEqual(cookies.sessionStorage, "foo=bar")
+
+        // Verify that cookies are cleared when Cookies is selected.
+        clearPrivateData([Clearable.Cookies])
+        cookies = getCookies(webView)
+        XCTAssertEqual(cookies.cookie, "")
+        XCTAssertNil(cookies.localStorage)
+        XCTAssertNil(cookies.sessionStorage)
+    }
+
+    private func setCookies(webView: WKWebView, cookie: String) {
+        let expectation = expectationWithDescription("Set cookie")
+        webView.evaluateJavaScript("document.cookie = \"\(cookie)\"; localStorage.cookie = \"\(cookie)\"; sessionStorage.cookie = \"\(cookie)\";") { result, _ in
+            expectation.fulfill()
+        }
+        waitForExpectationsWithTimeout(10, handler: nil)
+    }
+
+    private func getCookies(webView: WKWebView) -> (cookie: String, localStorage: String?, sessionStorage: String?) {
+        var cookie: (String, String?, String?)!
+        let expectation = expectationWithDescription("Got cookie")
+        webView.evaluateJavaScript("JSON.stringify([document.cookie, localStorage.cookie, sessionStorage.cookie])") { result, _ in
+            let cookies = JSON.parse(result as! String).asArray!
+            cookie = (cookies[0].asString!, cookies[1].asString, cookies[2].asString)
+            expectation.fulfill()
+        }
+        waitForExpectationsWithTimeout(10, handler: nil)
+        return cookie
     }
 }
