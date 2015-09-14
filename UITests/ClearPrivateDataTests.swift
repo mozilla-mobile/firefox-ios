@@ -160,6 +160,29 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertNil(cookies.sessionStorage)
     }
 
+    @available(iOS 9.0, *)
+    func testClearsCache() {
+        let cachedServer = CachedPageServer()
+        let cacheRoot = cachedServer.start()
+        let url = "\(cacheRoot)/cachedPage.html"
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+        tester().waitForWebViewElementWithAccessibilityLabel("Cache test")
+
+        let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+        let requests = cachedServer.requests
+
+        // Verify that clearing non-cache items will keep the page in the cache.
+        clearPrivateData(AllClearables.subtract([Clearable.Cache]))
+        webView.reload()
+        XCTAssertEqual(cachedServer.requests, requests)
+
+        // Verify that clearing the cache will fire a new request.
+        clearPrivateData([Clearable.Cache])
+        webView.reload()
+        XCTAssertEqual(cachedServer.requests, requests + 1)
+    }
+
     private func setCookies(webView: WKWebView, cookie: String) {
         let expectation = expectationWithDescription("Set cookie")
         webView.evaluateJavaScript("document.cookie = \"\(cookie)\"; localStorage.cookie = \"\(cookie)\"; sessionStorage.cookie = \"\(cookie)\";") { result, _ in
@@ -178,5 +201,25 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         }
         waitForExpectationsWithTimeout(10, handler: nil)
         return cookie
+    }
+}
+
+/// Server that keeps track of requests.
+private class CachedPageServer {
+    var requests = 0
+
+    func start() -> String {
+        let webServer = GCDWebServer()
+        webServer.addHandlerForMethod("GET", path: "/cachedPage.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            self.requests++
+            return GCDWebServerDataResponse(HTML: "<html><head><title>Cached page</title></head><body>Cache test</body></html>")
+        }
+
+        webServer.startWithPort(0, bonjourName: nil)
+
+        // We use 127.0.0.1 explicitly here, rather than localhost, in order to avoid our
+        // history exclusion code (Bug 1188626).
+        let webRoot = "http://127.0.0.1:\(webServer.port)"
+        return webRoot
     }
 }
