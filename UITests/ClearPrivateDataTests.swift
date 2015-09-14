@@ -6,6 +6,17 @@ import Foundation
 import WebKit
 import UIKit
 
+// Needs to be in sync with Client Clearables.
+private enum Clearable: String {
+    case History = "Browsing History"
+    case Logins = "Saved Logins"
+    case Cache = "Cache"
+    case OfflineData = "Offline Website Data"
+    case Cookies = "Cookies"
+}
+
+private let AllClearables = Set([Clearable.History, Clearable.Logins, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
+
 class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     private var webRoot: String!
 
@@ -16,16 +27,22 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     override func tearDown() {
         BrowserUtils.clearHistoryItems(tester())
     }
-    
-    func openClearPrivateDataDialog(shouldClear shouldClear: Bool) {
+
+    private func clearPrivateData(clearables: Set<Clearable>) {
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Clear Private Data")
 
-        if shouldClear {
-            tester().tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
+        // Disable all items that we don't want to clear.
+        for clearable in AllClearables.subtract(clearables) {
+            // If we don't wait here, setOn:forSwitchWithAccessibilityLabel tries to use the UITableViewCell
+            // instead of the UISwitch. KIF bug?
+            tester().waitForViewWithAccessibilityLabel(clearable.rawValue)
+
+            tester().setOn(false, forSwitchWithAccessibilityLabel: clearable.rawValue)
         }
 
+        tester().tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
         tester().tapViewWithAccessibilityLabel("Settings")
         tester().tapViewWithAccessibilityLabel("Done")
         tester().tapViewWithAccessibilityLabel("home")
@@ -63,18 +80,18 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         // Only one will be found -- we collapse by domain.
         anyDomainsExistOnTopSites(domains)
 
-        openClearPrivateDataDialog(shouldClear: true)
+        clearPrivateData([Clearable.History])
 
         XCTAssertFalse(tester().viewExistsWithLabel(urls[0].title), "Expected to have removed top site panel \(urls[0])")
         XCTAssertFalse(tester().viewExistsWithLabel(urls[1].title), "We shouldn't find the other URL, either.")
     }
 
-    func testCancelDoesNotClearTopSitesPanel() {
+    func testDisabledHistoryDoesNotClearTopSitesPanel() {
         let urls = visitSites(noOfSites: 2)
         let domains = Set<String>(urls.map { $0.domain })
 
         anyDomainsExistOnTopSites(domains)
-        openClearPrivateDataDialog(shouldClear: false)
+        clearPrivateData(AllClearables.subtract([Clearable.History]))
         anyDomainsExistOnTopSites(domains)
     }
 
@@ -87,14 +104,14 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertTrue(tester().viewExistsWithLabel(url1), "Expected to have history row \(url1)")
         XCTAssertTrue(tester().viewExistsWithLabel(url2), "Expected to have history row \(url2)")
 
-        openClearPrivateDataDialog(shouldClear: true)
+        clearPrivateData([Clearable.History])
 
         tester().tapViewWithAccessibilityLabel("History")
         XCTAssertFalse(tester().viewExistsWithLabel(url1), "Expected to have removed history row \(url1)")
         XCTAssertFalse(tester().viewExistsWithLabel(url2), "Expected to have removed history row \(url2)")
     }
 
-    func testCancelDoesNotClearHistoryPanel() {
+    func testDisabledHistoryDoesNotClearHistoryPanel() {
         let urls = visitSites(noOfSites: 2)
 
         tester().tapViewWithAccessibilityLabel("History")
@@ -103,7 +120,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertTrue(tester().viewExistsWithLabel(url1), "Expected to have history row \(url1)")
         XCTAssertTrue(tester().viewExistsWithLabel(url2), "Expected to have history row \(url2)")
 
-        openClearPrivateDataDialog(shouldClear: false)
+        clearPrivateData(AllClearables.subtract([Clearable.History]))
 
         XCTAssertTrue(tester().viewExistsWithLabel(url1), "Expected to not have removed history row \(url1)")
         XCTAssertTrue(tester().viewExistsWithLabel(url2), "Expected to not have removed history row \(url2)")
