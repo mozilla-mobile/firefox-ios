@@ -9,6 +9,16 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
+/**
+ * Hierarchy:
+ * - BookmarkBasePayload
+ *   \_ FolderPayload
+ *      \_ LivemarkPayload
+ *   \_ SeparatorPayload
+ *   \_ BookmarkPayload
+ *      \_ BookmarkQueryPayload
+ */
+
 public enum BookmarkType: String {
     case livemark
     case separator
