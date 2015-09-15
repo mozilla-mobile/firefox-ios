@@ -53,6 +53,76 @@ private let BookmarksStorageVersion = 2
  * modified timestamp to allow for resuming a batch in the case of a conflicting
  * write, detected via X-I-U-S.
  */
+
+private func itemFromRecord(record: Record<BookmarkBasePayload>) -> BookmarkMirrorItem? {
+    guard let itemable = record as? MirrorItemable else {
+        return nil
+    }
+    return itemable.toMirrorItem(record.modified)
+}
+
+public class BookmarksMirrorer {
+    private let downloader: BatchingDownloader<BookmarkBasePayload>
+    private let storage: BookmarkMirrorStorage
+    private let batchSize: Int
+
+    public init(storage: BookmarkMirrorStorage, client: Sync15CollectionClient<BookmarkBasePayload>, basePrefs: Prefs, collection: String, batchSize: Int=100) {
+        self.storage = storage
+        self.downloader = BatchingDownloader(collectionClient: client, basePrefs: basePrefs, collection: collection)
+        self.batchSize = batchSize
+    }
+
+    // TODO
+    public func storageFormatDidChange() {
+    }
+
+    // TODO
+    public func onWipeWasAppliedToStorage() {
+    }
+
+    private func applyRecordsFromBatcher() -> Success {
+        let retrieved = self.downloader.retrieve()
+        let records = retrieved.flatMap { ($0.payload as? MirrorItemable)?.toMirrorItem($0.modified) }
+        if records.isEmpty {
+            log.debug("Got empty batch.")
+            return succeed()
+        }
+
+        log.debug("Applying \(records.count) downloaded bookmarks.")
+        return self.storage.applyRecords(records)
+    }
+
+    public func go(info: InfoCollections, greenLight: () -> Bool) -> Success {
+        if !greenLight() {
+            log.info("Green light turned red. Stopping mirror operation.")
+            return succeed()
+        }
+
+        return self.downloader.go(info, limit: self.batchSize)
+                              .bind { result in
+            guard let end = result.successValue else {
+                log.warning("Got failure: \(result.failureValue!)")
+                return succeed()
+            }
+            switch end {
+            case .Complete:
+                log.info("Done with batched mirroring.")
+                return self.applyRecordsFromBatcher()
+            case .Incomplete:
+                log.debug("Running another batch.")
+                // This recursion is fine because Deferred always pushes callbacks onto a queue.
+                return self.applyRecordsFromBatcher() >>> { self.go(info, greenLight: greenLight) }
+            case .Interrupted:
+                log.info("Interrupted. Aborting batching this time.")
+                return succeed()
+            case .NoNewData:
+                log.info("No new data. No need to continue batching.")
+                return succeed()
+            }
+        }
+    }
+}
+
 class BatchingDownloader<T: CleartextPayloadJSON> {
     let client: Sync15CollectionClient<T>
     let collection: String
