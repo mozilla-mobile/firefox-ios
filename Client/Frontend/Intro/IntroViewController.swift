@@ -30,10 +30,14 @@ struct IntroViewControllerUX {
 
     static let Card1Title = NSLocalizedString("Organize", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     static let Card2Title = NSLocalizedString("Customize", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    static let Card4Title = NSLocalizedString("Send to Firefox", tableName: "Intro", comment: "See http://mzl.la/1if9ODp")
+    static let Card5Title = NSLocalizedString("Make it your browser", tableName: "Intro", comment: "See http://mzl.la/1if9ODp")
 
-    static let Card1Text = NSLocalizedString("Browse multiple Web pages at the same time with tabs.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
-    static let Card2Text = NSLocalizedString("Personalize your Firefox just the way you like in Settings.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
-    static let Card3Text = NSLocalizedString("Connect Firefox everywhere you use it.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    static let Card1Text = NSLocalizedString("Easily switch between open pages with tabs.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    static let Card2Text = NSLocalizedString("Personalize things like your default search engine in Settings.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    static let Card3Text = NSLocalizedString("Connect Firefox everywhere you use it.", tableName: "Intro", comment: "ee http://mzl.la/1T8gxwo")
+    static let Card4Text = NSLocalizedString("Use the share sheet to send links from other apps to Firefox.", tableName: "Intro", comment: "See http://mzl.la/1if9ODp")
+    static let Card5Text = NSLocalizedString("Tap, hold and move the Firefox icon into your dock for easy access.", tableName: "Intro", comment: "See http://mzl.la/1if9ODp")
 
     static let Card1ImageLabel = NSLocalizedString("The Show Tabs button is next to the Address and Search text field and displays the current number of open tabs.", tableName: "Intro", comment: "Accessibility label for an image. See http://mzl.la/1T8gxwo")
     static let Card2ImageLabel = NSLocalizedString("The Settings button is at the beginning of the Tabs Tray.", tableName: "Intro", comment: "Accessibility label for an image. See http://mzl.la/1T8gxwo")
