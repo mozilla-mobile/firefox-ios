@@ -38,8 +38,8 @@ class BrowserViewController: UIViewController, UIActivityItemSource {
     var homePanelController: HomePanelViewController?
     var webViewContainer: UIView!
     var urlBar: URLBarView!
-
     var readerModeBar: ReaderModeBarView?
+    
     private var statusBarOverlay: UIView!
     private var toolbar: BrowserToolbar?
     private var searchController: SearchViewController?
