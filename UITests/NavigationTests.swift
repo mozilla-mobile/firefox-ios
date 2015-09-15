@@ -18,7 +18,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
     func testNavigation() {
         tester().tapViewWithAccessibilityIdentifier("url")
         var textView = tester().waitForViewWithAccessibilityLabel("Address and Search") as? UITextField
-        XCTAssertTrue(textView!.text.isEmpty, "Text is empty")
+        XCTAssertTrue(textView!.text!.isEmpty, "Text is empty")
         XCTAssertNotNil(textView!.placeholder, "Text view has a placeholder to show when its empty")
 
         let url1 = "\(webRoot)/numberedPage.html?page=1"
@@ -56,7 +56,7 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
 
         // now open another tab and test it works too
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        var addTabButton = tester().waitForViewWithAccessibilityLabel("Add Tab") as? UIButton
+        let addTabButton = tester().waitForViewWithAccessibilityLabel("Add Tab") as? UIButton
         addTabButton?.tap()
         tester().waitForViewWithAccessibilityLabel("Web content")
         let url2 = "\(webRoot)/scrollablePage.html?page=2"
@@ -69,6 +69,49 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
 
         tester().tapStatusBar()
         tester().waitForWebViewElementWithAccessibilityLabel("Top")
+    }
+
+    func testTapSignInShowsFxAFromRemoteTabPanel() {
+        tester().tapViewWithAccessibilityLabel("Synced tabs")
+        tester().tapViewWithAccessibilityLabel("Sign in")
+        tester().waitForViewWithAccessibilityLabel("Web content")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().waitForViewWithAccessibilityLabel("Sign in")
+    }
+
+    func testTapSignInShowsFxAFromTour() {
+        // Launch the tour from the settings
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("Show Tour")
+        tester().waitForAnimationsToFinish()
+
+        // Swipe to the end of the tour
+        tester().swipeViewWithAccessibilityLabel("Intro Tour Carousel", inDirection: KIFSwipeDirection.Left)
+        tester().swipeViewWithAccessibilityLabel("Intro Tour Carousel", inDirection: KIFSwipeDirection.Left)
+
+        tester().tapViewWithAccessibilityLabel("Sign in to Firefox")
+        tester().waitForViewWithAccessibilityLabel("Web content")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("home")
+    }
+
+    func testTapSigninShowsFxAFromSettings() {
+        // Navigation to the settings to select the signin option
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("Sign in")
+        tester().waitForViewWithAccessibilityLabel("Web content")
+
+        // Go back to the home screen
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("home")
     }
 
     override func tearDown() {

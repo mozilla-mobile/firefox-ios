@@ -10,16 +10,16 @@ class SyncCommandsTable<T>: GenericTable<SyncCommand> {
     override var name: String { return TableSyncCommands }
     override var version: Int { return 1 }
 
-    override var rows: String { return join(",", [
+    override var rows: String { return [
         "id INTEGER PRIMARY KEY AUTOINCREMENT",
         "client_guid TEXT NOT NULL",
         "value TEXT NOT NULL",
-        ])
+        ].joinWithSeparator(",")
     }
 
 
     override func getInsertAndArgs(inout item: SyncCommand) -> (String, [AnyObject?])? {
-        var args: [AnyObject?] = [item.clientGUID!, item.value]
+        let args: [AnyObject?] = [item.clientGUID!, item.value]
         return ("INSERT INTO \(name) (client_guid, value) VALUES (?, ?)", args)
     }
 

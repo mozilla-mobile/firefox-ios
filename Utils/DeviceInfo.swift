@@ -13,13 +13,13 @@ public class DeviceInfo {
         uname(&systemInfo)
 
         let machine = systemInfo.machine
-        let mirror = reflect(machine)
+        let mirror = Mirror(reflecting: machine)
         var identifier = ""
 
         // Parses the string for the model name via NSUTF8StringEncoding, refer to 
         // http://stackoverflow.com/questions/26028918/ios-how-to-determine-iphone-model-in-swift
-        for i in 0..<mirror.count {
-            if let value = mirror[i].1.value as? Int8 where value != 0 {
+        for child in mirror.children.enumerate() {
+            if let value = child.1.value as? Int8 where value != 0 {
                 identifier.append(UnicodeScalar(UInt8(value)))
             }
         }
@@ -63,6 +63,6 @@ public class DeviceInfo {
         // 1. http://stackoverflow.com/questions/21603475/how-can-i-detect-if-the-iphone-my-app-is-on-is-going-to-use-a-simple-transparen
         // 2. https://gist.github.com/conradev/8655650
         // Thus, testing has to take place on actual devices.
-        return !contains(lowGraphicsQualityModels, specificModelName)
+        return !lowGraphicsQualityModels.contains(specificModelName)
     }
 }

@@ -25,15 +25,14 @@ public extension Logger {
     :returns: Directory path where log files are stored
     */
     static func logFileDirectoryPath() -> String? {
-        if let cacheDir = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true).first as? String {
+        if let cacheDir = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true).first {
             let logDir = "\(cacheDir)/Logs"
             if !NSFileManager.defaultManager().fileExistsAtPath(logDir) {
-                var error: NSError?
-                NSFileManager.defaultManager().createDirectoryAtPath(logDir, withIntermediateDirectories: false, attributes: nil, error: &error)
-                if let error = error {
-                    return nil
-                } else {
+                do {
+                    try NSFileManager.defaultManager().createDirectoryAtPath(logDir, withIntermediateDirectories: false, attributes: nil)
                     return logDir
+                } catch _ as NSError {
+                    return nil
                 }
             } else {
                 return logDir
@@ -44,7 +43,7 @@ public extension Logger {
     }
 
     static private func fileLoggerWithName(filename: String) -> XCGLogger {
-        var log = XCGLogger()
+        let log = XCGLogger()
         if let logDir = Logger.logFileDirectoryPath() {
             let fileDestination = XCGFileLogDestination(owner: log, writeToFile: "\(logDir)/\(filename).log", identifier: "com.mozilla.firefox.filelogger.\(filename)")
             log.addLogDestination(fileDestination)

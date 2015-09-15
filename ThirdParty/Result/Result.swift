@@ -9,13 +9,13 @@
 import Foundation
 //import Box
 
-public enum Result<T> {
-    case Failure(ErrorType)
+public enum Maybe<T> {
+    case Failure(MaybeErrorType)
 
     // TODO: Get rid of Box hack at some point after 6.3
     case Success(Box<T>)
 
-    public init(failure: ErrorType) {
+    public init(failure: MaybeErrorType) {
         self = .Failure(failure)
     }
 
@@ -30,7 +30,7 @@ public enum Result<T> {
         }
     }
 
-    public var failureValue: ErrorType? {
+    public var failureValue: MaybeErrorType? {
         switch self {
         case .Success: return nil
         case let .Failure(error): return error
@@ -51,14 +51,14 @@ public enum Result<T> {
         }
     }
 
-    public func map<U>(f: T -> U) -> Result<U> {
+    public func map<U>(f: T -> U) -> Maybe<U> {
         switch self {
         case let .Failure(error): return .Failure(error)
         case let .Success(value): return .Success(Box(f(value.value)))
         }
     }
 
-    public func bind<U>(f: T -> Result<U>) -> Result<U> {
+    public func bind<U>(f: T -> Maybe<U>) -> Maybe<U> {
         switch self {
         case let .Failure(error): return .Failure(error)
         case let .Success(value): return f(value.value)
@@ -66,7 +66,7 @@ public enum Result<T> {
     }
 }
 
-extension Result: Printable {
+extension Maybe: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .Failure(error): return "Result.Failure(\(error))"

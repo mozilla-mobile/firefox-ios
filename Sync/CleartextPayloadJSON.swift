@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 public class CleartextPayloadJSON: JSON {
-    public init(_ jsonString: String) {
+    required public init(_ jsonString: String) {
         super.init(JSON.parse(jsonString))
     }
 

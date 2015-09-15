@@ -8,43 +8,7 @@ import Shared
 
 private let log = Logger.syncLogger
 
-public enum QuerySort {
-    case None, LastVisit, Frecency
-}
-
-public enum FilterType {
-    case ExactUrl
-    case Url
-    case Guid
-    case Id
-    case None
-}
-
-public class QueryOptions {
-    // A filter string to apploy to the query
-    public var filter: AnyObject? = nil
-
-    // Allows for customizing how the filter is applied (i.e. only urls or urls and titles?)
-    public var filterType: FilterType = .None
-
-    // The way to sort the query
-    public var sort: QuerySort = .None
-
-    public init(filter: AnyObject? = nil, filterType: FilterType = .None, sort: QuerySort = .None) {
-        self.filter = filter
-        self.filterType = filterType
-        self.sort = sort
-    }
-}
-
-let DBCouldNotOpenErrorCode = 200
-
-enum TableResult {
-    case Exists
-    case Created
-    case Updated
-    case Failed
-}
+typealias Args = [AnyObject?]
 
 /* This is a base interface into our browser db. It holds arrays of tables and handles basic creation/updating of them. */
 // Version 1 - Basic history table.
@@ -61,7 +25,7 @@ public class BrowserDB {
     private let files: FileAccessor
     private let filename: String
     private let secretKey: String?
-    private let schemaTable: SchemaTable<TableInfo>
+    private let schemaTable: SchemaTable
 
     private var initialized = [String]()
 
@@ -76,7 +40,7 @@ public class BrowserDB {
         self.schemaTable = SchemaTable()
         self.secretKey = secretKey
 
-        let file = files.getAndEnsureDirectory()!.stringByAppendingPathComponent(filename)
+        let file = ((try! files.getAndEnsureDirectory()) as NSString).stringByAppendingPathComponent(filename)
         db = SwiftData(filename: file, key: secretKey, prevKey: nil)
 
         if AppConstants.BuildChannel == .Developer && secretKey != nil {
@@ -88,7 +52,7 @@ public class BrowserDB {
     }
 
     // Creates a table and writes its table info into the table-table database.
-    private func createTable<T: Table>(db: SQLiteDBConnection, table: T) -> TableResult {
+    private func createTable(db: SQLiteDBConnection, table: Table) -> TableResult {
         log.debug("Try create \(table.name) version \(table.version)")
         if !table.create(db, version: table.version) {
             // If creating failed, we'll bail without storing the table info
@@ -102,7 +66,7 @@ public class BrowserDB {
 
     // Updates a table and writes its table into the table-table database.
     // Exposed internally for testing.
-    func updateTable<T: Table>(db: SQLiteDBConnection, table: T) -> TableResult {
+    func updateTable(db: SQLiteDBConnection, table: Table) -> TableResult {
         log.debug("Trying update \(table.name) version \(table.version)")
         var from = 0
         // Try to find the stored version of the table
@@ -138,10 +102,10 @@ public class BrowserDB {
 
     // Utility for table classes. They should call this when they're initialized to force
     // creation of the table in the database.
-    func createOrUpdate<T: Table>(table: T) -> Bool {
+    func createOrUpdate(table: Table) -> Bool {
         log.debug("Create or update \(table.name) version \(table.version).")
         var success = true
-        db = SwiftData(filename: files.getAndEnsureDirectory()!.stringByAppendingPathComponent(self.filename), key: secretKey)
+        db = SwiftData(filename: ((try! files.getAndEnsureDirectory()) as NSString).stringByAppendingPathComponent(self.filename), key: secretKey)
         let doCreate = { (connection: SQLiteDBConnection) -> () in
             switch self.createTable(connection, table: table) {
             case .Created:
@@ -157,7 +121,7 @@ public class BrowserDB {
             }
         }
 
-        if let err = db.transaction({ connection -> Bool in
+        if let _ = db.transaction({ connection -> Bool in
             // If the table doesn't exist, we'll create it
             if !table.exists(connection) {
                 doCreate(connection)
@@ -198,14 +162,19 @@ public class BrowserDB {
             // Note that a backup file might already exist! We append a counter to avoid this.
             var bakCounter = 0
             var bak: String
-            do {
+            repeat {
                 bak = "\(self.filename).bak.\(++bakCounter)"
             } while self.files.exists(bak)
 
-            success = self.files.move(self.filename, toRelativePath: bak)
+            do {
+                try self.files.move(self.filename, toRelativePath: bak)
+                success = true
+            } catch _ {
+                success = false
+            }
             assert(success)
 
-            if let err = db.transaction({ connection -> Bool in
+            if let _ = db.transaction({ connection -> Bool in
                 doCreate(connection)
                 return success
             }) {
@@ -218,7 +187,7 @@ public class BrowserDB {
 
     typealias IntCallback = (connection: SQLiteDBConnection, inout err: NSError?) -> Int
 
-    func withConnection<T>(#flags: SwiftData.Flags, inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> T {
+    func withConnection<T>(flags flags: SwiftData.Flags, inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> T {
         var res: T!
         err = db.withConnection(flags) { connection in
             var err: NSError? = nil
@@ -246,7 +215,7 @@ public class BrowserDB {
 
 extension BrowserDB {
     public class func varlist(count: Int) -> String {
-        return "(" + ", ".join(Array(count: count, repeatedValue: "?")) + ")"
+        return "(" + Array(count: count, repeatedValue: "?").joinWithSeparator(", ") + ")"
     }
 
     enum InsertOperation: String {
@@ -288,13 +257,13 @@ extension BrowserDB {
         // Sanity check.
         assert(values[0].count == variablesPerRow)
 
-        let cols = ", ".join(columns)
+        let cols = columns.joinWithSeparator(", ")
         let queryStart = "\(op.rawValue) INTO \(table) (\(cols)) VALUES "
 
         let varString = BrowserDB.varlist(variablesPerRow)
 
         let insertChunk: [Args] -> Success = { vals -> Success in
-            let valuesString = ", ".join(Array(count: vals.count, repeatedValue: varString))
+            let valuesString = Array(count: vals.count, repeatedValue: varString).joinWithSeparator(", ")
             let args: Args = vals.flatMap { $0 }
             return self.run(queryStart + valuesString, withArgs: args)
         }
@@ -311,14 +280,14 @@ extension BrowserDB {
 
         // There's no real reason why we can't pass the ArraySlice here, except that I don't
         // want to keep fighting Swift.
-        return walk(chunks, { insertChunk(Array($0)) })
+        return walk(chunks, f: { insertChunk(Array($0)) })
     }
 
-    func runWithConnection<T>(block: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> Deferred<Result<T>> {
+    func runWithConnection<T>(block: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> Deferred<Maybe<T>> {
         return DeferredDBOperation(db: db, block: block).start()
     }
 
-    func write(sql: String, withArgs args: Args? = nil) -> Deferred<Result<Int>> {
+    func write(sql: String, withArgs args: Args? = nil) -> Deferred<Maybe<Int>> {
         return self.runWithConnection() { (connection, err) -> Int in
             err = connection.executeChange(sql, withArgs: args)
             if err == nil {
@@ -356,13 +325,13 @@ extension BrowserDB {
         }
 
         if let err = err {
-            return deferResult(DatabaseError(err: err))
+            return deferMaybe(DatabaseError(err: err))
         }
 
         return succeed()
     }
 
-    func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Result<Cursor<T>>> {
+    func runQuery<T>(sql: String, args: Args?, factory: SDRow -> T) -> Deferred<Maybe<Cursor<T>>> {
         return runWithConnection { (connection, err) -> Cursor<T> in
             return connection.executeQuery(sql, factory: factory, withArgs: args)
         }
@@ -372,7 +341,7 @@ extension BrowserDB {
 extension SQLiteDBConnection {
     func tablesExist(names: Args) -> Bool {
         let count = names.count
-        let orClause = join(" OR ", Array(count: count, repeatedValue: "name = ?"))
+        let orClause = Array(count: count, repeatedValue: "name = ?").joinWithSeparator(" OR ")
         let tablesSQL = "SELECT name FROM sqlite_master WHERE type = 'table' AND (\(orClause))"
 
         let res = self.executeQuery(tablesSQL, factory: StringFactory, withArgs: names)

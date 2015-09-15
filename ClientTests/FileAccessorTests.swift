@@ -11,11 +11,11 @@ class FileAccessorTests: XCTestCase {
     private var files: FileAccessor!
 
     override func setUp() {
-        let docPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0] as! String
+        let docPath: NSString = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0]
         files = FileAccessor(rootPath: docPath.stringByAppendingPathComponent("filetest"))
 
-        testDir = files.getAndEnsureDirectory()
-        files.removeFilesInDirectory()
+        testDir = try! files.getAndEnsureDirectory()
+        try! files.removeFilesInDirectory()
     }
 
     func testFileAccessor() {
@@ -25,32 +25,52 @@ class FileAccessorTests: XCTestCase {
         XCTAssertTrue(files.exists("foo"), "File exists")
 
         // Test moving.
-        var success = files.move("foo", toRelativePath: "bar")
-        XCTAssertTrue(success, "Operation successful")
-        XCTAssertFalse(files.exists("foo"), "Old doesn't exist")
-        XCTAssertTrue(files.exists("bar"), "New file exists")
+        do {
+            try files.move("foo", toRelativePath: "bar")
+            XCTAssertFalse(files.exists("foo"), "Old doesn't exist")
+            XCTAssertTrue(files.exists("bar"), "New file exists")
+        } catch {
+            XCTFail("Unable to move 'foo' to 'bar' \(error)")
+        }
 
-        success = files.move("bar", toRelativePath: "foo/bar")
-        XCTAssertFalse(files.exists("bar"), "Old doesn't exist")
-        XCTAssertTrue(files.exists("foo/bar"), "New file exists")
+        do {
+            try files.move("bar", toRelativePath: "foo/bar")
+            XCTAssertFalse(files.exists("bar"), "Old doesn't exist")
+            XCTAssertTrue(files.exists("foo/bar"), "New file exists")
+        } catch {
+            XCTFail("Unable to move 'bar' to 'foo/bar' \(error)")
+        }
 
         // Test removal.
-        XCTAssertTrue(files.exists("foo"), "File exists")
-        success = files.remove("foo")
-        XCTAssertTrue(success, "Operation successful")
-        XCTAssertFalse(files.exists("foo"), "File removed")
+        do {
+            XCTAssertTrue(files.exists("foo"), "File exists")
+            try files.remove("foo")
+            XCTAssertFalse(files.exists("foo"), "File removed")
+        } catch {
+            XCTFail("Unable to remove 'foo' \(error)")
+        }
 
         // Test directory creation and path.
+        do {
         XCTAssertFalse(files.exists("foo"), "Directory doesn't exist")
-        let path = files.getAndEnsureDirectory(relativeDir: "foo")!
-        var isDirectory = ObjCBool(false)
-        NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDirectory)
-        XCTAssertTrue(isDirectory, "Directory exists")
+            let path = try files.getAndEnsureDirectory("foo")
+            var isDirectory = ObjCBool(false)
+            NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDirectory)
+            XCTAssertTrue(isDirectory, "Directory exists")
+        } catch {
+            XCTFail("Unable to find directory 'foo' \(error)")
+        }
     }
 
     private func createFile(filename: String) {
-        let path = testDir.stringByAppendingPathComponent(filename)
-        let success = "foo".writeToFile(path, atomically: false, encoding: NSUTF8StringEncoding)
+        let path = (testDir as NSString).stringByAppendingPathComponent(filename)
+        let success: Bool
+        do {
+            try "foo".writeToFile(path, atomically: false, encoding: NSUTF8StringEncoding)
+            success = true
+        } catch _ {
+            success = false
+        }
         XCTAssertTrue(success, "Wrote to \(path)")
     }
 }

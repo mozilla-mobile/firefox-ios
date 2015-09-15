@@ -36,10 +36,10 @@ public class WeakList<T: AnyObject>: SequenceType {
         items.append(WeakRef(item))
     }
 
-    public func generate() -> GeneratorOf<T> {
+    public func generate() -> AnyGenerator<T> {
         var index = 0
 
-        return GeneratorOf<T> {
+        return anyGenerator(){
             if index >= self.items.count {
                 return nil
             }

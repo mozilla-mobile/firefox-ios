@@ -11,9 +11,11 @@ class ReadingListStorageTestCase: XCTestCase {
     var storage: ReadingListStorage!
 
     override func setUp() {
-        let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first as! String
+        let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first!
         if NSFileManager.defaultManager().fileExistsAtPath("\(path)/ReadingList.db") {
-            if !NSFileManager.defaultManager().removeItemAtPath("\(path)/ReadingList.db", error: nil) {
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath("\(path)/ReadingList.db")
+            } catch _ {
                 XCTFail("Cannot remove old \(path)/ReadingList.db")
             }
         }
@@ -40,7 +42,7 @@ class ReadingListStorageTestCase: XCTestCase {
         switch result1 {
         case .Failure(let error):
             XCTFail(error.description)
-        case .Success(let record):
+        case .Success( _):
             break
         }
 
@@ -48,16 +50,16 @@ class ReadingListStorageTestCase: XCTestCase {
         switch result2 {
         case .Failure(let error):
             XCTFail(error.description)
-        case .Success(let record):
+        case .Success( _):
             XCTAssert(result1.successValue == result2.successValue!)
         }
     }
 
     func testGetUnreadRecords() {
         // Create 3 records, mark the 2nd as read.
-        let createResult1 = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
         let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        let createResult3 = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
         if let record = createResult2.successValue {
             updateRecord(record, unread: false)
         }
@@ -74,9 +76,9 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testGetAllRecords() {
-        let createResult1 = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
         let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        let createResult3 = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
         if let record = createResult2.successValue {
             updateRecord(record, unread: false)
         }
@@ -88,9 +90,9 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testGetNewRecords() {
-        let createResult1 = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        let createResult3 = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
+        createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
         let getAllResult = getAllRecords()
         if let records = getAllResult.successValue {
             XCTAssertEqual(3, records.count)
@@ -103,7 +105,7 @@ class ReadingListStorageTestCase: XCTestCase {
         switch result1 {
         case .Failure(let error):
             XCTFail(error.description)
-        case .Success(let record):
+        case .Success(_):
             break
         }
 
@@ -125,16 +127,16 @@ class ReadingListStorageTestCase: XCTestCase {
     }
 
     func testDeleteAllRecords() {
-        let createResult1 = createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
-        let createResult2 = createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
-        let createResult3 = createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
+        createRecordWithURL("http://localhost/article1", title: "Test 1", addedBy: "Stefan's iPhone")
+        createRecordWithURL("http://localhost/article2", title: "Test 2", addedBy: "Stefan's iPhone")
+        createRecordWithURL("http://localhost/article3", title: "Test 3", addedBy: "Stefan's iPhone")
 
         let getAllResult1 = storage.getAllRecords()
         if let records = getAllResult1.successValue {
             XCTAssertEqual(3, records.count)
         }
 
-        let deleteResult = deleteAllRecords()
+        deleteAllRecords()
 
         let getAllResult2 = getAllRecords()
         if let records = getAllResult2.successValue {
@@ -166,25 +168,25 @@ class ReadingListStorageTestCase: XCTestCase {
 
     // Helpers that croak if the storage call was not succesful
 
-    func createRecordWithURL(url: String, title: String, addedBy: String) -> Result<ReadingListClientRecord> {
+    func createRecordWithURL(url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord> {
         let result = storage.createRecordWithURL(url, title: title, addedBy: addedBy)
         XCTAssertTrue(result.isSuccess)
         return result
     }
 
-    func deleteAllRecords() -> Result<Void> {
+    func deleteAllRecords() -> Maybe<Void> {
         let result = storage.deleteAllRecords()
         XCTAssertTrue(result.isSuccess)
         return result
     }
 
-    func getAllRecords() -> Result<[ReadingListClientRecord]> {
+    func getAllRecords() -> Maybe<[ReadingListClientRecord]> {
         let result = storage.getAllRecords()
         XCTAssertTrue(result.isSuccess)
         return result
     }
 
-    func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Result<ReadingListClientRecord?> {
+    func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?> {
         let result = storage.updateRecord(record, unread: unread)
         XCTAssertTrue(result.isSuccess)
         return result

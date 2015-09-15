@@ -52,7 +52,7 @@ public struct EngineMeta: Equatable {
 
     public static func mapFromJSON(map: [String: JSON]?) -> [String: EngineMeta]? {
         if let map = map {
-            return optFilter(mapValues(map, EngineMeta.fromJSON))
+            return optFilter(mapValues(map, f: EngineMeta.fromJSON))
         }
         return nil
     }
@@ -98,7 +98,7 @@ public struct MetaGlobal: Equatable {
 
     public func enginesPayload() -> JSON {
         if let engines = engines {
-            return JSON(mapValues(engines, { $0.toJSON() }))
+            return JSON(mapValues(engines, f: { $0.toJSON() }))
         }
         return JSON([:])
     }
@@ -117,8 +117,8 @@ public struct MetaGlobal: Equatable {
 public func ==(lhs: MetaGlobal, rhs: MetaGlobal) -> Bool {
     return (lhs.syncID == rhs.syncID) &&
            (lhs.storageVersion == rhs.storageVersion) &&
-           optArrayEqual(lhs.declined, rhs.declined) &&
-           optDictionaryEqual(lhs.engines, rhs.engines)
+           optArrayEqual(lhs.declined, rhs: rhs.declined) &&
+           optDictionaryEqual(lhs.engines, rhs: rhs.engines)
 }
 
 public class GlobalEnvelope: EnvelopeJSON {

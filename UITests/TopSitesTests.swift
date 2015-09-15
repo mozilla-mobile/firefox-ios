@@ -58,6 +58,32 @@ class TopSitesTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
+    func testRemovingSite() {
+        // Load a page
+        tester().tapViewWithAccessibilityIdentifier("url")
+        let url1 = "\(webRoot)/numberedPage.html?page=1"
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
+        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
+
+        // Open top sites
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().tapViewWithAccessibilityLabel("Top sites")
+
+        // Verify the row exists and that the Remove Page button is hidden
+        let row = tester().waitForViewWithAccessibilityLabel("127.0.0.1")
+        tester().waitForAbsenceOfViewWithAccessibilityLabel("Remove page")
+
+        // Long press the row and click the remove button
+        row.longPressAtPoint(CGPointZero, duration: 1)
+        tester().tapViewWithAccessibilityLabel("Remove page")
+
+        // Close editing mode
+        tester().tapViewWithAccessibilityLabel("Done")
+
+        // Close top sites
+        tester().tapViewWithAccessibilityLabel("Cancel")
+    }
+
     override func tearDown() {
         BrowserUtils.resetToAboutHome(tester())
     }

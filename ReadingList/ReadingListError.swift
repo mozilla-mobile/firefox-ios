@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 // TODO This needs to encapsulate an NSError eventually
-public class ReadingListError: ErrorType {
+public class ReadingListError: MaybeErrorType {
     var message: String
     init(_ message: String) {
         self.message = message

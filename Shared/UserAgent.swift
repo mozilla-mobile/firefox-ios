@@ -57,11 +57,13 @@ public class UserAgent {
         let userAgent = webView.stringByEvaluatingJavaScriptFromString("navigator.userAgent")!
 
         // Extract the WebKit version and use it as the Safari version.
-        let webKitVersionRegex = NSRegularExpression(pattern: "AppleWebKit/([^ ]+) ", options: nil, error: nil)!
-        let match = webKitVersionRegex.firstMatchInString(userAgent, options: nil, range: NSRange(location: 0, length: count(userAgent)))
+        let webKitVersionRegex = try! NSRegularExpression(pattern: "AppleWebKit/([^ ]+) ", options: [])
+
+        let match = webKitVersionRegex.firstMatchInString(userAgent, options:[],
+            range: NSMakeRange(0, userAgent.characters.count))
 
         if match == nil {
-            println("Error: Unable to determine WebKit version in UA.")
+            print("Error: Unable to determine WebKit version in UA.")
             return userAgent     // Fall back to Safari's.
         }
 
@@ -70,7 +72,7 @@ public class UserAgent {
         // Insert "FxiOS/<version>" before the Mobile/ section.
         let mobileRange = (userAgent as NSString).rangeOfString("Mobile/")
         if mobileRange.location == NSNotFound {
-            println("Error: Unable to find Mobile section in UA.")
+            print("Error: Unable to find Mobile section in UA.")
             return userAgent     // Fall back to Safari's.
         }
 

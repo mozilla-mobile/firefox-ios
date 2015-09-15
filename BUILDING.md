@@ -1,18 +1,24 @@
+> These are the instructions for building the *master* branch which is focussed on iOS 9 and Xcode 7 for our upcoming v1.1 and v2.0 releases. If you instead want to work on v1.0 then please follow the README.md in that branch.
+
 Building Firefox for iOS
 ========================
 
-Prerequisites, as of *August 10 2015*:
+Prerequisites, as of *September 4, 2015*:
 
-* Mac OS X 10.10.4
-* Xcode 6.4 with the iOS 8.4 SDK
-* Carthage 0.7.4 via Homebrew
+* Mac OS X 10.10.5
+* Xcode 7.0 GM with the iOS 9.0 GM SDK (Newer betas not supported)
+* Carthage 0.8 via Homebrew
 
-(We try to keep up to date with the most recent production versions of OS X, Xcode and the iOS SDK.)
+> There are issues with Carthage on OS X 10.11 El Capitan. We recommend to use OS X 10.10 Yosemite instead.
+
+(For the v1.1 release, we try to keep up to date with the most recent beta versions of Xcode and the iOS SDK.)
 
 When running on a device:
 
-* A device that supports iOS 8.0 or newer
-* A developer account and Admin access to the *Certificates, Identifiers & Profiles* section of the *iOS Dev Center*
+* A device that supports iOS 9.0 GM
+* One of the following:
+ * A developer account and Admin access to the *Certificates, Identifiers & Profiles* section of the *iOS DevCenter*
+ * A free developer account, new with Xcode 7
 
 Get the Code
 -----------
@@ -35,11 +41,15 @@ brew upgrade
 brew install carthage
 ```
 
+> OS X 10.11 El Capitan note: At time of writing it was not possible to install Carthage via homebrew. Instead, install the latest Carthage release manually from their [https://github.com/Carthage/Carthage/releases](releases page)
+
 You can now execute our `checkout.sh` script:
 
 ```
 ./checkout.sh
 ```
+
+> If checkout fails with an error like `fatal: Not a git repository (or any of the parent directories): .git` you may have to remove the `~/Library/Caches/org.carthage.CarthageKit` directory first. See [this Carthage issue](https://github.com/Carthage/Carthage/issues/407)
 
 At this point you have checked out the source code for both the Firefox for iOS project and it's dependencies. You can now build and run the application.
 
@@ -48,8 +58,35 @@ Everything after this point is done from within Xcode.
 Run on the Simulator
 -----------------
 
-* Open `Client.xcodeproj` and make sure you have the Client scheme and a simulated device selected. The app should run on any simulator. We just have not tested very well on the *Resizable iPad* and *Resizable iPhone* simulators.
+* Open `Client.xcodeproj` and make sure you have the *Client* scheme and a simulated device selected. The app should run on any simulator. We just have not tested very well on the *Resizable iPad* and *Resizable iPhone* simulators.
 * Select *Product -> Run* and the application should build and run on the selected simulator.
+
+Run on a Device with Xcode 7 and a Free Developer Account
+---------------
+
+> Only follow these instructions if you are using the new free personal developer accounts that Apple enabled with Xcode 7.
+
+In the following files, replace occurrences of `org.mozilla.ios` with your own unique reverse domain like for example `se.mydomain.ios`. If you do not own a domain, just use your full name like for example `jane.appleseed`.  
+
+Make sure you expand all the fields of the `.entitlements` files. Make sure you just replace the `org.mozilla.ios` part and keep prefixes like `group.` that some files contain.
+
+* `Client/Configuration/BaseConfig.xcconfig`
+* `Client/Info.plist`
+* `Client/Fennec.entitlements`
+* `Extensions/ShareTo/Info.plist`
+* `Extensions/ShareTo/Fennec.entitlements`
+* `Extensions/SendTo/Info.plist`
+* `Extensions/SendTo/Fennec.entitlements`
+* `Extensions/ViewLater/Info.plist`
+* `Extensions/ViewLater/Fennec.entitlements`
+
+If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
+
+Now when you run the app for the first time on your device, Xcode will tell you that it does not have a provisioning profile for the four application components and it will specifically mention a bundle identifier that contains your unique reverse domain.
+
+For each component it complains about, select *Fix This* to let Xcode resolve this. You may have to go through this process a couple of times. It is buggy. But then the app should properly build and run.
+
+> If after building, Xcode fails to run the app with a vague `Security` error, open Settings -> Profiles on your iOS Device and Trust your personal developer profile. This may only happen on iOS 9.
 
 Run on a Device
 ---------------
@@ -107,7 +144,3 @@ Updating SQLCipher.
 As of bug https://bugzilla.mozilla.org/show_bug.cgi?id=1182620 we do not run the SQLCipher 'amalgamation' phase anymore. Instead we have simply included generated copies of `sqlite3.c`, `sqlite3.h` and `sqlite3ext.h` in the project. This works around problems where the amalgamation phase did not work for production builds. It also speeds up things.
 
 To update to a newer version of SQLCipher: check out the original SQLCipher project and build it. Do not copy the project or anything in the Firefox project. Just follow their instructions. Then copy the above three `.c` and `.h` files back into the Firefox project. Also update the `README`, `VERION` and `CHANGELOG` files from the original distribution so that we know what version we have included.
-
-MozBuildID.xcconfig
-
-By default, .xcconfig files are cached after building a Xcode project. We generate a build identifier from the timestamp of when a build is made and a copy of the MozBuildID.xcconfig.template is filled in with the timestamp and renamed MozBuildID.xcconfig. Because of this, to generate a correct build identifier for a build, you will need to not just do a basic Clean of the project, but also a Clean Build Folder (Cmd+Alt+Shift+K)

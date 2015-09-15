@@ -8,7 +8,7 @@ import SnapKit
 import UIKit
 import WebKit
 
-protocol FxAContentViewControllerDelegate {
+protocol FxAContentViewControllerDelegate: class {
     func contentViewControllerDidSignIn(viewController: FxAContentViewController, data: JSON) -> Void
     func contentViewControllerDidCancel(viewController: FxAContentViewController)
 }
@@ -30,13 +30,13 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         case SignOut = "sign_out"
     }
 
-    var delegate: FxAContentViewControllerDelegate?
+    weak var delegate: FxAContentViewControllerDelegate?
 
     init() {
         super.init(backgroundColor: UIColor(red: 242 / 255.0, green: 242 / 255.0, blue: 242 / 255.0, alpha: 1.0), title: NSAttributedString(string: "Firefox Accounts"))
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -69,6 +69,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             configuration: config
         )
         webView.navigationDelegate = self
+        webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
 
         // Don't allow overscrolling.
         webView.scrollView.bounces = false
@@ -82,7 +83,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             "type": type,
             "content": content,
         ]
-        let json = JSON(data).toString(pretty: false)
+        let json = JSON(data).toString(false)
         let script = "window.postMessage(\(json), '\(self.url)');"
         webView.evaluateJavaScript(script, completionHandler: nil)
     }
@@ -160,7 +161,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     private func getJS() -> String {
         let fileRoot = NSBundle.mainBundle().pathForResource("FxASignIn", ofType: "js")
-        return NSString(contentsOfFile: fileRoot!, encoding: NSUTF8StringEncoding, error: nil)! as String
+        return (try! NSString(contentsOfFile: fileRoot!, encoding: NSUTF8StringEncoding)) as String
     }
 
     override func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {

@@ -48,7 +48,10 @@ class AuralProgressBar {
         }
 
         func start() {
-            engine.startAndReturnError(nil)
+            do {
+                try engine.start()
+            } catch _ {
+            }
             tickPlayer.play()
             progressPlayer.play()
             tickPlayer.scheduleBuffer(tickBuffer, atTime: nil, options: AVAudioPlayerNodeBufferOptions.Loops) { () -> Void in
@@ -61,7 +64,7 @@ class AuralProgressBar {
             engine.stop()
         }
 
-        func playProgress(var progress: Double) {
+        func playProgress(progress: Double) {
             // using exp2 and log2 instead of exp and log as "log" clashes with XCGLogger.log
             let pitch = AuralProgressBarUX.ProgressStartFrequency * exp2(log2(AuralProgressBarUX.ProgressEndFrequency/AuralProgressBarUX.ProgressStartFrequency) * progress)
             let buffer = UI.tone(progressPlayer.outputFormatForBus(0), pitch: pitch, volume: AuralProgressBarUX.ProgressVolume, duration: AuralProgressBarUX.ProgressDuration)
@@ -77,7 +80,7 @@ class AuralProgressBar {
             let buffer = AVAudioPCMBuffer(PCMFormat: format, frameCapacity: AVAudioFrameCount(frames))
             buffer.frameLength = buffer.frameCapacity
             for channel in 0..<Int(format.channelCount) {
-                var channelData = buffer.floatChannelData[channel]
+                let channelData = buffer.floatChannelData[channel]
                 var i = 0
                 for frame in 0..<frames {
                     // TODO: consider some attack-sustain-release to make the tones sound little less "sharp" and robotic

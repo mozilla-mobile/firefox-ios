@@ -7,59 +7,77 @@ import Alamofire
 import Shared
 
 extension Request {
+    public func responsePartialParsedJSON(completionHandler: ResponseHandler) -> Self {
+        let serializer = PartialParsedJSONResponseSerializer()
+        return self.response(responseSerializer: serializer, completionHandler: completionHandler)
+    }
+
+    public func responsePartialParsedJSON(queue queue: dispatch_queue_t, completionHandler: ResponseHandler) -> Self {
+        let serializer = PartialParsedJSONResponseSerializer()
+        return self.response(queue: queue, responseSerializer: serializer, completionHandler: completionHandler)
+    }
+
     public func responseParsedJSON(partial: Bool, completionHandler: ResponseHandler) -> Self {
-        let serializer = partial ? Request.PartialParsedJSONResponseSerializer() :
-                                   Request.ParsedJSONResponseSerializer()
-        return response(serializer: serializer, completionHandler: { (request, response, JSON, error) in
-            completionHandler(request, response, JSON, error)
-        })
+        let serializer = ParsedJSONResponseSerializer()
+        return self.response(responseSerializer: serializer, completionHandler: completionHandler)
     }
 
-    public func responseParsedJSON(#queue: dispatch_queue_t, partial: Bool, completionHandler: ResponseHandler) -> Self {
-        let serializer = partial ? Request.PartialParsedJSONResponseSerializer() :
-                                   Request.ParsedJSONResponseSerializer()
-        return response(queue: queue, serializer: serializer, completionHandler: { (request, response, JSON, error) in
-            completionHandler(request, response, JSON, error)
-        })
+    public func responseParsedJSON(queue queue: dispatch_queue_t, completionHandler: ResponseHandler) -> Self {
+        let serializer = ParsedJSONResponseSerializer()
+        return self.response(queue: queue, responseSerializer: serializer, completionHandler: completionHandler)
     }
+}
 
-    public class func PartialParsedJSONResponseSerializer() -> Serializer {
-        return { (request, response, data) in
+private enum JSONSerializeError: ErrorType {
+    case NoData
+    case ParseError
+}
+
+private struct ParsedJSONResponseSerializer: ResponseSerializer {
+    private var serializeResponse: (NSURLRequest?, NSHTTPURLResponse?, NSData?) -> Result<AnyObject>
+
+    private init() {
+        self.serializeResponse = { (request, response, data) in
             if data == nil || data?.length == 0 {
-                return (nil, nil)
-            }
-
-            var err: NSError?
-            let o: AnyObject? = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments, error: &err)
-
-            if let err = err {
-                return (nil, err)
-            }
-
-            if (o == nil) {
-                return (nil, nil)
-            }
-
-            let json = JSON(o!)
-            if json.isError {
-                return (nil, json.asError)
-            }
-
-            return (json, nil)
-        }
-    }
-
-    public class func ParsedJSONResponseSerializer() -> Serializer {
-        return { (request, response, data) in
-            if data == nil || data?.length == 0 {
-                return (nil, nil)
+                return Result.Failure(nil, JSONSerializeError.NoData)
             }
 
             let json = JSON(data: data!)
             if json.isError {
-                return (nil, json.asError)
+                return Result.Failure(data, JSONSerializeError.ParseError)
             }
-            return (json, nil)
+
+            return Result.Success(json)
+        }
+    }
+}
+
+private struct PartialParsedJSONResponseSerializer: ResponseSerializer {
+    private var serializeResponse: (NSURLRequest?, NSHTTPURLResponse?, NSData?) -> Result<AnyObject>
+
+    private init() {
+        self.serializeResponse = { (request, response, data) in
+            if data == nil || data?.length == 0 {
+                return Result.Failure(nil, JSONSerializeError.NoData)
+            }
+
+            let o: AnyObject?
+            do {
+                try o = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments)
+            } catch {
+                return Result.Failure(nil, error)
+            }
+
+            guard let object = o else {
+                return Result.Failure(nil, JSONSerializeError.NoData)
+            }
+
+            let json = JSON(object)
+            if json.isError {
+                return Result.Failure(nil, json.asError ?? JSONSerializeError.ParseError)
+            }
+
+            return Result.Success(json)
         }
     }
 }

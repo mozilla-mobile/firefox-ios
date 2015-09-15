@@ -45,7 +45,7 @@ public protocol Synchronizer {
      * Return a reason if the current state of this synchronizer -- particularly prefs and scratchpad --
      * prevent a routine sync from occurring.
      */
-    func reasonToNotSync(Sync15StorageClient) -> SyncNotStartedReason?
+    func reasonToNotSync(_: Sync15StorageClient) -> SyncNotStartedReason?
 }
 
 /**
@@ -72,8 +72,8 @@ public enum SyncStatus {
 }
 
 
-typealias DeferredTimestamp = Deferred<Result<Timestamp>>
-public typealias SyncResult = Deferred<Result<SyncStatus>>
+typealias DeferredTimestamp = Deferred<Maybe<Timestamp>>
+public typealias SyncResult = Deferred<Maybe<SyncStatus>>
 
 public enum SyncNotStartedReason {
     case NoAccount
@@ -161,7 +161,7 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
             return .Backoff(remainingSeconds: Int(remaining))
         }
 
-        if let global = self.scratchpad.global?.value {
+        if let _ = self.scratchpad.global?.value {
             // There's no need to check the global storage format here; the state machine will already have
             // done so.
             if let engineMeta = self.scratchpad.global?.value.engines?[collection] {

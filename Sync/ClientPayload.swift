@@ -7,8 +7,15 @@ import Shared
 
 public class ClientPayload: CleartextPayloadJSON {
     override public func isValid() -> Bool {
-        return super.isValid() &&
-               self["name"].isString &&
+        if !super.isValid() {
+            return false
+        }
+
+        if self["deleted"].asBool ?? false {
+            return true
+        }
+
+        return self["name"].isString &&
                self["type"].isString
     }
 

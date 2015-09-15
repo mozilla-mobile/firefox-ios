@@ -32,7 +32,7 @@ class SearchSettingsUITests: KIFTestCase {
     // Given that we're at the Search Settings sheet, return the default search engine's name.
     private func getDefaultSearchEngineName() -> String {
         let view = tester().waitForCellWithAccessibilityLabel("Default Search Engine")
-        return view.accessibilityValue
+        return view.accessibilityValue!
     }
 
     func testDefaultSearchEngine() {

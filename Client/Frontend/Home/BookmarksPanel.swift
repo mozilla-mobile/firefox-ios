@@ -33,21 +33,19 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     init() {
         super.init(nibName: nil, bundle: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataCleared, object: nil)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataCleared, object: nil)
     }
 
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationPrivateDataCleared:
+        case NotificationFirefoxAccountChanged:
             self.reloadData()
             break
         default:
@@ -65,7 +63,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     private func onModelFailure(e: Any) {
-        println("Error: failed to get data: \(e)")
+        print("Error: failed to get data: \(e)")
     }
 
     override func reloadData() {

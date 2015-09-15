@@ -1,6 +1,13 @@
 Firefox for iOS
 ===============
 
+This branch
+-----------
+
+This branch is targeting iOS 9, uses Swift 2.0, and is slated to become v1.1 and later. See the __v1.0__ branch if you're doing work for a 1.0.\* release.
+
+Please make sure you aim your pull requests in the right direction.
+
 Getting involved
 ----------------
 
@@ -20,7 +27,7 @@ https://mozilla.invisionapp.com/share/HA254M642#/screens/63057282?maintainScroll
 Building the code
 -----------------
 
-> __As of July 2, 2015, this project requires Xcode 6.4. Make sure you upgrade; the App Store should offer you 6.4 already.__
+> __As of August 28, 2015, this project requires Xcode 7 beta 6.__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage).

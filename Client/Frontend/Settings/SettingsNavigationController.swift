@@ -5,18 +5,7 @@
 import UIKit
 
 class SettingsNavigationController: UINavigationController {
-    var profile: Profile!
-    var tabManager: TabManager!
     var popoverDelegate: PresentingModalViewControllerDelegate?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let rootViewController = SettingsTableViewController()
-        rootViewController.profile = profile
-        rootViewController.tabManager = tabManager
-        self.pushViewController(rootViewController, animated: false)
-    }
 
     func SELdone() {
         if let delegate = popoverDelegate {

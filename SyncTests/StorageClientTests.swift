@@ -10,7 +10,7 @@ class StorageClientTests: XCTestCase {
 
     func testPartialJSON() {
         let body = "0"
-        let o: AnyObject? = NSJSONSerialization.JSONObjectWithData(body.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments, error: nil)
+        let o: AnyObject? = try! NSJSONSerialization.JSONObjectWithData(body.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments)
         XCTAssertTrue(JSON(o!).isInt)
     }
 

@@ -37,12 +37,14 @@ class BrowserScrollingController: NSObject {
     weak var snackBars: UIView?
 
     var footerBottomConstraint: Constraint?
-    var headerTopConstraint: Constraint?
+    // TODO: Since SnapKit hasn't added support yet (Swift 2.0/iOS 9) for handling layoutGuides,
+    // this constraint uses the system abstraction instead of SnapKit's Constraint class
+    var headerTopConstraint: NSLayoutConstraint?
     var toolbarsShowing: Bool { return headerTopOffset == 0 }
 
     private var headerTopOffset: CGFloat = 0 {
         didSet {
-            headerTopConstraint?.updateOffset(headerTopOffset)
+            headerTopConstraint?.constant = headerTopOffset
             header?.superview?.setNeedsLayout()
         }
     }
@@ -77,7 +79,7 @@ class BrowserScrollingController: NSObject {
         super.init()
     }
 
-    func showToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
+    func showToolbars(animated animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
         toolbarState = .Visible
         let durationRatio = abs(headerTopOffset / headerFrame.height)
         let actualDuration = NSTimeInterval(ToolbarBaseAnimationDuration * durationRatio)
@@ -90,9 +92,8 @@ class BrowserScrollingController: NSObject {
             completion: completion)
     }
 
-    func hideToolbars(#animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
+    func hideToolbars(animated animated: Bool, completion: ((finished: Bool) -> Void)? = nil) {
         toolbarState = .Collapsed
-        let animationDistance = headerFrame.height - abs(headerTopOffset)
         let durationRatio = abs((headerFrame.height + headerTopOffset) / headerFrame.height)
         let actualDuration = NSTimeInterval(ToolbarBaseAnimationDuration * durationRatio)
         self.animateToolbarsWithOffsets(
@@ -104,7 +105,7 @@ class BrowserScrollingController: NSObject {
             completion: completion)
     }
 
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if keyPath == "contentSize" {
             if !checkScrollHeightIsLargeEnoughForScrolling() && !toolbarsShowing {
                 showToolbars(animated: true, completion: nil)
@@ -191,7 +192,7 @@ private extension BrowserScrollingController {
         return y
     }
 
-    func animateToolbarsWithOffsets(#animated: Bool, duration: NSTimeInterval, headerOffset: CGFloat,
+    func animateToolbarsWithOffsets(animated animated: Bool, duration: NSTimeInterval, headerOffset: CGFloat,
         footerOffset: CGFloat, alpha: CGFloat, completion: ((finished: Bool) -> Void)?) {
 
         let animation: () -> Void = {
