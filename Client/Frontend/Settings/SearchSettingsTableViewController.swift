@@ -56,7 +56,7 @@ class SearchSettingsTableViewController: UITableViewController {
 
             case ItemDefaultSuggestions:
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-                cell.textLabel?.text = NSLocalizedString("Show search suggestions", comment: "Label for show search suggestions setting.")
+                cell.textLabel?.text = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
                 let toggle = UISwitch()
                 toggle.onTintColor = UIConstants.ControlTintColor
                 toggle.addTarget(self, action: "SELdidToggleSearchSuggestions:", forControlEvents: UIControlEvents.ValueChanged)
