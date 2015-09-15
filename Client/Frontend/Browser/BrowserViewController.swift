@@ -800,11 +800,11 @@ class BrowserViewController: UIViewController, UIActivityItemSource {
     
     private func isPasswordManagerActivityType(activityType: String?) -> Bool {
         let isOnePassword = OnePasswordExtension.sharedExtension().isOnePasswordExtensionActivityType(activityType)
-		
-		// If your extension's bundle identifier contains "password"
-		let isPasswordManager = activityType!.rangeOfString("password") != nil
-		
-		// If your extension's bundle identifier does not contain "password", simply submit a pull request by adding your bundle idenfidier.
+        
+        // If your extension's bundle identifier contains "password"
+        let isPasswordManager = activityType!.rangeOfString("password") != nil
+        
+        // If your extension's bundle identifier does not contain "password", simply submit a pull request by adding your bundle idenfidier.
         let isAnotherPasswordManager = (activityType == "bundle.identifier.for.another.password.manager")
         return isOnePassword || isPasswordManager || isAnotherPasswordManager
     }
