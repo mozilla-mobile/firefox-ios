@@ -168,6 +168,22 @@
 		28E91E761B443AD5009DF274 /* SyncConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E91E741B443AD5009DF274 /* SyncConstants.swift */; };
 		28EADE5D1AFC3A78007FB2FB /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EADE381AFC3898007FB2FB /* UIImageViewExtensions.swift */; };
 		28EADE5E1AFC3B86007FB2FB /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EADE381AFC3898007FB2FB /* UIImageViewExtensions.swift */; };
+		28ECD97A1BA1EA2200D829DA /* MockSyncServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ECD9791BA1EA2200D829DA /* MockSyncServer.swift */; settings = {ASSET_TAGS = (); }; };
+		28ECD9A31BA1EF3D00D829DA /* GCDWebServer.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D111A8D96D00040E6B5 /* GCDWebServer.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9A41BA1EF3D00D829DA /* GCDWebServerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D131A8D96D00040E6B5 /* GCDWebServerConnection.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9A51BA1EF3D00D829DA /* GCDWebServerFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D151A8D96D00040E6B5 /* GCDWebServerFunctions.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9A61BA1EF3D00D829DA /* GCDWebServerRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D191A8D96D00040E6B5 /* GCDWebServerRequest.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9A71BA1EF3D00D829DA /* GCDWebServerResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D1B1A8D96D00040E6B5 /* GCDWebServerResponse.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9A81BA1EF5100D829DA /* GCDWebServerDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D1E1A8D96D00040E6B5 /* GCDWebServerDataRequest.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9A91BA1EF5100D829DA /* GCDWebServerFileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D201A8D96D00040E6B5 /* GCDWebServerFileRequest.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9AA1BA1EF5100D829DA /* GCDWebServerMultiPartFormRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D221A8D96D00040E6B5 /* GCDWebServerMultiPartFormRequest.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9AB1BA1EF5100D829DA /* GCDWebServerURLEncodedFormRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D241A8D96D00040E6B5 /* GCDWebServerURLEncodedFormRequest.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9AC1BA1EF5100D829DA /* GCDWebServerDataResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D271A8D96D00040E6B5 /* GCDWebServerDataResponse.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9AD1BA1EF5100D829DA /* GCDWebServerErrorResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D291A8D96D00040E6B5 /* GCDWebServerErrorResponse.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9AE1BA1EF5100D829DA /* GCDWebServerFileResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D2B1A8D96D00040E6B5 /* GCDWebServerFileResponse.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9AF1BA1EF5100D829DA /* GCDWebServerStreamedResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = D38B2D2D1A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m */; settings = {ASSET_TAGS = (); }; };
+		28ECD9BF1BA1F19900D829DA /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
+		28ECD9F41BA1F59800D829DA /* DownloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ECD9F31BA1F59800D829DA /* DownloadTests.swift */; settings = {ASSET_TAGS = (); }; };
 		28ED02021B26123E003948B2 /* LoginPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02011B26123E003948B2 /* LoginPayload.swift */; };
 		28ED02031B26123E003948B2 /* LoginPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02011B26123E003948B2 /* LoginPayload.swift */; };
 		28ED02261B262B5E003948B2 /* LoginsSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02251B262B5E003948B2 /* LoginsSynchronizer.swift */; };
@@ -702,6 +718,13 @@
 			remoteGlobalIDString = 28F9520619D0F9FB00DCE892;
 			remoteInfo = FxATests;
 		};
+		28ECD9BE1BA1F12B00D829DA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
+			remoteInfo = Client;
+		};
 		2F0624F51AE5AA1A00FA022C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 39A362B21AAF5E2B00F47390 /* XCGLogger.xcodeproj */;
@@ -778,6 +801,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 6CA0A8071A75135D00AC539F;
 			remoteInfo = SecEncodeTransformTests;
+		};
+		2F67C5271BB0D33000E7B73A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2FA435FA1ABB83B4008031D1;
+			remoteInfo = Account;
 		};
 		2F77F69C1ABCAEFE00484F3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1365,6 +1395,9 @@
 		28E8BEC81B79449B002CC733 /* AlamofireExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireExtensions.swift; sourceTree = "<group>"; };
 		28E91E741B443AD5009DF274 /* SyncConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncConstants.swift; sourceTree = "<group>"; };
 		28EADE381AFC3898007FB2FB /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Extensions/UIImageViewExtensions.swift; sourceTree = "<group>"; };
+		28ECD9791BA1EA2200D829DA /* MockSyncServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockSyncServer.swift; path = SyncTests/MockSyncServer.swift; sourceTree = "<group>"; };
+		28ECD9A21BA1EBA800D829DA /* SyncTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SyncTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		28ECD9F31BA1F59800D829DA /* DownloadTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadTests.swift; path = SyncTests/DownloadTests.swift; sourceTree = "<group>"; };
 		28ED02011B26123E003948B2 /* LoginPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginPayload.swift; sourceTree = "<group>"; };
 		28ED02251B262B5E003948B2 /* LoginsSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginsSynchronizer.swift; path = Synchronizers/LoginsSynchronizer.swift; sourceTree = "<group>"; };
 		28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IndependentRecordSynchronizer.swift; path = Synchronizers/IndependentRecordSynchronizer.swift; sourceTree = "<group>"; };
@@ -1722,6 +1755,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28ECD9BF1BA1F19900D829DA /* libz.tbd in Frameworks */,
 				282731691ABC9BE700AA1954 /* Sync.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1932,6 +1966,7 @@
 		282731601ABC9BE600AA1954 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				282731621ABC9BE600AA1954 /* Sync-Bridging-Header.h */,
 				282731611ABC9BE600AA1954 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -1940,6 +1975,7 @@
 		2827316F1ABC9BE700AA1954 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				28ECD9A21BA1EBA800D829DA /* SyncTests-Bridging-Header.h */,
 				282731701ABC9BE700AA1954 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -2047,6 +2083,7 @@
 			children = (
 				28C077971A3B064000834FE5 /* CryptoTests.swift */,
 				28786E541AB0F5FA009EA9EF /* DeferredTests.swift */,
+				28ECD9F31BA1F59800D829DA /* DownloadTests.swift */,
 				2F3724C41ABF3C01007607FA /* LiveStorageClientTests.swift */,
 				28C0779D1A3B066000834FE5 /* RecordTests.swift */,
 				2FEBABAE1AB3659000DB5728 /* ResultTests.swift */,
@@ -2055,6 +2092,7 @@
 				28F596A01ACA13CA0071DDCC /* InfoTests.swift */,
 				2827316F1ABC9BE700AA1954 /* Supporting Files */,
 				50027345B49B967409DDA348 /* StateTests.swift */,
+				28ECD9791BA1EA2200D829DA /* MockSyncServer.swift */,
 				2855611E1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift */,
 			);
 			name = SyncTests;
@@ -2075,7 +2113,6 @@
 				2894C1641AE89DBC00F1F92F /* Synchronizers */,
 				284AA38F1AD4C115009041C5 /* Interfaces */,
 				282731601ABC9BE600AA1954 /* Supporting Files */,
-				282731621ABC9BE600AA1954 /* Sync-Bridging-Header.h */,
 				28926B3D1AC0F1A6009C0B1D /* Meta */,
 				28926B3C1AC0F176009C0B1D /* Records */,
 				28CE83BC1A1D1D3200576538 /* KeyBundle.swift */,
@@ -3074,6 +3111,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				28ECD9B11BA1F07000D829DA /* PBXTargetDependency */,
 				2827316B1ABC9BE700AA1954 /* PBXTargetDependency */,
 			);
 			name = SyncTests;
@@ -4052,9 +4090,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28ECD9AF1BA1EF5100D829DA /* GCDWebServerStreamedResponse.m in Sources */,
+				28ECD97A1BA1EA2200D829DA /* MockSyncServer.swift in Sources */,
 				285D37E31ABCA69E000E1CF9 /* CryptoTests.swift in Sources */,
 				28F657DD1ABFC98300A608BD /* KeysPayload.swift in Sources */,
 				28F657DC1ABFC98300A608BD /* KeyBundle.swift in Sources */,
+				28ECD9AA1BA1EF5100D829DA /* GCDWebServerMultiPartFormRequest.m in Sources */,
 				28F596A11ACA13CA0071DDCC /* InfoTests.swift in Sources */,
 				28926B3B1AC0F128009C0B1D /* CleartextPayloadJSON.swift in Sources */,
 				282731A01ABC9C5900AA1954 /* ResultTests.swift in Sources */,
@@ -4063,26 +4104,38 @@
 				2F3724E81ABF3C19007607FA /* StorageClient.swift in Sources */,
 				2F3724C71ABF3C01007607FA /* StorageClientTests.swift in Sources */,
 				28E91E761B443AD5009DF274 /* SyncConstants.swift in Sources */,
+				28ECD9F41BA1F59800D829DA /* DownloadTests.swift in Sources */,
 				28F657DB1ABFC98300A608BD /* ClientPayload.swift in Sources */,
 				28909D9C1ACCBB02009AD220 /* State.swift in Sources */,
+				28ECD9AB1BA1EF5100D829DA /* GCDWebServerURLEncodedFormRequest.m in Sources */,
 				28926B1B1AC0F074009C0B1D /* EncryptedJSON.swift in Sources */,
 				2894C16A1AE89DDC00F1F92F /* ClientsSynchronizer.swift in Sources */,
 				2F3724C61ABF3C01007607FA /* LiveStorageClientTests.swift in Sources */,
 				28ED02031B26123E003948B2 /* LoginPayload.swift in Sources */,
 				2894C1671AE89DD200F1F92F /* TabsSynchronizer.swift in Sources */,
+				28ECD9A51BA1EF3D00D829DA /* GCDWebServerFunctions.m in Sources */,
 				2F3724EA1ABF3C19007607FA /* Synchronizer.swift in Sources */,
 				28F657DE1ABFC98300A608BD /* SyncMeta.swift in Sources */,
+				28ECD9A81BA1EF5100D829DA /* GCDWebServerDataRequest.m in Sources */,
 				28926B381AC0F0DD009C0B1D /* EnvelopeJSON.swift in Sources */,
+				28ECD9AC1BA1EF5100D829DA /* GCDWebServerDataResponse.m in Sources */,
 				2827319F1ABC9C5900AA1954 /* DeferredTests.swift in Sources */,
+				28ECD9AE1BA1EF5100D829DA /* GCDWebServerFileResponse.m in Sources */,
 				2853C5421AD84C6800C4F31D /* TabsPayload.swift in Sources */,
 				288502401AC117A500E7F670 /* SyncStateMachine.swift in Sources */,
+				28ECD9A71BA1EF3D00D829DA /* GCDWebServerResponse.m in Sources */,
 				28F657EA1ABFCA7A00A608BD /* LiveAccountTest.swift in Sources */,
 				2827319E1ABC9C5900AA1954 /* RecordTests.swift in Sources */,
 				28A6CE8A1AC082E200C1A2D4 /* UtilsTests.swift in Sources */,
 				28F657C01ABFC97D00A608BD /* Record.swift in Sources */,
 				2F3724E61ABF3C19007607FA /* Info.swift in Sources */,
+				28ECD9A31BA1EF3D00D829DA /* GCDWebServer.m in Sources */,
+				28ECD9A61BA1EF3D00D829DA /* GCDWebServerRequest.m in Sources */,
+				28ECD9A41BA1EF3D00D829DA /* GCDWebServerConnection.m in Sources */,
+				28ECD9A91BA1EF5100D829DA /* GCDWebServerFileRequest.m in Sources */,
 				2855611F1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift in Sources */,
 				2894C16D1AE89FD500F1F92F /* HistoryPayload.swift in Sources */,
+				28ECD9AD1BA1EF5100D829DA /* GCDWebServerErrorResponse.m in Sources */,
 				288501F91AC0F62200E7F670 /* RequestExtensions.swift in Sources */,
 				5002717C41BC7C50F67F1CAD /* StateTests.swift in Sources */,
 			);
@@ -4603,6 +4656,11 @@
 			target = 288A2D851AB8B3260023ABC3 /* Shared */;
 			targetProxy = 288A2D9B1AB8B3260023ABC3 /* PBXContainerItemProxy */;
 		};
+		28ECD9B11BA1F07000D829DA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F84B21BD1A090F8100AAB793 /* Client */;
+			targetProxy = 28ECD9BE1BA1F12B00D829DA /* PBXContainerItemProxy */;
+		};
 		2F0624F61AE5AA1A00FA022C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "XCGLogger (iOS)";
@@ -4964,7 +5022,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Debug;
@@ -5003,7 +5061,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -5043,7 +5101,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -6358,7 +6416,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Sync/Sync-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/SyncTests/SyncTests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 				VALIDATE_PRODUCT = YES;
 			};
