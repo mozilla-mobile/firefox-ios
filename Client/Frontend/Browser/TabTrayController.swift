@@ -15,7 +15,6 @@ struct TabTrayControllerUX {
     static let Margin = CGFloat(15)
     static let ToolbarBarTintColor = UIConstants.AppBackgroundColor
     static let ToolbarButtonOffset = CGFloat(10.0)
-    static let TabTitleTextColor = UIColor.blackColor()
     static let TabTitleTextFont = UIConstants.DefaultSmallFontBold
     static let CloseButtonSize = CGFloat(18.0)
     static let CloseButtonMargin = CGFloat(6.0)
@@ -34,19 +33,40 @@ struct TabTrayControllerUX {
     }
 }
 
+struct LightTabCellUX {
+    static let TabTitleTextColor = UIColor.blackColor()
+}
+
+struct DarkTabCellUX {
+    static let TabTitleTextColor = UIColor.whiteColor()
+}
+
 protocol TabCellDelegate: class {
     func tabCellDidClose(cell: TabCell)
 }
 
-// UIcollectionViewController doesn't let us specify a style for recycling views. We override the default style here.
 class TabCell: UICollectionViewCell {
-    let backgroundHolder: UIView
-    let background: UIImageViewAligned
+    enum Style {
+        case Light
+        case Dark
+    }
+
+    static let Identifier = "TabCellIdentifier"
+
+    var style: Style = .Light {
+        didSet {
+            applyStyle(style)
+        }
+    }
+
+    let backgroundHolder = UIView()
+    let background = UIImageViewAligned()
     let titleText: UILabel
-    let title: UIVisualEffectView
     let innerStroke: InnerStrokedView
-    let favicon: UIImageView
+    let favicon: UIImageView = UIImageView()
     let closeButton: UIButton
+
+    var title: UIVisualEffectView!
     var animator: SwipeAnimator!
 
     weak var delegate: TabCellDelegate?
@@ -55,34 +75,22 @@ class TabCell: UICollectionViewCell {
     var margin = CGFloat(0)
 
     override init(frame: CGRect) {
-
-        self.backgroundHolder = UIView()
         self.backgroundHolder.backgroundColor = UIColor.whiteColor()
         self.backgroundHolder.layer.cornerRadius = TabTrayControllerUX.CornerRadius
         self.backgroundHolder.clipsToBounds = true
         self.backgroundHolder.backgroundColor = TabTrayControllerUX.CellBackgroundColor
 
-        self.background = UIImageViewAligned()
         self.background.contentMode = UIViewContentMode.ScaleAspectFill
         self.background.clipsToBounds = true
         self.background.userInteractionEnabled = false
         self.background.alignLeft = true
         self.background.alignTop = true
 
-        self.favicon = UIImageView()
         self.favicon.backgroundColor = UIColor.clearColor()
         self.favicon.layer.cornerRadius = 2.0
         self.favicon.layer.masksToBounds = true
 
-        self.title = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
-        self.title.layer.shadowColor = UIColor.blackColor().CGColor
-        self.title.layer.shadowOpacity = 0.2
-        self.title.layer.shadowOffset = CGSize(width: 0, height: 0.5)
-        self.title.layer.shadowRadius = 0
-
         self.titleText = UILabel()
-        self.titleText.textColor = TabTrayControllerUX.TabTitleTextColor
-        self.titleText.backgroundColor = UIColor.clearColor()
         self.titleText.textAlignment = NSTextAlignment.Left
         self.titleText.userInteractionEnabled = false
         self.titleText.numberOfLines = 1
@@ -91,10 +99,6 @@ class TabCell: UICollectionViewCell {
         self.closeButton = UIButton()
         self.closeButton.setImage(UIImage(named: "stop"), forState: UIControlState.Normal)
         self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
-
-        self.title.addSubview(self.closeButton)
-        self.title.addSubview(self.titleText)
-        self.title.addSubview(self.favicon)
 
         self.innerStroke = InnerStrokedView(frame: self.backgroundHolder.frame)
         self.innerStroke.layer.backgroundColor = UIColor.clearColor().CGColor
@@ -109,11 +113,43 @@ class TabCell: UICollectionViewCell {
         contentView.addSubview(backgroundHolder)
         backgroundHolder.addSubview(self.background)
         backgroundHolder.addSubview(innerStroke)
-        backgroundHolder.addSubview(self.title)
+
+        // Default style is light
+        applyStyle(style)
 
         self.accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: NSLocalizedString("Close", comment: "Accessibility label for action denoting closing a tab in tab list (tray)"), target: self.animator, selector: "SELcloseWithoutGesture")
         ]
+    }
+
+    private func applyStyle(style: Style) {
+        self.title?.removeFromSuperview()
+
+        let title: UIVisualEffectView
+        switch style {
+        case .Light:
+            title = UIVisualEffectView(effect: UIBlurEffect(style: .ExtraLight))
+
+            self.titleText.textColor = LightTabCellUX.TabTitleTextColor
+            self.titleText.backgroundColor = UIColor.clearColor()
+        case .Dark:
+            title = UIVisualEffectView(effect: UIBlurEffect(style: .Dark))
+
+            self.titleText.textColor = DarkTabCellUX.TabTitleTextColor
+            self.titleText.backgroundColor = UIColor.clearColor()
+        }
+
+        title.layer.shadowColor = UIColor.blackColor().CGColor
+        title.layer.shadowOpacity = 0.2
+        title.layer.shadowOffset = CGSize(width: 0, height: 0.5)
+        title.layer.shadowRadius = 0
+
+        title.addSubview(self.closeButton)
+        title.addSubview(self.titleText)
+        title.addSubview(self.favicon)
+
+        backgroundHolder.addSubview(title)
+        self.title = title
     }
 
     required init?(coder aDecoder: NSCoder) {
