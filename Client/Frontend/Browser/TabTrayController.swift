@@ -247,7 +247,7 @@ class TabTrayController: UIViewController {
         button.setImage(UIImage(named: "smallPrivateMask"), forState: UIControlState.Normal)
         button.setImage(UIImage(named: "smallPrivateMaskSelected"), forState: UIControlState.Selected)
         button.addTarget(self, action: "SELdidTogglePrivateMode", forControlEvents: .TouchUpInside)
-        button.accessibilityLabel = NSLocalizedString("Toggle Private Tab", comment: "Accessibility label for toggling on/off private mode")
+        button.accessibilityLabel = NSLocalizedString("Toggle Private Mode", comment: "Accessibility label for toggling on/off private mode")
         return button
     }()
 

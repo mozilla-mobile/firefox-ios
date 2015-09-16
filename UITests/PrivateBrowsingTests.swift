@@ -13,7 +13,6 @@ class PrivateBrowsingTests: KIFTestCase {
     }
 
     func testPrivateTabDoesntTrackHistory() {
-
         // First navigate to a normal tab and see that it tracks
         let url1 = "\(webRoot)/numberedPage.html?page=1"
         tester().tapViewWithAccessibilityIdentifier("url")
@@ -30,9 +29,8 @@ class PrivateBrowsingTests: KIFTestCase {
 
         // Then try doing the same thing for a private tab
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().waitForAnimationsToFinish()
-        tester().tapViewWithAccessibilityLabel("Add Private Tab")
-        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("Toggle Private Mode")
+        tester().tapViewWithAccessibilityLabel("Add Tab")
         tester().tapViewWithAccessibilityIdentifier("url")
 
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
@@ -43,5 +41,10 @@ class PrivateBrowsingTests: KIFTestCase {
 
         tableView = tester().waitForViewWithAccessibilityIdentifier("History List") as! UITableView
         XCTAssertEqual(tableView.numberOfRowsInSection(0), 1)
+
+        // Exit private mode
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Toggle Private Mode")
     }
 }
