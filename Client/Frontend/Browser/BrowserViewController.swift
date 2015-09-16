@@ -39,7 +39,7 @@ class BrowserViewController: UIViewController {
     var webViewContainer: UIView!
     var urlBar: URLBarView!
     var readerModeBar: ReaderModeBarView?
-    
+
     private var statusBarOverlay: UIView!
     private var toolbar: BrowserToolbar?
     private var searchController: SearchViewController?
@@ -836,9 +836,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
-        let tabTrayController = TabTrayController()
-        tabTrayController.profile = profile
-        tabTrayController.tabManager = tabManager
+        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile)
 
         if let tab = tabManager.selectedTab {
             tab.setScreenshot(screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1))
