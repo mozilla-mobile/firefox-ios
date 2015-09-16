@@ -17,6 +17,9 @@ private let Bug1204635_S2 = NSLocalizedString("Are you sure you want to clear al
 private let Bug1204635_S3 = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to Clear private data dialog")
 private let Bug1204635_S4 = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")
 
+// The following are strings for bug 1162174 - Support third party passwords
+private let Bug1162174_S1 = NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")
+
 // A base TableViewCell, to help minimize initialization and allow recycling.
 class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
