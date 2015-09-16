@@ -290,7 +290,8 @@ class TabManager : NSObject {
             delegate.get()?.tabManager(self, didRemoveTab: tab)
         }
 
-        if count == 0 {
+        // Make sure we never reach 0 normal tabs
+        if !tab.isPrivate && normalTabs.count == 0 {
             addTab()
         }
 
