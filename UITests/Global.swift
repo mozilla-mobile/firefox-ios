@@ -280,6 +280,10 @@ class SimplePageServer {
             return GCDWebServerDataResponse(HTML: self.getPageData("readerContent"))
         }
 
+        webServer.addHandlerForMethod("GET", path: "/cookie.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            return GCDWebServerDataResponse(HTML: self.getPageData("cookie"))
+        }
+
         if !webServer.startWithPort(0, bonjourName: nil) {
             XCTFail("Can't start the GCDWebServer")
         }

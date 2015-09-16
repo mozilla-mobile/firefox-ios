@@ -577,6 +577,7 @@
 		E6C05DB21BA1CDAB00CDDD08 /* Breakpad.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E69E4E2A1B9F709A00646EDB /* Breakpad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */; };
 		E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */; };
+		E6F768E11BA345DC005D0682 /* cookie.html in Resources */ = {isa = PBXBuildFile; fileRef = E6F768E01BA345DC005D0682 /* cookie.html */; settings = {ASSET_TAGS = (); }; };
 		E6F965121B2F1CF20034B023 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */; };
 		E6F9653F1B2F242E0034B023 /* NSMutableAttributedStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F9653D1B2F235A0034B023 /* NSMutableAttributedStringExtensions.swift */; };
@@ -1696,6 +1697,7 @@
 		E6A99D761B20D95800006EDD /* GeometryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeometryExtensions.swift; sourceTree = "<group>"; };
 		E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTrayAnimators.swift; sourceTree = "<group>"; };
 		E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = scrollablePage.html; sourceTree = "<group>"; };
+		E6F768E01BA345DC005D0682 /* cookie.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = cookie.html; sourceTree = "<group>"; };
 		E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SharedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6F9650F1B2F1CF20034B023 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLExtensionsTests.swift; sourceTree = "<group>"; };
@@ -2448,6 +2450,7 @@
 			children = (
 				D39FA16F1A83E62600EE869C /* UITests-Bridging-Header.h */,
 				0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */,
+				E6F768E01BA345DC005D0682 /* cookie.html */,
 				0B6FBAB11AC1F830007EC669 /* numberedPage.html */,
 				0B5A93411B1EB572004F47A2 /* readablePage.html */,
 				4F9757391AFA6F37006ECC24 /* readerContent.html */,
@@ -3918,6 +3921,7 @@
 			files = (
 				E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */,
 				0B6FBAB21AC1F830007EC669 /* numberedPage.html in Resources */,
+				E6F768E11BA345DC005D0682 /* cookie.html in Resources */,
 				0B5A93421B1EB572004F47A2 /* readablePage.html in Resources */,
 				0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */,
 				D3E171C21A841EAD00AB44CD /* KIFHelper.js in Resources */,
