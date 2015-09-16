@@ -589,3 +589,69 @@ class InnerStrokedView: UIView {
         path.stroke()
     }
 }
+
+struct EmptyPrivateTabsViewUX {
+    static let TitleColor = UIColor.whiteColor()
+    static let TitleFont = UIFont.systemFontOfSize(22, weight: UIFontWeightMedium)
+    static let DescriptionColor = UIColor.whiteColor()
+    static let DescriptionFont = UIFont.systemFontOfSize(17)
+    static let TextMargin: CGFloat = 18
+    static let MaxDescriptionWidth: CGFloat = 250
+}
+
+// View we display when there are no private tabs created
+private class EmptyPrivateTabsView: UIView {
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = EmptyPrivateTabsViewUX.TitleColor
+        label.font = EmptyPrivateTabsViewUX.TitleFont
+        label.textAlignment = NSTextAlignment.Center
+        return label
+    }()
+
+    private var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = EmptyPrivateTabsViewUX.DescriptionColor
+        label.font = EmptyPrivateTabsViewUX.DescriptionFont
+        label.textAlignment = NSTextAlignment.Center
+        label.numberOfLines = 3
+        label.preferredMaxLayoutWidth = EmptyPrivateTabsViewUX.MaxDescriptionWidth
+        return label
+    }()
+
+    private var iconImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "largePrivateMask"))
+        return imageView
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        titleLabel.text =  NSLocalizedString("Private Browsing",
+            tableName: "PrivateBrowsing", comment: "Title displayed for when there are no open tabs while in private mode")
+        descriptionLabel.text = NSLocalizedString("Firefox won't remember any of your history or cookies, but new bookmarks will be saved.",
+            tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
+
+        addSubview(titleLabel)
+        addSubview(descriptionLabel)
+        addSubview(iconImageView)
+
+        titleLabel.snp_makeConstraints { make in
+            make.center.equalTo(self)
+        }
+
+        iconImageView.snp_makeConstraints { make in
+            make.bottom.equalTo(titleLabel.snp_top).offset(-EmptyPrivateTabsViewUX.TextMargin)
+            make.centerX.equalTo(self)
+        }
+
+        descriptionLabel.snp_makeConstraints { make in
+            make.top.equalTo(titleLabel.snp_bottom).offset(EmptyPrivateTabsViewUX.TextMargin)
+            make.centerX.equalTo(self)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
