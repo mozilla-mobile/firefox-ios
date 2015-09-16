@@ -10,8 +10,8 @@ import Shared
 protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?)
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser, restoring: Bool)
-    func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int, restoring: Bool)
-    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int)
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser, restoring: Bool)
+    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser)
     func tabManagerDidRestoreTabs(tabManager: TabManager)
     func tabManagerDidAddTabs(tabManager: TabManager)
 }
@@ -77,6 +77,27 @@ class TabManager : NSObject {
     unowned let profile: Profile
     var selectedIndex: Int { return _selectedIndex }
 
+    var normalTabs: [Browser] {
+        return tabs.filter { !$0.isPrivate }
+    }
+
+    var privateTabs: [Browser] {
+        if #available(iOS 9, *) {
+            return tabs.filter { $0.isPrivate }
+        } else {
+            return []
+        }
+    }
+
+    func indexForTab(tab: Browser?, inTabs tabList: [Browser]) -> Int? {
+        for i in 0..<count {
+            if tabList[i] === tab {
+                return i
+            }
+        }
+        return nil
+    }
+
     init(defaultNewTabRequest: NSURLRequest, profile: Profile) {
         self.profile = profile
         self.defaultNewTabRequest = defaultNewTabRequest
@@ -135,13 +156,7 @@ class TabManager : NSObject {
 
         let previous = selectedTab
 
-        _selectedIndex = -1
-        for i in 0..<count {
-            if tabs[i] === tab {
-                _selectedIndex = i
-                break
-            }
-        }
+        _selectedIndex = indexForTab(tab, inTabs: tabs) ?? -1
 
         preserveTabs()
 
@@ -219,7 +234,7 @@ class TabManager : NSObject {
         tabs.append(tab)
 
         for delegate in delegates {
-            delegate.get()?.tabManager(self, didAddTab: tab, atIndex: tabs.count - 1, restoring: restoring)
+            delegate.get()?.tabManager(self, didAddTab: tab, restoring: restoring)
         }
 
         if !zombie {
@@ -255,11 +270,9 @@ class TabManager : NSObject {
         }
 
         let prevCount = count
-        var index = -1
         for i in 0..<count {
             if tabs[i] === tab {
                 tabs.removeAtIndex(i)
-                index = i
                 break
             }
         }
@@ -274,7 +287,7 @@ class TabManager : NSObject {
         tab.webView?.navigationDelegate = nil
 
         for delegate in delegates {
-            delegate.get()?.tabManager(self, didRemoveTab: tab, atIndex: index)
+            delegate.get()?.tabManager(self, didRemoveTab: tab)
         }
 
         if count == 0 {
