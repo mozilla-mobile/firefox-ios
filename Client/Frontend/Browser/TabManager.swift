@@ -344,6 +344,7 @@ extension TabManager {
     class SavedTab: NSObject, NSCoding {
         let isSelected: Bool
         let title: String?
+        let isPrivate: Bool
         var sessionData: SessionData?
         var screenshotUUID: NSUUID?
 
@@ -351,6 +352,7 @@ extension TabManager {
             self.screenshotUUID = browser.screenshotUUID
             self.isSelected = isSelected
             self.title = browser.displayTitle
+            self.isPrivate = browser.isPrivate
             super.init()
 
             if browser.sessionData == nil {
@@ -377,6 +379,7 @@ extension TabManager {
             self.screenshotUUID = coder.decodeObjectForKey("screenshotUUID") as? NSUUID
             self.isSelected = coder.decodeBoolForKey("isSelected")
             self.title = coder.decodeObjectForKey("title") as? String
+            self.isPrivate = coder.decodeBoolForKey("isPrivate")
         }
 
         func encodeWithCoder(coder: NSCoder) {
@@ -384,6 +387,7 @@ extension TabManager {
             coder.encodeObject(screenshotUUID, forKey: "screenshotUUID")
             coder.encodeBool(isSelected, forKey: "isSelected")
             coder.encodeObject(title, forKey: "title")
+            coder.encodeBool(isPrivate, forKey: "isPrivate")
         }
     }
 
@@ -437,7 +441,12 @@ extension TabManager {
                     var tabToSelect: Browser?
 
                     for (_, savedTab) in savedTabs.enumerate() {
-                        let tab = self.addTab(flushToDisk: false, zombie: true, restoring: true)
+                        let tab: Browser
+                        if #available(iOS 9, *) {
+                            tab = self.addTab(flushToDisk: false, zombie: true, restoring: true, isPrivate: savedTab.isPrivate)
+                        } else {
+                            tab = self.addTab(flushToDisk: false, zombie: true, restoring: true)
+                        }
 
                         // Set the UUID for the tab, asynchronously fetch the UIImage, then store
                         // the screenshot in the tab as long as long as a newer one hasn't been taken.
