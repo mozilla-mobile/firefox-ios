@@ -242,7 +242,7 @@ class TabTrayController: UIViewController {
     }
 
     @available(iOS 9, *)
-    private lazy var togglePrivateMode: UIButton = {
+    lazy var togglePrivateMode: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "smallPrivateMask"), forState: UIControlState.Normal)
         button.setImage(UIImage(named: "smallPrivateMaskSelected"), forState: UIControlState.Selected)
