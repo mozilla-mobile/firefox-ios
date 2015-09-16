@@ -24,7 +24,7 @@ INCOMPLETE_LOCALES=(
     "uz"
 )
 
-if [ $1 == "--only-complete" ]; then
+if [ "$1" == "--only-complete" ]; then
   for i in "${!INCOMPLETE_LOCALES[@]}"; do
     echo "Removing incomplete locale ${INCOMPLETE_LOCALES[$i]}"
     rm -rf "firefox-ios-l10n/${INCOMPLETE_LOCALES[$i]}"
