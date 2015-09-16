@@ -339,7 +339,12 @@ class URLBarView: UIView {
         self.backgroundColor = URLBarViewUX.backgroundColorWithAlpha(1 - alpha)
     }
 
+
     func updateTabCount(count: Int) {
+        updateTabCount(count, animated: true)
+    }
+
+    func updateTabCount(count: Int, animated: Bool) {
         // make a 'clone' of the tabs button
         let newTabsButton = InsetButton()
         self.clonedTabsButton = newTabsButton
@@ -378,20 +383,29 @@ class URLBarView: UIView {
             oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective
             oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(M_PI_2), 1.0, 0.0, 0.0)
 
-            UIView.animateWithDuration(1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: { _ in
+            let animate = {
                 newTabsButton.titleLabel?.layer.transform = CATransform3DIdentity
                 self.tabsButton.titleLabel?.layer.transform = oldFlipTransform
                 self.tabsButton.titleLabel?.layer.opacity = 0
-                }, completion: { _ in
-                    // remove the clone and setup the actual tab button
-                    newTabsButton.removeFromSuperview()
+            }
 
-                    self.tabsButton.titleLabel?.layer.opacity = 1
-                    self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
-                    self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
-                    self.tabsButton.accessibilityValue = count.description
-                    self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
-            })
+            let completion: (Bool) -> Void = { finished in
+                // remove the clone and setup the actual tab button
+                newTabsButton.removeFromSuperview()
+
+                self.tabsButton.titleLabel?.layer.opacity = 1
+                self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
+                self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
+                self.tabsButton.accessibilityValue = count.description
+                self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
+            }
+
+            if animated {
+                UIView.animateWithDuration(1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: animate, completion: completion)
+            } else {
+                animate()
+                completion(true)
+            }
         }
     }
 
