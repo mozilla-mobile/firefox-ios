@@ -287,6 +287,11 @@ private func createTransitionCellFromBrowser(browser: Browser?, withFrame frame:
     let cell = TabCell(frame: frame)
     cell.background.image = browser?.screenshot
     cell.titleText.text = browser?.displayTitle
+
+    if let browser = browser where browser.isPrivate {
+        cell.style = .Dark
+    }
+
     if let favIcon = browser?.displayFavicon {
         cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
     } else {
