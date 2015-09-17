@@ -345,6 +345,12 @@ class URLBarView: UIView {
     }
 
     func updateTabCount(count: Int, animated: Bool) {
+        if let _ = self.clonedTabsButton {
+            self.clonedTabsButton?.layer.removeAllAnimations()
+            self.clonedTabsButton?.removeFromSuperview()
+            self.tabsButton.layer.removeAllAnimations()
+        }
+
         // make a 'clone' of the tabs button
         let newTabsButton = InsetButton()
         self.clonedTabsButton = newTabsButton
@@ -390,14 +396,16 @@ class URLBarView: UIView {
             }
 
             let completion: (Bool) -> Void = { finished in
-                // remove the clone and setup the actual tab button
-                newTabsButton.removeFromSuperview()
+                if finished {
+                    // remove the clone and setup the actual tab button
+                    newTabsButton.removeFromSuperview()
 
-                self.tabsButton.titleLabel?.layer.opacity = 1
-                self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
-                self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
-                self.tabsButton.accessibilityValue = count.description
-                self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
+                    self.tabsButton.titleLabel?.layer.opacity = 1
+                    self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
+                    self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
+                    self.tabsButton.accessibilityValue = count.description
+                    self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
+                }
             }
 
             if animated {
