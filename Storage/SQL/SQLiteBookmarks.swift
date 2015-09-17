@@ -292,3 +292,83 @@ extension SQLiteBookmarks: SearchableBookmarks {
         return db.runQuery(sql, args: args, factory: SQLiteBookmarks.itemFactory)
     }
 }
+
+private extension BookmarkMirrorItem {
+    func getUpdateOrInsertArgs() -> Args {
+        let args: Args = [
+            self.type.rawValue,
+            NSNumber(unsignedLongLong: self.serverModified),
+            self.isDeleted ? 1 : 0,
+            self.hasDupe ? 1 : 0,
+            self.parentID,
+            self.parentName,
+            self.feedURI,
+            self.siteURI,
+            self.pos,
+            self.title,
+            self.description,
+            self.bookmarkURI,
+            self.tags,
+            self.keyword,
+            self.folderName,
+            self.queryID,
+            self.guid,
+        ]
+
+        return args
+    }
+}
+
+extension SQLiteBookmarks: BookmarkMirrorStorage {
+    public func applyRecords(records: [BookmarkMirrorItem]) -> Success {
+        // Within a transaction, we first attempt to update each item.
+        // If an update fails, insert instead. TODO: batch the inserts!
+        let deferred = Deferred<Maybe<()>>(defaultQueue: dispatch_get_main_queue())
+
+        let values = records.lazy.map { $0.getUpdateOrInsertArgs() }
+        var err: NSError?
+        self.db.transaction(&err) { (conn, err) -> Bool in
+            // These have the same values in the same order.
+            let update =
+            "UPDATE \(TableBookmarksMirror) SET " +
+            "type = ?, server_modified = ?, is_deleted = ?, " +
+            "hasDupe = ?, parentid = ?, parentName = ?, " +
+            "feedUri = ?, siteUri = ?, pos = ?, title = ?, " +
+            "description = ?, bmkUri = ?, tags = ?, keyword = ?, " +
+            "folderName = ?, queryId = ? " +
+            "WHERE guid = ?"
+
+            let insert =
+            "INSERT OR IGNORE INTO \(TableBookmarksMirror) " +
+            "(type, server_modified, is_deleted, hasDupe, parentid, parentName, " +
+             "feedUri, siteUri, pos, title, description, bmkUri, tags, keyword, folderName, queryId, guid) " +
+            "VALUES " +
+            "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+
+            for args in values {
+                if let error = conn.executeChange(update, withArgs: args) {
+                    log.error("Updating mirror: \(error.description).")
+                    err = error
+                    deferred.fill(Maybe(failure: DatabaseError(err: error)))
+                    return false
+                }
+
+                if conn.numberOfRowsModified > 0 {
+                    continue
+                }
+
+                if let error = conn.executeChange(insert, withArgs: args) {
+                    log.error("Inserting mirror: \(error.description).")
+                    err = error
+                    deferred.fill(Maybe(failure: DatabaseError(err: error)))
+                    return false
+                }
+            }
+
+            deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: err)))
+            return err == nil
+        }
+
+        return deferred
+    }
+}
