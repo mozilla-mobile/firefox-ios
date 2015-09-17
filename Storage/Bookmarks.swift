@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 import Shared
 
-/// Small structure to encapsulate all the possible data that we can get
+// A small structure to encapsulate all the possible data that we can get
 // from an application sharing a web page or a URL.
 public struct ShareItem {
     public let url: String
