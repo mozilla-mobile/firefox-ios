@@ -32,18 +32,11 @@ class SQLiteBookmarkFolder: BookmarkFolder {
     }
 }
 
-public class SQLiteBookmarks: BookmarksModelFactory {
-    let db: BrowserDB
-    let favicons: FaviconsTable<Favicon>
-
-    private static let defaultFolderTitle = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark folders without titles.")
-    private static let defaultItemTitle = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark nodes without titles.")
-
-    public init(db: BrowserDB) {
-        self.db = db
-        self.favicons = FaviconsTable<Favicon>()
-    }
-
+// Helps with managing rows from the current local bookmarks schema.
+// The mirror schema is different, because it's shaped like the Sync object formats.
+// This helper will change extensively -- probably going away entirely -- as we add
+// bidirectional syncing support.
+private class LocalBookmarkNodeFactory {
     private class func itemFactory(row: SDRow) -> BookmarkItem {
         let id = row["id"] as! Int
         let guid = row["guid"] as! String
@@ -53,11 +46,11 @@ public class SQLiteBookmarks: BookmarksModelFactory {
 
         // TODO: share this logic with SQLiteHistory.
         if let faviconUrl = row["iconURL"] as? String,
-           let date = row["iconDate"] as? Double,
-           let faviconType = row["iconType"] as? Int {
-            bookmark.favicon = Favicon(url: faviconUrl,
-                date: NSDate(timeIntervalSince1970: date),
-                type: IconType(rawValue: faviconType)!)
+            let date = row["iconDate"] as? Double,
+            let faviconType = row["iconType"] as? Int {
+                bookmark.favicon = Favicon(url: faviconUrl,
+                    date: NSDate(timeIntervalSince1970: date),
+                    type: IconType(rawValue: faviconType)!)
         }
 
         bookmark.id = id
@@ -79,7 +72,7 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         return BookmarkNode(guid: guid, title: title)
     }
 
-    private class func factory(row: SDRow) -> BookmarkNode {
+    class func factory(row: SDRow) -> BookmarkNode {
         if let typeCode = row["type"] as? Int, type = BookmarkNodeType(rawValue: typeCode) {
             switch type {
             case .Bookmark:
@@ -103,22 +96,37 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         assert(false, "Invalid bookmark data.")
         return nodeFactory(row)
     }
+}
+
+public class SQLiteBookmarks: BookmarksModelFactory {
+    let db: BrowserDB
+    let favicons: FaviconsTable<Favicon>
+
+    private static let defaultFolderTitle = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark folders without titles.")
+    private static let defaultItemTitle = NSLocalizedString("Untitled", tableName: "Storage", comment: "The default name for bookmark nodes without titles.")
+
+    public init(db: BrowserDB) {
+        self.db = db
+        self.favicons = FaviconsTable<Favicon>()
+    }
 
     private func getChildrenWhere(whereClause: String, args: Args, includeIcon: Bool) -> Cursor<BookmarkNode> {
         var err: NSError? = nil
         return db.withReadableConnection(&err) { (conn, err) -> Cursor<BookmarkNode> in
             let inner = "SELECT id, type, guid, url, title, faviconID FROM \(TableBookmarks) WHERE \(whereClause)"
 
+            let sql: String
             if includeIcon {
-                let sql =
+                sql =
                 "SELECT bookmarks.id AS id, bookmarks.type AS type, guid, bookmarks.url AS url, title, " +
                 "favicons.url AS iconURL, favicons.date AS iconDate, favicons.type AS iconType " +
                 "FROM (\(inner)) AS bookmarks " +
                 "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
-                return conn.executeQuery(sql, factory: SQLiteBookmarks.factory, withArgs: args)
             } else {
-                return conn.executeQuery(inner, factory: SQLiteBookmarks.factory, withArgs: args)
+                sql = inner
             }
+
+            return conn.executeQuery(sql, factory: LocalBookmarkNodeFactory.factory, withArgs: args)
         }
     }
 
@@ -288,7 +296,7 @@ extension SQLiteBookmarks: SearchableBookmarks {
         "FROM (\(inner)) AS bookmarks " +
         "LEFT OUTER JOIN favicons ON bookmarks.faviconID = favicons.id"
         let args: Args = [url.absoluteString]
-        return db.runQuery(sql, args: args, factory: SQLiteBookmarks.itemFactory)
+        return db.runQuery(sql, args: args, factory: LocalBookmarkNodeFactory.itemFactory)
     }
 }
 
