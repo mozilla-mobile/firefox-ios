@@ -333,6 +333,7 @@
 		D33B5B7C1AF1AFC100F4DDE6 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33B5B7B1AF1AFC100F4DDE6 /* SearchTests.swift */; };
 		D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34510871ACF415700EC27F0 /* SearchLoader.swift */; };
 		D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
+		D34E33031BA793C2006135F0 /* loginForm.html in Resources */ = {isa = PBXBuildFile; fileRef = D34E33021BA793C2006135F0 /* loginForm.html */; settings = {ASSET_TAGS = (); }; };
 		D36998891AD70A0A00650C6C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D36998881AD70A0A00650C6C /* IOKit.framework */; };
 		D375A9201AE71675001B30D5 /* ViewMemoryLeakTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D375A91F1AE71675001B30D5 /* ViewMemoryLeakTests.swift */; };
 		D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38A1BEC1A9FA2CA00F6A386 /* SiteTableViewController.swift */; };
@@ -1497,6 +1498,7 @@
 		D33B5B7B1AF1AFC100F4DDE6 /* SearchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTests.swift; sourceTree = "<group>"; };
 		D34510871ACF415700EC27F0 /* SearchLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchLoader.swift; sourceTree = "<group>"; };
 		D34DC84D1A16C40C00D49B7B /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Profile.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		D34E33021BA793C2006135F0 /* loginForm.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = loginForm.html; sourceTree = "<group>"; };
 		D35275151AA8D13B00E9C906 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		D36998881AD70A0A00650C6C /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		D375A91F1AE71675001B30D5 /* ViewMemoryLeakTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewMemoryLeakTests.swift; sourceTree = "<group>"; };
@@ -2447,6 +2449,7 @@
 			isa = PBXGroup;
 			children = (
 				D39FA16F1A83E62600EE869C /* UITests-Bridging-Header.h */,
+				D34E33021BA793C2006135F0 /* loginForm.html */,
 				0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */,
 				0B6FBAB11AC1F830007EC669 /* numberedPage.html */,
 				0B5A93411B1EB572004F47A2 /* readablePage.html */,
@@ -3917,6 +3920,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6EAC5961B29CB3A00E1DE1E /* scrollablePage.html in Resources */,
+				D34E33031BA793C2006135F0 /* loginForm.html in Resources */,
 				0B6FBAB21AC1F830007EC669 /* numberedPage.html in Resources */,
 				0B5A93421B1EB572004F47A2 /* readablePage.html in Resources */,
 				0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */,

@@ -95,34 +95,80 @@ extension KIFUITestActor {
      * elements with the given textContent or title.
      */
     func waitForWebViewElementWithAccessibilityLabel(text: String) {
-        let webView = waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+        let success = hasWebViewElementWithAccessibilityLabel(text)
+        XCTAssert(success, "Found accessibility label in webview: \(text)")
+    }
 
-        // Wait for the webView to stop loading.
-        runBlock({ _ in
-            return webView.loading ? KIFTestStepResult.Wait : KIFTestStepResult.Success
-        })
-
-        lazilyInjectKIFHelper(webView)
-
+    /**
+     * Sets the text for a WKWebView input element with the given name.
+     */
+    func enterText(text: String, intoWebViewInputWithName inputName: String) {
+        let webView = getWebViewWithKIFHelper()
         var stepResult = KIFTestStepResult.Wait
 
         let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
-        webView.evaluateJavaScript("KIFHelper.selectElementWithAccessibilityLabel(\"\(escaped)\");", completionHandler: { (result: AnyObject?, error: NSError?) in
-            stepResult = result != nil ? (result as! Bool ? KIFTestStepResult.Success : KIFTestStepResult.Failure) : KIFTestStepResult.Failure
-        })
+        webView.evaluateJavaScript("KIFHelper.enterTextIntoInputWithName(\"\(escaped)\", \"\(inputName)\");") { success, _ in
+            stepResult = (success as! Bool) ? KIFTestStepResult.Success : KIFTestStepResult.Failure
+        }
 
-        runBlock({ (error: NSErrorPointer) in
+        runBlock { error in
+            if stepResult == KIFTestStepResult.Failure {
+                error.memory = NSError(domain: "KIFHelper", code: 0, userInfo: [NSLocalizedDescriptionKey: "Input element not found in webview: \(escaped)"])
+            }
+            return stepResult
+        }
+    }
+
+    /**
+     * Clicks a WKWebView element with the given label.
+     */
+    func tapWebViewElementWithAccessibilityLabel(text: String) {
+        let webView = getWebViewWithKIFHelper()
+        var stepResult = KIFTestStepResult.Wait
+
+        let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+        webView.evaluateJavaScript("KIFHelper.tapElementWithAccessibilityLabel(\"\(escaped)\")") { success, _ in
+            stepResult = (success as! Bool) ? KIFTestStepResult.Success : KIFTestStepResult.Failure
+        }
+
+        runBlock { error in
             if stepResult == KIFTestStepResult.Failure {
                 error.memory = NSError(domain: "KIFHelper", code: 0, userInfo: [NSLocalizedDescriptionKey: "Accessibility label not found in webview: \(escaped)"])
             }
             return stepResult
-        })
+        }
     }
 
-    private func lazilyInjectKIFHelper(webView: WKWebView) {
+    /**
+     * Determines whether an element in the page exists.
+     */
+    func hasWebViewElementWithAccessibilityLabel(text: String) -> Bool {
+        let webView = getWebViewWithKIFHelper()
+        var stepResult = KIFTestStepResult.Wait
+        var found = false
+
+        let escaped = text.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+        webView.evaluateJavaScript("KIFHelper.hasElementWithAccessibilityLabel(\"\(escaped)\")") { success, _ in
+            found = success as! Bool
+            stepResult = KIFTestStepResult.Success
+        }
+
+        runBlock { _ in return stepResult }
+
+        return found
+    }
+
+    private func getWebViewWithKIFHelper() -> WKWebView {
+        let webView = waitForViewWithAccessibilityLabel("Web content") as! WKWebView
+
+        // Wait for the web view to stop loading.
+        runBlock { _ in
+            return webView.loading ? KIFTestStepResult.Wait : KIFTestStepResult.Success
+        }
+
         var stepResult = KIFTestStepResult.Wait
 
-        webView.evaluateJavaScript("typeof KIFHelper;", completionHandler: { (result: AnyObject?, error: NSError?) in
+        webView.evaluateJavaScript("typeof KIFHelper") { result, _ in
             if result as! String == "undefined" {
                 let bundle = NSBundle(forClass: NavigationTests.self)
                 let path = bundle.pathForResource("KIFHelper", ofType: "js")!
@@ -130,18 +176,16 @@ extension KIFUITestActor {
                 webView.evaluateJavaScript(source as String, completionHandler: nil)
             }
             stepResult = KIFTestStepResult.Success
-        })
+        }
 
-        runBlock({ _ in
-            return stepResult
-        })
+        runBlock { _ in return stepResult }
+
+        return webView
     }
 
     public func deleteCharacterFromFirstResponser() {
         enterTextIntoCurrentFirstResponder("\u{0008}")
     }
-
-    // TODO: Click element, etc.
 }
 
 class BrowserUtils {
@@ -278,6 +322,10 @@ class SimplePageServer {
 
         webServer.addHandlerForMethod("GET", path: "/readerContent.html", requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             return GCDWebServerDataResponse(HTML: self.getPageData("readerContent"))
+        }
+
+        webServer.addHandlerForMethod("GET", path: "/loginForm.html", requestClass: GCDWebServerRequest.self) { _ in
+            return GCDWebServerDataResponse(HTML: self.getPageData("loginForm"))
         }
 
         if !webServer.startWithPort(0, bonjourName: nil) {

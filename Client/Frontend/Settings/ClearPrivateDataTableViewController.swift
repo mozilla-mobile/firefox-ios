@@ -67,6 +67,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
             cell.textLabel?.text = NSLocalizedString("Clear Private Data", comment: "Button in settings that clears private data for the selected items.")
             cell.textLabel?.textAlignment = NSTextAlignment.Center
             cell.textLabel?.textColor = UIConstants.DestructiveRed
+            cell.accessibilityTraits = UIAccessibilityTraitButton
             clearButton = cell
         }
 
