@@ -214,6 +214,14 @@ class TabCell: UICollectionViewCell {
     }
 }
 
+@available(iOS 9, *)
+struct PrivateModeStrings {
+    static let toggleAccessibilityLabel = NSLocalizedString("Private Mode", tableName: "PrivateBrowsing", comment: "Accessibility label for toggling on/off private mode")
+    static let toggleAccessibilityHint = NSLocalizedString("Turns private mode on or off", tableName: "PrivateBrowsing", comment: "Accessiblity hint for toggling on/off private mode")
+    static let toggleAccessibilityValueOn = NSLocalizedString("On", tableName: "PrivateBrowsing", comment: "Toggled ON accessibility value")
+    static let toggleAccessibilityValueOff = NSLocalizedString("Off", tableName: "PrivateBrowsing", comment: "Toggled OFF accessibility value")
+}
+
 class TabTrayController: UIViewController {
     let tabManager: TabManager
     let profile: Profile
@@ -228,6 +236,7 @@ class TabTrayController: UIViewController {
         didSet {
             if #available(iOS 9, *) {
                 togglePrivateMode.selected = privateMode
+                togglePrivateMode.accessibilityValue = privateMode ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
                 emptyPrivateTabsView.hidden = !(privateMode && tabManager.privateTabs.count == 0)
                 tabDataSource.tabs = tabsToDisplay
                 collectionView.reloadData()
@@ -245,7 +254,9 @@ class TabTrayController: UIViewController {
         button.setImage(UIImage(named: "smallPrivateMask"), forState: UIControlState.Normal)
         button.setImage(UIImage(named: "smallPrivateMaskSelected"), forState: UIControlState.Selected)
         button.addTarget(self, action: "SELdidTogglePrivateMode", forControlEvents: .TouchUpInside)
-        button.accessibilityLabel = NSLocalizedString("Toggle Private Mode", comment: "Accessibility label for toggling on/off private mode")
+        button.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
+        button.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
+        button.accessibilityValue = self.privateMode ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
         return button
     }()
 
@@ -335,11 +346,10 @@ class TabTrayController: UIViewController {
                 make.centerY.equalTo(self.navBar)
             }
 
-            view.addSubview(emptyPrivateTabsView)
+            view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
             emptyPrivateTabsView.hidden = !(privateMode && tabManager.privateTabs.count == 0)
             emptyPrivateTabsView.snp_makeConstraints { make in
-                make.top.equalTo(navBar.snp_bottom)
-                make.left.right.bottom.equalTo(self.view)
+                make.edges.equalTo(self.view)
             }
 
             if let tab = tabManager.selectedTab where tab.isPrivate {
