@@ -28,6 +28,96 @@ public protocol SearchableBookmarks {
     func bookmarksByURL(url: NSURL) -> Deferred<Maybe<Cursor<BookmarkItem>>>
 }
 
+public struct BookmarkMirrorItem {
+    public let guid: GUID
+    public let type: BookmarkNodeType
+    let serverModified: Timestamp
+    let isDeleted: Bool
+    let hasDupe: Bool
+    let parentID: GUID?
+    let parentName: String?
+
+    // Livemarks.
+    let feedURI: String?
+    let siteURI: String?
+
+    // Separators.
+    let pos: Int?
+
+    // Folders, livemarks, bookmarks and queries.
+    let title: String?
+    let description: String?
+
+    // Bookmarks and queries.
+    let bookmarkURI: String?
+    let tags: String?
+    let keyword: String?
+
+    // Queries.
+    let folderName: String?
+    let queryID: String?
+
+    public static func folder(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: GUID, title: String, description: String) -> BookmarkMirrorItem {
+        return BookmarkMirrorItem(guid: guid, type: .Bookmark, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parentID, parentName: parentName,
+            feedURI: nil, siteURI: nil,
+            pos: nil,
+            title: title, description: description,
+            bookmarkURI: nil, tags: nil, keyword: nil,
+            folderName: nil, queryID: nil)
+    }
+
+    public static func livemark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: GUID, title: String, description: String, feedURI: String, siteURI: String) -> BookmarkMirrorItem {
+        return BookmarkMirrorItem(guid: guid, type: .Livemark, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parentID, parentName: parentName,
+            feedURI: feedURI, siteURI: siteURI,
+            pos: nil,
+            title: title, description: description,
+            bookmarkURI: nil, tags: nil, keyword: nil,
+            folderName: nil, queryID: nil)
+    }
+
+    public static func separator(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: GUID, pos: Int) -> BookmarkMirrorItem {
+        return BookmarkMirrorItem(guid: guid, type: .Separator, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parentID, parentName: parentName,
+            feedURI: nil, siteURI: nil,
+            pos: pos,
+            title: nil, description: nil,
+            bookmarkURI: nil, tags: nil, keyword: nil,
+            folderName: nil, queryID: nil)
+    }
+
+    public static func bookmark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: GUID, title: String, description: String, URI: String, tags: String, keyword: String) -> BookmarkMirrorItem {
+        return BookmarkMirrorItem(guid: guid, type: .Bookmark, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parentID, parentName: parentName,
+            feedURI: nil, siteURI: nil,
+            pos: nil,
+            title: title, description: description,
+            bookmarkURI: URI, tags: tags, keyword: keyword,
+            folderName: nil, queryID: nil)
+    }
+
+    public static func query(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: GUID, title: String, description: String, URI: String, tags: String, keyword: String, folderName: String, queryID: String) -> BookmarkMirrorItem {
+        return BookmarkMirrorItem(guid: guid, type: .Query, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parentID, parentName: parentName,
+            feedURI: nil, siteURI: nil,
+            pos: nil,
+            title: title, description: description,
+            bookmarkURI: URI, tags: tags, keyword: keyword,
+            folderName: folderName, queryID: queryID)
+    }
+
+    public static func deleted(type: BookmarkNodeType, guid: GUID, modified: Timestamp) -> BookmarkMirrorItem {
+        return BookmarkMirrorItem(guid: guid, type: type, serverModified: modified,
+            isDeleted: true, hasDupe: false, parentID: nil, parentName: nil,
+            feedURI: nil, siteURI: nil,
+            pos: nil,
+            title: nil, description: nil,
+            bookmarkURI: nil, tags: nil, keyword: nil,
+            folderName: nil, queryID: nil)
+    }
+}
+
 public struct BookmarkRoots {
     // These match Places on desktop.
     public static let RootGUID =               "root________"
