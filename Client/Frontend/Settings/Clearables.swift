@@ -29,7 +29,7 @@ class HistoryClearable: Clearable {
     }
 
     var label: String {
-        return NSLocalizedString("Browsing History", comment: "Settings item for clearing browsing history")
+        return NSLocalizedString("Browsing History", tableName: "ClearPrivateData", comment: "Settings item for clearing browsing history")
     }
 
     func clear() -> Success {
@@ -51,7 +51,7 @@ class PasswordsClearable: Clearable {
     }
 
     var label: String {
-        return NSLocalizedString("Saved Logins", comment: "Settings item for clearing passwords and login data")
+        return NSLocalizedString("Saved Logins", tableName: "ClearPrivateData", comment: "Settings item for clearing passwords and login data")
     }
 
     func clear() -> Success {
@@ -90,7 +90,7 @@ class CacheClearable: Clearable {
     }
 
     var label: String {
-        return NSLocalizedString("Cache", comment: "Settings item for clearing the cache")
+        return NSLocalizedString("Cache", tableName: "ClearPrivateData", comment: "Settings item for clearing the cache")
     }
 
     func clear() -> Success {
@@ -144,7 +144,7 @@ class SiteDataClearable: Clearable {
     }
 
     var label: String {
-        return NSLocalizedString("Offline Website Data", comment: "Settings item for clearing website data")
+        return NSLocalizedString("Offline Website Data", tableName: "ClearPrivateData", comment: "Settings item for clearing website data")
     }
 
     func clear() -> Success {
@@ -175,7 +175,7 @@ class CookiesClearable: Clearable {
     }
 
     var label: String {
-        return NSLocalizedString("Cookies", comment: "Settings item for clearing cookies")
+        return NSLocalizedString("Cookies", tableName: "ClearPrivateData", comment: "Settings item for clearing cookies")
     }
 
     func clear() -> Success {
