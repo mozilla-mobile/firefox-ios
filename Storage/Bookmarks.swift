@@ -50,7 +50,11 @@ public struct BookmarkRoots {
 }
 
 /**
- * This matches Places's nsINavBookmarksService, just for sanity.
+ * This partly matches Places's nsINavBookmarksService, just for sanity.
+ *
+ * It is further extended to support the types that exist in Sync, so we can use
+ * this to store mirrored rows.
+ *
  * These are only used at the DB layer.
  */
 public enum BookmarkNodeType: Int {
@@ -58,6 +62,11 @@ public enum BookmarkNodeType: Int {
     case Folder = 2
     case Separator = 3
     case DynamicContainer = 4
+
+    case Livemark = 5
+    case Query = 6
+
+    // No microsummary: those turn into bookmarks.
 }
 
 /**
