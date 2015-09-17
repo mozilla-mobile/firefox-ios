@@ -165,6 +165,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 // queue, and so calling anything else that calls through to the DB will
                 // deadlock. This problem will go away when the bookmarks API switches to
                 // Deferred instead of using callbacks.
+                // TODO: it's now time for this.
                 self.profile.bookmarks.remove(bookmark).uponQueue(dispatch_get_main_queue()) { res in
                     if let err = res.failureValue {
                         self.onModelFailure(err)
