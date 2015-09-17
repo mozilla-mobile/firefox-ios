@@ -29,13 +29,23 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.clearHistoryItems(tester())
     }
 
+    private func openClearPrivateDataDialog() {
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Clear Private Data")
+    }
+
+    private func closeClearPrivateDataDialog(lastTabLabel lastTabLabel: String) {
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel(lastTabLabel)
+    }
+
     private func clearPrivateData(clearables: Set<Clearable>) {
         let webView = tester().waitForViewWithAccessibilityLabel("Web content") as! WKWebView
         let lastTabLabel = webView.title!.isEmpty ? "home" : webView.title!
 
-        tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Clear Private Data")
+        openClearPrivateDataDialog()
 
         // Disable all items that we don't want to clear.
         for clearable in AllClearables {
@@ -47,9 +57,8 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         }
 
         tester().tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
-        tester().tapViewWithAccessibilityLabel("Settings")
-        tester().tapViewWithAccessibilityLabel("Done")
-        tester().tapViewWithAccessibilityLabel(lastTabLabel)
+
+        closeClearPrivateDataDialog(lastTabLabel: lastTabLabel)
     }
 
     func visitSites(noOfSites noOfSites: Int) -> [(title: String, domain: String, url: String)] {
@@ -73,6 +82,25 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             }
         }
         XCTFail("Couldn't find any domains in top sites.")
+    }
+
+    func testRemembersToggles() {
+        clearPrivateData([Clearable.History, Clearable.Logins])
+
+        openClearPrivateDataDialog()
+
+        // Ensure the toggles match our settings.
+        [
+            (Clearable.Cache, "0"),
+            (Clearable.Cookies, "0"),
+            (Clearable.OfflineData, "0"),
+            (Clearable.History, "1"),
+            (Clearable.Logins, "1"),
+        ].forEach { clearable, value in
+            XCTAssertEqual(value, tester().waitForViewWithAccessibilityLabel(clearable.rawValue).accessibilityValue)
+        }
+
+        closeClearPrivateDataDialog(lastTabLabel: "home")
     }
 
     func testClearsTopSitesPanel() {
