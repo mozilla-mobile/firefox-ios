@@ -13,32 +13,30 @@ public class SuggestedSite: Site {
     public let backgroundColor: UIColor
 
     let trackingId: Int
-    init(json: JSON) {
-        self.backgroundColor = UIColor(colorString: json["bgcolor"].asString!)
-        self.trackingId = json["trackingid"].asInt ?? 0
-        self.wordmark = Favicon(url: json["imageurl"].asString!, date: NSDate(), type: .Icon)
-
-        super.init(url: json["url"].asString!, title: json["title"].asString!)
-
-        self.icon = Favicon(url: json["faviconUrl"].asString!, date: NSDate(), type: .Icon)
+    init(data: SuggestedSiteData) {
+        self.backgroundColor = UIColor(colorString: data.bgColor)
+        self.trackingId = data.trackingId
+        self.wordmark = Favicon(url: data.imageUrl, date: NSDate(), type: .Icon)
+        super.init(url: data.url, title: data.title)
+        self.icon = Favicon(url: data.faviconUrl, date: NSDate(), type: .Icon)
     }
 }
 
-public let SuggestedSites: SuggestedSitesData<SuggestedSite> = SuggestedSitesData<SuggestedSite>()
+public let SuggestedSites: SuggestedSitesCursor = SuggestedSitesCursor()
 
-public class SuggestedSitesData<T>: ArrayCursor<SuggestedSite> {
+public class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
     private init() {
-        // TODO: Make this list localized. That should be as simple as making sure it's in the lproj directory.
-        let path = NSBundle.mainBundle().pathForResource("suggestedsites", ofType: "json")
-        let data = try? NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding)
-        let json = JSON.parse(data as! String)
-
-        var tiles = [SuggestedSite]()
-        for i in 0..<json.length {
-            let t = SuggestedSite(json: json[i])
-            tiles.append(t)
-        }
-
+        let sites = DefaultSuggestedSites.sites
+        let tiles = sites.map({data in SuggestedSite(data: data)})
         super.init(data: tiles, status: .Success, statusMessage: "Loaded")
     }
+}
+
+public struct SuggestedSiteData {
+    var url: String
+    var bgColor: String
+    var imageUrl: String
+    var faviconUrl: String
+    var trackingId: Int
+    var title: String
 }
