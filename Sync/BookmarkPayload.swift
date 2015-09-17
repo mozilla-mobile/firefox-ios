@@ -16,7 +16,6 @@ public enum BookmarkType: String {
     case bookmark
     case query
     case microsummary     // Dead: now a bookmark.
-    case item             // Oh, Sync.
 
     public static func payloadFromJSON(json: JSON) -> BookmarkBasePayload? {
         guard let typeString = json["type"].asString else {
@@ -28,9 +27,9 @@ public enum BookmarkType: String {
 
         let result: BookmarkBasePayload
         switch type {
-        case bookmark:
-            fallthrough
         case microsummary:
+            fallthrough
+        case bookmark:
             result = BookmarkPayload(json)
         case folder:
             result = FolderPayload(json)
@@ -40,8 +39,6 @@ public enum BookmarkType: String {
             result = SeparatorPayload(json)
         case query:
             result = BookmarkQueryPayload(json)
-        case item:
-            return nil
         }
 
         if result.isValid() {
