@@ -78,6 +78,7 @@
 		2816F0011B33E05400522243 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816EFFF1B33E05400522243 /* UIConstants.swift */; };
 		281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B2BE91ADF4D90002917DC /* MockProfile.swift */; };
 		281B2C081ADF4F29002917DC /* DeferredUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B2C071ADF4F29002917DC /* DeferredUtils.swift */; };
+		281EC0781BA9CB9E003052A4 /* BookmarkPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AA941C1B97DCA800703DC6 /* BookmarkPayload.swift */; settings = {ASSET_TAGS = (); }; };
 		282730F11ABC99C100AA1954 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283306E81AB3BB87008999AC /* Functions.swift */; };
 		282731631ABC9BE600AA1954 /* Sync-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 282731621ABC9BE600AA1954 /* Sync-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		282731691ABC9BE700AA1954 /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
@@ -4185,11 +4186,12 @@
 				28A6CE8A1AC082E200C1A2D4 /* UtilsTests.swift in Sources */,
 				28F657C01ABFC97D00A608BD /* Record.swift in Sources */,
 				2F3724E61ABF3C19007607FA /* Info.swift in Sources */,
+				281EC0781BA9CB9E003052A4 /* BookmarkPayload.swift in Sources */,
+				2855611F1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift in Sources */,
 				28ECD9A31BA1EF3D00D829DA /* GCDWebServer.m in Sources */,
 				28ECD9A61BA1EF3D00D829DA /* GCDWebServerRequest.m in Sources */,
 				28ECD9A41BA1EF3D00D829DA /* GCDWebServerConnection.m in Sources */,
 				28ECD9A91BA1EF5100D829DA /* GCDWebServerFileRequest.m in Sources */,
-				2855611F1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift in Sources */,
 				2894C16D1AE89FD500F1F92F /* HistoryPayload.swift in Sources */,
 				28ECD9AD1BA1EF5100D829DA /* GCDWebServerErrorResponse.m in Sources */,
 				288501F91AC0F62200E7F670 /* RequestExtensions.swift in Sources */,
