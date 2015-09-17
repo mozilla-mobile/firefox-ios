@@ -403,7 +403,6 @@ class URLBarView: UIView {
             if animated {
                 UIView.animateWithDuration(1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: animate, completion: completion)
             } else {
-                animate()
                 completion(true)
             }
         }

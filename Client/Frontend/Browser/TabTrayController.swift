@@ -129,15 +129,13 @@ class TabCell: UICollectionViewCell {
         switch style {
         case .Light:
             title = UIVisualEffectView(effect: UIBlurEffect(style: .ExtraLight))
-
             self.titleText.textColor = LightTabCellUX.TabTitleTextColor
-            self.titleText.backgroundColor = UIColor.clearColor()
         case .Dark:
             title = UIVisualEffectView(effect: UIBlurEffect(style: .Dark))
-
             self.titleText.textColor = DarkTabCellUX.TabTitleTextColor
-            self.titleText.backgroundColor = UIColor.clearColor()
         }
+
+        titleText.backgroundColor = UIColor.clearColor()
 
         title.layer.shadowColor = UIColor.blackColor().CGColor
         title.layer.shadowOpacity = 0.2
@@ -461,7 +459,8 @@ extension TabTrayController: TabManagerDelegate {
 
     func tabManager(tabManager: TabManager, didAddTab tab: Browser, restoring: Bool) {
         // Get the index of the added tab from it's set (private or normal)
-        guard let index = tabManager.indexForTab(tab, inTabs: tabsToDisplay) else { return }
+        guard let index = tabsToDisplay.indexOf(tab) else { return }
+        
         tabDataSource.tabs.append(tab)
 
         self.collectionView.performBatchUpdates({ _ in

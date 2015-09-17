@@ -89,15 +89,6 @@ class TabManager : NSObject {
         }
     }
 
-    func indexForTab(tab: Browser?, inTabs tabList: [Browser]) -> Int? {
-        for i in 0..<count {
-            if tabList[i] === tab {
-                return i
-            }
-        }
-        return nil
-    }
-
     init(defaultNewTabRequest: NSURLRequest, profile: Profile) {
         self.profile = profile
         self.defaultNewTabRequest = defaultNewTabRequest
@@ -156,7 +147,11 @@ class TabManager : NSObject {
 
         let previous = selectedTab
 
-        _selectedIndex = indexForTab(tab, inTabs: tabs) ?? -1
+        if let tab = tab {
+            _selectedIndex = tabs.indexOf(tab) ?? -1
+        } else {
+            _selectedIndex = -1
+        }
 
         preserveTabs()
 

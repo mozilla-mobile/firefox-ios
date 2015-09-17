@@ -1369,31 +1369,23 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didAddTab tab: Browser, restoring: Bool) {
         // If we are restoring tabs then we update the count once at the end
         if !restoring {
-            let count = tab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            urlBar.updateTabCount(count)
+            updateTabCountUsingTabManager(tabManager)
         }
         tab.browserDelegate = self
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser) {
-        let count = tab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-        urlBar.updateTabCount(max(count, 1))
+        updateTabCountUsingTabManager(tabManager)
         // browserDelegate is a weak ref (and the tab's webView may not be destroyed yet)
         // so we don't expcitly unset it.
     }
 
     func tabManagerDidAddTabs(tabManager: TabManager) {
-        if let selectedTab = tabManager.selectedTab {
-            let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            urlBar.updateTabCount(count)
-        }
+        updateTabCountUsingTabManager(tabManager)
     }
 
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
-        if let selectedTab = tabManager.selectedTab {
-            let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            urlBar.updateTabCount(count)
-        }
+        updateTabCountUsingTabManager(tabManager)
     }
 
     private func isWebPage(url: NSURL) -> Bool {
@@ -1404,6 +1396,13 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         return false
+    }
+
+    private func updateTabCountUsingTabManager(tabManager: TabManager) {
+        if let selectedTab = tabManager.selectedTab {
+            let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
+            urlBar.updateTabCount(max(count, 1))
+        }
     }
 }
 

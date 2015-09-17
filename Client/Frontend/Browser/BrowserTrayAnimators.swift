@@ -23,8 +23,8 @@ private extension TrayToBrowserAnimator {
         guard let selectedTab = bvc.tabManager.selectedTab else { return }
 
         let tabManager = bvc.tabManager
-        guard let expandFromIndex = tabManager.indexForTab(selectedTab,
-            inTabs: selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs) else { return }
+        let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        guard let expandFromIndex = displayedTabs.indexOf(selectedTab) else { return }
 
         // Hide browser components
         bvc.toggleSnackBarVisibility(show: false)
@@ -116,8 +116,8 @@ private extension BrowserToTrayAnimator {
         guard let selectedTab = bvc.tabManager.selectedTab else { return }
 
         let tabManager = bvc.tabManager
-        guard let scrollToIndex = tabManager.indexForTab(selectedTab,
-            inTabs: selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs) else { return }
+        let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+        guard let scrollToIndex = displayedTabs.indexOf(selectedTab) else { return }
 
         // Insert tab tray below the browser and force a layout so the collection view can get it's frame right
         container.insertSubview(tabTray.view, belowSubview: bvc.view)
