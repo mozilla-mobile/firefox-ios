@@ -781,12 +781,17 @@ class BrowserViewController: UIViewController {
         let isPage = (tab.displayURL != nil) ? isWebPage(tab.displayURL!) : false
         navigationToolbar.updatePageStatus(isWebPage: isPage)
 
-        if let url = tab.displayURL?.absoluteString {
-            profile.bookmarks.isBookmarked(url, success: { bookmarked in
-                self.navigationToolbar.updateBookmarkStatus(bookmarked)
-            }, failure: { err in
-                log.error("Error getting bookmark status: \(err).")
-            })
+        guard let url = tab.displayURL?.absoluteString else {
+            return
+        }
+
+        profile.bookmarks.isBookmarked(url).uponQueue(dispatch_get_main_queue()) { result in
+            guard let bookmarked = result.successValue else {
+                log.error("Error getting bookmark status: \(result.failureValue).")
+                return
+            }
+
+            self.navigationToolbar.updateBookmarkStatus(bookmarked)
         }
     }
 
@@ -994,22 +999,21 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 
     func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
-        if let tab = tabManager.selectedTab,
-           let url = tab.displayURL?.absoluteString {
-            profile.bookmarks.isBookmarked(url,
-                success: { isBookmarked in
-                    if isBookmarked {
-                        self.removeBookmark(url)
-                    } else {
-                        self.addBookmark(url, title: tab.title)
-                    }
-                },
-                failure: { err in
-                    log.error("Bookmark error: \(err).")
-                }
-            )
-        } else {
-            log.error("Bookmark error: No tab is selected, or no URL in tab.")
+        guard let tab = tabManager.selectedTab,
+              let url = tab.displayURL?.absoluteString else {
+                log.error("Bookmark error: No tab is selected, or no URL in tab.")
+                return
+        }
+        profile.bookmarks.isBookmarked(url).upon {
+            guard let isBookmarked = $0.successValue else {
+                log.error("Bookmark error: \($0.failureValue).")
+                return
+            }
+            if isBookmarked {
+                self.removeBookmark(url)
+            } else {
+                self.addBookmark(url, title: tab.title)
+            }
         }
     }
 
@@ -1337,12 +1341,15 @@ extension BrowserViewController: TabManagerDelegate {
             addOpenInViewIfNeccessary(webView.URL)
 
             if let url = webView.URL?.absoluteString {
-                profile.bookmarks.isBookmarked(url, success: { bookmarked in
-                    self.toolbar?.updateBookmarkStatus(bookmarked)
-                    self.urlBar.updateBookmarkStatus(bookmarked)
-                }, failure: { err in
-                    log.error("Error getting bookmark status: \(err).")
-                })
+                profile.bookmarks.isBookmarked(url).upon {
+                    guard let isBookmarked = $0.successValue else {
+                        log.error("Error getting bookmark status: \($0.failureValue).")
+                        return
+                    }
+
+                    self.toolbar?.updateBookmarkStatus(isBookmarked)
+                    self.urlBar.updateBookmarkStatus(isBookmarked)
+                }
             } else {
                 // The web view can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.

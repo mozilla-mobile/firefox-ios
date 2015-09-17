@@ -134,11 +134,10 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         return self.getChildrenWhere(sql, args: args, includeIcon: true)
     }
 
-    private func modelForFolder(guid: String, title: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func modelForFolder(guid: String, title: String) -> Deferred<Maybe<BookmarksModel>> {
         let children = getChildren(guid)
         if children.status == .Failure {
-            failure(children.statusMessage)
-            return
+            return deferMaybe(DatabaseError(description: children.statusMessage))
         }
 
         let f = SQLiteBookmarkFolder(guid: guid, title: title, children: children)
@@ -146,28 +145,27 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         // We add some suggested sites to the mobile bookmarks folder.
         if guid == BookmarkRoots.MobileFolderGUID {
             let extended = BookmarkFolderWithDefaults(folder: f, sites: SuggestedSites)
-            success(BookmarksModel(modelFactory: self, root: extended))
+            return deferMaybe(BookmarksModel(modelFactory: self, root: extended))
         } else {
-            success(BookmarksModel(modelFactory: self, root: f))
+            return deferMaybe(BookmarksModel(modelFactory: self, root: f))
         }
     }
 
-    public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
-        self.modelForFolder(folder.guid, title: folder.title, success: success, failure: failure)
+    public func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
+        return self.modelForFolder(folder.guid, title: folder.title)
     }
 
-    public func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
-        self.modelForFolder(guid, title: "", success: success, failure: failure)
+    public func modelForFolder(guid: String) -> Deferred<Maybe<BookmarksModel>> {
+        return self.modelForFolder(guid, title: "")
     }
 
-    public func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
         let children = getRootChildren()
         if children.status == .Failure {
-            failure(children.statusMessage)
-            return
+            return deferMaybe(DatabaseError(description: children.statusMessage))
         }
         let folder = SQLiteBookmarkFolder(guid: BookmarkRoots.RootGUID, title: "Root", children: children)
-        success(BookmarksModel(modelFactory: self, root: folder))
+        return deferMaybe(BookmarksModel(modelFactory: self, root: folder))
     }
 
     public var nullModel: BookmarksModel {
@@ -176,7 +174,7 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         return BookmarksModel(modelFactory: self, root: folder)
     }
 
-    public func isBookmarked(url: String, success: (Bool) -> (), failure: (Any) -> ()) {
+    public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
         var err: NSError?
         let sql = "SELECT id FROM \(TableBookmarks) WHERE url = ? LIMIT 1"
         let args: Args = [url]
@@ -184,11 +182,11 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         let c = db.withReadableConnection(&err) { (conn, err) -> Cursor<Int> in
             return conn.executeQuery(sql, factory: { $0["id"] as! Int }, withArgs: args)
         }
+
         if c.status == .Success {
-            success(c.count > 0)
-        } else {
-            failure(err)
+            return deferMaybe(c.count > 0)
         }
+        return deferMaybe(DatabaseError(err: err))
     }
 
     public func clearBookmarks() -> Success {

@@ -25,7 +25,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             // only show mobile bookmarks.
             // Note that we also need to build a similar kind of virtual hierarchy
             // to what we have on Android.
-            profile.bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID, success: self.onNewModel, failure: self.onModelFailure)
+            profile.bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID).upon(onModelFetched)
+
             // profile.bookmarks.modelForRoot(self.onNewModel, failure: self.onModelFailure)
         }
     }
@@ -55,6 +56,14 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
+    private func onModelFetched(result: Maybe<BookmarksModel>) {
+        guard let model = result.successValue else {
+            self.onModelFailure(result.failureValue)
+            return
+        }
+        self.onNewModel(model)
+    }
+
     private func onNewModel(model: BookmarksModel) {
         self.source = model
         dispatch_async(dispatch_get_main_queue()) {
@@ -67,7 +76,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     override func reloadData() {
-        self.source?.reloadData(self.onNewModel, failure: self.onModelFailure)
+        self.source?.reloadData().upon(onModelFetched)
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -132,7 +141,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
             case let folder as BookmarkFolder:
                 // Descend into the folder.
-                source.selectFolder(folder, success: self.onNewModel, failure: self.onModelFailure)
+                source.selectFolder(folder).upon(onModelFetched)
                 break
 
             default:
@@ -178,7 +187,11 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                     }
 
                     dispatch_async(dispatch_get_main_queue()) {
-                        self.source?.reloadData({ model in
+                        self.source?.reloadData().upon {
+                            guard let model = $0.successValue else {
+                                self.onModelFailure($0.failureValue)
+                                return
+                            }
                             dispatch_async(dispatch_get_main_queue()) {
                                 tableView.beginUpdates()
                                 self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
@@ -188,7 +201,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
                                 NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added":false])
                             }
-                        }, failure: self.onModelFailure)
+                        }
                     }
                 }
             }

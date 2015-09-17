@@ -22,26 +22,20 @@ class TestSQLiteBookmarks: XCTestCase {
 
         let e1 = self.expectationWithDescription("Waiting for add.")
         func modelContainsItem() -> Success {
-            bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID,
-                success: { (model: BookmarksModel) in
-                    let folder = model.current
-                    let child = folder[0] as? BookmarkItem
-                    XCTAssertEqual(url, child!.url)
-                    e1.fulfill()
-                },
-                failure: { any in })
-            return succeed()
+            return bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID).bind { res in
+                XCTAssertEqual((res.successValue?.current[0] as? BookmarkItem)?.url, url)
+                e1.fulfill()
+                return succeed()
+            }
         }
 
         let e2 = self.expectationWithDescription("Waiting for existence check.")
         func itemExists() -> Success {
-            bookmarks.isBookmarked(url,
-                success: { yes in
-                    XCTAssertTrue(yes)
-                    e2.fulfill()
-                },
-                failure: { any in })
-            return succeed()
+            return bookmarks.isBookmarked(url).bind { res in
+                XCTAssertTrue(res.successValue ?? false)
+                e2.fulfill()
+                return succeed()
+            }
         }
 
         let e3 = self.expectationWithDescription("Waiting for delete.")
