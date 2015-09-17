@@ -86,9 +86,16 @@ public class SQLiteBookmarks: BookmarksModelFactory {
             case .Folder:
                 return folderFactory(row)
             case .DynamicContainer:
-                assert(false, "Should never occur.")
+                fallthrough
             case .Separator:
+                // TODO
                 assert(false, "Separators not yet supported.")
+            case .Livemark:
+                // TODO
+                assert(false, "Livemarks not yet supported.")
+            case .Query:
+                // TODO
+                assert(false, "Queries not yet supported.")
             }
         }
 
