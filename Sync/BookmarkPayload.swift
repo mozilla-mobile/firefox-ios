@@ -230,6 +230,28 @@ public class BookmarkPayload: BookmarkBasePayload {
 
         return true
     }
+
+    // This goes here because extensions cannot override methods yet.
+    // The rest are in extension blocks at the end of this file.
+    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Bookmark, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.bookmark(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            // TODO: these might need to be weakened if real-world data is dirty.
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString!,
+            title: self["title"].asString!,
+            description: self["description"].asString!,
+            URI: self["bmkUri"].asString!,
+            tags: self["tags"].asString!,
+            keyword: self["keyword"].asString!
+        )
+    }
 }
 
 public class BookmarkQueryPayload: BookmarkPayload {
@@ -268,6 +290,27 @@ public class BookmarkQueryPayload: BookmarkPayload {
         }
 
         return true
+    }
+
+    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Query, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.query(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString!,
+            title: self["title"].asString ?? "",
+            description: self["description"].asString,
+            URI: self["bmkUri"].asString!,
+            tags: self["tags"].toString(),           // Stringify it so we can put the array in the DB.
+            keyword: self["keyword"].asString,
+            folderName: self["folderName"].asString,
+            queryID: self["queryID"].asString
+        )
     }
 }
 
@@ -358,5 +401,71 @@ public class BookmarkBasePayload: CleartextPayloadJSON {
         }
 
         return self.hasDupe == p.hasDupe
+    }
+}
+
+public protocol MirrorItemable {
+    func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem
+}
+
+extension BookmarkPayload: MirrorItemable {
+    // In the main class definition due to Swift compiler limitations.
+}
+
+extension FolderPayload: MirrorItemable {
+    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Folder, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.folder(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            // TODO: these might need to be weakened if real-world data is dirty.
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString!,
+            title: self["title"].asString!,
+            description: self["description"].asString!
+        )
+    }
+}
+
+extension LivemarkPayload: MirrorItemable {
+    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Livemark, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.livemark(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            // TODO: these might need to be weakened if real-world data is dirty.
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString!,
+            title: self["title"].asString!,
+            description: self["description"].asString!,
+            feedURI: self["feedURI"].asString!,
+            siteURI: self["siteURI"].asString!
+        )
+    }
+}
+
+extension SeparatorPayload: MirrorItemable {
+    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Separator, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.separator(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            // TODO: these might need to be weakened if real-world data is dirty.
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString!,
+            pos: self["pos"].asInt!
+        )
     }
 }

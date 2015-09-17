@@ -239,5 +239,17 @@ class RecordTests: XCTestCase {
             ])
         let bookmark = BookmarkType.payloadFromJSON(validBookmark)!
         XCTAssertTrue(bookmark is BookmarkPayload)
+
+        let query = JSON.parse("{\"id\":\"ShCZLGEFQMam\",\"type\":\"query\",\"title\":\"Downloads\",\"parentName\":\"\",\"bmkUri\":\"place:transition=7&sort=4\",\"tags\":[],\"keyword\":null,\"description\":null,\"loadInSidebar\":false,\"parentid\":\"T6XK5oJMU8ih\"}")
+        let q = BookmarkType.payloadFromJSON(query)
+        XCTAssertTrue(q is BookmarkQueryPayload)
+        XCTAssertTrue(q is MirrorItemable)
+        guard let item = (q as? MirrorItemable)?.toMirrorItem(NSDate.now()) else {
+            XCTFail("Not mirrorable!")
+            return
+        }
+
+        XCTAssertEqual(6, item.type.rawValue)
+        XCTAssertEqual("ShCZLGEFQMam", item.guid)
     }
 }
