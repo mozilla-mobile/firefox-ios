@@ -38,12 +38,12 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("Clear Private Data")
 
         // Disable all items that we don't want to clear.
-        for clearable in AllClearables.subtract(clearables) {
+        for clearable in AllClearables {
             // If we don't wait here, setOn:forSwitchWithAccessibilityLabel tries to use the UITableViewCell
             // instead of the UISwitch. KIF bug?
             tester().waitForViewWithAccessibilityLabel(clearable.rawValue)
 
-            tester().setOn(false, forSwitchWithAccessibilityLabel: clearable.rawValue)
+            tester().setOn(clearables.contains(clearable), forSwitchWithAccessibilityLabel: clearable.rawValue)
         }
 
         tester().tapViewWithAccessibilityLabel("Clear Private Data", traits: UIAccessibilityTraitButton)
