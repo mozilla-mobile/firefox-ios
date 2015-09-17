@@ -38,7 +38,7 @@ class PrivateBrowsingTests: KIFTestCase {
 
         // Then try doing the same thing for a private tab
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Toggle Private Mode")
+        tester().tapViewWithAccessibilityLabel("Private Mode")
         tester().tapViewWithAccessibilityLabel("Add Tab")
         tester().tapViewWithAccessibilityIdentifier("url")
 
@@ -54,7 +54,7 @@ class PrivateBrowsingTests: KIFTestCase {
         // Exit private mode
         tester().tapViewWithAccessibilityLabel("Cancel")
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Toggle Private Mode")
+        tester().tapViewWithAccessibilityLabel("Private Mode")
         tester().tapViewWithAccessibilityLabel("Page 1")
     }
 
@@ -72,7 +72,7 @@ class PrivateBrowsingTests: KIFTestCase {
 
         // Add a private tab and make sure we only see the private tab in the count, and not the normal tabs
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Toggle Private Mode")
+        tester().tapViewWithAccessibilityLabel("Private Mode")
         tester().tapViewWithAccessibilityLabel("Add Tab")
 
         tabButton = tester().waitForViewWithAccessibilityLabel("Show Tabs") as! UIButton
@@ -80,7 +80,7 @@ class PrivateBrowsingTests: KIFTestCase {
 
         // Switch back to normal tabs and make sure the private tab doesnt get added to the count
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Toggle Private Mode")
+        tester().tapViewWithAccessibilityLabel("Private Mode")
         tester().tapViewWithAccessibilityLabel("Page 1")
 
         tabButton = tester().waitForViewWithAccessibilityLabel("Show Tabs") as! UIButton
@@ -90,7 +90,7 @@ class PrivateBrowsingTests: KIFTestCase {
     func testNoPrivateTabsShowsAndHidesEmptyView() {
         // Do we show the empty private tabs panel view?
         tester().tapViewWithAccessibilityLabel("Show Tabs")
-        tester().tapViewWithAccessibilityLabel("Toggle Private Mode")
+        tester().tapViewWithAccessibilityLabel("Private Mode")
         XCTAssertTrue(tester().viewExistsWithLabel("Private Browsing"))
 
         // Do we hide it when we add a tab?
@@ -111,6 +111,6 @@ class PrivateBrowsingTests: KIFTestCase {
         XCTAssertTrue(tester().viewExistsWithLabel("Private Browsing"), "Private browsing title on empty view is visible")
 
         // Exit private mode
-        tester().tapViewWithAccessibilityLabel("Toggle Private Mode")
+        tester().tapViewWithAccessibilityLabel("Private Mode")
     }
 }
