@@ -133,10 +133,15 @@ public class SQLiteBookmarks: BookmarksModelFactory {
             return
         }
 
-        // We add some suggested sites to the mobile bookmarks folder.
         let f = SQLiteBookmarkFolder(guid: guid, title: title, children: children)
-        let extended = BookmarkFolderWithDefaults(folder: f, sites: SuggestedSites)
-        success(BookmarksModel(modelFactory: self, root: extended))
+
+        // We add some suggested sites to the mobile bookmarks folder.
+        if guid == BookmarkRoots.MobileFolderGUID {
+            let extended = BookmarkFolderWithDefaults(folder: f, sites: SuggestedSites)
+            success(BookmarksModel(modelFactory: self, root: extended))
+        } else {
+            success(BookmarksModel(modelFactory: self, root: f))
+        }
     }
 
     public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
