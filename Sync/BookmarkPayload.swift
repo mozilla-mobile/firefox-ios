@@ -27,6 +27,11 @@ public enum BookmarkType: String {
     case query
     case microsummary     // Dead: now a bookmark.
 
+    // The result might be invalid, but it won't be nil.
+    public static func somePayloadFromJSON(json: JSON) -> BookmarkBasePayload {
+        return payloadFromJSON(json) ?? BookmarkBasePayload(json)
+    }
+
     public static func payloadFromJSON(json: JSON) -> BookmarkBasePayload? {
         guard let typeString = json["type"].asString else {
             return nil
@@ -315,6 +320,10 @@ public class BookmarkBasePayload: CleartextPayloadJSON {
         return self.hasOptionalBooleanFields(BookmarkBasePayload.optionalBooleanFields)
     }
 
+    public var hasDupe: Bool {
+        return self["hasDupe"].asBool ?? false
+    }
+
     /**
      * This only makes sense for valid payloads.
      */
@@ -348,6 +357,6 @@ public class BookmarkBasePayload: CleartextPayloadJSON {
             return false
         }
 
-        return (self["hasDupe"].asBool ?? false) == (p["hasDupe"].asBool ?? false)
+        return self.hasDupe == p.hasDupe
     }
 }
