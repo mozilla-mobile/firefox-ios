@@ -10,6 +10,7 @@ private let SectionButton = 1
 private let NumberOfSections = 2
 private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
 private let HeaderHeight: CGFloat = 44
+private let TogglesPrefKey = "clearprivatedata.toggles"
 
 class ClearPrivateDataTableViewController: UITableViewController {
     private var clearButton: UITableViewCell?
@@ -28,6 +29,10 @@ class ClearPrivateDataTableViewController: UITableViewController {
     }()
 
     private lazy var toggles: [Bool] = {
+        if let savedToggles = self.profile.prefs.arrayForKey(TogglesPrefKey) as? [Bool] {
+            return savedToggles
+        }
+
         return [Bool](count: self.clearables.count, repeatedValue: true)
     }()
 
@@ -58,7 +63,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
             let control = UISwitch()
             control.onTintColor = UIConstants.ControlTintColor
             control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
-            control.on = true
+            control.on = toggles[indexPath.item]
             cell.accessoryView = control
             cell.selectionStyle = .None
             control.tag = indexPath.item
@@ -107,6 +112,8 @@ class ClearPrivateDataTableViewController: UITableViewController {
             .allSucceed()
             .upon { result in
                 assert(result.isSuccess, "Private data cleared successfully")
+
+                self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
 
                 dispatch_async(dispatch_get_main_queue()) {
                     // Disable the Clear Private Data button after it's clicked.
