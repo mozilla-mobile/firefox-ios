@@ -232,10 +232,12 @@ public class BookmarkNode {
     public var guid: String
     public var title: String
     public var favicon: Favicon? = nil
+    public let editable: Bool
 
-    init(guid: String, title: String) {
+    init(guid: String, title: String, editable: Bool) {
         self.guid = guid
         self.title = title
+        self.editable = editable
     }
 }
 
@@ -247,9 +249,9 @@ public class BookmarkNode {
 public class BookmarkItem: BookmarkNode {
     public let url: String!
 
-    public init(guid: String, title: String, url: String) {
+    public init(guid: String, title: String, url: String, editable: Bool) {
         self.url = url
-        super.init(guid: guid, title: title)
+        super.init(guid: guid, title: title, editable: editable)
     }
 }
 
@@ -263,6 +265,22 @@ public class BookmarkFolder: BookmarkNode {
 
     public func itemIsEditableAtIndex(index: Int) -> Bool {
         return false
+    }
+}
+
+// Livemarks are conceptually folders, but we will present them as bookmarks
+// that take you to the site URI.
+public class BookmarkLivemark: BookmarkNode {
+    let siteURI: String
+    public init(guid: GUID, title: String, siteURI: String) {
+        self.siteURI = siteURI
+        super.init(guid: guid, title: title, editable: false)
+    }
+}
+
+public class BookmarkSeparator: BookmarkNode {
+    public init(guid: String) {
+        super.init(guid: guid, title: "", editable: false)
     }
 }
 
@@ -339,7 +357,7 @@ public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
 
     public init(guid: GUID, title: String, children: [BookmarkNode]) {
         self.children = children
-        super.init(guid: guid, title: title)
+        super.init(guid: guid, title: title, editable: false)
     }
 
     public struct BookmarkNodeGenerator: GeneratorType {
@@ -413,7 +431,7 @@ public class MemoryBookmarksSink: ShareToDestination {
 
         // Don't create duplicates.
         if (!queue.contains(exists)) {
-            queue.append(BookmarkItem(guid: Bytes.generateGUID(), title: title, url: item.url))
+            queue.append(BookmarkItem(guid: Bytes.generateGUID(), title: title, url: item.url, editable: false))
         }
     }
 }
@@ -421,7 +439,7 @@ public class MemoryBookmarksSink: ShareToDestination {
 
 private extension SuggestedSite {
     func asBookmark() -> BookmarkNode {
-        let b = BookmarkItem(guid: self.guid ?? Bytes.generateGUID(), title: self.title, url: self.url)
+        let b = BookmarkItem(guid: self.guid ?? Bytes.generateGUID(), title: self.title, url: self.url, editable: false)
         b.favicon = self.icon
         return b
     }
@@ -461,7 +479,7 @@ public class BookmarkFolderWithDefaults: BookmarkFolder {
     init(folder: BookmarkFolder, sites: SuggestedSitesCursor) {
         self.folder = folder
         self.sites = sites
-        super.init(guid: folder.guid, title: folder.title)
+        super.init(guid: folder.guid, title: folder.title, editable: false)
     }
 
     override public var count: Int {
