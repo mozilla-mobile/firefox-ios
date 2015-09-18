@@ -98,6 +98,52 @@ private class LocalBookmarkNodeFactory {
     }
 }
 
+private class MirrorBookmarkNodeFactory {
+    private class func itemFactory(row: SDRow) -> BookmarkItem {
+        let id = row["id"] as! Int
+        let guid = row["guid"] as! String
+        let url = row["bmkUri"] as! String
+        let title = row["title"] as? String ?? url
+        let bookmark = BookmarkItem(guid: guid, title: title, url: url, editable: false)
+        bookmark.id = id
+        return bookmark
+    }
+
+    private class func folderFactory(row: SDRow) -> BookmarkFolder {
+        let id = row["id"] as! Int
+        let guid = row["guid"] as! String
+        let title = row["title"] as? String ?? SQLiteBookmarks.defaultFolderTitle
+        let folder = BookmarkFolder(guid: guid, title: title, editable: false)
+        folder.id = id
+        return folder
+    }
+
+    class func factory(row: SDRow) -> BookmarkNode {
+        if let typeCode = row["type"] as? Int, type = BookmarkNodeType(rawValue: typeCode) {
+            switch type {
+            case .Bookmark:
+                return itemFactory(row)
+            case .Folder:
+                return folderFactory(row)
+            case .DynamicContainer:
+                fallthrough
+            case .Separator:
+                // TODO
+                assert(false, "Separators not yet supported.")
+            case .Livemark:
+                // TODO
+                assert(false, "Livemarks not yet supported.")
+            case .Query:
+                // TODO
+                assert(false, "Queries not yet supported.")
+            }
+        }
+
+        assert(false, "Invalid bookmark data.")
+        return LocalBookmarkNodeFactory.nodeFactory(row)
+    }
+}
+
 public class SQLiteBookmarks: BookmarksModelFactory {
     let db: BrowserDB
     let favicons: FaviconsTable<Favicon>
@@ -287,6 +333,8 @@ extension SQLiteBookmarks: ShareToDestination {
     }
 }
 
+// At present this only searches local bookmarks.
+// TODO: also search mirrored bookmarks.
 extension SQLiteBookmarks: SearchableBookmarks {
     public func bookmarksByURL(url: NSURL) -> Deferred<Maybe<Cursor<BookmarkItem>>> {
         let inner = "SELECT id, type, guid, url, title, faviconID FROM \(TableBookmarks) WHERE type = \(BookmarkNodeType.Bookmark.rawValue) AND url = ?"
@@ -326,7 +374,13 @@ private extension BookmarkMirrorItem {
     }
 }
 
-extension SQLiteBookmarks: BookmarkMirrorStorage {
+public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
+    private let db: BrowserDB
+
+    public init(db: BrowserDB) {
+        self.db = db
+    }
+
     public func applyRecords(records: [BookmarkMirrorItem]) -> Success {
         // Within a transaction, we first attempt to update each item.
         // If an update fails, insert instead. TODO: batch the inserts!
@@ -377,5 +431,124 @@ extension SQLiteBookmarks: BookmarkMirrorStorage {
         }
 
         return deferred
+    }
+}
+
+extension SQLiteBookmarkMirrorStorage: BookmarksModelFactory {
+    public func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
+        return self.modelForFolder(folder.guid)
+    }
+
+    public func modelForFolder(guid: String) -> Deferred<Maybe<BookmarksModel>> {
+        if guid == BookmarkRoots.MobileFolderGUID {
+            return self.modelForRoot()
+        }
+
+        let args: Args = [guid]
+        let sql =
+        "SELECT id, guid, type, bmkUri, title, pos FROM \(TableBookmarksMirror) WHERE " +
+        "parentid = ? AND is_deleted = 0 " +
+        "ORDER BY pos ASC"
+        return self.db.runQuery(sql, args: args, factory: MirrorBookmarkNodeFactory.factory)
+    }
+
+    public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
+        // Return a virtual model containing "Desktop bookmarks" prepended to the local mobile bookmarks.
+        // TODO
+        // Shiiiiiit, we need to know the places root. TODO TODO
+        return self.modelForFolder(BookmarkRoots.RootGUID)
+    }
+
+    public var nullModel: BookmarksModel {
+        let children = Cursor<BookmarkNode>(status: .Failure, msg: "Null model")
+        let folder = SQLiteBookmarkFolder(guid: "Null", title: "Null", children: children)
+        return BookmarksModel(modelFactory: self, root: folder)
+    }
+
+    public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
+        return deferMaybe(false)        // TODO
+    }
+
+    public func remove(bookmark: BookmarkNode) -> Success {
+        return deferMaybe(DatabaseError(description: "Can't remove records from the mirror."))
+    }
+
+    public func removeByURL(url: String) -> Success {
+        return deferMaybe(DatabaseError(description: "Can't remove records from the mirror."))
+    }
+
+    public func clearBookmarks() -> Success {
+        // This doesn't make sense for synced data just yet.
+        log.debug("Mirror ignoring clearBookmarks.")
+        return deferMaybe(DatabaseError(description: "Can't remove records from the mirror."))
+    }
+}
+
+public class MergedSQLiteBookmarks {
+    let local: SQLiteBookmarks
+    let mirror: SQLiteBookmarkMirrorStorage
+
+    public init(db: BrowserDB) {
+        self.local = SQLiteBookmarks(db: db)
+        self.mirror = SQLiteBookmarkMirrorStorage(db: db)
+    }
+}
+
+extension MergedSQLiteBookmarks: BookmarkMirrorStorage {
+    public func applyRecords(records: [BookmarkMirrorItem]) -> Success {
+        return self.mirror.applyRecords(records)
+    }
+}
+
+extension MergedSQLiteBookmarks: ShareToDestination {
+    public func shareItem(item: ShareItem) {
+        self.local.shareItem(item)
+    }
+}
+
+extension MergedSQLiteBookmarks: BookmarksModelFactory {
+    public func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
+        if folder.guid == BookmarkRoots.MobileFolderGUID {
+            return self.modelForRoot()
+        }
+
+        // TODO: return self.mirror.modelForFolder(folder).
+    }
+
+    public func modelForFolder(guid: String) -> Deferred<Maybe<BookmarksModel>> {
+        if guid == BookmarkRoots.MobileFolderGUID {
+            return self.modelForRoot()
+        }
+        // TODO: return self.mirror.modelForFolder(guid).
+    }
+
+    public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
+        // Return a virtual model containing "Desktop bookmarks" prepended to the local mobile bookmarks.
+        // TODO
+        return self.local.modelForFolder(BookmarkRoots.MobileFolderGUID)
+    }
+
+    // Whenever async construction is necessary, we fall into a pattern of needing
+    // a placeholder that behaves correctly for the period between kickoff and set.
+    public var nullModel: BookmarksModel {
+        return self.local.nullModel
+    }
+
+    // TODO: we really want to know 'isRemovable', too.
+    // For now we simply treat remote URLs as non-bookmarked.
+    public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
+        return self.local.isBookmarked(url)
+    }
+
+    public func remove(bookmark: BookmarkNode) -> Success {
+        return self.local.remove(bookmark)
+    }
+
+    public func removeByURL(url: String) -> Success {
+        return self.local.removeByURL(url)
+    }
+
+    public func clearBookmarks() -> Success {
+        return self.local.clearBookmarks()
     }
 }
