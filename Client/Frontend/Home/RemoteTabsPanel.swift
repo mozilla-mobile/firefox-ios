@@ -424,7 +424,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         contentView.addSubview(titleLabel)
 
         instructionsLabel.font = RemoteTabsPanelUX.EmptyStateInstructionsFont
-        instructionsLabel.text = RemoteTabsPanelUX.EmptyStateInstructionsSyncTabsPasswordsBookmarksString
+        instructionsLabel.text = RemoteTabsPanelUX.EmptyStateInstructionsGetTabsBookmarksPasswordsString
         instructionsLabel.textAlignment = NSTextAlignment.Center
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
         instructionsLabel.numberOfLines = 0
