@@ -34,7 +34,7 @@ struct IntroViewControllerUX {
     static let Card5Title = NSLocalizedString("Choose", tableName: "Intro", comment: "See http://mzl.la/1if9ODp")
 
     static let Card1Text = NSLocalizedString("Easily switch between open pages with tabs.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
-    static let Card2Text = NSLocalizedString("Personalize things like your default search engine in Settings.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    static let Card2Text = NSLocalizedString("Personalize your default search engine and more in Settings.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     static let Card3Text = NSLocalizedString("Sync Your Devices.", tableName: "Intro", comment: "ee http://mzl.la/1T8gxwo")
     static let Card4Text = NSLocalizedString("Use the share sheet to send links from other apps to Firefox.", tableName: "Intro", comment: "See http://mzl.la/1if9ODp")
     static let Card5Text = NSLocalizedString("Tap, hold and move the Firefox icon into your dock for easy access.", tableName: "Intro", comment: "See http://mzl.la/1if9ODp")
