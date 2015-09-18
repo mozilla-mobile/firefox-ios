@@ -10,8 +10,8 @@ import Shared
 protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?)
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser, restoring: Bool)
-    func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int, restoring: Bool)
-    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex index: Int)
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser, restoring: Bool)
+    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser)
     func tabManagerDidRestoreTabs(tabManager: TabManager)
     func tabManagerDidAddTabs(tabManager: TabManager)
 }
@@ -77,6 +77,18 @@ class TabManager : NSObject {
     unowned let profile: Profile
     var selectedIndex: Int { return _selectedIndex }
 
+    var normalTabs: [Browser] {
+        return tabs.filter { !$0.isPrivate }
+    }
+
+    var privateTabs: [Browser] {
+        if #available(iOS 9, *) {
+            return tabs.filter { $0.isPrivate }
+        } else {
+            return []
+        }
+    }
+
     init(defaultNewTabRequest: NSURLRequest, profile: Profile) {
         self.profile = profile
         self.defaultNewTabRequest = defaultNewTabRequest
@@ -135,12 +147,10 @@ class TabManager : NSObject {
 
         let previous = selectedTab
 
-        _selectedIndex = -1
-        for i in 0..<count {
-            if tabs[i] === tab {
-                _selectedIndex = i
-                break
-            }
+        if let tab = tab {
+            _selectedIndex = tabs.indexOf(tab) ?? -1
+        } else {
+            _selectedIndex = -1
         }
 
         preserveTabs()
@@ -219,7 +229,7 @@ class TabManager : NSObject {
         tabs.append(tab)
 
         for delegate in delegates {
-            delegate.get()?.tabManager(self, didAddTab: tab, atIndex: tabs.count - 1, restoring: restoring)
+            delegate.get()?.tabManager(self, didAddTab: tab, restoring: restoring)
         }
 
         if !zombie {
@@ -255,11 +265,9 @@ class TabManager : NSObject {
         }
 
         let prevCount = count
-        var index = -1
         for i in 0..<count {
             if tabs[i] === tab {
                 tabs.removeAtIndex(i)
-                index = i
                 break
             }
         }
@@ -274,10 +282,11 @@ class TabManager : NSObject {
         tab.webView?.navigationDelegate = nil
 
         for delegate in delegates {
-            delegate.get()?.tabManager(self, didRemoveTab: tab, atIndex: index)
+            delegate.get()?.tabManager(self, didRemoveTab: tab)
         }
 
-        if count == 0 {
+        // Make sure we never reach 0 normal tabs
+        if !tab.isPrivate && normalTabs.count == 0 {
             addTab()
         }
 
@@ -331,6 +340,7 @@ extension TabManager {
     class SavedTab: NSObject, NSCoding {
         let isSelected: Bool
         let title: String?
+        let isPrivate: Bool
         var sessionData: SessionData?
         var screenshotUUID: NSUUID?
 
@@ -338,6 +348,7 @@ extension TabManager {
             self.screenshotUUID = browser.screenshotUUID
             self.isSelected = isSelected
             self.title = browser.displayTitle
+            self.isPrivate = browser.isPrivate
             super.init()
 
             if browser.sessionData == nil {
@@ -364,6 +375,7 @@ extension TabManager {
             self.screenshotUUID = coder.decodeObjectForKey("screenshotUUID") as? NSUUID
             self.isSelected = coder.decodeBoolForKey("isSelected")
             self.title = coder.decodeObjectForKey("title") as? String
+            self.isPrivate = coder.decodeBoolForKey("isPrivate")
         }
 
         func encodeWithCoder(coder: NSCoder) {
@@ -371,6 +383,7 @@ extension TabManager {
             coder.encodeObject(screenshotUUID, forKey: "screenshotUUID")
             coder.encodeBool(isSelected, forKey: "isSelected")
             coder.encodeObject(title, forKey: "title")
+            coder.encodeBool(isPrivate, forKey: "isPrivate")
         }
     }
 
@@ -424,7 +437,12 @@ extension TabManager {
                     var tabToSelect: Browser?
 
                     for (_, savedTab) in savedTabs.enumerate() {
-                        let tab = self.addTab(flushToDisk: false, zombie: true, restoring: true)
+                        let tab: Browser
+                        if #available(iOS 9, *) {
+                            tab = self.addTab(flushToDisk: false, zombie: true, restoring: true, isPrivate: savedTab.isPrivate)
+                        } else {
+                            tab = self.addTab(flushToDisk: false, zombie: true, restoring: true)
+                        }
 
                         // Set the UUID for the tab, asynchronously fetch the UIImage, then store
                         // the screenshot in the tab as long as long as a newer one hasn't been taken.

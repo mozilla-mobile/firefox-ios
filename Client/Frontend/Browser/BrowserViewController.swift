@@ -39,7 +39,7 @@ class BrowserViewController: UIViewController {
     var webViewContainer: UIView!
     var urlBar: URLBarView!
     var readerModeBar: ReaderModeBarView?
-    
+
     private var statusBarOverlay: UIView!
     private var toolbar: BrowserToolbar?
     private var searchController: SearchViewController?
@@ -836,9 +836,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
-        let tabTrayController = TabTrayController()
-        tabTrayController.profile = profile
-        tabTrayController.tabManager = tabManager
+        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile)
 
         if let tab = tabManager.selectedTab {
             tab.setScreenshot(screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1))
@@ -1316,6 +1314,9 @@ extension BrowserViewController: TabManagerDelegate {
 
             updateURLBarDisplayURL(tab)
 
+            let count = tab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
+            urlBar.updateTabCount(count, animated: false)
+
             scrollController.browser = selected
             webViewContainer.addSubview(webView)
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
@@ -1365,26 +1366,26 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser, restoring: Bool) {
     }
 
-    func tabManager(tabManager: TabManager, didAddTab tab: Browser, atIndex: Int, restoring: Bool) {
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser, restoring: Bool) {
         // If we are restoring tabs then we update the count once at the end
         if !restoring {
-            urlBar.updateTabCount(tabManager.count)
+            updateTabCountUsingTabManager(tabManager)
         }
         tab.browserDelegate = self
     }
 
-    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser, atIndex: Int) {
-        urlBar.updateTabCount(max(tabManager.count, 1))
+    func tabManager(tabManager: TabManager, didRemoveTab tab: Browser) {
+        updateTabCountUsingTabManager(tabManager)
         // browserDelegate is a weak ref (and the tab's webView may not be destroyed yet)
         // so we don't expcitly unset it.
     }
 
     func tabManagerDidAddTabs(tabManager: TabManager) {
-        urlBar.updateTabCount(tabManager.count)
+        updateTabCountUsingTabManager(tabManager)
     }
 
     func tabManagerDidRestoreTabs(tabManager: TabManager) {
-        urlBar.updateTabCount(tabManager.count)
+        updateTabCountUsingTabManager(tabManager)
     }
 
     private func isWebPage(url: NSURL) -> Bool {
@@ -1395,6 +1396,13 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         return false
+    }
+
+    private func updateTabCountUsingTabManager(tabManager: TabManager) {
+        if let selectedTab = tabManager.selectedTab {
+            let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
+            urlBar.updateTabCount(max(count, 1))
+        }
     }
 }
 
