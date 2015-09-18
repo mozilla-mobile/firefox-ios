@@ -57,7 +57,6 @@ public struct UIConstants {
 /// Strings that will be used for features that haven't yet landed.
 private struct TempStrings {
     // Bug 1189902 - Offer crash reporting on first run after a crash
-<<<<<<< HEAD
     let crashReportTitle = NSLocalizedString("Oops! Firefox crashed", comment: "Pending feature; currently unused string! Title for prompt displayed to user after the app crashes")
     let crashReportDescription = NSLocalizedString("Send a crash report so Mozilla can fix the problem?", comment: "Pending feature; currently unused string! Message displayed in the crash dialog above the buttons used to select when sending reports")
     let sendReport = NSLocalizedString("Send Report", comment: "Pending feature; currently unused string! Used as a button label for crash dialog prompt")
@@ -79,9 +78,7 @@ private struct TempStrings {
     // Bug 1196227 - (pbmode) [Meta] Private Browsing
     let openInNewPrivateTab = NSLocalizedString("Open In New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
     let closePrivateTabsSettingsOption = NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs")
-    let whenLeavingOption = NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Setting for when the user leaves private browsing mode")
-    let manually = NSLocalizedString("Manually", tableName: "PrivateBrowsing", comment: "Manual option")
-    let automatically = NSLocalizedString("Automatically", tableName: "PrivateBrowsing", comment: "Automatic option")
+    let whenLeavingOption = NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'")
 }
 
 /// Old strings that will be removed when we kill 1.0. We need to keep them around for now for l10n export.
