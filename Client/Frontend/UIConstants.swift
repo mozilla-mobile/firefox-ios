@@ -53,3 +53,13 @@ public struct UIConstants {
     /// JPEG compression quality for persisted screenshots. Must be between 0-1.
     static let ScreenshotQuality: Float = 0.3
 }
+
+private struct TempStrings {
+    // Bug 1189902 - Offer crash reporting on first run after a crash
+    let crashReportTitle = NSLocalizedString("Oops! Firefox crashed", comment: "Title for prompt displayed to user after the app crashes")
+    let crashReportDescription = NSLocalizedString("Send a crash report so Mozilla can fix the problem?", comment: "Message displayed in the crash dialog above the buttons used to select when sending reports")
+    let sendReport = NSLocalizedString("Send Report", comment: "Used as a button label for crash dialog prompt")
+    let alwaysSend = NSLocalizedString("Always Send", comment: "Used as a button label for crash dialog prompt")
+    let dontSend = NSLocalizedString("Don't Send", comment: "Used as a button label for crash dialog prompt")
+    let neverSend = NSLocalizedString("Never Send", comment: "Used as a button label for crash dialog prompt")
+}
