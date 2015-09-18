@@ -62,4 +62,8 @@ private struct TempStrings {
     let alwaysSend = NSLocalizedString("Always Send", comment: "Pending feature; currently unused string! Used as a button label for crash dialog prompt")
     let dontSend = NSLocalizedString("Don't Send", comment: "Pending feature; currently unused string! Used as a button label for crash dialog prompt")
     let neverSend = NSLocalizedString("Never Send", comment: "Pending feature; currently unused string! Used as a button label for crash dialog prompt")
+
+    // Bug 1109675 - Request Desktop Site
+    let requestDesktopSite = NSLocalizedString("Request Desktop Site", comment: "Pending feature; currently unused string! Tooltip label triggered by long pressing the refresh button.")
+    let requestMobileSite = NSLocalizedString("Request Mobile Site", comment: "Pending feature; currently unused string! Tooltip label triggered by long pressing the refresh button a second time.")
 }
