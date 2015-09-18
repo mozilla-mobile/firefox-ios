@@ -35,6 +35,8 @@ private struct RemoteTabsPanelUX {
 
     // Temporary placeholder for strings removed in Bug 1193456.
     private let CreateAccountString = NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j")
+
+    static let EmptyStateInstructionsSyncTabsPasswordsBookmarksString = NSLocalizedString("Sync your tabs, bookmarks, passwords and more.", comment: "See http://mzl.la/1Qtkf0j")
 }
 
 private let RemoteClientIdentifier = "RemoteClient"
@@ -417,7 +419,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         contentView.addSubview(titleLabel)
 
         instructionsLabel.font = RemoteTabsPanelUX.EmptyStateInstructionsFont
-        instructionsLabel.text = NSLocalizedString("Sync your tabs, bookmarks, passwords and more.", comment: "See http://mzl.la/1Qtkf0j")
+        instructionsLabel.text = RemoteTabsPanelUX.EmptyStateInstructionsSyncTabsPasswordsBookmarksString
         instructionsLabel.textAlignment = NSTextAlignment.Center
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
         instructionsLabel.numberOfLines = 0
