@@ -264,9 +264,9 @@ private extension SuggestedSite {
 
 public class BookmarkFolderWithDefaults: BookmarkFolder {
     private let folder: BookmarkFolder
-    private let sites: SuggestedSitesData<SuggestedSite>
+    private let sites: SuggestedSitesCursor
 
-    init(folder: BookmarkFolder, sites: SuggestedSitesData<SuggestedSite>) {
+    init(folder: BookmarkFolder, sites: SuggestedSitesCursor) {
         self.folder = folder
         self.sites = sites
         super.init(guid: folder.guid, title: folder.title)
