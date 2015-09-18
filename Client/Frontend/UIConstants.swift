@@ -54,6 +54,7 @@ public struct UIConstants {
     static let ScreenshotQuality: Float = 0.3
 }
 
+/// Strings that will be used for features that haven't yet landed.
 private struct TempStrings {
     // Bug 1189902 - Offer crash reporting on first run after a crash
     let crashReportTitle = NSLocalizedString("Oops! Firefox crashed", comment: "Pending feature; currently unused string! Title for prompt displayed to user after the app crashes")
@@ -69,4 +70,13 @@ private struct TempStrings {
 
     // Bug 1182303 - Checkbox to block alert spam.
     let disableAlerts = NSLocalizedString("Disable additional page dialogs", comment: "Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown")
+}
+
+/// Old strings that will be removed when we kill 1.0. We need to keep them around for now for l10n export.
+private struct ObsoleteStrings {
+    let introMultiplePages = NSLocalizedString("Browse multiple Web pages at the same time with tabs.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    let introPersonalize = NSLocalizedString("Personalize your Firefox just the way you like in Settings.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    let introConnect = NSLocalizedString("Connect Firefox everywhere you use it.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    let settingsSearchSuggestions = NSLocalizedString("Show search suggestions", comment: "Label for show search suggestions setting.")
+    let settingsSignIn = NSLocalizedString("Sign in", comment: "Text message / button in the settings table view")
 }
