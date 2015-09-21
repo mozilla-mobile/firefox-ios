@@ -736,6 +736,9 @@ private class EmptyPrivateTabsView: UIView {
         descriptionLabel.text = NSLocalizedString("Firefox won't remember any of your history or cookies, but new bookmarks will be saved.",
             tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
 
+        // This landed last-minute as a new string that is needed in the EmptyPrivateTabsView
+        let learnMoreLabelText = NSLocalizedString("Learn More", tableName: "PrivateBrowsing", comment: "Text button displayed when there are no tabs open while in private mode")
+
         addSubview(titleLabel)
         addSubview(descriptionLabel)
         addSubview(iconImageView)
