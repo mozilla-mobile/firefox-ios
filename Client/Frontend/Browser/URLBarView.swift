@@ -667,6 +667,14 @@ extension URLBarView {
         get { return cancelButton.titleColorForState(UIControlState.Normal) }
         set { return cancelButton.setTitleColor(newValue, forState: UIControlState.Normal) }
     }
+
+    dynamic var actionButtonTintColor: UIColor? {
+        get { return helper?.buttonTintColor }
+        set {
+            guard let value = newValue else { return }
+            helper?.buttonTintColor = value
+        }
+    }
 }
 
 /* Code for drawing the urlbar curve */

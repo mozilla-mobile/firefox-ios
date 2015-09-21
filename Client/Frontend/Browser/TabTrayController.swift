@@ -98,6 +98,7 @@ class TabCell: UICollectionViewCell {
 
         self.closeButton = UIButton()
         self.closeButton.setImage(UIImage(named: "stop"), forState: UIControlState.Normal)
+        self.closeButton.tintColor = UIColor.lightGrayColor()
         self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
 
         self.innerStroke = InnerStrokedView(frame: self.backgroundHolder.frame)

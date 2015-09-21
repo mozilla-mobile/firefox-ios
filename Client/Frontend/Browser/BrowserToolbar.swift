@@ -14,6 +14,7 @@ protocol BrowserToolbarProtocol {
     var forwardButton: UIButton { get }
     var backButton: UIButton { get }
     var stopReloadButton: UIButton { get }
+    var actionButtons: [UIButton] { get }
 
     func updateBackStatus(canGoBack: Bool)
     func updateForwardStatus(canGoForward: Bool)
@@ -44,6 +45,12 @@ public class BrowserToolbarHelper: NSObject {
     let ImageStop = UIImage(named: "stop")
     let ImageStopPressed = UIImage(named: "stopPressed")
 
+    var buttonTintColor = UIColor.darkGrayColor() {
+        didSet {
+            setTintColor(buttonTintColor, forButtons: toolbar.actionButtons)
+        }
+    }
+
     var loading: Bool = false {
         didSet {
             if loading {
@@ -56,6 +63,10 @@ public class BrowserToolbarHelper: NSObject {
                 toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the browser toolbar Reload button")
             }
         }
+    }
+
+    private func setTintColor(color: UIColor, forButtons buttons: [UIButton]) {
+        buttons.forEach { $0.tintColor = color }
     }
 
     init(toolbar: BrowserToolbarProtocol) {
@@ -95,6 +106,8 @@ public class BrowserToolbarHelper: NSObject {
         let longPressGestureBookmarkButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBookmark:")
         toolbar.bookmarkButton.addGestureRecognizer(longPressGestureBookmarkButton)
         toolbar.bookmarkButton.addTarget(self, action: "SELdidClickBookmark", forControlEvents: UIControlEvents.TouchUpInside)
+
+        setTintColor(buttonTintColor, forButtons: toolbar.actionButtons)
     }
 
     func SELdidClickBack() {
@@ -153,6 +166,7 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
     let forwardButton: UIButton
     let backButton: UIButton
     let stopReloadButton: UIButton
+    let actionButtons: [UIButton]
 
     var helper: BrowserToolbarHelper?
 
@@ -164,6 +178,7 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
         stopReloadButton = UIButton()
         shareButton = UIButton()
         bookmarkButton = UIButton()
+        actionButtons = [backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton]
 
         super.init(frame: frame)
 
@@ -213,5 +228,16 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
         CGContextMoveToPoint(context, start.x, start.y)
         CGContextAddLineToPoint(context, end.x, end.y)
         CGContextStrokePath(context)
+    }
+}
+
+// MARK: UIAppearance
+extension BrowserToolbar {
+    dynamic var actionButtonTintColor: UIColor? {
+        get { return helper?.buttonTintColor }
+        set {
+            guard let value = newValue else { return }
+            helper?.buttonTintColor = value
+        }
     }
 }
