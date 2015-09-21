@@ -48,6 +48,22 @@ protocol URLBarDelegate: class {
 }
 
 class URLBarView: UIView {
+    // Additional UIAppearance-configurable properties
+    dynamic var locationHighlightedBorderColor: UIColor = URLBarViewUX.TextFieldActiveBorderColor {
+        didSet {
+            if inOverlayMode {
+                locationContainer.layer.borderColor = locationHighlightedBorderColor.CGColor
+            }
+        }
+    }
+    dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
+        didSet {
+            if !inOverlayMode {
+                locationContainer.layer.borderColor = locationBorderColor.CGColor
+            }
+        }
+    }
+
     weak var delegate: URLBarDelegate?
     weak var browserToolbarDelegate: BrowserToolbarDelegate?
     var helper: BrowserToolbarHelper?
@@ -101,7 +117,7 @@ class URLBarView: UIView {
         // Enable clipping to apply the rounded edges to subviews.
         locationContainer.clipsToBounds = true
 
-        locationContainer.layer.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
+        locationContainer.layer.borderColor = self.locationBorderColor.CGColor
         locationContainer.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
 
@@ -489,7 +505,7 @@ class URLBarView: UIView {
         self.backButton.alpha = inOverlayMode ? 0 : 1
         self.stopReloadButton.alpha = inOverlayMode ? 0 : 1
 
-        let borderColor = inOverlayMode ? URLBarViewUX.TextFieldActiveBorderColor : URLBarViewUX.TextFieldBorderColor
+        let borderColor = inOverlayMode ? locationHighlightedBorderColor : locationBorderColor
         locationContainer.layer.borderColor = borderColor.CGColor
 
         if inOverlayMode {
@@ -656,11 +672,11 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     }
 }
 
-// MARK: Customizable view properties exposed through UIAppearance
+// MARK: UIAppearance
 extension URLBarView {
-    dynamic var progressBarTint: UIColor {
-        get { return progressBar.tintColor }
-        set { progressBar.tintColor = newValue }
+    dynamic var progressBarTint: UIColor? {
+        get { return progressBar.progressTintColor }
+        set { progressBar.progressTintColor = newValue }
     }
 
     dynamic var cancelTextColor: UIColor? {
@@ -674,6 +690,11 @@ extension URLBarView {
             guard let value = newValue else { return }
             helper?.buttonTintColor = value
         }
+    }
+
+    dynamic var locationInputBackgroundColor: UIColor? {
+        get { return locationTextField.backgroundColor }
+        set { locationTextField.backgroundColor = newValue }
     }
 }
 
