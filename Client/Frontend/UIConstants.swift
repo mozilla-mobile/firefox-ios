@@ -70,6 +70,10 @@ private struct TempStrings {
 
     // Bug 1182303 - Checkbox to block alert spam.
     let disableAlerts = NSLocalizedString("Disable additional page dialogs", comment: "Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown")
+
+    // Bug 1186013 - Prompt for going to clipboard URL
+    let goToCopiedURL = NSLocalizedString("Go to copied URL?", comment: "Pending feature; currently unused string! Prompt message shown when browser is opened with URL on the clipboard")
+    let goToCopiedURLButton = NSLocalizedString("Go", comment: "Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened")
 }
 
 /// Old strings that will be removed when we kill 1.0. We need to keep them around for now for l10n export.
