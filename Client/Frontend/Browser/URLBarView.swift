@@ -656,6 +656,19 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     }
 }
 
+// MARK: Customizable view properties exposed through UIAppearance
+extension URLBarView {
+    dynamic var progressBarTint: UIColor {
+        get { return progressBar.tintColor }
+        set { progressBar.tintColor = newValue }
+    }
+
+    dynamic var cancelTextColor: UIColor? {
+        get { return cancelButton.titleColorForState(UIControlState.Normal) }
+        set { return cancelButton.setTitleColor(newValue, forState: UIControlState.Normal) }
+    }
+}
+
 /* Code for drawing the urlbar curve */
 // Curve's aspect ratio
 private let ASPECT_RATIO = 0.729

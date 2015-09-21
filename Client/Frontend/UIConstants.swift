@@ -9,6 +9,7 @@ public struct UIConstants {
     static let AboutHomeURL = NSURL(string: "\(WebServer.sharedInstance.base)/about/home/#panel=0")!
 
     static let AppBackgroundColor = UIColor.blackColor()
+    static let PrivateModePurple = UIColor(red: 207 / 255, green: 104 / 255, blue: 255 / 255, alpha: 1)
 
     static let ToolbarHeight: CGFloat = 44
     static let DefaultRowHeight: CGFloat = 58
