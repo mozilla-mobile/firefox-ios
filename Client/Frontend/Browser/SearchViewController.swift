@@ -498,17 +498,14 @@ extension SearchViewController {
 
         case .BookmarksAndHistory:
             let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
-            if let site = data[indexPath.row] {
-                if let cell = cell as? TwoLineTableViewCell {
-                    cell.setLines(site.title, detailText: site.url)
-                    cell.imageView?.setIcon(site.icon, withPlaceholder: self.defaultIcon)
+            if let site = data[indexPath.row],
+               let cell = cell as? TwoLineTableViewCell {
+                cell.setLines(site.title, detailText: site.url)
+                cell.imageView?.setIcon(site.icon, withPlaceholder: self.defaultIcon)
 
-                    cell.rightBadge.image = nil
-                    if let bookmarked = site.bookmarked {
-                        if bookmarked {
-                            cell.rightBadge.image = UIImage(named: "bookmarked")
-                        }
-                    }
+                cell.rightBadge.image = nil
+                if site.bookmarked ?? false {
+                    cell.rightBadge.image = UIImage(named: "bookmarked")
                 }
             }
             return cell

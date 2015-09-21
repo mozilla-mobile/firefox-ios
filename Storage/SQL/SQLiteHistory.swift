@@ -244,19 +244,19 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        return self.getSitesByFrecencyWithLimit(limit, includeIcon: true, includeBookmarked: true)
+        return self.getSitesByFrecencyWithLimit(limit, includeIcon: true, includeBookmarkState: true)
     }
 
-    public func getSitesByFrecencyWithLimit(limit: Int, includeIcon: Bool, includeBookmarked: Bool = false) -> Deferred<Maybe<Cursor<Site>>> {
+    public func getSitesByFrecencyWithLimit(limit: Int, includeIcon: Bool, includeBookmarkState: Bool = false) -> Deferred<Maybe<Cursor<Site>>> {
         // Exclude redirect domains. Bug 1194852.
         let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
         let groupBy = "GROUP BY domain_id "
 
-        return self.getFilteredSitesByFrecencyWithLimit(limit, groupClause: groupBy, whereData: whereData, includeIcon: includeIcon, includeBookmarked: includeBookmarked)
+        return self.getFilteredSitesByFrecencyWithLimit(limit, groupClause: groupBy, whereData: whereData, includeIcon: includeIcon, includeBookmarkState: includeBookmarkState)
     }
 
-    public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String, includeBookmarked: Bool = false) -> Deferred<Maybe<Cursor<Site>>> {
-        return self.getFilteredSitesByFrecencyWithLimit(limit, whereURLContains: filter, includeBookmarked: includeBookmarked)
+    public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String, includeBookmarkState: Bool = false) -> Deferred<Maybe<Cursor<Site>>> {
+        return self.getFilteredSitesByFrecencyWithLimit(limit, whereURLContains: filter, includeBookmarkState: includeBookmarkState)
     }
 
     public func getSitesByLastVisit(limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
@@ -283,9 +283,7 @@ extension SQLiteHistory: BrowserHistory {
             site.latestVisit = Visit(date: latest, type: VisitType.Unknown)
         }
 
-        if let bookmarked = row["bookmarked"] as? Int {
-            site.bookmarked = bookmarked > 0
-        }
+        site.bookmarked = row.getBoolean("bookmarked")
 
         return site
     }
@@ -310,7 +308,7 @@ extension SQLiteHistory: BrowserHistory {
     private func getFilteredSitesByVisitDateWithLimit(limit: Int,
                                                       whereURLContains filter: String? = nil,
                                                       includeIcon: Bool = true,
-                                                      includeBookmarked: Bool = false) -> Deferred<Maybe<Cursor<Site>>> {
+                                                      includeBookmarkState: Bool = false) -> Deferred<Maybe<Cursor<Site>>> {
         let args: Args?
         let whereClause: String
         if let filter = filter {
@@ -325,28 +323,29 @@ extension SQLiteHistory: BrowserHistory {
         }
 
         let ungroupedSQL =
-            "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain, " +
-            "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate, " +
-            "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate, " +
-            "COALESCE(count(\(TableVisits).is_local), 0) AS visitCount " +
-            (includeBookmarked ? ", count(\(TableBookmarks).id) AS bookmarked " : "") +
-            "FROM \(TableHistory) " +
-            (includeBookmarked ? "LEFT OUTER JOIN \(TableBookmarks) ON \(TableBookmarks).url IS \(TableHistory).url " : "") +
-            "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
-            "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
-            whereClause + " GROUP BY historyID"
+        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain, " +
+        "COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate, " +
+        "COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate, " +
+        "COALESCE(count(\(TableVisits).is_local), 0) AS visitCount " +
+        (includeBookmarkState ? ", count(\(TableBookmarks).id) AS bookmarked " : "") +
+        "FROM \(TableHistory) " +
+        (includeBookmarkState ? "LEFT OUTER JOIN \(TableBookmarks) ON \(TableBookmarks).url IS \(TableHistory).url " : "") +
+        "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
+        "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
+        whereClause + " GROUP BY historyID"
 
-        let bookedmarkedSQL = includeBookmarked ? ", bookmarked " : " "
+        let bookmarkedSQL = includeBookmarkState ? ", bookmarked " : " "
 
         let historySQL =
-            "SELECT historyID, url, title, guid, domain_id, domain, visitCount, " +
-            "max(localVisitDate) AS localVisitDate, " +
-            "max(remoteVisitDate) AS remoteVisitDate\(bookedmarkedSQL)" +
-            "FROM (" + ungroupedSQL + ") " +
-            "WHERE (visitCount > 0) " +    // Eliminate dead rows from coalescing.
-            "GROUP BY historyID " +
-            "ORDER BY max(localVisitDate, remoteVisitDate) DESC " +
-            "LIMIT \(limit) "
+        "SELECT historyID, url, title, guid, domain_id, domain, visitCount, " +
+        "max(localVisitDate) AS localVisitDate, " +
+        "max(remoteVisitDate) AS remoteVisitDate" +
+        bookmarkedSQL +
+        "FROM (" + ungroupedSQL + ") " +
+        "WHERE (visitCount > 0) " +    // Eliminate dead rows from coalescing.
+        "GROUP BY historyID " +
+        "ORDER BY max(localVisitDate, remoteVisitDate) DESC " +
+        "LIMIT \(limit) "
 
         if includeIcon {
             // We select the history items then immediately join to get the largest icon.
@@ -354,7 +353,8 @@ extension SQLiteHistory: BrowserHistory {
             let sql = "SELECT " +
                 "historyID, url, title, guid, domain_id, domain, " +
                 "localVisitDate, remoteVisitDate, visitCount, " +
-                "iconID, iconURL, iconDate, iconType, iconWidth\(bookedmarkedSQL)" +
+                "iconID, iconURL, iconDate, iconType, iconWidth" +
+                bookmarkedSQL +
                 "FROM (\(historySQL)) LEFT OUTER JOIN " +
                 "view_history_id_favicon ON historyID = view_history_id_favicon.id"
             let factory = SQLiteHistory.iconHistoryColumnFactory
@@ -370,7 +370,7 @@ extension SQLiteHistory: BrowserHistory {
                                                      groupClause: String = "GROUP BY historyID ",
                                                      whereData: String? = nil,
                                                      includeIcon: Bool = true,
-                                                     includeBookmarked: Bool = false) -> Deferred<Maybe<Cursor<Site>>> {
+                                                     includeBookmarkState: Bool = false) -> Deferred<Maybe<Cursor<Site>>> {
         let localFrecencySQL = getLocalFrecencySQL()
         let remoteFrecencySQL = getRemoteFrecencySQL()
         let sixMonthsInMicroseconds: UInt64 = 15_724_800_000_000      // 182 * 1000 * 1000 * 60 * 60 * 24
@@ -396,20 +396,21 @@ extension SQLiteHistory: BrowserHistory {
         ", COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate" +
         ", COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount" +
         ", COALESCE(sum(case \(TableVisits).is_local when 1 then 0 else 1 end), 0) AS remoteVisitCount" +
-            (includeBookmarked ? ", count(\(TableBookmarks).id) AS bookmarked " : "") +
+            (includeBookmarkState ? ", count(\(TableBookmarks).id) AS bookmarked " : "") +
         " FROM \(TableHistory) " +
-        (includeBookmarked ? "LEFT OUTER JOIN \(TableBookmarks) ON \(TableBookmarks).url IS \(TableHistory).url " : "") +
+        (includeBookmarkState ? "LEFT OUTER JOIN \(TableBookmarks) ON \(TableBookmarks).url IS \(TableHistory).url " : "") +
         "INNER JOIN \(TableDomains) ON \(TableDomains).id = \(TableHistory).domain_id " +
         "INNER JOIN \(TableVisits) ON \(TableVisits).siteID = \(TableHistory).id " +
         whereClause + " GROUP BY historyID"
 
-        let bookedmarkedSQL = includeBookmarked ? ", bookmarked" : ""
+        let bookmarkedSQL = includeBookmarkState ? ", bookmarked" : ""
         // Next: limit to only those that have been visited at all within the last six months.
         // (Don't do that in the innermost: we want to get the full count, even if some visits are older.)
         // Discard all but the 1000 most frecent.
         // Compute and return the frecency for all 1000 URLs.
         let frecenciedSQL =
-        "SELECT *, (\(localFrecencySQL) + \(remoteFrecencySQL)) AS frecency\(bookedmarkedSQL)" +
+        "SELECT *, (\(localFrecencySQL) + \(remoteFrecencySQL)) AS frecency" +
+        bookmarkedSQL +
         " FROM (" + ungroupedSQL + ")" +
         " WHERE (" +
         "((localVisitCount > 0) OR (remoteVisitCount > 0)) AND " +                         // Eliminate dead rows from coalescing.
@@ -424,7 +425,8 @@ extension SQLiteHistory: BrowserHistory {
         ", max(remoteVisitDate) AS remoteVisitDate" +
         ", sum(localVisitCount) AS localVisitCount" +
         ", sum(remoteVisitCount) AS remoteVisitCount" +
-        ", sum(frecency) AS frecencies\(bookedmarkedSQL)" +
+        ", sum(frecency) AS frecencies" +
+        bookmarkedSQL +
         " FROM (" + frecenciedSQL + ") " +
         groupClause + " " +
         "ORDER BY frecencies DESC " +
@@ -437,7 +439,8 @@ extension SQLiteHistory: BrowserHistory {
             let sql = "SELECT" +
                       " historyID, url, title, guid, domain_id, domain" +
                       ", localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount" +
-                      ", iconID, iconURL, iconDate, iconType, iconWidth\(bookedmarkedSQL)" +
+                      ", iconID, iconURL, iconDate, iconType, iconWidth" +
+                      bookmarkedSQL +
                       " FROM (\(historySQL)) LEFT OUTER JOIN" +
                       " view_history_id_favicon ON historyID = view_history_id_favicon.id"
             let factory = SQLiteHistory.iconHistoryColumnFactory
