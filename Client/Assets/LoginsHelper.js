@@ -599,19 +599,28 @@ function onBlur(event) {
   LoginManagerContent.onUsernameInput(event)
 }
 
-window.addEventListener("load", function(event) {
+var documentBody = document.querySelector('body')
+var observer = new MutationObserver(function(mutations) {
+    findLogins()
+});
+
+observer.observe(documentBody, { attributes: false, childList: true, characterData: false });
+
+function findLogins(event) {
   try {
     for (var i = 0; i < document.forms.length; i++) {
       LoginManagerContent._asyncFindLogins(document.forms[i], { })
-                         .then(function(res) {
-                            LoginManagerContent.loginsFound(res.form, res.loginsFound);
-                         }).then(null, log);
-    }
-  } catch(ex) {
-    // Eat errors to avoid leaking them to the page
-    log(ex);
-  }
-})
+        .then(function(res) {
+          LoginManagerContent.loginsFound(res.form, res.loginsFound);
+        }).then(null, log);
+     }
+   } catch(ex) {
+     // Eat errors to avoid leaking them to the page
+     log(ex);
+   }
+ }
+
+window.addEventListener("load", findLogins);
 
 window.addEventListener("submit", function(event) {
   try {
