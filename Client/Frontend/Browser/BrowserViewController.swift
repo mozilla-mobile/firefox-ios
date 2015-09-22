@@ -64,11 +64,11 @@ class BrowserViewController: UIViewController {
     let tabManager: TabManager
 
     // These views wrap the urlbar and toolbar to provide background effects on them
-    var header: UIView!
+    var header: BlurWrapper!
     var headerBackdrop: UIView!
     var footer: UIView!
     var footerBackdrop: UIView!
-    private var footerBackground: UIView!
+    private var footerBackground: BlurWrapper?
     private var topTouchArea: UIButton!
 
     // Backdrop used for displaying greyed background for private tabs
@@ -149,7 +149,13 @@ class BrowserViewController: UIViewController {
         if showToolbar {
             toolbar = BrowserToolbar()
             toolbar?.browserToolbarDelegate = self
-            footerBackground = wrapInEffect(toolbar!, parent: footer)
+            footerBackground = BlurWrapper(view: toolbar!)
+
+            // Need to reset the proper blur style
+            if let selectedTab = tabManager.selectedTab where selectedTab.isPrivate {
+                footerBackground!.blurStyle = .Dark
+            }
+            footer.addSubview(footerBackground!)
         }
 
         view.setNeedsUpdateConstraints()
@@ -257,7 +263,8 @@ class BrowserViewController: UIViewController {
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.browserToolbarDelegate = self
-        header = wrapInEffect(urlBar, parent: view, backgroundColor: nil)
+        header = BlurWrapper(view: urlBar)
+        view.addSubview(header)
 
         // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work, thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need to make them "persistent" e.g. by being stored in BVC
         pasteGoAction = AccessibleAction(name: NSLocalizedString("Paste & Go", comment: "Paste the URL into the location bar and visit"), handler: { () -> Bool in
@@ -506,23 +513,6 @@ class BrowserViewController: UIViewController {
                 make.bottom.equalTo(self.view.snp_bottom)
             }
         }
-    }
-
-    private func wrapInEffect(view: UIView, parent: UIView) -> UIView {
-        return self.wrapInEffect(view, parent: parent, backgroundColor: UIColor.clearColor())
-    }
-
-    private func wrapInEffect(view: UIView, parent: UIView, backgroundColor: UIColor?) -> UIView {
-        let effect = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
-        effect.clipsToBounds = false
-        effect.translatesAutoresizingMaskIntoConstraints = false
-        if let _ = backgroundColor {
-            view.backgroundColor = backgroundColor
-        }
-        effect.addSubview(view)
-
-        parent.addSubview(effect)
-        return effect
     }
 
     private func showHomePanelController(inline inline: Bool) {
@@ -1329,6 +1319,12 @@ extension BrowserViewController: TabManagerDelegate {
 
             let count = tab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             urlBar.updateTabCount(count, animated: false)
+
+            if tab.isPrivate {
+                applyPrivateModeTheme()
+            } else {
+                applyNormalModeTheme()
+            }
 
             scrollController.browser = selected
             webViewContainer.addSubview(webView)
@@ -2172,3 +2168,99 @@ extension BrowserViewController: UIAlertViewDelegate {
     }
 }
 
+// MARK: Browser Chrome Theming
+extension BrowserViewController {
+
+    func applyPrivateModeTheme() {
+        BrowserLocationView.appearance().baseURLFontColor = UIColor.lightGrayColor()
+        BrowserLocationView.appearance().hostFontColor = UIColor.whiteColor()
+        BrowserLocationView.appearance().backgroundColor = UIConstants.PrivateModeLocationBackgroundColor
+
+        ToolbarTextField.appearance().backgroundColor = UIConstants.PrivateModeLocationBackgroundColor
+        ToolbarTextField.appearance().textColor = UIColor.whiteColor()
+        ToolbarTextField.appearance().clearButtonTintColor = UIColor.whiteColor()
+
+        URLBarView.appearance().locationBorderColor = UIConstants.PrivateModeLocationBorderColor
+        URLBarView.appearance().progressBarTint = UIConstants.PrivateModePurple
+        URLBarView.appearance().cancelTextColor = UIColor.whiteColor()
+        URLBarView.appearance().actionButtonTintColor = UIConstants.PrivateModeActionButtonTintColor
+
+        BrowserToolbar.appearance().actionButtonTintColor = UIConstants.PrivateModeActionButtonTintColor
+
+        TabsButton.appearance().borderColor = UIConstants.PrivateModePurple
+        TabsButton.appearance().borderWidth = 2
+        TabsButton.appearance().titleFont = UIConstants.DefaultMediumBoldFont
+        TabsButton.appearance().titleBackgroundColor = UIConstants.AppBackgroundColor
+        TabsButton.appearance().textColor = UIConstants.PrivateModePurple
+        TabsButton.appearance().insets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+
+        header.blurStyle = .Dark
+        footerBackground?.blurStyle = .Dark
+    }
+
+    func applyNormalModeTheme() {
+        BrowserLocationView.appearance().baseURLFontColor = BrowserLocationViewUX.BaseURLFontColor
+        BrowserLocationView.appearance().hostFontColor = BrowserLocationViewUX.HostFontColor
+        BrowserLocationView.appearance().backgroundColor = UIColor.whiteColor()
+
+        ToolbarTextField.appearance().backgroundColor = UIColor.whiteColor()
+        ToolbarTextField.appearance().textColor = UIColor.blackColor()
+        ToolbarTextField.appearance().clearButtonTintColor = nil
+
+        URLBarView.appearance().locationBorderColor = URLBarViewUX.TextFieldBorderColor
+        URLBarView.appearance().progressBarTint = URLBarViewUX.ProgressTintColor
+        URLBarView.appearance().cancelTextColor = UIColor.blackColor()
+        URLBarView.appearance().actionButtonTintColor = UIColor.darkGrayColor()
+
+        BrowserToolbar.appearance().actionButtonTintColor = UIColor.darkGrayColor()
+
+        TabsButton.appearance().borderColor = TabsButtonUX.borderColor
+        TabsButton.appearance().borderWidth = TabsButtonUX.borderStrokeWidth
+        TabsButton.appearance().titleFont = TabsButtonUX.titleFont
+        TabsButton.appearance().titleBackgroundColor = TabsButtonUX.titleBackgroundColor
+        TabsButton.appearance().textColor = TabsButtonUX.titleColor
+        TabsButton.appearance().insets = TabsButtonUX.titleInsets
+
+        header.blurStyle = .ExtraLight
+        footerBackground?.blurStyle = .ExtraLight
+    }
+}
+
+// A small convienent class for wrapping a view with a blur background that can be modified
+class BlurWrapper: UIView {
+    var blurStyle: UIBlurEffectStyle = .ExtraLight {
+        didSet {
+            let newEffect = UIVisualEffectView(effect: UIBlurEffect(style: blurStyle))
+            effectView.removeFromSuperview()
+            effectView = newEffect
+            insertSubview(effectView, belowSubview: wrappedView)
+            effectView.snp_remakeConstraints { make in
+                make.edges.equalTo(self)
+            }
+        }
+    }
+
+    private var effectView: UIVisualEffectView
+    private var wrappedView: UIView
+
+    init(view: UIView) {
+        wrappedView = view
+        effectView = UIVisualEffectView(effect: UIBlurEffect(style: blurStyle))
+        super.init(frame: CGRectZero)
+
+        addSubview(effectView)
+        addSubview(wrappedView)
+
+        effectView.snp_makeConstraints { make in
+            make.edges.equalTo(self)
+        }
+
+        wrappedView.snp_makeConstraints { make in
+            make.edges.equalTo(self)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}

@@ -7,7 +7,7 @@ import UIKit
 import Shared
 import SnapKit
 
-private struct URLBarViewUX {
+struct URLBarViewUX {
     static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
     static let TextFieldContentInset = UIOffsetMake(9, 5)
@@ -21,6 +21,7 @@ private struct URLBarViewUX {
     static let URLBarCurveOffsetLeft: CGFloat = -10
     // buffer so we dont see edges when animation overshoots with spring
     static let URLBarCurveBounceBuffer: CGFloat = 8
+    static let ProgressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0

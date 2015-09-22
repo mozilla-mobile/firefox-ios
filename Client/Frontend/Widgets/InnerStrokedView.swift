@@ -7,9 +7,23 @@ import UIKit
 // A transparent view with a rectangular border with rounded corners, stroked
 // with a semi-transparent white border.
 class InnerStrokedView: UIView {
-    var color = UIColor.whiteColor().colorWithAlphaComponent(0.2)
-    var strokeWidth: CGFloat = 1.0
-    var cornerRadius: CGFloat = 4
+    var color = UIColor.whiteColor().colorWithAlphaComponent(0.2) {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+
+    var strokeWidth: CGFloat = 1.0 {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+
+    var cornerRadius: CGFloat = 4 {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)

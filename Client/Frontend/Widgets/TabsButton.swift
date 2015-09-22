@@ -5,7 +5,7 @@
 import Foundation
 import SnapKit
 
-private struct DefaultUX {
+struct TabsButtonUX {
     static let titleColor: UIColor = UIColor.blackColor()
     static let titleBackgroundColor: UIColor = UIColor.whiteColor()
     static let cornerRadius: CGFloat = 2
@@ -18,9 +18,9 @@ private struct DefaultUX {
 class TabsButton: UIControl {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = DefaultUX.titleFont
-        label.textColor = DefaultUX.titleColor
-        label.layer.cornerRadius = DefaultUX.cornerRadius
+        label.font = TabsButtonUX.titleFont
+        label.textColor = TabsButtonUX.titleColor
+        label.layer.cornerRadius = TabsButtonUX.cornerRadius
         label.textAlignment = NSTextAlignment.Center
         label.userInteractionEnabled = false
         return label
@@ -28,22 +28,22 @@ class TabsButton: UIControl {
 
     private lazy var labelBackground: UIView = {
         let background = UIView()
-        background.backgroundColor = DefaultUX.titleBackgroundColor
-        background.layer.cornerRadius = DefaultUX.cornerRadius
+        background.backgroundColor = TabsButtonUX.titleBackgroundColor
+        background.layer.cornerRadius = TabsButtonUX.cornerRadius
         background.userInteractionEnabled = false
         return background
     }()
 
     private lazy var borderView: InnerStrokedView = {
         let border = InnerStrokedView()
-        border.strokeWidth = DefaultUX.borderStrokeWidth
-        border.color = DefaultUX.borderColor
-        border.cornerRadius = DefaultUX.cornerRadius
+        border.strokeWidth = TabsButtonUX.borderStrokeWidth
+        border.color = TabsButtonUX.borderColor
+        border.cornerRadius = TabsButtonUX.cornerRadius
         border.userInteractionEnabled = false
         return border
     }()
 
-    private var buttonInsets: UIEdgeInsets = DefaultUX.titleInsets
+    private var buttonInsets: UIEdgeInsets = TabsButtonUX.titleInsets
 
     override init(frame: CGRect) {
         super.init(frame: frame)

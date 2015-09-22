@@ -16,7 +16,7 @@ protocol BrowserLocationViewDelegate {
     func browserLocationViewLocationAccessibilityActions(browserLocationView: BrowserLocationView) -> [UIAccessibilityCustomAction]?
 }
 
-private struct BrowserLocationViewUX {
+struct BrowserLocationViewUX {
     static let HostFontColor = UIColor.blackColor()
     static let BaseURLFontColor = UIColor.grayColor()
     static let BaseURLPitch = 0.75
