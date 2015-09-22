@@ -1513,6 +1513,10 @@ extension BrowserViewController: WKNavigationDelegate {
         if let url = webView.URL where !ErrorPageHelper.isErrorPageURL(url) && !AboutUtils.isAboutHomeURL(url) {
             tab.lastExecutedTime = NSDate.now()
 
+            if navigation == nil {
+                log.warning("Implicitly unwrapped optional navigation was nil.")
+            }
+
             postLocationChangeNotificationForTab(tab, navigation: navigation)
 
             // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
@@ -1532,7 +1536,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    private func postLocationChangeNotificationForTab(tab: Browser, navigation: WKNavigation) {
+    private func postLocationChangeNotificationForTab(tab: Browser, navigation: WKNavigation?) {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         var info = [NSObject: AnyObject]()
         info["url"] = tab.displayURL
