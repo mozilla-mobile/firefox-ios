@@ -135,7 +135,7 @@ class URLBarView: UIView {
 
     private lazy var progressBar: UIProgressView = {
         let progressBar = UIProgressView()
-        progressBar.progressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
+        progressBar.progressTintColor = URLBarViewUX.ProgressTintColor
         progressBar.alpha = 0
         progressBar.hidden = true
         return progressBar
@@ -177,7 +177,7 @@ class URLBarView: UIView {
     }()
 
     // Used to temporarily store the cloned button so we can respond to layout changes during animation
-    private weak var clonedTabsButton: InsetButton?
+    private weak var clonedTabsButton: TabsButton?
 
     private var rightBarConstraint: Constraint?
     private let defaultRightOffset: CGFloat = URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer
@@ -350,77 +350,68 @@ class URLBarView: UIView {
     }
 
     func updateTabCount(count: Int, animated: Bool) {
-        tabsButton.titleLabel.text = "\(count)"
-//        if let _ = self.clonedTabsButton {
-//            self.clonedTabsButton?.layer.removeAllAnimations()
-//            self.clonedTabsButton?.removeFromSuperview()
-//            self.tabsButton.layer.removeAllAnimations()
-//        }
-//
-//        // make a 'clone' of the tabs button
-//        let newTabsButton = InsetButton()
-//        self.clonedTabsButton = newTabsButton
-//        newTabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
-//        newTabsButton.setTitleColor(UIConstants.AppBackgroundColor, forState: UIControlState.Normal)
-//        newTabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
-//        newTabsButton.titleLabel?.layer.cornerRadius = 2
-//        newTabsButton.titleLabel?.font = UIConstants.DefaultSmallFontBold
-//        newTabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
-//        newTabsButton.setTitle(count.description, forState: .Normal)
-//        addSubview(newTabsButton)
-//        newTabsButton.titleLabel?.snp_makeConstraints { make in
-//            make.size.equalTo(URLBarViewUX.TabsButtonHeight)
-//        }
-//        newTabsButton.snp_makeConstraints { make in
-//            make.centerY.equalTo(self.locationContainer)
-//            make.trailing.equalTo(self)
-//            make.size.equalTo(UIConstants.ToolbarHeight)
-//        }
-//
-//        newTabsButton.frame = tabsButton.frame
-//
-//        // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
-//        // a rotation around a non-origin point
-//        if let labelFrame = newTabsButton.titleLabel?.frame {
-//            let halfTitleHeight = CGRectGetHeight(labelFrame) / 2
-//
-//            var newFlipTransform = CATransform3DIdentity
-//            newFlipTransform = CATransform3DTranslate(newFlipTransform, 0, halfTitleHeight, 0)
-//            newFlipTransform.m34 = -1.0 / 200.0 // add some perspective
-//            newFlipTransform = CATransform3DRotate(newFlipTransform, CGFloat(-M_PI_2), 1.0, 0.0, 0.0)
-//            newTabsButton.titleLabel?.layer.transform = newFlipTransform
-//
-//            var oldFlipTransform = CATransform3DIdentity
-//            oldFlipTransform = CATransform3DTranslate(oldFlipTransform, 0, halfTitleHeight, 0)
-//            oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective
-//            oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(M_PI_2), 1.0, 0.0, 0.0)
-//
-//            let animate = {
-//                newTabsButton.titleLabel?.layer.transform = CATransform3DIdentity
-//                self.tabsButton.titleLabel?.layer.transform = oldFlipTransform
-//                self.tabsButton.titleLabel?.layer.opacity = 0
-//            }
-//
-//            let completion: (Bool) -> Void = { finished in
-//                // remove the clone and setup the actual tab button
-//                newTabsButton.removeFromSuperview()
-//
-//                self.tabsButton.titleLabel?.layer.opacity = 1
-//                self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
-//                self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
-//
-//                if finished {
-//                    self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
-//                    self.tabsButton.accessibilityValue = count.description
-//                }
-//            }
-//
-//            if animated {
-//                UIView.animateWithDuration(1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: animate, completion: completion)
-//            } else {
-//                completion(true)
-//            }
-//        }
+        if let _ = self.clonedTabsButton {
+            self.clonedTabsButton?.layer.removeAllAnimations()
+            self.clonedTabsButton?.removeFromSuperview()
+            self.tabsButton.layer.removeAllAnimations()
+        }
+
+        // make a 'clone' of the tabs button
+        let newTabsButton = self.tabsButton.clone() as! TabsButton
+        self.clonedTabsButton = newTabsButton
+        newTabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
+        newTabsButton.titleLabel.text = count.description
+        newTabsButton.accessibilityValue = count.description
+        addSubview(newTabsButton)
+        newTabsButton.snp_makeConstraints { make in
+            make.centerY.equalTo(self.locationContainer)
+            make.trailing.equalTo(self)
+            make.size.equalTo(UIConstants.ToolbarHeight)
+        }
+
+        newTabsButton.frame = tabsButton.frame
+
+        // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
+        // a rotation around a non-origin point
+        let frame = tabsButton.insideButton.frame
+        let halfTitleHeight = CGRectGetHeight(frame) / 2
+
+        var newFlipTransform = CATransform3DIdentity
+        newFlipTransform = CATransform3DTranslate(newFlipTransform, 0, halfTitleHeight, 0)
+        newFlipTransform.m34 = -1.0 / 200.0 // add some perspective
+        newFlipTransform = CATransform3DRotate(newFlipTransform, CGFloat(-M_PI_2), 1.0, 0.0, 0.0)
+        newTabsButton.insideButton.layer.transform = newFlipTransform
+
+        var oldFlipTransform = CATransform3DIdentity
+        oldFlipTransform = CATransform3DTranslate(oldFlipTransform, 0, halfTitleHeight, 0)
+        oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective
+        oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(M_PI_2), 1.0, 0.0, 0.0)
+
+        let animate = {
+            newTabsButton.insideButton.layer.transform = CATransform3DIdentity
+            self.tabsButton.insideButton.layer.transform = oldFlipTransform
+            self.tabsButton.insideButton.layer.opacity = 0
+        }
+
+        let completion: (Bool) -> Void = { finished in
+            // remove the clone and setup the actual tab button
+            newTabsButton.removeFromSuperview()
+
+            self.tabsButton.insideButton.layer.opacity = 1
+            self.tabsButton.insideButton.layer.transform = CATransform3DIdentity
+            self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
+
+            if finished {
+                self.tabsButton.titleLabel.text = count.description
+                self.tabsButton.accessibilityValue = count.description
+            }
+        }
+
+        if animated {
+            UIView.animateWithDuration(1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: animate, completion: completion)
+        } else {
+            completion(true)
+        }
     }
 
     func updateProgressBar(progress: Float) {

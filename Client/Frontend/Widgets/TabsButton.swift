@@ -26,6 +26,13 @@ class TabsButton: UIControl {
         return label
     }()
 
+    lazy var insideButton: UIView = {
+        let view = UIView()
+        view.clipsToBounds = false
+        view.userInteractionEnabled = false
+        return view
+    }()
+
     private lazy var labelBackground: UIView = {
         let background = UIView()
         background.backgroundColor = TabsButtonUX.titleBackgroundColor
@@ -47,26 +54,49 @@ class TabsButton: UIControl {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(labelBackground)
-        addSubview(borderView)
-        addSubview(titleLabel)
+        insideButton.addSubview(labelBackground)
+        insideButton.addSubview(borderView)
+        insideButton.addSubview(titleLabel)
+        addSubview(insideButton)
     }
 
     override func updateConstraints() {
         super.updateConstraints()
         labelBackground.snp_remakeConstraints { (make) -> Void in
-            make.edges.equalTo(self).inset(insets)
+            make.edges.equalTo(insideButton)
         }
         borderView.snp_remakeConstraints { (make) -> Void in
-            make.edges.equalTo(self).inset(insets)
+            make.edges.equalTo(insideButton)
         }
         titleLabel.snp_remakeConstraints { (make) -> Void in
+            make.edges.equalTo(insideButton)
+        }
+        insideButton.snp_remakeConstraints { (make) -> Void in
             make.edges.equalTo(self).inset(insets)
         }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func clone() -> UIView {
+        let button = TabsButton()
+
+        button.titleLabel.text = titleLabel.text
+
+        // Copy all of the styable properties over to the new TabsButton
+        button.titleLabel.font = titleLabel.font
+        button.titleLabel.textColor = titleLabel.textColor
+        button.titleLabel.layer.cornerRadius = titleLabel.layer.cornerRadius
+
+        button.labelBackground.backgroundColor = labelBackground.backgroundColor
+        button.labelBackground.layer.cornerRadius = labelBackground.layer.cornerRadius
+
+        button.borderView.strokeWidth = borderView.strokeWidth
+        button.borderView.color = borderView.color
+        button.borderView.cornerRadius = borderView.cornerRadius
+        return button
     }
 }
 
