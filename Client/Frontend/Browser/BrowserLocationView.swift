@@ -29,11 +29,11 @@ class BrowserLocationView: UIView {
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
 
-    private var _baseURLFontColor: UIColor = BrowserLocationViewUX.BaseURLFontColor {
+    dynamic var baseURLFontColor: UIColor = BrowserLocationViewUX.BaseURLFontColor {
         didSet { updateTextWithURL() }
     }
 
-    private var _hostFontColor: UIColor = BrowserLocationViewUX.HostFontColor {
+    dynamic var hostFontColor: UIColor = BrowserLocationViewUX.HostFontColor {
         didSet { updateTextWithURL() }
     }
 
@@ -202,8 +202,8 @@ class BrowserLocationView: UIView {
             // Highlight the base domain of the current URL.
             let attributedString = NSMutableAttributedString(string: httplessURL)
             let nsRange = NSMakeRange(0, httplessURL.characters.count)
-            attributedString.addAttribute(NSForegroundColorAttributeName, value: _baseURLFontColor, range: nsRange)
-            attributedString.colorSubstring(baseDomain, withColor: _hostFontColor)
+            attributedString.addAttribute(NSForegroundColorAttributeName, value: baseURLFontColor, range: nsRange)
+            attributedString.colorSubstring(baseDomain, withColor: hostFontColor)
             attributedString.addAttribute(UIAccessibilitySpeechAttributePitch, value: NSNumber(double: BrowserLocationViewUX.BaseURLPitch), range: nsRange)
             attributedString.pitchSubstring(baseDomain, withPitch: BrowserLocationViewUX.HostPitch)
             urlTextField.attributedText = attributedString
@@ -231,19 +231,6 @@ extension BrowserLocationView: AccessibilityActionsSource {
             return delegate?.browserLocationViewLocationAccessibilityActions(self)
         }
         return nil
-    }
-}
-
-// MARK: UIAppearance
-extension BrowserLocationView {
-    dynamic var baseURLFontColor: UIColor {
-        get { return _baseURLFontColor }
-        set { _baseURLFontColor = newValue }
-    }
-
-    dynamic var hostFontColor: UIColor {
-        get { return _hostFontColor }
-        set { _hostFontColor = newValue }
     }
 }
 

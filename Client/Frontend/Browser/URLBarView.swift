@@ -692,11 +692,7 @@ extension URLBarView {
         }
     }
 
-    dynamic var locationInputBackgroundColor: UIColor? {
-        get { return locationTextField.backgroundColor }
-        set { locationTextField.backgroundColor = newValue }
-    }
-}
+   }
 
 /* Code for drawing the urlbar curve */
 // Curve's aspect ratio
@@ -781,12 +777,66 @@ private class CurveView: UIView {
     }
 }
 
-private class ToolbarTextField: AutocompleteTextField {
+class ToolbarTextField: AutocompleteTextField {
+    dynamic var clearButtonTintColor: UIColor? {
+        didSet {
+            // Clear previous tinted image that's cache and ask for a relayout
+            tintedClearImage = nil
+            setNeedsLayout()
+        }
+    }
+
+    private var tintedClearImage: UIImage?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        // Since we're unable to change the tint color of the clear image, we need to iterate through the
+        // subviews, find the clear button, and tint it ourselves. Thanks to Mikael Hellman for the tip:
+        // http://stackoverflow.com/questions/27944781/how-to-change-the-tint-color-of-the-clear-button-on-a-uitextfield
+        for view in subviews as [UIView] {
+            if view is UIButton {
+                let button = view as! UIButton
+                if let image = button.imageForState(.Normal) {
+                    if tintedClearImage == nil {
+                        tintedClearImage = tintImage(image, color: clearButtonTintColor)
+                    }
+                    button.setImage(tintedClearImage, forState: .Normal)
+                }
+            }
+        }
+    }
+
+    private func tintImage(image: UIImage, color: UIColor?) -> UIImage {
+        guard let color = color else { return image }
+
+        let size = image.size
+
+        UIGraphicsBeginImageContextWithOptions(size, false, 2)
+        let context = UIGraphicsGetCurrentContext()
+        image.drawAtPoint(CGPointZero, blendMode: CGBlendMode.Normal, alpha: 1.0)
+
+        CGContextSetFillColorWithColor(context, color.CGColor)
+        CGContextSetBlendMode(context, CGBlendMode.SourceIn)
+        CGContextSetAlpha(context, 1.0)
+
+        let rect = CGRectMake(
+            CGPointZero.x,
+            CGPointZero.y,
+            image.size.width,
+            image.size.height)
+        CGContextFillRect(UIGraphicsGetCurrentContext(), rect)
+        let tintedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return tintedImage
     }
 }
