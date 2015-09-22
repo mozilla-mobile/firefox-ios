@@ -68,6 +68,7 @@ class DownloadTests: XCTestCase {
 
     func makeValidEnvelope(guid: GUID, modified: Timestamp) -> EnvelopeJSON {
         let clientBody: [String: AnyObject] = [
+            "id": guid,
             "name": "Foobar",
             "commands": [],
             "type": "mobile",
@@ -80,5 +81,55 @@ class DownloadTests: XCTestCase {
             "modified": Double(modified) / 1000,
         ]
         return EnvelopeJSON(JSON(clientRecord).toString(false))
+    }
+
+    func testDownloadBatches() {
+        let guid1: GUID = "abcdefghijkl"
+        let ts1: Timestamp = 1326254123650
+        let rec1 = makeValidEnvelope(guid1, modified: ts1)
+
+        let guid2: GUID = "bbcdefghijkl"
+        let ts2: Timestamp = 1326254125650
+        let rec2 = makeValidEnvelope(guid2, modified: ts2)
+
+        let server = getServer()
+        server.storeRecords([rec1], inCollection: "clients")
+
+        let storageClient = getClient(server)!
+        let bookmarksClient = storageClient.clientForCollection("clients", encrypter: getEncrypter())
+        let prefs = MockProfilePrefs()
+
+        let batcher = BatchingDownloader(collectionClient: bookmarksClient, basePrefs: prefs, collection: "clients")
+
+        let ic1 = InfoCollections(collections: ["clients": ts1])
+        let fetch1 = batcher.go(ic1, limit: 1).value
+        XCTAssertEqual(fetch1.successValue, DownloadEndState.Complete)
+        let records1 = batcher.retrieve()
+        XCTAssertEqual(1, records1.count)
+        XCTAssertEqual(guid1, records1[0].id)
+
+        // Fetching again yields nothing, because the collection hasn't
+        // changed.
+        XCTAssertEqual(batcher.go(ic1, limit: 1).value.successValue, DownloadEndState.NoNewData)
+
+        // More records. Start again.
+        batcher.reset().value
+
+        let ic2 = InfoCollections(collections: ["clients": ts2])
+        server.storeRecords([rec2], inCollection: "clients")
+        let fetch2 = batcher.go(ic2, limit: 1).value
+        XCTAssertEqual(fetch2.successValue, DownloadEndState.Incomplete)
+        let records2 = batcher.retrieve()
+        XCTAssertEqual(1, records2.count)
+        XCTAssertEqual(guid1, records2[0].id)
+        let fetch3 = batcher.go(ic2, limit: 1).value
+        XCTAssertEqual(fetch3.successValue, DownloadEndState.Complete)
+        let records3 = batcher.retrieve()
+        XCTAssertEqual(1, records3.count)
+        XCTAssertEqual(guid2, records3[0].id)
+        let fetch4 = batcher.go(ic2, limit: 1).value
+        XCTAssertEqual(fetch4.successValue, DownloadEndState.NoNewData)
+        let records4 = batcher.retrieve()
+        XCTAssertEqual(0, records4.count)
     }
 }
