@@ -345,11 +345,7 @@ class URLBarView: UIView {
         self.actionButtons.forEach { $0.alpha = alpha }
     }
 
-    func updateTabCount(count: Int) {
-        updateTabCount(count, animated: true)
-    }
-
-    func updateTabCount(count: Int, animated: Bool) {
+    func updateTabCount(count: Int, animated: Bool = true) {
         if let _ = self.clonedTabsButton {
             self.clonedTabsButton?.layer.removeAllAnimations()
             self.clonedTabsButton?.removeFromSuperview()

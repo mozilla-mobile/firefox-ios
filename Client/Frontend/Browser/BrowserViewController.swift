@@ -425,6 +425,8 @@ class BrowserViewController: UIViewController {
         } else {
             restoreTabs()
         }
+
+        updateTabCountUsingTabManager(tabManager, animated: false)
     }
 
     private func restoreTabs() {
@@ -1409,10 +1411,10 @@ extension BrowserViewController: TabManagerDelegate {
         return false
     }
 
-    private func updateTabCountUsingTabManager(tabManager: TabManager) {
+    private func updateTabCountUsingTabManager(tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            urlBar.updateTabCount(max(count, 1))
+            urlBar.updateTabCount(max(count, 1), animated: animated)
         }
     }
 }
