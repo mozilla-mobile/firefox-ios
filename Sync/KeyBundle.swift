@@ -277,6 +277,11 @@ public struct RecordEncrypter<T: CleartextPayloadJSON> {
         self.serializer = bundle.serializer(encoder.encode)
         self.factory = bundle.factory(encoder.decode)
     }
+
+    init(serializer: Record<T> -> JSON?, factory: String -> T?) {
+        self.serializer = serializer
+        self.factory = factory
+    }
 }
 
 public func ==(lhs: Keys, rhs: Keys) -> Bool {

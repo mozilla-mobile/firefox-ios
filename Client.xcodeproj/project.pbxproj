@@ -802,6 +802,13 @@
 			remoteGlobalIDString = 6CA0A8071A75135D00AC539F;
 			remoteInfo = SecEncodeTransformTests;
 		};
+		2F67C5271BB0D33000E7B73A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2FA435FA1ABB83B4008031D1;
+			remoteInfo = Account;
+		};
 		2F77F69C1ABCAEFE00484F3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */;
@@ -1388,7 +1395,7 @@
 		28E8BEC81B79449B002CC733 /* AlamofireExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireExtensions.swift; sourceTree = "<group>"; };
 		28E91E741B443AD5009DF274 /* SyncConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncConstants.swift; sourceTree = "<group>"; };
 		28EADE381AFC3898007FB2FB /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIImageViewExtensions.swift; path = Extensions/UIImageViewExtensions.swift; sourceTree = "<group>"; };
-		28ECD9791BA1EA2200D829DA /* MockSyncServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockSyncServer.swift; sourceTree = "<group>"; };
+		28ECD9791BA1EA2200D829DA /* MockSyncServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockSyncServer.swift; path = SyncTests/MockSyncServer.swift; sourceTree = "<group>"; };
 		28ECD9A21BA1EBA800D829DA /* SyncTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SyncTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		28ECD9F31BA1F59800D829DA /* DownloadTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadTests.swift; path = SyncTests/DownloadTests.swift; sourceTree = "<group>"; };
 		28ED02011B26123E003948B2 /* LoginPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginPayload.swift; sourceTree = "<group>"; };
@@ -2085,8 +2092,8 @@
 				28F596A01ACA13CA0071DDCC /* InfoTests.swift */,
 				2827316F1ABC9BE700AA1954 /* Supporting Files */,
 				50027345B49B967409DDA348 /* StateTests.swift */,
-				2855611E1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift */,
 				28ECD9791BA1EA2200D829DA /* MockSyncServer.swift */,
+				2855611E1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift */,
 			);
 			name = SyncTests;
 			sourceTree = "<group>";
@@ -3104,8 +3111,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				2827316B1ABC9BE700AA1954 /* PBXTargetDependency */,
 				28ECD9B11BA1F07000D829DA /* PBXTargetDependency */,
+				2827316B1ABC9BE700AA1954 /* PBXTargetDependency */,
 			);
 			name = SyncTests;
 			productName = SyncTests;
@@ -4122,14 +4129,14 @@
 				28A6CE8A1AC082E200C1A2D4 /* UtilsTests.swift in Sources */,
 				28F657C01ABFC97D00A608BD /* Record.swift in Sources */,
 				2F3724E61ABF3C19007607FA /* Info.swift in Sources */,
-				2855611F1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift in Sources */,
 				28ECD9A31BA1EF3D00D829DA /* GCDWebServer.m in Sources */,
 				28ECD9A61BA1EF3D00D829DA /* GCDWebServerRequest.m in Sources */,
 				28ECD9A41BA1EF3D00D829DA /* GCDWebServerConnection.m in Sources */,
 				28ECD9A91BA1EF5100D829DA /* GCDWebServerFileRequest.m in Sources */,
+				2855611F1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift in Sources */,
 				2894C16D1AE89FD500F1F92F /* HistoryPayload.swift in Sources */,
-				288501F91AC0F62200E7F670 /* RequestExtensions.swift in Sources */,
 				28ECD9AD1BA1EF5100D829DA /* GCDWebServerErrorResponse.m in Sources */,
+				288501F91AC0F62200E7F670 /* RequestExtensions.swift in Sources */,
 				5002717C41BC7C50F67F1CAD /* StateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
