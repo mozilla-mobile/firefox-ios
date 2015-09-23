@@ -502,21 +502,34 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
 }
 
 extension SQLiteBookmarkMirrorStorage: BookmarksModelFactory {
+    private func cursorForGUID(guid: GUID) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
+        let args: Args = [guid]
+        let sql =
+        "SELECT id, guid, type, bmkUri, title, pos FROM \(TableBookmarksMirror) WHERE " +
+            "parentid = ? AND is_deleted = 0 " +
+        "ORDER BY pos ASC"
+        return self.db.runQuery(sql, args: args, factory: MirrorBookmarkNodeFactory.factory)
+    }
+
+    private func modelForCursor(guid: GUID, title: String)(cursor: Cursor<BookmarkNode>) -> Deferred<Maybe<BookmarksModel>> {
+        let folder = SQLiteBookmarkFolder(guid: guid, title: title, children: cursor)
+        return deferMaybe(BookmarksModel(modelFactory: self, root: folder))
+    }
+
     public func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
         return self.modelForFolder(folder.guid)
     }
 
-    public func modelForFolder(guid: String) -> Deferred<Maybe<BookmarksModel>> {
+    public func modelForFolder(guid: GUID) -> Deferred<Maybe<BookmarksModel>> {
+        return self.modelForFolder(guid, title: "")
+    }
+
+    public func modelForFolder(guid: GUID, title: String) -> Deferred<Maybe<BookmarksModel>> {
         if guid == BookmarkRoots.MobileFolderGUID {
             return self.modelForRoot()
         }
 
-        let args: Args = [guid]
-        let sql =
-        "SELECT id, guid, type, bmkUri, title, pos FROM \(TableBookmarksMirror) WHERE " +
-        "parentid = ? AND is_deleted = 0 " +
-        "ORDER BY pos ASC"
-        return self.db.runQuery(sql, args: args, factory: MirrorBookmarkNodeFactory.factory)
+        return self.cursorForGUID(guid) >>== self.modelForCursor(guid, title: "")
     }
 
     public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
@@ -579,14 +592,19 @@ extension MergedSQLiteBookmarks: BookmarksModelFactory {
             return self.modelForRoot()
         }
 
-        // TODO: return self.mirror.modelForFolder(folder).
+        return self.mirror.modelForFolder(folder)
     }
 
     public func modelForFolder(guid: String) -> Deferred<Maybe<BookmarksModel>> {
+        return self.modelForFolder(guid, title: "")
+    }
+
+    public func modelForFolder(guid: String, title: String) -> Deferred<Maybe<BookmarksModel>> {
         if guid == BookmarkRoots.MobileFolderGUID {
             return self.modelForRoot()
         }
-        // TODO: return self.mirror.modelForFolder(guid).
+
+        return self.mirror.modelForFolder(guid, title: title)
     }
 
     public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
