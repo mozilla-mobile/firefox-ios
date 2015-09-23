@@ -590,9 +590,13 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
             tabCell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
         } else {
             var defaultFavicon = UIImage(named: "defaultFavicon")
-            defaultFavicon = defaultFavicon?.imageWithRenderingMode(.AlwaysTemplate)
-            tabCell.favicon.image = defaultFavicon
-            tabCell.favicon.tintColor = tab.isPrivate ? UIColor.whiteColor() : UIColor.darkGrayColor()
+            if tab.isPrivate {
+                defaultFavicon = defaultFavicon?.imageWithRenderingMode(.AlwaysTemplate)
+                tabCell.favicon.image = defaultFavicon
+                tabCell.favicon.tintColor = UIColor.whiteColor()
+            } else {
+                tabCell.favicon.image = defaultFavicon
+            }
         }
 
         tabCell.background.image = tab.screenshot

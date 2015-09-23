@@ -6,21 +6,21 @@ import Foundation
 import SnapKit
 
 struct TabsButtonUX {
-    static let titleColor: UIColor = UIColor.blackColor()
-    static let titleBackgroundColor: UIColor = UIColor.whiteColor()
-    static let cornerRadius: CGFloat = 2
-    static let titleFont: UIFont = UIConstants.DefaultSmallFontBold
-    static let borderStrokeWidth: CGFloat = 0
-    static let borderColor: UIColor = UIColor.clearColor()
-    static let titleInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+    static let TitleColor: UIColor = UIColor.blackColor()
+    static let TitleBackgroundColor: UIColor = UIColor.whiteColor()
+    static let CornerRadius: CGFloat = 2
+    static let TitleFont: UIFont = UIConstants.DefaultSmallFontBold
+    static let BorderStrokeWidth: CGFloat = 0
+    static let BorderColor: UIColor = UIColor.clearColor()
+    static let TitleInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
 }
 
 class TabsButton: UIControl {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = TabsButtonUX.titleFont
-        label.textColor = TabsButtonUX.titleColor
-        label.layer.cornerRadius = TabsButtonUX.cornerRadius
+        label.font = TabsButtonUX.TitleFont
+        label.textColor = TabsButtonUX.TitleColor
+        label.layer.cornerRadius = TabsButtonUX.CornerRadius
         label.textAlignment = NSTextAlignment.Center
         label.userInteractionEnabled = false
         return label
@@ -35,22 +35,22 @@ class TabsButton: UIControl {
 
     private lazy var labelBackground: UIView = {
         let background = UIView()
-        background.backgroundColor = TabsButtonUX.titleBackgroundColor
-        background.layer.cornerRadius = TabsButtonUX.cornerRadius
+        background.backgroundColor = TabsButtonUX.TitleBackgroundColor
+        background.layer.cornerRadius = TabsButtonUX.CornerRadius
         background.userInteractionEnabled = false
         return background
     }()
 
     private lazy var borderView: InnerStrokedView = {
         let border = InnerStrokedView()
-        border.strokeWidth = TabsButtonUX.borderStrokeWidth
-        border.color = TabsButtonUX.borderColor
-        border.cornerRadius = TabsButtonUX.cornerRadius
+        border.strokeWidth = TabsButtonUX.BorderStrokeWidth
+        border.color = TabsButtonUX.BorderColor
+        border.cornerRadius = TabsButtonUX.CornerRadius
         border.userInteractionEnabled = false
         return border
     }()
 
-    private var buttonInsets: UIEdgeInsets = TabsButtonUX.titleInsets
+    private var buttonInsets: UIEdgeInsets = TabsButtonUX.TitleInsets
 
     override init(frame: CGRect) {
         super.init(frame: frame)

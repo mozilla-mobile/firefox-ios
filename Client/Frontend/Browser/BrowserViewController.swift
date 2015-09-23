@@ -2216,12 +2216,12 @@ extension BrowserViewController {
 
         BrowserToolbar.appearance().actionButtonTintColor = UIColor.darkGrayColor()
 
-        TabsButton.appearance().borderColor = TabsButtonUX.borderColor
-        TabsButton.appearance().borderWidth = TabsButtonUX.borderStrokeWidth
-        TabsButton.appearance().titleFont = TabsButtonUX.titleFont
-        TabsButton.appearance().titleBackgroundColor = TabsButtonUX.titleBackgroundColor
-        TabsButton.appearance().textColor = TabsButtonUX.titleColor
-        TabsButton.appearance().insets = TabsButtonUX.titleInsets
+        TabsButton.appearance().borderColor = TabsButtonUX.BorderColor
+        TabsButton.appearance().borderWidth = TabsButtonUX.BorderStrokeWidth
+        TabsButton.appearance().titleFont = TabsButtonUX.TitleFont
+        TabsButton.appearance().titleBackgroundColor = TabsButtonUX.TitleBackgroundColor
+        TabsButton.appearance().textColor = TabsButtonUX.TitleColor
+        TabsButton.appearance().insets = TabsButtonUX.TitleInsets
 
         header.blurStyle = .ExtraLight
         footerBackground?.blurStyle = .ExtraLight
