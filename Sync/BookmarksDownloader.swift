@@ -61,6 +61,32 @@ private func itemFromRecord(record: Record<BookmarkBasePayload>) -> BookmarkMirr
     return itemable.toMirrorItem(record.modified)
 }
 
+public class MirroringBookmarksSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
+    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
+        super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, collection: "bookmarks")
+    }
+
+    override var storageVersion: Int {
+        return BookmarksStorageVersion
+    }
+
+    public func mirrorBookmarksToStorage(storage: BookmarkMirrorStorage, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: () -> Bool) -> SyncResult {
+        if let reason = self.reasonToNotSync(storageClient) {
+            return deferMaybe(.NotStarted(reason))
+        }
+
+        let encoder = RecordEncoder<BookmarkBasePayload>(decode: BookmarkType.somePayloadFromJSON, encode: { $0 })
+
+        guard let bookmarksClient = self.collectionClient(encoder, storageClient: storageClient) else {
+            log.error("Couldn't make bookmarks factory.")
+            return deferMaybe(FatalError(message: "Couldn't make bookmarks factory."))
+        }
+
+        let mirrorer = BookmarksMirrorer(storage: storage, client: bookmarksClient, basePrefs: self.prefs, collection: "bookmarks")
+        return mirrorer.go(info, greenLight: greenLight) >>> always(SyncStatus.Completed)
+    }
+}
+
 public class BookmarksMirrorer {
     private let downloader: BatchingDownloader<BookmarkBasePayload>
     private let storage: BookmarkMirrorStorage
