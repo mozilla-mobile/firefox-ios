@@ -599,28 +599,45 @@ function onBlur(event) {
   LoginManagerContent.onUsernameInput(event)
 }
 
-var documentBody = document.querySelector('body')
+var documentBody = document.body
 var observer = new MutationObserver(function(mutations) {
-    findLogins()
+  for(var idx = 0; idx < mutations.length; ++idx){
+    findForms(mutations[idx].addedNodes);
+  }
 });
 
-observer.observe(documentBody, { attributes: false, childList: true, characterData: false });
+function findForms(nodes) {
+  for (var i = 0; i < nodes.length; i++) {
+    var node = nodes[i];
+    if (node.nodeName === "FORM") {
+      findLogins(node);
+    } else if(node.hasChildNodes()) {
+      findForms(node.childNodes);
+    }
 
-function findLogins(event) {
+  }
+  return false;
+}
+
+ observer.observe(documentBody, { attributes: false, childList: true, characterData: false, subtree: true });
+
+function findLogins(form) {
   try {
-    for (var i = 0; i < document.forms.length; i++) {
-      LoginManagerContent._asyncFindLogins(document.forms[i], { })
+      LoginManagerContent._asyncFindLogins(form, { })
         .then(function(res) {
           LoginManagerContent.loginsFound(res.form, res.loginsFound);
         }).then(null, log);
-     }
    } catch(ex) {
      // Eat errors to avoid leaking them to the page
      log(ex);
    }
  }
 
-window.addEventListener("load", findLogins);
+ window.addEventListener("load", function(event) {
+   for (var i = 0; i < document.forms.length; i++) {
+     findLogins(document.forms[i]);
+   }
+});
 
 window.addEventListener("submit", function(event) {
   try {
