@@ -52,25 +52,25 @@ public class BrowserDB {
     }
 
     // Creates a table and writes its table info into the table-table database.
-    private func createTable(db: SQLiteDBConnection, table: Table) -> TableResult {
+    private func createTable(conn: SQLiteDBConnection, table: Table) -> TableResult {
         log.debug("Try create \(table.name) version \(table.version)")
-        if !table.create(db, version: table.version) {
+        if !table.create(conn, version: table.version) {
             // If creating failed, we'll bail without storing the table info
             log.debug("Creation failed.")
             return .Failed
         }
 
         var err: NSError? = nil
-        return schemaTable.insert(db, item: table, err: &err) > -1 ? .Created : .Failed
+        return schemaTable.insert(conn, item: table, err: &err) > -1 ? .Created : .Failed
     }
 
     // Updates a table and writes its table into the table-table database.
     // Exposed internally for testing.
-    func updateTable(db: SQLiteDBConnection, table: Table) -> TableResult {
+    func updateTable(conn: SQLiteDBConnection, table: Table) -> TableResult {
         log.debug("Trying update \(table.name) version \(table.version)")
         var from = 0
         // Try to find the stored version of the table
-        let cursor = schemaTable.query(db, options: QueryOptions(filter: table.name))
+        let cursor = schemaTable.query(conn, options: QueryOptions(filter: table.name))
         if cursor.count > 0 {
             if let info = cursor[0] as? TableInfoWrapper {
                 from = info.version
@@ -82,7 +82,7 @@ public class BrowserDB {
             return .Exists
         }
 
-        if !table.updateTable(db, from: from, to: table.version) {
+        if !table.updateTable(conn, from: from, to: table.version) {
             // If the update failed, we'll bail without writing the change to the table-table.
             log.debug("Updating failed.")
             return .Failed
@@ -93,8 +93,8 @@ public class BrowserDB {
         // Yes, we UPDATE OR INSERT… because we might be transferring ownership of a database table
         // to a different Table. It'll trigger exists, and thus take the update path, but we won't
         // necessarily have an existing schema entry -- i.e., we'll be updating from 0.
-        if schemaTable.update(db, item: table, err: &err) > 0 ||
-           schemaTable.insert(db, item: table, err: &err) > 0 {
+        if schemaTable.update(conn, item: table, err: &err) > 0 ||
+           schemaTable.insert(conn, item: table, err: &err) > 0 {
             return .Updated
         }
         return .Failed
@@ -121,7 +121,7 @@ public class BrowserDB {
             }
         }
 
-        if let _ = db.transaction({ connection -> Bool in
+        if let _ = self.db.transaction({ connection -> Bool in
             // If the table doesn't exist, we'll create it
             if !table.exists(connection) {
                 doCreate(connection)
@@ -284,7 +284,7 @@ extension BrowserDB {
     }
 
     func runWithConnection<T>(block: (connection: SQLiteDBConnection, inout err: NSError?) -> T) -> Deferred<Maybe<T>> {
-        return DeferredDBOperation(db: db, block: block).start()
+        return DeferredDBOperation(db: self.db, block: block).start()
     }
 
     func write(sql: String, withArgs args: Args? = nil) -> Deferred<Maybe<Int>> {
