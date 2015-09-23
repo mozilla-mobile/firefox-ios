@@ -50,17 +50,17 @@ protocol URLBarDelegate: class {
 
 class URLBarView: UIView {
     // Additional UIAppearance-configurable properties
-    dynamic var locationHighlightedBorderColor: UIColor = URLBarViewUX.TextFieldActiveBorderColor {
-        didSet {
-            if inOverlayMode {
-                locationContainer.layer.borderColor = locationHighlightedBorderColor.CGColor
-            }
-        }
-    }
     dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
         didSet {
             if !inOverlayMode {
                 locationContainer.layer.borderColor = locationBorderColor.CGColor
+            }
+        }
+    }
+    dynamic var locationActiveBorderColor: UIColor = URLBarViewUX.TextFieldActiveBorderColor {
+        didSet {
+            if inOverlayMode {
+                locationContainer.layer.borderColor = locationActiveBorderColor.CGColor
             }
         }
     }
@@ -493,7 +493,7 @@ class URLBarView: UIView {
         self.backButton.alpha = inOverlayMode ? 0 : 1
         self.stopReloadButton.alpha = inOverlayMode ? 0 : 1
 
-        let borderColor = inOverlayMode ? locationHighlightedBorderColor : locationBorderColor
+        let borderColor = inOverlayMode ? locationActiveBorderColor : locationBorderColor
         locationContainer.layer.borderColor = borderColor.CGColor
 
         if inOverlayMode {
