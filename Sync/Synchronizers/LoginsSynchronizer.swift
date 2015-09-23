@@ -149,27 +149,27 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
         }
 
         let encoder = RecordEncoder<LoginPayload>(decode: { LoginPayload($0) }, encode: { $0 })
-        if let passwordsClient = self.collectionClient(encoder, storageClient: storageClient) {
-            let since: Timestamp = self.lastFetched
-            log.debug("Synchronizing \(self.collection). Last fetched: \(since).")
-
-            let applyIncomingToStorage: StorageResponse<[Record<LoginPayload>]> -> Success = { response in
-                let ts = response.metadata.timestampMilliseconds
-                let lm = response.metadata.lastModifiedMilliseconds!
-                log.debug("Applying incoming password records from response timestamped \(ts), last modified \(lm).")
-                log.debug("Records header hint: \(response.metadata.records)")
-                return self.applyIncomingToStorage(logins, records: response.value, fetched: lm)
-            }
-            return passwordsClient.getSince(since)
-                >>== applyIncomingToStorage
-                // TODO: If we fetch sorted by date, we can bump the lastFetched timestamp
-                // to the last successfully applied record timestamp, no matter where we fail.
-                // There's no need to do the upload before bumping -- the storage of local changes is stable.
-                >>> { self.uploadOutgoingFromStorage(logins, lastTimestamp: 0, withServer: passwordsClient) }
-                >>> { return deferMaybe(.Completed) }
+        guard let passwordsClient = self.collectionClient(encoder, storageClient: storageClient) else {
+            log.error("Couldn't make logins factory.")
+            return deferMaybe(FatalError(message: "Couldn't make logins factory."))
         }
 
-        log.error("Couldn't make logins factory.")
-        return deferMaybe(FatalError(message: "Couldn't make logins factory."))
+        let since: Timestamp = self.lastFetched
+        log.debug("Synchronizing \(self.collection). Last fetched: \(since).")
+
+        let applyIncomingToStorage: StorageResponse<[Record<LoginPayload>]> -> Success = { response in
+            let ts = response.metadata.timestampMilliseconds
+            let lm = response.metadata.lastModifiedMilliseconds!
+            log.debug("Applying incoming password records from response timestamped \(ts), last modified \(lm).")
+            log.debug("Records header hint: \(response.metadata.records)")
+            return self.applyIncomingToStorage(logins, records: response.value, fetched: lm)
+        }
+        return passwordsClient.getSince(since)
+            >>== applyIncomingToStorage
+            // TODO: If we fetch sorted by date, we can bump the lastFetched timestamp
+            // to the last successfully applied record timestamp, no matter where we fail.
+            // There's no need to do the upload before bumping -- the storage of local changes is stable.
+            >>> { self.uploadOutgoingFromStorage(logins, lastTimestamp: 0, withServer: passwordsClient) }
+            >>> { return deferMaybe(.Completed) }
     }
 }
