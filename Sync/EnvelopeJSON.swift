@@ -50,4 +50,15 @@ public class EnvelopeJSON {
 
         return 0
     }
+
+    public func toString() -> String {
+        return self.json.toString()
+    }
+}
+
+
+extension EnvelopeJSON {
+    func asJSON() -> JSON {
+        return self.json
+    }
 }

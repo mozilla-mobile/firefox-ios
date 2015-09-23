@@ -167,7 +167,14 @@ private func optionalUIntegerHeader(input: AnyObject?) -> Timestamp? {
     return nil
 }
 
+
+public enum SortOption: String {
+    case Newest = "newest"
+    case Index = "index"
+}
+
 public struct ResponseMetadata {
+    public let status: Int
     public let alert: String?
     public let nextOffset: String?
     public let records: UInt64?
@@ -178,10 +185,12 @@ public struct ResponseMetadata {
     public let retryAfterMilliseconds: UInt64?
 
     public init(response: NSHTTPURLResponse) {
-        self.init(headers: response.allHeaderFields)
+        self.init(status: response.statusCode, headers: response.allHeaderFields)
     }
 
-    public init(headers: [NSObject : AnyObject]) {
+
+    init(status: Int, headers: [NSObject : AnyObject]) {
+        self.status = status
         alert = headers["X-Weave-Alert"] as? String
         nextOffset = headers["X-Weave-Next-Offset"] as? String
         records = optionalUIntegerHeader(headers["X-Weave-Records"])
