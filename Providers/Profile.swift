@@ -277,7 +277,7 @@ public class BrowserProfile: Profile {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
         withExtendedLifetime(self.places) {
-            return SQLiteBookmarks(db: self.db)
+            return MergedSQLiteBookmarks(db: self.db)
         }
     }()
 
