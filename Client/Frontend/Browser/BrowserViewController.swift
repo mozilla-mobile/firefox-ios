@@ -281,7 +281,7 @@ class BrowserViewController: UIViewController {
         })
 
 
-        searchLoader = SearchLoader(history: profile.history, urlBar: urlBar)
+        searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
 
         footer = UIView()
         self.view.addSubview(footer)

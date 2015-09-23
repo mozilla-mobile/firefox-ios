@@ -20,12 +20,12 @@ typealias SearchLoader = _SearchLoader<AnyObject, AnyObject>
  * Since both of these use the same SQL query, we can perform the query once and dispatch the results.
  */
 class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController> {
-    private let history: BrowserHistory
+    private let profile: Profile
     private let urlBar: URLBarView
     private var inProgress: Cancellable? = nil
 
-    init(history: BrowserHistory, urlBar: URLBarView) {
-        self.history = history
+    init(profile: Profile, urlBar: URLBarView) {
+        self.profile = profile
         self.urlBar = urlBar
         super.init()
     }
@@ -42,7 +42,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 self.inProgress = nil
             }
 
-            let deferred = self.history.getSitesByFrecencyWithLimit(100, whereURLContains: query)
+            let deferred = self.profile.history.getSitesByFrecencyWithLimit(100, whereURLContains: query)
             inProgress = deferred as? Cancellable
 
             deferred.uponQueue(dispatch_get_main_queue()) { result in
