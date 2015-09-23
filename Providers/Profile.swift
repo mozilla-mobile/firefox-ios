@@ -27,6 +27,8 @@ public protocol SyncManager {
     // The simplest possible approach.
     func beginTimedSyncs()
     func endTimedSyncs()
+    func applicationDidEnterBackground()
+    func applicationDidBecomeActive()
 
     func onRemovedAccount(account: FirefoxAccount?) -> Success
     func onAddedAccount() -> Success
@@ -456,6 +458,17 @@ public class BrowserProfile: Profile {
 
         private var syncTimer: NSTimer? = nil
 
+        private var backgrounded: Bool = true
+        func applicationDidEnterBackground() {
+            self.backgrounded = true
+            self.endTimedSyncs()
+        }
+
+        func applicationDidBecomeActive() {
+            self.backgrounded = false
+            self.beginTimedSyncs()
+        }
+
         /**
          * Locking is managed by withSyncInputs. Make sure you take and release these
          * whenever you do anything Sync-ey.
@@ -718,6 +731,22 @@ public class BrowserProfile: Profile {
         func syncHistory() -> SyncResult {
             // TODO: recognize .NotStarted.
             return self.sync("history", function: syncHistoryWithDelegate)
+        }
+
+        /**
+         * Return a thunk that continues to return true so long as an ongoing sync
+         * should continue.
+         */
+        func greenLight() -> () -> Bool {
+            let start = NSDate.now()
+
+            // Give it one minute to run before we stop.
+            let stopBy = start + OneMinuteInMilliseconds
+            return {
+                !self.backgrounded &&
+                NSDate.now() < stopBy &&
+                self.profile.hasSyncableAccount()
+            }
         }
     }
 }
