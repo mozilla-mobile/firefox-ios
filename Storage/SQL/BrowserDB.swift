@@ -19,7 +19,7 @@ typealias Args = [AnyObject?]
 // Version 6 - Visit timestamps are now microseconds.
 // Version 7 - Eliminate most tables.
 public class BrowserDB {
-    private var db: SwiftData
+    private let db: SwiftData
     // XXX: Increasing this should blow away old history, since we currently don't support any upgrades.
     private let Version: Int = 7
     private let files: FileAccessor
@@ -41,7 +41,7 @@ public class BrowserDB {
         self.secretKey = secretKey
 
         let file = ((try! files.getAndEnsureDirectory()) as NSString).stringByAppendingPathComponent(filename)
-        db = SwiftData(filename: file, key: secretKey, prevKey: nil)
+        self.db = SwiftData(filename: file, key: secretKey, prevKey: nil)
 
         if AppConstants.BuildChannel == .Developer && secretKey != nil {
             log.debug("Creating db: \(file) with secret = \(secretKey)")
@@ -104,8 +104,8 @@ public class BrowserDB {
     // creation of the table in the database.
     func createOrUpdate(table: Table) -> Bool {
         log.debug("Create or update \(table.name) version \(table.version).")
+
         var success = true
-        db = SwiftData(filename: ((try! files.getAndEnsureDirectory()) as NSString).stringByAppendingPathComponent(self.filename), key: secretKey)
         let doCreate = { (connection: SQLiteDBConnection) -> () in
             switch self.createTable(connection, table: table) {
             case .Created:
