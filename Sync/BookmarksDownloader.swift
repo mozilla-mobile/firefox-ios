@@ -124,6 +124,7 @@ public class BookmarksMirrorer {
             return succeed()
         }
 
+        log.debug("Downloading up to \(self.batchSize) records.")
         return self.downloader.go(info, limit: self.batchSize)
                               .bind { result in
             guard let end = result.successValue else {
@@ -234,6 +235,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
 
     func downloadNextBatchWithLimit(limit: Int, advancingOnCompletionTo: Timestamp) -> Deferred<Maybe<DownloadEndState>> {
         func handleFailure(err: MaybeErrorType) -> Deferred<Maybe<DownloadEndState>> {
+            log.debug("Handling failure.")
             guard let badRequest = err as? BadRequestError<[Record<T>]> where badRequest.response.metadata.status == 412 else {
                 // Just pass through the failure.
                 return deferMaybe(err)
@@ -246,6 +248,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         }
 
         func handleSuccess(response: StorageResponse<[Record<T>]>) -> Deferred<Maybe<DownloadEndState>> {
+            log.debug("Handling success.")
             // Shift to the next offset. This might be nil, in which case… fine!
             let offset = response.metadata.nextOffset
             self.nextOffset = offset

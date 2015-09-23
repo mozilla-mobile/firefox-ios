@@ -758,6 +758,7 @@ public class BrowserProfile: Profile {
 
             // Give it one minute to run before we stop.
             let stopBy = start + OneMinuteInMilliseconds
+            log.debug("Checking green light. Backgrounded: \(self.backgrounded).")
             return {
                 !self.backgrounded &&
                 NSDate.now() < stopBy &&

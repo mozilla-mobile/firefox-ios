@@ -657,6 +657,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
             params.append(NSURLQueryItem(name: "sort", value: sort.rawValue))
         }
 
+        log.debug("Issuing GET with newer = \(since).")
         let req = client.requestGET(self.collectionURI.withQueryParams(params))
 
         req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, result) in
