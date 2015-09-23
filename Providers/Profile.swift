@@ -267,9 +267,9 @@ public class BrowserProfile: Profile {
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
-        let _ = self.places
-
-        return SQLiteBookmarks(db: self.db)
+        withExtendedLifetime(self.places) {
+            return SQLiteBookmarks(db: self.db)
+        }
     }()
 
     lazy var searchEngines: SearchEngines = {
