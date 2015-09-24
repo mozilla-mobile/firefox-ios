@@ -221,7 +221,7 @@ class TabManager : NSObject {
         return tab
     }
 
-    private func configureTab(tab: Browser, request: NSURLRequest?, flushToDisk: Bool, zombie: Bool, restoring: Bool) {
+    func configureTab(tab: Browser, request: NSURLRequest?, flushToDisk: Bool, zombie: Bool, restoring: Bool) {
         for delegate in delegates {
             delegate.get()?.tabManager(self, didCreateTab: tab, restoring: restoring)
         }
@@ -315,7 +315,7 @@ class TabManager : NSObject {
         return -1
     }
 
-    private func storeChanges() {
+    func storeChanges() {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
         let storedTabs: [RemoteTab] = normalTabs.flatMap( Browser.toTab )
         self.profile.storeTabs(storedTabs)
