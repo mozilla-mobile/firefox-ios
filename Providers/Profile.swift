@@ -36,8 +36,12 @@ typealias EngineIdentifier = String
 typealias SyncFunction = (SyncDelegate, Prefs, Ready) -> SyncResult
 
 class ProfileFileAccessor: FileAccessor {
-    init(profile: Profile) {
-        let profileDirName = "profile.\(profile.localName())"
+    convenience init(profile: Profile) {
+        self.init(localName: profile.localName())
+    }
+
+    init(localName: String) {
+        let profileDirName = "profile.\(localName)"
 
         // Bug 1147262: First option is for device, second is for simulator.
         var rootPath: NSString
@@ -159,10 +163,13 @@ protocol Profile: class {
 
 public class BrowserProfile: Profile {
     private let name: String
+    internal let files: FileAccessor
+
     weak private var app: UIApplication?
 
     init(localName: String, app: UIApplication?) {
         self.name = localName
+        self.files = ProfileFileAccessor(localName: localName)
         self.app = app
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
@@ -225,10 +232,6 @@ public class BrowserProfile: Profile {
 
     func localName() -> String {
         return name
-    }
-
-    var files: FileAccessor {
-        return ProfileFileAccessor(profile: self)
     }
 
     lazy var queue: TabQueue = {
