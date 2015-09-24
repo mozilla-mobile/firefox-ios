@@ -34,7 +34,7 @@ public class BrowserDB {
     static let MaxVariableNumber = 999
 
     public init(filename: String, secretKey: String? = nil, files: FileAccessor) {
-        log.debug("Initializing BrowserDB.")
+        log.debug("Initializing BrowserDB: \(filename).")
         self.files = files
         self.filename = filename
         self.schemaTable = SchemaTable()
