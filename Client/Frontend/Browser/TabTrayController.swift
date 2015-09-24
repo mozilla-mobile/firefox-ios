@@ -236,9 +236,8 @@ class TabTrayController: UIViewController {
     private var privateMode: Bool = false {
         didSet {
             if #available(iOS 9, *) {
-                togglePrivateMode.selected = privateMode
+                togglePrivateMode.selected = !togglePrivateMode.selected
                 togglePrivateMode.accessibilityValue = privateMode ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
-                emptyPrivateTabsView.hidden = !(privateMode && tabManager.privateTabs.count == 0)
                 tabDataSource.tabs = tabsToDisplay
                 collectionView.reloadData()
             }
@@ -250,10 +249,9 @@ class TabTrayController: UIViewController {
     }
 
     @available(iOS 9, *)
-    lazy var togglePrivateMode: UIButton = {
-        let button = UIButton()
+    lazy var togglePrivateMode: ToggleButton = {
+        let button = ToggleButton()
         button.setImage(UIImage(named: "smallPrivateMask"), forState: UIControlState.Normal)
-        button.setImage(UIImage(named: "smallPrivateMaskSelected"), forState: UIControlState.Selected)
         button.addTarget(self, action: "SELdidTogglePrivateMode", forControlEvents: .TouchUpInside)
         button.accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
         button.accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
@@ -333,7 +331,7 @@ class TabTrayController: UIViewController {
             }
 
             view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
-            emptyPrivateTabsView.hidden = !(privateMode && tabManager.privateTabs.count == 0)
+            emptyPrivateTabsView.alpha = privateMode && tabManager.privateTabs.count == 0 ? 1 : 0
             emptyPrivateTabsView.snp_makeConstraints { make in
                 make.edges.equalTo(self.view)
             }
@@ -428,7 +426,54 @@ class TabTrayController: UIViewController {
 
     @available(iOS 9, *)
     func SELdidTogglePrivateMode() {
+        let scaleDownTransform = CGAffineTransformMakeScale(0.9, 0.9)
+
+        let fromView: UIView
+        if privateTabsAreEmpty() {
+            fromView = emptyPrivateTabsView
+        } else {
+            let snapshot = collectionView.snapshotViewAfterScreenUpdates(false)
+            snapshot.frame = collectionView.frame
+            view.insertSubview(snapshot, aboveSubview: collectionView)
+            fromView = snapshot
+        }
+
         privateMode = !privateMode
+        togglePrivateMode.setSelected(privateMode, animated: true)
+        collectionView.layoutSubviews()
+
+        let toView: UIView
+        if privateTabsAreEmpty() {
+            toView = emptyPrivateTabsView
+        } else {
+            let newSnapshot = collectionView.snapshotViewAfterScreenUpdates(true)
+            newSnapshot.frame = collectionView.frame
+            view.insertSubview(newSnapshot, aboveSubview: fromView)
+            collectionView.alpha = 0
+            toView = newSnapshot
+        }
+        toView.alpha = 0
+        toView.transform = scaleDownTransform
+
+        UIView.animateWithDuration(0.2, delay: 0, options: [], animations: { () -> Void in
+            fromView.transform = scaleDownTransform
+            fromView.alpha = 0
+            toView.transform = CGAffineTransformIdentity
+            toView.alpha = 1
+        }) { finished in
+            if fromView != self.emptyPrivateTabsView {
+                fromView.removeFromSuperview()
+            }
+            if toView != self.emptyPrivateTabsView {
+                toView.removeFromSuperview()
+            }
+            self.collectionView.alpha = 1
+        }
+    }
+
+    @available(iOS 9, *)
+    private func privateTabsAreEmpty() -> Bool {
+        return privateMode && tabManager.privateTabs.count == 0
     }
 }
 
@@ -492,8 +537,8 @@ extension TabTrayController: TabManagerDelegate {
             }
 
             if #available(iOS 9, *) {
-                if privateMode && tabsToDisplay.count == 0 {
-                    emptyPrivateTabsView.hidden = false
+                if privateTabsAreEmpty() {
+                    emptyPrivateTabsView.alpha = 1
                 }
             }
         }

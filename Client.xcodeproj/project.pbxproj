@@ -597,6 +597,7 @@
 		E65AB12C1B7CDADF00C2B47A /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65AB12B1B7CDADF00C2B47A /* SessionRestoreHelper.swift */; };
 		E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660BDD81BB06521009AC090 /* TabsButton.swift */; settings = {ASSET_TAGS = (); }; };
 		E660BE061BB0666D009AC090 /* InnerStrokedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660BE051BB0666D009AC090 /* InnerStrokedView.swift */; settings = {ASSET_TAGS = (); }; };
+		E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E663D5771BB341C4001EF30E /* ToggleButton.swift */; settings = {ASSET_TAGS = (); }; };
 		E679FDBB1B99CF10008C220A /* PrivateBrowsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */; settings = {ASSET_TAGS = (); }; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
 		E698FFDA1B4AADF40001F623 /* BrowserScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */; };
@@ -1737,6 +1738,7 @@
 		E65AB12B1B7CDADF00C2B47A /* SessionRestoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHelper.swift; sourceTree = "<group>"; };
 		E660BDD81BB06521009AC090 /* TabsButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsButton.swift; sourceTree = "<group>"; };
 		E660BE051BB0666D009AC090 /* InnerStrokedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InnerStrokedView.swift; sourceTree = "<group>"; };
+		E663D5771BB341C4001EF30E /* ToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
 		E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTests.swift; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserScrollController.swift; sourceTree = "<group>"; };
@@ -2416,6 +2418,7 @@
 				6BB2FD971B017DAB001A189B /* AuralProgressBar.swift */,
 				E660BDD81BB06521009AC090 /* TabsButton.swift */,
 				E660BE051BB0666D009AC090 /* InnerStrokedView.swift */,
+				E663D5771BB341C4001EF30E /* ToggleButton.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -4582,6 +4585,7 @@
 				0B5B51AF1B4CDB9E00E3B6E9 /* RXMLElement.m in Sources */,
 				D38B2D491A8D96D00040E6B5 /* GCDWebServerDataResponse.m in Sources */,
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
+				E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */,
 				D38B2D521A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */,
 				D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
