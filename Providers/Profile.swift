@@ -188,11 +188,11 @@ public class BrowserProfile: Profile {
     }
 
     func shutdown() {
-        if dbCreated {
+        if self.dbCreated {
             db.close()
         }
 
-        if loginsDBCreated {
+        if self.loginsDBCreated {
             loginsDB.close()
         }
     }
@@ -232,18 +232,23 @@ public class BrowserProfile: Profile {
     }
 
     lazy var queue: TabQueue = {
-        if !self.dbCreated {
-            _ = self.history
+        withExtendedLifetime(self.history) {
+            return SQLiteQueue(db: self.db)
         }
-        return SQLiteQueue(db: self.db)
     }()
 
     private var dbCreated = false
-    lazy var db: BrowserDB = {
-        self.dbCreated = true
-        return BrowserDB(filename: "browser.db", files: self.files)
-    }()
-
+    var db: BrowserDB {
+        struct Singleton {
+            static var token: dispatch_once_t = 0
+            static var instance: BrowserDB!
+        }
+        dispatch_once(&Singleton.token) {
+            Singleton.instance = BrowserDB(filename: "browser.db", files: self.files)
+            self.dbCreated = true
+        }
+        return Singleton.instance
+    }
 
     /**
      * Favicons, history, and bookmarks are all stored in one intermeshed
@@ -346,8 +351,15 @@ public class BrowserProfile: Profile {
 
     private var loginsDBCreated = false
     private lazy var loginsDB: BrowserDB = {
-        self.loginsDBCreated = true
-        return BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
+        struct Singleton {
+            static var token: dispatch_once_t = 0
+            static var instance: BrowserDB!
+        }
+        dispatch_once(&Singleton.token) {
+            Singleton.instance = BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
+            self.loginsDBCreated = true
+        }
+        return Singleton.instance
     }()
 
     let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
