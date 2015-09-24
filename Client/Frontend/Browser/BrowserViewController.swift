@@ -17,7 +17,6 @@ private let log = Logger.browserLogger
 
 private let OKString = NSLocalizedString("OK", comment: "OK button")
 private let CancelString = NSLocalizedString("Cancel", comment: "Cancel button")
-private let OpenInString = NSLocalizedString("Open in…", comment: "String indicating that the file can be opened in another application on the device")
 
 private let KVOLoading = "loading"
 private let KVOEstimatedProgress = "estimatedProgress"

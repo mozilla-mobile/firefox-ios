@@ -17,6 +17,7 @@ struct OpenInViewUX {
     static let TextFont = UIFont.systemFontOfSize(16)
     static let TextColor = UIColor(red: 74.0/255.0, green: 144.0/255.0, blue: 226.0/255.0, alpha: 1.0)
     static let TextOffset = -15
+    static let OpenInString = NSLocalizedString("Open in…", comment: "String indicating that the file can be opened in another application on the device")
 }
 
 enum FileType : String {
@@ -43,9 +44,6 @@ struct OpenInHelperFactory {
 class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDelegate {
     private var view: OpenInView?
     private var docController: UIDocumentInteractionController? = nil
-
-    private var parentView: UIView!
-    private var webView: WKWebView!
 
     init(url: NSURL) {
         super.init()
@@ -100,7 +98,7 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
 
     func hideOpenInView(forWebView webView: WKWebView) {
         webView.snp_updateConstraints { make in
-            make.edges.equalTo(EdgeInsetsMake(0, left: 0, bottom: 0, right: 0))
+            make.edges.equalTo(EdgeInsetsZero)
         }
         view?.removeFromSuperview()
         view = nil
@@ -126,7 +124,7 @@ class OpenInView: UIView {
     init() {
         super.init(frame: CGRectZero)
         openInButton.setTitleColor(OpenInViewUX.TextColor, forState: UIControlState.Normal)
-        openInButton.setTitle(NSLocalizedString("Open in...", comment: "String indicating that the file can be opened in another application"), forState: UIControlState.Normal)
+        openInButton.setTitle(OpenInViewUX.OpenInString, forState: UIControlState.Normal)
         openInButton.titleLabel?.font = OpenInViewUX.TextFont
         openInButton.sizeToFit()
         self.addSubview(openInButton)
