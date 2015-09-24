@@ -133,10 +133,7 @@ public class SeparatorPayload: BookmarkBasePayload {
 
 public class FolderPayload: BookmarkBasePayload {
     private var childrenAreValid: Bool {
-        guard let children = self["children"].asArray else {
-            return false
-        }
-        return children.every({ $0.isString })
+        return self.hasStringArrayField("children")
     }
 
     override public func isValid() -> Bool {
@@ -144,11 +141,16 @@ public class FolderPayload: BookmarkBasePayload {
             return false
         }
 
-        if !self.hasRequiredStringFields(["title", "description"]) {
-            log.warning("Folder \(self.id) missing title or description.")
+        if !self.hasRequiredStringFields(["title"]) {
+            log.warning("Folder \(self.id) missing title.")
             return false
         }
 
+        if !self.hasOptionalStringFields(["description"]) {
+            log.warning("Folder \(self.id) missing string description.")
+            return false
+
+        }
         if !self.childrenAreValid {
             log.warning("Folder \(self.id) has invalid children.")
             return false
@@ -191,7 +193,10 @@ public class FolderPayload: BookmarkBasePayload {
 }
 
 public class BookmarkPayload: BookmarkBasePayload {
-    private static let requiredBookmarkStringFields = ["title", "bmkUri", "description", "tags", "keyword"]
+    private static let requiredBookmarkStringFields = ["bmkUri"]
+
+    // Title *should* be required, but can be missing for queries. Great.
+    private static let optionalBookmarkStringFields = ["title", "keyword", "description"]
     private static let optionalBookmarkBooleanFields = ["loadInSidebar"]
 
     override public func isValid() -> Bool {
@@ -201,6 +206,15 @@ public class BookmarkPayload: BookmarkBasePayload {
 
         if !self.hasRequiredStringFields(BookmarkPayload.requiredBookmarkStringFields) {
             log.warning("Bookmark \(self.id) missing required string field.")
+            return false
+        }
+
+        if !self.hasStringArrayField("tags") {
+            log.warning("Bookmark \(self.id) missing tags array.")
+            return false
+        }
+
+        if !self.hasOptionalStringFields(BookmarkPayload.optionalBookmarkStringFields) {
             return false
         }
 
@@ -224,12 +238,22 @@ public class BookmarkPayload: BookmarkBasePayload {
             return false
         }
 
+        // TODO: compare optional fields.
+
+        if Set(self.tags) != Set(p.tags) {
+            return false
+        }
+
         if self["loadInSidebar"].asBool != p["loadInSidebar"].asBool {
             return false
         }
 
         return true
     }
+
+    lazy var tags: [String] = {
+        return self["tags"].asArray?.flatMap { $0.asString } ?? []
+    }()
 
     // This goes here because extensions cannot override methods yet.
     // The rest are in extension blocks at the end of this file.
@@ -245,11 +269,11 @@ public class BookmarkPayload: BookmarkBasePayload {
             // TODO: these might need to be weakened if real-world data is dirty.
             parentID: self["parentid"].asString!,
             parentName: self["parentName"].asString!,
-            title: self["title"].asString!,
-            description: self["description"].asString!,
+            title: self["title"].asString ?? "",
+            description: self["description"].asString,
             URI: self["bmkUri"].asString!,
-            tags: self["tags"].asString!,
-            keyword: self["keyword"].asString!
+            tags: self["tags"].toString(),           // Stringify it so we can put the array in the DB.
+            keyword: self["keyword"].asString
         )
     }
 }
@@ -260,8 +284,8 @@ public class BookmarkQueryPayload: BookmarkPayload {
             return false
         }
 
-        if !self.hasRequiredStringFields(["folderName", "queryId"]) {
-            log.warning("Query \(self.id) missing required string field.")
+        if !self.hasOptionalStringFields(["queryId", "folderName"]) {
+            log.warning("Query \(self.id) missing queryId or folderName.")
             return false
         }
 
@@ -315,8 +339,15 @@ public class BookmarkQueryPayload: BookmarkPayload {
 }
 
 public class BookmarkBasePayload: CleartextPayloadJSON {
-    private static let requiredStringFields: [String] = ["parentid", "parentName", "type"]
+    private static let requiredStringFields: [String] = ["parentid", "type"]
     private static let optionalBooleanFields: [String] = ["hasDupe"]
+
+    func hasStringArrayField(name: String) -> Bool {
+        guard let arr = self[name].asArray else {
+            return false
+        }
+        return arr.every { $0.isString }
+    }
 
     func hasRequiredStringFields(fields: [String]) -> Bool {
         return fields.every { self[$0].isString }
@@ -353,6 +384,11 @@ public class BookmarkBasePayload: CleartextPayloadJSON {
 
         if self["deleted"].asBool ?? false {
             return true
+        }
+
+        if !(self["parentName"].isString || self.id == "places") {
+            log.warning("Not the places root and missing parent name.")
+            return false
         }
 
         if !self.hasRequiredStringFields(BookmarkBasePayload.requiredStringFields) {
@@ -400,6 +436,10 @@ public class BookmarkBasePayload: CleartextPayloadJSON {
             return false
         }
 
+        if p["parentName"].asString != self["parentName"].asString {
+            return false
+        }
+
         return self.hasDupe == p.hasDupe
     }
 }
@@ -424,9 +464,9 @@ extension FolderPayload: MirrorItemable {
             hasDupe: self.hasDupe,
             // TODO: these might need to be weakened if real-world data is dirty.
             parentID: self["parentid"].asString!,
-            parentName: self["parentName"].asString!,
+            parentName: self["parentName"].asString,
             title: self["title"].asString!,
-            description: self["description"].asString!
+            description: self["description"].asString
         )
     }
 }
@@ -445,7 +485,7 @@ extension LivemarkPayload: MirrorItemable {
             parentID: self["parentid"].asString!,
             parentName: self["parentName"].asString!,
             title: self["title"].asString!,
-            description: self["description"].asString!,
+            description: self["description"].asString,
             feedURI: self["feedURI"].asString!,
             siteURI: self["siteURI"].asString!
         )
