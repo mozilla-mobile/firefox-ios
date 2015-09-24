@@ -317,7 +317,7 @@ class TabManager : NSObject {
 
     private func storeChanges() {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = tabs.filter { !$0.isPrivate }.flatMap( Browser.toTab )
+        let storedTabs: [RemoteTab] = normalTabs.flatMap( Browser.toTab )
         self.profile.storeTabs(storedTabs)
 
         // Also save (full) tab state to disk
