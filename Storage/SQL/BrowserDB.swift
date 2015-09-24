@@ -102,11 +102,9 @@ public class BrowserDB {
 
     // Utility for table classes. They should call this when they're initialized to force
     // creation of the table in the database.
-    func createOrUpdate(table: Table) -> Bool {
-        log.debug("Create or update \(table.name) version \(table.version).")
-
+    func createOrUpdate(tables: Table...) -> Bool {
         var success = true
-        let doCreate = { (connection: SQLiteDBConnection) -> () in
+        let doCreate = { (table: Table, connection: SQLiteDBConnection) -> () in
             switch self.createTable(connection, table: table) {
             case .Created:
                 success = true
@@ -122,31 +120,41 @@ public class BrowserDB {
         }
 
         if let _ = self.db.transaction({ connection -> Bool in
-            // If the table doesn't exist, we'll create it
-            if !table.exists(connection) {
-                doCreate(connection)
-            } else {
-                // Otherwise, we'll update it
-                switch self.updateTable(connection, table: table) {
-                case .Updated:
-                    success = true
-                    connection.checkpoint()
-                    break
-                case .Exists:
-                    log.debug("Table already exists.")
-                    success = true
-                    break
-                default:
-                    log.error("Update failed for \(table.name). Dropping and recreating.")
+            let thread = NSThread.currentThread().description
+            // If the table doesn't exist, we'll create it.
+            for table in tables {
+                log.debug("Create or update \(table.name) version \(table.version) on \(thread).")
+                if !table.exists(connection) {
+                    log.debug("Doesn't exist. Creating table \(table.name).")
+                    doCreate(table, connection)
+                } else {
+                    // Otherwise, we'll update it
+                    switch self.updateTable(connection, table: table) {
+                    case .Updated:
+                        log.debug("Updated table \(table.name).")
+                        success = true
+                        connection.checkpoint()
+                        break
+                    case .Exists:
+                        log.debug("Table \(table.name) already exists.")
+                        success = true
+                        break
+                    default:
+                        log.error("Update failed for \(table.name). Dropping and recreating.")
 
-                    table.drop(connection)
-                    var err: NSError? = nil
-                    self.schemaTable.delete(connection, item: table, err: &err)
+                        table.drop(connection)
+                        var err: NSError? = nil
+                        self.schemaTable.delete(connection, item: table, err: &err)
 
-                    doCreate(connection)
+                        doCreate(table, connection)
+                    }
+                }
+
+                if !success {
+                    log.warning("Failed to configure multiple tables. Aborting.")
+                    return false
                 }
             }
-
             return success
         }) {
             // Err getting a transaction
@@ -156,7 +164,7 @@ public class BrowserDB {
         // If we failed, move the file and try again. This will probably break things that are already
         // attached and expecting a working DB, but at least we should be able to restart.
         if !success {
-            log.debug("Couldn't create or update \(table.name).")
+            log.debug("Couldn't create or update \(tables.map { $0.name }).")
             log.debug("Attempting to move \(self.filename) to another location.")
 
             // Note that a backup file might already exist! We append a counter to avoid this.
@@ -175,7 +183,12 @@ public class BrowserDB {
             assert(success)
 
             if let _ = db.transaction({ connection -> Bool in
-                doCreate(connection)
+                for table in tables {
+                    doCreate(table, connection)
+                    if !success {
+                        return false
+                    }
+                }
                 return success
             }) {
                 success = false;
