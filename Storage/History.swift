@@ -24,7 +24,7 @@ public protocol BrowserHistory {
     func removeSiteFromTopSites(site: Site) -> Success
 
     func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>>
-    func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>>
+    func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String, includeBookmarkState: Bool) -> Deferred<Maybe<Cursor<Site>>>
     func getSitesByLastVisit(limit: Int) -> Deferred<Maybe<Cursor<Site>>>
 }
 

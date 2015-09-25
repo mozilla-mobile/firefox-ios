@@ -244,19 +244,19 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        return self.getSitesByFrecencyWithLimit(limit, includeIcon: true)
+        return self.getSitesByFrecencyWithLimit(limit, includeIcon: true, includeBookmarkState: true)
     }
 
-    public func getSitesByFrecencyWithLimit(limit: Int, includeIcon: Bool) -> Deferred<Maybe<Cursor<Site>>> {
+    public func getSitesByFrecencyWithLimit(limit: Int, includeIcon: Bool, includeBookmarkState: Bool = false) -> Deferred<Maybe<Cursor<Site>>> {
         // Exclude redirect domains. Bug 1194852.
         let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
         let groupBy = "GROUP BY domain_id "
 
-        return self.getFilteredSitesByFrecencyWithLimit(limit, groupClause: groupBy, whereData: whereData, includeIcon: includeIcon)
+        return self.getFilteredSitesByFrecencyWithLimit(limit, groupClause: groupBy, whereData: whereData, includeIcon: includeIcon, includeBookmarkState: includeBookmarkState)
     }
 
-    public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>> {
-        return self.getFilteredSitesByFrecencyWithLimit(limit, whereURLContains: filter)
+    public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String, includeBookmarkState: Bool = false) -> Deferred<Maybe<Cursor<Site>>> {
+        return self.getFilteredSitesByFrecencyWithLimit(limit, whereURLContains: filter, includeBookmarkState: includeBookmarkState)
     }
 
     public func getSitesByLastVisit(limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
@@ -283,6 +283,8 @@ extension SQLiteHistory: BrowserHistory {
             site.latestVisit = Visit(date: latest, type: VisitType.Unknown)
         }
 
+        site.bookmarked = row.getBoolean("bookmarked")
+
         return site
     }
 
@@ -305,7 +307,8 @@ extension SQLiteHistory: BrowserHistory {
 
     private func getFilteredSitesByVisitDateWithLimit(limit: Int,
                                                       whereURLContains filter: String? = nil,
-                                                      includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
+                                                      includeIcon: Bool = true,
+                                                      includeBookmarkState: Bool = false) -> Deferred<Maybe<Cursor<Site>>> {
         let args: Args?
         let whereClause: String
         if let filter = filter {
@@ -349,18 +352,31 @@ extension SQLiteHistory: BrowserHistory {
                 "FROM (\(historySQL)) LEFT OUTER JOIN " +
                 "view_history_id_favicon ON historyID = view_history_id_favicon.id"
             let factory = SQLiteHistory.iconHistoryColumnFactory
-            return db.runQuery(sql, args: args, factory: factory)
+            return db.runQuery(sql, args: args, factory: factory) >>== { cursor in
+                if includeBookmarkState {
+                    // get list of tuples of ids & urls
+                    return self.addBookmarkedState(toSites: cursor.asArray())
+                }
+                return deferMaybe(cursor)
+            }
         }
 
         let factory = SQLiteHistory.basicHistoryColumnFactory
-        return db.runQuery(historySQL, args: args, factory: factory)
+        return db.runQuery(historySQL, args: args, factory: factory) >>== { cursor in
+            if includeBookmarkState {
+                // get list of tuples of ids & urls
+                return self.addBookmarkedState(toSites: cursor.asArray())
+            }
+            return deferMaybe(cursor)
+        }
     }
 
     private func getFilteredSitesByFrecencyWithLimit(limit: Int,
                                                      whereURLContains filter: String? = nil,
                                                      groupClause: String = "GROUP BY historyID ",
                                                      whereData: String? = nil,
-                                                     includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
+                                                     includeIcon: Bool = true,
+                                                     includeBookmarkState: Bool = false) -> Deferred<Maybe<Cursor<Site>>> {
         let localFrecencySQL = getLocalFrecencySQL()
         let remoteFrecencySQL = getRemoteFrecencySQL()
         let sixMonthsInMicroseconds: UInt64 = 15_724_800_000_000      // 182 * 1000 * 1000 * 60 * 60 * 24
@@ -381,7 +397,7 @@ extension SQLiteHistory: BrowserHistory {
 
         // Innermost: grab history items and basic visit/domain metadata.
         let ungroupedSQL =
-        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, title, guid, domain_id, domain" +
+        "SELECT \(TableHistory).id AS historyID, \(TableHistory).url AS url, \(TableHistory).title AS title, \(TableHistory).guid AS guid, domain_id, domain" +
         ", COALESCE(max(case \(TableVisits).is_local when 1 then \(TableVisits).date else 0 end), 0) AS localVisitDate" +
         ", COALESCE(max(case \(TableVisits).is_local when 0 then \(TableVisits).date else 0 end), 0) AS remoteVisitDate" +
         ", COALESCE(sum(\(TableVisits).is_local), 0) AS localVisitCount" +
@@ -415,7 +431,7 @@ extension SQLiteHistory: BrowserHistory {
         " FROM (" + frecenciedSQL + ") " +
         groupClause + " " +
         "ORDER BY frecencies DESC " +
-        "LIMIT \(limit) "
+       "LIMIT \(limit) "
 
         // Finally: join this small list to the favicon data.
         if includeIcon {
@@ -425,14 +441,48 @@ extension SQLiteHistory: BrowserHistory {
                       " historyID, url, title, guid, domain_id, domain" +
                       ", localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount" +
                       ", iconID, iconURL, iconDate, iconType, iconWidth" +
-                      " FROM (\(historySQL)) LEFT OUTER JOIN " +
-                      "view_history_id_favicon ON historyID = view_history_id_favicon.id"
+                      " FROM (\(historySQL)) LEFT OUTER JOIN" +
+                      " view_history_id_favicon ON historyID = view_history_id_favicon.id"
             let factory = SQLiteHistory.iconHistoryColumnFactory
-            return db.runQuery(sql, args: args, factory: factory)
+            return db.runQuery(sql, args: args, factory: factory) >>== { cursor in
+                if includeBookmarkState {
+                    // get list of tuples of ids & urls
+                    return self.addBookmarkedState(toSites: cursor.asArray())
+                }
+                return deferMaybe(cursor)
+            }
         }
 
         let factory = SQLiteHistory.basicHistoryColumnFactory
-        return db.runQuery(historySQL, args: args, factory: factory)
+        return db.runQuery(historySQL, args: args, factory: factory) >>== { cursor in
+            if includeBookmarkState {
+                // get list of tuples of ids & urls
+                return self.addBookmarkedState(toSites: cursor.asArray())
+            }
+            return deferMaybe(cursor)
+        }
+    }
+
+    func addBookmarkedState(toSites sites: [Site]) -> Deferred<Maybe<Cursor<Site>>> {
+        let historyRowIds = optFilter(sites.map { String($0.id!) })
+        let historySQL = historyRowIds.joinWithSeparator(", ")
+        let bookmarkSQL = "SELECT  \(TableHistory).id AS historyID, count(\(TableBookmarks).id) AS bookmarkCount " +
+            "FROM \(TableHistory) LEFT JOIN \(TableBookmarks) ON \(TableHistory).url = \(TableBookmarks).url " +
+            "WHERE \(TableHistory).id IN (\(historySQL)) " +
+            "GROUP BY \(TableHistory).id"
+        func BookmarkFactory(row: SDRow) -> Site {
+            // we should never fail this test as we will get a response containing only those rows that exist in the sites array, but optionals will be optionals
+            guard let siteID = row["historyID"] as? Int, let index = sites.indexOf({ $0.id == siteID })
+                else {
+                    log.error("Returning an empty site from Bookmarks. This shouldn't ever happen!");
+                    return Site(url: "", title: "")
+            }
+            let site = sites[index]
+            site.bookmarked = row.getBoolean("bookmarkCount")
+            return site
+
+        }
+        return db.runQuery(bookmarkSQL, args: nil, factory: BookmarkFactory)
     }
 }
 

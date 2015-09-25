@@ -12,11 +12,16 @@ private let DetailTextTopMargin = CGFloat(5)
 
 class TwoLineTableViewCell: UITableViewCell {
     private let twoLineHelper = TwoLineCellHelper()
+    let leftBadge = UIImageView()
+    let rightBadge = UIImageView()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
 
-        twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
+        twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!, rightBadgeView: rightBadge, leftBadgeView: leftBadge)
+
+        contentView.addSubview(leftBadge)
+        contentView.addSubview(rightBadge)
 
         indentationWidth = 0
         layoutMargins = UIEdgeInsetsZero
@@ -30,6 +35,31 @@ class TwoLineTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         twoLineHelper.layoutSubviews()
+
+        let baseFrame = detailTextLabel!.frame
+        var leftBadgeWidth: CGFloat = 0
+        var rightBadgeWidth: CGFloat = 0
+        let Padding: CGFloat = 5
+        if let img = rightBadge.image {
+            rightBadgeWidth = img.size.width / img.size.height * baseFrame.height + Padding
+            rightBadge.frame = CGRect(x: baseFrame.origin.x + baseFrame.width - rightBadgeWidth + Padding,
+                y: baseFrame.origin.y,
+                width: rightBadgeWidth - Padding,
+                height: baseFrame.height)
+        }
+        if let img = leftBadge.image {
+            leftBadgeWidth = img.size.width / img.size.height * baseFrame.height + Padding
+            leftBadge.frame = CGRect(x: baseFrame.origin.x,
+                y: baseFrame.origin.y,
+                width: leftBadgeWidth - Padding,
+                height: baseFrame.height)
+        }
+
+
+        detailTextLabel!.frame = CGRect(x: baseFrame.origin.x + leftBadgeWidth,
+            y: baseFrame.origin.y,
+            width: baseFrame.width - rightBadgeWidth - leftBadgeWidth,
+            height: baseFrame.height)
     }
 
     func setLines(text: String?, detailText: String?) {
@@ -130,13 +160,17 @@ private class TwoLineCellHelper {
     var textLabel: UILabel!
     var detailTextLabel: UILabel!
     var imageView: UIImageView!
+    var leftBadge: UIImageView?
+    var rightBadge: UIImageView?
 
     // TODO: Not ideal. We should figure out a better way to get this initialized.
-    func setUpViews(container: UIView, textLabel: UILabel, detailTextLabel: UILabel, imageView: UIImageView) {
+    func setUpViews(container: UIView, textLabel: UILabel, detailTextLabel: UILabel, imageView: UIImageView, rightBadgeView: UIImageView? = nil, leftBadgeView: UIImageView? = nil) {
         self.container = container
         self.textLabel = textLabel
         self.detailTextLabel = detailTextLabel
         self.imageView = imageView
+        self.rightBadge = rightBadgeView
+        self.leftBadge = leftBadgeView
 
         if let headerView = self.container as? UITableViewHeaderFooterView {
             headerView.contentView.backgroundColor = UIColor.clearColor()
@@ -166,6 +200,7 @@ private class TwoLineCellHelper {
         imageView.frame = CGRectMake(ImageMargin, (height - ImageSize) / 2, ImageSize, ImageSize)
         textLabel.frame = CGRectMake(textLeft, (height - contentHeight) / 2,
             container.frame.width - textLeft - ImageMargin, textLabelHeight)
+
         detailTextLabel.frame = CGRectMake(textLeft, textLabel.frame.maxY + DetailTextTopMargin,
             container.frame.width - textLeft - ImageMargin, detailTextLabelHeight)
     }

@@ -29,7 +29,7 @@ class TestHistory : ProfileTest {
                 XCTAssertNotNil(s, "Cursor has a site for entry.")
                 let title = urls[s.url]
                 XCTAssertNotNil(title, "Found right URL.")
-                XCTAssertEqual(s.title, title!, "Found right title.")
+                XCTAssertEqual(s.title, title, "Found right title.")
             }
         } else {
             XCTFail("Couldn't get cursor.")
@@ -44,7 +44,7 @@ class TestHistory : ProfileTest {
         let expectation = self.expectationWithDescription("Wait for history")
         history.getSitesByLastVisit(100).upon { result in
             XCTAssertTrue(result.isSuccess)
-            history.getSitesByFrecencyWithLimit(100, whereURLContains: url).upon { result in
+            history.getSitesByFrecencyWithLimit(100, whereURLContains: url, includeBookmarkState: false).upon { result in
                 XCTAssertTrue(result.isSuccess)
                 let cursor = result.successValue!
                 XCTAssertEqual(cursor.status, CursorStatus.Success, "returned success \(cursor.statusMessage)")
