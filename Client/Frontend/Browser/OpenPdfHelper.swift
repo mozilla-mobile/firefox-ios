@@ -25,9 +25,8 @@ enum FileType : String {
 }
 
 protocol OpenInHelper {
+    var openInView: OpenInView { get }
     static func canOpen(url: NSURL) -> Bool
-    func showOpenInView(inView parentView: UIView, forWebView webView: WKWebView)
-    func hideOpenInView(forWebView webView: WKWebView)
     func open()
 }
 
@@ -42,33 +41,24 @@ struct OpenInHelperFactory {
 }
 
 class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDelegate {
-    private var view: OpenInView?
+    private var url: NSURL
     private var docController: UIDocumentInteractionController? = nil
+    private var openInURL: NSURL?
+
+    lazy var openInView: OpenInView = getOpenInView(self)()
 
     init(url: NSURL) {
+        self.url = url
         super.init()
-        let contentsOfFile = NSData(contentsOfURL: url)
-        let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory,
-            .UserDomainMask, true)
+    }
 
-        let dirPath = NSURL(fileURLWithPath: dirPaths[0]).URLByAppendingPathComponent("pdfs")
+    deinit {
+        guard let url = openInURL else { return }
         let fileManager = NSFileManager.defaultManager()
         do {
-            guard let lastPathComponent = url.lastPathComponent else {
-                log.error("failed to create proper URL")
-                return
-            }
-            let filePath = dirPath.URLByAppendingPathComponent(lastPathComponent)
-            try fileManager.createDirectoryAtURL(dirPath, withIntermediateDirectories: true, attributes: nil)
-            if fileManager.createFileAtPath(filePath.absoluteString, contents: contentsOfFile, attributes: nil) {
-                let openInURL = NSURL(fileURLWithPath: filePath.absoluteString)
-                docController = UIDocumentInteractionController(URL: openInURL)
-                docController?.delegate = self
-            } else {
-                log.error("Unable to create local version of PDF file at \(filePath)")
-            }
+            try fileManager.removeItemAtURL(url)
         } catch {
-            log.error("Error on creating directory at \(dirPath)")
+            log.error("failed to delete file at \(url): \(error)")
         }
     }
     
@@ -77,41 +67,57 @@ class OpenPdfInHelper: NSObject, OpenInHelper, UIDocumentInteractionControllerDe
         return pathExtension == FileType.PDF.rawValue && UIApplication.sharedApplication().canOpenURL(NSURL(string: "itms-books:")!)
     }
 
-    func showOpenInView(inView parentView: UIView, forWebView webView: WKWebView) {
+    func getOpenInView() -> OpenInView {
         let overlayView = OpenInView()
 
         overlayView.openInButton.addTarget(self, action: "open", forControlEvents: .TouchUpInside)
-        parentView.addSubview(overlayView)
-        overlayView.snp_makeConstraints { make in
-            make.trailing.equalTo(parentView)
-            make.leading.equalTo(parentView)
-            make.height.equalTo(OpenInViewUX.ViewHeight)
-            make.bottom.equalTo(webView.snp_top)
-        }
-
-        webView.snp_updateConstraints { make in
-            make.edges.equalTo(EdgeInsetsMake(OpenInViewUX.ViewHeight, left: 0, bottom: 0, right: 0))
-        }
-
-        view = overlayView
+        return overlayView
     }
 
-    func hideOpenInView(forWebView webView: WKWebView) {
-        webView.snp_updateConstraints { make in
-            make.edges.equalTo(EdgeInsetsZero)
+    func createDocumentControllerForURL(url: NSURL) {
+        docController = UIDocumentInteractionController(URL: url)
+        docController?.delegate = self
+        self.openInURL = url
+    }
+
+    func createLocalCopyOfPDF() {
+        guard let lastPathComponent = url.lastPathComponent else {
+            log.error("failed to create proper URL")
+            return
         }
-        view?.removeFromSuperview()
-        view = nil
+        if docController == nil{
+            // if we already have a URL but no document controller, just create the document controller
+            if let url = openInURL {
+                createDocumentControllerForURL(url)
+                return
+            }
+            let contentsOfFile = NSData(contentsOfURL: url)
+            let dirPath = NSURL(string: NSTemporaryDirectory())!.URLByAppendingPathComponent("pdfs")
+            let filePath = dirPath.URLByAppendingPathComponent(lastPathComponent)
+            let fileManager = NSFileManager.defaultManager()
+            do {
+                try fileManager.createDirectoryAtPath(dirPath.absoluteString, withIntermediateDirectories: true, attributes: nil)
+                if fileManager.createFileAtPath(filePath.absoluteString, contents: contentsOfFile, attributes: nil) {
+                    let openInURL = NSURL(fileURLWithPath: filePath.absoluteString)
+                    createDocumentControllerForURL(openInURL)
+                } else {
+                    log.error("Unable to create local version of PDF file at \(filePath)")
+                }
+            } catch {
+                log.error("Error on creating directory at \(dirPath)")
+            }
+        }
     }
 
     func open() {
-        guard let parentView = view?.superview, docController = self.docController else { print("view doesn't have a superview so can't open anything"); return }
+        createLocalCopyOfPDF()
+        guard let _parentView = self.openInView.superview, docController = self.docController else { log.error("view doesn't have a superview so can't open anything"); return }
         // iBooks should be installed by default on all devices we care about, so regardless of whether or not there are other pdf-capable
         // apps on this device, if we can open in iBooks we can open this PDF
         // simulators do not have iBooks so the open in view will not work on the simulator
         if UIApplication.sharedApplication().canOpenURL(NSURL(string: "itms-books:")!) {
             log.info("iBooks installed: attempting to open pdf")
-            docController.presentOpenInMenuFromRect(CGRectZero, inView: parentView, animated: true)
+            docController.presentOpenInMenuFromRect(CGRectZero, inView: _parentView, animated: true)
         } else {
             log.info("iBooks is not installed")
         }
@@ -138,11 +144,5 @@ class OpenInView: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    func setHeight(height: CGFloat) {
-        var frame = self.frame
-        frame.size.height = height
-        self.frame = frame
     }
 }

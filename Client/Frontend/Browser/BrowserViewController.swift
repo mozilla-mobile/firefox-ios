@@ -49,6 +49,7 @@ class BrowserViewController: UIViewController {
     private var searchLoader: SearchLoader!
     private let snackBars = UIView()
     private let auralProgress = AuralProgressBar()
+    private let webViewContainerToolbar = UIView()
 
     private var openInHelper: OpenInHelper?
 
@@ -238,6 +239,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(webViewContainerBackdrop)
 
         webViewContainer = UIView()
+        webViewContainer.addSubview(webViewContainerToolbar)
         view.addSubview(webViewContainer)
 
         // Temporary work around for covering the non-clipped web view content
@@ -323,6 +325,13 @@ class BrowserViewController: UIViewController {
 
         webViewContainerBackdrop.snp_makeConstraints { make in
             make.edges.equalTo(webViewContainer)
+        }
+
+        webViewContainerToolbar.snp_makeConstraints { make in
+            make.trailing.equalTo(webViewContainer)
+            make.leading.equalTo(webViewContainer)
+            make.height.equalTo(0)
+            make.top.equalTo(webViewContainer)
         }
     }
 
@@ -425,6 +434,7 @@ class BrowserViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         startTrackingAccessibilityStatus()
         presentIntroViewController()
+        self.webViewContainerToolbar.hidden = false
         super.viewDidAppear(animated)
     }
 
@@ -834,6 +844,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressTabs(urlBar: URLBarView) {
+        self.webViewContainerToolbar.hidden = true
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile)
 
         if let tab = tabManager.selectedTab {
@@ -1069,7 +1080,8 @@ extension BrowserViewController: BrowserDelegate {
     func browser(browser: Browser, didCreateWebView webView: WKWebView) {
         webViewContainer.insertSubview(webView, atIndex: 0)
         webView.snp_makeConstraints { make in
-            make.edges.equalTo(self.webViewContainer)
+            make.top.equalTo(webViewContainerToolbar.snp_bottom)
+            make.left.right.bottom.equalTo(self.webViewContainer)
         }
 
         // Observers that live as long as the tab. Make sure these are all cleared
@@ -1294,6 +1306,7 @@ extension BrowserViewController: TabManagerDelegate {
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
         if let wv = previous?.webView {
+            removeOpenInView()
             wv.endEditing(true)
             wv.accessibilityLabel = nil
             wv.accessibilityElementsHidden = true
@@ -1322,6 +1335,8 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
+
+            addOpenInViewIfNeccessary(webView.URL)
 
             if let url = webView.URL?.absoluteString {
                 profile.bookmarks.isBookmarked(url, success: { bookmarked in
@@ -1422,7 +1437,7 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             // remove the open in overlay view if it is present
-            openInHelper?.hideOpenInView(forWebView: webView)
+            removeOpenInView()
         }
     }
 
@@ -1535,10 +1550,32 @@ extension BrowserViewController: WKNavigationDelegate {
             UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
         }
 
-        // add the open in overlay view if it is required
-        guard let url = webView.URL, let openInHelper = OpenInHelperFactory.helperForURL(url) else { return }
-        openInHelper.showOpenInView(inView: webViewContainer, forWebView: webView)
+        addOpenInViewIfNeccessary(webView.URL)
+    }
+
+    private func addOpenInViewIfNeccessary(url: NSURL?) {
+        guard let url = url, let openInHelper = OpenInHelperFactory.helperForURL(url) else { return }
+        let view = openInHelper.openInView
+        webViewContainerToolbar.addSubview(view)
+        webViewContainerToolbar.snp_updateConstraints { make in
+            make.height.equalTo(OpenInViewUX.ViewHeight)
+        }
+        view.snp_makeConstraints { make in
+            make.edges.equalTo(webViewContainerToolbar)
+        }
+
         self.openInHelper = openInHelper
+    }
+
+    private func removeOpenInView() {
+        guard let _ = self.openInHelper else { return }
+        webViewContainerToolbar.subviews.forEach { $0.removeFromSuperview() }
+
+        webViewContainerToolbar.snp_updateConstraints { make in
+            make.height.equalTo(0)
+        }
+
+        self.openInHelper = nil
     }
 
     private func postLocationChangeNotificationForTab(tab: Browser, navigation: WKNavigation?) {
