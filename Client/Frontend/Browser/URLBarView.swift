@@ -337,8 +337,8 @@ class URLBarView: UIView {
         self.tabsButton.alpha = alpha
         self.locationContainer.alpha = alpha
         self.backgroundColor = URLBarViewUX.backgroundColorWithAlpha(1 - alpha)
+        self.actionButtons.forEach { $0.alpha = alpha }
     }
-
 
     func updateTabCount(count: Int) {
         updateTabCount(count, animated: true)
