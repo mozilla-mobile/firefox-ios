@@ -481,12 +481,14 @@ extension TabTrayController: TabManagerDelegate {
             // Workaround: On iOS 8.* devices, cells don't get reloaded during the deletion but after the 
             // animation has finished which causes cells that animate from above to suddenly 'appear'. This
             // is fixed on iOS 9 but for iOS 8 we force a reload on non-visible cells during the animation.
-            let visibleCount = collectionView.indexPathsForVisibleItems().count
-            var offscreenIndexPaths = [NSIndexPath]()
-            for i in 0..<(tabsToDisplay.count - visibleCount) {
-                offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
+            if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_8_3) {
+                let visibleCount = collectionView.indexPathsForVisibleItems().count
+                var offscreenIndexPaths = [NSIndexPath]()
+                for i in 0..<(tabsToDisplay.count - visibleCount) {
+                    offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
+                }
+                self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
             }
-            self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
 
             if #available(iOS 9, *) {
                 if privateMode && tabsToDisplay.count == 0 {
