@@ -281,7 +281,7 @@ class BrowserViewController: UIViewController {
         })
 
 
-        searchLoader = SearchLoader(history: profile.history, urlBar: urlBar)
+        searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
 
         footer = UIView()
         self.view.addSubview(footer)
@@ -423,11 +423,7 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(animated: Bool) {
         startTrackingAccessibilityStatus()
-        // We want to load queued tabs here in case we need to execute any commands that were received while using a share extension,
-        // but no point even trying if this is the first time.
-        if !presentIntroViewController() {
-            loadQueuedTabs()
-        }
+        presentIntroViewController()
         super.viewDidAppear(animated)
     }
 

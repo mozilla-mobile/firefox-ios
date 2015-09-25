@@ -36,8 +36,12 @@ typealias EngineIdentifier = String
 typealias SyncFunction = (SyncDelegate, Prefs, Ready) -> SyncResult
 
 class ProfileFileAccessor: FileAccessor {
-    init(profile: Profile) {
-        let profileDirName = "profile.\(profile.localName())"
+    convenience init(profile: Profile) {
+        self.init(localName: profile.localName())
+    }
+
+    init(localName: String) {
+        let profileDirName = "profile.\(localName)"
 
         // Bug 1147262: First option is for device, second is for simulator.
         var rootPath: NSString
@@ -159,10 +163,13 @@ protocol Profile: class {
 
 public class BrowserProfile: Profile {
     private let name: String
+    internal let files: FileAccessor
+
     weak private var app: UIApplication?
 
     init(localName: String, app: UIApplication?) {
         self.name = localName
+        self.files = ProfileFileAccessor(localName: localName)
         self.app = app
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
@@ -188,11 +195,11 @@ public class BrowserProfile: Profile {
     }
 
     func shutdown() {
-        if dbCreated {
+        if self.dbCreated {
             db.close()
         }
 
-        if loginsDBCreated {
+        if self.loginsDBCreated {
             loginsDB.close()
         }
     }
@@ -227,23 +234,24 @@ public class BrowserProfile: Profile {
         return name
     }
 
-    var files: FileAccessor {
-        return ProfileFileAccessor(profile: self)
-    }
-
     lazy var queue: TabQueue = {
-        if !self.dbCreated {
-            _ = self.history
+        withExtendedLifetime(self.history) {
+            return SQLiteQueue(db: self.db)
         }
-        return SQLiteQueue(db: self.db)
     }()
 
     private var dbCreated = false
-    lazy var db: BrowserDB = {
-        self.dbCreated = true
-        return BrowserDB(filename: "browser.db", files: self.files)
-    }()
-
+    var db: BrowserDB {
+        struct Singleton {
+            static var token: dispatch_once_t = 0
+            static var instance: BrowserDB!
+        }
+        dispatch_once(&Singleton.token) {
+            Singleton.instance = BrowserDB(filename: "browser.db", files: self.files)
+            self.dbCreated = true
+        }
+        return Singleton.instance
+    }
 
     /**
      * Favicons, history, and bookmarks are all stored in one intermeshed
@@ -267,9 +275,9 @@ public class BrowserProfile: Profile {
     lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
-        let _ = self.places
-
-        return SQLiteBookmarks(db: self.db)
+        withExtendedLifetime(self.places) {
+            return SQLiteBookmarks(db: self.db)
+        }
     }()
 
     lazy var searchEngines: SearchEngines = {
@@ -346,8 +354,15 @@ public class BrowserProfile: Profile {
 
     private var loginsDBCreated = false
     private lazy var loginsDB: BrowserDB = {
-        self.loginsDBCreated = true
-        return BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
+        struct Singleton {
+            static var token: dispatch_once_t = 0
+            static var instance: BrowserDB!
+        }
+        dispatch_once(&Singleton.token) {
+            Singleton.instance = BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
+            self.loginsDBCreated = true
+        }
+        return Singleton.instance
     }()
 
     let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
