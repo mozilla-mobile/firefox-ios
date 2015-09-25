@@ -15,23 +15,21 @@ private struct UX {
 }
 
 class ToggleButton: UIButton {
-    override var selected: Bool {
-        didSet {
-            let path = CGPathCreateMutable()
-            if selected {
-                CGPathAddEllipseInRect(path, nil, CGRect(origin: CGPointZero, size: maskShapeLayer.bounds.size))
-                self.maskShapeLayer.path = path
-            } else {
-                CGPathAddEllipseInRect(path, nil, CGRect(origin: maskShapeLayer.position, size: CGSizeZero))
-                self.maskShapeLayer.path = path
-            }
-        }
-    }
-
     func setSelected(selected: Bool, animated: Bool = true) {
         self.selected = selected
         if animated {
             animateSelection(selected)
+        }
+    }
+
+    private func updateMaskPathForSelectedState(selected: Bool) {
+        let path = CGPathCreateMutable()
+        if selected {
+            CGPathAddEllipseInRect(path, nil, CGRect(origin: CGPointZero, size: maskShapeLayer.bounds.size))
+            self.maskShapeLayer.path = path
+        } else {
+            CGPathAddEllipseInRect(path, nil, CGRect(origin: maskShapeLayer.position, size: CGSizeZero))
+            self.maskShapeLayer.path = path
         }
     }
 
@@ -112,6 +110,8 @@ class ToggleButton: UIButton {
         maskShapeLayer.bounds = backgroundView.frame
         gradientLayer.position = CGPoint(x: CGRectGetMidX(zeroFrame), y: CGRectGetMidY(zeroFrame))
         maskShapeLayer.position = CGPoint(x: CGRectGetMidX(zeroFrame), y: CGRectGetMidY(zeroFrame))
+
+        updateMaskPathForSelectedState(selected)
     }
 
     required init?(coder aDecoder: NSCoder) {
