@@ -287,6 +287,11 @@ class TabTrayController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillResignActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
+    }
+
 // MARK: View Controller Callbacks
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -341,6 +346,9 @@ class TabTrayController: UIViewController {
                 privateMode = true
             }
         }
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappWillResignActiveNotification", name: UIApplicationWillResignActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELappDidBecomeActiveNotification", name: UIApplicationDidBecomeActiveNotification, object: nil)
     }
 
     override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
@@ -428,6 +436,24 @@ class TabTrayController: UIViewController {
     @available(iOS 9, *)
     func SELdidTogglePrivateMode() {
         privateMode = !privateMode
+    }
+}
+
+// MARK: - App Notifications
+extension TabTrayController {
+    func SELappWillResignActiveNotification() {
+        if privateMode {
+            collectionView.alpha = 0
+        }
+    }
+
+    func SELappDidBecomeActiveNotification() {
+        // Re-show any components that might have been hidden because they were being displayed
+        // as part of a private mode tab
+        UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
+            self.collectionView.alpha = 1
+        },
+        completion: nil)
     }
 }
 
