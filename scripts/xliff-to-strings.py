@@ -37,6 +37,7 @@ FILES = [
     "Client/Info.plist",
     "Client/Intro.strings",
     "Client/Localizable.strings",
+    "Client/PrivateBrowsing.strings",
     "Client/Search.strings",
     "Extensions/SendTo/Info.plist",
     "Extensions/SendTo/SendTo.strings",
