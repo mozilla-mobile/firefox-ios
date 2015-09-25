@@ -236,7 +236,7 @@ class TabTrayController: UIViewController {
     private var privateMode: Bool = false {
         didSet {
             if #available(iOS 9, *) {
-                togglePrivateMode.selected = !togglePrivateMode.selected
+                togglePrivateMode.selected = privateMode
                 togglePrivateMode.accessibilityValue = privateMode ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
                 tabDataSource.tabs = tabsToDisplay
                 collectionView.reloadData()

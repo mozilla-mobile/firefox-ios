@@ -26,11 +26,10 @@ class ToggleButton: UIButton {
         let path = CGPathCreateMutable()
         if selected {
             CGPathAddEllipseInRect(path, nil, CGRect(origin: CGPointZero, size: maskShapeLayer.bounds.size))
-            self.maskShapeLayer.path = path
         } else {
             CGPathAddEllipseInRect(path, nil, CGRect(origin: maskShapeLayer.position, size: CGSizeZero))
-            self.maskShapeLayer.path = path
         }
+        self.maskShapeLayer.path = path
     }
 
     private func animateSelection(selected: Bool) {
