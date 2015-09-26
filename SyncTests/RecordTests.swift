@@ -44,7 +44,7 @@ class RecordTests: XCTestCase {
         let invalidPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"invalid\"}"
         let emptyPayload = "{\"id\": \"abcdefghijkl\", \"collection\": \"clients\", \"payload\": \"{}\"}"
 
-        let clientBody: [String: AnyObject] = ["name": "Foobar", "commands": [], "type": "mobile"]
+        let clientBody: [String: AnyObject] = ["id": "abcdefghijkl", "name": "Foobar", "commands": [], "type": "mobile"]
         let clientBodyString = JSON(clientBody).toString(false)
         let clientRecord: [String : AnyObject] = ["id": "abcdefghijkl", "collection": "clients", "payload": clientBodyString]
         let clientPayload = JSON(clientRecord).toString(false)
@@ -63,7 +63,9 @@ class RecordTests: XCTestCase {
 
         // Only payloads that parse as JSON are valid.
         XCTAssertNil(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: clearFactory))
-        XCTAssertNotNil(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(emptyPayload), payloadFactory: clearFactory))
+
+        // Missing ID.
+        XCTAssertNil(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(emptyPayload), payloadFactory: clearFactory))
 
         // Only valid ClientPayloads are valid.
         XCTAssertNil(Record<ClientPayload>.fromEnvelope(EnvelopeJSON(invalidPayload), payloadFactory: cleartextClientsFactory))
@@ -205,7 +207,7 @@ class RecordTests: XCTestCase {
         XCTAssertNil(BookmarkType.payloadFromJSON(invalidSeparator))
 
         // This one's right.
-        let validSeparator = JSON(["type": "separator", "parentid": "toolbar", "parentName": "Bookmarks Toolbar", "pos": 3])
+        let validSeparator = JSON(["id": "abcabcabcabc", "type": "separator", "parentid": "toolbar", "parentName": "Bookmarks Toolbar", "pos": 3])
         let separator = BookmarkType.payloadFromJSON(validSeparator)!
         XCTAssertTrue(separator is SeparatorPayload)
         XCTAssertTrue(separator.isValid())
@@ -214,6 +216,7 @@ class RecordTests: XCTestCase {
 
     func testFolders() {
         let validFolder = JSON([
+            "id": "abcabcabcabc",
             "type": "folder",
             "parentid": "toolbar",
             "parentName": "Bookmarks Toolbar",
@@ -228,6 +231,7 @@ class RecordTests: XCTestCase {
 
     func testBookmarks() {
         let validBookmark = JSON([
+            "id": "abcabcabcabc",
             "type": "bookmark",
             "parentid": "menu",
             "parentName": "Bookmarks Menu",
@@ -237,7 +241,7 @@ class RecordTests: XCTestCase {
             "tags": [],
             "keyword": "",
             ])
-        let bookmark = BookmarkType.payloadFromJSON(validBookmark)!
+        let bookmark = BookmarkType.payloadFromJSON(validBookmark)
         XCTAssertTrue(bookmark is BookmarkPayload)
 
         let query = JSON.parse("{\"id\":\"ShCZLGEFQMam\",\"type\":\"query\",\"title\":\"Downloads\",\"parentName\":\"\",\"bmkUri\":\"place:transition=7&sort=4\",\"tags\":[],\"keyword\":null,\"description\":null,\"loadInSidebar\":false,\"parentid\":\"T6XK5oJMU8ih\"}")
