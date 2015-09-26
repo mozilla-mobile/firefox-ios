@@ -40,7 +40,8 @@ class TabManagerTests: XCTestCase {
 
         manager.storeChanges()
         let remoteTabs = profile.remoteClientsAndTabs.getTabsForClientWithGUID(nil).value.successValue
-        XCTAssertEqual(remoteTabs?.count ?? 0, 3)
+        let count = remoteTabs?.count
+        XCTAssertEqual(count, 3)
         // now test that the database contains 3 tabs
 
         // test that private tabs are not saved to the DB
@@ -56,7 +57,8 @@ class TabManagerTests: XCTestCase {
 
             // now test that the database still contains only 3 tabs
             let remoteTabs = profile.remoteClientsAndTabs.getTabsForClientWithGUID(nil).value.successValue
-            XCTAssertEqual(remoteTabs?.count ?? 0, 3)
+            let count = remoteTabs?.count
+            XCTAssertEqual(count ?? 0, 3)
         }
     }
     
