@@ -16,6 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var rootViewController: UINavigationController!
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
+    
+    enum ShortcutType: String {
+        case NewTab = "org.mozilla.ios.newtab"
+        case NewPrivate = "org.mozilla.ios.newprivate"
+        case Bookmarks = "org.mozilla.ios.bookmarks"
+        case ReadingList = "org.mozilla.ios.readinglist"
+    }
 
     let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
@@ -100,7 +107,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         self.window!.makeKeyAndVisible()
-        return true
+//        return true
+        var launchedFromShortCut = false
+        //Check for ShortCutItem
+        if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
+            launchedFromShortCut = true
+            handleShortCutItem(shortcutItem)
+        }
+        
+        //Return false incase application was lanched from shorcut to prevent
+        //application(_:performActionForShortcutItem:completionHandler:) from being called
+        return !launchedFromShortCut
     }
 
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
@@ -182,10 +199,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let action = SentTabAction(rawValue: actionId) {
                 viewURLInNewTab(notification)
                 switch(action) {
-                case .Bookmark:
+                case SentTabAction.Bookmark:
                     addBookmark(notification)
                     break
-                case .ReadingList:
+                case SentTabAction.ReadingList:
                     addToReadingList(notification)
                     break
                 default:
@@ -201,6 +218,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
         viewURLInNewTab(notification)
+    }
+
+    func application(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: Bool -> Void) {
+        let handledShortCutItem = handleShortCutItem(shortcutItem)
+        completionHandler(handledShortCutItem)
+    }
+
+    func handleShortCutItem(shortcutItem: UIApplicationShortcutItem) -> Bool {
+        var handled = false
+        //Get type string from shortcutItem
+        if let shortcutType = ShortcutType.init(rawValue: shortcutItem.type) {
+            //Get root navigation viewcontroller and its first controller
+            let rootNavigationViewController = window!.rootViewController as? UINavigationController
+            //let rootViewController = rootNavigationViewController?.viewControllers.first as UIViewController?
+            //Pop to root view controller so that approperiete segue can be performed
+            rootNavigationViewController?.popToRootViewControllerAnimated(false)
+            
+            switch shortcutType {
+            case ShortcutType.NewTab:
+                self.browserViewController.openNewTab()
+                handled = true
+            case ShortcutType.NewPrivate:
+                self.browserViewController.openPrivateTab()
+                handled = true
+            case ShortcutType.Bookmarks:
+                self.browserViewController.openBookmarks()
+                handled = true
+            case ShortcutType.ReadingList:
+                self.browserViewController.
+                    openReadingList()
+                handled = true
+            }
+        }
+        return handled
     }
 
     private func viewURLInNewTab(notification: UILocalNotification) {

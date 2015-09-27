@@ -100,5 +100,40 @@
 	<true/>
 	<key>Vendor</key>
 	<string>$(MOZ_VENDOR)</string>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>org.mozilla.ios.newtab</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>New Tab</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>add</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>org.mozilla.ios.newprivate</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>New Private Tab</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>smallPrivateMask</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>org.mozilla.ios.bookmarks</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Show Bookmarks</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>bookmark</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemType</key>
+			<string>org.mozilla.ios.readinglist</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Show Reading List</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>reader</string>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -231,6 +231,7 @@ class TabTrayController: UIViewController {
     var addTabButton: UIButton!
     var settingsButton: UIButton!
     var collectionViewTransitionSnapshot: UIView?
+    var calledFromShortcut: Bool = false
 
     private var privateMode: Bool = false {
         didSet {
@@ -239,7 +240,9 @@ class TabTrayController: UIViewController {
                 togglePrivateMode.accessibilityValue = privateMode ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
                 emptyPrivateTabsView.hidden = !(privateMode && tabManager.privateTabs.count == 0)
                 tabDataSource.tabs = tabsToDisplay
-                collectionView.reloadData()
+                if !calledFromShortcut {
+                 collectionView.reloadData()
+                }
             }
         }
     }
@@ -428,6 +431,11 @@ class TabTrayController: UIViewController {
     @available(iOS 9, *)
     func SELdidTogglePrivateMode() {
         privateMode = !privateMode
+    }
+
+    func changeMode(toPrivate: Bool) {
+        calledFromShortcut = true
+        privateMode = toPrivate
     }
 }
 
