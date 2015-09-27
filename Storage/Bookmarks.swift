@@ -59,8 +59,10 @@ public struct BookmarkMirrorItem {
 
     // The places root is a folder but has no parentName.
     public static func folder(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String, description: String?) -> BookmarkMirrorItem {
-        return BookmarkMirrorItem(guid: guid, type: .Bookmark, serverModified: modified,
-            isDeleted: false, hasDupe: hasDupe, parentID: parentID, parentName: parentName,
+        let id = BookmarkRoots.translateIncomingRootGUID(guid)
+        let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
+        return BookmarkMirrorItem(guid: id, type: .Bookmark, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
             feedURI: nil, siteURI: nil,
             pos: nil,
             title: title, description: description,
@@ -69,8 +71,11 @@ public struct BookmarkMirrorItem {
     }
 
     public static func livemark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, feedURI: String, siteURI: String) -> BookmarkMirrorItem {
-        return BookmarkMirrorItem(guid: guid, type: .Livemark, serverModified: modified,
-            isDeleted: false, hasDupe: hasDupe, parentID: parentID, parentName: parentName,
+        let id = BookmarkRoots.translateIncomingRootGUID(guid)
+        let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
+
+        return BookmarkMirrorItem(guid: id, type: .Livemark, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
             feedURI: feedURI, siteURI: siteURI,
             pos: nil,
             title: title, description: description,
@@ -79,8 +84,11 @@ public struct BookmarkMirrorItem {
     }
 
     public static func separator(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, pos: Int) -> BookmarkMirrorItem {
-        return BookmarkMirrorItem(guid: guid, type: .Separator, serverModified: modified,
-            isDeleted: false, hasDupe: hasDupe, parentID: parentID, parentName: parentName,
+        let id = BookmarkRoots.translateIncomingRootGUID(guid)
+        let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
+
+        return BookmarkMirrorItem(guid: id, type: .Separator, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
             feedURI: nil, siteURI: nil,
             pos: pos,
             title: nil, description: nil,
@@ -89,8 +97,11 @@ public struct BookmarkMirrorItem {
     }
 
     public static func bookmark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, URI: String, tags: String, keyword: String?) -> BookmarkMirrorItem {
-        return BookmarkMirrorItem(guid: guid, type: .Bookmark, serverModified: modified,
-            isDeleted: false, hasDupe: hasDupe, parentID: parentID, parentName: parentName,
+        let id = BookmarkRoots.translateIncomingRootGUID(guid)
+        let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
+
+        return BookmarkMirrorItem(guid: id, type: .Bookmark, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
             feedURI: nil, siteURI: nil,
             pos: nil,
             title: title, description: description,
@@ -99,8 +110,11 @@ public struct BookmarkMirrorItem {
     }
 
     public static func query(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, URI: String, tags: String, keyword: String?, folderName: String?, queryID: String?) -> BookmarkMirrorItem {
-        return BookmarkMirrorItem(guid: guid, type: .Query, serverModified: modified,
-            isDeleted: false, hasDupe: hasDupe, parentID: parentID, parentName: parentName,
+        let id = BookmarkRoots.translateIncomingRootGUID(guid)
+        let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
+
+        return BookmarkMirrorItem(guid: id, type: .Query, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
             feedURI: nil, siteURI: nil,
             pos: nil,
             title: title, description: description,
@@ -109,7 +123,9 @@ public struct BookmarkMirrorItem {
     }
 
     public static func deleted(type: BookmarkNodeType, guid: GUID, modified: Timestamp) -> BookmarkMirrorItem {
-        return BookmarkMirrorItem(guid: guid, type: type, serverModified: modified,
+        let id = BookmarkRoots.translateIncomingRootGUID(guid)
+
+        return BookmarkMirrorItem(guid: id, type: type, serverModified: modified,
             isDeleted: true, hasDupe: false, parentID: nil, parentName: nil,
             feedURI: nil, siteURI: nil,
             pos: nil,
@@ -126,6 +142,38 @@ public struct BookmarkRoots {
     public static let MenuFolderGUID =         "menu________"
     public static let ToolbarFolderGUID =      "toolbar_____"
     public static let UnfiledFolderGUID =      "unfiled_____"
+
+    /**
+     * Sync records are a horrible mess of Places-native GUIDs and Sync-native IDs.
+     * For example:
+     * {"id":"places",
+     *  "type":"folder",
+     *  "title":"",
+     *  "description":null,
+     *  "children":["menu________","toolbar_____",
+     *              "tags________","unfiled_____",
+     *              "jKnyPDrBQSDg","T6XK5oJMU8ih"],
+     *  "parentid":"2hYxKgBwvkEH"}"
+     *
+     * We thus normalize on the extended Places IDs (with underscores) for
+     * local storage, and translate to the Sync IDs when creating an outbound
+     * record.
+     * We translate the record's ID and also its parent. Evidence suggests that
+     * we don't need to translate children IDs.
+     *
+     * TODO: We don't create outbound records yet, so that's why there's no
+     * translation in that direction yet!
+     */
+    public static func translateIncomingRootGUID(guid: GUID) -> GUID {
+        return [
+            "places": RootGUID,
+            "root": RootGUID,
+            "mobile": MobileFolderGUID,
+            "menu": MenuFolderGUID,
+            "toolbar": ToolbarFolderGUID,
+            "unfiled": UnfiledFolderGUID
+        ][guid] ?? guid
+    }
 
     /*
     public static let TagsFolderGUID =         "tags________"

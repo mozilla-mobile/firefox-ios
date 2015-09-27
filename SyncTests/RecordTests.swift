@@ -255,5 +255,24 @@ class RecordTests: XCTestCase {
 
         XCTAssertEqual(6, item.type.rawValue)
         XCTAssertEqual("ShCZLGEFQMam", item.guid)
+
+        let places = JSON.parse("{\"id\":\"places\",\"type\":\"folder\",\"title\":\"\",\"description\":null,\"children\":[\"menu________\",\"toolbar_____\",\"tags________\",\"unfiled_____\",\"jKnyPDrBQSDg\",\"T6XK5oJMU8ih\"],\"parentid\":\"2hYxKgBwvkEH\"}")
+        let p = BookmarkType.payloadFromJSON(places)
+        XCTAssertTrue(p is FolderPayload)
+        XCTAssertTrue(p is MirrorItemable)
+
+        // Items keep their GUID until they're written into the mirror table.
+        XCTAssertEqual("places", p!.id)
+
+        guard let pMirror = (p as? MirrorItemable)?.toMirrorItem(NSDate.now()) else {
+            XCTFail("Not mirrorable!")
+            return
+        }
+
+        XCTAssertEqual(2, pMirror.type.rawValue)
+
+        // The mirror item has a translated GUID.
+        XCTAssertEqual(BookmarkRoots.RootGUID, pMirror.guid)
+
     }
 }
