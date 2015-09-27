@@ -466,7 +466,8 @@ extension FolderPayload: MirrorItemable {
             parentID: self["parentid"].asString!,
             parentName: self["parentName"].asString,
             title: self["title"].asString!,
-            description: self["description"].asString
+            description: self["description"].asString,
+            children: self.children
         )
     }
 }
