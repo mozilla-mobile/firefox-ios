@@ -152,4 +152,37 @@ class MockSyncServerTests: XCTestCase {
         }
         waitForExpectationsWithTimeout(10, handler: nil)
     }
+
+    func testPut() {
+        // For now, only test uploading crypto/keys.  There's nothing special about this PUT, however.
+        let expectation = self.expectationWithDescription("Waiting for result.")
+        let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
+        client.uploadCryptoKeys(Keys.random(), withSyncKeyBundle: KeyBundle.random(), ifUnmodifiedSince: nil).upon { result in
+            XCTAssertNotNil(result.successValue)
+            guard let response = result.successValue else {
+                expectation.fulfill()
+                return
+            }
+            let after = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
+
+            // Contents: should be just the record timestamp.
+            XCTAssertLessThanOrEqual(before, response.value)
+            XCTAssertLessThanOrEqual(response.value, after)
+
+            // X-Weave-Timestamp.
+            XCTAssertLessThanOrEqual(before, response.metadata.timestampMilliseconds)
+            XCTAssertLessThanOrEqual(response.metadata.timestampMilliseconds, after)
+            // X-Weave-Records.
+            XCTAssertNil(response.metadata.records)
+            // X-Last-Modified.
+            XCTAssertNil(response.metadata.lastModifiedMilliseconds)
+
+            // And we really uploaded the record.
+            XCTAssertNotNil(self.server.collections["crypto"])
+            XCTAssertNotNil(self.server.collections["crypto"]?["keys"])
+
+            expectation.fulfill()
+        }
+        waitForExpectationsWithTimeout(10, handler: nil)
+    }
 }
