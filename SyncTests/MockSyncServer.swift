@@ -192,6 +192,21 @@ class MockSyncServer {
         return (items, nil)
     }
 
+    private func recordResponse(record: EnvelopeJSON) -> GCDWebServerResponse {
+        let body = JSON(record.asJSON()).toString()
+        let bodyData = body.utf8EncodedData
+        let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
+
+        // Compute the correct set of headers: timestamps, etc.
+        let xLastModified = millisecondsToDecimalSeconds(record.modified)
+        response.setValue("\(xLastModified)", forAdditionalHeader: "X-Last-Modified")
+
+        let xWeaveTimestamp = millisecondsToDecimalSeconds(NSDate.now())
+        response.setValue("\(xWeaveTimestamp)", forAdditionalHeader: "X-Weave-Timestamp")
+
+        return response
+    }
+
     func start() {
         let basePath = "/1.5/\(self.username)/"
         let storagePath = "\(basePath)storage/"
@@ -239,8 +254,13 @@ class MockSyncServer {
             }
 
             // 2. Grab the matching set of records. Prune based on TTL, exclude with X-I-U-S, etc.
-            if spec.id != nil {
-                return GCDWebServerDataResponse(statusCode: 500)
+            if let id = spec.id {
+                guard let collection = self.collections[spec.collection], record = collection[id] else {
+                    // Unable to find the requested collection/id.
+                    return GCDWebServerDataResponse(statusCode: 404)
+                }
+
+                return self.recordResponse(record)
             }
 
             guard let (items, offset) = self.recordsMatchingSpec(spec) else {

@@ -75,4 +75,45 @@ class MockSyncServerTests: XCTestCase {
         }
         waitForExpectationsWithTimeout(10, handler: nil)
     }
+
+    func testGet() {
+        server.storeRecords([MockSyncServer.makeValidEnvelope("guid", modified: 0)], inCollection: "bookmarks", now: 1326251111000)
+        let collectionClient = client.clientForCollection("bookmarks", encrypter: getEncrypter())
+
+        let expectation = self.expectationWithDescription("Waiting for result.")
+        let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
+        collectionClient.get("guid").upon { result in
+            XCTAssertNotNil(result.successValue)
+            guard let response = result.successValue else {
+                expectation.fulfill()
+                return
+            }
+            let after = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
+
+            // JSON contents.
+            XCTAssertEqual(response.value.id, "guid")
+            XCTAssertEqual(response.value.modified, 1326251111000)
+
+            // X-Weave-Timestamp.
+            XCTAssertLessThanOrEqual(before, response.metadata.timestampMilliseconds)
+            XCTAssertLessThanOrEqual(response.metadata.timestampMilliseconds, after)
+            // X-Weave-Records.
+            XCTAssertNil(response.metadata.records)
+            // X-Last-Modified.
+            XCTAssertEqual(response.metadata.lastModifiedMilliseconds, 1326251111000)
+
+            expectation.fulfill()
+        }
+        waitForExpectationsWithTimeout(10, handler: nil)
+
+        // And now a missing record, which should produce a 404.
+        collectionClient.get("missing").upon { result in
+            XCTAssertNotNil(result.failureValue)
+            guard let response = result.failureValue else {
+                expectation.fulfill()
+                return
+            }
+            XCTAssertNotNil(response as? NotFound<NSHTTPURLResponse>)
+        }
+    }
 }
