@@ -16,7 +16,7 @@ protocol BrowserLocationViewDelegate {
     func browserLocationViewLocationAccessibilityActions(browserLocationView: BrowserLocationView) -> [UIAccessibilityCustomAction]?
 }
 
-private struct BrowserLocationViewUX {
+struct BrowserLocationViewUX {
     static let HostFontColor = UIColor.blackColor()
     static let BaseURLFontColor = UIColor.grayColor()
     static let BaseURLPitch = 0.75
@@ -28,6 +28,14 @@ class BrowserLocationView: UIView {
     var delegate: BrowserLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
+
+    dynamic var baseURLFontColor: UIColor = BrowserLocationViewUX.BaseURLFontColor {
+        didSet { updateTextWithURL() }
+    }
+
+    dynamic var hostFontColor: UIColor = BrowserLocationViewUX.HostFontColor {
+        didSet { updateTextWithURL() }
+    }
 
     var url: NSURL? {
         didSet {
@@ -194,8 +202,8 @@ class BrowserLocationView: UIView {
             // Highlight the base domain of the current URL.
             let attributedString = NSMutableAttributedString(string: httplessURL)
             let nsRange = NSMakeRange(0, httplessURL.characters.count)
-            attributedString.addAttribute(NSForegroundColorAttributeName, value: BrowserLocationViewUX.BaseURLFontColor, range: nsRange)
-            attributedString.colorSubstring(baseDomain, withColor: BrowserLocationViewUX.HostFontColor)
+            attributedString.addAttribute(NSForegroundColorAttributeName, value: baseURLFontColor, range: nsRange)
+            attributedString.colorSubstring(baseDomain, withColor: hostFontColor)
             attributedString.addAttribute(UIAccessibilitySpeechAttributePitch, value: NSNumber(double: BrowserLocationViewUX.BaseURLPitch), range: nsRange)
             attributedString.pitchSubstring(baseDomain, withPitch: BrowserLocationViewUX.HostPitch)
             urlTextField.attributedText = attributedString

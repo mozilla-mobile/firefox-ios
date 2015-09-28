@@ -7,7 +7,7 @@ import UIKit
 import Shared
 import SnapKit
 
-private struct URLBarViewUX {
+struct URLBarViewUX {
     static let TextFieldBorderColor = UIColor(rgb: 0xBBBBBB)
     static let TextFieldActiveBorderColor = UIColor(rgb: 0x4A90E2)
     static let TextFieldContentInset = UIOffsetMake(9, 5)
@@ -21,6 +21,7 @@ private struct URLBarViewUX {
     static let URLBarCurveOffsetLeft: CGFloat = -10
     // buffer so we dont see edges when animation overshoots with spring
     static let URLBarCurveBounceBuffer: CGFloat = 8
+    static let ProgressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
 
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
@@ -48,6 +49,22 @@ protocol URLBarDelegate: class {
 }
 
 class URLBarView: UIView {
+    // Additional UIAppearance-configurable properties
+    dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
+        didSet {
+            if !inOverlayMode {
+                locationContainer.layer.borderColor = locationBorderColor.CGColor
+            }
+        }
+    }
+    dynamic var locationActiveBorderColor: UIColor = URLBarViewUX.TextFieldActiveBorderColor {
+        didSet {
+            if inOverlayMode {
+                locationContainer.layer.borderColor = locationActiveBorderColor.CGColor
+            }
+        }
+    }
+
     weak var delegate: URLBarDelegate?
     weak var browserToolbarDelegate: BrowserToolbarDelegate?
     var helper: BrowserToolbarHelper?
@@ -101,24 +118,16 @@ class URLBarView: UIView {
         // Enable clipping to apply the rounded edges to subviews.
         locationContainer.clipsToBounds = true
 
-        locationContainer.layer.borderColor = URLBarViewUX.TextFieldBorderColor.CGColor
+        locationContainer.layer.borderColor = self.locationBorderColor.CGColor
         locationContainer.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
 
         return locationContainer
     }()
 
-    private lazy var tabsButton: UIButton = {
-        let tabsButton = InsetButton()
-        tabsButton.translatesAutoresizingMaskIntoConstraints = false
-        tabsButton.setTitle("0", forState: UIControlState.Normal)
-        tabsButton.setTitleColor(URLBarViewUX.backgroundColorWithAlpha(1), forState: UIControlState.Normal)
-        tabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
-        tabsButton.titleLabel?.layer.cornerRadius = 2
-        tabsButton.titleLabel?.font = UIConstants.DefaultSmallFontBold
-        tabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
-        tabsButton.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
-        tabsButton.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Horizontal)
+    private lazy var tabsButton: TabsButton = {
+        let tabsButton = TabsButton()
+        tabsButton.titleLabel.text = "0"
         tabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
         tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the browser toolbar")
         return tabsButton
@@ -126,7 +135,7 @@ class URLBarView: UIView {
 
     private lazy var progressBar: UIProgressView = {
         let progressBar = UIProgressView()
-        progressBar.progressTintColor = UIColor(red:1, green:0.32, blue:0, alpha:1)
+        progressBar.progressTintColor = URLBarViewUX.ProgressTintColor
         progressBar.alpha = 0
         progressBar.hidden = true
         return progressBar
@@ -168,7 +177,7 @@ class URLBarView: UIView {
     }()
 
     // Used to temporarily store the cloned button so we can respond to layout changes during animation
-    private weak var clonedTabsButton: InsetButton?
+    private weak var clonedTabsButton: TabsButton?
 
     private var rightBarConstraint: Constraint?
     private let defaultRightOffset: CGFloat = URLBarViewUX.URLBarCurveOffset - URLBarViewUX.URLBarCurveBounceBuffer
@@ -240,14 +249,10 @@ class URLBarView: UIView {
             make.trailing.equalTo(self)
         }
 
-        tabsButton.titleLabel?.snp_makeConstraints { make in
-            make.size.equalTo(URLBarViewUX.TabsButtonHeight)
-        }
-
         tabsButton.snp_makeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
             make.trailing.equalTo(self)
-            make.width.height.equalTo(UIConstants.ToolbarHeight)
+            make.size.equalTo(UIConstants.ToolbarHeight)
         }
 
         curveShape.snp_makeConstraints { make in
@@ -340,11 +345,7 @@ class URLBarView: UIView {
         self.actionButtons.forEach { $0.alpha = alpha }
     }
 
-    func updateTabCount(count: Int) {
-        updateTabCount(count, animated: true)
-    }
-
-    func updateTabCount(count: Int, animated: Bool) {
+    func updateTabCount(count: Int, animated: Bool = true) {
         if let _ = self.clonedTabsButton {
             self.clonedTabsButton?.layer.removeAllAnimations()
             self.clonedTabsButton?.removeFromSuperview()
@@ -352,19 +353,12 @@ class URLBarView: UIView {
         }
 
         // make a 'clone' of the tabs button
-        let newTabsButton = InsetButton()
+        let newTabsButton = self.tabsButton.clone() as! TabsButton
         self.clonedTabsButton = newTabsButton
         newTabsButton.addTarget(self, action: "SELdidClickAddTab", forControlEvents: UIControlEvents.TouchUpInside)
-        newTabsButton.setTitleColor(UIConstants.AppBackgroundColor, forState: UIControlState.Normal)
-        newTabsButton.titleLabel?.layer.backgroundColor = UIColor.whiteColor().CGColor
-        newTabsButton.titleLabel?.layer.cornerRadius = 2
-        newTabsButton.titleLabel?.font = UIConstants.DefaultSmallFontBold
-        newTabsButton.titleLabel?.textAlignment = NSTextAlignment.Center
-        newTabsButton.setTitle(count.description, forState: .Normal)
+        newTabsButton.titleLabel.text = count.description
+        newTabsButton.accessibilityValue = count.description
         addSubview(newTabsButton)
-        newTabsButton.titleLabel?.snp_makeConstraints { make in
-            make.size.equalTo(URLBarViewUX.TabsButtonHeight)
-        }
         newTabsButton.snp_makeConstraints { make in
             make.centerY.equalTo(self.locationContainer)
             make.trailing.equalTo(self)
@@ -375,45 +369,44 @@ class URLBarView: UIView {
 
         // Instead of changing the anchorPoint of the CALayer, lets alter the rotation matrix math to be
         // a rotation around a non-origin point
-        if let labelFrame = newTabsButton.titleLabel?.frame {
-            let halfTitleHeight = CGRectGetHeight(labelFrame) / 2
+        let frame = tabsButton.insideButton.frame
+        let halfTitleHeight = CGRectGetHeight(frame) / 2
 
-            var newFlipTransform = CATransform3DIdentity
-            newFlipTransform = CATransform3DTranslate(newFlipTransform, 0, halfTitleHeight, 0)
-            newFlipTransform.m34 = -1.0 / 200.0 // add some perspective
-            newFlipTransform = CATransform3DRotate(newFlipTransform, CGFloat(-M_PI_2), 1.0, 0.0, 0.0)
-            newTabsButton.titleLabel?.layer.transform = newFlipTransform
+        var newFlipTransform = CATransform3DIdentity
+        newFlipTransform = CATransform3DTranslate(newFlipTransform, 0, halfTitleHeight, 0)
+        newFlipTransform.m34 = -1.0 / 200.0 // add some perspective
+        newFlipTransform = CATransform3DRotate(newFlipTransform, CGFloat(-M_PI_2), 1.0, 0.0, 0.0)
+        newTabsButton.insideButton.layer.transform = newFlipTransform
 
-            var oldFlipTransform = CATransform3DIdentity
-            oldFlipTransform = CATransform3DTranslate(oldFlipTransform, 0, halfTitleHeight, 0)
-            oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective
-            oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(M_PI_2), 1.0, 0.0, 0.0)
+        var oldFlipTransform = CATransform3DIdentity
+        oldFlipTransform = CATransform3DTranslate(oldFlipTransform, 0, halfTitleHeight, 0)
+        oldFlipTransform.m34 = -1.0 / 200.0 // add some perspective
+        oldFlipTransform = CATransform3DRotate(oldFlipTransform, CGFloat(M_PI_2), 1.0, 0.0, 0.0)
 
-            let animate = {
-                newTabsButton.titleLabel?.layer.transform = CATransform3DIdentity
-                self.tabsButton.titleLabel?.layer.transform = oldFlipTransform
-                self.tabsButton.titleLabel?.layer.opacity = 0
+        let animate = {
+            newTabsButton.insideButton.layer.transform = CATransform3DIdentity
+            self.tabsButton.insideButton.layer.transform = oldFlipTransform
+            self.tabsButton.insideButton.layer.opacity = 0
+        }
+
+        let completion: (Bool) -> Void = { finished in
+            // remove the clone and setup the actual tab button
+            newTabsButton.removeFromSuperview()
+
+            self.tabsButton.insideButton.layer.opacity = 1
+            self.tabsButton.insideButton.layer.transform = CATransform3DIdentity
+            self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
+
+            if finished {
+                self.tabsButton.titleLabel.text = count.description
+                self.tabsButton.accessibilityValue = count.description
             }
+        }
 
-            let completion: (Bool) -> Void = { finished in
-                // remove the clone and setup the actual tab button
-                newTabsButton.removeFromSuperview()
-
-                self.tabsButton.titleLabel?.layer.opacity = 1
-                self.tabsButton.titleLabel?.layer.transform = CATransform3DIdentity
-                self.tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) browser toolbar")
-
-                if finished {
-                    self.tabsButton.setTitle(count.description, forState: UIControlState.Normal)
-                    self.tabsButton.accessibilityValue = count.description
-                }
-            }
-
-            if animated {
-                UIView.animateWithDuration(1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: animate, completion: completion)
-            } else {
-                completion(true)
-            }
+        if animated {
+            UIView.animateWithDuration(1.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: animate, completion: completion)
+        } else {
+            completion(true)
         }
     }
 
@@ -500,7 +493,7 @@ class URLBarView: UIView {
         self.backButton.alpha = inOverlayMode ? 0 : 1
         self.stopReloadButton.alpha = inOverlayMode ? 0 : 1
 
-        let borderColor = inOverlayMode ? URLBarViewUX.TextFieldActiveBorderColor : URLBarViewUX.TextFieldBorderColor
+        let borderColor = inOverlayMode ? locationActiveBorderColor : locationBorderColor
         locationContainer.layer.borderColor = borderColor.CGColor
 
         if inOverlayMode {
@@ -667,6 +660,28 @@ extension URLBarView: AutocompleteTextFieldDelegate {
     }
 }
 
+// MARK: UIAppearance
+extension URLBarView {
+    dynamic var progressBarTint: UIColor? {
+        get { return progressBar.progressTintColor }
+        set { progressBar.progressTintColor = newValue }
+    }
+
+    dynamic var cancelTextColor: UIColor? {
+        get { return cancelButton.titleColorForState(UIControlState.Normal) }
+        set { return cancelButton.setTitleColor(newValue, forState: UIControlState.Normal) }
+    }
+
+    dynamic var actionButtonTintColor: UIColor? {
+        get { return helper?.buttonTintColor }
+        set {
+            guard let value = newValue else { return }
+            helper?.buttonTintColor = value
+        }
+    }
+
+   }
+
 /* Code for drawing the urlbar curve */
 // Curve's aspect ratio
 private let ASPECT_RATIO = 0.729
@@ -750,12 +765,68 @@ private class CurveView: UIView {
     }
 }
 
-private class ToolbarTextField: AutocompleteTextField {
+class ToolbarTextField: AutocompleteTextField {
+    dynamic var clearButtonTintColor: UIColor? {
+        didSet {
+            // Clear previous tinted image that's cache and ask for a relayout
+            tintedClearImage = nil
+            setNeedsLayout()
+        }
+    }
+
+    private var tintedClearImage: UIImage?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        // Since we're unable to change the tint color of the clear image, we need to iterate through the
+        // subviews, find the clear button, and tint it ourselves. Thanks to Mikael Hellman for the tip:
+        // http://stackoverflow.com/questions/27944781/how-to-change-the-tint-color-of-the-clear-button-on-a-uitextfield
+        for view in subviews as [UIView] {
+            if let button = view as? UIButton {
+                if let image = button.imageForState(.Normal) {
+                    if tintedClearImage == nil {
+                        tintedClearImage = tintImage(image, color: clearButtonTintColor)
+                    }
+
+                    if button.imageView?.image != tintedClearImage {
+                        button.setImage(tintedClearImage, forState: .Normal)
+                    }
+                }
+            }
+        }
+    }
+
+    private func tintImage(image: UIImage, color: UIColor?) -> UIImage {
+        guard let color = color else { return image }
+
+        let size = image.size
+
+        UIGraphicsBeginImageContextWithOptions(size, false, 2)
+        let context = UIGraphicsGetCurrentContext()
+        image.drawAtPoint(CGPointZero, blendMode: CGBlendMode.Normal, alpha: 1.0)
+
+        CGContextSetFillColorWithColor(context, color.CGColor)
+        CGContextSetBlendMode(context, CGBlendMode.SourceIn)
+        CGContextSetAlpha(context, 1.0)
+
+        let rect = CGRectMake(
+            CGPointZero.x,
+            CGPointZero.y,
+            image.size.width,
+            image.size.height)
+        CGContextFillRect(UIGraphicsGetCurrentContext(), rect)
+        let tintedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return tintedImage
     }
 }

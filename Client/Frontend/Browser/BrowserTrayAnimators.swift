@@ -313,7 +313,14 @@ private func createTransitionCellFromBrowser(browser: Browser?, withFrame frame:
     if let favIcon = browser?.displayFavicon {
         cell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
     } else {
-        cell.favicon.image = UIImage(named: "defaultFavicon")
+        var defaultFavicon = UIImage(named: "defaultFavicon")
+        if browser?.isPrivate ?? false {
+            defaultFavicon = defaultFavicon?.imageWithRenderingMode(.AlwaysTemplate)
+            cell.favicon.image = defaultFavicon
+            cell.favicon.tintColor = (browser?.isPrivate ?? false) ? UIColor.whiteColor() : UIColor.darkGrayColor()
+        } else {
+            cell.favicon.image = defaultFavicon
+        }
     }
     return cell
 }

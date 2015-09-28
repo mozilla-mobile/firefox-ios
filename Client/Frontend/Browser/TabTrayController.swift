@@ -98,6 +98,7 @@ class TabCell: UICollectionViewCell {
 
         self.closeButton = UIButton()
         self.closeButton.setImage(UIImage(named: "stop"), forState: UIControlState.Normal)
+        self.closeButton.tintColor = UIColor.lightGrayColor()
         self.closeButton.imageEdgeInsets = UIEdgeInsetsMake(TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset, TabTrayControllerUX.CloseButtonEdgeInset)
 
         self.innerStroke = InnerStrokedView(frame: self.backgroundHolder.frame)
@@ -588,7 +589,14 @@ private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
         if let favIcon = tab.displayFavicon {
             tabCell.favicon.sd_setImageWithURL(NSURL(string: favIcon.url)!)
         } else {
-            tabCell.favicon.image = UIImage(named: "defaultFavicon")
+            var defaultFavicon = UIImage(named: "defaultFavicon")
+            if tab.isPrivate {
+                defaultFavicon = defaultFavicon?.imageWithRenderingMode(.AlwaysTemplate)
+                tabCell.favicon.image = defaultFavicon
+                tabCell.favicon.tintColor = UIColor.whiteColor()
+            } else {
+                tabCell.favicon.image = defaultFavicon
+            }
         }
 
         tabCell.background.image = tab.screenshot
@@ -675,34 +683,6 @@ private class TabTrayCollectionViewLayout: UICollectionViewFlowLayout {
             calculatedSize.height = collectionViewHeight + 1
         }
         return calculatedSize
-    }
-}
-
-// A transparent view with a rectangular border with rounded corners, stroked
-// with a semi-transparent white border.
-class InnerStrokedView: UIView {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.backgroundColor = UIColor.clearColor()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func drawRect(rect: CGRect) {
-        let strokeWidth = 1.0 as CGFloat
-        let halfWidth = strokeWidth/2 as CGFloat
-
-        let path = UIBezierPath(roundedRect: CGRect(x: halfWidth,
-            y: halfWidth,
-            width: rect.width - strokeWidth,
-            height: rect.height - strokeWidth),
-            cornerRadius: TabTrayControllerUX.CornerRadius)
-        
-        path.lineWidth = strokeWidth
-        UIColor.whiteColor().colorWithAlphaComponent(0.2).setStroke()
-        path.stroke()
     }
 }
 
