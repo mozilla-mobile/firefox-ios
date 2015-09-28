@@ -253,6 +253,7 @@ public class Keys: Equatable {
 
     public func asPayload() -> KeysPayload {
         let json: JSON = JSON([
+            "id": "keys",
             "collection": "crypto",
             "default": self.defaultBundle.asPair(),
             "collections": mapValues(self.collectionKeys, f: { $0.asPair() })

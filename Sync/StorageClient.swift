@@ -519,13 +519,12 @@ public class Sync15StorageClient {
     }
 
     func uploadMetaGlobal(metaGlobal: MetaGlobal, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
-        let payload = metaGlobal.toPayload()
+        let payload = metaGlobal.asPayload()
         if payload.isError {
             return Deferred(value: Maybe(failure: MalformedMetaGlobalError()))
         }
 
-        // TODO finish this!
-        let record: JSON = JSON(["payload": payload, "id": "global"])
+        let record: JSON = JSON(["payload": payload.toString(), "id": "global"])
         return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
     }
 
