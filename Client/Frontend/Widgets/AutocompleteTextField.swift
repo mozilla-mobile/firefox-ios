@@ -151,7 +151,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             if suggestion.startsWith(enteredText) && (enteredText).characters.count < suggestion.characters.count {
                 let endingString = suggestion.substringFromIndex(suggestion.startIndex.advancedBy(enteredText.characters.count))
                 let completedAndMarkedString = NSMutableAttributedString(string: suggestion)
-                completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: AutocompleteTextFieldUX.HighlightColor, range: NSMakeRange(enteredText.characters.count, endingString.characters.count))
+                completedAndMarkedString.addAttribute(NSBackgroundColorAttributeName, value: highlightColor, range: NSMakeRange(enteredText.characters.count, endingString.characters.count))
                 attributedText = completedAndMarkedString
                 completionActive = true
                 previousSuggestion = suggestion
