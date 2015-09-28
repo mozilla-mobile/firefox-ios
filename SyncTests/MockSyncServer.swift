@@ -85,6 +85,36 @@ private struct SyncRequestSpec {
     }
 }
 
+private struct SyncDeleteRequestSpec {
+    let collection: String?
+    let id: String?
+
+    static func fromRequest(request: GCDWebServerRequest) -> SyncDeleteRequestSpec? {
+        // Input is "/1.5/user{/storage{/collection{/id}}}".
+        // That means we get four, five, or six path components here, the first being empty.
+
+        let parts = request.path!.componentsSeparatedByString("/").filter { !$0.isEmpty }
+
+        guard [2, 4, 5].contains(parts.count) else {
+            return nil
+        }
+
+        if parts.count == 2 {
+            return SyncDeleteRequestSpec(collection: nil, id: nil)
+        }
+
+        if parts[2] != "storage" {
+            return nil
+        }
+
+        if parts.count == 4 {
+            return SyncDeleteRequestSpec(collection: parts[3], id: nil)
+        }
+
+        return SyncDeleteRequestSpec(collection: parts[3], id: parts[4])
+    }
+}
+
 class MockSyncServer {
     let server = GCDWebServer()
     let username: String
@@ -113,6 +143,23 @@ class MockSyncServer {
             "modified": Double(modified) / 1000,
         ]
         return EnvelopeJSON(JSON(clientRecord).toString(false))
+    }
+
+    class func withHeaders(response: GCDWebServerResponse, lastModified: Timestamp? = nil, records: Int? = nil, timestamp: Timestamp? = nil) -> GCDWebServerResponse {
+        let timestamp = timestamp ?? NSDate.now()
+        let xWeaveTimestamp = millisecondsToDecimalSeconds(timestamp)
+        response.setValue("\(xWeaveTimestamp)", forAdditionalHeader: "X-Weave-Timestamp")
+
+        if let lastModified = lastModified {
+            let xLastModified = millisecondsToDecimalSeconds(lastModified)
+            response.setValue("\(xLastModified)", forAdditionalHeader: "X-Last-Modified")
+        }
+
+        if let records = records {
+            response.setValue("\(records)", forAdditionalHeader: "X-Weave-Records")
+        }
+
+        return response;
     }
 
     func storeRecords(records: [EnvelopeJSON], inCollection collection: String, now: Timestamp? = nil) {
@@ -196,22 +243,21 @@ class MockSyncServer {
         let body = JSON(record.asJSON()).toString()
         let bodyData = body.utf8EncodedData
         let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
+        return MockSyncServer.withHeaders(response, lastModified: record.modified)
+    }
 
-        // Compute the correct set of headers: timestamps, etc.
-        let xLastModified = millisecondsToDecimalSeconds(record.modified)
-        response.setValue("\(xLastModified)", forAdditionalHeader: "X-Last-Modified")
-
-        let xWeaveTimestamp = millisecondsToDecimalSeconds(NSDate.now())
-        response.setValue("\(xWeaveTimestamp)", forAdditionalHeader: "X-Weave-Timestamp")
-
-        return response
+    private func modifiedResponse(timestamp: Timestamp) -> GCDWebServerResponse {
+        let body = JSON(["modified": NSNumber(unsignedLongLong: timestamp)]).toString()
+        let bodyData = body.utf8EncodedData
+        let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
+        return MockSyncServer.withHeaders(response)
     }
 
     func start() {
-        let basePath = "/1.5/\(self.username)/"
-        let storagePath = "\(basePath)storage/"
+        let basePath = "/1.5/\(self.username)"
+        let storagePath = "\(basePath)/storage/"
 
-        let infoCollectionsPath = "\(basePath)info/collections"
+        let infoCollectionsPath = "\(basePath)/info/collections"
         server.addHandlerForMethod("GET", path: infoCollectionsPath, requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var ic = [String: NSNumber]()
             var lastModified: Timestamp = 0
@@ -226,16 +272,41 @@ class MockSyncServer {
             let bodyData = body.utf8EncodedData
 
             let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
+            return MockSyncServer.withHeaders(response, lastModified: lastModified, records: ic.count)
+        }
 
-            let xLastModified = millisecondsToDecimalSeconds(lastModified)
-            response.setValue("\(xLastModified)", forAdditionalHeader: "X-Last-Modified")
+        let matchDelete: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
+            guard method == "DELETE" && path.startsWith(basePath) else {
+                return nil
+            }
+            return GCDWebServerRequest(method: method, url: url, headers: headers, path: path, query: query)
+        }
 
-            let xWeaveTimestamp = millisecondsToDecimalSeconds(NSDate.now())
-            response.setValue("\(xWeaveTimestamp)", forAdditionalHeader: "X-Weave-Timestamp")
+        server.addHandlerWithMatchBlock(matchDelete) { (request) -> GCDWebServerResponse! in
+            guard let spec = SyncDeleteRequestSpec.fromRequest(request) else {
+                return GCDWebServerDataResponse(statusCode: 400)
+            }
 
-            response.setValue("\(ic.count)", forAdditionalHeader: "X-Weave-Records")
+            if let collection = spec.collection, id = spec.id {
+                guard var items = self.collections[collection] else {
+                    // Unable to find the requested collection.
+                    return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 404))
+                }
 
-            return response
+                guard let item = items[id] else {
+                    // Unable to find the requested id.
+                    return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 404))
+                }
+                items.removeValueForKey(id)
+                return self.modifiedResponse(item.modified)
+            }
+
+            if let _ = spec.collection {
+                return self.modifiedResponse(NSDate.now())
+            }
+
+            self.collections = [:]
+            return MockSyncServer.withHeaders(GCDWebServerDataResponse(data: "{}".utf8EncodedData, contentType: "application/json"))
         }
 
         let match: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
@@ -276,20 +347,11 @@ class MockSyncServer {
             let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
 
             // 3. Compute the correct set of headers: timestamps, X-Weave-Records, etc.
-
-            let xLastModified = millisecondsToDecimalSeconds(items.reduce(Timestamp(0)) { max($0, $1.modified) })
-            response.setValue("\(xLastModified)", forAdditionalHeader: "X-Last-Modified")
-
-            let xWeaveTimestamp = millisecondsToDecimalSeconds(NSDate.now())
-            response.setValue("\(xWeaveTimestamp)", forAdditionalHeader: "X-Weave-Timestamp")
-
-            response.setValue("\(items.count)", forAdditionalHeader: "X-Weave-Records")
-
             if let offset = offset {
                 response.setValue(offset, forAdditionalHeader: "X-Weave-Next-Offset")
             }
 
-            return response
+            return MockSyncServer.withHeaders(response, lastModified: items.reduce(Timestamp(0)) { max($0, $1.modified) }, records: items.count)
         }
 
         if server.startWithPort(0, bonjourName: nil) == false {

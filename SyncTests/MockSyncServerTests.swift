@@ -116,4 +116,40 @@ class MockSyncServerTests: XCTestCase {
             XCTAssertNotNil(response as? NotFound<NSHTTPURLResponse>)
         }
     }
+
+    func testWipeStorage() {
+        server.storeRecords([MockSyncServer.makeValidEnvelope("a", modified: 0)], inCollection: "bookmarks", now: 1326251111000)
+        server.storeRecords([MockSyncServer.makeValidEnvelope("b", modified: 0)], inCollection: "bookmarks", now: 1326252222000)
+        server.storeRecords([MockSyncServer.makeValidEnvelope("c", modified: 0)], inCollection: "clients",   now: 1326253333000)
+        server.storeRecords([], inCollection: "tabs")
+
+        // For now, only testing wiping the storage root, which is the only thing we use in practice.
+        let expectation = self.expectationWithDescription("Waiting for result.")
+        let before = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
+        client.wipeStorage().upon { result in
+            XCTAssertNotNil(result.successValue)
+            guard let response = result.successValue else {
+                expectation.fulfill()
+                return
+            }
+            let after = decimalSecondsStringToTimestamp(millisecondsToDecimalSeconds(NSDate.now()))!
+
+            // JSON contents: should be the empty object.
+            XCTAssertEqual(response.value.toString(), "{}")
+
+            // X-Weave-Timestamp.
+            XCTAssertLessThanOrEqual(before, response.metadata.timestampMilliseconds)
+            XCTAssertLessThanOrEqual(response.metadata.timestampMilliseconds, after)
+            // X-Weave-Records.
+            XCTAssertNil(response.metadata.records)
+            // X-Last-Modified.
+            XCTAssertNil(response.metadata.lastModifiedMilliseconds)
+
+            // And we really wiped the data.
+            XCTAssertTrue(self.server.collections.isEmpty)
+
+            expectation.fulfill()
+        }
+        waitForExpectationsWithTimeout(10, handler: nil)
+    }
 }
