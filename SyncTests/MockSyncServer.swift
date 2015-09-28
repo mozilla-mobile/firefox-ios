@@ -67,6 +67,10 @@ private struct SyncRequestSpec {
             return nil
         }
 
+        if parts[2] != "storage" {
+            return nil
+        }
+
         // Use dropFirst, you say! It's buggy.
         switch parts.count {
         case 4:
@@ -191,6 +195,33 @@ class MockSyncServer {
     func start() {
         let basePath = "/1.5/\(self.username)/"
         let storagePath = "\(basePath)storage/"
+
+        let infoCollectionsPath = "\(basePath)info/collections"
+        server.addHandlerForMethod("GET", path: infoCollectionsPath, requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+            var ic = [String: NSNumber]()
+            var lastModified: Timestamp = 0
+            for (collection, map) in self.collections {
+                if !map.isEmpty {
+                    let timestamp = map.values.reduce(0) { max($0, $1.modified) }
+                    lastModified = max(lastModified, timestamp)
+                    ic[collection] = NSNumber(double: Double(timestamp) / 1000)
+                }
+            }
+            let body = JSON(ic).toString()
+            let bodyData = body.utf8EncodedData
+
+            let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
+
+            let xLastModified = millisecondsToDecimalSeconds(lastModified)
+            response.setValue("\(xLastModified)", forAdditionalHeader: "X-Last-Modified")
+
+            let xWeaveTimestamp = millisecondsToDecimalSeconds(NSDate.now())
+            response.setValue("\(xWeaveTimestamp)", forAdditionalHeader: "X-Weave-Timestamp")
+
+            response.setValue("\(ic.count)", forAdditionalHeader: "X-Weave-Records")
+
+            return response
+        }
 
         let match: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
             guard method == "GET" && path.startsWith(storagePath) else {
