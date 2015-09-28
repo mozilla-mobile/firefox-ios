@@ -111,6 +111,28 @@ private struct SyncDeleteRequestSpec {
     }
 }
 
+private struct SyncPutRequestSpec {
+    let collection: String
+    let id: String
+
+    static func fromRequest(request: GCDWebServerRequest) -> SyncPutRequestSpec? {
+        // Input is "/1.5/user/storage/collection/id}}}".
+        // That means we get six path components here, the first being empty.
+
+        let parts = request.path!.componentsSeparatedByString("/").filter { !$0.isEmpty }
+
+        guard parts.count == 5 else {
+            return nil
+        }
+
+        if parts[2] != "storage" {
+            return nil
+        }
+
+        return SyncPutRequestSpec(collection: parts[3], id: parts[4])
+    }
+}
+
 class MockSyncServer {
     let server = GCDWebServer()
     let username: String
@@ -242,6 +264,32 @@ class MockSyncServer {
             response.setValue("\(xWeaveTimestamp)", forAdditionalHeader: "X-Weave-Timestamp")
 
             return response
+        }
+
+        let matchPut: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
+            guard method == "PUT" && path.startsWith(basePath) else {
+                return nil
+            }
+            return GCDWebServerDataRequest(method: method, url: url, headers: headers, path: path, query: query)
+        }
+
+        server.addHandlerWithMatchBlock(matchPut) { (request) -> GCDWebServerResponse! in
+            guard let request = request as? GCDWebServerDataRequest else {
+                return GCDWebServerDataResponse(statusCode: 400)
+            }
+
+            guard let spec = SyncPutRequestSpec.fromRequest(request) else {
+                return GCDWebServerDataResponse(statusCode: 400)
+            }
+
+            var body = JSON(request.jsonObject).asDictionary!
+            body["modified"] = JSON(millisecondsToDecimalSeconds(NSDate.now()))
+            let record = EnvelopeJSON(JSON(body))
+
+            self.storeRecords([record], inCollection: spec.collection)
+            let timestamp = self.collections[spec.collection]!.values.reduce(Timestamp(0)) { max($0, $1.modified) }
+
+            return GCDWebServerDataResponse(data: String(Double(timestamp) / 1000).utf8EncodedData, contentType: "application/json")
         }
 
         let matchDelete: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
