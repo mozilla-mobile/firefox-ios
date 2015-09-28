@@ -85,6 +85,32 @@ private struct SyncRequestSpec {
     }
 }
 
+private struct SyncDeleteRequestSpec {
+    let collection: String?
+    let id: String?
+
+    static func fromRequest(request: GCDWebServerRequest) -> SyncDeleteRequestSpec? {
+        // Input is "/1.5/user{/storage{/collection{/id}}}".
+        // That means we get four, five, or six path components here, the first being empty.
+
+        let parts = request.path!.componentsSeparatedByString("/").filter { !$0.isEmpty }
+
+        guard 2 <= parts.count && parts.count <= 5 else {
+            return nil
+        }
+
+        if parts.count == 2 {
+            return SyncDeleteRequestSpec(collection: nil, id: nil)
+        }
+
+        if parts[2] != "storage" {
+            return nil
+        }
+
+        return SyncDeleteRequestSpec(collection: parts[3], id: parts[4])
+    }
+}
+
 class MockSyncServer {
     let server = GCDWebServer()
     let username: String
@@ -187,6 +213,17 @@ class MockSyncServer {
         return response
     }
 
+    private func modifiedResponse(timestamp: Timestamp) -> GCDWebServerResponse {
+        let body = JSON(["modified": NSNumber(unsignedLongLong: timestamp)]).toString()
+        let bodyData = body.utf8EncodedData
+        let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
+
+        let xWeaveTimestamp = millisecondsToDecimalSeconds(NSDate.now())
+        response.setValue("\(xWeaveTimestamp)", forAdditionalHeader: "X-Weave-Timestamp")
+
+        return response
+    }
+
     func start() {
         let basePath = "/1.5/\(self.username)/"
         let storagePath = "\(basePath)storage/"
@@ -205,6 +242,42 @@ class MockSyncServer {
             response.setValue("\(xWeaveTimestamp)", forAdditionalHeader: "X-Weave-Timestamp")
 
             return response
+        }
+
+        let matchDelete: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
+            guard method == "DELETE" && path.startsWith(basePath) else {
+                return nil
+            }
+            return GCDWebServerRequest(method: method, url: url, headers: headers, path: path, query: query)
+        }
+
+        server.addHandlerWithMatchBlock(matchDelete) { (request) -> GCDWebServerResponse! in
+            guard let spec = SyncDeleteRequestSpec.fromRequest(request) else {
+                return GCDWebServerDataResponse(statusCode: 400)
+            }
+
+            if let collection = spec.collection {
+                guard var items = self.collections[collection] else {
+                    // Unable to find the requested collection.
+                    return GCDWebServerDataResponse(statusCode: 404)
+                }
+
+                if let id = spec.id {
+                    guard let item = items[id] else {
+                        // Unable to find the requested id.
+                        return GCDWebServerDataResponse(statusCode: 404)
+                    }
+                    items.removeValueForKey(id)
+                    return self.modifiedResponse(item.modified)
+                } else {
+                    self.collections.removeValueForKey(collection)
+                    let timestamp = items.values.reduce(Timestamp(0)) { max($0, $1.modified) }
+                    return self.modifiedResponse(timestamp)
+                }
+            } else {
+                self.collections = [:]
+                return GCDWebServerDataResponse(data: JSON([String: AnyObject]()).toString().utf8EncodedData, contentType: "application/json")
+            }
         }
 
         let match: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
