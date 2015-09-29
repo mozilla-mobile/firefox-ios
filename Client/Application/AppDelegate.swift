@@ -246,8 +246,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.browserViewController.openBookmarks()
                 handled = true
             case ShortcutType.ReadingList:
-                self.browserViewController.
-                    openReadingList()
+                self.browserViewController.openReadingList()
                 handled = true
             }
         }
