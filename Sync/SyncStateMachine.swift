@@ -77,7 +77,7 @@ public enum SyncStateLabel: String {
     case ResolveMetaGlobal = "resolveMetaGlobal"
     case NewMetaGlobal = "newMetaGlobal"
     case HasMetaGlobal = "hasMetaGlobal"
-    case Restart = "restart"                                  // Go around again... once only, perhaps.
+    case FreshStartRequired = "freshStartRequired"                                  // Go around again... once only, perhaps.
     case Ready = "ready"
 
     case ChangedServer = "changedServer"
@@ -94,7 +94,7 @@ public enum SyncStateLabel: String {
         ResolveMetaGlobal,
         NewMetaGlobal,
         HasMetaGlobal,
-        Restart,
+        FreshStartRequired,
         Ready,
 
         ChangedServer,
@@ -306,11 +306,11 @@ public class SyncIDChangedError: RecoverableSyncState {
  * Recovery: wipe the server (perhaps unnecessarily) and start fresh, uploading a
  * new meta/global and a new crypto/keys.
  */
-public class Restart: RecoverableSyncState {
-    public var label: SyncStateLabel { return SyncStateLabel.MissingMetaGlobal }
+public class FreshStartRequiredError: RecoverableSyncState {
+    public var label: SyncStateLabel { return SyncStateLabel.FreshStartRequired }
 
     public var description: String {
-        return "Blank server: restart required."
+        return "Fresh start required."
     }
 
     private let previousState: BaseSyncStateWithInfo
@@ -330,7 +330,7 @@ public class Restart: RecoverableSyncState {
             >>> {
                 let s = self.previousState.scratchpad.evolve().setGlobal(nil).setKeys(nil).build().checkpoint()
                 // Upload a new meta/global ...
-                return client.uploadMetaGlobal(Restart.createMetaGlobal(nil, scratchpad: s), ifUnmodifiedSince: nil)
+                return client.uploadMetaGlobal(FreshStartRequiredError.createMetaGlobal(nil, scratchpad: s), ifUnmodifiedSince: nil)
                     // ... and a new crypto/keys.
                     >>> { return client.uploadCryptoKeys(Keys.random(), withSyncKeyBundle: s.syncKeyBundle, ifUnmodifiedSince: nil) }
                     >>> { return advanceSyncState(InitialWithLiveToken(client: client, scratchpad: s, token: self.previousState.token)) }
@@ -352,7 +352,7 @@ public class MissingMetaGlobalError: RecoverableSyncState {
     }
 
     public func recover() -> ReadyDeferred {
-        return Restart(previousState: self.previousState).recover()
+        return FreshStartRequiredError(previousState: self.previousState).recover()
     }
 }
 
@@ -370,7 +370,7 @@ public class MissingCryptoKeysError: RecoverableSyncState {
     }
 
     public func recover() -> ReadyDeferred {
-        return Restart(previousState: self.previousState).recover()
+        return FreshStartRequiredError(previousState: self.previousState).recover()
     }
 }
 
