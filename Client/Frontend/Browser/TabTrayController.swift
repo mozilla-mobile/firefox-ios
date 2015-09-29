@@ -652,7 +652,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     }
 
     @objc func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let cellWidth = (collectionView.bounds.width - TabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns)
+        let cellWidth = floor((collectionView.bounds.width - TabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         return CGSizeMake(cellWidth, self.cellHeightForCurrentDevice())
     }
 
