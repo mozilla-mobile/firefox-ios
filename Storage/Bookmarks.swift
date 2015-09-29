@@ -426,6 +426,33 @@ private extension SuggestedSite {
     }
 }
 
+public class PrependedBookmarkFolder: BookmarkFolder {
+    private let main: BookmarkFolder
+    private let prepend: BookmarkNode
+
+    init(main: BookmarkFolder, prepend: BookmarkNode) {
+        self.main = main
+        self.prepend = prepend
+        super.init(guid: main.guid, title: main.guid, editable: false)
+    }
+
+    override public var count: Int {
+        return self.main.count + 1
+    }
+
+    override public subscript(index: Int) -> BookmarkNode? {
+        if index == 0 {
+            return self.prepend
+        }
+
+        return self.main[index - 1]
+    }
+
+    override public func itemIsEditableAtIndex(index: Int) -> Bool {
+        return index > 0
+    }
+}
+
 public class BookmarkFolderWithDefaults: BookmarkFolder {
     private let folder: BookmarkFolder
     private let sites: SuggestedSitesCursor
