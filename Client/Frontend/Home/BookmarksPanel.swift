@@ -107,22 +107,11 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        // Don't show a header for the root
-        if source == nil || source?.current.guid == BookmarkRoots.MobileFolderGUID {
-            return nil
-        }
-
-        // Note: If there's no root (i.e. source == nil), we'll also show no header.
-        return source?.current.title
+        return nil
     }
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // Don't show a header for the root. If there's no root (i.e. source == nil), we'll also show no header.
-        if source == nil || source?.current.guid == BookmarkRoots.MobileFolderGUID {
-            return 0
-        }
-
-        return super.tableView(tableView, heightForHeaderInSection: section)
+        return 0
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
