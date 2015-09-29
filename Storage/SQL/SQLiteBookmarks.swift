@@ -8,6 +8,8 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
+private let desktopBookmarksLabel = NSLocalizedString("Desktop Bookmarks", tableName: "BookmarkPanel", comment: "The folder name for the virtual folder that contains all desktop bookmarks.")
+
 class SQLiteBookmarkFolder: BookmarkFolder {
     private let cursor: Cursor<BookmarkNode>
     override var count: Int {

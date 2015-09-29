@@ -8,7 +8,6 @@ import Shared
 import XCGLogger
 
 private let log = Logger.browserLogger
-private let desktopBookmarksLabel = NSLocalizedString("Desktop Bookmarks", tableName: "BookmarkPanel", comment: "The folder name for the virtual folder that contains all desktop bookmarks.")
 
 let BookmarkStatusChangedNotification = "BookmarkStatusChangedNotification"
 
