@@ -532,6 +532,11 @@ public class Sync15StorageClient {
         return getResource("storage/meta/global", f: { GlobalEnvelope($0) })
     }
 
+    func wipeStorage() -> Deferred<Maybe<StorageResponse<JSON>>> {
+        // In Sync 1.5 it's preferred that we delete the root, not /storage.
+        return deleteResource("", f: { $0 })
+    }
+
     func uploadMetaGlobal(metaGlobal: MetaGlobal, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
         let payload = metaGlobal.asPayload()
         if payload.isError {
@@ -542,14 +547,20 @@ public class Sync15StorageClient {
         return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
     }
 
-    func wipeStorage() -> Deferred<Maybe<StorageResponse<JSON>>> {
-        // In Sync 1.5 it's preferred that we delete the root, not /storage.
-        return deleteResource("", f: { $0 })
+    // The crypto/keys record is a special snowflake: it is encrypted with the Sync key bundle.  All other records are
+    // encrypted with the bulk key bundle (including possibly a per-collection bulk key) stored in crypto/keys.
+    func uploadCryptoKeys(keys: Keys, withSyncKeyBundle syncKeyBundle: KeyBundle, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
+        let syncKey = Keys(defaultBundle: syncKeyBundle)
+        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0 })
+        let encrypter = syncKey.encrypter("keys", encoder: encoder)
+        let client = self.clientForCollection("crypto", encrypter: encrypter)
+
+        let record = Record(id: "keys", payload: keys.asPayload())
+        return client.put(record, ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
-    // TODO: it would be convenient to have the storage client manage Keys,
-    // but of course we need to use a different set of keys to fetch crypto/keys
-    // itself.
+    // It would be convenient to have the storage client manage Keys, but of course we need to use a different set of
+    // keys to fetch crypto/keys itself.  See uploadCryptoKeys.
     func clientForCollection<T: CleartextPayloadJSON>(collection: String, encrypter: RecordEncrypter<T>) -> Sync15CollectionClient<T> {
         let storage = self.serverURI.URLByAppendingPathComponent("storage", isDirectory: true)
         return Sync15CollectionClient(client: self, serverURI: storage, collection: collection, encrypter: encrypter)
