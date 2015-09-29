@@ -349,6 +349,20 @@ extension SQLiteBookmarks: SearchableBookmarks {
 }
 
 private extension BookmarkMirrorItem {
+    func getChildrenArgs() -> [Args] {
+        // Only folders have children, and we manage roots ourselves.
+        if self.type != .Folder ||
+           self.guid == BookmarkRoots.RootGUID {
+            return []
+        }
+        let parent = self.guid
+        var idx = 0
+        return self.children?.map { child in
+            let ret: Args = [parent, child, idx++]
+            return ret
+        } ?? []
+    }
+
     func getUpdateOrInsertArgs() -> Args {
         let args: Args = [
             self.type.rawValue,
@@ -381,12 +395,25 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
         self.db = db
     }
 
+    /**
+     * This is a little gnarly because our DB access layer is rough.
+     * Within a single transaction, we walk the list of items, attempting to update
+     * and inserting if the update failed. (TODO: batch the inserts!)
+     * Once we've added all of the records, we flatten all of their children
+     * into big arg lists and hard-update the structure table.
+     */
     public func applyRecords(records: [BookmarkMirrorItem]) -> Success {
-        // Within a transaction, we first attempt to update each item.
-        // If an update fails, insert instead. TODO: batch the inserts!
+        return self.applyRecords(records, withMaxVars: BrowserDB.MaxVariableNumber)
+    }
+
+    public func applyRecords(records: [BookmarkMirrorItem], withMaxVars maxVars: Int) -> Success {
         let deferred = Deferred<Maybe<()>>(defaultQueue: dispatch_get_main_queue())
 
-        let values = records.lazy.map { $0.getUpdateOrInsertArgs() }
+        let deleted = records.filter { $0.isDeleted }.map { $0.guid }
+        let nonDeleted = records.filter { !$0.isDeleted }
+        let values = nonDeleted.map { $0.getUpdateOrInsertArgs() }
+        let children = nonDeleted.flatMap { $0.getChildrenArgs() }
+
         var err: NSError?
         self.db.transaction(&err) { (conn, err) -> Bool in
             // These have the same values in the same order.
@@ -426,8 +453,48 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
                 }
             }
 
+            // Insert children in chunks.
+            log.debug("Inserting \(children.count) children.")
+            if !children.isEmpty {
+                let chunks = chunk(children, by: maxVars - (maxVars % 3))
+                for chunk in chunks {
+                    // Hurgh.
+                    var parents: Args = []
+                    for parent in Set(chunk.map { $0[0]! as! GUID }) {
+                        parents.append(parent as AnyObject)
+                    }
+
+                    // Drop existing rows.
+                    let del = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN (" +
+                              Array<String>(count: parents.count, repeatedValue: "?").joinWithSeparator(", ") +
+                              ")"
+                    if let error = conn.executeChange(del, withArgs: Array(parents)) {
+                        log.error("Dropping existing rows from mirror structure: \(error.description).")
+                        err = error
+                        deferred.fill(Maybe(failure: DatabaseError(err: error)))
+                        return false
+                    }
+
+                    let childArgs: Args = chunk.flatMap { $0 }   // Flatten [[a, b, c], [...]] into [a, b, c, ...].
+                    let sets = childArgs.count / 3
+                    let ins = "INSERT INTO \(TableBookmarksMirrorStructure) (parent, child, idx) VALUES " +
+                              Array<String>(count: sets, repeatedValue: "(?, ?, ?)").joinWithSeparator(", ")
+                    log.debug("Inserting \(sets) records (out of \(children.count)).")
+                    if let error = conn.executeChange(ins, withArgs: childArgs) {
+                        log.error("Updating mirror structure: \(error.description).")
+                        err = error
+                        deferred.fill(Maybe(failure: DatabaseError(err: error)))
+                        return false
+                    }
+                }
+            }
+
+            if err == nil {
+                deferred.fillIfUnfilled(Maybe(success: ()))
+                return true
+            }
             deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: err)))
-            return err == nil
+            return false
         }
 
         return deferred
