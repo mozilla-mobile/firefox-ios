@@ -20,7 +20,6 @@ public enum IconType: Int {
 
 public class Favicon: Identifiable {
     var id: Int? = nil
-    var img: UIImage? = nil
 
     public let url: String
     public let date: NSDate
