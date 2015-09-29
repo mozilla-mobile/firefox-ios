@@ -124,7 +124,7 @@ class LiveStorageClientTests : LiveAccountTest {
         let expectation = expectationWithDescription("Waiting on value.")
         let authState = self.getAuthState(NSDate.now())
 
-        let d = chainDeferred(authState, f: { SyncStateMachine.toReady($0, prefs: MockProfilePrefs()) })
+        let d = chainDeferred(authState, f: { SyncStateMachine(prefs: MockProfilePrefs()).toReady($0) })
 
         d.upon { result in
             if let ready = result.successValue {

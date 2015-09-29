@@ -636,13 +636,12 @@ public class BrowserProfile: Profile {
                 }
 
                 let authState = account.syncAuthState
-                let syncPrefs = profile.prefs.branch("sync")
 
-                let readyDeferred = SyncStateMachine.toReady(authState, prefs: syncPrefs)
+                let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState)
                 let delegate = profile.getSyncDelegate()
 
                 let go = readyDeferred >>== { ready in
-                    function(delegate, syncPrefs, ready)
+                    function(delegate, self.prefsForSync, ready)
                 }
 
                 // Always unlock when we're done.
