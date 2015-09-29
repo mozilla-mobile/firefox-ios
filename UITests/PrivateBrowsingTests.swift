@@ -116,4 +116,56 @@ class PrivateBrowsingTests: KIFTestCase {
         // Exit private mode
         tester().tapViewWithAccessibilityLabel("Private Mode")
     }
+
+    func testClosePrivateTabsClosesPrivateTabs() {
+        // First, make sure that selecting the option to ON will close the tabs
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().setOn(true, forSwitchWithAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("Private Mode")
+
+        XCTAssertEqual(numberOfTabs(), 0)
+
+        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().waitForViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+
+        XCTAssertEqual(numberOfTabs(), 1)
+
+        tester().tapViewWithAccessibilityLabel("Private Mode")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("Private Mode")
+
+        XCTAssertEqual(numberOfTabs(), 0)
+
+        tester().tapViewWithAccessibilityLabel("Private Mode")
+
+        // Second, make sure selecting the option to OFF will not close the tabs
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().setOn(false, forSwitchWithAccessibilityLabel: "Close Private Tabs, When Leaving Private Browsing")
+        tester().tapViewWithAccessibilityLabel("Done")
+        tester().tapViewWithAccessibilityLabel("Private Mode")
+
+        XCTAssertEqual(numberOfTabs(), 0)
+
+        tester().tapViewWithAccessibilityLabel("Add Tab")
+        tester().waitForViewWithAccessibilityLabel("Show Tabs")
+        tester().tapViewWithAccessibilityLabel("Show Tabs")
+
+        XCTAssertEqual(numberOfTabs(), 1)
+
+        tester().tapViewWithAccessibilityLabel("Private Mode")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityLabel("Private Mode")
+
+        XCTAssertEqual(numberOfTabs(), 1)
+
+        tester().tapViewWithAccessibilityLabel("Private Mode")
+    }
+
+    private func numberOfTabs() -> Int {
+        let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
+        return tabsView.numberOfItemsInSection(0)
+    }
 }
