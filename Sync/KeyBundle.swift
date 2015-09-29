@@ -240,6 +240,10 @@ public class Keys: Equatable {
         self.init(payload: keysRecord?.payload)
     }
 
+    public class func random() -> Keys {
+        return Keys(defaultBundle: KeyBundle.random())
+    }
+
     public func forCollection(collection: String) -> KeyBundle {
         if let bundle = collectionKeys[collection] {
             return bundle
