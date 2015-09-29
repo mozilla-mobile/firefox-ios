@@ -188,21 +188,29 @@ public class SQLiteBookmarks: BookmarksModelFactory {
         return self.getChildrenWhere(sql, args: args, includeIcon: true)
     }
 
-    public func modelForFolder(guid: String, title: String) -> Deferred<Maybe<BookmarksModel>> {
+    func folderForGUID(guid: GUID, title: String) -> BookmarkFolder? {
         let children = getChildren(guid)
         if children.status == .Failure {
-            return deferMaybe(DatabaseError(description: children.statusMessage))
+            log.warning("Couldn't get children: \(children.statusMessage).")
+            return nil
         }
 
-        let f = SQLiteBookmarkFolder(guid: guid, title: title, children: children)
+        let folder = SQLiteBookmarkFolder(guid: guid, title: title, children: children)
 
-        // We add some suggested sites to the mobile bookmarks folder.
+        // We add some suggested sites to the mobile bookmarks folder only.
         if guid == BookmarkRoots.MobileFolderGUID {
-            let extended = BookmarkFolderWithDefaults(folder: f, sites: SuggestedSites)
-            return deferMaybe(BookmarksModel(modelFactory: self, root: extended))
-        } else {
-            return deferMaybe(BookmarksModel(modelFactory: self, root: f))
+            return BookmarkFolderWithDefaults(folder: folder, sites: SuggestedSites)
         }
+
+        return folder
+    }
+
+    public func modelForFolder(guid: String, title: String) -> Deferred<Maybe<BookmarksModel>> {
+        guard let f = self.folderForGUID(guid, title: title) else {
+            return deferMaybe(DatabaseError(description: "Couldn't get children."))
+        }
+
+        return deferMaybe(BookmarksModel(modelFactory: self, root: f))
     }
 
     public func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
@@ -502,13 +510,62 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
 }
 
 extension SQLiteBookmarkMirrorStorage: BookmarksModelFactory {
+    private func getDesktopRoots() -> Deferred<Maybe<Cursor<BookmarkNode>>> {
+        let args: Args = [BookmarkRoots.RootGUID]
+        let folderType = BookmarkNodeType.Folder.rawValue
+        let sql =
+        "SELECT id, guid, type, title FROM \(TableBookmarksMirror) WHERE " +
+        "parentid = ? AND " +
+        "is_deleted = 0 AND " +
+        "type = \(folderType) AND " +
+        "title IS NOT '' " +
+        "ORDER BY guid ASC"
+        return self.db.runQuery(sql, args: args, factory: MirrorBookmarkNodeFactory.factory)
+    }
+
     private func cursorForGUID(guid: GUID) -> Deferred<Maybe<Cursor<BookmarkNode>>> {
         let args: Args = [guid]
         let sql =
-        "SELECT id, guid, type, bmkUri, title, pos FROM \(TableBookmarksMirror) WHERE " +
-            "parentid = ? AND is_deleted = 0 " +
-        "ORDER BY pos ASC"
+        "SELECT m.id AS id, m.guid AS guid, m.type AS type, m.bmkUri AS bmkUri, m.title AS title, " +
+        "s.idx AS idx FROM " +
+        "\(TableBookmarksMirror) AS m JOIN \(TableBookmarksMirrorStructure) AS s " +
+        "ON s.child = m.guid " +
+        "WHERE s.parent = ? AND " +
+        "m.is_deleted = 0 AND " +
+        "m.type <= 2 " +                // Bookmark or folder.
+        "ORDER BY idx ASC"
         return self.db.runQuery(sql, args: args, factory: MirrorBookmarkNodeFactory.factory)
+    }
+
+    /**
+     * Prepend the provided mobile bookmarks folder with a single folder.
+     * The prepended folder is "Desktop Bookmarks". It contains mirrored folders.
+     * We also *append* suggested sites.
+     */
+    public func extendWithDesktopBookmarksFolder(mobile: BookmarkFolder, factory: BookmarksModelFactory) -> Deferred<Maybe<BookmarksModel>> {
+
+        return self.getDesktopRoots() >>== { cursor in
+            if cursor.count == 0 {
+                // No desktop bookmarks.
+                log.debug("No desktop bookmarks. Only showing mobile.")
+                return deferMaybe(BookmarksModel(modelFactory: factory, root: mobile))
+            }
+
+            let desktop = self.folderForDesktopBookmarksCursor(cursor)
+            let prepended = PrependedBookmarkFolder(main: mobile, prepend: desktop)
+            return deferMaybe(BookmarksModel(modelFactory: self, root: prepended))
+        }
+    }
+
+    private func modelForDesktopBookmarks() -> Deferred<Maybe<BookmarksModel>> {
+        return self.getDesktopRoots() >>== { cursor in
+            let desktop = self.folderForDesktopBookmarksCursor(cursor)
+            return deferMaybe(BookmarksModel(modelFactory: self, root: desktop))
+        }
+    }
+
+    private func folderForDesktopBookmarksCursor(cursor: Cursor<BookmarkNode>) -> SQLiteBookmarkFolder {
+        return SQLiteBookmarkFolder(guid: "desktop_____", title: "Desktop Bookmarks", children: cursor)
     }
 
     private func modelForCursor(guid: GUID, title: String)(cursor: Cursor<BookmarkNode>) -> Deferred<Maybe<BookmarksModel>> {
@@ -529,13 +586,14 @@ extension SQLiteBookmarkMirrorStorage: BookmarksModelFactory {
             return self.modelForRoot()
         }
 
+        if guid == "desktop_____" {
+            return self.modelForDesktopBookmarks()
+        }
+
         return self.cursorForGUID(guid) >>== self.modelForCursor(guid, title: "")
     }
 
     public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
-        // Return a virtual model containing "Desktop bookmarks" prepended to the local mobile bookmarks.
-        // TODO
-        // Shiiiiiit, we need to know the places root. TODO TODO
         return self.modelForFolder(BookmarkRoots.RootGUID)
     }
 
@@ -609,8 +667,12 @@ extension MergedSQLiteBookmarks: BookmarksModelFactory {
 
     public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
         // Return a virtual model containing "Desktop bookmarks" prepended to the local mobile bookmarks.
-        // TODO
-        return self.local.modelForFolder(BookmarkRoots.MobileFolderGUID)
+
+        guard let mobile = self.local.folderForGUID(BookmarkRoots.MobileFolderGUID, title: "") else {
+            return deferMaybe(DatabaseError(description: "Unable to fetch mobile bookmarks."))
+        }
+
+        return self.mirror.extendWithDesktopBookmarksFolder(mobile, factory: self)
     }
 
     // Whenever async construction is necessary, we fall into a pattern of needing
