@@ -9,9 +9,6 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-private let ShortCircuitMissingMetaGlobal = true           // Do this so we don't exercise 'recovery' code.
-private let ShortCircuitMissingCryptoKeys = true           // Do this so we don't exercise 'recovery' code.
-
 private let StorageVersionCurrent = 5
 private let DefaultEngines: [String: Int] = ["tabs": 1]
 private let DefaultDeclined: [String] = [String]()
@@ -242,25 +239,13 @@ public class InvalidKeysError: SyncError {
     }
 }
 
-public class MissingMetaGlobalAndUnwillingError: SyncError {
-    public var description: String {
-        return "No meta/global on server, and we're unwilling to create one."
-    }
-}
-
-public class MissingCryptoKeysAndUnwillingError: SyncError {
-    public var description: String {
-        return "No crypto/keys on server, and we're unwilling to create one."
-    }
-}
-
 /*
  * Error states. These are errors that can be recovered from by taking actions.
  */
 
 public protocol RecoverableSyncState: SyncState, SyncError {
     // All error states must be able to advance to a usable state.
-    func advance() -> Deferred<Maybe<SyncState>>
+    func recover() -> ReadyDeferred
 }
 
 /**
@@ -284,10 +269,10 @@ public class ChangedServerError: RecoverableSyncState {
         self.newScratchpad = Scratchpad(b: scratchpad.syncKeyBundle, persistingTo: scratchpad.prefs)
     }
 
-    public func advance() -> Deferred<Maybe<SyncState>> {
+    public func recover() -> ReadyDeferred {
         // TODO: mutate local storage to allow for a fresh start.
         let state = InitialWithLiveToken(scratchpad: newScratchpad.checkpoint(), token: newToken)
-        return Deferred(value: Maybe(success: state))
+        return advanceSyncState(state)
     }
 }
 
@@ -309,23 +294,23 @@ public class SyncIDChangedError: RecoverableSyncState {
         self.newMetaGlobal = newMetaGlobal
     }
 
-    public func advance() -> Deferred<Maybe<SyncState>> {
+    public func recover() -> ReadyDeferred {
         // TODO: mutate local storage to allow for a fresh start.
         let s = self.previousState.scratchpad.evolve().setGlobal(self.newMetaGlobal).setKeys(nil).build().checkpoint()
         let state = HasMetaGlobal(client: self.previousState.client, scratchpad: s, token: self.previousState.token, info: self.previousState.info)
-        return Deferred(value: Maybe(success: state))
+        return advanceSyncState(state)
     }
 }
 
 /**
- * Recovery: wipe the server (perhaps unnecessarily), upload a new meta/global,
- * do a fresh start.
+ * Recovery: wipe the server (perhaps unnecessarily) and start fresh, uploading a
+ * new meta/global and a new crypto/keys.
  */
-public class MissingMetaGlobalError: RecoverableSyncState {
+public class Restart: RecoverableSyncState {
     public var label: SyncStateLabel { return SyncStateLabel.MissingMetaGlobal }
 
     public var description: String {
-        return "Missing meta/global."
+        return "Blank server: restart required."
     }
 
     private let previousState: BaseSyncStateWithInfo
@@ -339,26 +324,38 @@ public class MissingMetaGlobalError: RecoverableSyncState {
         return MetaGlobal(syncID: Bytes.generateGUID(), storageVersion: StorageVersionCurrent, engines: getDefaultEngines(), declined: DefaultDeclined)
     }
 
-    private func onWiped(resp: StorageResponse<JSON>, s: Scratchpad) -> Deferred<Maybe<SyncState>> {
-        // Upload a new meta/global.
-        // Note that we discard info/collections -- we just wiped storage.
-        return Deferred(value: Maybe(success: InitialWithLiveToken(client: self.previousState.client, scratchpad: s, token: self.previousState.token)))
-    }
-
-    private func advanceFromWiped(wipe: Deferred<Maybe<StorageResponse<JSON>>>) -> Deferred<Maybe<SyncState>> {
-        // TODO: mutate local storage to allow for a fresh start.
-        // Note that we discard the previous global and keys -- after all, we just wiped storage.
-
-        let s = self.previousState.scratchpad.evolve().setGlobal(nil).setKeys(nil).build().checkpoint()
-        return chainDeferred(wipe, f: { self.onWiped($0, s: s) })
-    }
-
-    public func advance() -> Deferred<Maybe<SyncState>> {
-        return self.advanceFromWiped(self.previousState.client.wipeStorage())
+    public func recover() -> ReadyDeferred {
+        let client = self.previousState.client
+        return client.wipeStorage()
+            >>> {
+                let s = self.previousState.scratchpad.evolve().setGlobal(nil).setKeys(nil).build().checkpoint()
+                // Upload a new meta/global ...
+                return client.uploadMetaGlobal(Restart.createMetaGlobal(nil, scratchpad: s), ifUnmodifiedSince: nil)
+                    // ... and a new crypto/keys.
+                    >>> { return client.uploadCryptoKeys(Keys.random(), withSyncKeyBundle: s.syncKeyBundle, ifUnmodifiedSince: nil) }
+                    >>> { return advanceSyncState(InitialWithLiveToken(client: client, scratchpad: s, token: self.previousState.token)) }
+        }
     }
 }
 
-// TODO
+public class MissingMetaGlobalError: RecoverableSyncState {
+    public var label: SyncStateLabel { return SyncStateLabel.MissingMetaGlobal }
+
+    public var description: String {
+        return "Missing meta/global."
+    }
+
+    private let previousState: BaseSyncStateWithInfo
+
+    public init(previousState: BaseSyncStateWithInfo) {
+        self.previousState = previousState
+    }
+
+    public func recover() -> ReadyDeferred {
+        return Restart(previousState: self.previousState).recover()
+    }
+}
+
 public class MissingCryptoKeysError: RecoverableSyncState {
     public var label: SyncStateLabel { return SyncStateLabel.MissingCryptoKeys }
 
@@ -366,8 +363,14 @@ public class MissingCryptoKeysError: RecoverableSyncState {
         return "Missing crypto/keys."
     }
 
-    public func advance() -> Deferred<Maybe<SyncState>> {
-        return Deferred(value: Maybe(failure: MissingCryptoKeysAndUnwillingError()))
+    private let previousState: BaseSyncStateWithInfo
+
+    public init(previousState: BaseSyncStateWithInfo) {
+        self.previousState = previousState
+    }
+
+    public func recover() -> ReadyDeferred {
+        return Restart(previousState: self.previousState).recover()
     }
 }
 
@@ -470,16 +473,6 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
         return ResolveMetaGlobal(fetched: fetched, client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
     }
 
-
-    func advanceAfterWipe(resp: StorageResponse<JSON>) -> ReadyDeferred {
-        // This will only be called on a successful response.
-        // Upload a new meta/global by advancing to an initial state.
-        // Note that we discard info/collections -- we just wiped storage.
-        let s = self.scratchpad.evolve().setGlobal(nil).setKeys(nil).build().checkpoint()
-        let initial: InitialWithLiveToken = InitialWithLiveToken(client: self.client, scratchpad: s, token: self.token)
-        return advanceSyncState(initial)
-    }
-
     func advance() -> ReadyDeferred {
         // TODO: detect when an individual collection syncID has changed, and make sure that
         //       collection is reset.
@@ -487,19 +480,15 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
         // First: check storage version.
         let v = fetched.value.storageVersion
         if v > StorageVersionCurrent {
+            // New storage version?  Uh-oh.  No recovery possible here.
             log.info("Client upgrade required for storage version \(v)")
             return Deferred(value: Maybe(failure: UpgradeRequiredError(target: v)))
         }
 
         if v < StorageVersionCurrent {
+            // Old storage version?  Uh-oh.  Wipe and upload both meta/global and crypto/keys.
             log.info("Server storage version \(v) is outdated.")
-
-            // Wipe the server and upload.
-            // TODO: if we're connecting for the first time, and this is an old server, try
-            //       to salvage old preferences from the old meta/global -- e.g., datatype elections.
-            //       This doesn't need to be implemented until we rev the storage format, which
-            //       might never happen.
-            return chainDeferred(client.wipeStorage(), f: self.advanceAfterWipe)
+            return MissingMetaGlobalError(previousState: self).recover()
         }
 
         // Second: check syncID and contents.
@@ -579,12 +568,7 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
             return failure
         }
 
-        // For now, avoid the risky stuff.
-        if ShortCircuitMissingMetaGlobal {
-            return MissingMetaGlobalAndUnwillingError()
-        }
-
-        if let _ = failure as? NotFound<StorageResponse<GlobalEnvelope>> {
+        if let _ = failure as? NotFound<NSHTTPURLResponse> {
             // OK, this is easy.
             // This state is responsible for creating the new m/g, uploading it, and
             // restarting with a clean scratchpad.
@@ -635,7 +619,11 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
             }
 
             // Otherwise, we have a failure state.
-            return Deferred(value: Maybe(failure: self.processFailure(result.failureValue)))
+            let failure = self.processFailure(result.failureValue)
+            guard let recoverable = failure as? RecoverableSyncState else {
+                return Deferred(value: Maybe(failure: failure))
+            }
+            return recoverable.recover()
         }
     }
 }
@@ -652,16 +640,9 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
     }
 
     private func processFailure(failure: MaybeErrorType?) -> MaybeErrorType {
-        // For now, avoid the risky stuff.
-        if ShortCircuitMissingCryptoKeys {
-            return MissingCryptoKeysAndUnwillingError()
-        }
-
-        if let _ = failure as? NotFound<StorageResponse<KeysPayload>> {
-            // This state is responsible for creating the new c/k, uploading it, and
-            // restarting with a clean scratchpad.
-            // But we haven't implemented it yet.
-            return MissingCryptoKeysError()
+        if let _ = failure as? NotFound<NSHTTPURLResponse> {
+            // No crypto/keys?  Uh-oh.  Wipe and upload both meta/global and crypto/keys.
+            return MissingMetaGlobalError(previousState: self)
         }
 
         // TODO: backoff etc. for all of these.
@@ -752,9 +733,13 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
                 return Deferred(value: Maybe(success: ready))
             }
 
-            // Otherwise, we have a failure state.
             // Much of this logic is shared with the meta/global fetch.
-            return Deferred(value: Maybe(failure: self.processFailure(result.failureValue)))
+            // Otherwise, we have a failure state.
+            let failure = self.processFailure(result.failureValue)
+            guard let recoverable = failure as? RecoverableSyncState else {
+                return Deferred(value: Maybe(failure: failure))
+            }
+            return recoverable.recover()
         }
     }
 }
