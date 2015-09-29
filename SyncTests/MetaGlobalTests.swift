@@ -67,7 +67,7 @@ class MetaGlobalTests: XCTestCase {
     func ready() -> ReadyDeferred {
         let syncPrefs = MockProfilePrefs()
         let authState: SyncAuthState = MockSyncAuthState(serverRoot: serverRoot, kB: kB)
-        return SyncStateMachine.toReady(authState, prefs: syncPrefs)
+        return SyncStateMachine(prefs: syncPrefs).toReady(authState)
     }
 
     func assertFreshStart(ready: Ready?, after: Timestamp) {
@@ -104,7 +104,6 @@ class MetaGlobalTests: XCTestCase {
             XCTAssertNil(error, "\(error)")
         }
     }
-
 
     func testMetaGlobalVersionTooOld() {
         // To recover from a meta/global version "in the past", fresh start.
