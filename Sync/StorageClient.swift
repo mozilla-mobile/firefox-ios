@@ -275,7 +275,13 @@ public class Sync15StorageClient {
         self.backoff = backoff
 
         // This is a potentially dangerous assumption, but failable initializers up the stack are a giant pain.
-        self.serverURI = NSURL(string: token.api_endpoint)!
+        // We want the serverURI to *not* have a trailing slash: to efficiently wipe a user's storage, we delete
+        // the user root (like /1.5/1234567) and not an "empty collection" (like /1.5/1234567/); the storage
+        // server treats the first like a DROP table and the latter like a DELETE *, and the former is more
+        // efficient than the latter.
+        self.serverURI = NSURL(string: token.api_endpoint.endsWith("/")
+            ? token.api_endpoint.substringToIndex(token.api_endpoint.endIndex.predecessor())
+            : token.api_endpoint)!
         self.authorizer = {
             (r: NSMutableURLRequest) -> NSMutableURLRequest in
             let helper = HawkHelper(id: token.id, key: token.key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
@@ -446,7 +452,15 @@ public class Sync15StorageClient {
             return deferred
         }
 
-        let req = op(self.serverURI.URLByAppendingPathComponent(path))
+        // Special case "": we want /1.5/1234567 and not /1.5/1234567/.  See note about trailing slashes above.
+        let url: NSURL
+        if path == "" {
+            url = self.serverURI // No trailing slash.
+        } else {
+            url = self.serverURI.URLByAppendingPathComponent(path)
+        }
+
+        let req = op(url)
         let handler = self.errorWrap(deferred) { (_, response, result) in
             if let json: JSON = result.value as? JSON {
                 if let v = f(json) {
