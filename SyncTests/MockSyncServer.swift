@@ -247,10 +247,10 @@ class MockSyncServer {
     }
 
     func start() {
-        let basePath = "/1.5/\(self.username)/"
-        let storagePath = "\(basePath)storage/"
+        let basePath = "/1.5/\(self.username)"
+        let storagePath = "\(basePath)/storage/"
 
-        let infoCollectionsPath = "\(basePath)info/collections"
+        let infoCollectionsPath = "\(basePath)/info/collections"
         server.addHandlerForMethod("GET", path: infoCollectionsPath, requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var ic = [String: NSNumber]()
             for (collection, map) in self.collections {
@@ -267,7 +267,7 @@ class MockSyncServer {
         }
 
         let matchPut: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
-            guard method == "PUT" && path.startsWith(basePath) else {
+            guard method == "PUT" && path.startsWith(storagePath) else {
                 return nil
             }
             return GCDWebServerDataRequest(method: method, url: url, headers: headers, path: path, query: query)
