@@ -788,9 +788,9 @@ class SettingsTableViewController: UITableViewController {
         settings += [
             SettingSection(title: NSAttributedString(string: privacyTitle), children: [
                 ClearPrivateDataSetting(settings: self),
+                ClosePrivateTabs(settings: self),
                 SendCrashReportsSetting(settings: self),
                 PrivacyPolicySetting(),
-                ClosePrivateTabs(settings: self),
             ]),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
                 ShowIntroductionSetting(settings: self),
@@ -923,7 +923,7 @@ class SettingsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         //make account/sign-in and close private tabs rows taller, as per design specs
         if ((indexPath.section == 0 && indexPath.row == 0) ||
-            (indexPath.section == 2 && indexPath.row == 3)) {
+            (indexPath.section == 2 && indexPath.row == 1)) {
             return 64
         }
         return 44
