@@ -35,6 +35,7 @@ public typealias ReadyDeferred = Deferred<Maybe<Ready>>
 public class SyncStateMachine {
     // The keys are used as a set, to prevent cycles in the state machine.
     var stateLabelsSeen = [SyncStateLabel: Bool]()
+    var stateLabelSequence = [SyncStateLabel]()
 
     let scratchpadPrefs: Prefs
 
@@ -50,13 +51,17 @@ public class SyncStateMachine {
 
     private func advanceFromState(state: SyncState) -> ReadyDeferred {
         log.info("advanceFromState: \(state.label)")
+
+        // Record visibility before taking any action.
+        let labelAlreadySeen = self.stateLabelsSeen.updateValue(true, forKey: state.label) != nil
+        stateLabelSequence.append(state.label)
+
         if let ready = state as? Ready {
             // Sweet, we made it!
             return deferMaybe(ready)
         }
 
         // Cycles are not necessarily a problem, but seeing the same (recoverable) error condition is a problem.
-        let labelAlreadySeen = self.stateLabelsSeen.updateValue(true, forKey: state.label) != nil
         if state is RecoverableSyncState && labelAlreadySeen {
             return deferMaybe(StateMachineCycleError())
         }
@@ -105,6 +110,8 @@ public enum SyncStateLabel: String {
     case MissingCryptoKeys = "missingCryptoKeys"
     case MalformedCryptoKeys = "malformedCryptoKeys"
     case SyncIDChanged = "syncIDChanged"
+    case RemoteUpgradeRequired = "remoteUpgradeRequired"
+    case ClientUpgradeRequired = "clientUpgradeRequired"
 
     static let allValues: [SyncStateLabel] = [
         InitialWithExpiredToken,
@@ -124,6 +131,8 @@ public enum SyncStateLabel: String {
         MissingCryptoKeys,
         MalformedCryptoKeys,
         SyncIDChanged,
+        RemoteUpgradeRequired,
+        ClientUpgradeRequired,
     ]
 }
 
@@ -249,7 +258,7 @@ public class StubStateError: SyncError {
     }
 }
 
-public class UpgradeRequiredError: SyncError {
+public class ClientUpgradeRequiredError: SyncError {
     let targetStorageVersion: Int
 
     public init(target: Int) {
@@ -257,7 +266,7 @@ public class UpgradeRequiredError: SyncError {
     }
 
     public var description: String {
-        return "Upgrade required to work with storage version \(self.targetStorageVersion)."
+        return "Client upgrade required to work with storage version \(self.targetStorageVersion)."
     }
 }
 
@@ -403,6 +412,36 @@ public class MissingCryptoKeysError: RecoverableSyncState {
     }
 }
 
+public class RemoteUpgradeRequired: RecoverableSyncState {
+    public var label: SyncStateLabel { return SyncStateLabel.RemoteUpgradeRequired }
+
+    private let previousState: BaseSyncStateWithInfo
+
+    public init(previousState: BaseSyncStateWithInfo) {
+        self.previousState = previousState
+    }
+
+    public func advance() -> Deferred<Maybe<SyncState>> {
+        return deferMaybe(FreshStartRequiredError(previousState: self.previousState))
+    }
+}
+
+public class ClientUpgradeRequired: RecoverableSyncState {
+    public var label: SyncStateLabel { return SyncStateLabel.ClientUpgradeRequired }
+
+    private let previousState: BaseSyncStateWithInfo
+    let targetStorageVersion: Int
+
+    public init(previousState: BaseSyncStateWithInfo, target: Int) {
+        self.previousState = previousState
+        self.targetStorageVersion = target
+    }
+
+    public func advance() -> Deferred<Maybe<SyncState>> {
+        return deferMaybe(ClientUpgradeRequiredError(target: self.targetStorageVersion))
+    }
+}
+
 /*
  * Non-error states.
  */
@@ -468,13 +507,13 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
         if v > StorageVersionCurrent {
             // New storage version?  Uh-oh.  No recovery possible here.
             log.info("Client upgrade required for storage version \(v)")
-            return deferMaybe(UpgradeRequiredError(target: v))
+            return deferMaybe(ClientUpgradeRequired(previousState: self, target: v))
         }
 
         if v < StorageVersionCurrent {
             // Old storage version?  Uh-oh.  Wipe and upload both meta/global and crypto/keys.
             log.info("Server storage version \(v) is outdated.")
-            return deferMaybe(MissingMetaGlobalError(previousState: self))
+            return deferMaybe(RemoteUpgradeRequired(previousState: self))
         }
 
         // Second: check syncID and contents.
@@ -605,7 +644,7 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
                 // OK, this is easy.
                 // This state is responsible for creating the new m/g, uploading it, and
                 // restarting with a clean scratchpad.
-                return deferMaybe(FreshStartRequiredError(previousState: self))
+                return deferMaybe(MissingMetaGlobalError(previousState: self))
             }
 
             // Otherwise, we have a failure state.  Die on the sword!
