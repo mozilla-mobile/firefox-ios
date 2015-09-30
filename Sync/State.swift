@@ -39,6 +39,7 @@ private let PrefGlobalTS = "globalTS"
 private let PrefKeyLabel = "keyLabel"
 private let PrefKeysTS = "keysTS"
 private let PrefLastFetched = "lastFetched"
+private let PrefNeedsLocalReset = "needsLocalReset"
 private let PrefClientName = "clientName"
 private let PrefClientGUID = "clientGUID"
 
@@ -98,6 +99,7 @@ public class Scratchpad {
         private var keys: Fetched<Keys>?
         private var keyLabel: String
         var collectionLastFetched: [String: Timestamp]
+        var collectionNeedsLocalReset: [String: Bool]
         var engineConfiguration: EngineConfiguration?
         var clientGUID: String
         var clientName: String
@@ -113,12 +115,36 @@ public class Scratchpad {
             self.keyLabel = p.keyLabel
 
             self.collectionLastFetched = p.collectionLastFetched
+            self.collectionNeedsLocalReset = p.collectionNeedsLocalReset
             self.engineConfiguration = p.engineConfiguration
             self.clientGUID = p.clientGUID
             self.clientName = p.clientName
         }
 
+        public func setCollectionsThatCanBeReset(collections: [String]) -> Builder {
+            self.collectionNeedsLocalReset.removeAll()
+            for collection in collections {
+                self.collectionNeedsLocalReset.updateValue(false, forKey: collection)
+            }
+            return self
+        }
+
         public func setKeys(keys: Fetched<Keys>?) -> Builder {
+            // Getting new keys forces local collection resets.
+            if let freshKeys = keys?.value, staleKeys = self.keys?.value where staleKeys.valid {
+                // New keys, and we have valid old keys.  Each must agree individually, falling through to the default key on both sides.
+                for collection in self.collectionNeedsLocalReset.keys {
+                    if staleKeys.forCollection(collection) != freshKeys.forCollection(collection) {
+                        self.collectionNeedsLocalReset.updateValue(true, forKey: collection)
+                    }
+                }
+            } else {
+                // Removing keys, or new keys and either we didn't have old keys or they weren't valid.  Everybody gets a reset!
+                for collection in self.collectionNeedsLocalReset.keys {
+                    self.collectionNeedsLocalReset.updateValue(true, forKey: collection)
+                }
+            }
+
             self.keys = keys
             if let keys = keys {
                 self.collectionLastFetched["crypto"] = keys.timestamp
@@ -146,6 +172,7 @@ public class Scratchpad {
                     k: self.keys,
                     keyLabel: self.keyLabel,
                     fetches: self.collectionLastFetched,
+                    resets: self.collectionNeedsLocalReset,
                     engines: self.engineConfiguration,
                     clientGUID: self.clientGUID,
                     clientName: self.clientName,
@@ -195,6 +222,9 @@ public class Scratchpad {
     // Collection timestamps.
     var collectionLastFetched: [String: Timestamp]
 
+    // Collections needing local reset.
+    var collectionNeedsLocalReset: [String: Bool]
+
     // Enablement states.
     let engineConfiguration: EngineConfiguration?
 
@@ -210,6 +240,7 @@ public class Scratchpad {
          k: Fetched<Keys>?,
          keyLabel: String,
          fetches: [String: Timestamp],
+         resets: [String: Bool],
          engines: EngineConfiguration?,
          clientGUID: String,
          clientName: String,
@@ -223,6 +254,7 @@ public class Scratchpad {
         self.global = m
         self.engineConfiguration = engines
         self.collectionLastFetched = fetches
+        self.collectionNeedsLocalReset = resets
         self.clientGUID = clientGUID
         self.clientName = clientName
     }
@@ -238,6 +270,7 @@ public class Scratchpad {
         self.global = nil
         self.engineConfiguration = nil
         self.collectionLastFetched = [String: Timestamp]()
+        self.collectionNeedsLocalReset = [String: Bool]()
         self.clientGUID = Bytes.generateGUID()
         self.clientName = DeviceInfo.defaultClientName()
     }
@@ -245,6 +278,11 @@ public class Scratchpad {
     // For convenience.
     func withGlobal(m: Fetched<MetaGlobal>?) -> Scratchpad {
         return self.evolve().setGlobal(m).build()
+    }
+
+    // For convenience.
+    func withCollectionsThatCanBeReset(collections: [String]) -> Scratchpad {
+        return self.evolve().setCollectionsThatCanBeReset(collections).build()
     }
 
     func freshStartWithGlobal(global: Fetched<MetaGlobal>) -> Scratchpad {

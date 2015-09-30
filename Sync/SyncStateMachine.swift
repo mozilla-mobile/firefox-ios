@@ -10,7 +10,34 @@ import XCGLogger
 private let log = Logger.syncLogger
 
 private let StorageVersionCurrent = 5
-private let DefaultEngines: [String: Int] = ["tabs": 1]
+
+// Names of collections for which a synchronizer is implemented locally.
+private let LocalEngines: [String] = [
+    "bookmarks",
+    "clients",
+    "forms",
+    "history",
+    "passwords",
+    "tabs",
+]
+
+// Names of collections which will appear in a default meta/global produced locally.
+// Map collection name to engine version.  See http://docs.services.mozilla.com/sync/objectformats.html.
+private let DefaultEngines: [String: Int] = [
+    "bookmarks": 2,
+    "clients": 1,
+    "forms": 1,
+    "history": 1,
+    "passwords": 1,
+    "tabs": 1,
+    // We opt-in to syncing collections we don't know about, since no client offers to sync non-enabled,
+    // non-declined engines yet.  See Bug 969669.
+    "addons": 1,
+    "prefs": 2,
+]
+
+// Names of collections which will appear as declined in a default
+// meta/global produced locally.
 private let DefaultDeclined: [String] = [String]()
 
 private func getDefaultEngines() -> [String: EngineMeta] {
@@ -82,7 +109,8 @@ public class SyncStateMachine {
             if prior == nil {
                 log.info("No persisted Sync state. Starting over.")
             }
-            let scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: self.scratchpadPrefs)
+            var scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKB(kB), persistingTo: self.scratchpadPrefs)
+            scratchpad = scratchpad.withCollectionsThatCanBeReset(LocalEngines)
 
             log.info("Advancing to InitialWithLiveToken.")
             let state = InitialWithLiveToken(scratchpad: scratchpad, token: token)
@@ -737,10 +765,6 @@ public class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
                 // other records in that collection, even if there are we don't care about them.
                 let fetched = Fetched(value: collectionKeys, timestamp: resp.value.modified)
                 let s = self.scratchpad.evolve().setKeys(fetched).build().checkpoint()
-
-                if let staleCollectionKeys = self.staleCollectionKeys {
-                    // We have work to do.  We need to reset all the local collections that are no longer fresh.
-                }
                 return deferMaybe(HasFreshCryptoKeys.fromState(self, scratchpad: s, collectionKeys: collectionKeys))
             }
 
@@ -780,5 +804,16 @@ public class Ready: BaseSyncStateWithInfo {
     public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections, keys: Keys) {
         self.collectionKeys = keys
         super.init(client: client, scratchpad: scratchpad, token: token, info: info)
+    }
+
+    public func collectionsThatNeedLocalReset() -> [String] {
+        var collections = [String]()
+        for (collection, value) in self.scratchpad.collectionNeedsLocalReset {
+            if value {
+                collections.append(collection)
+            }
+        }
+        collections.sortInPlace() // Ease testing.
+        return collections
     }
 }
