@@ -220,14 +220,12 @@ public class Keys: Equatable {
     }
 
     public init(payload: KeysPayload?) {
-        if let payload = payload {
-            if payload.isValid() {
-                if let keys = payload.defaultKeys {
-                    self.defaultBundle = keys
-                    self.valid = true
-                    return
-                }
+        if let payload = payload where payload.isValid() {
+            if let keys = payload.defaultKeys {
+                self.defaultBundle = keys
                 self.collectionKeys = payload.collectionKeys
+                self.valid = true
+                return
             }
         }
         self.defaultBundle = KeyBundle.invalid
