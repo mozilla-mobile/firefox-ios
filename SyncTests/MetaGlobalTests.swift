@@ -62,9 +62,8 @@ class MetaGlobalTests: XCTestCase {
         server.storeRecords([envelope], inCollection: "meta")
     }
 
-    func storeKeys(keys: Keys) {
+    func storeCryptoKeys(keys: Keys) {
         let keyBundle = KeyBundle.fromKB(kB)
-        let keys = Keys(defaultBundle: keyBundle)
         let record = Record(id: "keys", payload: keys.asPayload())
         let envelope = EnvelopeJSON(keyBundle.serializer({ $0 })(record)!)
         server.storeRecords([envelope], inCollection: "crypto")
@@ -84,14 +83,14 @@ class MetaGlobalTests: XCTestCase {
         XCTAssertNotNil(ready.scratchpad.keys)
         // Basic verifications.
         XCTAssertEqual(ready.collectionKeys.defaultBundle.encKey.length, 32)
-        if let clients = ready.scratchpad.global?.value.engines?["clients"] {
+        if let clients = ready.scratchpad.global?.value.engines["clients"] {
             XCTAssertTrue(clients.syncID.characters.count == 12)
         }
     }
 
     func testMetaGlobalVersionTooNew() {
         // There's no recovery from a meta/global version "in the future": just bail out with an UpgradeRequiredError.
-        storeMetaGlobal(MetaGlobal(syncID: "id", storageVersion: 6, engines: [String: EngineMeta](), declined: nil))
+        storeMetaGlobal(MetaGlobal(syncID: "id", storageVersion: 6, engines: [String: EngineMeta](), declined: []))
 
         let expectation = expectationWithDescription("Waiting on value.")
         stateMachine.toReady(authState).upon { result in
@@ -108,7 +107,7 @@ class MetaGlobalTests: XCTestCase {
 
     func testMetaGlobalVersionTooOld() {
         // To recover from a meta/global version "in the past", fresh start.
-        storeMetaGlobal(MetaGlobal(syncID: "id", storageVersion: 4, engines: [String: EngineMeta](), declined: nil))
+        storeMetaGlobal(MetaGlobal(syncID: "id", storageVersion: 4, engines: [String: EngineMeta](), declined: []))
 
         let afterStores = now()
         let expectation = expectationWithDescription("Waiting on value.")
@@ -146,7 +145,7 @@ class MetaGlobalTests: XCTestCase {
 
     func testCryptoKeysMissing() {
         // To recover from a missing crypto/keys, fresh start.
-        storeMetaGlobal(MetaGlobal(syncID: "id", storageVersion: 5, engines: [String: EngineMeta](), declined: nil))
+        storeMetaGlobal(MetaGlobal(syncID: "id", storageVersion: 5, engines: [String: EngineMeta](), declined: []))
 
         let afterStores = now()
         let expectation = expectationWithDescription("Waiting on value.")
@@ -156,6 +155,61 @@ class MetaGlobalTests: XCTestCase {
             XCTAssertTrue(result.isSuccess)
             XCTAssertNil(result.failureValue)
             expectation.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(2000) { (error) in
+            XCTAssertNil(error, "\(error)")
+        }
+    }
+
+    func testMetaGlobalAndCryptoKeysFresh() {
+        // When encountering a valid meta/global and crypto/keys, advance smoothly.
+        let metaGlobal = MetaGlobal(syncID: "id", storageVersion: 5, engines: [String: EngineMeta](), declined: [])
+        let cryptoKeys = Keys.random()
+        storeMetaGlobal(metaGlobal)
+        storeCryptoKeys(cryptoKeys)
+
+        var metaGlobalTimestamp: Timestamp!
+        var cryptoKeysTimestamp: Timestamp!
+
+        let expectation = expectationWithDescription("Waiting on value.")
+        stateMachine.toReady(authState).upon { result in
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobal", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertNotNil(result.successValue)
+            guard let ready = result.successValue else {
+                return
+            }
+            metaGlobalTimestamp = ready.scratchpad.global!.timestamp
+            cryptoKeysTimestamp = ready.scratchpad.keys!.timestamp
+
+            // And we should have downloaded meta/global and crypto/keys.
+            XCTAssertEqual(ready.scratchpad.global?.value, metaGlobal)
+            XCTAssertEqual(ready.scratchpad.keys?.value, cryptoKeys)
+
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNil(result.failureValue)
+            expectation.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(2000) { (error) in
+            XCTAssertNil(error, "\(error)")
+        }
+
+        // Now, run through the state machine again.  Nothing's changed remotely, so we should advance quickly.
+        let secondExpectation = expectationWithDescription("Waiting on value.")
+        stateMachine.toReady(authState).upon { result in
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "hasMetaGlobal", "hasFreshCryptoKeys", "ready"])
+            XCTAssertNotNil(result.successValue)
+            guard let ready = result.successValue else {
+                return
+            }
+            // And we should have not downloaded a fresh meta/global or crypto/keys.
+            XCTAssertEqual(ready.scratchpad.global?.timestamp, metaGlobalTimestamp)
+            XCTAssertEqual(ready.scratchpad.keys?.timestamp, cryptoKeysTimestamp)
+
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNil(result.failureValue)
+            secondExpectation.fulfill()
         }
 
         waitForExpectationsWithTimeout(2000) { (error) in
