@@ -101,9 +101,11 @@ public enum SyncStateLabel: String {
     case ResolveMetaGlobal = "resolveMetaGlobal"
     case NewMetaGlobal = "newMetaGlobal"
     case HasMetaGlobal = "hasMetaGlobal"
+    case NeedsFreshCryptoKeys = "needsFreshCryptoKeys"
+    case HasFreshCryptoKeys = "hasFreshCryptoKeys"
+    case Ready = "ready"
     case FreshStartRequired = "freshStartRequired"                                  // Go around again... once only, perhaps.
     case ServerConfigurationRequired = "serverConfigurationRequired"
-    case Ready = "ready"
 
     case ChangedServer = "changedServer"
     case MissingMetaGlobal = "missingMetaGlobal"
@@ -121,6 +123,8 @@ public enum SyncStateLabel: String {
         ResolveMetaGlobal,
         NewMetaGlobal,
         HasMetaGlobal,
+        NeedsFreshCryptoKeys,
+        HasFreshCryptoKeys,
         Ready,
 
         FreshStartRequired,
@@ -665,60 +669,58 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
     }
 
     override public func advance() -> Deferred<Maybe<SyncState>> {
-        // Fetch crypto/keys, unless it's present in the cache already.
-
+        // Check if crypto/keys is fresh in the cache already.
         if let keys = self.scratchpad.keys where keys.value.valid {
             if let cryptoModified = self.info.modified("crypto") {
                 // Both of these are server timestamps. If the record we stored has the
                 // same modified time as the server collection, and we're fetching from the
                 // same server, then the record must be identical, and we can use it directly.
-                // If the server timestamp is newer, there might be new keys.
-                // If the server timestamp is older, something horribly wrong has occurred.
                 if cryptoModified == keys.timestamp {
                     log.debug("Using cached collection keys for ready state.")
-                    let ready = Ready(client: self.client, scratchpad: self.scratchpad, token: self.token, info: self.info, keys: keys.value)
-                    return Deferred(value: Maybe(success: ready))
+                    return deferMaybe(HasFreshCryptoKeys.fromState(self, scratchpad: self.scratchpad, collectionKeys: keys.value))
                 }
 
-                log.warning("Cached keys with timestamp \(keys.timestamp) disagree with server modified \(cryptoModified).")
+                if cryptoModified < keys.timestamp {
+                    // If the server timestamp is older, something horribly wrong has occurred.
+                    log.warning("Cached keys with timestamp \(keys.timestamp) newer than server modified \(cryptoModified). This should never happen! Dropping stale cached keys.")
+                    self.scratchpad = self.scratchpad.evolve().setKeys(nil).build().checkpoint()
+                }
 
+                // The server timestamp is newer, so there might be new keys.
                 // Re-fetch keys and check to see if the actual contents differ.
                 // If the keys are the same, we can ignore this change. If they differ,
                 // we need to re-sync any collection whose keys just changed.
-                // TODO TODO TODO: do that work.
-                log.error("Unable to handle key evolution. Sorry.")
-                return Deferred(value: Maybe(failure: InvalidKeysError(keys.value)))
+                log.info("Cached keys with timestamp \(keys.timestamp) older than server modified \(cryptoModified). Fetching fresh keys.")
+                return deferMaybe(NeedsFreshCryptoKeys.fromState(self, scratchpad: self.scratchpad, staleCollectionKeys: keys.value))
             } else {
                 // No known modified time for crypto/. That likely means the server has no keys.
                 // Drop our cached value and fall through; we'll try to fetch, fail, and
                 // go through the usual failure flow.
                 log.warning("Local keys found timestamped \(keys.timestamp), but no crypto collection on server. Dropping cached keys.")
                 self.scratchpad = self.scratchpad.evolve().setKeys(nil).build().checkpoint()
-
-                // TODO: we need to do a full sync when we have new keys.
             }
         }
 
-        //
-        // N.B., we assume that if the server has a meta/global, we don't have a cached crypto/keys,
-        // and the server doesn't have crypto/keys, that the server was wiped.
-        //
-        // This assumption is basically so that we don't get trapped in a cycle of seeing this situation,
-        // blanking the server, trying to upload meta/global, getting interrupted, and so on.
-        //
-        // I think this is pretty safe. TODO: verify this assumption by reading a-s and desktop code.
-        //
-        // TODO: detect when the keys have changed, and scream and run away if so.
-        // TODO: upload keys if necessary, then go to Restart.
-        let syncKey = Keys(defaultBundle: self.scratchpad.syncKeyBundle)
-        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0 })
-        let encrypter = syncKey.encrypter("keys", encoder: encoder)
-        let client = self.client.clientForCollection("crypto", encrypter: encrypter)
+        return deferMaybe(NeedsFreshCryptoKeys.fromState(self, scratchpad: self.scratchpad, staleCollectionKeys: nil))
+    }
+}
 
-        // TODO: this assumes that there are keys on the server. Check first, and if there aren't,
-        // go ahead and go to an upload state without having to fail.
-        return client.get("keys").bind {
-            result in
+public class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
+    public override var label: SyncStateLabel { return SyncStateLabel.NeedsFreshCryptoKeys }
+    let staleCollectionKeys: Keys?
+
+    class func fromState(state: BaseSyncStateWithInfo, scratchpad: Scratchpad, staleCollectionKeys: Keys?) -> NeedsFreshCryptoKeys {
+        return NeedsFreshCryptoKeys(client: state.client, scratchpad: scratchpad, token: state.token, info: state.info, keys: staleCollectionKeys)
+    }
+
+    public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections, keys: Keys?) {
+        self.staleCollectionKeys = keys
+        super.init(client: client, scratchpad: scratchpad, token: token, info: info)
+    }
+
+    override public func advance() -> Deferred<Maybe<SyncState>> {
+        // Fetch crypto/keys.
+        return self.client.getCryptoKeys(self.scratchpad.syncKeyBundle, ifUnmodifiedSince: nil).bind { result in
             if let resp = result.successValue {
                 let collectionKeys = Keys(payload: resp.value.payload)
                 if (!collectionKeys.valid) {
@@ -730,10 +732,11 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
                 // other records in that collection, even if there are we don't care about them.
                 let fetched = Fetched(value: collectionKeys, timestamp: resp.value.modified)
                 let s = self.scratchpad.evolve().setKeys(fetched).build().checkpoint()
-                let ready = Ready(client: self.client, scratchpad: s, token: self.token, info: self.info, keys: collectionKeys)
 
-                log.info("Arrived in Ready state.")
-                return deferMaybe(ready)
+                if let staleCollectionKeys = self.staleCollectionKeys {
+                    // We have work to do.  We need to reset all the local collections that are no longer fresh.
+                }
+                return deferMaybe(HasFreshCryptoKeys.fromState(self, scratchpad: s, collectionKeys: collectionKeys))
             }
 
             if let _ = result.failureValue as? NotFound<NSHTTPURLResponse> {
@@ -744,6 +747,24 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
             // Otherwise, we have a failure state.
             return deferMaybe(processFailure(result.failureValue))
         }
+    }
+}
+
+public class HasFreshCryptoKeys: BaseSyncStateWithInfo {
+    public override var label: SyncStateLabel { return SyncStateLabel.HasFreshCryptoKeys }
+    let collectionKeys: Keys
+
+    class func fromState(state: BaseSyncStateWithInfo, scratchpad: Scratchpad, collectionKeys: Keys) -> HasFreshCryptoKeys {
+        return HasFreshCryptoKeys(client: state.client, scratchpad: scratchpad, token: state.token, info: state.info, keys: collectionKeys)
+    }
+
+    public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections, keys: Keys) {
+        self.collectionKeys = keys
+        super.init(client: client, scratchpad: scratchpad, token: token, info: info)
+    }
+
+    override public func advance() -> Deferred<Maybe<SyncState>> {
+        return deferMaybe(Ready(client: self.client, scratchpad: self.scratchpad, token: self.token, info: self.info, keys: self.collectionKeys))
     }
 }
 
