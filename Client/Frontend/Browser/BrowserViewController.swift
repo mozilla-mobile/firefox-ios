@@ -1929,7 +1929,7 @@ private class BrowserScreenshotHelper: ScreenshotHelper {
 
     func takeScreenshot(tab: Browser, aspectRatio: CGFloat, quality: CGFloat) -> UIImage? {
         if let url = tab.url {
-            if url == UIConstants.AboutHomeURL {
+            if AboutUtils.isAboutHomeURL(url) {
                 if let homePanel = controller?.homePanelController {
                     return homePanel.view.screenshot(aspectRatio, quality: quality)
                 }
