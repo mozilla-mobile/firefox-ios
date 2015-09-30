@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
 
-        let defaultRequest = NSURLRequest(URL: UIConstants.AboutHomeURL)
+        let defaultRequest = NSURLRequest(URL: UIConstants.DefaultHomePage)
         self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, profile: profile)
         browserViewController = BrowserViewController(profile: profile, tabManager: self.tabManager)
 
