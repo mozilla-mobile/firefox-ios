@@ -80,8 +80,8 @@ public func ==(lhs: EngineMeta, rhs: EngineMeta) -> Bool {
 public struct MetaGlobal: Equatable {
     let syncID: String
     let storageVersion: Int
-    let engines: [String: EngineMeta]?      // Is this really optional?
-    let declined: [String]?
+    let engines: [String: EngineMeta]
+    let declined: [String]
 
     public static func fromPayload(string: String) -> MetaGlobal? {
         return fromPayload(JSON(string: string))
@@ -95,22 +95,19 @@ public struct MetaGlobal: Equatable {
         }
         if let syncID = json["syncID"].asString {
             if let storageVersion = json["storageVersion"].asInt {
-                let engines = EngineMeta.mapFromJSON(json["engines"].asDictionary)
-                let declined = json["declined"].asArray
+                let engines = EngineMeta.mapFromJSON(json["engines"].asDictionary) ?? [:]
+                let declined = json["declined"].asArray ?? []
                 return MetaGlobal(syncID: syncID,
                                   storageVersion: storageVersion,
                                   engines: engines,
-                                  declined: jsonsToStrings(declined))
+                                  declined: jsonsToStrings(declined) ?? [])
             }
         }
         return nil
     }
 
     public func enginesPayload() -> JSON {
-        if let engines = engines {
-            return JSON(mapValues(engines, f: { $0.toJSON() }))
-        }
-        return JSON([:])
+        return JSON(mapValues(engines, f: { $0.toJSON() }))
     }
 
     // TODO: make a whole record JSON for this.
@@ -119,7 +116,7 @@ public struct MetaGlobal: Equatable {
             "syncID": self.syncID,
             "storageVersion": self.storageVersion,
             "engines": enginesPayload(),
-            "declined": JSON(self.declined ?? [])
+            "declined": JSON(self.declined)
         ])
         return CleartextPayloadJSON(json)
     }

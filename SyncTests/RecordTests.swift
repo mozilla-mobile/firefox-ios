@@ -140,13 +140,11 @@ class RecordTests: XCTestCase {
         XCTAssertTrue(global != nil)
 
         if let global = global {
-            XCTAssertTrue(global.declined != nil)
-            XCTAssertTrue(global.engines != nil)
-            XCTAssertEqual(["bookmarks"], global.declined!)
+            XCTAssertEqual(["bookmarks"], global.declined)
             XCTAssertEqual(5, global.storageVersion)
             let modified = record.modified
             XCTAssertTrue(1320460737440 == modified)
-            let forms = global.engines!["forms"]
+            let forms = global.engines["forms"]
             let syncID = forms!.syncID
             XCTAssertEqual("GXF29AFprnvc", syncID)
 
