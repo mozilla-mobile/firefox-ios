@@ -35,12 +35,18 @@ class MetaGlobalTests: XCTestCase {
     var server: MockSyncServer!
     var serverRoot: String!
     var kB: NSData!
+    var syncPrefs: Prefs!
+    var authState: SyncAuthState!
+    var stateMachine: SyncStateMachine!
 
     override func setUp() {
         kB = NSData.randomOfLength(32)!
         server = MockSyncServer(username: "1234567")
         server.start()
         serverRoot = server.baseURL
+        syncPrefs = MockProfilePrefs()
+        authState = MockSyncAuthState(serverRoot: serverRoot, kB: kB)
+        stateMachine = SyncStateMachine(prefs: syncPrefs)
     }
 
     func now() -> Timestamp {
@@ -64,10 +70,8 @@ class MetaGlobalTests: XCTestCase {
         server.storeRecords([envelope], inCollection: "crypto")
     }
 
-    func ready() -> ReadyDeferred {
-        let syncPrefs = MockProfilePrefs()
-        let authState: SyncAuthState = MockSyncAuthState(serverRoot: serverRoot, kB: kB)
-        return SyncStateMachine(prefs: syncPrefs).toReady(authState)
+    func assertStateLabelsSeen(stateLabelsSeen: [String]) {
+        XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, stateLabelsSeen)
     }
 
     func assertFreshStart(ready: Ready?, after: Timestamp) {
@@ -94,8 +98,9 @@ class MetaGlobalTests: XCTestCase {
         storeMetaGlobal(MetaGlobal(syncID: "id", storageVersion: 6, engines: [String: EngineMeta](), declined: nil))
 
         let expectation = expectationWithDescription("Waiting on value.")
-        ready().upon { result in
-            XCTAssertNotNil(result.failureValue as? UpgradeRequiredError)
+        stateMachine.toReady(authState).upon { result in
+            self.assertStateLabelsSeen(["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobal", "clientUpgradeRequired"])
+            XCTAssertNotNil(result.failureValue as? ClientUpgradeRequiredError)
             XCTAssertNil(result.successValue)
             expectation.fulfill()
         }
@@ -111,7 +116,8 @@ class MetaGlobalTests: XCTestCase {
 
         let afterStores = now()
         let expectation = expectationWithDescription("Waiting on value.")
-        ready().upon { result in
+        stateMachine.toReady(authState).upon { result in
+            self.assertStateLabelsSeen(["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobal", "remoteUpgradeRequired", "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobal", "hasMetaGlobal", "ready"])
             self.assertFreshStart(result.successValue, after: afterStores)
             XCTAssertTrue(result.isSuccess)
             XCTAssertNil(result.failureValue)
@@ -127,7 +133,8 @@ class MetaGlobalTests: XCTestCase {
         // To recover from a missing meta/global, fresh start.
         let afterStores = now()
         let expectation = expectationWithDescription("Waiting on value.")
-        ready().upon { result in
+        stateMachine.toReady(authState).upon { result in
+            self.assertStateLabelsSeen(["initialWithLiveToken", "initialWithLiveTokenAndInfo", "missingMetaGlobal", "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobal", "hasMetaGlobal", "ready"])
             self.assertFreshStart(result.successValue, after: afterStores)
             XCTAssertTrue(result.isSuccess)
             XCTAssertNil(result.failureValue)
@@ -145,7 +152,8 @@ class MetaGlobalTests: XCTestCase {
 
         let afterStores = now()
         let expectation = expectationWithDescription("Waiting on value.")
-        ready().upon { result in
+        stateMachine.toReady(authState).upon { result in
+            self.assertStateLabelsSeen(["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobal", "hasMetaGlobal", "missingCryptoKeys", "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobal", "hasMetaGlobal", "ready"])
             self.assertFreshStart(result.successValue, after: afterStores)
             XCTAssertTrue(result.isSuccess)
             XCTAssertNil(result.failureValue)
