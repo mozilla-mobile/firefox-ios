@@ -244,12 +244,20 @@ public class Scratchpad {
             self.global = global
             if let global = global {
                 self.collectionLastFetched["meta"] = global.timestamp
+
+                // We always take the incoming meta/global's engine configuration.
+                self.engineConfiguration = global.value.engineConfiguration()
             }
             return self
         }
 
         public func clearFetchTimestamps() -> Builder {
             self.collectionLastFetched = [:]
+            return self
+        }
+
+        public func setEngineConfiguration(engineConfiguration: EngineConfiguration?) -> Builder {
+            self.engineConfiguration = engineConfiguration
             return self
         }
 
@@ -361,11 +369,6 @@ public class Scratchpad {
         self.localCommands = Set()
         self.clientGUID = Bytes.generateGUID()
         self.clientName = DeviceInfo.defaultClientName()
-    }
-
-    // For convenience.
-    func withGlobal(m: Fetched<MetaGlobal>?) -> Scratchpad {
-        return self.evolve().setGlobal(m).build()
     }
 
     func freshStartWithGlobal(global: Fetched<MetaGlobal>) -> Scratchpad {
