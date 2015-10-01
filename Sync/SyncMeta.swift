@@ -9,7 +9,7 @@ import Shared
 // Note that EngineConfiguration is not enough to evolve an existing meta/global:
 // a meta/global generated from this will have different syncIDs and will
 // always use this device's engine versions.
-public class EngineConfiguration {
+public class EngineConfiguration: Equatable {
     let enabled: [String]
     let declined: [String]
     public init(enabled: [String], declined: [String]) {
@@ -32,6 +32,16 @@ public class EngineConfiguration {
         // Note that sometimes we also need to make changes to the meta/global
         // itself -- e.g., missing declined. That should be a method on MetaGlobal.
         return self
+    }
+}
+
+public func ==(lhs: EngineConfiguration, rhs: EngineConfiguration) -> Bool {
+    return Set(lhs.enabled) == Set(rhs.enabled)
+}
+
+extension EngineConfiguration: CustomStringConvertible {
+    public var description: String {
+        return "EngineConfiguration(enabled: \(self.enabled.sort()), declined: \(self.declined.sort()))"
     }
 }
 
@@ -112,6 +122,14 @@ public struct MetaGlobal: Equatable {
             "declined": JSON(self.declined ?? [])
         ])
         return CleartextPayloadJSON(json)
+    }
+
+    public func withSyncID(syncID: String) -> MetaGlobal {
+        return MetaGlobal(syncID: syncID, storageVersion: self.storageVersion, engines: self.engines, declined: self.declined)
+    }
+
+    public func engineConfiguration() -> EngineConfiguration {
+        return EngineConfiguration(enabled: Array(engines.keys), declined: declined)
     }
 }
 
