@@ -662,6 +662,37 @@ private class SendCrashReportsSetting: Setting {
     }
 }
 
+private class ClosePrivateTabs: Setting {
+    let profile: Profile
+
+    private let titleText = NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs")
+    private let statusText =
+        NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'")
+
+    override var status: NSAttributedString? {
+        return NSAttributedString(string: statusText, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
+    }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(title: NSAttributedString(string: titleText, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        let control = UISwitch()
+        control.onTintColor = UIConstants.ControlTintColor
+        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        control.on = profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
+        cell.accessoryView = control
+    }
+
+    @objc func switchValueChanged(control: UISwitch) {
+        profile.prefs.setBool(control.on, forKey: "settings.closePrivateTabs")
+        configureActiveCrashReporter(profile.prefs.boolForKey("settings.closePrivateTabs"))
+    }
+}
+
 private class PrivacyPolicySetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: NSLocalizedString("Privacy Policy", comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
@@ -757,6 +788,7 @@ class SettingsTableViewController: UITableViewController {
         settings += [
             SettingSection(title: NSAttributedString(string: privacyTitle), children: [
                 ClearPrivateDataSetting(settings: self),
+                ClosePrivateTabs(settings: self),
                 SendCrashReportsSetting(settings: self),
                 PrivacyPolicySetting(),
             ]),
@@ -889,7 +921,11 @@ class SettingsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if (indexPath.section == 0 && indexPath.row == 0) { return 64 } //make account/sign-in row taller, as per design specs
+        //make account/sign-in and close private tabs rows taller, as per design specs
+        if ((indexPath.section == 0 && indexPath.row == 0) ||
+            (indexPath.section == 2 && indexPath.row == 1)) {
+            return 64
+        }
         return 44
     }
 }
