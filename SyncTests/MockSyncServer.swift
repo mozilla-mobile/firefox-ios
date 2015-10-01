@@ -95,7 +95,7 @@ private struct SyncDeleteRequestSpec {
 
         let parts = request.path!.componentsSeparatedByString("/").filter { !$0.isEmpty }
 
-        guard 2 <= parts.count && parts.count <= 5 else {
+        guard [2, 4, 5].contains(parts.count) else {
             return nil
         }
 
@@ -105,6 +105,10 @@ private struct SyncDeleteRequestSpec {
 
         if parts[2] != "storage" {
             return nil
+        }
+
+        if parts.count == 4 {
+            return SyncDeleteRequestSpec(collection: parts[3], id: nil)
         }
 
         return SyncDeleteRequestSpec(collection: parts[3], id: parts[4])
@@ -234,6 +238,7 @@ class MockSyncServer {
 
         let xWeaveTimestamp = millisecondsToDecimalSeconds(NSDate.now())
         response.setValue("\(xWeaveTimestamp)", forAdditionalHeader: "X-Weave-Timestamp")
+        log.debug("Responding with \(xLastModified) and \(xWeaveTimestamp) for record \(record.id)")
 
         return response
     }
@@ -310,28 +315,27 @@ class MockSyncServer {
                 return GCDWebServerDataResponse(statusCode: 400)
             }
 
-            if let collection = spec.collection {
+            if let collection = spec.collection, id = spec.id {
                 guard var items = self.collections[collection] else {
                     // Unable to find the requested collection.
                     return GCDWebServerDataResponse(statusCode: 404)
                 }
 
-                if let id = spec.id {
-                    guard let item = items[id] else {
-                        // Unable to find the requested id.
-                        return GCDWebServerDataResponse(statusCode: 404)
-                    }
-                    items.removeValueForKey(id)
-                    return self.modifiedResponse(item.modified)
-                } else {
-                    self.collections.removeValueForKey(collection)
-                    let timestamp = items.values.reduce(Timestamp(0)) { max($0, $1.modified) }
-                    return self.modifiedResponse(timestamp)
+                guard let item = items[id] else {
+                    // Unable to find the requested id.
+                    return GCDWebServerDataResponse(statusCode: 404)
                 }
-            } else {
-                self.collections = [:]
-                return GCDWebServerDataResponse(data: JSON([String: AnyObject]()).toString().utf8EncodedData, contentType: "application/json")
+                items.removeValueForKey(id)
+                return self.modifiedResponse(item.modified)
             }
+
+            if let _ = spec.collection {
+                let now = Timestamp(NSDate.now())
+                return self.modifiedResponse(now)
+            }
+
+            self.collections = [:]
+            return GCDWebServerDataResponse(data: JSON([String: AnyObject]()).toString().utf8EncodedData, contentType: "application/json")
         }
 
         let match: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
