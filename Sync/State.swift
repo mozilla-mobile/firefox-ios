@@ -382,18 +382,6 @@ public class Scratchpad {
                    .clearFetchTimestamps()
                    .build()
     }
-
-    func applyEngineChoices(old: MetaGlobal?) -> (Scratchpad, MetaGlobal?) {
-        log.info("Applying engine choices from inbound meta/global.")
-        log.info("Old meta/global syncID: \(old?.syncID)")
-        log.info("New meta/global syncID: \(self.global?.value.syncID)")
-        log.info("HACK: ignoring engine choices.")
-
-        // TODO: detect when the sets of declined or enabled engines have changed, and update
-        //       our preferences and generate a new meta/global if necessary.
-        return (self, nil)
-    }
-
     private class func unpickleV1FromPrefs(prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad {
         let b = Scratchpad(b: syncKeyBundle, persistingTo: prefs).evolve()
 
