@@ -81,6 +81,15 @@ class MetaGlobalTests: XCTestCase {
         // And we should have downloaded meta/global and crypto/keys.
         XCTAssertNotNil(ready.scratchpad.global)
         XCTAssertNotNil(ready.scratchpad.keys)
+
+        // We should have the default engine configuration.
+        XCTAssertNotNil(ready.scratchpad.engineConfiguration)
+        guard let engineConfiguration = ready.scratchpad.engineConfiguration else {
+            return
+        }
+        XCTAssertEqual(engineConfiguration.enabled.sort(), ["addons", "bookmarks", "clients", "forms", "history", "passwords", "prefs", "tabs"])
+        XCTAssertEqual(engineConfiguration.declined, [])
+
         // Basic verifications.
         XCTAssertEqual(ready.collectionKeys.defaultBundle.encKey.length, 32)
         if let clients = ready.scratchpad.global?.value.engines["clients"] {
@@ -145,7 +154,7 @@ class MetaGlobalTests: XCTestCase {
 
     func testCryptoKeysMissing() {
         // To recover from a missing crypto/keys, fresh start.
-        storeMetaGlobal(MetaGlobal(syncID: "id", storageVersion: 5, engines: [String: EngineMeta](), declined: []))
+        storeMetaGlobal(createMetaGlobal())
 
         let afterStores = now()
         let expectation = expectationWithDescription("Waiting on value.")
@@ -346,6 +355,77 @@ class MetaGlobalTests: XCTestCase {
             XCTAssertTrue(result.isSuccess)
             XCTAssertNil(result.failureValue)
             fourthExpectation.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(2000) { (error) in
+            XCTAssertNil(error, "\(error)")
+        }
+    }
+
+    func testEngineConfigurations() {
+        // When encountering a valid meta/global and crypto/keys, advance smoothly.  Keep the engine configuration for re-upload.
+        let metaGlobal = MetaGlobal(syncID: "id", storageVersion: 5,
+            engines: ["bookmarks": EngineMeta(version: 1, syncID: "bookmarks"), "unknownEngine1": EngineMeta(version: 2, syncID: "engineId1")],
+            declined: ["clients, forms", "unknownEngine2"])
+        let cryptoKeys = Keys.random()
+        storeMetaGlobal(metaGlobal)
+        storeCryptoKeys(cryptoKeys)
+
+        let expectedEngineConfiguration = EngineConfiguration(enabled: ["bookmarks", "unknownEngine1"], declined: ["clients", "forms", "unknownEngine2"])
+
+        let expectation = expectationWithDescription("Waiting on value.")
+        stateMachine.toReady(authState).upon { result in
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobal", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertNotNil(result.successValue)
+            guard let ready = result.successValue else {
+                return
+            }
+
+            // We should have saved the engine configuration.
+            XCTAssertNotNil(ready.scratchpad.engineConfiguration)
+            guard let engineConfiguration = ready.scratchpad.engineConfiguration else {
+                return
+            }
+            XCTAssertEqual(engineConfiguration, expectedEngineConfiguration)
+
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNil(result.failureValue)
+            expectation.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(2000) { (error) in
+            XCTAssertNil(error, "\(error)")
+        }
+
+        // Wipe meta/global.
+        server.collections["meta"]?.removeAll()
+
+        // Now, run through the state machine again.  We should produce and upload a meta/global reflecting our engine configuration.
+        let secondExpectation = expectationWithDescription("Waiting on value.")
+        stateMachine.toReady(authState).upon { result in
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "missingMetaGlobal", "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobal", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertNotNil(result.successValue)
+            guard let ready = result.successValue else {
+                return
+            }
+
+            // The downloaded meta/global should reflect our local engine configuration.
+            XCTAssertNotNil(ready.scratchpad.global)
+            guard let global = ready.scratchpad.global?.value else {
+                return
+            }
+            XCTAssertEqual(global.engineConfiguration(), expectedEngineConfiguration)
+
+            // We should have the same cached engine configuration.
+            XCTAssertNotNil(ready.scratchpad.engineConfiguration)
+            guard let engineConfiguration = ready.scratchpad.engineConfiguration else {
+                return
+            }
+            XCTAssertEqual(engineConfiguration, expectedEngineConfiguration)
+
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNil(result.failureValue)
+            secondExpectation.fulfill()
         }
 
         waitForExpectationsWithTimeout(2000) { (error) in

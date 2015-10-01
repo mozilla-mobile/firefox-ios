@@ -39,13 +39,22 @@ private let DefaultEngines: [String: Int] = [
 // meta/global produced locally.
 private let DefaultDeclined: [String] = [String]()
 
-private func getDefaultEngines() -> [String: EngineMeta] {
-    return mapValues(DefaultEngines, f: { EngineMeta(version: $0, syncID: Bytes.generateGUID()) })
+// public for testing.
+public func createMetaGlobalWithEngineConfiguration(engineConfiguration: EngineConfiguration) -> MetaGlobal {
+    var engines: [String: EngineMeta] = [:]
+    for engine in engineConfiguration.enabled {
+        // We take this device's version, or, if we don't know the correct version, 0.  Another client should recognize
+        // the engine, see an old version, wipe and start again.
+        // TODO: this client does not yet do this wipe-and-update itself!
+        let version = DefaultEngines[engine] ?? 0
+        engines[engine] = EngineMeta(version: version, syncID: Bytes.generateGUID())
+    }
+    return MetaGlobal(syncID: Bytes.generateGUID(), storageVersion: StorageVersionCurrent, engines: engines, declined: engineConfiguration.declined)
 }
 
-// TODO: this needs EnginePreferences.
-private func createMetaGlobal(previous: MetaGlobal?, scratchpad: Scratchpad) -> MetaGlobal {
-    return MetaGlobal(syncID: Bytes.generateGUID(), storageVersion: StorageVersionCurrent, engines: getDefaultEngines(), declined: DefaultDeclined)
+public func createMetaGlobal() -> MetaGlobal {
+    let engineConfiguration = EngineConfiguration(enabled: Array(DefaultEngines.keys), declined: DefaultDeclined)
+    return createMetaGlobalWithEngineConfiguration(engineConfiguration)
 }
 
 public typealias TokenSource = () -> Deferred<Maybe<TokenServerToken>>
@@ -387,7 +396,13 @@ public class ServerConfigurationRequiredError: RecoverableSyncState {
                 .setKeys(nil)
                 .build().checkpoint()
         // Upload a new meta/global ...
-        return client.uploadMetaGlobal(createMetaGlobal(nil, scratchpad: s), ifUnmodifiedSince: nil)
+        let metaGlobal: MetaGlobal
+        if let oldEngineConfiguration = s.engineConfiguration {
+            metaGlobal = createMetaGlobalWithEngineConfiguration(oldEngineConfiguration)
+        } else {
+            metaGlobal = createMetaGlobal()
+        }
+        return client.uploadMetaGlobal(metaGlobal, ifUnmodifiedSince: nil)
             // ... and a new crypto/keys.
             >>> { return client.uploadCryptoKeys(Keys.random(), withSyncKeyBundle: s.syncKeyBundle, ifUnmodifiedSince: nil) }
             >>> { return deferMaybe(InitialWithLiveToken(client: client, scratchpad: s, token: self.previousState.token)) }
@@ -404,11 +419,6 @@ public class FreshStartRequiredError: RecoverableSyncState {
 
     public init(previousState: BaseSyncStateWithInfo) {
         self.previousState = previousState
-    }
-
-    // TODO: this needs EnginePreferences.
-    private class func createMetaGlobal(previous: MetaGlobal?, scratchpad: Scratchpad) -> MetaGlobal {
-        return MetaGlobal(syncID: Bytes.generateGUID(), storageVersion: StorageVersionCurrent, engines: getDefaultEngines(), declined: DefaultDeclined)
     }
 
     public func advance() -> Deferred<Maybe<SyncState>> {
@@ -561,7 +571,7 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
             // TODO: Check individual collections, resetting them as necessary if their syncID has changed!
             // For now, we just adopt the new meta/global, adjust our engines to match, and move on.
             // This means that if a per-engine syncID changes, *we won't do the right thing*.
-            let withFetchedGlobal = self.scratchpad.withGlobal(fetched)
+            let withFetchedGlobal = self.scratchpad.evolve().setGlobal(fetched).build()
             return applyEngineChoicesAndAdvance(withFetchedGlobal)
         }
 
