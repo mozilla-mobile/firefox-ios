@@ -257,7 +257,10 @@ class MockSyncServer {
         server.addHandlerForMethod("GET", path: infoCollectionsPath, requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var ic = [String: NSNumber]()
             for (collection, map) in self.collections {
-                ic[collection] = NSNumber(double: Double(map.values.reduce(Timestamp(0)) { max($0, $1.modified) }) / 1000)
+                if !map.isEmpty {
+                    let timestamp = map.values.reduce(0) { max($0, $1.modified) }
+                    ic[collection] = NSNumber(double: Double(timestamp) / 1000)
+                }
             }
             let body = JSON(ic).toString()
             let bodyData = body.utf8EncodedData
