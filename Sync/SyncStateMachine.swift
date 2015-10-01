@@ -543,9 +543,6 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
     }
 
     override public func advance() -> Deferred<Maybe<SyncState>> {
-        // TODO: detect when an individual collection syncID has changed, and make sure that
-        //       collection is reset.
-
         // First: check storage version.
         let v = fetched.value.storageVersion
         if v > StorageVersionCurrent {
@@ -560,60 +557,45 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
             return deferMaybe(RemoteUpgradeRequired(previousState: self))
         }
 
-        // Second: check syncID and contents.
+        // Second: check global syncID and contents.
         if let previous = self.scratchpad.global?.value {
             // Do checks that only apply when we're coming from a previous meta/global.
             if previous.syncID != fetched.value.syncID {
-                // Global syncID changed. Reset for every collection, and also throw away any cached keys.
-                return resetStateWithGlobal(fetched)
+                log.info("Remote global sync ID has changed. Dropping keys and resetting all local collections.")
+                let s = self.scratchpad.freshStartWithGlobal(fetched).checkpoint()
+                return deferMaybe(HasMetaGlobal.fromState(self, scratchpad: s))
             }
 
-            // TODO: Check individual collections, resetting them as necessary if their syncID has changed!
-            // For now, we just adopt the new meta/global, adjust our engines to match, and move on.
-            // This means that if a per-engine syncID changes, *we won't do the right thing*.
-            let withFetchedGlobal = self.scratchpad.evolve().setGlobal(fetched).build()
-            return applyEngineChoicesAndAdvance(withFetchedGlobal)
+            let b = self.scratchpad.evolve()
+                .setGlobal(fetched) // We always adopt the upstream meta/global record.
+
+            let previousEngines = Set(previous.engines.keys)
+            let remoteEngines = Set(fetched.value.engines.keys)
+
+            for engine in previousEngines.subtract(remoteEngines) {
+                log.info("Remote meta/global disabled previously enabled engine \(engine). No action needed.")
+            }
+
+            for engine in remoteEngines.subtract(previousEngines) {
+                log.info("Remote meta/global enabled previously disabled engine \(engine). Resetting local.")
+                b.localCommands.insert(.ResetEngine(engine: engine))
+            }
+
+            for engine in remoteEngines.intersect(previousEngines) {
+                let remoteEngine = fetched.value.engines[engine]!
+                let previousEngine = previous.engines[engine]!
+                if previousEngine.syncID != remoteEngine.syncID {
+                    log.info("Remote sync ID for \(engine) has changed. Resetting local.")
+                    b.localCommands.insert(.ResetEngine(engine: engine))
+                }
+            }
+
+            let s = b.build().checkpoint()
+            return deferMaybe(HasMetaGlobal.fromState(self, scratchpad: s))
         }
 
-        // No previous meta/global. We know we need to do a fresh start sync.
-        // This function will do the right thing if there's no previous meta/global.
-        return resetStateWithGlobal(fetched)
-    }
-
-    /**
-     * In some cases we downloaded a new meta/global, and we recognize that we need
-     * a blank slate. This method makes one from our scratchpad, applies any necessary
-     * changes to engine elections from the downloaded meta/global, uploads a changed
-     * meta/global if we must, and then moves to HasMetaGlobal and on to Ready.
-     * TODO: reset all local collections.
-     */
-    private func resetStateWithGlobal(fetched: Fetched<MetaGlobal>) -> Deferred<Maybe<SyncState>> {
-        let fresh = self.scratchpad.freshStartWithGlobal(fetched)
-        return applyEngineChoicesAndAdvance(fresh)
-    }
-
-    private func applyEngineChoicesAndAdvance(newScratchpad: Scratchpad) -> Deferred<Maybe<SyncState>> {
-        // When we adopt a new meta global, we might update our local enabled/declined
-        // engine lists (which are stored in the scratchpad itself), or need to add
-        // some to meta/global. This call asks the scratchpad to return a possibly new
-        // scratchpad, and optionally a meta/global to upload.
-        // If this upload fails, we abort, of course.
-        let previousMetaGlobal = self.scratchpad.global?.value
-        let (withEnginesApplied, toUpload) = newScratchpad.applyEngineChoices(previousMetaGlobal)
-
-        if let toUpload = toUpload {
-            // Upload the new meta/global.
-            // The provided scratchpad *does not reflect this new meta/global*: you need to
-            // get the timestamp from the upload!
-            let upload = self.client.uploadMetaGlobal(toUpload, ifUnmodifiedSince: fetched.timestamp)
-            return chainDeferred(upload, f: { resp in
-                let postUpload = withEnginesApplied.checkpoint()    // TODO: add the timestamp!
-                return deferMaybe(HasMetaGlobal.fromState(self, scratchpad: postUpload))
-            })
-        }
-
-        // If the meta/global was quietly applied, great; roll on with what we were given.
-        let s = withEnginesApplied.checkpoint()
+        // No previous meta/global. Adopt the new meta/global.
+        let s = self.scratchpad.freshStartWithGlobal(fetched).checkpoint()
         return deferMaybe(HasMetaGlobal.fromState(self, scratchpad: s))
     }
 }
