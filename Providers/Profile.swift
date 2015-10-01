@@ -209,10 +209,9 @@ public class BrowserProfile: Profile {
         if let v = notification.userInfo!["visitType"] as? Int,
            let visitType = VisitType(rawValue: v),
            let url = notification.userInfo!["url"] as? NSURL where !isIgnoredURL(url),
-           let title = notification.userInfo!["title"] as? NSString,
-           let tabIsPrivate = notification.userInfo!["isPrivate"] as? Bool {
+           let title = notification.userInfo!["title"] as? NSString {
             // Only record local vists if the change notification originated from a non-private tab
-            if !tabIsPrivate {
+            if !(notification.userInfo!["isPrivate"] as? Bool ?? false) {
                 // We don't record a visit if no type was specified -- that means "ignore me".
                 let site = Site(url: url.absoluteString, title: title as String)
                 let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
