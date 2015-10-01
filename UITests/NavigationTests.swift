@@ -73,10 +73,10 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
         tester().tapViewWithAccessibilityLabel("Synced tabs")
-        tester().tapViewWithAccessibilityLabel("Sign In")
+        tester().tapViewWithAccessibilityLabel("Sign in")
         tester().waitForViewWithAccessibilityLabel("Web content")
         tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().waitForViewWithAccessibilityLabel("Sign In")
+        tester().waitForViewWithAccessibilityLabel("Sign in")
     }
 
     func testTapSignInShowsFxAFromTour() {
