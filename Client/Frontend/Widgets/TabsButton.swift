@@ -83,7 +83,7 @@ class TabsButton: UIControl {
     override func clone() -> UIView {
         let button = TabsButton()
 
-        button.accessibilityLabel = button.accessibilityLabel
+        button.accessibilityLabel = accessibilityLabel
         button.titleLabel.text = titleLabel.text
 
         // Copy all of the styable properties over to the new TabsButton
