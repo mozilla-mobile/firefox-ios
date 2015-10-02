@@ -133,7 +133,8 @@ public enum SyncStateLabel: String {
     case InitialWithExpiredTokenAndInfo = "initialWithExpiredTokenAndInfo"
     case InitialWithLiveToken = "initialWithLiveToken"
     case InitialWithLiveTokenAndInfo = "initialWithLiveTokenAndInfo"
-    case ResolveMetaGlobal = "resolveMetaGlobal"
+    case ResolveMetaGlobalVersion = "resolveMetaGlobalVersion"
+    case ResolveMetaGlobalContent = "resolveMetaGlobalContent"
     case NewMetaGlobal = "newMetaGlobal"
     case HasMetaGlobal = "hasMetaGlobal"
     case NeedsFreshCryptoKeys = "needsFreshCryptoKeys"
@@ -155,7 +156,8 @@ public enum SyncStateLabel: String {
         InitialWithExpiredTokenAndInfo,
         InitialWithLiveToken,
         InitialWithLiveTokenAndInfo,
-        ResolveMetaGlobal,
+        ResolveMetaGlobalVersion,
+        ResolveMetaGlobalContent,
         NewMetaGlobal,
         HasMetaGlobal,
         NeedsFreshCryptoKeys,
@@ -525,21 +527,20 @@ public class InitialWithLiveToken: BaseSyncState {
  * Or it might be different. In this case the previous m/g and our local user preferences
  * are compared to the new, resulting in some actions and a final state.
  *
- * This state is similar in purpose to GlobalSession.processMetaGlobal in Android Sync.
- * TODO
+ * This states are similar in purpose to GlobalSession.processMetaGlobal in Android Sync.
  */
 
-public class ResolveMetaGlobal: BaseSyncStateWithInfo {
+public class ResolveMetaGlobalVersion: BaseSyncStateWithInfo {
     let fetched: Fetched<MetaGlobal>
 
     init(fetched: Fetched<MetaGlobal>, client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections) {
         self.fetched = fetched
         super.init(client: client, scratchpad: scratchpad, token: token, info: info)
     }
-    public override var label: SyncStateLabel { return SyncStateLabel.ResolveMetaGlobal }
+    public override var label: SyncStateLabel { return SyncStateLabel.ResolveMetaGlobalVersion }
 
-    class func fromState(state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobal {
-        return ResolveMetaGlobal(fetched: fetched, client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
+    class func fromState(state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobalVersion {
+        return ResolveMetaGlobalVersion(fetched: fetched, client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
     }
 
     override public func advance() -> Deferred<Maybe<SyncState>> {
@@ -557,7 +558,25 @@ public class ResolveMetaGlobal: BaseSyncStateWithInfo {
             return deferMaybe(RemoteUpgradeRequired(previousState: self))
         }
 
-        // Second: check global syncID and contents.
+        return deferMaybe(ResolveMetaGlobalContent.fromState(self, fetched: self.fetched))
+    }
+}
+
+public class ResolveMetaGlobalContent: BaseSyncStateWithInfo {
+    let fetched: Fetched<MetaGlobal>
+
+    init(fetched: Fetched<MetaGlobal>, client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections) {
+        self.fetched = fetched
+        super.init(client: client, scratchpad: scratchpad, token: token, info: info)
+    }
+    public override var label: SyncStateLabel { return SyncStateLabel.ResolveMetaGlobalContent }
+
+    class func fromState(state: BaseSyncStateWithInfo, fetched: Fetched<MetaGlobal>) -> ResolveMetaGlobalContent {
+        return ResolveMetaGlobalContent(fetched: fetched, client: state.client, scratchpad: state.scratchpad, token: state.token, info: state.info)
+    }
+
+    override public func advance() -> Deferred<Maybe<SyncState>> {
+        // Check global syncID and contents.
         if let previous = self.scratchpad.global?.value {
             // Do checks that only apply when we're coming from a previous meta/global.
             if previous.syncID != fetched.value.syncID {
@@ -664,7 +683,7 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
                 // We use the server's timestamp, rather than the record's modified field.
                 // Either can be made to work, but the latter has suffered from bugs: see Bug 1210625.
                 let fetched = Fetched(value: resp.value, timestamp: resp.metadata.timestampMilliseconds)
-                return deferMaybe(ResolveMetaGlobal.fromState(self, fetched: fetched))
+                return deferMaybe(ResolveMetaGlobalVersion.fromState(self, fetched: fetched))
             }
 
             if let _ = result.failureValue as? NotFound<NSHTTPURLResponse> {
