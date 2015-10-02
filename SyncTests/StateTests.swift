@@ -26,6 +26,8 @@ func compareScratchpads(lhs: Scratchpad, rhs: Scratchpad) {
     }
 
     XCTAssertTrue(lhs.global == rhs.global)
+
+    XCTAssertEqual(lhs.engineConfiguration, rhs.engineConfiguration)
 }
 
 func roundtrip(s: Scratchpad) -> (Scratchpad, rhs: Scratchpad) {
@@ -40,6 +42,10 @@ class StateTests: XCTestCase {
         return Fetched(value: g, timestamp: NSDate.now())
     }
 
+    func getEngineConfiguration() -> EngineConfiguration {
+        return EngineConfiguration(enabled: ["bookmarks", "clients"], declined: ["tabs"])
+    }
+
     func baseScratchpad() -> Scratchpad {
         let syncKeyBundle = KeyBundle.fromKB(Bytes.generateRandomBytes(32))
         let keys = Fetched(value: Keys(defaultBundle: syncKeyBundle), timestamp: 1001)
@@ -49,5 +55,6 @@ class StateTests: XCTestCase {
     func testPickling() {
         compareScratchpads(roundtrip(baseScratchpad()))
         compareScratchpads(roundtrip(baseScratchpad().evolve().setGlobal(getGlobal()).build()))
+        compareScratchpads(roundtrip(baseScratchpad().evolve().setEngineConfiguration(getEngineConfiguration()).build()))
     }
 }

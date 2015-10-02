@@ -42,6 +42,7 @@ private let PrefLastFetched = "lastFetched"
 private let PrefNeedsLocalReset = "needsLocalReset"
 private let PrefClientName = "clientName"
 private let PrefClientGUID = "clientGUID"
+private let PrefEngineConfiguration = "engineConfiguration"
 
 class PrefsBackoffStorage: BackoffStorage {
     let prefs: Prefs
@@ -357,7 +358,14 @@ public class Scratchpad {
             return DeviceInfo.defaultClientName()
         }()
 
-        // TODO: engineConfiguration
+        if let engineConfigurationString = prefs.stringForKey(PrefEngineConfiguration) {
+            if let engineConfiguration = EngineConfiguration.fromJSON(JSON.parse(engineConfigurationString)) {
+                b.engineConfiguration = engineConfiguration
+            } else {
+                log.error("Invalid engineConfiguration found in prefs. Discarding.")
+            }
+        }
+
         return b.build()
     }
 
@@ -423,14 +431,18 @@ public class Scratchpad {
             KeychainWrapper.removeObjectForKey(self.keyLabel)
         }
 
-        // TODO: engineConfiguration
-
         prefs.setString(clientName, forKey: PrefClientName)
         prefs.setString(clientGUID, forKey: PrefClientGUID)
 
         // Thanks, Swift.
         let dict = mapValues(collectionLastFetched, f: { NSNumber(unsignedLongLong: $0) }) as NSDictionary
         prefs.setObject(dict, forKey: PrefLastFetched)
+
+        if let engineConfiguration = self.engineConfiguration {
+            prefs.setString(engineConfiguration.toJSON().toString(), forKey: PrefEngineConfiguration)
+        } else {
+            prefs.removeObjectForKey(PrefEngineConfiguration)
+        }
 
         return self
     }
