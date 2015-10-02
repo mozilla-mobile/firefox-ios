@@ -133,10 +133,10 @@ class RecordTests: XCTestCase {
             "\"username\":\"5817483\"," +
             "\"modified\":1.32046073744E9}"
 
-        let record = GlobalEnvelope(fullRecord)
+        let record = EnvelopeJSON(fullRecord)
         XCTAssertTrue(record.isValid())
 
-        let global = MetaGlobal.fromPayload(JSON.parse(record.payload))
+        let global = MetaGlobal.fromJSON(JSON.parse(record.payload))
         XCTAssertTrue(global != nil)
 
         if let global = global {

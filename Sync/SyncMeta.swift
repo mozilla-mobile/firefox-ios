@@ -83,13 +83,9 @@ public struct MetaGlobal: Equatable {
     let engines: [String: EngineMeta]
     let declined: [String]
 
-    public static func fromPayload(string: String) -> MetaGlobal? {
-        return fromPayload(JSON(string: string))
-    }
-
     // TODO: is it more useful to support partial globals?
     // TODO: how do we return error states here?
-    public static func fromPayload(json: JSON) -> MetaGlobal? {
+    public static func fromJSON(json: JSON) -> MetaGlobal? {
         if json.isError {
             return nil
         }
@@ -135,19 +131,6 @@ public func ==(lhs: MetaGlobal, rhs: MetaGlobal) -> Bool {
            (lhs.storageVersion == rhs.storageVersion) &&
            optArrayEqual(lhs.declined, rhs: rhs.declined) &&
            optDictionaryEqual(lhs.engines, rhs: rhs.engines)
-}
-
-public class GlobalEnvelope: EnvelopeJSON {
-    public lazy var global: MetaGlobal? = {
-        return MetaGlobal.fromPayload(self.payload)
-    }()
-
-    public func toFetched() -> Fetched<MetaGlobal>? {
-        if let g = global {
-            return Fetched(value: g, timestamp: self.modified)
-        }
-        return nil
-    }
 }
 
 /**
