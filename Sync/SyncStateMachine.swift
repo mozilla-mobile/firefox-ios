@@ -636,31 +636,35 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
         // has been the case in the past, with the Sync 1.1 migration indicator.
         if let global = self.scratchpad.global {
             if let metaModified = self.info.modified("meta") {
-                // The record timestamp *should* be no more recent than the current collection.
-                // We don't check that (indeed, we don't even store it!).
-                // We also check the last fetch timestamp for the record, and that can be
+                // We check the last time we fetched the record, and that can be
                 // later than the collection timestamp. All we care about here is if the
                 // server might have a newer record.
                 if global.timestamp >= metaModified {
-                    log.info("Using cached meta/global.")
+                    log.debug("Cached meta/global fetched at \(global.timestamp), newer than server modified \(metaModified). Using cached meta/global.")
                     // Strictly speaking we can avoid fetching if this condition is not true,
                     // but if meta/ is modified for a different reason -- store timestamps
                     // for the last collection fetch. This will do for now.
                     return deferMaybe(HasMetaGlobal.fromState(self))
                 }
+                log.info("Cached meta/global fetched at \(global.timestamp) older than server modified \(metaModified). Fetching fresh meta/global.")
+            } else {
+                // No known modified time for meta/. That means the server has no meta/global.
+                // Drop our cached value and fall through; we'll try to fetch, fail, and
+                // go through the usual failure flow.
+                log.warning("Local meta/global fetched at \(global.timestamp) found, but no meta collection on server. Dropping cached meta/global.")
+                self.scratchpad = self.scratchpad.evolve().setGlobal(nil).setKeys(nil).build().checkpoint()
             }
+        } else {
+            log.debug("No cached meta/global found. Fetching fresh meta/global.")
         }
 
         // Fetch.
         return self.client.getMetaGlobal().bind { result in
             if let resp = result.successValue {
-                if let fetched = resp.value.toFetched() {
-                    return deferMaybe(ResolveMetaGlobal.fromState(self, fetched: fetched))
-                }
-
-                // This should not occur.
-                log.error("Unexpectedly no meta/global despite a successful fetch!")
-                return deferMaybe(UnknownError())
+                // We use the server's timestamp, rather than the record's modified field.
+                // Either can be made to work, but the latter has suffered from bugs: see Bug 1210625.
+                let fetched = Fetched(value: resp.value, timestamp: resp.metadata.timestampMilliseconds)
+                return deferMaybe(ResolveMetaGlobal.fromState(self, fetched: fetched))
             }
 
             if let _ = result.failureValue as? NotFound<NSHTTPURLResponse> {
@@ -747,8 +751,6 @@ public class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
                     return Deferred(value: Maybe(failure: InvalidKeysError(collectionKeys)))
                 }
 
-                // setKeys bumps the crypto/ timestamp because, though in theory there might be
-                // other records in that collection, even if there are we don't care about them.
                 let fetched = Fetched(value: collectionKeys, timestamp: resp.value.modified)
                 let s = self.scratchpad.evolve()
                         .addLocalCommandsFromKeys(fetched)

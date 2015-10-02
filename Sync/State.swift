@@ -367,7 +367,7 @@ public class Scratchpad {
 
         if let mg = prefs.stringForKey(PrefGlobal) {
             if let mgTS = prefs.unsignedLongForKey(PrefGlobalTS) {
-                if let global = MetaGlobal.fromPayload(mg) {
+                if let global = MetaGlobal.fromJSON(JSON.parse(mg)) {
                     b.setGlobal(Fetched(value: global, timestamp: mgTS))
                 } else {
                     log.error("Malformed meta/global in prefs. Ignoring.")

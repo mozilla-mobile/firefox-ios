@@ -533,8 +533,15 @@ public class Sync15StorageClient {
         return getResource("info/collections", f: InfoCollections.fromJSON)
     }
 
-    func getMetaGlobal() -> Deferred<Maybe<StorageResponse<GlobalEnvelope>>> {
-        return getResource("storage/meta/global", f: { GlobalEnvelope($0) })
+    func getMetaGlobal() -> Deferred<Maybe<StorageResponse<MetaGlobal>>> {
+        return getResource("storage/meta/global") { json in
+            // We have an envelope.  Parse the meta/global record embedded in the 'payload' string.
+            let envelope = EnvelopeJSON(json)
+            if envelope.isValid() {
+                return MetaGlobal.fromJSON(JSON.parse(envelope.payload))
+            }
+            return nil
+        }
     }
 
     func getCryptoKeys(syncKeyBundle: KeyBundle, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Record<KeysPayload>>>> {
