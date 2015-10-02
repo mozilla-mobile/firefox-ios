@@ -166,7 +166,6 @@ public class Scratchpad {
         private var global: Fetched<MetaGlobal>?
         private var keys: Fetched<Keys>?
         private var keyLabel: String
-        var collectionLastFetched: [String: Timestamp]
         var localCommands: Set<LocalCommand>
         var engineConfiguration: EngineConfiguration?
         var clientGUID: String
@@ -181,8 +180,6 @@ public class Scratchpad {
 
             self.keys = p.keys
             self.keyLabel = p.keyLabel
-
-            self.collectionLastFetched = p.collectionLastFetched
             self.localCommands = p.localCommands
             self.engineConfiguration = p.engineConfiguration
             self.clientGUID = p.clientGUID
@@ -236,25 +233,15 @@ public class Scratchpad {
 
         public func setKeys(keys: Fetched<Keys>?) -> Builder {
             self.keys = keys
-            if let keys = keys {
-                self.collectionLastFetched["crypto"] = keys.timestamp
-            }
             return self
         }
 
         public func setGlobal(global: Fetched<MetaGlobal>?) -> Builder {
             self.global = global
             if let global = global {
-                self.collectionLastFetched["meta"] = global.timestamp
-
                 // We always take the incoming meta/global's engine configuration.
                 self.engineConfiguration = global.value.engineConfiguration()
             }
-            return self
-        }
-
-        public func clearFetchTimestamps() -> Builder {
-            self.collectionLastFetched = [:]
             return self
         }
 
@@ -269,7 +256,6 @@ public class Scratchpad {
                     m: self.global,
                     k: self.keys,
                     keyLabel: self.keyLabel,
-                    fetches: self.collectionLastFetched,
                     localCommands: self.localCommands,
                     engines: self.engineConfiguration,
                     clientGUID: self.clientGUID,
@@ -317,9 +303,6 @@ public class Scratchpad {
     let keys: Fetched<Keys>?
     let keyLabel: String
 
-    // Collection timestamps.
-    var collectionLastFetched: [String: Timestamp]
-
     // Local commands.
     var localCommands: Set<LocalCommand>
 
@@ -337,7 +320,6 @@ public class Scratchpad {
          m: Fetched<MetaGlobal>?,
          k: Fetched<Keys>?,
          keyLabel: String,
-         fetches: [String: Timestamp],
          localCommands: Set<LocalCommand>,
          engines: EngineConfiguration?,
          clientGUID: String,
@@ -351,7 +333,6 @@ public class Scratchpad {
         self.keyLabel = keyLabel
         self.global = m
         self.engineConfiguration = engines
-        self.collectionLastFetched = fetches
         self.localCommands = localCommands
         self.clientGUID = clientGUID
         self.clientName = clientName
@@ -367,7 +348,6 @@ public class Scratchpad {
         self.keyLabel = Bytes.generateGUID()
         self.global = nil
         self.engineConfiguration = nil
-        self.collectionLastFetched = [String: Timestamp]()
         self.localCommands = Set()
         self.clientGUID = Bytes.generateGUID()
         self.clientName = DeviceInfo.defaultClientName()
@@ -379,16 +359,11 @@ public class Scratchpad {
                    .setGlobal(global)
                    .addLocalCommandsFromKeys(nil)
                    .setKeys(nil)
-                   .clearFetchTimestamps()
                    .build()
     }
+
     private class func unpickleV1FromPrefs(prefs: Prefs, syncKeyBundle: KeyBundle) -> Scratchpad {
         let b = Scratchpad(b: syncKeyBundle, persistingTo: prefs).evolve()
-
-        // Do this first so that the meta/global and crypto/keys unpickling can overwrite the timestamps.
-        if let lastFetched: [String: AnyObject] = prefs.dictionaryForKey(PrefLastFetched) {
-            b.collectionLastFetched = optFilter(mapValues(lastFetched, f: { ($0 as? NSNumber)?.unsignedLongLongValue }))
-        }
 
         if let mg = prefs.stringForKey(PrefGlobal) {
             if let mgTS = prefs.unsignedLongForKey(PrefGlobalTS) {
@@ -510,10 +485,6 @@ public class Scratchpad {
 
         prefs.setString(clientName, forKey: PrefClientName)
         prefs.setString(clientGUID, forKey: PrefClientGUID)
-
-        // Thanks, Swift.
-        let dict = mapValues(collectionLastFetched, f: { NSNumber(unsignedLongLong: $0) }) as NSDictionary
-        prefs.setObject(dict, forKey: PrefLastFetched)
 
         let localCommands: [String] = Array(self.localCommands).map({$0.toJSON().toString()})
         prefs.setObject(localCommands, forKey: PrefLocalCommands)
