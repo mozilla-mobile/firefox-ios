@@ -695,33 +695,28 @@ public class HasMetaGlobal: BaseSyncStateWithInfo {
         // Check if crypto/keys is fresh in the cache already.
         if let keys = self.scratchpad.keys where keys.value.valid {
             if let cryptoModified = self.info.modified("crypto") {
-                // Both of these are server timestamps. If the record we stored has the
-                // same modified time as the server collection, and we're fetching from the
-                // same server, then the record must be identical, and we can use it directly.
-                if cryptoModified == keys.timestamp {
-                    log.debug("Using cached collection keys for ready state.")
+                // Both of these are server timestamps. If the record we stored was fetched after the last time the record was modified, as represented by the "crypto" entry in info/collections, and we're fetching from the
+                // same server, then the record must be identical, and we can use it directly.  If are ever additional records in the crypto collection, this will fetch keys too frequently.  In that case, we should use X-I-U-S and expect some 304 responses.
+                if keys.timestamp >= cryptoModified {
+                    log.debug("Cached keys fetched at \(keys.timestamp), newer than server modified \(cryptoModified). Using cached keys.")
                     return deferMaybe(HasFreshCryptoKeys.fromState(self, scratchpad: self.scratchpad, collectionKeys: keys.value))
-                }
-
-                if cryptoModified < keys.timestamp {
-                    // If the server timestamp is older, something horribly wrong has occurred.
-                    log.warning("Cached keys with timestamp \(keys.timestamp) newer than server modified \(cryptoModified). This should never happen! Dropping stale cached keys.")
-                    self.scratchpad = self.scratchpad.evolve().setKeys(nil).build().checkpoint()
                 }
 
                 // The server timestamp is newer, so there might be new keys.
                 // Re-fetch keys and check to see if the actual contents differ.
                 // If the keys are the same, we can ignore this change. If they differ,
                 // we need to re-sync any collection whose keys just changed.
-                log.info("Cached keys with timestamp \(keys.timestamp) older than server modified \(cryptoModified). Fetching fresh keys.")
+                log.info("Cached keys fetched at \(keys.timestamp) older than server modified \(cryptoModified). Fetching fresh keys.")
                 return deferMaybe(NeedsFreshCryptoKeys.fromState(self, scratchpad: self.scratchpad, staleCollectionKeys: keys.value))
             } else {
                 // No known modified time for crypto/. That likely means the server has no keys.
                 // Drop our cached value and fall through; we'll try to fetch, fail, and
                 // go through the usual failure flow.
-                log.warning("Local keys found timestamped \(keys.timestamp), but no crypto collection on server. Dropping cached keys.")
+                log.warning("Local keys fetched at \(keys.timestamp) found, but no crypto collection on server. Dropping cached keys.")
                 self.scratchpad = self.scratchpad.evolve().setKeys(nil).build().checkpoint()
             }
+        } else {
+            log.debug("No cached keys found. Fetching fresh keys.")
         }
 
         return deferMaybe(NeedsFreshCryptoKeys.fromState(self, scratchpad: self.scratchpad, staleCollectionKeys: nil))
@@ -751,7 +746,7 @@ public class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
                     return Deferred(value: Maybe(failure: InvalidKeysError(collectionKeys)))
                 }
 
-                let fetched = Fetched(value: collectionKeys, timestamp: resp.value.modified)
+                let fetched = Fetched(value: collectionKeys, timestamp: resp.metadata.timestampMilliseconds)
                 let s = self.scratchpad.evolve()
                         .addLocalCommandsFromKeys(fetched)
                         .setKeys(fetched)
