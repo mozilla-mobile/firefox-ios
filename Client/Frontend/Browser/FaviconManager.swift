@@ -37,11 +37,8 @@ class FaviconManager : BrowserHelper {
             let site = Site(url: url, title: "")
             if let icons = message.body as? [String: Int] {
                 for icon in icons {
-                    if let iconUrl = NSURL(string: icon.0) {
-                        var options = [SDWebImageOptions.LowPriority]
-                        if browser?.isPrivate ?? false {
-                            options.append(SDWebImageOptions.CacheMemoryOnly)
-                        }
+                    if let iconUrl = NSURL(string: icon.0), let browser = self.browser {
+                        let options = browser.isPrivate ? [SDWebImageOptions.LowPriority, SDWebImageOptions.CacheMemoryOnly] : [SDWebImageOptions.LowPriority]
                         manager.downloadImageWithURL(iconUrl, options: SDWebImageOptions(options), progress: nil, completed: { (img, err, cacheType, success, url) -> Void in
                             let fav = Favicon(url: url.absoluteString,
                                 date: NSDate(),
@@ -53,8 +50,9 @@ class FaviconManager : BrowserHelper {
                             } else {
                                 return
                             }
-                            self.browser?.favicons.append(fav)
-                            if !(self.browser?.isPrivate ?? false) {
+
+                            browser.favicons.append(fav)
+                            if !browser.isPrivate {
                                 self.profile.favicons.addFavicon(fav, forSite: site)
                             }
                         })
