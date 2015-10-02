@@ -11,7 +11,6 @@ func compareScratchpads(lhs: Scratchpad, rhs: Scratchpad) {
     // This one is set in the constructor!
     XCTAssertEqual(lhs.syncKeyBundle, rhs.syncKeyBundle)
 
-    XCTAssertEqual(lhs.collectionLastFetched, rhs.collectionLastFetched)
     XCTAssertEqual(lhs.clientName, rhs.clientName)
     XCTAssertEqual(lhs.clientGUID, rhs.clientGUID)
     if let lkeys = lhs.keys {
