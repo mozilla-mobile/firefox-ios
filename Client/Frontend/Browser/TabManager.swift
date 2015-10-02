@@ -206,7 +206,14 @@ class TabManager : NSObject {
         assert(NSThread.isMainThread())
         configuration?.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
 
-        let tab = Browser(configuration: configuration ?? self.configuration, isPrivate: isPrivate)
+        let defaultConfiguration: WKWebViewConfiguration
+        if (configuration == nil) && isPrivate {
+            defaultConfiguration = privateConfiguration
+        } else {
+            defaultConfiguration = self.configuration
+        }
+
+        let tab = Browser(configuration: configuration ?? defaultConfiguration, isPrivate: isPrivate)
         configureTab(tab, request: request, flushToDisk: flushToDisk, zombie: zombie, restoring: restoring)
         return tab
     }
