@@ -18,6 +18,9 @@ public class EngineConfiguration: Equatable {
     }
 
     public class func fromJSON(json: JSON) -> EngineConfiguration? {
+        if json.isError {
+            return nil
+        }
         if let enabled = jsonsToStrings(json["enabled"].asArray) {
             if let declined = jsonsToStrings(json["declined"].asArray) {
                 return EngineConfiguration(enabled: enabled, declined: declined)
@@ -26,12 +29,9 @@ public class EngineConfiguration: Equatable {
         return nil
     }
 
-    public func reconcile(meta: [String: EngineMeta]) -> EngineConfiguration {
-        // TODO: when we get a changed meta/global, we need to be able
-        // to reflect its changes into our configuration.
-        // Note that sometimes we also need to make changes to the meta/global
-        // itself -- e.g., missing declined. That should be a method on MetaGlobal.
-        return self
+    public func toJSON() -> JSON {
+        let json: [String: AnyObject] = ["enabled": self.enabled, "declined": self.declined]
+        return JSON(json)
     }
 }
 

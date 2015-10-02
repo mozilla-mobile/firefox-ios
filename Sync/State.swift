@@ -108,6 +108,7 @@ private let PrefLastFetched = "lastFetched"
 private let PrefLocalCommands = "localCommands"
 private let PrefClientName = "clientName"
 private let PrefClientGUID = "clientGUID"
+private let PrefEngineConfiguration = "engineConfiguration"
 
 class PrefsBackoffStorage: BackoffStorage {
     let prefs: Prefs
@@ -441,12 +442,18 @@ public class Scratchpad {
             return DeviceInfo.defaultClientName()
         }()
 
-
         if let localCommands: [String] = prefs.stringArrayForKey(PrefLocalCommands) {
             b.localCommands = Set(optFilter(localCommands.map({LocalCommand.fromJSON(JSON.parse($0))})))
         }
 
-        // TODO: engineConfiguration
+        if let engineConfigurationString = prefs.stringForKey(PrefEngineConfiguration) {
+            if let engineConfiguration = EngineConfiguration.fromJSON(JSON.parse(engineConfigurationString)) {
+                b.engineConfiguration = engineConfiguration
+            } else {
+                log.error("Invalid engineConfiguration found in prefs. Discarding.")
+            }
+        }
+
         return b.build()
     }
 
@@ -512,8 +519,6 @@ public class Scratchpad {
             KeychainWrapper.removeObjectForKey(self.keyLabel)
         }
 
-        // TODO: engineConfiguration
-
         prefs.setString(clientName, forKey: PrefClientName)
         prefs.setString(clientGUID, forKey: PrefClientGUID)
 
@@ -523,6 +528,12 @@ public class Scratchpad {
 
         let localCommands: [String] = Array(self.localCommands).map({$0.toJSON().toString()})
         prefs.setObject(localCommands, forKey: PrefLocalCommands)
+
+        if let engineConfiguration = self.engineConfiguration {
+            prefs.setString(engineConfiguration.toJSON().toString(), forKey: PrefEngineConfiguration)
+        } else {
+            prefs.removeObjectForKey(PrefEngineConfiguration)
+        }
 
         return self
     }
