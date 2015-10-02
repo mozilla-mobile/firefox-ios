@@ -655,9 +655,6 @@ public class InitialWithLiveTokenAndInfo: BaseSyncStateWithInfo {
         return self.client.getMetaGlobal().bind { result in
             if let resp = result.successValue {
                 if let fetched = resp.value.toFetched() {
-                    // We bump the meta/ timestamp because, though in theory there might be
-                    // other records in that collection, even if there are we don't care about them.
-                    self.scratchpad.collectionLastFetched["meta"] = resp.metadata.lastModifiedMilliseconds
                     return deferMaybe(ResolveMetaGlobal.fromState(self, fetched: fetched))
                 }
 
