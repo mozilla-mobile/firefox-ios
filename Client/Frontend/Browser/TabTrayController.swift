@@ -787,7 +787,7 @@ private class EmptyPrivateTabsView: UIView {
         label.textColor = EmptyPrivateTabsViewUX.DescriptionColor
         label.font = EmptyPrivateTabsViewUX.DescriptionFont
         label.textAlignment = NSTextAlignment.Center
-        label.numberOfLines = 3
+        label.numberOfLines = 0
         label.preferredMaxLayoutWidth = EmptyPrivateTabsViewUX.MaxDescriptionWidth
         return label
     }()
