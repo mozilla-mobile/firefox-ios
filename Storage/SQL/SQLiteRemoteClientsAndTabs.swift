@@ -16,14 +16,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
     public init(db: BrowserDB) {
         self.db = db
-
-        // There's no need to synchronously wait to update these tables --
-        // we don't pay attention to the return value -- so let's do it in
-        // the background.
-        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-        dispatch_async(queue) {
-            self.db.createOrUpdate(clients, tabs, commands)
-        }
+        self.db.createOrUpdate(clients, tabs, commands)
     }
 
     private func doWipe(f: (conn: SQLiteDBConnection, inout err: NSError?) -> ()) -> Deferred<Maybe<()>> {
