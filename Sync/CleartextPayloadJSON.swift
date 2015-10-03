@@ -16,7 +16,7 @@ public class BasePayloadJSON: JSON {
 
     // Override me.
     private func isValid() -> Bool {
-        return !isError && self["id"].isString
+        return !isError
     }
 }
 
