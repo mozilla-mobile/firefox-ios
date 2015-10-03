@@ -158,6 +158,8 @@ public struct BookmarkRoots {
     public static let ToolbarFolderGUID =      "toolbar_____"
     public static let UnfiledFolderGUID =      "unfiled_____"
 
+    public static let FakeDesktopFolderGUID =  "desktop_____"   // Pseudo. Never mentioned in a real record.
+
     /**
      * Sync records are a horrible mess of Places-native GUIDs and Sync-native IDs.
      * For example:
@@ -193,7 +195,6 @@ public struct BookmarkRoots {
     /*
     public static let TagsFolderGUID =         "tags________"
     public static let PinnedFolderGUID =       "pinned______"
-    public static let FakeDesktopFolderGUID =  "desktop_____"
      */
 
     static let RootID =    0
