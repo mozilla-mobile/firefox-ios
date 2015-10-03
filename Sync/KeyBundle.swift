@@ -220,14 +220,12 @@ public class Keys: Equatable {
     }
 
     public init(payload: KeysPayload?) {
-        if let payload = payload {
-            if payload.isValid() {
-                if let keys = payload.defaultKeys {
-                    self.defaultBundle = keys
-                    self.valid = true
-                    return
-                }
+        if let payload = payload where payload.isValid() {
+            if let keys = payload.defaultKeys {
+                self.defaultBundle = keys
                 self.collectionKeys = payload.collectionKeys
+                self.valid = true
+                return
             }
         }
         self.defaultBundle = KeyBundle.invalid
@@ -238,6 +236,10 @@ public class Keys: Equatable {
         let f: (JSON) -> KeysPayload = { KeysPayload($0) }
         let keysRecord = Record<KeysPayload>.fromEnvelope(downloaded, payloadFactory: master.factory(f))
         self.init(payload: keysRecord?.payload)
+    }
+
+    public class func random() -> Keys {
+        return Keys(defaultBundle: KeyBundle.random())
     }
 
     public func forCollection(collection: String) -> KeyBundle {
@@ -253,6 +255,7 @@ public class Keys: Equatable {
 
     public func asPayload() -> KeysPayload {
         let json: JSON = JSON([
+            "id": "keys",
             "collection": "crypto",
             "default": self.defaultBundle.asPair(),
             "collections": mapValues(self.collectionKeys, f: { $0.asPair() })

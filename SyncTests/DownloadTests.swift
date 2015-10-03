@@ -65,20 +65,4 @@ class DownloadTests: XCTestCase {
         }
         waitForExpectationsWithTimeout(10, handler: nil)
     }
-
-    func makeValidEnvelope(guid: GUID, modified: Timestamp) -> EnvelopeJSON {
-        let clientBody: [String: AnyObject] = [
-            "name": "Foobar",
-            "commands": [],
-            "type": "mobile",
-        ]
-        let clientBodyString = JSON(clientBody).toString(false)
-        let clientRecord: [String : AnyObject] = [
-            "id": guid,
-            "collection": "clients",
-            "payload": clientBodyString,
-            "modified": Double(modified) / 1000,
-        ]
-        return EnvelopeJSON(JSON(clientRecord).toString(false))
-    }
 }
