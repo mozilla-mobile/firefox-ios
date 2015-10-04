@@ -404,6 +404,26 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
     }
 
     /**
+     * Remove child records for any folders that've been deleted.
+     */
+    private func deleteChildrenInTransactionWithGUIDs(guids: [GUID], connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) -> NSError? {
+        log.debug("Deleting \(guids.count) mirror bookmarks from structure table.")
+        let chunks = chunk(guids, by: maxVars)
+        for chunk in chunks {
+            let inList = Array<String>(count: chunk.count, repeatedValue: "?").joinWithSeparator(", ")
+            let delStructure = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN (\(inList))"
+
+            // Yup, this looks like a redundant cast. But it's not, thanks to SwiftData.
+            let args: Args = chunk.flatMap { $0 as? AnyObject }
+            if let error = connection.executeChange(delStructure, withArgs: args) {
+                log.error("Updating mirror structure: \(error.description).")
+                return error
+            }
+        }
+        return nil
+    }
+
+    /**
      * This is a little gnarly because our DB access layer is rough.
      * Within a single transaction, we walk the list of items, attempting to update
      * and inserting if the update failed. (TODO: batch the inserts!)
@@ -418,9 +438,8 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
         let deferred = Deferred<Maybe<()>>(defaultQueue: dispatch_get_main_queue())
 
         let deleted = records.filter { $0.isDeleted }.map { $0.guid }
-        let nonDeleted = records.filter { !$0.isDeleted }
-        let values = nonDeleted.map { $0.getUpdateOrInsertArgs() }
-        let children = nonDeleted.flatMap { $0.getChildrenArgs() }
+        let values = records.map { $0.getUpdateOrInsertArgs() }
+        let children = records.filter { !$0.isDeleted }.flatMap { $0.getChildrenArgs() }
 
         var err: NSError?
         self.db.transaction(&err) { (conn, err) -> Bool in
@@ -496,6 +515,10 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
                     }
                 }
             }
+
+            // We only drop the child structure. Otherwise, deleted records stay in the mirror
+            // table so that we know about the deletion when we do a real sync!
+            err = self.deleteChildrenInTransactionWithGUIDs(deleted, connection: conn)
 
             if err == nil {
                 deferred.fillIfUnfilled(Maybe(success: ()))
