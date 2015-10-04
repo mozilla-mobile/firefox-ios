@@ -99,6 +99,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+            AdjustIntegration.sharedInstance.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
+        }
         self.window!.makeKeyAndVisible()
         return true
     }
@@ -282,4 +285,3 @@ public func configureCrashReporter(reporter: CrashReporter, optedIn: Bool?) {
         configureReporter()
     }
 }
-
