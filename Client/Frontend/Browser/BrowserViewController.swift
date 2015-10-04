@@ -799,6 +799,35 @@ class BrowserViewController: UIViewController {
         let tab = tabManager.addTab(NSURLRequest(URL: url))
         tabManager.selectTab(tab)
     }
+
+    
+    func openReadingList() {
+        openNewTab()
+        homePanelController?.selectedButtonIndex = 4
+    }
+
+    func openBookmarks() {
+        openNewTab()
+        homePanelController?.selectedButtonIndex = 1
+    }
+
+    func openPrivateTab() {
+        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile)
+        var tab: Browser
+        self.tabTrayController = tabTrayController
+        self.tabTrayController.changeMode(true)
+        tab = self.tabManager.addTab(isPrivate: true)
+        self.tabManager.selectTab(tab)
+    }
+
+    func openNewTab() {
+        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile)
+        var tab: Browser
+        self.tabTrayController = tabTrayController
+        self.tabTrayController.changeMode(false)
+        tab = self.tabManager.addTab()
+        self.tabManager.selectTab(tab)
+    }
 }
 
 /**
