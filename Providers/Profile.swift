@@ -27,6 +27,8 @@ public protocol SyncManager {
     // The simplest possible approach.
     func beginTimedSyncs()
     func endTimedSyncs()
+    func applicationDidEnterBackground()
+    func applicationDidBecomeActive()
 
     func onRemovedAccount(account: FirefoxAccount?) -> Success
     func onAddedAccount() -> Success
@@ -275,8 +277,13 @@ public class BrowserProfile: Profile {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
         withExtendedLifetime(self.places) {
-            return SQLiteBookmarks(db: self.db)
+            return MergedSQLiteBookmarks(db: self.db)
         }
+    }()
+
+    lazy var mirrorBookmarks: BookmarkMirrorStorage = {
+        // Yeah, this is lazy. Sorry.
+        return self.bookmarks as! MergedSQLiteBookmarks
     }()
 
     lazy var searchEngines: SearchEngines = {
@@ -456,6 +463,17 @@ public class BrowserProfile: Profile {
 
         private var syncTimer: NSTimer? = nil
 
+        private var backgrounded: Bool = true
+        func applicationDidEnterBackground() {
+            self.backgrounded = true
+            self.endTimedSyncs()
+        }
+
+        func applicationDidBecomeActive() {
+            self.backgrounded = false
+            self.beginTimedSyncs()
+        }
+
         /**
          * Locking is managed by withSyncInputs. Make sure you take and release these
          * whenever you do anything Sync-ey.
@@ -597,6 +615,12 @@ public class BrowserProfile: Profile {
             return loginsSynchronizer.synchronizeLocalLogins(self.profile.logins, withServer: ready.client, info: ready.info)
         }
 
+        private func mirrorBookmarksWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
+            log.debug("Mirroring server bookmarks to storage.")
+            let bookmarksMirrorer = ready.synchronizer(MirroringBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
+            return bookmarksMirrorer.mirrorBookmarksToStorage(self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
+        }
+
         /**
          * Returns nil if there's no account.
          */
@@ -664,6 +688,7 @@ public class BrowserProfile: Profile {
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate),
                 ("logins", self.syncLoginsWithDelegate),
+                ("bookmarks", self.mirrorBookmarksWithDelegate),
                 ("history", self.syncHistoryWithDelegate)
             ) >>> succeed
         }
@@ -718,6 +743,27 @@ public class BrowserProfile: Profile {
         func syncHistory() -> SyncResult {
             // TODO: recognize .NotStarted.
             return self.sync("history", function: syncHistoryWithDelegate)
+        }
+
+        func mirrorBookmarks() -> SyncResult {
+            return self.sync("bookmarks", function: mirrorBookmarksWithDelegate)
+        }
+
+        /**
+         * Return a thunk that continues to return true so long as an ongoing sync
+         * should continue.
+         */
+        func greenLight() -> () -> Bool {
+            let start = NSDate.now()
+
+            // Give it one minute to run before we stop.
+            let stopBy = start + OneMinuteInMilliseconds
+            log.debug("Checking green light. Backgrounded: \(self.backgrounded).")
+            return {
+                !self.backgrounded &&
+                NSDate.now() < stopBy &&
+                self.profile.hasSyncableAccount()
+            }
         }
     }
 }

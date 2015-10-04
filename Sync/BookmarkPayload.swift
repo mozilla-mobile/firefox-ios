@@ -9,6 +9,16 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
+/**
+ * Hierarchy:
+ * - BookmarkBasePayload
+ *   \_ FolderPayload
+ *      \_ LivemarkPayload
+ *   \_ SeparatorPayload
+ *   \_ BookmarkPayload
+ *      \_ BookmarkQueryPayload
+ */
+
 public enum BookmarkType: String {
     case livemark
     case separator
@@ -16,7 +26,11 @@ public enum BookmarkType: String {
     case bookmark
     case query
     case microsummary     // Dead: now a bookmark.
-    case item             // Oh, Sync.
+
+    // The result might be invalid, but it won't be nil.
+    public static func somePayloadFromJSON(json: JSON) -> BookmarkBasePayload {
+        return payloadFromJSON(json) ?? BookmarkBasePayload(json)
+    }
 
     public static func payloadFromJSON(json: JSON) -> BookmarkBasePayload? {
         guard let typeString = json["type"].asString else {
@@ -28,9 +42,9 @@ public enum BookmarkType: String {
 
         let result: BookmarkBasePayload
         switch type {
-        case bookmark:
-            fallthrough
         case microsummary:
+            fallthrough
+        case bookmark:
             result = BookmarkPayload(json)
         case folder:
             result = FolderPayload(json)
@@ -40,8 +54,6 @@ public enum BookmarkType: String {
             result = SeparatorPayload(json)
         case query:
             result = BookmarkQueryPayload(json)
-        case item:
-            return nil
         }
 
         if result.isValid() {
@@ -121,10 +133,7 @@ public class SeparatorPayload: BookmarkBasePayload {
 
 public class FolderPayload: BookmarkBasePayload {
     private var childrenAreValid: Bool {
-        guard let children = self["children"].asArray else {
-            return false
-        }
-        return children.every({ $0.isString })
+        return self.hasStringArrayField("children")
     }
 
     override public func isValid() -> Bool {
@@ -132,11 +141,16 @@ public class FolderPayload: BookmarkBasePayload {
             return false
         }
 
-        if !self.hasRequiredStringFields(["title", "description"]) {
-            log.warning("Folder \(self.id) missing title or description.")
+        if !self.hasRequiredStringFields(["title"]) {
+            log.warning("Folder \(self.id) missing title.")
             return false
         }
 
+        if !self.hasOptionalStringFields(["description"]) {
+            log.warning("Folder \(self.id) missing string description.")
+            return false
+
+        }
         if !self.childrenAreValid {
             log.warning("Folder \(self.id) has invalid children.")
             return false
@@ -179,7 +193,10 @@ public class FolderPayload: BookmarkBasePayload {
 }
 
 public class BookmarkPayload: BookmarkBasePayload {
-    private static let requiredBookmarkStringFields = ["title", "bmkUri", "description", "tags", "keyword"]
+    private static let requiredBookmarkStringFields = ["bmkUri"]
+
+    // Title *should* be required, but can be missing for queries. Great.
+    private static let optionalBookmarkStringFields = ["title", "keyword", "description"]
     private static let optionalBookmarkBooleanFields = ["loadInSidebar"]
 
     override public func isValid() -> Bool {
@@ -189,6 +206,15 @@ public class BookmarkPayload: BookmarkBasePayload {
 
         if !self.hasRequiredStringFields(BookmarkPayload.requiredBookmarkStringFields) {
             log.warning("Bookmark \(self.id) missing required string field.")
+            return false
+        }
+
+        if !self.hasStringArrayField("tags") {
+            log.warning("Bookmark \(self.id) missing tags array.")
+            return false
+        }
+
+        if !self.hasOptionalStringFields(BookmarkPayload.optionalBookmarkStringFields) {
             return false
         }
 
@@ -212,11 +238,43 @@ public class BookmarkPayload: BookmarkBasePayload {
             return false
         }
 
+        // TODO: compare optional fields.
+
+        if Set(self.tags) != Set(p.tags) {
+            return false
+        }
+
         if self["loadInSidebar"].asBool != p["loadInSidebar"].asBool {
             return false
         }
 
         return true
+    }
+
+    lazy var tags: [String] = {
+        return self["tags"].asArray?.flatMap { $0.asString } ?? []
+    }()
+
+    // This goes here because extensions cannot override methods yet.
+    // The rest are in extension blocks at the end of this file.
+    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Bookmark, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.bookmark(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            // TODO: these might need to be weakened if real-world data is dirty.
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString!,
+            title: self["title"].asString ?? "",
+            description: self["description"].asString,
+            URI: self["bmkUri"].asString!,
+            tags: self["tags"].toString(),           // Stringify it so we can put the array in the DB.
+            keyword: self["keyword"].asString
+        )
     }
 }
 
@@ -226,8 +284,8 @@ public class BookmarkQueryPayload: BookmarkPayload {
             return false
         }
 
-        if !self.hasRequiredStringFields(["folderName", "queryId"]) {
-            log.warning("Query \(self.id) missing required string field.")
+        if !self.hasOptionalStringFields(["queryId", "folderName"]) {
+            log.warning("Query \(self.id) missing queryId or folderName.")
             return false
         }
 
@@ -257,11 +315,39 @@ public class BookmarkQueryPayload: BookmarkPayload {
 
         return true
     }
+
+    override public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Query, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.query(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString!,
+            title: self["title"].asString ?? "",
+            description: self["description"].asString,
+            URI: self["bmkUri"].asString!,
+            tags: self["tags"].toString(),           // Stringify it so we can put the array in the DB.
+            keyword: self["keyword"].asString,
+            folderName: self["folderName"].asString,
+            queryID: self["queryID"].asString
+        )
+    }
 }
 
 public class BookmarkBasePayload: CleartextPayloadJSON {
-    private static let requiredStringFields: [String] = ["parentid", "parentName", "type"]
+    private static let requiredStringFields: [String] = ["parentid", "type"]
     private static let optionalBooleanFields: [String] = ["hasDupe"]
+
+    func hasStringArrayField(name: String) -> Bool {
+        guard let arr = self[name].asArray else {
+            return false
+        }
+        return arr.every { $0.isString }
+    }
 
     func hasRequiredStringFields(fields: [String]) -> Bool {
         return fields.every { self[$0].isString }
@@ -300,12 +386,21 @@ public class BookmarkBasePayload: CleartextPayloadJSON {
             return true
         }
 
+        if !(self["parentName"].isString || self.id == "places") {
+            log.warning("Not the places root and missing parent name.")
+            return false
+        }
+
         if !self.hasRequiredStringFields(BookmarkBasePayload.requiredStringFields) {
             log.warning("Item missing required string field.")
             return false
         }
 
         return self.hasOptionalBooleanFields(BookmarkBasePayload.optionalBooleanFields)
+    }
+
+    public var hasDupe: Bool {
+        return self["hasDupe"].asBool ?? false
     }
 
     /**
@@ -341,6 +436,77 @@ public class BookmarkBasePayload: CleartextPayloadJSON {
             return false
         }
 
-        return (self["hasDupe"].asBool ?? false) == (p["hasDupe"].asBool ?? false)
+        if p["parentName"].asString != self["parentName"].asString {
+            return false
+        }
+
+        return self.hasDupe == p.hasDupe
+    }
+}
+
+public protocol MirrorItemable {
+    func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem
+}
+
+extension BookmarkPayload: MirrorItemable {
+    // In the main class definition due to Swift compiler limitations.
+}
+
+extension FolderPayload: MirrorItemable {
+    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Folder, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.folder(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            // TODO: these might need to be weakened if real-world data is dirty.
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString,
+            title: self["title"].asString!,
+            description: self["description"].asString,
+            children: self.children
+        )
+    }
+}
+
+extension LivemarkPayload: MirrorItemable {
+    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Livemark, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.livemark(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            // TODO: these might need to be weakened if real-world data is dirty.
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString!,
+            title: self["title"].asString!,
+            description: self["description"].asString,
+            feedURI: self["feedURI"].asString!,
+            siteURI: self["siteURI"].asString!
+        )
+    }
+}
+
+extension SeparatorPayload: MirrorItemable {
+    public func toMirrorItem(modified: Timestamp) -> BookmarkMirrorItem {
+        if self.deleted {
+            return BookmarkMirrorItem.deleted(.Separator, guid: self.id, modified: modified)
+        }
+
+        return BookmarkMirrorItem.separator(
+            self.id,
+            modified: modified,
+            hasDupe: self.hasDupe,
+            // TODO: these might need to be weakened if real-world data is dirty.
+            parentID: self["parentid"].asString!,
+            parentName: self["parentName"].asString!,
+            pos: self["pos"].asInt!
+        )
     }
 }

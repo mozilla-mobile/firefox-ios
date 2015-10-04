@@ -167,7 +167,6 @@ private func optionalUIntegerHeader(input: AnyObject?) -> Timestamp? {
     return nil
 }
 
-
 public enum SortOption: String {
     case Newest = "newest"
     case Index = "index"
@@ -187,7 +186,6 @@ public struct ResponseMetadata {
     public init(response: NSHTTPURLResponse) {
         self.init(status: response.statusCode, headers: response.allHeaderFields)
     }
-
 
     init(status: Int, headers: [NSObject : AnyObject]) {
         self.status = status
@@ -313,8 +311,7 @@ public class Sync15StorageClient {
              * Returns true if handled.
              */
             func failFromResponse(response: NSHTTPURLResponse?) -> Bool {
-                // TODO: Swift 2.0 guards.
-                if response == nil {
+                guard let response = response else {
                     // TODO: better error.
                     log.error("No response")
                     let result = Maybe<T>(failure: RecordParseError())
@@ -322,7 +319,6 @@ public class Sync15StorageClient {
                     return true
                 }
 
-                let response = response!
                 log.debug("Status code: \(response.statusCode).")
 
                 let storageResponse = StorageResponse(value: response, metadata: ResponseMetadata(response: response))
@@ -636,32 +632,57 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
      * multiple requests. The others use application/newlines. We don't want to write
      * another Serializer, and we're loading everything into memory anyway.
      */
-    public func getSince(since: Timestamp) -> Deferred<Maybe<StorageResponse<[Record<T>]>>> {
+    public func getSince(since: Timestamp, sort: SortOption?=nil, limit: Int?=nil, offset: String?=nil) -> Deferred<Maybe<StorageResponse<[Record<T>]>>> {
         let deferred = Deferred<Maybe<StorageResponse<[Record<T>]>>>(defaultQueue: client.resultQueue)
 
+        // Fills the Deferred for us.
         if self.client.checkBackoff(deferred) {
             return deferred
         }
 
-        let req = client.requestGET(self.collectionURI.withQueryParams([
+        var params: [NSURLQueryItem] = [
             NSURLQueryItem(name: "full", value: "1"),
-            NSURLQueryItem(name: "newer", value: millisecondsToDecimalSeconds(since))]))
+            NSURLQueryItem(name: "newer", value: millisecondsToDecimalSeconds(since)),
+        ]
+
+        if let offset = offset {
+            params.append(NSURLQueryItem(name: "offset", value: offset))
+        }
+
+        if let limit = limit {
+            params.append(NSURLQueryItem(name: "limit", value: "\(limit)"))
+        }
+
+        if let sort = sort {
+            params.append(NSURLQueryItem(name: "sort", value: sort.rawValue))
+        }
+
+        log.debug("Issuing GET with newer = \(since).")
+        let req = client.requestGET(self.collectionURI.withQueryParams(params))
 
         req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, result) in
 
-            if let json: JSON = result.value as? JSON {
-                func recordify(json: JSON) -> Record<T>? {
-                    let envelope = EnvelopeJSON(json)
-                    return Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
-                }
-                if let arr = json.asArray {
-                    let response = StorageResponse(value: optFilter(arr.map(recordify)), response: response!)
-                    deferred.fill(Maybe(success: response))
-                    return
-                }
+            log.debug("Response is \(response).")
+            guard let json: JSON = result.value as? JSON else {
+                log.warning("Non-JSON response.")
+                deferred.fill(Maybe(failure: RecordParseError()))
+                return
             }
 
-            deferred.fill(Maybe(failure: RecordParseError()))
+            guard let arr = json.asArray else {
+                log.warning("Non-array response.")
+                deferred.fill(Maybe(failure: RecordParseError()))
+                return
+            }
+
+            func recordify(json: JSON) -> Record<T>? {
+                let envelope = EnvelopeJSON(json)
+                return Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
+            }
+
+            let records = optFilter(arr.map(recordify))
+            let response = StorageResponse(value: records, response: response!)
+            deferred.fill(Maybe(success: response))
         })
 
         return deferred

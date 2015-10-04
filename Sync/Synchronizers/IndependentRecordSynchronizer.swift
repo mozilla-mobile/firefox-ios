@@ -35,7 +35,7 @@ class Uploader {
     }
 }
 
-public class IndependentRecordSynchronizer: BaseSingleCollectionSynchronizer {
+public class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronizer {
     func applyIncomingToStorage<T>(records: [T], fetched: Timestamp, apply: T -> Success) -> Success {
         func done() -> Success {
             log.debug("Bumping fetch timestamp to \(fetched).")

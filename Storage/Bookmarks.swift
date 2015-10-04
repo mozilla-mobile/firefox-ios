@@ -28,6 +28,128 @@ public protocol SearchableBookmarks {
     func bookmarksByURL(url: NSURL) -> Deferred<Maybe<Cursor<BookmarkItem>>>
 }
 
+public struct BookmarkMirrorItem {
+    public let guid: GUID
+    public let type: BookmarkNodeType
+    let serverModified: Timestamp
+    let isDeleted: Bool
+    let hasDupe: Bool
+    let parentID: GUID?
+    let parentName: String?
+
+    // Livemarks.
+    let feedURI: String?
+    let siteURI: String?
+
+    // Separators.
+    let pos: Int?
+
+    // Folders, livemarks, bookmarks and queries.
+    let title: String?
+    let description: String?
+
+    // Bookmarks and queries.
+    let bookmarkURI: String?
+    let tags: String?
+    let keyword: String?
+
+    // Queries.
+    let folderName: String?
+    let queryID: String?
+
+    // Folders.
+    let children: [GUID]?
+
+    // The places root is a folder but has no parentName.
+    public static func folder(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String?, title: String, description: String?, children: [GUID]) -> BookmarkMirrorItem {
+        let id = BookmarkRoots.translateIncomingRootGUID(guid)
+        let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
+
+        return BookmarkMirrorItem(guid: id, type: .Folder, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
+            feedURI: nil, siteURI: nil,
+            pos: nil,
+            title: title, description: description,
+            bookmarkURI: nil, tags: nil, keyword: nil,
+            folderName: nil, queryID: nil,
+            children: children)
+    }
+
+    public static func livemark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, feedURI: String, siteURI: String) -> BookmarkMirrorItem {
+        let id = BookmarkRoots.translateIncomingRootGUID(guid)
+        let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
+
+        return BookmarkMirrorItem(guid: id, type: .Livemark, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
+            feedURI: feedURI, siteURI: siteURI,
+            pos: nil,
+            title: title, description: description,
+            bookmarkURI: nil, tags: nil, keyword: nil,
+            folderName: nil, queryID: nil,
+            children: nil)
+    }
+
+    public static func separator(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, pos: Int) -> BookmarkMirrorItem {
+        let id = BookmarkRoots.translateIncomingRootGUID(guid)
+        let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
+
+        return BookmarkMirrorItem(guid: id, type: .Separator, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
+            feedURI: nil, siteURI: nil,
+            pos: pos,
+            title: nil, description: nil,
+            bookmarkURI: nil, tags: nil, keyword: nil,
+            folderName: nil, queryID: nil,
+            children: nil)
+    }
+
+    public static func bookmark(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, URI: String, tags: String, keyword: String?) -> BookmarkMirrorItem {
+        let id = BookmarkRoots.translateIncomingRootGUID(guid)
+        let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
+
+        return BookmarkMirrorItem(guid: id, type: .Bookmark, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
+            feedURI: nil, siteURI: nil,
+            pos: nil,
+            title: title, description: description,
+            bookmarkURI: URI, tags: tags, keyword: keyword,
+            folderName: nil, queryID: nil,
+            children: nil)
+    }
+
+    public static func query(guid: GUID, modified: Timestamp, hasDupe: Bool, parentID: GUID, parentName: String, title: String, description: String?, URI: String, tags: String, keyword: String?, folderName: String?, queryID: String?) -> BookmarkMirrorItem {
+        let id = BookmarkRoots.translateIncomingRootGUID(guid)
+        let parent = BookmarkRoots.translateIncomingRootGUID(parentID)
+
+        return BookmarkMirrorItem(guid: id, type: .Query, serverModified: modified,
+            isDeleted: false, hasDupe: hasDupe, parentID: parent, parentName: parentName,
+            feedURI: nil, siteURI: nil,
+            pos: nil,
+            title: title, description: description,
+            bookmarkURI: URI, tags: tags, keyword: keyword,
+            folderName: folderName, queryID: queryID,
+            children: nil)
+    }
+
+    public static func deleted(type: BookmarkNodeType, guid: GUID, modified: Timestamp) -> BookmarkMirrorItem {
+        let id = BookmarkRoots.translateIncomingRootGUID(guid)
+
+        return BookmarkMirrorItem(guid: id, type: type, serverModified: modified,
+            isDeleted: true, hasDupe: false, parentID: nil, parentName: nil,
+            feedURI: nil, siteURI: nil,
+            pos: nil,
+            title: nil, description: nil,
+            bookmarkURI: nil, tags: nil, keyword: nil,
+            folderName: nil, queryID: nil,
+            children: nil)
+    }
+}
+
+public protocol BookmarkMirrorStorage {
+    func applyRecords(records: [BookmarkMirrorItem]) -> Success
+}
+
+
 public struct BookmarkRoots {
     // These match Places on desktop.
     public static let RootGUID =               "root________"
@@ -36,10 +158,43 @@ public struct BookmarkRoots {
     public static let ToolbarFolderGUID =      "toolbar_____"
     public static let UnfiledFolderGUID =      "unfiled_____"
 
+    public static let FakeDesktopFolderGUID =  "desktop_____"   // Pseudo. Never mentioned in a real record.
+
+    /**
+     * Sync records are a horrible mess of Places-native GUIDs and Sync-native IDs.
+     * For example:
+     * {"id":"places",
+     *  "type":"folder",
+     *  "title":"",
+     *  "description":null,
+     *  "children":["menu________","toolbar_____",
+     *              "tags________","unfiled_____",
+     *              "jKnyPDrBQSDg","T6XK5oJMU8ih"],
+     *  "parentid":"2hYxKgBwvkEH"}"
+     *
+     * We thus normalize on the extended Places IDs (with underscores) for
+     * local storage, and translate to the Sync IDs when creating an outbound
+     * record.
+     * We translate the record's ID and also its parent. Evidence suggests that
+     * we don't need to translate children IDs.
+     *
+     * TODO: We don't create outbound records yet, so that's why there's no
+     * translation in that direction yet!
+     */
+    public static func translateIncomingRootGUID(guid: GUID) -> GUID {
+        return [
+            "places": RootGUID,
+            "root": RootGUID,
+            "mobile": MobileFolderGUID,
+            "menu": MenuFolderGUID,
+            "toolbar": ToolbarFolderGUID,
+            "unfiled": UnfiledFolderGUID
+        ][guid] ?? guid
+    }
+
     /*
     public static let TagsFolderGUID =         "tags________"
     public static let PinnedFolderGUID =       "pinned______"
-    public static let FakeDesktopFolderGUID =  "desktop_____"
      */
 
     static let RootID =    0
@@ -50,7 +205,11 @@ public struct BookmarkRoots {
 }
 
 /**
- * This matches Places's nsINavBookmarksService, just for sanity.
+ * This partly matches Places's nsINavBookmarksService, just for sanity.
+ *
+ * It is further extended to support the types that exist in Sync, so we can use
+ * this to store mirrored rows.
+ *
  * These are only used at the DB layer.
  */
 public enum BookmarkNodeType: Int {
@@ -58,6 +217,11 @@ public enum BookmarkNodeType: Int {
     case Folder = 2
     case Separator = 3
     case DynamicContainer = 4
+
+    case Livemark = 5
+    case Query = 6
+
+    // No microsummary: those turn into bookmarks.
 }
 
 /**
@@ -123,44 +287,45 @@ public class BookmarksModel {
     /**
      * Produce a new model rooted at the appropriate folder. Fails if the folder doesn't exist.
      */
-    public func selectFolder(folder: BookmarkFolder, success: BookmarksModel -> (), failure: Any -> ()) {
-        modelFactory.modelForFolder(folder, success: success, failure: failure)
+    public func selectFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
+        return modelFactory.modelForFolder(folder)
     }
 
     /**
      * Produce a new model rooted at the appropriate folder. Fails if the folder doesn't exist.
      */
-    public func selectFolder(guid: String, success: BookmarksModel -> (), failure: Any -> ()) {
-        modelFactory.modelForFolder(guid, success: success, failure: failure)
+    public func selectFolder(guid: String) -> Deferred<Maybe<BookmarksModel>> {
+        return modelFactory.modelForFolder(guid)
     }
 
     /**
      * Produce a new model rooted at the base of the hierarchy. Should never fail.
      */
-    public func selectRoot(success: BookmarksModel -> (), failure: Any -> ()) {
-        modelFactory.modelForRoot(success, failure: failure)
+    public func selectRoot() -> Deferred<Maybe<BookmarksModel>> {
+        return modelFactory.modelForRoot()
     }
 
     /**
      * Produce a new model rooted at the same place as this model. Can fail if
      * the folder has been deleted from the backing store.
      */
-    public func reloadData(success: BookmarksModel -> (), failure: Any -> ()) {
-        modelFactory.modelForFolder(current, success: success, failure: failure)
+    public func reloadData() -> Deferred<Maybe<BookmarksModel>> {
+        return modelFactory.modelForFolder(current)
     }
 }
 
 public protocol BookmarksModelFactory {
-    func modelForFolder(folder: BookmarkFolder, success: BookmarksModel -> (), failure: Any -> ())
-    func modelForFolder(guid: String, success: BookmarksModel -> (), failure: Any -> ())
+    func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>>
+    func modelForFolder(guid: GUID) -> Deferred<Maybe<BookmarksModel>>
+    func modelForFolder(guid: GUID, title: String) -> Deferred<Maybe<BookmarksModel>>
 
-    func modelForRoot(success: BookmarksModel -> (), failure: Any -> ())
+    func modelForRoot() -> Deferred<Maybe<BookmarksModel>>
 
     // Whenever async construction is necessary, we fall into a pattern of needing
     // a placeholder that behaves correctly for the period between kickoff and set.
     var nullModel: BookmarksModel { get }
 
-    func isBookmarked(url: String, success: Bool -> (), failure: Any -> ())
+    func isBookmarked(url: String) -> Deferred<Maybe<Bool>>
     func remove(bookmark: BookmarkNode) -> Success
     func removeByURL(url: String) -> Success
     func clearBookmarks() -> Success
@@ -172,7 +337,7 @@ public protocol BookmarksModelFactory {
 public class MemoryBookmarkFolder: BookmarkFolder, SequenceType {
     let children: [BookmarkNode]
 
-    public init(guid: String, title: String, children: [BookmarkNode]) {
+    public init(guid: GUID, title: String, children: [BookmarkNode]) {
         self.children = children
         super.init(guid: guid, title: title)
     }
@@ -262,6 +427,33 @@ private extension SuggestedSite {
     }
 }
 
+public class PrependedBookmarkFolder: BookmarkFolder {
+    private let main: BookmarkFolder
+    private let prepend: BookmarkNode
+
+    init(main: BookmarkFolder, prepend: BookmarkNode) {
+        self.main = main
+        self.prepend = prepend
+        super.init(guid: main.guid, title: main.guid, editable: false)
+    }
+
+    override public var count: Int {
+        return self.main.count + 1
+    }
+
+    override public subscript(index: Int) -> BookmarkNode? {
+        if index == 0 {
+            return self.prepend
+        }
+
+        return self.main[index - 1]
+    }
+
+    override public func itemIsEditableAtIndex(index: Int) -> Bool {
+        return index > 0
+    }
+}
+
 public class BookmarkFolderWithDefaults: BookmarkFolder {
     private let folder: BookmarkFolder
     private let sites: SuggestedSitesCursor
@@ -314,11 +506,15 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         root = MemoryBookmarkFolder(guid: BookmarkRoots.RootGUID, title: "Root", children: [mobile, unsorted])
     }
 
-    public func modelForFolder(folder: BookmarkFolder, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
-        self.modelForFolder(folder.guid, success: success, failure: failure)
+    public func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
+        return self.modelForFolder(folder.guid, title: folder.title)
     }
 
-    public  func modelForFolder(guid: String, success: (BookmarksModel) -> (), failure: (Any) -> ()) {
+    public func modelForFolder(guid: GUID) -> Deferred<Maybe<BookmarksModel>> {
+        return self.modelForFolder(guid, title: "")
+    }
+
+    public func modelForFolder(guid: GUID, title: String) -> Deferred<Maybe<BookmarksModel>> {
         var m: BookmarkFolder
         switch (guid) {
         case BookmarkRoots.MobileFolderGUID:
@@ -332,15 +528,14 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
             m = self.unsorted
             break;
         default:
-            failure("No such folder.")
-            return
+            return deferMaybe(DatabaseError(description: "No such folder \(guid)."))
         }
 
-        success(BookmarksModel(modelFactory: self, root: m))
+        return deferMaybe(BookmarksModel(modelFactory: self, root: m))
     }
 
-    public func modelForRoot(success: (BookmarksModel) -> (), failure: (Any) -> ()) {
-        success(BookmarksModel(modelFactory: self, root: self.root))
+    public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
+        return deferMaybe(BookmarksModel(modelFactory: self, root: self.root))
     }
 
     /**
@@ -355,8 +550,8 @@ public class MockMemoryBookmarksStore: BookmarksModelFactory, ShareToDestination
         self.sink.shareItem(item)
     }
 
-    public func isBookmarked(url: String, success: (Bool) -> (), failure: (Any) -> ()) {
-        failure("Not implemented")
+    public func isBookmarked(url: String) -> Deferred<Maybe<Bool>> {
+        return deferMaybe(DatabaseError(description: "Not implemented"))
     }
 
     public func remove(bookmark: BookmarkNode) -> Success {
