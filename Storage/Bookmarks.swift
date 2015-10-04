@@ -434,7 +434,7 @@ public class PrependedBookmarkFolder: BookmarkFolder {
     init(main: BookmarkFolder, prepend: BookmarkNode) {
         self.main = main
         self.prepend = prepend
-        super.init(guid: main.guid, title: main.guid, editable: false)
+        super.init(guid: main.guid, title: main.guid)
     }
 
     override public var count: Int {

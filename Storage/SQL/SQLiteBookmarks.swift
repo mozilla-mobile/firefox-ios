@@ -104,7 +104,7 @@ private class MirrorBookmarkNodeFactory {
         let guid = row["guid"] as! String
         let url = row["bmkUri"] as! String
         let title = row["title"] as? String ?? url
-        let bookmark = BookmarkItem(guid: guid, title: title, url: url, editable: false)
+        let bookmark = BookmarkItem(guid: guid, title: title, url: url)
         bookmark.id = id
         return bookmark
     }
@@ -113,7 +113,7 @@ private class MirrorBookmarkNodeFactory {
         let id = row["id"] as! Int
         let guid = row["guid"] as! String
         let title = row["title"] as? String ?? SQLiteBookmarks.defaultFolderTitle
-        let folder = BookmarkFolder(guid: guid, title: title, editable: false)
+        let folder = BookmarkFolder(guid: guid, title: title)
         folder.id = id
         return folder
     }
@@ -413,8 +413,7 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
             let inList = Array<String>(count: chunk.count, repeatedValue: "?").joinWithSeparator(", ")
             let delStructure = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN (\(inList))"
 
-            // Yup, this looks like a redundant cast. But it's not, thanks to SwiftData.
-            let args: Args = chunk.flatMap { $0 as? AnyObject }
+            let args: Args = chunk.flatMap { $0 as AnyObject }
             if let error = connection.executeChange(delStructure, withArgs: args) {
                 log.error("Updating mirror structure: \(error.description).")
                 return error
