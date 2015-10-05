@@ -809,7 +809,7 @@ private class EmptyPrivateTabsView: UIView {
     }()
 
     private var learnMoreButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .System)
         button.setTitle(
             NSLocalizedString("Learn More", tableName: "PrivateBrowsing", comment: "Text button displayed when there are no tabs open while in private mode"),
             forState: .Normal)
