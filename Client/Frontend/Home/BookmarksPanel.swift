@@ -20,7 +20,7 @@ struct BookmarksPanelUX {
 class BookmarksPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var source: BookmarksModel?
-    var parentFolders = [BookmarkFolder]()
+    var parentFolders = [BookmarksModel]()
 
     private let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
     private let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
@@ -136,7 +136,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             if parentFolders.count == 1 {
                 header.textLabel?.text = NSLocalizedString("Bookmarks", comment: "Panel accessibility label")
             } else {
-                header.textLabel?.text = parentFolder.title
+                header.textLabel?.text = parentFolder.current.title
             }
         }
 
@@ -163,7 +163,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 break
 
             case let folder as BookmarkFolder:
-                parentFolders.append(source.current)
+                parentFolders.append(source)
                 // Descend into the folder.
                 source.selectFolder(folder).upon(onModelFetched)
                 break
@@ -242,9 +242,11 @@ private protocol BookmarkFolderTableViewHeaderDelegate {
 
 extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
     private func didSelectHeader() {
-        guard let parentFolder = parentFolders.last else { return }
-        source?.selectFolder(parentFolder.guid).upon(onModelFetched)
-        parentFolders.removeLast()
+        guard let parentFolder = parentFolders.popLast() else {
+            return
+        }
+
+        self.onNewModel(parentFolder)
     }
 }
 
