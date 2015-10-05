@@ -575,7 +575,7 @@ extension SQLiteBookmarkMirrorStorage: BookmarksModelFactory {
 
             let desktop = self.folderForDesktopBookmarksCursor(cursor)
             let prepended = PrependedBookmarkFolder(main: mobile, prepend: desktop)
-            return deferMaybe(BookmarksModel(modelFactory: self, root: prepended))
+            return deferMaybe(BookmarksModel(modelFactory: factory, root: prepended))
         }
     }
 
