@@ -20,7 +20,7 @@ struct BookmarksPanelUX {
 class BookmarksPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var source: BookmarksModel?
-    var parentFolder:BookmarkFolder?
+    var parentFolders = [BookmarkFolder]()
 
     private let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
     private let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
@@ -32,7 +32,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     override var profile: Profile! {
         didSet {
             // Get all the bookmarks split by folders
-             profile.bookmarks.modelForRoot(self.onNewModel, failure: self.onModelFailure)
+             profile.bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID).upon(onModelFetched)
         }
     }
 
@@ -122,7 +122,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // Don't show a header for the root
-        if source == nil || source?.current.guid == BookmarkRoots.RootGUID {
+        if source == nil || parentFolders.isEmpty {
             return nil
         }
         guard let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier(BookmarkFolderHeaderViewIdentifier) as? BookmarkFolderTableViewHeader else { return nil }
@@ -132,8 +132,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             header.delegate = self
         }
 
-        if let parentFolder = parentFolder {
-            if parentFolder.guid == BookmarkRoots.RootGUID {
+        if let parentFolder = parentFolders.last {
+            if parentFolders.count == 1 {
                 header.textLabel?.text = NSLocalizedString("Bookmarks", comment: "Panel accessibility label")
             } else {
                 header.textLabel?.text = parentFolder.title
@@ -145,7 +145,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // Don't show a header for the root. If there's no root (i.e. source == nil), we'll also show no header.
-        if source == nil || source?.current.guid == BookmarkRoots.RootGUID {
+        if source == nil || parentFolders.isEmpty {
             return 0
         }
 
@@ -163,9 +163,9 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 break
 
             case let folder as BookmarkFolder:
+                parentFolders.append(source.current)
                 // Descend into the folder.
-                parentFolder = source.current
-                source.selectFolder(folder, success: self.onNewModel, failure: self.onModelFailure)
+                source.selectFolder(folder).upon(onModelFetched)
                 break
 
             default:
@@ -242,12 +242,9 @@ private protocol BookmarkFolderTableViewHeaderDelegate {
 
 extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
     private func didSelectHeader() {
-        guard let parentFolder = parentFolder else { return }
-        if parentFolder.guid == BookmarkRoots.RootGUID {
-            self.source?.selectRoot(self.onNewModel, failure: self.onModelFailure)
-        } else {
-            self.source?.selectFolder(parentFolder, success: self.onNewModel, failure: self.onModelFailure)
-        }
+        guard let parentFolder = parentFolders.last else { return }
+        source?.selectFolder(parentFolder.guid).upon(onModelFetched)
+        parentFolders.removeLast()
     }
 }
 
