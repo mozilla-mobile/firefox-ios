@@ -512,7 +512,7 @@ private class YourRightsSetting: Setting {
     }
 
     override var url: NSURL? {
-        return NSURL(string: WebServer.sharedInstance.URLForResource("rights", module: "about"))
+        return NSURL(string: "https://www.mozilla.org/about/legal/terms/firefox/")
     }
 
     private override func onClick(navigationController: UINavigationController?) {

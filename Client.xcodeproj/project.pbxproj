@@ -604,10 +604,6 @@
 		E679FDBB1B99CF10008C220A /* PrivateBrowsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */; settings = {ASSET_TAGS = (); }; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
 		E698FFDA1B4AADF40001F623 /* BrowserScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */; };
-		E69922131B94E3EF007C480D /* about.css in Resources */ = {isa = PBXBuildFile; fileRef = E699220E1B94E3EF007C480D /* about.css */; };
-		E69922141B94E3EF007C480D /* aboutRights.dtd in Resources */ = {isa = PBXBuildFile; fileRef = E699220F1B94E3EF007C480D /* aboutRights.dtd */; };
-		E69922151B94E3EF007C480D /* aboutRights.xhtml in Resources */ = {isa = PBXBuildFile; fileRef = E69922101B94E3EF007C480D /* aboutRights.xhtml */; };
-		E69922161B94E3EF007C480D /* brand.dtd in Resources */ = {isa = PBXBuildFile; fileRef = E69922111B94E3EF007C480D /* brand.dtd */; };
 		E69922171B94E3EF007C480D /* Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = E69922121B94E3EF007C480D /* Licenses.html */; };
 		E69966991B72674B0036F797 /* RollingFileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69966981B72674B0036F797 /* RollingFileLogger.swift */; };
 		E6C05DB21BA1CDAB00CDDD08 /* Breakpad.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E69E4E2A1B9F709A00646EDB /* Breakpad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -820,13 +816,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 6CA0A8071A75135D00AC539F;
 			remoteInfo = SecEncodeTransformTests;
-		};
-		2F67C5271BB0D33000E7B73A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2FA435FA1ABB83B4008031D1;
-			remoteInfo = Account;
 		};
 		2F77F69C1ABCAEFE00484F3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1219,20 +1208,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
-		};
-		E660BDFE1BB06522009AC090 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D38B2D761A8D98380040E6B5 /* SWXMLHash.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CD9D052C1A757D8B003CCB21;
-			remoteInfo = SWXMLHashOSX;
-		};
-		E660BE001BB06522009AC090 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D38B2D761A8D98380040E6B5 /* SWXMLHash.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CD9D05361A757D8B003CCB21;
-			remoteInfo = SWXMLHashOSXTests;
 		};
 		E69E4E291B9F709A00646EDB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1746,10 +1721,6 @@
 		E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTests.swift; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserScrollController.swift; sourceTree = "<group>"; };
-		E699220E1B94E3EF007C480D /* about.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = about.css; sourceTree = "<group>"; };
-		E699220F1B94E3EF007C480D /* aboutRights.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = aboutRights.dtd; sourceTree = "<group>"; };
-		E69922101B94E3EF007C480D /* aboutRights.xhtml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = aboutRights.xhtml; sourceTree = "<group>"; };
-		E69922111B94E3EF007C480D /* brand.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = brand.dtd; sourceTree = "<group>"; };
 		E69922121B94E3EF007C480D /* Licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Licenses.html; sourceTree = "<group>"; };
 		E69966981B72674B0036F797 /* RollingFileLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollingFileLogger.swift; sourceTree = "<group>"; };
 		E69E4E241B9F709A00646EDB /* Breakpad.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Breakpad.xcodeproj; path = "Carthage/Checkouts/google-breakpad-ios/src/client/ios/Breakpad.xcodeproj"; sourceTree = "<group>"; };
@@ -2505,9 +2476,7 @@
 			isa = PBXGroup;
 			children = (
 				D38B2D811A8D98380040E6B5 /* SWXMLHash.framework */,
-				E660BDFF1BB06522009AC090 /* SWXMLHash.framework */,
 				D38B2D831A8D98380040E6B5 /* SWXMLHashTests.xctest */,
-				E660BE011BB06522009AC090 /* SWXMLHashOSXTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2787,10 +2756,6 @@
 		E699220D1B94E3EF007C480D /* About */ = {
 			isa = PBXGroup;
 			children = (
-				E699220E1B94E3EF007C480D /* about.css */,
-				E69922101B94E3EF007C480D /* aboutRights.xhtml */,
-				E699220F1B94E3EF007C480D /* aboutRights.dtd */,
-				E69922111B94E3EF007C480D /* brand.dtd */,
 				E69922121B94E3EF007C480D /* Licenses.html */,
 			);
 			path = About;
@@ -3909,20 +3874,6 @@
 			remoteRef = D3B5A0E91B5459F600C15BCF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		E660BDFF1BB06522009AC090 /* SWXMLHash.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SWXMLHash.framework;
-			remoteRef = E660BDFE1BB06522009AC090 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E660BE011BB06522009AC090 /* SWXMLHashOSXTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = SWXMLHashOSXTests.xctest;
-			remoteRef = E660BE001BB06522009AC090 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		E69E4E2A1B9F709A00646EDB /* Breakpad.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -4053,12 +4004,9 @@
 				746B6A791B277C1800EA83E3 /* SessionRestore.html in Resources */,
 				2F44FB2C1A9D5D8500FD20CC /* Home.xcassets in Resources */,
 				E4ECCD8D1AB091470005E717 /* Reader.xcassets in Resources */,
-				E69922161B94E3EF007C480D /* brand.dtd in Resources */,
 				E4B7B77D1A793CF20022C5E0 /* FiraSans-Regular.ttf in Resources */,
 				0BDA568B1B26B1BE008C9B96 /* LoginsHelper.js in Resources */,
-				E69922141B94E3EF007C480D /* aboutRights.dtd in Resources */,
 				E4B7B7791A793CF20022C5E0 /* FiraSans-Light.ttf in Resources */,
-				E69922151B94E3EF007C480D /* aboutRights.xhtml in Resources */,
 				D38A1BF01A9FA2CA00F6A386 /* SiteTableViewControllerHeader.xib in Resources */,
 				E49BFF591B1F48C3009368CC /* Readability.js in Resources */,
 				E4CD9E9A1A68980A00318571 /* ReaderMode.js in Resources */,
@@ -4073,7 +4021,6 @@
 				E4ECCDAE1AB131770005E717 /* FiraSans-Medium.ttf in Resources */,
 				E4424B3C1AC71FB400F44C38 /* FiraSans-Book.ttf in Resources */,
 				0BF42D391A7C0E8900889E28 /* Favicons.js in Resources */,
-				E69922131B94E3EF007C480D /* about.css in Resources */,
 				E4D6BEB91A0930EC00F538BD /* LaunchScreen.xib in Resources */,
 				E49C0EB11B46109C009092BB /* WindowCloseHelper.js in Resources */,
 				E4D8F3B01ACDD5150005A2E4 /* InfoPlist.strings in Resources */,
