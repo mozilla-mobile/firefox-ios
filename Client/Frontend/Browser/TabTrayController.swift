@@ -416,10 +416,11 @@ class TabTrayController: UIViewController {
 
     @available(iOS 9, *)
     func SELdidTapLearnMore() {
-        let currentLocale = NSLocale.currentLocale().localeIdentifier
         let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
-        let learnMoreRequest = NSURLRequest(URL: "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(currentLocale)/private-browsing-ios".asURL!)
-        openNewTab(learnMoreRequest)
+        if let langID = NSLocale.preferredLanguages().first {
+            let learnMoreRequest = NSURLRequest(URL: "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(langID)/private-browsing-ios".asURL!)
+            openNewTab(learnMoreRequest)
+        }
     }
 
     @available(iOS 9, *)
