@@ -150,6 +150,7 @@ class BrowserViewController: UIViewController {
             toolbar = BrowserToolbar()
             toolbar?.browserToolbarDelegate = self
             footerBackground = BlurWrapper(view: toolbar!)
+            footerBackground?.translatesAutoresizingMaskIntoConstraints = false
 
             // Need to reset the proper blur style
             if let selectedTab = tabManager.selectedTab where selectedTab.isPrivate {
@@ -639,10 +640,9 @@ class BrowserViewController: UIViewController {
         let shareItem = ShareItem(url: url, title: title, favicon: nil)
         profile.bookmarks.shareItem(shareItem)
 
-        animateBookmarkStar()
-
         // Dispatch to the main thread to update the UI
         dispatch_async(dispatch_get_main_queue()) { _ in
+            self.animateBookmarkStar()
             self.toolbar?.updateBookmarkStatus(true)
             self.urlBar.updateBookmarkStatus(true)
         }
