@@ -94,6 +94,23 @@ class MockSyncServer {
         self.username = username
     }
 
+    class func makeValidEnvelope(guid: GUID, modified: Timestamp) -> EnvelopeJSON {
+        let clientBody: [String: AnyObject] = [
+            "id": guid,
+            "name": "Foobar",
+            "commands": [],
+            "type": "mobile",
+        ]
+        let clientBodyString = JSON(clientBody).toString(false)
+        let clientRecord: [String : AnyObject] = [
+            "id": guid,
+            "collection": "clients",
+            "payload": clientBodyString,
+            "modified": Double(modified) / 1000,
+        ]
+        return EnvelopeJSON(JSON(clientRecord).toString(false))
+    }
+
     func storeRecords(records: [EnvelopeJSON], inCollection collection: String) {
         var out = self.collections[collection] ?? [:]
         records.forEach { out[$0.id] = $0 }

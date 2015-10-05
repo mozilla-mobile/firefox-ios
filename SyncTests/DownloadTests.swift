@@ -66,31 +66,14 @@ class DownloadTests: XCTestCase {
         waitForExpectationsWithTimeout(10, handler: nil)
     }
 
-    func makeValidEnvelope(guid: GUID, modified: Timestamp) -> EnvelopeJSON {
-        let clientBody: [String: AnyObject] = [
-            "id": guid,
-            "name": "Foobar",
-            "commands": [],
-            "type": "mobile",
-        ]
-        let clientBodyString = JSON(clientBody).toString(false)
-        let clientRecord: [String : AnyObject] = [
-            "id": guid,
-            "collection": "clients",
-            "payload": clientBodyString,
-            "modified": Double(modified) / 1000,
-        ]
-        return EnvelopeJSON(JSON(clientRecord).toString(false))
-    }
-
     func testDownloadBatches() {
         let guid1: GUID = "abcdefghijkl"
         let ts1: Timestamp = 1326254123650
-        let rec1 = makeValidEnvelope(guid1, modified: ts1)
+        let rec1 = MockSyncServer.makeValidEnvelope(guid1, modified: ts1)
 
         let guid2: GUID = "bbcdefghijkl"
         let ts2: Timestamp = 1326254125650
-        let rec2 = makeValidEnvelope(guid2, modified: ts2)
+        let rec2 = MockSyncServer.makeValidEnvelope(guid2, modified: ts2)
 
         let server = getServer()
         server.storeRecords([rec1], inCollection: "clients")
