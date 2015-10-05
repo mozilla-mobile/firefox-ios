@@ -170,8 +170,12 @@ class TabManager : NSObject {
     }
 
     @available(iOS 9, *)
-    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, isPrivate: Bool) -> Browser {
-        return self.addTab(request, configuration: isPrivate ? privateConfiguration : configuration, flushToDisk: true, zombie: false, isPrivate: isPrivate)
+    func addTab(request: NSURLRequest! = nil, var configuration: WKWebViewConfiguration! = nil, isPrivate: Bool) -> Browser {
+        if (configuration == nil) && isPrivate {
+            configuration = privateConfiguration
+        }
+
+        return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
 
     // This method is duplicated to hide the flushToDisk option from consumers.

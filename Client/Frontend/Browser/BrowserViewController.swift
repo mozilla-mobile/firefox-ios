@@ -1598,15 +1598,21 @@ extension BrowserViewController: WKNavigationDelegate {
 
 extension BrowserViewController: WKUIDelegate {
     func webView(webView: WKWebView, createWebViewWithConfiguration configuration: WKWebViewConfiguration, forNavigationAction navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        if let currentTab = tabManager.selectedTab {
-            currentTab.setScreenshot(screenshotHelper.takeScreenshot(currentTab, aspectRatio: 0, quality: 1))
-        }
+
+        guard let currentTab = tabManager.selectedTab else { return nil }
+
+        currentTab.setScreenshot(screenshotHelper.takeScreenshot(currentTab, aspectRatio: 0, quality: 1))
 
         // If the page uses window.open() or target="_blank", open the page in a new tab.
         // TODO: This doesn't work for window.open() without user action (bug 1124942).
-        let tab = tabManager.addTab(navigationAction.request, configuration: configuration)
-        tabManager.selectTab(tab)
-        return tab.webView
+        let newTab: Browser
+        if #available(iOS 9, *) {
+            newTab = tabManager.addTab(navigationAction.request, configuration: configuration, isPrivate: currentTab.isPrivate)
+        } else {
+            newTab = tabManager.addTab(navigationAction.request, configuration: configuration)
+        }
+        tabManager.selectTab(newTab)
+        return newTab.webView
     }
 
     func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
