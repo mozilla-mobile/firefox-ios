@@ -450,7 +450,7 @@ public class PrependedBookmarkFolder: BookmarkFolder {
     }
 
     override public func itemIsEditableAtIndex(index: Int) -> Bool {
-        return index > 0
+        return index > 0 && self.main.itemIsEditableAtIndex(index - 1)
     }
 }
 
