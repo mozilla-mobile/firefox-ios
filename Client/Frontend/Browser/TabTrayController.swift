@@ -261,7 +261,9 @@ class TabTrayController: UIViewController {
 
     @available(iOS 9, *)
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
-        return EmptyPrivateTabsView()
+        let emptyView = EmptyPrivateTabsView()
+        emptyView.learnMoreButton.addTarget(self, action: "SELdidTapLearnMore", forControlEvents: UIControlEvents.TouchUpInside)
+        return emptyView
     }()
 
     private lazy var tabDataSource: TabManagerDataSource = {
@@ -409,27 +411,15 @@ class TabTrayController: UIViewController {
     }
 
     func SELdidClickAddTab() {
-        if #available(iOS 9, *) {
-            if privateMode {
-                emptyPrivateTabsView.hidden = true
-            }
-        }
+        openNewTab()
+    }
 
-        // We're only doing one update here, but using a batch update lets us delay selecting the tab
-        // until after its insert animation finishes.
-        self.collectionView.performBatchUpdates({ _ in
-            var tab: Browser
-            if #available(iOS 9, *) {
-                tab = self.tabManager.addTab(isPrivate: self.privateMode)
-            } else {
-                tab = self.tabManager.addTab()
-            }
-            self.tabManager.selectTab(tab)
-        }, completion: { finished in
-            if finished {
-                self.navigationController?.popViewControllerAnimated(true)
-            }
-        })
+    @available(iOS 9, *)
+    func SELdidTapLearnMore() {
+        let currentLocale = NSLocale.currentLocale().localeIdentifier
+        let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
+        let learnMoreRequest = NSURLRequest(URL: "https://support.mozilla.org/1/mobile/\(appVersion)/iOS/\(currentLocale)/private-browsing-ios".asURL!)
+        openNewTab(learnMoreRequest)
     }
 
     @available(iOS 9, *)
@@ -488,6 +478,30 @@ class TabTrayController: UIViewController {
     @available(iOS 9, *)
     private func privateTabsAreEmpty() -> Bool {
         return privateMode && tabManager.privateTabs.count == 0
+    }
+
+    private func openNewTab(request: NSURLRequest? = nil) {
+        if #available(iOS 9, *) {
+            if privateMode {
+                emptyPrivateTabsView.hidden = true
+            }
+        }
+
+        // We're only doing one update here, but using a batch update lets us delay selecting the tab
+        // until after its insert animation finishes.
+        self.collectionView.performBatchUpdates({ _ in
+            var tab: Browser
+            if #available(iOS 9, *) {
+                tab = self.tabManager.addTab(request, isPrivate: self.privateMode)
+            } else {
+                tab = self.tabManager.addTab(request)
+            }
+            self.tabManager.selectTab(tab)
+        }, completion: { finished in
+            if finished {
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+        })
     }
 }
 
@@ -768,7 +782,9 @@ struct EmptyPrivateTabsViewUX {
     static let TitleFont = UIFont.systemFontOfSize(22, weight: UIFontWeightMedium)
     static let DescriptionColor = UIColor.whiteColor()
     static let DescriptionFont = UIFont.systemFontOfSize(17)
+    static let LearnMoreFont = UIFont.systemFontOfSize(15, weight: UIFontWeightMedium)
     static let TextMargin: CGFloat = 18
+    static let LearnMoreMargin: CGFloat = 30
     static let MaxDescriptionWidth: CGFloat = 250
 }
 
@@ -792,6 +808,16 @@ private class EmptyPrivateTabsView: UIView {
         return label
     }()
 
+    private var learnMoreButton: UIButton = {
+        let button = UIButton()
+        button.setTitle(
+            NSLocalizedString("Learn More", tableName: "PrivateBrowsing", comment: "Text button displayed when there are no tabs open while in private mode"),
+            forState: .Normal)
+        button.setTitleColor(UIConstants.PrivateModeTextHighlightColor, forState: .Normal)
+        button.titleLabel?.font = EmptyPrivateTabsViewUX.LearnMoreFont
+        return button
+    }()
+
     private var iconImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "largePrivateMask"))
         return imageView
@@ -805,12 +831,10 @@ private class EmptyPrivateTabsView: UIView {
         descriptionLabel.text = NSLocalizedString("Firefox won't remember any of your history or cookies, but new bookmarks will be saved.",
             tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
 
-        // This landed last-minute as a new string that is needed in the EmptyPrivateTabsView
-        let learnMoreLabelText = NSLocalizedString("Learn More", tableName: "PrivateBrowsing", comment: "Text button displayed when there are no tabs open while in private mode")
-
         addSubview(titleLabel)
         addSubview(descriptionLabel)
         addSubview(iconImageView)
+        addSubview(learnMoreButton)
 
         titleLabel.snp_makeConstraints { make in
             make.center.equalTo(self)
@@ -823,6 +847,11 @@ private class EmptyPrivateTabsView: UIView {
 
         descriptionLabel.snp_makeConstraints { make in
             make.top.equalTo(titleLabel.snp_bottom).offset(EmptyPrivateTabsViewUX.TextMargin)
+            make.centerX.equalTo(self)
+        }
+
+        learnMoreButton.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo(descriptionLabel.snp_bottom).offset(EmptyPrivateTabsViewUX.LearnMoreMargin)
             make.centerX.equalTo(self)
         }
     }
