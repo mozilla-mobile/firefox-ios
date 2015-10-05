@@ -111,9 +111,12 @@ class MockSyncServer {
         return EnvelopeJSON(JSON(clientRecord).toString(false))
     }
 
-    func storeRecords(records: [EnvelopeJSON], inCollection collection: String) {
+    func storeRecords(records: [EnvelopeJSON], inCollection collection: String, now: Timestamp? = nil) {
+        let now = now ?? NSDate.now()
         var out = self.collections[collection] ?? [:]
-        records.forEach { out[$0.id] = $0 }
+        records.forEach {
+            out[$0.id] = $0.withModified(now)
+        }
         self.collections[collection] = out
     }
 
