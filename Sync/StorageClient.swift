@@ -642,12 +642,11 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
 
         var params: [NSURLQueryItem] = [
             NSURLQueryItem(name: "full", value: "1"),
+            NSURLQueryItem(name: "newer", value: millisecondsToDecimalSeconds(since)),
         ]
 
         if let offset = offset {
             params.append(NSURLQueryItem(name: "offset", value: offset))
-        } else {
-            params.append(NSURLQueryItem(name: "newer", value: millisecondsToDecimalSeconds(since)))
         }
 
         if let limit = limit {
