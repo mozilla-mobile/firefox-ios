@@ -616,14 +616,9 @@ public class BrowserProfile: Profile {
         }
 
         private func mirrorBookmarksWithDelegate(delegate: SyncDelegate, prefs: Prefs, ready: Ready) -> SyncResult {
-            // Temporarily turned off.
-            return deferMaybe(SyncStatus.NotStarted(SyncNotStartedReason.EngineRemotelyNotEnabled(collection: "bookmarks")))
-
-            /*
             log.debug("Mirroring server bookmarks to storage.")
             let bookmarksMirrorer = ready.synchronizer(MirroringBookmarksSynchronizer.self, delegate: delegate, prefs: prefs)
             return bookmarksMirrorer.mirrorBookmarksToStorage(self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
-            */
         }
 
         /**

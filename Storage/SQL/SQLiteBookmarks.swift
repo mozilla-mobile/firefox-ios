@@ -482,30 +482,39 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
             // Insert children in chunks.
             log.debug("Inserting \(children.count) children.")
             if !children.isEmpty {
-                let chunks = chunk(children, by: maxVars - (maxVars % 3))
-                for chunk in chunks {
-                    // Hurgh.
-                    var parents: Args = []
-                    for parent in Set(chunk.map { $0[0]! as! GUID }) {
-                        parents.append(parent as AnyObject)
-                    }
+                // Hurgh.
+                var parents: Args = []
+                for parent in Set(children.map { $0[0]! as! GUID }) {
+                    parents.append(parent as AnyObject)
+                }
 
-                    // Drop existing rows.
+                log.debug("\(parents.count) unique parents to drop from structure table.")
+                let parentChunks = chunk(parents, by: maxVars)
+
+                // Drop existing rows.
+                for parents in parentChunks {
+                    log.verbose("Deleting \(parents.count)…")
                     let del = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN (" +
                               Array<String>(count: parents.count, repeatedValue: "?").joinWithSeparator(", ") +
                               ")"
-                    if let error = conn.executeChange(del, withArgs: Array(parents)) {
+                    let args: Args = Array(parents)
+                    if let error = conn.executeChange(del, withArgs: args) {
                         log.error("Dropping existing rows from mirror structure: \(error.description).")
                         err = error
                         deferred.fill(Maybe(failure: DatabaseError(err: error)))
                         return false
                     }
+                }
 
+                // Insert the new rows. This uses three vars per row.
+                let maxRowsPerInsert: Int = maxVars / 3
+                let chunks = chunk(children, by: maxRowsPerInsert)
+                for chunk in chunks {
+                    log.verbose("Inserting \(chunk.count)…")
                     let childArgs: Args = chunk.flatMap { $0 }   // Flatten [[a, b, c], [...]] into [a, b, c, ...].
-                    let sets = childArgs.count / 3
                     let ins = "INSERT INTO \(TableBookmarksMirrorStructure) (parent, child, idx) VALUES " +
-                              Array<String>(count: sets, repeatedValue: "(?, ?, ?)").joinWithSeparator(", ")
-                    log.debug("Inserting \(sets) records (out of \(children.count)).")
+                              Array<String>(count: chunk.count, repeatedValue: "(?, ?, ?)").joinWithSeparator(", ")
+                    log.debug("Inserting \(chunk.count) records (out of \(children.count)).")
                     if let error = conn.executeChange(ins, withArgs: childArgs) {
                         log.error("Updating mirror structure: \(error.description).")
                         err = error
