@@ -123,9 +123,13 @@ extension AdjustIntegration: AdjustDelegate {
     /// of all the things it knows. Like the campaign ID. We simply save this to a local file so
     /// that we know we have done a single attribution ping to Adjust. This is also used to prevent
     /// sending data to adjust multiple times.
+    ///
+    /// We also disable Adjust here, otherwise it keeps sending session pings until the app is cold
+    /// started again.
 
     func adjustAttributionChanged(attribution: ADJAttribution!) {
         do {
+            Adjust.setEnabled(false)
             try AdjustIntegration.sharedInstance.saveAttribution(attribution)
         } catch let error {
             Logger.browserLogger.error("Adjust - Failed to save attribution: \(error)")
