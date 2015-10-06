@@ -36,6 +36,10 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
     // timestamp and possibly re-upload.
     case ResetEngine(engine: String)
 
+    // We've seen a change in meta/global: an engine has come or gone.
+    case EnableEngine(engine: String)
+    case DisableEngine(engine: String)
+
     public func toJSON() -> JSON {
         switch (self) {
         case let .ResetAllEngines(except):
@@ -43,6 +47,12 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
 
         case let .ResetEngine(engine):
             return JSON(["type": "ResetEngine", "engine": engine])
+
+        case let .EnableEngine(engine):
+            return JSON(["type": "EnableEngine", "engine": engine])
+
+        case let .DisableEngine(engine):
+            return JSON(["type": "DisableEngine", "engine": engine])
         }
     }
 
@@ -62,6 +72,16 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
         case "ResetEngine":
             if let engine = json["engine"].asString {
                 return .ResetEngine(engine: engine)
+            }
+            return nil
+        case "EnableEngine":
+            if let engine = json["engine"].asString {
+                return .EnableEngine(engine: engine)
+            }
+            return nil
+        case "DisableEngine":
+            if let engine = json["engine"].asString {
+                return .DisableEngine(engine: engine)
             }
             return nil
         default:
@@ -84,6 +104,12 @@ public func ==(lhs: LocalCommand, rhs: LocalCommand) -> Bool {
         return exceptL == exceptR
 
     case (let .ResetEngine(engineL), let .ResetEngine(engineR)):
+        return engineL == engineR
+
+    case (let .EnableEngine(engineL), let .EnableEngine(engineR)):
+        return engineL == engineR
+
+    case (let .DisableEngine(engineL), let .DisableEngine(engineR)):
         return engineL == engineR
 
     default:

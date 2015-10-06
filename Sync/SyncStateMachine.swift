@@ -592,12 +592,13 @@ public class ResolveMetaGlobalContent: BaseSyncStateWithInfo {
             let remoteEngines = Set(fetched.value.engines.keys)
 
             for engine in previousEngines.subtract(remoteEngines) {
-                log.info("Remote meta/global disabled previously enabled engine \(engine). No action needed.")
+                log.info("Remote meta/global disabled previously enabled engine \(engine).")
+                b.localCommands.insert(.DisableEngine(engine: engine))
             }
 
             for engine in remoteEngines.subtract(previousEngines) {
-                log.info("Remote meta/global enabled previously disabled engine \(engine). Resetting local.")
-                b.localCommands.insert(.ResetEngine(engine: engine))
+                log.info("Remote meta/global enabled previously disabled engine \(engine).")
+                b.localCommands.insert(.EnableEngine(engine: engine))
             }
 
             for engine in remoteEngines.intersect(previousEngines) {
@@ -819,9 +820,37 @@ public class Ready: BaseSyncStateWithInfo {
                 needReset.unionInPlace(Set(LocalEngines).subtract(except))
             case let .ResetEngine(engine):
                 needReset.insert(engine)
+            case .EnableEngine, .DisableEngine:
+                break
             }
         }
         return Array(needReset).sort()
+    }
+
+    public func enginesEnabled() -> [String] {
+        var engines: Set<String> = Set()
+        for command in self.scratchpad.localCommands {
+            switch command {
+            case let .EnableEngine(engine):
+                engines.insert(engine)
+            default:
+                break
+            }
+        }
+        return Array(engines).sort()
+    }
+
+    public func enginesDisabled() -> [String] {
+        var engines: Set<String> = Set()
+        for command in self.scratchpad.localCommands {
+            switch command {
+            case let .DisableEngine(engine):
+                engines.insert(engine)
+            default:
+                break
+            }
+        }
+        return Array(engines).sort()
     }
 
     public func clearLocalCommands() {

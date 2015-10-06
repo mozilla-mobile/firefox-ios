@@ -505,8 +505,9 @@ class MetaGlobalTests: XCTestCase {
         var engines = newMetaGlobal.engines
         engines.updateValue(EngineMeta(version: 1, syncID: Bytes.generateGUID()), forKey: "bookmarks")
         engines.updateValue(EngineMeta(version: 1, syncID: Bytes.generateGUID()), forKey: "forms")
+        engines.removeValueForKey("unknownEngine1")
         var declined = newMetaGlobal.declined.filter({ $0 != "forms" })
-        declined.append("passwords")
+        declined.append("unknownEngine1")
         let secondMetaGlobal = MetaGlobal(syncID: newMetaGlobal.syncID, storageVersion: 5, engines: engines, declined: declined)
         storeMetaGlobal(secondMetaGlobal)
 
@@ -523,8 +524,10 @@ class MetaGlobalTests: XCTestCase {
             // ... and we should have downloaded a fresh crypto/keys -- but its timestamp is identical to the old one!
             // Therefore, the "needsFreshCryptoKeys" stage above is our test that we re-downloaded crypto/keys.
 
-            // We should have marked the changed engine and the newly enabled engine for local reset.
-            XCTAssertEqual(ready.collectionsThatNeedLocalReset(), ["bookmarks", "forms"])
+            // We should have marked the changed engine for local reset, and identified the enabled and disabled engines.
+            XCTAssertEqual(ready.collectionsThatNeedLocalReset(), ["bookmarks"])
+            XCTAssertEqual(ready.enginesEnabled(), ["forms"])
+            XCTAssertEqual(ready.enginesDisabled(), ["unknownEngine1"])
 
             // And our engine configuration should reflect the new meta/global on the server.
             XCTAssertNotNil(ready.scratchpad.global)

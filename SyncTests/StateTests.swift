@@ -51,6 +51,8 @@ class StateTests: XCTestCase {
         let b = Scratchpad(b: syncKeyBundle, persistingTo: MockProfilePrefs()).evolve()
         b.setKeys(keys)
         b.localCommands = Set([
+            .EnableEngine(engine: "tabs"),
+            .DisableEngine(engine: "passwords"),
             .ResetAllEngines(except: Set(["bookmarks", "clients"])),
             .ResetEngine(engine: "clients")])
         return b.build()
