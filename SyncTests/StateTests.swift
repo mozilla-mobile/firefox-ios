@@ -26,6 +26,7 @@ func compareScratchpads(lhs: Scratchpad, rhs: Scratchpad) {
     }
 
     XCTAssertTrue(lhs.global == rhs.global)
+    XCTAssertEqual(lhs.localCommands, rhs.localCommands)
 }
 
 func roundtrip(s: Scratchpad) -> (Scratchpad, rhs: Scratchpad) {
@@ -43,11 +44,17 @@ class StateTests: XCTestCase {
     func baseScratchpad() -> Scratchpad {
         let syncKeyBundle = KeyBundle.fromKB(Bytes.generateRandomBytes(32))
         let keys = Fetched(value: Keys(defaultBundle: syncKeyBundle), timestamp: 1001)
-        return Scratchpad(b: syncKeyBundle, persistingTo: MockProfilePrefs()).evolve().setKeys(keys).build()
+        let b = Scratchpad(b: syncKeyBundle, persistingTo: MockProfilePrefs()).evolve()
+        b.setKeys(keys)
+        b.localCommands = Set([
+            .ResetAllEngines(except: Set(["bookmarks", "clients"])),
+            .ResetEngine(engine: "clients")])
+        return b.build()
     }
 
     func testPickling() {
         compareScratchpads(roundtrip(baseScratchpad()))
         compareScratchpads(roundtrip(baseScratchpad().evolve().setGlobal(getGlobal()).build()))
+        compareScratchpads(roundtrip(baseScratchpad().evolve().clearLocalCommands().build()))
     }
 }
