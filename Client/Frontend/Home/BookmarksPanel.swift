@@ -15,6 +15,7 @@ struct BookmarksPanelUX {
     private static let BookmarkFolderHeaderViewChevronInset: CGFloat = 10
     private static let BookmarkFolderChevronSize: CGFloat = 20
     private static let BookmarkFolderChevronLineWidth: CGFloat = 4.0
+    private static let BookmarkFolderTextColor = UIColor(rgb: 0x525456)
 }
 
 class BookmarksPanel: SiteTableViewController, HomePanel {
@@ -256,12 +257,12 @@ class BookmarkFolderTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        textLabel?.tintColor = SiteTableViewControllerUX.HeaderTextColor
-        textLabel?.font = UIConstants.DefaultStandardFontBold
+        self.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
+        textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
+        textLabel?.font = UIConstants.DefaultMediumBoldFont
         imageView?.image = UIImage(named: "bookmarkFolder")
         let chevron = ChevronView(direction: .Right)
-        chevron.tintColor = SiteTableViewControllerUX.HeaderTextColor
+        chevron.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
         chevron.frame = CGRectMake(0, 0, BookmarksPanelUX.BookmarkFolderChevronSize, BookmarksPanelUX.BookmarkFolderChevronSize)
         chevron.lineWidth = BookmarksPanelUX.BookmarkFolderChevronLineWidth
         accessoryView = chevron
@@ -279,6 +280,11 @@ private class BookmarkFolderTableViewHeader : SiteTableViewHeader {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
+        // set the background color to white
+        self.backgroundView = UIView(frame: self.bounds)
+        self.backgroundView?.backgroundColor = UIColor.clearColor()
+        contentView.backgroundColor = UIColor.clearColor()
+
         textLabel?.textColor = UIConstants.HighlightBlue
         let chevron = ChevronView(direction: .Left)
         chevron.tintColor = UIConstants.HighlightBlue
