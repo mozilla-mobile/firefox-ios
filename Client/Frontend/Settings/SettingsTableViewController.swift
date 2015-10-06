@@ -932,13 +932,12 @@ class SettingsTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         //make account/sign-in and close private tabs rows taller, as per design specs
+        if indexPath.section == 0 && indexPath.row == 0 {
+            return 64
+        }
+
         if #available(iOS 9, *) {
-            if ((indexPath.section == 0 && indexPath.row == 0) ||
-                (indexPath.section == 2 && indexPath.row == 1)) {
-                return 64
-            }
-        } else {
-            if indexPath.section == 0 && indexPath.row == 0 {
+            if indexPath.section == 2 && indexPath.row == 1 {
                 return 64
             }
         }
