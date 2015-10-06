@@ -21,10 +21,12 @@ class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityBrowse
     var semaphore: dispatch_semaphore_t
     var result: ReadabilityOperationResult?
     var browser: Browser!
+    var readerModeCache: ReaderModeCache
 
-    init(url: NSURL) {
+    init(url: NSURL, readerModeCache: ReaderModeCache) {
         self.url = url
         self.semaphore = dispatch_semaphore_create(0)
+        self.readerModeCache = readerModeCache
     }
 
     override func main() {
@@ -64,7 +66,7 @@ class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityBrowse
                 break
             case .Success(let readabilityResult):
                 do {
-                    try ReaderModeCache.sharedInstance.put(url, readabilityResult)
+                    try readerModeCache.put(url, readabilityResult)
                 } catch let error as NSError {
                     print("Failed to store readability results in the cache: \(error.localizedDescription)")
                     // TODO Fail
@@ -104,7 +106,7 @@ class ReadabilityService {
         queue.maxConcurrentOperationCount = ReadabilityServiceDefaultConcurrency
     }
 
-    func process(url: NSURL) {
-        queue.addOperation(ReadabilityOperation(url: url))
+    func process(url: NSURL, cache: ReaderModeCache) {
+        queue.addOperation(ReadabilityOperation(url: url, readerModeCache: cache))
     }
 }

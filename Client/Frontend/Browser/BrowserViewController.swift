@@ -39,6 +39,7 @@ class BrowserViewController: UIViewController {
     var webViewContainer: UIView!
     var urlBar: URLBarView!
     var readerModeBar: ReaderModeBarView?
+    var readerModeCache: ReaderModeCache
 
     private var statusBarOverlay: UIView!
     private var toolbar: BrowserToolbar?
@@ -91,6 +92,7 @@ class BrowserViewController: UIViewController {
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
+        self.readerModeCache = DiskReaderModeCache.sharedInstance
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -1327,10 +1329,13 @@ extension BrowserViewController: TabManagerDelegate {
             urlBar.updateTabCount(count, animated: false)
 
             if tab.isPrivate {
+                readerModeCache = MemoryReaderModeCache.sharedInstance
                 applyPrivateModeTheme()
             } else {
+                readerModeCache = DiskReaderModeCache.sharedInstance
                 applyNormalModeTheme()
             }
+            ReaderModeHandlers.readerModeCache = readerModeCache
 
             scrollController.browser = selected
             webViewContainer.addSubview(webView)
@@ -1831,7 +1836,7 @@ extension BrowserViewController {
             webView.evaluateJavaScript("\(ReaderModeNamespace).readerize()", completionHandler: { (object, error) -> Void in
                 if let readabilityResult = ReadabilityResult(object: object) {
                     do {
-                        try ReaderModeCache.sharedInstance.put(currentURL, readabilityResult)
+                        try self.readerModeCache.put(currentURL, readabilityResult)
                     } catch _ {
                     }
                     if let nav = webView.loadRequest(NSURLRequest(URL: readerModeURL)) {
