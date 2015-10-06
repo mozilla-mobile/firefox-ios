@@ -137,6 +137,8 @@ addEventListener("touchstart", function (event) {
       cancel();
       webkit.messageHandlers.contextMenuMessageHandler.postMessage(data);
     }, 500);
+
+    webkit.messageHandlers.contextMenuMessageHandler.postMessage({ handled: true });
   }
 }, true);
 

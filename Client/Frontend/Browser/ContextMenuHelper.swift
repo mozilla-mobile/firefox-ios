@@ -12,6 +12,7 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
     private weak var browser: Browser?
     weak var delegate: ContextMenuHelperDelegate?
     private let gestureRecognizer = UILongPressGestureRecognizer()
+    private weak var selectionGestureRecognizer: UIGestureRecognizer?
 
     struct Elements {
         let link: NSURL?
@@ -52,15 +53,24 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
             return
         }
 
-        let data = message.body as! [String: String]
+        let data = message.body as! [String: AnyObject]
+
+        // On sites where <a> elements have child text elements, the text selection delegate can be triggered
+        // when we show a context menu. To prevent this, cancel the text selection delegate if we know the
+        // user is long-pressing a link.
+        if let handled = data["handled"] as? Bool where handled {
+            // Setting `enabled = false` cancels the current gesture for this recognizer.
+            selectionGestureRecognizer?.enabled = false
+            selectionGestureRecognizer?.enabled = true
+        }
 
         var linkURL: NSURL?
-        if let urlString = data["link"] {
+        if let urlString = data["link"] as? String {
             linkURL = NSURL(string: urlString)
         }
 
         var imageURL: NSURL?
-        if let urlString = data["image"] {
+        if let urlString = data["image"] as? String {
             imageURL = NSURL(string: urlString)
         }
 
@@ -75,6 +85,11 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
     }
 
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailByGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Hack to detect the built-in text selection gesture recognizer.
+        if let otherDelegate = otherGestureRecognizer.delegate where String(otherDelegate).contains("_UIKeyboardBasedNonEditableTextSelectionGestureController") {
+            selectionGestureRecognizer = otherGestureRecognizer
+        }
+
         // Hack to detect the built-in context menu gesture recognizer.
         return otherGestureRecognizer is UILongPressGestureRecognizer && otherGestureRecognizer.delegate?.description.rangeOfString("WKContentView") != nil
     }
