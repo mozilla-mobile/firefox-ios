@@ -49,16 +49,12 @@ class MetaGlobalTests: XCTestCase {
         stateMachine = SyncStateMachine(prefs: syncPrefs)
     }
 
-    func now() -> Timestamp {
-        return Timestamp(1000 * NSDate().timeIntervalSince1970)
-    }
-
     func storeMetaGlobal(metaGlobal: MetaGlobal) {
         let envelope = EnvelopeJSON(JSON([
             "id": "global",
             "collection": "meta",
             "payload": metaGlobal.asPayload().toString(),
-            "modified": Double(NSDate().timeIntervalSince1970)]))
+            "modified": Double(NSDate.now())/1000]))
         server.storeRecords([envelope], inCollection: "meta")
     }
 
@@ -118,7 +114,7 @@ class MetaGlobalTests: XCTestCase {
         // To recover from a meta/global version "in the past", fresh start.
         storeMetaGlobal(MetaGlobal(syncID: "id", storageVersion: 4, engines: [String: EngineMeta](), declined: []))
 
-        let afterStores = now()
+        let afterStores = NSDate.now()
         let expectation = expectationWithDescription("Waiting on value.")
         stateMachine.toReady(authState).upon { result in
             XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "remoteUpgradeRequired",
@@ -136,7 +132,7 @@ class MetaGlobalTests: XCTestCase {
 
     func testMetaGlobalMissing() {
         // To recover from a missing meta/global, fresh start.
-        let afterStores = now()
+        let afterStores = NSDate.now()
         let expectation = expectationWithDescription("Waiting on value.")
         stateMachine.toReady(authState).upon { result in
             XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "missingMetaGlobal",
@@ -156,7 +152,7 @@ class MetaGlobalTests: XCTestCase {
         // To recover from a missing crypto/keys, fresh start.
         storeMetaGlobal(createMetaGlobal())
 
-        let afterStores = now()
+        let afterStores = NSDate.now()
         let expectation = expectationWithDescription("Waiting on value.")
         stateMachine.toReady(authState).upon { result in
             XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "missingCryptoKeys", "freshStartRequired", "serverConfigurationRequired", "initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobalVersion", "resolveMetaGlobalContent", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
@@ -203,7 +199,7 @@ class MetaGlobalTests: XCTestCase {
             XCTAssertNil(error, "\(error)")
         }
 
-        let afterFirstSync = now()
+        let afterFirstSync = NSDate.now()
 
         // Now, run through the state machine again.  Nothing's changed remotely, so we should advance quickly.
         let secondExpectation = expectationWithDescription("Waiting on value.")
@@ -264,7 +260,7 @@ class MetaGlobalTests: XCTestCase {
             XCTAssertNil(error, "\(error)")
         }
 
-        let afterFirstSync = now()
+        let afterFirstSync = NSDate.now()
 
         // Store a fresh crypto/keys, with the same default key, one identical collection key, and one changed collection key.
         let freshCryptoKeys = Keys.init(defaultBundle: cryptoKeys.defaultBundle)
@@ -297,7 +293,7 @@ class MetaGlobalTests: XCTestCase {
             XCTAssertNil(error, "\(error)")
         }
 
-        let afterSecondSync = now()
+        let afterSecondSync = NSDate.now()
 
         // Store a fresh crypto/keys, with a changed default key and one identical collection key, and one changed collection key.
         let freshCryptoKeys2 = Keys.random()
@@ -330,7 +326,7 @@ class MetaGlobalTests: XCTestCase {
             XCTAssertNil(error, "\(error)")
         }
 
-        let afterThirdSync = now()
+        let afterThirdSync = NSDate.now()
 
         // Now store a random crypto/keys, with a different default key (and no bulk keys).
         let randomCryptoKeys = Keys.random()
@@ -467,7 +463,7 @@ class MetaGlobalTests: XCTestCase {
             XCTAssertNil(error, "\(error)")
         }
 
-        let afterFirstSync = now()
+        let afterFirstSync = NSDate.now()
 
         // Store a meta/global with a new global syncID.
         let newMetaGlobal = metaGlobal.withSyncID("newID")
