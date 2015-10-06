@@ -8,7 +8,7 @@ import Storage
 import XCGLogger
 
 private let log = Logger.syncLogger
-private let BookmarksStorageVersion = 2
+let BookmarksStorageVersion = 2
 
 /**
  * This is like a synchronizer, but it downloads records bit by bit, eventually
