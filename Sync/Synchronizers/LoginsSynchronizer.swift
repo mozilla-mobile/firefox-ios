@@ -8,7 +8,7 @@ import Storage
 import XCGLogger
 
 private let log = Logger.syncLogger
-private let PasswordsStorageVersion = 1
+let PasswordsStorageVersion = 1
 
 private func makeDeletedLoginRecord(guid: GUID) -> Record<LoginPayload> {
     // Local modified time is ignored in upload serialization.

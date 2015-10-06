@@ -10,7 +10,33 @@ import XCGLogger
 private let log = Logger.syncLogger
 
 private let StorageVersionCurrent = 5
-private let DefaultEngines: [String: Int] = ["tabs": 1]
+
+// Names of collections for which a synchronizer is implemented locally.
+private let LocalEngines: [String] = [
+    "bookmarks",
+    "clients",
+    "history",
+    "passwords",
+    "tabs",
+]
+
+// Names of collections which will appear in a default meta/global produced locally.
+// Map collection name to engine version.  See http://docs.services.mozilla.com/sync/objectformats.html.
+private let DefaultEngines: [String: Int] = [
+    "bookmarks": BookmarksStorageVersion,
+    "clients": ClientsStorageVersion,
+    "history": HistoryStorageVersion,
+    "passwords": PasswordsStorageVersion,
+    "tabs": TabsStorageVersion,
+    // We opt-in to syncing collections we don't know about, since no client offers to sync non-enabled,
+    // non-declined engines yet.  See Bug 969669.
+    "forms": 1,
+    "addons": 1,
+    "prefs": 2,
+]
+
+// Names of collections which will appear as declined in a default
+// meta/global produced locally.
 private let DefaultDeclined: [String] = [String]()
 
 private func getDefaultEngines() -> [String: EngineMeta] {

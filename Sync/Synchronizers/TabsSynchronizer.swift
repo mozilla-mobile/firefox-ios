@@ -8,7 +8,7 @@ import Storage
 import XCGLogger
 
 private let log = Logger.syncLogger
-private let TabsStorageVersion = 1
+let TabsStorageVersion = 1
 
 public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
     public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs) {
