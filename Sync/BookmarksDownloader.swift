@@ -176,15 +176,27 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         log.info("Downloader configured with prefs '\(branchName)'.")
     }
 
-    var nextOffset: String? {
+    /**
+     * Clients should provide the same set of parameters alongside an `offset` as was
+     * provided with the initial request. The only thing that varies in our batch fetches
+     * is `newer`, so we track the original value alongside.
+     */
+    var nextOffset: (String, Timestamp)? {
         get {
-            return self.prefs.stringForKey("nextOffset")
+            let o = self.prefs.stringForKey("nextOffset")
+            let n = self.prefs.timestampForKey("offsetNewer")
+            guard let offset = o, let newer = n else {
+                return nil
+            }
+            return (offset, newer)
         }
         set (value) {
-            if let value = value {
-                self.prefs.setString(value, forKey: "nextOffset")
+            if let (offset, newer) = value {
+                self.prefs.setString(offset, forKey: "nextOffset")
+                self.prefs.setTimestamp(newer, forKey: "offsetNewer")
             } else {
                 self.prefs.removeObjectForKey("nextOffset")
+                self.prefs.removeObjectForKey("offsetNewer")
             }
         }
     }
@@ -233,7 +245,21 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         return self.downloadNextBatchWithLimit(limit, advancingOnCompletionTo: modified)
     }
 
+    // We're either fetching from our current base timestamp with no offset,
+    // or the timestamp we were using when we last saved an offset.
+    func fetchParameters() -> (String?, Timestamp) {
+        if let (offset, since) = self.nextOffset {
+            return (offset, since)
+        }
+        return (nil, self.baseTimestamp)
+    }
+
     func downloadNextBatchWithLimit(limit: Int, advancingOnCompletionTo: Timestamp) -> Deferred<Maybe<DownloadEndState>> {
+        let (offset, since) = self.fetchParameters()
+        log.debug("Fetching newer=\(since), offset=\(offset).")
+
+        let fetch = self.client.getSince(since, sort: SortOption.Newest, limit: limit, offset: offset)
+
         func handleFailure(err: MaybeErrorType) -> Deferred<Maybe<DownloadEndState>> {
             log.debug("Handling failure.")
             guard let badRequest = err as? BadRequestError<[Record<T>]> where badRequest.response.metadata.status == 412 else {
@@ -250,8 +276,10 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         func handleSuccess(response: StorageResponse<[Record<T>]>) -> Deferred<Maybe<DownloadEndState>> {
             log.debug("Handling success.")
             // Shift to the next offset. This might be nil, in which case… fine!
-            let offset = response.metadata.nextOffset
-            self.nextOffset = offset
+            // Note that we preserve the previous 'newer' value from the offset or the original fetch,
+            // even as we update baseTimestamp.
+            let nextOffset = response.metadata.nextOffset
+            self.nextOffset = nextOffset == nil ? nil : (nextOffset!, since)
 
             // If there are records, advance to just before the timestamp of the last.
             // If our next fetch with X-Weave-Next-Offset fails, at least we'll start here.
@@ -263,7 +291,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             // Store the incoming records for collection.
             self.store(response.value)
 
-            if offset == nil {
+            if nextOffset == nil {
                 self.lastModified = advancingOnCompletionTo
                 return deferMaybe(.Complete)
             }
@@ -271,7 +299,6 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             return deferMaybe(.Incomplete)
         }
 
-        let fetch = self.client.getSince(self.baseTimestamp, sort: SortOption.Newest, limit: limit, offset: self.nextOffset)
         return fetch.bind { result in
             guard let response = result.successValue else {
                 return handleFailure(result.failureValue!)
