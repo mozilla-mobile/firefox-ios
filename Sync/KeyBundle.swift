@@ -9,7 +9,7 @@ import Account
 
 private let KeyLength = 32
 
-public class KeyBundle: Equatable {
+public class KeyBundle: Hashable {
     let encKey: NSData
     let hmacKey: NSData
 
@@ -201,6 +201,10 @@ public class KeyBundle: Equatable {
 
     public func asPair() -> [String] {
         return [self.encKey.base64EncodedString, self.hmacKey.base64EncodedString]
+    }
+
+    public var hashValue: Int {
+        return "\(self.encKey.base64EncodedString) \(self.hmacKey.base64EncodedString)".hashValue
     }
 }
 

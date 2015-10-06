@@ -25,6 +25,72 @@ public func ==<T: Equatable>(lhs: Fetched<T>, rhs: Fetched<T>) -> Bool {
            lhs.value == rhs.value
 }
 
+public enum LocalCommand: CustomStringConvertible, Hashable {
+    // We've seen something (a blank server, a changed global sync ID, a
+    // crypto/keys with a different meta/global) that requires us to reset all
+    // local engine timestamps (save the ones listed) and possibly re-upload.
+    case ResetAllEngines(except: Set<String>)
+
+    // We've seen something (a changed engine sync ID, a crypto/keys with a
+    // different per-engine bulk key) that requires us to reset our local engine
+    // timestamp and possibly re-upload.
+    case ResetEngine(engine: String)
+
+    public func toJSON() -> JSON {
+        switch (self) {
+        case let .ResetAllEngines(except):
+            return JSON(["type": "ResetAllEngines", "except": Array(except).sort()])
+
+        case let .ResetEngine(engine):
+            return JSON(["type": "ResetEngine", "engine": engine])
+        }
+    }
+
+    public static func fromJSON(json: JSON) -> LocalCommand? {
+        if json.isError {
+            return nil
+        }
+        guard let type = json["type"].asString else {
+            return nil
+        }
+        switch type {
+        case "ResetAllEngines":
+            if let except = json["except"].asArray where except.every({$0.isString}) {
+                return .ResetAllEngines(except: Set(except.map({$0.asString!})))
+            }
+            return nil
+        case "ResetEngine":
+            if let engine = json["engine"].asString {
+                return .ResetEngine(engine: engine)
+            }
+            return nil
+        default:
+            return nil
+        }
+    }
+
+    public var description: String {
+        return self.toJSON().toString()
+    }
+
+    public var hashValue: Int {
+        return self.description.hashValue
+    }
+}
+
+public func ==(lhs: LocalCommand, rhs: LocalCommand) -> Bool {
+    switch (lhs, rhs) {
+    case (let .ResetAllEngines(exceptL), let .ResetAllEngines(exceptR)):
+        return exceptL == exceptR
+
+    case (let .ResetEngine(engineL), let .ResetEngine(engineR)):
+        return engineL == engineR
+
+    default:
+        return false
+    }
+}
+
 /*
  * Persistence pref names.
  * Note that syncKeyBundle isn't persisted by us.
@@ -39,6 +105,7 @@ private let PrefGlobalTS = "globalTS"
 private let PrefKeyLabel = "keyLabel"
 private let PrefKeysTS = "keysTS"
 private let PrefLastFetched = "lastFetched"
+private let PrefLocalCommands = "localCommands"
 private let PrefClientName = "clientName"
 private let PrefClientGUID = "clientGUID"
 
@@ -83,6 +150,7 @@ class PrefsBackoffStorage: BackoffStorage {
  * 2. Metadata like timestamps, both for cached records and for server fetches.
  * 3. User preferences -- engine enablement.
  * 4. Client record state.
+ * 5. Local commands that have yet to be processed.
  *
  * Note that the scratchpad itself is immutable, but is a class passed by reference.
  * Its mutable fields can be mutated, but you can't accidentally e.g., switch out
@@ -98,6 +166,7 @@ public class Scratchpad {
         private var keys: Fetched<Keys>?
         private var keyLabel: String
         var collectionLastFetched: [String: Timestamp]
+        var localCommands: Set<LocalCommand>
         var engineConfiguration: EngineConfiguration?
         var clientGUID: String
         var clientName: String
@@ -113,6 +182,7 @@ public class Scratchpad {
             self.keyLabel = p.keyLabel
 
             self.collectionLastFetched = p.collectionLastFetched
+            self.localCommands = p.localCommands
             self.engineConfiguration = p.engineConfiguration
             self.clientGUID = p.clientGUID
             self.clientName = p.clientName
@@ -146,6 +216,7 @@ public class Scratchpad {
                     k: self.keys,
                     keyLabel: self.keyLabel,
                     fetches: self.collectionLastFetched,
+                    localCommands: self.localCommands,
                     engines: self.engineConfiguration,
                     clientGUID: self.clientGUID,
                     clientName: self.clientName,
@@ -195,6 +266,9 @@ public class Scratchpad {
     // Collection timestamps.
     var collectionLastFetched: [String: Timestamp]
 
+    // Local commands.
+    var localCommands: Set<LocalCommand>
+
     // Enablement states.
     let engineConfiguration: EngineConfiguration?
 
@@ -210,6 +284,7 @@ public class Scratchpad {
          k: Fetched<Keys>?,
          keyLabel: String,
          fetches: [String: Timestamp],
+         localCommands: Set<LocalCommand>,
          engines: EngineConfiguration?,
          clientGUID: String,
          clientName: String,
@@ -223,6 +298,7 @@ public class Scratchpad {
         self.global = m
         self.engineConfiguration = engines
         self.collectionLastFetched = fetches
+        self.localCommands = localCommands
         self.clientGUID = clientGUID
         self.clientName = clientName
     }
@@ -238,6 +314,7 @@ public class Scratchpad {
         self.global = nil
         self.engineConfiguration = nil
         self.collectionLastFetched = [String: Timestamp]()
+        self.localCommands = Set()
         self.clientGUID = Bytes.generateGUID()
         self.clientName = DeviceInfo.defaultClientName()
     }
@@ -316,6 +393,11 @@ public class Scratchpad {
             return DeviceInfo.defaultClientName()
         }()
 
+
+        if let localCommands: [String] = prefs.stringArrayForKey(PrefLocalCommands) {
+            b.localCommands = Set(localCommands.flatMap({LocalCommand.fromJSON(JSON.parse($0))}))
+        }
+
         // TODO: engineConfiguration
         return b.build()
     }
@@ -390,6 +472,9 @@ public class Scratchpad {
         // Thanks, Swift.
         let dict = mapValues(collectionLastFetched, f: { NSNumber(unsignedLongLong: $0) }) as NSDictionary
         prefs.setObject(dict, forKey: PrefLastFetched)
+
+        let localCommands: [String] = Array(self.localCommands).map({$0.toJSON().toString()})
+        prefs.setObject(localCommands, forKey: PrefLocalCommands)
 
         return self
     }
