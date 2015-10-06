@@ -381,7 +381,11 @@ public class ServerConfigurationRequiredError: RecoverableSyncState {
 
     public func advance() -> Deferred<Maybe<SyncState>> {
         let client = self.previousState.client
-        let s = self.previousState.scratchpad.evolve().setGlobal(nil).setKeys(nil).build().checkpoint()
+        let s = self.previousState.scratchpad.evolve()
+                .setGlobal(nil)
+                .addLocalCommandsFromKeys(nil)
+                .setKeys(nil)
+                .build().checkpoint()
         // Upload a new meta/global ...
         return client.uploadMetaGlobal(createMetaGlobal(nil, scratchpad: s), ifUnmodifiedSince: nil)
             // ... and a new crypto/keys.
@@ -757,11 +761,10 @@ public class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
                 // setKeys bumps the crypto/ timestamp because, though in theory there might be
                 // other records in that collection, even if there are we don't care about them.
                 let fetched = Fetched(value: collectionKeys, timestamp: resp.value.modified)
-                let s = self.scratchpad.evolve().setKeys(fetched).build().checkpoint()
-
-                if let staleCollectionKeys = self.staleCollectionKeys {
-                    // We have work to do.  We need to reset all the local collections that are no longer fresh.
-                }
+                let s = self.scratchpad.evolve()
+                        .addLocalCommandsFromKeys(fetched)
+                        .setKeys(fetched)
+                        .build().checkpoint()
                 return deferMaybe(HasFreshCryptoKeys.fromState(self, scratchpad: s, collectionKeys: collectionKeys))
             }
 
@@ -801,5 +804,22 @@ public class Ready: BaseSyncStateWithInfo {
     public init(client: Sync15StorageClient, scratchpad: Scratchpad, token: TokenServerToken, info: InfoCollections, keys: Keys) {
         self.collectionKeys = keys
         super.init(client: client, scratchpad: scratchpad, token: token, info: info)
+    }
+
+    public func collectionsThatNeedLocalReset() -> [String] {
+        var needReset: Set<String> = Set()
+        for command in self.scratchpad.localCommands {
+            switch command {
+            case let .ResetAllEngines(except: except):
+                needReset.unionInPlace(Set(LocalEngines).subtract(except))
+            case let .ResetEngine(engine):
+                needReset.insert(engine)
+            }
+        }
+        return Array(needReset).sort()
+    }
+
+    public func clearLocalCommands() {
+        self.scratchpad = self.scratchpad.evolve().clearLocalCommands().build().checkpoint()
     }
 }

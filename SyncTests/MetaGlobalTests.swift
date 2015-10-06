@@ -169,9 +169,6 @@ class MetaGlobalTests: XCTestCase {
         storeMetaGlobal(metaGlobal)
         storeCryptoKeys(cryptoKeys)
 
-        var metaGlobalTimestamp: Timestamp!
-        var cryptoKeysTimestamp: Timestamp!
-
         let expectation = expectationWithDescription("Waiting on value.")
         stateMachine.toReady(authState).upon { result in
             XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobal", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
@@ -179,12 +176,14 @@ class MetaGlobalTests: XCTestCase {
             guard let ready = result.successValue else {
                 return
             }
-            metaGlobalTimestamp = ready.scratchpad.global!.timestamp
-            cryptoKeysTimestamp = ready.scratchpad.keys!.timestamp
 
             // And we should have downloaded meta/global and crypto/keys.
             XCTAssertEqual(ready.scratchpad.global?.value, metaGlobal)
             XCTAssertEqual(ready.scratchpad.keys?.value, cryptoKeys)
+
+            // We should have marked all local engines for reset.
+            XCTAssertEqual(ready.collectionsThatNeedLocalReset(), ["bookmarks", "clients", "history", "passwords", "tabs"])
+            ready.clearLocalCommands()
 
             XCTAssertTrue(result.isSuccess)
             XCTAssertNil(result.failureValue)
@@ -195,6 +194,8 @@ class MetaGlobalTests: XCTestCase {
             XCTAssertNil(error, "\(error)")
         }
 
+        let afterFirstSync = now()
+
         // Now, run through the state machine again.  Nothing's changed remotely, so we should advance quickly.
         let secondExpectation = expectationWithDescription("Waiting on value.")
         stateMachine.toReady(authState).upon { result in
@@ -204,12 +205,147 @@ class MetaGlobalTests: XCTestCase {
                 return
             }
             // And we should have not downloaded a fresh meta/global or crypto/keys.
-            XCTAssertEqual(ready.scratchpad.global?.timestamp, metaGlobalTimestamp)
-            XCTAssertEqual(ready.scratchpad.keys?.timestamp, cryptoKeysTimestamp)
+            XCTAssertLessThan(ready.scratchpad.global?.timestamp ?? Timestamp.max, afterFirstSync)
+            XCTAssertLessThan(ready.scratchpad.keys?.timestamp ?? Timestamp.max, afterFirstSync)
+
+            // We should not have marked any local engines for reset.
+            XCTAssertEqual(ready.collectionsThatNeedLocalReset(), [])
 
             XCTAssertTrue(result.isSuccess)
             XCTAssertNil(result.failureValue)
             secondExpectation.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(2000) { (error) in
+            XCTAssertNil(error, "\(error)")
+        }
+    }
+
+    func testUpdatedCryptoKeys() {
+        // When encountering a valid meta/global and crypto/keys, advance smoothly.
+        let metaGlobal = MetaGlobal(syncID: "id", storageVersion: 5, engines: [String: EngineMeta](), declined: [])
+        let cryptoKeys = Keys.random()
+        cryptoKeys.collectionKeys.updateValue(KeyBundle.random(), forKey: "bookmarks")
+        cryptoKeys.collectionKeys.updateValue(KeyBundle.random(), forKey: "clients")
+        storeMetaGlobal(metaGlobal)
+        storeCryptoKeys(cryptoKeys)
+
+        let expectation = expectationWithDescription("Waiting on value.")
+        stateMachine.toReady(authState).upon { result in
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "resolveMetaGlobal", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertNotNil(result.successValue)
+            guard let ready = result.successValue else {
+                return
+            }
+
+            // And we should have downloaded meta/global and crypto/keys.
+            XCTAssertEqual(ready.scratchpad.global?.value, metaGlobal)
+            XCTAssertEqual(ready.scratchpad.keys?.value, cryptoKeys)
+
+            // We should have marked all local engines for reset.
+            XCTAssertEqual(ready.collectionsThatNeedLocalReset(), ["bookmarks", "clients", "history", "passwords", "tabs"])
+            ready.clearLocalCommands()
+
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNil(result.failureValue)
+            expectation.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(2000) { (error) in
+            XCTAssertNil(error, "\(error)")
+        }
+
+        let afterFirstSync = now()
+
+        // Store a fresh crypto/keys, with the same default key, one identical collection key, and one changed collection key.
+        let freshCryptoKeys = Keys.init(defaultBundle: cryptoKeys.defaultBundle)
+        freshCryptoKeys.collectionKeys.updateValue(cryptoKeys.forCollection("bookmarks"), forKey: "bookmarks")
+        freshCryptoKeys.collectionKeys.updateValue(KeyBundle.random(), forKey: "clients")
+        storeCryptoKeys(freshCryptoKeys)
+
+        // Now, run through the state machine again.
+        let secondExpectation = expectationWithDescription("Waiting on value.")
+        stateMachine.toReady(authState).upon { result in
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertNotNil(result.successValue)
+            guard let ready = result.successValue else {
+                return
+            }
+            // And we should have not downloaded a fresh meta/global ...
+            XCTAssertLessThan(ready.scratchpad.global?.timestamp ?? Timestamp.max, afterFirstSync)
+            // ... but we should have downloaded a fresh crypto/keys.
+            XCTAssertGreaterThanOrEqual(ready.scratchpad.keys?.timestamp ?? Timestamp.min, afterFirstSync)
+
+            // We should have marked only the local engine with a changed key for reset.
+            XCTAssertEqual(ready.collectionsThatNeedLocalReset(), ["clients"])
+
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNil(result.failureValue)
+            secondExpectation.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(2000) { (error) in
+            XCTAssertNil(error, "\(error)")
+        }
+
+        let afterSecondSync = now()
+
+        // Store a fresh crypto/keys, with a changed default key and one identical collection key, and one changed collection key.
+        let freshCryptoKeys2 = Keys.random()
+        freshCryptoKeys2.collectionKeys.updateValue(freshCryptoKeys.forCollection("bookmarks"), forKey: "bookmarks")
+        freshCryptoKeys2.collectionKeys.updateValue(KeyBundle.random(), forKey: "clients")
+        storeCryptoKeys(freshCryptoKeys2)
+
+        // Now, run through the state machine again.
+        let thirdExpectation = expectationWithDescription("Waiting on value.")
+        stateMachine.toReady(authState).upon { result in
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertNotNil(result.successValue)
+            guard let ready = result.successValue else {
+                return
+            }
+            // And we should have not downloaded a fresh meta/global ...
+            XCTAssertLessThan(ready.scratchpad.global?.timestamp ?? Timestamp.max, afterSecondSync)
+            // ... but we should have downloaded a fresh crypto/keys.
+            XCTAssertGreaterThanOrEqual(ready.scratchpad.keys?.timestamp ?? Timestamp.min, afterSecondSync)
+
+            // We should have marked all local engines as needing reset, except for the engine whose key remained constant.
+            XCTAssertEqual(ready.collectionsThatNeedLocalReset(), ["clients", "history", "passwords", "tabs"])
+
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNil(result.failureValue)
+            thirdExpectation.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(2000) { (error) in
+            XCTAssertNil(error, "\(error)")
+        }
+
+        let afterThirdSync = now()
+
+        // Now store a random crypto/keys, with a different default key (and no bulk keys).
+        let randomCryptoKeys = Keys.random()
+        storeCryptoKeys(randomCryptoKeys)
+
+        // Now, run through the state machine again.
+        let fourthExpectation = expectationWithDescription("Waiting on value.")
+        stateMachine.toReady(authState).upon { result in
+            XCTAssertEqual(self.stateMachine.stateLabelSequence.map { $0.rawValue }, ["initialWithLiveToken", "initialWithLiveTokenAndInfo", "hasMetaGlobal", "needsFreshCryptoKeys", "hasFreshCryptoKeys", "ready"])
+            XCTAssertNotNil(result.successValue)
+            guard let ready = result.successValue else {
+                return
+            }
+            // And we should have not downloaded a fresh meta/global ...
+            XCTAssertLessThan(ready.scratchpad.global?.timestamp ?? Timestamp.max, afterThirdSync)
+            // ... but we should have downloaded a fresh crypto/keys.
+            XCTAssertGreaterThanOrEqual(ready.scratchpad.keys?.timestamp ?? Timestamp.min, afterThirdSync)
+
+            // We should have marked all local engines for reset.
+            XCTAssertEqual(ready.collectionsThatNeedLocalReset(), ["bookmarks", "clients", "history", "passwords", "tabs"])
+
+            XCTAssertTrue(result.isSuccess)
+            XCTAssertNil(result.failureValue)
+            fourthExpectation.fulfill()
         }
 
         waitForExpectationsWithTimeout(2000) { (error) in

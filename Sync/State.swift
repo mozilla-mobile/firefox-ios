@@ -188,6 +188,51 @@ public class Scratchpad {
             self.clientName = p.clientName
         }
 
+        public func clearLocalCommands() -> Builder {
+            self.localCommands.removeAll()
+            return self
+        }
+
+        public func addLocalCommandsFromKeys(keys: Fetched<Keys>?) -> Builder {
+            // Getting new keys can force local collection resets.
+            guard let freshKeys = keys?.value, staleKeys = self.keys?.value where staleKeys.valid else {
+                // Removing keys, or new keys and either we didn't have old keys or they weren't valid.  Everybody gets a reset!
+                self.localCommands.insert(LocalCommand.ResetAllEngines(except: []))
+                return self
+            }
+
+            // New keys, and we have valid old keys.
+            if freshKeys.defaultBundle != staleKeys.defaultBundle {
+                // Default bundle has changed.  Reset everything but collections that have unchanged bulk keys.
+                var except: Set<String> = Set()
+                // Symmetric difference, like an animal.  Swift doesn't allow Hashable tuples; don't fight it.
+                for (collection, keyBundle) in staleKeys.collectionKeys {
+                    if keyBundle == freshKeys.forCollection(collection) {
+                        except.insert(collection)
+                    }
+                }
+                for (collection, keyBundle) in freshKeys.collectionKeys {
+                    if keyBundle == staleKeys.forCollection(collection) {
+                        except.insert(collection)
+                    }
+                }
+                self.localCommands.insert(.ResetAllEngines(except: except))
+            } else {
+                // Default bundle is the same.  Reset collections that have changed bulk keys.
+                for (collection, keyBundle) in staleKeys.collectionKeys {
+                    if keyBundle != freshKeys.forCollection(collection) {
+                        self.localCommands.insert(.ResetEngine(engine: collection))
+                    }
+                }
+                for (collection, keyBundle) in freshKeys.collectionKeys {
+                    if keyBundle != staleKeys.forCollection(collection) {
+                        self.localCommands.insert(.ResetEngine(engine: collection))
+                    }
+                }
+            }
+            return self
+        }
+
         public func setKeys(keys: Fetched<Keys>?) -> Builder {
             self.keys = keys
             if let keys = keys {
@@ -328,6 +373,7 @@ public class Scratchpad {
         // TODO: I *think* a new keyLabel is unnecessary.
         return self.evolve()
                    .setGlobal(global)
+                   .addLocalCommandsFromKeys(nil)
                    .setKeys(nil)
                    .clearFetchTimestamps()
                    .build()
