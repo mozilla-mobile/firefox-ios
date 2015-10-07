@@ -242,7 +242,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             return deferMaybe(.NoNewData)
         }
 
-        return self.downloadNextBatchWithLimit(limit, advancingOnCompletionTo: modified)
+        return self.downloadNextBatchWithLimit(limit, infoModified: modified)
     }
 
     // We're either fetching from our current base timestamp with no offset,
@@ -254,7 +254,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         return (nil, self.baseTimestamp)
     }
 
-    func downloadNextBatchWithLimit(limit: Int, advancingOnCompletionTo: Timestamp) -> Deferred<Maybe<DownloadEndState>> {
+    func downloadNextBatchWithLimit(limit: Int, infoModified: Timestamp) -> Deferred<Maybe<DownloadEndState>> {
         let (offset, since) = self.fetchParameters()
         log.debug("Fetching newer=\(since), offset=\(offset).")
 
@@ -292,7 +292,15 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             self.store(response.value)
 
             if nextOffset == nil {
-                self.lastModified = advancingOnCompletionTo
+                // If we can't get a timestamp from the header -- and we should always be able to --
+                // we fall back on the collection modified time in i/c, as supplied by the caller.
+                // In any case where there is no racing writer these two values should be the same.
+                // If they differ, the header should be later. If it's missing, and we use the i/c
+                // value, we'll simply redownload some records.
+                // All bets are off if we hit this case and are filtering somehow… don't do that.
+                let lm = response.metadata.lastModifiedMilliseconds
+                log.debug("Advancing lastModified to \(lm) ?? \(infoModified).")
+                self.lastModified = lm ?? infoModified
                 return deferMaybe(.Complete)
             }
 
