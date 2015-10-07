@@ -201,6 +201,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         }
     }
 
+    // Set after each batch, from record timestamps.
     var baseTimestamp: Timestamp {
         get {
             return self.prefs.timestampForKey("baseTimestamp") ?? 0
@@ -210,6 +211,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         }
     }
 
+    // Only set at the end of a batch, from headers.
     var lastModified: Timestamp {
         get {
             return self.prefs.timestampForKey("lastModified") ?? 0
@@ -251,7 +253,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         if let (offset, since) = self.nextFetchParameters {
             return (offset, since)
         }
-        return (nil, self.baseTimestamp)
+        return (nil, max(self.lastModified, self.baseTimestamp))
     }
 
     func downloadNextBatchWithLimit(limit: Int, infoModified: Timestamp) -> Deferred<Maybe<DownloadEndState>> {
