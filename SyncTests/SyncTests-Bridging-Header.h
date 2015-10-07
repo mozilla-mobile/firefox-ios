@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GCDWebServer.h"
+#import "GCDWebServerDataRequest.h"
 #import "GCDWebServerDataResponse.h"
 
 #endif

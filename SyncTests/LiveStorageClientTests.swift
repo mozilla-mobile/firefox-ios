@@ -124,13 +124,13 @@ class LiveStorageClientTests : LiveAccountTest {
         let expectation = expectationWithDescription("Waiting on value.")
         let authState = self.getAuthState(NSDate.now())
 
-        let d = chainDeferred(authState, f: { SyncStateMachine.toReady($0, prefs: MockProfilePrefs()) })
+        let d = chainDeferred(authState, f: { SyncStateMachine(prefs: MockProfilePrefs()).toReady($0) })
 
         d.upon { result in
             if let ready = result.successValue {
                 XCTAssertTrue(ready.collectionKeys.defaultBundle.encKey.length == 32)
                 XCTAssertTrue(ready.scratchpad.global != nil)
-                if let clients = ready.scratchpad.global?.value.engines?["clients"] {
+                if let clients = ready.scratchpad.global?.value.engines["clients"] {
                     XCTAssertTrue(clients.syncID.characters.count == 12)
                 }
             }

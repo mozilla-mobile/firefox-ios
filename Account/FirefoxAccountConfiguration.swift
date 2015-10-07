@@ -92,8 +92,8 @@ public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration
     public let oauthEndpointURL = NSURL(string: "https://oauth.accounts.firefox.com/v1")!
     public let profileEndpointURL = NSURL(string: "https://profile.accounts.firefox.com/v1")!
 
-    public let signInURL = NSURL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1&exclude_signup=1")!
-    public let settingsURL = NSURL(string: "https://accounts.firefox.com/settings?context=fx_ios_v1&exclude_signup=1")!
+    public let signInURL = NSURL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1")!
+    public let settingsURL = NSURL(string: "https://accounts.firefox.com/settings?context=fx_ios_v1")!
     public let forceAuthURL = NSURL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = ProductionSync15Configuration()
