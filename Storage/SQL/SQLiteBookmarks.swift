@@ -28,7 +28,7 @@ class SQLiteBookmarkFolder: BookmarkFolder {
 
     init(guid: String, title: String, children: Cursor<BookmarkNode>) {
         self.cursor = children
-        super.init(guid: guid, title: title)
+        super.init(guid: guid, title: title, editable: false)
     }
 }
 
@@ -42,7 +42,7 @@ private class LocalBookmarkNodeFactory {
         let guid = row["guid"] as! String
         let url = row["url"] as! String
         let title = row["title"] as? String ?? url
-        let bookmark = BookmarkItem(guid: guid, title: title, url: url)
+        let bookmark = BookmarkItem(guid: guid, title: title, url: url, editable: false)
 
         // TODO: share this logic with SQLiteHistory.
         if let faviconUrl = row["iconURL"] as? String,
@@ -61,7 +61,7 @@ private class LocalBookmarkNodeFactory {
         let id = row["id"] as! Int
         let guid = row["guid"] as! String
         let title = row["title"] as? String ?? SQLiteBookmarks.defaultFolderTitle
-        let folder = BookmarkFolder(guid: guid, title: title)
+        let folder = BookmarkFolder(guid: guid, title: title, editable: false)
         folder.id = id
         return folder
     }
@@ -69,7 +69,7 @@ private class LocalBookmarkNodeFactory {
     private class func nodeFactory(row: SDRow) -> BookmarkNode {
         let guid = row["guid"] as! String
         let title = row["title"] as? String ?? SQLiteBookmarks.defaultItemTitle
-        return BookmarkNode(guid: guid, title: title)
+        return BookmarkNode(guid: guid, title: title, editable: false)
     }
 
     class func factory(row: SDRow) -> BookmarkNode {
@@ -460,6 +460,10 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
             "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
             for args in values {
+                let guid = args[16]
+                let title = args[9]
+                let parent = args[5]
+                log.debug("Updating record with GUID \(guid), title \(title), parent \(parent).")
                 if let error = conn.executeChange(update, withArgs: args) {
                     log.error("Updating mirror: \(error.description).")
                     err = error
@@ -468,9 +472,11 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
                 }
 
                 if conn.numberOfRowsModified > 0 {
+                    log.debug("Update succeeded. Not inserting.")
                     continue
                 }
 
+                log.debug("Inserting record with GUID \(guid), title \(title), parent \(parent).")
                 if let error = conn.executeChange(insert, withArgs: args) {
                     log.error("Inserting mirror: \(error.description).")
                     err = error
