@@ -6,7 +6,10 @@ import Foundation
 import Shared
 import XCGLogger
 
-// To keep SwiftData happy.
+let BookmarksFolderTitleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
+let BookmarksFolderTitleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
+let BookmarksFolderTitleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
+let BookmarksFolderTitleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
 
 let TableBookmarks = "bookmarks"
 let TableBookmarksMirror = "bookmarksMirror"                           // Added in v9.
@@ -113,17 +116,12 @@ public class BrowserTable: Table {
         let type = BookmarkNodeType.Folder.rawValue
         let root = BookmarkRoots.RootID
 
-        let titleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
-        let titleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
-        let titleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
-        let titleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
-
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,
-            BookmarkRoots.MobileID, BookmarkRoots.MobileFolderGUID, type, titleMobile, root,
-            BookmarkRoots.MenuID, BookmarkRoots.MenuFolderGUID, type, titleMenu, root,
-            BookmarkRoots.ToolbarID, BookmarkRoots.ToolbarFolderGUID, type, titleToolbar, root,
-            BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, titleUnsorted, root,
+            BookmarkRoots.MobileID, BookmarkRoots.MobileFolderGUID, type, BookmarksFolderTitleMobile, root,
+            BookmarkRoots.MenuID, BookmarkRoots.MenuFolderGUID, type, BookmarksFolderTitleMenu, root,
+            BookmarkRoots.ToolbarID, BookmarkRoots.ToolbarFolderGUID, type, BookmarksFolderTitleToolbar, root,
+            BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, BookmarksFolderTitleUnsorted, root,
         ]
 
         let sql =
