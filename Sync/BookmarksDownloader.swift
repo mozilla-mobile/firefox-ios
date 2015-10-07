@@ -285,8 +285,12 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
 
             // If there are records, advance to just before the timestamp of the last.
             // If our next fetch with X-Weave-Next-Offset fails, at least we'll start here.
+            //
+            // Without Bug 1212189 we get records in the wrong order, and this approach doesn't work.
+            // Commented out until then.
             if let newBase = response.value.last?.modified {
-                self.baseTimestamp = newBase - 1
+                // TODO
+                // self.baseTimestamp = newBase - 1
             }
 
             log.debug("Got success response with \(response.metadata.records) records.")
