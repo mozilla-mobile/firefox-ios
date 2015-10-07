@@ -176,19 +176,32 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         log.info("Downloader configured with prefs '\(branchName)'.")
     }
 
-    var nextOffset: String? {
+    /**
+     * Clients should provide the same set of parameters alongside an `offset` as was
+     * provided with the initial request. The only thing that varies in our batch fetches
+     * is `newer`, so we track the original value alongside.
+     */
+    var nextFetchParameters: (String, Timestamp)? {
         get {
-            return self.prefs.stringForKey("nextOffset")
+            let o = self.prefs.stringForKey("nextOffset")
+            let n = self.prefs.timestampForKey("offsetNewer")
+            guard let offset = o, let newer = n else {
+                return nil
+            }
+            return (offset, newer)
         }
         set (value) {
-            if let value = value {
-                self.prefs.setString(value, forKey: "nextOffset")
+            if let (offset, newer) = value {
+                self.prefs.setString(offset, forKey: "nextOffset")
+                self.prefs.setTimestamp(newer, forKey: "offsetNewer")
             } else {
                 self.prefs.removeObjectForKey("nextOffset")
+                self.prefs.removeObjectForKey("offsetNewer")
             }
         }
     }
 
+    // Set after each batch, from record timestamps.
     var baseTimestamp: Timestamp {
         get {
             return self.prefs.timestampForKey("baseTimestamp") ?? 0
@@ -198,6 +211,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         }
     }
 
+    // Only set at the end of a batch, from headers.
     var lastModified: Timestamp {
         get {
             return self.prefs.timestampForKey("lastModified") ?? 0
@@ -213,7 +227,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
     func reset() -> Success {
         self.baseTimestamp = 0
         self.lastModified = 0
-        self.nextOffset = nil
+        self.nextFetchParameters = nil
         self.batch = []
         return succeed()
     }
@@ -230,10 +244,24 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             return deferMaybe(.NoNewData)
         }
 
-        return self.downloadNextBatchWithLimit(limit, advancingOnCompletionTo: modified)
+        return self.downloadNextBatchWithLimit(limit, infoModified: modified)
     }
 
-    func downloadNextBatchWithLimit(limit: Int, advancingOnCompletionTo: Timestamp) -> Deferred<Maybe<DownloadEndState>> {
+    // We're either fetching from our current base timestamp with no offset,
+    // or the timestamp we were using when we last saved an offset.
+    func fetchParameters() -> (String?, Timestamp) {
+        if let (offset, since) = self.nextFetchParameters {
+            return (offset, since)
+        }
+        return (nil, max(self.lastModified, self.baseTimestamp))
+    }
+
+    func downloadNextBatchWithLimit(limit: Int, infoModified: Timestamp) -> Deferred<Maybe<DownloadEndState>> {
+        let (offset, since) = self.fetchParameters()
+        log.debug("Fetching newer=\(since), offset=\(offset).")
+
+        let fetch = self.client.getSince(since, sort: SortOption.Newest, limit: limit, offset: offset)
+
         func handleFailure(err: MaybeErrorType) -> Deferred<Maybe<DownloadEndState>> {
             log.debug("Handling failure.")
             guard let badRequest = err as? BadRequestError<[Record<T>]> where badRequest.response.metadata.status == 412 else {
@@ -243,35 +271,48 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
 
             // Conflict. Start again.
             log.warning("Server contents changed during offset-based batching. Stepping back.")
-            self.nextOffset = nil
+            self.nextFetchParameters = nil
             return deferMaybe(.Interrupted)
         }
 
         func handleSuccess(response: StorageResponse<[Record<T>]>) -> Deferred<Maybe<DownloadEndState>> {
             log.debug("Handling success.")
             // Shift to the next offset. This might be nil, in which case… fine!
-            let offset = response.metadata.nextOffset
-            self.nextOffset = offset
+            // Note that we preserve the previous 'newer' value from the offset or the original fetch,
+            // even as we update baseTimestamp.
+            let nextOffset = response.metadata.nextOffset
+            self.nextFetchParameters = nextOffset == nil ? nil : (nextOffset!, since)
 
             // If there are records, advance to just before the timestamp of the last.
             // If our next fetch with X-Weave-Next-Offset fails, at least we'll start here.
+            //
+            // Without Bug 1212189 we get records in the wrong order, and this approach doesn't work.
+            // Commented out until then.
             if let newBase = response.value.last?.modified {
-                self.baseTimestamp = newBase - 1
+                // TODO
+                // self.baseTimestamp = newBase - 1
             }
 
             log.debug("Got success response with \(response.metadata.records) records.")
             // Store the incoming records for collection.
             self.store(response.value)
 
-            if offset == nil {
-                self.lastModified = advancingOnCompletionTo
+            if nextOffset == nil {
+                // If we can't get a timestamp from the header -- and we should always be able to --
+                // we fall back on the collection modified time in i/c, as supplied by the caller.
+                // In any case where there is no racing writer these two values should be the same.
+                // If they differ, the header should be later. If it's missing, and we use the i/c
+                // value, we'll simply redownload some records.
+                // All bets are off if we hit this case and are filtering somehow… don't do that.
+                let lm = response.metadata.lastModifiedMilliseconds
+                log.debug("Advancing lastModified to \(lm) ?? \(infoModified).")
+                self.lastModified = lm ?? infoModified
                 return deferMaybe(.Complete)
             }
 
             return deferMaybe(.Incomplete)
         }
 
-        let fetch = self.client.getSince(self.baseTimestamp, sort: SortOption.Newest, limit: limit, offset: self.nextOffset)
         return fetch.bind { result in
             guard let response = result.successValue else {
                 return handleFailure(result.failureValue!)
