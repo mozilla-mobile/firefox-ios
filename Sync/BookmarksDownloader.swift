@@ -181,7 +181,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
      * provided with the initial request. The only thing that varies in our batch fetches
      * is `newer`, so we track the original value alongside.
      */
-    var nextOffset: (String, Timestamp)? {
+    var nextFetchParameters: (String, Timestamp)? {
         get {
             let o = self.prefs.stringForKey("nextOffset")
             let n = self.prefs.timestampForKey("offsetNewer")
@@ -225,7 +225,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
     func reset() -> Success {
         self.baseTimestamp = 0
         self.lastModified = 0
-        self.nextOffset = nil
+        self.nextFetchParameters = nil
         self.batch = []
         return succeed()
     }
@@ -248,7 +248,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
     // We're either fetching from our current base timestamp with no offset,
     // or the timestamp we were using when we last saved an offset.
     func fetchParameters() -> (String?, Timestamp) {
-        if let (offset, since) = self.nextOffset {
+        if let (offset, since) = self.nextFetchParameters {
             return (offset, since)
         }
         return (nil, self.baseTimestamp)
@@ -269,7 +269,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
 
             // Conflict. Start again.
             log.warning("Server contents changed during offset-based batching. Stepping back.")
-            self.nextOffset = nil
+            self.nextFetchParameters = nil
             return deferMaybe(.Interrupted)
         }
 
@@ -279,7 +279,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             // Note that we preserve the previous 'newer' value from the offset or the original fetch,
             // even as we update baseTimestamp.
             let nextOffset = response.metadata.nextOffset
-            self.nextOffset = nextOffset == nil ? nil : (nextOffset!, since)
+            self.nextFetchParameters = nextOffset == nil ? nil : (nextOffset!, since)
 
             // If there are records, advance to just before the timestamp of the last.
             // If our next fetch with X-Weave-Next-Offset fails, at least we'll start here.
