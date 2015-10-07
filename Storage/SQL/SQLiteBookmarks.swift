@@ -613,10 +613,6 @@ extension SQLiteBookmarkMirrorStorage: BookmarksModelFactory {
     }
 
     public func modelForFolder(guid: GUID, title: String) -> Deferred<Maybe<BookmarksModel>> {
-        if guid == BookmarkRoots.MobileFolderGUID {
-            return self.modelForRoot()
-        }
-
         if guid == BookmarkRoots.FakeDesktopFolderGUID {
             return self.modelForDesktopBookmarks()
         }
