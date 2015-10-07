@@ -11,10 +11,18 @@ private let log = Logger.syncLogger
 private let desktopBookmarksLabel = NSLocalizedString("Desktop Bookmarks", tableName: "BookmarkPanel", comment: "The folder name for the virtual folder that contains all desktop bookmarks.")
 
 func titleForSpecialGUID(guid: GUID) -> String? {
-    if guid == BookmarkRoots.MobileFolderGUID {
+    switch guid {
+    case BookmarkRoots.MobileFolderGUID:
         return BookmarksFolderTitleMobile
+    case BookmarkRoots.ToolbarFolderGUID:
+        return BookmarksFolderTitleToolbar
+    case BookmarkRoots.MenuFolderGUID:
+        return BookmarksFolderTitleMenu
+    case BookmarkRoots.UnfiledFolderGUID:
+        return BookmarksFolderTitleUnsorted
+    default:
+        return nil
     }
-    return nil
 }
 
 class SQLiteBookmarkFolder: BookmarkFolder {
