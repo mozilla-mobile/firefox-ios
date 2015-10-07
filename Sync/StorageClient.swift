@@ -524,17 +524,32 @@ public class Sync15StorageClient {
         return doOp(self.requestDELETE, path: path, f: f)
     }
 
+    func wipeStorage() -> Deferred<Maybe<StorageResponse<JSON>>> {
+        // In Sync 1.5 it's preferred that we delete the root, not /storage.
+        return deleteResource("", f: { $0 })
+    }
+
     func getInfoCollections() -> Deferred<Maybe<StorageResponse<InfoCollections>>> {
         return getResource("info/collections", f: InfoCollections.fromJSON)
     }
 
-    func getMetaGlobal() -> Deferred<Maybe<StorageResponse<GlobalEnvelope>>> {
-        return getResource("storage/meta/global", f: { GlobalEnvelope($0) })
+    func getMetaGlobal() -> Deferred<Maybe<StorageResponse<MetaGlobal>>> {
+        return getResource("storage/meta/global") { json in
+            // We have an envelope.  Parse the meta/global record embedded in the 'payload' string.
+            let envelope = EnvelopeJSON(json)
+            if envelope.isValid() {
+                return MetaGlobal.fromJSON(JSON.parse(envelope.payload))
+            }
+            return nil
+        }
     }
 
-    func wipeStorage() -> Deferred<Maybe<StorageResponse<JSON>>> {
-        // In Sync 1.5 it's preferred that we delete the root, not /storage.
-        return deleteResource("", f: { $0 })
+    func getCryptoKeys(syncKeyBundle: KeyBundle, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Record<KeysPayload>>>> {
+        let syncKey = Keys(defaultBundle: syncKeyBundle)
+        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0 })
+        let encrypter = syncKey.encrypter("keys", encoder: encoder)
+        let client = self.clientForCollection("crypto", encrypter: encrypter)
+        return client.get("keys")
     }
 
     func uploadMetaGlobal(metaGlobal: MetaGlobal, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {

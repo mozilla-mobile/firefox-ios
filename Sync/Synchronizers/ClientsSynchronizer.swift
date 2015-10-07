@@ -8,7 +8,7 @@ import Storage
 import XCGLogger
 
 private let log = Logger.syncLogger
-private let ClientsStorageVersion = 1
+let ClientsStorageVersion = 1
 
 // TODO
 public protocol Command {

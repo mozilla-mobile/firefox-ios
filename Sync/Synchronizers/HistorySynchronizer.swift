@@ -9,7 +9,7 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 private let HistoryTTLInSeconds = 5184000                   // 60 days.
-private let HistoryStorageVersion = 1
+let HistoryStorageVersion = 1
 
 func makeDeletedHistoryRecord(guid: GUID) -> Record<HistoryPayload> {
     // Local modified time is ignored in upload serialization.

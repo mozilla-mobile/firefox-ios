@@ -142,10 +142,10 @@ public class BaseCollectionSynchronizer {
             return .Backoff(remainingSeconds: Int(remaining))
         }
 
-        if let _ = self.scratchpad.global?.value {
+        if let metaGlobal = self.scratchpad.global?.value {
             // There's no need to check the global storage format here; the state machine will already have
             // done so.
-            if let engineMeta = self.scratchpad.global?.value.engines?[collection] {
+            if let engineMeta = metaGlobal.engines[collection] {
                 if engineMeta.version > self.storageVersion {
                     return .EngineFormatOutdated(needs: engineMeta.version)
                 }
