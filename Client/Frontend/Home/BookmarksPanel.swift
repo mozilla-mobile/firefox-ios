@@ -21,7 +21,7 @@ struct BookmarksPanelUX {
 class BookmarksPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var source: BookmarksModel?
-    var parentFolder: BookmarkFolder?
+    var parentFolders = [BookmarkFolder]()
     var bookmarkFolder = BookmarkRoots.MobileFolderGUID
 
     private let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
@@ -124,7 +124,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // Don't show a header for the root
-        if source == nil || parentFolder == nil {
+        if source == nil || parentFolders.isEmpty {
             return nil
         }
         guard let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier(BookmarkFolderHeaderViewIdentifier) as? BookmarkFolderTableViewHeader else { return nil }
@@ -134,12 +134,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             header.delegate = self
         }
 
-        if let parentFolder = parentFolder {
-            if parentFolder.guid == BookmarkRoots.MobileFolderGUID {
-                header.textLabel?.text = NSLocalizedString("Bookmarks", comment: "Panel accessibility label")
-            } else {
-                header.textLabel?.text = parentFolder.title
-            }
+        if parentFolders.count == 1 {
+            header.textLabel?.text = NSLocalizedString("Bookmarks", comment: "Panel accessibility label")
+        } else if let parentFolder = parentFolders.last {
+            header.textLabel?.text = parentFolder.title
         }
 
         return header
@@ -147,7 +145,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // Don't show a header for the root. If there's no root (i.e. source == nil), we'll also show no header.
-        if source == nil || parentFolder == nil {
+        if source == nil || parentFolders.isEmpty {
             return 0
         }
 
@@ -166,7 +164,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
             case let folder as BookmarkFolder:
                 let nextController = BookmarksPanel()
-                nextController.parentFolder = source.current
+                nextController.parentFolders = parentFolders + [source.current]
                 nextController.bookmarkFolder = folder.guid
                 nextController.profile = self.profile
                 self.navigationController?.pushViewController(nextController, animated: true)
