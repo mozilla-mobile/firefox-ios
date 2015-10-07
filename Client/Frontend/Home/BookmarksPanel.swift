@@ -30,14 +30,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     private lazy var defaultIcon: UIImage = {
         return UIImage(named: "defaultFavicon")!
     }()
-
-    override var profile: Profile! {
-        didSet {
-            // Get all the bookmarks split by folders
-             profile.bookmarks.modelForFolder(bookmarkFolder).upon(onModelFetched)
-        }
-    }
-
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
@@ -52,6 +45,18 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // if we've not already set a source for this panel fetch a new model
+        // otherwise just use the existing source to select a folder
+        guard let source = self.source else {
+            // Get all the bookmarks split by folders
+            profile.bookmarks.modelForFolder(bookmarkFolder).upon(onModelFetched)
+            return
+        }
+        source.selectFolder(bookmarkFolder).upon(onModelFetched)
     }
 
     func notificationReceived(notification: NSNotification) {
@@ -166,6 +171,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 let nextController = BookmarksPanel()
                 nextController.parentFolders = parentFolders + [source.current]
                 nextController.bookmarkFolder = folder.guid
+                nextController.source = source
                 nextController.profile = self.profile
                 self.navigationController?.pushViewController(nextController, animated: true)
                 break
