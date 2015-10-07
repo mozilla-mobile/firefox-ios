@@ -5,6 +5,8 @@
 import Foundation
 
 struct ReaderModeHandlers {
+    static var readerModeCache: ReaderModeCache = DiskReaderModeCache.sharedInstance
+
     static func register(webServer: WebServer, profile: Profile) {
         // Register our fonts and css, which we want to expose to web content that we present in the WebView
         webServer.registerMainBundleResourcesOfType("ttf", module: "reader-mode/fonts")
@@ -19,7 +21,7 @@ struct ReaderModeHandlers {
                 return GCDWebServerResponse(statusCode: 500)
             }
 
-            let status = ReaderModeCache.sharedInstance.contains(url) ? 200 : 404
+            let status = readerModeCache.contains(url) ? 200 : 404
             return GCDWebServerResponse(statusCode: status)
         }
 
@@ -28,7 +30,7 @@ struct ReaderModeHandlers {
             if let url = request.query["url"] as? String {
                 if let url = NSURL(string: url) {
                     do {
-                        let readabilityResult = try ReaderModeCache.sharedInstance.get(url)
+                        let readabilityResult = try readerModeCache.get(url)
                         // We have this page in our cache, so we can display it. Just grab the correct style from the
                         // profile and then generate HTML from the Readability results.
                         var readerModeStyle = DefaultReaderModeStyle
@@ -51,7 +53,7 @@ struct ReaderModeHandlers {
                         // What we do is simply queue the page in the ReadabilityService and then show our loading
                         // screen, which will periodically call page-exists to see if the readerized content has
                         // become available.
-                        ReadabilityService.sharedInstance.process(url)
+                        ReadabilityService.sharedInstance.process(url, cache: readerModeCache)
                         if let readerViewLoadingPath = NSBundle.mainBundle().pathForResource("ReaderViewLoading", ofType: "html") {
                             do {
                                 let readerViewLoading = try NSMutableString(contentsOfFile: readerViewLoadingPath, encoding: NSUTF8StringEncoding)
