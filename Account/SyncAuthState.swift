@@ -16,6 +16,11 @@ public struct SyncAuthStateCache {
     let expiresAt: Timestamp
 }
 
+public protocol SyncAuthState {
+    func invalidate()
+    func token(now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>>
+}
+
 public func syncAuthStateCachefromJSON(json: JSON) -> SyncAuthStateCache? {
     if let version = json["version"].asInt {
         if version != CurrentSyncAuthStateCacheVersion {
@@ -43,7 +48,7 @@ extension SyncAuthStateCache: JSONLiteralConvertible {
     }
 }
 
-public class SyncAuthState {
+public class FirefoxAccountSyncAuthState: SyncAuthState {
     private let account: FirefoxAccount
     private let cache: KeychainCache<SyncAuthStateCache>
 

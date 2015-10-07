@@ -55,9 +55,8 @@ public class FirefoxAccount {
         self.configuration = configuration
         self.stateCache = stateCache
         self.stateCache.checkpoint()
-        self.syncAuthState = SyncAuthState(account: self,
-            cache: KeychainCache.fromBranch("account.syncAuthState", withLabel: self.stateCache.label, factory: syncAuthStateCachefromJSON)
-)
+        self.syncAuthState = FirefoxAccountSyncAuthState(account: self,
+            cache: KeychainCache.fromBranch("account.syncAuthState", withLabel: self.stateCache.label, factory: syncAuthStateCachefromJSON))
     }
 
     public class func fromConfigurationAndJSON(configuration: FirefoxAccountConfiguration, data: JSON) -> FirefoxAccount? {

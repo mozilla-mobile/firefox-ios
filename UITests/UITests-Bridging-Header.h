@@ -10,6 +10,7 @@
 #import <KIF/UIApplication-KIFAdditions.h>
 #import <KIF/UIAccessibilityElement-KIFAdditions.h>
 #import "GCDWebServer.h"
+#import "GCDWebServerDataRequest.h"
 #import "GCDWebServerDataResponse.h"
 
 #endif

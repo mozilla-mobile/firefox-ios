@@ -360,7 +360,7 @@ public class Scratchpad {
         prefs.setInt(1, forKey: PrefVersion)
         if let global = global {
             prefs.setLong(global.timestamp, forKey: PrefGlobalTS)
-            prefs.setString(global.value.toPayload().toString(), forKey: PrefGlobal)
+            prefs.setString(global.value.asPayload().toString(), forKey: PrefGlobal)
         } else {
             prefs.removeObjectForKey(PrefGlobal)
             prefs.removeObjectForKey(PrefGlobalTS)

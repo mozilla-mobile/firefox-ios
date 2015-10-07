@@ -54,6 +54,14 @@ public class EnvelopeJSON {
     public func toString() -> String {
         return self.json.toString()
     }
+
+    public func withModified(now: Timestamp) -> EnvelopeJSON {
+        if var d = self.json.asDictionary {
+            d["modified"] = JSON(Double(now) / 1000)
+            return EnvelopeJSON(JSON(d))
+        }
+        return EnvelopeJSON(JSON.parse("!")) // Intentionally bad JSON.
+    }
 }
 
 

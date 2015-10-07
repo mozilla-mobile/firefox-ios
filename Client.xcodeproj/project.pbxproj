@@ -233,6 +233,7 @@
 		2F834D171A80629A006A0B7B /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = 2F834D111A80629A006A0B7B /* FxASignIn.js */; };
 		2F834D1A1A80629A006A0B7B /* FxAContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F834D131A80629A006A0B7B /* FxAContentViewController.swift */; };
 		2F834D1B1A80629A006A0B7B /* FxAContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F834D131A80629A006A0B7B /* FxAContentViewController.swift */; };
+		2F8C76571BC32F3C00D5E4E0 /* MockSyncServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8C76561BC32F3C00D5E4E0 /* MockSyncServerTests.swift */; settings = {ASSET_TAGS = (); }; };
 		2FA435111ABB6829008031D1 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE23F1ABB531100877008 /* Bookmarks.swift */; };
 		2FA435131ABB6829008031D1 /* Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2411ABB531100877008 /* Cursor.swift */; };
 		2FA435141ABB6829008031D1 /* Favicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2421ABB531100877008 /* Favicons.swift */; };
@@ -1463,6 +1464,7 @@
 		2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEnginesTests.swift; sourceTree = "<group>"; };
 		2F834D111A80629A006A0B7B /* FxASignIn.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = FxASignIn.js; path = Frontend/SignIn/FxASignIn.js; sourceTree = "<group>"; };
 		2F834D131A80629A006A0B7B /* FxAContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxAContentViewController.swift; path = Frontend/SignIn/FxAContentViewController.swift; sourceTree = "<group>"; };
+		2F8C76561BC32F3C00D5E4E0 /* MockSyncServerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockSyncServerTests.swift; path = SyncTests/MockSyncServerTests.swift; sourceTree = "<group>"; };
 		2FA435FB1ABB83B4008031D1 /* Account.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Account.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FA435FE1ABB83B4008031D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FA436051ABB83B4008031D1 /* AccountTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AccountTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2168,7 +2170,10 @@
 				28C077971A3B064000834FE5 /* CryptoTests.swift */,
 				28786E541AB0F5FA009EA9EF /* DeferredTests.swift */,
 				28ECD9F31BA1F59800D829DA /* DownloadTests.swift */,
+				2855611E1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift */,
 				2F3724C41ABF3C01007607FA /* LiveStorageClientTests.swift */,
+				28ECD9791BA1EA2200D829DA /* MockSyncServer.swift */,
+				2F8C76561BC32F3C00D5E4E0 /* MockSyncServerTests.swift */,
 				28C0779D1A3B066000834FE5 /* RecordTests.swift */,
 				2FEBABAE1AB3659000DB5728 /* ResultTests.swift */,
 				28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */,
@@ -2176,8 +2181,6 @@
 				28F596A01ACA13CA0071DDCC /* InfoTests.swift */,
 				2827316F1ABC9BE700AA1954 /* Supporting Files */,
 				50027345B49B967409DDA348 /* StateTests.swift */,
-				28ECD9791BA1EA2200D829DA /* MockSyncServer.swift */,
-				2855611E1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift */,
 			);
 			name = SyncTests;
 			sourceTree = "<group>";
@@ -4269,6 +4272,7 @@
 				28ECD9AE1BA1EF5100D829DA /* GCDWebServerFileResponse.m in Sources */,
 				2853C5421AD84C6800C4F31D /* TabsPayload.swift in Sources */,
 				288502401AC117A500E7F670 /* SyncStateMachine.swift in Sources */,
+				2F8C76571BC32F3C00D5E4E0 /* MockSyncServerTests.swift in Sources */,
 				28ECD9A71BA1EF3D00D829DA /* GCDWebServerResponse.m in Sources */,
 				28F657EA1ABFCA7A00A608BD /* LiveAccountTest.swift in Sources */,
 				2827319E1ABC9C5900AA1954 /* RecordTests.swift in Sources */,

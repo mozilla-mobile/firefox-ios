@@ -275,7 +275,13 @@ public class Sync15StorageClient {
         self.backoff = backoff
 
         // This is a potentially dangerous assumption, but failable initializers up the stack are a giant pain.
-        self.serverURI = NSURL(string: token.api_endpoint)!
+        // We want the serverURI to *not* have a trailing slash: to efficiently wipe a user's storage, we delete
+        // the user root (like /1.5/1234567) and not an "empty collection" (like /1.5/1234567/); the storage
+        // server treats the first like a DROP table and the latter like a DELETE *, and the former is more
+        // efficient than the latter.
+        self.serverURI = NSURL(string: token.api_endpoint.endsWith("/")
+            ? token.api_endpoint.substringToIndex(token.api_endpoint.endIndex.predecessor())
+            : token.api_endpoint)!
         self.authorizer = {
             (r: NSMutableURLRequest) -> NSMutableURLRequest in
             let helper = HawkHelper(id: token.id, key: token.key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
@@ -446,7 +452,15 @@ public class Sync15StorageClient {
             return deferred
         }
 
-        let req = op(self.serverURI.URLByAppendingPathComponent(path))
+        // Special case "": we want /1.5/1234567 and not /1.5/1234567/.  See note about trailing slashes above.
+        let url: NSURL
+        if path == "" {
+            url = self.serverURI // No trailing slash.
+        } else {
+            url = self.serverURI.URLByAppendingPathComponent(path)
+        }
+
+        let req = op(url)
         let handler = self.errorWrap(deferred) { (_, response, result) in
             if let json: JSON = result.value as? JSON {
                 if let v = f(json) {
@@ -518,25 +532,35 @@ public class Sync15StorageClient {
         return getResource("storage/meta/global", f: { GlobalEnvelope($0) })
     }
 
-    func uploadMetaGlobal(metaGlobal: MetaGlobal, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
-        let payload = metaGlobal.toPayload()
-        if payload.isError {
-            return Deferred(value: Maybe(failure: MalformedMetaGlobalError()))
-        }
-
-        // TODO finish this!
-        let record: JSON = JSON(["payload": payload, "id": "global"])
-        return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
-    }
-
     func wipeStorage() -> Deferred<Maybe<StorageResponse<JSON>>> {
         // In Sync 1.5 it's preferred that we delete the root, not /storage.
         return deleteResource("", f: { $0 })
     }
 
-    // TODO: it would be convenient to have the storage client manage Keys,
-    // but of course we need to use a different set of keys to fetch crypto/keys
-    // itself.
+    func uploadMetaGlobal(metaGlobal: MetaGlobal, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
+        let payload = metaGlobal.asPayload()
+        if payload.isError {
+            return Deferred(value: Maybe(failure: MalformedMetaGlobalError()))
+        }
+
+        let record: JSON = JSON(["payload": payload.toString(), "id": "global"])
+        return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
+    }
+
+    // The crypto/keys record is a special snowflake: it is encrypted with the Sync key bundle.  All other records are
+    // encrypted with the bulk key bundle (including possibly a per-collection bulk key) stored in crypto/keys.
+    func uploadCryptoKeys(keys: Keys, withSyncKeyBundle syncKeyBundle: KeyBundle, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
+        let syncKey = Keys(defaultBundle: syncKeyBundle)
+        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0 })
+        let encrypter = syncKey.encrypter("keys", encoder: encoder)
+        let client = self.clientForCollection("crypto", encrypter: encrypter)
+
+        let record = Record(id: "keys", payload: keys.asPayload())
+        return client.put(record, ifUnmodifiedSince: ifUnmodifiedSince)
+    }
+
+    // It would be convenient to have the storage client manage Keys, but of course we need to use a different set of
+    // keys to fetch crypto/keys itself.  See uploadCryptoKeys.
     func clientForCollection<T: CleartextPayloadJSON>(collection: String, encrypter: RecordEncrypter<T>) -> Sync15CollectionClient<T> {
         let storage = self.serverURI.URLByAppendingPathComponent("storage", isDirectory: true)
         return Sync15CollectionClient(client: self, serverURI: storage, collection: collection, encrypter: encrypter)
