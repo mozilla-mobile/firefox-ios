@@ -25,8 +25,10 @@ class HomePanels {
 
         HomePanelDescriptor(
             makeViewController: { profile in
-                let controller = BookmarksPanel()
-                controller.profile = profile
+                let bookmarks = BookmarksPanel()
+                bookmarks.profile = profile
+                let controller = UINavigationController(rootViewController: bookmarks)
+                controller.setNavigationBarHidden(true, animated: false)
                 return controller
             },
             imageName: "Bookmarks",
