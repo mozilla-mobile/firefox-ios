@@ -108,6 +108,7 @@ class ThumbnailCell: UICollectionViewCell {
 
     lazy var backgroundImage: UIImageView = {
         let backgroundImage = UIImageView()
+        backgroundImage.backgroundColor = UIColor.whiteColor()
         backgroundImage.contentMode = UIViewContentMode.ScaleAspectFill
         return backgroundImage
     }()
