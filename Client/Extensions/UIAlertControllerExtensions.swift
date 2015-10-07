@@ -22,8 +22,7 @@ extension UIAlertController {
     class func crashOptInAlert(
         sendReportCallback sendReportCallback: UIAlertActionCallback,
         alwaysSendCallback: UIAlertActionCallback,
-        dontSendCallback: UIAlertActionCallback,
-        neverSendCallback: UIAlertActionCallback) -> UIAlertController {
+        dontSendCallback: UIAlertActionCallback) -> UIAlertController {
 
         let alert = UIAlertController(
             title: NSLocalizedString("Oops! Firefox crashed", comment: "Title for prompt displayed to user after the app crashes"),
@@ -49,16 +48,9 @@ extension UIAlertController {
             handler: dontSendCallback
         )
 
-        let neverSend = UIAlertAction(
-            title: NSLocalizedString("Never Send", comment: "Used as a button label for crash dialog prompt"),
-            style: UIAlertActionStyle.Default,
-            handler: neverSendCallback
-        )
-
         alert.addAction(sendReport)
         alert.addAction(alwaysSend)
         alert.addAction(dontSend)
-        alert.addAction(neverSend)
 
         return alert
     }
