@@ -169,7 +169,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
             case let folder as BookmarkFolder:
                 let nextController = BookmarksPanel()
-                nextController.parentFolders = parentFolders + [source.current]
+                print("adding \(folder.title) to parent list")
+                nextController.parentFolders = parentFolders + [folder]
                 nextController.bookmarkFolder = folder.guid
                 nextController.source = source
                 nextController.profile = self.profile
