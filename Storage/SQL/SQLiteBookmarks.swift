@@ -596,7 +596,7 @@ extension SQLiteBookmarkMirrorStorage: BookmarksModelFactory {
     }
 
     private func folderForDesktopBookmarksCursor(cursor: Cursor<BookmarkNode>) -> SQLiteBookmarkFolder {
-        return SQLiteBookmarkFolder(guid: BookmarkRoots.FakeDesktopFolderGUID, title: "Desktop Bookmarks", children: cursor)
+        return SQLiteBookmarkFolder(guid: BookmarkRoots.FakeDesktopFolderGUID, title: desktopBookmarksLabel, children: cursor)
     }
 
     private func modelForCursor(guid: GUID, title: String)(cursor: Cursor<BookmarkNode>) -> Deferred<Maybe<BookmarksModel>> {
