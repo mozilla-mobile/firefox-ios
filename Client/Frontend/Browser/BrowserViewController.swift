@@ -417,6 +417,14 @@ class BrowserViewController: UIViewController {
             // Reset previous crash state
             activeCrashReporter?.resetPreviousCrashState()
 
+            // Only ask to restore tabs from a crash if we had non-home tabs or tabs with some kind of history in them
+            guard let tabsToRestore = tabManager.tabsToRestore() else { return }
+            let onlyNoHistoryTabs = !tabsToRestore.every { $0.sessionData?.urls.count > 1 }
+            if onlyNoHistoryTabs {
+                tabManager.addTabAndSelect();
+                return
+            }
+
             let optedIntoCrashReporting = profile.prefs.boolForKey("crashreports.send.always")
             if optedIntoCrashReporting == nil {
                 // Offer a chance to allow the user to opt into crash reporting
