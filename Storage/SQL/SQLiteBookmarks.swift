@@ -10,6 +10,21 @@ private let log = Logger.syncLogger
 
 private let desktopBookmarksLabel = NSLocalizedString("Desktop Bookmarks", tableName: "BookmarkPanel", comment: "The folder name for the virtual folder that contains all desktop bookmarks.")
 
+func titleForSpecialGUID(guid: GUID) -> String? {
+    switch guid {
+    case BookmarkRoots.MobileFolderGUID:
+        return BookmarksFolderTitleMobile
+    case BookmarkRoots.ToolbarFolderGUID:
+        return BookmarksFolderTitleToolbar
+    case BookmarkRoots.MenuFolderGUID:
+        return BookmarksFolderTitleMenu
+    case BookmarkRoots.UnfiledFolderGUID:
+        return BookmarksFolderTitleUnsorted
+    default:
+        return nil
+    }
+}
+
 class SQLiteBookmarkFolder: BookmarkFolder {
     private let cursor: Cursor<BookmarkNode>
     override var count: Int {
@@ -60,7 +75,10 @@ private class LocalBookmarkNodeFactory {
     private class func folderFactory(row: SDRow) -> BookmarkFolder {
         let id = row["id"] as! Int
         let guid = row["guid"] as! String
-        let title = row["title"] as? String ?? SQLiteBookmarks.defaultFolderTitle
+        let title = titleForSpecialGUID(guid) ??
+                    row["title"] as? String ??
+                    SQLiteBookmarks.defaultFolderTitle
+
         let folder = BookmarkFolder(guid: guid, title: title)
         folder.id = id
         return folder
@@ -112,7 +130,10 @@ private class MirrorBookmarkNodeFactory {
     private class func folderFactory(row: SDRow) -> BookmarkFolder {
         let id = row["id"] as! Int
         let guid = row["guid"] as! String
-        let title = row["title"] as? String ?? SQLiteBookmarks.defaultFolderTitle
+        let title = titleForSpecialGUID(guid) ??
+                    row["title"] as? String ??
+                    SQLiteBookmarks.defaultFolderTitle
+
         let folder = BookmarkFolder(guid: guid, title: title)
         folder.id = id
         return folder
@@ -605,7 +626,7 @@ extension SQLiteBookmarkMirrorStorage: BookmarksModelFactory {
     }
 
     public func modelForFolder(folder: BookmarkFolder) -> Deferred<Maybe<BookmarksModel>> {
-        return self.modelForFolder(folder.guid)
+        return self.modelForFolder(folder.guid, title: folder.title)
     }
 
     public func modelForFolder(guid: GUID) -> Deferred<Maybe<BookmarksModel>> {
@@ -613,15 +634,12 @@ extension SQLiteBookmarkMirrorStorage: BookmarksModelFactory {
     }
 
     public func modelForFolder(guid: GUID, title: String) -> Deferred<Maybe<BookmarksModel>> {
-        if guid == BookmarkRoots.MobileFolderGUID {
-            return self.modelForRoot()
-        }
-
         if guid == BookmarkRoots.FakeDesktopFolderGUID {
             return self.modelForDesktopBookmarks()
         }
 
-        return self.cursorForGUID(guid) >>== self.modelForCursor(guid, title: "")
+        let outputTitle = titleForSpecialGUID(guid) ?? title
+        return self.cursorForGUID(guid) >>== self.modelForCursor(guid, title: outputTitle)
     }
 
     public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
@@ -699,7 +717,7 @@ extension MergedSQLiteBookmarks: BookmarksModelFactory {
     public func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
         // Return a virtual model containing "Desktop bookmarks" prepended to the local mobile bookmarks.
 
-        guard let mobile = self.local.folderForGUID(BookmarkRoots.MobileFolderGUID, title: "") else {
+        guard let mobile = self.local.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile) else {
             return deferMaybe(DatabaseError(description: "Unable to fetch mobile bookmarks."))
         }
 
