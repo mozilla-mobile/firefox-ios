@@ -445,58 +445,62 @@ extension TabManager {
         }
     }
 
-    private func restoreTabsInternal() {
+    func tabsToRestore() -> [SavedTab]? {
         let tabStateArchivePath = tabsStateArchivePath()
         if NSFileManager.defaultManager().fileExistsAtPath(tabStateArchivePath) {
             if let data = NSData(contentsOfFile: tabStateArchivePath) {
                 let unarchiver = NSKeyedUnarchiver(forReadingWithData: data)
-                if let savedTabs = unarchiver.decodeObjectForKey("tabs") as? [SavedTab] {
-                    var tabToSelect: Browser?
+                return unarchiver.decodeObjectForKey("tabs") as? [SavedTab]
+            }
+        }
+        return nil
+    }
 
-                    for (_, savedTab) in savedTabs.enumerate() {
-                        let tab: Browser
-                        if #available(iOS 9, *) {
-                            tab = self.addTab(flushToDisk: false, zombie: true, restoring: true, isPrivate: savedTab.isPrivate)
-                        } else {
-                            tab = self.addTab(flushToDisk: false, zombie: true, restoring: true)
-                        }
+    private func restoreTabsInternal() {
+        guard let savedTabs = tabsToRestore() else { return }
 
-                        // Set the UUID for the tab, asynchronously fetch the UIImage, then store
-                        // the screenshot in the tab as long as long as a newer one hasn't been taken.
-                        if let screenshotUUID = savedTab.screenshotUUID {
-                            tab.screenshotUUID = screenshotUUID
-                            imageStore.get(screenshotUUID.UUIDString) >>== { screenshot in
-                                if tab.screenshotUUID == screenshotUUID {
-                                    tab.setScreenshot(screenshot, revUUID: false)
-                                }
-                            }
-                        }
+        var tabToSelect: Browser?
+        for (_, savedTab) in savedTabs.enumerate() {
+            let tab: Browser
+            if #available(iOS 9, *) {
+                tab = self.addTab(flushToDisk: false, zombie: true, restoring: true, isPrivate: savedTab.isPrivate)
+            } else {
+                tab = self.addTab(flushToDisk: false, zombie: true, restoring: true)
+            }
 
-                        if savedTab.isSelected {
-                            tabToSelect = tab
-                        }
-
-                        tab.sessionData = savedTab.sessionData
-                        tab.lastTitle = savedTab.title
-                    }
-
-                    if tabToSelect == nil {
-                        tabToSelect = tabs.first
-                    }
-
-                    // Only tell our delegates that we restored tabs if we actually restored a tab(s)
-                    if savedTabs.count > 0 {
-                        for delegate in delegates {
-                            delegate.get()?.tabManagerDidRestoreTabs(self)
-                        }
-                    }
-
-                    if let tab = tabToSelect {
-                        selectTab(tab)
-                        tab.createWebview()
+            // Set the UUID for the tab, asynchronously fetch the UIImage, then store
+            // the screenshot in the tab as long as long as a newer one hasn't been taken.
+            if let screenshotUUID = savedTab.screenshotUUID {
+                tab.screenshotUUID = screenshotUUID
+                imageStore.get(screenshotUUID.UUIDString) >>== { screenshot in
+                    if tab.screenshotUUID == screenshotUUID {
+                        tab.setScreenshot(screenshot, revUUID: false)
                     }
                 }
             }
+
+            if savedTab.isSelected {
+                tabToSelect = tab
+            }
+
+            tab.sessionData = savedTab.sessionData
+            tab.lastTitle = savedTab.title
+        }
+
+        if tabToSelect == nil {
+            tabToSelect = tabs.first
+        }
+
+        // Only tell our delegates that we restored tabs if we actually restored a tab(s)
+        if savedTabs.count > 0 {
+            for delegate in delegates {
+                delegate.get()?.tabManagerDidRestoreTabs(self)
+            }
+        }
+
+        if let tab = tabToSelect {
+            selectTab(tab)
+            tab.createWebview()
         }
     }
 
