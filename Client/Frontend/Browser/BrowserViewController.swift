@@ -798,7 +798,12 @@ class BrowserViewController: UIViewController {
     }
 
     func openURLInNewTab(url: NSURL) {
-        let tab = tabManager.addTab(NSURLRequest(URL: url))
+        let tab: Browser
+        if #available(iOS 9, *) {
+            tab = tabManager.addTab(NSURLRequest(URL: url), isPrivate: tabTrayController?.privateMode ?? false)
+        } else {
+            tab = tabManager.addTab(NSURLRequest(URL: url))
+        }
         tabManager.selectTab(tab)
     }
 }
