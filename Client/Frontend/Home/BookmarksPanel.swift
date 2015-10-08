@@ -15,7 +15,8 @@ struct BookmarksPanelUX {
     private static let BookmarkFolderHeaderViewChevronInset: CGFloat = 10
     private static let BookmarkFolderChevronSize: CGFloat = 20
     private static let BookmarkFolderChevronLineWidth: CGFloat = 4.0
-    private static let BookmarkFolderTextColor = UIColor(rgb: 0x525456)
+    private static let BookmarkFolderTextColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
+    private static let BookmarkFolderTextFont = UIFont.systemFontOfSize(UIConstants.DefaultMediumFontSize, weight: UIFontWeightMedium)
 }
 
 class BookmarksPanel: SiteTableViewController, HomePanel {
@@ -87,7 +88,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     private func onModelFailure(e: Any) {
-        print("Error: failed to get data: \(e)")
+        log.error("Error: failed to get data: \(e)")
     }
 
     override func reloadData() {
@@ -134,6 +135,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
         guard let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier(BookmarkFolderHeaderViewIdentifier) as? BookmarkFolderTableViewHeader else { return nil }
 
+        // for some reason specifying the font in header view init is being ignored, so setting it here
+        header.textLabel?.font = BookmarksPanelUX.BookmarkFolderTextFont
         // register as delegate to ensure we get notified when the user interacts with this header
         if header.delegate == nil {
             header.delegate = self
@@ -169,7 +172,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
             case let folder as BookmarkFolder:
                 let nextController = BookmarksPanel()
-                print("adding \(folder.title) to parent list")
                 nextController.parentFolders = parentFolders + [folder]
                 nextController.bookmarkFolder = folder.guid
                 nextController.source = source
@@ -255,7 +257,7 @@ extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
     }
 }
 
-class BookmarkFolderTableViewCell: UITableViewCell {
+class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     let topBorder = UIView()
     let bottomBorder = UIView()
 
@@ -263,7 +265,7 @@ class BookmarkFolderTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
         textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
-        textLabel?.font = UIConstants.DefaultMediumBoldFont
+        textLabel?.font = BookmarksPanelUX.BookmarkFolderTextFont
         imageView?.image = UIImage(named: "bookmarkFolder")
         let chevron = ChevronView(direction: .Right)
         chevron.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
@@ -271,7 +273,7 @@ class BookmarkFolderTableViewCell: UITableViewCell {
         chevron.lineWidth = BookmarksPanelUX.BookmarkFolderChevronLineWidth
         accessoryView = chevron
 
-        separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        separatorInset = UIEdgeInsetsZero
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -311,7 +313,7 @@ private class BookmarkFolderTableViewHeader : SiteTableViewHeader {
         super.layoutSubviews()
 
         if var textLabelFrame = textLabel?.frame {
-            textLabelFrame.origin.x += (BookmarksPanelUX.BookmarkFolderChevronSize + BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
+            textLabelFrame.origin.x += (BookmarksPanelUX.BookmarkFolderChevronSize + (BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset / 2))
             textLabel?.frame = textLabelFrame
         }
     }
