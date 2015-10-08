@@ -425,7 +425,7 @@ class BrowserViewController: UIViewController {
                 showRestoreTabsAlert()
             }
         } else {
-            restoreTabs()
+            tabManager.restoreTabs()
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
@@ -452,35 +452,16 @@ class BrowserViewController: UIViewController {
     }
 
     private func showRestoreTabsAlert() {
-        func addAndSelect() {
-            let tab = tabManager.addTab()
-            tabManager.selectTab(tab)
-        }
-
         let alert = UIAlertController.restoreTabsAlert(
             okayCallback: { _ in
-                self.restoreTabs()
-                if self.tabManager.count == 0 {
-                    addAndSelect()
-                }
+                self.tabManager.restoreTabs()
             },
             noCallback: { _ in
-                addAndSelect()
+                self.tabManager.addTabAndSelect()
             }
         )
 
         self.presentViewController(alert, animated: true, completion: nil)
-    }
-
-    private func restoreTabs() {
-        if tabManager.count == 0 && !AppConstants.IsRunningTest {
-            tabManager.restoreTabs()
-        }
-
-        if tabManager.count == 0 {
-            let tab = tabManager.addTab()
-            tabManager.selectTab(tab)
-        }
     }
 
     override func viewDidAppear(animated: Bool) {
