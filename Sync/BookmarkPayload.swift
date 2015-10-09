@@ -66,6 +66,14 @@ public enum BookmarkType: String {
 }
 
 public class LivemarkPayload: BookmarkBasePayload {
+    public var feedURI: String? {
+        return self["feedUri"].asString
+    }
+
+    public var siteURI: String? {
+        return self["siteUri"].asString
+    }
+
     override public func isValid() -> Bool {
         if !super.isValid() {
             return false
@@ -86,11 +94,11 @@ public class LivemarkPayload: BookmarkBasePayload {
             return true
         }
 
-        if self["feedUri"].asString != p["feedUri"].asString {
+        if self.feedURI != p.feedURI {
             return false
         }
 
-        if self["siteUri"].asString != p["siteUri"].asString {
+        if self.siteURI != p.siteURI {
             return false
         }
 
@@ -487,8 +495,8 @@ extension LivemarkPayload: MirrorItemable {
             parentName: self["parentName"].asString!,
             title: self["title"].asString!,
             description: self["description"].asString,
-            feedURI: self["feedURI"].asString!,
-            siteURI: self["siteURI"].asString!
+            feedURI: self.feedURI!,
+            siteURI: self.siteURI!
         )
     }
 }
