@@ -260,6 +260,7 @@ extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
 class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     let topBorder = UIView()
     let bottomBorder = UIView()
+    private let ImageMargin: CGFloat = 12
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -267,7 +268,9 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
         textLabel?.backgroundColor = UIColor.clearColor()
         textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
         textLabel?.font = BookmarksPanelUX.BookmarkFolderTextFont
+
         imageView?.image = UIImage(named: "bookmarkFolder")
+
         let chevron = ChevronView(direction: .Right)
         chevron.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
         chevron.frame = CGRectMake(0, 0, BookmarksPanelUX.BookmarkFolderChevronSize, BookmarksPanelUX.BookmarkFolderChevronSize)
@@ -275,6 +278,13 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
         accessoryView = chevron
 
         separatorInset = UIEdgeInsetsZero
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if let imageSize = imageView?.image?.size {
+            imageView?.frame = CGRectMake(ImageMargin, (frame.height - imageSize.width) / 2, imageSize.width, imageSize.height)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
