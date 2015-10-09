@@ -456,6 +456,8 @@ class MetaGlobalTests: XCTestCase {
 
             // We should have marked all local engines for reset.
             XCTAssertEqual(ready.collectionsThatNeedLocalReset(), ["bookmarks", "clients", "history", "passwords", "tabs"])
+            XCTAssertEqual(ready.enginesEnabled(), [])
+            XCTAssertEqual(ready.enginesDisabled(), [])
 
             XCTAssertTrue(result.isSuccess)
             XCTAssertNil(result.failureValue)
