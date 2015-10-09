@@ -58,13 +58,6 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
     }
 
-    public func clear() -> Deferred<Maybe<()>> {
-        return self.doWipe { (conn, inout err: NSError?) -> () in
-            self.tabs.delete(conn, item: nil, err: &err)
-            self.clients.delete(conn, item: nil, err: &err)
-        }
-    }
-
     public func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return self.insertOrUpdateTabsForClientGUID(nil, tabs: tabs)
     }
@@ -259,12 +252,6 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         return deferred
     }
 
-    public func onRemovedAccount() -> Success {
-        log.info("Clearing clients and tabs after account removal.")
-        // TODO: Bug 1168690 - delete our client and tabs records from the server.
-        return self.clear()
-    }
-
     private let debug_enabled = true
     private func debug(msg: String) {
         if debug_enabled {
@@ -356,5 +343,27 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             syncCommands[command.clientGUID!] = cmds
         }
         return syncCommands
+    }
+}
+
+extension SQLiteRemoteClientsAndTabs: ResettableSyncStorage {
+    public func resetClient() -> Success {
+        // For this engine, resetting is equivalent to wiping.
+        return self.clear()
+    }
+
+    public func clear() -> Success {
+        return self.doWipe { (conn, inout err: NSError?) -> () in
+            self.tabs.delete(conn, item: nil, err: &err)
+            self.clients.delete(conn, item: nil, err: &err)
+        }
+    }
+}
+
+extension SQLiteRemoteClientsAndTabs {
+    public func onRemovedAccount() -> Success {
+        log.info("Clearing clients and tabs after account removal.")
+        // TODO: Bug 1168690 - delete our client and tabs records from the server.
+        return self.resetClient()
     }
 }
