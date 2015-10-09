@@ -275,6 +275,13 @@ class MockSyncServer {
         return MockSyncServer.withHeaders(response)
     }
 
+    func modifiedTimeForCollection(collection: String) -> Timestamp? {
+        guard let items = self.collections[collection] else {
+            return nil
+        }
+        return items.values.reduce(0) { max($0, $1.modified) } as Timestamp
+    }
+
     func start() {
         let basePath = "/1.5/\(self.username)"
         let storagePath = "\(basePath)/storage/"
@@ -283,12 +290,12 @@ class MockSyncServer {
         server.addHandlerForMethod("GET", path: infoCollectionsPath, requestClass: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var ic = [String: NSNumber]()
             var lastModified: Timestamp = 0
-            for (collection, map) in self.collections {
-                if !map.isEmpty {
-                    let timestamp = map.values.reduce(0) { max($0, $1.modified) }
-                    lastModified = max(lastModified, timestamp)
+            for collection in self.collections.keys {
+                if let timestamp = self.modifiedTimeForCollection(collection) {
                     ic[collection] = NSNumber(double: Double(timestamp) / 1000)
+                    lastModified = max(lastModified, timestamp)
                 }
+
             }
             let body = JSON(ic).toString()
             let bodyData = body.utf8EncodedData
@@ -318,7 +325,7 @@ class MockSyncServer {
             let record = EnvelopeJSON(JSON(body))
 
             self.storeRecords([record], inCollection: spec.collection)
-            let timestamp = self.collections[spec.collection]!.values.reduce(Timestamp(0)) { max($0, $1.modified) }
+            let timestamp = self.modifiedTimeForCollection(spec.collection)!
 
             let response = GCDWebServerDataResponse(data: millisecondsToDecimalSeconds(timestamp).utf8EncodedData, contentType: "application/json")
             return MockSyncServer.withHeaders(response)
@@ -400,7 +407,9 @@ class MockSyncServer {
                 response.setValue(offset, forAdditionalHeader: "X-Weave-Next-Offset")
             }
 
-            return MockSyncServer.withHeaders(response, lastModified: items.reduce(Timestamp(0)) { max($0, $1.modified) }, records: items.count)
+            let timestamp = self.modifiedTimeForCollection(spec.collection)!
+            log.debug("Returning GET response with X-Last-Modified for \(items.count) records: \(timestamp).")
+            return MockSyncServer.withHeaders(response, lastModified: timestamp, records: items.count)
         }
 
         if server.startWithPort(0, bonjourName: nil) == false {
