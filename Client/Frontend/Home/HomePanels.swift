@@ -29,6 +29,7 @@ class HomePanels {
                 bookmarks.profile = profile
                 let controller = UINavigationController(rootViewController: bookmarks)
                 controller.setNavigationBarHidden(true, animated: false)
+                controller.interactivePopGestureRecognizer?.delegate = nil
                 return controller
             },
             imageName: "Bookmarks",
