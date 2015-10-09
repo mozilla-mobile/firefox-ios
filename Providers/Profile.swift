@@ -122,16 +122,16 @@ class BrowserProfileSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: class {
-    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> { get }
+    var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, ResettableSyncStorage> { get }
     // var favicons: Favicons { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
-    var history: protocol<BrowserHistory, SyncableHistory> { get }
+    var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> { get }
     var favicons: Favicons { get }
     var readingList: ReadingListService? { get }
-    var logins: protocol<BrowserLogins, SyncableLogins> { get }
+    var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> { get }
 
     func shutdown()
 
@@ -261,7 +261,7 @@ public class BrowserProfile: Profile {
      * Any other class that needs to access any one of these should ensure
      * that this is initialized first.
      */
-    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory> = {
+    private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage> = {
         return SQLiteHistory(db: self.db)!
     }()
 
@@ -269,11 +269,11 @@ public class BrowserProfile: Profile {
         return self.places
     }
 
-    var history: protocol<BrowserHistory, SyncableHistory> {
+    var history: protocol<BrowserHistory, SyncableHistory, ResettableSyncStorage> {
         return self.places
     }
 
-    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination> = {
+    lazy var bookmarks: protocol<BookmarksModelFactory, ShareToDestination, ResettableSyncStorage> = {
         // Make sure the rest of our tables are initialized before we try to read them!
         // This expression is for side-effects only.
         withExtendedLifetime(self.places) {
@@ -302,7 +302,7 @@ public class BrowserProfile: Profile {
         return ReadingListService(profileStoragePath: self.files.rootPath as String)
     }()
 
-    private lazy var remoteClientsAndTabs: RemoteClientsAndTabs = {
+    private lazy var remoteClientsAndTabs: protocol<RemoteClientsAndTabs, ResettableSyncStorage> = {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
@@ -342,7 +342,7 @@ public class BrowserProfile: Profile {
         self.remoteClientsAndTabs.insertCommands(commands, forClients: clients) >>> { self.syncManager.syncClients() }
     }
 
-    lazy var logins: protocol<BrowserLogins, SyncableLogins> = {
+    lazy var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> = {
         return SQLiteLogins(db: self.loginsDB)
     }()
 
@@ -544,6 +544,33 @@ public class BrowserProfile: Profile {
             return self.syncEverything()
         }
 
+        func locallyResetCollection(collection: String) -> Success {
+            switch collection {
+            case "bookmarks":
+                return MirroringBookmarksSynchronizer.resetSynchronizerWithStorage(self.profile.bookmarks, basePrefs: self.prefsForSync, collection: "bookmarks")
+            case "clients":
+                return ClientsSynchronizer.resetSynchronizerWithStorage(self.profile.remoteClientsAndTabs, basePrefs: self.prefsForSync, collection: "clients")
+            case "tabs":
+                return TabsSynchronizer.resetSynchronizerWithStorage(self.profile.remoteClientsAndTabs, basePrefs: self.prefsForSync, collection: "tabs")
+            case "history":
+                return HistorySynchronizer.resetSynchronizerWithStorage(self.profile.history, basePrefs: self.prefsForSync, collection: "history")
+            case "passwords":
+                return LoginsSynchronizer.resetSynchronizerWithStorage(self.profile.logins, basePrefs: self.prefsForSync, collection: "passwords")
+            case "forms":
+                log.debug("Requested reset for forms, but this client doesn't sync them yet.")
+                return succeed()
+            case "addons":
+                log.debug("Requested reset for addons, but this client doesn't sync them.")
+                return succeed()
+            case "prefs":
+                log.debug("Requested reset for prefs, but this client doesn't sync them.")
+                return succeed()
+            default:
+                log.warning("Asked to reset collection \(collection), which we don't know about.")
+                return succeed()
+            }
+        }
+
         func onRemovedAccount(account: FirefoxAccount?) -> Success {
             let h: SyncableHistory = self.profile.history
             let flagHistory = { h.onRemovedAccount() }
@@ -621,6 +648,20 @@ public class BrowserProfile: Profile {
             return bookmarksMirrorer.mirrorBookmarksToStorage(self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
+        private func takeActionsOnReady(ready: Ready) -> Deferred<Maybe<Ready>> {
+            var needReset = Set<String>(ready.collectionsThatNeedLocalReset())
+            needReset.unionInPlace(ready.enginesDisabled())
+            needReset.unionInPlace(ready.enginesEnabled())
+            if needReset.isEmpty {
+                log.debug("No collections need reset. Moving on.")
+                return deferMaybe(ready)
+            }
+
+            return walk(Array(needReset), f: self.locallyResetCollection)
+               >>> effect(ready.clearLocalCommands)
+               >>> always(ready)
+        }
+
         /**
          * Returns nil if there's no account.
          */
@@ -640,7 +681,7 @@ public class BrowserProfile: Profile {
                 let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState)
                 let delegate = profile.getSyncDelegate()
 
-                let go = readyDeferred >>== { ready in
+                let go = readyDeferred >>== self.takeActionsOnReady >>== { ready in
                     function(delegate, self.prefsForSync, ready)
                 }
 
