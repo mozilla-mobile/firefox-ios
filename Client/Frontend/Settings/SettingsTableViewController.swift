@@ -325,10 +325,7 @@ private class AccountStatusSetting: WithAccountSetting {
                 viewController.url = cs?.URL
             case .None, .NeedsUpgrade:
                 // In future, we'll want to link to /settings and an upgrade page, respectively.
-                if let cs = NSURLComponents(URL: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false) {
-                    cs.queryItems?.append(NSURLQueryItem(name: "email", value: account.email))
-                    viewController.url = cs.URL
-                }
+                return
             }
         }
         navigationController?.pushViewController(viewController, animated: true)
