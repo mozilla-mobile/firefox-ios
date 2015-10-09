@@ -131,13 +131,24 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
                 if index < panels.count {
                     let panel = self.panels[index].makeViewController(profile: profile)
-                    (panel as? HomePanel)?.homePanelDelegate = self
-                    panel.view.accessibilityNavigationStyle = .Combined
-                    panel.view.accessibilityLabel = self.panels[index].accessibilityLabel
-                    self.showPanel(panel)
+                    let accessibilityLabel = self.panels[index].accessibilityLabel
+                    if let panelController = panel as? UINavigationController,
+                     let rootPanel = panelController.viewControllers.first {
+                        setupHomePanel(rootPanel, accessibilityLabel: accessibilityLabel)
+                        self.showPanel(panelController)
+                    } else {
+                        setupHomePanel(panel, accessibilityLabel: accessibilityLabel)
+                        self.showPanel(panel)
+                    }
                 }
             }
         }
+    }
+
+    func setupHomePanel(panel: UIViewController, accessibilityLabel: String) {
+        (panel as? HomePanel)?.homePanelDelegate = self
+        panel.view.accessibilityNavigationStyle = .Combined
+        panel.view.accessibilityLabel = accessibilityLabel
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {

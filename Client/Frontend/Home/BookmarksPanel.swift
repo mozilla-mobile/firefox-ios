@@ -175,6 +175,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 nextController.parentFolders = parentFolders + [folder]
                 nextController.bookmarkFolder = folder.guid
                 nextController.source = source
+                nextController.homePanelDelegate = self.homePanelDelegate
                 nextController.profile = self.profile
                 self.navigationController?.pushViewController(nextController, animated: true)
                 break
