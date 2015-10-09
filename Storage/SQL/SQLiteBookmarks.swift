@@ -669,6 +669,12 @@ extension SQLiteBookmarkMirrorStorage: BookmarksModelFactory {
         log.debug("Mirror ignoring clearBookmarks.")
         return deferMaybe(DatabaseError(description: "Can't remove records from the mirror."))
     }
+
+    // Used for resetting.
+    public func wipeBookmarks() -> Success {
+        return self.db.run("DELETE FROM \(TableBookmarksMirror)")
+            >>> { self.db.run("DELETE FROM \(TableBookmarksMirrorStructure)") }
+    }
 }
 
 public class MergedSQLiteBookmarks {
@@ -746,5 +752,23 @@ extension MergedSQLiteBookmarks: BookmarksModelFactory {
 
     public func clearBookmarks() -> Success {
         return self.local.clearBookmarks()
+    }
+}
+
+extension MergedSQLiteBookmarks: ResettableSyncStorage {
+    /**
+     * Right now our mirror is simply a mirror of server contents. That means we should
+     * be very willing to drop it and re-populate it from the server whenever we might
+     * be out of sync. See Bug 1212431 Comment 2.
+     */
+    public func resetClient() -> Success {
+        return self.mirror.wipeBookmarks()
+    }
+}
+
+extension SQLiteBookmarks: ResettableSyncStorage {
+    public func resetClient() -> Success {
+        log.debug("SQLiteBookmarks doesn't yet store any data that needs to be reset.")
+        return succeed()
     }
 }
