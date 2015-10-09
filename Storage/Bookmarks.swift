@@ -38,8 +38,8 @@ public struct BookmarkMirrorItem {
     let parentName: String?
 
     // Livemarks.
-    let feedURI: String?
-    let siteURI: String?
+    public let feedURI: String?
+    public let siteURI: String?
 
     // Separators.
     let pos: Int?
