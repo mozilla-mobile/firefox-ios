@@ -18,6 +18,23 @@ public protocol SyncDelegate {
     // TODO: storage.
 }
 
+/**
+ * We sometimes want to make a synchronizer start from scratch: to throw away any
+ * metadata and reset storage to match, allowing us to respond to significant server
+ * changes.
+ *
+ * But instantiating a Synchronizer is a lot of work if we simply want to change some
+ * persistent state. This protocol describes a static func that fits most synchronizers.
+ *
+ * When the returned `Deferred` is filled with a success value, the supplied prefs and
+ * storage are ready to sync from scratch.
+ *
+ * Persisted long-term/local data is kept, and will later be reconciled as appropriate.
+ */
+public protocol ResettableSynchronizer {
+    static func resetSynchronizerWithStorage(storage: ResettableSyncStorage, basePrefs: Prefs, collection: String) -> Success
+}
+
 // TODO: return values?
 /**
  * A Synchronizer is (unavoidably) entirely in charge of what it does within a sync.
@@ -203,5 +220,13 @@ public class TimestampedSingleCollectionSynchronizer: BaseCollectionSynchronizer
 
     public func remoteHasChanges(info: InfoCollections) -> Bool {
         return info.modified(self.collection) > self.lastFetched
+    }
+}
+
+extension BaseCollectionSynchronizer: ResettableSynchronizer {
+    public static func resetSynchronizerWithStorage(storage: ResettableSyncStorage, basePrefs: Prefs, collection: String) -> Success {
+        let synchronizerPrefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)
+        synchronizerPrefs.removeObjectForKey("lastFetched")
+        return storage.resetClient()
     }
 }
