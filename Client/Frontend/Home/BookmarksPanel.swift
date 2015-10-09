@@ -15,12 +15,15 @@ struct BookmarksPanelUX {
     private static let BookmarkFolderHeaderViewChevronInset: CGFloat = 10
     private static let BookmarkFolderChevronSize: CGFloat = 20
     private static let BookmarkFolderChevronLineWidth: CGFloat = 4.0
+    private static let BookmarkFolderTextColor = UIColor(red: 92/255, green: 92/255, blue: 92/255, alpha: 1.0)
+    private static let BookmarkFolderTextFont = UIFont.systemFontOfSize(UIConstants.DefaultMediumFontSize, weight: UIFontWeightMedium)
 }
 
 class BookmarksPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var source: BookmarksModel?
-    var parentFolders = [BookmarksModel]()
+    var parentFolders = [BookmarkFolder]()
+    var bookmarkFolder = BookmarkRoots.MobileFolderGUID
 
     private let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
     private let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
@@ -28,14 +31,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     private lazy var defaultIcon: UIImage = {
         return UIImage(named: "defaultFavicon")!
     }()
-
-    override var profile: Profile! {
-        didSet {
-            // Get all the bookmarks split by folders
-             profile.bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID).upon(onModelFetched)
-        }
-    }
-
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
@@ -50,6 +46,18 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // if we've not already set a source for this panel fetch a new model
+        // otherwise just use the existing source to select a folder
+        guard let source = self.source else {
+            // Get all the bookmarks split by folders
+            profile.bookmarks.modelForFolder(bookmarkFolder).upon(onModelFetched)
+            return
+        }
+        source.selectFolder(bookmarkFolder).upon(onModelFetched)
     }
 
     func notificationReceived(notification: NSNotification) {
@@ -80,7 +88,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     private func onModelFailure(e: Any) {
-        print("Error: failed to get data: \(e)")
+        log.error("Error: failed to get data: \(e)")
     }
 
     override func reloadData() {
@@ -127,17 +135,17 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
         guard let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier(BookmarkFolderHeaderViewIdentifier) as? BookmarkFolderTableViewHeader else { return nil }
 
+        // for some reason specifying the font in header view init is being ignored, so setting it here
+        header.textLabel?.font = BookmarksPanelUX.BookmarkFolderTextFont
         // register as delegate to ensure we get notified when the user interacts with this header
         if header.delegate == nil {
             header.delegate = self
         }
 
-        if let parentFolder = parentFolders.last {
-            if parentFolders.count == 1 {
-                header.textLabel?.text = NSLocalizedString("Bookmarks", comment: "Panel accessibility label")
-            } else {
-                header.textLabel?.text = parentFolder.current.title
-            }
+        if parentFolders.count == 1 {
+            header.textLabel?.text = NSLocalizedString("Bookmarks", comment: "Panel accessibility label")
+        } else if let parentFolder = parentFolders.last {
+            header.textLabel?.text = parentFolder.title
         }
 
         return header
@@ -163,9 +171,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 break
 
             case let folder as BookmarkFolder:
-                parentFolders.append(source)
-                // Descend into the folder.
-                source.selectFolder(folder).upon(onModelFetched)
+                let nextController = BookmarksPanel()
+                nextController.parentFolders = parentFolders + [folder]
+                nextController.bookmarkFolder = folder.guid
+                nextController.source = source
+                nextController.profile = self.profile
+                self.navigationController?.pushViewController(nextController, animated: true)
                 break
 
             default:
@@ -242,31 +253,27 @@ private protocol BookmarkFolderTableViewHeaderDelegate {
 
 extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
     private func didSelectHeader() {
-        guard let parentFolder = parentFolders.popLast() else {
-            return
-        }
-
-        self.onNewModel(parentFolder)
+        self.navigationController?.popViewControllerAnimated(true)
     }
 }
 
-class BookmarkFolderTableViewCell: UITableViewCell {
+class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     let topBorder = UIView()
     let bottomBorder = UIView()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        textLabel?.tintColor = SiteTableViewControllerUX.HeaderTextColor
-        textLabel?.font = UIConstants.DefaultStandardFontBold
+        self.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
+        textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
+        textLabel?.font = BookmarksPanelUX.BookmarkFolderTextFont
         imageView?.image = UIImage(named: "bookmarkFolder")
         let chevron = ChevronView(direction: .Right)
-        chevron.tintColor = SiteTableViewControllerUX.HeaderTextColor
+        chevron.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
         chevron.frame = CGRectMake(0, 0, BookmarksPanelUX.BookmarkFolderChevronSize, BookmarksPanelUX.BookmarkFolderChevronSize)
         chevron.lineWidth = BookmarksPanelUX.BookmarkFolderChevronLineWidth
         accessoryView = chevron
 
-        separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        separatorInset = UIEdgeInsetsZero
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -279,6 +286,11 @@ private class BookmarkFolderTableViewHeader : SiteTableViewHeader {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
+        // set the background color to white
+        self.backgroundView = UIView(frame: self.bounds)
+        self.backgroundView?.backgroundColor = UIColor.clearColor()
+        contentView.backgroundColor = UIColor.clearColor()
+
         textLabel?.textColor = UIConstants.HighlightBlue
         let chevron = ChevronView(direction: .Left)
         chevron.tintColor = UIConstants.HighlightBlue
@@ -301,7 +313,7 @@ private class BookmarkFolderTableViewHeader : SiteTableViewHeader {
         super.layoutSubviews()
 
         if var textLabelFrame = textLabel?.frame {
-            textLabelFrame.origin.x += (BookmarksPanelUX.BookmarkFolderChevronSize + BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
+            textLabelFrame.origin.x += (BookmarksPanelUX.BookmarkFolderChevronSize + (BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset / 2))
             textLabel?.frame = textLabelFrame
         }
     }
