@@ -9,6 +9,10 @@ public class NSUserDefaultsPrefs: Prefs {
     private let prefixWithDot: String
     private let userDefaults: NSUserDefaults
 
+    public func getBranchPrefix() -> String {
+        return self.prefixWithDot
+    }
+
     init(prefix: String, userDefaults: NSUserDefaults) {
         self.prefixWithDot = prefix + (prefix.endsWith(".") ? "" : ".")
         self.userDefaults = userDefaults

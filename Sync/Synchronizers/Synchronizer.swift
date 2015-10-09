@@ -120,14 +120,18 @@ public class BaseCollectionSynchronizer {
     let delegate: SyncDelegate
     let prefs: Prefs
 
+    static func prefsForCollection(collection: String, withBasePrefs basePrefs: Prefs) -> Prefs {
+        let branchName = "synchronizer." + collection + "."
+        return basePrefs.branch(branchName)
+    }
+
     init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, collection: String) {
         self.scratchpad = scratchpad
         self.delegate = delegate
         self.collection = collection
-        let branchName = "synchronizer." + collection + "."
-        self.prefs = basePrefs.branch(branchName)
+        self.prefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)
 
-        log.info("Synchronizer configured with prefs '\(branchName)'.")
+        log.info("Synchronizer configured with prefs '\(self.prefs.getBranchPrefix()).'")
     }
 
     var storageVersion: Int {
