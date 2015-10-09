@@ -854,11 +854,14 @@ extension SQLiteLogins: SyncableLogins {
         return self.db.run("DELETE FROM \(TableLoginsMirror) WHERE guid IN \(inClause)", withArgs: args)
          >>> { self.db.run("DELETE FROM \(TableLoginsLocal) WHERE guid IN \(inClause)", withArgs: args) }
     }
+}
 
+extension SQLiteLogins: ResettableSyncStorage {
     /**
      * Clean up any metadata.
+     * TODO: is this safe for a regular reset? It forces a content-based merge.
      */
-    public func onRemovedAccount() -> Success {
+    public func resetClient() -> Success {
         // Clone all the mirrors so we don't lose data.
         return self.cloneMirrorToOverlay(whereClause: nil, args: nil)
 
@@ -867,5 +870,11 @@ extension SQLiteLogins: SyncableLogins {
 
         // Mark all of the local data as new.
         >>> { self.db.run("UPDATE \(TableLoginsLocal) SET sync_status = \(SyncStatus.New.rawValue)") }
+    }
+}
+
+extension SQLiteLogins {
+    public func onRemovedAccount() -> Success {
+        return self.resetClient()
     }
 }
