@@ -3,6 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import AVFoundation
+import Shared
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 private struct AuralProgressBarUX {
     static let TickPeriod = 1.0
@@ -69,17 +73,22 @@ class AuralProgressBar {
             connectPlayerNodes()
 
             if !engine.running {
-                do { try engine.start() } catch _ { }
+                do { try engine.start() }
+                catch {
+                    log.error("Unable to restart AVAudioEngine. Player will not automatically restart : \(error)")
+                }
             }
         }
 
         func start() {
             do {
                 try engine.start()
-            } catch _ { }
-            tickPlayer.play()
-            progressPlayer.play()
-            tickPlayer.scheduleBuffer(tickBuffer, atTime: nil, options: AVAudioPlayerNodeBufferOptions.Loops) { }
+                tickPlayer.play()
+                progressPlayer.play()
+                tickPlayer.scheduleBuffer(tickBuffer, atTime: nil, options: AVAudioPlayerNodeBufferOptions.Loops) { }
+            } catch {
+                log.error("Unable to start AVAudioEngine. Tick & Progress player will not play : \(error)")
+            }
         }
 
         func stop() {
