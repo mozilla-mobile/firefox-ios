@@ -76,7 +76,7 @@ class DownloadTests: XCTestCase {
         let rec2 = MockSyncServer.makeValidEnvelope(guid2, modified: ts2)
 
         let server = getServer()
-        server.storeRecords([rec1], inCollection: "clients")
+        server.storeRecords([rec1], inCollection: "clients", now: ts1)
 
         let storageClient = getClient(server)!
         let bookmarksClient = storageClient.clientForCollection("clients", encrypter: getEncrypter())
@@ -99,7 +99,7 @@ class DownloadTests: XCTestCase {
         batcher.reset().value
 
         let ic2 = InfoCollections(collections: ["clients": ts2])
-        server.storeRecords([rec2], inCollection: "clients")
+        server.storeRecords([rec2], inCollection: "clients", now: ts2)
         let fetch2 = batcher.go(ic2, limit: 1).value
         XCTAssertEqual(fetch2.successValue, DownloadEndState.Incomplete)
         let records2 = batcher.retrieve()
