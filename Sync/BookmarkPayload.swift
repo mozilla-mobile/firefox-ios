@@ -66,6 +66,14 @@ public enum BookmarkType: String {
 }
 
 public class LivemarkPayload: BookmarkBasePayload {
+    public var feedURI: String? {
+        return self["feedUri"].asString
+    }
+
+    public var siteURI: String? {
+        return self["siteUri"].asString
+    }
+
     override public func isValid() -> Bool {
         if !super.isValid() {
             return false
@@ -86,11 +94,11 @@ public class LivemarkPayload: BookmarkBasePayload {
             return true
         }
 
-        if self["feedUri"].asString != p["feedUri"].asString {
+        if self.feedURI != p.feedURI {
             return false
         }
 
-        if self["siteUri"].asString != p["siteUri"].asString {
+        if self.siteURI != p.siteURI {
             return false
         }
 
