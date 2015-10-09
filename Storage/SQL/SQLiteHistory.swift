@@ -844,17 +844,21 @@ extension SQLiteHistory: SyncableHistory {
         let args: Args = guids.map { $0 as AnyObject }
         return self.db.run(sql, withArgs: args) >>> always(modified)
     }
+}
 
+extension SQLiteHistory: ResettableSyncStorage {
+    // We don't drop deletions when we reset -- we might need to upload a deleted item
+    // that never made it to the server.
+    public func resetClient() -> Success {
+        let flag = "UPDATE \(TableHistory) SET should_upload = 1, server_modified = NULL"
+        return self.db.run(flag)
+    }
+}
+
+extension SQLiteHistory {
     public func onRemovedAccount() -> Success {
-        log.info("Clearing history metadata after account removal.")
-
-        let discard =
-        "DELETE FROM \(TableHistory) WHERE is_deleted = 1"
-
-        let flag =
-        "UPDATE \(TableHistory) SET " +
-        "should_upload = 1, server_modified = NULL "
-
-        return self.db.run(discard) >>> { self.db.run(flag) }
+        log.info("Clearing history metadata and deleted items after account removal.")
+        let discard = "DELETE FROM \(TableHistory) WHERE is_deleted = 1"
+        return self.db.run(discard) >>> self.resetClient
     }
 }
