@@ -495,8 +495,8 @@ extension LivemarkPayload: MirrorItemable {
             parentName: self["parentName"].asString!,
             title: self["title"].asString!,
             description: self["description"].asString,
-            feedURI: self["feedURI"].asString!,
-            siteURI: self["siteURI"].asString!
+            feedURI: self.feedURI!,
+            siteURI: self.siteURI!
         )
     }
 }
