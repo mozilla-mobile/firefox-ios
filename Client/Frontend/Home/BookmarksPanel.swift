@@ -264,6 +264,7 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
+        textLabel?.backgroundColor = UIColor.clearColor()
         textLabel?.tintColor = BookmarksPanelUX.BookmarkFolderTextColor
         textLabel?.font = BookmarksPanelUX.BookmarkFolderTextFont
         imageView?.image = UIImage(named: "bookmarkFolder")
