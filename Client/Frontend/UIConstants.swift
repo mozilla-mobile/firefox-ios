@@ -81,7 +81,7 @@ private struct TempStrings {
     let goToCopiedURLButton = NSLocalizedString("Go", comment: "Pending feature; currently unused string! Button to browse to URL on the clipboard when browser is opened")
 
     // Bug 1196227 - (pbmode) [Meta] Private Browsing
-    let openInNewPrivateTab = NSLocalizedString("Open In New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
+    let openInNewPrivateTab = NSLocalizedString("Open in New Private Tab", tableName: "PrivateBrowsing", comment: "Context menu option for opening a link in a new private tab")
 }
 
 /// Old strings that will be removed when we kill 1.0. We need to keep them around for now for l10n export.
