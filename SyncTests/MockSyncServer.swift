@@ -85,22 +85,28 @@ private struct SyncRequestSpec {
     }
 }
 
-private struct SyncDeleteRequestSpec {
+struct SyncDeleteRequestSpec {
     let collection: String?
-    let id: String?
+    let id: GUID?
+    let ids: [GUID]?
+    let wholeCollection: Bool
 
     static func fromRequest(request: GCDWebServerRequest) -> SyncDeleteRequestSpec? {
         // Input is "/1.5/user{/storage{/collection{/id}}}".
         // That means we get four, five, or six path components here, the first being empty.
+        return SyncDeleteRequestSpec.fromPath(request.path!, withQuery: request.query)
+    }
 
-        let parts = request.path!.componentsSeparatedByString("/").filter { !$0.isEmpty }
+    static func fromPath(path: String, withQuery query: [NSObject: AnyObject]) -> SyncDeleteRequestSpec? {
+        let parts = path.componentsSeparatedByString("/").filter { !$0.isEmpty }
+        let queryIDs: [GUID]? = (query["ids"] as? String)?.componentsSeparatedByString(",")
 
         guard [2, 4, 5].contains(parts.count) else {
             return nil
         }
 
         if parts.count == 2 {
-            return SyncDeleteRequestSpec(collection: nil, id: nil)
+            return SyncDeleteRequestSpec(collection: nil, id: nil, ids: queryIDs, wholeCollection: true)
         }
 
         if parts[2] != "storage" {
@@ -108,10 +114,11 @@ private struct SyncDeleteRequestSpec {
         }
 
         if parts.count == 4 {
-            return SyncDeleteRequestSpec(collection: parts[3], id: nil)
+            let hasIDs = queryIDs != nil
+            return SyncDeleteRequestSpec(collection: parts[3], id: nil, ids: queryIDs, wholeCollection: !hasIDs)
         }
 
-        return SyncDeleteRequestSpec(collection: parts[3], id: parts[4])
+        return SyncDeleteRequestSpec(collection: parts[3], id: parts[4], ids: queryIDs, wholeCollection: false)
     }
 }
 
@@ -143,7 +150,7 @@ class MockSyncServer {
 
     var offsets: Int = 0
     var continuations: [String: [EnvelopeJSON]] = [:]
-    var collections: [String: [String: EnvelopeJSON]] = [:]
+    var collections: [String: (modified: Timestamp, records: [String: EnvelopeJSON])] = [:]
     var baseURL: String!
 
     init(username: String) {
@@ -186,11 +193,13 @@ class MockSyncServer {
 
     func storeRecords(records: [EnvelopeJSON], inCollection collection: String, now: Timestamp? = nil) {
         let now = now ?? NSDate.now()
-        var out = self.collections[collection] ?? [:]
+        let coll = self.collections[collection]
+        var out = coll?.records ?? [:]
         records.forEach {
             out[$0.id] = $0.withModified(now)
         }
-        self.collections[collection] = out
+        let newModified = max(now, coll?.modified ?? 0)
+        self.collections[collection] = (modified: newModified, records: out)
     }
 
     private func splitArray<T>(items: [T], at: Int) -> ([T], [T]) {
@@ -223,7 +232,7 @@ class MockSyncServer {
             return (returned, next)
         }
 
-        guard let records = self.collections[spec.collection]?.values else {
+        guard let records = self.collections[spec.collection]?.records.values else {
             // No matching records.
             return ([], nil)
         }
@@ -276,10 +285,13 @@ class MockSyncServer {
     }
 
     func modifiedTimeForCollection(collection: String) -> Timestamp? {
-        guard let items = self.collections[collection] else {
-            return nil
+        return self.collections[collection]?.modified
+    }
+
+    func removeAllItemsFromCollection(collection: String, atTime: Timestamp) {
+        if self.collections[collection] != nil {
+            self.collections[collection] = (atTime, [:])
         }
-        return items.values.reduce(0) { max($0, $1.modified) } as Timestamp
     }
 
     func start() {
@@ -344,7 +356,7 @@ class MockSyncServer {
             }
 
             if let collection = spec.collection, id = spec.id {
-                guard var items = self.collections[collection] else {
+                guard var items = self.collections[collection]?.records else {
                     // Unable to find the requested collection.
                     return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 404))
                 }
@@ -357,7 +369,18 @@ class MockSyncServer {
                 return self.modifiedResponse(item.modified)
             }
 
-            if let _ = spec.collection {
+            if let collection = spec.collection {
+                if spec.wholeCollection {
+                    self.collections.removeValueForKey(collection)
+                } else {
+                    if let ids = spec.ids,
+                       var map = self.collections[collection]?.records {
+                            for id in ids {
+                                map.removeValueForKey(id)
+                            }
+                            self.collections[collection] = (modified: NSDate.now(), records: map)
+                    }
+                }
                 return self.modifiedResponse(NSDate.now())
             }
 
@@ -382,7 +405,7 @@ class MockSyncServer {
 
             // 2. Grab the matching set of records. Prune based on TTL, exclude with X-I-U-S, etc.
             if let id = spec.id {
-                guard let collection = self.collections[spec.collection], record = collection[id] else {
+                guard let collection = self.collections[spec.collection], record = collection.records[id] else {
                     // Unable to find the requested collection/id.
                     return MockSyncServer.withHeaders(GCDWebServerDataResponse(statusCode: 404))
                 }
