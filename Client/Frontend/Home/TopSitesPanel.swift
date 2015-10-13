@@ -361,6 +361,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
                     cell.imageView.sd_setImageWithURL(icons[0].url.asURL!) { (img, err, type, url) -> Void in
                         if let img = img {
                             cell.backgroundImage.image = img
+                            cell.backgroundEffect?.alpha = 1
                             cell.image = img
                         } else {
                             let icon = Favicon(url: "", date: NSDate(), type: IconType.NoneFound)
@@ -393,6 +394,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
 
         // Resets used cell's background image so that it doesn't get recycled when a tile doesn't update its background image.
         cell.backgroundImage.image = nil
+        cell.backgroundEffect?.alpha = 0
 
         if let icon = site.icon {
             // We've looked before recently and didn't find a favicon
@@ -403,6 +405,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
                 cell.imageView.sd_setImageWithURL(icon.url.asURL, completed: { (img, err, type, url) -> Void in
                     if let img = img {
                         cell.backgroundImage.image = img
+                        cell.backgroundEffect?.alpha = 1
                         cell.image = img
                     } else {
                         self.getFavicon(cell, site: site)
@@ -423,6 +426,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.textLabel.text = site.title.isEmpty ? NSURL(string: site.url)?.normalizedHostAndPath() : site.title
         cell.imageWrapper.backgroundColor = site.backgroundColor
         cell.backgroundImage.image = nil
+        cell.backgroundEffect?.alpha = 0
 
         if let icon = site.wordmark.url.asURL,
            let host = icon.host {
