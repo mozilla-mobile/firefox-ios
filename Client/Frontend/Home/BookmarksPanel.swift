@@ -313,7 +313,7 @@ private class BookmarkFolderTableViewHeader : SiteTableViewHeader {
         super.init(reuseIdentifier: reuseIdentifier)
         // set the background color to white
         self.backgroundView = UIView(frame: self.bounds)
-        self.backgroundView?.backgroundColor = UIColor.clearColor()
+        self.backgroundView?.backgroundColor = UIColor.whiteColor()
         contentView.backgroundColor = UIColor.clearColor()
 
         textLabel?.textColor = UIConstants.HighlightBlue
