@@ -10,6 +10,7 @@ import Storage
 private let log = Logger.browserLogger
 
 private let ThumbnailIdentifier = "Thumbnail"
+private let FrecencyLimit = 20
 
 extension UIView {
     public class func viewOrientationForSize(size: CGSize) -> UIInterfaceOrientation {
@@ -44,8 +45,8 @@ class TopSitesPanel: UIViewController {
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        self.refreshHistory(self.layout.thumbnailCount)
         self.layout.setupForOrientation(UIView.viewOrientationForSize(size))
+        self.collection?.reloadData()
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -76,7 +77,7 @@ class TopSitesPanel: UIViewController {
             make.edges.equalTo(self.view)
         }
         self.collection = collection
-        self.refreshHistory(layout.thumbnailCount)
+        self.refreshHistory(FrecencyLimit)
     }
 
     deinit {
@@ -87,7 +88,7 @@ class TopSitesPanel: UIViewController {
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
-            refreshHistory(self.layout.thumbnailCount)
+            refreshHistory(FrecencyLimit)
             break
         default:
             // no need to do anything at all
