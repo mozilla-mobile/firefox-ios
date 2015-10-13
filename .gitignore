@@ -37,3 +37,5 @@ signedInUser.json
 # Generated config file
 MozBuildID.xcconfig
 
+# Python.
+*.pyc
