@@ -56,7 +56,7 @@ private struct SyncRequestSpec {
         let sort: SortOption?
         switch request.query["sort"] as? String ?? "" {
         case "newest":
-            sort = SortOption.Newest
+            sort = SortOption.NewestFirst
         case "index":
             sort = SortOption.Index
         default:
@@ -251,8 +251,10 @@ class MockSyncServer {
 
         if let sort = spec.sort {
             switch sort {
-            case SortOption.Newest:
+            case SortOption.NewestFirst:
                 items.sortInPlace { $0.modified < $1.modified }
+            case SortOption.OldestFirst:
+                items.sortInPlace { $0.modified > $1.modified }
             case SortOption.Index:
                 log.warning("Index sorting not yet supported.")
             }
