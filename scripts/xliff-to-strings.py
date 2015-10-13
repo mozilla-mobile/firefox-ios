@@ -39,6 +39,7 @@ FILES = [
     "Client/Localizable.strings",
     "Client/PrivateBrowsing.strings",
     "Client/Search.strings",
+    "Client/Shared.strings",
     "Client/Storage.strings",
     "Extensions/SendTo/Info.plist",
     "Extensions/SendTo/SendTo.strings",
@@ -50,6 +51,7 @@ FILES = [
 # Because Xcode is unpredictable. See bug 1162510 - Sync.strings are not imported
 FILENAME_OVERRIDES = {
     "Shared/Supporting Files/Info.plist": "Shared/Localizable.strings",
+    "Shared/Supporting Files/Shared.strings": "Client/Shared.strings",
     "Storage.strings": "Client/Storage.strings",
 }
 
