@@ -260,7 +260,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         let (offset, since) = self.fetchParameters()
         log.debug("Fetching newer=\(since), offset=\(offset).")
 
-        let fetch = self.client.getSince(since, sort: SortOption.Oldest, limit: limit, offset: offset)
+        let fetch = self.client.getSince(since, sort: SortOption.OldestFirst, limit: limit, offset: offset)
 
         func handleFailure(err: MaybeErrorType) -> Deferred<Maybe<DownloadEndState>> {
             log.debug("Handling failure.")
