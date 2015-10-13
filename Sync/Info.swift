@@ -50,28 +50,3 @@ public class InfoCollections {
         return ours.sameElements(theirs, f: ==) && same(other, collections: ours)
     }
 }
-
-extension Array {
-    // Laughably inefficient, but good enough for a handful of items.
-    func sameElements(arr: [Element], f: (Element, Element) -> Bool) -> Bool {
-        return self.count == arr.count && every { arr.contains($0, f: f) }
-    }
-
-    func contains(x: Element, f: (Element, Element) -> Bool) -> Bool {
-        for y in self {
-            if f(x, y) {
-                return true
-            }
-        }
-        return false
-    }
-
-    func every(f: (Element) -> Bool) -> Bool {
-        for x in self {
-            if !f(x) {
-                return false
-            }
-        }
-        return true
-    }
-}
