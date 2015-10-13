@@ -253,6 +253,8 @@ class MockSyncServer {
             switch sort {
             case SortOption.Newest:
                 items.sortInPlace { $0.modified < $1.modified }
+            case SortOption.Oldest:
+                items.sortInPlace { $0.modified > $1.modified }
             case SortOption.Index:
                 log.warning("Index sorting not yet supported.")
             }
