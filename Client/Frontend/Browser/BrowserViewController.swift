@@ -2115,11 +2115,25 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 pasteBoard.string = url.absoluteString
                 // put the actual image on the clipboard
                 // do this be asyncronously just in case we're in a low bandwidth situation
-                // Is this neccessary, or is the image already sat in cache?
-                NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: { (data, _, error) -> Void in
-                    guard let imageData = data where error == nil else { return }
-                    pasteBoard.image = UIImage(data: imageData)
-                }).resume()
+                let application = UIApplication.sharedApplication()
+                var taskId: UIBackgroundTaskIdentifier = 0
+                taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
+                    application.endBackgroundTask(taskId)
+                }
+
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+                    Alamofire.request(.GET, url)
+                        .response { responseRequest, responseResponse, responseData, responseError in
+                            // only set the image onto pasteboard if the thing currently in pasteboard is
+                            // the URL of this image, otherwise, in low bandwidth situations,
+                            // we might be overwriting something that the user has subsequently added
+                            if pasteBoard.string == url.absoluteString {
+                                guard let imageData = responseData where responseError == nil else { return }
+                                pasteBoard.image = UIImage(data: imageData)
+                                application.endBackgroundTask(taskId)
+                            }
+                    }
+                }
             }
             actionSheetController.addAction(copyAction)
         }
