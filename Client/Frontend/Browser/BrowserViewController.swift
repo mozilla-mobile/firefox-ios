@@ -2113,7 +2113,13 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let copyAction = UIAlertAction(title: copyImageTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) -> Void in
                 let pasteBoard = UIPasteboard.generalPasteboard()
                 pasteBoard.string = url.absoluteString
-                // TODO: put the actual image on the clipboard
+                // put the actual image on the clipboard
+                // do this be asyncronously just in case we're in a low bandwidth situation
+                // Is this neccessary, or is the image already sat in cache?
+                NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: { (data, _, error) -> Void in
+                    guard let imageData = data where error == nil else { return }
+                    pasteBoard.image = UIImage(data: imageData)
+                }).resume()
             }
             actionSheetController.addAction(copyAction)
         }
