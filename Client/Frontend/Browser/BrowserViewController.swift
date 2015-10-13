@@ -73,7 +73,7 @@ class BrowserViewController: UIViewController {
     private var topTouchArea: UIButton!
 
     // Backdrop used for displaying greyed background for private tabs
-    private var webViewContainerBackdrop: UIView!
+    var webViewContainerBackdrop: UIView!
 
     private var scrollController = BrowserScrollingController()
 
