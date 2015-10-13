@@ -23,7 +23,6 @@ private func optStringArray(x: AnyObject?) -> [String]? {
     return str.componentsSeparatedByString(",").map { $0.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) }
 }
 
-// TODO: flesh out.
 private struct SyncRequestSpec {
     let collection: String
     let id: String?
@@ -55,6 +54,8 @@ private struct SyncRequestSpec {
 
         let sort: SortOption?
         switch request.query["sort"] as? String ?? "" {
+        case "oldest":
+            sort = SortOption.OldestFirst
         case "newest":
             sort = SortOption.NewestFirst
         case "index":
