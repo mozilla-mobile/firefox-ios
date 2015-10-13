@@ -178,6 +178,12 @@ class TabManager : NSObject {
         return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
 
+    func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Browser {
+        let tab = addTab(request, configuration: configuration)
+        selectTab(tab)
+        return tab
+    }
+
     // This method is duplicated to hide the flushToDisk option from consumers.
     func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Browser {
         return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false)
@@ -495,15 +501,22 @@ extension TabManager {
     }
 
     func restoreTabs() {
-        // This is wrapped in an Objective-C @try/@catch handler because NSKeyedUnarchiver may throw exceptions which Swift cannot handle
-        let _ = Try(
-            `withTry`: { () -> Void in
-                self.restoreTabsInternal()
-            },
-            `catch`: { exception in
-                print("Failed to restore tabs: \(exception)")
-            }
-        )
+        if count == 0 && !AppConstants.IsRunningTest {
+            // This is wrapped in an Objective-C @try/@catch handler because NSKeyedUnarchiver may throw exceptions which Swift cannot handle
+            let _ = Try(
+                `withTry`: { () -> Void in
+                    self.restoreTabsInternal()
+                },
+                `catch`: { exception in
+                    print("Failed to restore tabs: \(exception)")
+                }
+            )
+        }
+
+        if count == 0 {
+            let tab = addTab()
+            selectTab(tab)
+        }
     }
 }
 

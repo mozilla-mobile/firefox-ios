@@ -417,30 +417,51 @@ class BrowserViewController: UIViewController {
             // Reset previous crash state
             activeCrashReporter?.resetPreviousCrashState()
 
-            let crashPrompt = UIAlertView(
-                title: CrashPromptMessaging.Title,
-                message: CrashPromptMessaging.Description,
-                delegate: self,
-                cancelButtonTitle: CrashPromptMessaging.Negative,
-                otherButtonTitles: CrashPromptMessaging.Affirmative
-            )
-            crashPrompt.show()
+            let optedIntoCrashReporting = profile.prefs.boolForKey("crashreports.send.always")
+            if optedIntoCrashReporting == nil {
+                // Offer a chance to allow the user to opt into crash reporting
+                showCrashOptInAlert()
+            } else {
+                showRestoreTabsAlert()
+            }
         } else {
-            restoreTabs()
+            tabManager.restoreTabs()
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
     }
 
-    private func restoreTabs() {
-        if tabManager.count == 0 && !AppConstants.IsRunningTest {
-            tabManager.restoreTabs()
-        }
+    private func showCrashOptInAlert() {
+        let alert = UIAlertController.crashOptInAlert(
+            sendReportCallback: { _ in
+                // Turn on uploading but don't save opt-in flag to profile because this is a one time send.
+                configureActiveCrashReporter(true)
+                self.showRestoreTabsAlert()
+            },
+            alwaysSendCallback: { _ in
+                self.profile.prefs.setBool(true, forKey: "crashreports.send.always")
+                configureActiveCrashReporter(true)
+                self.showRestoreTabsAlert()
+            },
+            dontSendCallback: { _ in
+                // no-op: Do nothing if we don't want to send it
+                self.showRestoreTabsAlert()
+            }
+        )
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
 
-        if tabManager.count == 0 {
-            let tab = tabManager.addTab()
-            tabManager.selectTab(tab)
-        }
+    private func showRestoreTabsAlert() {
+        let alert = UIAlertController.restoreTabsAlert(
+            okayCallback: { _ in
+                self.tabManager.restoreTabs()
+            },
+            noCallback: { _ in
+                self.tabManager.addTabAndSelect()
+            }
+        )
+
+        self.presentViewController(alert, animated: true, completion: nil)
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -2171,36 +2192,6 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 
         if let tab = tabManager.selectedTab where tab.webView === browser.webView {
             updateUIForReaderHomeStateForTab(tab)
-        }
-    }
-}
-
-private struct CrashPromptMessaging {
-    static let Title = NSLocalizedString("Well, this is embarrassing.", comment: "Restore Tabs Prompt Title")
-    static let Description = NSLocalizedString("Looks like Firefox crashed previously. Would you like to restore your tabs?", comment: "Restore Tabs Prompt Description")
-    static let Affirmative = NSLocalizedString("Okay", comment: "Restore Tabs Affirmative Action")
-    static let Negative = NSLocalizedString("No", comment: "Restore Tabs Negative Action")
-}
-
-extension BrowserViewController: UIAlertViewDelegate {
-    private enum CrashPromptIndex: Int {
-        case Cancel = 0
-        case Restore = 1
-    }
-
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        func addAndSelect() {
-            let tab = tabManager.addTab()
-            tabManager.selectTab(tab)
-        }
-
-        if buttonIndex == CrashPromptIndex.Restore.rawValue {
-            self.restoreTabs()
-            if tabManager.count == 0 {
-                addAndSelect()
-            }
-        } else {
-            addAndSelect()
         }
     }
 }
