@@ -2121,18 +2121,16 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     application.endBackgroundTask(taskId)
                 }
 
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
-                    Alamofire.request(.GET, url)
-                        .response { responseRequest, responseResponse, responseData, responseError in
-                            // only set the image onto pasteboard if the thing currently in pasteboard is
-                            // the URL of this image, otherwise, in low bandwidth situations,
-                            // we might be overwriting something that the user has subsequently added
-                            if pasteBoard.string == url.absoluteString {
-                                guard let imageData = responseData where responseError == nil else { return }
-                                pasteBoard.image = UIImage(data: imageData)
-                                application.endBackgroundTask(taskId)
-                            }
-                    }
+                Alamofire.request(.GET, url)
+                    .response { responseRequest, responseResponse, responseData, responseError in
+                        // only set the image onto pasteboard if the thing currently in pasteboard is
+                        // the URL of this image, otherwise, in low bandwidth situations,
+                        // we might be overwriting something that the user has subsequently added
+                        if pasteBoard.string == url.absoluteString {
+                            guard let imageData = responseData where responseError == nil else { return }
+                            pasteBoard.image = UIImage(data: imageData)
+                            application.endBackgroundTask(taskId)
+                        }
                 }
             }
             actionSheetController.addAction(copyAction)
