@@ -22,6 +22,7 @@ class DBPlace: Place {
 }
 
 class MockSyncableHistory {
+    var wasReset: Bool = false
     var places = [GUID: DBPlace]()
     var remoteVisits = [GUID: Set<Visit>]()
     var localVisits = [GUID: Set<Visit>]()
@@ -31,6 +32,13 @@ class MockSyncableHistory {
 
     private func placeForURL(url: String) -> DBPlace? {
         return findOneValue(places) { $0.url == url }
+    }
+}
+
+extension MockSyncableHistory: ResettableSyncStorage {
+    func resetClient() -> Success {
+        self.wasReset = true
+        return succeed()
     }
 }
 
@@ -157,7 +165,7 @@ extension MockSyncableHistory: SyncableHistory {
 
 
 class HistorySynchronizerTests: XCTestCase {
-    private func applyRecords(records: [Record<HistoryPayload>], toStorage storage: SyncableHistory) -> HistorySynchronizer {
+    private func applyRecords(records: [Record<HistoryPayload>], toStorage storage: protocol<SyncableHistory, ResettableSyncStorage>) -> (synchronizer: HistorySynchronizer, prefs: Prefs, scratchpad: Scratchpad) {
         let delegate = MockSyncDelegate()
 
         // We can use these useless values because we're directly injecting decrypted
@@ -178,7 +186,7 @@ class HistorySynchronizerTests: XCTestCase {
 
         waitForExpectationsWithTimeout(10, handler: nil)
         XCTAssertTrue(succeeded, "Application succeeded.")
-        return synchronizer
+        return (synchronizer, prefs, scratchpad)
     }
 
     func testApplyRecords() {
@@ -193,7 +201,7 @@ class HistorySynchronizerTests: XCTestCase {
         let noRecords = [Record<HistoryPayload>]()
 
         // Apply no records.
-        assertTimestampIsReasonable(self.applyRecords(noRecords, toStorage: empty))
+        assertTimestampIsReasonable(self.applyRecords(noRecords, toStorage: empty).synchronizer)
 
         // Hey look! Nothing changed.
         XCTAssertTrue(empty.places.isEmpty)
@@ -205,7 +213,8 @@ class HistorySynchronizerTests: XCTestCase {
         let pA = HistoryPayload.fromJSON(JSON.parse(jA))!
         let rA = Record<HistoryPayload>(id: "aaaaaa", payload: pA, modified: earliest + 10000, sortindex: 123, ttl: 1000000)
 
-        assertTimestampIsReasonable(self.applyRecords([rA], toStorage: empty))
+        let (synchronizer, prefs, _) = self.applyRecords([rA], toStorage: empty)
+        assertTimestampIsReasonable(synchronizer)
 
         // The record was stored. This is checking our mock implementation, but real storage should work, too!
 
@@ -214,5 +223,11 @@ class HistorySynchronizerTests: XCTestCase {
         XCTAssertEqual(1, empty.remoteVisits["aaaaaa"]!.count)
         XCTAssertTrue(empty.localVisits.isEmpty)
 
+        // Test resetting now that we have a timestamp.
+        XCTAssertFalse(empty.wasReset)
+        XCTAssertTrue(0 < synchronizer.lastFetched)
+        XCTAssertTrue(HistorySynchronizer.resetSynchronizerWithStorage(empty, basePrefs: prefs, collection: "history").value.isSuccess)
+        XCTAssertTrue(empty.wasReset)
+        XCTAssertFalse(0 < synchronizer.lastFetched)
     }
 }

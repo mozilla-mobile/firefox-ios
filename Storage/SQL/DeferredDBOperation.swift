@@ -88,7 +88,7 @@ class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
             var error: NSError? = nil
             result = self.block(connection: db, err: &error)
             if error == nil {
-                log.debug("Modified rows: \(db.numberOfRowsModified).")
+                log.verbose("Modified rows: \(db.numberOfRowsModified).")
             }
             self.connection = nil
             return error

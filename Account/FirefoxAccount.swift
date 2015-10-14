@@ -188,7 +188,7 @@ public class FirefoxAccount {
             if let existingDeferred = self.advanceDeferred where existingDeferred === deferred {
                 // The guard should not be needed, but should prevent trampling racing consumers.
                 self.advanceDeferred = nil
-                log.debug("advance() completed and shared deferred is existing deferred; clearing shared defered.")
+                log.debug("advance() completed and shared deferred is existing deferred; clearing shared deferred.")
             } else {
                 log.warning("advance() completed but shared deferred is not existing deferred; ignoring potential bug!")
             }

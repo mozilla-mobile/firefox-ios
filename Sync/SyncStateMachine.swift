@@ -803,6 +803,13 @@ public class HasFreshCryptoKeys: BaseSyncStateWithInfo {
     }
 }
 
+public protocol EngineStateChanges {
+    func collectionsThatNeedLocalReset() -> [String]
+    func enginesEnabled() -> [String]
+    func enginesDisabled() -> [String]
+    func clearLocalCommands()
+}
+
 public class Ready: BaseSyncStateWithInfo {
     public override var label: SyncStateLabel { return SyncStateLabel.Ready }
     let collectionKeys: Keys
@@ -811,7 +818,9 @@ public class Ready: BaseSyncStateWithInfo {
         self.collectionKeys = keys
         super.init(client: client, scratchpad: scratchpad, token: token, info: info)
     }
+}
 
+extension Ready: EngineStateChanges {
     public func collectionsThatNeedLocalReset() -> [String] {
         var needReset: Set<String> = Set()
         for command in self.scratchpad.localCommands {

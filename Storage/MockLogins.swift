@@ -105,3 +105,9 @@ public class MockLogins: BrowserLogins, SyncableLogins {
     public func markAsDeleted(guids: [GUID]) -> Success { return succeed() }
     public func onRemovedAccount() -> Success { return succeed() }
 }
+
+extension MockLogins: ResettableSyncStorage {
+    public func resetClient() -> Success {
+        return succeed()
+    }
+}

@@ -10,6 +10,7 @@ public struct PrefsKeys {
 }
 
 public protocol Prefs {
+    func getBranchPrefix() -> String
     func branch(branch: String) -> Prefs
     func setTimestamp(value: Timestamp, forKey defaultName: String)
     func setLong(value: UInt64, forKey defaultName: String)
@@ -33,6 +34,10 @@ public protocol Prefs {
 
 public class MockProfilePrefs : Prefs {
     let prefix: String
+
+    public func getBranchPrefix() -> String {
+        return self.prefix
+    }
 
     // Public for testing.
     public var things: NSMutableDictionary = NSMutableDictionary()

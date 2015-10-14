@@ -58,13 +58,6 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
     }
 
-    public func clear() -> Deferred<Maybe<()>> {
-        return self.doWipe { (conn, inout err: NSError?) -> () in
-            self.tabs.delete(conn, item: nil, err: &err)
-            self.clients.delete(conn, item: nil, err: &err)
-        }
-    }
-
     public func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return self.insertOrUpdateTabsForClientGUID(nil, tabs: tabs)
     }
@@ -122,16 +115,13 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             for client in clients {
 
                 let updated = self.clients.update(connection, item: client, err: &err)
-                log.info("Updated clients: \(updated)")
-
                 if err == nil && updated == 0 {
-                    let inserted = self.clients.insert(connection, item: client, err: &err)
-                    log.info("Inserted clients: \(inserted)")
+                    self.clients.insert(connection, item: client, err: &err)
                 }
 
                 if let err = err {
                     let databaseError = DatabaseError(err: err)
-                    log.debug("insertOrUpdateClients failed: \(databaseError)")
+                    log.warning("insertOrUpdateClients failed: \(databaseError)")
                     deferred.fill(Maybe(failure: databaseError))
                     return false
                 }
@@ -209,13 +199,13 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         let clients = clientCursor.asArray()
         clientCursor.close()
 
-        log.info("Found \(clients.count) clients in the DB.")
+        log.debug("Found \(clients.count) clients in the DB.")
 
         let tabCursor = db.withReadableConnection(&err) { connection, _ in
             return self.tabs.query(connection, options: nil)
         }
 
-        log.info("Found \(tabCursor.count) raw tabs in the DB.")
+        log.debug("Found \(tabCursor.count) raw tabs in the DB.")
 
         if let err = err {
             tabCursor.close()
@@ -239,7 +229,6 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         }
 
         tabCursor.close()
-        log.info("Accumulated tabs with client GUIDs \(acc.keys).")
 
         // Most recent first.
         let fillTabs: (RemoteClient) -> ClientAndTabs = { client in
@@ -257,19 +246,6 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
         // Why is this whole function synchronous?
         deferred.fill(Maybe(success: clients.filter(removeLocalClient).map(fillTabs)))
         return deferred
-    }
-
-    public func onRemovedAccount() -> Success {
-        log.info("Clearing clients and tabs after account removal.")
-        // TODO: Bug 1168690 - delete our client and tabs records from the server.
-        return self.clear()
-    }
-
-    private let debug_enabled = true
-    private func debug(msg: String) {
-        if debug_enabled {
-            log.info(msg)
-        }
     }
 
     public func deleteCommands() -> Success {
@@ -310,7 +286,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             for command in commands {
                 for client in clients {
                     if let commandID = self.commands.insert(connection, item: command.withClientGUID(client.guid), err: &err) {
-                        log.info("Inserted command: \(commandID)")
+                        log.verbose("Inserted command: \(commandID)")
                         ++numberOfInserts
                     } else {
                         if let err = err {
@@ -344,7 +320,7 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         let clientSyncCommands = clientsFromCommands(allCommands)
 
-        log.info("Found \(clientSyncCommands.count) client sync commands in the DB.")
+        log.debug("Found \(clientSyncCommands.count) client sync commands in the DB.")
         return failOrSucceed(err, op: "get commands", val: clientSyncCommands)
     }
 
@@ -356,5 +332,27 @@ public class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             syncCommands[command.clientGUID!] = cmds
         }
         return syncCommands
+    }
+}
+
+extension SQLiteRemoteClientsAndTabs: ResettableSyncStorage {
+    public func resetClient() -> Success {
+        // For this engine, resetting is equivalent to wiping.
+        return self.clear()
+    }
+
+    public func clear() -> Success {
+        return self.doWipe { (conn, inout err: NSError?) -> () in
+            self.tabs.delete(conn, item: nil, err: &err)
+            self.clients.delete(conn, item: nil, err: &err)
+        }
+    }
+}
+
+extension SQLiteRemoteClientsAndTabs {
+    public func onRemovedAccount() -> Success {
+        log.info("Clearing clients and tabs after account removal.")
+        // TODO: Bug 1168690 - delete our client and tabs records from the server.
+        return self.resetClient()
     }
 }
