@@ -379,8 +379,12 @@ class RemoteTabsErrorCell: UITableViewCell {
             make.top.equalTo(imageView.snp_top)
             make.left.bottom.right.equalTo(instructionsLabel)
             // And then center it in the overlay view that sits on top of the UITableView
-            make.center.equalTo(contentView)
+            make.centerX.equalTo(contentView)
+            make.centerY.equalTo(contentView).offset(-180).priorityMedium()
         }
+
+        containerView.layer.borderColor = UIColor.redColor().CGColor
+        containerView.layer.borderWidth = 1.0
     }
 
     required init?(coder aDecoder: NSCoder) {
