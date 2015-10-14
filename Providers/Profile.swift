@@ -102,7 +102,9 @@ class BrowserProfileSyncDelegate: SyncDelegate {
         // the user has agreed to them
         if let currentSettings = app.currentUserNotificationSettings() {
             if currentSettings.types.rawValue & UIUserNotificationType.Alert.rawValue != 0 {
-                log.info("Displaying notification for URL \(URL.absoluteString)")
+                if Logger.logPII {
+                    log.info("Displaying notification for URL \(URL.absoluteString)")
+                }
 
                 let notification = UILocalNotification()
                 notification.fireDate = NSDate()
