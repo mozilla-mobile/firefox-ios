@@ -280,17 +280,12 @@ public class SQLiteBookmarks: BookmarksModelFactory {
     }
 
     public func removeByURL(url: String) -> Success {
-        log.debug("Removing bookmark \(url).")
         return self.db.run([
             ("DELETE FROM \(TableBookmarks) WHERE url = ?", [url]),
         ])
     }
 
     public func remove(bookmark: BookmarkNode) -> Success {
-        if let item = bookmark as? BookmarkItem {
-            log.debug("Removing bookmark \(item.url).")
-        }
-
         let sql: String
         let args: Args
         if let id = bookmark.id {
