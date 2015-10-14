@@ -123,7 +123,7 @@ public class SwiftData {
             }
 
             if transactionClosure(db: db) {
-                log.debug("Op in transaction succeeded. Committing.")
+                log.verbose("Op in transaction succeeded. Committing.")
                 if let err = db.executeChange("COMMIT") {
                     log.error("COMMIT failed. Rolling back.")
                     db.executeChange("ROLLBACK")
