@@ -6,15 +6,17 @@
     }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "E084C86B03F81D63323C9E7510697EA528A758C7" : 0,
     "4c0a9323-5329-0410-9bdc-e9ce6186880e++505" : 0,
-    "55011AEBD444630C0E9DF47BD2E18FDBBDCC285D" : 0,
-    "31F61D37FA0E05F17C9C09F96F652B8EC64779B9" : 0
+    "31F61D37FA0E05F17C9C09F96F652B8EC64779B9" : 0,
+    "55011AEBD444630C0E9DF47BD2E18FDBBDCC285D" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "735ABF42-7DDF-42DC-959C-850D55951B2D",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "E084C86B03F81D63323C9E7510697EA528A758C7" : "firefox-ios\/Carthage\/Checkouts\/Base32\/Carthage\/Checkouts\/xcconfigs\/",
     "4c0a9323-5329-0410-9bdc-e9ce6186880e++505" : "s2fxios\/ThirdParty\/google-breakpad\/",
-    "55011AEBD444630C0E9DF47BD2E18FDBBDCC285D" : "s2fxios\/Carthage\/Checkouts\/SQLite.swift\/Vendor\/sqlcipher\/",
-    "31F61D37FA0E05F17C9C09F96F652B8EC64779B9" : "s2fxios\/"
+    "31F61D37FA0E05F17C9C09F96F652B8EC64779B9" : "s2fxios\/",
+    "55011AEBD444630C0E9DF47BD2E18FDBBDCC285D" : "s2fxios\/Carthage\/Checkouts\/SQLite.swift\/Vendor\/sqlcipher\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "Client",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -34,6 +36,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/sqlcipher\/sqlcipher.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "55011AEBD444630C0E9DF47BD2E18FDBBDCC285D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jspahrsummers\/xcconfigs.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E084C86B03F81D63323C9E7510697EA528A758C7"
     }
   ]
 }
