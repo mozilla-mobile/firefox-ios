@@ -211,7 +211,10 @@ extension SQLiteHistory: BrowserHistory {
 
             return 1
         }
-        log.warning("Invalid URL \(site.url). Not stored in history.")
+
+        if Logger.logPII {
+            log.warning("Invalid URL \(site.url). Not stored in history.")
+        }
         return 0
     }
 
