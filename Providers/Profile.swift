@@ -548,14 +548,19 @@ public class BrowserProfile: Profile {
             switch collection {
             case "bookmarks":
                 return MirroringBookmarksSynchronizer.resetSynchronizerWithStorage(self.profile.bookmarks, basePrefs: self.prefsForSync, collection: "bookmarks")
+
             case "clients":
-                return ClientsSynchronizer.resetSynchronizerWithStorage(self.profile.remoteClientsAndTabs, basePrefs: self.prefsForSync, collection: "clients")
+                fallthrough
             case "tabs":
-                return TabsSynchronizer.resetSynchronizerWithStorage(self.profile.remoteClientsAndTabs, basePrefs: self.prefsForSync, collection: "tabs")
+                // Because clients and tabs share storage, and thus we wipe data for both if we reset either,
+                // we reset the prefs for both at the same time.
+                return TabsSynchronizer.resetClientsAndTabsWithStorage(self.profile.remoteClientsAndTabs, basePrefs: self.prefsForSync)
+
             case "history":
                 return HistorySynchronizer.resetSynchronizerWithStorage(self.profile.history, basePrefs: self.prefsForSync, collection: "history")
             case "passwords":
                 return LoginsSynchronizer.resetSynchronizerWithStorage(self.profile.logins, basePrefs: self.prefsForSync, collection: "passwords")
+
             case "forms":
                 log.debug("Requested reset for forms, but this client doesn't sync them yet.")
                 return succeed()
@@ -655,6 +660,15 @@ public class BrowserProfile: Profile {
             if needReset.isEmpty {
                 log.debug("No collections need reset. Moving on.")
                 return deferMaybe(ready)
+            }
+
+            // needReset needs at most one of clients and tabs, because we reset them
+            // both if either needs reset. This is strictly an optimization to avoid
+            // doing duplicate work.
+            if needReset.contains("clients") {
+                if needReset.remove("tabs") != nil {
+                    log.debug("Already resetting clients (and tabs); not bothering to also reset tabs again.")
+                }
             }
 
             return walk(Array(needReset), f: self.locallyResetCollection)
