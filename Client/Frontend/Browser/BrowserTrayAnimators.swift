@@ -41,6 +41,7 @@ private extension TrayToBrowserAnimator {
         bvc.toggleSnackBarVisibility(show: false)
         toggleWebViewVisibility(show: false, usingTabManager: bvc.tabManager)
         bvc.homePanelController?.view.hidden = true
+        bvc.webViewContainerBackdrop.hidden = true
 
         // Take a snapshot of the collection view that we can scale/fade out. We don't need to wait for screen updates since it's already rendered on the screen
         let tabCollectionViewSnapshot = tabTray.collectionView.snapshotViewAfterScreenUpdates(false)
@@ -100,6 +101,7 @@ private extension TrayToBrowserAnimator {
             bvc.startTrackingAccessibilityStatus()
             bvc.toggleSnackBarVisibility(show: true)
             toggleWebViewVisibility(show: true, usingTabManager: bvc.tabManager)
+            bvc.webViewContainerBackdrop.hidden = false
             bvc.homePanelController?.view.hidden = false
             bvc.urlBar.isTransitioning = false
             transitionContext.completeTransition(true)
