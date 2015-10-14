@@ -302,7 +302,7 @@ public class BrowserProfile: Profile {
         return ReadingListService(profileStoragePath: self.files.rootPath as String)
     }()
 
-    private lazy var remoteClientsAndTabs: protocol<RemoteClientsAndTabs, ResettableSyncStorage> = {
+    lazy var remoteClientsAndTabs: protocol<RemoteClientsAndTabs, ResettableSyncStorage> = {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
@@ -653,7 +653,7 @@ public class BrowserProfile: Profile {
             return bookmarksMirrorer.mirrorBookmarksToStorage(self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
-        private func takeActionsOnEngineStateChanges<T: EngineStateChanges>(changes: T) -> Deferred<Maybe<T>> {
+        func takeActionsOnEngineStateChanges<T: EngineStateChanges>(changes: T) -> Deferred<Maybe<T>> {
             var needReset = Set<String>(changes.collectionsThatNeedLocalReset())
             needReset.unionInPlace(changes.enginesDisabled())
             needReset.unionInPlace(changes.enginesEnabled())
