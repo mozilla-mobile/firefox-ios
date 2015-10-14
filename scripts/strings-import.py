@@ -18,7 +18,7 @@ TARGETS = {
     "Shared":    {"path": "Shared"},
 }
 
-LOCALES_TO_SKIP = ['son']
+LOCALES_TO_SKIP = []
 
 def get_groups(project):
     return [group for group in project.objects.values() if group.get('isa') == 'PBXGroup']
