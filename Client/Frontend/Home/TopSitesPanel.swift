@@ -388,7 +388,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         //
         // Instead we'll painstakingly re-extract those things here.
 
-        let domainURL = NSURL(string: site.url)?.normalizedHost() ?? site.url
+        let domainURL = NSURL(string: site.url)?.baseDomain() ?? site.url
         cell.textLabel.text = domainURL
         cell.imageWrapper.backgroundColor = UIColor.clearColor()
 
