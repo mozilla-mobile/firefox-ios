@@ -214,7 +214,9 @@ public class SQLiteLogins: BrowserLogins {
         "ORDER BY timeLastUsed DESC"
 
         let args: Args = [protectionSpace.host, protectionSpace.host]
-        log.debug("Looking for login: \(protectionSpace.host)")
+        if Logger.logPII {
+            log.debug("Looking for login: \(protectionSpace.host)")
+        }
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
     }
 
@@ -232,7 +234,10 @@ public class SQLiteLogins: BrowserLogins {
             usernameMatch = "username IS NULL"
         }
 
-        log.debug("Looking for login: \(username), \(args[0])")
+        if Logger.logPII {
+            log.debug("Looking for login: \(username), \(args[0])")
+        }
+
         let sql =
         "SELECT \(projection) FROM " +
         "\(TableLoginsLocal) WHERE is_deleted = 0 AND hostname IS ? AND \(usernameMatch) " +
