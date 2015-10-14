@@ -2182,21 +2182,21 @@
 		28C077911A3B05C200834FE5 /* SyncTests */ = {
 			isa = PBXGroup;
 			children = (
+				28ECD9791BA1EA2200D829DA /* MockSyncServer.swift */,
+				2827316F1ABC9BE700AA1954 /* Supporting Files */,
 				28C077971A3B064000834FE5 /* CryptoTests.swift */,
 				28786E541AB0F5FA009EA9EF /* DeferredTests.swift */,
 				28ECD9F31BA1F59800D829DA /* DownloadTests.swift */,
+				2855611E1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift */,
+				28F596A01ACA13CA0071DDCC /* InfoTests.swift */,
 				2F3724C41ABF3C01007607FA /* LiveStorageClientTests.swift */,
 				2F67C5251BB0CB4E00E7B73A /* MetaGlobalTests.swift */,
-				28C0779D1A3B066000834FE5 /* RecordTests.swift */,
 				2F8C76561BC32F3C00D5E4E0 /* MockSyncServerTests.swift */,
+				28C0779D1A3B066000834FE5 /* RecordTests.swift */,
 				2FEBABAE1AB3659000DB5728 /* ResultTests.swift */,
-				28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */,
-				2F3724C51ABF3C01007607FA /* StorageClientTests.swift */,
-				28F596A01ACA13CA0071DDCC /* InfoTests.swift */,
-				2827316F1ABC9BE700AA1954 /* Supporting Files */,
 				50027345B49B967409DDA348 /* StateTests.swift */,
-				28ECD9791BA1EA2200D829DA /* MockSyncServer.swift */,
-				2855611E1AEFFA1C00D5ED5B /* HistorySynchronizerTests.swift */,
+				2F3724C51ABF3C01007607FA /* StorageClientTests.swift */,
+				28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */,
 			);
 			name = SyncTests;
 			sourceTree = "<group>";
