@@ -373,7 +373,6 @@ class BrowserViewController: UIViewController {
                 var urls = [NSURL]()
                 for row in cursor {
                     if let url = row?.url.asURL {
-                        log.debug("Queuing \(url).")
                         urls.append(url)
                     }
                 }
