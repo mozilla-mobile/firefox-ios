@@ -81,11 +81,8 @@ public class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchron
         func onResponseReceived(response: StorageResponse<[Record<TabsPayload>]>) -> Success {
 
             func afterWipe() -> Success {
-                log.info("Fetching tabs.")
                 let doInsert: (Record<TabsPayload>) -> Deferred<Maybe<(Int)>> = { record in
                     let remotes = record.payload.remoteTabs
-                    log.debug("\(remotes)")
-                    log.info("Inserting \(remotes.count) tabs for client \(record.id).")
                     let ins = localTabs.insertOrUpdateTabsForClientGUID(record.id, tabs: remotes)
                     ins.upon() { res in
                         if let inserted = res.successValue {
