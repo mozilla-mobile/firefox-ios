@@ -37,11 +37,11 @@ class SiteTableViewHeader : UITableViewHeaderFooterView {
     }
 
     override func layoutSubviews() {
+        super.layoutSubviews()
         topBorder.frame = CGRect(x: 0, y: -0.5, width: frame.width, height: 0.5)
         bottomBorder.frame = CGRect(x: 0, y: frame.height, width: frame.width, height: 0.5)
         topBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
         bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        super.layoutSubviews()
     }
 }
 
