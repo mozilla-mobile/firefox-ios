@@ -217,12 +217,10 @@ public class BrowserProfile: Profile {
                 // We don't record a visit if no type was specified -- that means "ignore me".
                 let site = Site(url: url.absoluteString, title: title as String)
                 let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
-                log.debug("Recording visit for \(url) with type \(v).")
                 history.addLocalVisit(visit)
             }
         } else {
-            let url = notification.userInfo!["url"] as? NSURL
-            log.debug("Ignoring navigation for \(url).")
+            log.debug("Ignoring navigation.")
         }
     }
 
