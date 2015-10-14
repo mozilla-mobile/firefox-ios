@@ -653,13 +653,13 @@ public class BrowserProfile: Profile {
             return bookmarksMirrorer.mirrorBookmarksToStorage(self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
-        private func takeActionsOnReady(ready: Ready) -> Deferred<Maybe<Ready>> {
-            var needReset = Set<String>(ready.collectionsThatNeedLocalReset())
-            needReset.unionInPlace(ready.enginesDisabled())
-            needReset.unionInPlace(ready.enginesEnabled())
+        private func takeActionsOnEngineStateChanges<T: EngineStateChanges>(changes: T) -> Deferred<Maybe<T>> {
+            var needReset = Set<String>(changes.collectionsThatNeedLocalReset())
+            needReset.unionInPlace(changes.enginesDisabled())
+            needReset.unionInPlace(changes.enginesEnabled())
             if needReset.isEmpty {
                 log.debug("No collections need reset. Moving on.")
-                return deferMaybe(ready)
+                return deferMaybe(changes)
             }
 
             // needReset needs at most one of clients and tabs, because we reset them
@@ -672,8 +672,8 @@ public class BrowserProfile: Profile {
             }
 
             return walk(Array(needReset), f: self.locallyResetCollection)
-               >>> effect(ready.clearLocalCommands)
-               >>> always(ready)
+               >>> effect(changes.clearLocalCommands)
+               >>> always(changes)
         }
 
         /**
@@ -695,7 +695,7 @@ public class BrowserProfile: Profile {
                 let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState)
                 let delegate = profile.getSyncDelegate()
 
-                let go = readyDeferred >>== self.takeActionsOnReady >>== { ready in
+                let go = readyDeferred >>== self.takeActionsOnEngineStateChanges >>== { ready in
                     function(delegate, self.prefsForSync, ready)
                 }
 
