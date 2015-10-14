@@ -651,7 +651,7 @@ extension SQLiteHistory: SyncableHistory {
             if let metadata = metadata {
                 // The item exists locally (perhaps originally with a different GUID).
                 if metadata.serverModified == modified {
-                    log.debug("History item \(place.guid) is unchanged; skipping insert-or-update.")
+                    log.verbose("History item \(place.guid) is unchanged; skipping insert-or-update.")
                     return deferMaybe(place.guid)
                 }
 
@@ -669,19 +669,19 @@ extension SQLiteHistory: SyncableHistory {
                         return self.db.run(update, withArgs: args) >>> always(place.guid)
                     }
 
-                    log.debug("Remote changes overriding local.")
+                    log.verbose("Remote changes overriding local.")
                     // Fall through.
                 }
 
                 // The record didn't change locally. Update it.
-                log.debug("Updating local history item for guid \(place.guid).")
+                log.verbose("Updating local history item for guid \(place.guid).")
                 let update = "UPDATE \(TableHistory) SET title = ?, server_modified = ?, is_deleted = 0 WHERE id = ?"
                 let args: Args = [place.title, serverModified, metadata.id]
                 return self.db.run(update, withArgs: args) >>> always(place.guid)
             }
 
             // The record doesn't exist locally. Insert it.
-            log.debug("Inserting remote history item for guid \(place.guid).")
+            log.verbose("Inserting remote history item for guid \(place.guid).")
             if let host = place.url.asURL?.normalizedHost() {
                 if LogPII {
                     log.debug("Inserting: \(place.url).")
