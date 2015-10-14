@@ -631,8 +631,6 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
 
     public func put(record: Record<T>, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
         if let body = self.encrypter.serializer(record) {
-            log.debug("Body is \(body)")
-            log.debug("Original record is \(record)")
             return self.client.putResource(uriForRecord(record.id), body: body, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
         }
         return deferMaybe(RecordParseError())
@@ -701,7 +699,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
 
         req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, result) in
 
-            log.debug("Response is \(response).")
+            log.verbose("Response is \(response).")
             guard let json: JSON = result.value as? JSON else {
                 log.warning("Non-JSON response.")
                 deferred.fill(Maybe(failure: RecordParseError()))
