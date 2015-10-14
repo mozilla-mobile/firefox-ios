@@ -26,6 +26,13 @@ class TopSitesPanel: UIViewController {
     }()
     private lazy var layout: TopSitesLayout = { return TopSitesLayout() }()
 
+    private lazy var maxFrecencyLimit: Int = {
+        return max(
+            self.calculateApproxThumbnailCountForOrientation(UIInterfaceOrientation.LandscapeLeft),
+            self.calculateApproxThumbnailCountForOrientation(UIInterfaceOrientation.Portrait)
+        )
+    }()
+
     var editingThumbnails: Bool = false {
         didSet {
             if editingThumbnails != oldValue {
@@ -76,7 +83,7 @@ class TopSitesPanel: UIViewController {
             make.edges.equalTo(self.view)
         }
         self.collection = collection
-        self.refreshHistory(maxFrecencyLimit())
+        self.refreshHistory(maxFrecencyLimit)
     }
 
     deinit {
@@ -87,7 +94,7 @@ class TopSitesPanel: UIViewController {
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
-            refreshHistory(maxFrecencyLimit())
+            refreshHistory(maxFrecencyLimit)
             break
         default:
             // no need to do anything at all
@@ -155,19 +162,6 @@ class TopSitesPanel: UIViewController {
                 self.updateRemoveButtonStates()
             })
         }
-    }
-
-    /**
-    Finds an approximation of the maximum number of top site tiles we will need to show regardless
-    of the current orientation.
-
-    - returns: Maximum number of tiles we should query for when fetching frecency results to fill the grid
-    */
-    private func maxFrecencyLimit() -> Int {
-        return max(
-            calculateApproxThumbnailCountForOrientation(.LandscapeLeft),
-            calculateApproxThumbnailCountForOrientation(.Portrait)
-        )
     }
 
     /**
