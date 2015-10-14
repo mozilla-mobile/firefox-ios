@@ -1,0 +1,25 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+
+fastlane_version "1.39.0"
+
+default_platform :ios
+
+
+import_build_tools(
+  url: 'git@github.com:mozilla/firefox-ios-build-tools.git',
+  clone_folder: "../build-tools"
+)
+
+#move all the build tools to the right places
+clone_folder = "../../build-tools"
+sh("rsync -a #{clone_folder}/scripts ../")
+sh("rsync -a #{clone_folder}/fastlane/Appfile Appfile")
+sh("rsync -a #{clone_folder}/fastlane/scripts .")
+sh("rsync -a #{clone_folder}/fastlane/templates .")
+
+#import the fastfile
+import "#{clone_folder}/fastlane/BaseFastfile"
+
+sh("rm -rf #{clone_folder}")
