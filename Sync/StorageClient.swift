@@ -168,7 +168,8 @@ private func optionalUIntegerHeader(input: AnyObject?) -> Timestamp? {
 }
 
 public enum SortOption: String {
-    case Newest = "newest"
+    case NewestFirst = "newest"
+    case OldestFirst = "oldest"
     case Index = "index"
 }
 
