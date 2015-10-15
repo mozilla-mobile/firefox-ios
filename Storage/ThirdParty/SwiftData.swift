@@ -385,6 +385,7 @@ public class SQLiteDBConnection {
 
     /// Executes a change on the database.
     func executeChange(sqlStr: String, withArgs args: [AnyObject?]? = nil) -> NSError? {
+        log.debug("-------\nSQL CHANGE: \n\(sqlStr)\n-------")
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
@@ -412,6 +413,7 @@ public class SQLiteDBConnection {
     /// Queries the database.
     /// Returns a cursor pre-filled with the complete result set.
     func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]? = nil) -> Cursor<T> {
+        log.debug("-------\nSQL QUERY: \n\(sqlStr)\n-------")
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
@@ -440,6 +442,7 @@ public class SQLiteDBConnection {
      * Instances of this class *must not* leak outside of the connection queue!
      */
     func executeQueryUnsafe<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]? = nil) -> Cursor<T> {
+        log.debug("-------\nSQL QUERY UNSAFE: \n\(sqlStr)\n-------")
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
