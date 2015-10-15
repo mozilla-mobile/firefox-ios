@@ -26,6 +26,13 @@ class TopSitesPanel: UIViewController {
     }()
     private lazy var layout: TopSitesLayout = { return TopSitesLayout() }()
 
+    private lazy var maxFrecencyLimit: Int = {
+        return max(
+            self.calculateApproxThumbnailCountForOrientation(UIInterfaceOrientation.LandscapeLeft),
+            self.calculateApproxThumbnailCountForOrientation(UIInterfaceOrientation.Portrait)
+        )
+    }()
+
     var editingThumbnails: Bool = false {
         didSet {
             if editingThumbnails != oldValue {
@@ -44,8 +51,8 @@ class TopSitesPanel: UIViewController {
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        self.refreshHistory(self.layout.thumbnailCount)
         self.layout.setupForOrientation(UIView.viewOrientationForSize(size))
+        self.collection?.reloadData()
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -76,7 +83,7 @@ class TopSitesPanel: UIViewController {
             make.edges.equalTo(self.view)
         }
         self.collection = collection
-        self.refreshHistory(layout.thumbnailCount)
+        self.refreshHistory(maxFrecencyLimit)
     }
 
     deinit {
@@ -87,7 +94,7 @@ class TopSitesPanel: UIViewController {
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
-            refreshHistory(self.layout.thumbnailCount)
+            refreshHistory(maxFrecencyLimit)
             break
         default:
             // no need to do anything at all
@@ -155,6 +162,40 @@ class TopSitesPanel: UIViewController {
                 self.updateRemoveButtonStates()
             })
         }
+    }
+
+    /**
+    Calculates an approximation of the number of tiles we want to display for the given orientation. This
+    method uses the screen's size as it's basis for the calculation instead of the collectionView's since the 
+    collectionView's bounds is determined until the next layout pass.
+
+    - parameter orientation: Orientation to calculate number of tiles for
+
+    - returns: Rough tile count we will be displaying for the passed in orientation
+    */
+    private func calculateApproxThumbnailCountForOrientation(orientation: UIInterfaceOrientation) -> Int {
+        let size = UIScreen.mainScreen().bounds.size
+        let portraitSize = CGSize(width: min(size.width, size.height), height: max(size.width, size.height))
+
+        func calculateRowsForSize(size: CGSize, columns: Int) -> Int {
+            let insets = ThumbnailCellUX.Insets
+            let thumbnailWidth = (size.width - insets.left - insets.right) / CGFloat(columns)
+            let thumbnailHeight = thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio)
+            return max(2, Int(size.height / thumbnailHeight))
+        }
+
+        let numberOfColumns: Int
+        let numberOfRows: Int
+
+        if UIInterfaceOrientationIsLandscape(orientation) {
+            numberOfColumns = 5
+            numberOfRows = calculateRowsForSize(CGSize(width: portraitSize.height, height: portraitSize.width), columns: numberOfColumns)
+        } else {
+            numberOfColumns = 4
+            numberOfRows = calculateRowsForSize(portraitSize, columns: numberOfColumns)
+        }
+
+        return numberOfColumns * numberOfRows
     }
 }
 
