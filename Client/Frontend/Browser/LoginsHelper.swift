@@ -44,8 +44,8 @@ class LoginsHelper: BrowserHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        var res = message.body as! [String: String]
-        let type = res["type"]
+        guard var res = message.body as? [String: AnyObject] else { return }
+        guard let type = res["type"] as? String else { return }
 
         // We don't use the WKWebView's URL since the page can spoof the URL by using document.location
         // right before requesting login data. See bug 1194567 for more context.
@@ -55,10 +55,14 @@ class LoginsHelper: BrowserHelper {
             if message.frameInfo.mainFrame && type == "request" {
                 res["username"] = ""
                 res["password"] = ""
-                let login = Login.fromScript(url, script: res)
-                requestLogins(login, requestId: res["requestId"]!)
+                if let login = Login.fromScript(url, script: res),
+                   let requestId = res["requestId"] as? String {
+                    requestLogins(login, requestId: requestId)
+                }
             } else if type == "submit" {
-                setCredentials(Login.fromScript(url, script: res))
+                if let login = Login.fromScript(url, script: res) {
+                    setCredentials(login)
+                }
             }
         }
     }

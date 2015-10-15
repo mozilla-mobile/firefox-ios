@@ -73,6 +73,10 @@ var LoginManagerContent = {
 
     var formOrigin = LoginUtils._getPasswordOrigin();
     var actionOrigin = LoginUtils._getActionOrigin(form);
+    if (actionOrigin == null) {
+      return Promise.reject("Action origin is null")
+    }
+
     // XXX - Allowing the page to set origin information in this message is a security problem. Right now its just ignored...
     // TODO: We need to designate what type of message we're sending here...
     var requestData = { form: form };

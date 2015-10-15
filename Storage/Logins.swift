@@ -219,18 +219,23 @@ public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatabl
         ]
     }
 
-    public class func fromScript(url: NSURL, script: [String: String]) -> LoginData {
-        let login = Login(hostname: getPasswordOrigin(url.absoluteString)!, username: script["username"]!, password: script["password"]!)
+    public class func fromScript(url: NSURL, script: [String: AnyObject]) -> LoginData? {
+        guard let username = script["username"] as? String,
+              let password = script["password"] as? String else {
+                return nil
+        }
 
-        if let formSubmit = script["formSubmitURL"] {
+        let login = Login(hostname: getPasswordOrigin(url.absoluteString)!, username: username, password: password)
+
+        if let formSubmit = script["formSubmitURL"] as? String {
             login.formSubmitURL = formSubmit
         }
 
-        if let passwordField = script["passwordField"] {
+        if let passwordField = script["passwordField"] as? String {
             login.passwordField = passwordField
         }
 
-        if let userField = script["usernameField"] {
+        if let userField = script["usernameField"] as? String {
             login.usernameField = userField
         }
 
