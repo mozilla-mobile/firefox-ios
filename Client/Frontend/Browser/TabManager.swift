@@ -556,6 +556,15 @@ extension TabManager : WKNavigationDelegate {
         }
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
     }
+
+    /// Called when the WKWebView's content process has gone away. If this happens for the currently selected tab
+    /// then we immediately reload it.
+
+    func webViewWebContentProcessDidTerminate(webView: WKWebView) {
+        if let browser = selectedTab where browser.webView == webView {
+            webView.reload()
+        }
+    }
 }
 
 // WKNavigationDelegates must implement NSObjectProtocol
