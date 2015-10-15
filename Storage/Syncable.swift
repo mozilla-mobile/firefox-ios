@@ -18,3 +18,7 @@ import Shared
 public protocol ResettableSyncStorage {
     func resetClient() -> Success
 }
+
+public protocol AccountRemovalDelegate {
+    func onRemovedAccount() -> Success
+}

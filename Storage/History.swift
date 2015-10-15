@@ -32,7 +32,7 @@ public protocol BrowserHistory {
  * The interface that history storage needs to provide in order to be
  * synced by a `HistorySynchronizer`.
  */
-public protocol SyncableHistory {
+public protocol SyncableHistory: AccountRemovalDelegate {
     /**
      * Make sure that the local place with the provided URL has the provided GUID.
      * Succeeds if no place exists with that URL.
@@ -55,11 +55,6 @@ public protocol SyncableHistory {
      */
     func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>>
     func markAsDeleted(guids: [GUID]) -> Success
-
-    /**
-     * Clean up any metadata.
-     */
-    func onRemovedAccount() -> Success
 }
 
 // TODO: integrate Site with this.

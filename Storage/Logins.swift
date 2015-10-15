@@ -516,7 +516,7 @@ public protocol BrowserLogins {
     func removeAll() -> Success
 }
 
-public protocol SyncableLogins {
+public protocol SyncableLogins: AccountRemovalDelegate {
     /**
      * Delete the login with the provided GUID. Succeeds if the GUID is unknown.
      */
@@ -532,11 +532,6 @@ public protocol SyncableLogins {
      */
     func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>>
     func markAsDeleted(guids: [GUID]) -> Success
-
-    /**
-     * Clean up any metadata.
-     */
-    func onRemovedAccount() -> Success
 }
 
 public class LoginDataError: MaybeErrorType {
