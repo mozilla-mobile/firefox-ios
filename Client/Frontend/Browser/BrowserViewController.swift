@@ -369,17 +369,14 @@ class BrowserViewController: UIViewController {
             // This assumes that the DB returns rows in some kind of sane order.
             // It does in practice, so WFM.
             log.debug("Queue. Count: \(cursor.count).")
-            if cursor.count > 0 {
-                var urls = [NSURL]()
-                for row in cursor {
-                    if let url = row?.url.asURL {
-                        urls.append(url)
-                    }
-                }
-                if !urls.isEmpty {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.tabManager.addTabsForURLs(urls, zombie: false)
-                    }
+            if cursor.count <= 0 {
+                return
+            }
+
+            let urls = cursor.flatMap { $0?.url.asURL }
+            if !urls.isEmpty {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.tabManager.addTabsForURLs(urls, zombie: false)
                 }
             }
 
