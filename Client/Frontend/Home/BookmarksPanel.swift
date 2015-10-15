@@ -22,7 +22,7 @@ struct BookmarksPanelUX {
 class BookmarksPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var source: BookmarksModel?
-    var parentFolders = [BookmarkFolder]()
+    var parentFolders = [String]()
     var bookmarkFolder = BookmarkRoots.MobileFolderGUID
 
     private let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
@@ -82,6 +82,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     private func onNewModel(model: BookmarksModel) {
         self.source = model
+        self.title = parentFolders.isEmpty ? NSLocalizedString("Bookmarks", comment: "Panel accessibility label") : model.current.title
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
         }
@@ -146,10 +147,15 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             header.delegate = self
         }
 
-        if parentFolders.count == 1 {
-            header.textLabel?.text = NSLocalizedString("Bookmarks", comment: "Panel accessibility label")
-        } else if let parentFolder = parentFolders.last {
-            header.textLabel?.text = parentFolder.title
+        if let navController = self.navigationController {
+            let vcIndex: Int
+            if navController.viewControllers.count > 1 {
+                vcIndex = navController.viewControllers.count - 2
+            } else {
+                vcIndex = 0
+            }
+            let parentTitle = navController.viewControllers[vcIndex].title
+            header.textLabel?.text = parentTitle
         }
 
         return header
