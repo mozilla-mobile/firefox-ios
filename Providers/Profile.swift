@@ -577,22 +577,30 @@ public class BrowserProfile: Profile {
         }
 
         func onRemovedAccount(account: FirefoxAccount?) -> Success {
-            let h: SyncableHistory = self.profile.history
-            let flagHistory = { h.onRemovedAccount() }
-            let clearTabs = { self.profile.remoteClientsAndTabs.onRemovedAccount() }
+            let profile = self.profile
 
-            // Run these in order, because they both write to the same DB!
-            return accumulate([flagHistory, clearTabs])
-                >>> {
-                // Clear prefs after we're done clearing everything else -- just in case
-                // one of them needs the prefs and we race. Clear regardless of success
-                // or failure.
+            // Run these in order, because they might write to the same DB!
+            let remove = [
+                profile.history.onRemovedAccount,
+                profile.remoteClientsAndTabs.onRemovedAccount,
+                profile.logins.onRemovedAccount,
+                profile.bookmarks.onRemovedAccount,
+            ]
 
-                // This will remove keys from the Keychain if they exist, as well
-                // as wiping the Sync prefs.
-                SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
+            let clearPrefs: () -> Success = {
+                withExtendedLifetime(self) {
+                    // Clear prefs after we're done clearing everything else -- just in case
+                    // one of them needs the prefs and we race. Clear regardless of success
+                    // or failure.
+
+                    // This will remove keys from the Keychain if they exist, as well
+                    // as wiping the Sync prefs.
+                    SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
+                }
                 return succeed()
             }
+
+            return accumulate(remove) >>> clearPrefs
         }
 
         private func repeatingTimerAtInterval(interval: NSTimeInterval, selector: Selector) -> NSTimer {
