@@ -1039,7 +1039,7 @@ extension BrowserViewController: BrowserToolbarDelegate {
                 log.error("Bookmark error: No tab is selected, or no URL in tab.")
                 return
         }
-        profile.bookmarks.isBookmarked(url).upon {
+        profile.bookmarks.isBookmarked(url).uponQueue(dispatch_get_main_queue()) {
             guard let isBookmarked = $0.successValue else {
                 log.error("Bookmark error: \($0.failureValue).")
                 return
@@ -1379,7 +1379,7 @@ extension BrowserViewController: TabManagerDelegate {
             addOpenInViewIfNeccessary(webView.URL)
 
             if let url = webView.URL?.absoluteString {
-                profile.bookmarks.isBookmarked(url).upon {
+                profile.bookmarks.isBookmarked(url).uponQueue(dispatch_get_main_queue()) {
                     guard let isBookmarked = $0.successValue else {
                         log.error("Error getting bookmark status: \($0.failureValue).")
                         return
