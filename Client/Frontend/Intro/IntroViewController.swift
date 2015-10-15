@@ -33,10 +33,10 @@ struct IntroViewControllerUX {
     static let CardTitleCustomize = NSLocalizedString("Customize", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     static let CardTitleShare = NSLocalizedString("Share", tableName: "Intro", comment: "See http://mzl.la/1if9ODp")
     static let CardTitleChoose = NSLocalizedString("Choose", tableName: "Intro", comment: "See http://mzl.la/1if9ODp")
+    static let CardTitleSync = NSLocalizedString("Sync Your Devices.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
 
     static let CardTextOrganize = NSLocalizedString("Easily switch between open pages with tabs.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     static let CardTextCustomize = NSLocalizedString("Personalize your default search engine and more in Settings.", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
-    static let CardTextSync = NSLocalizedString("Sync Your Devices.", tableName: "Intro", comment: "ee http://mzl.la/1T8gxwo")
     static let CardTextShare = NSLocalizedString("Use the share sheet to send links from other apps to Firefox.", tableName: "Intro", comment: "See http://mzl.la/1if9ODp")
     static let CardTextChoose = NSLocalizedString("Tap, hold and move the Firefox icon into your dock for easy access.", tableName: "Intro", comment: "See http://mzl.la/1if9ODp")
 
@@ -156,19 +156,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         addCard(IntroViewControllerUX.CardTextChoose, title: IntroViewControllerUX.CardTitleChoose)
 
 
-        // Card 3
-
-        let introView3 = UIView()
-        let label3 = UILabel()
-        label3.numberOfLines = 0
-        label3.attributedText = attributedStringForLabel(IntroViewControllerUX.CardTextSync)
-        label3.font = IntroViewControllerUX.CardTextFont
-        introView3.addSubview(label3)
-        label3.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(introView3)
-            make.bottom.equalTo(introView3.snp_centerY).offset(-IntroViewControllerUX.CardTextSyncOffsetFromCenter)
-            make.width.equalTo(self.view.frame.width <= 320 ? 200 : 260) // TODO Talk to UX about small screen sizes
-        }
+        // Sync card, with sign in to sync button.
 
         signInButton = UIButton()
         signInButton.backgroundColor = IntroViewControllerUX.SignInButtonColor
@@ -178,16 +166,13 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         signInButton.layer.cornerRadius = IntroViewControllerUX.SignInButtonCornerRadius
         signInButton.clipsToBounds = true
         signInButton.addTarget(self, action: "SELlogin", forControlEvents: UIControlEvents.TouchUpInside)
-        introView3.addSubview(signInButton)
-
         signInButton.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(introView3)
-            make.top.equalTo(introView3.snp_centerY).offset(IntroViewControllerUX.Card3ButtonOffsetFromCenter)
             make.height.equalTo(IntroViewControllerUX.SignInButtonHeight)
-            make.width.equalTo(self.view.frame.width <= 320 ? 200 : 260) // TODO Talk to UX about small screen sizes
         }
 
-        introViews.append(introView3)
+        let syncCardView =  UIView()
+        addViewsToIntroView(syncCardView, view: signInButton, title: IntroViewControllerUX.CardTitleSync)
+        introViews.append(syncCardView)
 
         // Add all the cards to the view, make them invisible with zero alpha
 
@@ -364,8 +349,13 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         label.numberOfLines = 0
         label.attributedText = attributedStringForLabel(text)
         label.font = IntroViewControllerUX.CardTextFont
-        introView.addSubview(label)
-        label.snp_makeConstraints { (make) -> Void in
+
+        addViewsToIntroView(introView, view: label, title: title)
+    }
+
+    private func addViewsToIntroView(introView: UIView, view: UIView, title: String = "") {
+        introView.addSubview(view)
+        view.snp_makeConstraints { (make) -> Void in
             make.center.equalTo(introView)
             make.width.equalTo(self.view.frame.width <= 320 ? 240 : 280) // TODO Talk to UX about small screen sizes
         }
@@ -379,7 +369,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
             introView.addSubview(titleLabel)
             titleLabel.snp_makeConstraints { (make) -> Void in
                 make.top.equalTo(introView)
-                make.bottom.equalTo(label.snp_top)
+                make.bottom.equalTo(view.snp_top)
                 make.centerX.equalTo(introView)
                 make.width.equalTo(self.view.frame.width <= 320 ? 240 : 280) // TODO Talk to UX about small screen sizes
             }
