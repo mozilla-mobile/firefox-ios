@@ -92,6 +92,37 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         log.error("Error: failed to get data: \(e)")
     }
 
+    // for each folder in the hierarchy, fetch the model and then push the next view controller
+    // on the stack and continue recursively till we've traversed the hierarchy
+    // we have to do this otherwise each BookmarksPanel does not have access to the right model in order
+    // to load the appropriate folder and create the backwards navigation
+    func restoreFolderHeirarchy(hierarchy: [String], fromIndex: Int) {
+        if fromIndex < hierarchy.count {
+            profile.bookmarks.modelForFolder(bookmarkFolder).upon { result in
+                self.onModelFetched(result)
+                let folder = hierarchy[fromIndex]
+
+                let nextPanel = self.newBookmarkPanel(forFolder: folder)
+                self.navigationController?.pushViewController(nextPanel, animated: false)
+
+                nextPanel.restoreFolderHeirarchy(hierarchy, fromIndex: fromIndex + 1)
+            }
+        }
+    }
+
+    private func newBookmarkPanel(forFolder guid: String) -> BookmarksPanel {
+        let nextController = BookmarksPanel()
+        nextController.profile = self.profile
+        if let source = source {
+            nextController.parentFolders = parentFolders + [source.current.guid]
+            nextController.source = source
+        }
+        nextController.bookmarkFolder = guid
+        nextController.homePanelDelegate = self.homePanelDelegate
+
+        return nextController
+    }
+
     override func reloadData() {
         self.source?.reloadData().upon(onModelFetched)
     }
@@ -190,13 +221,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 break
 
             case let folder as BookmarkFolder:
-                let nextController = BookmarksPanel()
-                nextController.parentFolders = parentFolders + [source.current]
-                nextController.bookmarkFolder = folder.guid
-                nextController.source = source
-                nextController.homePanelDelegate = self.homePanelDelegate
-                nextController.profile = self.profile
-                self.navigationController?.pushViewController(nextController, animated: true)
+                self.navigationController?.pushViewController(newBookmarkPanel(forFolder: folder.guid), animated: true)
                 break
 
             default:
