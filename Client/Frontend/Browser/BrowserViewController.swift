@@ -555,7 +555,7 @@ class BrowserViewController: UIViewController {
             homePanelController = HomePanelViewController()
             homePanelController!.profile = profile
             homePanelController!.delegate = self
-            homePanelController!.url = tabManager.selectedTab?.displayURL
+            homePanelController!.url = tabManager.selectedTab?.url
             homePanelController!.view.alpha = 0
 
             addChildViewController(homePanelController!)
