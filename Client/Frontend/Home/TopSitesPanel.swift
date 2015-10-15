@@ -112,6 +112,7 @@ class TopSitesPanel: UIViewController {
             // redraw now we've udpated our sources
             self.collection?.collectionViewLayout.invalidateLayout()
             self.collection?.setNeedsLayout()
+            log.info("TIMING: UPDATE DATA SOURCE")
         }
     }
 
