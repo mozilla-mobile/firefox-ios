@@ -560,16 +560,9 @@ class BrowserViewController: UIViewController {
             homePanelController!.didMoveToParentViewController(self)
         }
 
-        let panelNumber = tabManager.selectedTab?.url?.fragment
-
         // splitting this out to see if we can get better crash reports when this has a problem
-        var newSelectedButtonIndex = 0
-        if let numberArray = panelNumber?.componentsSeparatedByString("=") {
-            if let last = numberArray.last, lastInt = Int(last) {
-                newSelectedButtonIndex = lastInt
-            }
-        }
-        homePanelController?.selectedButtonIndex = newSelectedButtonIndex
+        let panel = AboutUtils.getHomePanel(tabManager.selectedTab?.url?.fragment)
+        homePanelController?.selectedButtonIndex = panel
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
