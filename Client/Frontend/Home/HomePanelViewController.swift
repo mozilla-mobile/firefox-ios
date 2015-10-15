@@ -29,6 +29,10 @@ protocol HomePanel: class {
     optional func endEditing()
 }
 
+struct HomePanelUX {
+    static let EmptyTabContentOffset = -180
+}
+
 @objc
 protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(homePanel: HomePanel)
