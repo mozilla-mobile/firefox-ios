@@ -135,8 +135,12 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                     let panel = self.panels[index].makeViewController(profile: profile)
                     let accessibilityLabel = self.panels[index].accessibilityLabel
                     if let panelController = panel as? UINavigationController,
-                     let rootPanel = panelController.viewControllers.first {
+                        let rootPanel = panelController.viewControllers.first {
                         setupHomePanel(rootPanel, accessibilityLabel: accessibilityLabel)
+                        if let bookmarkPanel = rootPanel as? BookmarksPanel,
+                            let folders = AboutUtils.getBookmarkFolders(url?.fragment) {
+                                bookmarkPanel.restoreFolderHeirarchy(folders, fromIndex: 1)
+                        }
                         self.showPanel(panelController)
                     } else {
                         setupHomePanel(panel, accessibilityLabel: accessibilityLabel)
