@@ -170,11 +170,7 @@ class TabManager : NSObject {
     }
 
     @available(iOS 9, *)
-    func addTab(request: NSURLRequest! = nil, var configuration: WKWebViewConfiguration! = nil, isPrivate: Bool) -> Browser {
-        if (configuration == nil) && isPrivate {
-            configuration = privateConfiguration
-        }
-
+    func addTab(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, isPrivate: Bool) -> Browser {
         return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
 
@@ -212,26 +208,20 @@ class TabManager : NSObject {
     }
 
     @available(iOS 9, *)
-    private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, restoring: Bool = false, isPrivate: Bool) -> Browser {
+    private func addTab(request: NSURLRequest? = nil, var configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, restoring: Bool = false, isPrivate: Bool) -> Browser {
         assert(NSThread.isMainThread())
-        configuration?.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
 
-        let defaultConfiguration: WKWebViewConfiguration
-        if (configuration == nil) && isPrivate {
-            defaultConfiguration = privateConfiguration
-        } else {
-            defaultConfiguration = self.configuration
+        if configuration == nil {
+            configuration = isPrivate ? privateConfiguration : self.configuration
         }
 
-        let tab = Browser(configuration: configuration ?? defaultConfiguration, isPrivate: isPrivate)
+        let tab = Browser(configuration: configuration, isPrivate: isPrivate)
         configureTab(tab, request: request, flushToDisk: flushToDisk, zombie: zombie, restoring: restoring)
         return tab
     }
 
     private func addTab(request: NSURLRequest? = nil, configuration: WKWebViewConfiguration! = nil, flushToDisk: Bool, zombie: Bool, restoring: Bool = false) -> Browser {
         assert(NSThread.isMainThread())
-
-        configuration?.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
 
         let tab = Browser(configuration: configuration ?? self.configuration)
         configureTab(tab, request: request, flushToDisk: flushToDisk, zombie: zombie, restoring: restoring)
@@ -343,8 +333,14 @@ class TabManager : NSObject {
 
     func prefsDidChange() {
         let allowPopups = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
+        // Each tab may have its own configuration, so we should tell each of them in turn.
         for tab in tabs {
             tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+        }
+        // The default tab configurations also need to change.
+        self.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+        if #available(iOS 9, *) {
+            self.privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
         }
     }
 
