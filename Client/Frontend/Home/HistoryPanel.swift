@@ -192,7 +192,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             make.centerX.equalTo(overlayView)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView.snp_centerY).offset(-160).priorityMedium()
+            make.centerY.equalTo(overlayView.snp_centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50).priorityHigh()

@@ -315,7 +315,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
             make.centerY.lessThanOrEqualTo(overlayView.snp_centerY).priorityHigh()
 
             // Sets proper top constraint for iPhone 6 in portait and iPads.
-            make.centerY.equalTo(overlayView.snp_centerY).offset(-180).priorityMedium()
+            make.centerY.equalTo(overlayView.snp_centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50).priorityHigh()

@@ -379,7 +379,8 @@ class RemoteTabsErrorCell: UITableViewCell {
             make.top.equalTo(imageView.snp_top)
             make.left.bottom.right.equalTo(instructionsLabel)
             // And then center it in the overlay view that sits on top of the UITableView
-            make.center.equalTo(contentView)
+            make.centerX.equalTo(contentView)
+            make.centerY.equalTo(contentView).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
         }
     }
 
@@ -446,7 +447,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
             make.centerX.equalTo(instructionsLabel)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(contentView.snp_centerY).offset(-180).priorityMedium()
+            make.centerY.equalTo(contentView.snp_centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(contentView.snp_top).offset(50).priorityHigh()
