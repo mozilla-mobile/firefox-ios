@@ -139,7 +139,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                         setupHomePanel(rootPanel, accessibilityLabel: accessibilityLabel)
                         if let bookmarkPanel = rootPanel as? BookmarksPanel,
                             let folders = AboutUtils.getBookmarkFolders(url?.fragment) {
-                                bookmarkPanel.restoreFolderHeirarchy(folders, fromIndex: 1)
+                                bookmarkPanel.restoreFolderHierarchy(folders, fromIndex: 1)
                         }
                         self.showPanel(panelController)
                     } else {
