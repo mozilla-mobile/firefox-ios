@@ -184,6 +184,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
             switch (bookmark) {
             case let item as BookmarkItem:
+                let bookmarkHeirarchy: [String] = parentFolders + [source.current.guid]
+                self.homePanelDelegate?.homePanel?(self, didSelectBookmarkFolder: bookmarkHeirarchy.joinWithSeparator(","))
                 homePanelDelegate?.homePanel(self, didSelectURL: NSURL(string: item.url)!, visitType: VisitType.Bookmark)
                 break
 
