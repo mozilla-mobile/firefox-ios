@@ -100,11 +100,13 @@ class DownloadTests: XCTestCase {
 
         let ic2 = InfoCollections(collections: ["clients": ts2])
         server.storeRecords([rec2], inCollection: "clients", now: ts2)
+
         let fetch2 = batcher.go(ic2, limit: 1).value
         XCTAssertEqual(fetch2.successValue, DownloadEndState.Incomplete)
         let records2 = batcher.retrieve()
         XCTAssertEqual(1, records2.count)
         XCTAssertEqual(guid1, records2[0].id)
+
         let fetch3 = batcher.go(ic2, limit: 1).value
         XCTAssertEqual(fetch3.successValue, DownloadEndState.Complete)
         let records3 = batcher.retrieve()
