@@ -1298,6 +1298,13 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
         }
     }
 
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectBookmarkFolder folders: String) {
+        if AboutUtils.isAboutHomeURL(tabManager.selectedTab?.url) {
+            let panel = AboutUtils.getHomePanel(tabManager.selectedTab?.url?.fragment)
+            tabManager.selectedTab?.webView?.evaluateJavaScript("history.replaceState({}, '', '#panel=\(panel)&bookmarkFolders=\(folders)')", completionHandler: nil)
+        }
+    }
+
     func homePanelViewControllerDidRequestToCreateAccount(homePanelViewController: HomePanelViewController) {
         presentSignInViewController() // TODO UX Right now the flow for sign in and create account is the same
     }
