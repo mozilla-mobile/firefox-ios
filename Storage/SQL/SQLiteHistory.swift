@@ -856,7 +856,7 @@ extension SQLiteHistory: ResettableSyncStorage {
     }
 }
 
-extension SQLiteHistory {
+extension SQLiteHistory: AccountRemovalDelegate {
     public func onRemovedAccount() -> Success {
         log.info("Clearing history metadata and deleted items after account removal.")
         let discard = "DELETE FROM \(TableHistory) WHERE is_deleted = 1"

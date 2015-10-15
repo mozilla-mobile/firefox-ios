@@ -878,7 +878,7 @@ extension SQLiteLogins: ResettableSyncStorage {
     }
 }
 
-extension SQLiteLogins {
+extension SQLiteLogins: AccountRemovalDelegate {
     public func onRemovedAccount() -> Success {
         return self.resetClient()
     }

@@ -750,6 +750,12 @@ extension MergedSQLiteBookmarks: BookmarksModelFactory {
     }
 }
 
+extension MergedSQLiteBookmarks: AccountRemovalDelegate {
+    public func onRemovedAccount() -> Success {
+        return self.resetClient()
+    }
+}
+
 extension MergedSQLiteBookmarks: ResettableSyncStorage {
     /**
      * Right now our mirror is simply a mirror of server contents. That means we should
@@ -758,6 +764,13 @@ extension MergedSQLiteBookmarks: ResettableSyncStorage {
      */
     public func resetClient() -> Success {
         return self.mirror.wipeBookmarks()
+    }
+}
+
+extension SQLiteBookmarks: AccountRemovalDelegate {
+    public func onRemovedAccount() -> Success {
+        log.debug("SQLiteBookmarks doesn't yet store any data that needs to be discarded on account removal.")
+        return succeed()
     }
 }
 
