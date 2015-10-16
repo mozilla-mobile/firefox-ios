@@ -66,12 +66,12 @@ class ContextMenuHelper: NSObject, BrowserHelper, UIGestureRecognizerDelegate {
 
         var linkURL: NSURL?
         if let urlString = data["link"] as? String {
-            linkURL = NSURL(string: urlString)
+            linkURL = NSURL(string: urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLAllowedCharacterSet())!)
         }
 
         var imageURL: NSURL?
         if let urlString = data["image"] as? String {
-            imageURL = NSURL(string: urlString)
+            imageURL = NSURL(string: urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLAllowedCharacterSet())!)
         }
 
         if linkURL != nil || imageURL != nil {

@@ -4,24 +4,12 @@
 
 import Foundation
 import UIKit
+import Shared
 import SWXMLHash
 
 private let TypeSearch = "text/html"
 private let TypeSuggest = "application/x-suggestions+json"
 private let SearchTermsAllowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*-_."
-
-extension NSCharacterSet {
-    class func URLAllowedCharacterSet() -> NSCharacterSet {
-        let characterSet = NSMutableCharacterSet()
-        characterSet.formUnionWithCharacterSet(NSCharacterSet.URLQueryAllowedCharacterSet())
-        characterSet.formUnionWithCharacterSet(NSCharacterSet.URLUserAllowedCharacterSet())
-        characterSet.formUnionWithCharacterSet(NSCharacterSet.URLPathAllowedCharacterSet())
-        characterSet.formUnionWithCharacterSet(NSCharacterSet.URLPasswordAllowedCharacterSet())
-        characterSet.formUnionWithCharacterSet(NSCharacterSet.URLHostAllowedCharacterSet())
-        characterSet.formUnionWithCharacterSet(NSCharacterSet.URLFragmentAllowedCharacterSet())
-        return characterSet
-    }
-}
 
 class OpenSearchEngine {
     static let PreferredIconSize = 30
