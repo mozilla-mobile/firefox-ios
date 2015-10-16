@@ -2251,6 +2251,9 @@ extension BrowserViewController {
         TabsButton.appearance().textColor = UIConstants.PrivateModePurple
         TabsButton.appearance().insets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 
+        ReaderModeBarView.appearance().backgroundColor = UIConstants.PrivateModeReaderModeBackgroundColor
+        ReaderModeBarView.appearance().buttonTintColor = UIColor.whiteColor()
+
         header.blurStyle = .Dark
         footerBackground?.blurStyle = .Dark
     }
@@ -2279,6 +2282,9 @@ extension BrowserViewController {
         TabsButton.appearance().titleBackgroundColor = TabsButtonUX.TitleBackgroundColor
         TabsButton.appearance().textColor = TabsButtonUX.TitleColor
         TabsButton.appearance().insets = TabsButtonUX.TitleInsets
+
+        ReaderModeBarView.appearance().backgroundColor = UIColor.whiteColor()
+        ReaderModeBarView.appearance().buttonTintColor = UIColor.darkGrayColor()
 
         header.blurStyle = .ExtraLight
         footerBackground?.blurStyle = .ExtraLight

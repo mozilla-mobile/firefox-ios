@@ -47,10 +47,16 @@ class ReaderModeBarView: UIView {
     var settingsButton: UIButton!
     var listStatusButton: UIButton!
 
+    dynamic var buttonTintColor: UIColor = UIColor.clearColor() {
+        didSet {
+            readStatusButton.tintColor = self.buttonTintColor
+            settingsButton.tintColor = self.buttonTintColor
+            listStatusButton.tintColor = self.buttonTintColor
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        backgroundColor = UIColor.whiteColor()
 
         readStatusButton = createButton(type: .MarkAsRead, action: "SELtappedReadStatusButton:")
         readStatusButton.snp_makeConstraints { (make) -> () in
