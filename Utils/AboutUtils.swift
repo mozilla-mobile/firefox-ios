@@ -7,6 +7,10 @@ import Foundation
 struct AboutUtils {
     private static let AboutPath = "/about/"
 
+    static func buildAboutHomeURLForIndex(index: Int) -> NSURL? {
+        return NSURL(string: "http://localhost:1234/about/home/#panel=\(index)")
+    }
+
     static func isAboutHomeURL(url: NSURL?) -> Bool {
         return getAboutComponent(url) == "home"
     }

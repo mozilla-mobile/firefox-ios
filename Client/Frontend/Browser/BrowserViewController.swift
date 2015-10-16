@@ -548,7 +548,6 @@ class BrowserViewController: UIViewController {
             homePanelController = HomePanelViewController()
             homePanelController!.profile = profile
             homePanelController!.delegate = self
-            homePanelController!.url = tabManager.selectedTab?.url
             homePanelController!.view.alpha = 0
 
             addChildViewController(homePanelController!)
@@ -556,9 +555,7 @@ class BrowserViewController: UIViewController {
             homePanelController!.didMoveToParentViewController(self)
         }
 
-        // splitting this out to see if we can get better crash reports when this has a problem
-        let panel = AboutUtils.getHomePanel(tabManager.selectedTab?.url?.fragment)
-        homePanelController?.selectedButtonIndex = panel
+        homePanelController!.url = tabManager.selectedTab?.url
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.

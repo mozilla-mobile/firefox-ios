@@ -43,7 +43,46 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     var profile: Profile!
     var notificationToken: NSObjectProtocol!
     var panels: [HomePanelDescriptor]!
-    var url: NSURL?
+    var url: NSURL? {
+        didSet {
+            if oldValue?.absoluteString == url?.absoluteString {
+                return
+            }
+            print("Old URL: \(oldValue)")
+            print("New URL: \(url)")
+
+            // splitting this out to see if we can get better crash reports when this has a problem
+            let panel = AboutUtils.getHomePanel(url?.fragment)
+            selectedButtonIndex = panel
+
+            hideCurrentPanel()
+
+            if let index = selectedButtonIndex {
+                if index < buttons.count {
+                    let newButton = buttons[index]
+                    newButton.selected = true
+                }
+
+                if index < panels.count {
+                    let panel = self.panels[index].makeViewController(profile: profile)
+                    let accessibilityLabel = self.panels[index].accessibilityLabel
+                    if let panelController = panel as? UINavigationController,
+                        let rootPanel = panelController.viewControllers.first {
+                        setupHomePanel(rootPanel, accessibilityLabel: accessibilityLabel)
+                        if let bookmarkPanel = rootPanel as? BookmarksPanel,
+                            let folders = AboutUtils.getBookmarkFolders(url?.fragment) {
+                                bookmarkPanel.restoreFolderHierarchy(folders, fromIndex: 1)
+                        }
+                        self.showPanel(panelController)
+                    } else {
+                        setupHomePanel(panel, accessibilityLabel: accessibilityLabel)
+                        self.showPanel(panel)
+                    }
+                }
+            }
+        }
+    }
+
     weak var delegate: HomePanelViewControllerDelegate?
 
     private var buttonContainerView: UIView!
@@ -112,42 +151,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     var selectedButtonIndex: Int? = nil {
         didSet {
             if oldValue == selectedButtonIndex {
-                // Prevent flicker, allocations, and disk access: avoid duplicate view controllers.
                 return
             }
-
-            if let index = oldValue {
-                if index < buttons.count {
-                    let currentButton = buttons[index]
-                    currentButton.selected = false
-                }
-            }
-
-            hideCurrentPanel()
-
-            if let index = selectedButtonIndex {
-                if index < buttons.count {
-                    let newButton = buttons[index]
-                    newButton.selected = true
-                }
-
-                if index < panels.count {
-                    let panel = self.panels[index].makeViewController(profile: profile)
-                    let accessibilityLabel = self.panels[index].accessibilityLabel
-                    if let panelController = panel as? UINavigationController,
-                        let rootPanel = panelController.viewControllers.first {
-                        setupHomePanel(rootPanel, accessibilityLabel: accessibilityLabel)
-                        if let bookmarkPanel = rootPanel as? BookmarksPanel,
-                            let folders = AboutUtils.getBookmarkFolders(url?.fragment) {
-                                bookmarkPanel.restoreFolderHierarchy(folders, fromIndex: 1)
-                        }
-                        self.showPanel(panelController)
-                    } else {
-                        setupHomePanel(panel, accessibilityLabel: accessibilityLabel)
-                        self.showPanel(panel)
-                    }
-                }
-            }
+            buttons.forEach { $0.selected = false }
+            buttons[selectedButtonIndex ?? 0].selected = true
         }
     }
 
@@ -183,6 +190,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         for (index, button) in buttons.enumerate() {
             if (button == sender) {
                 selectedButtonIndex = index
+                url = AboutUtils.buildAboutHomeURLForIndex(index)
                 delegate?.homePanelViewController(self, didSelectPanel: index)
                 break
             }
