@@ -304,42 +304,53 @@ class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     }
 }
 
-private class BookmarkFolderTableViewHeader : SiteTableViewHeader {
+private class BookmarkFolderTableViewHeader : UITableViewHeaderFooterView {
     var delegate: BookmarkFolderTableViewHeaderDelegate?
+
+    lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIConstants.HighlightBlue
+        return label
+    }()
+
+    lazy var chevron: ChevronView = {
+        let chevron = ChevronView(direction: .Left)
+        chevron.tintColor = UIConstants.HighlightBlue
+        chevron.lineWidth = BookmarksPanelUX.BookmarkFolderChevronLineWidth
+        return chevron
+    }()
+
+    override var textLabel: UILabel? {
+        return titleLabel
+    }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        // set the background color to white
-        self.backgroundView = UIView(frame: self.bounds)
-        self.backgroundView?.backgroundColor = UIColor.whiteColor()
-        contentView.backgroundColor = UIColor.clearColor()
-
-        textLabel?.textColor = UIConstants.HighlightBlue
-        let chevron = ChevronView(direction: .Left)
-        chevron.tintColor = UIConstants.HighlightBlue
-        chevron.frame = CGRectMake(BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset, (SiteTableViewControllerUX.RowHeight / 2) - BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset, BookmarksPanelUX.BookmarkFolderChevronSize, BookmarksPanelUX.BookmarkFolderChevronSize)
-        chevron.lineWidth = BookmarksPanelUX.BookmarkFolderChevronLineWidth
-        addSubview(chevron)
 
         userInteractionEnabled = true
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: "viewWasTapped:")
         tapGestureRecognizer.numberOfTapsRequired = 1
         addGestureRecognizer(tapGestureRecognizer)
+
+        contentView.addSubview(chevron)
+        contentView.addSubview(titleLabel)
+
+        chevron.snp_makeConstraints { make in
+            make.left.equalTo(contentView).offset(BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
+            make.centerY.equalTo(contentView)
+            make.size.equalTo(BookmarksPanelUX.BookmarkFolderChevronSize)
+        }
+
+        titleLabel.snp_makeConstraints { make in
+            make.left.equalTo(chevron.snp_right).offset(BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
+            make.right.equalTo(contentView).offset(-BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
+            make.centerY.equalTo(contentView)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    private override func layoutSubviews() {
-        super.layoutSubviews()
-
-        // doing this here as SiteTableViewHeader changes the textLabel frame in it's layoutSubviews and we have to make sure it is right
-        if var textLabelFrame = textLabel?.frame {
-            textLabelFrame.origin.x += (BookmarksPanelUX.BookmarkFolderChevronSize + (BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset / 2))
-            textLabel?.frame = textLabelFrame
-        }
     }
 
     @objc private func viewWasTapped(gestureRecognizer: UITapGestureRecognizer) {
