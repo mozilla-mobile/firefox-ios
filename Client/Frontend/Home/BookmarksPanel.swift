@@ -98,7 +98,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     // to load the appropriate folder and create the backwards navigation
     func restoreFolderHierarchy(hierarchy: [GUID], fromIndex: Int) {
         if fromIndex < hierarchy.count {
-            profile.bookmarks.modelForFolder(bookmarkFolder).upon { result in
+            profile.bookmarks.modelForFolder(bookmarkFolder).uponQueue(dispatch_get_main_queue()) { result in
                 self.onModelFetched(result)
                 let folder = hierarchy[fromIndex]
 
