@@ -369,17 +369,14 @@ class BrowserViewController: UIViewController {
             // This assumes that the DB returns rows in some kind of sane order.
             // It does in practice, so WFM.
             log.debug("Queue. Count: \(cursor.count).")
-            if cursor.count > 0 {
-                var urls = [NSURL]()
-                for row in cursor {
-                    if let url = row?.url.asURL {
-                        urls.append(url)
-                    }
-                }
-                if !urls.isEmpty {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.tabManager.addTabsForURLs(urls, zombie: false)
-                    }
+            if cursor.count <= 0 {
+                return
+            }
+
+            let urls = cursor.flatMap { $0?.url.asURL }
+            if !urls.isEmpty {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.tabManager.addTabsForURLs(urls, zombie: false)
                 }
             }
 
@@ -1379,14 +1376,19 @@ extension BrowserViewController: TabManagerDelegate {
             addOpenInViewIfNeccessary(webView.URL)
 
             if let url = webView.URL?.absoluteString {
-                profile.bookmarks.isBookmarked(url).uponQueue(dispatch_get_main_queue()) {
-                    guard let isBookmarked = $0.successValue else {
-                        log.error("Error getting bookmark status: \($0.failureValue).")
-                        return
-                    }
+                // Don't bother fetching bookmark state for about/sessionrestore and about/home.
+                if AboutUtils.isAboutURL(webView.URL) {
+                    // Indeed, because we don't show the toolbar at all, don't even blank the star.
+                } else {
+                    profile.bookmarks.isBookmarked(url).uponQueue(dispatch_get_main_queue()) {
+                        guard let isBookmarked = $0.successValue else {
+                            log.error("Error getting bookmark status: \($0.failureValue).")
+                            return
+                        }
 
-                    self.toolbar?.updateBookmarkStatus(isBookmarked)
-                    self.urlBar.updateBookmarkStatus(isBookmarked)
+                        self.toolbar?.updateBookmarkStatus(isBookmarked)
+                        self.urlBar.updateBookmarkStatus(isBookmarked)
+                    }
                 }
             } else {
                 // The web view can go gray if it was zombified due to memory pressure.
