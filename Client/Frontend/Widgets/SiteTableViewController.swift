@@ -11,7 +11,8 @@ struct SiteTableViewControllerUX {
     static let HeaderBorderColor = UIColor(rgb: 0xCFD5D9).colorWithAlphaComponent(0.8)
     static let HeaderTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x232323)
     static let HeaderBackgroundColor = UIColor(rgb: 0xECF0F3).colorWithAlphaComponent(0.3)
-    static let HeaderFont = UIFont.systemFontOfSize(11, weight: UIFontWeightMedium)
+    static let HeaderFont = UIFont.systemFontOfSize(12, weight: UIFontWeightMedium)
+    static let HeaderTextMargin = CGFloat(10)
 }
 
 class SiteTableViewHeader : UITableViewHeaderFooterView {
@@ -19,29 +20,47 @@ class SiteTableViewHeader : UITableViewHeaderFooterView {
     // we just use views for the top and bottom borders.
     let topBorder = UIView()
     let bottomBorder = UIView()
+    let titleLabel = UILabel()
+
+    override var textLabel: UILabel? {
+        return titleLabel
+    }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
+
+        topBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+        bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+
+        titleLabel.font = SiteTableViewControllerUX.HeaderFont
+        titleLabel.textColor = SiteTableViewControllerUX.HeaderTextColor
+        titleLabel.textAlignment = .Left
+        contentView.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
+
         addSubview(topBorder)
         addSubview(bottomBorder)
-        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .ExtraLight))
+        contentView.addSubview(titleLabel)
 
-        textLabel?.font = SiteTableViewControllerUX.HeaderFont
-        textLabel?.textColor = SiteTableViewControllerUX.HeaderTextColor
-        textLabel?.textAlignment = .Center
-        contentView.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
+        topBorder.snp_makeConstraints { make in
+            make.left.right.equalTo(self)
+            make.top.equalTo(self).offset(-0.5)
+            make.height.equalTo(0.5)
+        }
+
+        bottomBorder.snp_makeConstraints { make in
+            make.left.right.bottom.equalTo(self)
+            make.height.equalTo(0.5)
+        }
+
+        titleLabel.snp_makeConstraints { make in
+            make.left.equalTo(contentView).offset(SiteTableViewControllerUX.HeaderTextMargin)
+            make.right.equalTo(contentView).offset(-SiteTableViewControllerUX.HeaderTextMargin)
+            make.centerY.equalTo(contentView)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        topBorder.frame = CGRect(x: 0, y: -0.5, width: frame.width, height: 0.5)
-        bottomBorder.frame = CGRect(x: 0, y: frame.height, width: frame.width, height: 0.5)
-        topBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
     }
 }
 
