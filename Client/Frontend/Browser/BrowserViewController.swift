@@ -1593,6 +1593,15 @@ extension BrowserViewController: WKNavigationDelegate {
             // VoiceOver will sometimes be stuck on the element, not allowing user to move
             // forward/backward. Strange, but LayoutChanged fixes that.
             UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+        } else {
+            // Tab is in the backgroud, but we want to be able to see it in the TabTray.
+            // Delay 100ms to let the tab render (it doesn't work without the delay)
+            // before screenshotting.
+            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(100 * NSEC_PER_MSEC))
+            dispatch_after(time, dispatch_get_main_queue()) {
+                let screenshot = self.screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1)
+                tab.setScreenshot(screenshot)
+            }
         }
 
         addOpenInViewIfNeccessary(webView.URL)
