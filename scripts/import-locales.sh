@@ -12,22 +12,26 @@ fi
 
 svn co --non-interactive --trust-server-cert https://svn.mozilla.org/projects/l10n-misc/trunk/firefox-ios firefox-ios-l10n || exit 1
 
-#
-# TODO Add incomplete locales here that are NOT to be included.
-# TODO Look at https://l10n.mozilla-community.org/~flod/webstatus/?product=firefox-ios to find out which locales are not at 100%
-#
-
-INCOMPLETE_LOCALES=(
-    "da"
-    "lt"
-    "son"
-    "uz"
-)
-
 if [ "$1" == "--only-complete" ]; then
-  for i in "${!INCOMPLETE_LOCALES[@]}"; do
-    echo "Removing incomplete locale ${INCOMPLETE_LOCALES[$i]}"
-    rm -rf "firefox-ios-l10n/${INCOMPLETE_LOCALES[$i]}"
+  # Get the list of incomplete locale (missing strings, errors) from the localization dashboard
+  # https://l10n.mozilla-community.org/~flod/webstatus/api/?product=firefox-ios&type=incomplete&txt
+  INCOMPLETE_LOCALES_LIST=$(wget -qO- https://l10n.mozilla-community.org/~flod/webstatus/api/?product=firefox-ios\&type=incomplete\&txt)
+  INCOMPLETE_LOCALES=(${INCOMPLETE_LOCALES_LIST//$'\n'/ })
+
+  # Extra locales excluded even if complete
+  ADDITIONAL_LOCALES=(
+      "da"
+  )
+
+  # Full list of locales to exclude
+  EXCLUDED_LOCALES=(
+      "${INCOMPLETE_LOCALES[@]}"
+      "${ADDITIONAL_LOCALES[@]}"
+  )
+
+  for i in "${!EXCLUDED_LOCALES[@]}"; do
+    echo "Removing incomplete locale ${EXCLUDED_LOCALES[$i]}"
+    rm -rf "firefox-ios-l10n/${EXCLUDED_LOCALES[$i]}"
   done
 fi
 
