@@ -39,9 +39,10 @@ class ChevronView: UIView {
     }
 
     init(direction: ChevronDirection) {
-        super.init(frame: CGRectNull)
+        super.init(frame: CGRectZero)
         self.direction = direction
         self.backgroundColor = UIColor.clearColor()
+        self.contentMode = UIViewContentMode.Redraw
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -49,6 +50,8 @@ class ChevronView: UIView {
     }
 
     override func drawRect(rect: CGRect) {
+        super.drawRect(rect)
+
         let strokeLength = (rect.size.height / 2) - Padding;
 
         let path: UIBezierPath
