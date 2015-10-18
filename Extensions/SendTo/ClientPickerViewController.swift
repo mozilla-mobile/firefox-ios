@@ -132,10 +132,18 @@ class ClientPickerViewController: UITableViewController {
     }
 
     private func reloadClients() {
+        guard let profile = self.profile else {
+            return
+        }
+
         reloading = true
-        profile?.getClients().upon({ result in
-            self.reloading = false
-            if let c = result.successValue {
+        profile.getClients().upon({ result in
+            withExtendedLifetime(profile) {
+                self.reloading = false
+                guard let c = result.successValue else {
+                    return
+                }
+
                 self.clients = c
                 dispatch_async(dispatch_get_main_queue()) {
                     if self.clients.count == 0 {
