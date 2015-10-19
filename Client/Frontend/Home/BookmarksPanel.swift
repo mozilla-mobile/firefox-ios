@@ -320,6 +320,18 @@ private class BookmarkFolderTableViewHeader : UITableViewHeaderFooterView {
         return chevron
     }()
 
+    lazy var topBorder: UIView = {
+        let view = UIView()
+        view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+        return view
+    }()
+
+    lazy var bottomBorder: UIView = {
+        let view = UIView()
+        view.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
+        return view
+    }()
+
     override var textLabel: UILabel? {
         return titleLabel
     }
@@ -333,6 +345,8 @@ private class BookmarkFolderTableViewHeader : UITableViewHeaderFooterView {
         tapGestureRecognizer.numberOfTapsRequired = 1
         addGestureRecognizer(tapGestureRecognizer)
 
+        addSubview(topBorder)
+        addSubview(bottomBorder)
         contentView.addSubview(chevron)
         contentView.addSubview(titleLabel)
 
@@ -346,6 +360,17 @@ private class BookmarkFolderTableViewHeader : UITableViewHeaderFooterView {
             make.left.equalTo(chevron.snp_right).offset(BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
             make.right.equalTo(contentView).offset(-BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
             make.centerY.equalTo(contentView)
+        }
+
+        topBorder.snp_makeConstraints { make in
+            make.left.right.equalTo(self)
+            make.top.equalTo(self).offset(-0.5)
+            make.height.equalTo(0.5)
+        }
+
+        bottomBorder.snp_makeConstraints { make in
+            make.left.right.bottom.equalTo(self)
+            make.height.equalTo(0.5)
         }
     }
 
