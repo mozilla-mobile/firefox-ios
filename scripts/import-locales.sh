@@ -18,11 +18,13 @@ svn co --non-interactive --trust-server-cert https://svn.mozilla.org/projects/l1
 #
 
 INCOMPLETE_LOCALES=(
+    "az"
     "da"
-    "lt"
     "kk"
+    "ms"
+    "my"
     "son"
-    "uz"
+    "th"
 )
 
 if [ "$1" == "--only-complete" ]; then
