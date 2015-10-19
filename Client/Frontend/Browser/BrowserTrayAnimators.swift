@@ -265,7 +265,7 @@ private func calculateExpandedCellFrameFromBVC(bvc: BrowserViewController) -> CG
     // there is no toolbar for home panels
     if !bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {
         return frame
-    } else if AboutUtils.isAboutURL(bvc.tabManager.selectedTab?.url) {
+    } else if AboutUtils.isAboutURL(bvc.tabManager.selectedTab?.url) && bvc.toolbar == nil {
         frame.size.height += UIConstants.ToolbarHeight
     }
 

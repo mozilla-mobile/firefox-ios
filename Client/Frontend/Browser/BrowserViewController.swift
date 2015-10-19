@@ -42,7 +42,7 @@ class BrowserViewController: UIViewController {
     var readerModeCache: ReaderModeCache
 
     private var statusBarOverlay: UIView!
-    private var toolbar: BrowserToolbar?
+    var toolbar: BrowserToolbar?
     private var searchController: SearchViewController?
     private let uriFixup = URIFixup()
     private var screenshotHelper: ScreenshotHelper!
