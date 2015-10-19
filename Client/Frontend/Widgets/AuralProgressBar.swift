@@ -50,11 +50,13 @@ class AuralProgressBar {
 
             connectPlayerNodes()
 
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("audioEngineConfigurationDidChange:"), name: AVAudioEngineConfigurationChangeNotification, object: nil)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleAudioEngineConfigurationDidChangeNotification:"), name: AVAudioEngineConfigurationChangeNotification, object: nil)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleAudioSessionInterruptionNotification:"), name: AVAudioSessionInterruptionNotification, object: nil)
         }
 
         deinit {
             NSNotificationCenter.defaultCenter().removeObserver(self, name: AVAudioEngineConfigurationChangeNotification, object: nil)
+            NSNotificationCenter.defaultCenter().removeObserver(self, name: AVAudioSessionInterruptionNotification, object: nil)
         }
 
         func connectPlayerNodes() {
@@ -68,16 +70,38 @@ class AuralProgressBar {
             engine.disconnectNodeOutput(progressPlayer)
         }
 
-        @objc func audioEngineConfigurationDidChange(notification: NSNotification) {
-            disconnectPlayerNodes()
-            connectPlayerNodes()
-
+        func startEngine() {
             if !engine.running {
-                do { try engine.start() }
-                catch {
-                    log.error("Unable to restart AVAudioEngine. Player will not automatically restart : \(error)")
+                do {
+                    try engine.start()
+                } catch {
+                    log.error("Unable to start AVAudioEngine: \(error)")
                 }
             }
+        }
+
+        @objc func handleAudioSessionInterruptionNotification(notification: NSNotification) {
+            if let interruptionTypeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt {
+                if let interruptionType = AVAudioSessionInterruptionType(rawValue: interruptionTypeValue) {
+                    switch interruptionType {
+                    case .Began:
+                        tickPlayer.stop()
+                        progressPlayer.stop()
+                    case .Ended:
+                        if let interruptionOptionValue = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt {
+                            let interruptionOption = AVAudioSessionInterruptionOptions(rawValue: interruptionOptionValue)
+                            if interruptionOption == .ShouldResume {
+                                startEngine()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        @objc func handleAudioEngineConfigurationDidChangeNotification(notification: NSNotification) {
+            disconnectPlayerNodes()
+            connectPlayerNodes()
         }
 
         func start() {
