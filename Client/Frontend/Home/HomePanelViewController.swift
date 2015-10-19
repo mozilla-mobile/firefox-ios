@@ -19,6 +19,7 @@ private struct HomePanelViewControllerUX {
 protocol HomePanelViewControllerDelegate: class {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType)
     func homePanelViewController(HomePanelViewController: HomePanelViewController, didSelectPanel panel: Int)
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectBookmarkFolder folder: String)
     func homePanelViewControllerDidRequestToSignIn(homePanelViewController: HomePanelViewController)
     func homePanelViewControllerDidRequestToCreateAccount(homePanelViewController: HomePanelViewController)
 }
@@ -38,6 +39,7 @@ protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(homePanel: HomePanel)
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
+    optional func homePanel(homePanel: HomePanel, didSelectBookmarkFolder folder: String)
     optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
 }
 
@@ -137,8 +139,12 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                     let panel = self.panels[index].makeViewController(profile: profile)
                     let accessibilityLabel = self.panels[index].accessibilityLabel
                     if let panelController = panel as? UINavigationController,
-                     let rootPanel = panelController.viewControllers.first {
+                        let rootPanel = panelController.viewControllers.first {
                         setupHomePanel(rootPanel, accessibilityLabel: accessibilityLabel)
+                        if let bookmarkPanel = rootPanel as? BookmarksPanel,
+                            let folders = AboutUtils.getBookmarkFolders(url?.fragment) {
+                                bookmarkPanel.restoreFolderHierarchy(folders, fromIndex: 1)
+                        }
                         self.showPanel(panelController)
                     } else {
                         setupHomePanel(panel, accessibilityLabel: accessibilityLabel)
@@ -228,6 +234,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType) {
         delegate?.homePanelViewController(self, didSelectURL: url, visitType: visitType)
         dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    func homePanel(homePanel: HomePanel, didSelectBookmarkFolder folder: String) {
+        delegate?.homePanelViewController(self, didSelectBookmarkFolder: folder)
     }
 
     func homePanelDidRequestToCreateAccount(homePanel: HomePanel) {

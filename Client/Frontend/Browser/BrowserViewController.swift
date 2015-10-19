@@ -552,7 +552,7 @@ class BrowserViewController: UIViewController {
             homePanelController = HomePanelViewController()
             homePanelController!.profile = profile
             homePanelController!.delegate = self
-            homePanelController!.url = tabManager.selectedTab?.displayURL
+            homePanelController!.url = tabManager.selectedTab?.url
             homePanelController!.view.alpha = 0
 
             addChildViewController(homePanelController!)
@@ -560,16 +560,9 @@ class BrowserViewController: UIViewController {
             homePanelController!.didMoveToParentViewController(self)
         }
 
-        let panelNumber = tabManager.selectedTab?.url?.fragment
-
         // splitting this out to see if we can get better crash reports when this has a problem
-        var newSelectedButtonIndex = 0
-        if let numberArray = panelNumber?.componentsSeparatedByString("=") {
-            if let last = numberArray.last, lastInt = Int(last) {
-                newSelectedButtonIndex = lastInt
-            }
-        }
-        homePanelController?.selectedButtonIndex = newSelectedButtonIndex
+        let panel = AboutUtils.getHomePanel(tabManager.selectedTab?.url?.fragment)
+        homePanelController?.selectedButtonIndex = panel
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
@@ -1302,6 +1295,13 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectPanel panel: Int) {
         if AboutUtils.isAboutHomeURL(tabManager.selectedTab?.url) {
             tabManager.selectedTab?.webView?.evaluateJavaScript("history.replaceState({}, '', '#panel=\(panel)')", completionHandler: nil)
+        }
+    }
+
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectBookmarkFolder folders: String) {
+        if AboutUtils.isAboutHomeURL(tabManager.selectedTab?.url) {
+            let panel = AboutUtils.getHomePanel(tabManager.selectedTab?.url?.fragment)
+            tabManager.selectedTab?.webView?.evaluateJavaScript("history.replaceState({}, '', '#panel=\(panel)&bookmarkFolders=\(folders)')", completionHandler: nil)
         }
     }
 
