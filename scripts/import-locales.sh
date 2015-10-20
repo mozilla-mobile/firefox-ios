@@ -21,6 +21,7 @@ INCOMPLETE_LOCALES=(
     "az"
     "da"
     "kk"
+    "lo"
     "ms"
     "my"
     "son"
