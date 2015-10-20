@@ -623,7 +623,8 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        searchController = SearchViewController()
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        searchController = SearchViewController(isPrivate: isPrivate)
         searchController!.searchEngines = profile.searchEngines
         searchController!.searchDelegate = self
         searchController!.profile = self.profile
