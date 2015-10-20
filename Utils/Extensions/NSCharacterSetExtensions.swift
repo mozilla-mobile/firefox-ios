@@ -6,13 +6,6 @@ import Foundation
 
 extension NSCharacterSet {
     public static func URLAllowedCharacterSet() -> NSCharacterSet {
-        let characterSet = NSMutableCharacterSet()
-        characterSet.formUnionWithCharacterSet(NSCharacterSet.URLQueryAllowedCharacterSet())
-        characterSet.formUnionWithCharacterSet(NSCharacterSet.URLUserAllowedCharacterSet())
-        characterSet.formUnionWithCharacterSet(NSCharacterSet.URLPathAllowedCharacterSet())
-        characterSet.formUnionWithCharacterSet(NSCharacterSet.URLPasswordAllowedCharacterSet())
-        characterSet.formUnionWithCharacterSet(NSCharacterSet.URLHostAllowedCharacterSet())
-        characterSet.formUnionWithCharacterSet(NSCharacterSet.URLFragmentAllowedCharacterSet())
-        return characterSet
+        return NSCharacterSet(charactersInString: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=%")
     }
 }
