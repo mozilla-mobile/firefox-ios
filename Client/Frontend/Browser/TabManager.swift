@@ -16,6 +16,10 @@ protocol TabManagerDelegate: class {
     func tabManagerDidAddTabs(tabManager: TabManager)
 }
 
+protocol TabManagerStateDelegate: class {
+    func tabManagerDidStoreChanges(tabManager: TabManager)
+}
+
 // We can't use a WeakList here because this is a protocol.
 class WeakTabManagerDelegate {
     weak var value : TabManagerDelegate?
@@ -32,6 +36,7 @@ class WeakTabManagerDelegate {
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class TabManager : NSObject {
     private var delegates = [WeakTabManagerDelegate]()
+    weak var stateDelegate: TabManagerStateDelegate?
 
     func addDelegate(delegate: TabManagerDelegate) {
         assert(NSThread.isMainThread())
@@ -58,7 +63,7 @@ class TabManager : NSObject {
     lazy private var configuration: WKWebViewConfiguration = {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
-        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
         return configuration
     }()
 
@@ -67,14 +72,14 @@ class TabManager : NSObject {
     lazy private var privateConfiguration: WKWebViewConfiguration = {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
-        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
+        configuration.preferences.javaScriptCanOpenWindowsAutomatically = !(self.prefs.boolForKey("blockPopups") ?? true)
         configuration.websiteDataStore = WKWebsiteDataStore.nonPersistentDataStore()
         return configuration
     }()
 
-    private let imageStore: DiskImageStore
+    private let imageStore: DiskImageStore?
 
-    unowned let profile: Profile
+    private let prefs: Prefs
     var selectedIndex: Int { return _selectedIndex }
 
     var normalTabs: [Browser] {
@@ -89,11 +94,11 @@ class TabManager : NSObject {
         }
     }
 
-    init(defaultNewTabRequest: NSURLRequest, profile: Profile) {
-        self.profile = profile
+    init(defaultNewTabRequest: NSURLRequest, prefs: Prefs, imageStore: DiskImageStore?) {
+        self.prefs = prefs
         self.defaultNewTabRequest = defaultNewTabRequest
         self.navDelegate = TabManagerNavDelegate()
-        self.imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
+        self.imageStore = imageStore
         super.init()
 
         addNavigationDelegate(self)
@@ -323,22 +328,14 @@ class TabManager : NSObject {
     }
 
     func storeChanges() {
-        // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
-        let storedTabs: [RemoteTab] = normalTabs.flatMap( Browser.toTab )
-
-        // Don't insert into the DB immediately. We tend to contend with more important
-        // work like querying for top sites.
-        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(100 * NSEC_PER_MSEC)), queue) {
-            self.profile.storeTabs(storedTabs)
-        }
-
         // Also save (full) tab state to disk.
         preserveTabs()
+
+        stateDelegate?.tabManagerDidStoreChanges(self)
     }
 
     func prefsDidChange() {
-        let allowPopups = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
+        let allowPopups = !(self.prefs.boolForKey("blockPopups") ?? true)
         // Each tab may have its own configuration, so we should tell each of them in turn.
         for tab in tabs {
             tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
@@ -423,13 +420,13 @@ extension TabManager {
                    let screenshotUUID = tab.screenshotUUID
                 {
                     savedUUIDs.insert(screenshotUUID.UUIDString)
-                    imageStore.put(screenshotUUID.UUIDString, image: screenshot)
+                    imageStore?.put(screenshotUUID.UUIDString, image: screenshot)
                 }
             }
         }
 
         // Clean up any screenshots that are no longer associated with a tab.
-        imageStore.clearExcluding(savedUUIDs)
+        imageStore?.clearExcluding(savedUUIDs)
 
         let tabStateData = NSMutableData()
         let archiver = NSKeyedArchiver(forWritingWithMutableData: tabStateData)
@@ -472,7 +469,8 @@ extension TabManager {
 
             // Set the UUID for the tab, asynchronously fetch the UIImage, then store
             // the screenshot in the tab as long as long as a newer one hasn't been taken.
-            if let screenshotUUID = savedTab.screenshotUUID {
+            if let screenshotUUID = savedTab.screenshotUUID,
+               let imageStore = self.imageStore {
                 tab.screenshotUUID = screenshotUUID
                 imageStore.get(screenshotUUID.UUIDString) >>== { screenshot in
                     if tab.screenshotUUID == screenshotUUID {

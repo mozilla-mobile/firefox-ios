@@ -27,7 +27,7 @@ class TabManagerTests: XCTestCase {
 
     func testTabManagerStoresChangesInDB() {
         let profile = TabManagerMockProfile()
-        let manager = TabManager(defaultNewTabRequest: NSURLRequest(URL: NSURL(fileURLWithPath: "http://localhost")), profile: profile)
+        let manager = TabManager(defaultNewTabRequest: NSURLRequest(URL: NSURL(fileURLWithPath: "http://localhost")), prefs: profile.prefs, imageStore: nil)
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
 
