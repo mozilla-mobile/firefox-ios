@@ -164,6 +164,18 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
     }
 
+    private var quickSearchEngines: [OpenSearchEngine] {
+        var engines = searchEngines.quickSearchEngines
+
+        // If we're not showing search suggestions, the default search engine won't be visible
+        // at the top of the table. Show it with the others in the bottom search bar.
+        if isPrivate || !searchEngines.shouldShowSearchSuggestions {
+            engines.insert(searchEngines.defaultEngine, atIndex: 0)
+        }
+
+        return engines
+    }
+
     private func layoutSuggestionsOptInPrompt() {
         if isPrivate || !(searchEngines?.shouldShowSearchSuggestionsOptIn ?? false) {
             // Make sure any pending layouts are drawn so they don't get coupled
@@ -323,7 +335,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         //search engines
         leftEdge = searchButton.snp_right
-        for engine in searchEngines.quickSearchEngines {
+        for engine in quickSearchEngines {
             let engineButton = UIButton()
             engineButton.setImage(engine.image, forState: UIControlState.Normal)
             engineButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
@@ -352,16 +364,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     func SELdidSelectEngine(sender: UIButton) {
-        // The UIButtons are the same cardinality and order as the array of quick search engines
-        for i in 0..<searchEngineScrollViewContent.subviews.count {
-            if let button = searchEngineScrollViewContent.subviews[i] as? UIButton {
-                if button === sender {
-                    //subtract 1 from index to account for magnifying glass accessory
-                    if let url = searchEngines.quickSearchEngines[i-1].searchURLForQuery(searchQuery) {
-                        searchDelegate?.searchViewController(self, didSelectURL: url)
-                    }
-                }
-            }
+        // The UIButtons are the same cardinality and order as the array of quick search engines.
+        // Subtract 1 from index to account for magnifying glass accessory.
+        if let index = searchEngineScrollViewContent.subviews.indexOf(sender),
+           let url = quickSearchEngines[index - 1].searchURLForQuery(searchQuery) {
+            searchDelegate?.searchViewController(self, didSelectURL: url)
         }
     }
 
@@ -374,12 +381,14 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchEngines.shouldShowSearchSuggestionsOptIn = false
         querySuggestClient()
         layoutSuggestionsOptInPrompt()
+        reloadSearchEngines()
     }
 
     func SELdidClickOptInNo() {
         searchEngines.shouldShowSearchSuggestions = false
         searchEngines.shouldShowSearchSuggestionsOptIn = false
         layoutSuggestionsOptInPrompt()
+        reloadSearchEngines()
     }
 
     func keyboardHelper(keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
