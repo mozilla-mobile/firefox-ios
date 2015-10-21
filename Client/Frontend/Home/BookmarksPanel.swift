@@ -358,7 +358,7 @@ private class BookmarkFolderTableViewHeader : UITableViewHeaderFooterView {
 
         titleLabel.snp_makeConstraints { make in
             make.left.equalTo(chevron.snp_right).offset(BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
-            make.right.equalTo(contentView).offset(-BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
+            make.right.greaterThanOrEqualTo(contentView).offset(-BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
             make.centerY.equalTo(contentView)
         }
 
