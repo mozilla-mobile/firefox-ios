@@ -56,6 +56,7 @@ protocol SearchViewControllerDelegate: class {
 class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener {
     var searchDelegate: SearchViewControllerDelegate?
 
+    private let isPrivate: Bool
     private var suggestClient: SearchSuggestClient?
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
@@ -75,16 +76,13 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     static var userAgent: String?
 
-    convenience init() {
-        self.init(nibName: nil, bundle: nil)
-    }
-
-    required override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    init(isPrivate: Bool) {
+        self.isPrivate = isPrivate
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -154,8 +152,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             querySuggestClient()
 
             // Show the default search engine first.
-            let ua = SearchViewController.userAgent as String! ?? "FxSearch"
-            suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine, userAgent: ua)
+            if !isPrivate {
+                let ua = SearchViewController.userAgent as String! ?? "FxSearch"
+                suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine, userAgent: ua)
+            }
 
             // Reload the footer list of search engines.
             reloadSearchEngines()
@@ -165,7 +165,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     private func layoutSuggestionsOptInPrompt() {
-        if !(searchEngines?.shouldShowSearchSuggestionsOptIn ?? false) {
+        if isPrivate || !(searchEngines?.shouldShowSearchSuggestionsOptIn ?? false) {
             // Make sure any pending layouts are drawn so they don't get coupled
             // with the "slide up" animation below.
             view.layoutIfNeeded()
@@ -511,7 +511,7 @@ extension SearchViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch SearchListSection(rawValue: section)! {
         case .SearchSuggestions:
-            return searchEngines.shouldShowSearchSuggestions && !searchQuery.looksLikeAURL() ? 1 : 0
+            return searchEngines.shouldShowSearchSuggestions && !searchQuery.looksLikeAURL() && !isPrivate ? 1 : 0
         case .BookmarksAndHistory:
             return data.count
         }
