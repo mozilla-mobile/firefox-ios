@@ -10,7 +10,7 @@ import Foundation
  */
 public struct KeyboardState {
     public let animationDuration: Double
-    public let animationCurve: UIViewAnimationCurve
+    public var animationCurve: UIViewAnimationCurve
     private let userInfo: [NSObject: AnyObject]
 
     private init(_ userInfo: [NSObject: AnyObject]) {
