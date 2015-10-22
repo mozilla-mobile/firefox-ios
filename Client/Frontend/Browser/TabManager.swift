@@ -214,7 +214,7 @@ class TabManager : NSObject {
         if configuration == nil {
             configuration = isPrivate ? privateConfiguration : self.configuration
         }
-
+        
         let tab = Browser(configuration: configuration, isPrivate: isPrivate)
         configureTab(tab, request: request, flushToDisk: flushToDisk, zombie: zombie, restoring: restoring)
         return tab
