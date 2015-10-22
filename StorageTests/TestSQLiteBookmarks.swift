@@ -146,5 +146,21 @@ class TestSQLiteBookmarks: XCTestCase {
         let mB = BookmarkMirrorItem.folder("UjAHxFOGEqU8", modified: NSDate.now(), hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: children)
         let applyM = bookmarks.applyRecords([mA, mB]).value
         XCTAssertTrue(applyM.isSuccess)
+
+        func childCount(parent: GUID) -> Int? {
+            let sql = "SELECT COUNT(*) AS childCount FROM \(TableBookmarksMirrorStructure) WHERE parent = ?"
+            let args: Args = [parent]
+            return db.runQuery(sql, args: args, factory: { $0["childCount"] as! Int }).value.successValue?[0]
+        }
+
+        // We have children.
+        XCTAssertEqual(children.count, childCount("UjAHxFOGEqU8"))
+
+        // Insert an empty mobile bookmarks folder, so we can verify that the structure table is wiped.
+        let mBEmpty = BookmarkMirrorItem.folder("UjAHxFOGEqU8", modified: NSDate.now() + 1, hasDupe: false, parentID: "places", parentName: "", title: "mobile", description: nil, children: [])
+        XCTAssertTrue(bookmarks.applyRecords([mBEmpty]).value.isSuccess)
+
+        // We no longer have children.
+        XCTAssertEqual(0, childCount("UjAHxFOGEqU8"))
     }
 }

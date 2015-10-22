@@ -420,10 +420,10 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
     }
 
     /**
-     * Remove child records for any folders that've been deleted.
+     * Remove child records for any folders that've been deleted or are empty.
      */
     private func deleteChildrenInTransactionWithGUIDs(guids: [GUID], connection: SQLiteDBConnection, withMaxVars maxVars: Int=BrowserDB.MaxVariableNumber) -> NSError? {
-        log.debug("Deleting \(guids.count) mirror bookmarks from structure table.")
+        log.debug("Deleting \(guids.count) parents from structure table.")
         let chunks = chunk(guids, by: maxVars)
         for chunk in chunks {
             let inList = Array<String>(count: chunk.count, repeatedValue: "?").joinWithSeparator(", ")
@@ -455,6 +455,7 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
         let deleted = records.filter { $0.isDeleted }.map { $0.guid }
         let values = records.map { $0.getUpdateOrInsertArgs() }
         let children = records.filter { !$0.isDeleted }.flatMap { $0.getChildrenArgs() }
+        let folders = records.filter { $0.type == BookmarkNodeType.Folder }.map { $0.guid }
 
         var err: NSError?
         self.db.transaction(&err) { (conn, err) -> Bool in
@@ -495,34 +496,24 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
                 }
             }
 
-            // Insert children in chunks.
+            // Delete existing structure for any folders we've seen. We always trust the folders,
+            // not the children's parent pointers, so we do this here: we'll insert their current
+            // children right after, when we process the child structure rows.
+            // We only drop the child structure for deleted folders, not the record itself.
+            // Deleted records stay in the mirror table so that we know about the deletion
+            // when we do a real sync!
+
+            log.debug("\(folders.count) folders and \(deleted.count) deleted maybe-folders to drop from structure table.")
+
+            if let error = self.deleteChildrenInTransactionWithGUIDs(folders + deleted, connection: conn) {
+                deferred.fill(Maybe(failure: DatabaseError(err: error)))
+                return false
+            }
+
+            // (Re-)insert children in chunks.
             log.debug("Inserting \(children.count) children.")
             if !children.isEmpty {
-                // Hurgh.
-                var parents: Args = []
-                for parent in Set(children.map { $0[0]! as! GUID }) {
-                    parents.append(parent as AnyObject)
-                }
-
-                log.debug("\(parents.count) unique parents to drop from structure table.")
-                let parentChunks = chunk(parents, by: maxVars)
-
-                // Drop existing rows.
-                for parents in parentChunks {
-                    log.verbose("Deleting \(parents.count)…")
-                    let del = "DELETE FROM \(TableBookmarksMirrorStructure) WHERE parent IN (" +
-                              Array<String>(count: parents.count, repeatedValue: "?").joinWithSeparator(", ") +
-                              ")"
-                    let args: Args = Array(parents)
-                    if let error = conn.executeChange(del, withArgs: args) {
-                        log.error("Dropping existing rows from mirror structure: \(error.description).")
-                        err = error
-                        deferred.fill(Maybe(failure: DatabaseError(err: error)))
-                        return false
-                    }
-                }
-
-                // Insert the new rows. This uses three vars per row.
+                // Insert the new structure rows. This uses three vars per row.
                 let maxRowsPerInsert: Int = maxVars / 3
                 let chunks = chunk(children, by: maxRowsPerInsert)
                 for chunk in chunks {
@@ -540,14 +531,11 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
                 }
             }
 
-            // We only drop the child structure. Otherwise, deleted records stay in the mirror
-            // table so that we know about the deletion when we do a real sync!
-            err = self.deleteChildrenInTransactionWithGUIDs(deleted, connection: conn)
-
             if err == nil {
                 deferred.fillIfUnfilled(Maybe(success: ()))
                 return true
             }
+
             deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: err)))
             return false
         }
