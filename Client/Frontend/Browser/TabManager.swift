@@ -17,7 +17,7 @@ protocol TabManagerDelegate: class {
 }
 
 protocol TabManagerStateDelegate: class {
-    func tabManagerDidStoreChanges(tabManager: TabManager)
+    func tabManagerWillStoreTabs(tabs: [Browser])
 }
 
 // We can't use a WeakList here because this is a protocol.
@@ -328,10 +328,10 @@ class TabManager : NSObject {
     }
 
     func storeChanges() {
+        stateDelegate?.tabManagerWillStoreTabs(tabs: normalTabs)
+
         // Also save (full) tab state to disk.
         preserveTabs()
-
-        stateDelegate?.tabManagerDidStoreChanges(self)
     }
 
     func prefsDidChange() {

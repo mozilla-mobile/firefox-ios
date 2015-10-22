@@ -14,6 +14,7 @@ private let log = Logger.syncLogger
 
 public let ProfileDidStartSyncingNotification = "ProfileDidStartSyncingNotification"
 public let ProfileDidFinishSyncingNotification = "ProfileDidFinishSyncingNotification"
+public let ProfileRemoteTabsSyncDelay: NSTimeInterval = 0.1
 
 public protocol SyncManager {
     var isSyncing: Bool { get }

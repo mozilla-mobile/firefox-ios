@@ -69,8 +69,7 @@ class TabManagerTests: XCTestCase {
             manager.storeChanges()
 
             // We can't use waitForCondition here since we're testing a non-change.
-            // The TabManager storeChanges() delay is 100ms, so 200ms should be sufficient.
-            wait(0.2)
+            wait(ProfileRemoteTabsSyncDelay * 2)
 
             // now test that the database still contains only 3 tabs
             remoteTabs = profile.remoteClientsAndTabs.getTabsForClientWithGUID(nil).value.successValue
