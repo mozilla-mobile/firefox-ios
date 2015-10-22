@@ -328,7 +328,7 @@ class TabManager : NSObject {
     }
 
     func storeChanges() {
-        stateDelegate?.tabManagerWillStoreTabs(tabs: normalTabs)
+        stateDelegate?.tabManagerWillStoreTabs(normalTabs)
 
         // Also save (full) tab state to disk.
         preserveTabs()
