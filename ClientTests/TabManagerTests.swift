@@ -27,9 +27,19 @@ class TabManagerTests: XCTestCase {
 
     func testTabManagerStoresChangesInDB() {
         let profile = TabManagerMockProfile()
-        let manager = TabManager(defaultNewTabRequest: NSURLRequest(URL: NSURL(fileURLWithPath: "http://localhost")), profile: profile)
+        let manager = TabManager(defaultNewTabRequest: NSURLRequest(URL: NSURL(fileURLWithPath: "http://localhost")), prefs: profile.prefs, imageStore: nil)
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
+
+        profile.remoteClientsAndTabs.wipeTabs()
+
+        // Make sure we start with no remote tabs.
+        var remoteTabs: [RemoteTab]?
+        waitForCondition {
+            remoteTabs = profile.remoteClientsAndTabs.getTabsForClientWithGUID(nil).value.successValue
+            return remoteTabs?.count == 0
+        }
+        XCTAssertEqual(remoteTabs?.count, 0)
 
         // test that non-private tabs are saved to the db
         // add some non-private tabs to the tab manager
@@ -39,10 +49,13 @@ class TabManagerTests: XCTestCase {
         }
 
         manager.storeChanges()
-        let remoteTabs = profile.remoteClientsAndTabs.getTabsForClientWithGUID(nil).value.successValue
-        let count = remoteTabs?.count
-        XCTAssertEqual(count, 3)
+
         // now test that the database contains 3 tabs
+        waitForCondition {
+            remoteTabs = profile.remoteClientsAndTabs.getTabsForClientWithGUID(nil).value.successValue
+            return remoteTabs?.count == 3
+        }
+        XCTAssertEqual(remoteTabs?.count, 3)
 
         // test that private tabs are not saved to the DB
         // private tabs are only available in iOS9 so don't execute this part of the test if we're testing against < iOS9
@@ -55,10 +68,12 @@ class TabManagerTests: XCTestCase {
 
             manager.storeChanges()
 
+            // We can't use waitForCondition here since we're testing a non-change.
+            wait(ProfileRemoteTabsSyncDelay * 2)
+
             // now test that the database still contains only 3 tabs
-            let remoteTabs = profile.remoteClientsAndTabs.getTabsForClientWithGUID(nil).value.successValue
-            let count = remoteTabs?.count
-            XCTAssertEqual(count ?? 0, 3)
+            remoteTabs = profile.remoteClientsAndTabs.getTabsForClientWithGUID(nil).value.successValue
+            XCTAssertEqual(remoteTabs?.count, 3)
         }
     }
     

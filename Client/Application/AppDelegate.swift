@@ -45,7 +45,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.backgroundColor = UIColor.whiteColor()
 
         let defaultRequest = NSURLRequest(URL: UIConstants.DefaultHomePage)
-        self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, profile: profile)
+        let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
+        self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, prefs: profile.prefs, imageStore: imageStore)
+        self.tabManager.stateDelegate = self
         browserViewController = BrowserViewController(profile: profile, tabManager: self.tabManager)
 
         // Add restoration class, the factory that will return the ViewController we 
@@ -244,6 +246,20 @@ extension AppDelegate: UINavigationControllerDelegate {
             } else {
                 return nil
             }
+    }
+}
+
+extension AppDelegate: TabManagerStateDelegate {
+    func tabManagerWillStoreTabs(tabs: [Browser]) {
+        // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
+        let storedTabs: [RemoteTab] = tabs.flatMap( Browser.toTab )
+
+        // Don't insert into the DB immediately. We tend to contend with more important
+        // work like querying for top sites.
+        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(ProfileRemoteTabsSyncDelay * Double(NSEC_PER_MSEC))), queue) {
+            self.profile?.storeTabs(storedTabs)
+        }
     }
 }
 
