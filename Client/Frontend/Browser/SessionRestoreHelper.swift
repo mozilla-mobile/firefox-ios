@@ -25,7 +25,7 @@ class SessionRestoreHelper: BrowserHelper {
         if let browser = browser, params = message.body as? [String: AnyObject] {
             if params["name"] as! String == "didRestoreSession" {
                 dispatch_async(dispatch_get_main_queue()) {
-                    delegate?.sessionRestoreHelper(self, didRestoreSessionForBrowser: browser)
+                    self.delegate?.sessionRestoreHelper(self, didRestoreSessionForBrowser: browser)
                 }
             }
         }
