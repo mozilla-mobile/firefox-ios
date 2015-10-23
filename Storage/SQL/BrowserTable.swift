@@ -17,6 +17,7 @@ let TableBookmarksMirrorStructure = "bookmarksMirrorStructure"         // Added 
 
 let TableFavicons = "favicons"
 let TableHistory = "history"
+let TableCachedTopSites = "cached_top_sites"
 let TableDomains = "domains"
 let TableVisits = "visits"
 let TableFaviconSites = "favicon_sites"
@@ -38,6 +39,7 @@ private let AllTables: Args = [
 
     TableHistory,
     TableVisits,
+    TableCachedTopSites,
 
     TableBookmarks,
     TableBookmarksMirror,
@@ -67,7 +69,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 public class BrowserTable: Table {
-    static let DefaultVersion = 10
+    static let DefaultVersion = 11
     let version: Int
     var name: String { return "BROWSER" }
     let sqliteVersion: Int32
@@ -148,6 +150,26 @@ public class BrowserTable: Table {
             (version > 5 ? "domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE, " : "") +
             "CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)" +
             ")"
+    }
+
+    func getTopSitesTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
+        return "CREATE TABLE IF NOT EXISTS \(TableCachedTopSites) (" +
+            "historyID INTEGER, " +
+            "url TEXT NOT NULL, " +
+            "title TEXT NOT NULL, " +
+            "guid TEXT NOT NULL UNIQUE, " +
+            "domain_id INTEGER, " +
+            "domain TEXT NO NULL, " +
+            "localVisitDate REAL, " +
+            "remoteVisitDate REAL, " +
+            "localVisitCount INTEGER, " +
+            "remoteVisitCount INTEGER, " +
+            "iconID INTEGER, " +
+            "iconURL TEXT, " +
+            "iconDate REAL, " +
+            "iconType INTEGER, " +
+            "iconWidth INTEGER, " +
+            "frecencies REAL)"
     }
 
     func getDomainsTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
@@ -339,7 +361,8 @@ public class BrowserTable: Table {
             (widestFavicons, nil),
             (historyIDsWithIcon, nil),
             (iconForURL, nil),
-            (getQueueTableCreationString(forVersion: version), nil)
+            (getQueueTableCreationString(forVersion: version), nil),
+            (getTopSitesTableCreationString(forVersion: version), nil)
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -424,6 +447,12 @@ public class BrowserTable: Table {
             let indexStructureParentIdx = "CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureParentIdx) " +
                                           "ON \(TableBookmarksMirrorStructure) (parent, idx)"
             if !self.run(db, sql: indexStructureParentIdx) {
+                return false
+            }
+        }
+
+        if from < 11 && to >= 11 {
+            if !self.runValidQueries(db, queries: [(getTopSitesTableCreationString(forVersion: to), nil)]) {
                 return false
             }
         }
