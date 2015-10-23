@@ -10,7 +10,7 @@ import Foundation
  */
 public struct KeyboardState {
     public let animationDuration: Double
-    public var animationCurve: UIViewAnimationCurve
+    public let animationCurve: UIViewAnimationCurve
     private let userInfo: [NSObject: AnyObject]
 
     private init(_ userInfo: [NSObject: AnyObject]) {
@@ -19,9 +19,11 @@ public struct KeyboardState {
         // HACK: UIViewAnimationCurve doesn't expose the keyboard animation used (curveValue = 7),
         // so UIViewAnimationCurve(rawValue: curveValue) returns nil. As a workaround, get a
         // reference to an EaseIn curve, then change the underlying pointer data with that ref.
-        let curveValue = userInfo[UIKeyboardAnimationCurveUserInfoKey] as! Int
-        animationCurve = UIViewAnimationCurve.EaseIn
-        NSNumber(integer: curveValue).getValue(&animationCurve)
+        var curve = UIViewAnimationCurve.EaseIn
+        if let curveValue = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? Int {
+            NSNumber(integer: curveValue).getValue(&curve)
+        }
+        self.animationCurve = curve
     }
 
     /// Return the height of the keyboard that overlaps with the specified view. This is more
