@@ -283,10 +283,13 @@ private class TopSitesLayout: UICollectionViewLayout {
     // The width and height of the thumbnail here are the width and height of the tile itself, not the image inside the tile.
     private var thumbnailWidth: CGFloat {
         let insets = ThumbnailCellUX.Insets
-        return (width - insets.left - insets.right) / CGFloat(thumbnailCols) }
+        return floor(width - insets.left - insets.right) / CGFloat(thumbnailCols)
+    }
     // The tile's height is determined the aspect ratio of the thumbnails width. We also take into account
     // some padding between the title and the image.
-    private var thumbnailHeight: CGFloat { return thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio) }
+    private var thumbnailHeight: CGFloat {
+        return floor(thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio))
+    }
 
     // Used to calculate the height of the list.
     private var count: Int {
