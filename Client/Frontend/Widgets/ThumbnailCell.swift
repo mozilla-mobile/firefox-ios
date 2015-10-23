@@ -106,20 +106,6 @@ class ThumbnailCell: UICollectionViewCell {
         return imageView
     }()
 
-    lazy var backgroundImage: UIImageView = {
-        let backgroundImage = UIImageView()
-        backgroundImage.backgroundColor = UIColor.clearColor()
-        backgroundImage.contentMode = UIViewContentMode.ScaleAspectFill
-        return backgroundImage
-    }()
-
-    lazy var backgroundEffect: UIVisualEffectView? = {
-        let blur = UIBlurEffect(style: UIBlurEffectStyle.Light)
-        let vib = UIVibrancyEffect(forBlurEffect: blur)
-        let effect: UIVisualEffectView? = DeviceInfo.isBlurSupported() ? UIVisualEffectView(effect: blur) : nil
-        effect?.alpha = 0
-        return effect
-    }()
 
     lazy var imageWrapper: UIView = {
         let imageWrapper = UIView()
@@ -140,20 +126,25 @@ class ThumbnailCell: UICollectionViewCell {
         return removeButton
     }()
 
+    lazy var backgroundImage: UIImageView = {
+        let backgroundImage = UIImageView()
+        backgroundImage.contentMode = UIViewContentMode.ScaleAspectFill
+        return backgroundImage
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.mainScreen().scale
 
         isAccessibilityElement = true
         addGestureRecognizer(longPressGesture)
 
         contentView.addSubview(imageWrapper)
-        if let backgroundEffect = backgroundEffect {
-            imageWrapper.addSubview(backgroundImage)
-            imageWrapper.addSubview(backgroundEffect)
-            backgroundImage.snp_remakeConstraints { make in
-                make.top.bottom.left.right.equalTo(self.imageWrapper)
-            }
-
+        imageWrapper.addSubview(backgroundImage)
+        backgroundImage.snp_remakeConstraints { make in
+            make.top.bottom.left.right.equalTo(self.imageWrapper)
         }
         imageWrapper.addSubview(imageView)
         imageWrapper.addSubview(textWrapper)
@@ -165,10 +156,6 @@ class ThumbnailCell: UICollectionViewCell {
             make.left.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.left)
             make.bottom.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.bottom)
             make.right.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.right)
-        }
-
-        backgroundEffect?.snp_remakeConstraints { make in
-            make.top.bottom.left.right.equalTo(self.imageWrapper)
         }
 
         imageView.snp_remakeConstraints { make in
@@ -188,7 +175,7 @@ class ThumbnailCell: UICollectionViewCell {
         textLabel.snp_remakeConstraints { make in
             make.edges.equalTo(self.textWrapper).inset(ThumbnailCellUX.LabelInsets) // TODO swift-2.0 I changes insets to inset - how can that be right?
         }
-        
+
         // Prevents the textLabel from getting squished in relation to other view priorities.
         textLabel.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
     }
@@ -208,9 +195,17 @@ class ThumbnailCell: UICollectionViewCell {
         removeButton.frame = frame
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        backgroundImage.image = nil
+        removeButton.hidden = true
+        imageWrapper.backgroundColor = UIColor.clearColor()
+    }
+
     func SELdidRemove() {
         delegate?.didRemoveThumbnail(self)
     }
+
 
     func SELdidLongPress() {
         delegate?.didLongPressThumbnail(self)
