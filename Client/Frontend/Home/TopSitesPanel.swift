@@ -51,8 +51,11 @@ class TopSitesPanel: UIViewController {
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        self.layout.setupForOrientation(UIView.viewOrientationForSize(size))
-        self.collection?.reloadData()
+
+        coordinator.animateAlongsideTransition({ context in
+            self.layout.setupForTraitCollection(self.traitCollection, viewSize: size)
+            self.collection?.reloadData()
+        }, completion: nil)
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -302,20 +305,27 @@ private class TopSitesLayout: UICollectionViewLayout {
 
     override init() {
         super.init()
-        setupForOrientation(UIApplication.sharedApplication().statusBarOrientation)
+        let rootWindow = (UIApplication.sharedApplication().delegate as! AppDelegate).window!
+        setupForTraitCollection(rootWindow.traitCollection, viewSize: rootWindow.bounds.size)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupForOrientation(orientation: UIInterfaceOrientation) {
-        if orientation.isLandscape {
-            thumbnailCols = 5
-        } else if UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact {
+    private func setupForTraitCollection(traitCollection: UITraitCollection, viewSize: CGSize) {
+        if traitCollection.userInterfaceIdiom == .Pad && traitCollection.verticalSizeClass == .Regular && traitCollection.horizontalSizeClass == .Regular {
+            if viewSize.width > viewSize.height {
+                thumbnailCols = 5
+            } else {
+                thumbnailCols = 4
+            }
+        } else if traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular {
             thumbnailCols = 3
+        } else if traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Compact {
+            thumbnailCols = 5
         } else {
-            thumbnailCols = 4
+            thumbnailCols = 3
         }
     }
 
