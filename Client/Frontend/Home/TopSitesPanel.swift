@@ -323,8 +323,6 @@ private class TopSitesLayout: UICollectionViewLayout {
             } else {
                 thumbnailCols = 4
             }
-        } else if traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Regular {
-            thumbnailCols = 3
         } else if traitCollection.horizontalSizeClass == .Compact && traitCollection.verticalSizeClass == .Compact {
             thumbnailCols = 5
         } else {
