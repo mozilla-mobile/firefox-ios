@@ -18,11 +18,31 @@ struct ThumbnailCellUX {
     static let InsetSize: CGFloat = 20
     static let InsetSizeCompact: CGFloat = 6
     static var Insets: UIEdgeInsets {
-        let inset: CGFloat = (UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact) ? ThumbnailCellUX.InsetSizeCompact : ThumbnailCellUX.InsetSize
+        let traitCollection = (UIApplication.sharedApplication().delegate as! AppDelegate).window!.traitCollection
+
+        let inset: CGFloat
+        if traitCollection.userInterfaceIdiom == .Pad && traitCollection.verticalSizeClass == .Regular && traitCollection.horizontalSizeClass == .Regular {
+            inset = ThumbnailCellUX.InsetSize
+        } else {
+            inset = ThumbnailCellUX.InsetSizeCompact
+        }
+
         return UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
     }
-    static let ImagePadding: CGFloat = 20
+    static let ImagePaddingWide: CGFloat = 20
     static let ImagePaddingCompact: CGFloat = 10
+    static var ImageInsets: UIEdgeInsets {
+        let traitCollection = (UIApplication.sharedApplication().delegate as! AppDelegate).window!.traitCollection
+
+        let padding: CGFloat
+        if traitCollection.userInterfaceIdiom == .Pad && traitCollection.verticalSizeClass == .Regular && traitCollection.horizontalSizeClass == .Regular {
+            padding = ThumbnailCellUX.ImagePaddingWide
+        } else {
+            padding = ThumbnailCellUX.ImagePaddingCompact
+        }
+        return UIEdgeInsetsMake(padding, padding, padding, padding)
+    }
+
     static let LabelInsets = UIEdgeInsetsMake(10, 3, 10, 3)
     static let PlaceholderImage = UIImage(named: "defaultTopSiteIcon")
     static let CornerRadius: CGFloat = 3
@@ -159,12 +179,10 @@ class ThumbnailCell: UICollectionViewCell {
         }
 
         imageView.snp_remakeConstraints { make in
-            let imagePadding: CGFloat = (UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact) ? ThumbnailCellUX.ImagePaddingCompact : ThumbnailCellUX.ImagePadding
-            let insets = UIEdgeInsetsMake(imagePadding, imagePadding, imagePadding, imagePadding)
-            make.top.equalTo(self.imageWrapper).inset(insets.top)
-            make.left.right.equalTo(self.imageWrapper).inset(insets.left)
-            make.right.equalTo(self.imageWrapper).inset(insets.right)
-            make.bottom.equalTo(textWrapper.snp_top).offset(-imagePadding) // .insets(insets)
+            make.top.equalTo(self.imageWrapper).inset(ThumbnailCellUX.ImageInsets.top)
+            make.left.right.equalTo(self.imageWrapper).inset(ThumbnailCellUX.ImageInsets.left)
+            make.right.equalTo(self.imageWrapper).inset(ThumbnailCellUX.ImageInsets.right)
+            make.bottom.equalTo(textWrapper.snp_top).offset(-ThumbnailCellUX.ImageInsets.top)
         }
 
         textWrapper.snp_makeConstraints { make in
