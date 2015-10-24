@@ -5,6 +5,7 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms-books</string>
+		<string>org-appextension-feature-password-management</string>
 	</array>
 	<key>AppID</key>
 	<string>$(MOZ_APP_ID)</string>
@@ -108,9 +109,24 @@
 	<true/>
 	<key>Vendor</key>
 	<string>$(MOZ_VENDOR)</string>
-        <key>AdjustEnvironment</key>
-        <string>$(ADJUST_ENVIRONMENT)</string>
-        <key>AdjustAppToken</key>
-        <string>$(ADJUST_APP_TOKEN)</string>
+	<key>AdjustEnvironment</key>
+	<string>$(ADJUST_ENVIRONMENT)</string>
+	<key>AdjustAppToken</key>
+	<string>$(ADJUST_APP_TOKEN)</string>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.url</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>1Password Fill Browser Action</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.appextension.fill-browser-action</string>
+			<key>UTTypeSize64IconFile</key>
+			<string></string>
+		</dict>
+	</array>
 </dict>
 </plist>
