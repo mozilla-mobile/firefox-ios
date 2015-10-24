@@ -40,7 +40,6 @@ class BrowserViewController: UIViewController {
     var urlBar: URLBarView!
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
-
     private var statusBarOverlay: UIView!
     private(set) var toolbar: BrowserToolbar?
     private var searchController: SearchViewController?
@@ -1088,50 +1087,26 @@ extension BrowserViewController: BrowserToolbarDelegate {
     }
 
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
-        if let selected = tabManager.selectedTab {
-            if let url = selected.displayURL {
-                let printInfo = UIPrintInfo(dictionary: nil)
-                printInfo.jobName = url.absoluteString
-                printInfo.outputType = .General
-                let renderer = BrowserPrintPageRenderer(browser: selected)
+        if let selectedTab = tabManager.selectedTab {
+            let helper = ShareExtensionHelper(tab: selectedTab)
 
-                var activityItems = [printInfo, renderer, url]
-                if let title = selected.title {
-                    activityItems.append(TitleActivityItemProvider(title: title))
-                }
+            let activityViewController = helper.createActivityViewController({
+                // We don't know what share action the user has chosen so we simply always
+                // update the toolbar and reader mode bar to refelect the latest status.
+                self.updateURLBarDisplayURL(selectedTab)
+                self.updateReaderModeBar()
+            })
 
-                let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-
-                // Hide 'Add to Reading List' which currently uses Safari.
-                // Also hide our own View Later… after all, you're in the browser!
-                let viewLater = NSBundle.mainBundle().bundleIdentifier! + ".ViewLater"
-                activityViewController.excludedActivityTypes = [
-                    UIActivityTypeAddToReadingList,
-                    viewLater,                        // Doesn't work: rdar://19430419
-                ]
-
-                activityViewController.completionWithItemsHandler = { activityType, completed, _, _ in
-                    log.debug("Selected activity type: \(activityType).")
-                    if completed {
-                        if let selectedTab = self.tabManager.selectedTab {
-                            // We don't know what share action the user has chosen so we simply always
-                            // update the toolbar and reader mode bar to refelect the latest status.
-                            self.updateURLBarDisplayURL(selectedTab)
-                            self.updateReaderModeBar()
-                        }
-                    }
-                }
-
-                if let popoverPresentationController = activityViewController.popoverPresentationController {
-                    // Using the button for the sourceView here results in this not showing on iPads.
-                    popoverPresentationController.sourceView = toolbar ?? urlBar
-                    popoverPresentationController.sourceRect = button.frame ?? button.frame
-                    popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
-                    popoverPresentationController.delegate = self
-                }
-                presentViewController(activityViewController, animated: true, completion: nil)
+            if let popoverPresentationController = activityViewController.popoverPresentationController {
+                // Using the button for the sourceView here results in this not showing on iPads.
+                popoverPresentationController.sourceView = self.toolbar ?? self.urlBar
+                popoverPresentationController.sourceRect = button.frame ?? button.frame
+                popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
+                popoverPresentationController.delegate = self
             }
+            self.presentViewController(activityViewController, animated: true, completion: nil)
         }
+
     }
 }
 
