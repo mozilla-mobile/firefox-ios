@@ -13,8 +13,23 @@ private let DetailTextTopMargin = CGFloat(5)
 class TwoLineTableViewCell: UITableViewCell {
     private let twoLineHelper = TwoLineCellHelper()
 
+    let _textLabel = UILabel()
+    let _detailTextLabel = UILabel()
+
+    // Override the default labels with our own to disable default UITableViewCell label behaviours like dynamic type
+    override var textLabel: UILabel? {
+        return _textLabel
+    }
+
+    override var detailTextLabel: UILabel? {
+        return _detailTextLabel
+    }
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
+
+        contentView.addSubview(_textLabel)
+        contentView.addSubview(_detailTextLabel)
 
         twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
 
@@ -146,7 +161,6 @@ private class TwoLineCellHelper {
 
         textLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
         textLabel.textColor = TextColor
-
         detailTextLabel.font = UIFont.systemFontOfSize(10, weight: UIFontWeightRegular)
         detailTextLabel.textColor = DetailTextColor
 
