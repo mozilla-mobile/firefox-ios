@@ -276,8 +276,6 @@ class TabTrayController: UIViewController {
         return delegate
     }()
 
-    private var removedTabIndexPath: NSIndexPath?
-
     init(tabManager: TabManager, profile: Profile) {
         self.tabManager = tabManager
         self.profile = profile
@@ -549,7 +547,7 @@ extension TabTrayController: TabManagerDelegate {
         // Get the index of the added tab from it's set (private or normal)
         guard let index = tabsToDisplay.indexOf(tab) else { return }
         
-        tabDataSource.tabs.append(tab)
+        tabDataSource.addTab(tab)
 
         self.collectionView.performBatchUpdates({ _ in
             self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
@@ -565,28 +563,24 @@ extension TabTrayController: TabManagerDelegate {
     }
 
     func tabManager(tabManager: TabManager, didRemoveTab tab: Browser) {
-        if let removedIndex = removedTabIndexPath {
-            tabDataSource.tabs.removeAtIndex(removedIndex.item)
-            removedTabIndexPath = nil
+        let removedIndex = tabDataSource.removeTab(tab)
+        self.collectionView.deleteItemsAtIndexPaths([NSIndexPath(forItem: removedIndex, inSection: 0)])
 
-            self.collectionView.deleteItemsAtIndexPaths([removedIndex])
-
-            // Workaround: On iOS 8.* devices, cells don't get reloaded during the deletion but after the 
-            // animation has finished which causes cells that animate from above to suddenly 'appear'. This
-            // is fixed on iOS 9 but for iOS 8 we force a reload on non-visible cells during the animation.
-            if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_8_3) {
-                let visibleCount = collectionView.indexPathsForVisibleItems().count
-                var offscreenIndexPaths = [NSIndexPath]()
-                for i in 0..<(tabsToDisplay.count - visibleCount) {
-                    offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
-                }
-                self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
+        // Workaround: On iOS 8.* devices, cells don't get reloaded during the deletion but after the
+        // animation has finished which causes cells that animate from above to suddenly 'appear'. This
+        // is fixed on iOS 9 but for iOS 8 we force a reload on non-visible cells during the animation.
+        if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_8_3) {
+            let visibleCount = collectionView.indexPathsForVisibleItems().count
+            var offscreenIndexPaths = [NSIndexPath]()
+            for i in 0..<(tabsToDisplay.count - visibleCount) {
+                offscreenIndexPaths.append(NSIndexPath(forItem: i, inSection: 0))
             }
+            self.collectionView.reloadItemsAtIndexPaths(offscreenIndexPaths)
+        }
 
-            if #available(iOS 9, *) {
-                if privateTabsAreEmpty() {
-                    emptyPrivateTabsView.alpha = 1
-                }
+        if #available(iOS 9, *) {
+            if privateTabsAreEmpty() {
+                emptyPrivateTabsView.alpha = 1
             }
         }
     }
@@ -634,7 +628,6 @@ extension TabTrayController: SwipeAnimatorDelegate {
         let tabCell = animator.container as! TabCell
         if let indexPath = collectionView.indexPathForCell(tabCell) {
             let tab = tabsToDisplay[indexPath.item]
-            removedTabIndexPath = indexPath
             tabManager.removeTab(tab)
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: ""))
         }
@@ -645,19 +638,46 @@ extension TabTrayController: TabCellDelegate {
     func tabCellDidClose(cell: TabCell) {
         let indexPath = collectionView.indexPathForCell(cell)!
         let tab = tabsToDisplay[indexPath.item]
-        removedTabIndexPath = indexPath
         tabManager.removeTab(tab)
     }
 }
 
 private class TabManagerDataSource: NSObject, UICollectionViewDataSource {
     unowned var cellDelegate: protocol<TabCellDelegate, SwipeAnimatorDelegate>
-    var tabs: [Browser]
+    private var tabs: [Browser]
 
     init(tabs: [Browser], cellDelegate: protocol<TabCellDelegate, SwipeAnimatorDelegate>) {
         self.cellDelegate = cellDelegate
         self.tabs = tabs
         super.init()
+    }
+
+    /**
+     Removes the given tab from the data source
+
+     - parameter tab: Tab to remove
+
+     - returns: The index of the removed tab, -1 if tab did not exist
+     */
+    func removeTab(tabToRemove: Browser) -> Int {
+        var index: Int = -1
+        for (i, tab) in tabs.enumerate() {
+            if tabToRemove === tab {
+                index = i
+                break
+            }
+        }
+        tabs.removeAtIndex(index)
+        return index
+    }
+
+    /**
+     Adds the given tab to the data source
+
+     - parameter tab: Tab to add
+     */
+    func addTab(tab: Browser) {
+        tabs.append(tab)
     }
 
     @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
