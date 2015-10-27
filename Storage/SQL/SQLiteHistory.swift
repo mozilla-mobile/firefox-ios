@@ -250,10 +250,39 @@ extension SQLiteHistory: BrowserHistory {
 
     public func getSitesByFrecencyWithLimit(limit: Int, includeIcon: Bool) -> Deferred<Maybe<Cursor<Site>>> {
         // Exclude redirect domains. Bug 1194852.
-        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
-        let groupBy = "GROUP BY domain_id "
-
+        let (whereData, groupBy) = self.topSiteClauses()
         return self.getFilteredSitesByFrecencyWithLimit(limit, groupClause: groupBy, whereData: whereData, includeIcon: includeIcon)
+    }
+
+    public func getTopSitesWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
+        let purgeTopSites: () -> Success = {
+            let deleteQuery = "DELETE FROM \(TableCachedTopSites)"
+            return self.db.run(deleteQuery, withArgs: nil)
+        }
+
+        let insertTopSites: () -> Success = { frecencyResults in
+            let (whereData, groupBy) = self.topSiteClauses()
+            let (query, args) = self.filteredSitesByFrecencyQueryWithLimit(limit, groupClause: groupBy, whereData: whereData)
+            let insertQuery = "INSERT INTO \(TableCachedTopSites) \(query)"
+            return self.db.run(insertQuery, withArgs: args)
+        }
+
+        let topSitesResult: () -> Deferred<Maybe<Cursor<Site>>> = {
+            // Grab all of the entries for top sites
+            let topSitesQuery = "SELECT * FROM \(TableCachedTopSites) ORDER BY frecencies DESC LIMIT (?)"
+            let factory = SQLiteHistory.iconHistoryColumnFactory
+            return self.db.runQuery(topSitesQuery, args: [limit], factory: factory)
+        }
+
+        let lastComputeTime: Timestamp = 0
+
+        // If the cached data is too stale, dump everything, recompute, cache, and return
+        let now = NSDate.now()
+        if now - lastComputeTime > OneHourInMilliseconds {
+            return (purgeTopSites() >>> insertTopSites) >>> topSitesResult
+        } else {
+            return topSitesResult()
+        }
     }
 
     public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>> {
@@ -302,6 +331,12 @@ extension SQLiteHistory: BrowserHistory {
         let site = basicHistoryColumnFactory(row)
         site.icon = iconColumnFactory(row)
         return site
+    }
+
+    private func topSiteClauses() -> (String, String) {
+        let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
+        let groupBy = "GROUP BY domain_id "
+        return (whereData, groupBy)
     }
 
     private func getFilteredSitesByVisitDateWithLimit(limit: Int,
@@ -362,6 +397,28 @@ extension SQLiteHistory: BrowserHistory {
                                                      groupClause: String = "GROUP BY historyID ",
                                                      whereData: String? = nil,
                                                      includeIcon: Bool = true) -> Deferred<Maybe<Cursor<Site>>> {
+        let factory: (SDRow) -> Site
+        if includeIcon {
+            factory = SQLiteHistory.iconHistoryColumnFactory
+        } else {
+            factory = SQLiteHistory.basicHistoryColumnFactory
+        }
+
+        let (query, args) = filteredSitesByFrecencyQueryWithLimit(limit,
+            whereURLContains: filter,
+            groupClause: groupClause,
+            whereData: whereData,
+            includeIcon: includeIcon
+        )
+
+        return db.runQuery(query, args: args, factory: factory)
+    }
+
+    private func filteredSitesByFrecencyQueryWithLimit(limit: Int,
+                                                       whereURLContains filter: String? = nil,
+                                                       groupClause: String = "GROUP BY historyID ",
+                                                       whereData: String? = nil,
+                                                       includeIcon: Bool = true) -> (String, Args?) {
         let localFrecencySQL = getLocalFrecencySQL()
         let remoteFrecencySQL = getRemoteFrecencySQL()
         let sixMonthsInMicroseconds: UInt64 = 15_724_800_000_000      // 182 * 1000 * 1000 * 60 * 60 * 24
@@ -404,7 +461,7 @@ extension SQLiteHistory: BrowserHistory {
         "((localVisitDate > \(sixMonthsAgo)) OR (remoteVisitDate > \(sixMonthsAgo)))" +    // Exclude really old items.
         ") ORDER BY frecency DESC" +
         " LIMIT 1000"                                 // Don't even look at a huge set. This avoids work.
-
+        
         // Next: merge by domain and sum frecency, ordering by that sum and reducing to a (typically much lower) limit.
         let historySQL =
         "SELECT historyID, url, title, guid, domain_id, domain" +
@@ -417,23 +474,21 @@ extension SQLiteHistory: BrowserHistory {
         groupClause + " " +
         "ORDER BY frecencies DESC " +
         "LIMIT \(limit) "
-
+        
         // Finally: join this small list to the favicon data.
         if includeIcon {
             // We select the history items then immediately join to get the largest icon.
             // We do this so that we limit and filter *before* joining against icons.
             let sql = "SELECT" +
-                      " historyID, url, title, guid, domain_id, domain" +
-                      ", localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount" +
-                      ", iconID, iconURL, iconDate, iconType, iconWidth, frecencies" +
-                      " FROM (\(historySQL)) LEFT OUTER JOIN " +
-                      "view_history_id_favicon ON historyID = view_history_id_favicon.id"
-            let factory = SQLiteHistory.iconHistoryColumnFactory
-            return db.runQuery(sql, args: args, factory: factory)
+            " historyID, url, title, guid, domain_id, domain" +
+            ", localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount" +
+            ", iconID, iconURL, iconDate, iconType, iconWidth, frecencies" +
+            " FROM (\(historySQL)) LEFT OUTER JOIN " +
+            "view_history_id_favicon ON historyID = view_history_id_favicon.id"
+            return (sql, args)
         }
 
-        let factory = SQLiteHistory.basicHistoryColumnFactory
-        return db.runQuery(historySQL, args: args, factory: factory)
+        return (historySQL, args)
     }
 }
 
