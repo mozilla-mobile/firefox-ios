@@ -1361,9 +1361,6 @@ extension BrowserViewController: TabManagerDelegate {
 
             updateURLBarDisplayURL(tab)
 
-            let count = tab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
-            urlBar.updateTabCount(count, animated: false)
-
             if tab.isPrivate {
                 readerModeCache = MemoryReaderModeCache.sharedInstance
                 applyPrivateModeTheme()
