@@ -46,6 +46,7 @@ protocol URLBarDelegate: class {
     func urlBarDidPressScrollToTop(urlBar: URLBarView)
     func urlBar(urlBar: URLBarView, didEnterText text: String)
     func urlBar(urlBar: URLBarView, didSubmitText text: String)
+    func urlBarDisplayTextForURL(url: NSURL?) -> String?
 }
 
 class URLBarView: UIView {
@@ -620,7 +621,8 @@ extension URLBarView: BrowserLocationViewDelegate {
     }
 
     func browserLocationViewDidTapLocation(browserLocationView: BrowserLocationView) {
-        enterOverlayMode(locationView.url?.absoluteString, pasted: false)
+        let locationText = delegate?.urlBarDisplayTextForURL(locationView.url)
+        enterOverlayMode(locationText, pasted: false)
     }
 
     func browserLocationViewDidLongPressLocation(browserLocationView: BrowserLocationView) {

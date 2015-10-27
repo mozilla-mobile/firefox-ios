@@ -20,6 +20,14 @@ class OpenSearchEngine {
     private let searchTemplate: String
     private let suggestTemplate: String?
 
+    private let SearchTermComponent = "{searchTerms}"
+
+    private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
+    private lazy var hostURL: NSURL? = {
+        guard let hostEndIndex = self.searchTemplate.rangeOfString("?")?.startIndex else { return nil }
+        return NSURL(string: self.searchTemplate.substringToIndex(hostEndIndex))
+    }()
+
     init(shortName: String, description: String?, image: UIImage?, searchTemplate: String, suggestTemplate: String?) {
         self.shortName = shortName
         self.description = description
@@ -35,6 +43,39 @@ class OpenSearchEngine {
         return getURLFromTemplate(searchTemplate, query: query)
     }
 
+    private func getQueryArgFromTemplate() -> String? {
+        if let queryStartIndex = searchTemplate.rangeOfString("?")?.startIndex.successor() {
+            let queryArgs = searchTemplate.substringFromIndex(queryStartIndex)
+            let queryParts = queryArgs.componentsSeparatedByString("&").map { $0.componentsSeparatedByString("=") }
+            for part in queryParts {
+                if part[1] == SearchTermComponent {
+                    return part[0]
+                }
+            }
+
+        }
+        return nil
+    }
+
+    /**
+     * check that the URLs have a common prefix that is more than just www.
+     * so that we can ensure we are matching on more than just a shared query parameter
+     **/
+    private func isMatchingURL(url: NSURL?) -> Bool {
+        guard let urlHost = url?.host, hostURLHost = hostURL?.host else { return false }
+        let commonPrefix = urlHost.commonPrefixWithString(hostURLHost, options: NSStringCompareOptions.CaseInsensitiveSearch)
+        return !commonPrefix.isEmpty && commonPrefix != "www."
+    }
+
+    func queryForSearchURL(url: NSURL?) -> String? {
+        if isMatchingURL(url){
+            if let key = searchQueryComponentKey, let value = url?.getQuery()[key] {
+                return value.stringByReplacingOccurrencesOfString("+", withString: " ").stringByRemovingPercentEncoding
+            }
+        }
+        return nil
+    }
+
     /**
      * Returns the search suggestion URL for the given query.
      */
@@ -42,7 +83,6 @@ class OpenSearchEngine {
         if let suggestTemplate = suggestTemplate {
             return getURLFromTemplate(suggestTemplate, query: query)
         }
-
         return nil
     }
 
@@ -57,7 +97,7 @@ class OpenSearchEngine {
             templateAllowedSet.formUnionWithCharacterSet(NSCharacterSet(charactersInString: "{}"))
 
             if let encodedSearchTemplate = searchTemplate.stringByAddingPercentEncodingWithAllowedCharacters(templateAllowedSet) {
-                let urlString = encodedSearchTemplate.stringByReplacingOccurrencesOfString("{searchTerms}", withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                let urlString = encodedSearchTemplate.stringByReplacingOccurrencesOfString(SearchTermComponent, withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
                 return NSURL(string: urlString)
             }
         }
