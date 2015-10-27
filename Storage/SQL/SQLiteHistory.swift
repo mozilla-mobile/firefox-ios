@@ -425,7 +425,7 @@ extension SQLiteHistory: BrowserHistory {
             let sql = "SELECT" +
                       " historyID, url, title, guid, domain_id, domain" +
                       ", localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount" +
-                      ", iconID, iconURL, iconDate, iconType, iconWidth" +
+                      ", iconID, iconURL, iconDate, iconType, iconWidth, frecencies" +
                       " FROM (\(historySQL)) LEFT OUTER JOIN " +
                       "view_history_id_favicon ON historyID = view_history_id_favicon.id"
             let factory = SQLiteHistory.iconHistoryColumnFactory
