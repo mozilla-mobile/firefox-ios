@@ -500,6 +500,26 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
     }
 }
 
+class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
+    func testCachePerf() {
+        let files = MockFiles()
+        let db = BrowserDB(filename: "browser.db", files: files)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)!
+
+        let count = 500
+
+        history.clearHistory().value
+        populateHistoryForFrecencyCalcuations(history, siteCount: count)
+
+        history.purgeTopSitesCache().value
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+            history.getTopSitesWithLimit(100).value
+            self.stopMeasuring()
+        }
+    }
+}
+
 private func populateHistoryForFrecencyCalcuations(history: SQLiteHistory, siteCount count: Int) {
     for i in 0...count {
         let site = Site(url: "http://s\(i)ite\(i)/foo", title: "A \(i)")

@@ -264,6 +264,14 @@ extension SQLiteHistory: BrowserHistory {
         }
     }
 
+    public func purgeTopSitesCache() -> Success {
+        let deleteQuery = "DELETE FROM \(TableCachedTopSites)"
+        return self.db.run(deleteQuery, withArgs: nil) >>> {
+            self.prefs.removeObjectForKey(PrefsKeys.KeyLastFrecencyCacheTime)
+            return succeed()
+        }
+    }
+
     public func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>> {
         return self.getFilteredSitesByFrecencyWithLimit(limit, whereURLContains: filter)
     }
@@ -316,14 +324,6 @@ extension SQLiteHistory: BrowserHistory {
         let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
         let groupBy = "GROUP BY domain_id "
         return (whereData, groupBy)
-    }
-
-    private func purgeTopSitesCache() -> Success {
-        let deleteQuery = "DELETE FROM \(TableCachedTopSites)"
-        return self.db.run(deleteQuery, withArgs: nil) >>> {
-            self.prefs.removeObjectForKey(PrefsKeys.KeyLastFrecencyCacheTime)
-            return succeed()
-        }
     }
 
     private func updateTopSitesCacheWithLimit(limit : Int) -> Success {
