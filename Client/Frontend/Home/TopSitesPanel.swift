@@ -401,34 +401,34 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         return 0
     }
 
-    private func setDefaultThumbnailBackground(cell: ThumbnailCell) {
+    private func setDefaultThumbnailBackgroundForCell(cell: ThumbnailCell) {
         cell.imageView.image = UIImage(named: "defaultTopSiteIcon")!
         cell.imageView.contentMode = UIViewContentMode.Center
     }
 
-    private func getFavicon(cell: ThumbnailCell, site: Site) {
-        self.setDefaultThumbnailBackground(cell)
+    private func getFaviconForCell(cell:ThumbnailCell, site: Site, profile: Profile) {
+        setDefaultThumbnailBackgroundForCell(cell)
+        guard let url = site.url.asURL else { return }
 
-        if let url = site.url.asURL {
-            FaviconFetcher.getForURL(url, profile: profile) >>== { icons in
-                if (icons.count > 0) {
-                    cell.imageView.sd_setImageWithURL(icons[0].url.asURL!) { (img, err, type, url) -> Void in
-                        if let img = img {
-                            cell.backgroundImage.image = img
-                            cell.backgroundEffect?.alpha = 1
-                            cell.image = img
-                        } else {
-                            let icon = Favicon(url: "", date: NSDate(), type: IconType.NoneFound)
-                            self.profile.favicons.addFavicon(icon, forSite: site)
-                            self.setDefaultThumbnailBackground(cell)
-                        }
-                    }
+        FaviconFetcher.getForURL(url, profile: profile) >>== { icons in
+            if icons.count == 0 { return }
+            guard let url = icons[0].url.asURL else { return }
+
+            cell.imageView.sd_setImageWithURL(url) { (img, err, type, url) -> Void in
+                guard let img = img else {
+                    let icon = Favicon(url: "", date: NSDate(), type: IconType.NoneFound)
+                    profile.favicons.addFavicon(icon, forSite: site)
+                    self.setDefaultThumbnailBackgroundForCell(cell)
+                    return
                 }
+
+                cell.image = img
+                cell.backgroundImage.image = img.applyLightEffect()
             }
         }
     }
 
-    private func createTileForSite(cell: ThumbnailCell, site: Site) -> ThumbnailCell {
+    private func configureCell(cell: ThumbnailCell, forSite site: Site, isEditing editing: Bool, profile: Profile) {
 
         // We always want to show the domain URL, not the title.
         //
@@ -442,67 +442,53 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         //
         // Instead we'll painstakingly re-extract those things here.
 
-        let domainURL = NSURL(string: site.url)?.host ?? site.url
+        let domainURL = NSURL(string: site.url)?.normalizedHost() ?? site.url
         cell.textLabel.text = domainURL
-        cell.imageWrapper.backgroundColor = UIColor.clearColor()
+        cell.accessibilityLabel = cell.textLabel.text
+        cell.removeButton.hidden = !editing
 
-        // Resets used cell's background image so that it doesn't get recycled when a tile doesn't update its background image.
-        cell.backgroundImage.image = nil
-        cell.backgroundEffect?.alpha = 0
-
-        if let icon = site.icon {
-            // We've looked before recently and didn't find a favicon
-            switch icon.type {
-            case .NoneFound where NSDate().timeIntervalSinceDate(icon.date) < FaviconFetcher.ExpirationTime:
-                self.setDefaultThumbnailBackground(cell)
-            default:
-                cell.imageView.sd_setImageWithURL(icon.url.asURL, completed: { (img, err, type, url) -> Void in
-                    if let img = img {
-                        cell.backgroundImage.image = img
-                        cell.backgroundEffect?.alpha = 1
-                        cell.image = img
-                    } else {
-                        self.getFavicon(cell, site: site)
-                    }
-                })
-            }
-        } else {
-            getFavicon(cell, site: site)
+        guard let icon = site.icon else {
+            getFaviconForCell(cell, site: site, profile: profile)
+            return
         }
 
-        cell.isAccessibilityElement = true
-        cell.accessibilityLabel = cell.textLabel.text
-        cell.removeButton.hidden = !editingThumbnails
-        return cell
+        // We've looked before recently and didn't find a favicon
+        switch icon.type {
+        case .NoneFound where NSDate().timeIntervalSinceDate(icon.date) < FaviconFetcher.ExpirationTime:
+            self.setDefaultThumbnailBackgroundForCell(cell)
+        default:
+            cell.imageView.sd_setImageWithURL(icon.url.asURL, completed: { (img, err, type, url) -> Void in
+                if let img = img {
+                    cell.image = img
+                    cell.backgroundImage.image = img.applyLightEffect()
+                } else {
+                    self.getFaviconForCell(cell, site: site, profile: profile)
+                }
+            })
+        }
     }
 
-    private func createTileForSuggestedSite(cell: ThumbnailCell, site: SuggestedSite) -> ThumbnailCell {
+    private func configureCell(cell: ThumbnailCell, forSuggestedSite site: SuggestedSite) {
         cell.textLabel.text = site.title.isEmpty ? NSURL(string: site.url)?.normalizedHostAndPath() : site.title
         cell.imageWrapper.backgroundColor = site.backgroundColor
-        cell.backgroundImage.image = nil
-        cell.backgroundEffect?.alpha = 0
+        cell.imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        cell.accessibilityLabel = cell.textLabel.text
 
-        if let icon = site.wordmark.url.asURL,
-           let host = icon.host {
-            if icon.scheme == "asset" {
-                cell.imageView.image = UIImage(named: host)
-            } else {
-                cell.imageView.sd_setImageWithURL(icon, completed: { img, err, type, key in
-                    if img == nil {
-                        self.setDefaultThumbnailBackground(cell)
-                    }
-                })
-            }
-        } else {
-            self.setDefaultThumbnailBackground(cell)
+        guard let icon = site.wordmark.url.asURL,
+            let host = icon.host else {
+                self.setDefaultThumbnailBackgroundForCell(cell)
+                return
         }
 
-        cell.imageView.contentMode = UIViewContentMode.ScaleAspectFit
-        cell.isAccessibilityElement = true
-        cell.accessibilityLabel = cell.textLabel.text
-        cell.removeButton.hidden = true
-
-        return cell
+        if icon.scheme == "asset" {
+            cell.imageView.image = UIImage(named: host)
+        } else {
+            cell.imageView.sd_setImageWithURL(icon, completed: { img, err, type, key in
+                if img == nil {
+                    self.setDefaultThumbnailBackgroundForCell(cell)
+                }
+            })
+        }
     }
 
     subscript(index: Int) -> Site? {
@@ -522,8 +508,11 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as! ThumbnailCell
 
         if indexPath.item >= data.count {
-            return createTileForSuggestedSite(cell, site: site as! SuggestedSite)
+            configureCell(cell, forSuggestedSite: site as! SuggestedSite)
+        } else {
+            configureCell(cell, forSite: site, isEditing: editingThumbnails, profile: profile)
         }
-        return createTileForSite(cell, site: site)
+
+        return cell
     }
 }
