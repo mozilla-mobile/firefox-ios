@@ -148,23 +148,26 @@ class TopSitesPanel: UIViewController {
         // get the number of top sites items we have before we update the data sourcce 
         // this is so we know how many new top sites cells to add
         // as a sync may have brought in more results than we had previously
-        let previousNumberOfTopSitesItems = collectionView.dataSource?.collectionView(collectionView, numberOfItemsInSection: 0) ?? 0
+        let previousNumOfThumbnails = collectionView.dataSource?.collectionView(collectionView, numberOfItemsInSection: 0) ?? 0
 
         // now update the data source with the new data
         self.updateDataSourceWithSites(result)
 
         let data = dataSource.data
-        let numOfThumbnails = self.layout.thumbnailCount
         collection?.performBatchUpdates({
-            // If we have enough data to fill the tiles after the deletion, then delete and insert the next one from data
-            if (data.count + SuggestedSites.count >= numOfThumbnails) {
+
+            // find out how many thumbnails, up the max for display, we can actually add
+            let numOfCellsFromData = data.count + SuggestedSites.count
+            let numOfThumbnails = min(numOfCellsFromData, self.layout.thumbnailCount)
+
+            // If we have enough data to fill the tiles after the deletion, then delete the correct tile and insert any that are missing
+            if (numOfThumbnails >= previousNumOfThumbnails) {
                 self.collection?.deleteItemsAtIndexPaths([indexPath])
-                self.collection?.dataSource?.collectionView(self.collection!, numberOfItemsInSection: 0)
-                let indexesToAdd = (previousNumberOfTopSitesItems-1..<numOfThumbnails).map{ NSIndexPath(forItem: $0, inSection: 0) }
+                let indexesToAdd = ((previousNumOfThumbnails-1)..<numOfThumbnails).map{ NSIndexPath(forItem: $0, inSection: 0) }
                 self.collection?.insertItemsAtIndexPaths(indexesToAdd)
             }
-            // If we don't have enough to fill the thumbnail tile area even with suggested tiles, just delete
-            else if (data.count + SuggestedSites.count) < numOfThumbnails {
+            // If we don't have any data to backfill our tiles, just delete
+            else {
                 self.collection?.deleteItemsAtIndexPaths([indexPath])
             }
         }, completion: { _ in
