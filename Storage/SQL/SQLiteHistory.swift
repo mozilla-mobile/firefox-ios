@@ -320,8 +320,10 @@ extension SQLiteHistory: BrowserHistory {
 
     private func purgeTopSitesCache() -> Success {
         let deleteQuery = "DELETE FROM \(TableCachedTopSites)"
-        prefs.removeObjectForKey(PrefsKeys.KeyLastFrecencyCacheTime)
-        return self.db.run(deleteQuery, withArgs: nil)
+        return self.db.run(deleteQuery, withArgs: nil) >>> {
+            self.prefs.removeObjectForKey(PrefsKeys.KeyLastFrecencyCacheTime)
+            return succeed()
+        }
     }
 
     private func updateTopSitesCacheWithLimit(limit : Int) -> Success {
