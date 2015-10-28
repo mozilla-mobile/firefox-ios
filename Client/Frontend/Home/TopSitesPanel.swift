@@ -210,6 +210,8 @@ class TopSitesPanel: UIViewController {
 extension TopSitesPanel: HomePanel {
     func endEditing() {
         editingThumbnails = false
+
+        collection?.reloadData()
     }
 }
 
