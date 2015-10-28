@@ -4,8 +4,89 @@
 
 import Foundation
 import XCGLogger
+import Shared
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
+
+// A protocol for information about a particular table. This is used as a type to be stored by TableTable.
+protocol TableInfo {
+    var name: String { get }
+    var version: Int { get }
+}
+
+// A wrapper class for table info coming from the TableTable. This should ever only be used internally.
+class TableInfoWrapper: TableInfo {
+    let name: String
+    let version: Int
+    init(name: String, version: Int) {
+        self.name = name
+        self.version = version
+    }
+}
+
+/**
+ * Something that knows how to build and maintain part of a database.
+ * This should really be called "Section" or something like that.
+ */
+protocol Table: TableInfo {
+    func create(db: SQLiteDBConnection, version: Int) -> Bool
+    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool
+    func exists(db: SQLiteDBConnection) -> Bool
+    func drop(db: SQLiteDBConnection) -> Bool
+}
+
+/**
+ * A table in our database. Note this doesn't have to be a real table. It might be backed by a join
+ * or something else interesting.
+ */
+protocol BaseTable: Table {
+    typealias Type
+    func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int?
+    func update(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
+    func delete(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int
+    func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<Type>
+}
+
+
+public enum QuerySort {
+    case None, LastVisit, Frecency
+}
+
+public class QueryOptions {
+    // A filter string to apploy to the query
+    public var filter: AnyObject? = nil
+
+    // Allows for customizing how the filter is applied (i.e. only urls or urls and titles?)
+    public var filterType: FilterType = .None
+
+    // The way to sort the query
+    public var sort: QuerySort = .None
+
+    public init(filter: AnyObject? = nil, filterType: FilterType = .None, sort: QuerySort = .None) {
+        self.filter = filter
+        self.filterType = filterType
+        self.sort = sort
+    }
+}
+
+
+public enum FilterType {
+    case ExactUrl
+    case Url
+    case Guid
+    case Id
+    case None
+}
+
+let DBCouldNotOpenErrorCode = 200
+
+enum TableResult {
+    case Exists
+    case Created
+    case Updated
+    case Failed
+}
+
 
 class GenericTable<T>: BaseTable {
     typealias Type = T
@@ -64,15 +145,25 @@ class GenericTable<T>: BaseTable {
         return err == nil
     }
 
-    func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int {
+    /**
+     * Returns nil or the last inserted row ID.
+     * err will be nil if there was no error (e.g., INSERT OR IGNORE).
+     */
+    func insert(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int? {
         if var site = item {
             if let (query, args) = getInsertAndArgs(&site) {
+                let previous = db.lastInsertedRowID
                 if let error = db.executeChange(query, withArgs: args) {
                     err = error
-                    return -1
+                    return nil
                 }
 
-                return db.lastInsertedRowID
+                let now = db.lastInsertedRowID
+                if previous == now {
+                    log.debug("INSERT did not change last inserted row ID.")
+                    return nil
+                }
+                return now
             }
         }
 
@@ -102,12 +193,10 @@ class GenericTable<T>: BaseTable {
     }
 
     func delete(db: SQLiteDBConnection, item: Type?, inout err: NSError?) -> Int {
-        var numDeleted: Int = 0
-
         if var item: Type? = item {
             if let (query, args) = getDeleteAndArgs(&item) {
                 if let error = db.executeChange(query, withArgs: args) {
-                    println(error.description)
+                    print(error.description)
                     err = error
                     return 0
                 }
@@ -118,8 +207,8 @@ class GenericTable<T>: BaseTable {
         return 0
     }
 
-    func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<T> {
-        if var (query, args) = getQueryAndArgs(options) {
+    func query(db: SQLiteDBConnection, options: QueryOptions?) -> Cursor<Type> {
+        if let (query, args) = getQueryAndArgs(options) {
             if let factory = self.factory {
                 let c =  db.executeQuery(query, factory: factory, withArgs: args)
                 return c

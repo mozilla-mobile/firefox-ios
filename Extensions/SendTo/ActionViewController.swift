@@ -19,7 +19,7 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if profile.getAccount() == nil {
+        if !profile.hasAccount() {
             let instructionsViewController = InstructionsViewController()
             instructionsViewController.delegate = self
             let navigationController = UINavigationController(rootViewController: instructionsViewController)
@@ -47,8 +47,8 @@ class ActionViewController: UIViewController, ClientPickerViewControllerDelegate
     func clientPickerViewController(clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
         // TODO: hook up Send Tab via Sync.
         // profile?.clients.sendItem(self.sharedItem!, toClients: clients)
-        for client in clients {
-            println("Sending tab to \(client.name)")
+        if let item = sharedItem {
+            self.profile.sendItems([item], toClients: clients)
         }
         finish()
     }

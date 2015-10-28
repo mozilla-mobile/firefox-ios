@@ -37,7 +37,7 @@ class HawkHelperTests: XCTestCase {
             "8000\n" +
             "\n" +
             "some-app-ext-data\n";
-        XCTAssertEqual(HawkHelper.getRequestStringFor(req.request, timestampString: String(timestamp), nonce: nonce, hash: "", extra: extra).componentsSeparatedByString("\n"),
+        XCTAssertEqual(HawkHelper.getRequestStringFor(req.request!, timestampString: String(timestamp), nonce: nonce, hash: "", extra: extra).componentsSeparatedByString("\n"),
             expected.componentsSeparatedByString("\n"))
     }
 
@@ -48,7 +48,7 @@ class HawkHelperTests: XCTestCase {
         let timestamp = Int64(1353832234)
         let nonce = "j4h3g2"
         let extra = "some-app-ext-data"
-        let value = helper.getAuthorizationValueFor(req.request, at: timestamp, nonce: nonce, extra: extra)
+        let value = helper.getAuthorizationValueFor(req.request!, at: timestamp, nonce: nonce, extra: extra)
         let expected = "Hawk id=\"dh37fgj492je\", ts=\"1353832234\", nonce=\"j4h3g2\", ext=\"some-app-ext-data\", mac=\"6R4rV5iE+NPoym+WwjeHzjAGXUtLNIxmo1vpMofpLAE=\"";
         XCTAssertEqual(value, expected)
     }
@@ -60,14 +60,14 @@ class HawkHelperTests: XCTestCase {
         let req = Alamofire.request(.POST, NSURL(string: "http://example.com:8000/resource/1?b=1&a=2")!,
             parameters: [:], encoding: .Custom({ convertible, params in
                 // This just makes a POST with a body string.
-                var mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
+                let mutableRequest = convertible.URLRequest.copy() as! NSMutableURLRequest
                 mutableRequest.HTTPBody = body.utf8EncodedData
                 return (mutableRequest, nil)
             }))
         let timestamp = Int64(1353832234)
         let nonce = "j4h3g2"
         let extra = "some-app-ext-data"
-        let value = helper.getAuthorizationValueFor(req.request, at: timestamp, nonce: nonce, extra: extra)
+        let value = helper.getAuthorizationValueFor(req.request!, at: timestamp, nonce: nonce, extra: extra)
         let expected = "Hawk id=\"dh37fgj492je\", ts=\"1353832234\", nonce=\"j4h3g2\", hash=\"Yi9LfIIFRtBEPt74PVmbTF/xVAwPn7ub15ePICfgnuY=\", ext=\"some-app-ext-data\", mac=\"aSe1DERmZuRl3pI36/9BdZmnErTw3sNzOOAUlfeKjVw=\"";
         XCTAssertEqual(value, expected)
     }

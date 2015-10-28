@@ -15,11 +15,11 @@ public enum IconType: Int {
     case AppleIconPrecomposed = 2
     case Guess = 3
     case Local = 4
+    case NoneFound = 5
 }
 
 public class Favicon: Identifiable {
     var id: Int? = nil
-    var img: UIImage? = nil
 
     public let url: String
     public let date: NSDate

@@ -9,7 +9,7 @@ class TestSchemaTable: XCTestCase {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testTable() {
         let files = MockFiles()
-        var db = BrowserDB(filename: "browser.db", files: files)
+        let db = BrowserDB(filename: "browser.db", files: files)
 
         // Test creating a table
         var testTable = getCreateTable()
@@ -17,7 +17,7 @@ class TestSchemaTable: XCTestCase {
 
         // Now make sure the item is in the table-table
         var err: NSError? = nil
-        let table = SchemaTable<TableInfo>()
+        let table = SchemaTable()
         var cursor = db.withReadableConnection(&err) { (connection, err) -> Cursor<TableInfo> in
             return table.query(connection, options: QueryOptions(filter: testTable.name))
         }
@@ -42,14 +42,17 @@ class TestSchemaTable: XCTestCase {
         testTable = getNoOpTable()
         db.createOrUpdate(testTable)
 
-        // Cleanup
-        files.remove("browser.db")
+        do {
+            // Cleanup
+            try files.remove("browser.db")
+        } catch _ {
+        }
     }
 
     // Helper for verifying that the data in a cursor matches whats in a table
     private func verifyTable(cursor: Cursor<TableInfo>, table: TestTable) {
         XCTAssertEqual(cursor.count, 1, "Cursor is the right size")
-        var data = cursor[0] as! TableInfoWrapper
+        let data = cursor[0] as! TableInfoWrapper
         XCTAssertNotNil(data, "Found an object of the right type")
         XCTAssertEqual(data.name, table.name, "Table info has the right name")
         XCTAssertEqual(data.version, table.version, "Table info has the right version")

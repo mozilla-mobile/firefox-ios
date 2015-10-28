@@ -5,8 +5,8 @@
 import Alamofire
 import MessageUI
 
-private let AuroraPropertyListURL = "https://pvtbuilds.mozilla.org/ios/FennecAurora.plist"
-private let AuroraDownloadPageURL = "https://pvtbuilds.mozilla.org/ios/index.html"
+private let AuroraPropertyListURL = "https://people.mozilla.org/iosbuilds/FennecAurora.plist"
+private let AuroraDownloadPageURL = "https://people.mozilla.org/iosbuilds/index.html"
 
 private let AppUpdateTitle = NSLocalizedString("New version available", comment: "Prompt title for application update")
 private let AppUpdateMessage = NSLocalizedString("There is a new version available of Firefox Aurora. Tap OK to go to the download page.", comment: "Prompt message for application update")
@@ -82,8 +82,8 @@ extension AuroraAppDelegate: UIAlertViewDelegate {
     }
 
     private func fetchLatestAuroraVersion(completionHandler: NSString? -> Void) {
-        Alamofire.request(.GET, AuroraPropertyListURL).responsePropertyList(options: NSPropertyListReadOptions.allZeros, completionHandler: { (_, _, object, _) -> Void in
-            if let plist = object as? NSDictionary {
+        Alamofire.request(.GET, AuroraPropertyListURL).responsePropertyList(options: NSPropertyListReadOptions(), completionHandler: { (_, _, object) -> Void in
+            if let plist = object.value as? NSDictionary {
                 if let items = plist["items"] as? NSArray {
                     if let item = items[0] as? NSDictionary {
                         if let metadata = item["metadata"] as? NSDictionary {
@@ -115,14 +115,15 @@ extension AuroraAppDelegate: MFMailComposeViewControllerDelegate {
                 mailComposeViewController.setSubject("Feedback on iOS client version v\(appVersion) (\(buildNumber))")
                 mailComposeViewController.setToRecipients(["ios-feedback@mozilla.com"])
 
-                let imageData = UIImagePNGRepresentation(image)
-                mailComposeViewController.addAttachmentData(imageData, mimeType: "image/png", fileName: "feedback.png")
-                window?.rootViewController?.presentViewController(mailComposeViewController, animated: true, completion: nil)
+                if let imageData = UIImagePNGRepresentation(image) {
+                    mailComposeViewController.addAttachmentData(imageData, mimeType: "image/png", fileName: "feedback.png")
+                    window?.rootViewController?.presentViewController(mailComposeViewController, animated: true, completion: nil)
+                }
             }
         }
     }
 
-    func mailComposeController(mailComposeViewController: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+    func mailComposeController(mailComposeViewController: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
         mailComposeViewController.dismissViewControllerAnimated(true, completion: nil)
     }
 }

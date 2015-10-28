@@ -3,51 +3,58 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
+
+let TableClients = "clients"
+let TableTabs = "tabs"
 
 class RemoteClientsTable<T>: GenericTable<RemoteClient> {
-    override var name: String { return "clients" }
+    override var name: String { return TableClients }
     override var version: Int { return 1 }
 
     // TODO: index on guid and last_modified.
-    override var rows: String { return join(",", [
+    override var rows: String { return [
             "guid TEXT PRIMARY KEY",
             "name TEXT NOT NULL",
             "modified INTEGER NOT NULL",
             "type TEXT",
             "formfactor TEXT",
             "os TEXT",
-        ])
+        ].joinWithSeparator(",")
     }
 
     // TODO: this won't work correctly with NULL fields.
     override func getInsertAndArgs(inout item: RemoteClient) -> (String, [AnyObject?])? {
-        var args = [AnyObject?]()
-        args.append(item.guid)
-        args.append(item.name)
-        args.append(NSNumber(unsignedLongLong: item.modified))
-        args.append(item.type)
-        args.append(item.formfactor)
-        args.append(item.os)
+        let args: Args = [
+            item.guid,
+            item.name,
+            NSNumber(unsignedLongLong: item.modified),
+            item.type,
+            item.formfactor,
+            item.os,
+        ]
         return ("INSERT INTO \(name) (guid, name, modified, type, formfactor, os) VALUES (?, ?, ?, ?, ?, ?)", args)
     }
 
     override func getUpdateAndArgs(inout item: RemoteClient) -> (String, [AnyObject?])? {
-        var args = [AnyObject?]()
-        args.append(item.name)
-        args.append(NSNumber(unsignedLongLong: item.modified))
-        args.append(item.type)
-        args.append(item.formfactor)
-        args.append(item.os)
-        args.append(item.guid)
+        let args: Args = [
+            item.name,
+            NSNumber(unsignedLongLong: item.modified),
+            item.type,
+            item.formfactor,
+            item.os,
+            item.guid,
+        ]
+
         return ("UPDATE \(name) SET name = ?, modified = ?, type = ?, formfactor = ?, os = ? WHERE guid = ?", args)
     }
 
     override func getDeleteAndArgs(inout item: RemoteClient?) -> (String, [AnyObject?])? {
         if let item = item {
             return ("DELETE FROM \(name) WHERE guid = ?", [item.guid])
-        } else {
-            return ("DELETE FROM \(name)", [])
         }
+
+        return ("DELETE FROM \(name)", [])
     }
 
     override var factory: ((row: SDRow) -> RemoteClient)? {
@@ -67,48 +74,68 @@ class RemoteClientsTable<T>: GenericTable<RemoteClient> {
 }
 
 class RemoteTabsTable<T>: GenericTable<RemoteTab> {
-    override var name: String { return "tabs" }
+    override var name: String { return TableTabs }
     override var version: Int { return 2 }
 
     // TODO: index on id, client_guid, last_used, and position.
-    override var rows: String { return join(",", [
+    override var rows: String { return [
             "id INTEGER PRIMARY KEY AUTOINCREMENT", // An individual tab has no GUID from Sync.
             "client_guid TEXT REFERENCES clients(guid) ON DELETE CASCADE",
             "url TEXT NOT NULL",
             "title TEXT", // TODO: NOT NULL throughout.
             "history TEXT",
             "last_used INTEGER",
-        ])
+        ].joinWithSeparator(",")
+    }
+
+    private static func convertHistoryToString(history: [NSURL]) -> String? {
+        let historyAsStrings = optFilter(history.map { $0.absoluteString })
+
+        let data = try! NSJSONSerialization.dataWithJSONObject(historyAsStrings, options: [])
+        return NSString(data: data, encoding: NSUTF8StringEncoding) as? String
+    }
+
+    private func convertStringToHistory(history: String?) -> [NSURL] {
+        if let data = history?.dataUsingEncoding(NSUTF8StringEncoding) {
+            if let urlStrings = try! NSJSONSerialization.JSONObjectWithData(data, options: [NSJSONReadingOptions.AllowFragments]) as? [String] {
+                return optFilter(urlStrings.map { NSURL(string: $0) })
+            }
+        }
+        return []
     }
 
     override func getInsertAndArgs(inout item: RemoteTab) -> (String, [AnyObject?])? {
-        var args = [AnyObject?]()
-        args.append(item.clientGUID)
-        args.append(item.URL.absoluteString!)
-        args.append(item.title)
-        args.append(nil) // TODO: persist history.
-        args.append(NSNumber(unsignedLongLong: item.lastUsed))
+        let args: Args = [
+            item.clientGUID,
+            item.URL.absoluteString,
+            item.title,
+            RemoteTabsTable.convertHistoryToString(item.history),
+            NSNumber(unsignedLongLong: item.lastUsed),
+        ]
+
         return ("INSERT INTO \(name) (client_guid, url, title, history, last_used) VALUES (?, ?, ?, ?, ?)", args)
     }
 
     override func getUpdateAndArgs(inout item: RemoteTab) -> (String, [AnyObject?])? {
-        var args = [AnyObject?]()
-        args.append(item.title)
-        args.append(nil) // TODO: persist history.
-        args.append(NSNumber(unsignedLongLong: item.lastUsed))
+        let args: Args = [
+            item.title,
+            RemoteTabsTable.convertHistoryToString(item.history),
+            NSNumber(unsignedLongLong: item.lastUsed),
 
-        // Key by (client_guid, url) rather than (transient) id.
-        args.append(item.clientGUID)
-        args.append(item.URL.absoluteString!)
+            // Key by (client_guid, url) rather than (transient) id.
+            item.clientGUID,
+            item.URL.absoluteString,
+        ]
+
         return ("UPDATE \(name) SET title = ?, history = ?, last_used = ? WHERE client_guid IS ? AND url = ?", args)
     }
 
     override func getDeleteAndArgs(inout item: RemoteTab?) -> (String, [AnyObject?])? {
         if let item = item {
-            return ("DELETE FROM \(name) WHERE client_guid = IS AND url = ?", [item.clientGUID, item.URL.absoluteString!])
-        } else {
-            return ("DELETE FROM \(name)", [])
+            return ("DELETE FROM \(name) WHERE client_guid = IS AND url = ?", [item.clientGUID, item.URL.absoluteString])
         }
+
+        return ("DELETE FROM \(name)", [])
     }
 
     override var factory: ((row: SDRow) -> RemoteTab)? {
@@ -117,8 +144,8 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
                 clientGUID: row["client_guid"] as? String,
                 URL: NSURL(string: row["url"] as! String)!, // TODO: find a way to make this less dangerous.
                 title: row["title"] as! String,
-                history: [], // TODO: extract history.
-                lastUsed: (row["last_used"] as! NSNumber).unsignedLongLongValue,
+                history: self.convertStringToHistory(row["history"] as? String),
+                lastUsed: row.getTimestamp("last_used")!,
                 icon: nil      // TODO
             )
         }
@@ -126,6 +153,6 @@ class RemoteTabsTable<T>: GenericTable<RemoteTab> {
 
     override func getQueryAndArgs(options: QueryOptions?) -> (String, [AnyObject?])? {
         // Per-client chunks, each chunk in client-order.
-        return ("SELECT * FROM \(name) ORDER BY client_guid DESC, last_used DESC", [])
+        return ("SELECT * FROM \(name) WHERE client_guid IS NOT NULL ORDER BY client_guid DESC, last_used DESC", [])
     }
 }

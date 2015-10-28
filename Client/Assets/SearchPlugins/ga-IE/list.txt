@@ -1,5 +1,5 @@
+amazon-en-GB
 google
+tearma
 twitter
 wikipedia-ga-IE
-focal
-amazon-en-GB

@@ -7,7 +7,7 @@ import Storage
 import XCGLogger
 import XCTest
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 class MockSyncDelegate: SyncDelegate {
     func displaySentTabForURL(URL: NSURL, title: String) {
@@ -22,6 +22,7 @@ class DBPlace: Place {
 }
 
 class MockSyncableHistory {
+    var wasReset: Bool = false
     var places = [GUID: DBPlace]()
     var remoteVisits = [GUID: Set<Visit>]()
     var localVisits = [GUID: Set<Visit>]()
@@ -34,6 +35,13 @@ class MockSyncableHistory {
     }
 }
 
+extension MockSyncableHistory: ResettableSyncStorage {
+    func resetClient() -> Success {
+        self.wasReset = true
+        return succeed()
+    }
+}
+
 extension MockSyncableHistory: SyncableHistory {
     // TODO: consider comparing the timestamp to local visits, perhaps opting to
     // not delete the local place (and instead to give it a new GUID) if the visits
@@ -42,7 +50,7 @@ extension MockSyncableHistory: SyncableHistory {
     // they might apply our new record first, renaming their local copy of
     // the old record with that URL, and thus bring all the old visits back to life.
     // Desktop just finds by GUID then deletes by URL.
-    func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Deferred<Result<()>> {
+    func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Deferred<Maybe<()>> {
         self.remoteVisits.removeValueForKey(guid)
         self.localVisits.removeValueForKey(guid)
         self.places.removeValueForKey(guid)
@@ -84,12 +92,12 @@ extension MockSyncableHistory: SyncableHistory {
         return succeed()
     }
 
-    func insertOrUpdatePlace(place: Place, modified: Timestamp) -> Deferred<Result<GUID>> {
+    func insertOrUpdatePlace(place: Place, modified: Timestamp) -> Deferred<Maybe<GUID>> {
         // See if we've already applied this one.
         if let existingModified = self.places[place.guid]?.serverModified {
             if existingModified == modified {
                 log.debug("Already seen unchanged record \(place.guid).")
-                return deferResult(place.guid)
+                return deferMaybe(place.guid)
             }
         }
 
@@ -107,7 +115,7 @@ extension MockSyncableHistory: SyncableHistory {
                             // Nothing to do: it's marked as changed.
                             log.debug("Discarding remote non-visit changes!")
                             self.places[place.guid]?.serverModified = modified
-                            return deferResult(place.guid)
+                            return deferMaybe(place.guid)
                         } else {
                             log.debug("Discarding local non-visit changes!")
                             self.places[place.guid]?.shouldUpload = false
@@ -125,26 +133,26 @@ extension MockSyncableHistory: SyncableHistory {
                 p.serverModified = modified
                 p.isDeleted = false
                 self.places[place.guid] = p
-                return deferResult(place.guid)
+                return deferMaybe(place.guid)
         }
     }
 
-    func getModifiedHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>> {
+    func getModifiedHistoryToUpload() -> Deferred<Maybe<[(Place, [Visit])]>> {
         // TODO.
-        return deferResult([])
+        return deferMaybe([])
     }
 
-    func getDeletedHistoryToUpload() -> Deferred<Result<[GUID]>> {
+    func getDeletedHistoryToUpload() -> Deferred<Maybe<[GUID]>> {
         // TODO.
-        return deferResult([])
+        return deferMaybe([])
     }
 
-    func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>> {
+    func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>> {
         // TODO
-        return deferResult(0)
+        return deferMaybe(0)
     }
 
-    func markAsDeleted([GUID]) -> Success {
+    func markAsDeleted(_: [GUID]) -> Success {
         // TODO
         return succeed()
     }
@@ -157,7 +165,7 @@ extension MockSyncableHistory: SyncableHistory {
 
 
 class HistorySynchronizerTests: XCTestCase {
-    private func applyRecords(records: [Record<HistoryPayload>], toStorage storage: SyncableHistory) -> HistorySynchronizer {
+    private func applyRecords(records: [Record<HistoryPayload>], toStorage storage: protocol<SyncableHistory, ResettableSyncStorage>) -> (synchronizer: HistorySynchronizer, prefs: Prefs, scratchpad: Scratchpad) {
         let delegate = MockSyncDelegate()
 
         // We can use these useless values because we're directly injecting decrypted
@@ -178,7 +186,7 @@ class HistorySynchronizerTests: XCTestCase {
 
         waitForExpectationsWithTimeout(10, handler: nil)
         XCTAssertTrue(succeeded, "Application succeeded.")
-        return synchronizer
+        return (synchronizer, prefs, scratchpad)
     }
 
     func testApplyRecords() {
@@ -193,7 +201,7 @@ class HistorySynchronizerTests: XCTestCase {
         let noRecords = [Record<HistoryPayload>]()
 
         // Apply no records.
-        assertTimestampIsReasonable(self.applyRecords(noRecords, toStorage: empty))
+        assertTimestampIsReasonable(self.applyRecords(noRecords, toStorage: empty).synchronizer)
 
         // Hey look! Nothing changed.
         XCTAssertTrue(empty.places.isEmpty)
@@ -205,7 +213,8 @@ class HistorySynchronizerTests: XCTestCase {
         let pA = HistoryPayload.fromJSON(JSON.parse(jA))!
         let rA = Record<HistoryPayload>(id: "aaaaaa", payload: pA, modified: earliest + 10000, sortindex: 123, ttl: 1000000)
 
-        assertTimestampIsReasonable(self.applyRecords([rA], toStorage: empty))
+        let (synchronizer, prefs, _) = self.applyRecords([rA], toStorage: empty)
+        assertTimestampIsReasonable(synchronizer)
 
         // The record was stored. This is checking our mock implementation, but real storage should work, too!
 
@@ -214,5 +223,11 @@ class HistorySynchronizerTests: XCTestCase {
         XCTAssertEqual(1, empty.remoteVisits["aaaaaa"]!.count)
         XCTAssertTrue(empty.localVisits.isEmpty)
 
+        // Test resetting now that we have a timestamp.
+        XCTAssertFalse(empty.wasReset)
+        XCTAssertTrue(0 < synchronizer.lastFetched)
+        XCTAssertTrue(HistorySynchronizer.resetSynchronizerWithStorage(empty, basePrefs: prefs, collection: "history").value.isSuccess)
+        XCTAssertTrue(empty.wasReset)
+        XCTAssertFalse(0 < synchronizer.lastFetched)
     }
 }

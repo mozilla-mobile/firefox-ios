@@ -67,8 +67,7 @@ public class KeychainWrapper {
     /// :param: keyName The key to check for.
     /// :returns: True if a value exists for the key. False otherwise.
     public class func hasValueForKey(keyName: String) -> Bool {
-        var keychainData: NSData? = self.dataForKey(keyName)
-        if let data = keychainData {
+        if let _: NSData? = self.dataForKey(keyName) {
             return true
         } else {
             return false
@@ -80,7 +79,7 @@ public class KeychainWrapper {
     /// :param: keyName The key to lookup data for.
     /// :returns: The String associated with the key if it exists. If no data exists, or the data found cannot be encoded as a string, returns nil.
     public class func stringForKey(keyName: String) -> String? {
-        var keychainData: NSData? = self.dataForKey(keyName)
+        let keychainData: NSData? = self.dataForKey(keyName)
         var stringValue: String?
         if let data = keychainData {
             stringValue = NSString(data: data, encoding: NSUTF8StringEncoding) as String?
@@ -256,7 +255,7 @@ public class KeychainWrapper {
         }
 
         // Uniquely identify the account who will be accessing the keychain
-        var encodedIdentifier: NSData? = keyName.dataUsingEncoding(NSUTF8StringEncoding)
+        let encodedIdentifier: NSData? = keyName.dataUsingEncoding(NSUTF8StringEncoding)
 
         keychainQueryDictionary[SecAttrGeneric] = encodedIdentifier
 

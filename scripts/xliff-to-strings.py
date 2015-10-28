@@ -37,7 +37,10 @@ FILES = [
     "Client/Info.plist",
     "Client/Intro.strings",
     "Client/Localizable.strings",
+    "Client/PrivateBrowsing.strings",
     "Client/Search.strings",
+    "Client/Shared.strings",
+    "Client/Storage.strings",
     "Extensions/SendTo/Info.plist",
     "Extensions/SendTo/SendTo.strings",
     "Extensions/ShareTo/ShareTo.strings",
@@ -48,6 +51,8 @@ FILES = [
 # Because Xcode is unpredictable. See bug 1162510 - Sync.strings are not imported
 FILENAME_OVERRIDES = {
     "Shared/Supporting Files/Info.plist": "Shared/Localizable.strings",
+    "Shared/Supporting Files/Shared.strings": "Client/Shared.strings",
+    "Storage.strings": "Client/Storage.strings",
 }
 
 def export_xliff_file(file_node, export_path, target_language):
@@ -64,8 +69,8 @@ def export_xliff_file(file_node, export_path, target_language):
                 if len(notes) == 1:
                     line = u"/* %s */\n" % notes[0].text
                     fp.write(line.encode("utf8"))
-                source_text = trans_unit_id.replace("'", "\\'")
-                target_text = targets[0].text.replace("'", "\\'")
+                source_text = trans_unit_id.replace('"', '\\"')
+                target_text = targets[0].text.replace('"', '\\"')
                 line = u"\"%s\" = \"%s\";\n\n" % (source_text, target_text)
                 fp.write(line.encode("utf8"))
 

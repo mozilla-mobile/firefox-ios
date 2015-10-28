@@ -7,7 +7,18 @@ import WebKit
 import Shared
 import XCGLogger
 
-private var log = XCGLogger.defaultInstance()
+private var log = Logger.syncLogger
+
+enum SyncStatus: Int {
+    // Ordinarily not needed; synced items are removed from the overlay. But they start here when cloned.
+    case Synced = 0
+
+    // A material change that we want to upload on next sync.
+    case Changed = 1
+
+    // Created locally.
+    case New = 2
+}
 
 public enum CommutativeLoginField {
     case TimesUsed(increment: Int)
@@ -106,7 +117,7 @@ public protocol LoginUsageData {
     var timePasswordChanged: MicrosecondTimestamp { get set }
 }
 
-public class Login: Printable, LoginData, LoginUsageData, Equatable {
+public class Login: CustomStringConvertible, LoginData, LoginUsageData, Equatable {
     public var guid: String
 
     public let credentials: NSURLCredential
@@ -139,10 +150,9 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
             let url1 = NSURL(string: value!)
 
             if url1?.host != url2?.host {
-                assertionFailure("Form submit URL domain doesn't match login's domain.")
-                self._formSubmitURL = nil
-                return
+                log.warning("Form submit URL domain doesn't match login's domain.")
             }
+
             self._formSubmitURL = value
         }
     }
@@ -209,18 +219,23 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         ]
     }
 
-    public class func fromScript(url: NSURL, script: [String: String]) -> LoginData {
-        let login = Login(hostname: getPasswordOrigin(url.absoluteString!)!, username: script["username"]!, password: script["password"]!)
+    public class func fromScript(url: NSURL, script: [String: AnyObject]) -> LoginData? {
+        guard let username = script["username"] as? String,
+              let password = script["password"] as? String else {
+                return nil
+        }
 
-        if let formSubmit = script["formSubmitURL"] {
+        let login = Login(hostname: getPasswordOrigin(url.absoluteString)!, username: username, password: password)
+
+        if let formSubmit = script["formSubmitURL"] as? String {
             login.formSubmitURL = formSubmit
         }
 
-        if let passwordField = script["passwordField"] {
+        if let passwordField = script["passwordField"] as? String {
             login.passwordField = passwordField
         }
 
-        if let userField = script["usernameField"] {
+        if let userField = script["usernameField"] as? String {
             login.usernameField = userField
         }
 
@@ -229,16 +244,16 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
 
     private class func getPasswordOrigin(uriString: String, allowJS: Bool = false) -> String? {
         var realm: String? = nil
-        if let uri = NSURL(string: uriString) {
+        if let uri = NSURL(string: uriString) where !uri.scheme.isEmpty {
             if allowJS && uri.scheme == "javascript" {
                 return "javascript:"
             }
 
-            realm = "\(uri.scheme!)://\(uri.host!)"
+            realm = "\(uri.scheme)://\(uri.host!)"
 
             // If the URI explicitly specified a port, only include it when
             // it's not the default. (We never want "http://foo.com:80")
-            if var port = uri.port {
+            if let port = uri.port {
                 realm? += ":\(port)"
             }
         } else {
@@ -269,7 +284,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
      * 3. Applying a merged delta stream to a record. Again, this is unordered, but we
      *    use arrays for convenience.
      */
-    public func deltas(#from: Login) -> LoginDeltas {
+    public func deltas(from from: Login) -> LoginDeltas {
         let commutative: [CommutativeLoginField]
 
         if self.timesUsed > 0 && self.timesUsed != from.timesUsed {
@@ -321,12 +336,12 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         var deltas = Array<T?>(count: count, repeatedValue: nil)
 
         // Let's start with the 'a's.
-        for (let f) in a {
+        for f in a {
             deltas[f.index] = f
         }
 
         // Then detect any conflicts and fill out the rest.
-        for (let f) in b {
+        for f in b {
             let index = f.index
             if deltas[index] != nil {
                 log.warning("Collision in \(T.self) \(f.index). Using latest.")
@@ -341,7 +356,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         return optFilter(deltas)
     }
 
-    public class func mergeDeltas(#a: TimestampedLoginDeltas, b: TimestampedLoginDeltas) -> LoginDeltas {
+    public class func mergeDeltas(a a: TimestampedLoginDeltas, b: TimestampedLoginDeltas) -> LoginDeltas {
         let (aAt, aChanged) = a
         let (bAt, bChanged) = b
         let (aCommutative, aNonCommutative, aNonConflicting) = aChanged
@@ -395,14 +410,14 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
         var timeLastUsed = self.timeLastUsed
         var timePasswordChanged = self.timePasswordChanged
 
-        for (let delta) in deltas.commutative {
+        for delta in deltas.commutative {
             switch delta {
             case let .TimesUsed(increment):
                 timesUsed += increment
             }
         }
 
-        for (let delta) in deltas.nonCommutative {
+        for delta in deltas.nonCommutative {
             switch delta {
             case let .Hostname(to):
                 hostname = to
@@ -431,7 +446,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
             }
         }
 
-        for (let delta) in deltas.nonConflicting {
+        for delta in deltas.nonConflicting {
             switch delta {
             case let .UsernameField(to):
                 usernameField = to
@@ -442,7 +457,7 @@ public class Login: Printable, LoginData, LoginUsageData, Equatable {
             }
         }
 
-        var out = Login(guid: guid, hostname: hostname, username: username!, password: password)
+        let out = Login(guid: guid, hostname: hostname, username: username!, password: password)
         out.timesUsed = timesUsed
         out.httpRealm = httpRealm
         out.formSubmitURL = formSubmitURL
@@ -484,9 +499,9 @@ class LocalLogin: Login {
 }
 
 public protocol BrowserLogins {
-    func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Result<LoginUsageData>>
-    func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Result<Cursor<LoginData>>>
-    func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace, withUsername username: String?) -> Deferred<Result<Cursor<LoginData>>>
+    func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Maybe<LoginUsageData>>
+    func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>>
+    func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace, withUsername username: String?) -> Deferred<Maybe<Cursor<LoginData>>>
 
     // Add a new login regardless of whether other logins might match some fields. Callers
     // are responsible for querying first if they care.
@@ -501,7 +516,7 @@ public protocol BrowserLogins {
     func removeAll() -> Success
 }
 
-public protocol SyncableLogins {
+public protocol SyncableLogins: AccountRemovalDelegate {
     /**
      * Delete the login with the provided GUID. Succeeds if the GUID is unknown.
      */
@@ -509,22 +524,17 @@ public protocol SyncableLogins {
 
     func applyChangedLogin(upstream: ServerLogin) -> Success
 
-    func getModifiedLoginsToUpload() -> Deferred<Result<[Login]>>
-    func getDeletedLoginsToUpload() -> Deferred<Result<[GUID]>>
+    func getModifiedLoginsToUpload() -> Deferred<Maybe<[Login]>>
+    func getDeletedLoginsToUpload() -> Deferred<Maybe<[GUID]>>
 
     /**
      * Chains through the provided timestamp.
      */
-    func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>>
+    func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>>
     func markAsDeleted(guids: [GUID]) -> Success
-
-    /**
-     * Clean up any metadata.
-     */
-    func onRemovedAccount() -> Success
 }
 
-public class LoginDataError: ErrorType {
+public class LoginDataError: MaybeErrorType {
     public let description: String
     public init(description: String) {
         self.description = description

@@ -14,3 +14,20 @@ extension CGRect {
         }
     }
 }
+
+/**
+Generates the affine transform for transforming the first CGRect into the second one
+
+- parameter frame:   CGRect to transform from
+- parameter toFrame: CGRect to transform to
+
+- returns: CGAffineTransform that transforms the first CGRect into the second
+*/
+func CGAffineTransformMakeRectToRect(frame: CGRect, toFrame: CGRect) -> CGAffineTransform {
+    let scale = toFrame.size.width / frame.size.width
+    let tx = toFrame.origin.x + toFrame.width / 2 - (frame.origin.x + frame.width / 2)
+    let ty = toFrame.origin.y - frame.origin.y * scale * 2
+    let translation = CGAffineTransformMakeTranslation(tx, ty)
+    let scaledAndTranslated = CGAffineTransformScale(translation, scale, scale)
+    return scaledAndTranslated
+}

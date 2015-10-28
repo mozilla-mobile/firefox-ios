@@ -9,7 +9,7 @@ import Shared
 // Note that EngineConfiguration is not enough to evolve an existing meta/global:
 // a meta/global generated from this will have different syncIDs and will
 // always use this device's engine versions.
-public class EngineConfiguration {
+public class EngineConfiguration: Equatable {
     let enabled: [String]
     let declined: [String]
     public init(enabled: [String], declined: [String]) {
@@ -18,6 +18,9 @@ public class EngineConfiguration {
     }
 
     public class func fromJSON(json: JSON) -> EngineConfiguration? {
+        if json.isError {
+            return nil
+        }
         if let enabled = jsonsToStrings(json["enabled"].asArray) {
             if let declined = jsonsToStrings(json["declined"].asArray) {
                 return EngineConfiguration(enabled: enabled, declined: declined)
@@ -26,12 +29,19 @@ public class EngineConfiguration {
         return nil
     }
 
-    public func reconcile(meta: [String: EngineMeta]) -> EngineConfiguration {
-        // TODO: when we get a changed meta/global, we need to be able
-        // to reflect its changes into our configuration.
-        // Note that sometimes we also need to make changes to the meta/global
-        // itself -- e.g., missing declined. That should be a method on MetaGlobal.
-        return self
+    public func toJSON() -> JSON {
+        let json: [String: AnyObject] = ["enabled": self.enabled, "declined": self.declined]
+        return JSON(json)
+    }
+}
+
+public func ==(lhs: EngineConfiguration, rhs: EngineConfiguration) -> Bool {
+    return Set(lhs.enabled) == Set(rhs.enabled)
+}
+
+extension EngineConfiguration: CustomStringConvertible {
+    public var description: String {
+        return "EngineConfiguration(enabled: \(self.enabled.sort()), declined: \(self.declined.sort()))"
     }
 }
 
@@ -52,7 +62,7 @@ public struct EngineMeta: Equatable {
 
     public static func mapFromJSON(map: [String: JSON]?) -> [String: EngineMeta]? {
         if let map = map {
-            return optFilter(mapValues(map, EngineMeta.fromJSON))
+            return optFilter(mapValues(map, f: EngineMeta.fromJSON))
         }
         return nil
     }
@@ -70,68 +80,57 @@ public func ==(lhs: EngineMeta, rhs: EngineMeta) -> Bool {
 public struct MetaGlobal: Equatable {
     let syncID: String
     let storageVersion: Int
-    let engines: [String: EngineMeta]?      // Is this really optional?
-    let declined: [String]?
-
-    public static func fromPayload(string: String) -> MetaGlobal? {
-        return fromPayload(JSON(string: string))
-    }
+    let engines: [String: EngineMeta]
+    let declined: [String]
 
     // TODO: is it more useful to support partial globals?
     // TODO: how do we return error states here?
-    public static func fromPayload(json: JSON) -> MetaGlobal? {
+    public static func fromJSON(json: JSON) -> MetaGlobal? {
         if json.isError {
             return nil
         }
         if let syncID = json["syncID"].asString {
             if let storageVersion = json["storageVersion"].asInt {
-                let engines = EngineMeta.mapFromJSON(json["engines"].asDictionary)
-                let declined = json["declined"].asArray
+                let engines = EngineMeta.mapFromJSON(json["engines"].asDictionary) ?? [:]
+                let declined = json["declined"].asArray ?? []
                 return MetaGlobal(syncID: syncID,
                                   storageVersion: storageVersion,
                                   engines: engines,
-                                  declined: jsonsToStrings(declined))
+                                  declined: jsonsToStrings(declined) ?? [])
             }
         }
         return nil
     }
 
     public func enginesPayload() -> JSON {
-        if let engines = engines {
-            return JSON(mapValues(engines, { $0.toJSON() }))
-        }
-        return JSON([:])
+        return JSON(mapValues(engines, f: { $0.toJSON() }))
     }
 
     // TODO: make a whole record JSON for this.
-    public func toPayload() -> JSON {
-        return JSON([
+    public func asPayload() -> CleartextPayloadJSON {
+        let json: JSON = JSON([
             "syncID": self.syncID,
             "storageVersion": self.storageVersion,
             "engines": enginesPayload(),
-            "declined": JSON(self.declined ?? [])
+            "declined": JSON(self.declined)
         ])
+        return CleartextPayloadJSON(json)
+    }
+
+    public func withSyncID(syncID: String) -> MetaGlobal {
+        return MetaGlobal(syncID: syncID, storageVersion: self.storageVersion, engines: self.engines, declined: self.declined)
+    }
+
+    public func engineConfiguration() -> EngineConfiguration {
+        return EngineConfiguration(enabled: Array(engines.keys), declined: declined)
     }
 }
 
 public func ==(lhs: MetaGlobal, rhs: MetaGlobal) -> Bool {
     return (lhs.syncID == rhs.syncID) &&
            (lhs.storageVersion == rhs.storageVersion) &&
-           optArrayEqual(lhs.declined, rhs.declined) &&
-           optDictionaryEqual(lhs.engines, rhs.engines)
-}
-
-public class GlobalEnvelope: EnvelopeJSON {
-    public lazy var global: MetaGlobal? = {
-        return MetaGlobal.fromPayload(self.payload)
-    }()
-
-    public func toFetched() -> Fetched<MetaGlobal>? {
-        if let g = global {
-            return Fetched(value: g, timestamp: self.modified)
-        }
-        return nil
-    }
+           optArrayEqual(lhs.declined, rhs: rhs.declined) &&
+           optDictionaryEqual(lhs.engines, rhs: rhs.engines)
 }
 
 /**

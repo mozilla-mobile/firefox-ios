@@ -7,6 +7,9 @@ import SnapKit
 import Storage
 import ReadingList
 import Shared
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
@@ -20,7 +23,7 @@ private struct ReadingListTableViewCellUX {
     static let ReadIndicatorLeftOffset: CGFloat = 18
     static let ReadAccessibilitySpeechPitch: Float = 0.7 // 1.0 default, 0.0 lowest, 2.0 highest
 
-    static let TitleLabelFont = UIFont.systemFontOfSize(15, weight: UIFontWeightMedium)
+    static let TitleLabelFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightMedium)
     static let TitleLabelTopOffset: CGFloat = 14 - 4
     static let TitleLabelLeftOffset: CGFloat = 16 + 16 + 16
     static let TitleLabelRightOffset: CGFloat = -40
@@ -47,13 +50,13 @@ private struct ReadingListTableViewCellUX {
 private struct ReadingListPanelUX {
     // Welcome Screen
     static let WelcomeScreenTopPadding: CGFloat = 16
-    static let WelcomeScreenPadding: CGFloat = 10
+    static let WelcomeScreenPadding: CGFloat = 15
 
-    static let WelcomeScreenHeaderFont = UIFont.boldSystemFontOfSize(14)
+    static let WelcomeScreenHeaderFont = UIFont.boldSystemFontOfSize(UIConstants.DeviceFontSize - 1)
     static let WelcomeScreenHeaderTextColor = UIColor.darkGrayColor()
 
     static let WelcomeScreenItemFont = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
-    static let WelcomeScreenItemTextColor = UIColor.lightGrayColor()
+    static let WelcomeScreenItemTextColor = UIColor.grayColor()
     static let WelcomeScreenItemWidth = 220
     static let WelcomeScreenItemOffset = -20
 
@@ -83,13 +86,15 @@ class ReadingListTableViewCell: SWTableViewCell {
             titleLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
             hostnameLabel.textColor = unread ? ReadingListTableViewCellUX.ActiveTextColor : ReadingListTableViewCellUX.DimmedTextColor
             markAsReadButton.setTitle(unread ? ReadingListTableViewCellUX.MarkAsReadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText, forState: UIControlState.Normal)
-            markAsReadAction.name = markAsReadButton.titleLabel!.text
+            if let text = markAsReadButton.titleLabel?.text {
+                markAsReadAction.name = text
+            }
             updateAccessibilityLabel()
         }
     }
 
-    private let deleteAction: UIAccessibilityCustomAction
-    private let markAsReadAction: UIAccessibilityCustomAction
+    private var deleteAction: UIAccessibilityCustomAction!
+    private var markAsReadAction: UIAccessibilityCustomAction!
 
     let readStatusImageView: UIImageView!
     let titleLabel: UILabel!
@@ -103,8 +108,6 @@ class ReadingListTableViewCell: SWTableViewCell {
         hostnameLabel = UILabel()
         deleteButton = UIButton()
         markAsReadButton = UIButton()
-        deleteAction = UIAccessibilityCustomAction()
-        markAsReadAction = UIAccessibilityCustomAction()
 
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -150,9 +153,8 @@ class ReadingListTableViewCell: SWTableViewCell {
         deleteButton.setTitle(ReadingListTableViewCellUX.DeleteButtonTitleText, forState: UIControlState.Normal)
         deleteButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         deleteButton.titleEdgeInsets = ReadingListTableViewCellUX.DeleteButtonTitleEdgeInsets
-        deleteAction.name = deleteButton.titleLabel!.text
-        deleteAction.target = self
-        deleteAction.selector = "deleteActionActivated"
+        deleteAction = UIAccessibilityCustomAction(name: ReadingListTableViewCellUX.DeleteButtonTitleText, target: self, selector: "deleteActionActivated")
+
         rightUtilityButtons = [deleteButton]
 
         markAsReadButton.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
@@ -163,15 +165,14 @@ class ReadingListTableViewCell: SWTableViewCell {
         markAsReadButton.setTitle(ReadingListTableViewCellUX.MarkAsReadButtonTitleText, forState: UIControlState.Normal)
         markAsReadButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         markAsReadButton.titleEdgeInsets = ReadingListTableViewCellUX.MarkAsReadButtonTitleEdgeInsets
-        markAsReadAction.name = markAsReadButton.titleLabel!.text
-        markAsReadAction.target = self
-        markAsReadAction.selector = "markAsReadActionActivated"
+        markAsReadAction = UIAccessibilityCustomAction(name: ReadingListTableViewCellUX.MarkAsReadButtonTitleText, target: self, selector: "markAsReadActionActivated")
+
         leftUtilityButtons = [markAsReadButton]
 
         accessibilityCustomActions = [deleteAction, markAsReadAction]
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -181,7 +182,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         let hostname = url.host ?? ""
         for prefix in prefixesToSimplify {
             if hostname.hasPrefix(prefix) {
-                return hostname.substringFromIndex(advance(hostname.startIndex, count(prefix)))
+                return hostname.substringFromIndex(hostname.startIndex.advancedBy(prefix.characters.count))
             }
         }
         return hostname
@@ -219,12 +220,6 @@ class ReadingListTableViewCell: SWTableViewCell {
     }
 }
 
-class ReadingListEmptyStateView: UIView {
-    convenience init() {
-        self.init(frame: CGRectZero)
-    }
-}
-
 class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegate {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var profile: Profile!
@@ -235,10 +230,10 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
     }
 
-    required init!(coder aDecoder: NSCoder!) {
+    required init!(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -272,25 +267,35 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
     }
 
-    func firefoxAccountChanged(notification: NSNotification) {
-        if notification.name == NotificationFirefoxAccountChanged {
-            let prevNumberOfRecords = records?.count
-            if let result = profile.readingList?.getAvailableRecords() where result.isSuccess {
-                records = result.successValue
+    func notificationReceived(notification: NSNotification) {
+        switch notification.name {
+        case NotificationFirefoxAccountChanged:
+            refreshReadingList()
+            break
+        default:
+            // no need to do anything at all
+            log.warning("Received unexpected notification \(notification.name)")
+            break
+        }
+    }
 
-                if records?.count == 0 {
-                    tableView.scrollEnabled = false
-                    if emptyStateOverlayView.superview == nil {
-                        view.addSubview(emptyStateOverlayView)
-                    }
-                } else {
-                    if prevNumberOfRecords == 0 {
-                        tableView.scrollEnabled = true
-                        emptyStateOverlayView.removeFromSuperview()
-                    }
+    func refreshReadingList() {
+        let prevNumberOfRecords = records?.count
+        if let result = profile.readingList?.getAvailableRecords() where result.isSuccess {
+            records = result.successValue
+
+            if records?.count == 0 {
+                tableView.scrollEnabled = false
+                if emptyStateOverlayView.superview == nil {
+                    view.addSubview(emptyStateOverlayView)
                 }
-                self.tableView.reloadData()
+            } else {
+                if prevNumberOfRecords == 0 {
+                    tableView.scrollEnabled = true
+                    emptyStateOverlayView.removeFromSuperview()
+                }
             }
+            self.tableView.reloadData()
         }
     }
 
@@ -298,17 +303,23 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         let overlayView = UIView(frame: tableView.bounds)
         overlayView.backgroundColor = UIColor.whiteColor()
         // Unknown why this does not work with autolayout
-        overlayView.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
+        overlayView.autoresizingMask = [UIViewAutoresizing.FlexibleHeight, UIViewAutoresizing.FlexibleWidth]
 
         let containerView = UIView()
         overlayView.addSubview(containerView)
 
         let logoImageView = UIImageView(image: UIImage(named: "ReadingListEmptyPanel"))
         containerView.addSubview(logoImageView)
-        logoImageView.snp_makeConstraints({ (make) -> Void in
+        logoImageView.snp_makeConstraints { make in
             make.centerX.equalTo(containerView)
-            make.top.equalTo(containerView)
-        })
+            make.centerY.lessThanOrEqualTo(overlayView.snp_centerY).priorityHigh()
+
+            // Sets proper top constraint for iPhone 6 in portait and iPads.
+            make.centerY.equalTo(overlayView.snp_centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
+
+            // Sets proper top constraint for iPhone 4, 5 in portrait.
+            make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50).priorityHigh()
+        }
 
         let welcomeLabel = UILabel()
         containerView.addSubview(welcomeLabel)
@@ -317,11 +328,14 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         welcomeLabel.font = ReadingListPanelUX.WelcomeScreenHeaderFont
         welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
         welcomeLabel.adjustsFontSizeToFitWidth = true
-        welcomeLabel.snp_makeConstraints({ (make) -> Void in
+        welcomeLabel.snp_makeConstraints { make in
             make.centerX.equalTo(containerView)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)
             make.top.equalTo(logoImageView.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
-        })
+
+            // Sets proper center constraint for iPhones in landscape.
+            make.centerY.lessThanOrEqualTo(overlayView.snp_centerY).offset(-40).priorityHigh()
+        }
 
         let readerModeLabel = UILabel()
         containerView.addSubview(readerModeLabel)
@@ -329,18 +343,18 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         readerModeLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
         readerModeLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
         readerModeLabel.numberOfLines = 0
-        readerModeLabel.snp_makeConstraints({ (make) -> Void in
+        readerModeLabel.snp_makeConstraints { make in
             make.top.equalTo(welcomeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
             make.left.equalTo(welcomeLabel.snp_left)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
-        })
+        }
 
         let readerModeImageView = UIImageView(image: UIImage(named: "ReaderModeCircle"))
         containerView.addSubview(readerModeImageView)
-        readerModeImageView.snp_makeConstraints({ (make) -> Void in
+        readerModeImageView.snp_makeConstraints { make in
             make.centerY.equalTo(readerModeLabel)
             make.right.equalTo(welcomeLabel.snp_right)
-        })
+        }
 
         let readingListLabel = UILabel()
         containerView.addSubview(readingListLabel)
@@ -348,28 +362,28 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         readingListLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
         readingListLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
         readingListLabel.numberOfLines = 0
-        readingListLabel.snp_makeConstraints({ (make) -> Void in
+        readingListLabel.snp_makeConstraints { make in
             make.top.equalTo(readerModeLabel.snp_bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
             make.left.equalTo(welcomeLabel.snp_left)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
-        })
+        }
 
         let readingListImageView = UIImageView(image: UIImage(named: "AddToReadingListCircle"))
         containerView.addSubview(readingListImageView)
-        readingListImageView.snp_makeConstraints({ (make) -> Void in
+        readingListImageView.snp_makeConstraints { make in
             make.centerY.equalTo(readingListLabel)
             make.right.equalTo(welcomeLabel.snp_right)
-        })
+        }
 
-        containerView.snp_makeConstraints({ (make) -> Void in
+        containerView.snp_makeConstraints { make in
             // Let the container wrap around the content
-            make.top.equalTo(overlayView.snp_top).offset(20)
-            make.bottom.equalTo(readingListLabel.snp_bottom)
+            make.top.equalTo(logoImageView.snp_top)
             make.left.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
             make.right.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenCircleOffset)
+
             // And then center it in the overlay view that sits on top of the UITableView
             make.centerX.equalTo(overlayView)
-        })
+        }
 
         return overlayView
     }
@@ -424,6 +438,8 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
         if let record = records?[indexPath.row], encodedURL = ReaderModeUtils.encodeURL(NSURL(string: record.url)!) {
+            // Mark the item as read
+            profile.readingList?.updateRecord(record, unread: false)
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.Bookmark
             homePanelDelegate?.homePanel(self, didSelectURL: encodedURL, visitType: visitType)

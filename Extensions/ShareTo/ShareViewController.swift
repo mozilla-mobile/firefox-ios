@@ -34,7 +34,9 @@ private struct ShareDialogControllerUX {
     static let NavigationBarIconSize = 38                                                           // Width and height of the icon
     static let NavigationBarBottomPadding = 12
 
-    static let ItemTitleFont = UIFont.systemFontOfSize(15, weight: UIFontWeightMedium)
+    @available(iOSApplicationExtension 8.2, *)
+    static let ItemTitleFontMedium = UIFont.systemFontOfSize(15, weight: UIFontWeightMedium)
+    static let ItemTitleFont = UIFont.systemFontOfSize(15)
     static let ItemTitleMaxNumberOfLines = 2
     static let ItemTitleLeftPadding = 44
     static let ItemTitleRightPadding = 44
@@ -50,7 +52,8 @@ private struct ShareDialogControllerUX {
     static let DividerHeight = 0.5
 
     static let TableRowHeight: CGFloat = 44                                                         // System default
-    static let TableRowFont = UIFont.systemFontOfSize(UIFont.labelFontSize())
+    static let TableRowFont = UIFont.systemFontOfSize(14)
+    static let TableRowFontMinScale: CGFloat = 0.8
     static let TableRowTintColor = UIColor(red:0.427, green:0.800, blue:0.102, alpha:1.0)           // Green tint for the checkmark
     static let TableRowTextColor = UIColor(rgb: 0x555555)
 
@@ -78,7 +81,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         // Setup the NavigationBar
 
         navBar = UINavigationBar()
-        navBar.setTranslatesAutoresizingMaskIntoConstraints(false)
+        navBar.translatesAutoresizingMaskIntoConstraints = false
         navBar.tintColor = ShareDialogControllerUX.NavigationBarTintColor
         navBar.translucent = false
         self.view.addSubview(navBar)
@@ -102,17 +105,22 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         // Setup the title view
 
         let titleView = UILabel()
-        titleView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        titleView.translatesAutoresizingMaskIntoConstraints = false
         titleView.numberOfLines = ShareDialogControllerUX.ItemTitleMaxNumberOfLines
         titleView.lineBreakMode = NSLineBreakMode.ByTruncatingTail
         titleView.text = item.title
-        titleView.font = ShareDialogControllerUX.ItemTitleFont
+        if #available(iOSApplicationExtension 8.2, *) {
+            titleView.font = ShareDialogControllerUX.ItemTitleFontMedium
+        } else {
+            // Fallback on earlier versions
+            titleView.font = ShareDialogControllerUX.ItemTitleFont
+        }
         view.addSubview(titleView)
 
         // Setup the link view
 
         let linkView = UILabel()
-        linkView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        linkView.translatesAutoresizingMaskIntoConstraints = false
         linkView.numberOfLines = ShareDialogControllerUX.ItemLinkMaxNumberOfLines
         linkView.lineBreakMode = NSLineBreakMode.ByTruncatingTail
         linkView.text = item.url
@@ -122,21 +130,21 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         // Setup the icon
 
         let iconView = UIImageView()
-        iconView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        iconView.translatesAutoresizingMaskIntoConstraints = false
         iconView.image = UIImage(named: "defaultFavicon")
         view.addSubview(iconView)
 
         // Setup the divider
 
         let dividerView = UIView()
-        dividerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        dividerView.translatesAutoresizingMaskIntoConstraints = false
         dividerView.backgroundColor = ShareDialogControllerUX.DividerColor
         view.addSubview(dividerView)
 
         // Setup the table with destinations
 
         let tableView = UITableView()
-        tableView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
         tableView.userInteractionEnabled = true
@@ -179,7 +187,7 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         ]
 
         for constraint in constraints {
-            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(constraint, options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+            view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(constraint, options: NSLayoutFormatOptions(), metrics: nil, views: views))
         }
     }
 
@@ -215,6 +223,8 @@ class ShareDialogController: UIViewController, UITableViewDataSource, UITableVie
         cell.tintColor = ShareDialogControllerUX.TableRowTintColor
         cell.layoutMargins = UIEdgeInsetsZero
         cell.textLabel?.text = ShareDestinations[indexPath.row].name
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
+        cell.textLabel?.minimumScaleFactor = ShareDialogControllerUX.TableRowFontMinScale
         cell.imageView?.image = UIImage(named: ShareDestinations[indexPath.row].image)
         return cell
     }

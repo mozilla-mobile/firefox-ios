@@ -15,8 +15,8 @@ public struct ReadingListServerMetadata: Equatable {
 
     /// Initialize from server record.
     init?(json: AnyObject) {
-        var guid = json.valueForKeyPath("id") as? String
-        var lastModified = json.valueForKeyPath("last_modified") as? NSNumber
+        let guid = json.valueForKeyPath("id") as? String
+        let lastModified = json.valueForKeyPath("last_modified") as? NSNumber
         if guid == nil || lastModified == nil {
             return nil
         }
@@ -25,8 +25,8 @@ public struct ReadingListServerMetadata: Equatable {
     }
 
     init?(row: AnyObject) {
-        var guid = row.valueForKeyPath("id") as? String
-        var lastModified = row.valueForKeyPath("last_modified") as? NSNumber
+        let guid = row.valueForKeyPath("id") as? String
+        let lastModified = row.valueForKeyPath("last_modified") as? NSNumber
         if guid == nil || lastModified == nil {
             return nil
         }

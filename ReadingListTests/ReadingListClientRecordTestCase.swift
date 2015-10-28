@@ -112,13 +112,13 @@ class ReadingListClientRecordTestCase: XCTestCase {
 
         if let record = record {
             let json: AnyObject = record.json
-            XCTAssertEqual(json.valueForKeyPath("url") as! String, "http://localhost/article/1")
-            XCTAssertEqual(json.valueForKeyPath("title") as! String, "Article 1")
-            XCTAssertEqual(json.valueForKeyPath("added_by") as! String, "Stefan's iPhone 3GS")
+            XCTAssertEqual(json.valueForKeyPath("url") as? String, "http://localhost/article/1")
+            XCTAssertEqual(json.valueForKeyPath("title") as? String, "Article 1")
+            XCTAssertEqual(json.valueForKeyPath("added_by") as? String, "Stefan's iPhone 3GS")
 
-            XCTAssertEqual(json.valueForKeyPath("unread") as! Bool, true)
-            XCTAssertEqual(json.valueForKeyPath("archived") as! Bool, false)
-            XCTAssertEqual(json.valueForKeyPath("favorite") as! Bool, true)
+            XCTAssertEqual(json.valueForKeyPath("unread") as? Bool, true)
+            XCTAssertEqual(json.valueForKeyPath("archived") as? Bool, false)
+            XCTAssertEqual(json.valueForKeyPath("favorite") as? Bool, true)
         }
     }
 }

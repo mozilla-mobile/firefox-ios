@@ -22,4 +22,10 @@ extension UIColor {
             blue:  CGFloat((rgb & 0x0000FF) >> 0)  / 255.0,
             alpha: 1)
     }
+
+    public convenience init(colorString: String) {
+        var colorInt: UInt32 = 0
+        NSScanner(string: colorString).scanHexInt(&colorInt)
+        self.init(rgb: (Int) (colorInt ?? 0xaaaaaa))
+    }
 }

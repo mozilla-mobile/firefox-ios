@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 
-class ReadingListStorageError: ErrorType {
+class ReadingListStorageError: MaybeErrorType {
     var message: String
     init(_ message: String) {
         self.message = message
@@ -18,15 +18,15 @@ class ReadingListStorageError: ErrorType {
 
 /// Storage protocol. The only thing the client (application) communicates with is the storage. Adding, removing and updating items.
 protocol ReadingListStorage {
-    func getAllRecords() -> Result<[ReadingListClientRecord]>
-    func getNewRecords() -> Result<[ReadingListClientRecord]>
+    func getAllRecords() -> Maybe<[ReadingListClientRecord]>
+    func getNewRecords() -> Maybe<[ReadingListClientRecord]>
 
     // These are the used by the application
-    func getUnreadRecords() -> Result<[ReadingListClientRecord]>
-    func getAvailableRecords() -> Result<[ReadingListClientRecord]>
-    func deleteRecord(record: ReadingListClientRecord) -> Result<Void>
-    func deleteAllRecords() -> Result<Void>
-    func createRecordWithURL(url: String, title: String, addedBy: String) -> Result<ReadingListClientRecord>
-    func getRecordWithURL(url: String) -> Result<ReadingListClientRecord?>
-    func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Result<ReadingListClientRecord?>
+    func getUnreadRecords() -> Maybe<[ReadingListClientRecord]>
+    func getAvailableRecords() -> Maybe<[ReadingListClientRecord]>
+    func deleteRecord(record: ReadingListClientRecord) -> Maybe<Void>
+    func deleteAllRecords() -> Maybe<Void>
+    func createRecordWithURL(url: String, title: String, addedBy: String) -> Maybe<ReadingListClientRecord>
+    func getRecordWithURL(url: String) -> Maybe<ReadingListClientRecord?>
+    func updateRecord(record: ReadingListClientRecord, unread: Bool) -> Maybe<ReadingListClientRecord?>
 }

@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 import SnapKit
 import UIKit
 import Storage        // For VisitType.
@@ -12,7 +13,7 @@ private struct HomePanelViewControllerUX {
     static let ButtonContainerHeight: CGFloat = 40
     static let ButtonContainerBorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
     static let BackgroundColor = UIConstants.PanelBackgroundColor
-    static let EditDoneButtonLeftPadding: CGFloat = 10
+    static let EditDoneButtonRightPadding: CGFloat = -12
 }
 
 protocol HomePanelViewControllerDelegate: class {
@@ -26,6 +27,10 @@ protocol HomePanelViewControllerDelegate: class {
 protocol HomePanel: class {
     weak var homePanelDelegate: HomePanelDelegate? { get set }
     optional func endEditing()
+}
+
+struct HomePanelUX {
+    static let EmptyTabContentOffset = -180
 }
 
 @objc
@@ -54,12 +59,17 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     override func viewDidLoad() {
         view.backgroundColor = HomePanelViewControllerUX.BackgroundColor
 
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light))
-        view.addSubview(blur)
+        let blur: UIVisualEffectView? = DeviceInfo.isBlurSupported() ? UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light)) : nil
+
+        if let blur = blur {
+            view.addSubview(blur)
+        }
 
         buttonContainerView = UIView()
         buttonContainerView.backgroundColor = HomePanelViewControllerUX.BackgroundColor
         buttonContainerView.clipsToBounds = true
+        buttonContainerView.accessibilityNavigationStyle = .Combined
+        buttonContainerView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarsk, history, remote tabs, reading list).")
         view.addSubview(buttonContainerView)
 
         self.buttonContainerBottomBorderView = UIView()
@@ -69,7 +79,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         controllerContainerView = UIView()
         view.addSubview(controllerContainerView)
 
-        blur.snp_makeConstraints { make in
+        blur?.snp_makeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
@@ -109,21 +119,40 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             }
 
             if let index = oldValue {
-                let currentButton = buttons[index]
-                currentButton.selected = false
+                if index < buttons.count {
+                    let currentButton = buttons[index]
+                    currentButton.selected = false
+                }
             }
 
             hideCurrentPanel()
 
             if let index = selectedButtonIndex {
-                let newButton = buttons[index]
-                newButton.selected = true
+                if index < buttons.count {
+                    let newButton = buttons[index]
+                    newButton.selected = true
+                }
 
-                let panel = self.panels[index].makeViewController(profile: profile)
-                (panel as! HomePanel).homePanelDelegate = self
-                self.showPanel(panel)
+                if index < panels.count {
+                    let panel = self.panels[index].makeViewController(profile: profile)
+                    let accessibilityLabel = self.panels[index].accessibilityLabel
+                    if let panelController = panel as? UINavigationController,
+                     let rootPanel = panelController.viewControllers.first {
+                        setupHomePanel(rootPanel, accessibilityLabel: accessibilityLabel)
+                        self.showPanel(panelController)
+                    } else {
+                        setupHomePanel(panel, accessibilityLabel: accessibilityLabel)
+                        self.showPanel(panel)
+                    }
+                }
             }
         }
+    }
+
+    func setupHomePanel(panel: UIViewController, accessibilityLabel: String) {
+        (panel as? HomePanel)?.homePanelDelegate = self
+        panel.view.accessibilityNavigationStyle = .Combined
+        panel.view.accessibilityLabel = accessibilityLabel
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -131,24 +160,25 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     private func hideCurrentPanel() {
-        if let panel = childViewControllers.first as? UIViewController {
+        if let panel = childViewControllers.first {
+            panel.willMoveToParentViewController(nil)
             panel.view.removeFromSuperview()
             panel.removeFromParentViewController()
         }
     }
 
     private func showPanel(panel: UIViewController) {
+        addChildViewController(panel)
         controllerContainerView.addSubview(panel.view)
         panel.view.snp_makeConstraints { make in
             make.top.equalTo(self.buttonContainerView.snp_bottom)
             make.left.right.bottom.equalTo(self.view)
         }
-
-        addChildViewController(panel)
+        panel.didMoveToParentViewController(self)
     }
 
     func SELtappedButton(sender: UIButton!) {
-        for (index, button) in enumerate(buttons) {
+        for (index, button) in buttons.enumerate() {
             if (button == sender) {
                 selectedButtonIndex = index
                 delegate?.homePanelViewController(self, didSelectPanel: index)
@@ -214,25 +244,26 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     func toggleEditingMode(editing: Bool) {
-        let translateUp = CGAffineTransformMakeTranslation(0, -UIConstants.ToolbarHeight)
         let translateDown = CGAffineTransformMakeTranslation(0, UIConstants.ToolbarHeight)
+        let translateUp = CGAffineTransformMakeTranslation(0, -UIConstants.ToolbarHeight)
 
         if editing {
-            let button = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+            let button = UIButton(type: UIButtonType.System)
             button.setTitle(NSLocalizedString("Done", comment: "Done editing button"), forState: UIControlState.Normal)
             button.addTarget(self, action: "endEditing:", forControlEvents: UIControlEvents.TouchUpInside)
             button.transform = translateDown
+            button.titleLabel?.textAlignment = .Right
             self.buttonContainerView.addSubview(button)
             button.snp_makeConstraints { make in
-                make.left.equalTo(self.buttonContainerView).offset(HomePanelViewControllerUX.EditDoneButtonLeftPadding)
+                make.right.equalTo(self.buttonContainerView).offset(HomePanelViewControllerUX.EditDoneButtonRightPadding)
                 make.centerY.equalTo(self.buttonContainerView)
             }
             self.buttonContainerView.layoutIfNeeded()
             finishEditingButton = button
         }
 
-        UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: UIViewAnimationOptions.AllowUserInteraction |  UIViewAnimationOptions.CurveEaseInOut, animations: { () -> Void in
-            self.buttons.map { $0.transform = editing ? translateUp : CGAffineTransformIdentity }
+        UIView.animateWithDuration(0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: [UIViewAnimationOptions.AllowUserInteraction, UIViewAnimationOptions.CurveEaseInOut], animations: { () -> Void in
+            self.buttons.forEach { $0.transform = editing ? translateUp : CGAffineTransformIdentity }
             self.finishEditingButton?.transform = editing ? CGAffineTransformIdentity : translateDown
         }, completion: { _ in
             if !editing {

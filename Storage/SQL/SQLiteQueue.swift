@@ -6,17 +6,16 @@ import Foundation
 import Shared
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 public class SQLiteQueue: TabQueue {
     let db: BrowserDB
 
     public init(db: BrowserDB) {
-        self.db = db
-
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
         db.createOrUpdate(BrowserTable())
+        self.db = db
     }
 
     public func addToQueue(tab: ShareItem) -> Success {
@@ -28,7 +27,7 @@ public class SQLiteQueue: TabQueue {
         return ShareItem(url: row["url"] as! String, title: row["title"] as? String, favicon: nil)
     }
 
-    public func getQueuedTabs() -> Deferred<Result<Cursor<ShareItem>>> {
+    public func getQueuedTabs() -> Deferred<Maybe<Cursor<ShareItem>>> {
         return db.runQuery("SELECT url, title FROM \(TableQueuedTabs)", args: nil, factory: self.factory)
     }
 

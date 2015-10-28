@@ -47,8 +47,6 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         // Check that it appears in the bookmarks home panel
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().tapViewWithAccessibilityLabel("Bookmarks")
-        let bookmarkRow = tester().waitForViewWithAccessibilityLabel("Page 1") as! UITableViewCell
-        XCTAssertNotNil(bookmarkRow.imageView?.image)
 
         // Tap to open it
         tester().tapViewWithAccessibilityLabel("Page 1")
@@ -62,6 +60,9 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().tapViewWithAccessibilityLabel("Bookmarks")
         tester().waitForAbsenceOfViewWithAccessibilityLabel("Page 1")
+
+        // The "default" bookmarks (suggested sites) should now show here.
+        tester().waitForViewWithAccessibilityLabel("The Mozilla Project")
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
@@ -74,7 +75,7 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
 
         // Bookmark it using the bookmark button
         tester().tapViewWithAccessibilityLabel("Bookmark")
-        var bookmarkButton = tester().waitForViewWithAccessibilityLabel("Bookmark") as! UIButton
+        let bookmarkButton = tester().waitForViewWithAccessibilityLabel("Bookmark") as! UIButton
         XCTAssertTrue(bookmarkButton.selected, "Bookmark button is marked selected")
 
         // Check that its row in the bookmarks panel has a url instead of a title
@@ -89,6 +90,6 @@ class BookmarkingTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
-        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearHistoryItems(tester())
     }
 }

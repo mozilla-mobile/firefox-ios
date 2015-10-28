@@ -18,10 +18,10 @@ class SearchTests: XCTestCase {
         XCTAssertNil(engine.description)
 
         // Test regular search queries.
-        XCTAssertEqual(engine.searchURLForQuery("foobar")!.absoluteString!, "https://www.google.com/search?q=foobar&ie=utf-8&oe=utf-8")
+        XCTAssertEqual(engine.searchURLForQuery("foobar")!.absoluteString, "https://www.google.com/search?q=foobar&ie=utf-8&oe=utf-8")
 
         // Test search suggestion queries.
-        XCTAssertEqual(engine.suggestURLForQuery("foobar")!.absoluteString!, "https://www.google.com/complete/search?client=firefox&q=foobar")
+        XCTAssertEqual(engine.suggestURLForQuery("foobar")!.absoluteString, "https://www.google.com/complete/search?client=firefox&q=foobar")
     }
 
     func testURIFixup() {
@@ -45,7 +45,7 @@ class SearchTests: XCTestCase {
     }
 
     private func checkValidURL(beforeFixup: String, afterFixup: String) {
-        XCTAssertEqual(uriFixup.getURL(beforeFixup)!.absoluteString!, afterFixup)
+        XCTAssertEqual(uriFixup.getURL(beforeFixup)!.absoluteString, afterFixup)
     }
 
     private func checkInvalidURL(beforeFixup: String) {
@@ -56,33 +56,38 @@ class SearchTests: XCTestCase {
         let webServerBase = startMockSuggestServer()
 
         let engine = OpenSearchEngine(shortName: "Mock engine", description: nil, image: nil, searchTemplate: "", suggestTemplate: "\(webServerBase)?q={searchTerms}")
-        let client = SearchSuggestClient(searchEngine: engine)
+        let client = SearchSuggestClient(searchEngine: engine, userAgent: "Fx-testSuggestClient")
+
 
         let query1 = self.expectationWithDescription("foo query")
         client.query("foo", callback: { response, error in
-            if error != nil {
-                XCTFail("Error: \(error?.description)")
+            withExtendedLifetime(client) {
+                if error != nil {
+                    XCTFail("Error: \(error?.description)")
+                }
+
+                XCTAssertEqual(response![0], "foo")
+                XCTAssertEqual(response![1], "foo2")
+                XCTAssertEqual(response![2], "foo you")
+
+                query1.fulfill()
             }
-
-            XCTAssertEqual(response![0], "foo")
-            XCTAssertEqual(response![1], "foo2")
-            XCTAssertEqual(response![2], "foo you")
-
-            query1.fulfill()
         })
         waitForExpectationsWithTimeout(10, handler: nil)
 
         let query2 = self.expectationWithDescription("foo bar query")
         client.query("foo bar", callback: { response, error in
-            if error != nil {
-                XCTFail("Error: \(error?.description)")
+            withExtendedLifetime(client) {
+                if error != nil {
+                    XCTFail("Error: \(error?.description)")
+                }
+
+                XCTAssertEqual(response![0], "foo bar soap")
+                XCTAssertEqual(response![1], "foo barstool")
+                XCTAssertEqual(response![2], "foo bartender")
+
+                query2.fulfill()
             }
-
-            XCTAssertEqual(response![0], "foo bar soap")
-            XCTAssertEqual(response![1], "foo barstool")
-            XCTAssertEqual(response![2], "foo bartender")
-
-            query2.fulfill()
         })
         waitForExpectationsWithTimeout(10, handler: nil)
     }

@@ -9,6 +9,10 @@ public class NSUserDefaultsPrefs: Prefs {
     private let prefixWithDot: String
     private let userDefaults: NSUserDefaults
 
+    public func getBranchPrefix() -> String {
+        return self.prefixWithDot
+    }
+
     init(prefix: String, userDefaults: NSUserDefaults) {
         self.prefixWithDot = prefix + (prefix.endsWith(".") ? "" : ".")
         self.userDefaults = userDefaults
@@ -16,7 +20,7 @@ public class NSUserDefaultsPrefs: Prefs {
 
     init(prefix: String) {
         self.prefixWithDot = prefix + (prefix.endsWith(".") ? "" : ".")
-        self.userDefaults = NSUserDefaults(suiteName: ExtensionUtils.sharedContainerIdentifier())!
+        self.userDefaults = NSUserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
     }
 
     public func branch(branch: String) -> Prefs {
@@ -98,7 +102,7 @@ public class NSUserDefaultsPrefs: Prefs {
 
     public func stringArrayForKey(defaultName: String) -> [String]? {
         let objects = userDefaults.stringArrayForKey(qualifyKey(defaultName))
-        if let strings = objects as? [String] {
+        if let strings = objects {
             return strings
         }
         return nil
@@ -109,7 +113,7 @@ public class NSUserDefaultsPrefs: Prefs {
     }
 
     public func dictionaryForKey(defaultName: String) -> [String : AnyObject]? {
-        return userDefaults.dictionaryForKey(qualifyKey(defaultName)) as? [String:AnyObject]
+        return userDefaults.dictionaryForKey(qualifyKey(defaultName))
     }
 
     public func removeObjectForKey(defaultName: String) {
@@ -120,7 +124,6 @@ public class NSUserDefaultsPrefs: Prefs {
         // TODO: userDefaults.removePersistentDomainForName() has no effect for app group suites.
         // iOS Bug? Iterate and remove each manually for now.
         for key in userDefaults.dictionaryRepresentation().keys {
-            let key = key as! String
             if key.startsWith(prefixWithDot) {
                 userDefaults.removeObjectForKey(key)
             }

@@ -7,8 +7,8 @@ import Shared
 import Storage
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
-private let PasswordsStorageVersion = 1
+private let log = Logger.syncLogger
+let PasswordsStorageVersion = 1
 
 private func makeDeletedLoginRecord(guid: GUID) -> Record<LoginPayload> {
     // Local modified time is ignored in upload serialization.
@@ -136,7 +136,7 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
             }
         }
 
-        return deferResult(lastTimestamp)
+        return deferMaybe(lastTimestamp)
             >>== uploadDeleted
             >>== uploadModified
             >>> effect({ log.debug("Done syncing.") })
@@ -145,31 +145,31 @@ public class LoginsSynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
     public func synchronizeLocalLogins(logins: SyncableLogins, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
         if let reason = self.reasonToNotSync(storageClient) {
-            return deferResult(.NotStarted(reason))
+            return deferMaybe(.NotStarted(reason))
         }
 
         let encoder = RecordEncoder<LoginPayload>(decode: { LoginPayload($0) }, encode: { $0 })
-        if let passwordsClient = self.collectionClient(encoder, storageClient: storageClient) {
-            let since: Timestamp = self.lastFetched
-            log.debug("Synchronizing \(self.collection). Last fetched: \(since).")
-
-            let applyIncomingToStorage: StorageResponse<[Record<LoginPayload>]> -> Success = { response in
-                let ts = response.metadata.timestampMilliseconds
-                let lm = response.metadata.lastModifiedMilliseconds!
-                log.debug("Applying incoming password records from response timestamped \(ts), last modified \(lm).")
-                log.debug("Records header hint: \(response.metadata.records)")
-                return self.applyIncomingToStorage(logins, records: response.value, fetched: lm)
-            }
-            return passwordsClient.getSince(since)
-                >>== applyIncomingToStorage
-                // TODO: If we fetch sorted by date, we can bump the lastFetched timestamp
-                // to the last successfully applied record timestamp, no matter where we fail.
-                // There's no need to do the upload before bumping -- the storage of local changes is stable.
-                >>> { self.uploadOutgoingFromStorage(logins, lastTimestamp: 0, withServer: passwordsClient) }
-                >>> { return deferResult(.Completed) }
+        guard let passwordsClient = self.collectionClient(encoder, storageClient: storageClient) else {
+            log.error("Couldn't make logins factory.")
+            return deferMaybe(FatalError(message: "Couldn't make logins factory."))
         }
 
-        log.error("Couldn't make logins factory.")
-        return deferResult(FatalError(message: "Couldn't make logins factory."))
+        let since: Timestamp = self.lastFetched
+        log.debug("Synchronizing \(self.collection). Last fetched: \(since).")
+
+        let applyIncomingToStorage: StorageResponse<[Record<LoginPayload>]> -> Success = { response in
+            let ts = response.metadata.timestampMilliseconds
+            let lm = response.metadata.lastModifiedMilliseconds!
+            log.debug("Applying incoming password records from response timestamped \(ts), last modified \(lm).")
+            log.debug("Records header hint: \(response.metadata.records)")
+            return self.applyIncomingToStorage(logins, records: response.value, fetched: lm)
+        }
+        return passwordsClient.getSince(since)
+            >>== applyIncomingToStorage
+            // TODO: If we fetch sorted by date, we can bump the lastFetched timestamp
+            // to the last successfully applied record timestamp, no matter where we fail.
+            // There's no need to do the upload before bumping -- the storage of local changes is stable.
+            >>> { self.uploadOutgoingFromStorage(logins, lastTimestamp: 0, withServer: passwordsClient) }
+            >>> { return deferMaybe(.Completed) }
     }
 }

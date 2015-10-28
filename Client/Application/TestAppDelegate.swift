@@ -8,7 +8,7 @@ class TestAppDelegate: AppDelegate {
     override func getProfile(application: UIApplication) -> Profile {
         // Use a clean profile for each test session.
         let profile = BrowserProfile(localName: "testProfile", app: application)
-        profile.files.removeFilesInDirectory()
+        _ = try? profile.files.removeFilesInDirectory()
         profile.prefs.clearAll()
 
         // Skip the first run UI.

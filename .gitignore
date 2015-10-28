@@ -15,6 +15,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+*.xcscmblueprint
 
 # OS X
 .DS_Store
@@ -28,5 +29,13 @@ DerivedData
 
 Carthage/
 
+ThirdParty/google-breakpad
+
 # Saved Sync credentials for tests.
 signedInUser.json
+
+# Generated config file
+MozBuildID.xcconfig
+
+# Python.
+*.pyc

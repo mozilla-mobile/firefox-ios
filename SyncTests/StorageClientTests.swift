@@ -8,6 +8,12 @@ import XCTest
 
 class StorageClientTests: XCTestCase {
 
+    func testPartialJSON() {
+        let body = "0"
+        let o: AnyObject? = try! NSJSONSerialization.JSONObjectWithData(body.dataUsingEncoding(NSUTF8StringEncoding)!, options: NSJSONReadingOptions.AllowFragments)
+        XCTAssertTrue(JSON(o!).isInt)
+    }
+
     func testPOSTResult() {
         // Pulled straight from <http://docs.services.mozilla.com/storage/apis-1.5.html>.
         let r = "{" +
@@ -28,7 +34,7 @@ class StorageClientTests: XCTestCase {
     }
 
     func testNumeric() {
-        let m = ResponseMetadata(headers: [
+        let m = ResponseMetadata(status: 200, headers: [
             "X-Last-Modified": "2174380461.12",
         ])
         XCTAssertTrue(m.lastModifiedMilliseconds == 2174380461120)
@@ -40,7 +46,7 @@ class StorageClientTests: XCTestCase {
     // and for response header parsing.
     func testResponseHeaders() {
         let v: JSON = JSON.parse("{\"a:\": 2}")
-        let m = ResponseMetadata(headers: [
+        let m = ResponseMetadata(status: 200, headers: [
             "X-Weave-Timestamp": "1274380461.12",
             "X-Last-Modified":   "2174380461.12",
             "X-Weave-Next-Offset": "abdef",

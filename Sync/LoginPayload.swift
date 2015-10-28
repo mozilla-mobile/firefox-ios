@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 public class LoginPayload: CleartextPayloadJSON {
     private static let OptionalStringFields = [
@@ -41,9 +41,11 @@ public class LoginPayload: CleartextPayloadJSON {
         if !super.isValid() {
             return false
         }
-        if self["deleted"].isBool {
+
+        if self["deleted"].asBool ?? false {
             return true
         }
+
         if !LoginPayload.RequiredStringFields.every({ self[$0].isString }) {
             return false
         }

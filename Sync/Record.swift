@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 let ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60;
 
@@ -60,7 +60,7 @@ public class Record<T: CleartextPayloadJSON> {
             return Record<T>(envelope: envelope, payload: payload!)
         }
 
-        log.error("Invalid payload \(payload!.toString(pretty: true)).")
+        log.error("Invalid payload \(payload!.toString(true)).")
         return nil
     }
 

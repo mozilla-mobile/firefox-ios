@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Shared
@@ -8,13 +8,17 @@ import XCGLogger
 
 private let CurrentSyncAuthStateCacheVersion = 1
 
-// TODO: manage this logging better.
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 public struct SyncAuthStateCache {
     let token: TokenServerToken
     let forKey: NSData
     let expiresAt: Timestamp
+}
+
+public protocol SyncAuthState {
+    func invalidate()
+    func token(now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>>
 }
 
 public func syncAuthStateCachefromJSON(json: JSON) -> SyncAuthStateCache? {
@@ -44,7 +48,7 @@ extension SyncAuthStateCache: JSONLiteralConvertible {
     }
 }
 
-public class SyncAuthState {
+public class FirefoxAccountSyncAuthState: SyncAuthState {
     private let account: FirefoxAccount
     private let cache: KeychainCache<SyncAuthStateCache>
 
@@ -65,7 +69,7 @@ public class SyncAuthState {
     // It's tricky to get Swift to recurse into a closure that captures from the environment without
     // segfaulting the compiler, so we pass everything around, like barbarians.
     private func generateAssertionAndFetchTokenAt(audience: String, client: TokenServerClient, clientState: String?, married: MarriedState,
-            now: Timestamp, retryCount: Int) -> Deferred<Result<TokenServerToken>> {
+            now: Timestamp, retryCount: Int) -> Deferred<Maybe<TokenServerToken>> {
         let assertion = married.generateAssertionForAudience(audience, now: now)
         return client.token(assertion, clientState: clientState).bind { result in
             if retryCount > 0 {
@@ -87,7 +91,7 @@ public class SyncAuthState {
         }
     }
 
-    public func token(now: Timestamp, canBeExpired: Bool) -> Deferred<Result<(token: TokenServerToken, forKey: NSData)>> {
+    public func token(now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
         if let value = cache.value {
             // Give ourselves some room to do work.
             let isExpired = value.expiresAt < now + 5 * OneMinuteInMilliseconds
@@ -97,12 +101,12 @@ public class SyncAuthState {
                 } else {
                     log.info("Returning cached token, which should be valid.")
                 }
-                return deferResult((token: value.token, forKey: value.forKey))
+                return deferMaybe((token: value.token, forKey: value.forKey))
             }
 
             if !isExpired {
                 log.info("Returning cached token, which should be valid.")
-                return deferResult((token: value.token, forKey: value.forKey))
+                return deferMaybe((token: value.token, forKey: value.forKey))
             }
         }
 
@@ -127,9 +131,9 @@ public class SyncAuthState {
                         self.cache.value = newCache
                     }
                 }
-                return chain(deferred, { (token: $0, forKey: married.kB) })
+                return chain(deferred, f: { (token: $0, forKey: married.kB) })
             }
-            return deferResult(result.failureValue!)
+            return deferMaybe(result.failureValue!)
         }
     }
 }

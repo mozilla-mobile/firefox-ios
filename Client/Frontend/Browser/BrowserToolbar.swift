@@ -14,12 +14,13 @@ protocol BrowserToolbarProtocol {
     var forwardButton: UIButton { get }
     var backButton: UIButton { get }
     var stopReloadButton: UIButton { get }
+    var actionButtons: [UIButton] { get }
 
     func updateBackStatus(canGoBack: Bool)
     func updateForwardStatus(canGoForward: Bool)
     func updateBookmarkStatus(isBookmarked: Bool)
     func updateReloadStatus(isLoading: Bool)
-    func updatePageStatus(#isWebPage: Bool)
+    func updatePageStatus(isWebPage isWebPage: Bool)
 }
 
 @objc
@@ -44,6 +45,12 @@ public class BrowserToolbarHelper: NSObject {
     let ImageStop = UIImage(named: "stop")
     let ImageStopPressed = UIImage(named: "stopPressed")
 
+    var buttonTintColor = UIColor.darkGrayColor() {
+        didSet {
+            setTintColor(buttonTintColor, forButtons: toolbar.actionButtons)
+        }
+    }
+
     var loading: Bool = false {
         didSet {
             if loading {
@@ -58,6 +65,10 @@ public class BrowserToolbarHelper: NSObject {
         }
     }
 
+    private func setTintColor(color: UIColor, forButtons buttons: [UIButton]) {
+        buttons.forEach { $0.tintColor = color }
+    }
+
     init(toolbar: BrowserToolbarProtocol) {
         self.toolbar = toolbar
         super.init()
@@ -66,7 +77,7 @@ public class BrowserToolbarHelper: NSObject {
         toolbar.backButton.setImage(UIImage(named: "backPressed"), forState: .Highlighted)
         toolbar.backButton.accessibilityLabel = NSLocalizedString("Back", comment: "Accessibility Label for the browser toolbar Back button")
         //toolbar.backButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
-        var longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack:")
+        let longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBack:")
         toolbar.backButton.addGestureRecognizer(longPressGestureBackButton)
         toolbar.backButton.addTarget(self, action: "SELdidClickBack", forControlEvents: UIControlEvents.TouchUpInside)
 
@@ -74,7 +85,7 @@ public class BrowserToolbarHelper: NSObject {
         toolbar.forwardButton.setImage(UIImage(named: "forwardPressed"), forState: .Highlighted)
         toolbar.forwardButton.accessibilityLabel = NSLocalizedString("Forward", comment: "Accessibility Label for the browser toolbar Forward button")
         //toolbar.forwardButton.accessibilityHint = NSLocalizedString("Double tap and hold to open history", comment: "")
-        var longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward:")
+        let longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressForward:")
         toolbar.forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         toolbar.forwardButton.addTarget(self, action: "SELdidClickForward", forControlEvents: UIControlEvents.TouchUpInside)
 
@@ -92,9 +103,11 @@ public class BrowserToolbarHelper: NSObject {
         toolbar.bookmarkButton.setImage(UIImage(named: "bookmark"), forState: .Normal)
         toolbar.bookmarkButton.setImage(UIImage(named: "bookmarked"), forState: UIControlState.Selected)
         toolbar.bookmarkButton.accessibilityLabel = NSLocalizedString("Bookmark", comment: "Accessibility Label for the browser toolbar Bookmark button")
-        var longPressGestureBookmarkButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBookmark:")
+        let longPressGestureBookmarkButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressBookmark:")
         toolbar.bookmarkButton.addGestureRecognizer(longPressGestureBookmarkButton)
         toolbar.bookmarkButton.addTarget(self, action: "SELdidClickBookmark", forControlEvents: UIControlEvents.TouchUpInside)
+
+        setTintColor(buttonTintColor, forButtons: toolbar.actionButtons)
     }
 
     func SELdidClickBack() {
@@ -153,6 +166,7 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
     let forwardButton: UIButton
     let backButton: UIButton
     let stopReloadButton: UIButton
+    let actionButtons: [UIButton]
 
     var helper: BrowserToolbarHelper?
 
@@ -164,6 +178,7 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
         stopReloadButton = UIButton()
         shareButton = UIButton()
         bookmarkButton = UIButton()
+        actionButtons = [backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton]
 
         super.init(frame: frame)
 
@@ -171,9 +186,11 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
 
         addButtons(backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton)
 
+        accessibilityNavigationStyle = .Combined
+        accessibilityLabel = NSLocalizedString("Navigation Toolbar", comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -193,15 +210,16 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
         helper?.updateReloadStatus(isLoading)
     }
 
-    func updatePageStatus(#isWebPage: Bool) {
+    func updatePageStatus(isWebPage isWebPage: Bool) {
         bookmarkButton.enabled = isWebPage
         stopReloadButton.enabled = isWebPage
         shareButton.enabled = isWebPage
     }
 
     override func drawRect(rect: CGRect) {
-        let context = UIGraphicsGetCurrentContext()
-        drawLine(context, start: CGPoint(x: 0, y: 0), end: CGPoint(x: frame.width, y: 0))
+        if let context = UIGraphicsGetCurrentContext() {
+            drawLine(context, start: CGPoint(x: 0, y: 0), end: CGPoint(x: frame.width, y: 0))
+        }
     }
 
     private func drawLine(context: CGContextRef, start: CGPoint, end: CGPoint) {
@@ -210,5 +228,16 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
         CGContextMoveToPoint(context, start.x, start.y)
         CGContextAddLineToPoint(context, end.x, end.y)
         CGContextStrokePath(context)
+    }
+}
+
+// MARK: UIAppearance
+extension BrowserToolbar {
+    dynamic var actionButtonTintColor: UIColor? {
+        get { return helper?.buttonTintColor }
+        set {
+            guard let value = newValue else { return }
+            helper?.buttonTintColor = value
+        }
     }
 }

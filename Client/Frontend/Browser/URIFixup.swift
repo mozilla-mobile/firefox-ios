@@ -11,7 +11,7 @@ class URIFixup {
 
         // First check if the URL includes a scheme. This will handle
         // all valid requests starting with "http://", "about:", etc.
-        if url?.scheme != nil {
+        if !(url?.scheme.isEmpty ?? true) {
             return url
         }
 

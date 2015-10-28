@@ -73,6 +73,10 @@ var LoginManagerContent = {
 
     var formOrigin = LoginUtils._getPasswordOrigin();
     var actionOrigin = LoginUtils._getActionOrigin(form);
+    if (actionOrigin == null) {
+      return Promise.reject("Action origin is null")
+    }
+
     // XXX - Allowing the page to set origin information in this message is a security problem. Right now its just ignored...
     // TODO: We need to designate what type of message we're sending here...
     var requestData = { form: form };
@@ -316,14 +320,6 @@ var LoginManagerContent = {
     var hostname = LoginUtils._getPasswordOrigin(doc.documentURI);
     if (!hostname) {
       log("(form submission ignored -- invalid hostname)");
-      return;
-    }
-
-    // Somewhat gross hack - we don't want to show the "remember password"
-    // notification on about:accounts for Firefox.
-    var topWin = win.top;
-    if (/^about:accounts($|\?)/i.test(topWin.document.documentURI)) {
-      log("(form submission ignored -- about:accounts)");
       return;
     }
 
@@ -599,19 +595,45 @@ function onBlur(event) {
   LoginManagerContent.onUsernameInput(event)
 }
 
-window.addEventListener("load", function(event) {
-  try {
-    for (var i = 0; i < document.forms.length; i++) {
-      LoginManagerContent._asyncFindLogins(document.forms[i], { })
-                         .then(function(res) {
-                            LoginManagerContent.loginsFound(res.form, res.loginsFound);
-                         }).then(null, log);
-    }
-  } catch(ex) {
-    // Eat errors to avoid leaking them to the page
-    log(ex);
+var documentBody = document.body
+var observer = new MutationObserver(function(mutations) {
+  for(var idx = 0; idx < mutations.length; ++idx){
+    findForms(mutations[idx].addedNodes);
   }
-})
+});
+
+function findForms(nodes) {
+  for (var i = 0; i < nodes.length; i++) {
+    var node = nodes[i];
+    if (node.nodeName === "FORM") {
+      findLogins(node);
+    } else if(node.hasChildNodes()) {
+      findForms(node.childNodes);
+    }
+
+  }
+  return false;
+}
+
+ observer.observe(documentBody, { attributes: false, childList: true, characterData: false, subtree: true });
+
+function findLogins(form) {
+  try {
+      LoginManagerContent._asyncFindLogins(form, { })
+        .then(function(res) {
+          LoginManagerContent.loginsFound(res.form, res.loginsFound);
+        }).then(null, log);
+   } catch(ex) {
+     // Eat errors to avoid leaking them to the page
+     log(ex);
+   }
+ }
+
+ window.addEventListener("load", function(event) {
+   for (var i = 0; i < document.forms.length; i++) {
+     findLogins(document.forms[i]);
+   }
+});
 
 window.addEventListener("submit", function(event) {
   try {

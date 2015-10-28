@@ -13,8 +13,23 @@ private let DetailTextTopMargin = CGFloat(5)
 class TwoLineTableViewCell: UITableViewCell {
     private let twoLineHelper = TwoLineCellHelper()
 
+    let _textLabel = UILabel()
+    let _detailTextLabel = UILabel()
+
+    // Override the default labels with our own to disable default UITableViewCell label behaviours like dynamic type
+    override var textLabel: UILabel? {
+        return _textLabel
+    }
+
+    override var detailTextLabel: UILabel? {
+        return _detailTextLabel
+    }
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: UITableViewCellStyle.Subtitle, reuseIdentifier: reuseIdentifier)
+
+        contentView.addSubview(_textLabel)
+        contentView.addSubview(_detailTextLabel)
 
         twoLineHelper.setUpViews(self, textLabel: textLabel!, detailTextLabel: detailTextLabel!, imageView: imageView!)
 
@@ -23,7 +38,7 @@ class TwoLineTableViewCell: UITableViewCell {
         separatorInset = UIEdgeInsetsMake(0, ImageSize + 2 * ImageMargin, 0, 0)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -56,11 +71,11 @@ class TwoLineCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(detailTextLabel)
         contentView.addSubview(imageView)
 
-        backgroundColor = UIColor.clearColor()
+        contentView.backgroundColor = UIColor.clearColor()
         layoutMargins = UIEdgeInsetsZero
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -91,22 +106,17 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
     let imageView = UIImageView()
 
     // Yes, this is strange.
-    override var textLabel: UILabel {
+    override var textLabel: UILabel? {
         return _textLabel
     }
 
     // Yes, this is strange.
-    override var detailTextLabel: UILabel {
+    override var detailTextLabel: UILabel? {
         return _detailTextLabel
     }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
         twoLineHelper.setUpViews(self, textLabel: _textLabel, detailTextLabel: _detailTextLabel, imageView: imageView)
 
         contentView.addSubview(_textLabel)
@@ -116,7 +126,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView {
         layoutMargins = UIEdgeInsetsZero
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -143,11 +153,14 @@ private class TwoLineCellHelper {
         self.detailTextLabel = detailTextLabel
         self.imageView = imageView
 
-        self.container.backgroundColor = UIColor.clearColor()
+        if let headerView = self.container as? UITableViewHeaderFooterView {
+            headerView.contentView.backgroundColor = UIColor.clearColor()
+        } else {
+            self.container.backgroundColor = UIColor.clearColor()
+        }
 
         textLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
         textLabel.textColor = TextColor
-
         detailTextLabel.font = UIFont.systemFontOfSize(10, weight: UIFontWeightRegular)
         detailTextLabel.textColor = DetailTextColor
 
@@ -159,7 +172,11 @@ private class TwoLineCellHelper {
         let textLeft = ImageSize + 2 * ImageMargin
         let textLabelHeight = textLabel.intrinsicContentSize().height
         let detailTextLabelHeight = detailTextLabel.intrinsicContentSize().height
-        let contentHeight = textLabelHeight + detailTextLabelHeight + DetailTextTopMargin
+        var contentHeight = textLabelHeight
+        if detailTextLabelHeight > 0 {
+            contentHeight += detailTextLabelHeight + DetailTextTopMargin
+        }
+        
         imageView.frame = CGRectMake(ImageMargin, (height - ImageSize) / 2, ImageSize, ImageSize)
         textLabel.frame = CGRectMake(textLeft, (height - contentHeight) / 2,
             container.frame.width - textLeft - ImageMargin, textLabelHeight)

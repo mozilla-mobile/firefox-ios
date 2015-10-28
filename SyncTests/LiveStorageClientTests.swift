@@ -8,7 +8,7 @@ import Shared
 import Account
 import XCTest
 
-private class KeyFetchError: ErrorType {
+private class KeyFetchError: MaybeErrorType {
     var description: String {
         return "key fetch error"
     }
@@ -30,7 +30,7 @@ private class MockBackoffStorage: BackoffStorage {
 }
 
 class LiveStorageClientTests : LiveAccountTest {
-    func getKeys(kB: NSData, token: TokenServerToken) -> Deferred<Result<Record<KeysPayload>>> {
+    func getKeys(kB: NSData, token: TokenServerToken) -> Deferred<Maybe<Record<KeysPayload>>> {
         let endpoint = token.api_endpoint
         XCTAssertTrue(endpoint.rangeOfString("services.mozilla.com") != nil, "We got a Sync server.")
 
@@ -57,47 +57,46 @@ class LiveStorageClientTests : LiveAccountTest {
             // Unwrap the response.
             res in
             if let r = res.successValue {
-                return Result(success: r.value)
+                return Maybe(success: r.value)
             }
-            return Result(failure: KeyFetchError())
+            return Maybe(failure: KeyFetchError())
         })
     }
 
-    func getState(user: String, password: String) -> Deferred<Result<FxAState>> {
+    func getState(user: String, password: String) -> Deferred<Maybe<FxAState>> {
         let err: NSError = NSError(domain: FxAClientErrorDomain, code: 0, userInfo: nil)
-        return Deferred(value: Result<FxAState>(failure: FxAClientError.Local(err)))
+        return Deferred(value: Maybe<FxAState>(failure: FxAClientError.Local(err)))
     }
 
-    func getTokenAndDefaultKeys() -> Deferred<Result<(TokenServerToken, KeyBundle)>> {
+    func getTokenAndDefaultKeys() -> Deferred<Maybe<(TokenServerToken, KeyBundle)>> {
         let authState = self.syncAuthState(NSDate.now())
 
-        let keysPayload: Deferred<Result<Record<KeysPayload>>> = authState.bind {
+        let keysPayload: Deferred<Maybe<Record<KeysPayload>>> = authState.bind {
             tokenResult in
             if let (token, forKey) = tokenResult.successValue {
                 return self.getKeys(forKey, token: token)
             }
             XCTAssertEqual(tokenResult.failureValue!.description, "")
-            return Deferred(value: Result(failure: KeyFetchError()))
+            return Deferred(value: Maybe(failure: KeyFetchError()))
         }
 
-        let result = Deferred<Result<(TokenServerToken, KeyBundle)>>()
+        let result = Deferred<Maybe<(TokenServerToken, KeyBundle)>>()
         keysPayload.upon {
             res in
             if let rec = res.successValue {
                 XCTAssert(rec.id == "keys", "GUID is correct.")
                 XCTAssert(rec.modified > 1000, "modified is sane.")
                 let payload: KeysPayload = rec.payload as KeysPayload
-                println("Body: \(payload.toString(pretty: false))")
+                print("Body: \(payload.toString(false))", terminator: "\n")
                 XCTAssert(rec.id == "keys", "GUID inside is correct.")
-                let arr = payload["default"].asArray![0].asString
                 if let keys = payload.defaultKeys {
                     // Extracting the token like this is not great, but...
-                    result.fill(Result(success: (authState.value.successValue!.token, keys)))
+                    result.fill(Maybe(success: (authState.value.successValue!.token, keys)))
                     return
                 }
             }
 
-            result.fill(Result(failure: KeyFetchError()))
+            result.fill(Maybe(failure: KeyFetchError()))
         }
         return result
     }
@@ -107,8 +106,8 @@ class LiveStorageClientTests : LiveAccountTest {
         let deferred = getTokenAndDefaultKeys()
         deferred.upon {
             res in
-            if let (token, keyBundle) = res.successValue {
-                println("Yay")
+            if let (_, _) = res.successValue {
+                print("Yay", terminator: "\n")
             } else {
                 XCTAssertEqual(res.failureValue!.description, "")
             }
@@ -125,14 +124,14 @@ class LiveStorageClientTests : LiveAccountTest {
         let expectation = expectationWithDescription("Waiting on value.")
         let authState = self.getAuthState(NSDate.now())
 
-        let d = chainDeferred(authState, { SyncStateMachine.toReady($0, prefs: MockProfilePrefs()) })
+        let d = chainDeferred(authState, f: { SyncStateMachine(prefs: MockProfilePrefs()).toReady($0) })
 
         d.upon { result in
             if let ready = result.successValue {
                 XCTAssertTrue(ready.collectionKeys.defaultBundle.encKey.length == 32)
                 XCTAssertTrue(ready.scratchpad.global != nil)
-                if let clients = ready.scratchpad.global?.value.engines?["clients"] {
-                    XCTAssertTrue(count(clients.syncID) == 12)
+                if let clients = ready.scratchpad.global?.value.engines["clients"] {
+                    XCTAssertTrue(clients.syncID.characters.count == 12)
                 }
             }
             XCTAssertTrue(result.isSuccess)

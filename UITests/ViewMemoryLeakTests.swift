@@ -16,6 +16,11 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
     }
 
     override func tearDown() {
+        do {
+            try tester().tryFindingTappableViewWithAccessibilityLabel("home")
+            tester().tapViewWithAccessibilityLabel("home")
+        } catch _ {
+        }
         BrowserUtils.resetToAboutHome(tester())
     }
 
@@ -28,6 +33,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityIdentifier("url")
         let url = "\(webRoot)/numberedPage.html?page=1"
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         tester().runBlock { _ in
             return (aboutHomeController == nil) ? KIFTestStepResult.Success : KIFTestStepResult.Wait
@@ -93,12 +99,13 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertNil(webView, "webView disposed")
     }
 
+
     private func getChildViewController(parent: UIViewController, childClass: String) -> UIViewController {
         let childControllers = parent.childViewControllers.filter { child in
             let description = NSString(string: child.description)
             return description.containsString(childClass)
         }
         XCTAssertEqual(childControllers.count, 1, "Found 1 child controller of type: \(childClass)")
-        return childControllers.first as! UIViewController
+        return childControllers.first!
     }
 }

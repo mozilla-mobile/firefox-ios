@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
 import Storage
@@ -43,11 +43,19 @@ class ClientPickerViewController: UITableViewController {
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "cancel")
+        tableView.registerClass(ClientPickerTableViewHeaderCell.self, forCellReuseIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier)
+        tableView.registerClass(ClientPickerTableViewCell.self, forCellReuseIdentifier: ClientPickerTableViewCell.CellIdentifier)
+        tableView.registerClass(ClientPickerNoClientsTableViewCell.self, forCellReuseIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier)
         tableView.tableFooterView = UIView(frame: CGRectZero)
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        if let refreshControl = refreshControl {
+            refreshControl.beginRefreshing()
+            let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))
+            self.tableView.contentOffset = CGPointMake(0, height)
+        }
         reloadClients()
     }
 
@@ -72,52 +80,23 @@ class ClientPickerViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let cell: UITableViewCell
 
         if clients.count > 0 {
             if indexPath.section == 0 {
-                let textLabel = UILabel()
-                cell.contentView.addSubview(textLabel)
-                textLabel.font = ClientPickerViewControllerUX.TableHeaderTextFont
-                textLabel.text = NSLocalizedString("Available devices:", tableName: "SendTo", comment: "Header for the list of devices table")
-                textLabel.textColor = ClientPickerViewControllerUX.TableHeaderTextColor
-                textLabel.snp_makeConstraints({ (make) -> Void in
-                    make.left.equalTo(ClientPickerViewControllerUX.TableHeaderTextPaddingLeft)
-                    make.centerY.equalTo(cell.snp_centerY)
-                    make.right.equalTo(cell.snp_right)
-                })
-
-                cell.accessoryType = UITableViewCellAccessoryType.None
-                cell.preservesSuperviewLayoutMargins = false
-                cell.layoutMargins = UIEdgeInsetsZero
-                cell.separatorInset = UIEdgeInsetsZero
+                cell = tableView.dequeueReusableCellWithIdentifier(ClientPickerTableViewHeaderCell.CellIdentifier, forIndexPath: indexPath) as! ClientPickerTableViewHeaderCell
             } else {
-                let textLabel = UILabel()
-                cell.contentView.addSubview(textLabel)
-                textLabel.font = ClientPickerViewControllerUX.DeviceRowTextFont
-                textLabel.text = clients[indexPath.row].name
-                textLabel.numberOfLines = 2
-                textLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
-                textLabel.snp_makeConstraints({ (make) -> Void in
-                    make.left.equalTo(ClientPickerViewControllerUX.DeviceRowTextPaddingLeft)
-                    make.centerY.equalTo(cell.snp_centerY)
-                    make.right.equalTo(cell.snp_right).offset(-ClientPickerViewControllerUX.DeviceRowTextPaddingRight)
-                })
-
-                cell.imageView?.image = UIImage(named: clients[indexPath.row].type == "mobile" ? "deviceTypeMobile" : "deviceTypeDesktop")
-                cell.imageView?.transform = CGAffineTransformMakeScale(0.5, 0.5)
-
-                cell.accessoryType = selectedClients.containsObject(indexPath) ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
-                cell.tintColor = ClientPickerViewControllerUX.DeviceRowTintColor
-                cell.preservesSuperviewLayoutMargins = false
+                let clientCell = tableView.dequeueReusableCellWithIdentifier(ClientPickerTableViewCell.CellIdentifier, forIndexPath: indexPath) as! ClientPickerTableViewCell
+                clientCell.nameLabel.text = clients[indexPath.row].name
+                clientCell.clientType = clients[indexPath.row].type == "mobile" ? ClientType.Mobile : ClientType.Desktop
+                clientCell.checked = selectedClients.containsObject(indexPath)
+                cell = clientCell
             }
         } else {
             if reloading == false {
-                setupHelpView(cell.contentView,
-                    introText: NSLocalizedString("You don't have any other devices connected to this Firefox Account available to sync.", tableName: "SendTo", comment: "Error message shown in the remote tabs panel"),
-                    showMeText: "") // TODO We used to have a 'show me how to ...' text here. But, we cannot open web pages from the extension. So this is clear for now until we decide otherwise.
-                // Move the separator off screen
-                cell.separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
+                cell = tableView.dequeueReusableCellWithIdentifier(ClientPickerNoClientsTableViewCell.CellIdentifier, forIndexPath: indexPath) as! ClientPickerNoClientsTableViewCell
+            } else {
+                cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "ClientCell")
             }
         }
 
@@ -153,11 +132,18 @@ class ClientPickerViewController: UITableViewController {
     }
 
     private func reloadClients() {
+        guard let profile = self.profile else {
+            return
+        }
+
         reloading = true
-        profile?.getClients().upon({ result in
-            self.reloading = false
-            self.refreshControl?.endRefreshing()
-            if let c = result.successValue {
+        profile.getClients().upon({ result in
+            withExtendedLifetime(profile) {
+                self.reloading = false
+                guard let c = result.successValue else {
+                    return
+                }
+
                 self.clients = c
                 dispatch_async(dispatch_get_main_queue()) {
                     if self.clients.count == 0 {
@@ -168,6 +154,7 @@ class ClientPickerViewController: UITableViewController {
                     }
                     self.selectedClients.removeAllObjects()
                     self.tableView.reloadData()
+                    self.refreshControl?.endRefreshing()
                 }
             }
         })
@@ -187,5 +174,98 @@ class ClientPickerViewController: UITableViewController {
             clients.append(self.clients[indexPath.row])
         }
         clientPickerDelegate?.clientPickerViewController(self, didPickClients: clients)
+    }
+}
+
+class ClientPickerTableViewHeaderCell: UITableViewCell {
+    static let CellIdentifier = "ClientPickerTableViewSectionHeader"
+    let nameLabel = UILabel()
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        addSubview(nameLabel)
+        nameLabel.font = ClientPickerViewControllerUX.TableHeaderTextFont
+        nameLabel.text = NSLocalizedString("Available devices:", tableName: "SendTo", comment: "Header for the list of devices table")
+        nameLabel.textColor = ClientPickerViewControllerUX.TableHeaderTextColor
+
+        nameLabel.snp_makeConstraints{ (make) -> Void in
+            make.left.equalTo(ClientPickerViewControllerUX.TableHeaderTextPaddingLeft)
+            make.centerY.equalTo(self)
+            make.right.equalTo(self)
+        }
+
+        preservesSuperviewLayoutMargins = false
+        layoutMargins = UIEdgeInsetsZero
+        separatorInset = UIEdgeInsetsZero
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+public enum ClientType: String {
+    case Mobile = "deviceTypeMobile"
+    case Desktop = "deviceTypeDesktop"
+}
+
+class ClientPickerTableViewCell: UITableViewCell {
+    static let CellIdentifier = "ClientPickerTableViewCell"
+
+    var nameLabel: UILabel
+    var checked: Bool = false {
+        didSet {
+            self.accessoryType = checked ? UITableViewCellAccessoryType.Checkmark : UITableViewCellAccessoryType.None
+        }
+    }
+
+    var clientType: ClientType = ClientType.Mobile {
+        didSet {
+            self.imageView?.image = UIImage(named: clientType.rawValue)
+        }
+    }
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        nameLabel = UILabel()
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.addSubview(nameLabel)
+        nameLabel.font = ClientPickerViewControllerUX.DeviceRowTextFont
+        nameLabel.numberOfLines = 2
+        nameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        self.tintColor = ClientPickerViewControllerUX.DeviceRowTintColor
+        self.preservesSuperviewLayoutMargins = false
+        self.selectionStyle = UITableViewCellSelectionStyle.None
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        nameLabel.snp_makeConstraints{ (make) -> Void in
+            make.left.equalTo(ClientPickerViewControllerUX.DeviceRowTextPaddingLeft)
+            make.centerY.equalTo(self.snp_centerY)
+            make.right.equalTo(self.snp_right).offset(-ClientPickerViewControllerUX.DeviceRowTextPaddingRight)
+        }
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+}
+
+class ClientPickerNoClientsTableViewCell: UITableViewCell {
+    static let CellIdentifier = "ClientPickerNoClientsTableViewCell"
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupHelpView(contentView,
+            introText: NSLocalizedString("You don't have any other devices connected to this Firefox Account available to sync.", tableName: "SendTo", comment: "Error message shown in the remote tabs panel"),
+            showMeText: "") // TODO We used to have a 'show me how to ...' text here. But, we cannot open web pages from the extension. So this is clear for now until we decide otherwise.
+        // Move the separator off screen
+        separatorInset = UIEdgeInsetsMake(0, 1000, 0, 0)
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

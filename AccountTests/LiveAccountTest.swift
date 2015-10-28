@@ -14,7 +14,7 @@ import XCTest
 public class LiveAccountTest: XCTestCase {
     lazy var signedInUser: JSON? = {
         if let path = NSBundle(forClass: self.dynamicType).pathForResource("signedInUser.json", ofType: nil) {
-            if let contents = String(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) {
+            if let contents = try? String(contentsOfFile: path, encoding: NSUTF8StringEncoding) {
                 let json = JSON.parse(contents)
                 if json.isError {
                     return nil
@@ -64,8 +64,8 @@ public class LiveAccountTest: XCTestCase {
 
             let keyPair = RSAKeyPair.generateKeyPairWithModulusSize(1024)
             let client = FxAClient10()
-            let login: Deferred<Result<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
-            let sign: Deferred<Result<FxASignResponse>> = login.bind { (result: Result<FxALoginResponse>) in
+            let login: Deferred<Maybe<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
+            let sign: Deferred<Maybe<FxASignResponse>> = login.bind { (result: Maybe<FxALoginResponse>) in
                 switch result {
                 case let .Failure(error):
                     expectation.fulfill()
@@ -86,7 +86,7 @@ public class LiveAccountTest: XCTestCase {
         }
     }
 
-    public enum AccountError: Printable, ErrorType {
+    public enum AccountError: MaybeErrorType {
         case BadParameters
         case NoSignedInUser
         case UnverifiedSignedInUser
@@ -101,7 +101,7 @@ public class LiveAccountTest: XCTestCase {
     }
 
     // Internal helper.
-    func account(email: String, password: String, configuration: FirefoxAccountConfiguration) -> Deferred<Result<FirefoxAccount>> {
+    func account(email: String, password: String, configuration: FirefoxAccountConfiguration) -> Deferred<Maybe<FirefoxAccount>> {
         let client = FxAClient10(endpoint: configuration.authEndpointURL)
         if let emailUTF8 = email.utf8EncodedData {
             if let passwordUTF8 = email.utf8EncodedData {
@@ -110,52 +110,52 @@ public class LiveAccountTest: XCTestCase {
                 return login.bind { result in
                     if let response = result.successValue {
                         let unwrapkB = FxAClient10.computeUnwrapKey(quickStretchedPW)
-                        return Deferred(value: Result(success: FirefoxAccount.fromConfigurationAndLoginResponse(configuration, response: response, unwrapkB: unwrapkB)))
+                        return Deferred(value: Maybe(success: FirefoxAccount.fromConfigurationAndLoginResponse(configuration, response: response, unwrapkB: unwrapkB)))
                     } else {
-                        return Deferred(value: Result(failure: result.failureValue!))
+                        return Deferred(value: Maybe(failure: result.failureValue!))
                     }
                 }
             }
         }
-        return Deferred(value: Result(failure: AccountError.BadParameters))
+        return Deferred(value: Maybe(failure: AccountError.BadParameters))
     }
 
     // Override this to configure test account.
-    public func account() -> Deferred<Result<FirefoxAccount>> {
+    public func account() -> Deferred<Maybe<FirefoxAccount>> {
         if self.signedInUser == nil {
-            return Deferred(value: Result(failure: AccountError.NoSignedInUser))
+            return Deferred(value: Maybe(failure: AccountError.NoSignedInUser))
         }
         if !(self.signedInUser?["verified"].asBool ?? false) {
-            return Deferred(value: Result(failure: AccountError.UnverifiedSignedInUser))
+            return Deferred(value: Maybe(failure: AccountError.UnverifiedSignedInUser))
         }
         return self.account("testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
             configuration: ProductionFirefoxAccountConfiguration())
     }
 
-    func getTestAccount() -> Deferred<Result<FirefoxAccount>> {
+    func getTestAccount() -> Deferred<Maybe<FirefoxAccount>> {
         // TODO: Use signedInUser.json here.  It's hard to include the same resource file in two Xcode targets.
         return self.account("testtesto@mockmyid.com", password: "testtesto@mockmyid.com",
             configuration: ProductionFirefoxAccountConfiguration())
     }
 
-    public func getAuthState(now: Timestamp) -> Deferred<Result<SyncAuthState>> {
+    public func getAuthState(now: Timestamp) -> Deferred<Maybe<SyncAuthState>> {
         let account = self.getTestAccount()
-        println("Got test account.")
+        print("Got test account.")
         return account.map { result in
-            println("Result was successful? \(result.isSuccess)")
+            print("Result was successful? \(result.isSuccess)")
             if let account = result.successValue {
-                return Result(success: account.syncAuthState)
+                return Maybe(success: account.syncAuthState)
             }
-            return Result(failure: result.failureValue!)
+            return Maybe(failure: result.failureValue!)
         }
     }
 
-    public func syncAuthState(now: Timestamp) -> Deferred<Result<(token: TokenServerToken, forKey: NSData)>> {
+    public func syncAuthState(now: Timestamp) -> Deferred<Maybe<(token: TokenServerToken, forKey: NSData)>> {
         return getAuthState(now).bind { result in
             if let authState = result.successValue {
                 return authState.token(now, canBeExpired: false)
             }
-            return Deferred(value: Result(failure: result.failureValue!))
+            return Deferred(value: Maybe(failure: result.failureValue!))
         }
     }
 }

@@ -11,6 +11,10 @@ struct AboutUtils {
         return getAboutComponent(url) == "home"
     }
 
+    static func isAboutURL(url: NSURL?) -> Bool {
+        return getAboutComponent(url) != nil
+    }
+
     /// If the URI is an about: URI, return the path after "about/" in the URI.
     /// For example, return "home" for "http://localhost:1234/about/home/#panel=0".
     static func getAboutComponent(url: NSURL?) -> String? {

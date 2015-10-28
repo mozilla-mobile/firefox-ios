@@ -36,7 +36,12 @@ class WebServerTests: XCTestCase {
     }
 
     func testWebServerIsServingRequests() {
-        let response = NSString(contentsOfURL: NSURL(string: "\(webServerBase)/hello")!, encoding: NSUTF8StringEncoding, error: nil)
+        let response: NSString?
+        do {
+            response = try NSString(contentsOfURL: NSURL(string: "\(webServerBase)/hello")!, encoding: NSUTF8StringEncoding)
+        } catch _ {
+            response = nil
+        }
         XCTAssertNotNil(response)
         XCTAssertTrue(response == "<html><body><p>Hello World</p></body></html>")
     }

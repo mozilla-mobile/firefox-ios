@@ -5,7 +5,7 @@
 import Foundation
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.keychainLogger
 
 public protocol JSONLiteralConvertible {
     func asJSON() -> JSON
@@ -52,7 +52,7 @@ public class KeychainCache<T: JSONLiteralConvertible> {
         log.info("Storing \(self.branch) in Keychain with label \(self.branch).\(self.label).")
         // TODO: PII logging.
         if let value = value {
-            let jsonString = value.asJSON().toString(pretty: false)
+            let jsonString = value.asJSON().toString(false)
             KeychainWrapper.setString(jsonString, forKey: "\(branch).\(label)")
         } else {
             KeychainWrapper.removeObjectForKey("\(branch).\(label)")

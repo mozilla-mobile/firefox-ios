@@ -5,20 +5,17 @@
 import UIKit
 
 class SettingsNavigationController: UINavigationController {
-    var profile: Profile!
-    var tabManager: TabManager!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let rootViewController = SettingsTableViewController()
-        rootViewController.profile = profile
-        rootViewController.tabManager = tabManager
-        self.pushViewController(rootViewController, animated: false)
-    }
+    var popoverDelegate: PresentingModalViewControllerDelegate?
 
     func SELdone() {
-        NSLog("Done!")
-        self.dismissViewControllerAnimated(true, completion: nil)
+        if let delegate = popoverDelegate {
+            delegate.dismissPresentedModalViewController(self, animated: true)
+        } else {
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
+}
+
+protocol PresentingModalViewControllerDelegate {
+    func dismissPresentedModalViewController(modalViewController: UIViewController, animated: Bool)
 }

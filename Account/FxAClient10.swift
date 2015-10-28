@@ -62,7 +62,7 @@ public enum FxAClientError {
 }
 
 // Be aware that string interpolation doesn't work: rdar://17318018, much good that it will do.
-extension FxAClientError: Printable, ErrorType {
+extension FxAClientError: MaybeErrorType {
     public var description: String {
         switch self {
         case let .Remote(error):
@@ -70,7 +70,7 @@ extension FxAClientError: Printable, ErrorType {
             let messageString = error.message ?? NSLocalizedString("Missing message", comment: "Error for a missing remote error message")
             return "<FxAClientError.Remote \(error.code)/\(error.errno): \(errorString) (\(messageString))>"
         case let .Local(error):
-            return "<FxAClientError.Local \(error.description)>"
+            return "<FxAClientError.Local Error Domain=\(error.domain) Code=\(error.code) \"\(error.localizedDescription)\">"
         }
     }
 }
@@ -212,8 +212,14 @@ public class FxAClient10 {
         return nil
     }
 
-    public func login(emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool) -> Deferred<Result<FxALoginResponse>> {
-        let deferred = Deferred<Result<FxALoginResponse>>()
+    lazy private var alamofire: Alamofire.Manager = {
+        let ua = UserAgent.fxaUserAgent
+        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
+        return Alamofire.Manager.managerWithUserAgent(ua, configuration: configuration)
+    }()
+
+    public func login(emailUTF8: NSData, quickStretchedPW: NSData, getKeys: Bool) -> Deferred<Maybe<FxALoginResponse>> {
+        let deferred = Deferred<Maybe<FxALoginResponse>>()
         let authPW = quickStretchedPW.deriveHKDFSHA256KeyWithSalt(NSData(), contextInfo: FxAClient10.KW("authPW")!, length: 32)
 
         let parameters = [
@@ -223,7 +229,7 @@ public class FxAClient10 {
 
         var URL: NSURL = self.URL.URLByAppendingPathComponent("/account/login")
         if getKeys {
-            let components = NSURLComponents(URL: self.URL.URLByAppendingPathComponent("/account/login"), resolvingAgainstBaseURL: false)!
+            let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)!
             components.query = "keys=true"
             URL = components.URL!
         }
@@ -231,36 +237,39 @@ public class FxAClient10 {
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.HTTPBody = JSON(parameters).toString(pretty: false).utf8EncodedData
+        mutableURLRequest.HTTPBody = JSON(parameters).toString(false).utf8EncodedData
 
-        let request = Alamofire.request(mutableURLRequest)
-            .validate(contentType: ["application/json"])
-            .responseJSON { (request, response, data, error) in
-                if let error = error {
-                    deferred.fill(Result(failure: FxAClientError.Local(error)))
-                    return
-                }
+        alamofire.request(mutableURLRequest)
+                 .validate(contentType: ["application/json"])
+                 .responseJSON { (request, response, result) in
 
-                if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
-                    let json = JSON(data)
-                    if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                        deferred.fill(Result(failure: FxAClientError.Remote(remoteError)))
-                        return
+                    // Don't cancel requests just because our Manager is deallocated.
+                    withExtendedLifetime(self.alamofire) {
+                        if let error = result.error as? NSError {
+                            deferred.fill(Maybe(failure: FxAClientError.Local(error)))
+                            return
+                        }
+
+                        if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                            let json = JSON(data)
+                            if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
+                                deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
+                                return
+                            }
+
+                            if let response = FxAClient10.loginResponseFromJSON(json) {
+                                deferred.fill(Maybe(success: response))
+                                return
+                            }
+                        }
+                        deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
                     }
-
-                    if let response = FxAClient10.loginResponseFromJSON(json) {
-                        deferred.fill(Result(success: response))
-                        return
-                    }
-                }
-
-                deferred.fill(Result(failure: FxAClientError.Local(FxAClientUnknownError)))
         }
         return deferred
     }
 
-    public func keys(keyFetchToken: NSData) -> Deferred<Result<FxAKeysResponse>> {
-        let deferred = Deferred<Result<FxAKeysResponse>>()
+    public func keys(keyFetchToken: NSData) -> Deferred<Maybe<FxAKeysResponse>> {
+        let deferred = Deferred<Maybe<FxAKeysResponse>>()
 
         let salt: NSData = NSData()
         let contextInfo: NSData = FxAClient10.KW("keyFetchToken")!
@@ -277,34 +286,34 @@ public class FxAClient10 {
         let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
         mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
 
-        Alamofire.request(mutableURLRequest)
+        alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
-            .responseJSON { (request, response, data, error) in
-                if let error = error {
-                    deferred.fill(Result(failure: FxAClientError.Local(error)))
+            .responseJSON { (request, response, result) in
+                if let error = result.error as? NSError {
+                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
                     return
                 }
 
-                if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
                     let json = JSON(data)
                     if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                        deferred.fill(Result(failure: FxAClientError.Remote(remoteError)))
+                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
                         return
                     }
 
                     if let response = FxAClient10.keysResponseFromJSON(keyRequestKey, json: json) {
-                        deferred.fill(Result(success: response))
+                        deferred.fill(Maybe(success: response))
                         return
                     }
                 }
 
-                deferred.fill(Result(failure: FxAClientError.Local(FxAClientUnknownError)))
+                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
             }
         return deferred
     }
 
-    public func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Result<FxASignResponse>> {
-        let deferred = Deferred<Result<FxASignResponse>>()
+    public func sign(sessionToken: NSData, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
+        let deferred = Deferred<Maybe<FxASignResponse>>()
 
         let parameters = [
             "publicKey": publicKey.JSONRepresentation(),
@@ -323,33 +332,33 @@ public class FxAClient10 {
         mutableURLRequest.HTTPMethod = Method.POST.rawValue
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        mutableURLRequest.HTTPBody = JSON(parameters).toString(pretty: false).utf8EncodedData
+        mutableURLRequest.HTTPBody = JSON(parameters).toString(false).utf8EncodedData
 
         let hawkValue = hawkHelper.getAuthorizationValueFor(mutableURLRequest)
         mutableURLRequest.setValue(hawkValue, forHTTPHeaderField: "Authorization")
 
-        Alamofire.request(mutableURLRequest)
+        alamofire.request(mutableURLRequest)
             .validate(contentType: ["application/json"])
-            .responseJSON { (request, response, data, error) in
-                if let error = error {
-                    deferred.fill(Result(failure: FxAClientError.Local(error)))
+            .responseJSON { (request, response, result) in
+                if let error = result.error as? NSError {
+                    deferred.fill(Maybe(failure: FxAClientError.Local(error)))
                     return
                 }
 
-                if let data: AnyObject = data { // Declaring the type quiets a Swift warning about inferring AnyObject.
+                if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
                     let json = JSON(data)
                     if let remoteError = FxAClient10.remoteErrorFromJSON(json, statusCode: response!.statusCode) {
-                        deferred.fill(Result(failure: FxAClientError.Remote(remoteError)))
+                        deferred.fill(Maybe(failure: FxAClientError.Remote(remoteError)))
                         return
                     }
 
                     if let response = FxAClient10.signResponseFromJSON(json) {
-                        deferred.fill(Result(success: response))
+                        deferred.fill(Maybe(success: response))
                         return
                     }
                 }
 
-                deferred.fill(Result(failure: FxAClientError.Local(FxAClientUnknownError)))
+                deferred.fill(Maybe(failure: FxAClientError.Local(FxAClientUnknownError)))
         }
         return deferred
     }

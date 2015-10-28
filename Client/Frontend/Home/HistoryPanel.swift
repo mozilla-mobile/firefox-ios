@@ -8,21 +8,30 @@ import Shared
 import Storage
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.browserLogger
 
-private func getDate(#dayOffset: Int) -> NSDate {
+private func getDate(dayOffset dayOffset: Int) -> NSDate {
     let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-    let nowComponents = calendar.components(NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay, fromDate: NSDate())
+    let nowComponents = calendar.components([NSCalendarUnit.Year, NSCalendarUnit.Month, NSCalendarUnit.Day], fromDate: NSDate())
     let today = calendar.dateFromComponents(nowComponents)!
-    return calendar.dateByAddingUnit(NSCalendarUnit.CalendarUnitDay, value: dayOffset, toDate: today, options: nil)!
+    return calendar.dateByAddingUnit(NSCalendarUnit.Day, value: dayOffset, toDate: today, options: [])!
 }
 
 private typealias SectionNumber = Int
 private typealias CategoryNumber = Int
 private typealias CategorySpec = (section: SectionNumber?, rows: Int, offset: Int)
 
+private struct HistoryPanelUX {
+    static let WelcomeScreenPadding: CGFloat = 15
+    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightLight) // Changes font size based on device.
+    static let WelcomeScreenItemTextColor = UIColor.grayColor()
+    static let WelcomeScreenItemWidth = 170
+}
+
 class HistoryPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
+
+    private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
 
     private let QueryLimit = 100
     private let NumSections = 4
@@ -44,46 +53,96 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataClearedHistory, object: nil)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let refresh = UIRefreshControl()
-        refresh.attributedTitle = NSAttributedString(string: NSLocalizedString("Pull to Sync", comment: "The pull-to-refresh string for syncing in the history panel."))
-        refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
-        self.refreshControl = refresh
-        self.tableView.addSubview(refresh)
+        self.tableView.accessibilityIdentifier = "History List"
     }
 
-    required init(coder aDecoder: NSCoder) {
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // Add a refresh control if the user is logged in and the control was not added before. If the user is not
+        // logged in, remove any existing control but only when it is not currently refreshing. Otherwise, wait for
+        // the refresh to finish before removing the control.
+        if profile.hasSyncableAccount() && self.refreshControl == nil {
+            addRefreshControl()
+        } else if self.refreshControl?.refreshing == false {
+            removeRefreshControl()
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
     }
 
-    func firefoxAccountChanged(notification: NSNotification) {
-        if notification.name == NotificationFirefoxAccountChanged {
-            refresh()
+    func notificationReceived(notification: NSNotification) {
+        switch notification.name {
+        case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
+            resyncHistory()
+            break
+        default:
+            // no need to do anything at all
+            log.warning("Received unexpected notification \(notification.name)")
+            break
         }
     }
 
-    @objc func refresh() {
-        self.refreshControl?.beginRefreshing()
+    func addRefreshControl() {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl = refresh
+        self.tableView.addSubview(refresh)
+    }
+
+    func removeRefreshControl() {
+        self.refreshControl?.removeFromSuperview()
+        self.refreshControl = nil
+    }
+
+    func endRefreshing() {
+        // Always end refreshing, even if we failed!
+        self.refreshControl?.endRefreshing()
+
+        // Remove the refresh control if the user has logged out in the meantime
+        if !self.profile.hasSyncableAccount() {
+            self.removeRefreshControl()
+        }
+    }
+
+    /**
+    * sync history with the server and ensure that we update our view afterwards
+    **/
+    func resyncHistory() {
         profile.syncManager.syncHistory().uponQueue(dispatch_get_main_queue()) { result in
             if result.isSuccess {
                 self.reloadData()
+            } else {
+                self.endRefreshing()
             }
-
-            // Always end refreshing, even if we failed!
-            self.refreshControl?.endRefreshing()
         }
     }
 
-    private func refetchData() -> Deferred<Result<Cursor<Site>>> {
+    /**
+    * called by the table view pull to refresh
+    **/
+    @objc func refresh() {
+        self.refreshControl?.beginRefreshing()
+        resyncHistory()
+    }
+
+    /**
+    * fetch from the profile
+    **/
+    private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
         return profile.history.getSitesByLastVisit(QueryLimit)
     }
 
@@ -92,20 +151,71 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         self.computeSectionOffsets()
     }
 
+    /**
+    * Update our view after a data refresh
+    **/
     override func reloadData() {
-        self.refetchData().uponQueue(dispatch_get_main_queue()) { result in
+        self.fetchData().uponQueue(dispatch_get_main_queue()) { result in
             if let data = result.successValue {
                 self.setData(data)
                 self.tableView.reloadData()
+                self.updateEmptyPanelState()
             }
 
-            // Always end refreshing, even if we failed!
-            self.refreshControl?.endRefreshing()
+            self.endRefreshing()
 
             // TODO: error handling.
         }
     }
 
+    private func updateEmptyPanelState() {
+        if data.count == 0 {
+            if self.emptyStateOverlayView.superview == nil {
+                self.tableView.addSubview(self.emptyStateOverlayView)
+                self.emptyStateOverlayView.snp_makeConstraints { make -> Void in
+                    make.edges.equalTo(self.tableView)
+                    make.size.equalTo(self.view)
+                }
+            }
+        } else {
+            self.emptyStateOverlayView.removeFromSuperview()
+        }
+    }
+
+    private func createEmptyStateOverview() -> UIView {
+        let overlayView = UIView()
+        overlayView.backgroundColor = UIColor.whiteColor()
+
+        let logoImageView = UIImageView(image: UIImage(named: "emptyHistory"))
+        overlayView.addSubview(logoImageView)
+        logoImageView.snp_makeConstraints { make in
+            make.centerX.equalTo(overlayView)
+
+            // Sets proper top constraint for iPhone 6 in portait and for iPad.
+            make.centerY.equalTo(overlayView.snp_centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
+
+            // Sets proper top constraint for iPhone 4, 5 in portrait.
+            make.top.greaterThanOrEqualTo(overlayView.snp_top).offset(50).priorityHigh()
+        }
+
+        let welcomeLabel = UILabel()
+        overlayView.addSubview(welcomeLabel)
+        welcomeLabel.text = NSLocalizedString("Pages you have visited recently will show up here.", comment: "See http://bit.ly/1I7Do4b")
+        welcomeLabel.textAlignment = NSTextAlignment.Center
+        welcomeLabel.font = HistoryPanelUX.WelcomeScreenItemFont
+        welcomeLabel.textColor = HistoryPanelUX.WelcomeScreenItemTextColor
+        welcomeLabel.numberOfLines = 2
+        welcomeLabel.adjustsFontSizeToFitWidth = true
+
+        welcomeLabel.snp_makeConstraints { make in
+            make.centerX.equalTo(overlayView)
+            make.top.equalTo(logoImageView.snp_bottom).offset(HistoryPanelUX.WelcomeScreenPadding)
+            make.width.equalTo(HistoryPanelUX.WelcomeScreenItemWidth)
+        }
+
+        return overlayView
+    }
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         let category = self.categories[indexPath.section]
@@ -155,7 +265,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         default:
             assertionFailure("Invalid history section \(section)")
         }
-        return title.uppercaseString
+        return title
     }
 
     func categoryForDate(date: MicrosecondTimestamp) -> Int {
@@ -222,7 +332,6 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return self.categories[uiSectionToCategory(section)].rows
     }
 
-
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
@@ -232,49 +341,83 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         let delete = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: { (action, indexPath) in
             if let site = self.siteForIndexPath(indexPath) {
-                // Compute the section in advance -- if we try to do this below, naturally the category
-                // will be empty, and so there will be no section in the CategorySpec!
-                let category = self.categoryForDate(site.latestVisit!.date)
-                let section = self.categoryToUISection(category)!
-
                 // Why the dispatches? Because we call success and failure on the DB
                 // queue, and so calling anything else that calls through to the DB will
                 // deadlock. This problem will go away when the history API switches to
                 // Deferred instead of using callbacks.
                 self.profile.history.removeHistoryForURL(site.url)
                     .upon { res in
-                        self.refetchData().uponQueue(dispatch_get_main_queue()) { result in
+                        self.fetchData().uponQueue(dispatch_get_main_queue()) { result in
                             // If a section will be empty after removal, we must remove the section itself.
                             if let data = result.successValue {
-                                tableView.beginUpdates()
+
+                                let oldCategories = self.categories
                                 self.data = data
                                 self.computeSectionOffsets()
 
-                                let spec = self.categories[category]
-                                if spec.rows == 0 {
-                                    // Remove the section. Sections can't be empty.
-                                    self.tableView.deleteSections(NSIndexSet(index: section), withRowAnimation: UITableViewRowAnimation.Left)
-                                } else {
-                                    self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
-                                }
+                                let sectionsToDelete = NSMutableIndexSet()
+                                var rowsToDelete = [NSIndexPath]()
+                                let sectionsToAdd = NSMutableIndexSet()
+                                var rowsToAdd = [NSIndexPath]()
 
-                                // If the query was limited, we may also add a row at the end.
-                                if data.count == self.QueryLimit {
-                                    if let site = data[self.QueryLimit-1] {
-                                        let categoryIndex = self.categoryForDate(site.latestVisit!.date)
-                                        let section = self.categoryToUISection(categoryIndex)!
-                                        let category = self.categories[categoryIndex]
-                                        if category.rows == 1 {
-                                            let sections = NSIndexSet(index: section)
-                                            self.tableView.insertSections(sections, withRowAnimation: UITableViewRowAnimation.Right)
-                                        } else {
-                                            let indexPath = NSIndexPath(forItem: category.rows-1, inSection: section)
-                                            self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
+                                for (index, category) in self.categories.enumerate() {
+                                    let oldCategory = oldCategories[index]
+
+                                    // don't bother if we're not displaying this category
+                                    if oldCategory.section == nil && category.section == nil {
+                                        continue
+                                    }
+
+                                    // 1. add a new section if the section didn't previously exist
+                                    if oldCategory.section == nil && category.section != oldCategory.section {
+                                        log.debug("adding section \(category.section)")
+                                        sectionsToAdd.addIndex(category.section!)
+                                    }
+
+                                    // 2. add a new row if there are more rows now than there were before
+                                    if oldCategory.rows < category.rows {
+                                        log.debug("adding row to \(category.section) at \(category.rows-1)")
+                                        rowsToAdd.append(NSIndexPath(forRow: category.rows-1, inSection: category.section!))
+                                    }
+
+                                    // if we're dealing with the section where the row was deleted:
+                                    // 1. if the category no longer has a section, then we need to delete the entire section
+                                    // 2. delete a row if the number of rows has been reduced
+                                    // 3. delete the selected row and add a new one on the bottom of the section if the number of rows has stayed the same
+                                    if oldCategory.section == indexPath.section {
+                                        if category.section == nil {
+                                            log.debug("deleting section \(indexPath.section)")
+                                            sectionsToDelete.addIndex(indexPath.section)
+                                        } else if oldCategory.section == category.section {
+                                            if oldCategory.rows > category.rows {
+                                                log.debug("deleting row from \(category.section) at \(indexPath.row)")
+                                                rowsToDelete.append(indexPath)
+                                            } else if category.rows == oldCategory.rows {
+                                                log.debug("in section \(category.section), removing row at \(indexPath.row) and inserting row at \(category.rows-1)")
+                                                rowsToDelete.append(indexPath)
+                                                rowsToAdd.append(NSIndexPath(forRow: category.rows-1, inSection: indexPath.section))
+                                            }
                                         }
                                     }
                                 }
 
+                                tableView.beginUpdates()
+                                if sectionsToAdd.count > 0 {
+                                    tableView.insertSections(sectionsToAdd, withRowAnimation: UITableViewRowAnimation.Left)
+                                }
+                                if sectionsToDelete.count > 0 {
+                                    tableView.deleteSections(sectionsToDelete, withRowAnimation: UITableViewRowAnimation.Right)
+                                }
+                                if !rowsToDelete.isEmpty {
+                                    tableView.deleteRowsAtIndexPaths(rowsToDelete, withRowAnimation: UITableViewRowAnimation.Right)
+                                }
+
+                                if !rowsToAdd.isEmpty {
+                                    tableView.insertRowsAtIndexPaths(rowsToAdd, withRowAnimation: UITableViewRowAnimation.Right)
+                                }
+
                                 tableView.endUpdates()
+                                self.updateEmptyPanelState()
                             }
                         }
                 }

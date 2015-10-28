@@ -62,7 +62,7 @@ public func ==(lhs: RemoteClient, rhs: RemoteClient) -> Bool {
         lhs.os == rhs.os
 }
 
-extension RemoteClient: Printable {
+extension RemoteClient: CustomStringConvertible {
     public var description: String {
         return "<RemoteClient GUID: \(guid), name: \(name), modified: \(modified), type: \(type), formfactor: \(formfactor), OS: \(os)>"
     }

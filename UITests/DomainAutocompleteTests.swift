@@ -16,91 +16,88 @@ class DomainAutocompleteTests: KIFTestCase {
 
         // Basic autocompletion cases.
         tester().enterTextIntoCurrentFirstResponder("w")
-        ensureAutocompletionResult(textField, prefix: "w", completion: "ww.yahoo.com/")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "w", completion: "ww.yahoo.com/")
         tester().enterTextIntoCurrentFirstResponder("ww.yahoo.com/")
-        ensureAutocompletionResult(textField, prefix: "www.yahoo.com/", completion: "")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "www.yahoo.com/", completion: "")
         tester().clearTextFromFirstResponder()
+
+        // Test that deleting characters works correctly with autocomplete
+        tester().enterTextIntoCurrentFirstResponder("www.yah")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "www.yah", completion: "oo.com/")
+        tester().deleteCharacterFromFirstResponser()
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "www.yah", completion: "")
+        tester().deleteCharacterFromFirstResponser()
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "www.ya", completion: "")
+        tester().enterTextIntoCurrentFirstResponder("h")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "www.yah", completion: "oo.com/")
+
+        // Delete the entire string, verify the home panels are shown again.
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().deleteCharacterFromFirstResponser()
+        tester().waitForViewWithAccessibilityLabel("Panel Chooser")
 
         // Ensure that the scheme is included in the autocompletion.
         tester().enterTextIntoCurrentFirstResponder("https")
-        ensureAutocompletionResult(textField, prefix: "https", completion: "://foo.bar.baz.org/")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "https", completion: "://foo.bar.baz.org/")
         tester().clearTextFromFirstResponder()
 
         // Multiple subdomains.
         tester().enterTextIntoCurrentFirstResponder("f")
-        ensureAutocompletionResult(textField, prefix: "f", completion: "oo.bar.baz.org/")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "f", completion: "oo.bar.baz.org/")
         tester().clearTextFromFirstResponder()
         tester().enterTextIntoCurrentFirstResponder("b")
-        ensureAutocompletionResult(textField, prefix: "b", completion: "ar.baz.org/")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "b", completion: "ar.baz.org/")
         tester().enterTextIntoCurrentFirstResponder("a")
-        ensureAutocompletionResult(textField, prefix: "ba", completion: "r.baz.org/")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "ba", completion: "r.baz.org/")
         tester().enterTextIntoCurrentFirstResponder("z")
-        ensureAutocompletionResult(textField, prefix: "baz", completion: ".org/")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "baz", completion: ".org/")
 
         // Non-matches.
         tester().enterTextIntoCurrentFirstResponder("!")
-        ensureAutocompletionResult(textField, prefix: "baz!", completion: "")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "baz!", completion: "")
         tester().clearTextFromFirstResponder()
 
         // Ensure we don't match against TLDs.
         tester().enterTextIntoCurrentFirstResponder("o")
-        ensureAutocompletionResult(textField, prefix: "o", completion: "")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "o", completion: "")
         tester().clearTextFromFirstResponder()
 
         // Ensure we don't match other characters.
         tester().enterTextIntoCurrentFirstResponder(".")
-        ensureAutocompletionResult(textField, prefix: ".", completion: "")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: ".", completion: "")
         tester().clearTextFromFirstResponder()
         tester().enterTextIntoCurrentFirstResponder(":")
-        ensureAutocompletionResult(textField, prefix: ":", completion: "")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: ":", completion: "")
         tester().clearTextFromFirstResponder()
         tester().enterTextIntoCurrentFirstResponder("/")
-        ensureAutocompletionResult(textField, prefix: "/", completion: "")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "/", completion: "")
         tester().clearTextFromFirstResponder()
 
         // Ensure we don't match letters that don't start a word.
         tester().enterTextIntoCurrentFirstResponder("a")
-        ensureAutocompletionResult(textField, prefix: "a", completion: "")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "a", completion: "")
         tester().clearTextFromFirstResponder()
 
         // Ensure we don't match words outside of the domain.
         tester().enterTextIntoCurrentFirstResponder("ding")
-        ensureAutocompletionResult(textField, prefix: "ding", completion: "")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "ding", completion: "")
         tester().clearTextFromFirstResponder()
 
         tester().tapViewWithAccessibilityLabel("Cancel")
     }
 
-    private func ensureAutocompletionResult(textField: UITextField, prefix: String, completion: String) {
-        var range = NSRange()
-        var attribute: AnyObject?
-        let textLength = count(textField.text)
-
-        attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, atIndex: 0, effectiveRange: &range)
-
-        if attribute != nil {
-            // If the background attribute exists for the first character, the entire string is highlighted.
-            XCTAssertEqual(prefix, "")
-            XCTAssertEqual(completion, textField.text)
-            return
+    override func tearDown() {
+        do {
+            try tester().tryFindingTappableViewWithAccessibilityLabel("Cancel")
+            tester().tapViewWithAccessibilityLabel("Cancel")
+        } catch _ {
         }
-
-        let prefixLength = range.length
-
-        attribute = textField.attributedText!.attribute(NSBackgroundColorAttributeName, atIndex: textLength - 1, effectiveRange: &range)
-
-        if attribute == nil {
-            // If the background attribute exists for the last character, the entire string is not highlighted.
-            XCTAssertEqual(prefix, textField.text)
-            XCTAssertEqual(completion, "")
-            return
-        }
-
-        let completionStartIndex = advance(textField.text.startIndex, prefixLength)
-        let actualPrefix = textField.text.substringToIndex(completionStartIndex)
-        let actualCompletion = textField.text.substringFromIndex(completionStartIndex)
-
-        XCTAssertEqual(prefix, actualPrefix, "Expected prefix matches actual prefix")
-        XCTAssertEqual(completion, actualCompletion, "Expected completion matches actual completion")
+        BrowserUtils.clearHistoryItems(tester())
     }
 }

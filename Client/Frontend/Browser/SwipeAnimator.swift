@@ -16,7 +16,7 @@ struct SwipeAnimationParameters {
 private let DefaultParameters =
     SwipeAnimationParameters(
         totalRotationInDegrees: 10,
-        deleteThreshold: 60,
+        deleteThreshold: 80,
         totalScale: 0.9,
         totalAlpha: 0,
         minExitVelocity: 800,
@@ -76,12 +76,12 @@ extension SwipeAnimator {
     }
 
     private func transformForTranslation(translation: CGFloat) -> CGAffineTransform {
-        let halfWidth = container.frame.size.width / 2
+        let swipeWidth = container.frame.size.width
         let totalRotationInRadians = CGFloat(params.totalRotationInDegrees / 180.0 * M_PI)
 
         // Determine rotation / scaling amounts by the distance to the edge
-        var rotation = (translation / halfWidth) * totalRotationInRadians
-        var scale = 1 - (abs(translation) / halfWidth) * (1 - params.totalScale)
+        let rotation = (translation / swipeWidth) * totalRotationInRadians
+        let scale = 1 - (abs(translation) / swipeWidth) * (1 - params.totalScale)
 
         let rotationTransform = CGAffineTransformMakeRotation(rotation)
         let scaleTransform = CGAffineTransformMakeScale(scale, scale)
@@ -90,8 +90,8 @@ extension SwipeAnimator {
     }
 
     private func alphaForDistanceFromCenter(distance: CGFloat) -> CGFloat {
-        let halfWidth = container.frame.size.width / 2
-        return 1 - (distance / halfWidth) * (1 - params.totalAlpha)
+        let swipeWidth = container.frame.size.width
+        return 1 - (distance / swipeWidth) * (1 - params.totalAlpha)
     }
 }
 
@@ -111,7 +111,7 @@ extension SwipeAnimator {
             animateBackToCenter()
         case .Ended:
             let velocity = recognizer.velocityInView(container)
-            // Bounce back if the velocity is too low or if we have not reached the treshold yet
+            // Bounce back if the velocity is too low or if we have not reached the threshold yet
             let speed = max(abs(velocity.x), params.minExitVelocity)
             if (speed < params.minExitVelocity || abs(prevOffset.x) < params.deleteThreshold) {
                 animateBackToCenter()
@@ -123,7 +123,7 @@ extension SwipeAnimator {
         }
     }
 
-    func close(#right: Bool) {
+    func close(right right: Bool) {
         let direction = CGFloat(right ? -1 : 1)
         animateAwayWithVelocity(CGPoint(x: -direction * params.minExitVelocity, y: 0), speed: direction * params.minExitVelocity)
     }

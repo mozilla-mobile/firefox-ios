@@ -24,7 +24,7 @@ class ReadingListSynchronizer {
         self.client = client
     }
 
-    func synchronize(#type: ReadingListSyncType, completion: (ReadingListSynchronizerResult) -> Void) {
+    func synchronize(type type: ReadingListSyncType, completion: (ReadingListSynchronizerResult) -> Void) {
         // TODO Check if we are already syncing - Keep state somewhere
         // TODO If this is a first time sync then we want to remember the account and server in storage, so that:
         // TODO Check if the client is configured to use a different account or server

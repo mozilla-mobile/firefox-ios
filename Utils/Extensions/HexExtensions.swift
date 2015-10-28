@@ -19,7 +19,7 @@ extension NSData {
     public class func randomOfLength(length: UInt) -> NSData? {
         let length = Int(length)
         if let data = NSMutableData(length: length) {
-            let result = SecRandomCopyBytes(kSecRandomDefault, length, UnsafeMutablePointer<UInt8>(data.mutableBytes))
+            _ = SecRandomCopyBytes(kSecRandomDefault, length, UnsafeMutablePointer<UInt8>(data.mutableBytes))
             return NSData(data: data)
         } else {
             return nil
@@ -29,6 +29,6 @@ extension NSData {
 
 extension NSData {
     public var base64EncodedString: String {
-        return base64EncodedStringWithOptions(NSDataBase64EncodingOptions.allZeros)
+        return base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
     }
 }

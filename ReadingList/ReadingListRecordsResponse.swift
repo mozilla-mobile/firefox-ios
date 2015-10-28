@@ -22,7 +22,7 @@ class ReadingListRecordsResponse: ReadingListResponse {
                 var records = [ReadingListServerRecord]()
                 if let items = json.valueForKeyPath("items") as? NSArray {
                     for item in items {
-                        if let dict = item as? NSDictionary {
+                        if let _ = item as? NSDictionary {
                             if let record = ReadingListServerRecord(json: item) {
                                 records.append(record)
                             }

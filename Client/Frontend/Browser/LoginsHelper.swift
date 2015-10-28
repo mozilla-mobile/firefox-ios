@@ -8,13 +8,16 @@ import Storage
 import XCGLogger
 import WebKit
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.browserLogger
 
 private let SaveButtonTitle = NSLocalizedString("Save", comment: "Button to save the user's password")
 private let NotNowButtonTitle = NSLocalizedString("Not now", comment: "Button to not save the user's password")
 private let UpdateButtonTitle = NSLocalizedString("Update", comment: "Button to update the user's password")
 private let CancelButtonTitle = NSLocalizedString("Cancel", comment: "Authentication prompt cancel button")
 private let LogInButtonTitle  = NSLocalizedString("Log in", comment: "Authentication prompt log in button")
+
+// Copied from SearchViewController.swift PromptYes
+private let PromptYes = NSLocalizedString("Yes", tableName: "Search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
 
 class LoginsHelper: BrowserHelper {
     private weak var browser: Browser?
@@ -30,11 +33,9 @@ class LoginsHelper: BrowserHelper {
         self.browser = browser
         self.profile = profile
 
-        if let path = NSBundle.mainBundle().pathForResource("LoginsHelper", ofType: "js") {
-            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) as? String {
-                var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
-                browser.webView!.configuration.userContentController.addUserScript(userScript)
-            }
+        if let path = NSBundle.mainBundle().pathForResource("LoginsHelper", ofType: "js"), source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
+            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: false)
+            browser.webView!.configuration.userContentController.addUserScript(userScript)
         }
     }
 
@@ -43,16 +44,25 @@ class LoginsHelper: BrowserHelper {
     }
 
     func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        var res = message.body as! [String: String]
-        let type = res["type"]
-        if let url = browser?.url {
-            if type == "request" {
+        guard var res = message.body as? [String: AnyObject] else { return }
+        guard let type = res["type"] as? String else { return }
+
+        // We don't use the WKWebView's URL since the page can spoof the URL by using document.location
+        // right before requesting login data. See bug 1194567 for more context.
+        if let url = message.frameInfo.request.URL {
+            // Since responses go to the main frame, make sure we only listen for main frame requests
+            // to avoid XSS attacks.
+            if message.frameInfo.mainFrame && type == "request" {
                 res["username"] = ""
                 res["password"] = ""
-                let login = Login.fromScript(url, script: res)
-                requestLogins(login, requestId: res["requestId"]!)
+                if let login = Login.fromScript(url, script: res),
+                   let requestId = res["requestId"] as? String {
+                    requestLogins(login, requestId: requestId)
+                }
             } else if type == "submit" {
-                setCredentials(Login.fromScript(url, script: res))
+                if let login = Login.fromScript(url, script: res) {
+                    setCredentials(login)
+                }
             }
         }
     }
@@ -60,24 +70,25 @@ class LoginsHelper: BrowserHelper {
     class func replace(base: String, keys: [String], replacements: [String]) -> NSMutableAttributedString {
         var ranges = [NSRange]()
         var string = base
-        for (index, key) in enumerate(keys) {
+        for (index, key) in keys.enumerate() {
             let replace = replacements[index]
             let range = string.rangeOfString(key,
                 options: NSStringCompareOptions.LiteralSearch,
                 range: nil,
                 locale: nil)!
             string.replaceRange(range, with: replace)
-            let nsRange = NSMakeRange(distance(string.startIndex, range.startIndex),
-                count(replace))
+            let nsRange = NSMakeRange(string.startIndex.distanceTo(range.startIndex),
+                replace.characters.count)
             ranges.append(nsRange)
         }
 
-        var attributes = [NSObject: AnyObject]()
+        var attributes = [String: AnyObject]()
         attributes[NSFontAttributeName] = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
         attributes[NSForegroundColorAttributeName] = UIColor.darkGrayColor()
-        var attr = NSMutableAttributedString(string: string, attributes: attributes)
-        for (index, range) in enumerate(ranges) {
-            attr.addAttribute(NSFontAttributeName, value: UIFont.systemFontOfSize(13, weight: UIFontWeightMedium), range: range)
+        let attr = NSMutableAttributedString(string: string, attributes: attributes)
+        let font: UIFont = UIFont.systemFontOfSize(13, weight: UIFontWeightMedium)
+        for (_, range) in ranges.enumerate() {
+            attr.addAttribute(NSFontAttributeName, value: font, range: range)
         }
         return attr
     }
@@ -124,20 +135,21 @@ class LoginsHelper: BrowserHelper {
             browser?.removeSnackbar(snackBar!)
         }
 
-        snackBar = CountdownSnackBar(attrText: promptMessage,
-            img: UIImage(named: "lock_verified"),
+        snackBar = TimerSnackBar(attrText: promptMessage,
+            img: UIImage(named: "key"),
             buttons: [
-                SnackButton(title: SaveButtonTitle, callback: { (bar: SnackBar) -> Void in
-                    self.browser?.removeSnackbar(bar)
-                    self.snackBar = nil
-                    self.profile.logins.addLogin(login)
-                }),
-
                 SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     return
+                }),
+
+                SnackButton(title: PromptYes, callback: { (bar: SnackBar) -> Void in
+                    self.browser?.removeSnackbar(bar)
+                    self.snackBar = nil
+                    self.profile.logins.addLogin(login)
                 })
+
             ])
         browser?.addSnackbar(snackBar!)
     }
@@ -159,19 +171,20 @@ class LoginsHelper: BrowserHelper {
             browser?.removeSnackbar(snackBar!)
         }
 
-        snackBar = CountdownSnackBar(attrText: promptMessage,
-            img: UIImage(named: "lock_verified"),
+        snackBar = TimerSnackBar(attrText: promptMessage,
+            img: UIImage(named: "key"),
             buttons: [
+                SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
+                    self.browser?.removeSnackbar(bar)
+                    self.snackBar = nil
+                    return
+                }),
+
                 SnackButton(title: UpdateButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.logins.updateLoginByGUID(guid, new: new,
                                                           significant: new.isSignificantlyDifferentFrom(old))
-                }),
-                SnackButton(title: NotNowButtonTitle, callback: { (bar: SnackBar) -> Void in
-                    self.browser?.removeSnackbar(bar)
-                    self.snackBar = nil
-                    return
                 })
             ])
         browser?.addSnackbar(snackBar!)
@@ -184,7 +197,7 @@ class LoginsHelper: BrowserHelper {
                 log.debug("Found \(cursor.count) logins.")
                 jsonObj["requestId"] = requestId
                 jsonObj["name"] = "RemoteLogins:loginsFound"
-                jsonObj["logins"] = map(cursor, { $0!.toDict() })
+                jsonObj["logins"] = cursor.map { $0!.toDict() }
             }
 
             let json = JSON(jsonObj)
@@ -194,10 +207,10 @@ class LoginsHelper: BrowserHelper {
         }
     }
 
-    func handleAuthRequest(viewController: UIViewController, challenge: NSURLAuthenticationChallenge) -> Deferred<Result<LoginData>> {
+    func handleAuthRequest(viewController: UIViewController, challenge: NSURLAuthenticationChallenge) -> Deferred<Maybe<LoginData>> {
         // If there have already been too many login attempts, we'll just fail.
         if challenge.previousFailureCount >= LoginsHelper.MaxAuthenticationAttempts {
-            return deferResult(LoginDataError(description: "Too many attempts to open site"))
+            return deferMaybe(LoginDataError(description: "Too many attempts to open site"))
         }
 
         var credential = challenge.proposedCredential
@@ -206,7 +219,7 @@ class LoginsHelper: BrowserHelper {
         if let proposed = credential {
             if !(proposed.user?.isEmpty ?? true) {
                 if challenge.previousFailureCount == 0 {
-                    return deferResult(Login.createWithCredential(credential!, protectionSpace: challenge.protectionSpace))
+                    return deferMaybe(Login.createWithCredential(credential!, protectionSpace: challenge.protectionSpace))
                 }
             } else {
                 credential = nil
@@ -219,20 +232,19 @@ class LoginsHelper: BrowserHelper {
         }
 
         // Otherwise, try to look one up
-        let options = QueryOptions(filter: challenge.protectionSpace.host, filterType: .None, sort: .None)
         return profile.logins.getLoginsForProtectionSpace(challenge.protectionSpace).bindQueue(dispatch_get_main_queue()) { res in
             let credentials = res.successValue?[0]?.credentials
             return self.promptForUsernamePassword(viewController, credentials: credentials, protectionSpace: challenge.protectionSpace)
         }
     }
 
-    private func promptForUsernamePassword(viewController: UIViewController, credentials: NSURLCredential?, protectionSpace: NSURLProtectionSpace) -> Deferred<Result<LoginData>> {
+    private func promptForUsernamePassword(viewController: UIViewController, credentials: NSURLCredential?, protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<LoginData>> {
         if protectionSpace.host.isEmpty {
-            println("Unable to show a password prompt without a hostname")
-            return deferResult(LoginDataError(description: "Unable to show a password prompt without a hostname"))
+            print("Unable to show a password prompt without a hostname")
+            return deferMaybe(LoginDataError(description: "Unable to show a password prompt without a hostname"))
         }
 
-        let deferred = Deferred<Result<LoginData>>()
+        let deferred = Deferred<Maybe<LoginData>>()
         let alert: UIAlertController
         let title = NSLocalizedString("Authentication required", comment: "Authentication prompt title")
         if !(protectionSpace.realm?.isEmpty ?? true) {
@@ -248,18 +260,17 @@ class LoginsHelper: BrowserHelper {
         // Add a button to log in.
         let action = UIAlertAction(title: LogInButtonTitle,
             style: UIAlertActionStyle.Default) { (action) -> Void in
-                let user = (alert.textFields?[0] as! UITextField).text
-                let pass = (alert.textFields?[1] as! UITextField).text
+                guard let user = alert.textFields?[0].text, pass = alert.textFields?[1].text else { deferred.fill(Maybe(failure: LoginDataError(description: "Username and Password required"))); return }
 
                 let login = Login.createWithCredential(NSURLCredential(user: user, password: pass, persistence: .ForSession), protectionSpace: protectionSpace)
-                deferred.fill(Result(success: login))
+                deferred.fill(Maybe(success: login))
                 self.setCredentials(login)
         }
         alert.addAction(action)
 
         // Add a cancel button.
         let cancel = UIAlertAction(title: CancelButtonTitle, style: UIAlertActionStyle.Cancel) { (action) -> Void in
-            deferred.fill(Result(failure: LoginDataError(description: "Save password cancelled")))
+            deferred.fill(Maybe(failure: LoginDataError(description: "Save password cancelled")))
         }
         alert.addAction(cancel)
 

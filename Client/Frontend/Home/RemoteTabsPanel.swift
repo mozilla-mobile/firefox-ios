@@ -10,21 +10,21 @@ import Storage
 import Sync
 import XCGLogger
 
-// TODO: same comment as for SyncAuthState.swift!
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.browserLogger
 
 
 private struct RemoteTabsPanelUX {
-    static let HeaderHeight: CGFloat = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
-    static let RowHeight: CGFloat = SiteTableViewControllerUX.RowHeight
+    static let HeaderHeight = SiteTableViewControllerUX.RowHeight // Not HeaderHeight!
+    static let RowHeight = SiteTableViewControllerUX.RowHeight
     static let HeaderBackgroundColor = UIColor(rgb: 0xf8f8f8)
 
-    static let EmptyStateTitleFont = UIFont.systemFontOfSize(15, weight: UIFontWeightMedium)
+    static let EmptyStateTitleFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightMedium)
     static let EmptyStateTitleTextColor = UIColor.darkGrayColor()
-    static let EmptyStateInstructionsFont = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
+
+    static let EmptyStateInstructionsFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize - 1, weight: UIFontWeightLight)
     static let EmptyStateInstructionsTextColor = UIColor.grayColor()
-    static let EmptyStateInstructionsWidth = 226
-    static let EmptyStateTopPaddingInBetweenItems: CGFloat = 10 // UX TODO I set this to 8 so that it all fits on landscape
+    static let EmptyStateInstructionsWidth = 252
+    static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape
     static let EmptyStateSignInButtonColor = UIColor(red:0.3, green:0.62, blue:1, alpha:1)
     static let EmptyStateSignInButtonTitleFont = UIFont.systemFontOfSize(16)
     static let EmptyStateSignInButtonTitleColor = UIColor.whiteColor()
@@ -32,6 +32,13 @@ private struct RemoteTabsPanelUX {
     static let EmptyStateSignInButtonHeight = 44
     static let EmptyStateSignInButtonWidth = 200
     static let EmptyStateCreateAccountButtonFont = UIFont.systemFontOfSize(12)
+
+    // Backup and active strings added in Bug 1205294.
+    static let EmptyStateInstructionsSyncTabsPasswordsBookmarksString = NSLocalizedString("Sync your tabs, bookmarks, passwords and more.", comment: "See http://mzl.la/1Qtkf0j")
+
+    static let EmptyStateInstructionsSyncTabsPasswordsString = NSLocalizedString("Sync your tabs, passwords and more.", comment: "See http://mzl.la/1Qtkf0j")
+
+    static let EmptyStateInstructionsGetTabsBookmarksPasswordsString = NSLocalizedString("Get your open tabs, bookmarks, and passwords from your other devices.", comment: "A re-worded offer about Sync that emphasizes one-way data transfer, not syncing.")
 }
 
 private let RemoteClientIdentifier = "RemoteClient"
@@ -43,10 +50,10 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firefoxAccountChanged:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
     }
 
-    required init!(coder aDecoder: NSCoder!) {
+    required init!(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -63,8 +70,6 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         tableView.dataSource = nil
 
         refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: "SELrefresh", forControlEvents: UIControlEvents.ValueChanged)
-
         view.backgroundColor = UIConstants.PanelBackgroundColor
     }
 
@@ -74,12 +79,24 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        refresh()
+        refreshControl?.addTarget(self, action: "SELrefreshTabs", forControlEvents: UIControlEvents.ValueChanged)
+        refreshTabs()
     }
 
-    func firefoxAccountChanged(notification: NSNotification) {
-        if notification.name == NotificationFirefoxAccountChanged {
-            refresh()
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        refreshControl?.removeTarget(self, action: "SELrefreshTabs", forControlEvents: UIControlEvents.ValueChanged)
+    }
+
+    func notificationReceived(notification: NSNotification) {
+        switch notification.name {
+        case NotificationFirefoxAccountChanged:
+            refreshTabs()
+            break
+        default:
+            // no need to do anything at all
+            log.warning("Received unexpected notification \(notification.name)")
+            break
         }
     }
 
@@ -90,15 +107,15 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         }
     }
 
-    func refresh() {
+    func refreshTabs() {
         tableView.scrollEnabled = false
         tableView.allowsSelection = false
         tableView.tableFooterView = UIView(frame: CGRectZero)
 
         // Short circuit if the user is not logged in
-        if profile.getAccount() == nil {
+        if !profile.hasAccount() {
             self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: self, error: .NotLoggedIn)
-            self.tableView.reloadData()
+            self.endRefreshing()
             return
         }
 
@@ -109,7 +126,8 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
 
             // Otherwise, fetch the tabs cloud if its been more than 1 minute since last sync
             let lastSyncTime = self.profile.prefs.timestampForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-            if NSDate.now() - (lastSyncTime ?? 0) > OneMinuteInMilliseconds {
+            if NSDate.now() - (lastSyncTime ?? 0) > OneMinuteInMilliseconds && !(self.refreshControl?.refreshing ?? false) {
+                self.startRefreshing()
                 self.profile.getClientsAndTabs().uponQueue(dispatch_get_main_queue()) { result in
                     if let clientAndTabs = result.successValue {
                         self.profile.prefs.setTimestamp(NSDate.now(), forKey: PrefsKeys.KeyLastRemoteTabSyncTime)
@@ -119,7 +137,7 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
                 }
             } else {
                 // If we failed before and didn't sync, show the failure delegate
-                if let failed = result.failureValue {
+                if let _ = result.failureValue {
                     self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: self, error: .FailedToSync)
                 }
 
@@ -128,8 +146,19 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         }
     }
 
+    private func startRefreshing() {
+        if let refreshControl = self.refreshControl {
+            let height = -refreshControl.bounds.size.height
+            self.tableView.setContentOffset(CGPointMake(0, height), animated: true)
+            refreshControl.beginRefreshing()
+        }
+    }
+
     func endRefreshing() {
-        self.refreshControl?.endRefreshing()
+        if self.refreshControl?.refreshing ?? false {
+            self.refreshControl?.endRefreshing()
+        }
+
         self.tableView.scrollEnabled = true
         self.tableView.reloadData()
     }
@@ -148,9 +177,8 @@ class RemoteTabsPanel: UITableViewController, HomePanel {
         }
     }
 
-    @objc private func SELrefresh() {
-        self.refreshControl?.beginRefreshing()
-        refresh()
+    @objc private func SELrefreshTabs() {
+        refreshTabs()
     }
 
 }
@@ -204,7 +232,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let client = clientTabs.client
         let view = tableView.dequeueReusableHeaderFooterViewWithIdentifier(RemoteClientIdentifier) as! TwoLineHeaderFooterView
         view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
-        view.textLabel.text = client.name
+        view.textLabel?.text = client.name
         view.contentView.backgroundColor = RemoteTabsPanelUX.HeaderBackgroundColor
 
         /*
@@ -222,7 +250,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
 
         let timestamp = clientTabs.approximateLastSyncTime()
         let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time. Argument is the relative date string.")
-        view.detailTextLabel.text = String(format: label, NSDate.fromTimestamp(timestamp).toRelativeTimeString())
+        view.detailTextLabel?.text = String(format: label, NSDate.fromTimestamp(timestamp).toRelativeTimeString())
 
         let image: UIImage?
         if client.type == "desktop" {
@@ -265,10 +293,12 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
 class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource {
     weak var homePanel: HomePanel?
     var error: RemoteTabsError
+    var notLoggedCell: UITableViewCell?
 
     init(homePanel: HomePanel, error: RemoteTabsError) {
         self.homePanel = homePanel
         self.error = error
+        self.notLoggedCell = nil
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -280,19 +310,34 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource {
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if let cell = self.notLoggedCell {
+            cell.updateConstraints()
+        }
         return tableView.bounds.height
+    }
+
+    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        // Making the footer height as small as possible because it will disable button tappability if too high.
+        return 1
+    }
+
+    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch error {
         case .NotLoggedIn:
             let cell = RemoteTabsNotLoggedInCell(homePanel: homePanel)
+            self.notLoggedCell = cell
             return cell
         default:
             let cell = RemoteTabsErrorCell(error: self.error)
+            self.notLoggedCell = nil
             return cell
         }
     }
+
 }
 
 // MARK: -
@@ -323,22 +368,23 @@ class RemoteTabsErrorCell: UITableViewCell {
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
         instructionsLabel.numberOfLines = 0
         containerView.addSubview(instructionsLabel)
-        instructionsLabel.snp_makeConstraints({ (make) -> Void in
+        instructionsLabel.snp_makeConstraints { make in
             make.top.equalTo(imageView.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(containerView)
             make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
-        })
+        }
 
-        containerView.snp_makeConstraints({ (make) -> Void in
+        containerView.snp_makeConstraints { make in
             // Let the container wrap around the content
             make.top.equalTo(imageView.snp_top)
             make.left.bottom.right.equalTo(instructionsLabel)
             // And then center it in the overlay view that sits on top of the UITableView
-            make.center.equalTo(contentView)
-        })
+            make.centerX.equalTo(contentView)
+            make.centerY.equalTo(contentView).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
+        }
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
@@ -348,48 +394,41 @@ class RemoteTabsErrorCell: UITableViewCell {
 class RemoteTabsNotLoggedInCell: UITableViewCell {
     static let Identifier = "RemoteTabsNotLoggedInCell"
     var homePanel: HomePanel?
+    var instructionsLabel: UILabel
+    var signInButton: UIButton
+    var titleLabel: UILabel
 
     init(homePanel: HomePanel?) {
+        let titleLabel = UILabel()
+        let instructionsLabel = UILabel()
+        let signInButton = UIButton()
+
+        self.instructionsLabel = instructionsLabel
+        self.signInButton = signInButton
+        self.titleLabel = titleLabel
+
         super.init(style: .Default, reuseIdentifier: RemoteTabsErrorCell.Identifier)
 
         self.homePanel = homePanel
-
-        let containerView = UIView()
-        contentView.addSubview(containerView)
-
+        let createAnAccountButton = UIButton(type: .System)
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "emptySync")
-        containerView.addSubview(imageView)
-        imageView.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(containerView)
-            make.centerX.equalTo(containerView)
-        }
 
-        let titleLabel = UILabel()
+        imageView.image = UIImage(named: "emptySync")
+        contentView.addSubview(imageView)
+
         titleLabel.font = RemoteTabsPanelUX.EmptyStateTitleFont
         titleLabel.text = NSLocalizedString("Welcome to Sync", comment: "See http://mzl.la/1Qtkf0j")
         titleLabel.textAlignment = NSTextAlignment.Center
         titleLabel.textColor = RemoteTabsPanelUX.EmptyStateTitleTextColor
-        containerView.addSubview(titleLabel)
-        titleLabel.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(imageView.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
-            make.centerX.equalTo(containerView)
-        })
+        contentView.addSubview(titleLabel)
 
-        let instructionsLabel = UILabel()
         instructionsLabel.font = RemoteTabsPanelUX.EmptyStateInstructionsFont
-        instructionsLabel.text = NSLocalizedString("Sync your tabs, bookmarks, passwords and more.", comment: "See http://mzl.la/1Qtkf0j")
+        instructionsLabel.text = RemoteTabsPanelUX.EmptyStateInstructionsGetTabsBookmarksPasswordsString
         instructionsLabel.textAlignment = NSTextAlignment.Center
         instructionsLabel.textColor = RemoteTabsPanelUX.EmptyStateInstructionsTextColor
         instructionsLabel.numberOfLines = 0
-        containerView.addSubview(instructionsLabel)
-        instructionsLabel.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(titleLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
-            make.centerX.equalTo(containerView)
-            make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
-        })
+        contentView.addSubview(instructionsLabel)
 
-        let signInButton = UIButton()
         signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
         signInButton.setTitle(NSLocalizedString("Sign in", comment: "See http://mzl.la/1Qtkf0j"), forState: .Normal)
         signInButton.setTitleColor(RemoteTabsPanelUX.EmptyStateSignInButtonTitleColor, forState: .Normal)
@@ -397,36 +436,36 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
         signInButton.addTarget(self, action: "SELsignIn", forControlEvents: UIControlEvents.TouchUpInside)
-        containerView.addSubview(signInButton)
-        signInButton.snp_makeConstraints { (make) -> Void in
-            make.centerX.equalTo(containerView)
-            make.top.equalTo(instructionsLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
-            make.height.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonHeight)
-            make.width.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonWidth)
-        }
+        contentView.addSubview(signInButton)
 
-        let createAnAccountButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
         createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), forState: .Normal)
         createAnAccountButton.titleLabel?.font = RemoteTabsPanelUX.EmptyStateCreateAccountButtonFont
         createAnAccountButton.addTarget(self, action: "SELcreateAnAccount", forControlEvents: UIControlEvents.TouchUpInside)
-        containerView.addSubview(createAnAccountButton)
-        createAnAccountButton.snp_makeConstraints({ (make) -> Void in
-            make.centerX.equalTo(containerView)
-            make.top.equalTo(signInButton.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
-        })
+        contentView.addSubview(createAnAccountButton)
 
-        containerView.snp_makeConstraints({ (make) -> Void in
-            // Let the container wrap around the content
-            make.top.equalTo(contentView.snp_top).offset(20)
-            make.bottom.equalTo(createAnAccountButton)
-            make.left.equalTo(signInButton)
-            make.right.equalTo(signInButton)
-            // And then center it in the overlay view that sits on top of the UITableView
-            make.centerX.equalTo(contentView)
-        })
+        imageView.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(instructionsLabel)
+
+            // Sets proper top constraint for iPhone 6 in portait and for iPad.
+            make.centerY.equalTo(contentView.snp_centerY).offset(HomePanelUX.EmptyTabContentOffset).priorityMedium()
+
+            // Sets proper top constraint for iPhone 4, 5 in portrait.
+            make.top.greaterThanOrEqualTo(contentView.snp_top).offset(50).priorityHigh()
+        }
+
+        titleLabel.snp_makeConstraints { make in
+            make.top.equalTo(imageView.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+            make.centerX.equalTo(imageView)
+        }
+
+
+        createAnAccountButton.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(signInButton)
+            make.top.equalTo(signInButton.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+        }
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -440,5 +479,46 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         if let homePanel = self.homePanel {
             homePanel.homePanelDelegate?.homePanelDidRequestToCreateAccount(homePanel)
         }
+    }
+
+    override func updateConstraints() {
+        if UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation) && !(DeviceInfo.deviceModel().rangeOfString("iPad") != nil) {
+            instructionsLabel.snp_remakeConstraints { make in
+                make.top.equalTo(titleLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+                make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
+
+                // Sets proper landscape layout for bigger phones: iPhone 6 and on.
+                make.left.lessThanOrEqualTo(contentView.snp_left).offset(80).priorityMedium()
+
+                // Sets proper landscape layout for smaller phones: iPhone 4 & 5.
+                make.right.lessThanOrEqualTo(contentView.snp_centerX).offset(-10).priorityHigh()
+            }
+
+            signInButton.snp_remakeConstraints { make in
+                make.height.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonHeight)
+                make.width.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonWidth)
+                make.centerY.equalTo(titleLabel.snp_centerY)
+
+                // Sets proper landscape layout for bigger phones: iPhone 6 and on.
+                make.right.greaterThanOrEqualTo(contentView.snp_right).offset(-80).priorityMedium()
+
+                // Sets proper landscape layout for smaller phones: iPhone 4 & 5.
+                make.left.greaterThanOrEqualTo(contentView.snp_centerX).offset(10).priorityHigh()
+            }
+        } else {
+            instructionsLabel.snp_remakeConstraints { make in
+                make.top.equalTo(titleLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+                make.centerX.equalTo(contentView)
+                make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)
+            }
+
+            signInButton.snp_remakeConstraints { make in
+                make.centerX.equalTo(contentView)
+                make.top.equalTo(instructionsLabel.snp_bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
+                make.height.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonHeight)
+                make.width.equalTo(RemoteTabsPanelUX.EmptyStateSignInButtonWidth)
+            }
+        }
+        super.updateConstraints()
     }
 }

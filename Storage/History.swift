@@ -4,7 +4,7 @@
 
 import Shared
 
-public class IgnoredSiteError: ErrorType {
+public class IgnoredSiteError: MaybeErrorType {
     public var description: String {
         return "Ignored site."
     }
@@ -21,17 +21,18 @@ public protocol BrowserHistory {
     func addLocalVisit(visit: SiteVisit) -> Success
     func clearHistory() -> Success
     func removeHistoryForURL(url: String) -> Success
+    func removeSiteFromTopSites(site: Site) -> Success
 
-    func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Result<Cursor<Site>>>
-    func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Result<Cursor<Site>>>
-    func getSitesByLastVisit(limit: Int) -> Deferred<Result<Cursor<Site>>>
+    func getSitesByFrecencyWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>>
+    func getSitesByFrecencyWithLimit(limit: Int, whereURLContains filter: String) -> Deferred<Maybe<Cursor<Site>>>
+    func getSitesByLastVisit(limit: Int) -> Deferred<Maybe<Cursor<Site>>>
 }
 
 /**
  * The interface that history storage needs to provide in order to be
  * synced by a `HistorySynchronizer`.
  */
-public protocol SyncableHistory {
+public protocol SyncableHistory: AccountRemovalDelegate {
     /**
      * Make sure that the local place with the provided URL has the provided GUID.
      * Succeeds if no place exists with that URL.
@@ -44,21 +45,16 @@ public protocol SyncableHistory {
     func deleteByGUID(guid: GUID, deletedAt: Timestamp) -> Success
 
     func storeRemoteVisits(visits: [Visit], forGUID guid: GUID) -> Success
-    func insertOrUpdatePlace(place: Place, modified: Timestamp) -> Deferred<Result<GUID>>
+    func insertOrUpdatePlace(place: Place, modified: Timestamp) -> Deferred<Maybe<GUID>>
 
-    func getModifiedHistoryToUpload() -> Deferred<Result<[(Place, [Visit])]>>
-    func getDeletedHistoryToUpload() -> Deferred<Result<[GUID]>>
+    func getModifiedHistoryToUpload() -> Deferred<Maybe<[(Place, [Visit])]>>
+    func getDeletedHistoryToUpload() -> Deferred<Maybe<[GUID]>>
 
     /**
      * Chains through the provided timestamp.
      */
-    func markAsSynchronized([GUID], modified: Timestamp) -> Deferred<Result<Timestamp>>
+    func markAsSynchronized(_: [GUID], modified: Timestamp) -> Deferred<Maybe<Timestamp>>
     func markAsDeleted(guids: [GUID]) -> Success
-
-    /**
-     * Clean up any metadata.
-     */
-    func onRemovedAccount() -> Success
 }
 
 // TODO: integrate Site with this.

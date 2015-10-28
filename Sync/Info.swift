@@ -28,7 +28,7 @@ public class InfoCollections {
     }
 
     public func collectionNames() -> [String] {
-        return self.collections.keys.array
+        return Array(self.collections.keys)
     }
 
     public func modified(collection: String) -> Timestamp? {
@@ -48,30 +48,5 @@ public class InfoCollections {
         let ours = self.collectionNames()
         let theirs = other.collectionNames()
         return ours.sameElements(theirs, f: ==) && same(other, collections: ours)
-    }
-}
-
-extension Array {
-    // Laughably inefficient, but good enough for a handful of items.
-    func sameElements(arr: [T], f: (T, T) -> Bool) -> Bool {
-        return self.count == arr.count && every { arr.contains($0, f: f) }
-    }
-
-    func contains(x: T, f: (T, T) -> Bool) -> Bool {
-        for y in self {
-            if f(x, y) {
-                return true
-            }
-        }
-        return false
-    }
-
-    func every(f: (T) -> Bool) -> Bool {
-        for x in self {
-            if !f(x) {
-                return false
-            }
-        }
-        return true
     }
 }

@@ -5,10 +5,15 @@
 import Shared
 import Storage
 import AVFoundation
+import XCGLogger
+import Breakpad
+
+private let log = Logger.browserLogger
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var browserViewController: BrowserViewController!
+    var rootViewController: UINavigationController!
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
 
@@ -18,46 +23,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set the Firefox UA for browsing.
         setUserAgent()
 
-        // Listen for crashes
-        FXCrashDetector.sharedDetector().listenForCrashes()
-
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
+
+        // Create a new sync log file on cold app launch
+        Logger.syncLogger.newLogWithDate(NSDate())
 
         let profile = getProfile(application)
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
 
-        // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
-        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: AVAudioSessionCategoryOptions.MixWithOthers, error: nil)
+        do {
+            // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: AVAudioSessionCategoryOptions.MixWithOthers)
+        } catch _ {
+            log.error("Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
+        }
 
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
 
-        let defaultRequest = NSURLRequest(URL: UIConstants.AboutHomeURL)
-        self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, prefs: profile.prefs)
+        let defaultRequest = NSURLRequest(URL: UIConstants.DefaultHomePage)
+        let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
+        self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, prefs: profile.prefs, imageStore: imageStore)
+        self.tabManager.stateDelegate = self
         browserViewController = BrowserViewController(profile: profile, tabManager: self.tabManager)
 
         // Add restoration class, the factory that will return the ViewController we 
         // will restore with.
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         browserViewController.restorationClass = AppDelegate.self
+        browserViewController.automaticallyAdjustsScrollViewInsets = false
 
-        self.window!.rootViewController = browserViewController
+        rootViewController = UINavigationController(rootViewController: browserViewController)
+        rootViewController.automaticallyAdjustsScrollViewInsets = false
+        rootViewController.delegate = self
+        rootViewController.navigationBarHidden = true
+
+        self.window!.rootViewController = rootViewController
         self.window!.backgroundColor = UIConstants.AppBackgroundColor
 
+        activeCrashReporter = BreakpadCrashReporter(breakpadInstance: BreakpadController.sharedInstance())
+        configureActiveCrashReporter(profile.prefs.boolForKey("crashreports.send.always"))
+
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
-            if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL, absoluteString = url.absoluteString {
+            if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL {
                 let title = (userInfo["Title"] as? String) ?? ""
-                profile.readingList?.createRecordWithURL(absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
+                profile.readingList?.createRecordWithURL(url.absoluteString, title: title, addedBy: UIDevice.currentDevice().name)
             }
         }
 
-        // Force a database upgrade by requesting a non-existent password
-        profile.logins.getLoginsForProtectionSpace(NSURLProtectionSpace(host: "example.com", port: 0, `protocol`: nil, realm: nil, authenticationMethod: nil))
-
-        // check to see if we started cos someone tapped on a notification
+        // check to see if we started 'cos someone tapped on a notification.
         if let localNotification = launchOptions?[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
             viewURLInNewTab(localNotification)
         }
@@ -84,26 +101,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+            AdjustIntegration.sharedInstance.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
+        }
         self.window!.makeKeyAndVisible()
         return true
     }
 
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) {
             if components.scheme != "firefox" && components.scheme != "firefox-x-callback" {
                 return false
             }
             var url: String?
-            var appName: String?
-            var callbackScheme: String?
-            for item in components.queryItems as? [NSURLQueryItem] ?? [] {
+            for item in (components.queryItems ?? []) as [NSURLQueryItem] {
                 switch item.name {
                 case "url":
                     url = item.value
-                case "x-source":
-                    callbackScheme = item.value
-                case "x-source-name":
-                    appName = item.value
                 default: ()
                 }
             }
@@ -119,7 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(application: UIApplication) {
-        self.profile?.syncManager.beginTimedSyncs()
+        self.profile?.syncManager.applicationDidBecomeActive()
 
         // We could load these here, but then we have to futz with the tab counter
         // and making NSURLRequests.
@@ -127,11 +141,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
-        self.profile?.syncManager.endTimedSyncs()
+        self.profile?.syncManager.applicationDidEnterBackground()
 
-        let taskId = application.beginBackgroundTaskWithExpirationHandler { _ in }
-        self.profile?.shutdown()
-        application.endBackgroundTask(taskId)
+        var taskId: UIBackgroundTaskIdentifier = 0
+        taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
+            log.warning("Running out of background time, but we have a profile shutdown pending.")
+            application.endBackgroundTask(taskId)
+        }
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+            self.profile?.shutdown()
+            application.endBackgroundTask(taskId)
+        }
     }
 
     private func setUpWebServer(profile: Profile) {
@@ -145,40 +166,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func setUserAgent() {
-        let currentiOSVersion = UIDevice.currentDevice().systemVersion
-        let lastiOSVersion = NSUserDefaults.standardUserDefaults().stringForKey("LastDeviceSystemVersionNumber")
-        var firefoxUA = NSUserDefaults.standardUserDefaults().stringForKey("UserAgent")
-        if firefoxUA == nil
-            || lastiOSVersion != currentiOSVersion {
-            let webView = UIWebView()
+        // Note that we use defaults here that are readable from extensions, so they
+        // can just used the cached identifier.
+        let defaults = NSUserDefaults(suiteName: AppInfo.sharedContainerIdentifier())!
+        let firefoxUA = UserAgent.defaultUserAgent(defaults)
 
-            NSUserDefaults.standardUserDefaults().setObject(currentiOSVersion,forKey: "LastDeviceSystemVersionNumber")
-            let userAgent = webView.stringByEvaluatingJavaScriptFromString("navigator.userAgent")!
+        // Set the UA for WKWebView (via defaults), the favicon fetcher, and the image loader.
+        // This only needs to be done once per runtime.
 
-            // Extract the WebKit version and use it as the Safari version.
-            let webKitVersionRegex = NSRegularExpression(pattern: "AppleWebKit/([^ ]+) ", options: nil, error: nil)!
-            let match = webKitVersionRegex.firstMatchInString(userAgent, options: nil, range: NSRange(location: 0, length: count(userAgent)))
-            if match == nil {
-                println("Error: Unable to determine WebKit version")
-                return
-            }
-            let webKitVersion = (userAgent as NSString).substringWithRange(match!.rangeAtIndex(1))
-
-            // Insert "FxiOS/<version>" before the Mobile/ section.
-            let mobileRange = (userAgent as NSString).rangeOfString("Mobile/")
-            if mobileRange.location == NSNotFound {
-                println("Error: Unable to find Mobile section")
-                return
-            }
-
-            let mutableUA = NSMutableString(string: userAgent)
-            mutableUA.insertString("FxiOS/\(appVersion) ", atIndex: mobileRange.location)
-            firefoxUA = "\(mutableUA) Safari/\(webKitVersion)"
-            NSUserDefaults.standardUserDefaults().setObject(firefoxUA, forKey: "UserAgent")
-        }
-        NSUserDefaults.standardUserDefaults().registerDefaults(["UserAgent": firefoxUA!])
-
+        defaults.registerDefaults(["UserAgent": firefoxUA])
+        FaviconFetcher.userAgent = firefoxUA
         SDWebImageDownloader.sharedDownloader().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
+
+        // Record the user agent for use by search suggestion clients.
+        SearchViewController.userAgent = firefoxUA
     }
 
     func application(application: UIApplication, handleActionWithIdentifier identifier: String?, forLocalNotification notification: UILocalNotification, completionHandler: () -> Void) {
@@ -196,10 +197,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     break
                 }
             } else {
-                println("ERROR: Unknown notification action received")
+                print("ERROR: Unknown notification action received")
             }
         } else {
-            println("ERROR: Unknown notification received")
+            print("ERROR: Unknown notification received")
         }
     }
 
@@ -232,3 +233,71 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+// MARK: - Root View Controller Animations
+extension AppDelegate: UINavigationControllerDelegate {
+    func navigationController(navigationController: UINavigationController,
+        animationControllerForOperation operation: UINavigationControllerOperation,
+        fromViewController fromVC: UIViewController,
+        toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+            if operation == UINavigationControllerOperation.Push {
+                return BrowserToTrayAnimator()
+            } else if operation == UINavigationControllerOperation.Pop {
+                return TrayToBrowserAnimator()
+            } else {
+                return nil
+            }
+    }
+}
+
+extension AppDelegate: TabManagerStateDelegate {
+    func tabManagerWillStoreTabs(tabs: [Browser]) {
+        // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
+        let storedTabs: [RemoteTab] = tabs.flatMap( Browser.toTab )
+
+        // Don't insert into the DB immediately. We tend to contend with more important
+        // work like querying for top sites.
+        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(ProfileRemoteTabsSyncDelay * Double(NSEC_PER_MSEC))), queue) {
+            self.profile?.storeTabs(storedTabs)
+        }
+    }
+}
+
+var activeCrashReporter: CrashReporter?
+func configureActiveCrashReporter(optedIn: Bool?) {
+    if let reporter = activeCrashReporter {
+        configureCrashReporter(reporter, optedIn: optedIn)
+    }
+}
+
+public func configureCrashReporter(reporter: CrashReporter, optedIn: Bool?) {
+    let configureReporter: () -> () = {
+        let addUploadParameterForKey: String -> Void = { key in
+            if let value = NSBundle.mainBundle().objectForInfoDictionaryKey(key) as? String {
+                reporter.addUploadParameter(value, forKey: key)
+            }
+        }
+
+        addUploadParameterForKey("AppID")
+        addUploadParameterForKey("BuildID")
+        addUploadParameterForKey("ReleaseChannel")
+        addUploadParameterForKey("Vendor")
+    }
+
+    if let optedIn = optedIn {
+        // User has explicitly opted-in for sending crash reports. If this is not true, then the user has
+        // explicitly opted-out of crash reporting so don't bother starting breakpad or stop if it was running
+        if optedIn {
+            reporter.start(true)
+            configureReporter()
+            reporter.setUploadingEnabled(true)
+        } else {
+            reporter.stop()
+        }
+    }
+    // We haven't asked the user for their crash reporting preference yet. Log crashes anyways but don't send them.
+    else {
+        reporter.start(true)
+        configureReporter()
+    }
+}

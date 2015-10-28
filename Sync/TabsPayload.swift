@@ -5,6 +5,9 @@
 import Foundation
 import Shared
 import Storage
+import XCGLogger
+
+private let log = Logger.browserLogger
 
 public class TabsPayload: CleartextPayloadJSON {
     public class Tab {
@@ -23,6 +26,7 @@ public class TabsPayload: CleartextPayloadJSON {
         func toRemoteTabForClient(guid: GUID) -> RemoteTab? {
             let urls = optFilter(urlHistory.map({ $0.asURL }))
             if urls.isEmpty {
+                log.debug("Bug 1201875 - Discarding tab as history has no conforming URLs.")
                 return nil
             }
 
@@ -59,8 +63,15 @@ public class TabsPayload: CleartextPayloadJSON {
     }
 
     override public func isValid() -> Bool {
-        return super.isValid() &&
-               self["clientName"].isString &&
+        if !super.isValid() {
+            return false
+        }
+
+        if self["deleted"].asBool ?? false {
+            return true
+        }
+
+        return self["clientName"].isString &&
                self["tabs"].isArray
     }
 
@@ -70,8 +81,14 @@ public class TabsPayload: CleartextPayloadJSON {
 
     var remoteTabs: [RemoteTab] {
         if let clientGUID = self["id"].asString {
-            return optFilter(self["tabs"].asArray!.map({ Tab.remoteTabFromJSON($0, clientGUID: clientGUID) }))
+            let payloadTabs = self["tabs"].asArray!
+            let remoteTabs = optFilter(payloadTabs.map({ Tab.remoteTabFromJSON($0, clientGUID: clientGUID) }))
+            if payloadTabs.count != remoteTabs.count {
+                log.debug("Bug 1201875 - Missing remote tabs from sync")
+            }
+            return remoteTabs
         }
+        log.debug("no client ID for remote tabs")
         return []
     }
 

@@ -30,7 +30,7 @@ class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
     func loadReaderContent() {
         tester().tapViewWithAccessibilityIdentifier("url")
         let url = "\(webRoot)/readerContent.html"
-        tester().clearTextFromAndThenEnterText("\(url)\n", intoViewWithAccessibilityLabel: "Address and Search")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
         tester().tapViewWithAccessibilityLabel("Reader View")
     }
 
@@ -106,6 +106,6 @@ class ReaderViewUITests: KIFTestCase, UITextFieldDelegate {
     // TODO: Add a reader view display settings test
 
     override func tearDown() {
-        BrowserUtils.resetToAboutHome(tester())
+        BrowserUtils.clearHistoryItems(tester(), numberOfTests: 5)
     }
 }

@@ -5,7 +5,10 @@
 #
 #  For each folder (locale) available in base_l10n_folder:
 #
-#  1. Read existing translations.
+#  1. Read existing translations, store them in an array: IDs use the structure
+#     file_name:string_id:source_hash. Using the hash of the source string
+#     prevent from keeping an existing translation if the ID doesn't change
+#     but the source string does.
 #
 #  2. Inject available translations in the reference XLIFF file, updating
 #     the target-language where available on file elements.
@@ -72,10 +75,13 @@ def main():
         # Using locale folder as locale code. In some cases we need to map this
         # value to a different locale code
         # http://www.ibabbleon.com/iOS-Language-Codes-ISO-639.html
+        # See Bug 1193530, Bug 1160467.
         locale_code = file_path.split(os.sep)[-2]
         locale_mapping = {
             'bn-IN': 'bn',
             'ga-IE': 'ga',
+            'nb-NO': 'nb',
+            'nn-NO': 'nn',
             'sv-SE': 'sv'
         }
         if locale_code in locale_mapping:
@@ -84,16 +90,17 @@ def main():
         # Store existing localizations
         translations = {}
         for trans_node in locale_root.xpath('//x:trans-unit', namespaces=NS):
-            file_name = trans_node.getparent().getparent().get('original')
-            string_id = '%s:%s' % (file_name, trans_node.get('id'))
             for child in trans_node.xpath('./x:target', namespaces=NS):
+                file_name = trans_node.getparent().getparent().get('original')
+                source_string = trans_node.xpath('./x:source', namespaces=NS)[0].text
+                string_id = '%s:%s:%s' % (file_name, trans_node.get('id'), hash(source_string))
                 translations[string_id] = child.text
 
         # Inject available translations in the reference XML
         for trans_node in reference_root.xpath('//x:trans-unit', namespaces=NS):
             file_name = trans_node.getparent().getparent().get('original')
-            string_id = '%s:%s' % (file_name, trans_node.get('id'))
-
+            source_string = trans_node.xpath('./x:source', namespaces=NS)[0].text
+            string_id = '%s:%s:%s' % (file_name, trans_node.get('id'), hash(source_string))
             updated = False
             translated = string_id in translations
             for child in trans_node.xpath('./x:target', namespaces=NS):

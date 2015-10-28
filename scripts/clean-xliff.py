@@ -3,7 +3,7 @@
 #
 # clean-xliff.py <l10n_folder>
 #
-#  Remove targets from a locale, remove target-language attribute
+# Remove targets from a locale, remove target-language attribute
 #
 
 from glob import glob

@@ -125,7 +125,7 @@ class TestSQLiteLogins: XCTestCase {
             log.debug("Get logins for \(protectionSpace)")
             return self.logins.getLoginsForProtectionSpace(protectionSpace) >>== { results in
                 XCTAssertEqual(expected.count, results.count)
-                for (index, login) in enumerate(expected) {
+                for (index, login) in expected.enumerate() {
                     XCTAssertEqual(results[index]!.username!, login.username!)
                     XCTAssertEqual(results[index]!.hostname, login.hostname)
                     XCTAssertEqual(results[index]!.password, login.password)
@@ -192,18 +192,18 @@ class TestSyncableLogins: XCTestCase {
         let guid = "abcdabcdabcd"
         let host = "http://example.com"
         let user = "username"
-        var loginA1 = Login(guid: guid, hostname: host, username: user, password: "password1")
+        let loginA1 = Login(guid: guid, hostname: host, username: user, password: "password1")
         loginA1.formSubmitURL = "\(host)/form1/"
         loginA1.usernameField = "afield"
 
-        var loginA2 = Login(guid: guid, hostname: host, username: user, password: "password1")
+        let loginA2 = Login(guid: guid, hostname: host, username: user, password: "password1")
         loginA2.formSubmitURL = "\(host)/form1/"
         loginA2.usernameField = "somefield"
 
-        var loginB = Login(guid: guid, hostname: host, username: user, password: "password2")
+        let loginB = Login(guid: guid, hostname: host, username: user, password: "password2")
         loginB.formSubmitURL = "\(host)/form1/"
 
-        var loginC = Login(guid: guid, hostname: host, username: user, password: "password")
+        let loginC = Login(guid: guid, hostname: host, username: user, password: "password")
         loginC.formSubmitURL = "\(host)/form2/"
 
         XCTAssert(loginA1.isSignificantlyDifferentFrom(loginB))
@@ -215,7 +215,7 @@ class TestSyncableLogins: XCTestCase {
 
     func testLocalNewStaysNewAndIsRemoved() {
         let guidA = "abcdabcdabcd"
-        var loginA1 = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "password")
+        let loginA1 = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "password")
         loginA1.formSubmitURL = "http://example.com/form/"
         loginA1.timesUsed = 1
         XCTAssertTrue((self.logins as BrowserLogins).addLogin(loginA1).value.isSuccess)
@@ -242,7 +242,7 @@ class TestSyncableLogins: XCTestCase {
 
     func testApplyLogin() {
         let guidA = "abcdabcdabcd"
-        var loginA1 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "password", modified: 1234)
+        let loginA1 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "password", modified: 1234)
         loginA1.formSubmitURL = "http://example.com/form/"
         loginA1.timesUsed = 3
 
@@ -267,7 +267,7 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(mirror!.password, "password")
 
         // Change it.
-        var loginA2 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "newpassword", modified: 2234)
+        let loginA2 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "newpassword", modified: 2234)
         loginA2.formSubmitURL = "http://example.com/form/"
         loginA2.timesUsed = 4
 
@@ -307,7 +307,7 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(mirrorUsed!.timesUsed, 4)
 
         // Change the password and form URL locally.
-        var newLocalPassword = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "yupyup")
+        let newLocalPassword = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "yupyup")
         newLocalPassword.formSubmitURL = "http://example.com/form2/"
 
         let preUpdate = NSDate.now()
@@ -334,7 +334,7 @@ class TestSyncableLogins: XCTestCase {
     func testDeltas() {
         // Shared.
         let guidA = "abcdabcdabcd"
-        var loginA1 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "password", modified: 1234)
+        let loginA1 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "password", modified: 1234)
         loginA1.timeCreated = 1200
         loginA1.timeLastUsed = 1234
         loginA1.timePasswordChanged = 1200
@@ -346,7 +346,7 @@ class TestSyncableLogins: XCTestCase {
         XCTAssertEqual(0, a1a1.nonConflicting.count)
         XCTAssertEqual(0, a1a1.commutative.count)
 
-        var loginA2 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "password", modified: 1235)
+        let loginA2 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "password", modified: 1235)
         loginA2.timeCreated = 1200
         loginA2.timeLastUsed = 1235
         loginA2.timePasswordChanged = 1200
@@ -362,8 +362,6 @@ class TestSyncableLogins: XCTestCase {
         case let .TimesUsed(increment):
             XCTAssertEqual(increment, 1)
             break
-        default:
-            XCTFail("Unexpected commutative login field.")
         }
         switch a1a2.nonCommutative[0] {
         case let .FormSubmitURL(to):
@@ -380,7 +378,7 @@ class TestSyncableLogins: XCTestCase {
             XCTFail("Unexpected non-commutative login field.")
         }
 
-        var loginA3 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "something else", modified: 1280)
+        let loginA3 = ServerLogin(guid: guidA, hostname: "http://example.com", username: "username", password: "something else", modified: 1280)
         loginA3.timeCreated = 1200
         loginA3.timeLastUsed = 1250
         loginA3.timePasswordChanged = 1250
@@ -397,8 +395,6 @@ class TestSyncableLogins: XCTestCase {
         case let .TimesUsed(increment):
             XCTAssertEqual(increment, 2)
             break
-        default:
-            XCTFail("Unexpected commutative login field.")
         }
 
         switch a1a3.nonCommutative[0] {
@@ -484,7 +480,7 @@ class TestSyncableLogins: XCTestCase {
         }
 
         // Applying the merged deltas gives us the expected login.
-        var expected = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "something else")
+        let expected = Login(guid: guidA, hostname: "http://example.com", username: "username", password: "something else")
         expected.timeCreated = 1200
         expected.timeLastUsed = 1250
         expected.timePasswordChanged = 1250

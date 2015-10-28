@@ -45,20 +45,20 @@ class DeferredTests: XCTestCase {
         let e1 = self.expectationWithDescription("First.")
         let e2 = self.expectationWithDescription("Second.")
 
-        let f1: () -> Deferred<Result<Int>> = {
-            return deferResult(5)
+        let f1: () -> Deferred<Maybe<Int>> = {
+            return deferMaybe(5)
         }
 
-        let f2: (x: Int) -> Deferred<Result<String>> = {
+        let f2: (x: Int) -> Deferred<Maybe<String>> = {
             if $0 == 5 {
                 e1.fulfill()
             }
-            return deferResult("Hello!")
+            return deferMaybe("Hello!")
         }
 
         // Type signatures:
-        let combined: () -> Deferred<Result<String>> = { f1() >>== f2 }
-        let result: Deferred<Result<String>> = combined()
+        let combined: () -> Deferred<Maybe<String>> = { f1() >>== f2 }
+        let result: Deferred<Maybe<String>> = combined()
 
         result.upon {
             XCTAssertEqual("Hello!", $0.successValue!)

@@ -7,6 +7,6 @@ import Shared
 
 public protocol TabQueue {
     func addToQueue(tab: ShareItem) -> Success
-    func getQueuedTabs() -> Deferred<Result<Cursor<ShareItem>>>
+    func getQueuedTabs() -> Deferred<Maybe<Cursor<ShareItem>>>
     func clearQueuedTabs() -> Success
 }

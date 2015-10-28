@@ -8,7 +8,7 @@ import XCTest
 // Trivial test for using Result.
 class ResultTests: XCTestCase {
     func testResult() {
-        let r = Result<Int>(success: 5)
+        let r = Maybe<Int>(success: 5)
         if let i = r.successValue {
             XCTAssertEqual(5, i)
         } else {

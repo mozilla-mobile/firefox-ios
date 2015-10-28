@@ -56,8 +56,8 @@ class ReadingListClient {
 
     func getRecordWithGuid(guid: String, ifModifiedSince: ReadingListTimestamp?, completion: (ReadingListGetRecordResult) -> Void) {
         if let url = NSURL(string: guid, relativeToURL: articlesBaseURL) {
-            Alamofire.Manager.sharedInstance.request(createRequest("GET", url, ifModifiedSince: ifModifiedSince)).responseJSON(options: .allZeros, completionHandler: { (request, response, json, error) -> Void in
-                if let response = response {
+            Alamofire.Manager.sharedInstance.request(createRequest("GET", url, ifModifiedSince: ifModifiedSince)).responseJSON(options: [], completionHandler: { (request, response, json) -> Void in
+                if let json = json.value, response = response{
                     switch response.statusCode {
                         case 200:
                             completion(.Success(ReadingListRecordResponse(response: response, json: json)!))
@@ -69,7 +69,7 @@ class ReadingListClient {
                             completion(.Failure(ReadingListResponse(response: response, json: json)!))
                     }
                 } else {
-                    completion(.Error(error ?? ReadingListClientUnknownError))
+                    completion(.Error(json.error as? NSError ?? ReadingListClientUnknownError))
                 }
             })
         } else {
@@ -83,8 +83,8 @@ class ReadingListClient {
 
     func getAllRecordsWithFetchSpec(fetchSpec: ReadingListFetchSpec, ifModifiedSince: ReadingListTimestamp?, completion: (ReadingListGetAllRecordsResult) -> Void) {
         if let url = fetchSpec.getURL(serviceURL: serviceURL, path: "/v1/articles") {
-            Alamofire.Manager.sharedInstance.request(createRequest("GET", url)).responseJSON(options: .allZeros, completionHandler: { (request, response, json, error) -> Void in
-                if let response = response {
+            Alamofire.Manager.sharedInstance.request(createRequest("GET", url)).responseJSON(options: [], completionHandler: { (request, response, json) -> Void in
+                if let response = response, json = json.value {
                     switch response.statusCode {
                     case 200:
                         completion(.Success(ReadingListRecordsResponse(response: response, json: json)!))
@@ -94,7 +94,7 @@ class ReadingListClient {
                         completion(.Failure(ReadingListResponse(response: response, json: json)!))
                     }
                 } else {
-                    completion(.Error(error ?? ReadingListClientUnknownError))
+                    completion(.Error(json.error as? NSError ?? ReadingListClientUnknownError))
                 }
             })
         } else {
@@ -110,8 +110,8 @@ class ReadingListClient {
     }
 
     func addRecord(record: ReadingListClientRecord, completion: (ReadingListAddRecordResult) -> Void) {
-        Alamofire.Manager.sharedInstance.request(createRequest("POST", articlesURL, json: record.json)).responseJSON(options: .allZeros, completionHandler: { (request, response, json, error) -> Void in
-            if let response = response {
+        Alamofire.Manager.sharedInstance.request(createRequest("POST", articlesURL, json: record.json)).responseJSON(options: [], completionHandler: { (request, response, json) -> Void in
+            if let response = response, json = json.value {
                 switch response.statusCode {
                     case 200, 201: // TODO Should we have different results for these? Do we care about 200 vs 201?
                         completion(.Success(ReadingListRecordResponse(response: response, json: json)!))
@@ -121,7 +121,7 @@ class ReadingListClient {
                         completion(.Failure(ReadingListResponse(response: response, json: json)!))
                 }
             } else {
-                completion(.Error(error ?? ReadingListClientUnknownError))
+                completion(.Error(json.error as? NSError ?? ReadingListClientUnknownError))
             }
         })
     }
@@ -135,8 +135,8 @@ class ReadingListClient {
     }
 
     func batchAddRecords(records: [ReadingListClientRecord], completion: (ReadingListBatchAddRecordsResult) -> Void) {
-        Alamofire.Manager.sharedInstance.request(createRequest("POST", batchURL, json: recordsToBatchJSON(records))).responseJSON(options: .allZeros, completionHandler: { (request, response, json, error) -> Void in
-            if let response = response {
+        Alamofire.Manager.sharedInstance.request(createRequest("POST", batchURL, json: recordsToBatchJSON(records))).responseJSON(options: [], completionHandler: { (request, response, json) -> Void in
+            if let response = response, json = json.value {
                 switch response.statusCode {
                 case 200:
                     completion(.Success(ReadingListBatchRecordResponse(response: response, json: json)!))
@@ -144,15 +144,16 @@ class ReadingListClient {
                     completion(.Failure(ReadingListResponse(response: response, json: json)!))
                 }
             } else {
-                completion(.Error(error ?? ReadingListClientUnknownError))
+                completion(.Error(json.error as? NSError ?? ReadingListClientUnknownError))
             }
         })
     }
 
     func deleteRecordWithGuid(guid: String, ifUnmodifiedSince: ReadingListTimestamp?, completion: (ReadingListDeleteRecordResult) -> Void) {
         if let url = NSURL(string: guid, relativeToURL: articlesBaseURL) {
-            Alamofire.Manager.sharedInstance.request(createRequest("DELETE", url, ifUnmodifiedSince: ifUnmodifiedSince)).responseJSON(options: .allZeros, completionHandler: { (request, response, json, error) -> Void in
-                if let response = response {
+            Alamofire.Manager.sharedInstance.request(createRequest("DELETE", url, ifUnmodifiedSince: ifUnmodifiedSince)).responseJSON(options: [], completionHandler: { (request, response, json) -> Void in
+                if let response = response,
+                    let json = json.value {
                     switch response.statusCode {
                         case 200:
                             completion(.Success(ReadingListRecordResponse(response: response, json: json)!))
@@ -164,7 +165,7 @@ class ReadingListClient {
                             completion(.Failure(ReadingListResponse(response: response, json: json)!))
                     }
                 } else {
-                    completion(.Error(error ?? ReadingListClientUnknownError))
+                    completion(.Error(json.error as? NSError ?? ReadingListClientUnknownError))
                 }
             })
         } else {
@@ -191,7 +192,11 @@ class ReadingListClient {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         if let json: AnyObject = json {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.HTTPBody = NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted, error: nil) // TODO Handle errors here
+            do {
+                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
+            } catch _ {
+                request.HTTPBody = nil
+            } // TODO Handle errors here
         }
         return request
     }

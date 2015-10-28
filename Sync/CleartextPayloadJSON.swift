@@ -5,8 +5,8 @@
 import Foundation
 import Shared
 
-public class CleartextPayloadJSON: JSON {
-    public init(_ jsonString: String) {
+public class BasePayloadJSON: JSON {
+    required public init(_ jsonString: String) {
         super.init(JSON.parse(jsonString))
     }
 
@@ -15,8 +15,20 @@ public class CleartextPayloadJSON: JSON {
     }
 
     // Override me.
-    public func isValid() -> Bool {
+    private func isValid() -> Bool {
         return !isError
+    }
+}
+
+/**
+ * http://docs.services.mozilla.com/sync/objectformats.html
+ * "In addition to these custom collection object structures, the
+ *  Encrypted DataObject adds fields like id and deleted."
+ */
+public class CleartextPayloadJSON: BasePayloadJSON {
+    // Override me.
+    override public func isValid() -> Bool {
+        return super.isValid() && self["id"].isString
     }
 
     public var id: String {
@@ -33,7 +45,14 @@ public class CleartextPayloadJSON: JSON {
     }
 
     // Override me.
+    // Doesn't check id. Should it?
     public func equalPayloads (obj: CleartextPayloadJSON) -> Bool {
         return self.deleted == obj.deleted
+    }
+}
+
+extension JSON {
+    public var isStringOrNull: Bool {
+        return self.isString || self.isNull
     }
 }

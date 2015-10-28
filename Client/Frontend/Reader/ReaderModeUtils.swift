@@ -11,7 +11,7 @@ struct ReaderModeUtils {
     static func simplifyDomain(domain: String) -> String {
         for prefix in DomainPrefixesToSimplify {
             if domain.hasPrefix(prefix) {
-                return domain.substringFromIndex(advance(domain.startIndex, count(prefix)))
+                return domain.substringFromIndex(domain.startIndex.advancedBy(prefix.characters.count))
             }
         }
         return domain
@@ -19,49 +19,51 @@ struct ReaderModeUtils {
 
     static func generateReaderContent(readabilityResult: ReadabilityResult, initialStyle: ReaderModeStyle) -> String? {
         if let stylePath = NSBundle.mainBundle().pathForResource("Reader", ofType: "css") {
-            if let css = NSString(contentsOfFile: stylePath, encoding: NSUTF8StringEncoding, error: nil) {
+            do {
+                let css = try NSString(contentsOfFile: stylePath, encoding: NSUTF8StringEncoding)
                 if let tmplPath = NSBundle.mainBundle().pathForResource("Reader", ofType: "html") {
-                    if let tmpl = NSMutableString(contentsOfFile: tmplPath, encoding: NSUTF8StringEncoding, error: nil) {
+                    do {
+                        let tmpl = try NSMutableString(contentsOfFile: tmplPath, encoding: NSUTF8StringEncoding)
                         tmpl.replaceOccurrencesOfString("%READER-CSS%", withString: css as String,
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
+                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
 
                         tmpl.replaceOccurrencesOfString("%READER-STYLE%", withString: initialStyle.encode(),
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
+                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
 
                         tmpl.replaceOccurrencesOfString("%READER-DOMAIN%", withString: simplifyDomain(readabilityResult.domain),
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
+                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
 
                         tmpl.replaceOccurrencesOfString("%READER-URL%", withString: readabilityResult.url,
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
+                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
 
                         tmpl.replaceOccurrencesOfString("%READER-TITLE%", withString: readabilityResult.title,
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
+                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
 
                         tmpl.replaceOccurrencesOfString("%READER-CREDITS%", withString: readabilityResult.credits,
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
+                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
 
                         tmpl.replaceOccurrencesOfString("%READER-CONTENT%", withString: readabilityResult.content,
-                            options: NSStringCompareOptions.allZeros, range: NSMakeRange(0, tmpl.length))
+                            options: NSStringCompareOptions(), range: NSMakeRange(0, tmpl.length))
 
                         return tmpl as String
+                    } catch _ {
                     }
                 }
+            } catch _ {
             }
         }
         return nil
     }
 
     static func isReaderModeURL(url: NSURL) -> Bool {
-        if let scheme = url.scheme, host = url.host, path = url.path {
-            return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
-        }
-        return false
+        let scheme = url.scheme, host = url.host, path = url.path
+        return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
     }
 
     static func decodeURL(url: NSURL) -> NSURL? {
         if ReaderModeUtils.isReaderModeURL(url) {
             if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: false), queryItems = components.queryItems where queryItems.count == 1 {
-                if let queryItem = queryItems.first as? NSURLQueryItem, value = queryItem.value {
+                if let queryItem = queryItems.first, value = queryItem.value {
                     return NSURL(string: value)
                 }
             }

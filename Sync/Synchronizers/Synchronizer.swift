@@ -7,8 +7,7 @@ import Shared
 import Storage
 import XCGLogger
 
-// TODO: same comment as for SyncAuthState.swift!
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 /**
  * This exists to pass in external context: e.g., the UIApplication can
@@ -17,6 +16,23 @@ private let log = XCGLogger.defaultInstance()
 public protocol SyncDelegate {
     func displaySentTabForURL(URL: NSURL, title: String)
     // TODO: storage.
+}
+
+/**
+ * We sometimes want to make a synchronizer start from scratch: to throw away any
+ * metadata and reset storage to match, allowing us to respond to significant server
+ * changes.
+ *
+ * But instantiating a Synchronizer is a lot of work if we simply want to change some
+ * persistent state. This protocol describes a static func that fits most synchronizers.
+ *
+ * When the returned `Deferred` is filled with a success value, the supplied prefs and
+ * storage are ready to sync from scratch.
+ *
+ * Persisted long-term/local data is kept, and will later be reconciled as appropriate.
+ */
+public protocol ResettableSynchronizer {
+    static func resetSynchronizerWithStorage(storage: ResettableSyncStorage, basePrefs: Prefs, collection: String) -> Success
 }
 
 // TODO: return values?
@@ -46,7 +62,7 @@ public protocol Synchronizer {
      * Return a reason if the current state of this synchronizer -- particularly prefs and scratchpad --
      * prevent a routine sync from occurring.
      */
-    func reasonToNotSync(Sync15StorageClient) -> SyncNotStartedReason?
+    func reasonToNotSync(_: Sync15StorageClient) -> SyncNotStartedReason?
 }
 
 /**
@@ -73,8 +89,8 @@ public enum SyncStatus {
 }
 
 
-typealias DeferredTimestamp = Deferred<Result<Timestamp>>
-public typealias SyncResult = Deferred<Result<SyncStatus>>
+typealias DeferredTimestamp = Deferred<Maybe<Timestamp>>
+public typealias SyncResult = Deferred<Maybe<SyncStatus>>
 
 public enum SyncNotStartedReason {
     case NoAccount
@@ -114,45 +130,30 @@ public protocol SingleCollectionSynchronizer {
     func remoteHasChanges(info: InfoCollections) -> Bool
 }
 
-public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
+public class BaseCollectionSynchronizer {
     let collection: String
 
     let scratchpad: Scratchpad
     let delegate: SyncDelegate
     let prefs: Prefs
 
+    static func prefsForCollection(collection: String, withBasePrefs basePrefs: Prefs) -> Prefs {
+        let branchName = "synchronizer." + collection + "."
+        return basePrefs.branch(branchName)
+    }
+
     init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, collection: String) {
         self.scratchpad = scratchpad
         self.delegate = delegate
         self.collection = collection
-        let branchName = "synchronizer." + collection + "."
-        self.prefs = basePrefs.branch(branchName)
+        self.prefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)
 
-        log.info("Synchronizer configured with prefs '\(branchName)'.")
+        log.info("Synchronizer configured with prefs '\(self.prefs.getBranchPrefix()).'")
     }
 
     var storageVersion: Int {
         assert(false, "Override me!")
         return 0
-    }
-
-    var lastFetched: Timestamp {
-        set(value) {
-            self.prefs.setLong(value, forKey: "lastFetched")
-        }
-
-        get {
-            return self.prefs.unsignedLongForKey("lastFetched") ?? 0
-        }
-    }
-
-    func setTimestamp(timestamp: Timestamp) {
-        log.debug("Setting post-upload lastFetched to \(timestamp).")
-        self.lastFetched = timestamp
-    }
-
-    public func remoteHasChanges(info: InfoCollections) -> Bool {
-        return info.modified(self.collection) > self.lastFetched
     }
 
     public func reasonToNotSync(client: Sync15StorageClient) -> SyncNotStartedReason? {
@@ -162,10 +163,10 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
             return .Backoff(remainingSeconds: Int(remaining))
         }
 
-        if let global = self.scratchpad.global?.value {
+        if let metaGlobal = self.scratchpad.global?.value {
             // There's no need to check the global storage format here; the state machine will already have
             // done so.
-            if let engineMeta = self.scratchpad.global?.value.engines?[collection] {
+            if let engineMeta = metaGlobal.engines[collection] {
                 if engineMeta.version > self.storageVersion {
                     return .EngineFormatOutdated(needs: engineMeta.version)
                 }
@@ -193,5 +194,39 @@ public class BaseSingleCollectionSynchronizer: SingleCollectionSynchronizer {
             return storageClient.clientForCollection(self.collection, encrypter: encrypter)
         }
         return nil
+    }
+}
+
+/**
+ * Tracks a lastFetched timestamp, uses it to decide if there are any
+ * remote changes, and exposes a method to fast-forward after upload.
+ */
+public class TimestampedSingleCollectionSynchronizer: BaseCollectionSynchronizer, SingleCollectionSynchronizer {
+
+    var lastFetched: Timestamp {
+        set(value) {
+            self.prefs.setLong(value, forKey: "lastFetched")
+        }
+
+        get {
+            return self.prefs.unsignedLongForKey("lastFetched") ?? 0
+        }
+    }
+
+    func setTimestamp(timestamp: Timestamp) {
+        log.debug("Setting post-upload lastFetched to \(timestamp).")
+        self.lastFetched = timestamp
+    }
+
+    public func remoteHasChanges(info: InfoCollections) -> Bool {
+        return info.modified(self.collection) > self.lastFetched
+    }
+}
+
+extension BaseCollectionSynchronizer: ResettableSynchronizer {
+    public static func resetSynchronizerWithStorage(storage: ResettableSyncStorage, basePrefs: Prefs, collection: String) -> Success {
+        let synchronizerPrefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)
+        synchronizerPrefs.removeObjectForKey("lastFetched")
+        return storage.resetClient()
     }
 }

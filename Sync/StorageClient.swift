@@ -8,13 +8,12 @@ import Shared
 import Account
 import XCGLogger
 
-// TODO: same comment as for SyncAuthState.swift!
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 
 // Not an error that indicates a server problem, but merely an
 // error that encloses a StorageResponse.
-public class StorageResponseError<T>: ErrorType {
+public class StorageResponseError<T>: MaybeErrorType {
     public let response: StorageResponse<T>
 
     public init(_ response: StorageResponse<T>) {
@@ -26,23 +25,16 @@ public class StorageResponseError<T>: ErrorType {
     }
 }
 
-public class RequestError: ErrorType {
-    public let error: NSError?
-
-    public init(_ err: NSError?) {
-        self.error = err
-    }
-
+public class RequestError: MaybeErrorType {
     public var description: String {
-        let str = self.error?.localizedDescription ?? "No description"
-        return "Request error: \(str)."
+        return "Request error."
     }
 }
 
 public class BadRequestError<T>: StorageResponseError<T> {
-    public let request: NSURLRequest
+    public let request: NSURLRequest?
 
-    public init(request: NSURLRequest, response: StorageResponse<T>) {
+    public init(request: NSURLRequest?, response: StorageResponse<T>) {
         self.request = request
         super.init(response)
     }
@@ -64,7 +56,7 @@ public class ServerError<T>: StorageResponseError<T> {
 
 public class NotFound<T>: StorageResponseError<T> {
     override public var description: String {
-        return "Not found."
+        return "Not found. (\(T.self))"
     }
 
     override public init(_ response: StorageResponse<T>) {
@@ -72,13 +64,13 @@ public class NotFound<T>: StorageResponseError<T> {
     }
 }
 
-public class RecordParseError: ErrorType {
+public class RecordParseError: MaybeErrorType {
     public var description: String {
         return "Failed to parse record."
     }
 }
 
-public class MalformedMetaGlobalError: ErrorType {
+public class MalformedMetaGlobalError: MaybeErrorType {
     public var description: String {
         return "Supplied meta/global for upload did not serialize to valid JSON."
     }
@@ -90,7 +82,7 @@ public class MalformedMetaGlobalError: ErrorType {
  * If you want to bypass this, remove the backoff from the BackoffStorage that
  * the storage client is using.
  */
-public class ServerInBackoffError: ErrorType {
+public class ServerInBackoffError: MaybeErrorType {
     private let until: Timestamp
 
     public var description: String {
@@ -175,7 +167,14 @@ private func optionalUIntegerHeader(input: AnyObject?) -> Timestamp? {
     return nil
 }
 
+public enum SortOption: String {
+    case NewestFirst = "newest"
+    case OldestFirst = "oldest"
+    case Index = "index"
+}
+
 public struct ResponseMetadata {
+    public let status: Int
     public let alert: String?
     public let nextOffset: String?
     public let records: UInt64?
@@ -186,10 +185,11 @@ public struct ResponseMetadata {
     public let retryAfterMilliseconds: UInt64?
 
     public init(response: NSHTTPURLResponse) {
-        self.init(headers: response.allHeaderFields)
+        self.init(status: response.statusCode, headers: response.allHeaderFields)
     }
 
-    public init(headers: [NSObject : AnyObject]) {
+    init(status: Int, headers: [NSObject : AnyObject]) {
+        self.status = status
         alert = headers["X-Weave-Alert"] as? String
         nextOffset = headers["X-Weave-Next-Offset"] as? String
         records = optionalUIntegerHeader(headers["X-Weave-Records"])
@@ -239,7 +239,7 @@ public struct POSTResult {
             if failed {
                 return nil
             }
-            let failedGUIDs = mapValues(f, asArrOrFail)
+            let failedGUIDs = mapValues(f, f: asArrOrFail)
             if failed {
                 return nil
             }
@@ -251,7 +251,7 @@ public struct POSTResult {
 }
 
 public typealias Authorizer = (NSMutableURLRequest) -> NSMutableURLRequest
-public typealias ResponseHandler = (NSURLRequest, NSHTTPURLResponse?, AnyObject?, NSError?) -> Void
+public typealias ResponseHandler = (NSURLRequest?, NSHTTPURLResponse?, Result<AnyObject>) -> Void
 
 // TODO: don't be so naïve. Use a combination of uptime and wall clock time.
 public protocol BackoffStorage {
@@ -276,7 +276,13 @@ public class Sync15StorageClient {
         self.backoff = backoff
 
         // This is a potentially dangerous assumption, but failable initializers up the stack are a giant pain.
-        self.serverURI = NSURL(string: token.api_endpoint)!
+        // We want the serverURI to *not* have a trailing slash: to efficiently wipe a user's storage, we delete
+        // the user root (like /1.5/1234567) and not an "empty collection" (like /1.5/1234567/); the storage
+        // server treats the first like a DROP table and the latter like a DELETE *, and the former is more
+        // efficient than the latter.
+        self.serverURI = NSURL(string: token.api_endpoint.endsWith("/")
+            ? token.api_endpoint.substringToIndex(token.api_endpoint.endIndex.predecessor())
+            : token.api_endpoint)!
         self.authorizer = {
             (r: NSMutableURLRequest) -> NSMutableURLRequest in
             let helper = HawkHelper(id: token.id, key: token.key.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!)
@@ -304,59 +310,90 @@ public class Sync15StorageClient {
         }
     }
 
-    func errorWrap<T>(deferred: Deferred<Result<T>>, handler: ResponseHandler) -> ResponseHandler {
-        return { (request, response, data, error) in
+    func errorWrap<T>(deferred: Deferred<Maybe<T>>, handler: ResponseHandler) -> ResponseHandler {
+        return { (request, response, result) in
             log.verbose("Response is \(response).")
 
-            if let error = error {
-                log.error("Got error \(error). Response: \(response?.statusCode)")
-                deferred.fill(Result<T>(failure: RequestError(error)))
+            /**
+             * Returns true if handled.
+             */
+            func failFromResponse(response: NSHTTPURLResponse?) -> Bool {
+                guard let response = response else {
+                    // TODO: better error.
+                    log.error("No response")
+                    let result = Maybe<T>(failure: RecordParseError())
+                    deferred.fill(result)
+                    return true
+                }
+
+                log.debug("Status code: \(response.statusCode).")
+
+                let storageResponse = StorageResponse(value: response, metadata: ResponseMetadata(response: response))
+
+                self.updateBackoffFromResponse(storageResponse)
+
+                if response.statusCode >= 500 {
+                    log.debug("ServerError.")
+                    let result = Maybe<T>(failure: ServerError(storageResponse))
+                    deferred.fill(result)
+                    return true
+                }
+
+                if response.statusCode == 404 {
+                    log.debug("NotFound<\(T.self)>.")
+                    let result = Maybe<T>(failure: NotFound(storageResponse))
+                    deferred.fill(result)
+                    return true
+                }
+
+                if response.statusCode >= 400 {
+                    log.debug("BadRequestError.")
+                    let result = Maybe<T>(failure: BadRequestError(request: request, response: storageResponse))
+                    deferred.fill(result)
+                    return true
+                }
+
+                return false
+            }
+
+            // Check for an error from the request processor.
+            if result.isFailure {
+                log.error("Response: \(response?.statusCode ?? 0). Got error \(result.error).")
+
+                // If we got one, we don't want to hit the response nil case above and
+                // return a RecordParseError, because a RequestError is more fitting.
+                if let response = response {
+                    if failFromResponse(response) {
+                        log.error("This was a failure response. Filled specific error type.")
+                        return
+                    }
+                }
+
+                log.error("Filling generic RequestError.")
+                deferred.fill(Maybe<T>(failure: RequestError()))
                 return
             }
 
-            if response == nil {
-                // TODO: better error.
-                log.error("No response")
-                let result = Result<T>(failure: RecordParseError())
-                deferred.fill(result)
+            if failFromResponse(response) {
                 return
             }
 
-            let response = response!
-
-            log.debug("Status code: \(response.statusCode)")
-            let storageResponse = StorageResponse(value: response, metadata: ResponseMetadata(response: response))
-
-            self.updateBackoffFromResponse(storageResponse)
-
-            if response.statusCode >= 500 {
-                let result = Result<T>(failure: ServerError(storageResponse))
-                deferred.fill(result)
-                return
-            }
-
-            if response.statusCode == 404 {
-                let result = Result<T>(failure: NotFound(storageResponse))
-                deferred.fill(result)
-                return
-            }
-
-            if response.statusCode >= 400 {
-                let result = Result<T>(failure: BadRequestError(request: request, response: storageResponse))
-                deferred.fill(result)
-                return
-            }
-
-            handler(request, response, data, error)
+            handler(request, response, result)
         }
     }
+
+    lazy private var alamofire: Alamofire.Manager = {
+        let ua = UserAgent.syncUserAgent
+        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
+        return Alamofire.Manager.managerWithUserAgent(ua, configuration: configuration)
+    }()
 
     func requestGET(url: NSURL) -> Request {
         let req = NSMutableURLRequest(URL: url)
         req.HTTPMethod = Method.GET.rawValue
         req.setValue("application/json", forHTTPHeaderField: "Accept")
         let authorized: NSMutableURLRequest = self.authorizer(req)
-        return Alamofire.request(authorized)
+        return alamofire.request(authorized)
                         .validate(contentType: ["application/json"])
     }
 
@@ -365,7 +402,7 @@ public class Sync15StorageClient {
         req.HTTPMethod = Method.DELETE.rawValue
         req.setValue("1", forHTTPHeaderField: "X-Confirm-Delete")
         let authorized: NSMutableURLRequest = self.authorizer(req)
-        return Alamofire.request(authorized)
+        return alamofire.request(authorized)
     }
 
     func requestWrite(url: NSURL, method: String, body: String, contentType: String, ifUnmodifiedSince: Timestamp?) -> Request {
@@ -380,19 +417,19 @@ public class Sync15StorageClient {
         }
 
         req.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding)!
-        return Alamofire.request(authorized)
+        return alamofire.request(authorized)
     }
 
     func requestPUT(url: NSURL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {
-        return self.requestWrite(url, method: Method.PUT.rawValue, body: body.toString(pretty: false), contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
+        return self.requestWrite(url, method: Method.PUT.rawValue, body: body.toString(false), contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
     func requestPOST(url: NSURL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {
-        return self.requestWrite(url, method: Method.POST.rawValue, body: body.toString(pretty: false), contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
+        return self.requestWrite(url, method: Method.POST.rawValue, body: body.toString(false), contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
     func requestPOST(url: NSURL, body: [JSON], ifUnmodifiedSince: Timestamp?) -> Request {
-        let body = "\n".join(body.map { $0.toString(pretty: false) })
+        let body = body.map { $0.toString(false) }.joinWithSeparator("\n")
         return self.requestWrite(url, method: Method.POST.rawValue, body: body, contentType: "application/newlines", ifUnmodifiedSince: ifUnmodifiedSince)
     }
 
@@ -400,114 +437,146 @@ public class Sync15StorageClient {
      * Returns true and fills the provided Deferred if our state shows that we're in backoff.
      * Returns false otherwise.
      */
-    private func checkBackoff<T>(deferred: Deferred<Result<T>>) -> Bool {
+    private func checkBackoff<T>(deferred: Deferred<Maybe<T>>) -> Bool {
         if let until = self.backoff.isInBackoff(NSDate.now()) {
-            deferred.fill(Result<T>(failure: ServerInBackoffError(until: until)))
+            deferred.fill(Maybe<T>(failure: ServerInBackoffError(until: until)))
             return true
         }
         return false
     }
 
-    private func doOp<T>(op: (NSURL) -> Request, path: String, f: (JSON) -> T?) -> Deferred<Result<StorageResponse<T>>> {
+    private func doOp<T>(op: (NSURL) -> Request, path: String, f: (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
 
-        let deferred = Deferred<Result<StorageResponse<T>>>(defaultQueue: self.resultQueue)
+        let deferred = Deferred<Maybe<StorageResponse<T>>>(defaultQueue: self.resultQueue)
 
         if self.checkBackoff(deferred) {
             return deferred
         }
 
-        let req = op(self.serverURI.URLByAppendingPathComponent(path))
-        let handler = self.errorWrap(deferred) { (_, response, data, error) in
-            if let json: JSON = data as? JSON {
+        // Special case "": we want /1.5/1234567 and not /1.5/1234567/.  See note about trailing slashes above.
+        let url: NSURL
+        if path == "" {
+            url = self.serverURI // No trailing slash.
+        } else {
+            url = self.serverURI.URLByAppendingPathComponent(path)
+        }
+
+        let req = op(url)
+        let handler = self.errorWrap(deferred) { (_, response, result) in
+            if let json: JSON = result.value as? JSON {
                 if let v = f(json) {
                     let storageResponse = StorageResponse<T>(value: v, response: response!)
-                    deferred.fill(Result(success: storageResponse))
+                    deferred.fill(Maybe(success: storageResponse))
                 } else {
-                    deferred.fill(Result(failure: RecordParseError()))
+                    deferred.fill(Maybe(failure: RecordParseError()))
                 }
                 return
             }
 
-            deferred.fill(Result(failure: RecordParseError()))
+            deferred.fill(Maybe(failure: RecordParseError()))
         }
 
-        req.responseParsedJSON(handler)
+        req.responseParsedJSON(true, completionHandler: handler)
         return deferred
     }
 
     // Sync storage responds with a plain timestamp to a PUT, not with a JSON body.
-    private func putResource<T>(path: String, body: JSON, ifUnmodifiedSince: Timestamp?, parser: (String) -> T?) -> Deferred<Result<StorageResponse<T>>> {
+    private func putResource<T>(path: String, body: JSON, ifUnmodifiedSince: Timestamp?, parser: (String) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
         let url = self.serverURI.URLByAppendingPathComponent(path)
         return self.putResource(url, body: body, ifUnmodifiedSince: ifUnmodifiedSince, parser: parser)
     }
 
-    private func putResource<T>(URL: NSURL, body: JSON, ifUnmodifiedSince: Timestamp?, parser: (String) -> T?) -> Deferred<Result<StorageResponse<T>>> {
+    private func putResource<T>(URL: NSURL, body: JSON, ifUnmodifiedSince: Timestamp?, parser: (String) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
 
-        let deferred = Deferred<Result<StorageResponse<T>>>(defaultQueue: self.resultQueue)
+        let deferred = Deferred<Maybe<StorageResponse<T>>>(defaultQueue: self.resultQueue)
 
         if self.checkBackoff(deferred) {
             return deferred
         }
 
         let req = self.requestPUT(URL, body: body, ifUnmodifiedSince: ifUnmodifiedSince)
-        let handler = self.errorWrap(deferred) { (_, response, data, error) in
-            if let data = data as? String {
+        let handler = self.errorWrap(deferred) { (_, response, result) in
+            if let data = result.value as? String {
                 if let v = parser(data) {
                     let storageResponse = StorageResponse<T>(value: v, response: response!)
-                    deferred.fill(Result(success: storageResponse))
+                    deferred.fill(Maybe(success: storageResponse))
                 } else {
-                    deferred.fill(Result(failure: RecordParseError()))
+                    deferred.fill(Maybe(failure: RecordParseError()))
                 }
                 return
             }
 
-            deferred.fill(Result(failure: RecordParseError()))
+            deferred.fill(Maybe(failure: RecordParseError()))
         }
 
-        // Yay Swift.
-        let stringHandler = { (a, b, c: String?, d) in
-            return handler(a, b, c, d)
+        let stringHandler = { (a: NSURLRequest?, b: NSHTTPURLResponse?, c: Result<String>) in
+            return handler(a, b, c.isSuccess ? Result.Success(c.value!) : Result.Failure(c.data, c.error!))
         }
 
         req.responseString(encoding: nil, completionHandler: stringHandler)
         return deferred
     }
 
-    private func getResource<T>(path: String, f: (JSON) -> T?) -> Deferred<Result<StorageResponse<T>>> {
+    private func getResource<T>(path: String, f: (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
         return doOp(self.requestGET, path: path, f: f)
     }
 
-    private func deleteResource<T>(path: String, f: (JSON) -> T?) -> Deferred<Result<StorageResponse<T>>> {
+    private func deleteResource<T>(path: String, f: (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
         return doOp(self.requestDELETE, path: path, f: f)
     }
 
-    func getInfoCollections() -> Deferred<Result<StorageResponse<InfoCollections>>> {
-        return getResource("info/collections", f: InfoCollections.fromJSON)
-    }
-
-    func getMetaGlobal() -> Deferred<Result<StorageResponse<GlobalEnvelope>>> {
-        return getResource("storage/meta/global", f: { GlobalEnvelope($0) })
-    }
-
-    func uploadMetaGlobal(metaGlobal: MetaGlobal, ifUnmodifiedSince: Timestamp?) -> Deferred<Result<StorageResponse<Timestamp>>> {
-        let payload = metaGlobal.toPayload()
-        if payload.isError {
-            return Deferred(value: Result(failure: MalformedMetaGlobalError()))
-        }
-
-        // TODO finish this!
-        let record: JSON = JSON(["payload": payload, "id": "global"])
-        return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
-    }
-
-    func wipeStorage() -> Deferred<Result<StorageResponse<JSON>>> {
+    func wipeStorage() -> Deferred<Maybe<StorageResponse<JSON>>> {
         // In Sync 1.5 it's preferred that we delete the root, not /storage.
         return deleteResource("", f: { $0 })
     }
 
-    // TODO: it would be convenient to have the storage client manage Keys,
-    // but of course we need to use a different set of keys to fetch crypto/keys
-    // itself.
+    func getInfoCollections() -> Deferred<Maybe<StorageResponse<InfoCollections>>> {
+        return getResource("info/collections", f: InfoCollections.fromJSON)
+    }
+
+    func getMetaGlobal() -> Deferred<Maybe<StorageResponse<MetaGlobal>>> {
+        return getResource("storage/meta/global") { json in
+            // We have an envelope.  Parse the meta/global record embedded in the 'payload' string.
+            let envelope = EnvelopeJSON(json)
+            if envelope.isValid() {
+                return MetaGlobal.fromJSON(JSON.parse(envelope.payload))
+            }
+            return nil
+        }
+    }
+
+    func getCryptoKeys(syncKeyBundle: KeyBundle, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Record<KeysPayload>>>> {
+        let syncKey = Keys(defaultBundle: syncKeyBundle)
+        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0 })
+        let encrypter = syncKey.encrypter("keys", encoder: encoder)
+        let client = self.clientForCollection("crypto", encrypter: encrypter)
+        return client.get("keys")
+    }
+
+    func uploadMetaGlobal(metaGlobal: MetaGlobal, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
+        let payload = metaGlobal.asPayload()
+        if payload.isError {
+            return Deferred(value: Maybe(failure: MalformedMetaGlobalError()))
+        }
+
+        let record: JSON = JSON(["payload": payload.toString(), "id": "global"])
+        return putResource("storage/meta/global", body: record, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
+    }
+
+    // The crypto/keys record is a special snowflake: it is encrypted with the Sync key bundle.  All other records are
+    // encrypted with the bulk key bundle (including possibly a per-collection bulk key) stored in crypto/keys.
+    func uploadCryptoKeys(keys: Keys, withSyncKeyBundle syncKeyBundle: KeyBundle, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
+        let syncKey = Keys(defaultBundle: syncKeyBundle)
+        let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0 })
+        let encrypter = syncKey.encrypter("keys", encoder: encoder)
+        let client = self.clientForCollection("crypto", encrypter: encrypter)
+
+        let record = Record(id: "keys", payload: keys.asPayload())
+        return client.put(record, ifUnmodifiedSince: ifUnmodifiedSince)
+    }
+
+    // It would be convenient to have the storage client manage Keys, but of course we need to use a different set of
+    // keys to fetch crypto/keys itself.  See uploadCryptoKeys.
     func clientForCollection<T: CleartextPayloadJSON>(collection: String, encrypter: RecordEncrypter<T>) -> Sync15CollectionClient<T> {
         let storage = self.serverURI.URLByAppendingPathComponent("storage", isDirectory: true)
         return Sync15CollectionClient(client: self, serverURI: storage, collection: collection, encrypter: encrypter)
@@ -522,6 +591,7 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
     private let client: Sync15StorageClient
     private let encrypter: RecordEncrypter<T>
     private let collectionURI: NSURL
+    private let collectionQueue = dispatch_queue_create("com.mozilla.sync.collectionclient", DISPATCH_QUEUE_SERIAL)
 
     init(client: Sync15StorageClient, serverURI: NSURL, collection: String, encrypter: RecordEncrypter<T>) {
         self.client = client
@@ -533,8 +603,8 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         return self.collectionURI.URLByAppendingPathComponent(guid)
     }
 
-    public func post(records: [Record<T>], ifUnmodifiedSince: Timestamp?) -> Deferred<Result<StorageResponse<POSTResult>>> {
-        let deferred = Deferred<Result<StorageResponse<POSTResult>>>(defaultQueue: client.resultQueue)
+    public func post(records: [Record<T>], ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<POSTResult>>> {
+        let deferred = Deferred<Maybe<StorageResponse<POSTResult>>>(defaultQueue: client.resultQueue)
 
         if self.client.checkBackoff(deferred) {
             return deferred
@@ -545,53 +615,51 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
         let json = optFilter(records.map(self.encrypter.serializer))
 
         let req = client.requestPOST(self.collectionURI, body: json, ifUnmodifiedSince: nil)
-        req.responseParsedJSON(self.client.errorWrap(deferred) { (_, response, data, error) in
-            if let json: JSON = data as? JSON,
+        req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, result) in
+            if let json: JSON = result.value as? JSON,
                let result = POSTResult.fromJSON(json) {
                 let storageResponse = StorageResponse(value: result, response: response!)
-                deferred.fill(Result(success: storageResponse))
+                deferred.fill(Maybe(success: storageResponse))
                 return
             } else {
                 log.warning("Couldn't parse JSON response.")
             }
-            deferred.fill(Result(failure: RecordParseError()))
+            deferred.fill(Maybe(failure: RecordParseError()))
         })
 
         return deferred
     }
 
-    public func put(record: Record<T>, ifUnmodifiedSince: Timestamp?) -> Deferred<Result<StorageResponse<Timestamp>>> {
+    public func put(record: Record<T>, ifUnmodifiedSince: Timestamp?) -> Deferred<Maybe<StorageResponse<Timestamp>>> {
         if let body = self.encrypter.serializer(record) {
-            log.debug("Body is \(body)")
-            log.debug("Original record is \(record)")
             return self.client.putResource(uriForRecord(record.id), body: body, ifUnmodifiedSince: ifUnmodifiedSince, parser: decimalSecondsStringToTimestamp)
         }
-        return deferResult(RecordParseError())
+        return deferMaybe(RecordParseError())
     }
 
-    public func get(guid: String) -> Deferred<Result<StorageResponse<Record<T>>>> {
-        let deferred = Deferred<Result<StorageResponse<Record<T>>>>(defaultQueue: client.resultQueue)
+    public func get(guid: String) -> Deferred<Maybe<StorageResponse<Record<T>>>> {
+        let deferred = Deferred<Maybe<StorageResponse<Record<T>>>>(defaultQueue: client.resultQueue)
 
         if self.client.checkBackoff(deferred) {
             return deferred
         }
 
         let req = client.requestGET(uriForRecord(guid))
-        req.responseParsedJSON(self.client.errorWrap(deferred) { (_, response, data, error) in
+        req.responsePartialParsedJSON(queue:collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, result) in
 
-            if let json: JSON = data as? JSON {
+            if let json: JSON = result.value as? JSON {
                 let envelope = EnvelopeJSON(json)
                 let record = Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
                 if let record = record {
                     let storageResponse = StorageResponse(value: record, response: response!)
-                    deferred.fill(Result(success: storageResponse))
+                    deferred.fill(Maybe(success: storageResponse))
                     return
                 }
             } else {
                 log.warning("Couldn't parse JSON response.")
             }
 
-            deferred.fill(Result(failure: RecordParseError()))
+            deferred.fill(Maybe(failure: RecordParseError()))
         })
 
         return deferred
@@ -602,32 +670,57 @@ public class Sync15CollectionClient<T: CleartextPayloadJSON> {
      * multiple requests. The others use application/newlines. We don't want to write
      * another Serializer, and we're loading everything into memory anyway.
      */
-    public func getSince(since: Timestamp) -> Deferred<Result<StorageResponse<[Record<T>]>>> {
-        let deferred = Deferred<Result<StorageResponse<[Record<T>]>>>(defaultQueue: client.resultQueue)
+    public func getSince(since: Timestamp, sort: SortOption?=nil, limit: Int?=nil, offset: String?=nil) -> Deferred<Maybe<StorageResponse<[Record<T>]>>> {
+        let deferred = Deferred<Maybe<StorageResponse<[Record<T>]>>>(defaultQueue: client.resultQueue)
 
+        // Fills the Deferred for us.
         if self.client.checkBackoff(deferred) {
             return deferred
         }
 
-        let req = client.requestGET(self.collectionURI.withQueryParams([
+        var params: [NSURLQueryItem] = [
             NSURLQueryItem(name: "full", value: "1"),
-            NSURLQueryItem(name: "newer", value: millisecondsToDecimalSeconds(since))]))
+            NSURLQueryItem(name: "newer", value: millisecondsToDecimalSeconds(since)),
+        ]
 
-        req.responseParsedJSON(self.client.errorWrap(deferred) { (_, response, data, error) in
+        if let offset = offset {
+            params.append(NSURLQueryItem(name: "offset", value: offset))
+        }
 
-            if let json: JSON = data as? JSON {
-                func recordify(json: JSON) -> Record<T>? {
-                    let envelope = EnvelopeJSON(json)
-                    return Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
-                }
-                if let arr = json.asArray {
-                    let response = StorageResponse(value: optFilter(arr.map(recordify)), response: response!)
-                    deferred.fill(Result(success: response))
-                    return
-                }
+        if let limit = limit {
+            params.append(NSURLQueryItem(name: "limit", value: "\(limit)"))
+        }
+
+        if let sort = sort {
+            params.append(NSURLQueryItem(name: "sort", value: sort.rawValue))
+        }
+
+        log.debug("Issuing GET with newer = \(since).")
+        let req = client.requestGET(self.collectionURI.withQueryParams(params))
+
+        req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (_, response, result) in
+
+            log.verbose("Response is \(response).")
+            guard let json: JSON = result.value as? JSON else {
+                log.warning("Non-JSON response.")
+                deferred.fill(Maybe(failure: RecordParseError()))
+                return
             }
 
-            deferred.fill(Result(failure: RecordParseError()))
+            guard let arr = json.asArray else {
+                log.warning("Non-array response.")
+                deferred.fill(Maybe(failure: RecordParseError()))
+                return
+            }
+
+            func recordify(json: JSON) -> Record<T>? {
+                let envelope = EnvelopeJSON(json)
+                return Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
+            }
+
+            let records = optFilter(arr.map(recordify))
+            let response = StorageResponse(value: records, response: response!)
+            deferred.fill(Maybe(success: response))
         })
 
         return deferred

@@ -21,10 +21,12 @@ class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityBrowse
     var semaphore: dispatch_semaphore_t
     var result: ReadabilityOperationResult?
     var browser: Browser!
+    var readerModeCache: ReaderModeCache
 
-    init(url: NSURL) {
+    init(url: NSURL, readerModeCache: ReaderModeCache) {
         self.url = url
         self.semaphore = dispatch_semaphore_create(0)
+        self.readerModeCache = readerModeCache
     }
 
     override func main() {
@@ -63,14 +65,13 @@ class ReadabilityOperation: NSOperation, WKNavigationDelegate, ReadabilityBrowse
                 // Don't do anything on timeout
                 break
             case .Success(let readabilityResult):
-                var error: NSError? = nil
-                if !ReaderModeCache.sharedInstance.put(url, readabilityResult, error: &error) {
-                    if error != nil {
-                        println("Failed to store readability results in the cache: \(error?.localizedDescription)")
-                        // TODO Fail
-                    }
+                do {
+                    try readerModeCache.put(url, readabilityResult)
+                } catch let error as NSError {
+                    print("Failed to store readability results in the cache: \(error.localizedDescription)")
+                    // TODO Fail
                 }
-            case .Error(let error):
+            case .Error(_):
                 // TODO Not entitely sure what to do on error. Needs UX discussion and followup bug.
                 break
             }
@@ -105,7 +106,7 @@ class ReadabilityService {
         queue.maxConcurrentOperationCount = ReadabilityServiceDefaultConcurrency
     }
 
-    func process(url: NSURL) {
-        queue.addOperation(ReadabilityOperation(url: url))
+    func process(url: NSURL, cache: ReaderModeCache) {
+        queue.addOperation(ReadabilityOperation(url: url, readerModeCache: cache))
     }
 }

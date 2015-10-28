@@ -31,19 +31,8 @@ class SearchSettingsUITests: KIFTestCase {
 
     // Given that we're at the Search Settings sheet, return the default search engine's name.
     private func getDefaultSearchEngineName() -> String {
-        var view: UIView!
-
-        // There appears to be a KIF bug where waitForViewWithAccessibilityLabel returns the parent
-        // UITableView instead of the UITableViewCell with the given label.
-        // As a workaround, retry until KIF gives us a cell.
-        // Open issue: https://github.com/kif-framework/KIF/issues/336
-        tester().runBlock { _ in
-            view = self.tester().waitForViewWithAccessibilityLabel("Default Search Engine", traits: UIAccessibilityTraitButton)
-            let cell = view as? UITableViewCell
-            return (cell == nil) ? KIFTestStepResult.Wait : KIFTestStepResult.Success
-        }
-
-        return view.accessibilityValue
+        let view = tester().waitForCellWithAccessibilityLabel("Default Search Engine")
+        return view.accessibilityValue!
     }
 
     func testDefaultSearchEngine() {

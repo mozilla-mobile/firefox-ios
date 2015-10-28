@@ -9,7 +9,7 @@ import Account
 
 private let KeyLength = 32
 
-public class KeyBundle: Equatable {
+public class KeyBundle: Hashable {
     let encKey: NSData
     let hmacKey: NSData
 
@@ -54,7 +54,7 @@ public class KeyBundle: Equatable {
 
     public func hmac(ciphertext: NSData) -> NSData {
         let (result, digestLen) = _hmac(ciphertext)
-        var data = NSMutableData(bytes: result, length: digestLen)
+        let data = NSMutableData(bytes: result, length: digestLen)
 
         result.destroy()
         return data
@@ -65,7 +65,7 @@ public class KeyBundle: Equatable {
      */
     public func hmacString(ciphertext: NSData) -> String {
         let (result, digestLen) = _hmac(ciphertext)
-        var hash = NSMutableString()
+        let hash = NSMutableString()
         for i in 0..<digestLen {
             hash.appendFormat("%02x", result[i])
         }
@@ -127,7 +127,7 @@ public class KeyBundle: Equatable {
         return (success, result, copied)
     }
 
-    public func verify(#hmac: NSData, ciphertextB64: NSData) -> Bool {
+    public func verify(hmac hmac: NSData, ciphertextB64: NSData) -> Bool {
         let expectedHMAC = hmac
         let computedHMAC = self.hmac(ciphertextB64)
         return expectedHMAC.isEqualToData(computedHMAC)
@@ -167,7 +167,7 @@ public class KeyBundle: Equatable {
         return { (record: Record<T>) -> JSON? in
             let json = f(record.payload)
 
-            if let data = json.toString(pretty: false).utf8EncodedData,
+            if let data = json.toString(false).utf8EncodedData,
                // We pass a null IV, which means "generate me a new one".
                // We then include the generated IV in the resulting record.
                let (ciphertext, iv) = self.encrypt(data, iv: nil) {
@@ -185,7 +185,7 @@ public class KeyBundle: Equatable {
                         "ciphertext": ciphertext,
                         "IV": iv,
                         "hmac": hmac,
-                    ]).toString(pretty: false)
+                    ]).toString(false)
 
                     return JSON([
                         "id": record.id,
@@ -201,6 +201,10 @@ public class KeyBundle: Equatable {
 
     public func asPair() -> [String] {
         return [self.encKey.base64EncodedString, self.hmacKey.base64EncodedString]
+    }
+
+    public var hashValue: Int {
+        return "\(self.encKey.base64EncodedString) \(self.hmacKey.base64EncodedString)".hashValue
     }
 }
 
@@ -220,14 +224,12 @@ public class Keys: Equatable {
     }
 
     public init(payload: KeysPayload?) {
-        if let payload = payload {
-            if payload.isValid() {
-                if let keys = payload.defaultKeys {
-                    self.defaultBundle = keys
-                    self.valid = true
-                    return
-                }
+        if let payload = payload where payload.isValid() {
+            if let keys = payload.defaultKeys {
+                self.defaultBundle = keys
                 self.collectionKeys = payload.collectionKeys
+                self.valid = true
+                return
             }
         }
         self.defaultBundle = KeyBundle.invalid
@@ -238,6 +240,10 @@ public class Keys: Equatable {
         let f: (JSON) -> KeysPayload = { KeysPayload($0) }
         let keysRecord = Record<KeysPayload>.fromEnvelope(downloaded, payloadFactory: master.factory(f))
         self.init(payload: keysRecord?.payload)
+    }
+
+    public class func random() -> Keys {
+        return Keys(defaultBundle: KeyBundle.random())
     }
 
     public func forCollection(collection: String) -> KeyBundle {
@@ -253,9 +259,10 @@ public class Keys: Equatable {
 
     public func asPayload() -> KeysPayload {
         let json: JSON = JSON([
+            "id": "keys",
             "collection": "crypto",
             "default": self.defaultBundle.asPair(),
-            "collections": mapValues(self.collectionKeys, { $0.asPair() })
+            "collections": mapValues(self.collectionKeys, f: { $0.asPair() })
         ])
         return KeysPayload(json)
     }
@@ -276,6 +283,11 @@ public struct RecordEncrypter<T: CleartextPayloadJSON> {
     init(bundle: KeyBundle, encoder: RecordEncoder<T>) {
         self.serializer = bundle.serializer(encoder.encode)
         self.factory = bundle.factory(encoder.decode)
+    }
+
+    init(serializer: Record<T> -> JSON?, factory: String -> T?) {
+        self.serializer = serializer
+        self.factory = factory
     }
 }
 

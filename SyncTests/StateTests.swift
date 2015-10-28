@@ -11,7 +11,6 @@ func compareScratchpads(lhs: Scratchpad, rhs: Scratchpad) {
     // This one is set in the constructor!
     XCTAssertEqual(lhs.syncKeyBundle, rhs.syncKeyBundle)
 
-    XCTAssertEqual(lhs.collectionLastFetched, rhs.collectionLastFetched)
     XCTAssertEqual(lhs.clientName, rhs.clientName)
     XCTAssertEqual(lhs.clientGUID, rhs.clientGUID)
     if let lkeys = lhs.keys {
@@ -26,12 +25,14 @@ func compareScratchpads(lhs: Scratchpad, rhs: Scratchpad) {
     }
 
     XCTAssertTrue(lhs.global == rhs.global)
+    XCTAssertEqual(lhs.localCommands, rhs.localCommands)
+    XCTAssertEqual(lhs.engineConfiguration, rhs.engineConfiguration)
 }
 
-func roundtrip(s: Scratchpad) -> (Scratchpad, Scratchpad) {
+func roundtrip(s: Scratchpad) -> (Scratchpad, rhs: Scratchpad) {
     let prefs = MockProfilePrefs()
     s.pickle(prefs)
-    return (s, Scratchpad.restoreFromPrefs(prefs, syncKeyBundle: s.syncKeyBundle)!)
+    return (s, rhs: Scratchpad.restoreFromPrefs(prefs, syncKeyBundle: s.syncKeyBundle)!)
 }
 
 class StateTests: XCTestCase {
@@ -40,14 +41,27 @@ class StateTests: XCTestCase {
         return Fetched(value: g, timestamp: NSDate.now())
     }
 
+    func getEngineConfiguration() -> EngineConfiguration {
+        return EngineConfiguration(enabled: ["bookmarks", "clients"], declined: ["tabs"])
+    }
+
     func baseScratchpad() -> Scratchpad {
         let syncKeyBundle = KeyBundle.fromKB(Bytes.generateRandomBytes(32))
         let keys = Fetched(value: Keys(defaultBundle: syncKeyBundle), timestamp: 1001)
-        return Scratchpad(b: syncKeyBundle, persistingTo: MockProfilePrefs()).evolve().setKeys(keys).build()
+        let b = Scratchpad(b: syncKeyBundle, persistingTo: MockProfilePrefs()).evolve()
+        b.setKeys(keys)
+        b.localCommands = Set([
+            .EnableEngine(engine: "tabs"),
+            .DisableEngine(engine: "passwords"),
+            .ResetAllEngines(except: Set(["bookmarks", "clients"])),
+            .ResetEngine(engine: "clients")])
+        return b.build()
     }
 
     func testPickling() {
         compareScratchpads(roundtrip(baseScratchpad()))
         compareScratchpads(roundtrip(baseScratchpad().evolve().setGlobal(getGlobal()).build()))
+        compareScratchpads(roundtrip(baseScratchpad().evolve().clearLocalCommands().build()))
+        compareScratchpads(roundtrip(baseScratchpad().evolve().setEngineConfiguration(getEngineConfiguration()).build()))
     }
 }

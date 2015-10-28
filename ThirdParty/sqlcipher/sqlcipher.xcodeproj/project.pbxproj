@@ -6,34 +6,10 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		9069D08B0FCE185A0042E34C /* amalgamation */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 9069D0900FCE18970042E34C /* Build configuration list for PBXAggregateTarget "amalgamation" */;
-			buildPhases = (
-				9069D08A0FCE185A0042E34C /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = amalgamation;
-			productName = amalgamation;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		28B46E6317CD07A700672510 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B46E6217CD07A600672510 /* Security.framework */; };
 		9069D0A30FCE1A4D0042E34C /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 9069D0A20FCE1A4D0042E34C /* sqlite3.c */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		289BE0E7180C4930003E52DA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9069D08B0FCE185A0042E34C;
-			remoteInfo = amalgamation;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		28B46E6217CD07A600672510 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -111,7 +87,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				289BE0E8180C4930003E52DA /* PBXTargetDependency */,
 			);
 			name = sqlcipher;
 			productName = sqlcipher;
@@ -124,6 +99,7 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0700;
 				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = 1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "sqlcipher" */;
@@ -141,28 +117,9 @@
 			projectRoot = "";
 			targets = (
 				D2AAC045055464E500DB518D /* sqlcipher */,
-				9069D08B0FCE185A0042E34C /* amalgamation */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		9069D08A0FCE185A0042E34C /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/sqlite3.c",
-			);
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/libsqlcipher.a",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "./configure --enable-tempstore=yes --with-crypto-lib=commoncrypto CFLAGS=\"-DSQLITE_HAS_CODEC -DSQLITE_TEMP_STORE=2\"\nmake sqlite3.c\nexit 0";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D2AAC044055464E500DB518D /* Sources */ = {
@@ -174,14 +131,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		289BE0E8180C4930003E52DA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9069D08B0FCE185A0042E34C /* amalgamation */;
-			targetProxy = 289BE0E7180C4930003E52DA /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB91EC08733DB70010E9CD /* Debug */ = {
@@ -300,40 +249,6 @@
 			};
 			name = Release;
 		};
-		9069D08C0FCE185A0042E34C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD)";
-				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
-				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD)";
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = amalgamation;
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				VALID_ARCHS = "arm64 armv7 armv7s";
-			};
-			name = Debug;
-		};
-		9069D08D0FCE185A0042E34C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD)";
-				"ARCHS[sdk=iphonesimulator*]" = "$(ARCHS_STANDARD)";
-				"ARCHS[sdk=macosx*]" = "$(ARCHS_STANDARD)";
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				PRODUCT_NAME = amalgamation;
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
-				VALID_ARCHS = "arm64 armv7 armv7s";
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -351,15 +266,6 @@
 			buildConfigurations = (
 				1DEB91F008733DB70010E9CD /* Debug */,
 				1DEB91F108733DB70010E9CD /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9069D0900FCE18970042E34C /* Build configuration list for PBXAggregateTarget "amalgamation" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9069D08C0FCE185A0042E34C /* Debug */,
-				9069D08D0FCE185A0042E34C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

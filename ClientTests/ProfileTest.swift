@@ -4,6 +4,8 @@
 
 import Foundation
 import XCTest
+import Storage
+import Shared
 
 /*
  * A base test type for tests that need a profile.

@@ -8,15 +8,14 @@ import XCTest
 class TestLocking: XCTestCase {
     // Test creating a read lock while a read lock is already active
     func testReadLock() {
-        var lock = Lock(name: "MyLock")
+        let lock = Lock(name: "MyLock")
         var reading = false
-        var writing = false
         var passed = false
 
-        var expectation = expectationWithDescription("main thread")
+        let expectation = expectationWithDescription("main thread")
         lock.withReadLock { () -> Void in
             reading = true
-            var queue = dispatch_queue_create("Test", nil)
+            let queue = dispatch_queue_create("Test", nil)
             dispatch_async(queue) { () -> Void in
                 lock.withReadLock() {
                     passed = reading
@@ -36,13 +35,13 @@ class TestLocking: XCTestCase {
 
     // Test creating a write lock while a read lock is already active
     func testWriteLock() {
-        var lock = Lock(name: "MyLock")
+        let lock = Lock(name: "MyLock")
         var reading = false
         var writing = false
         var started = false
 
-        var expectation = expectationWithDescription("main thread")
-        var queue = dispatch_queue_create("Test", nil)
+        let expectation = expectationWithDescription("main thread")
+        let queue = dispatch_queue_create("Test", nil)
 
         lock.withReadLock {
             reading = true
@@ -74,12 +73,12 @@ class TestLocking: XCTestCase {
 
     // Test two threads accessing the read Protector at the same time
     func testProtectorReading() {
-        var p = Protector(name: "testProtector", item: [1,2,3]);
+        let p = Protector(name: "testProtector", item: [1,2,3]);
         var reading = false
         var passed = false
-        var queue = dispatch_queue_create("Test", nil)
+        let queue = dispatch_queue_create("Test", nil)
 
-        var expectation = expectationWithDescription("main thread")
+        let expectation = expectationWithDescription("main thread")
         dispatch_async(queue) { () -> Void in
             p.withReadLock { protected -> Void in
                 XCTAssertEqual(protected[0], 1, "Item zero is correct")
@@ -108,13 +107,13 @@ class TestLocking: XCTestCase {
 
     // Test a writer accessing the protector at the same time a reader is active
     func testProtectorWriting() {
-        var lock = Protector(name: "MyLock", item: [1,2,3])
+        let lock = Protector(name: "MyLock", item: [1,2,3])
         var reading = false
         var writing = false
         var started = false
 
-        var expectation = expectationWithDescription("main thread")
-        var queue = dispatch_queue_create("Test", nil)
+        let expectation = expectationWithDescription("main thread")
+        let queue = dispatch_queue_create("Test", nil)
 
         lock.withReadLock { protected -> Void in
             reading = true

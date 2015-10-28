@@ -17,7 +17,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
      * Tests landscape page navigation enablement with the URL bar with tab switching.
      */
     func testLandscapeNavigationWithTabSwitch() {
-        let previousOrientation = UIDevice.currentDevice().valueForKey("orientation")
+        let previousOrientation = UIDevice.currentDevice().valueForKey("orientation") as! Int
 
         // Rotate to landscape.
         let value = UIInterfaceOrientation.LandscapeLeft.rawValue
@@ -25,7 +25,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
 
         tester().tapViewWithAccessibilityIdentifier("url")
         let textView = tester().waitForViewWithAccessibilityLabel("Address and Search") as! UITextField
-        XCTAssertTrue(textView.text.isEmpty, "Text is empty")
+        XCTAssertTrue(textView.text!.isEmpty, "Text is empty")
         XCTAssertNotNil(textView.placeholder, "Text view has a placeholder to show when it's empty")
 
         // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
@@ -82,8 +82,61 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         // Rotates back to previous orientation
         UIDevice.currentDevice().setValue(previousOrientation, forKey: "orientation")
     }
-    
+
+    func testURLEntry() {
+        let textField = tester().waitForViewWithAccessibilityIdentifier("url") as! UITextField
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().enterTextIntoCurrentFirstResponder("foobar")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        XCTAssertEqual(textField.text, "", "Verify that the URL bar text clears on about:home")
+
+        // 127.0.0.1 doesn't cause http:// to be hidden. localhost does. Both will work.
+        let localhostURL = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions(), range: nil)
+        let url = "\(localhostURL)/numberedPage.html?page=1"
+
+        // URL without "http://".
+        let displayURL = "\(localhostURL)/numberedPage.html?page=1".substringFromIndex(url.startIndex.advancedBy("http://".characters.count))
+
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().enterTextIntoCurrentFirstResponder("\(url)\n")
+        XCTAssertEqual(textField.text, displayURL, "URL matches page URL")
+
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().enterTextIntoCurrentFirstResponder("foobar")
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        XCTAssertEqual(textField.text, displayURL, "Verify that text reverts to page URL after entering text")
+
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().clearTextFromFirstResponder()
+        tester().tapViewWithAccessibilityLabel("Cancel")
+        XCTAssertEqual(textField.text, displayURL, "Verify that text reverts to page URL after clearing text")
+    }
+
+    func testClearURLTextUsingBackspace() {
+        // 127.0.0.1 doesn't cause http:// to be hidden. localhost does. Both will work.
+        let localhostURL = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "localhost", options: NSStringCompareOptions(), range: nil)
+        let url = "\(localhostURL)/numberedPage.html?page=1"
+
+        _ = tester().waitForViewWithAccessibilityIdentifier("url") as! UITextField
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().enterTextIntoCurrentFirstResponder(url+"\n")
+        tester().waitForAnimationsToFinish()
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().waitForKeyInputReady()
+        tester().enterTextIntoCurrentFirstResponder("\u{8}")
+
+        let autocompleteField = tester().waitForViewWithAccessibilityIdentifier("address") as! UITextField
+        XCTAssertEqual(autocompleteField.text, "", "Verify that backspace keypress deletes text when url is highlighted")
+    }
+
     override func tearDown() {
+        let previousOrientation = UIDevice.currentDevice().valueForKey("orientation") as! Int
+        if previousOrientation == UIInterfaceOrientation.LandscapeLeft.rawValue {
+            // Rotate back to portrait
+            let value = UIInterfaceOrientation.Portrait.rawValue
+            UIDevice.currentDevice().setValue(value, forKey: "orientation")
+        }
+
         BrowserUtils.resetToAboutHome(tester())
     }
 }

@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-public struct ClientAndTabs: Equatable, Printable {
+public struct ClientAndTabs: Equatable, CustomStringConvertible {
     public let client: RemoteClient
     public let tabs: [RemoteTab]
 
@@ -30,19 +30,20 @@ public func ==(lhs: ClientAndTabs, rhs: ClientAndTabs) -> Bool {
            (lhs.tabs == rhs.tabs)
 }
 
-public protocol RemoteClientsAndTabs {
-    func wipeClients() -> Deferred<Result<()>>
-    func wipeTabs() -> Deferred<Result<()>>
-    func getClients() -> Deferred<Result<[RemoteClient]>>
-    func getClientsAndTabs() -> Deferred<Result<[ClientAndTabs]>>
-    func insertOrUpdateClient(client: RemoteClient) -> Deferred<Result<()>>
-    func insertOrUpdateClients(clients: [RemoteClient]) -> Deferred<Result<()>>
+public protocol RemoteClientsAndTabs: SyncCommands {
+    func wipeClients() -> Deferred<Maybe<()>>
+    func wipeRemoteTabs() -> Deferred<Maybe<()>>
+    func wipeTabs() -> Deferred<Maybe<()>>
+    func getClientGUIDs() -> Deferred<Maybe<Set<GUID>>>
+    func getClients() -> Deferred<Maybe<[RemoteClient]>>
+    func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
+    func getTabsForClientWithGUID(guid: GUID?) -> Deferred<Maybe<[RemoteTab]>>
+    func insertOrUpdateClient(client: RemoteClient) -> Deferred<Maybe<()>>
+    func insertOrUpdateClients(clients: [RemoteClient]) -> Deferred<Maybe<()>>
 
     // Returns number of tabs inserted.
-    func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Result<Int>> // Insert into the local client.
-    func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Result<Int>>
-
-    func onRemovedAccount() -> Success
+    func insertOrUpdateTabs(tabs: [RemoteTab]) -> Deferred<Maybe<Int>> // Insert into the local client.
+    func insertOrUpdateTabsForClientGUID(clientGUID: String?, tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 }
 
 public struct RemoteTab: Equatable {
@@ -52,6 +53,24 @@ public struct RemoteTab: Equatable {
     public let history: [NSURL]
     public let lastUsed: Timestamp
     public let icon: NSURL?
+
+    public static func shouldIncludeURL(url: NSURL) -> Bool {
+        let scheme = url.scheme
+        if scheme == "about" {
+            return false
+        }
+        if scheme == "javascript" {
+            return false
+        }
+
+        if let hostname = url.host?.lowercaseString {
+            if hostname == "localhost" {
+                return false
+            }
+            return true
+        }
+        return false
+    }
 
     public init(clientGUID: String?, URL: NSURL, title: String, history: [NSURL], lastUsed: Timestamp, icon: NSURL?) {
         self.clientGUID = clientGUID
@@ -76,7 +95,7 @@ public func ==(lhs: RemoteTab, rhs: RemoteTab) -> Bool {
         lhs.icon == rhs.icon
 }
 
-extension RemoteTab: Printable {
+extension RemoteTab: CustomStringConvertible {
     public var description: String {
         return "<RemoteTab clientGUID: \(clientGUID), URL: \(URL), title: \(title), lastUsed: \(lastUsed)>"
     }

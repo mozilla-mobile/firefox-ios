@@ -1,44 +1,86 @@
 <!DOCTYPE html>
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
- - License, v. 2.0. If a copy of the MPL was not distributed with this
- - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <html>
+  <head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
+    <style>
+      @font-face {
+        font-family: sans-serif;
+        src: url('/reader-mode/fonts/FiraSans-Regular.ttf');
+      }
 
-    <body>
-        <h1 id="message">TODO Loading Interstitial</h1>
-    </body>
+      @-webkit-keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
 
-    <script>
-        var numberOfChecks = 10;
+      @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
 
-        function triggerCheck() {
-            if (numberOfChecks--) {
-                setTimeout(function() { checkIfContentIsAvailable(); }, 1000);
-            } else {
-                var e = document.getElementById("message")
-                if (e != null) {
-                    e.innerText = "There was a problem loading the content. Click here to load the original page.";
-                }
-            }
+      #container {
+        color: #666;
+        -webkit-animation: fadein 3s;
+        animation: fadein 3s;
+        margin: 20px auto 0 auto;
+      }
+
+      p {
+        font-family: sans-serif;
+        text-align: center;
+      }
+
+      a {
+        color: #5af;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="container">
+      <p id="message">%LOADING-TEXT%</p>
+      <p id="link" style="visibility: hidden;"><a id="link" href="%ORIGINAL-URL%">%LOAD-ORIGINAL-TEXT%</a></p>
+    </div>
+  </body>
+
+  <script>
+    var numberOfChecks = 20; // 20 * 500ms = 10 seconds total
+
+    function triggerCheck() {
+      if (numberOfChecks--) {
+        setTimeout(function() { checkIfContentIsAvailable(); }, 500);
+      } else {
+        var message = document.getElementById("message")
+        if (message != null) {
+          message.innerText = "%LOADING-FAILED-TEXT%";
         }
 
-        function checkIfContentIsAvailable() {
-            var request = new XMLHttpRequest();
-            request.open("GET", "/reader-mode/page-exists" + document.location.search, true);
-            request.onload = function() {
-                if (request.status == 200) {
-                    location.reload(true);
-                } else {
-                    triggerCheck();
-                }
-            };
-            request.onerror = function() {
-                triggerCheck();
-            };
-            request.send();
+        var link = document.getElementById("link")
+        if (link != null) {
+          link.style.visibility = "visible";
         }
+      }
+    }
 
+    function checkIfContentIsAvailable() {
+      var request = new XMLHttpRequest();
+      request.open("GET", "/reader-mode/page-exists" + document.location.search, true);
+      request.onload = function() {
+        if (request.status == 200) {
+          location.reload(true);
+        } else {
+          triggerCheck();
+        }
+      };
+      request.onerror = function() {
         triggerCheck();
-    </script>
+      };
+      request.send();
+    }
 
+    triggerCheck();
+  </script>
 </html>

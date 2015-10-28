@@ -87,9 +87,10 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         shareDialogController.initialShareDestinations = getLastUsedShareDestinations()
         
         self.addChildViewController(shareDialogController)
-        shareDialogController.view.setTranslatesAutoresizingMaskIntoConstraints(false)
+        shareDialogController.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(shareDialogController.view)
-        
+        shareDialogController.didMoveToParentViewController(self)
+
         // Setup constraints for the dialog. We keep the dialog centered with 16 points of padding on both
         // sides. The dialog grows to max 380 points wide so that it does not look too big on landscape or
         // iPad devices.
@@ -97,7 +98,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate {
         let views: NSDictionary = ["dialog": shareDialogController.view]
         
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(16@751)-[dialog(<=380@1000)]-(16@751)-|",
-            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views as [NSObject : AnyObject]))
+            options: NSLayoutFormatOptions(), metrics: nil, views: (views as? [String : AnyObject])!))
         
         let cx = NSLayoutConstraint(item: shareDialogController.view, attribute: NSLayoutAttribute.CenterX,
             relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)

@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 private let DeferredQueue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUEUE_SERIAL)
 
 /**
@@ -24,7 +24,7 @@ private let DeferredQueue = dispatch_queue_create("BrowserDBQueue", DISPATCH_QUE
     // ... Some time later
     deferred.cancel()
 */
-class DeferredDBOperation<T>: Deferred<Result<T>>, Cancellable {
+class DeferredDBOperation<T>: Deferred<Maybe<T>>, Cancellable {
     /// Cancelled is wrapping a ReadWrite lock to make access to it thread-safe.
     private var cancelledLock = LockProtected<Bool>(item: false)
     var cancelled: Bool {
@@ -74,13 +74,12 @@ class DeferredDBOperation<T>: Deferred<Result<T>>, Cancellable {
     private func main() {
         if self.cancelled {
             let err = NSError(domain: "mozilla", code: 9, userInfo: [NSLocalizedDescriptionKey: "Operation was cancelled before starting"])
-            fill(Result(failure: DatabaseError(err: err)))
+            fill(Maybe(failure: DatabaseError(err: err)))
             return
         }
 
-        let start = NSDate.now()
         var result: T? = nil
-        var err = db.withConnection(SwiftData.Flags.ReadWriteCreate) { (db) -> NSError? in
+        let err = db.withConnection(SwiftData.Flags.ReadWriteCreate) { (db) -> NSError? in
             self.connection = db
             if self.cancelled {
                 return NSError(domain: "mozilla", code: 9, userInfo: [NSLocalizedDescriptionKey: "Operation was cancelled before starting"])
@@ -88,16 +87,18 @@ class DeferredDBOperation<T>: Deferred<Result<T>>, Cancellable {
 
             var error: NSError? = nil
             result = self.block(connection: db, err: &error)
-            log.debug("Modified rows: \(db.numberOfRowsModified).")
+            if error == nil {
+                log.verbose("Modified rows: \(db.numberOfRowsModified).")
+            }
             self.connection = nil
             return error
         }
 
         if let result = result {
-            fill(Result(success: result))
+            fill(Maybe(success: result))
             return
         }
-        fill(Result(failure: DatabaseError(err: err)))
+        fill(Maybe(failure: DatabaseError(err: err)))
     }
 
     func cancel() {

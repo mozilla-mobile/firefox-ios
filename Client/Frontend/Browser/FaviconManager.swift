@@ -15,8 +15,8 @@ class FaviconManager : BrowserHelper {
         self.browser = browser
 
         if let path = NSBundle.mainBundle().pathForResource("Favicons", ofType: "js") {
-            if let source = NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding, error: nil) as? String {
-                var userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+            if let source = try? NSString(contentsOfFile: path, encoding: NSUTF8StringEncoding) as String {
+                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
                 browser.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -37,9 +37,10 @@ class FaviconManager : BrowserHelper {
             let site = Site(url: url, title: "")
             if let icons = message.body as? [String: Int] {
                 for icon in icons {
-                    if let iconUrl = NSURL(string: icon.0) {
-                        manager.downloadImageWithURL(iconUrl, options: SDWebImageOptions.LowPriority, progress: nil, completed: { (img, err, cacheType, success, url) -> Void in
-                            let fav = Favicon(url: url.absoluteString!,
+                    if let iconUrl = NSURL(string: icon.0), let browser = self.browser {
+                        let options = browser.isPrivate ? [SDWebImageOptions.LowPriority, SDWebImageOptions.CacheMemoryOnly] : [SDWebImageOptions.LowPriority]
+                        manager.downloadImageWithURL(iconUrl, options: SDWebImageOptions(options), progress: nil, completed: { (img, err, cacheType, success, url) -> Void in
+                            let fav = Favicon(url: url.absoluteString,
                                 date: NSDate(),
                                 type: IconType(rawValue: icon.1)!)
 
@@ -49,8 +50,11 @@ class FaviconManager : BrowserHelper {
                             } else {
                                 return
                             }
-                            self.browser?.favicons.append(fav)
-                            self.profile.favicons.addFavicon(fav, forSite: site)
+
+                            browser.favicons.append(fav)
+                            if !browser.isPrivate {
+                                self.profile.favicons.addFavicon(fav, forSite: site)
+                            }
                         })
                     }
                 }

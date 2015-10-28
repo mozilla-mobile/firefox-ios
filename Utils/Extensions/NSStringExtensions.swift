@@ -7,9 +7,9 @@ import Foundation
 extension NSString {
     public class func contentsOfFileWithResourceName(name: String, ofType type: String, fromBundle bundle: NSBundle, encoding: NSStringEncoding, error: NSErrorPointer) -> NSString? {
         if let path = bundle.pathForResource(name, ofType: type) {
-            if let data = NSString(contentsOfFile: path, encoding: encoding, error: error) {
-                return data
-            } else {
+            do {
+                return try NSString(contentsOfFile: path, encoding: encoding)
+            } catch {
                 return nil
             }
         } else {

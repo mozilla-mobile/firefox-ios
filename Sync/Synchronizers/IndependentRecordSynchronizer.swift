@@ -7,7 +7,7 @@ import Shared
 import Storage
 import XCGLogger
 
-private let log = XCGLogger.defaultInstance()
+private let log = Logger.syncLogger
 
 class Uploader {
     /**
@@ -19,7 +19,7 @@ class Uploader {
         // for the types to line up.
         let chunks = chunk(items, by: by).map { Array($0) }
 
-        let start = deferResult(lastTimestamp)
+        let start = deferMaybe(lastTimestamp)
 
         let perChunk: ([T], Timestamp) -> DeferredTimestamp = { (records, timestamp) in
             // TODO: detect interruptions -- clients uploading records during our sync --
@@ -31,11 +31,11 @@ class Uploader {
             return storageOp(records, timestamp)
         }
 
-        return walk(chunks, start, perChunk)
+        return walk(chunks, start: start, f: perChunk)
     }
 }
 
-public class IndependentRecordSynchronizer: BaseSingleCollectionSynchronizer {
+public class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronizer {
     func applyIncomingToStorage<T>(records: [T], fetched: Timestamp, apply: T -> Success) -> Success {
         func done() -> Success {
             log.debug("Bumping fetch timestamp to \(fetched).")
@@ -48,7 +48,7 @@ public class IndependentRecordSynchronizer: BaseSingleCollectionSynchronizer {
             return done()
         }
 
-        return walk(records, apply) >>> done
+        return walk(records, f: apply) >>> done
     }
 
     /*
@@ -71,7 +71,7 @@ public class IndependentRecordSynchronizer: BaseSingleCollectionSynchronizer {
     func uploadRecords<T>(records: [Record<T>], by: Int, lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>, onUpload: ([GUID], Timestamp) -> DeferredTimestamp) -> DeferredTimestamp {
         if records.isEmpty {
             log.debug("No modified records to upload.")
-            return deferResult(lastTimestamp)
+            return deferMaybe(lastTimestamp)
         }
 
         let storageOp: ([Record<T>], Timestamp) -> DeferredTimestamp = { records, timestamp in

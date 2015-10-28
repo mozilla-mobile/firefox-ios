@@ -9,46 +9,58 @@ struct SiteTableViewControllerUX {
     static let HeaderHeight = CGFloat(25)
     static let RowHeight = CGFloat(58)
     static let HeaderBorderColor = UIColor(rgb: 0xCFD5D9).colorWithAlphaComponent(0.8)
-    static let HeaderTextColor = UIColor(rgb: 0x232323)
+    static let HeaderTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x232323)
     static let HeaderBackgroundColor = UIColor(rgb: 0xECF0F3).colorWithAlphaComponent(0.3)
+    static let HeaderFont = UIFont.systemFontOfSize(12, weight: UIFontWeightMedium)
+    static let HeaderTextMargin = CGFloat(10)
 }
 
-private class SiteTableViewHeader : UITableViewHeaderFooterView {
+class SiteTableViewHeader : UITableViewHeaderFooterView {
     // I can't get drawRect to play nicely with the glass background. As a fallback
     // we just use views for the top and bottom borders.
     let topBorder = UIView()
     let bottomBorder = UIView()
+    let titleLabel = UILabel()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        didLoad()
+    override var textLabel: UILabel? {
+        return titleLabel
     }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-    }
 
-    private func didLoad() {
-        addSubview(topBorder)
-        addSubview(bottomBorder)
-        backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .ExtraLight))
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        topBorder.frame = CGRect(x: 0, y: -0.5, width: frame.width, height: 0.5)
-        bottomBorder.frame = CGRect(x: 0, y: frame.height, width: frame.width, height: 0.5)
         topBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
         bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        super.layoutSubviews()
 
-        textLabel.font = UIFont.systemFontOfSize(11, weight: UIFontWeightMedium)
-        textLabel.textColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : SiteTableViewControllerUX.HeaderTextColor
-        textLabel.textAlignment = .Center
+        titleLabel.font = SiteTableViewControllerUX.HeaderFont
+        titleLabel.textColor = SiteTableViewControllerUX.HeaderTextColor
+        titleLabel.textAlignment = .Left
         contentView.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
+
+        addSubview(topBorder)
+        addSubview(bottomBorder)
+        contentView.addSubview(titleLabel)
+
+        topBorder.snp_makeConstraints { make in
+            make.left.right.equalTo(self)
+            make.top.equalTo(self).offset(-0.5)
+            make.height.equalTo(0.5)
+        }
+
+        bottomBorder.snp_makeConstraints { make in
+            make.left.right.bottom.equalTo(self)
+            make.height.equalTo(0.5)
+        }
+
+        titleLabel.snp_makeConstraints { make in
+            make.left.equalTo(contentView).offset(SiteTableViewControllerUX.HeaderTextMargin)
+            make.right.equalTo(contentView).offset(-SiteTableViewControllerUX.HeaderTextMargin)
+            make.centerY.equalTo(contentView)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -85,13 +97,17 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.separatorColor = UIConstants.SeparatorColor
         tableView.accessibilityIdentifier = "SiteTable"
 
+        if #available(iOS 9, *) {
+            tableView.cellLayoutMarginsFollowReadableWidth = false
+        }
+
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
     }
 
     func reloadData() {
         if data.status != .Success {
-            println("Err: \(data.statusMessage)")
+            print("Err: \(data.statusMessage)", terminator: "\n")
         } else {
             self.tableView.reloadData()
         }
@@ -102,13 +118,11 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCellWithIdentifier(CellIdentifier) as! UITableViewCell
-        // Callers should override this to fill in the cell returned here
+        return tableView.dequeueReusableCellWithIdentifier(CellIdentifier, forIndexPath: indexPath)
     }
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return tableView.dequeueReusableHeaderFooterViewWithIdentifier(HeaderIdentifier) as? UIView
-        // Callers should override this to fill in the cell returned here
+        return tableView.dequeueReusableHeaderFooterViewWithIdentifier(HeaderIdentifier)
     }
 
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

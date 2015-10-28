@@ -30,7 +30,7 @@ class SearchSettingsTableViewController: UITableViewController {
 
         // Insert Done button if being presented outside of the Settings Nav stack
         if !(self.navigationController is SettingsNavigationController) {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Done, target: self, action: "SELDismiss")
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Done button label for search settings table"), style: .Done, target: self, action: "SELDismiss")
         }
 
         tableView.tableFooterView = UIView()
@@ -56,12 +56,13 @@ class SearchSettingsTableViewController: UITableViewController {
 
             case ItemDefaultSuggestions:
                 cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
-                cell.textLabel?.text = NSLocalizedString("Show search suggestions", comment: "Label for show search suggestions setting.")
+                cell.textLabel?.text = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
                 let toggle = UISwitch()
                 toggle.onTintColor = UIConstants.ControlTintColor
                 toggle.addTarget(self, action: "SELdidToggleSearchSuggestions:", forControlEvents: UIControlEvents.ValueChanged)
                 toggle.on = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
+                cell.selectionStyle = .None
 
             default:
                 // Should not happen.
@@ -86,6 +87,8 @@ class SearchSettingsTableViewController: UITableViewController {
 
             cell.textLabel?.text = engine.shortName
             cell.imageView?.image = engine.image?.createScaled(IconSize)
+
+            cell.selectionStyle = .None
         }
 
         // So that the seperator line goes all the way to the left edge.
@@ -112,7 +115,7 @@ class SearchSettingsTableViewController: UITableViewController {
             let searchEnginePicker = SearchEnginePicker()
             // Order alphabetically, so that picker is always consistently ordered.
             // Every engine is a valid choice for the default engine, even the current default engine.
-            searchEnginePicker.engines = model.orderedEngines.sorted { e, f in e.shortName < f.shortName }
+            searchEnginePicker.engines = model.orderedEngines.sort { e, f in e.shortName < f.shortName }
             searchEnginePicker.delegate = self
             searchEnginePicker.selectedSearchEngineName = model.defaultEngine.shortName
             navigationController?.pushViewController(searchEnginePicker, animated: true)
@@ -133,7 +136,7 @@ class SearchSettingsTableViewController: UITableViewController {
     // Hide a thin vertical line that iOS renders between the accessoryView and the reordering control.
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if cell.editing {
-            for v in cell.subviews as! [UIView] {
+            for v in cell.subviews {
                 if v.frame.width == 1.0 {
                     v.backgroundColor = UIColor.clearColor()
                 }
@@ -153,7 +156,7 @@ class SearchSettingsTableViewController: UITableViewController {
         } else {
             sectionTitle = NSLocalizedString("Quick-search Engines", comment: "Title for quick-search engines settings section.")
         }
-        headerView.titleLabel.text = sectionTitle.uppercaseString
+        headerView.titleLabel.text = sectionTitle
 
         return headerView
     }
