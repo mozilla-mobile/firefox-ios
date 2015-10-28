@@ -362,7 +362,7 @@ public class BrowserTable: Table {
             (historyIDsWithIcon, nil),
             (iconForURL, nil),
             (getQueueTableCreationString(forVersion: version), nil),
-            (getTopSitesTableCreationString(forVersion: version), nil)
+            (getTopSitesTableCreationString(forVersion: version), nil),
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")

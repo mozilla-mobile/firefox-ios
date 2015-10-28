@@ -257,34 +257,10 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getTopSitesWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        let purgeTopSites: () -> Success = {
-            let deleteQuery = "DELETE FROM \(TableCachedTopSites)"
-            return self.db.run(deleteQuery, withArgs: nil)
-        }
-
-        let insertTopSites: () -> Success = { frecencyResults in
-            let (whereData, groupBy) = self.topSiteClauses()
-            let (query, args) = self.filteredSitesByFrecencyQueryWithLimit(limit, groupClause: groupBy, whereData: whereData)
-            let insertQuery = "INSERT INTO \(TableCachedTopSites) \(query)"
-            return self.db.run(insertQuery, withArgs: args)
-        }
-
-        let topSitesResult: () -> Deferred<Maybe<Cursor<Site>>> = {
-            // Grab all of the entries for top sites
-            let topSitesQuery = "SELECT * FROM \(TableCachedTopSites) ORDER BY frecencies DESC LIMIT (?)"
-            let factory = SQLiteHistory.iconHistoryColumnFactory
-            return self.db.runQuery(topSitesQuery, args: [limit], factory: factory)
-        }
-
-        let lastComputeTime = prefs.timestampForKey(PrefsKeys.KeyLastFrecencyCacheTime) ?? 0
-
-        // If the cached data is too stale, dump everything, recompute, cache, and return
-        let now = NSDate.now()
-        if now - lastComputeTime > OneDayInMilliseconds {
-            prefs.setTimestamp(now, forKey: PrefsKeys.KeyLastFrecencyCacheTime)
-            return (purgeTopSites() >>> insertTopSites) >>> topSitesResult
-        } else {
-            return topSitesResult()
+        let lastCached = prefs.timestampForKey(PrefsKeys.KeyLastFrecencyCacheTime) ?? 0
+        let needsUpdate = NSDate.now() - lastCached > OneDayInMilliseconds
+        return (needsUpdate ? updateTopSitesCacheWithLimit(limit) : succeed()) >>> {
+            self.getCachedTopSitesWithLimit(limit)
         }
     }
 
@@ -340,6 +316,34 @@ extension SQLiteHistory: BrowserHistory {
         let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
         let groupBy = "GROUP BY domain_id "
         return (whereData, groupBy)
+    }
+
+    private func purgeTopSitesCache() -> Success {
+        let deleteQuery = "DELETE FROM \(TableCachedTopSites)"
+        prefs.removeObjectForKey(PrefsKeys.KeyLastFrecencyCacheTime)
+        return self.db.run(deleteQuery, withArgs: nil)
+    }
+
+    private func updateTopSitesCacheWithLimit(limit : Int) -> Success {
+        let (whereData, groupBy) = self.topSiteClauses()
+        let (query, args) = self.filteredSitesByFrecencyQueryWithLimit(limit, groupClause: groupBy, whereData: whereData)
+        let insertQuery = "INSERT INTO \(TableCachedTopSites) \(query)"
+        return self.purgeTopSitesCache() >>> {
+            self.db.run(insertQuery, withArgs: args) >>> {
+                self.updateLastFrecencyTimeToTime(NSDate.now())
+            }
+        }
+    }
+
+    private func updateLastFrecencyTimeToTime(time: Timestamp) -> Success {
+        prefs.setTimestamp(time, forKey: PrefsKeys.KeyLastFrecencyCacheTime)
+        return succeed()
+    }
+
+    private func getCachedTopSitesWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
+        let topSitesQuery = "SELECT * FROM \(TableCachedTopSites) ORDER BY frecencies DESC LIMIT (?)"
+        let factory = SQLiteHistory.iconHistoryColumnFactory
+        return self.db.runQuery(topSitesQuery, args: [limit], factory: factory)
     }
 
     private func getFilteredSitesByVisitDateWithLimit(limit: Int,
@@ -483,11 +487,11 @@ extension SQLiteHistory: BrowserHistory {
             // We select the history items then immediately join to get the largest icon.
             // We do this so that we limit and filter *before* joining against icons.
             let sql = "SELECT" +
-            " historyID, url, title, guid, domain_id, domain" +
-            ", localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount" +
-            ", iconID, iconURL, iconDate, iconType, iconWidth, frecencies" +
-            " FROM (\(historySQL)) LEFT OUTER JOIN " +
-            "view_history_id_favicon ON historyID = view_history_id_favicon.id"
+                      " historyID, url, title, guid, domain_id, domain" +
+                      ", localVisitDate, remoteVisitDate, localVisitCount, remoteVisitCount" +
+                      ", iconID, iconURL, iconDate, iconType, iconWidth, frecencies" +
+                      " FROM (\(historySQL)) LEFT OUTER JOIN " +
+                      "view_history_id_favicon ON historyID = view_history_id_favicon.id"
             return (sql, args)
         }
 
