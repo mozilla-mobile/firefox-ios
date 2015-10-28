@@ -17,6 +17,12 @@ DerivedData
 *.xcuserstate
 *.xcscmblueprint
 
+#fastlane
+fastlane/screenshots
+fastlane/report.xml
+builds
+provisioning-profiles
+
 # OS X
 .DS_Store
 

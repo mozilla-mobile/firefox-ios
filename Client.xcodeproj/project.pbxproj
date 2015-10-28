@@ -336,6 +336,8 @@
 		74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */; };
 		74E36E151B716BAF00D69DA1 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */; };
 		7B24DC9C1B67B3590005766B /* ClearPrivateDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */; };
+		7B60B0081BDE3AE10090C984 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */; };
+		7B60B00A1BDE3B460090C984 /* MarketingSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60B0091BDE3B460090C984 /* MarketingSnapshotTests.swift */; };
 		7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */; };
 		7BA8D1C71BA037F500C8AE9E /* OpenPdfHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA8D1C61BA037F500C8AE9E /* OpenPdfHelper.swift */; };
 		7BB20B6D1B71160200F1657F /* TopSitesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB20B6C1B71160200F1657F /* TopSitesTests.swift */; };
@@ -1022,6 +1024,13 @@
 			remoteGlobalIDString = 55E3EE4419D76F280068C3A7;
 			remoteInfo = "XCGLogger (iOS)";
 		};
+		7B60AFDA1BDE3A8B0090C984 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
+			remoteInfo = Client;
+		};
 		7B7692941B7CCBD100188277 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D31FC2291A8D908800BAF7EC /* Alamofire.xcodeproj */;
@@ -1579,6 +1588,10 @@
 		74C027441B2A348C001B1E88 /* SessionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionData.swift; sourceTree = "<group>"; };
 		74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsContentViewController.swift; sourceTree = "<group>"; };
 		7B24DC9B1B67B3590005766B /* ClearPrivateDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearPrivateDataTests.swift; sourceTree = "<group>"; };
+		7B60AFD51BDE3A8B0090C984 /* ClientUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ClientUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B60AFD91BDE3A8B0090C984 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
+		7B60B0091BDE3B460090C984 /* MarketingSnapshotTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MarketingSnapshotTests.swift; path = snapshot/MarketingSnapshotTests.swift; sourceTree = "<group>"; };
 		7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChevronView.swift; sourceTree = "<group>"; };
 		7BA8D1C61BA037F500C8AE9E /* OpenPdfHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenPdfHelper.swift; sourceTree = "<group>"; };
 		7BB20B6C1B71160200F1657F /* TopSitesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSitesTests.swift; sourceTree = "<group>"; };
@@ -1974,6 +1987,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FCAE2251ABB51F800877008 /* Storage.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B60AFD21BDE3A8B0090C984 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2529,7 +2549,25 @@
 				39C5750C1BE28BAE00E1C4B1 /* OnePasswordExtension.h */,
 				39C5750D1BE28BAE00E1C4B1 /* OnePasswordExtension.m */,
 			);
-			name = OnePasswordExtension;
+            name = OnePasswordExtension;
+            sourceTree = "<group>";
+        };
+		7B60AFD61BDE3A8B0090C984 /* ClientUITests */ = {
+			isa = PBXGroup;
+			children = (
+				7B60B0061BDE3ACD0090C984 /* Snapshot */,
+				7B60AFD91BDE3A8B0090C984 /* Info.plist */,
+			);
+			path = ClientUITests;
+			sourceTree = "<group>";
+		};
+		7B60B0061BDE3ACD0090C984 /* Snapshot */ = {
+			isa = PBXGroup;
+			children = (
+				7B60B0091BDE3B460090C984 /* MarketingSnapshotTests.swift */,
+				7B60B0071BDE3AE10090C984 /* SnapshotHelper.swift */,
+			);
+			name = Snapshot;
 			sourceTree = "<group>";
 		};
 		D31FC22A1A8D908800BAF7EC /* Products */ = {
@@ -3094,6 +3132,7 @@
 				2FA4360B1ABB83B4008031D1 /* AccountTests */,
 				F84B21C01A090F8100AAB793 /* Client */,
 				F84B21D61A090F8100AAB793 /* ClientTests */,
+				7B60AFD61BDE3A8B0090C984 /* ClientUITests */,
 				F8708D1E1A0970990051AB07 /* Extensions */,
 				28CE83B71A1D1D3200576538 /* FxAClient */,
 				E65C5BC51BEA4F6500D28BEF /* NativeRefTests */,
@@ -3134,6 +3173,7 @@
 				E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */,
 				E4BA8A2B1B4B0A1600BC2E95 /* ViewLater.appex */,
 				E65C5BC41BEA4F6500D28BEF /* NativeRefTests.xctest */,
+				7B60AFD51BDE3A8B0090C984 /* ClientUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3528,6 +3568,24 @@
 			productReference = 2FCAE2241ABB51F800877008 /* StorageTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		7B60AFD41BDE3A8B0090C984 /* ClientUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B60B0051BDE3A8B0090C984 /* Build configuration list for PBXNativeTarget "ClientUITests" */;
+			buildPhases = (
+				7B60AFD11BDE3A8B0090C984 /* Sources */,
+				7B60AFD21BDE3A8B0090C984 /* Frameworks */,
+				7B60AFD31BDE3A8B0090C984 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7B60AFDB1BDE3A8B0090C984 /* PBXTargetDependency */,
+			);
+			name = ClientUITests;
+			productName = ClientUITests;
+			productReference = 7B60AFD51BDE3A8B0090C984 /* ClientUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		D39FA15E1A83E0EC00EE869C /* UITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D39FA1671A83E0EC00EE869C /* Build configuration list for PBXNativeTarget "UITests" */;
@@ -3764,6 +3822,10 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = F84B21BD1A090F8100AAB793;
 					};
+					7B60AFD41BDE3A8B0090C984 = {
+						CreatedOnToolsVersion = 7.0.1;
+						TestTargetID = F84B21BD1A090F8100AAB793;
+					};
 					D39FA15E1A83E0EC00EE869C = {
 						CreatedOnToolsVersion = 6.1.1;
 						TestTargetID = F84B21BD1A090F8100AAB793;
@@ -3903,6 +3965,7 @@
 				E4D567171ADECE2700F1EFE7 /* ReadingList */,
 				E4D567211ADECE2700F1EFE7 /* ReadingListTests */,
 				E6F9650B1B2F1CF20034B023 /* SharedTests */,
+				7B60AFD41BDE3A8B0090C984 /* ClientUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -4250,6 +4313,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2FCAE2221ABB51F800877008 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B60AFD31BDE3A8B0090C984 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -4673,6 +4743,15 @@
 				2FA4351D1ABB6831008031D1 /* FaviconsTable.swift in Sources */,
 				2FA4352B1ABB6836008031D1 /* SwiftData.swift in Sources */,
 				28C210C51BB3941D0017B00C /* DefaultSuggestedSites.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B60AFD11BDE3A8B0090C984 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B60B00A1BDE3B460090C984 /* MarketingSnapshotTests.swift in Sources */,
+				7B60B0081BDE3AE10090C984 /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5214,6 +5293,11 @@
 			name = "XCGLogger (iOS)";
 			targetProxy = 39A362DB1AAF5ECE00F47390 /* PBXContainerItemProxy */;
 		};
+		7B60AFDB1BDE3A8B0090C984 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F84B21BD1A090F8100AAB793 /* Client */;
+			targetProxy = 7B60AFDA1BDE3A8B0090C984 /* PBXContainerItemProxy */;
+		};
 		D31FC2481A8D910E00BAF7EC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Alamofire iOS";
@@ -5319,10 +5403,10 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -5363,10 +5447,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -5416,10 +5500,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -5552,10 +5636,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -5596,10 +5680,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -5648,10 +5732,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -5685,10 +5769,10 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -5729,10 +5813,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -5782,10 +5866,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -5917,10 +6001,10 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -5967,10 +6051,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -6026,10 +6110,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -6169,6 +6253,151 @@
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FennecNightly;
+		};
+		7B60AFDC1BDE3A8B0090C984 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = ClientUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.ClientUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "340e9444-6fc5-464d-90a9-0fcd3d001c37";
+				TEST_TARGET_NAME = Client;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		7B60AFDD1BDE3A8B0090C984 /* FennecAurora */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ClientUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.ClientUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "340e9444-6fc5-464d-90a9-0fcd3d001c37";
+				SDKROOT = iphoneos;
+				TEST_TARGET_NAME = Client;
+				USES_XCTRUNNER = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FennecAurora;
+		};
+		7B60AFDE1BDE3A8B0090C984 /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ClientUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.ClientUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "340e9444-6fc5-464d-90a9-0fcd3d001c37";
+				SDKROOT = iphoneos;
+				TEST_TARGET_NAME = Client;
+				USES_XCTRUNNER = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Firefox;
+		};
+		7B60AFDF1BDE3A8B0090C984 /* FennecNightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = ClientUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.ClientUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "340e9444-6fc5-464d-90a9-0fcd3d001c37";
+				SDKROOT = iphoneos;
+				TEST_TARGET_NAME = Client;
+				USES_XCTRUNNER = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = FennecNightly;
@@ -6539,10 +6768,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -6591,10 +6820,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -6694,10 +6923,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -6787,10 +7016,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -6881,11 +7110,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -7139,11 +7368,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -7186,11 +7415,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -7241,11 +7470,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 5;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -8068,6 +8297,17 @@
 				2FCAE2391ABB51F900877008 /* FennecAurora */,
 				E448FCA51AEE7A6000869B6C /* Firefox */,
 				2FCAE23A1ABB51F900877008 /* FennecNightly */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = FennecAurora;
+		};
+		7B60B0051BDE3A8B0090C984 /* Build configuration list for PBXNativeTarget "ClientUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B60AFDC1BDE3A8B0090C984 /* Debug */,
+				7B60AFDD1BDE3A8B0090C984 /* FennecAurora */,
+				7B60AFDE1BDE3A8B0090C984 /* Firefox */,
+				7B60AFDF1BDE3A8B0090C984 /* FennecNightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = FennecAurora;
