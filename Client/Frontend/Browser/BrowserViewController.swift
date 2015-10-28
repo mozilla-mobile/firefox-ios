@@ -46,7 +46,6 @@ class BrowserViewController: UIViewController {
     private var searchController: SearchViewController?
     private let uriFixup = URIFixup()
     private var screenshotHelper: ScreenshotHelper!
-    private var homePanelIsInline = false
     private var searchLoader: SearchLoader!
     private let snackBars = UIView()
     private let auralProgress = AuralProgressBar()
@@ -542,22 +541,15 @@ class BrowserViewController: UIViewController {
         homePanelController?.view.snp_remakeConstraints { make in
             make.top.equalTo(self.urlBar.snp_bottom)
             make.left.right.equalTo(self.view)
-            if self.homePanelIsInline {
-                make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
-            } else {
-                make.bottom.equalTo(self.view.snp_bottom)
-            }
+            make.bottom.equalTo(self.view.snp_bottom)
         }
     }
 
-    private func showHomePanelController(inline inline: Bool) {
-        homePanelIsInline = inline
-
+    private func showHomePanelController() {
         if homePanelController == nil {
             homePanelController = HomePanelViewController()
             homePanelController!.profile = profile
             homePanelController!.delegate = self
-            homePanelController!.url = tabManager.selectedTab?.displayURL
             homePanelController!.view.alpha = 0
 
             addChildViewController(homePanelController!)
@@ -565,16 +557,7 @@ class BrowserViewController: UIViewController {
             homePanelController!.didMoveToParentViewController(self)
         }
 
-        let panelNumber = tabManager.selectedTab?.url?.fragment
-
-        // splitting this out to see if we can get better crash reports when this has a problem
-        var newSelectedButtonIndex = 0
-        if let numberArray = panelNumber?.componentsSeparatedByString("=") {
-            if let last = numberArray.last, lastInt = Int(last) {
-                newSelectedButtonIndex = lastInt
-            }
-        }
-        homePanelController?.selectedButtonIndex = newSelectedButtonIndex
+        homePanelController!.url = tabManager.selectedTab?.url
 
         // We have to run this animation, even if the view is already showing because there may be a hide animation running
         // and we want to be sure to override its results.
@@ -616,7 +599,7 @@ class BrowserViewController: UIViewController {
     private func updateInContentHomePanel(url: NSURL?) {
         if !urlBar.inOverlayMode {
             if AboutUtils.isAboutHomeURL(url){
-                showHomePanelController(inline: (tabManager.selectedTab?.canGoForward ?? false || tabManager.selectedTab?.canGoBack ?? false))
+                showHomePanelController()
             } else {
                 hideHomePanelController()
             }
@@ -994,7 +977,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(urlBar: URLBarView) {
-        showHomePanelController(inline: false)
+        showHomePanelController()
     }
 
     func urlBarDidLeaveOverlayMode(urlBar: URLBarView) {
@@ -1308,6 +1291,13 @@ extension BrowserViewController: HomePanelViewControllerDelegate {
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectPanel panel: Int) {
         if AboutUtils.isAboutHomeURL(tabManager.selectedTab?.url) {
             tabManager.selectedTab?.webView?.evaluateJavaScript("history.replaceState({}, '', '#panel=\(panel)')", completionHandler: nil)
+        }
+    }
+
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectBookmarkFolder folders: String) {
+        if AboutUtils.isAboutHomeURL(tabManager.selectedTab?.url) {
+            let panel = AboutUtils.getHomePanel(tabManager.selectedTab?.url?.fragment)
+            tabManager.selectedTab?.webView?.evaluateJavaScript("history.replaceState({}, '', '#panel=\(panel)&bookmarkFolders=\(folders)')", completionHandler: nil)
         }
     }
 
