@@ -105,6 +105,11 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.tableFooterView = UIView()
     }
 
+    deinit {
+        tableView.dataSource = nil
+        tableView.delegate = nil
+    }
+
     func reloadData() {
         if data.status != .Success {
             print("Err: \(data.statusMessage)", terminator: "\n")
