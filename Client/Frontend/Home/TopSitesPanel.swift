@@ -131,7 +131,6 @@ class TopSitesPanel: UIViewController {
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
         profile.history.removeSiteFromTopSites(site) >>== {
             self.profile.history.getSitesByFrecencyWithLimit(self.layout.thumbnailCount).uponQueue(dispatch_get_main_queue(), block: { result in
-                self.updateDataSourceWithSites(result)
                 self.deleteOrUpdateSites(result, indexPath: indexPath)
             })
         }
@@ -145,23 +144,35 @@ class TopSitesPanel: UIViewController {
     }
 
     private func deleteOrUpdateSites(result: Maybe<Cursor<Site>>, indexPath: NSIndexPath) {
-        if let data = result.successValue {
-            let numOfThumbnails = self.layout.thumbnailCount
-            collection?.performBatchUpdates({
-                // If we have enough data to fill the tiles after the deletion, then delete and insert the next one from data
-                if (data.count + SuggestedSites.count >= numOfThumbnails) {
-                    self.collection?.deleteItemsAtIndexPaths([indexPath])
-                    self.collection?.insertItemsAtIndexPaths([NSIndexPath(forItem: numOfThumbnails - 1, inSection: 0)])
-                }
+        guard let collectionView = collection else { return }
+        // get the number of top sites items we have before we update the data sourcce 
+        // this is so we know how many new top sites cells to add
+        // as a sync may have brought in more results than we had previously
+        let previousNumOfThumbnails = collectionView.dataSource?.collectionView(collectionView, numberOfItemsInSection: 0) ?? 0
 
-                // If we don't have enough to fill the thumbnail tile area even with suggested tiles, just delete
-                else if (data.count + SuggestedSites.count) < numOfThumbnails {
-                    self.collection?.deleteItemsAtIndexPaths([indexPath])
-                }
-            }, completion: { _ in
-                self.updateRemoveButtonStates()
-            })
-        }
+        // now update the data source with the new data
+        self.updateDataSourceWithSites(result)
+
+        let data = dataSource.data
+        collection?.performBatchUpdates({
+
+            // find out how many thumbnails, up the max for display, we can actually add
+            let numOfCellsFromData = data.count + SuggestedSites.count
+            let numOfThumbnails = min(numOfCellsFromData, self.layout.thumbnailCount)
+
+            // If we have enough data to fill the tiles after the deletion, then delete the correct tile and insert any that are missing
+            if (numOfThumbnails >= previousNumOfThumbnails) {
+                self.collection?.deleteItemsAtIndexPaths([indexPath])
+                let indexesToAdd = ((previousNumOfThumbnails-1)..<numOfThumbnails).map{ NSIndexPath(forItem: $0, inSection: 0) }
+                self.collection?.insertItemsAtIndexPaths(indexesToAdd)
+            }
+            // If we don't have any data to backfill our tiles, just delete
+            else {
+                self.collection?.deleteItemsAtIndexPaths([indexPath])
+            }
+        }, completion: { _ in
+            self.updateRemoveButtonStates()
+        })
     }
 
     /**
@@ -202,6 +213,8 @@ class TopSitesPanel: UIViewController {
 extension TopSitesPanel: HomePanel {
     func endEditing() {
         editingThumbnails = false
+
+        collection?.reloadData()
     }
 }
 
