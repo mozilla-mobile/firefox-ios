@@ -7,6 +7,7 @@ import Foundation
 public struct PrefsKeys {
     public static let KeyLastRemoteTabSyncTime = "lastRemoteTabSyncTime"
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
+    public static let KeyLastFrecencyCacheTime = "lastFrecencyCacheTime"
 }
 
 public protocol Prefs {

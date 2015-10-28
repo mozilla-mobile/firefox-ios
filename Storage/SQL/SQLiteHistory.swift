@@ -103,10 +103,12 @@ extension SDRow {
 public class SQLiteHistory {
     let db: BrowserDB
     let favicons: FaviconsTable<Favicon>
+    let prefs: Prefs
 
-    required public init?(db: BrowserDB, version: Int? = nil) {
+    required public init?(db: BrowserDB, prefs: Prefs, version: Int? = nil) {
         self.db = db
         self.favicons = FaviconsTable<Favicon>()
+        self.prefs = prefs
 
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
@@ -274,11 +276,12 @@ extension SQLiteHistory: BrowserHistory {
             return self.db.runQuery(topSitesQuery, args: [limit], factory: factory)
         }
 
-        let lastComputeTime: Timestamp = 0
+        let lastComputeTime = prefs.timestampForKey(PrefsKeys.KeyLastFrecencyCacheTime) ?? 0
 
         // If the cached data is too stale, dump everything, recompute, cache, and return
         let now = NSDate.now()
-        if now - lastComputeTime > OneHourInMilliseconds {
+        if now - lastComputeTime > OneDayInMilliseconds {
+            prefs.setTimestamp(now, forKey: PrefsKeys.KeyLastFrecencyCacheTime)
             return (purgeTopSites() >>> insertTopSites) >>> topSitesResult
         } else {
             return topSitesResult()

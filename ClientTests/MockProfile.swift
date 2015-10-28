@@ -76,7 +76,7 @@ public class MockProfile: Profile {
      * collection of tables.
      */
     private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage> = {
-        return SQLiteHistory(db: self.db)!
+        return SQLiteHistory(db: self.db, prefs: MockProfilePrefs())!
     }()
 
     var favicons: Favicons {
