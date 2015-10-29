@@ -29,7 +29,7 @@ public protocol BrowserHistory {
 
     func getTopSitesWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>>
     func setTopSitesNeedsInvalidation()
-    func invalidateTopSitesIfNeeded() -> Success
+    func invalidateTopSitesIfNeeded() -> Deferred<Bool>
 }
 
 /**

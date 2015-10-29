@@ -138,10 +138,24 @@ class TopSitesPanel: UIViewController {
     }
 
     private func refreshHistory(frequencyLimit: Int) {
-        self.profile.history.getTopSitesWithLimit(frequencyLimit).uponQueue(dispatch_get_main_queue(), block: { result in
+        // Reload right away with whatever is in the cache, then check to see if the cache is invalid. If it's invalid,
+        // invalidate the cache and requery. This allows us to always show results right away if they are cached but
+        // also load in the up-to-date results asynchronously if needed
+        reloadTopSitesWithLimit(frequencyLimit) >>== {
+            self.profile.history.invalidateTopSitesIfNeeded().upon { result in
+                if result {
+                    self.reloadTopSitesWithLimit(frequencyLimit)
+                }
+            }
+        }
+    }
+
+    private func reloadTopSitesWithLimit(limit: Int) -> Success {
+        return self.profile.history.getTopSitesWithLimit(limit).bindQueue(dispatch_get_main_queue()) { result in
             self.updateDataSourceWithSites(result)
             self.collection?.reloadData()
-        })
+            return succeed()
+        }
     }
 
     private func deleteOrUpdateSites(result: Maybe<Cursor<Site>>, indexPath: NSIndexPath) {

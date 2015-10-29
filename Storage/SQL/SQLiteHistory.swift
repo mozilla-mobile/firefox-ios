@@ -268,14 +268,18 @@ extension SQLiteHistory: BrowserHistory {
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
     }
 
-    public func invalidateTopSitesIfNeeded() -> Success {
+    public func invalidateTopSitesIfNeeded() -> Deferred<Bool> {
+        let deferred = Deferred<Bool>()
         if !(prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false) {
-            return purgeTopSitesCache() >>> {
-                self.updateTopSitesCacheWithLimit(TopSitesCacheSize)
+            purgeTopSitesCache() >>== {
+                self.updateTopSitesCacheWithLimit(TopSitesCacheSize) >>== {
+                    deferred.fill(true)
+                }
             }
         } else {
-            return succeed()
+            deferred.fill(false)
         }
+        return deferred
     }
 
     private func updateTopSitesCacheWithLimit(limit : Int) -> Success {
