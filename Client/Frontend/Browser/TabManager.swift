@@ -54,7 +54,7 @@ class TabManager : NSObject {
         }
     }
 
-    private var tabs: [Browser] = []
+    private(set) var tabs = [Browser]()
     private var _selectedIndex = -1
     private let defaultNewTabRequest: NSURLRequest
     private let navDelegate: TabManagerNavDelegate
