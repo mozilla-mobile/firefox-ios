@@ -173,6 +173,15 @@ public class BrowserProfile: Profile {
 
     weak private var app: UIApplication?
 
+    /**
+     * N.B., BrowserProfile is used from our extensions, often via a pattern like
+     *
+     *   BrowserProfile(…).foo.saveSomething(…)
+     *
+     * This can break if BrowserProfile's initializer does async work that
+     * subsequently — and asynchronously — expects the profile to stick around:
+     * see Bug 1218833. Be sure to only perform synchronous actions here.
+     */
     init(localName: String, app: UIApplication?) {
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
