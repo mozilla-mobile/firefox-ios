@@ -264,9 +264,17 @@ extension SQLiteHistory: BrowserHistory {
         return self.db.runQuery(topSitesQuery, args: [limit], factory: factory)
     }
 
-    public func invalidateTopSites() -> Success {
-        return purgeTopSitesCache() >>> {
-            self.updateTopSitesCacheWithLimit(TopSitesCacheSize)
+    public func setTopSitesNeedsInvalidation() {
+        prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+    }
+
+    public func invalidateTopSitesIfNeeded() -> Success {
+        if !(prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false) {
+            return purgeTopSitesCache() >>> {
+                self.updateTopSitesCacheWithLimit(TopSitesCacheSize)
+            }
+        } else {
+            return succeed()
         }
     }
 
