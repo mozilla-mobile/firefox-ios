@@ -8,6 +8,8 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
+private let TopSitesCacheSize = 100
+
 class NoSuchRecordError: MaybeErrorType {
     let guid: GUID
     init(guid: GUID) {
@@ -257,17 +259,33 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func getTopSitesWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        let lastCached = prefs.timestampForKey(PrefsKeys.KeyLastFrecencyCacheTime) ?? 0
-        let needsUpdate = NSDate.now() - lastCached > OneDayInMilliseconds
-        return (needsUpdate ? updateTopSitesCacheWithLimit(limit) : succeed()) >>> {
-            self.getCachedTopSitesWithLimit(limit)
+        let topSitesQuery = "SELECT * FROM \(TableCachedTopSites) ORDER BY frecencies DESC LIMIT (?)"
+        let factory = SQLiteHistory.iconHistoryColumnFactory
+        return self.db.runQuery(topSitesQuery, args: [limit], factory: factory)
+    }
+
+    public func invalidateTopSites() -> Success {
+        return purgeTopSitesCache() >>> {
+            self.updateTopSitesCacheWithLimit(TopSitesCacheSize)
         }
     }
 
-    public func purgeTopSitesCache() -> Success {
+    private func updateTopSitesCacheWithLimit(limit : Int) -> Success {
+        let (whereData, groupBy) = self.topSiteClauses()
+        let (query, args) = self.filteredSitesByFrecencyQueryWithLimit(limit, groupClause: groupBy, whereData: whereData)
+        let insertQuery = "INSERT INTO \(TableCachedTopSites) \(query)"
+        return self.purgeTopSitesCache() >>> {
+            self.db.run(insertQuery, withArgs: args) >>> {
+                self.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
+                return succeed()
+            }
+        }
+    }
+
+    private func purgeTopSitesCache() -> Success {
         let deleteQuery = "DELETE FROM \(TableCachedTopSites)"
         return self.db.run(deleteQuery, withArgs: nil) >>> {
-            self.prefs.removeObjectForKey(PrefsKeys.KeyLastFrecencyCacheTime)
+            self.prefs.removeObjectForKey(PrefsKeys.KeyTopSitesCacheIsValid)
             return succeed()
         }
     }
@@ -324,28 +342,6 @@ extension SQLiteHistory: BrowserHistory {
         let whereData = "(\(TableDomains).showOnTopSites IS 1) AND (\(TableDomains).domain NOT LIKE 'r.%') "
         let groupBy = "GROUP BY domain_id "
         return (whereData, groupBy)
-    }
-
-    private func updateTopSitesCacheWithLimit(limit : Int) -> Success {
-        let (whereData, groupBy) = self.topSiteClauses()
-        let (query, args) = self.filteredSitesByFrecencyQueryWithLimit(limit, groupClause: groupBy, whereData: whereData)
-        let insertQuery = "INSERT INTO \(TableCachedTopSites) \(query)"
-        return self.purgeTopSitesCache() >>> {
-            self.db.run(insertQuery, withArgs: args) >>> {
-                self.updateLastFrecencyTimeToTime(NSDate.now())
-            }
-        }
-    }
-
-    private func updateLastFrecencyTimeToTime(time: Timestamp) -> Success {
-        prefs.setTimestamp(time, forKey: PrefsKeys.KeyLastFrecencyCacheTime)
-        return succeed()
-    }
-
-    private func getCachedTopSitesWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        let topSitesQuery = "SELECT * FROM \(TableCachedTopSites) ORDER BY frecencies DESC LIMIT (?)"
-        let factory = SQLiteHistory.iconHistoryColumnFactory
-        return self.db.runQuery(topSitesQuery, args: [limit], factory: factory)
     }
 
     private func getFilteredSitesByVisitDateWithLimit(limit: Int,
