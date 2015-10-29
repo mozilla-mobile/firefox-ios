@@ -23,7 +23,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate? = nil
     var source: BookmarksModel?
     var parentFolders = [BookmarkFolder]()
-    var bookmarkFolder = BookmarkRoots.MobileFolderGUID
+    var bookmarkFolder: BookmarkFolder?
 
     private let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
     private let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
@@ -50,14 +50,24 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         // if we've not already set a source for this panel fetch a new model
         // otherwise just use the existing source to select a folder
         guard let source = self.source else {
             // Get all the bookmarks split by folders
-            profile.bookmarks.modelForFolder(bookmarkFolder).upon(onModelFetched)
+            if let bookmarkFolder = bookmarkFolder {
+                profile.bookmarks.modelForFolder(bookmarkFolder).upon(onModelFetched)
+            } else {
+                profile.bookmarks.modelForFolder(BookmarkRoots.MobileFolderGUID).upon(onModelFetched)
+            }
             return
         }
-        source.selectFolder(bookmarkFolder).upon(onModelFetched)
+
+        if let bookmarkFolder = bookmarkFolder {
+            source.selectFolder(bookmarkFolder).upon(onModelFetched)
+        } else {
+            source.selectFolder(BookmarkRoots.MobileFolderGUID).upon(onModelFetched)
+        }
     }
 
     func notificationReceived(notification: NSNotification) {
@@ -184,7 +194,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             case let folder as BookmarkFolder:
                 let nextController = BookmarksPanel()
                 nextController.parentFolders = parentFolders + [source.current]
-                nextController.bookmarkFolder = folder.guid
+                nextController.bookmarkFolder = folder
                 nextController.source = source
                 nextController.homePanelDelegate = self.homePanelDelegate
                 nextController.profile = self.profile
