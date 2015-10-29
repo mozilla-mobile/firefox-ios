@@ -92,6 +92,36 @@ class SearchTests: XCTestCase {
         waitForExpectationsWithTimeout(10, handler: nil)
     }
 
+    func testExtractingOfSearchTermsFromURL() {
+        let parser = OpenSearchParser(pluginMode: true)
+        var file = NSBundle.mainBundle().pathForResource("google", ofType: "xml", inDirectory: "SearchPlugins/en")
+        let googleEngine: OpenSearchEngine! = parser.parse(file!)
+
+        // create URL
+        let searchTerm = "Foo Bar"
+        let encodedSeachTerm = searchTerm.stringByReplacingOccurrencesOfString(" ", withString: "+")
+        let googleSearchURL = NSURL(string: "https://www.google.co.uk/search?q=\(encodedSeachTerm)&ie=utf-8&oe=utf-8&gws_rd=cr&ei=I0UyVp_qK4HtUoytjagM")
+        let duckDuckGoSearchURL = NSURL(string: "https://duckduckgo.com/?q=\(encodedSeachTerm)&ia=about")
+        let invalidSearchURL = NSURL(string: "https://www.google.co.uk")
+
+        // check it correctly matches google search term given google config
+        XCTAssertEqual(searchTerm, googleEngine.queryForSearchURL(googleSearchURL))
+
+        // check it doesn't match when the URL is not a search URL
+        XCTAssertNil(googleEngine.queryForSearchURL(invalidSearchURL))
+
+        // check that it matches given a different configuration
+        file = NSBundle.mainBundle().pathForResource("duckduckgo", ofType: "xml", inDirectory: "SearchPlugins/en")
+        let duckDuckGoEngine: OpenSearchEngine! = parser.parse(file!)
+        XCTAssertEqual(searchTerm, duckDuckGoEngine.queryForSearchURL(duckDuckGoSearchURL))
+
+        // check it doesn't match search URLs for different configurations
+        XCTAssertNil(duckDuckGoEngine.queryForSearchURL(googleSearchURL))
+
+        // check that if you pass in a nil URL that everything works
+        XCTAssertNil(duckDuckGoEngine.queryForSearchURL(nil))
+    }
+
     private func startMockSuggestServer() -> String {
         let webServer: GCDWebServer = GCDWebServer()
 
