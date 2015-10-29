@@ -171,6 +171,22 @@ class ThumbnailCell: UICollectionViewCell {
         textWrapper.addSubview(textLabel)
         contentView.addSubview(removeButton)
 
+        textWrapper.snp_makeConstraints { make in
+            make.bottom.equalTo(self.imageWrapper.snp_bottom) // .offset(ThumbnailCellUX.BorderWidth)
+            make.left.right.equalTo(self.imageWrapper) // .offset(ThumbnailCellUX.BorderWidth)
+        }
+
+        textLabel.snp_remakeConstraints { make in
+            make.edges.equalTo(self.textWrapper).inset(ThumbnailCellUX.LabelInsets) // TODO swift-2.0 I changes insets to inset - how can that be right?
+        }
+
+        // Prevents the textLabel from getting squished in relation to other view priorities.
+        textLabel.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
+    }
+
+    override func updateConstraints() {
+        super.updateConstraints()
+
         imageWrapper.snp_remakeConstraints { make in
             make.top.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.top)
             make.left.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.left)
@@ -184,18 +200,6 @@ class ThumbnailCell: UICollectionViewCell {
             make.right.equalTo(self.imageWrapper).inset(ThumbnailCellUX.ImageInsets.right)
             make.bottom.equalTo(textWrapper.snp_top).offset(-ThumbnailCellUX.ImageInsets.top)
         }
-
-        textWrapper.snp_makeConstraints { make in
-            make.bottom.equalTo(self.imageWrapper.snp_bottom) // .offset(ThumbnailCellUX.BorderWidth)
-            make.left.right.equalTo(self.imageWrapper) // .offset(ThumbnailCellUX.BorderWidth)
-        }
-
-        textLabel.snp_remakeConstraints { make in
-            make.edges.equalTo(self.textWrapper).inset(ThumbnailCellUX.LabelInsets) // TODO swift-2.0 I changes insets to inset - how can that be right?
-        }
-
-        // Prevents the textLabel from getting squished in relation to other view priorities.
-        textLabel.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
     }
 
     required init?(coder aDecoder: NSCoder) {

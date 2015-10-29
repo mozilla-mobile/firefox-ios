@@ -517,7 +517,8 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         // Cells for the top site thumbnails.
         let site = self[indexPath.item]!
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as! ThumbnailCell
-
+        cell.setNeedsUpdateConstraints()
+        
         if indexPath.item >= data.count {
             configureCell(cell, forSuggestedSite: site as! SuggestedSite)
         } else {
