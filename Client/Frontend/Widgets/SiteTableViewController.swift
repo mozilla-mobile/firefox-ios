@@ -105,6 +105,13 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.tableFooterView = UIView()
     }
 
+    deinit {
+        // The view might outlive this view controller thanks to animations;
+        // explicitly nil out its references to us to avoid crashes. Bug 1218826.
+        tableView.dataSource = nil
+        tableView.delegate = nil
+    }
+
     func reloadData() {
         if data.status != .Success {
             print("Err: \(data.statusMessage)", terminator: "\n")
