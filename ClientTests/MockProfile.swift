@@ -30,6 +30,9 @@ public class MockSyncManager: SyncManager {
         self.endTimedSyncs()
     }
 
+    public func onNewProfile() {
+    }
+
     public func onAddedAccount() -> Success {
         return succeed()
     }
