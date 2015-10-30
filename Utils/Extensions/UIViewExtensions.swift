@@ -25,7 +25,7 @@ extension UIView {
      * Takes a screenshot of the view with the given aspect ratio.
      * An aspect ratio of 0 means capture the entire view.
      */
-    func screenshot(aspectRatio: CGFloat, offset: CGPoint? = nil, quality: CGFloat = 1) -> UIImage? {
+    func screenshot(aspectRatio: CGFloat = 0, offset: CGPoint? = nil, quality: CGFloat = 1) -> UIImage? {
         assert(aspectRatio >= 0)
 
         var size: CGSize
