@@ -921,7 +921,10 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDisplayTextForURL(url: NSURL?) -> String? {
         // use the initial value for the URL so we can do proper pattern matching with search URLs
-        let searchURL = self.tabManager.selectedTab?.currentURLInitialValue ?? url
+        var searchURL = self.tabManager.selectedTab?.currentInitialURL
+        if searchURL == nil || ErrorPageHelper.isErrorPageURL(searchURL!) {
+            searchURL = url
+        }
         return profile.searchEngines.queryForSearchURL(searchURL) ?? url?.absoluteString
     }
 

@@ -201,9 +201,10 @@ class Browser: NSObject {
         return displayURL?.absoluteString ?? lastTitle ?? ""
     }
 
-    var currentURLInitialValue: NSURL? {
+    var currentInitialURL: NSURL? {
         get{
-            return self.webView?.backForwardList.currentItem?.initialURL
+            let initalURL = self.webView?.backForwardList.currentItem?.initialURL
+            return initalURL
         }
     }
 
