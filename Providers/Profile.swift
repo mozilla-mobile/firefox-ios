@@ -458,7 +458,14 @@ public class BrowserProfile: Profile {
 
     // Extends NSObject so we can use timers.
     class BrowserSyncManager: NSObject, SyncManager {
+        // We shouldn't live beyond our containing BrowserProfile, either in the main app or in
+        // an extension.
+        // But it's possible that we'll finish a side-effect sync after we've ditched the profile
+        // as a whole, so we hold on to our Prefs, potentially for a little while longer. This is
+        // safe as a strong reference, because there's no cycle.
         unowned private let profile: BrowserProfile
+        private let prefs: Prefs
+
         let FifteenMinutes = NSTimeInterval(60 * 15)
         let OneMinute = NSTimeInterval(60)
 
@@ -502,6 +509,8 @@ public class BrowserProfile: Profile {
 
         init(profile: BrowserProfile) {
             self.profile = profile
+            self.prefs = profile.prefs
+
             super.init()
 
             let center = NSNotificationCenter.defaultCenter()
@@ -534,11 +543,11 @@ public class BrowserProfile: Profile {
         }
 
         @objc func onFinishSyncing(notification: NSNotification) {
-            profile.prefs.setTimestamp(NSDate.now(), forKey: PrefsKeys.KeyLastSyncFinishTime)
+            self.prefs.setTimestamp(NSDate.now(), forKey: PrefsKeys.KeyLastSyncFinishTime)
         }
 
         var prefsForSync: Prefs {
-            return self.profile.prefs.branch("sync")
+            return self.prefs.branch("sync")
         }
 
         func onAddedAccount() -> Success {
