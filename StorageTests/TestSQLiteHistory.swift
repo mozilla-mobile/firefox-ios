@@ -407,9 +407,17 @@ class TestSQLiteHistory: XCTestCase {
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)!
 
+        history.clearHistory()
+
         // Make sure that we get back the top sites
-        XCTAssertNil(prefs.timestampForKey(PrefsKeys.KeyLastFrecencyCacheTime))
         populateHistoryForFrecencyCalcuations(history, siteCount: 100)
+
+        // Add extra visits to the 5th site to bubble it to the top of the top sites cache
+        let site = Site(url: "http://s\(5)ite\(5)/foo", title: "A \(5)")
+        site.guid = "abc\(5)def"
+        for i in 0...20 {
+            addVisitForSite(site, intoHistory: history, from: .Local, atTime: Timestamp(1438088398461 + (1000 * i)))
+        }
 
         let expectation = self.expectationWithDescription("First.")
         func done() -> Success {
@@ -417,40 +425,61 @@ class TestSQLiteHistory: XCTestCase {
             return succeed()
         }
 
+        func loadCache() -> Success {
+            return history.invalidateTopSitesIfNeeded().bind { result in
+                XCTAssertTrue(result, "Invalidate should be successful")
+                return succeed()
+            }
+        }
+
         func checkTopSitesReturnsResults() -> Success {
             return history.getTopSitesWithLimit(20) >>== { topSites in
                 XCTAssertEqual(topSites.count, 20)
-                XCTAssertNotNil(prefs.timestampForKey(PrefsKeys.KeyLastFrecencyCacheTime))
-                XCTAssertEqual(topSites[0]!.guid, "abc\(500)def")
+                XCTAssertEqual(topSites[0]!.guid, "abc\(5)def")
                 return succeed()
             }
         }
 
-        func addAdditionalVisits() -> Success {
-            let site = Site(url: "http://s\(19)ite\(19)/foo", title: "A \(19)")
-            site.guid = "abc\(19)def"
-
-            for i in 0...20 {
-                let local = SiteVisit(site: site, date: Timestamp(1000 * (1437088398461 + (1000 * i))), type: VisitType.Link)
-                XCTAssertTrue(history.addLocalVisit(local).value.isSuccess)
+        func invalidateIfNeededDoesntChangeResults() -> Success {
+            return history.invalidateTopSitesIfNeeded().bind { result in
+                return history.getTopSitesWithLimit(20) >>== { topSites in
+                    XCTAssertEqual(topSites.count, 20)
+                    XCTAssertEqual(topSites[0]!.guid, "abc\(5)def")
+                    return succeed()
+                }
             }
+        }
 
-            // Set timestamp to something really old to force invalidation
-            prefs.setTimestamp(0, forKey: PrefsKeys.KeyLastFrecencyCacheTime)
+        func addVisitsToZerothSite() -> Success {
+            let site = Site(url: "http://s\(0)ite\(0)/foo", title: "A \(0)")
+            site.guid = "abc\(0)def"
+            for i in 0...20 {
+                addVisitForSite(site, intoHistory: history, from: .Local, atTime: Timestamp(1439088398461 + (1000 * i)))
+            }
             return succeed()
         }
 
-        func checkTopOfTopSitesChanged() -> Success {
+        func markInvalidation() -> Success {
+            history.setTopSitesNeedsInvalidation()
+            return succeed()
+        }
+
+        func checkSitesInvalidate() -> Success {
+            history.invalidateTopSitesIfNeeded().value
+
             return history.getTopSitesWithLimit(20) >>== { topSites in
                 XCTAssertEqual(topSites.count, 20)
-                XCTAssertEqual(topSites[0]!.guid, "abc\(19)def")
+                XCTAssertEqual(topSites[0]!.guid, "abc\(0)def")
                 return succeed()
             }
         }
 
-        checkTopSitesReturnsResults()
-            >>> addAdditionalVisits
-            >>> checkTopOfTopSitesChanged
+        loadCache()
+            >>> checkTopSitesReturnsResults
+            >>> invalidateIfNeededDoesntChangeResults
+            >>> markInvalidation
+            >>> addVisitsToZerothSite
+            >>> checkSitesInvalidate
             >>> done
 
         waitForExpectationsWithTimeout(10.0) { error in
@@ -512,12 +541,19 @@ class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
         history.clearHistory().value
         populateHistoryForFrecencyCalcuations(history, siteCount: count)
 
-        history.purgeTopSitesCache().value
+        history.setTopSitesNeedsInvalidation()
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
-            history.getTopSitesWithLimit(100).value
+            history.invalidateTopSitesIfNeeded().value
             self.stopMeasuring()
         }
     }
+}
+
+// MARK - Private Test Helper Methods
+
+private enum VisitOrigin {
+    case Local
+    case Remote
 }
 
 private func populateHistoryForFrecencyCalcuations(history: SQLiteHistory, siteCount count: Int) {
@@ -526,16 +562,20 @@ private func populateHistoryForFrecencyCalcuations(history: SQLiteHistory, siteC
         site.guid = "abc\(i)def"
 
         history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).value
-
         for j in 0...20 {
-            let local = SiteVisit(site: site, date: Timestamp(1000 * (1437088398461 + (1000 * i) + j)), type: VisitType.Link)
-            XCTAssertTrue(history.addLocalVisit(local).value.isSuccess)
+            let visitTime = Timestamp(1000 * (1437088398461 + (1000 * i) + j))
+            addVisitForSite(site, intoHistory: history, from: .Local, atTime: visitTime)
+            addVisitForSite(site, intoHistory: history, from: .Remote, atTime: visitTime)
         }
+    }
+}
 
-        var remotes = [Visit]()
-        for j in 0...20 {
-            remotes.append(SiteVisit(site: site, date: Timestamp(1000 * (1437088399461 + (1000 * i) + j)), type: VisitType.Link))
-        }
-        history.storeRemoteVisits(remotes, forGUID: site.guid!).value
+private func addVisitForSite(site: Site, intoHistory history: SQLiteHistory, from: VisitOrigin, atTime: Timestamp) {
+    let visit = SiteVisit(site: site, date: atTime, type: VisitType.Link)
+    switch from {
+    case .Local:
+            history.addLocalVisit(visit).value
+    case .Remote:
+        history.storeRemoteVisits([visit], forGUID: site.guid!).value
     }
 }
