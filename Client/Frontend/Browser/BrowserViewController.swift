@@ -89,8 +89,6 @@ class BrowserViewController: UIViewController {
         return toolbar ?? urlBar
     }
 
-    private var viewIsVisible = false
-
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
@@ -475,24 +473,20 @@ class BrowserViewController: UIViewController {
         self.presentViewController(alert, animated: true, completion: nil)
     }
 
-    private func takePendingScreenshots() {
-        for tab in tabManager.tabs where tab.pendingScreenshot {
-            tab.pendingScreenshot = false
-            takeDelayedScreenshot(tab)
-        }
-    }
-
     override func viewDidAppear(animated: Bool) {
-        viewIsVisible = true
         startTrackingAccessibilityStatus()
         presentIntroViewController()
         self.webViewContainerToolbar.hidden = false
-        takePendingScreenshots()
+
+        screenshotHelper.viewIsVisible = true
+        screenshotHelper.takePendingScreenshots(tabManager.tabs)
+
         super.viewDidAppear(animated)
     }
 
     override func viewWillDisappear(animated: Bool) {
-        viewIsVisible = false
+        screenshotHelper.viewIsVisible = false
+
         super.viewWillDisappear(animated)
     }
 
@@ -899,7 +893,7 @@ extension BrowserViewController: URLBarDelegate {
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile)
 
         if let tab = tabManager.selectedTab {
-            tab.setScreenshot(screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1))
+            screenshotHelper.takeScreenshot(tab)
         }
 
         self.navigationController?.pushViewController(tabTrayController, animated: true)
@@ -1613,28 +1607,10 @@ extension BrowserViewController: WKNavigationDelegate {
             // forward/backward. Strange, but LayoutChanged fixes that.
             UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
         } else {
-            takeDelayedScreenshot(tab)
+            screenshotHelper.takeDelayedScreenshot(tab)
         }
 
         addOpenInViewIfNeccessary(webView.URL)
-    }
-
-    /// Takes a screenshot after a small delay.
-    /// Trying to take a screenshot immediately after didFinishNavigation results in a screenshot
-    /// of the previous page, presumably due to an iOS bug. Adding a brief delay fixes this.
-    private func takeDelayedScreenshot(tab: Browser) {
-        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(100 * NSEC_PER_MSEC))
-        dispatch_after(time, dispatch_get_main_queue()) {
-            // If the view controller isn't visible, the screenshot will be blank.
-            // Wait until the view controller is visible again to take the screenshot.
-            guard self.viewIsVisible else {
-                tab.pendingScreenshot = true
-                return
-            }
-
-            let screenshot = self.screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1)
-            tab.setScreenshot(screenshot)
-        }
     }
 
     private func addOpenInViewIfNeccessary(url: NSURL?) {
@@ -1680,7 +1656,7 @@ extension BrowserViewController: WKUIDelegate {
 
         guard let currentTab = tabManager.selectedTab else { return nil }
 
-        currentTab.setScreenshot(screenshotHelper.takeScreenshot(currentTab, aspectRatio: 0, quality: 1))
+        screenshotHelper.takeScreenshot(currentTab)
 
         // If the page uses window.open() or target="_blank", open the page in a new tab.
         // TODO: This doesn't work for window.open() without user action (bug 1124942).
