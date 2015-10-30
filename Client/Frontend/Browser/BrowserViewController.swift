@@ -920,7 +920,9 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDisplayTextForURL(url: NSURL?) -> String? {
-        return profile.searchEngines.queryForSearchURL(url) ?? url?.absoluteString
+        // use the initial value for the URL so we can do proper pattern matching with search URLs
+        let searchURL = self.tabManager.selectedTab?.currentURLInitialValue ?? url
+        return profile.searchEngines.queryForSearchURL(searchURL) ?? url?.absoluteString
     }
 
     func urlBarDidLongPressLocation(urlBar: URLBarView) {

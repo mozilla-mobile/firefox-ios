@@ -43,6 +43,10 @@ class OpenSearchEngine {
         return getURLFromTemplate(searchTemplate, query: query)
     }
 
+    /**
+     * Return the arg that we use for searching for this engine
+     * Problem: the search terms may not be a query arg, they may be part of the URL - how to deal with this?
+     **/
     private func getQueryArgFromTemplate() -> String? {
         if let queryStartIndex = searchTemplate.rangeOfString("?")?.startIndex.successor() {
             let queryArgs = searchTemplate.substringFromIndex(queryStartIndex)
@@ -58,17 +62,18 @@ class OpenSearchEngine {
     }
 
     /**
-     * check that the URLs have a common prefix that is more than just www.
-     * so that we can ensure we are matching on more than just a shared query parameter
+     * check that the URL host contains the name of the search engine somewhere inside it
      **/
-    private func isMatchingURL(url: NSURL?) -> Bool {
-        guard let urlHost = url?.host, hostURLHost = hostURL?.host else { return false }
-        let commonPrefix = urlHost.commonPrefixWithString(hostURLHost, options: NSStringCompareOptions.CaseInsensitiveSearch)
-        return !commonPrefix.isEmpty && commonPrefix != "www."
+    private func isSearchURLForEngine(url: NSURL?) -> Bool {
+        guard let urlHost = url?.host else { return false }
+        return urlHost.localizedCaseInsensitiveContainsString(self.shortName)
     }
 
+    /**
+     * Returns the query that was used to construct a given search URL
+     **/
     func queryForSearchURL(url: NSURL?) -> String? {
-        if isMatchingURL(url){
+        if isSearchURLForEngine(url){
             if let key = searchQueryComponentKey, let value = url?.getQuery()[key] {
                 return value.stringByReplacingOccurrencesOfString("+", withString: " ").stringByRemovingPercentEncoding
             }
