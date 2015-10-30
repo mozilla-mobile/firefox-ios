@@ -1,0 +1,6 @@
+amazon-en-GB
+bing
+duckduckgo
+google
+wikipedia-cy
+yahoo-en-GB

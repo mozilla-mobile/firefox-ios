@@ -1,0 +1,496 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C027041017A6FAEC0039CEC1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C027040F17A6FAEC0039CEC1 /* Foundation.framework */; };
+		C027041217A6FAEC0039CEC1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C027041117A6FAEC0039CEC1 /* CoreGraphics.framework */; };
+		C027041417A6FAEC0039CEC1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C027041317A6FAEC0039CEC1 /* UIKit.framework */; };
+		C027041A17A6FAEC0039CEC1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C027041817A6FAEC0039CEC1 /* InfoPlist.strings */; };
+		C027041C17A6FAEC0039CEC1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C027041B17A6FAEC0039CEC1 /* main.m */; };
+		C027042017A6FAEC0039CEC1 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C027041F17A6FAEC0039CEC1 /* AppDelegate.m */; };
+		C027042317A6FAEC0039CEC1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C027042117A6FAEC0039CEC1 /* Main.storyboard */; };
+		C027042617A6FAEC0039CEC1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C027042517A6FAEC0039CEC1 /* ViewController.m */; };
+		C027042817A6FAEC0039CEC1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C027042717A6FAEC0039CEC1 /* Images.xcassets */; };
+		C027042F17A6FAEC0039CEC1 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C027042E17A6FAEC0039CEC1 /* XCTest.framework */; };
+		C027043017A6FAEC0039CEC1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C027040F17A6FAEC0039CEC1 /* Foundation.framework */; };
+		C027043117A6FAEC0039CEC1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C027041317A6FAEC0039CEC1 /* UIKit.framework */; };
+		C027043917A6FAEC0039CEC1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C027043717A6FAEC0039CEC1 /* InfoPlist.strings */; };
+		C027043B17A6FAEC0039CEC1 /* ImageAlignmentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C027043A17A6FAEC0039CEC1 /* ImageAlignmentTests.m */; };
+		C027044717A6FB170039CEC1 /* UIImageViewAligned.m in Sources */ = {isa = PBXBuildFile; fileRef = C027044617A6FB170039CEC1 /* UIImageViewAligned.m */; };
+		C027044917A6FE200039CEC1 /* melinda_landscape.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C027044817A6FE200039CEC1 /* melinda_landscape.jpg */; };
+		C027044B17A6FE780039CEC1 /* melinda_portrait.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C027044A17A6FE780039CEC1 /* melinda_portrait.jpg */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C027043217A6FAEC0039CEC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C027040417A6FAEC0039CEC1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C027040B17A6FAEC0039CEC1;
+			remoteInfo = ImageAlignment;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C027040C17A6FAEC0039CEC1 /* ImageAlignment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageAlignment.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C027040F17A6FAEC0039CEC1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C027041117A6FAEC0039CEC1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C027041317A6FAEC0039CEC1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C027041717A6FAEC0039CEC1 /* ImageAlignment-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ImageAlignment-Info.plist"; sourceTree = "<group>"; };
+		C027041917A6FAEC0039CEC1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C027041B17A6FAEC0039CEC1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C027041D17A6FAEC0039CEC1 /* ImageAlignment-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ImageAlignment-Prefix.pch"; sourceTree = "<group>"; };
+		C027041E17A6FAEC0039CEC1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C027041F17A6FAEC0039CEC1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C027042217A6FAEC0039CEC1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C027042417A6FAEC0039CEC1 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		C027042517A6FAEC0039CEC1 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		C027042717A6FAEC0039CEC1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		C027042D17A6FAEC0039CEC1 /* ImageAlignmentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageAlignmentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C027042E17A6FAEC0039CEC1 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		C027043617A6FAEC0039CEC1 /* ImageAlignmentTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ImageAlignmentTests-Info.plist"; sourceTree = "<group>"; };
+		C027043817A6FAEC0039CEC1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C027043A17A6FAEC0039CEC1 /* ImageAlignmentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageAlignmentTests.m; sourceTree = "<group>"; };
+		C027044517A6FB170039CEC1 /* UIImageViewAligned.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImageViewAligned.h; sourceTree = "<group>"; };
+		C027044617A6FB170039CEC1 /* UIImageViewAligned.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImageViewAligned.m; sourceTree = "<group>"; };
+		C027044817A6FE200039CEC1 /* melinda_landscape.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = melinda_landscape.jpg; sourceTree = "<group>"; };
+		C027044A17A6FE780039CEC1 /* melinda_portrait.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = melinda_portrait.jpg; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C027040917A6FAEC0039CEC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C027041217A6FAEC0039CEC1 /* CoreGraphics.framework in Frameworks */,
+				C027041417A6FAEC0039CEC1 /* UIKit.framework in Frameworks */,
+				C027041017A6FAEC0039CEC1 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C027042A17A6FAEC0039CEC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C027042F17A6FAEC0039CEC1 /* XCTest.framework in Frameworks */,
+				C027043117A6FAEC0039CEC1 /* UIKit.framework in Frameworks */,
+				C027043017A6FAEC0039CEC1 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C027040317A6FAEC0039CEC1 = {
+			isa = PBXGroup;
+			children = (
+				C027041517A6FAEC0039CEC1 /* ImageAlignment */,
+				C027043417A6FAEC0039CEC1 /* ImageAlignmentTests */,
+				C027040E17A6FAEC0039CEC1 /* Frameworks */,
+				C027040D17A6FAEC0039CEC1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C027040D17A6FAEC0039CEC1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C027040C17A6FAEC0039CEC1 /* ImageAlignment.app */,
+				C027042D17A6FAEC0039CEC1 /* ImageAlignmentTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C027040E17A6FAEC0039CEC1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C027040F17A6FAEC0039CEC1 /* Foundation.framework */,
+				C027041117A6FAEC0039CEC1 /* CoreGraphics.framework */,
+				C027041317A6FAEC0039CEC1 /* UIKit.framework */,
+				C027042E17A6FAEC0039CEC1 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C027041517A6FAEC0039CEC1 /* ImageAlignment */ = {
+			isa = PBXGroup;
+			children = (
+				C027044417A6FAFD0039CEC1 /* UIImageViewAligned */,
+				C027041E17A6FAEC0039CEC1 /* AppDelegate.h */,
+				C027041F17A6FAEC0039CEC1 /* AppDelegate.m */,
+				C027042117A6FAEC0039CEC1 /* Main.storyboard */,
+				C027042417A6FAEC0039CEC1 /* ViewController.h */,
+				C027042517A6FAEC0039CEC1 /* ViewController.m */,
+				C027042717A6FAEC0039CEC1 /* Images.xcassets */,
+				C027044817A6FE200039CEC1 /* melinda_landscape.jpg */,
+				C027044A17A6FE780039CEC1 /* melinda_portrait.jpg */,
+				C027041617A6FAEC0039CEC1 /* Supporting Files */,
+			);
+			path = ImageAlignment;
+			sourceTree = "<group>";
+		};
+		C027041617A6FAEC0039CEC1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C027041717A6FAEC0039CEC1 /* ImageAlignment-Info.plist */,
+				C027041817A6FAEC0039CEC1 /* InfoPlist.strings */,
+				C027041B17A6FAEC0039CEC1 /* main.m */,
+				C027041D17A6FAEC0039CEC1 /* ImageAlignment-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C027043417A6FAEC0039CEC1 /* ImageAlignmentTests */ = {
+			isa = PBXGroup;
+			children = (
+				C027043A17A6FAEC0039CEC1 /* ImageAlignmentTests.m */,
+				C027043517A6FAEC0039CEC1 /* Supporting Files */,
+			);
+			path = ImageAlignmentTests;
+			sourceTree = "<group>";
+		};
+		C027043517A6FAEC0039CEC1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C027043617A6FAEC0039CEC1 /* ImageAlignmentTests-Info.plist */,
+				C027043717A6FAEC0039CEC1 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C027044417A6FAFD0039CEC1 /* UIImageViewAligned */ = {
+			isa = PBXGroup;
+			children = (
+				C027044517A6FB170039CEC1 /* UIImageViewAligned.h */,
+				C027044617A6FB170039CEC1 /* UIImageViewAligned.m */,
+			);
+			name = UIImageViewAligned;
+			path = ../../UIImageViewAligned;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C027040B17A6FAEC0039CEC1 /* ImageAlignment */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C027043E17A6FAEC0039CEC1 /* Build configuration list for PBXNativeTarget "ImageAlignment" */;
+			buildPhases = (
+				C027040817A6FAEC0039CEC1 /* Sources */,
+				C027040917A6FAEC0039CEC1 /* Frameworks */,
+				C027040A17A6FAEC0039CEC1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ImageAlignment;
+			productName = ImageAlignment;
+			productReference = C027040C17A6FAEC0039CEC1 /* ImageAlignment.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C027042C17A6FAEC0039CEC1 /* ImageAlignmentTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C027044117A6FAEC0039CEC1 /* Build configuration list for PBXNativeTarget "ImageAlignmentTests" */;
+			buildPhases = (
+				C027042917A6FAEC0039CEC1 /* Sources */,
+				C027042A17A6FAEC0039CEC1 /* Frameworks */,
+				C027042B17A6FAEC0039CEC1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C027043317A6FAEC0039CEC1 /* PBXTargetDependency */,
+			);
+			name = ImageAlignmentTests;
+			productName = ImageAlignmentTests;
+			productReference = C027042D17A6FAEC0039CEC1 /* ImageAlignmentTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C027040417A6FAEC0039CEC1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "Andrei Stanescu";
+				TargetAttributes = {
+					C027042C17A6FAEC0039CEC1 = {
+						TestTargetID = C027040B17A6FAEC0039CEC1;
+					};
+				};
+			};
+			buildConfigurationList = C027040717A6FAEC0039CEC1 /* Build configuration list for PBXProject "ImageAlignment" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C027040317A6FAEC0039CEC1;
+			productRefGroup = C027040D17A6FAEC0039CEC1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C027040B17A6FAEC0039CEC1 /* ImageAlignment */,
+				C027042C17A6FAEC0039CEC1 /* ImageAlignmentTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C027040A17A6FAEC0039CEC1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C027044917A6FE200039CEC1 /* melinda_landscape.jpg in Resources */,
+				C027044B17A6FE780039CEC1 /* melinda_portrait.jpg in Resources */,
+				C027042817A6FAEC0039CEC1 /* Images.xcassets in Resources */,
+				C027041A17A6FAEC0039CEC1 /* InfoPlist.strings in Resources */,
+				C027042317A6FAEC0039CEC1 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C027042B17A6FAEC0039CEC1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C027043917A6FAEC0039CEC1 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C027040817A6FAEC0039CEC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C027042617A6FAEC0039CEC1 /* ViewController.m in Sources */,
+				C027042017A6FAEC0039CEC1 /* AppDelegate.m in Sources */,
+				C027041C17A6FAEC0039CEC1 /* main.m in Sources */,
+				C027044717A6FB170039CEC1 /* UIImageViewAligned.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C027042917A6FAEC0039CEC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C027043B17A6FAEC0039CEC1 /* ImageAlignmentTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C027043317A6FAEC0039CEC1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C027040B17A6FAEC0039CEC1 /* ImageAlignment */;
+			targetProxy = C027043217A6FAEC0039CEC1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C027041817A6FAEC0039CEC1 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C027041917A6FAEC0039CEC1 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C027042117A6FAEC0039CEC1 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C027042217A6FAEC0039CEC1 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C027043717A6FAEC0039CEC1 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C027043817A6FAEC0039CEC1 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C027043C17A6FAEC0039CEC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: AG AG (4AJVDG7NFQ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: AG AG (4AJVDG7NFQ)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C027043D17A6FAEC0039CEC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: AG AG (4AJVDG7NFQ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: AG AG (4AJVDG7NFQ)";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C027043F17A6FAEC0039CEC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ImageAlignment/ImageAlignment-Prefix.pch";
+				INFOPLIST_FILE = "ImageAlignment/ImageAlignment-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C027044017A6FAEC0039CEC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ImageAlignment/ImageAlignment-Prefix.pch";
+				INFOPLIST_FILE = "ImageAlignment/ImageAlignment-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C027044217A6FAEC0039CEC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ImageAlignment.app/ImageAlignment";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(SYSTEM_APPS_DIR)/Xcode5-DP3.app/Contents/Developer/Library/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ImageAlignment/ImageAlignment-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "ImageAlignmentTests/ImageAlignmentTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		C027044317A6FAEC0039CEC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ImageAlignment.app/ImageAlignment";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(SYSTEM_APPS_DIR)/Xcode5-DP3.app/Contents/Developer/Library/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ImageAlignment/ImageAlignment-Prefix.pch";
+				INFOPLIST_FILE = "ImageAlignmentTests/ImageAlignmentTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C027040717A6FAEC0039CEC1 /* Build configuration list for PBXProject "ImageAlignment" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C027043C17A6FAEC0039CEC1 /* Debug */,
+				C027043D17A6FAEC0039CEC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C027043E17A6FAEC0039CEC1 /* Build configuration list for PBXNativeTarget "ImageAlignment" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C027043F17A6FAEC0039CEC1 /* Debug */,
+				C027044017A6FAEC0039CEC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C027044117A6FAEC0039CEC1 /* Build configuration list for PBXNativeTarget "ImageAlignmentTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C027044217A6FAEC0039CEC1 /* Debug */,
+				C027044317A6FAEC0039CEC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C027040417A6FAEC0039CEC1 /* Project object */;
+}

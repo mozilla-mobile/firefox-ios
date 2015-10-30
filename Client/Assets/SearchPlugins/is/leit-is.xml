@@ -1,0 +1,14 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>leit.is</ShortName>
+<InputEncoding>ISO-8859-1</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTM2QjI2ODIwODNBMTFFNDk1MDU4RUNGRkQyNTAxMDkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTM2QjI2ODMwODNBMTFFNDk1MDU4RUNGRkQyNTAxMDkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5MzZCMjY4MDA4M0ExMUU0OTUwNThFQ0ZGRDI1MDEwOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5MzZCMjY4MTA4M0ExMUU0OTUwNThFQ0ZGRDI1MDEwOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PtP1lEUAAADHSURBVHja3NZLDsIgEAZgQE7QjYmxJiZexJPrOVy2blzUE4CvDTFimfemhCXhCx2Yv37aHpzlCM54LBzw/jPtgG64vOc1JdtPND3yKDBQNbgLDGyR2QbhFvEM2jVlGOR3QDU4D41kMF8y3uC3CqQh6kUYQ9rsQEOhm7YNnXbdMNTyYM7QDJy/hnKi1YZ+ZP4YJpn8bViFfjEiuPR4G8A1583+mXNtuKR0gnr3YrROcFrvbP+LurCyBfoY5QZQA7kBF1lovAQYACBphv5NcS5xAAAAAElFTkSuQmCC</Image>
+<Url type="text/html" method="GET" template="http://leit.is/query.aspx" resultdomain="leit.is">
+  <Param name="qt" value="{searchTerms}"/>
+  <Param name="from" value="fx3"/>
+</Url>
+<SearchForm>http://leit.is/</SearchForm>
+</SearchPlugin>

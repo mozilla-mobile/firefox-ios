@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-#import "OpenSSL/evp.h"
-#import "OpenSSL/sha.h"
+#import "openssl/evp.h"
+#import "openssl/sha.h"
 
 #import "NSData+SHA.h"
 #import "NSData+Utils.h"

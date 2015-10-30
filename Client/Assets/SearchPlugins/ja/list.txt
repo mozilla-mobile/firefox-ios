@@ -1,0 +1,6 @@
+amazon-jp
+bing
+google
+twitter-ja
+wikipedia-ja
+yahoo-jp

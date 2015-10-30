@@ -1,0 +1,6 @@
+bing
+google
+twitter
+wikipedia-kk
+yahoo
+yandex

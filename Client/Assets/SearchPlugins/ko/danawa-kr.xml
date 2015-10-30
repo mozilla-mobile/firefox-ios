@@ -1,0 +1,15 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>다나와</ShortName>
+<Description>다나와 쇼핑 검색</Description>
+<InputEncoding>EUC-KR</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIE1hY2ludG9zaCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo3MzFFOTNFRkUzMEQxMUUyOUU5NkExMzIyOUEyMjM2NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo3MzFFOTNGMEUzMEQxMUUyOUU5NkExMzIyOUEyMjM2NyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjczMUU5M0VERTMwRDExRTI5RTk2QTEzMjI5QTIyMzY3IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjczMUU5M0VFRTMwRDExRTI5RTk2QTEzMjI5QTIyMzY3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+NtMPmAAAAP9JREFUeNpiYBjqgBFC/f//n/pGM4IMZ6K1D2huAQu6ADcjwzci9HGBya//SffBN9KCmYGRkcRIJqQBO8CWRqgaySCzftA4ktk5ybUA6H005KaCRdkvAobAAJCNhrACcxGCKimzAKvKznBMC4hIRbhKEQ1Ghpv4cgbFqaikhaR0THoQfXiAoowLjDCCiBgf4Aiir1+pVdj9xi68YxO1LMCRwjetRo9hMsui///gyjCKBwwLMFIRC/G1HgrIdMJSBl9ZR6VUtHoCFmU4cjILiUUmAwMfA8MnmlaZuEz//4a4KpM8gLtRwkRT0yn2ARGtKRYS9JDVOBv6Da+hDwACDAC3ECyo+r3QlQAAAABJRU5ErkJggg==</Image>
+<Url type="text/html" method="GET" template="http://m.danawa.com/search/index.html">
+  <Param name="keyword" value="{searchTerms}"/>
+  <Param name="from" value="firefox"/>
+</Url>
+<SearchForm>http://m.danawa.com</SearchForm>
+</SearchPlugin>

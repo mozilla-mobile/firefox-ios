@@ -1,23 +1,26 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
-
-@objc public class ClientPayload : CleartextPayloadJSON {
+public class ClientPayload: CleartextPayloadJSON {
     override public func isValid() -> Bool {
-        // We should also call super.isValid(), but that'll fail:
-        // Global is external, but doesn't have external or weak linkage!
-        // Swift compiler bug #18422804.
-        return !isError &&
-               self["name"].isString &&
-               self["commands"].isArray &&
+        if !super.isValid() {
+            return false
+        }
+
+        if self["deleted"].asBool ?? false {
+            return true
+        }
+
+        return self["name"].isString &&
                self["type"].isString
     }
 
     var commands: [JSON] {
-        return self["commands"].asArray!
+        return self["commands"].asArray ?? []   // It might not be present at all.
     }
 
     var name: String {
@@ -37,7 +40,7 @@ import Foundation
             return false;
         }
 
-        let p = obj as ClientPayload
+        let p = obj as! ClientPayload
         if p.name != self.name {
             return false
         }

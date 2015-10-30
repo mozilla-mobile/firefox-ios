@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E26a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -10,16 +10,18 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iPhone6-4.7" translatesAutoresizingMaskIntoConstraints="NO" id="0jH-Ya-j0m">
-                    <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="8jg-1f-0sB">
+                    <rect key="frame" x="175" y="175" width="130" height="130"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="130" id="V8U-lj-86g"/>
+                        <constraint firstAttribute="height" constant="130" id="eV3-E9-QZk"/>
+                    </constraints>
                 </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="0jH-Ya-j0m" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="4VC-rR-S6f"/>
-                <constraint firstAttribute="trailing" secondItem="0jH-Ya-j0m" secondAttribute="trailing" id="Ggl-Ru-uHL"/>
-                <constraint firstItem="0jH-Ya-j0m" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="it2-zM-naU"/>
-                <constraint firstAttribute="bottom" secondItem="0jH-Ya-j0m" secondAttribute="bottom" id="x1B-H7-cYF"/>
+                <constraint firstItem="8jg-1f-0sB" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="ITK-hU-DwR"/>
+                <constraint firstItem="8jg-1f-0sB" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="grm-jt-xY2"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -27,6 +29,6 @@
         </view>
     </objects>
     <resources>
-        <image name="iPhone6-4.7" width="750" height="1334"/>
+        <image name="splash" width="400" height="390"/>
     </resources>
 </document>

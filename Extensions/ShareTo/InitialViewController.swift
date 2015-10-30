@@ -1,32 +1,33 @@
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Storage
 
-let LastUsedShareDestinationsKey = "LastUsedShareDestinations"
+private let LastUsedShareDestinationsKey = "LastUsedShareDestinations"
 
 @objc(InitialViewController)
-class InitialViewController: UIViewController, ShareControllerDelegate
-{
+class InitialViewController: UIViewController, ShareControllerDelegate {
     var shareDialogController: ShareDialogController!
-    var account: Account?
+
+    lazy var profile: Profile = {
+        return BrowserProfile(localName: "profile", app: nil)
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor(white: 0.75, alpha: 0.65) // TODO: Is the correct color documented somewhere?
-        
-        let accountManager = AccountManager(loginCallback: { _ in () }, logoutCallback: { _ in () })
-        self.account = accountManager.getAccount()
+        self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.66) // TODO: Is the correct color documented somewhere?
     }
     
-    override func viewDidAppear(animated: Bool)
-    {
+    override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
         ExtensionUtils.extractSharedItemFromExtensionContext(self.extensionContext, completionHandler: { (item, error) -> Void in
             if error == nil && item != nil {
-                self.presentShareDialog(item!)
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.presentShareDialog(item!)
+                }
             } else {
                 self.extensionContext!.completeRequestReturningItems([], completionHandler: nil);
             }
@@ -35,8 +36,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     
     //
     
-    func shareControllerDidCancel(shareController: ShareDialogController)
-    {
+    func shareControllerDidCancel(shareController: ShareDialogController) {
         UIView.animateWithDuration(0.25, animations: { () -> Void in
             self.shareDialogController.view.alpha = 0.0
         }, completion: { (Bool) -> Void in
@@ -45,8 +45,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate
         })
     }
 
-    func shareController(shareController: ShareDialogController, didShareItem item: ExtensionUtils.ShareItem, toDestinations destinations: NSSet)
-    {
+    func shareController(shareController: ShareDialogController, didShareItem item: ShareItem, toDestinations destinations: NSSet) {
         setLastUsedShareDestinations(destinations)
         
         UIView.animateWithDuration(0.25, animations: { () -> Void in
@@ -68,9 +67,10 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     
     //
     
+    // TODO: use Set.
     func getLastUsedShareDestinations() -> NSSet {
         if let destinations = NSUserDefaults.standardUserDefaults().objectForKey(LastUsedShareDestinationsKey) as? NSArray {
-            return NSSet(array: destinations)
+            return NSSet(array: destinations as [AnyObject])
         }
         return NSSet(object: ShareDestinationBookmarks)
     }
@@ -80,16 +80,17 @@ class InitialViewController: UIViewController, ShareControllerDelegate
         NSUserDefaults.standardUserDefaults().synchronize()
     }
     
-    func presentShareDialog(item: ExtensionUtils.ShareItem) {
+    func presentShareDialog(item: ShareItem) {
         shareDialogController = ShareDialogController()
         shareDialogController.delegate = self
         shareDialogController.item = item
         shareDialogController.initialShareDestinations = getLastUsedShareDestinations()
         
         self.addChildViewController(shareDialogController)
-        shareDialogController.view.setTranslatesAutoresizingMaskIntoConstraints(false)
+        shareDialogController.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(shareDialogController.view)
-        
+        shareDialogController.didMoveToParentViewController(self)
+
         // Setup constraints for the dialog. We keep the dialog centered with 16 points of padding on both
         // sides. The dialog grows to max 380 points wide so that it does not look too big on landscape or
         // iPad devices.
@@ -97,7 +98,7 @@ class InitialViewController: UIViewController, ShareControllerDelegate
         let views: NSDictionary = ["dialog": shareDialogController.view]
         
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-(16@751)-[dialog(<=380@1000)]-(16@751)-|",
-            options: NSLayoutFormatOptions.allZeros, metrics: nil, views: views))
+            options: NSLayoutFormatOptions(), metrics: nil, views: (views as? [String : AnyObject])!))
         
         let cx = NSLayoutConstraint(item: shareDialogController.view, attribute: NSLayoutAttribute.CenterX,
             relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
@@ -123,13 +124,11 @@ class InitialViewController: UIViewController, ShareControllerDelegate
     
     //
     
-    func shareToReadingList(item: ExtensionUtils.ShareItem) {
-        // TODO: Discuss how to share to the (local) reading list
+    func shareToReadingList(item: ShareItem) {
+        profile.readingList?.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.currentDevice().name)
     }
     
-    func shareToBookmarks(item: ExtensionUtils.ShareItem) {
-        if account != nil { // TODO: We need to properly deal with this.
-            account?.bookmarks.shareItem(item)
-        }
+    func shareToBookmarks(item: ShareItem) {
+        profile.bookmarks.shareItem(item)
     }
 }

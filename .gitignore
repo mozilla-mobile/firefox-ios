@@ -1,5 +1,4 @@
 # Xcode
-#
 build/
 *.pbxuser
 !default.pbxuser
@@ -16,21 +15,27 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+*.xcscmblueprint
 
 # OS X
-#
 .DS_Store
 
 # Vim
 *~
+.*.sw*
 
 # IDEA
 .idea
 
-# CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# http://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
-#
-# Pods/
+Carthage/
+
+ThirdParty/google-breakpad
+
+# Saved Sync credentials for tests.
+signedInUser.json
+
+# Generated config file
+MozBuildID.xcconfig
+
+# Python.
+*.pyc

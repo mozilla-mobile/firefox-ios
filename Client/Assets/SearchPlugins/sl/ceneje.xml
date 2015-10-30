@@ -1,0 +1,15 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>m.Ceneje.si</ShortName>
+<Description>Mobilni iskalnik Ceneje.si</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image height="16" width="16" type="image/x-icon">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAABJ9JREFUeNrsnb9rFEEUx9/M7p3BSEyh+AsxhTZRNEEttJGAhVqJoP4FgqWgtb8aGwvtBBFsRZR0ChZiYyGiEfyB2EQEEbS4qBE1tzO+2dsLuejtnLgzs7d+H7zs3eXgbr+ffW/fmx9JTJn9vLl6hA9n2A+yDxPMhTXYJ9nP1Q9/mDYviEz8MT7ch/BeQUwwhCmRXflPIX4QCOMySzsQ378Zzc/ILOfDwthBias/bBRIaBDWAAAAAAAGAAAAAwAAgAEAAMAAAABgAAAAMAAAABgAAAAMAKptse8PTOprKBlYS0KIzKl1pPRB+pxaz2jBD382N0O68aKaAMTwZvq+9Rp9+SGpFscU12oURRHF7JLdPJZSznsbkveL5PEJUtM3qpWCjPjxnttE9eWlTwvRjkskR45WB8C8+LWhvsnNviBIiB8WgoT4YSFIiB8WgoT4YSFIiB8WQuF9gE38WM1S/fOTtOaPYnZT82f1v2An41z761aHlh59dgKz8QZqisHub9h4lgY+TVH09XVJGzHLlT+YvKUlr47nvkdnHsJmR6/Q3ND2/FOUyyjq16GI0o/NcDTqOF+WIrtzAFic5wEgrEnZGpsCgGARwMWANQIIANxFQFaN5QEgRIBTANqSgggpyC0AskQAIQW5s/QGawGgkYJ6EHJwPYm1+0jUlpP+9q7nGa50Fs4CQBXYKFYSgGTho52XO7pyufEYNR8cIpr7bAdgy/EFpqDqrYpg0ReLn2o2vJmisfO9hMCCBQN/9iIJVA6AGN7SdTxKbrCPZPpeAoB1QaHTZeXOiG+4XauXjw+rD0BrbXG3J6RnueJ5c/X3X/DNN3l2unQAYhcA8mto9yP9Rmg984Jz/pHWZ35rQfG54q28AJSfqRZT9/ta3VYqAEopGyHceUMCEFqRgO4OASRJPgAGFEF3dwASSwRIAHAMoJkfATpRVIPu7gA0k2b+B6oEqruNgHwAIgEApwDmbACaAOAUQGxZURANjVA0esrbCbY777RB1J1DJYpLYtMYmtK57QPRShqwXmUz5QWw4t2FdBFrd1vFvtXrVdYxFqVU6gmnQuOmbG4a58g1LuRgLgCzf6zIIY3CB+NM+2++ZBXNxeY9J8PRVYTgaueks/mAKkFwuW3V6YRMFSC43jPsfEasnyH42LDtZUqyHyF0E99sUYoPPEq9iHLa27qg9snkl6jlFl+s3N3x/cXoydb7X14sP4A2BN14TlQL8OcK9HxLRkKbE9cUZY1ZPW3STGPGr6mvpLrs/5IM4Hcou/ojAuZ1KMG8rFh07Pm7/6ED1paVdqW4B1TF0gheuOyFxVf/kH6CREBfGwvevLeX5Lr96eo7/f5uugwGADxDKLI0RQoqsqbfdIziPbf+ajc9IqAo8Vn0aFtr9XVkqqWfM6Q4RSECfFVWS9d3PjertJGCfJbXzzsrph4XApt/5omlakVFAace06yp93d67ncAIPS9AxIAAADAAAAAYAAAADAAAAAYAPx3ABqQIZg1DIBJ6BDMJg2Ac4iCMFe/0V7WD3+Y5gcTgOBd/AmjfXoT5gdTfBhnvw4QzoU3Go9nmtMvAQYANBXJumEWXjoAAAAASUVORK5CYII=</Image>
+<Url type="text/html" method="GET" template="http://m.ceneje.si/mobileceneje.aspx">
+  <Param name="q" value="{searchTerms}" />
+  <Param name="FF-SearchBox" value="1" />
+</Url>
+<SearchForm>http://m.ceneje.si</SearchForm>
+</SearchPlugin>

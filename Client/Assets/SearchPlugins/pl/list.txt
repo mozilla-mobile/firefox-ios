@@ -1,0 +1,5 @@
+bing
+duckduckgo
+google
+twitter
+wikipedia-pl

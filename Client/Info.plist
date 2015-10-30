@@ -2,26 +2,88 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>itms-books</string>
+	</array>
+	<key>AppID</key>
+	<string>$(MOZ_APP_ID)</string>
+	<key>BreakpadProduct</key>
+	<string>$(MOZ_SOCORRO_PRODUCT_NAME)</string>
+	<key>BreakpadProductDisplay</key>
+	<string>$(MOZ_BUNDLE_DISPLAY_NAME)</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>BreakpadReportInterval</key>
+	<string>$(MOZ_BREAKPAD_UPLOAD_FREQUENCY)</string>
+	<key>BreakpadServerType</key>
+	<string>$(MOZ_BREAKPAD_SERVER_TYPE)</string>
+	<key>BreakpadURL</key>
+	<string>https://$(MOZ_BREAKPAD_URL)</string>
+	<key>BreakpadVersion</key>
+	<string>$(MOZ_VERSION)</string>
+	<key>BuildID</key>
+	<string>$(MOZ_BUILD_ID)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>$(MOZ_BUNDLE_DISPLAY_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.allizom.$(PRODUCT_NAME:rfc1034identifier)</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
+	<string>$(MOZ_PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MOZ_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>org.mozilla.Client</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>firefox</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(MOZ_BUILD_ID)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Websites you visit may request your location.</string>
+	<key>ReleaseChannel</key>
+	<string>$(MOZ_RELEASE_CHANNEL)</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>CharisSILB.ttf</string>
+		<string>CharisSILBI.ttf</string>
+		<string>CharisSILI.ttf</string>
+		<string>CharisSILR.ttf</string>
+		<string>FiraSans-Bold.ttf</string>
+		<string>FiraSans-BoldItalic.ttf</string>
+		<string>FiraSans-Book.ttf</string>
+		<string>FiraSans-Italic.ttf</string>
+		<string>FiraSans-Light.ttf</string>
+		<string>FiraSans-Medium.ttf</string>
+		<string>FiraSans-Regular.ttf</string>
+		<string>FiraSans-SemiBold.ttf</string>
+		<string>FiraSans-UltraLight.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -31,6 +93,9 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -39,13 +104,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UIAppFonts</key>
-	<array>
-		<string>FiraSans-Regular.ttf</string>
-		<string>FiraSans-SemiBold.ttf</string>
-		<string>FiraSans-Light.ttf</string>
-		<string>FiraSans-UltraLight.ttf</string>
-		<string>FiraSans-Medium.ttf</string>
-	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+	<key>Vendor</key>
+	<string>$(MOZ_VENDOR)</string>
+        <key>AdjustEnvironment</key>
+        <string>$(ADJUST_ENVIRONMENT)</string>
+        <key>AdjustAppToken</key>
+        <string>$(ADJUST_APP_TOKEN)</string>
 </dict>
 </plist>

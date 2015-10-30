@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OpenSSL/bn.h"
+#import "openssl/bn.h"
 
 /**
  @file CHNumber.h
