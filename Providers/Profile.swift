@@ -31,6 +31,7 @@ public protocol SyncManager {
     func applicationDidEnterBackground()
     func applicationDidBecomeActive()
 
+    func onNewProfile()
     func onRemovedAccount(account: FirefoxAccount?) -> Success
     func onAddedAccount() -> Success
 }
@@ -172,6 +173,15 @@ public class BrowserProfile: Profile {
 
     weak private var app: UIApplication?
 
+    /**
+     * N.B., BrowserProfile is used from our extensions, often via a pattern like
+     *
+     *   BrowserProfile(…).foo.saveSomething(…)
+     *
+     * This can break if BrowserProfile's initializer does async work that
+     * subsequently — and asynchronously — expects the profile to stick around:
+     * see Bug 1218833. Be sure to only perform synchronous actions here.
+     */
     init(localName: String, app: UIApplication?) {
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
@@ -188,8 +198,9 @@ public class BrowserProfile: Profile {
 
         // If the profile dir doesn't exist yet, this is first run (for this profile).
         if !files.exists("") {
-            log.info("New profile. Removing old account data.")
-            removeAccount()
+            log.info("New profile. Removing old account metadata.")
+            self.removeAccountMetadata()
+            self.syncManager.onNewProfile()
             prefs.clearAll()
         }
     }
@@ -393,21 +404,24 @@ public class BrowserProfile: Profile {
         return account
     }
 
+    func removeAccountMetadata() {
+        self.prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
+        KeychainWrapper.removeObjectForKey(self.name + ".account")
+    }
+
     func removeAccount() {
         let old = self.account
-
-        prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-        KeychainWrapper.removeObjectForKey(name + ".account")
+        removeAccountMetadata()
         self.account = nil
 
-        // tell any observers that our account has changed
+        // Tell any observers that our account has changed.
         NSNotificationCenter.defaultCenter().postNotificationName(NotificationFirefoxAccountChanged, object: nil)
 
         // Trigger cleanup. Pass in the account in case we want to try to remove
         // client-specific data from the server.
         self.syncManager.onRemovedAccount(old)
 
-        // deregister for remote notifications
+        // Deregister for remote notifications.
         app?.unregisterForRemoteNotifications()
     }
 
@@ -584,6 +598,10 @@ public class BrowserProfile: Profile {
                 log.warning("Asked to reset collection \(collection), which we don't know about.")
                 return succeed()
             }
+        }
+
+        func onNewProfile() {
+            SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
         }
 
         func onRemovedAccount(account: FirefoxAccount?) -> Success {
