@@ -6,11 +6,15 @@ if [ ! -d Client.xcodeproj ]; then
 fi
 
 if [ -d firefox-ios-l10n ]; then
-  echo "There already is a firefox-ios-l10n checkout. Aborting to let you decide what to do."
-  exit 1
-fi
-
+  if [ -d firefox-ios-l10n/.svn ]; then
+    echo "deleting existng firefox-ios-l10n svn repo"
+    rm -r firefox-ios-l10n
+    svn co --non-interactive --trust-server-cert https://svn.mozilla.org/projects/l10n-misc/trunk/firefox-ios firefox-ios-l10n || exit 1
+  fi
+fi 
+echo "creating firefox-ios-l10n svn repo"
 svn co --non-interactive --trust-server-cert https://svn.mozilla.org/projects/l10n-misc/trunk/firefox-ios firefox-ios-l10n || exit 1
+
 
 #
 # TODO Add incomplete locales here that are NOT to be included.

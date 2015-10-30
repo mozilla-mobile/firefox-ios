@@ -22,19 +22,51 @@ default_platform :ios
 
 
 platform :ios do
-  before_all do
-    # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
-    
-    
-    # increment_build_number
-
-    # gym(scheme: "FennecAurora") # Build your app - more options available
-
-    # xctool # run the tests of your app
+  before_all do 
   end
 
-  desc "Builds an Aurora build for l10n"
-  lane :l10n do
+  private_lane :setup do |options|
+    puts "Setup: #{options[:options]}\n"
+    opts = options[:options]
+
+    # set build and version numbers
+    ENV["BUILD_VERSION"] = opts[:build] || get_build_number(xcodeproj: "Client.xcodeproj")
+    ENV["APP_VERSION"] = opts[:version] || get_version_number(xcodeproj: "Client.xcodeproj")
+
+    # create a name for this build
+    ENV["DATESTAMP"] = Time.now.utc.iso8601.gsub(/\W/, '')
+    ENV["BRANCH_NAME"] = "firefox-ios-#{lane_context[SharedValues::LANE_NAME].gsub!(' ','-')}-#{ENV["APP_VERSION"]}(#{ENV["BUILD_VERSION"]})"
+    ENV["BUILD_NAME"] = "#{ENV["BRANCH_NAME"]}-#{ENV["DATESTAMP"]}"
+    puts ENV["BUILD_NAME"]
+
+    # checkout a new branch for build
+    checkout_git_branch(
+      base_branch: opts[:branch],
+      branch: ENV["BRANCH_NAME"]
+    )
+
+    # import locales
+    sh("../scripts/localise.sh")
+
+    # make builds & prov profile dirs
+    sh("./scripts/mkdirs.sh")
+
+    increment_build_number(build_number: ENV["BUILD_VERSION"],
+    xcodeproj: 'Client.xcodeproj')
+
+    increment_version_number(version_number: ENV["APP_VERSION"],
+    xcodeproj: 'Client.xcodeproj') 
+
+    commit_version_bump(
+      message: 'Version Bump', 
+      xcodeproj: 'Client.xcodeproj', 
+    ) 
+  end
+
+  desc "Builds an Aurora build"
+  lane :aurora do |options|
+    setup(options: options)
+
     ENV["SIGH_TEAM_ID"] = "9G8J6YA743"
 
     sigh(app_identifier: "org.mozilla.ios.FennecAurora",
@@ -46,27 +78,17 @@ platform :ios do
     sigh(app_identifier: "org.mozilla.ios.FennecAurora.ViewLater",
       output_path: "./provisioning-profiles/" )
 
-
-    build_number = ENV["BUILD_VERSION"] || get_build_number(xcodeproj: "Client.xcodeproj")
-    increment_build_number(build_number: build_number)
-
-    version = ENV["APP_VERSION"] || get_version_number(xcodeproj: "Client.xcodeproj")
-    increment_version_number(version_number: version)
-
-    datestamp = ENV["DATESTAMP"] || Time.now.utc.iso8601.gsub(/\W/, '')
-    puts datestamp
-
-    output_name = "firefox-ios-l10n-"+ version +"("+ build_number +")-"+ datestamp +".ipa"
-    puts output_name
     gym(scheme: "FennecAurora",
       output_directory: "./builds/",
-      output_name: output_name,
+      output_name: "#{ENV["BUILD_NAME"]}.ipa",
       sdk: "iphoneos",
+      clean: true,
+      export_method: "enterprise",
+      export_team_id: ENV["SIGH_TEAM_ID"],
       include_symbols: true,
       include_bitcode: false)
 
   end
-
 
   desc "Makes a release build and takes marketing snapshots"
   lane :marketing do
@@ -77,9 +99,10 @@ platform :ios do
   after_all do |lane|
     # This block is called, only if the executed lane was successful
     
-    # slack(
-    #   message: "Successfully deployed new App Update."
-    # )
+    #commit_version_bump(
+    #  message: 'Version Bump',                    # create a commit with a custom message
+    #  xcodeproj: 'Client.xcodeproj', # optional, if you have multiple Xcode project files, you must specify your main project here
+    #) 
   end
 
   error do |lane, exception|

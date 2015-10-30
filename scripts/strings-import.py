@@ -37,8 +37,11 @@ def find_target(project, name):
 def find_resources_phase(project, target):
     if not target:
         return None
+    build_phases = target['buildPhases']
     for build_phase_id in target['buildPhases']:
-        phase = project.objects[build_phase_id]
+        phase = project.objects.get(build_phase_id)
+        if not phase:
+            continue
         if phase.get('isa') == 'PBXResourcesBuildPhase':
             return phase
 

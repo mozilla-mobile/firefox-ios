@@ -17,9 +17,21 @@ DerivedData
 *.xcuserstate
 *.xcscmblueprint
 
-#fastlane
-fastlane/screenshots
-fastlane/report.xml
+# fastlane temporary profiling data
+/fastlane/report.xml
+# deliver temporary error output
+/fastlane/Error*.png
+# deliver temporary preview output
+/fastlane/Preview.html
+# snapshot generated screenshots
+/fastlane/screenshots
+/fastlane/screenshots/*/*-portrait.png
+/fastlane/screenshots/*/*-landscape.png
+/fastlane/screenshots/screenshots.html
+# frameit generated screenshots
+/fastlane/screenshots/*/*-portrait_framed.png
+/fastlane/screenshots/*/*-landscape_framed.png
+# folders for storing builds and prov profiles
 builds
 provisioning-profiles
 
