@@ -46,7 +46,6 @@ class BrowserViewController: UIViewController {
     private var searchController: SearchViewController?
     private let uriFixup = URIFixup()
     private var screenshotHelper: ScreenshotHelper!
-    private var homePanelIsInline = false
     private var searchLoader: SearchLoader!
     private let snackBars = UIView()
     private let auralProgress = AuralProgressBar()
@@ -542,17 +541,11 @@ class BrowserViewController: UIViewController {
         homePanelController?.view.snp_remakeConstraints { make in
             make.top.equalTo(self.urlBar.snp_bottom)
             make.left.right.equalTo(self.view)
-            if self.homePanelIsInline {
-                make.bottom.equalTo(self.toolbar?.snp_top ?? self.view.snp_bottom)
-            } else {
-                make.bottom.equalTo(self.view.snp_bottom)
-            }
+            make.bottom.equalTo(self.view.snp_bottom)
         }
     }
 
-    private func showHomePanelController(inline inline: Bool) {
-        homePanelIsInline = inline
-
+    private func showHomePanelController() {
         if homePanelController == nil {
             homePanelController = HomePanelViewController()
             homePanelController!.profile = profile
@@ -616,7 +609,7 @@ class BrowserViewController: UIViewController {
     private func updateInContentHomePanel(url: NSURL?) {
         if !urlBar.inOverlayMode {
             if AboutUtils.isAboutHomeURL(url){
-                showHomePanelController(inline: (tabManager.selectedTab?.canGoForward ?? false || tabManager.selectedTab?.canGoBack ?? false))
+                showHomePanelController()
             } else {
                 hideHomePanelController()
             }
@@ -994,7 +987,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(urlBar: URLBarView) {
-        showHomePanelController(inline: false)
+        showHomePanelController()
     }
 
     func urlBarDidLeaveOverlayMode(urlBar: URLBarView) {
