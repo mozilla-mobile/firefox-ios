@@ -152,6 +152,39 @@ class SearchTests: KIFTestCase {
         BrowserUtils.resetToAboutHome(tester())
     }
 
+    var currentSearchEngine = "Yahoo"
+
+    func searchForTerms(terms: String, withSearchEngine engine: String) {
+        SearchUtils.navigateToSearchSettings(tester(), engine: currentSearchEngine)
+        SearchUtils.selectDefaultSearchEngineName(tester(), engineName: engine)
+        currentSearchEngine = engine
+        tester().tapViewWithAccessibilityLabel("Settings")
+        tester().tapViewWithAccessibilityLabel("Done")
+        let tabsView = tester().waitForViewWithAccessibilityLabel("Tabs Tray").subviews.first as! UICollectionView
+        let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
+        tester().tapViewWithAccessibilityLabel(cell.accessibilityLabel)
+
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(terms)\n")
+        tester().waitForTimeInterval(3.0)
+
+        tester().tapViewWithAccessibilityIdentifier("url")
+        let textField = tester().waitForViewWithAccessibilityLabel(LabelAddressAndSearch) as! UITextField
+        XCTAssertEqual(terms, textField.text)
+        tester().tapViewWithAccessibilityLabel("Cancel")
+    }
+
+    func testSearchTermExtractionDisplaysInURLBar() {
+        let searchTerms = "foo bar"
+        searchForTerms(searchTerms, withSearchEngine: "Amazon.com")
+        searchForTerms(searchTerms, withSearchEngine: "Bing")
+        searchForTerms(searchTerms, withSearchEngine: "DuckDuckGo")
+        searchForTerms(searchTerms, withSearchEngine: "Google")
+        searchForTerms(searchTerms, withSearchEngine: "Twitter")
+        searchForTerms(searchTerms, withSearchEngine: "Wikipedia")
+        searchForTerms(searchTerms, withSearchEngine: "Yahoo")
+    }
+
     /// Checks whether suggestions are shown. Note that suggestions aren't shown immediately
     /// due to debounce, so we wait for them to appear.
     private func suggestionsAreVisible(tester: KIFUITestActor) -> Bool {
