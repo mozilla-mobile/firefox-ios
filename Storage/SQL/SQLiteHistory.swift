@@ -356,6 +356,35 @@ extension SQLiteHistory: BrowserHistory {
         let factory = SQLiteHistory.basicHistoryColumnFactory
         return db.runQuery(historySQL, args: args, factory: factory)
     }
+    
+    private func computeAdditionalWordsWithFilter(filter: String) -> [String] {
+        // Split filter on whitespace
+        let words = filter.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        
+        // Remove substrings and duplicates
+        return words.enumerate().filter({ (index: Int, word: String) in
+            if word.isEmpty || word.characters.count == filter.characters.count {
+                return false
+            }
+            
+            for i in words.indices where i != index {
+                if words[i].rangeOfString(word) != nil && (words[i].characters.count != word.characters.count || i < index) {
+                    return false
+                }
+            }
+            
+            return true
+        }).map({ $0.1 })
+    }
+    
+    internal func computeWhereFragmentWithFilter(filter:String,
+                                                 perWordFragment:String,
+                                                 perWordArgs: (String) -> (Args)) -> (fragment: String, args: Args) {
+            let words = computeAdditionalWordsWithFilter(filter)
+            let fragment = perWordFragment + (words.count > 0 ? " OR " + words.map({ _ in perWordFragment }).joinWithSeparator(" AND ") : "")
+            let args = perWordArgs(filter) + words.map({ perWordArgs($0) }).joinWithSeparator([])
+            return (fragment, args)
+    }
 
     private func getFilteredSitesByFrecencyWithLimit(limit: Int,
                                                      whereURLContains filter: String? = nil,
@@ -370,11 +399,14 @@ extension SQLiteHistory: BrowserHistory {
         let args: Args?
         let whereClause: String
         let whereFragment = (whereData == nil) ? "" : " AND (\(whereData!))"
-        if let filter = filter {
-            args = ["%\(filter)%", "%\(filter)%"]
-
+        if let filter = filter?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) where !filter.isEmpty {
+            // Set up where clause including filter. Match for either the full filter string or a combination of its unique words.
             // No deleted item has a URL, so there is no need to explicitly add that here.
-            whereClause = " WHERE ((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?)) \(whereFragment)"
+            let perWordFragment = "((\(TableHistory).url LIKE ?) OR (\(TableHistory).title LIKE ?))"
+            let perWordArgs: String -> Args = { ["%\($0)%", "%\($0)%"] }
+            let (filterFragment, filterArgs) = computeWhereFragmentWithFilter(filter, perWordFragment: perWordFragment, perWordArgs: perWordArgs)
+            args = filterArgs
+            whereClause = " WHERE (\(filterFragment)) \(whereFragment)"
         } else {
             args = []
             whereClause = " WHERE (\(TableHistory).is_deleted = 0) \(whereFragment)"
