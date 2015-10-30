@@ -17,30 +17,42 @@ struct ThumbnailCellUX {
     static let LabelAlignment: NSTextAlignment = .Center
     static let InsetSize: CGFloat = 20
     static let InsetSizeCompact: CGFloat = 6
-    static var Insets: UIEdgeInsets {
-        let traitCollection = (UIApplication.sharedApplication().delegate as! AppDelegate).window!.traitCollection
-
-        let inset: CGFloat
-        if traitCollection.userInterfaceIdiom == .Pad && traitCollection.verticalSizeClass == .Regular && traitCollection.horizontalSizeClass == .Regular {
-            inset = ThumbnailCellUX.InsetSize
+    static func insetsForCollectionViewSize(size: CGSize) -> UIEdgeInsets {
+        if size.widthLargerThanHalfIPad() {
+            return UIEdgeInsets(
+                top: ThumbnailCellUX.InsetSize,
+                left: ThumbnailCellUX.InsetSize,
+                bottom: ThumbnailCellUX.InsetSize,
+                right: ThumbnailCellUX.InsetSize
+            )
         } else {
-            inset = ThumbnailCellUX.InsetSizeCompact
+            return UIEdgeInsets(
+                top: ThumbnailCellUX.InsetSizeCompact,
+                left: ThumbnailCellUX.InsetSizeCompact,
+                bottom: ThumbnailCellUX.InsetSizeCompact,
+                right: ThumbnailCellUX.InsetSizeCompact
+            )
         }
-
-        return UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
     }
+
     static let ImagePaddingWide: CGFloat = 20
     static let ImagePaddingCompact: CGFloat = 10
-    static var ImageInsets: UIEdgeInsets {
-        let traitCollection = (UIApplication.sharedApplication().delegate as! AppDelegate).window!.traitCollection
-
-        let padding: CGFloat
-        if traitCollection.userInterfaceIdiom == .Pad && traitCollection.verticalSizeClass == .Regular && traitCollection.horizontalSizeClass == .Regular {
-            padding = ThumbnailCellUX.ImagePaddingWide
+    static func imageInsetsForCollectionViewSize(size: CGSize) -> UIEdgeInsets {
+        if size.widthLargerThanHalfIPad() {
+            return UIEdgeInsets(
+                top: ThumbnailCellUX.ImagePaddingWide,
+                left: ThumbnailCellUX.ImagePaddingWide,
+                bottom: ThumbnailCellUX.ImagePaddingWide,
+                right: ThumbnailCellUX.ImagePaddingWide
+            )
         } else {
-            padding = ThumbnailCellUX.ImagePaddingCompact
+            return UIEdgeInsets(
+                top: ThumbnailCellUX.ImagePaddingCompact,
+                left: ThumbnailCellUX.ImagePaddingCompact,
+                bottom: ThumbnailCellUX.ImagePaddingCompact,
+                right: ThumbnailCellUX.ImagePaddingCompact
+            )
         }
-        return UIEdgeInsetsMake(padding, padding, padding, padding)
     }
 
     static let LabelInsets = UIEdgeInsetsMake(10, 3, 10, 3)
@@ -63,6 +75,9 @@ struct ThumbnailCellUX {
 
 class ThumbnailCell: UICollectionViewCell {
     weak var delegate: ThumbnailCellDelegate?
+
+    var imageInsets: UIEdgeInsets = UIEdgeInsetsZero
+    var cellInsets: UIEdgeInsets = UIEdgeInsetsZero
 
     var imagePadding: CGFloat = 0 {
         didSet {
@@ -184,23 +199,7 @@ class ThumbnailCell: UICollectionViewCell {
         textLabel.setContentCompressionResistancePriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
     }
 
-    override func updateConstraints() {
-        super.updateConstraints()
 
-        imageWrapper.snp_remakeConstraints { make in
-            make.top.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.top)
-            make.left.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.left)
-            make.bottom.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.bottom)
-            make.right.equalTo(self.contentView).inset(ThumbnailCellUX.Insets.right)
-        }
-
-        imageView.snp_remakeConstraints { make in
-            make.top.equalTo(self.imageWrapper).inset(ThumbnailCellUX.ImageInsets.top)
-            make.left.right.equalTo(self.imageWrapper).inset(ThumbnailCellUX.ImageInsets.left)
-            make.right.equalTo(self.imageWrapper).inset(ThumbnailCellUX.ImageInsets.right)
-            make.bottom.equalTo(textWrapper.snp_top).offset(-ThumbnailCellUX.ImageInsets.top)
-        }
-    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -211,7 +210,7 @@ class ThumbnailCell: UICollectionViewCell {
 
         // TODO: We can avoid creating this button at all if we're not in editing mode.
         var frame = removeButton.frame
-        let insets = ThumbnailCellUX.Insets
+        let insets = cellInsets
         frame.size = CGSize(width: ThumbnailCellUX.RemoveButtonSize, height: ThumbnailCellUX.RemoveButtonSize)
         frame.center = CGPoint(x: insets.left, y: insets.top)
         removeButton.frame = frame
@@ -257,5 +256,31 @@ class ThumbnailCell: UICollectionViewCell {
                     self.removeButton.hidden = true
                 }
             })
+    }
+
+    /**
+     Updates the insets and padding of the cell based on the size of the container collection view
+
+     - parameter size: Size of the container collection view
+     */
+    func updateLayoutForCollectionViewSize(size: CGSize) {
+        let cellInsets = ThumbnailCellUX.insetsForCollectionViewSize(size)
+        let imageInsets = ThumbnailCellUX.imageInsetsForCollectionViewSize(size)
+
+        if cellInsets != self.cellInsets {
+            self.cellInsets = cellInsets
+            imageWrapper.snp_remakeConstraints { make in
+                make.edges.equalTo(self.contentView).inset(cellInsets)
+            }
+        }
+
+        if imageInsets != self.imageInsets {
+            imageView.snp_remakeConstraints { make in
+                make.top.equalTo(self.imageWrapper).inset(imageInsets.top)
+                make.left.right.equalTo(self.imageWrapper).inset(imageInsets.left)
+                make.right.equalTo(self.imageWrapper).inset(imageInsets.right)
+                make.bottom.equalTo(textWrapper.snp_top).offset(-imageInsets.top)
+            }
+        }
     }
 }
