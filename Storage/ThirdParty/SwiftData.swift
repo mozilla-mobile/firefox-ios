@@ -290,6 +290,11 @@ public class SQLiteDBConnection {
         sqlite3_interrupt(sqliteDB)
     }
 
+    private func pragma<T: Equatable>(pragma: String, expected: T?, factory: SDRow -> T, message: String) {
+        let cursor = executeQueryUnsafe("PRAGMA \(pragma)", factory: factory)
+        assert(cursor[0] == expected, message)
+    }
+
     init?(filename: String, flags: Int32, key: String? = nil, prevKey: String? = nil) {
         self.filename = filename
         self.queue = dispatch_queue_create("SQLite connection: \(filename)", DISPATCH_QUEUE_SERIAL)
@@ -309,9 +314,38 @@ public class SQLiteDBConnection {
             }
         }
 
+        //
+        // For where these values come from, see Bug 1213623.
+        //
+
+        let currentPageSize = executeQueryUnsafe("PRAGMA page_size", factory: IntFactory)[0]
+        let desiredPageSize = 32 * 1024
+
+        // This has to be done without WAL, so we always hop into rollback/delete journal mode.
+        if currentPageSize != desiredPageSize {
+            pragma("journal_mode=DELETE", expected: "delete",
+                   factory: StringFactory, message: "delete journal mode set")
+
+            pragma("page_size=\(desiredPageSize)", expected: nil, factory: IntFactory, message: "Page size set")
+
+            log.info("Vacuuming to alter database page size from \(currentPageSize) to \(desiredPageSize).")
+            self.vacuum()
+            log.info("Vacuuming done.")
+        }
+
         if SwiftData.EnableWAL {
-            let cursor = executeQueryUnsafe("PRAGMA journal_mode=WAL", factory: StringFactory)
-            assert(cursor[0] == "wal", "WAL journal mode set")
+            log.info("Enabling WAL mode.")
+
+            let desiredPagesPerJournal = 16
+            let desiredCheckpointSize = desiredPagesPerJournal * desiredPageSize
+            let desiredJournalSizeLimit = 3 * desiredCheckpointSize
+
+            pragma("journal_mode=WAL", expected: "wal",
+                   factory: StringFactory, message: "WAL journal mode set")
+            pragma("wal_autocheckpoint=\(desiredPagesPerJournal)", expected: desiredPagesPerJournal,
+                   factory: IntFactory, message: "WAL autocheckpoint set")
+            pragma("journal_size_limit=\(desiredJournalSizeLimit)", expected: desiredJournalSizeLimit,
+                   factory: IntFactory, message: "WAL journal size limit set")
         }
 
         if SwiftData.EnableForeignKeys {
@@ -339,6 +373,10 @@ public class SQLiteDBConnection {
      */
     func checkpoint(mode: Int32 = SQLITE_CHECKPOINT_PASSIVE) {
         sqlite3_wal_checkpoint_v2(sqliteDB, nil, mode, nil, nil)
+    }
+
+    func vacuum() {
+        executeQueryUnsafe("VACUUM", factory: IntFactory)
     }
 
     /// Creates an error from a sqlite status. Will print to the console if debug_enabled is set.
