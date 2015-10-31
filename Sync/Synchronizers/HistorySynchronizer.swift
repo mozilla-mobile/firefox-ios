@@ -131,9 +131,13 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
 
     private func uploadOutgoingFromStorage(storage: SyncableHistory, lastTimestamp: Timestamp, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> Success {
 
+        var workWasDone = false
         let uploadDeleted: Timestamp -> DeferredTimestamp = { timestamp in
             storage.getDeletedHistoryToUpload()
             >>== { guids in
+                if !guids.isEmpty {
+                    workWasDone = true
+                }
                 return self.uploadDeletedPlaces(guids, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
             }
         }
@@ -141,15 +145,25 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         let uploadModified: Timestamp -> DeferredTimestamp = { timestamp in
             storage.getModifiedHistoryToUpload()
                 >>== { places in
+                    if !places.isEmpty {
+                        workWasDone = true
+                    }
                     return self.uploadModifiedPlaces(places, lastTimestamp: timestamp, fromStorage: storage, withServer: storageClient)
             }
         }
 
+        // The last clause will checkpoint the DB. But we just checkpointed the DB after downloading records!
+        // Yes, that's true. Either there will be lots of work to do (e.g., having just marked
+        // thousands of records as uploaded, or dropping lots of deleted rows), and so it's
+        // worthwhile… or there won't be much work to do, and the checkpoint will be cheap.
+        // If we did nothing -- uploaded no deletions, uploaded no modified records -- then we
+        // don't checkpoint at all.
         return deferMaybe(lastTimestamp)
           >>== uploadDeleted
           >>== uploadModified
-           >>> effect({ log.debug("Done syncing.") })
-           >>> succeed
+           >>> effect({ log.debug("Done syncing. Work was done? \(workWasDone)") })
+           >>> { workWasDone ? storage.doneUpdatingMetadataAfterUpload() : succeed() }    // A closure so we eval workWasDone after it's set!
+           >>> effect({ log.debug("Done.") })
     }
 
     public func synchronizeLocalHistory(history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
@@ -178,6 +192,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                 // TODO: If we fetch sorted by date, we can bump the lastFetched timestamp
                 // to the last successfully applied record timestamp, no matter where we fail.
                 // There's no need to do the upload before bumping -- the storage of local changes is stable.
+               >>> history.doneApplyingRecordsAfterDownload
                >>> { self.uploadOutgoingFromStorage(history, lastTimestamp: 0, withServer: historyClient) }
                >>> { return deferMaybe(.Completed) }
         }
