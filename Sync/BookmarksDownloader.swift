@@ -135,6 +135,7 @@ public class BookmarksMirrorer {
             case .Complete:
                 log.info("Done with batched mirroring.")
                 return self.applyRecordsFromBatcher()
+                   >>> self.storage.doneApplyingRecordsAfterDownload
             case .Incomplete:
                 log.debug("Running another batch.")
                 // This recursion is fine because Deferred always pushes callbacks onto a queue.

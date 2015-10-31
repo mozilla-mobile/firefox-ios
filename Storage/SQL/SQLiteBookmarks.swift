@@ -542,6 +542,11 @@ public class SQLiteBookmarkMirrorStorage: BookmarkMirrorStorage {
 
         return deferred
     }
+
+    public func doneApplyingRecordsAfterDownload() -> Success {
+        self.db.checkpoint()
+        return succeed()
+    }
 }
 
 extension SQLiteBookmarkMirrorStorage: BookmarksModelFactory {
@@ -673,6 +678,11 @@ public class MergedSQLiteBookmarks {
 extension MergedSQLiteBookmarks: BookmarkMirrorStorage {
     public func applyRecords(records: [BookmarkMirrorItem]) -> Success {
         return self.mirror.applyRecords(records)
+    }
+
+    public func doneApplyingRecordsAfterDownload() -> Success {
+        // It doesn't really matter which one we checkpoint -- they're both backed by the same DB.
+        return self.mirror.doneApplyingRecordsAfterDownload()
     }
 }
 

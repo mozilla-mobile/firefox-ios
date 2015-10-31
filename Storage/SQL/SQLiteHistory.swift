@@ -845,6 +845,16 @@ extension SQLiteHistory: SyncableHistory {
         let args: Args = guids.map { $0 as AnyObject }
         return self.db.run(sql, withArgs: args) >>> always(modified)
     }
+
+    public func doneApplyingRecordsAfterDownload() -> Success {
+        self.db.checkpoint()
+        return succeed()
+    }
+
+    public func doneUpdatingMetadataAfterUpload() -> Success {
+        self.db.checkpoint()
+        return succeed()
+    }
 }
 
 extension SQLiteHistory: ResettableSyncStorage {
