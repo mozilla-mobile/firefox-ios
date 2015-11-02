@@ -82,7 +82,9 @@ class TopSitesPanel: UIViewController {
             make.edges.equalTo(self.view)
         }
         self.collection = collection
-        self.refreshHistory(maxFrecencyLimit)
+
+        self.profile.history.setTopSitesCacheSize(Int32(maxFrecencyLimit))
+        self.refreshTopSites(maxFrecencyLimit)
     }
 
     deinit {
@@ -92,7 +94,7 @@ class TopSitesPanel: UIViewController {
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged:
-            refreshHistory(maxFrecencyLimit)
+            refreshTopSites(maxFrecencyLimit)
             break
         default:
             // no need to do anything at all
@@ -135,15 +137,13 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    private func refreshHistory(frequencyLimit: Int) {
+    private func refreshTopSites(frequencyLimit: Int) {
         // Reload right away with whatever is in the cache, then check to see if the cache is invalid. If it's invalid,
         // invalidate the cache and requery. This allows us to always show results right away if they are cached but
         // also load in the up-to-date results asynchronously if needed
-        reloadTopSitesWithLimit(frequencyLimit) >>== {
-            self.profile.history.invalidateTopSitesIfNeeded().upon { result in
-                if result {
-                    self.reloadTopSitesWithLimit(frequencyLimit)
-                }
+        reloadTopSitesWithLimit(frequencyLimit) >>> {
+            return self.profile.history.invalidateTopSitesIfNeeded() >>== { result in
+                return result ? self.reloadTopSitesWithLimit(frequencyLimit) : succeed()
             }
         }
     }

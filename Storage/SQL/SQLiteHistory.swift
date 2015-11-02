@@ -8,8 +8,6 @@ import XCGLogger
 
 private let log = Logger.syncLogger
 
-private let TopSitesCacheSize = 100
-
 class NoSuchRecordError: MaybeErrorType {
     let guid: GUID
     init(guid: GUID) {
@@ -268,18 +266,23 @@ extension SQLiteHistory: BrowserHistory {
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
     }
 
-    public func invalidateTopSitesIfNeeded() -> Deferred<Bool> {
-        let deferred = Deferred<Bool>()
-        if !(prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false) {
-            purgeTopSitesCache() >>== {
-                self.updateTopSitesCacheWithLimit(TopSitesCacheSize) >>== {
-                    deferred.fill(true)
-                }
-            }
-        } else {
-            deferred.fill(false)
+    public func invalidateTopSitesIfNeeded() -> Deferred<Maybe<Bool>> {
+        if prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false {
+            return deferMaybe(false)
         }
-        return deferred
+
+        let cacheSize = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? 0)
+        return purgeTopSitesCache()
+            >>> { self.updateTopSitesCacheWithLimit(cacheSize) }
+            >>> always(true)
+    }
+
+    public func setTopSitesCacheSize(size: Int32) {
+        let oldValue = prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? 0
+        if oldValue != size {
+            prefs.setInt(size, forKey: PrefsKeys.KeyTopSitesCacheSize)
+            setTopSitesNeedsInvalidation()
+        }
     }
 
     private func updateTopSitesCacheWithLimit(limit : Int) -> Success {

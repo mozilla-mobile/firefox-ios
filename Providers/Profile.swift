@@ -234,6 +234,7 @@ public class BrowserProfile: Profile {
         }
     }
 
+    // These selectors run on which ever thread sent the notifications (not the main thread)
     @objc
     func onProfileDidFinishSyncing(notification: NSNotification) {
         history.setTopSitesNeedsInvalidation()

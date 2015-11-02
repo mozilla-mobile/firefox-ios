@@ -8,6 +8,7 @@ public struct PrefsKeys {
     public static let KeyLastRemoteTabSyncTime = "lastRemoteTabSyncTime"
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
+    public static let KeyTopSitesCacheSize = "topSitesCacheSize"
 }
 
 public protocol Prefs {
