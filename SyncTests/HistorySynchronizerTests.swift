@@ -161,6 +161,14 @@ extension MockSyncableHistory: SyncableHistory {
         // TODO
         return succeed()
     }
+
+    func doneApplyingRecordsAfterDownload() -> Success {
+        return succeed()
+    }
+
+    func doneUpdatingMetadataAfterUpload() -> Success {
+        return succeed()
+    }
 }
 
 

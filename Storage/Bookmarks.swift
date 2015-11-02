@@ -147,6 +147,7 @@ public struct BookmarkMirrorItem {
 
 public protocol BookmarkMirrorStorage {
     func applyRecords(records: [BookmarkMirrorItem]) -> Success
+    func doneApplyingRecordsAfterDownload() -> Success
 }
 
 
