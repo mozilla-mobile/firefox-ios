@@ -17,9 +17,6 @@ private let Bug1204635_S2 = NSLocalizedString("Are you sure you want to clear al
 private let Bug1204635_S3 = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to Clear private data dialog")
 private let Bug1204635_S4 = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")
 
-// The following are strings for bug 1162174 - Support third party passwords
-private let Bug1162174_S1 = NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")
-
 // A base TableViewCell, to help minimize initialization and allow recycling.
 class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -733,6 +730,35 @@ private class PopupBlockingSettings: Setting {
     }
 }
 
+private class SaveLoginSettings: Setting {
+    let prefs: Prefs
+    let tabManager: TabManager!
+
+    let prefKey = "saveLogins"
+
+    init(settings: SettingsTableViewController) {
+        self.prefs = settings.profile.prefs
+        self.tabManager = settings.tabManager
+        let title = NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")
+        let attributes = [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]
+        super.init(title: NSAttributedString(string: title, attributes: attributes))
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        let control = UISwitch()
+        control.onTintColor = UIConstants.ControlTintColor
+        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        control.on = prefs.boolForKey(prefKey) ?? true
+        cell.accessoryView = control
+        cell.selectionStyle = .None
+    }
+
+    @objc func switchValueChanged(toggle: UISwitch) {
+        prefs.setObject(toggle.on, forKey: prefKey)
+    }
+}
+
 // The base settings view controller.
 class SettingsTableViewController: UITableViewController {
     private let Identifier = "CellIdentifier"
@@ -761,6 +787,7 @@ class SettingsTableViewController: UITableViewController {
         var generalSettings = [
             SearchSetting(settings: self),
             PopupBlockingSettings(settings: self),
+            SaveLoginSettings(settings: self)
         ]
 
         // There is nothing to show in the Customize section if we don't include the compact tab layout
