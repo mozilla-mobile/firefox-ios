@@ -137,13 +137,13 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    private func refreshTopSites(frequencyLimit: Int) {
+    private func refreshTopSites(frecencyLimit: Int) {
         // Reload right away with whatever is in the cache, then check to see if the cache is invalid. If it's invalid,
         // invalidate the cache and requery. This allows us to always show results right away if they are cached but
         // also load in the up-to-date results asynchronously if needed
-        reloadTopSitesWithLimit(frequencyLimit) >>> {
+        reloadTopSitesWithLimit(frecencyLimit) >>> {
             return self.profile.history.invalidateTopSitesIfNeeded() >>== { result in
-                return result ? self.reloadTopSitesWithLimit(frequencyLimit) : succeed()
+                return result ? self.reloadTopSitesWithLimit(frecencyLimit) : succeed()
             }
         }
     }
