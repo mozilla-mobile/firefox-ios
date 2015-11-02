@@ -51,12 +51,10 @@ class AuralProgressBar {
             connectPlayerNodes()
 
             NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleAudioEngineConfigurationDidChangeNotification:"), name: AVAudioEngineConfigurationChangeNotification, object: nil)
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleAudioSessionInterruptionNotification:"), name: AVAudioSessionInterruptionNotification, object: nil)
         }
 
         deinit {
             NSNotificationCenter.defaultCenter().removeObserver(self, name: AVAudioEngineConfigurationChangeNotification, object: nil)
-            NSNotificationCenter.defaultCenter().removeObserver(self, name: AVAudioSessionInterruptionNotification, object: nil)
         }
 
         func connectPlayerNodes() {
@@ -76,25 +74,6 @@ class AuralProgressBar {
                     try engine.start()
                 } catch {
                     log.error("Unable to start AVAudioEngine: \(error)")
-                }
-            }
-        }
-
-        @objc func handleAudioSessionInterruptionNotification(notification: NSNotification) {
-            if let interruptionTypeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt {
-                if let interruptionType = AVAudioSessionInterruptionType(rawValue: interruptionTypeValue) {
-                    switch interruptionType {
-                    case .Began:
-                        tickPlayer.stop()
-                        progressPlayer.stop()
-                    case .Ended:
-                        if let interruptionOptionValue = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt {
-                            let interruptionOption = AVAudioSessionInterruptionOptions(rawValue: interruptionOptionValue)
-                            if interruptionOption == .ShouldResume {
-                                startEngine()
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -180,6 +159,37 @@ class AuralProgressBar {
                     if let progress = progress {
                         ui.start()
                         ui.playProgress(progress)
+                    }
+                }
+            }
+        }
+    }
+
+    init() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("handleAudioSessionInterruptionNotification:"), name: AVAudioSessionInterruptionNotification, object: nil)
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: AVAudioSessionInterruptionNotification, object: nil)
+    }
+
+    @objc func handleAudioSessionInterruptionNotification(notification: NSNotification) {
+        if let interruptionTypeValue = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt {
+            if let interruptionType = AVAudioSessionInterruptionType(rawValue: interruptionTypeValue) {
+                switch interruptionType {
+                case .Began:
+                    ui.stop()
+                case .Ended:
+                    if let interruptionOptionValue = notification.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt {
+                        let interruptionOption = AVAudioSessionInterruptionOptions(rawValue: interruptionOptionValue)
+                        if interruptionOption == .ShouldResume {
+                            if !hidden {
+                                if let progress = progress {
+                                    ui.start()
+                                    ui.playProgress(progress)
+                                }
+                            }
+                        }
                     }
                 }
             }
