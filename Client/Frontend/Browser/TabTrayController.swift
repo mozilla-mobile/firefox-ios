@@ -355,7 +355,13 @@ class TabTrayController: UIViewController {
 
         // Update the trait collection we reference in our layout delegate
         tabLayoutDelegate.traitCollection = traitCollection
-        collectionView.collectionViewLayout.invalidateLayout()
+    }
+
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        coordinator.animateAlongsideTransition({ _ in
+            self.collectionView.collectionViewLayout.invalidateLayout()
+        }, completion: nil)
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
