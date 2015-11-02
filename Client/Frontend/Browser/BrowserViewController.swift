@@ -115,7 +115,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func didInit() {
-        screenshotHelper = BrowserScreenshotHelper(controller: self)
+        screenshotHelper = ScreenshotHelper(controller: self)
         tabManager.addDelegate(self)
         tabManager.addNavigationDelegate(self)
     }
@@ -477,7 +477,17 @@ class BrowserViewController: UIViewController {
         startTrackingAccessibilityStatus()
         presentIntroViewController()
         self.webViewContainerToolbar.hidden = false
+
+        screenshotHelper.viewIsVisible = true
+        screenshotHelper.takePendingScreenshots(tabManager.tabs)
+
         super.viewDidAppear(animated)
+    }
+
+    override func viewWillDisappear(animated: Bool) {
+        screenshotHelper.viewIsVisible = false
+
+        super.viewWillDisappear(animated)
     }
 
     override func viewDidDisappear(animated: Bool) {
@@ -883,7 +893,7 @@ extension BrowserViewController: URLBarDelegate {
         let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile)
 
         if let tab = tabManager.selectedTab {
-            tab.setScreenshot(screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1))
+            screenshotHelper.takeScreenshot(tab)
         }
 
         self.navigationController?.pushViewController(tabTrayController, animated: true)
@@ -1597,14 +1607,7 @@ extension BrowserViewController: WKNavigationDelegate {
             // forward/backward. Strange, but LayoutChanged fixes that.
             UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
         } else {
-            // Tab is in the backgroud, but we want to be able to see it in the TabTray.
-            // Delay 100ms to let the tab render (it doesn't work without the delay)
-            // before screenshotting.
-            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(100 * NSEC_PER_MSEC))
-            dispatch_after(time, dispatch_get_main_queue()) {
-                let screenshot = self.screenshotHelper.takeScreenshot(tab, aspectRatio: 0, quality: 1)
-                tab.setScreenshot(screenshot)
-            }
+            screenshotHelper.takeDelayedScreenshot(tab)
         }
 
         addOpenInViewIfNeccessary(webView.URL)
@@ -1653,7 +1656,7 @@ extension BrowserViewController: WKUIDelegate {
 
         guard let currentTab = tabManager.selectedTab else { return nil }
 
-        currentTab.setScreenshot(screenshotHelper.takeScreenshot(currentTab, aspectRatio: 0, quality: 1))
+        screenshotHelper.takeScreenshot(currentTab)
 
         // If the page uses window.open() or target="_blank", open the page in a new tab.
         // TODO: This doesn't work for window.open() without user action (bug 1124942).
@@ -1982,29 +1985,6 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                 }
             }
         }
-    }
-}
-
-private class BrowserScreenshotHelper: ScreenshotHelper {
-    private weak var controller: BrowserViewController?
-
-    init(controller: BrowserViewController) {
-        self.controller = controller
-    }
-
-    func takeScreenshot(tab: Browser, aspectRatio: CGFloat, quality: CGFloat) -> UIImage? {
-        if let url = tab.url {
-            if AboutUtils.isAboutHomeURL(url) {
-                if let homePanel = controller?.homePanelController {
-                    return homePanel.view.screenshot(aspectRatio, quality: quality)
-                }
-            } else {
-                let offset = CGPointMake(0, -(tab.webView?.scrollView.contentInset.top ?? 0))
-                return tab.webView?.screenshot(aspectRatio, offset: offset, quality: quality)
-            }
-        }
-
-        return nil
     }
 }
 

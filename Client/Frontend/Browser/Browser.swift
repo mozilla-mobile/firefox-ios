@@ -48,6 +48,7 @@ class Browser: NSObject {
     var sessionData: SessionData?
     var lastRequest: NSURLRequest? = nil
     var restoring: Bool = false
+    var pendingScreenshot = false
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
