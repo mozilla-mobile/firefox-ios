@@ -60,8 +60,10 @@ class LoginsHelper: BrowserHelper {
                     requestLogins(login, requestId: requestId)
                 }
             } else if type == "submit" {
-                if let login = Login.fromScript(url, script: res) {
-                    setCredentials(login)
+                if self.profile.prefs.boolForKey("saveLogins") ?? true {
+                    if let login = Login.fromScript(url, script: res) {
+                        setCredentials(login)
+                    }
                 }
             }
         }
