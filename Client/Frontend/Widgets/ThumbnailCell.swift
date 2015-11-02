@@ -17,41 +17,47 @@ struct ThumbnailCellUX {
     static let LabelAlignment: NSTextAlignment = .Center
     static let InsetSize: CGFloat = 20
     static let InsetSizeCompact: CGFloat = 6
-    static func insetsForCollectionViewSize(size: CGSize) -> UIEdgeInsets {
-        if size.widthLargerThanHalfIPad() {
-            return UIEdgeInsets(
+    static func insetsForCollectionViewSize(size: CGSize, traitCollection: UITraitCollection) -> UIEdgeInsets {
+        let largeInsets = UIEdgeInsets(
                 top: ThumbnailCellUX.InsetSize,
                 left: ThumbnailCellUX.InsetSize,
                 bottom: ThumbnailCellUX.InsetSize,
                 right: ThumbnailCellUX.InsetSize
             )
-        } else {
-            return UIEdgeInsets(
+        let smallInsets = UIEdgeInsets(
                 top: ThumbnailCellUX.InsetSizeCompact,
                 left: ThumbnailCellUX.InsetSizeCompact,
                 bottom: ThumbnailCellUX.InsetSizeCompact,
                 right: ThumbnailCellUX.InsetSizeCompact
             )
+
+        if traitCollection.horizontalSizeClass == .Compact {
+            return smallInsets
+        } else {
+            return largeInsets
         }
     }
 
     static let ImagePaddingWide: CGFloat = 20
     static let ImagePaddingCompact: CGFloat = 10
-    static func imageInsetsForCollectionViewSize(size: CGSize) -> UIEdgeInsets {
-        if size.widthLargerThanHalfIPad() {
-            return UIEdgeInsets(
+    static func imageInsetsForCollectionViewSize(size: CGSize, traitCollection: UITraitCollection) -> UIEdgeInsets {
+        let largeInsets = UIEdgeInsets(
                 top: ThumbnailCellUX.ImagePaddingWide,
                 left: ThumbnailCellUX.ImagePaddingWide,
                 bottom: ThumbnailCellUX.ImagePaddingWide,
                 right: ThumbnailCellUX.ImagePaddingWide
             )
-        } else {
-            return UIEdgeInsets(
+
+        let smallInsets = UIEdgeInsets(
                 top: ThumbnailCellUX.ImagePaddingCompact,
                 left: ThumbnailCellUX.ImagePaddingCompact,
                 bottom: ThumbnailCellUX.ImagePaddingCompact,
                 right: ThumbnailCellUX.ImagePaddingCompact
             )
+        if traitCollection.horizontalSizeClass == .Compact {
+            return smallInsets
+        } else {
+            return largeInsets
         }
     }
 
@@ -263,9 +269,11 @@ class ThumbnailCell: UICollectionViewCell {
 
      - parameter size: Size of the container collection view
      */
-    func updateLayoutForCollectionViewSize(size: CGSize) {
-        let cellInsets = ThumbnailCellUX.insetsForCollectionViewSize(size)
-        let imageInsets = ThumbnailCellUX.imageInsetsForCollectionViewSize(size)
+    func updateLayoutForCollectionViewSize(size: CGSize, traitCollection: UITraitCollection) {
+        let cellInsets = ThumbnailCellUX.insetsForCollectionViewSize(size,
+            traitCollection: traitCollection)
+        let imageInsets = ThumbnailCellUX.imageInsetsForCollectionViewSize(size,
+            traitCollection: traitCollection)
 
         if cellInsets != self.cellInsets {
             self.cellInsets = cellInsets
