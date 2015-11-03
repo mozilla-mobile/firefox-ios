@@ -49,7 +49,6 @@ class BrowserViewController: UIViewController {
     private var homePanelIsInline = false
     private var searchLoader: SearchLoader!
     private let snackBars = UIView()
-    private let auralProgress = AuralProgressBar()
     private let webViewContainerToolbar = UIView()
 
     private var openInHelper: OpenInHelper?
@@ -392,18 +391,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func startTrackingAccessibilityStatus() {
-        NSNotificationCenter.defaultCenter().addObserverForName(UIAccessibilityVoiceOverStatusChanged, object: nil, queue: nil) { (notification) -> Void in
-            self.auralProgress.hidden = !UIAccessibilityIsVoiceOverRunning()
-        }
-        auralProgress.hidden = !UIAccessibilityIsVoiceOverRunning()
-    }
-
-    func stopTrackingAccessibilityStatus() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIAccessibilityVoiceOverStatusChanged, object: nil)
-        auralProgress.hidden = true
-    }
-
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -474,7 +461,6 @@ class BrowserViewController: UIViewController {
     }
 
     override func viewDidAppear(animated: Bool) {
-        startTrackingAccessibilityStatus()
         presentIntroViewController()
         self.webViewContainerToolbar.hidden = false
 
@@ -488,10 +474,6 @@ class BrowserViewController: UIViewController {
         screenshotHelper.viewIsVisible = false
 
         super.viewWillDisappear(animated)
-    }
-
-    override func viewDidDisappear(animated: Bool) {
-        stopTrackingAccessibilityStatus()
     }
 
     override func updateViewConstraints() {
@@ -593,7 +575,6 @@ class BrowserViewController: UIViewController {
         }, completion: { finished in
             if finished {
                 self.webViewContainer.accessibilityElementsHidden = true
-                self.stopTrackingAccessibilityStatus()
                 UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
             }
         })
@@ -611,7 +592,6 @@ class BrowserViewController: UIViewController {
                     controller.removeFromParentViewController()
                     self.homePanelController = nil
                     self.webViewContainer.accessibilityElementsHidden = false
-                    self.startTrackingAccessibilityStatus()
                     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
 
                     // Refresh the reading view toolbar since the article record may have changed
@@ -764,15 +744,10 @@ class BrowserViewController: UIViewController {
         case KVOEstimatedProgress:
             guard let progress = change?[NSKeyValueChangeNewKey] as? Float else { break }
             urlBar.updateProgressBar(progress)
-            // when loading is stopped, KVOLoading is fired first, and only then KVOEstimatedProgress with progress 1.0 which would leave the progress bar running
-            if progress != 1.0 || tabManager.selectedTab?.loading ?? false {
-                auralProgress.progress = Double(progress)
-            }
         case KVOLoading:
             guard let loading = change?[NSKeyValueChangeNewKey] as? Bool else { break }
             toolbar?.updateReloadStatus(loading)
             urlBar.updateReloadStatus(loading)
-            auralProgress.progress = loading ? 0 : nil
         case KVOURL:
             if let tab = tabManager.selectedTab where tab.webView?.URL == nil {
                 log.debug("URL is nil!")
