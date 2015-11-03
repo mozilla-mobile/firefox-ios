@@ -91,8 +91,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     private func onNewModel(model: BookmarksModel) {
-        self.source = model
         dispatch_async(dispatch_get_main_queue()) {
+            self.source = model
             self.tableView.reloadData()
         }
     }
