@@ -11,9 +11,10 @@ private let log = Logger.browserLogger
 
 private let ThumbnailIdentifier = "Thumbnail"
 
-extension UIView {
-    public class func viewOrientationForSize(size: CGSize) -> UIInterfaceOrientation {
-        return size.width > size.height ? UIInterfaceOrientation.LandscapeRight : UIInterfaceOrientation.Portrait
+extension CGSize {
+    public func widthLargerOrEqualThanHalfIPad() -> Bool {
+        let halfIPadSize: CGFloat = 507
+        return width >= halfIPadSize
     }
 }
 
@@ -51,8 +52,10 @@ class TopSitesPanel: UIViewController {
 
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        self.layout.setupForOrientation(UIView.viewOrientationForSize(size))
-        self.collection?.reloadData()
+
+        coordinator.animateAlongsideTransition({ context in
+            self.collection?.reloadData()
+        }, completion: nil)
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -189,7 +192,8 @@ class TopSitesPanel: UIViewController {
         let portraitSize = CGSize(width: min(size.width, size.height), height: max(size.width, size.height))
 
         func calculateRowsForSize(size: CGSize, columns: Int) -> Int {
-            let insets = ThumbnailCellUX.Insets
+            let insets = ThumbnailCellUX.insetsForCollectionViewSize(size,
+                traitCollection:  traitCollection)
             let thumbnailWidth = (size.width - insets.left - insets.right) / CGFloat(columns)
             let thumbnailHeight = thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio)
             return max(2, Int(size.height / thumbnailHeight))
@@ -267,11 +271,39 @@ private class TopSitesCollectionView: UICollectionView {
 }
 
 private class TopSitesLayout: UICollectionViewLayout {
+
     private var thumbnailRows: Int {
         return max(2, Int((self.collectionView?.frame.height ?? self.thumbnailHeight) / self.thumbnailHeight))
     }
 
-    private var thumbnailCols = 2
+    private var thumbnailCols: Int {
+        let size = collectionView?.bounds.size ?? CGSizeZero
+        let traitCollection = collectionView!.traitCollection
+        if traitCollection.horizontalSizeClass == .Compact {
+            // Landscape iPHone
+            if traitCollection.verticalSizeClass == .Compact {
+                return 5
+            }
+            // Split screen iPad width
+            else if size.widthLargerOrEqualThanHalfIPad() ?? false {
+                return 4
+            }
+            // iPhone portrait
+            else {
+                return 3
+            }
+        } else {
+            // Portrait iPad
+            if size.height > size.width {
+                return 4;
+            }
+            // Landscape iPad
+            else {
+                return 5;
+            }
+        }
+    }
+
     private var thumbnailCount: Int {
         return thumbnailRows * thumbnailCols
     }
@@ -279,11 +311,17 @@ private class TopSitesLayout: UICollectionViewLayout {
 
     // The width and height of the thumbnail here are the width and height of the tile itself, not the image inside the tile.
     private var thumbnailWidth: CGFloat {
-        let insets = ThumbnailCellUX.Insets
-        return (width - insets.left - insets.right) / CGFloat(thumbnailCols) }
+        let size = collectionView?.bounds.size ?? CGSizeZero
+        let insets = ThumbnailCellUX.insetsForCollectionViewSize(size,
+            traitCollection:  collectionView!.traitCollection)
+
+        return floor(width - insets.left - insets.right) / CGFloat(thumbnailCols)
+    }
     // The tile's height is determined the aspect ratio of the thumbnails width. We also take into account
     // some padding between the title and the image.
-    private var thumbnailHeight: CGFloat { return thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio) }
+    private var thumbnailHeight: CGFloat {
+        return floor(thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio))
+    }
 
     // Used to calculate the height of the list.
     private var count: Int {
@@ -296,27 +334,10 @@ private class TopSitesLayout: UICollectionViewLayout {
     private var topSectionHeight: CGFloat {
         let maxRows = ceil(Float(count) / Float(thumbnailCols))
         let rows = min(Int(maxRows), thumbnailRows)
-        let insets = ThumbnailCellUX.Insets
+        let size = collectionView?.bounds.size ?? CGSizeZero
+        let insets = ThumbnailCellUX.insetsForCollectionViewSize(size,
+            traitCollection:  collectionView!.traitCollection)
         return thumbnailHeight * CGFloat(rows) + insets.top + insets.bottom
-    }
-
-    override init() {
-        super.init()
-        setupForOrientation(UIApplication.sharedApplication().statusBarOrientation)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private func setupForOrientation(orientation: UIInterfaceOrientation) {
-        if orientation.isLandscape {
-            thumbnailCols = 5
-        } else if UIScreen.mainScreen().traitCollection.horizontalSizeClass == .Compact {
-            thumbnailCols = 3
-        } else {
-            thumbnailCols = 4
-        }
     }
 
     private func getIndexAtPosition(y: CGFloat) -> Int {
@@ -369,7 +390,9 @@ private class TopSitesLayout: UICollectionViewLayout {
         // Set the top thumbnail frames.
         let row = floor(Double(indexPath.item / thumbnailCols))
         let col = indexPath.item % thumbnailCols
-        let insets = ThumbnailCellUX.Insets
+        let size = collectionView?.bounds.size ?? CGSizeZero
+        let insets = ThumbnailCellUX.insetsForCollectionViewSize(size,
+            traitCollection:  collectionView!.traitCollection)
         let x = insets.left + thumbnailWidth * CGFloat(col)
         let y = insets.top + CGFloat(row) * thumbnailHeight
         attr.frame = CGRectMake(ceil(x), ceil(y), thumbnailWidth, thumbnailHeight)
@@ -506,6 +529,9 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         // Cells for the top site thumbnails.
         let site = self[indexPath.item]!
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(ThumbnailIdentifier, forIndexPath: indexPath) as! ThumbnailCell
+
+        let traitCollection = collectionView.traitCollection
+        cell.updateLayoutForCollectionViewSize(collectionView.bounds.size, traitCollection: traitCollection)
 
         if indexPath.item >= data.count {
             configureCell(cell, forSuggestedSite: site as! SuggestedSite)
