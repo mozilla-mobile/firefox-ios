@@ -329,8 +329,11 @@ public class SQLiteDBConnection {
             pragma("page_size=\(desiredPageSize)", expected: nil, factory: IntFactory, message: "Page size set")
 
             log.info("Vacuuming to alter database page size from \(currentPageSize) to \(desiredPageSize).")
-            self.vacuum()
-            log.info("Vacuuming done.")
+            if let err = self.vacuum() {
+                log.error("Vacuuming failed: \(err).")
+            } else {
+                log.debug("Vacuuming succeeded.")
+            }
         }
 
         if SwiftData.EnableWAL {
@@ -375,8 +378,8 @@ public class SQLiteDBConnection {
         sqlite3_wal_checkpoint_v2(sqliteDB, nil, mode, nil, nil)
     }
 
-    func vacuum() {
-        executeQueryUnsafe("VACUUM", factory: IntFactory)
+    func vacuum() -> NSError? {
+        return self.executeChange("VACUUM")
     }
 
     /// Creates an error from a sqlite status. Will print to the console if debug_enabled is set.

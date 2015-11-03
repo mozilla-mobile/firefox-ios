@@ -229,9 +229,8 @@ public class BrowserDB {
 extension BrowserDB {
     func vacuum() {
         log.debug("Vacuuming a BrowserDB.")
-        db.transaction { connection in
-            connection.vacuum()
-            return true
+        db.withConnection(SwiftData.Flags.ReadWriteCreate) { connection in
+            return connection.vacuum()
         }
     }
 
