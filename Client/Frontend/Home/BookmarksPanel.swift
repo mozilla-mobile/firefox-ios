@@ -25,6 +25,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     var parentFolders = [BookmarkFolder]()
     var bookmarkFolder: BookmarkFolder?
 
+    var fetchedFolder = false
+
     private let BookmarkFolderCellIdentifier = "BookmarkFolderIdentifier"
     private let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderIdentifier"
 
@@ -87,11 +89,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             self.onModelFailure(result.failureValue)
             return
         }
-        self.onNewModel(model)
-    }
 
-    private func onNewModel(model: BookmarksModel) {
         self.source = model
+        fetchedFolder = true
+
         dispatch_async(dispatch_get_main_queue()) {
             self.tableView.reloadData()
         }
@@ -106,7 +107,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return source?.current.count ?? 0
+        return fetchedFolder ? (source?.current.count ?? 0) : 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
