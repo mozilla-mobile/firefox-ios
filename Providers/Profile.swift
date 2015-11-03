@@ -189,6 +189,9 @@ public class BrowserProfile: Profile {
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: Selector("onLocationChange:"), name: NotificationOnLocationChange, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("onProfileDidFinishSyncing:"), name: ProfileDidFinishSyncingNotification, object: nil)
+        notificationCenter.addObserver(self, selector: Selector("onPrivateDataClearedHistory:"), name: NotificationPrivateDataClearedHistory, object: nil)
+
 
         if let baseBundleIdentifier = AppInfo.baseBundleIdentifier() {
             KeychainWrapper.serviceName = baseBundleIdentifier
@@ -203,6 +206,8 @@ public class BrowserProfile: Profile {
             self.syncManager.onNewProfile()
             prefs.clearAll()
         }
+
+        history.setTopSitesNeedsInvalidation()
     }
 
     // Extensions don't have a UIApplication.
@@ -233,14 +238,31 @@ public class BrowserProfile: Profile {
                 let visit = SiteVisit(site: site, date: NSDate.nowMicroseconds(), type: visitType)
                 history.addLocalVisit(visit)
             }
+
+            history.setTopSitesNeedsInvalidation()
         } else {
             log.debug("Ignoring navigation.")
         }
     }
 
+    // These selectors run on which ever thread sent the notifications (not the main thread)
+    @objc
+    func onProfileDidFinishSyncing(notification: NSNotification) {
+        history.setTopSitesNeedsInvalidation()
+    }
+
+    @objc
+    func onPrivateDataClearedHistory(notification: NSNotification) {
+        // Immediately invalidate the top sites cache
+        history.setTopSitesNeedsInvalidation()
+        history.invalidateTopSitesIfNeeded()
+    }
+
     deinit {
         self.syncManager.endTimedSyncs()
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationOnLocationChange, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: ProfileDidFinishSyncingNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
     }
 
     func localName() -> String {
@@ -274,7 +296,7 @@ public class BrowserProfile: Profile {
      * that this is initialized first.
      */
     private lazy var places: protocol<BrowserHistory, Favicons, SyncableHistory, ResettableSyncStorage> = {
-        return SQLiteHistory(db: self.db)!
+        return SQLiteHistory(db: self.db, prefs: self.prefs)!
     }()
 
     var favicons: Favicons {

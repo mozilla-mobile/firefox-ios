@@ -66,7 +66,6 @@ class TopSitesPanel: UIViewController {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataClearedHistory, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -86,18 +85,19 @@ class TopSitesPanel: UIViewController {
             make.edges.equalTo(self.view)
         }
         self.collection = collection
-        self.refreshHistory(maxFrecencyLimit)
+
+        self.profile.history.setTopSitesCacheSize(Int32(maxFrecencyLimit))
+        self.refreshTopSites(maxFrecencyLimit)
     }
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
     }
     
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationPrivateDataClearedHistory:
-            refreshHistory(maxFrecencyLimit)
+        case NotificationFirefoxAccountChanged:
+            refreshTopSites(maxFrecencyLimit)
             break
         default:
             // no need to do anything at all
@@ -133,17 +133,30 @@ class TopSitesPanel: UIViewController {
 
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
         profile.history.removeSiteFromTopSites(site) >>== {
-            self.profile.history.getSitesByFrecencyWithLimit(self.layout.thumbnailCount).uponQueue(dispatch_get_main_queue(), block: { result in
+            self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount).uponQueue(dispatch_get_main_queue(), block: { result in
+                self.updateDataSourceWithSites(result)
                 self.deleteOrUpdateSites(result, indexPath: indexPath)
             })
         }
     }
 
-    private func refreshHistory(frequencyLimit: Int) {
-        self.profile.history.getSitesByFrecencyWithLimit(frequencyLimit).uponQueue(dispatch_get_main_queue(), block: { result in
+    private func refreshTopSites(frecencyLimit: Int) {
+        // Reload right away with whatever is in the cache, then check to see if the cache is invalid. If it's invalid,
+        // invalidate the cache and requery. This allows us to always show results right away if they are cached but
+        // also load in the up-to-date results asynchronously if needed
+        reloadTopSitesWithLimit(frecencyLimit) >>> {
+            return self.profile.history.invalidateTopSitesIfNeeded() >>== { result in
+                return result ? self.reloadTopSitesWithLimit(frecencyLimit) : succeed()
+            }
+        }
+    }
+
+    private func reloadTopSitesWithLimit(limit: Int) -> Success {
+        return self.profile.history.getTopSitesWithLimit(limit).bindQueue(dispatch_get_main_queue()) { result in
             self.updateDataSourceWithSites(result)
             self.collection?.reloadData()
-        })
+            return succeed()
+        }
     }
 
     private func deleteOrUpdateSites(result: Maybe<Cursor<Site>>, indexPath: NSIndexPath) {
