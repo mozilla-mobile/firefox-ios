@@ -31,6 +31,7 @@ public protocol BrowserHistory {
     func setTopSitesNeedsInvalidation()
     func invalidateTopSitesIfNeeded() -> Deferred<Maybe<Bool>>
     func setTopSitesCacheSize(size: Int32)
+    func clearTopSitesCache() -> Success
 }
 
 /**

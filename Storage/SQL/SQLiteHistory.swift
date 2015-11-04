@@ -277,7 +277,7 @@ extension SQLiteHistory: BrowserHistory {
         }
 
         let cacheSize = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? 0)
-        return purgeTopSitesCache()
+        return clearTopSitesCache()
             >>> { self.updateTopSitesCacheWithLimit(cacheSize) }
             >>> always(true)
     }
@@ -294,7 +294,7 @@ extension SQLiteHistory: BrowserHistory {
         let (whereData, groupBy) = self.topSiteClauses()
         let (query, args) = self.filteredSitesByFrecencyQueryWithLimit(limit, groupClause: groupBy, whereData: whereData)
         let insertQuery = "INSERT INTO \(TableCachedTopSites) \(query)"
-        return self.purgeTopSitesCache() >>> {
+        return self.clearTopSitesCache() >>> {
             self.db.run(insertQuery, withArgs: args) >>> {
                 self.prefs.setBool(true, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
                 return succeed()
@@ -302,7 +302,7 @@ extension SQLiteHistory: BrowserHistory {
         }
     }
 
-    private func purgeTopSitesCache() -> Success {
+    public func clearTopSitesCache() -> Success {
         let deleteQuery = "DELETE FROM \(TableCachedTopSites)"
         return self.db.run(deleteQuery, withArgs: nil) >>> {
             self.prefs.removeObjectForKey(PrefsKeys.KeyTopSitesCacheIsValid)
