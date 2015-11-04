@@ -14,6 +14,7 @@ protocol BrowserToolbarProtocol {
     var forwardButton: UIButton { get }
     var backButton: UIButton { get }
     var stopReloadButton: UIButton { get }
+    var findInPageButton: UIButton { get }
     var actionButtons: [UIButton] { get }
 
     func updateBackStatus(canGoBack: Bool)
@@ -34,6 +35,7 @@ protocol BrowserToolbarDelegate: class {
     func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbarProtocol, button: UIButton)
     func browserToolbarDidLongPressBookmark(browserToolbar: BrowserToolbarProtocol, button: UIButton)
     func browserToolbarDidPressShare(browserToolbar: BrowserToolbarProtocol, button: UIButton)
+    func browserToolbarDidPressFindInPage(browserToolbar: BrowserToolbarProtocol, button: UIButton)
 }
 
 @objc
@@ -107,6 +109,9 @@ public class BrowserToolbarHelper: NSObject {
         toolbar.bookmarkButton.addGestureRecognizer(longPressGestureBookmarkButton)
         toolbar.bookmarkButton.addTarget(self, action: "SELdidClickBookmark", forControlEvents: UIControlEvents.TouchUpInside)
 
+        toolbar.findInPageButton.setTitle("find", forState: UIControlState.Normal)
+        toolbar.findInPageButton.addTarget(self, action: "SELdidClickFindInPage", forControlEvents: UIControlEvents.TouchUpInside)
+
         setTintColor(buttonTintColor, forButtons: toolbar.actionButtons)
     }
 
@@ -138,6 +143,10 @@ public class BrowserToolbarHelper: NSObject {
         toolbar.browserToolbarDelegate?.browserToolbarDidPressBookmark(toolbar, button: toolbar.bookmarkButton)
     }
 
+    func SELdidClickFindInPage() {
+        toolbar.browserToolbarDelegate?.browserToolbarDidPressFindInPage(toolbar, button: toolbar.bookmarkButton)
+    }
+
     func SELdidLongPressBookmark(recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == UIGestureRecognizerState.Began {
             toolbar.browserToolbarDelegate?.browserToolbarDidLongPressBookmark(toolbar, button: toolbar.bookmarkButton)
@@ -166,6 +175,7 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
     let forwardButton: UIButton
     let backButton: UIButton
     let stopReloadButton: UIButton
+    let findInPageButton: UIButton
     let actionButtons: [UIButton]
 
     var helper: BrowserToolbarHelper?
@@ -178,13 +188,14 @@ class BrowserToolbar: Toolbar, BrowserToolbarProtocol {
         stopReloadButton = UIButton()
         shareButton = UIButton()
         bookmarkButton = UIButton()
-        actionButtons = [backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton]
+        findInPageButton = UIButton()
+        actionButtons = [backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton, findInPageButton]
 
         super.init(frame: frame)
 
         self.helper = BrowserToolbarHelper(toolbar: self)
 
-        addButtons(backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton)
+        addButtons(backButton, forwardButton, stopReloadButton, shareButton, bookmarkButton, findInPageButton)
 
         accessibilityNavigationStyle = .Combined
         accessibilityLabel = NSLocalizedString("Navigation Toolbar", comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")

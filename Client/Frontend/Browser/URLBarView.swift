@@ -158,6 +158,8 @@ class URLBarView: UIView {
 
     lazy var stopReloadButton: UIButton = { return UIButton() }()
 
+    lazy var findInPageButton: UIButton = { return UIButton() }()
+
     lazy var actionButtons: [UIButton] = {
         return [self.shareButton, self.bookmarkButton, self.forwardButton, self.backButton, self.stopReloadButton]
     }()

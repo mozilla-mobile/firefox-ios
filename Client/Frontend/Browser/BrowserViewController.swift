@@ -1051,6 +1051,10 @@ extension BrowserViewController: BrowserToolbarDelegate {
         tabManager.selectedTab?.goForward()
     }
 
+    func browserToolbarDidPressFindInPage(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
+        print("find in page")
+    }
+
     func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
 // See 1159373 - Disable long press back/forward for backforward list
 //        let controller = BackForwardListViewController()
