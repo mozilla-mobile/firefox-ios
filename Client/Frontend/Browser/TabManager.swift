@@ -257,11 +257,13 @@ class TabManager : NSObject {
 
     // This method is duplicated to hide the flushToDisk option from consumers.
     func removeTab(tab: Browser) {
-        self.removeTab(tab, flushToDisk: true)
+        self.removeTab(tab, flushToDisk: true, notify: true)
         hideNetworkActivitySpinner()
     }
 
-    private func removeTab(tab: Browser, flushToDisk: Bool) {
+    /// - Parameter notify: if set to true, will call the delegate after the tab 
+    ///   is removed.
+    private func removeTab(tab: Browser, flushToDisk: Bool, notify: Bool) {
         assert(NSThread.isMainThread())
         // If the removed tab was selected, find the new tab to select.
         if tab === selectedTab {
@@ -293,8 +295,10 @@ class TabManager : NSObject {
         // We don't want to pick up any stray events.
         tab.webView?.navigationDelegate = nil
 
-        for delegate in delegates {
-            delegate.get()?.tabManager(self, didRemoveTab: tab)
+        if notify {
+            for delegate in delegates {
+                delegate.get()?.tabManager(self, didRemoveTab: tab)
+            }
         }
 
         // Make sure we never reach 0 normal tabs
@@ -307,11 +311,18 @@ class TabManager : NSObject {
         }
     }
 
+    /// Removes all private tabs from the manager.
+    /// - Parameter notify: if set to true, the delegate is called when a tab is 
+    ///   removed.
+    func removeAllPrivateTabsAndNotify(notify: Bool) {
+        privateTabs.forEach({ removeTab($0, flushToDisk: true, notify: notify) })
+    }
+    
     func removeAll() {
         let tabs = self.tabs
 
         for tab in tabs {
-            self.removeTab(tab, flushToDisk: false)
+            self.removeTab(tab, flushToDisk: false, notify: true)
         }
         storeChanges()
     }
