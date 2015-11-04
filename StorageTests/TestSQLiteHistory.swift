@@ -407,7 +407,9 @@ class TestSQLiteHistory: XCTestCase {
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)!
 
-        history.clearHistory()
+        history.setTopSitesCacheSize(20)
+        history.clearTopSitesCache().value
+        history.clearHistory().value
 
         // Make sure that we get back the top sites
         populateHistoryForFrecencyCalcuations(history, siteCount: 100)
@@ -426,9 +428,8 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func loadCache() -> Success {
-            return history.invalidateTopSitesIfNeeded().bind { result in
-                XCTAssertTrue(result, "Invalidate should be successful")
-                return succeed()
+            return history.invalidateTopSitesIfNeeded() >>> {
+                succeed()
             }
         }
 
@@ -441,7 +442,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func invalidateIfNeededDoesntChangeResults() -> Success {
-            return history.invalidateTopSitesIfNeeded().bind { result in
+            return history.invalidateTopSitesIfNeeded() >>> {
                 return history.getTopSitesWithLimit(20) >>== { topSites in
                     XCTAssertEqual(topSites.count, 20)
                     XCTAssertEqual(topSites[0]!.guid, "abc\(5)def")
