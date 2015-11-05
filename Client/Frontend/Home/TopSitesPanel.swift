@@ -419,6 +419,9 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     var profile: Profile
     var editingThumbnails: Bool = false
 
+    private let blurQueue = dispatch_queue_create("FaviconBlurQueue", DISPATCH_QUEUE_CONCURRENT)
+    private let BackgroundFadeInDuration: NSTimeInterval = 0.3
+
     init(profile: Profile, data: Cursor<Site>) {
         self.data = data
         self.profile = profile
@@ -442,6 +445,25 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         cell.imageView.contentMode = UIViewContentMode.Center
     }
 
+    private func setBlurredBackground(image: UIImage, withURL url: NSURL, forCell cell: ThumbnailCell) {
+        let blurredKey = "\(url.absoluteString)!blurred"
+        if let blurredImage = SDImageCache.sharedImageCache().imageFromMemoryCacheForKey(blurredKey) {
+            cell.backgroundImage.image = blurredImage
+        } else {
+            dispatch_async(self.blurQueue) {
+                let blurredImage = image.applyLightEffect()
+                SDImageCache.sharedImageCache().storeImage(blurredImage, forKey: blurredKey, toDisk: false)
+                dispatch_async(dispatch_get_main_queue()) {
+                    cell.backgroundImage.alpha = 0
+                    cell.backgroundImage.image = blurredImage
+                    UIView.animateWithDuration(self.BackgroundFadeInDuration) {
+                        cell.backgroundImage.alpha = 1
+                    }
+                }
+            }
+        }
+    }
+
     private func getFaviconForCell(cell:ThumbnailCell, site: Site, profile: Profile) {
         setDefaultThumbnailBackgroundForCell(cell)
         guard let url = site.url.asURL else { return }
@@ -459,7 +481,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
                 }
 
                 cell.image = img
-                cell.backgroundImage.image = img.applyLightEffect()
+                self.setBlurredBackground(img, withURL: url, forCell: cell)
             }
         }
     }
@@ -496,7 +518,7 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
             cell.imageView.sd_setImageWithURL(icon.url.asURL, completed: { (img, err, type, url) -> Void in
                 if let img = img {
                     cell.image = img
-                    cell.backgroundImage.image = img.applyLightEffect()
+                    self.setBlurredBackground(img, withURL: url, forCell: cell)
                 } else {
                     self.getFaviconForCell(cell, site: site, profile: profile)
                 }
