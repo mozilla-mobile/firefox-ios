@@ -168,7 +168,49 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
            >>> effect({ log.debug("Done.") })
     }
 
-    public func synchronizeLocalHistory(history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
+    private func go(info: InfoCollections, greenLight: () -> Bool, downloader: BatchingDownloader<HistoryPayload>, history: SyncableHistory) -> Success {
+
+        if !greenLight() {
+            log.info("Green light turned red. Stopping history download.")
+            return succeed()
+        }
+
+        func applyBatched() -> Success {
+            return self.applyIncomingToStorage(history, records: downloader.retrieve())
+               >>> effect(downloader.advance)
+        }
+
+        func onBatchResult(result: Maybe<DownloadEndState>) -> Success {
+            guard let end = result.successValue else {
+                log.warning("Got failure: \(result.failureValue!)")
+                return succeed()
+            }
+
+            switch end {
+            case .Complete:
+                log.info("Done with batched mirroring.")
+                return applyBatched()
+                   >>> history.doneApplyingRecordsAfterDownload
+            case .Incomplete:
+                log.debug("Running another batch.")
+                // This recursion is fine because Deferred always pushes callbacks onto a queue.
+                return applyBatched()
+                   >>> { self.go(info, greenLight: greenLight, downloader: downloader, history: history) }
+            case .Interrupted:
+                log.info("Interrupted. Aborting batching this time.")
+                return succeed()
+            case .NoNewData:
+                log.info("No new data. No need to continue batching.")
+                downloader.advance()
+                return succeed()
+            }
+        }
+
+        return downloader.go(info, limit: self.batchSize)
+                         .bind(onBatchResult)
+    }
+
+    public func synchronizeLocalHistory(history: SyncableHistory, withServer storageClient: Sync15StorageClient, info: InfoCollections, greenLight: () -> Bool) -> SyncResult {
         if let reason = self.reasonToNotSync(storageClient) {
             return deferMaybe(.NotStarted(reason))
         }
@@ -180,27 +222,19 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
             return deferMaybe(FatalError(message: "Couldn't make history factory."))
         }
 
-        let since: Timestamp = self.lastFetched
-        log.debug("Synchronizing \(self.collection). Last fetched: \(since).")
+        let downloader = BatchingDownloader(collectionClient: historyClient, basePrefs: self.prefs, collection: "history")
 
-        let applyIncomingToStorage: StorageResponse<[Record<HistoryPayload>]> -> Success = { response in
-            let ts = response.metadata.timestampMilliseconds
-            let lm = response.metadata.lastModifiedMilliseconds!
-            log.debug("Applying incoming history records from response timestamped \(ts), last modified \(lm).")
-            log.debug("Records header hint: \(response.metadata.records)")
-            return self.applyIncomingToStorage(history, records: response.value)
-                >>> effect({
-                    log.debug("Advancing lastFetched to \(lm).")
-                    self.lastFetched = lm
-                })
+        // The original version of the history synchronizer tracked its
+        // own last fetched time. We need to migrate this into the
+        // batching downloader.
+        let since: Timestamp = self.lastFetched
+        if since > downloader.lastModified {
+            log.debug("Advancing downloader lastModified to synchronizer lastFetched \(since).")
+            downloader.lastModified = since
+            self.lastFetched = 0
         }
 
-        return historyClient.getSince(since)
-          >>== applyIncomingToStorage
-            // TODO: If we fetch sorted by date, we can bump the lastFetched timestamp
-            // to the last successfully applied record timestamp, no matter where we fail.
-            // There's no need to do the upload before bumping -- the storage of local changes is stable.
-           >>> history.doneApplyingRecordsAfterDownload
+        return self.go(info, greenLight: greenLight, downloader: downloader, history: history)
            >>> { self.uploadOutgoingFromStorage(history, lastTimestamp: 0, withServer: historyClient) }
            >>> { return deferMaybe(.Completed) }
     }

@@ -186,7 +186,7 @@ class HistorySynchronizerTests: XCTestCase {
 
         let expectation = expectationWithDescription("Waiting for application.")
         var succeeded = false
-        synchronizer.applyIncomingToStorage(storage, records: records, fetched: ts)
+        synchronizer.applyIncomingToStorage(storage, records: records)
                     .upon({ result in
             succeeded = result.isSuccess
             expectation.fulfill()
