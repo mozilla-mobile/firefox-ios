@@ -174,36 +174,34 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         }
 
         let encoder = RecordEncoder<HistoryPayload>(decode: { HistoryPayload($0) }, encode: { $0 })
-        if let historyClient = self.collectionClient(encoder, storageClient: storageClient) {
-            let since: Timestamp = self.lastFetched
-            log.debug("Synchronizing \(self.collection). Last fetched: \(since).")
 
-            // TODO: buffer downloaded records, fetching incrementally, so that we can separate
-            // the network fetch from record application.
-
-            let applyIncomingToStorage: StorageResponse<[Record<HistoryPayload>]> -> Success = { response in
-                let ts = response.metadata.timestampMilliseconds
-                let lm = response.metadata.lastModifiedMilliseconds!
-                log.debug("Applying incoming history records from response timestamped \(ts), last modified \(lm).")
-                log.debug("Records header hint: \(response.metadata.records)")
-                return self.applyIncomingToStorage(history, records: response.value)
-                    >>> effect({
-                        log.debug("Advancing lastFetched to \(lm).")
-                        self.lastFetched = lm
-                    })
-            }
-
-            return historyClient.getSince(since)
-              >>== applyIncomingToStorage
-                // TODO: If we fetch sorted by date, we can bump the lastFetched timestamp
-                // to the last successfully applied record timestamp, no matter where we fail.
-                // There's no need to do the upload before bumping -- the storage of local changes is stable.
-               >>> history.doneApplyingRecordsAfterDownload
-               >>> { self.uploadOutgoingFromStorage(history, lastTimestamp: 0, withServer: historyClient) }
-               >>> { return deferMaybe(.Completed) }
+        guard let historyClient = self.collectionClient(encoder, storageClient: storageClient) else {
+            log.error("Couldn't make history factory.")
+            return deferMaybe(FatalError(message: "Couldn't make history factory."))
         }
 
-        log.error("Couldn't make history factory.")
-        return deferMaybe(FatalError(message: "Couldn't make history factory."))
+        let since: Timestamp = self.lastFetched
+        log.debug("Synchronizing \(self.collection). Last fetched: \(since).")
+
+        let applyIncomingToStorage: StorageResponse<[Record<HistoryPayload>]> -> Success = { response in
+            let ts = response.metadata.timestampMilliseconds
+            let lm = response.metadata.lastModifiedMilliseconds!
+            log.debug("Applying incoming history records from response timestamped \(ts), last modified \(lm).")
+            log.debug("Records header hint: \(response.metadata.records)")
+            return self.applyIncomingToStorage(history, records: response.value)
+                >>> effect({
+                    log.debug("Advancing lastFetched to \(lm).")
+                    self.lastFetched = lm
+                })
+        }
+
+        return historyClient.getSince(since)
+          >>== applyIncomingToStorage
+            // TODO: If we fetch sorted by date, we can bump the lastFetched timestamp
+            // to the last successfully applied record timestamp, no matter where we fail.
+            // There's no need to do the upload before bumping -- the storage of local changes is stable.
+           >>> history.doneApplyingRecordsAfterDownload
+           >>> { self.uploadOutgoingFromStorage(history, lastTimestamp: 0, withServer: historyClient) }
+           >>> { return deferMaybe(.Completed) }
     }
 }
