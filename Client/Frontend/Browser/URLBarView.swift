@@ -580,6 +580,7 @@ extension URLBarView: BrowserToolbarProtocol {
     }
 
     func updateReloadStatus(isLoading: Bool) {
+        helper?.updateReloadStatus(isLoading)
         if isLoading {
             stopReloadButton.setImage(helper?.ImageStop, forState: .Normal)
             stopReloadButton.setImage(helper?.ImageStopPressed, forState: .Highlighted)
