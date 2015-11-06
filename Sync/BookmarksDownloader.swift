@@ -135,16 +135,20 @@ public class BookmarksMirrorer {
             case .Complete:
                 log.info("Done with batched mirroring.")
                 return self.applyRecordsFromBatcher()
+                   >>> effect(self.downloader.advance)
                    >>> self.storage.doneApplyingRecordsAfterDownload
             case .Incomplete:
                 log.debug("Running another batch.")
                 // This recursion is fine because Deferred always pushes callbacks onto a queue.
-                return self.applyRecordsFromBatcher() >>> { self.go(info, greenLight: greenLight) }
+                return self.applyRecordsFromBatcher()
+                   >>> effect(self.downloader.advance)
+                   >>> { self.go(info, greenLight: greenLight) }
             case .Interrupted:
                 log.info("Interrupted. Aborting batching this time.")
                 return succeed()
             case .NoNewData:
                 log.info("No new data. No need to continue batching.")
+                self.downloader.advance()
                 return succeed()
             }
         }
@@ -166,6 +170,15 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         let ret = self.batch
         self.batch = []
         return ret
+    }
+
+    var _advance: (() -> ())?
+    func advance() {
+        guard let f = self._advance else {
+            return
+        }
+        self._advance = nil
+        f()
     }
 
     init(collectionClient: Sync15CollectionClient<T>, basePrefs: Prefs, collection: String) {
@@ -230,6 +243,7 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         self.lastModified = 0
         self.nextFetchParameters = nil
         self.batch = []
+        self._advance = nil
         return succeed()
     }
 
@@ -245,6 +259,11 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
             return deferMaybe(.NoNewData)
         }
 
+        // If the caller hasn't advanced after the last batch, strange things will happen --
+        // potentially looping indefinitely. Warn.
+        if self._advance != nil && !self.batch.isEmpty {
+            log.warning("Downloading another batch without having advanced. This might be a bug.")
+        }
         return self.downloadNextBatchWithLimit(limit, infoModified: modified)
     }
 
@@ -278,39 +297,45 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
 
         func handleSuccess(response: StorageResponse<[Record<T>]>) -> Deferred<Maybe<DownloadEndState>> {
             log.debug("Handling success.")
-            // Shift to the next offset. This might be nil, in which case… fine!
-            // Note that we preserve the previous 'newer' value from the offset or the original fetch,
-            // even as we update baseTimestamp.
             let nextOffset = response.metadata.nextOffset
-            self.nextFetchParameters = nextOffset == nil ? nil : (nextOffset!, since)
+            let responseModified = response.value.last?.modified
 
-            // If there are records, advance to just before the timestamp of the last.
-            // If our next fetch with X-Weave-Next-Offset fails, at least we'll start here.
-            //
-            // This approach is only valid if we're fetching oldest-first.
-            if let newBase = response.value.last?.modified {
-                log.debug("Advancing baseTimestamp to \(newBase) - 1")
-                self.baseTimestamp = newBase - 1
+            // Queue up our metadata advance. We wait until the consumer has fetched
+            // and processed this batch; they'll call .advance() on success.
+            self._advance = {
+                // Shift to the next offset. This might be nil, in which case… fine!
+                // Note that we preserve the previous 'newer' value from the offset or the original fetch,
+                // even as we update baseTimestamp.
+                self.nextFetchParameters = nextOffset == nil ? nil : (nextOffset!, since)
+
+                // If there are records, advance to just before the timestamp of the last.
+                // If our next fetch with X-Weave-Next-Offset fails, at least we'll start here.
+                //
+                // This approach is only valid if we're fetching oldest-first.
+                if let newBase = responseModified {
+                    log.debug("Advancing baseTimestamp to \(newBase) - 1")
+                    self.baseTimestamp = newBase - 1
+                }
+
+                if nextOffset == nil {
+                    // If we can't get a timestamp from the header -- and we should always be able to --
+                    // we fall back on the collection modified time in i/c, as supplied by the caller.
+                    // In any case where there is no racing writer these two values should be the same.
+                    // If they differ, the header should be later. If it's missing, and we use the i/c
+                    // value, we'll simply redownload some records.
+                    // All bets are off if we hit this case and are filtering somehow… don't do that.
+                    let lm = response.metadata.lastModifiedMilliseconds
+                    log.debug("Advancing lastModified to \(lm) ?? \(infoModified).")
+                    self.lastModified = lm ?? infoModified
+                }
             }
 
             log.debug("Got success response with \(response.metadata.records) records.")
+
             // Store the incoming records for collection.
             self.store(response.value)
 
-            if nextOffset == nil {
-                // If we can't get a timestamp from the header -- and we should always be able to --
-                // we fall back on the collection modified time in i/c, as supplied by the caller.
-                // In any case where there is no racing writer these two values should be the same.
-                // If they differ, the header should be later. If it's missing, and we use the i/c
-                // value, we'll simply redownload some records.
-                // All bets are off if we hit this case and are filtering somehow… don't do that.
-                let lm = response.metadata.lastModifiedMilliseconds
-                log.debug("Advancing lastModified to \(lm) ?? \(infoModified).")
-                self.lastModified = lm ?? infoModified
-                return deferMaybe(.Complete)
-            }
-
-            return deferMaybe(.Incomplete)
+            return deferMaybe(nextOffset == nil ? .Complete : .Incomplete)
         }
 
         return fetch.bind { result in
