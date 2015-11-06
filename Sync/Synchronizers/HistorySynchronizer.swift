@@ -75,7 +75,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
     // 2. Try to update each place. Note failures.
     // 3. bulkInsert all failed updates in one go.
     // 4. Store all remote visits for all places in one go, constructing a single sequence of visits.
-    func applyIncomingToStorage(storage: SyncableHistory, records: [Record<HistoryPayload>], fetched: Timestamp) -> Success {
+    func applyIncomingToStorage(storage: SyncableHistory, records: [Record<HistoryPayload>]) -> Success {
 
         // Skip over at most this many failing records before aborting the sync.
         let maskSomeFailures = self.mask(3)
@@ -114,7 +114,7 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
             }).bind(maskSomeFailures)
         }
 
-        return self.applyIncomingToStorage(records, fetched: fetched, apply: applyRecord)
+        return self.applyIncomingRecords(records, apply: applyRecord)
     }
 
     private func uploadModifiedPlaces(places: [(Place, [Visit])], lastTimestamp: Timestamp, fromStorage storage: SyncableHistory, withServer storageClient: Sync15CollectionClient<HistoryPayload>) -> DeferredTimestamp {
@@ -184,7 +184,11 @@ public class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
                 let lm = response.metadata.lastModifiedMilliseconds!
                 log.debug("Applying incoming history records from response timestamped \(ts), last modified \(lm).")
                 log.debug("Records header hint: \(response.metadata.records)")
-                return self.applyIncomingToStorage(history, records: response.value, fetched: lm)
+                return self.applyIncomingToStorage(history, records: response.value)
+                    >>> effect({
+                        log.debug("Advancing lastFetched to \(lm).")
+                        self.lastFetched = lm
+                    })
             }
 
             return historyClient.getSince(since)

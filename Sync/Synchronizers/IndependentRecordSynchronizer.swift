@@ -36,6 +36,18 @@ class Uploader {
 }
 
 public class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronizer {
+    /**
+     * Just like the usual applyIncomingToStorage, but doesn't fast-forward the timestamp.
+     */
+    func applyIncomingRecords<T>(records: [T], apply: T -> Success) -> Success {
+        if records.isEmpty {
+            log.debug("No records; done applying.")
+            return succeed()
+        }
+
+        return walk(records, f: apply)
+    }
+
     func applyIncomingToStorage<T>(records: [T], fetched: Timestamp, apply: T -> Success) -> Success {
         func done() -> Success {
             log.debug("Bumping fetch timestamp to \(fetched).")
