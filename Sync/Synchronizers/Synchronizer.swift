@@ -227,6 +227,10 @@ extension BaseCollectionSynchronizer: ResettableSynchronizer {
     public static func resetSynchronizerWithStorage(storage: ResettableSyncStorage, basePrefs: Prefs, collection: String) -> Success {
         let synchronizerPrefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)
         synchronizerPrefs.removeObjectForKey("lastFetched")
+
+        // Not all synchronizers use a batching downloader, but it's
+        // convenient to just always reset it here.
         return storage.resetClient()
+           >>> effect({ BatchingDownloader.resetDownloaderWithPrefs(synchronizerPrefs, collection: collection) })
     }
 }

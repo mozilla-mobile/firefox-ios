@@ -187,7 +187,23 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         let branchName = "downloader." + collection + "."
         self.prefs = basePrefs.branch(branchName)
 
-        log.info("Downloader configured with prefs '\(branchName)'.")
+        log.info("Downloader configured with prefs '\(self.prefs.getBranchPrefix())'.")
+    }
+
+    static func resetDownloaderWithPrefs(basePrefs: Prefs, collection: String) {
+        // This leads to stupid paths like 'profile.sync.synchronizer.history..downloader.history..'.
+        // Sorry, but it's out in the world now...
+        let branchName = "downloader." + collection + "."
+        let prefs = basePrefs.branch(branchName)
+
+        let lm = prefs.timestampForKey("lastModified")
+        let bt = prefs.timestampForKey("baseTimestamp")
+        log.debug("Resetting downloader prefs \(prefs.getBranchPrefix()). Previous values: \(lm), \(bt).")
+
+        prefs.removeObjectForKey("nextOffset")
+        prefs.removeObjectForKey("offsetNewer")
+        prefs.removeObjectForKey("baseTimestamp")
+        prefs.removeObjectForKey("lastModified")
     }
 
     /**
