@@ -182,7 +182,6 @@ class HistorySynchronizerTests: XCTestCase {
         let scratchpad = Scratchpad(b: KeyBundle.random(), persistingTo: prefs)
 
         let synchronizer = HistorySynchronizer(scratchpad: scratchpad, delegate: delegate, basePrefs: prefs)
-        let ts = NSDate.now()
 
         let expectation = expectationWithDescription("Waiting for application.")
         var succeeded = false
@@ -200,16 +199,11 @@ class HistorySynchronizerTests: XCTestCase {
     func testApplyRecords() {
         let earliest = NSDate.now()
 
-        func assertTimestampIsReasonable(synchronizer: HistorySynchronizer) {
-            XCTAssertTrue(earliest <= synchronizer.lastFetched, "Timestamp is reasonable (lower).")
-            XCTAssertTrue(NSDate.now() >= synchronizer.lastFetched, "Timestamp is reasonable (upper).")
-        }
-
         let empty = MockSyncableHistory()
         let noRecords = [Record<HistoryPayload>]()
 
         // Apply no records.
-        assertTimestampIsReasonable(self.applyRecords(noRecords, toStorage: empty).synchronizer)
+        self.applyRecords(noRecords, toStorage: empty)
 
         // Hey look! Nothing changed.
         XCTAssertTrue(empty.places.isEmpty)
@@ -221,8 +215,7 @@ class HistorySynchronizerTests: XCTestCase {
         let pA = HistoryPayload.fromJSON(JSON.parse(jA))!
         let rA = Record<HistoryPayload>(id: "aaaaaa", payload: pA, modified: earliest + 10000, sortindex: 123, ttl: 1000000)
 
-        let (synchronizer, prefs, _) = self.applyRecords([rA], toStorage: empty)
-        assertTimestampIsReasonable(synchronizer)
+        let (_, prefs, _) = self.applyRecords([rA], toStorage: empty)
 
         // The record was stored. This is checking our mock implementation, but real storage should work, too!
 
@@ -233,9 +226,7 @@ class HistorySynchronizerTests: XCTestCase {
 
         // Test resetting now that we have a timestamp.
         XCTAssertFalse(empty.wasReset)
-        XCTAssertTrue(0 < synchronizer.lastFetched)
         XCTAssertTrue(HistorySynchronizer.resetSynchronizerWithStorage(empty, basePrefs: prefs, collection: "history").value.isSuccess)
         XCTAssertTrue(empty.wasReset)
-        XCTAssertFalse(0 < synchronizer.lastFetched)
     }
 }
