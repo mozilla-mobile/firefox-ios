@@ -94,6 +94,10 @@ class URLBarView: UIView {
         return locationView
     }()
 
+    func textFieldIsFirstResponder() -> Bool {
+        return locationTextField.isFirstResponder()
+    }
+
     private lazy var locationTextField: ToolbarTextField = {
         let locationTextField = ToolbarTextField()
         locationTextField.translatesAutoresizingMaskIntoConstraints = false

@@ -123,6 +123,29 @@ class BrowserViewController: UIViewController {
         return UIStatusBarStyle.LightContent
     }
 
+    // MARK: Bluetooth Keyboard Shortcuts
+
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+
+    override var keyCommands: [AnyObject]? {
+        get {
+            return [
+                UIKeyCommand(input: "t", modifierFlags: .Command, action: "openNewTab"), // CMD+T
+                UIKeyCommand(input: "b", modifierFlags: .Command, action: "openNewTab") // CMD+N
+            ]
+        }
+    }
+
+    func openNewTab() {
+        if urlBar.textFieldIsFirstResponder(){
+            urlBar.SELdidClickCancel()
+        }
+        let tab = tabManager.addTab()
+        tabManager.selectTab(tab)
+    }
+
     func shouldShowFooterForTraitCollection(previousTraitCollection: UITraitCollection) -> Bool {
         return previousTraitCollection.verticalSizeClass != .Compact &&
                previousTraitCollection.horizontalSizeClass != .Regular

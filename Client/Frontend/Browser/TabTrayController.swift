@@ -368,6 +368,21 @@ class TabTrayController: UIViewController {
         return UIStatusBarStyle.LightContent
     }
 
+    // MARK: Bluetooth Keyboard Shortcuts
+
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+
+    override var keyCommands: [AnyObject]? {
+        get {
+            return [
+                UIKeyCommand(input: "t", modifierFlags: .Command, action: "SELdidClickAddTab"), // CMD+T
+                UIKeyCommand(input: "b", modifierFlags: .Command, action: "SELdidClickAddTab") // CMD+N
+            ]
+        }
+    }
+
     private func makeConstraints() {
         let viewBindings: [String: AnyObject] = [
             "topLayoutGuide" : topLayoutGuide,

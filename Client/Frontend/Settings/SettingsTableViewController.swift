@@ -863,6 +863,31 @@ class SettingsTableViewController: UITableViewController {
         }
     }
 
+    // MARK: Bluetooth Keyboard Shortcuts
+
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+
+    override var keyCommands: [AnyObject]? {
+        get {
+            return [
+                UIKeyCommand(input: "t", modifierFlags: .Command, action: "openNewTab"), // CMD+T
+                UIKeyCommand(input: "b", modifierFlags: .Command, action: "openNewTab") // CMD+N
+            ]
+        }
+    }
+
+    func openNewTab() {
+        navigationController?.dismissViewControllerAnimated(true, completion: {
+            if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+                let rootNavigationController = appDelegate.rootViewController
+                rootNavigationController.popViewControllerAnimated(true)
+                appDelegate.browserViewController.openNewTab()
+            }
+        })
+    }
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
