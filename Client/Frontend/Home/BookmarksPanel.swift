@@ -264,8 +264,55 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                 }
             }
         })
+        
+        let edit = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: "Edit", handler: { (action, indexPath) in
+            let editAlertController = UIAlertController(title: "Edit bookmark title", message: "Change the name for \((self.source?.current[indexPath.row] as! BookmarkItem).url)", preferredStyle: .Alert)
+            
+            editAlertController.addTextFieldWithConfigurationHandler({ (textField) -> Void in
+                textField.placeholder = self.source?.current[indexPath.row]?.title
+                textField.text = self.source?.current[indexPath.row]?.title
+            })
+            
+            let okAction = UIAlertAction(title: "OK", style: .Default) { (_) in
+                let bookmarkTitleTextField = editAlertController.textFields![0] as UITextField
+                let bookmark = self.source?.current[indexPath.row]!
+                bookmark?.title = bookmarkTitleTextField.text!
+                self.profile.bookmarks.updateTitle(bookmark!).uponQueue(dispatch_get_main_queue()) { res in
+                    if let err = res.failureValue {
+                        self.onModelFailure(err)
+                        return
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.source?.reloadData().upon {
+                            guard let model = $0.successValue else {
+                                self.onModelFailure($0.failureValue)
+                                return
+                            }
+                            dispatch_async(dispatch_get_main_queue()) {
+                                self.source = model
+                                self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+                                
+//                                NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added":false])
+                            }
+                        }
+                    }
+                }
 
-        return [delete]
+                
+                
+                print("new title \(bookmarkTitleTextField.text)")
+            }
+            editAlertController.addAction(okAction)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in }
+            editAlertController.addAction(cancelAction)
+            
+            self.presentViewController(editAlertController, animated: true, completion: nil)
+        })
+
+
+        return [delete,edit]
     }
 }
 
