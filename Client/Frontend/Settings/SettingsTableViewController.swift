@@ -20,6 +20,9 @@ private let Bug1204635_S4 = NSLocalizedString("Cancel", tableName: "ClearPrivate
 // The following are strings for bug 1162174 - Support third party passwords
 private let Bug1162174_S1 = NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")
 
+// String removed in 1210775, keeping for possible use in iPad UI later
+private let Bug1210775_S1 = NSLocalizedString("Last synced: %@", comment: "Last synced time label beside Sync Now setting option. Argument is the relative date string.")
+
 // A base TableViewCell, to help minimize initialization and allow recycling.
 class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -230,8 +233,7 @@ private class SyncNowSetting: WithAccountSetting {
 
     override var status: NSAttributedString? {
         if let timestamp = profile.prefs.timestampForKey(PrefsKeys.KeyLastSyncFinishTime) {
-            let label = NSLocalizedString("Last synced: %@", comment: "Last synced time label beside Sync Now setting option. Argument is the relative date string.")
-            let formattedLabel = String(format: label, NSDate.fromTimestamp(timestamp).toRelativeTimeString())
+            let formattedLabel = NSDate.fromTimestamp(timestamp).toRelativeTimeString()
             let attributedString = NSMutableAttributedString(string: formattedLabel)
             let attributes = [NSForegroundColorAttributeName: UIColor.grayColor(), NSFontAttributeName: UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)]
             let range = NSMakeRange(0, attributedString.length)
