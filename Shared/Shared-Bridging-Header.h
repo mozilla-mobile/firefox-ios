@@ -4,6 +4,4 @@
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonCrypto.h>
 
-#import "ThirdParty/NRFileManager/NSFileManager+NRFileManager.h"
-
 #endif
