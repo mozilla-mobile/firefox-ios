@@ -23,10 +23,6 @@ class OpenSearchEngine {
     private let SearchTermComponent = "{searchTerms}"
 
     private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
-    private lazy var hostURL: NSURL? = {
-        guard let hostEndIndex = self.searchTemplate.rangeOfString("?")?.startIndex else { return nil }
-        return NSURL(string: self.searchTemplate.substringToIndex(hostEndIndex))
-    }()
 
     init(shortName: String, description: String?, image: UIImage?, searchTemplate: String, suggestTemplate: String?) {
         self.shortName = shortName
