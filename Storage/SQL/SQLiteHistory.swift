@@ -110,6 +110,9 @@ public class SQLiteHistory {
         self.favicons = FaviconsTable<Favicon>()
         self.prefs = prefs
 
+        // Always start by needing invalidation.
+        self.setTopSitesNeedsInvalidation()
+
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
         if !db.createOrUpdate(BrowserTable(version: version ?? BrowserTable.DefaultVersion)) {
