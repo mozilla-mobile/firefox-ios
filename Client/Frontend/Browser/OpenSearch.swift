@@ -48,17 +48,17 @@ class OpenSearchEngine {
      * Problem: the search terms may not be a query arg, they may be part of the URL - how to deal with this?
      **/
     private func getQueryArgFromTemplate() -> String? {
-        if let queryStartIndex = searchTemplate.rangeOfString("?")?.startIndex.successor() {
-            let queryArgs = searchTemplate.substringFromIndex(queryStartIndex)
-            let queryParts = queryArgs.componentsSeparatedByString("&").map { $0.componentsSeparatedByString("=") }
-            for part in queryParts {
-                if part[1] == SearchTermComponent {
-                    return part[0]
-                }
-            }
-
+        // we have the replace the templates SearchTermComponent in order to make the template
+        // a valid URL, otherwise we cannot do the conversion to NSURLComponents
+        // and have to do flaky pattern matching instead.
+        let placeholder = "PLACEHOLDER"
+        let template = searchTemplate.stringByReplacingOccurrencesOfString(SearchTermComponent, withString: placeholder)
+        let components = NSURLComponents(string: template)
+        let searchTerm = components?.queryItems?.filter { item in
+            return item.value == placeholder
         }
-        return nil
+        guard let term = searchTerm where !term.isEmpty  else { return nil }
+        return term[0].name
     }
 
     /**
@@ -77,7 +77,8 @@ class OpenSearchEngine {
      **/
     func queryForSearchURL(url: NSURL?) -> String? {
         if isSearchURLForEngine(url) {
-            if let key = searchQueryComponentKey, let value = url?.getQuery()[key] {
+            if let key = searchQueryComponentKey,
+                let value = url?.getQuery()[key] {
                 return value.stringByReplacingOccurrencesOfString("+", withString: " ").stringByRemovingPercentEncoding
             }
         }
