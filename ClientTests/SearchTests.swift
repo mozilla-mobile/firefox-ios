@@ -100,7 +100,7 @@ class SearchTests: XCTestCase {
         // create URL
         let searchTerm = "Foo Bar"
         let encodedSeachTerm = searchTerm.stringByReplacingOccurrencesOfString(" ", withString: "+")
-        let googleSearchURL = NSURL(string: "https://www.google.co.uk/search?q=\(encodedSeachTerm)&ie=utf-8&oe=utf-8&gws_rd=cr&ei=I0UyVp_qK4HtUoytjagM")
+        let googleSearchURL = NSURL(string: "https://www.google.com/search?q=\(encodedSeachTerm)&ie=utf-8&oe=utf-8&gws_rd=cr&ei=I0UyVp_qK4HtUoytjagM")
         let duckDuckGoSearchURL = NSURL(string: "https://duckduckgo.com/?q=\(encodedSeachTerm)&ia=about")
         let invalidSearchURL = NSURL(string: "https://www.google.co.uk")
 
