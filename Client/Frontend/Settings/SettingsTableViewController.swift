@@ -17,9 +17,6 @@ private let Bug1204635_S2 = NSLocalizedString("Are you sure you want to clear al
 private let Bug1204635_S3 = NSLocalizedString("Clear", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to Clear private data dialog")
 private let Bug1204635_S4 = NSLocalizedString("Cancel", tableName: "ClearPrivateData", comment: "Used as a button label in the dialog to cancel clear private data dialog")
 
-// The following are strings for bug 1162174 - Support third party passwords
-private let Bug1162174_S1 = NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")
-
 // A base TableViewCell, to help minimize initialization and allow recycling.
 class SettingsTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -111,6 +108,47 @@ class SettingSection : Setting {
             }
         }
         return nil
+    }
+}
+
+// A helper class for settings with a UISwitch.
+// Takes and optional settingsDidChange callback and status text.
+class BoolSetting: Setting {
+    private let prefKey: String
+    private let prefs: Prefs
+    private let defaultValue: Bool
+    private let settingDidChange: ((Bool) -> Void)?
+    private let statusText: String?
+
+    init(prefs: Prefs, prefKey: String, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
+        self.prefs = prefs
+        self.prefKey = prefKey
+        self.defaultValue = defaultValue
+        self.settingDidChange = settingDidChange
+        self.statusText = statusText
+        super.init(title: NSAttributedString(string: titleText, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    }
+
+    override var status: NSAttributedString? {
+        if let text = statusText {
+            return NSAttributedString(string: text, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
+        } else {
+            return nil
+        }
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        let control = UISwitch()
+        control.onTintColor = UIConstants.ControlTintColor
+        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        control.on = prefs.boolForKey(prefKey) ?? defaultValue
+        cell.accessoryView = control
+    }
+
+    @objc func switchValueChanged(control: UISwitch) {
+        prefs.setBool(control.on, forKey: prefKey)
+        settingDidChange?(control.on)
     }
 }
 
@@ -569,29 +607,6 @@ private class OpenSupportPageSetting: Setting {
     }
 }
 
-class UseCompactTabLayoutSetting: Setting {
-    let profile: Profile
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Use Compact Tabs", comment: "Setting to enable compact tabs in the tab overview"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
-    }
-
-    override func onConfigureCell(cell: UITableViewCell) {
-        super.onConfigureCell(cell)
-        let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
-        control.on = profile.prefs.boolForKey("CompactTabLayout") ?? true
-        cell.accessoryView = control
-        cell.selectionStyle = .None
-    }
-
-    @objc func switchValueChanged(control: UISwitch) {
-        profile.prefs.setBool(control.on, forKey: "CompactTabLayout")
-    }
-}
-
 // Opens the search settings pane
 private class SearchSetting: Setting {
     let profile: Profile
@@ -636,60 +651,6 @@ private class ClearPrivateDataSetting: Setting {
     }
 }
 
-private class SendCrashReportsSetting: Setting {
-    let profile: Profile
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Send Crash Reports", comment: "Setting to enable the sending of crash reports"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
-    }
-
-    override func onConfigureCell(cell: UITableViewCell) {
-        super.onConfigureCell(cell)
-        let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
-        control.on = profile.prefs.boolForKey("crashreports.send.always") ?? false
-        cell.accessoryView = control
-    }
-
-    @objc func switchValueChanged(control: UISwitch) {
-        profile.prefs.setBool(control.on, forKey: "crashreports.send.always")
-        configureActiveCrashReporter(profile.prefs.boolForKey("crashreports.send.always"))
-    }
-}
-
-private class ClosePrivateTabs: Setting {
-    let profile: Profile
-
-    private let titleText = NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs")
-    private let statusText =
-        NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'")
-
-    override var status: NSAttributedString? {
-        return NSAttributedString(string: statusText, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
-    }
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        super.init(title: NSAttributedString(string: titleText, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
-    }
-
-    override func onConfigureCell(cell: UITableViewCell) {
-        super.onConfigureCell(cell)
-        let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
-        control.on = profile.prefs.boolForKey("settings.closePrivateTabs") ?? false
-        cell.accessoryView = control
-    }
-
-    @objc func switchValueChanged(control: UISwitch) {
-        profile.prefs.setBool(control.on, forKey: "settings.closePrivateTabs")
-        configureActiveCrashReporter(profile.prefs.boolForKey("settings.closePrivateTabs"))
-    }
-}
-
 private class PrivacyPolicySetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: NSLocalizedString("Privacy Policy", comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/"), attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
@@ -701,35 +662,6 @@ private class PrivacyPolicySetting: Setting {
 
     override func onClick(navigationController: UINavigationController?) {
         setUpAndPushSettingsContentViewController(navigationController)
-    }
-}
-
-private class PopupBlockingSettings: Setting {
-    let prefs: Prefs
-    let tabManager: TabManager!
-
-    let prefKey = "blockPopups"
-
-    init(settings: SettingsTableViewController) {
-        self.prefs = settings.profile.prefs
-        self.tabManager = settings.tabManager
-        let title = NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")
-        let attributes = [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]
-        super.init(title: NSAttributedString(string: title, attributes: attributes))
-    }
-
-    override func onConfigureCell(cell: UITableViewCell) {
-        super.onConfigureCell(cell)
-        let control = UISwitch()
-        control.onTintColor = UIConstants.ControlTintColor
-        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
-        control.on = prefs.boolForKey(prefKey) ?? true
-        cell.accessoryView = control
-        cell.selectionStyle = .None
-    }
-
-    @objc func switchValueChanged(toggle: UISwitch) {
-        prefs.setObject(toggle.on, forKey: prefKey)
     }
 }
 
@@ -758,16 +690,23 @@ class SettingsTableViewController: UITableViewController {
             accountDebugSettings = []
         }
 
+        let prefs = profile.prefs
         var generalSettings = [
             SearchSetting(settings: self),
-            PopupBlockingSettings(settings: self),
+            BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
+                titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
+            BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
+                titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
         ]
 
         // There is nothing to show in the Customize section if we don't include the compact tab layout
         // setting on iPad. When more options are added that work on both device types, this logic can
         // be changed.
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            generalSettings +=  [UseCompactTabLayoutSetting(settings: self)]
+            generalSettings +=  [
+                BoolSetting(prefs: prefs, prefKey: "CompactTabLayout", defaultValue: true,
+                    titleText: NSLocalizedString("Use Compact Tabs", comment: "Setting to enable compact tabs in the tab overview"))
+            ]
         }
 
         settings += [
@@ -781,21 +720,25 @@ class SettingsTableViewController: UITableViewController {
             SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)
         ]
 
-        var privacySettings: [Setting]
+        var privacySettings: [Setting] = [ClearPrivateDataSetting(settings: self)]
+
         if #available(iOS 9, *) {
-            privacySettings = [
-                ClearPrivateDataSetting(settings: self),
-                ClosePrivateTabs(settings: self),
-                SendCrashReportsSetting(settings: self),
-                PrivacyPolicySetting()
-            ]
-        } else {
-            privacySettings = [
-                ClearPrivateDataSetting(settings: self),
-                SendCrashReportsSetting(settings: self),
-                PrivacyPolicySetting()
+            privacySettings += [
+                BoolSetting(prefs: prefs,
+                    prefKey: "settings.closePrivateTabs",
+                    defaultValue: false,
+                    titleText: NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs"),
+                    statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
             ]
         }
+
+        privacySettings += [
+            BoolSetting(prefs: prefs, prefKey: "crashreports.send.always", defaultValue: false,
+                titleText: NSLocalizedString("Send Crash Reports", comment: "Setting to enable the sending of crash reports"),
+                settingDidChange: { configureActiveCrashReporter($0) }),
+            PrivacyPolicySetting()
+        ]
+
 
         settings += [
             SettingSection(title: NSAttributedString(string: privacyTitle), children: privacySettings),
