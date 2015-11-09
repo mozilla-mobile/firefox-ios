@@ -1,9 +1,9 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /* Created and contributed by Nikolai Ruhe and rewritten in Swift.
-* https://github.com/NikolaiRuhe/NRFoundation */
+ * https://github.com/NikolaiRuhe/NRFoundation */
 
 import Foundation
 
@@ -58,28 +58,23 @@ public extension NSFileManager {
                 throw errorWithCode(.EnumeratorElementNotURL)
             }
 
-            var isRegularFile: AnyObject?
-            try itemURL.getResourceValue(&isRegularFile, forKey: NSURLIsRegularFileKey)
-
             // Skip files that are not regular and don't match our prefix
-            guard let isRegular = isRegularFile as? Bool
-                where isRegular == true && (itemURL.pathComponents?.last?.hasPrefix(prefix) ?? false) else {
+            guard itemURL.isRegularFile && itemURL.lastComponentIsPrefixedBy(prefix) else {
                 continue
             }
 
             // First try to get the total allocated size and in failing that, get the file allocated size
-            var fileSize: AnyObject?
-            try itemURL.getResourceValue(&fileSize, forKey: NSURLTotalFileAllocatedSizeKey)
+            var fileSize = itemURL.getResourceLongLongForKey(NSURLTotalFileAllocatedSizeKey)
             if fileSize == nil {
-                try itemURL.getResourceValue(&fileSize, forKey: NSURLFileAllocatedSizeKey)
+                fileSize = itemURL.getResourceLongLongForKey(NSURLFileAllocatedSizeKey)
             }
 
-            let size = (fileSize as? NSNumber)?.longLongValue ?? 0
-            accumulatedSize += size
+            accumulatedSize += fileSize ?? 0
         }
 
         return accumulatedSize
     }
+
 
     private func errorWithCode(code: NSFileManagerExtensionsErrorCodes, underlyingError error: NSError? = nil) -> NSError {
         var userInfo = [String: AnyObject]()
