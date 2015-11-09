@@ -8,8 +8,8 @@ import XCGLogger
 //// A rolling file loggers that saves to a different log file based on given timestamp
 public class RollingFileLogger: XCGLogger {
 
-    private static let TwoMBsInBytes: UInt64 = 2 * 100000
-    private let sizeLimit: UInt64
+    private static let TwoMBsInBytes: Int64 = 2 * 100000
+    private let sizeLimit: Int64
     private let logDirectoryPath: String?
 
     let fileLogIdentifierPrefix = "com.mozilla.firefox.filelogger."
@@ -22,7 +22,7 @@ public class RollingFileLogger: XCGLogger {
 
     let root: String
 
-    public init(filenameRoot: String, logDirectoryPath: String?, sizeLimit: UInt64 = TwoMBsInBytes) {
+    public init(filenameRoot: String, logDirectoryPath: String?, sizeLimit: Int64 = TwoMBsInBytes) {
         root = filenameRoot
         self.sizeLimit = sizeLimit
         self.logDirectoryPath = logDirectoryPath
@@ -41,8 +41,8 @@ public class RollingFileLogger: XCGLogger {
         }
 
         // Before we create a new log file, check to see we haven't hit our size limit and if we did, clear out some logs to make room
-        while sizeOfAllLogFiles() > sizeLimit {
-            deleteOldestLog()
+        while sizeOfAllLogFilesWithPrefix(root) > sizeLimit {
+            deleteOldestLogWithPrefix(root)
         }
 
         if let filename = filenameWithRoot(root, withDate: date) {
@@ -54,14 +54,14 @@ public class RollingFileLogger: XCGLogger {
         }
     }
 
-    private func deleteOldestLog() {
+    private func deleteOldestLogWithPrefix(prefix: String) {
         if logDirectoryPath == nil {
             return
         }
 
         do {
             var logFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(logDirectoryPath!)
-            logFiles = logFiles.filter { $0.startsWith("\(self.root).") }
+            logFiles = logFiles.filter { $0.hasPrefix("\(prefix).") }
             logFiles.sortInPlace { $0 < $1 }
 
             if let oldestLogFilename = logFiles.first {
@@ -73,15 +73,15 @@ public class RollingFileLogger: XCGLogger {
         }
     }
 
-    private func sizeOfAllLogFiles() -> UInt64 {
+    private func sizeOfAllLogFilesWithPrefix(prefix: String) -> Int64 {
         if logDirectoryPath == nil {
             return 0
         }
 
         let logDirURL = NSURL(fileURLWithPath: logDirectoryPath!)
-        var dirSize: UInt64 = 0
+        var dirSize: Int64 = 0
         do {
-            try NSFileManager.defaultManager().moz_getAllocatedSize(&dirSize, ofDirectoryAtURL: logDirURL, forFilesPrefixedWith: self.root)
+            dirSize = try NSFileManager.defaultManager().getAllocatedSizeOfDirectoryAtURL(logDirURL, forFilesPrefixedWith: prefix)
         } catch let errorValue as NSError {
             error("Error determining log directory size: \(errorValue)")
         }
