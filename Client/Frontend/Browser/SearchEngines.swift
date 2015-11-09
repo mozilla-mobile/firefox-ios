@@ -118,6 +118,16 @@ class SearchEngines {
         disabledEngineNames[engine.shortName] = true
     }
 
+
+    func queryForSearchURL(url: NSURL?) -> String? {
+        for engine in orderedEngines {
+            guard let searchTerm = engine.queryForSearchURL(url) else { continue }
+            return searchTerm
+        }
+
+        return nil
+    }
+
     private func getDisabledEngineNames() -> [String: Bool] {
         if let disabledEngineNames = self.prefs.stringArrayForKey(DisabledEngineNames) {
             var disabledEngineDict = [String: Bool]()

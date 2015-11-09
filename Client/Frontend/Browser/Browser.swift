@@ -201,6 +201,13 @@ class Browser: NSObject {
         return displayURL?.absoluteString ?? lastTitle ?? ""
     }
 
+    var currentInitialURL: NSURL? {
+        get {
+            let initalURL = self.webView?.backForwardList.currentItem?.initialURL
+            return initalURL
+        }
+    }
+
     var displayFavicon: Favicon? {
         var width = 0
         var largest: Favicon?

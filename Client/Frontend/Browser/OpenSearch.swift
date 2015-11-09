@@ -20,6 +20,10 @@ class OpenSearchEngine {
     private let searchTemplate: String
     private let suggestTemplate: String?
 
+    private let SearchTermComponent = "{searchTerms}"
+
+    private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
+
     init(shortName: String, description: String?, image: UIImage?, searchTemplate: String, suggestTemplate: String?) {
         self.shortName = shortName
         self.description = description
@@ -36,13 +40,54 @@ class OpenSearchEngine {
     }
 
     /**
+     * Return the arg that we use for searching for this engine
+     * Problem: the search terms may not be a query arg, they may be part of the URL - how to deal with this?
+     **/
+    private func getQueryArgFromTemplate() -> String? {
+        // we have the replace the templates SearchTermComponent in order to make the template
+        // a valid URL, otherwise we cannot do the conversion to NSURLComponents
+        // and have to do flaky pattern matching instead.
+        let placeholder = "PLACEHOLDER"
+        let template = searchTemplate.stringByReplacingOccurrencesOfString(SearchTermComponent, withString: placeholder)
+        let components = NSURLComponents(string: template)
+        let searchTerm = components?.queryItems?.filter { item in
+            return item.value == placeholder
+        }
+        guard let term = searchTerm where !term.isEmpty  else { return nil }
+        return term[0].name
+    }
+
+    /**
+     * check that the URL host contains the name of the search engine somewhere inside it
+     **/
+    private func isSearchURLForEngine(url: NSURL?) -> Bool {
+        guard let urlHost = url?.host,
+            let queryEndIndex = searchTemplate.rangeOfString("?")?.startIndex,
+            let templateURL = NSURL(string: searchTemplate.substringToIndex(queryEndIndex)),
+            let templateURLHost = templateURL.host else { return false }
+        return urlHost.localizedCaseInsensitiveContainsString(templateURLHost)
+    }
+
+    /**
+     * Returns the query that was used to construct a given search URL
+     **/
+    func queryForSearchURL(url: NSURL?) -> String? {
+        if isSearchURLForEngine(url) {
+            if let key = searchQueryComponentKey,
+                let value = url?.getQuery()[key] {
+                return value.stringByReplacingOccurrencesOfString("+", withString: " ").stringByRemovingPercentEncoding
+            }
+        }
+        return nil
+    }
+
+    /**
      * Returns the search suggestion URL for the given query.
      */
     func suggestURLForQuery(query: String) -> NSURL? {
         if let suggestTemplate = suggestTemplate {
             return getURLFromTemplate(suggestTemplate, query: query)
         }
-
         return nil
     }
 
@@ -57,7 +102,7 @@ class OpenSearchEngine {
             templateAllowedSet.formUnionWithCharacterSet(NSCharacterSet(charactersInString: "{}"))
 
             if let encodedSearchTemplate = searchTemplate.stringByAddingPercentEncodingWithAllowedCharacters(templateAllowedSet) {
-                let urlString = encodedSearchTemplate.stringByReplacingOccurrencesOfString("{searchTerms}", withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                let urlString = encodedSearchTemplate.stringByReplacingOccurrencesOfString(SearchTermComponent, withString: escapedQuery, options: NSStringCompareOptions.LiteralSearch, range: nil)
                 return NSURL(string: urlString)
             }
         }

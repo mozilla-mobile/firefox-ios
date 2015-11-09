@@ -855,6 +855,7 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController: URLBarDelegate {
+
     func urlBarDidPressReload(urlBar: URLBarView) {
         tabManager.selectedTab?.reload()
     }
@@ -916,6 +917,15 @@ extension BrowserViewController: URLBarDelegate {
         } else {
             return [copyAddressAction]
         }
+    }
+
+    func urlBarDisplayTextForURL(url: NSURL?) -> String? {
+        // use the initial value for the URL so we can do proper pattern matching with search URLs
+        var searchURL = self.tabManager.selectedTab?.currentInitialURL
+        if searchURL == nil || ErrorPageHelper.isErrorPageURL(searchURL!) {
+            searchURL = url
+        }
+        return profile.searchEngines.queryForSearchURL(searchURL) ?? url?.absoluteString
     }
 
     func urlBarDidLongPressLocation(urlBar: URLBarView) {
