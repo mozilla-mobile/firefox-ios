@@ -73,7 +73,7 @@ class OpenSearchEngine {
      * Returns the query that was used to construct a given search URL
      **/
     func queryForSearchURL(url: NSURL?) -> String? {
-        if isSearchURLForEngine(url){
+        if isSearchURLForEngine(url) {
             if let key = searchQueryComponentKey, let value = url?.getQuery()[key] {
                 return value.stringByReplacingOccurrencesOfString("+", withString: " ").stringByRemovingPercentEncoding
             }

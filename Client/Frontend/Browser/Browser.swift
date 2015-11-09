@@ -202,7 +202,7 @@ class Browser: NSObject {
     }
 
     var currentInitialURL: NSURL? {
-        get{
+        get {
             let initalURL = self.webView?.backForwardList.currentItem?.initialURL
             return initalURL
         }
