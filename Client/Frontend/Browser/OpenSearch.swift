@@ -65,8 +65,11 @@ class OpenSearchEngine {
      * check that the URL host contains the name of the search engine somewhere inside it
      **/
     private func isSearchURLForEngine(url: NSURL?) -> Bool {
-        guard let urlHost = url?.host else { return false }
-        return urlHost.localizedCaseInsensitiveContainsString(self.shortName)
+        guard let urlHost = url?.host,
+            let queryEndIndex = searchTemplate.rangeOfString("?")?.startIndex,
+            let templateURL = NSURL(string: searchTemplate.substringToIndex(queryEndIndex)),
+            let templateURLHost = templateURL.host else { return false }
+        return urlHost.localizedCaseInsensitiveContainsString(templateURLHost)
     }
 
     /**
