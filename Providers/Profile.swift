@@ -206,8 +206,6 @@ public class BrowserProfile: Profile {
             self.syncManager.onNewProfile()
             prefs.clearAll()
         }
-
-        history.setTopSitesNeedsInvalidation()
     }
 
     // Extensions don't have a UIApplication.
