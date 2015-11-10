@@ -206,6 +206,11 @@ public class BrowserProfile: Profile {
             self.syncManager.onNewProfile()
             prefs.clearAll()
         }
+
+        // Always start by needing invalidation.
+        // This is the same as self.history.setTopSitesNeedsInvalidation, but without the
+        // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
+        prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
     }
 
     // Extensions don't have a UIApplication.
