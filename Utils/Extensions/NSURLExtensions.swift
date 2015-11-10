@@ -53,7 +53,38 @@ private var etldEntries: TLDEntryMap? = {
     return loadEntriesFromDisk()
 }()
 
+// MARK: - Local Resource URL Extensions
 extension NSURL {
+
+    public func getResourceValueForKey(key: String) -> AnyObject? {
+        var val: AnyObject?
+        do {
+            try getResourceValue(&val, forKey: key)
+        } catch _ {
+            return nil
+        }
+        return val
+    }
+
+    public func getResourceLongLongForKey(key: String) -> Int64? {
+        return (getResourceValueForKey(key) as? NSNumber)?.longLongValue
+    }
+
+    public func getResourceBoolForKey(key: String) -> Bool? {
+        return getResourceValueForKey(key) as? Bool
+    }
+
+    public var isRegularFile: Bool {
+        return getResourceBoolForKey(NSURLIsRegularFileKey) ?? false
+    }
+
+    public func lastComponentIsPrefixedBy(prefix: String) -> Bool {
+        return (pathComponents?.last?.hasPrefix(prefix) ?? false)
+    }
+}
+
+extension NSURL {
+
     public func withQueryParams(params: [NSURLQueryItem]) -> NSURL {
         let components = NSURLComponents(URL: self, resolvingAgainstBaseURL: false)!
         var items = (components.queryItems ?? [])
