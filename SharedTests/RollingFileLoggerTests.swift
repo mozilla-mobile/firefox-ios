@@ -43,41 +43,57 @@ class RollingFileLoggerTests: XCTestCase {
     }
 
     func testNewLogDeletesPreviousLogIfItsTooLarge() {
+        let manager = NSFileManager.defaultManager()
+        let dirURL = NSURL(fileURLWithPath: logDir)
+        let prefix = "test"
         let expectedPath = createNewLogFileWithSize(sizeLimit + 1)
 
-        let directorySize = try! NSFileManager.defaultManager().getAllocatedSizeOfDirectoryAtURL(NSURL(fileURLWithPath: logDir), forFilesPrefixedWith: "test")
+        let directorySize = try! manager.getAllocatedSizeOfDirectoryAtURL(dirURL, forFilesPrefixedWith: prefix)
 
         // Pre-condition: Folder needs to be larger than the size limit
         XCTAssertGreaterThan(directorySize, Int64(sizeLimit), "Log folder should be larger than size limit")
 
+        let exceedsSmaller = try! manager.allocatedSizeOfDirectoryAtURL(dirURL, forFilesPrefixedWith: prefix, isLargerThanBytes: directorySize - 1)
+        let doesNotExceedLarger = try! manager.allocatedSizeOfDirectoryAtURL(dirURL, forFilesPrefixedWith: prefix, isLargerThanBytes: sizeLimit + 2)
+        XCTAssertTrue(exceedsSmaller)
+        XCTAssertTrue(doesNotExceedLarger)
+
         let newDate = NSDate().dateByAddingTimeInterval(60*60) // Create a log file using a date an hour ahead
-        let newExpected = "test.\(formatter.stringFromDate(newDate)).log"
+        let newExpected = "\(prefix).\(formatter.stringFromDate(newDate)).log"
         let newExpectedPath = "\(logDir)/\(newExpected)"
         logger.newLogWithDate(newDate)
 
-        XCTAssertTrue(NSFileManager.defaultManager().fileExistsAtPath(newExpectedPath), "New log file should exist")
-        XCTAssertFalse(NSFileManager.defaultManager().fileExistsAtPath(expectedPath), "Old log file should NOT exist")
+        XCTAssertTrue(manager.fileExistsAtPath(newExpectedPath), "New log file should exist")
+        XCTAssertTrue(manager.fileExistsAtPath(expectedPath), "Old log file exists until pruned")
+        logger.deleteOldLogsDownToSizeLimit()
+        XCTAssertFalse(manager.fileExistsAtPath(expectedPath), "Old log file should NOT exist")
     }
 
     func testNewLogDeletesOldestLogFileToMakeRoomForNewFile() {
+        let manager = NSFileManager.defaultManager()
+        let dirURL = NSURL(fileURLWithPath: logDir)
+        let prefix = "test"
+
         // Create 5 log files with spread out over 5 hours
         var logFilePaths = [0,1,2,3,4].map { self.createNewLogFileWithSize(200, withDate: NSDate().dateByAddingTimeInterval(60 * 60 * $0)) }
 
         // Reorder paths so oldest is first
         logFilePaths.sortInPlace { $0 < $1 }
 
-        let directorySize = try! NSFileManager.defaultManager().getAllocatedSizeOfDirectoryAtURL(NSURL(fileURLWithPath: logDir), forFilesPrefixedWith: "test")
+        let directorySize = try! manager.getAllocatedSizeOfDirectoryAtURL(dirURL, forFilesPrefixedWith: prefix)
 
         // Pre-condition: Folder needs to be larger than the size limit
         XCTAssertGreaterThan(directorySize, Int64(sizeLimit), "Log folder should be larger than size limit")
 
         let newDate = NSDate().dateByAddingTimeInterval(60*60*5) // Create a log file using a date an hour ahead
-        let newExpected = "test.\(formatter.stringFromDate(newDate)).log"
+        let newExpected = "\(prefix).\(formatter.stringFromDate(newDate)).log"
         let newExpectedPath = "\(logDir)/\(newExpected)"
         logger.newLogWithDate(newDate)
 
-        XCTAssertTrue(NSFileManager.defaultManager().fileExistsAtPath(newExpectedPath), "New log file should exist")
-        XCTAssertFalse(NSFileManager.defaultManager().fileExistsAtPath(logFilePaths.first!), "Oldest log file should NOT exist")
+        XCTAssertTrue(manager.fileExistsAtPath(newExpectedPath), "New log file should exist")
+        XCTAssertTrue(manager.fileExistsAtPath(logFilePaths.first!), "Old log file exists until pruned")
+        logger.deleteOldLogsDownToSizeLimit()
+        XCTAssertFalse(manager.fileExistsAtPath(logFilePaths.first!), "Oldest log file should NOT exist")
     }
 
     /**
