@@ -1061,7 +1061,10 @@ extension BrowserViewController: BrowserToolbarDelegate {
                 printInfo.outputType = .General
                 let renderer = BrowserPrintPageRenderer(browser: selected)
 
-                let activityItems = [printInfo, renderer, selected.title ?? url.absoluteString, url]
+                var activityItems = [printInfo, renderer, url]
+                if let title = selected.title {
+                    activityItems.append(TitleActivityItemProvider(title: title))
+                }
 
                 let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
 
