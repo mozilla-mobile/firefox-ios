@@ -132,18 +132,17 @@ class TopSitesPanel: UIViewController {
     }
 
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
-        profile.history.removeSiteFromTopSites(site) >>== {
-            self.invalidateTopSites() >>== {
-                self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount).uponQueue(dispatch_get_main_queue(), block: { result in
+        func reloadThumbnails() -> Success {
+            return self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount)
+                .bindQueue(dispatch_get_main_queue()) { result in
                     self.deleteOrUpdateSites(result, indexPath: indexPath)
-                })
+                    return succeed()
             }
         }
-    }
 
-    private func invalidateTopSites() -> Success {
-        profile.history.setTopSitesNeedsInvalidation()
-        return profile.history.invalidateTopSitesIfNeeded() >>> { succeed() }
+        profile.history.removeSiteFromTopSites(site)
+        >>> self.profile.history.refreshTopSitesCache
+        >>> reloadThumbnails
     }
 
     private func refreshTopSites(frecencyLimit: Int) {
@@ -151,7 +150,7 @@ class TopSitesPanel: UIViewController {
         // invalidate the cache and requery. This allows us to always show results right away if they are cached but
         // also load in the up-to-date results asynchronously if needed
         reloadTopSitesWithLimit(frecencyLimit) >>> {
-            return self.profile.history.invalidateTopSitesIfNeeded() >>== { result in
+            return self.profile.history.updateTopSitesCacheIfInvalidated() >>== { result in
                 return result ? self.reloadTopSitesWithLimit(frecencyLimit) : succeed()
             }
         }
