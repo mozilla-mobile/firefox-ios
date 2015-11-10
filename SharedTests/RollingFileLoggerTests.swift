@@ -9,7 +9,7 @@ import Shared
 class RollingFileLoggerTests: XCTestCase {
     var logger: RollingFileLogger!
     var logDir: String!
-    var sizeLimit: UInt64 = 5000
+    var sizeLimit: Int = 5000
 
     private lazy var formatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
@@ -24,7 +24,7 @@ class RollingFileLoggerTests: XCTestCase {
             try NSFileManager.defaultManager().createDirectoryAtPath(logDir, withIntermediateDirectories: false, attributes: nil)
         } catch _ {
         }
-        logger = RollingFileLogger(filenameRoot: "test", logDirectoryPath: logDir, sizeLimit: sizeLimit)
+        logger = RollingFileLogger(filenameRoot: "test", logDirectoryPath: logDir, sizeLimit: Int64(sizeLimit))
     }
 
     func testNewLogCreatesLogFileWithTimestamp() {
@@ -43,16 +43,12 @@ class RollingFileLoggerTests: XCTestCase {
     }
 
     func testNewLogDeletesPreviousLogIfItsTooLarge() {
-        let expectedPath = createNewLogFileWithSize(5001)
+        let expectedPath = createNewLogFileWithSize(sizeLimit + 1)
 
-        var directorySize: UInt64 = 0
-        do {
-            try NSFileManager.defaultManager().moz_getAllocatedSize(&directorySize, ofDirectoryAtURL: NSURL(fileURLWithPath: logDir), forFilesPrefixedWith: "test")
-        } catch _ {
-        }
+        let directorySize = try! NSFileManager.defaultManager().getAllocatedSizeOfDirectoryAtURL(NSURL(fileURLWithPath: logDir), forFilesPrefixedWith: "test")
 
         // Pre-condition: Folder needs to be larger than the size limit
-        XCTAssertGreaterThan(directorySize, sizeLimit, "Log folder should be larger than size limit")
+        XCTAssertGreaterThan(directorySize, Int64(sizeLimit), "Log folder should be larger than size limit")
 
         let newDate = NSDate().dateByAddingTimeInterval(60*60) // Create a log file using a date an hour ahead
         let newExpected = "test.\(formatter.stringFromDate(newDate)).log"
@@ -70,14 +66,10 @@ class RollingFileLoggerTests: XCTestCase {
         // Reorder paths so oldest is first
         logFilePaths.sortInPlace { $0 < $1 }
 
-        var directorySize: UInt64 = 0
-        do {
-            try NSFileManager.defaultManager().moz_getAllocatedSize(&directorySize, ofDirectoryAtURL: NSURL(fileURLWithPath: logDir), forFilesPrefixedWith: "test")
-        } catch _ {
-        }
+        let directorySize = try! NSFileManager.defaultManager().getAllocatedSizeOfDirectoryAtURL(NSURL(fileURLWithPath: logDir), forFilesPrefixedWith: "test")
 
         // Pre-condition: Folder needs to be larger than the size limit
-        XCTAssertGreaterThan(directorySize, sizeLimit, "Log folder should be larger than size limit")
+        XCTAssertGreaterThan(directorySize, Int64(sizeLimit), "Log folder should be larger than size limit")
 
         let newDate = NSDate().dateByAddingTimeInterval(60*60*5) // Create a log file using a date an hour ahead
         let newExpected = "test.\(formatter.stringFromDate(newDate)).log"
