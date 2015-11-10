@@ -271,7 +271,7 @@ extension SQLiteHistory: BrowserHistory {
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
     }
 
-    public func invalidateTopSitesIfNeeded() -> Deferred<Maybe<Bool>> {
+    public func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>> {
         if prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false {
             return deferMaybe(false)
         }
@@ -288,6 +288,12 @@ extension SQLiteHistory: BrowserHistory {
             prefs.setInt(size, forKey: PrefsKeys.KeyTopSitesCacheSize)
             setTopSitesNeedsInvalidation()
         }
+    }
+
+    public func refreshTopSitesCache() -> Success {
+        let cacheSize = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? 0)
+        return self.clearTopSitesCache()
+            >>> { self.updateTopSitesCacheWithLimit(cacheSize) }
     }
 
     private func updateTopSitesCacheWithLimit(limit : Int) -> Success {
