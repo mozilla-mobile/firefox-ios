@@ -174,6 +174,11 @@ class TopSitesPanel: UIViewController {
         // now update the data source with the new data
         self.updateDataSourceWithSites(result)
 
+        // Exit early if the query failed in some way.
+        guard result.isSuccess else {
+            return
+        }
+
         let data = dataSource.data
         collection?.performBatchUpdates({
 
