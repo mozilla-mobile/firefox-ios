@@ -133,11 +133,17 @@ class TopSitesPanel: UIViewController {
 
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
         profile.history.removeSiteFromTopSites(site) >>== {
-            self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount).uponQueue(dispatch_get_main_queue(), block: { result in
-                self.updateDataSourceWithSites(result)
-                self.deleteOrUpdateSites(result, indexPath: indexPath)
-            })
+            self.invalidateTopSites() >>== {
+                self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount).uponQueue(dispatch_get_main_queue(), block: { result in
+                    self.deleteOrUpdateSites(result, indexPath: indexPath)
+                })
+            }
         }
+    }
+
+    private func invalidateTopSites() -> Success {
+        profile.history.setTopSitesNeedsInvalidation()
+        return profile.history.invalidateTopSitesIfNeeded() >>> { succeed() }
     }
 
     private func refreshTopSites(frecencyLimit: Int) {
