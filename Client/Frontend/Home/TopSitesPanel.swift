@@ -450,16 +450,12 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         if let blurredImage = SDImageCache.sharedImageCache().imageFromMemoryCacheForKey(blurredKey) {
             cell.backgroundImage.image = blurredImage
         } else {
-            dispatch_async(self.blurQueue) {
-                let blurredImage = image.applyLightEffect()
-                SDImageCache.sharedImageCache().storeImage(blurredImage, forKey: blurredKey, toDisk: false)
-                dispatch_async(dispatch_get_main_queue()) {
-                    cell.backgroundImage.alpha = 0
-                    cell.backgroundImage.image = blurredImage
-                    UIView.animateWithDuration(self.BackgroundFadeInDuration) {
-                        cell.backgroundImage.alpha = 1
-                    }
-                }
+            let blurredImage = image.applyLightEffect()
+            SDImageCache.sharedImageCache().storeImage(blurredImage, forKey: blurredKey, toDisk: false)
+            cell.backgroundImage.alpha = 0
+            cell.backgroundImage.image = blurredImage
+            UIView.animateWithDuration(self.BackgroundFadeInDuration) {
+                cell.backgroundImage.alpha = 1
             }
         }
     }
