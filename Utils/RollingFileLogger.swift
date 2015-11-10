@@ -51,13 +51,9 @@ public class RollingFileLogger: XCGLogger {
 
     public func deleteOldLogsDownToSizeLimit() {
         // Check to see we haven't hit our size limit and if we did, clear out some logs to make room.
-        if !sizeOfAllLogFilesWithPrefix(self.root, exceedsSizeInBytes: sizeLimit) {
-            return
-        }
-
-        repeat {
+        while sizeOfAllLogFilesWithPrefix(self.root, exceedsSizeInBytes: sizeLimit) {
             deleteOldestLogWithPrefix(self.root)
-        } while sizeOfAllLogFilesWithPrefix(self.root) > sizeLimit
+        }
     }
 
     private func deleteOldestLogWithPrefix(prefix: String) {
