@@ -90,22 +90,6 @@ public class RollingFileLogger: XCGLogger {
         return false
     }
 
-    private func sizeOfAllLogFilesWithPrefix(prefix: String) -> Int64 {
-        guard let path = logDirectoryPath else {
-            return 0
-        }
-
-        let logDirURL = NSURL(fileURLWithPath: path)
-        var dirSize: Int64 = 0
-        do {
-            dirSize = try NSFileManager.defaultManager().getAllocatedSizeOfDirectoryAtURL(logDirURL, forFilesPrefixedWith: prefix)
-        } catch let errorValue as NSError {
-            error("Error determining log directory size: \(errorValue)")
-        }
-
-        return dirSize
-    }
-
     private func filenameWithRoot(root: String, withDate date: NSDate) -> String? {
         if let dir = logDirectoryPath {
             return "\(dir)/\(root).\(RollingFileLogger.DateFormatter.stringFromDate(date)).log"
