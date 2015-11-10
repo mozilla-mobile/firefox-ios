@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
 
-        // Create a new sync log file on cold app launch
+        // Create a new sync log file on cold app launch. Note that this doesn't roll old logs.
         Logger.syncLogger.newLogWithDate(NSDate())
 
         let profile = getProfile(application)
@@ -105,6 +105,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             AdjustIntegration.sharedInstance.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
         }
         self.window!.makeKeyAndVisible()
+
+        // Now roll logs.
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
+            Logger.syncLogger.deleteOldLogsDownToSizeLimit
+        )
+
         return true
     }
 
