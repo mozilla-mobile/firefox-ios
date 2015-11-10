@@ -2135,7 +2135,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                         // we might be overwriting something that the user has subsequently added
                         if pasteBoard.string == url.absoluteString {
                             guard let imageData = responseData where responseError == nil else { return }
-                            pasteBoard.image = UIImage(data: imageData)
+                            pasteBoard.image = UIImage.imageFromDataThreadSafe(imageData)
                             application.endBackgroundTask(taskId)
                         }
                 }
@@ -2161,7 +2161,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             .validate(statusCode: 200..<300)
             .response { _, _, data, _ in
                 if let data = data,
-                   let image = UIImage(data: data) {
+                   let image = UIImage.imageFromDataThreadSafe(data) {
                     success(image)
                 }
             }

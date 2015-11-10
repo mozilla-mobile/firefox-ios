@@ -5,7 +5,19 @@
 import Foundation
 import UIKit
 
+private let imageLock = NSLock()
+
 extension UIImage {
+    /// Despite docs that say otherwise, UIImage(data: NSData) isn't thread-safe (see bug 1223132).
+    /// As a workaround, synchronize access to this initializer.
+    /// This fix requires that you *always* use this over UIImage(data: NSData)!
+    public static func imageFromDataThreadSafe(data: NSData) -> UIImage? {
+        imageLock.lock()
+        let image = UIImage(data: data)
+        imageLock.unlock()
+        return image
+    }
+
     public static func createWithColor(size: CGSize, color: UIColor) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
         let context = UIGraphicsGetCurrentContext()
