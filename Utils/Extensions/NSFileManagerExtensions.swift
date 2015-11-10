@@ -16,25 +16,14 @@ public enum NSFileManagerExtensionsErrorCodes: Int {
 }
 
 public extension NSFileManager {
-
-    /**
-     Returns the precise size of the given directory on disk.
-
-     - parameter url:    Directory URL
-     - parameter prefix: Prefix of files to check for size
-
-     - throws: Error reading/operating on disk.
-     */
-    func getAllocatedSizeOfDirectoryAtURL(url: NSURL, forFilesPrefixedWith prefix: String) throws -> Int64 {
-        var accumulatedSize: Int64 = 0;
-
+    private func directoryEnumeratorForURL(url: NSURL) throws -> NSDirectoryEnumerator {
         let prefetchedProperties = [
             NSURLIsRegularFileKey,
             NSURLFileAllocatedSizeKey,
             NSURLTotalFileAllocatedSizeKey
         ]
 
-        // If we run into an issue getting an enumerator for the given url, capture the error and bail out later.
+        // If we run into an issue getting an enumerator for the given URL, capture the error and bail out later.
         var enumeratorError: NSError?
         let errorHandler: (NSURL, NSError?) -> Bool = { _, error in
             enumeratorError = error
@@ -48,33 +37,57 @@ public extension NSFileManager {
             throw errorWithCode(.EnumeratorFailure)
         }
 
-        // Bail out if we encountered an issue getting the enumerator
+        // Bail out if we encountered an issue getting the enumerator.
         if let _ = enumeratorError {
             throw errorWithCode(.ErrorEnumeratingDirectory, underlyingError: enumeratorError)
         }
 
-        for itemURL in directoryEnumerator {
-            guard let itemURL = itemURL as? NSURL else {
-                throw errorWithCode(.EnumeratorElementNotURL)
-            }
-
-            // Skip files that are not regular and don't match our prefix
-            guard itemURL.isRegularFile && itemURL.lastComponentIsPrefixedBy(prefix) else {
-                continue
-            }
-
-            // First try to get the total allocated size and in failing that, get the file allocated size
-            var fileSize = itemURL.getResourceLongLongForKey(NSURLTotalFileAllocatedSizeKey)
-            if fileSize == nil {
-                fileSize = itemURL.getResourceLongLongForKey(NSURLFileAllocatedSizeKey)
-            }
-
-            accumulatedSize += fileSize ?? 0
-        }
-
-        return accumulatedSize
+        return directoryEnumerator
     }
 
+    private func sizeForItemURL(url: AnyObject, withPrefix prefix: String) throws -> Int64 {
+        guard let itemURL = url as? NSURL else {
+            throw errorWithCode(.EnumeratorElementNotURL)
+        }
+
+        // Skip files that are not regular and don't match our prefix
+        guard itemURL.isRegularFile && itemURL.lastComponentIsPrefixedBy(prefix) else {
+            return 0
+        }
+
+        // First try to get the total allocated size and in failing that, get the file allocated size
+        return itemURL.getResourceLongLongForKey(NSURLTotalFileAllocatedSizeKey)
+            ?? itemURL.getResourceLongLongForKey(NSURLFileAllocatedSizeKey)
+            ?? 0
+    }
+
+    func allocatedSizeOfDirectoryAtURL(url: NSURL, forFilesPrefixedWith prefix: String, isLargerThanBytes threshold: Int64) throws -> Bool {
+        let directoryEnumerator = try directoryEnumeratorForURL(url)
+        var acc: Int64 = 0
+        for item in directoryEnumerator {
+            acc += try sizeForItemURL(item, withPrefix: prefix)
+            if acc > threshold {
+                return true
+            }
+        }
+        return false
+    }
+
+    /**
+     Returns the precise size of the given directory on disk.
+
+     - parameter url:    Directory URL
+     - parameter prefix: Prefix of files to check for size
+
+     - throws: Error reading/operating on disk.
+     */
+    func getAllocatedSizeOfDirectoryAtURL(url: NSURL, forFilesPrefixedWith prefix: String) throws -> Int64 {
+        let directoryEnumerator = try directoryEnumeratorForURL(url)
+        return try directoryEnumerator.reduce(0) {
+            let size = try sizeForItemURL($1, withPrefix: prefix)
+            return $0 + size
+        }
+    }
 
     private func errorWithCode(code: NSFileManagerExtensionsErrorCodes, underlyingError error: NSError? = nil) -> NSError {
         var userInfo = [String: AnyObject]()
