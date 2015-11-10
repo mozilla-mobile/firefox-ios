@@ -40,11 +40,6 @@ public class RollingFileLogger: XCGLogger {
             return
         }
 
-        // Before we create a new log file, check to see we haven't hit our size limit and if we did, clear out some logs to make room
-        while sizeOfAllLogFilesWithPrefix(root) > sizeLimit {
-            deleteOldestLogWithPrefix(root)
-        }
-
         if let filename = filenameWithRoot(root, withDate: date) {
             removeLogDestination(fileLogIdentifierWithRoot(root))
             addLogDestination(XCGFileLogDestination(owner: self, writeToFile: filename, identifier: fileLogIdentifierWithRoot(root)))
