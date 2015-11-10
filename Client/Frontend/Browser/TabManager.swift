@@ -421,6 +421,8 @@ extension TabManager {
     }
 
     private func preserveTabsInternal() {
+        guard !isRestoring else { return }
+
         let path = tabsStateArchivePath()
         var savedTabs = [SavedTab]()
         var savedUUIDs = Set<String>()
