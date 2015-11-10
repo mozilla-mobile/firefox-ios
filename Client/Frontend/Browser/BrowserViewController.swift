@@ -2061,6 +2061,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         var dialogTitle: String?
 
+        // Exit early if the tab is currently loading. Any context menu we show won't make any sense since the page
+        // will be reset soon.
+        guard !(tabManager.selectedTab?.loading ?? false) else {
+            return
+        }
+
         if let url = elements.link, currentTab = tabManager.selectedTab {
             dialogTitle = url.absoluteString
             let isPrivate = currentTab.isPrivate
