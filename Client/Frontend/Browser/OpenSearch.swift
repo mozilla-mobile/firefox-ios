@@ -252,7 +252,7 @@ class OpenSearchParser {
         if let imageElement = largestImageElement,
                imageURL = NSURL(string: imageElement.text!),
                imageData = NSData(contentsOfURL: imageURL),
-               image = UIImage(data: imageData) {
+               image = UIImage.imageFromDataThreadSafe(imageData) {
             uiImage = image
         } else {
             print("Error: Invalid search image data")

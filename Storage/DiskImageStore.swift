@@ -47,8 +47,7 @@ public class DiskImageStore {
         return deferDispatchAsync(queue) { () -> Deferred<Maybe<UIImage>> in
             let imagePath = (self.filesDir as NSString).stringByAppendingPathComponent(key)
             if let data = NSData(contentsOfFile: imagePath),
-                let image = UIImage(data: data)
-            {
+                   image = UIImage.imageFromDataThreadSafe(data) {
                 return deferMaybe(image)
             }
 
