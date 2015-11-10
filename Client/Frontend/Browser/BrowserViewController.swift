@@ -1421,12 +1421,12 @@ extension BrowserViewController: TabManagerDelegate {
         updateInContentHomePanel(selected?.url)
     }
 
-    func tabManager(tabManager: TabManager, didCreateTab tab: Browser, restoring: Bool) {
+    func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
     }
 
-    func tabManager(tabManager: TabManager, didAddTab tab: Browser, restoring: Bool) {
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser) {
         // If we are restoring tabs then we update the count once at the end
-        if !restoring {
+        if !tabManager.isRestoring {
             updateTabCountUsingTabManager(tabManager)
         }
         tab.browserDelegate = self

@@ -45,7 +45,7 @@ class TabManagerTests: XCTestCase {
         // add some non-private tabs to the tab manager
         for _ in 0..<3 {
             let tab = Browser(configuration: configuration)
-            manager.configureTab(tab, request: NSURLRequest(URL: NSURL(string: "http://yahoo.com")!), flushToDisk: false, zombie: false, restoring: false)
+            manager.configureTab(tab, request: NSURLRequest(URL: NSURL(string: "http://yahoo.com")!), flushToDisk: false, zombie: false)
         }
 
         manager.storeChanges()
@@ -63,7 +63,7 @@ class TabManagerTests: XCTestCase {
             // create some private tabs
             for _ in 0..<3 {
                 let tab = Browser(configuration: configuration, isPrivate: true)
-                manager.configureTab(tab, request: NSURLRequest(URL: NSURL(string: "http://yahoo.com")!), flushToDisk: false, zombie: false, restoring: false)
+                manager.configureTab(tab, request: NSURLRequest(URL: NSURL(string: "http://yahoo.com")!), flushToDisk: false, zombie: false)
             }
 
             manager.storeChanges()

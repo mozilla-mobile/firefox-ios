@@ -546,10 +546,10 @@ extension TabTrayController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?) {
     }
 
-    func tabManager(tabManager: TabManager, didCreateTab tab: Browser, restoring: Bool) {
+    func tabManager(tabManager: TabManager, didCreateTab tab: Browser) {
     }
 
-    func tabManager(tabManager: TabManager, didAddTab tab: Browser, restoring: Bool) {
+    func tabManager(tabManager: TabManager, didAddTab tab: Browser) {
         // Get the index of the added tab from it's set (private or normal)
         guard let index = tabsToDisplay.indexOf(tab) else { return }
         
