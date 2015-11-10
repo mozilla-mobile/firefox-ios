@@ -111,7 +111,10 @@ public class SQLiteHistory {
         self.prefs = prefs
 
         // Always start by needing invalidation.
-        self.setTopSitesNeedsInvalidation()
+        // This is the same as setTopSitesNeedsInvalidation, but calling that method
+        // here causes seriously bizarre behavior like crashing on closing tabs, failure
+        // to load pages, etc.
+        prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
         // BrowserTable exists only to perform create/update etc. operations -- it's not
         // a queryable thing that needs to stick around.
