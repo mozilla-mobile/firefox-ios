@@ -5,7 +5,7 @@
 import Foundation
 import XCGLogger
 
-//// A rolling file loggers that saves to a different log file based on given timestamp
+//// A rolling file logger that saves to a different log file based on given timestamp.
 public class RollingFileLogger: XCGLogger {
 
     private static let TwoMBsInBytes: Int64 = 2 * 100000
@@ -54,6 +54,17 @@ public class RollingFileLogger: XCGLogger {
         }
     }
 
+    public func deleteOldLogsDownToSizeLimit() {
+        // Check to see we haven't hit our size limit and if we did, clear out some logs to make room.
+        if !sizeOfAllLogFilesWithPrefix(self.root, exceedsSizeInBytes: sizeLimit) {
+            return
+        }
+
+        repeat {
+            deleteOldestLogWithPrefix(self.root)
+        } while sizeOfAllLogFilesWithPrefix(self.root) > sizeLimit
+    }
+
     private func deleteOldestLogWithPrefix(prefix: String) {
         if logDirectoryPath == nil {
             return
@@ -73,18 +84,34 @@ public class RollingFileLogger: XCGLogger {
         }
     }
 
+    private func sizeOfAllLogFilesWithPrefix(prefix: String, exceedsSizeInBytes threshold: Int64) -> Bool {
+        guard let path = logDirectoryPath else {
+            return false
+        }
+
+        let logDirURL = NSURL(fileURLWithPath: path)
+        do {
+            return try NSFileManager.defaultManager().allocatedSizeOfDirectoryAtURL(logDirURL, forFilesPrefixedWith: prefix, isLargerThanBytes: threshold)
+        } catch let errorValue as NSError {
+            error("Error determining log directory size: \(errorValue)")
+        }
+
+        return false
+    }
+
     private func sizeOfAllLogFilesWithPrefix(prefix: String) -> Int64 {
-        if logDirectoryPath == nil {
+        guard let path = logDirectoryPath else {
             return 0
         }
 
-        let logDirURL = NSURL(fileURLWithPath: logDirectoryPath!)
+        let logDirURL = NSURL(fileURLWithPath: path)
         var dirSize: Int64 = 0
         do {
             dirSize = try NSFileManager.defaultManager().getAllocatedSizeOfDirectoryAtURL(logDirURL, forFilesPrefixedWith: prefix)
         } catch let errorValue as NSError {
             error("Error determining log directory size: \(errorValue)")
         }
+
         return dirSize
     }
 
