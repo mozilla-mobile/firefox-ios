@@ -3,11 +3,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import UIKit
 
 extension UIImage {
-    class func createWithColor(size: CGSize, color: UIColor) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(size, false, 0.0);
-        let context = UIGraphicsGetCurrentContext();
+    public static func createWithColor(size: CGSize, color: UIColor) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        let context = UIGraphicsGetCurrentContext()
         let rect = CGRect(origin: CGPointZero, size: size)
         color.setFill()
         CGContextFillRect(context, rect)
@@ -16,7 +17,7 @@ extension UIImage {
         return image
     }
 
-    func createScaled(size: CGSize) -> UIImage {
+    public func createScaled(size: CGSize) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         drawInRect(CGRect(origin: CGPoint(x: 0, y: 0), size: size))
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
