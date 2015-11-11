@@ -494,6 +494,9 @@ class BrowserViewController: UIViewController {
 
         log.debug("BVC calling super.viewDidAppear.")
         super.viewDidAppear(animated)
+
+        log.debug("BVC loading queued tabs.")
+        self.loadQueuedTabs()
         log.debug("BVC done.")
     }
 
