@@ -29,9 +29,10 @@ public protocol BrowserHistory {
 
     func getTopSitesWithLimit(limit: Int) -> Deferred<Maybe<Cursor<Site>>>
     func setTopSitesNeedsInvalidation()
-    func invalidateTopSitesIfNeeded() -> Deferred<Maybe<Bool>>
+    func updateTopSitesCacheIfInvalidated() -> Deferred<Maybe<Bool>>
     func setTopSitesCacheSize(size: Int32)
     func clearTopSitesCache() -> Success
+    func refreshTopSitesCache() -> Success
 }
 
 /**

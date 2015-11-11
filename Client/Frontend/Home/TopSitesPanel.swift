@@ -132,12 +132,16 @@ class TopSitesPanel: UIViewController {
     }
 
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
-        profile.history.removeSiteFromTopSites(site) >>== {
-            self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount).uponQueue(dispatch_get_main_queue(), block: { result in
-                self.updateDataSourceWithSites(result)
-                self.deleteOrUpdateSites(result, indexPath: indexPath)
-            })
+        func reloadThumbnails() {
+            self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount)
+                .uponQueue(dispatch_get_main_queue()) { result in
+                    self.deleteOrUpdateSites(result, indexPath: indexPath)
+            }
         }
+
+        profile.history.removeSiteFromTopSites(site)
+        >>> self.profile.history.refreshTopSitesCache
+        >>> reloadThumbnails
     }
 
     private func refreshTopSites(frecencyLimit: Int) {
@@ -145,7 +149,7 @@ class TopSitesPanel: UIViewController {
         // invalidate the cache and requery. This allows us to always show results right away if they are cached but
         // also load in the up-to-date results asynchronously if needed
         reloadTopSitesWithLimit(frecencyLimit) >>> {
-            return self.profile.history.invalidateTopSitesIfNeeded() >>== { result in
+            return self.profile.history.updateTopSitesCacheIfInvalidated() >>== { result in
                 return result ? self.reloadTopSitesWithLimit(frecencyLimit) : succeed()
             }
         }
@@ -165,6 +169,11 @@ class TopSitesPanel: UIViewController {
         // this is so we know how many new top sites cells to add
         // as a sync may have brought in more results than we had previously
         let previousNumOfThumbnails = collectionView.dataSource?.collectionView(collectionView, numberOfItemsInSection: 0) ?? 0
+
+        // Exit early if the query failed in some way.
+        guard result.isSuccess else {
+            return
+        }
 
         // now update the data source with the new data
         self.updateDataSourceWithSites(result)

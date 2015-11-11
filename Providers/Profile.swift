@@ -257,8 +257,7 @@ public class BrowserProfile: Profile {
     @objc
     func onPrivateDataClearedHistory(notification: NSNotification) {
         // Immediately invalidate the top sites cache
-        history.setTopSitesNeedsInvalidation()
-        history.invalidateTopSitesIfNeeded()
+        history.refreshTopSitesCache()
     }
 
     deinit {
