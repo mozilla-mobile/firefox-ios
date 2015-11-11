@@ -132,11 +132,10 @@ class TopSitesPanel: UIViewController {
     }
 
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
-        func reloadThumbnails() -> Success {
-            return self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount)
-                .bindQueue(dispatch_get_main_queue()) { result in
+        func reloadThumbnails() {
+            self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount)
+                .uponQueue(dispatch_get_main_queue()) { result in
                     self.deleteOrUpdateSites(result, indexPath: indexPath)
-                    return succeed()
             }
         }
 
@@ -171,13 +170,13 @@ class TopSitesPanel: UIViewController {
         // as a sync may have brought in more results than we had previously
         let previousNumOfThumbnails = collectionView.dataSource?.collectionView(collectionView, numberOfItemsInSection: 0) ?? 0
 
-        // now update the data source with the new data
-        self.updateDataSourceWithSites(result)
-
         // Exit early if the query failed in some way.
         guard result.isSuccess else {
             return
         }
+
+        // now update the data source with the new data
+        self.updateDataSourceWithSites(result)
 
         let data = dataSource.data
         collection?.performBatchUpdates({

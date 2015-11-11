@@ -275,11 +275,8 @@ extension SQLiteHistory: BrowserHistory {
         if prefs.boolForKey(PrefsKeys.KeyTopSitesCacheIsValid) ?? false {
             return deferMaybe(false)
         }
-
-        let cacheSize = Int(prefs.intForKey(PrefsKeys.KeyTopSitesCacheSize) ?? 0)
-        return clearTopSitesCache()
-            >>> { self.updateTopSitesCacheWithLimit(cacheSize) }
-            >>> always(true)
+        
+        return refreshTopSitesCache() >>> always(true)
     }
 
     public func setTopSitesCacheSize(size: Int32) {
