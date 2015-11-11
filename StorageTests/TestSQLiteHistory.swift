@@ -428,7 +428,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func loadCache() -> Success {
-            return history.invalidateTopSitesIfNeeded() >>> succeed
+            return history.updateTopSitesCacheIfInvalidated() >>> succeed
         }
 
         func checkTopSitesReturnsResults() -> Success {
@@ -440,7 +440,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func invalidateIfNeededDoesntChangeResults() -> Success {
-            return history.invalidateTopSitesIfNeeded() >>> {
+            return history.updateTopSitesCacheIfInvalidated() >>> {
                 return history.getTopSitesWithLimit(20) >>== { topSites in
                     XCTAssertEqual(topSites.count, 20)
                     XCTAssertEqual(topSites[0]!.guid, "abc\(5)def")
@@ -464,7 +464,7 @@ class TestSQLiteHistory: XCTestCase {
         }
 
         func checkSitesInvalidate() -> Success {
-            history.invalidateTopSitesIfNeeded().value
+            history.updateTopSitesCacheIfInvalidated().value
 
             return history.getTopSitesWithLimit(20) >>== { topSites in
                 XCTAssertEqual(topSites.count, 20)
@@ -542,7 +542,7 @@ class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
 
         history.setTopSitesNeedsInvalidation()
         self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
-            history.invalidateTopSitesIfNeeded().value
+            history.updateTopSitesCacheIfInvalidated().value
             self.stopMeasuring()
         }
     }
