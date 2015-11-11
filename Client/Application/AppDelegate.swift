@@ -168,7 +168,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AboutHomeHandler.register(server)
         AboutLicenseHandler.register(server)
         SessionRestoreHandler.register(server)
-        server.start()
+        // Bug 1223009 was an issue whereby CGDWebserver crashed when moving to a background task
+        // catching and handling the error seemed to fix things, but we're not sure why.
+        // Either way, not implicitly unwrapping a try is not a great way of doing things
+        // so this is better anyway.
+        do {
+            try server.start()
+        } catch let err as NSError {
+            log.error("Unable to start WebServer \(err)")
+        }
     }
 
     private func setUserAgent() {
