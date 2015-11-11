@@ -5,7 +5,7 @@
 import Foundation
 
 class WebServer {
-    private static let WebServerSharedInstance = WebServer()
+    static let WebServerSharedInstance = WebServer()
 
     class var sharedInstance: WebServer {
         return WebServerSharedInstance
