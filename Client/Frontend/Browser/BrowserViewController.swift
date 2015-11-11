@@ -814,6 +814,7 @@ class BrowserViewController: UIViewController {
     }
 
     func openURLInNewTab(url: NSURL) {
+        urlBar.leaveOverlayMode()
         let tab: Browser
         if #available(iOS 9, *) {
             tab = tabManager.addTab(NSURLRequest(URL: url), isPrivate: tabTrayController?.privateMode ?? false)
@@ -1299,8 +1300,12 @@ extension BrowserViewController: BrowserDelegate {
 }
 
 extension BrowserViewController: HomePanelViewControllerDelegate {
-    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType) {
-        finishEditingAndSubmit(url, visitType: visitType)
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType, inNewTab: Bool) {
+        if inNewTab {
+            openURLInNewTab(url)
+        } else {
+            finishEditingAndSubmit(url, visitType: visitType)
+        }
     }
 
     func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectPanel panel: Int) {

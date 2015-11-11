@@ -238,7 +238,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         if let site = self.siteForIndexPath(indexPath),
            let url = NSURL(string: site.url) {
             let visitType = VisitType.Typed    // Means History, too.
-            homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: visitType)
+            homePanelDelegate?.homePanel(self, didSelectURL: url, visitType: visitType, inNewTab: false)
             return
         }
         log.warning("No site or no URL when selecting row.")
