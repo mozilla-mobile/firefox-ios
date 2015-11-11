@@ -168,7 +168,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AboutHomeHandler.register(server)
         AboutLicenseHandler.register(server)
         SessionRestoreHandler.register(server)
-        server.start()
+        do {
+            try server.start()
+        } catch let err as NSError {
+            log.error("Unable to start WebServer \(err)")
+        }
     }
 
     private func setUserAgent() {

@@ -4,9 +4,9 @@
 
 import Foundation
 
-private let WebServerSharedInstance = WebServer()
-
 class WebServer {
+    private static let WebServerSharedInstance = WebServer()
+
     class var sharedInstance: WebServer {
         return WebServerSharedInstance
     }
@@ -17,11 +17,9 @@ class WebServer {
         return "http://localhost:\(server.port)"
     }
 
-    func start() -> Bool {
-        withExtendedLifetime(server) {
-            if !server.running {
-                try! server.startWithOptions([GCDWebServerOption_Port: 6571, GCDWebServerOption_BindToLocalhost: true, GCDWebServerOption_AutomaticallySuspendInBackground: true])
-            }
+    func start() throws -> Bool{
+        if !server.running {
+            try server.startWithOptions([GCDWebServerOption_Port: 6571, GCDWebServerOption_BindToLocalhost: true, GCDWebServerOption_AutomaticallySuspendInBackground: true])
         }
         return server.running
     }
