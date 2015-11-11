@@ -322,11 +322,15 @@
 		7BF5A1EE1B429B3100EA9DD8 /* SyncCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1ED1B429B3100EA9DD8 /* SyncCommandsTests.swift */; };
 		7FB63CC91C08B27E0047F9A4 /* DynamicFontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB63CC81C08B27E0047F9A4 /* DynamicFontHelper.swift */; };
 		7FB63CEF1C08D4910047F9A4 /* DynamicFontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB63CC81C08B27E0047F9A4 /* DynamicFontHelper.swift */; };
+		A826F0D21CBEB8160084CF9A /* PhoneNumberFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A826F0D11CBEB8160084CF9A /* PhoneNumberFormatterTests.swift */; };
+		A826F0D31CBEB8F00084CF9A /* PhoneNumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86296D61C9EDCB50000B594 /* PhoneNumberFormatter.swift */; };
 		A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5AB61C1D993D0026D912 /* UIPasteboardExtensions.swift */; };
 		A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B181C1DA8BF0026D912 /* image.gif */; };
 		A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B191C1DA8BF0026D912 /* image.png */; };
 		A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */; };
 		A83E5B1E1C1DAAAA0026D912 /* UIPasteboardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5AB61C1D993D0026D912 /* UIPasteboardExtensions.swift */; };
+		A86296E81C9EDF8B0000B594 /* libPhoneNumber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8F9B1F11C9B49610028AAF8 /* libPhoneNumber.framework */; };
+		A862970A1C9EE1020000B594 /* libPhoneNumber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8F9B1F11C9B49610028AAF8 /* libPhoneNumber.framework */; };
 		B729F06A1B75CBEF00745F7A /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B729F0691B75CBEF00745F7A /* UserAgent.swift */; };
 		D301AAEE1A3A55B70078DD1D /* TabTrayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D301AAED1A3A55B70078DD1D /* TabTrayController.swift */; };
 		D30684F11C84F12A002D8D82 /* SearchPlugins in Resources */ = {isa = PBXBuildFile; fileRef = D30684F01C84F12A002D8D82 /* SearchPlugins */; };
@@ -1317,10 +1321,13 @@
 		7BF5A1E91B41640500EA9DD8 /* SyncQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncQueue.swift; sourceTree = "<group>"; };
 		7BF5A1ED1B429B3100EA9DD8 /* SyncCommandsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncCommandsTests.swift; sourceTree = "<group>"; };
 		7FB63CC81C08B27E0047F9A4 /* DynamicFontHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicFontHelper.swift; sourceTree = "<group>"; };
+		A826F0D11CBEB8160084CF9A /* PhoneNumberFormatterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberFormatterTests.swift; sourceTree = "<group>"; };
 		A83E5AB61C1D993D0026D912 /* UIPasteboardExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIPasteboardExtensions.swift; path = Extensions/UIPasteboardExtensions.swift; sourceTree = "<group>"; };
 		A83E5B181C1DA8BF0026D912 /* image.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = image.gif; sourceTree = "<group>"; };
 		A83E5B191C1DA8BF0026D912 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
 		A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPasteboardExtensionsTests.swift; sourceTree = "<group>"; };
+		A86296D61C9EDCB50000B594 /* PhoneNumberFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberFormatter.swift; sourceTree = "<group>"; };
+		A8F9B1F11C9B49610028AAF8 /* libPhoneNumber.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libPhoneNumber.framework; path = Carthage/Build/iOS/libPhoneNumber.framework; sourceTree = "<group>"; };
 		B729F0691B75CBEF00745F7A /* UserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserAgent.swift; path = ../Shared/UserAgent.swift; sourceTree = "<group>"; };
 		D301AAED1A3A55B70078DD1D /* TabTrayController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayController.swift; sourceTree = "<group>"; };
 		D30684F01C84F12A002D8D82 /* SearchPlugins */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SearchPlugins; path = Search/SearchPlugins; sourceTree = "<group>"; };
@@ -1634,6 +1641,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A862970A1C9EE1020000B594 /* libPhoneNumber.framework in Frameworks */,
 				7B604F861C494983006EEEC3 /* Alamofire.framework in Frameworks */,
 				7B604F971C494E2A006EEEC3 /* Breakpad.framework in Frameworks */,
 				7B604F9B1C4950F2006EEEC3 /* WebImage.framework in Frameworks */,
@@ -1784,6 +1792,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A86296E81C9EDF8B0000B594 /* libPhoneNumber.framework in Frameworks */,
 				E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2286,6 +2295,7 @@
 		7B604FC11C496005006EEEC3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A8F9B1F11C9B49610028AAF8 /* libPhoneNumber.framework */,
 				7BA4A9631C4CFE840091D032 /* Deferred.framework */,
 				7BA4A94B1C4CF03B0091D032 /* SwiftKeychainWrapper.framework */,
 				7BA4A9491C4CEFC70091D032 /* OnePasswordExtension.framework */,
@@ -2508,25 +2518,22 @@
 		E42CCDFF1A24C4E300B794D3 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				E695D8631C037E9F00D3FCCE /* FSUtils.h */,
-				E4C358531AF1440B00299F7E /* Swizzling.h */,
-				E46C51C11B41ADD800EB349F /* Try.h */,
-				E695D8641C037E9F00D3FCCE /* FSUtils.m */,
-				E4252A0D1AF01AE40028C684 /* Swizzling.m */,
-				E46C51C21B41ADD800EB349F /* Try.m */,
+				287DA9D51AE06D220055AC35 /* Extensions */,
 				0B3E7DB51B27A7E900E2E84D /* AboutUtils.swift */,
 				6BE4ACF81B0657180092AEBE /* Accessibility.swift */,
 				0BAC7A7F1AC4B135006018CB /* AppConstants.swift */,
 				28E8BE7E1B792A89002CC733 /* AppInfo.swift */,
-				E65D89801C8778940006EA35 /* AuthenticationKeychainInfo.swift */,
-				E4E7EB451C4A85D80094275D /* SupportUtils.swift */,
 				E66464ED1C10D98000AF05CE /* AssertionUtils.swift */,
+				39E65D351CA5CAF200C63CE3 /* AsyncReducer.swift */,
+				E65D89801C8778940006EA35 /* AuthenticationKeychainInfo.swift */,
 				2FCAE2401ABB531100877008 /* Bytes.swift */,
 				0B5A92E31B1E6075004F47A2 /* Cancellable.swift */,
 				281B2C071ADF4F29002917DC /* DeferredUtils.swift */,
 				287DAA1E1AE06E5D0055AC35 /* DeviceInfo.swift */,
 				7FB63CC81C08B27E0047F9A4 /* DynamicFontHelper.swift */,
 				0B71FFF41B4C49E50046AF87 /* FaviconFetcher.swift */,
+				E695D8631C037E9F00D3FCCE /* FSUtils.h */,
+				E695D8641C037E9F00D3FCCE /* FSUtils.m */,
 				283306E81AB3BB87008999AC /* Functions.swift */,
 				D39999A81AA01D65005AED21 /* KeyboardHelper.swift */,
 				2F0624D41AE58C7800FA022C /* KeychainCache.swift */,
@@ -2534,14 +2541,18 @@
 				E635D25D1B729DEE0078962F /* Logger.swift */,
 				D3C03E461C3C7C1500A07D5C /* MenuHelper.swift */,
 				285D3B321B4332C00035FD22 /* NotificationConstants.swift */,
+				A86296D61C9EDCB50000B594 /* PhoneNumberFormatter.swift */,
 				282731A11ABC9D2600AA1954 /* Prefs.swift */,
 				E69966981B72674B0036F797 /* RollingFileLogger.swift */,
+				E4E7EB451C4A85D80094275D /* SupportUtils.swift */,
+				E4C358531AF1440B00299F7E /* Swizzling.h */,
+				E4252A0D1AF01AE40028C684 /* Swizzling.m */,
 				E65D89591C8753CE0006EA35 /* SystemUtils.swift */,
 				2F3444561AB22A4B00FD9731 /* TimeConstants.swift */,
+				E46C51C11B41ADD800EB349F /* Try.h */,
+				E46C51C21B41ADD800EB349F /* Try.m */,
 				B729F0691B75CBEF00745F7A /* UserAgent.swift */,
 				D3ACB4381AD33EBA00748D50 /* WeakList.swift */,
-				287DA9D51AE06D220055AC35 /* Extensions */,
-				39E65D351CA5CAF200C63CE3 /* AsyncReducer.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -2776,17 +2787,18 @@
 		E6F9650D1B2F1CF20034B023 /* SharedTests */ = {
 			isa = PBXGroup;
 			children = (
+				E6F9650E1B2F1CF20034B023 /* Supporting Files */,
 				39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */,
 				28786E541AB0F5FA009EA9EF /* DeferredTests.swift */,
 				E695D8671C03804F00D3FCCE /* FSUtilsTests.swift */,
 				E4E25CCA1CA99E7400D0F088 /* HexExtensionsTests.swift */,
-				E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */,
 				E6F965411B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift */,
+				E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */,
+				A826F0D11CBEB8160084CF9A /* PhoneNumberFormatterTests.swift */,
 				2FEBABAE1AB3659000DB5728 /* ResultTests.swift */,
 				E61453BD1B750A1700C3F9D7 /* RollingFileLoggerTests.swift */,
-				28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */,
 				E4E7EB6C1C4AED5E0094275D /* SupportUtilsTests.swift */,
-				E6F9650E1B2F1CF20034B023 /* Supporting Files */,
+				28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */,
 			);
 			path = SharedTests;
 			sourceTree = "<group>";
@@ -4007,6 +4019,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftKeychainWrapper.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/libPhoneNumber.framework",
 			);
 			name = "Copy Carthage Dependencies";
 			outputPaths = (
@@ -4116,6 +4129,7 @@
 				D37016031BF282450063D032 /* UIImageExtensions.swift in Sources */,
 				E695D8661C037E9F00D3FCCE /* FSUtils.m in Sources */,
 				2FDE87521ABA3EA0005317B1 /* TimeConstants.swift in Sources */,
+				A826F0D31CBEB8F00084CF9A /* PhoneNumberFormatter.swift in Sources */,
 				2891CEC41ADC7F2900427D3C /* NSURLExtensions.swift in Sources */,
 				E4E7EB6B1C4A86430094275D /* SupportUtils.swift in Sources */,
 				2FDE87321ABA3E87005317B1 /* json.swift in Sources */,
@@ -4383,6 +4397,7 @@
 				28532BEA1C472008000072D9 /* DeferredTests.swift in Sources */,
 				E61453BE1B750A1700C3F9D7 /* RollingFileLoggerTests.swift in Sources */,
 				39E65D271CA5B92000C63CE3 /* AsyncReducerTests.swift in Sources */,
+				A826F0D21CBEB8160084CF9A /* PhoneNumberFormatterTests.swift in Sources */,
 				E4E7EB6D1C4AED5E0094275D /* SupportUtilsTests.swift in Sources */,
 				E4E25CCB1CA99E7400D0F088 /* HexExtensionsTests.swift in Sources */,
 				E6F965421B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift in Sources */,

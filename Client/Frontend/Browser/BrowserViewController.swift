@@ -1830,12 +1830,13 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
-        // gives us the exact same behaviour as Safari. The only thing we do not do is nicely format the phone number,
-        // instead we present it as it was put in the URL.
+        // gives us the exact same behaviour as Safari.
 
         if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
-            if let phoneNumber = url.resourceSpecifier.stringByRemovingPercentEncoding {
-                let alert = UIAlertController(title: phoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+            if let phoneNumber = url.resourceSpecifier.stringByRemovingPercentEncoding where !phoneNumber.isEmpty {
+                let formatter = PhoneNumberFormatter()
+                let formattedPhoneNumber = formatter.formatPhoneNumber(phoneNumber)
+                let alert = UIAlertController(title: formattedPhoneNumber, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Alert Cancel Button"), style: UIAlertActionStyle.Cancel, handler: nil))
                 alert.addAction(UIAlertAction(title: NSLocalizedString("Call", comment:"Alert Call Button"), style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
                     UIApplication.sharedApplication().openURL(url)

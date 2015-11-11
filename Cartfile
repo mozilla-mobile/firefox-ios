@@ -11,3 +11,4 @@ github "fluffyemily/google-breakpad-ios" "carthageise-breakpad"
 github "adjust/ios_sdk"             "v4.5.0"
 github "AgileBits/onepassword-extension" "add-framework-support"
 github "fluffyemily/SwiftKeychainWrapper" "extension-compatibility"					# default to latest tag
+github "iziz/libPhoneNumber-iOS"    "0.8.11"
