@@ -20,20 +20,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
 
     func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        log.debug("Setting UA…")
         // Set the Firefox UA for browsing.
         setUserAgent()
 
+        log.debug("Starting keyboard helper…")
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
 
+        log.debug("Creating Sync log file…")
         // Create a new sync log file on cold app launch. Note that this doesn't roll old logs.
         Logger.syncLogger.newLogWithDate(NSDate())
 
+        log.debug("Getting profile…")
         let profile = getProfile(application)
 
+        log.debug("Starting web server…")
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
 
+        log.debug("Setting AVAudioSession category…")
         do {
             // for aural progress bar: play even with silent switch on, and do not stop audio from other apps (like music)
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: AVAudioSessionCategoryOptions.MixWithOthers)
@@ -41,13 +47,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             log.error("Failed to assign AVAudioSession category to allow playing with silent switch on for aural progress bar")
         }
 
+        log.debug("Configuring window…")
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window!.backgroundColor = UIColor.whiteColor()
 
         let defaultRequest = NSURLRequest(URL: UIConstants.DefaultHomePage)
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
+
+        log.debug("Configuring tabManager…")
         self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, prefs: profile.prefs, imageStore: imageStore)
         self.tabManager.stateDelegate = self
+
+        log.debug("Initing BVC…")
         browserViewController = BrowserViewController(profile: profile, tabManager: self.tabManager)
 
         // Add restoration class, the factory that will return the ViewController we 
@@ -61,12 +72,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         rootViewController.delegate = self
         rootViewController.navigationBarHidden = true
 
+        log.debug("Initing window…")
         self.window!.rootViewController = rootViewController
         self.window!.backgroundColor = UIConstants.AppBackgroundColor
 
+        log.debug("Configuring Breakpad…")
         activeCrashReporter = BreakpadCrashReporter(breakpadInstance: BreakpadController.sharedInstance())
         configureActiveCrashReporter(profile.prefs.boolForKey("crashreports.send.always"))
 
+        log.debug("Adding observers…")
         NSNotificationCenter.defaultCenter().addObserverForName(FSReadingListAddReadingListItemNotification, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, url = userInfo["URL"] as? NSURL {
                 let title = (userInfo["Title"] as? String) ?? ""
@@ -78,6 +92,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let localNotification = launchOptions?[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
             viewURLInNewTab(localNotification)
         }
+
+        log.debug("Done with applicationWillFinishLaunching.")
         return true
     }
 
@@ -101,16 +117,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+        log.debug("Did finish launching.")
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
             AdjustIntegration.sharedInstance.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
         }
+        log.debug("Making window key and visible…")
         self.window!.makeKeyAndVisible()
 
         // Now roll logs.
+        log.debug("Triggering log roll.")
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
             Logger.syncLogger.deleteOldLogsDownToSizeLimit
         )
 
+        log.debug("Done with applicationDidFinishLaunching.")
         return true
     }
 
