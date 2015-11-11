@@ -7,6 +7,8 @@ import WebKit
 import Storage
 import Shared
 
+private let log = Logger.browserLogger
+
 protocol TabManagerDelegate: class {
     func tabManager(tabManager: TabManager, didSelectedTabChange selected: Browser?, previous: Browser?)
     func tabManager(tabManager: TabManager, didCreateTab tab: Browser)
@@ -470,7 +472,11 @@ extension TabManager {
     }
 
     private func restoreTabsInternal() {
-        guard let savedTabs = tabsToRestore() else { return }
+        log.debug("Restoring tabs.")
+        guard let savedTabs = tabsToRestore() else {
+            log.debug("Nothing to restore.")
+            return
+        }
 
         var tabToSelect: Browser?
         for (_, savedTab) in savedTabs.enumerate() {
@@ -505,17 +511,24 @@ extension TabManager {
             tabToSelect = tabs.first
         }
 
+        log.debug("Done adding tabs.")
+
         // Only tell our delegates that we restored tabs if we actually restored a tab(s)
         if savedTabs.count > 0 {
+            log.debug("Notifying delegates.")
             for delegate in delegates {
                 delegate.get()?.tabManagerDidRestoreTabs(self)
             }
         }
 
         if let tab = tabToSelect {
+            log.debug("Selecting a tab.")
             selectTab(tab)
+            log.debug("Creating webview for selected tab.")
             tab.createWebview()
         }
+
+        log.debug("Done.")
     }
 
     func restoreTabs() {
