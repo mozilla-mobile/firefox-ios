@@ -62,10 +62,6 @@ public struct UIConstants {
 
 /// Strings that will be used for features that haven't yet landed.
 private struct TempStrings {
-    // Bug 1109675 - Request Desktop Site
-    let requestDesktopSite = NSLocalizedString("Request Desktop Site", comment: "Pending feature; currently unused string! Tooltip label triggered by long pressing the refresh button.")
-    let requestMobileSite = NSLocalizedString("Request Mobile Site", comment: "Pending feature; currently unused string! Tooltip label triggered by long pressing the refresh button a second time.")
-
     // Bug 1182303 - Checkbox to block alert spam.
     let disableAlerts = NSLocalizedString("Disable additional page dialogs", comment: "Pending feature; currently unused string! Checkbox label shown after multiple alerts are shown")
 
