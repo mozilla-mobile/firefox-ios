@@ -26,14 +26,21 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
 
     func testAboutHomeDisposed() {
         // about:home is already active on startup; grab a reference to it.
-        let browserViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
+        let browserViewController = getTopViewController()
         weak var aboutHomeController = getChildViewController(browserViewController, childClass: "HomePanelViewController")
 
         // Change the page to make about:home go away.
         tester().tapViewWithAccessibilityIdentifier("url")
         let url = "\(webRoot)/numberedPage.html?page=1"
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+
+        // Work around potential KIF bug. The nillification does not seem to propagate unless we use and explicit autorelease pool.
+        // https://github.com/kif-framework/KIF/issues/739
+        autoreleasepool {
+            tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
+        }
+
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
+
 
         tester().runBlock { _ in
             return (aboutHomeController == nil) ? KIFTestStepResult.Success : KIFTestStepResult.Wait
@@ -45,7 +52,8 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         // Type the URL to make the search controller appear.
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("foobar")
-        let browserViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
+        tester().waitForTimeInterval(0.1) // Wait to make sure that input has propagated through delegate methods
+        let browserViewController = getTopViewController()
         weak var searchViewController = getChildViewController(browserViewController, childClass: "SearchViewController")
         XCTAssertNotNil(searchViewController, "Got search controller reference")
 
@@ -59,12 +67,10 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func testTabTrayDisposed() {
-        let browserViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
-
         // Enter the tab tray.
         tester().tapViewWithAccessibilityLabel("Show Tabs")
         tester().waitForViewWithAccessibilityLabel("Tabs Tray")
-        weak var tabTrayController = browserViewController.presentedViewController
+        weak var tabTrayController = getTopViewController()
         weak var tabCell = tester().waitForTappableViewWithAccessibilityLabel("home")
         XCTAssertNotNil(tabTrayController, "Got tab tray reference")
         XCTAssertNotNil(tabCell, "Got tab cell reference")
@@ -99,6 +105,9 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertNil(webView, "webView disposed")
     }
 
+    private func getTopViewController() -> UIViewController {
+        return (UIApplication.sharedApplication().keyWindow!.rootViewController as! UINavigationController).topViewController!
+    }
 
     private func getChildViewController(parent: UIViewController, childClass: String) -> UIViewController {
         let childControllers = parent.childViewControllers.filter { child in
