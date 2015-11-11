@@ -146,6 +146,15 @@ class TabManager : NSObject {
         return nil
     }
 
+    func getTabFor(url: NSURL) -> Browser? {
+        for tab in tabs {
+            if (tab.webView?.URL == url) {
+                return tab
+            }
+        }
+        return nil
+    }
+
     func selectTab(tab: Browser?) {
         assert(NSThread.isMainThread())
 
@@ -349,8 +358,7 @@ class TabManager : NSObject {
     }
 
     func getTabForURL(url: NSURL) -> Browser? {
-        guard let index = (tabs.indexOf { $0.url == url }) else { return nil }
-        return tabs[index]
+        return tabs.filter { $0.webView?.URL == url } .first
     }
 
     func storeChanges() {

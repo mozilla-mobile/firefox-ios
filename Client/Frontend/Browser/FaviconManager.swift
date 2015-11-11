@@ -42,7 +42,7 @@ class FaviconManager : BrowserHelper {
                         manager.downloadImageWithURL(iconUrl, options: SDWebImageOptions(options), progress: nil, completed: { (img, err, cacheType, success, url) -> Void in
                             let fav = Favicon(url: url.absoluteString,
                                 date: NSDate(),
-                                type: IconType(rawValue: icon.1)!)
+                                    type: IconType(rawValue: icon.1)!)
 
                             if let img = img {
                                 fav.width = Int(img.size.width)

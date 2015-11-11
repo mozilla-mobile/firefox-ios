@@ -67,6 +67,10 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Websites you visit may request your location.</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>org.mozilla.ios.firefox.browsing</string>
+	</array>
 	<key>ReleaseChannel</key>
 	<string>$(MOZ_RELEASE_CHANNEL)</string>
 	<key>UIAppFonts</key>
