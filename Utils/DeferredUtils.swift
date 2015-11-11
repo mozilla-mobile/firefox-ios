@@ -30,6 +30,15 @@ public func >>> <T, U>(x: Deferred<Maybe<T>>, f: () -> Deferred<Maybe<U>>) -> De
     }
 }
 
+// Another termination case.
+public func >>> <T>(x: Deferred<Maybe<T>>, f: () -> ())  {
+    return x.upon { res in
+        if res.isSuccess {
+            f();
+        }
+    }
+}
+
 /**
 * Returns a thunk that return a Deferred that resolves to the provided value.
 */
