@@ -1,0 +1,55 @@
+{
+    "categories": {
+        "Advertising": [
+            {
+                "Google": {
+                    "http://www.google.com/": [
+                        "2mdn.net",
+                        "admeld.com",
+                        "admob.com",
+                        "cc-dt.com",
+                        "destinationurl.com",
+                        "doubleclick.net",
+                        "adwords.google.com",
+                        "googleadservices.com",
+                        "googlesyndication.com",
+                        "googletagservices.com",
+                        "invitemedia.com",
+                        "smtad.net",
+                        "teracent.com",
+                        "teracent.net",
+                        "ytsa.net"
+                    ]
+                }
+            }
+        ],
+         "Analytics": [
+            {
+                "Google": {
+                    "http://www.google.com/": [
+                        "google-analytics.com",
+                        "postrank.com"
+                    ]
+                }
+            }
+        ],
+         "Social": [
+            {
+                "Google": {
+                    "http://www.google.com/": [
+                        "developers.google.com",
+                        "gmail.com",
+                        "mail.google.com",
+                        "inbox.google.com",
+                        "orkut.com",
+                        "plus.google.com",
+                        "plusone.google.com",
+                        "voice.google.com",
+                        "wave.google.com",
+                        "googlemail.com"
+                    ]
+                }
+            }
+        ]
+    }
+}
