@@ -51,7 +51,7 @@ public class FaviconFetcher : NSObject, NSXMLParserDelegate {
                     }
                 }
 
-                oldIcons.sortInPlace({ (a, b) -> Bool in
+                oldIcons = oldIcons.sort({ (a, b) -> Bool in
                     return a.width > b.width
                 })
 
