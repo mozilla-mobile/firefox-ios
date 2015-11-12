@@ -18,6 +18,7 @@ svn co --non-interactive --trust-server-cert https://svn.mozilla.org/projects/l1
 #
 
 INCOMPLETE_LOCALES=(
+    "ar"
     "az"
     "da"
     "kk"
