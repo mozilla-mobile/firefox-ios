@@ -253,10 +253,10 @@ class MockSyncServer {
         if let sort = spec.sort {
             switch sort {
             case SortOption.NewestFirst:
-                items.sortInPlace { $0.modified > $1.modified }
+                items = items.sort { $0.modified > $1.modified }
                 log.debug("Sorted items newest first: \(items.map { $0.modified })")
             case SortOption.OldestFirst:
-                items.sortInPlace { $0.modified < $1.modified }
+                items = items.sort { $0.modified < $1.modified }
                 log.debug("Sorted items oldest first: \(items.map { $0.modified })")
             case SortOption.Index:
                 log.warning("Index sorting not yet supported.")
