@@ -50,6 +50,10 @@ class BrowserViewController: UIViewController {
     private let snackBars = UIView()
     private let webViewContainerToolbar = UIView()
 
+    // popover rotation handling
+    private var displayedPopoverController: UIViewController?
+    private var updateDisplayedPopoverProperties: (() -> ())?
+
     private var openInHelper: OpenInHelper?
 
     // location label actions
@@ -104,6 +108,17 @@ class BrowserViewController: UIViewController {
             return UIInterfaceOrientationMask.AllButUpsideDown
         } else {
             return UIInterfaceOrientationMask.All
+        }
+    }
+
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
+
+        coordinator.animateAlongsideTransition(nil) { context in
+            if let displayedPopoverController = self.displayedPopoverController {
+                self.updateDisplayedPopoverProperties?()
+                self.presentViewController(displayedPopoverController, animated: true, completion: nil)
+            }
         }
     }
 
@@ -182,6 +197,8 @@ class BrowserViewController: UIViewController {
             updateToolbarStateForTraitCollection(newCollection)
         }
 
+        displayedPopoverController?.dismissViewControllerAnimated(true, completion: nil)
+
         // WKWebView looks like it has a bug where it doesn't invalidate it's visible area when the user
         // performs a device rotation. Since scrolling calls
         // _updateVisibleContentRects (https://github.com/WebKit/webkit/blob/master/Source/WebKit2/UIProcess/API/Cocoa/WKWebView.mm#L1430)
@@ -202,7 +219,7 @@ class BrowserViewController: UIViewController {
     }
 
     func SELappWillResignActiveNotification() {
-        // If we are displying a private tab, hide any elements in the browser that we wouldn't want shown 
+        // If we are displying a private tab, hide any elements in the browser that we wouldn't want shown
         // when the app is in the home switcher
         guard let privateTab = tabManager.selectedTab where privateTab.isPrivate else {
             return
@@ -1097,13 +1114,24 @@ extension BrowserViewController: BrowserToolbarDelegate {
                 self.updateReaderModeBar()
             })
 
-            if let popoverPresentationController = activityViewController.popoverPresentationController {
-                // Using the button for the sourceView here results in this not showing on iPads.
-                popoverPresentationController.sourceView = self.toolbar ?? self.urlBar
-                popoverPresentationController.sourceRect = button.frame ?? button.frame
-                popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
-                popoverPresentationController.delegate = self
+            let setupPopover = { [unowned self] in
+                if let popoverPresentationController = activityViewController.popoverPresentationController {
+                    let sourceView = self.navigationToolbar.shareButton
+                    popoverPresentationController.sourceView = sourceView.superview
+                    popoverPresentationController.sourceRect = sourceView.frame
+                    popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirection.Up
+                    popoverPresentationController.delegate = self
+                }
             }
+
+            setupPopover()
+            presentViewController(activityViewController, animated: true, completion: nil)
+
+            if activityViewController.popoverPresentationController != nil {
+                displayedPopoverController = activityViewController
+                updateDisplayedPopoverProperties = setupPopover
+            }
+
             self.presentViewController(activityViewController, animated: true, completion: nil)
         }
 
@@ -1143,7 +1171,7 @@ extension BrowserViewController: BrowserDelegate {
 
         let favicons = FaviconManager(browser: browser, profile: profile)
         browser.addHelper(favicons, name: FaviconManager.name())
-        
+
         // only add the logins helper if the tab is not a private browsing tab
         if !browser.isPrivate {
             let logins = LoginsHelper(browser: browser, profile: profile)
@@ -1783,7 +1811,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 }
 
-extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationControllerDelegate {
+extension BrowserViewController: ReaderModeDelegate {
     func readerMode(readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forBrowser browser: Browser) {
         // If this reader mode availability state change is for the tab that we currently show, then update
         // the button. Otherwise do nothing and the button will be updated when the tab is made active.
@@ -1803,6 +1831,17 @@ extension BrowserViewController: ReaderModeDelegate, UIPopoverPresentationContro
         return UIModalPresentationStyle.None
     }
 }
+
+// MARK: - UIPopoverPresentationControllerDelegate
+
+extension BrowserViewController: UIPopoverPresentationControllerDelegate {
+    func popoverPresentationControllerDidDismissPopover(popoverPresentationController: UIPopoverPresentationController) {
+        displayedPopoverController = nil
+        updateDisplayedPopoverProperties = nil
+    }
+}
+
+// MARK: - ReaderModeStyleViewControllerDelegate
 
 extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
     func readerModeStyleViewController(readerModeStyleViewController: ReaderModeStyleViewController, didConfigureStyle style: ReaderModeStyle) {
@@ -1933,19 +1972,19 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
                         readerModeStyle = style
                     }
                 }
-                
+
                 let readerModeStyleViewController = ReaderModeStyleViewController()
                 readerModeStyleViewController.delegate = self
                 readerModeStyleViewController.readerModeStyle = readerModeStyle
                 readerModeStyleViewController.modalPresentationStyle = UIModalPresentationStyle.Popover
-                
+
                 let popoverPresentationController = readerModeStyleViewController.popoverPresentationController
                 popoverPresentationController?.backgroundColor = UIColor.whiteColor()
                 popoverPresentationController?.delegate = self
                 popoverPresentationController?.sourceView = readerModeBar
                 popoverPresentationController?.sourceRect = CGRect(x: readerModeBar.frame.width/2, y: UIConstants.ToolbarHeight, width: 1, height: 1)
                 popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.Up
-                
+
                 self.presentViewController(readerModeStyleViewController, animated: true, completion: nil)
             }
 
