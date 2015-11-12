@@ -1,6 +1,8 @@
 Firefox for iOS
 ===============
 
+Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id989804926).
+
 This branch
 -----------
 
