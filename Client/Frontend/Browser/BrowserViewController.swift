@@ -2090,6 +2090,12 @@ extension BrowserViewController: FxAContentViewControllerDelegate {
 
 extension BrowserViewController: ContextMenuHelperDelegate {
     func contextMenuHelper(contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UILongPressGestureRecognizer) {
+        // locationInView can return (0, 0) when the long press is triggered in an invalid page
+        // state (e.g., long pressing a link before the document changes, then releasing after a
+        // different page loads).
+        let touchPoint = gestureRecognizer.locationInView(view)
+        guard touchPoint != CGPointZero else { return }
+
         let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         var dialogTitle: String?
 
@@ -2178,7 +2184,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         // If we're showing an arrow popup, set the anchor to the long press location.
         if let popoverPresentationController = actionSheetController.popoverPresentationController {
             popoverPresentationController.sourceView = view
-            popoverPresentationController.sourceRect = CGRect(origin: gestureRecognizer.locationInView(view), size: CGSizeMake(0, 16))
+            popoverPresentationController.sourceRect = CGRect(origin: touchPoint, size: CGSizeMake(0, 16))
             popoverPresentationController.permittedArrowDirections = .Any
         }
 
