@@ -318,7 +318,6 @@ class URLBarView: UIView {
         locationTextField.autocapitalizationType = UITextAutocapitalizationType.None
         locationTextField.returnKeyType = UIReturnKeyType.Go
         locationTextField.clearButtonMode = UITextFieldViewMode.WhileEditing
-        locationTextField.backgroundColor = UIColor.whiteColor()
         locationTextField.font = UIConstants.DefaultMediumFont
         locationTextField.accessibilityIdentifier = "address"
         locationTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
