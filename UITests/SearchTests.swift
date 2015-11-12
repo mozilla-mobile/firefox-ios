@@ -20,12 +20,13 @@ class SearchTests: KIFTestCase {
         XCTAssertTrue(found, "Prompt is shown")
 
         // Ensure that no suggestions are visible before answering the prompt.
-        found = suggestionsAreVisible(tester())
+        waitForPotentialDebounce(tester())
+        found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
         XCTAssertFalse(found, "No suggestion shown before prompt selection")
 
         // Ensure that suggestions are visible after selecting Yes.
         tester().tapViewWithAccessibilityLabel("Yes")
-        found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
+        found = tester().waitForViewWithAccessibilityHint(HintSuggestionButton) != nil
         XCTAssertTrue(found, "Found suggestions after choosing Yes")
 
         tester().tapViewWithAccessibilityLabel("Cancel")
@@ -36,8 +37,8 @@ class SearchTests: KIFTestCase {
         XCTAssertFalse(found, "Prompt is not shown")
         tester().tapViewWithAccessibilityIdentifier("url")
         tester().clearTextFromAndThenEnterText("foobar", intoViewWithAccessibilityLabel: LabelAddressAndSearch)
-        found = suggestionsAreVisible(tester())
-        XCTAssert(found, "Search suggestions are still enabled")
+        found = tester().waitForViewWithAccessibilityHint(HintSuggestionButton) != nil
+        XCTAssertTrue(found, "Search suggestions are still enabled")
         tester().tapViewWithAccessibilityLabel("Cancel")
         resetSuggestionsPrompt()
 
@@ -49,16 +50,15 @@ class SearchTests: KIFTestCase {
         XCTAssertTrue(found, "Prompt is shown")
 
         // Ensure that no suggestions are visible before answering the prompt.
-        found = suggestionsAreVisible(tester())
+        waitForPotentialDebounce(tester())
+        found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
         XCTAssertFalse(found, "No suggestion buttons are shown")
 
         // Ensure that no suggestions are visible after selecting No.
         tester().tapViewWithAccessibilityLabel("No")
-        found = suggestionsAreVisible(tester())
+        waitForPotentialDebounce(tester())
+        found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
         XCTAssertFalse(found, "No suggestions after choosing No")
-
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        resetSuggestionsPrompt()
     }
 
     func testTurnOffSuggestionsWhenEnteringURL() {
@@ -71,11 +71,13 @@ class SearchTests: KIFTestCase {
         XCTAssertTrue(found, "Prompt is shown")
 
         // Ensure that no suggestions are visible before answering the prompt.
-        found = suggestionsAreVisible(tester())
+        waitForPotentialDebounce(tester())
+        found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
         XCTAssertFalse(found, "No suggestion shown before prompt selection")
 
         // Ensure that suggestions are visible after selecting Yes.
         tester().tapViewWithAccessibilityLabel("Yes")
+        waitForPotentialDebounce(tester())
         found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
         XCTAssertTrue(found, "Found suggestions after choosing Yes")
         found = tester().viewExistsWithLabel(LabelYahooSearchIcon)
@@ -85,8 +87,7 @@ class SearchTests: KIFTestCase {
         tester().enterTextIntoCurrentFirstResponder("/")
 
         // Wait for debounce in case
-        tester().waitForTimeInterval(0.3)
-
+        waitForPotentialDebounce(tester())
         found = tester().tryFindingViewWithAccessibilityHint(HintSuggestionButton)
         XCTAssertFalse(found, "Found suggestions after adding / to url")
         found = tester().viewExistsWithLabel(LabelYahooSearchIcon)
@@ -146,10 +147,6 @@ class SearchTests: KIFTestCase {
         tester().tapViewWithAccessibilityLabel("Paste")
         promptFound = tester().waitForViewWithAccessibilityLabel(LabelPrompt) != nil
         XCTAssertTrue(promptFound, "Search prompt is shown")
-        tester().tapViewWithAccessibilityLabel("Cancel")
-
-        // Clean up.
-        BrowserUtils.resetToAboutHome(tester())
     }
 
     var currentSearchEngine = "Yahoo"
@@ -185,11 +182,8 @@ class SearchTests: KIFTestCase {
         searchForTerms(searchTerms, withSearchEngine: "Yahoo")
     }
 
-    /// Checks whether suggestions are shown. Note that suggestions aren't shown immediately
-    /// due to debounce, so we wait for them to appear.
-    private func suggestionsAreVisible(tester: KIFUITestActor) -> Bool {
+    private func waitForPotentialDebounce(tester: KIFUITestActor) {
         tester.waitForTimeInterval(0.3)
-        return tester.tryFindingViewWithAccessibilityHint(HintSuggestionButton)
     }
 
     private func resetSuggestionsPrompt() {
@@ -197,11 +191,13 @@ class SearchTests: KIFTestCase {
     }
 
     override func tearDown() {
+        resetSuggestionsPrompt()
         do {
             try tester().tryFindingTappableViewWithAccessibilityLabel("Cancel")
             tester().tapViewWithAccessibilityLabel("Cancel")
         } catch _ {
         }
-        BrowserUtils.clearHistoryItems(tester(), numberOfTests: 5)
+        BrowserUtils.clearHistoryItems(tester())
+        BrowserUtils.resetToAboutHome(tester())
     }
 }

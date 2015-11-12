@@ -28,6 +28,14 @@ extension KIFUITestActor {
         return element != nil
     }
 
+    func waitForViewWithAccessibilityHint(hint: String) -> UIView? {
+        var view: UIView? = nil
+        autoreleasepool {
+            waitForAccessibilityElement(nil, view: &view, withElementMatchingPredicate: NSPredicate(format: "accessibilityHint = %@", hint), tappable: false)
+        }
+        return view
+    }
+
     func viewExistsWithLabel(label: String) -> Bool {
         do {
             try self.tryFindingViewWithAccessibilityLabel(label)
