@@ -16,7 +16,7 @@
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
-fastlane_version "1.30.2"
+fastlane_version "1.39.0"
 
 default_platform :ios
 
@@ -30,8 +30,10 @@ platform :ios do
     opts = options[:options]
 
     # set build and version numbers
-    ENV["BUILD_VERSION"] = opts[:build] || get_build_number(xcodeproj: "Client.xcodeproj")
-    ENV["APP_VERSION"] = opts[:version] || get_version_number(xcodeproj: "Client.xcodeproj")
+    build_number = get_build_number(xcodeproj: "Client.xcodeproj")
+    version_number = get_version_number(xcodeproj: "Client.xcodeproj")
+    ENV["BUILD_VERSION"] = opts[:build] || build_number
+    ENV["APP_VERSION"] = opts[:version] || version_number
 
     # create a name for this build
     ENV["DATESTAMP"] = Time.now.utc.iso8601.gsub(/\W/, '')
@@ -51,20 +53,36 @@ platform :ios do
     # make builds & prov profile dirs
     sh("./scripts/mkdirs.sh")
 
-    increment_build_number(build_number: ENV["BUILD_VERSION"],
-    xcodeproj: 'Client.xcodeproj')
+    version_bumped = false
 
-    increment_version_number(version_number: ENV["APP_VERSION"],
-    xcodeproj: 'Client.xcodeproj') 
+    if ENV["BUILD_VERSION"] != build_number
+      increment_build_number(
+        build_number: ENV["BUILD_VERSION"],
+        xcodeproj: 'Client.xcodeproj',
+      )
+      version_bumped = true
+    end
 
-    commit_version_bump(
-      message: 'Version Bump', 
-      xcodeproj: 'Client.xcodeproj', 
-    ) 
+    if ENV["APP_VERSION"] != version_number
+      increment_version_number(
+        version_number: ENV["APP_VERSION"],
+        xcodeproj: 'Client.xcodeproj',
+      ) 
+      version_bumped = true
+    end
+
+    if version_bumped == true
+      commit_version_bump(
+        message: 'Version Bump', 
+        xcodeproj: 'Client.xcodeproj', 
+      ) 
+    end
   end
 
   desc "Builds an Aurora build"
   lane :aurora do |options|
+    options = options[:options] || options
+    puts "Aurora: #{options}\n"
     setup(options: options)
 
     ENV["SIGH_TEAM_ID"] = "9G8J6YA743"
@@ -90,7 +108,12 @@ platform :ios do
 
   end
 
-  desc "Makes a release build and takes marketing snapshots"
+  desc "Builds an l10n build"
+  lane :l10n do |options|
+    aurora(options)
+  end
+
+  desc "Takes marketing snapshots using current branch"
   lane :marketing do
     snapshot
     frameit(white: true)

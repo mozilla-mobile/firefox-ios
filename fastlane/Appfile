@@ -1,10 +1,15 @@
-app_identifier "org.mozilla.ios.FennecAurora" # The bundle identifier of your app
+app_identifier "org.mozilla.ios.Fennec" # The bundle identifier of your app
 apple_id "etoop@mozilla.com" # Your Apple email address
 
-# You can uncomment any of the lines below and add your own
-# team selection in case you're in multiple teams
-# team_name "Felix Krause"
-# team_id "Q2CBPJ58CA"
+for_lane :aurora do
+	team_id '9G8J6YA743' 
+	app_identifier 'org.mozilla.ios.FennecAurora'
+end
+
+for_lane :l10n do
+	team_id '9G8J6YA743' 
+	app_identifier 'org.mozilla.ios.FennecAurora'
+end
 
 
 # you can even provide different app identifiers, Apple IDs and team names per lane:
