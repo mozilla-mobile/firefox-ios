@@ -36,7 +36,11 @@ class MarketingSnapshotTests: XCTestCase {
         addressTextField.tap()
         addressTextField.typeText(url)
         if testForAutocompleteDialog {
-            app.buttons.elementBoundByIndex(7).tap()
+//            for var idx:UInt = 0; idx < app.buttons.count; idx++ {
+//                let button = app.buttons.elementBoundByIndex(idx)
+//                print("\(button.identifier): \(button.value)")
+//            }
+            app.buttons.elementBoundByIndex(8).tap()
         }
         let progressIndicator = app.progressIndicators.elementBoundByIndex(0)
         expectationForPredicate(exists, evaluatedWithObject: progressIndicator, handler: nil)
