@@ -10,4 +10,9 @@ struct DebugSettingsBundleOptions {
     static var doNotRestoreTabs: Bool {
         return NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleDoNotRestoreTabs") ?? false
     }
+
+    /// Disable the local web server we use for restoration, error pages, etc
+    static var disableLocalWebServer: Bool {
+        return NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleDisableLocalWebServer") ?? false
+    }
 }
