@@ -35,9 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.debug("Getting profile…")
         let profile = getProfile(application)
 
-        log.debug("Starting web server…")
-        // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
-        setUpWebServer(profile)
+        if !DebugSettingsBundleOptions.disableLocalWebServer {
+            log.debug("Starting web server…")
+            // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
+            setUpWebServer(profile)
+        }
 
         log.debug("Setting AVAudioSession category…")
         do {
