@@ -43,13 +43,51 @@ public extension Logger {
         return nil
     }
 
-    static private func fileLoggerWithName(filename: String) -> XCGLogger {
+    static private func fileLoggerWithName(name: String) -> XCGLogger {
         let log = XCGLogger()
-        if let logDir = Logger.logFileDirectoryPath() {
-            let fileDestination = XCGFileLogDestination(owner: log, writeToFile: "\(logDir)/\(filename).log", identifier: "com.mozilla.firefox.filelogger.\(filename)")
+        if let logFileURL = urlForLogNamed(name) {
+            let fileDestination = XCGFileLogDestination(
+                owner: log,
+                writeToFile: logFileURL.absoluteString,
+                identifier: "com.mozilla.firefox.filelogger.\(name)"
+            )
             log.addLogDestination(fileDestination)
         }
         return log
+    }
+
+    static private func urlForLogNamed(name: String) -> NSURL? {
+        guard let logDir = Logger.logFileDirectoryPath() else {
+            return nil
+        }
+
+        return NSURL(string: "\(logDir)/\(name).log")
+    }
+
+    /**
+     Grabs all of the configured logs that write to disk and returns them in NSData format along with their
+     associated filename.
+
+     - returns: Tuples of filenames to each file's contexts in a NSData object
+     */
+    static func diskLogFilenamesAndData() throws -> [(String, NSData?)] {
+        var filenamesAndURLs = [(String, NSURL)]()
+        filenamesAndURLs.append(("browser", urlForLogNamed("browser")!))
+        filenamesAndURLs.append(("keychain", urlForLogNamed("keychain")!))
+
+        // Grab all sync log files
+        if let logDir = Logger.logFileDirectoryPath() {
+            let syncFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(logDir, withFilenamePrefix: syncLogger.root)
+            let syncFilenamesAndURLS: [(String, NSURL)] = syncFiles.flatMap { filename in
+                if let url = NSURL(string: "\(logDir)/\(filename)") {
+                    return (filename, url)
+                }
+                return nil
+            }
+            filenamesAndURLs += syncFilenamesAndURLS
+        }
+
+        return filenamesAndURLs.map { ($0, NSData(contentsOfFile: $1.absoluteString)) }
     }
 }
 
