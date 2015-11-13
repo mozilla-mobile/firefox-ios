@@ -1,5 +1,4 @@
 app_identifier "org.mozilla.ios.Fennec" # The bundle identifier of your app
-apple_id "etoop@mozilla.com" # Your Apple email address
 
 for_lane :aurora do
 	team_id '9G8J6YA743' 
