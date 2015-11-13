@@ -478,7 +478,11 @@ class BrowserViewController: UIViewController {
             }
         )
 
-        self.presentViewController(alert, animated: true, completion: nil)
+        if DebugSettingsBundleOptions.doNotRestoreTabs {
+            self.tabManager.addTabAndSelect()
+        } else {
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
     }
 
     override func viewDidAppear(animated: Bool) {

@@ -16,11 +16,11 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Tab Restoration</string>
+			<string>Do Not Restore Tabs</string>
 			<key>Key</key>
-			<string>SettingsBundleTabRestoration</string>
+			<string>SettingsBundleDoNotRestoreTabs</string>
 			<key>DefaultValue</key>
-			<true/>
+			<false/>
 		</dict>
 	</array>
 </dict>

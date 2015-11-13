@@ -337,7 +337,6 @@
 		7BA8D1C71BA037F500C8AE9E /* OpenPdfHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA8D1C61BA037F500C8AE9E /* OpenPdfHelper.swift */; };
 		7BB20B6D1B71160200F1657F /* TopSitesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB20B6C1B71160200F1657F /* TopSitesTests.swift */; };
 		7BBFEE741BB405D900A305AA /* TabManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBFEE731BB405D900A305AA /* TabManagerTests.swift */; };
-		7BBFEE9A1BB409B200A305AA /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3968F241A38FE8500CEFD3B /* TabManager.swift */; };
 		7BBFEE9B1BB409C300A305AA /* Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A994961A3686BD008AD1AC /* Browser.swift */; };
 		7BBFEE9C1BB409D200A305AA /* SnackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B2861AC0A2B90052877D /* SnackBar.swift */; };
 		7BBFEE9D1BB409D800A305AA /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* SessionData.swift */; };
@@ -628,6 +627,9 @@
 		E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C041B90A472005ABB0D /* libxml2.2.tbd */; };
 		E6231C071B90A712005ABB0D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
 		E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E6231C001B90A44F005ABB0D /* libz.tbd */; };
+		E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */; };
+		E6327A8A1BF6473A008D12E0 /* DebugSettingsBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */; };
+		E6327A8B1BF64799008D12E0 /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3968F241A38FE8500CEFD3B /* TabManager.swift */; };
 		E635D25E1B729DEE0078962F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E635D25D1B729DEE0078962F /* Logger.swift */; };
 		E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64ED8F91BC55AE300DAF864 /* UIAlertControllerExtensions.swift */; };
 		E65072A31B2737DA001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
@@ -1825,6 +1827,7 @@
 		E6231C001B90A44F005ABB0D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		E6231C021B90A466005ABB0D /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		E6231C041B90A472005ABB0D /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
+		E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettingsBundleOptions.swift; sourceTree = "<group>"; };
 		E635D25D1B729DEE0078962F /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E64ED8F91BC55AE300DAF864 /* UIAlertControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIAlertControllerExtensions.swift; path = Extensions/UIAlertControllerExtensions.swift; sourceTree = "<group>"; };
 		E65AB12B1B7CDADF00C2B47A /* SessionRestoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHelper.swift; sourceTree = "<group>"; };
@@ -3172,6 +3175,7 @@
 				D3BE7B471B05596800641031 /* AuroraAppDelegate.swift */,
 				E60A60811B6BFC0B00F850D4 /* CrashReporter.swift */,
 				E4B3348B1BC01D8F004E2BFF /* AdjustIntegration.swift */,
+				E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */,
 				E6639F171BF11E17002D0853 /* Settings.bundle */,
 			);
 			path = Application;
@@ -4905,6 +4909,7 @@
 				E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */,
 				E4B334571BBF2393004E2BFF /* ADJConfig.m in Sources */,
 				D38B2D521A8D96D00040E6B5 /* GCDWebServerStreamedResponse.m in Sources */,
+				E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */,
 				E4B334531BBF2393004E2BFF /* UIDevice+ADJAdditions.m in Sources */,
 				D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */,
 				E4B334521BBF2393004E2BFF /* NSString+ADJAdditions.m in Sources */,
@@ -4921,6 +4926,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6327A8A1BF6473A008D12E0 /* DebugSettingsBundleOptions.swift in Sources */,
 				E42475E31AB73B9B00B23D33 /* SWTableViewCell.m in Sources */,
 				E4CD9F1D1A6D9C2800318571 /* WebServerTests.swift in Sources */,
 				D3D488591ABB54CD00A93597 /* FileAccessorTests.swift in Sources */,
@@ -4949,6 +4955,7 @@
 				D3FA77971A43B5390010CD32 /* OpenSearch.swift in Sources */,
 				D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */,
 				D3BA41681BD82F2200DA5457 /* XCTestCaseExtensions.swift in Sources */,
+				E6327A8B1BF64799008D12E0 /* TabManager.swift in Sources */,
 				7BBFEEA11BB40A0800A305AA /* ReaderModeCache.swift in Sources */,
 				D38B2D441A8D96D00040E6B5 /* GCDWebServerMultiPartFormRequest.m in Sources */,
 				E42475DD1AB73B9B00B23D33 /* SWCellScrollView.m in Sources */,
@@ -4980,7 +4987,6 @@
 				59A687B4A05CC772FE7E5A09 /* SearchViewController.swift in Sources */,
 				7BBFEE9E1BB409E300A305AA /* ReaderModeUtils.swift in Sources */,
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
-				7BBFEE9A1BB409B200A305AA /* TabManager.swift in Sources */,
 				E42475E91AB73B9B00B23D33 /* SWUtilityButtonView.m in Sources */,
 				0BE1083A1A1B1ED200D4B712 /* Locking.swift in Sources */,
 				59A6897152D30C846676DA34 /* TwoLineCell.swift in Sources */,
