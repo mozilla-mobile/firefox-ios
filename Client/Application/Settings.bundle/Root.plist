@@ -16,6 +16,16 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
+			<string>Email Logs On Launch</string>
+			<key>Key</key>
+			<string>SettingsBundleEmailLogsOnLaunch</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
 			<string>Disable Local Web Server</string>
 			<key>Key</key>
 			<string>SettingsBundleDisableLocalWebServer</string>

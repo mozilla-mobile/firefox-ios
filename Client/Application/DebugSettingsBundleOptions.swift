@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import MessageUI
 
 struct DebugSettingsBundleOptions {
 
@@ -14,5 +15,11 @@ struct DebugSettingsBundleOptions {
     /// Disable the local web server we use for restoration, error pages, etc
     static var disableLocalWebServer: Bool {
         return NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleDisableLocalWebServer") ?? false
+    }
+
+    /// When enabled, the app launch will be replaced with the mail compose view appearing with the device
+    /// logs pre-attached. When the mail is sent, the app continues launching normally.
+    static var emailLogsOnLaunch: Bool {
+        return (NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleEmailLogsOnLaunch") &&  MFMailComposeViewController.canSendMail()) ?? false
     }
 }
