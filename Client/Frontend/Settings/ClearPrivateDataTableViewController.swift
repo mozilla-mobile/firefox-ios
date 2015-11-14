@@ -12,19 +12,23 @@ private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
 private let HeaderHeight: CGFloat = 44
 private let TogglesPrefKey = "clearprivatedata.toggles"
 
+private let log = Logger.browserLogger
+
 class ClearPrivateDataTableViewController: UITableViewController {
     private var clearButton: UITableViewCell?
 
     var profile: Profile!
     var tabManager: TabManager!
 
-    private lazy var clearables: [Clearable] = {
+    private typealias DefaultCheckedState = Bool
+
+    private lazy var clearables: [(clearable: Clearable, checked: DefaultCheckedState)] = {
         return [
-            HistoryClearable(profile: self.profile),
-            CacheClearable(tabManager: self.tabManager),
-            CookiesClearable(tabManager: self.tabManager),
-            SiteDataClearable(tabManager: self.tabManager),
-            PasswordsClearable(profile: self.profile),
+            (HistoryClearable(profile: self.profile), true),
+            (CacheClearable(tabManager: self.tabManager), true),
+            (CookiesClearable(tabManager: self.tabManager), true),
+            (SiteDataClearable(tabManager: self.tabManager), true),
+            (PasswordsClearable(profile: self.profile), false),
         ]
     }()
 
@@ -33,7 +37,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
             return savedToggles
         }
 
-        return [Bool](count: self.clearables.count, repeatedValue: true)
+        return self.clearables.map { $0.checked }
     }()
 
     private var clearButtonEnabled = true {
@@ -59,7 +63,7 @@ class ClearPrivateDataTableViewController: UITableViewController {
         let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
 
         if indexPath.section == SectionToggles {
-            cell.textLabel?.text = clearables[indexPath.item].label
+            cell.textLabel?.text = clearables[indexPath.item].clearable.label
             let control = UISwitch()
             control.onTintColor = UIConstants.ControlTintColor
             control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
@@ -105,10 +109,16 @@ class ClearPrivateDataTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         guard indexPath.section == SectionButton else { return }
 
+        let toggles = self.toggles
         clearables
             .enumerate()
-            .filter { (i, _) in toggles[i] }
-            .map { (_, clearable) in clearable.clear() }
+            .flatMap { (i, pair) in
+                guard toggles[i] else {
+                    return nil
+                }
+                log.debug("Clearing \(pair.clearable).")
+                return pair.clearable.clear()
+            }
             .allSucceed()
             .upon { result in
                 assert(result.isSuccess, "Private data cleared successfully")
