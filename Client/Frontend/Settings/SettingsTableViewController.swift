@@ -683,6 +683,34 @@ private class PrivacyPolicySetting: Setting {
     }
 }
 
+private class ChinaSyncServiceSetting: WithoutAccountSetting {
+    override var accessoryType: UITableViewCellAccessoryType { return .None }
+    var prefs: Prefs { return settings.profile.prefs }
+    let prefKey = "useChinaSyncService"
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "本地同步服务", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor])
+    }
+
+    override var status: NSAttributedString? {
+        return NSAttributedString(string: "本地服务使用火狐通行证同步数据", attributes: [NSForegroundColorAttributeName: UIConstants.TableViewHeaderTextColor])
+    }
+
+    override func onConfigureCell(cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        let control = UISwitch()
+        control.onTintColor = UIConstants.ControlTintColor
+        control.addTarget(self, action: "switchValueChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        control.on = prefs.boolForKey(prefKey) ?? true
+        cell.accessoryView = control
+        cell.selectionStyle = .None
+    }
+
+    @objc func switchValueChanged(toggle: UISwitch) {
+        prefs.setObject(toggle.on, forKey: prefKey)
+    }
+}
+
 // The base settings view controller.
 class SettingsTableViewController: UITableViewController {
     private let Identifier = "CellIdentifier"
@@ -717,6 +745,18 @@ class SettingsTableViewController: UITableViewController {
                 titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
         ]
 
+        let accountChinaSyncSetting: [Setting]
+        let locale = NSLocale.currentLocale()
+        if locale.localeIdentifier != "zh_CN" {
+            accountChinaSyncSetting = []
+        } else {
+            // Set the value of "useChinaSyncService"
+            prefs.setObject(true, forKey: "useChinaSyncService")
+            accountChinaSyncSetting = [
+                // Show China sync service setting:
+                ChinaSyncServiceSetting(settings: self)
+            ]
+        }
         // There is nothing to show in the Customize section if we don't include the compact tab layout
         // setting on iPad. When more options are added that work on both device types, this logic can
         // be changed.
@@ -734,7 +774,7 @@ class SettingsTableViewController: UITableViewController {
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 SyncNowSetting(settings: self)
-            ] + accountDebugSettings),
+            ] + accountChinaSyncSetting + accountDebugSettings),
             SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)
         ]
 
