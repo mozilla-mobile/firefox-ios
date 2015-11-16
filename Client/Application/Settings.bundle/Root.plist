@@ -36,9 +36,9 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Do Not Restore Tabs</string>
+			<string>Skip Session Restore</string>
 			<key>Key</key>
-			<string>SettingsBundleDoNotRestoreTabs</string>
+			<string>SettingsBundleSkipSessionRestore</string>
 			<key>DefaultValue</key>
 			<false/>
 		</dict>

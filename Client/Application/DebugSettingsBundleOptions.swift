@@ -8,8 +8,8 @@ import MessageUI
 struct DebugSettingsBundleOptions {
 
     /// Don't restore tabs on app launch
-    static var doNotRestoreTabs: Bool {
-        return NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleDoNotRestoreTabs") ?? false
+    static var skipSessionRestore: Bool {
+        return NSUserDefaults.standardUserDefaults().boolForKey("SettingsBundleSkipSessionRestore") ?? false
     }
 
     /// Disable the local web server we use for restoration, error pages, etc
