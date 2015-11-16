@@ -70,13 +70,15 @@ private let log = Logger.syncLogger
  */
 public class BrowserTable: Table {
     static let DefaultVersion = 11
-    let version: Int
+
+    // TableInfo fields.
     var name: String { return "BROWSER" }
+    var version: Int { return BrowserTable.DefaultVersion }
+
     let sqliteVersion: Int32
     let supportsPartialIndices: Bool
 
-    public init(version: Int = DefaultVersion) {
-        self.version = version
+    public init() {
         let v = sqlite3_libversion_number()
         self.sqliteVersion = v
         self.supportsPartialIndices = v >= 3008000          // 3.8.0.
@@ -157,7 +159,7 @@ public class BrowserTable: Table {
         return self.run(db, sql: sql, args: args)
     }
 
-    func getHistoryTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
+    func getHistoryTableCreationString() -> String {
         return "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
@@ -167,12 +169,12 @@ public class BrowserTable: Table {
             "local_modified INTEGER, " +          // Can be null. Client clock. In extremis only.
             "is_deleted TINYINT NOT NULL, " +     // Boolean. Locally deleted.
             "should_upload TINYINT NOT NULL, " +  // Boolean. Set when changed or visits added.
-            (version > 5 ? "domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE, " : "") +
+            "domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE, " +
             "CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)" +
             ")"
     }
 
-    func getTopSitesTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
+    func getTopSitesTableCreationString() -> String {
         return "CREATE TABLE IF NOT EXISTS \(TableCachedTopSites) (" +
             "historyID INTEGER, " +
             "url TEXT NOT NULL, " +
@@ -192,11 +194,7 @@ public class BrowserTable: Table {
             "frecencies REAL)"
     }
 
-    func getDomainsTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
-        if version <= 5 {
-            return nil
-        }
-
+    func getDomainsTableCreationString() -> String {
         return "CREATE TABLE IF NOT EXISTS \(TableDomains) (" +
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                    "domain TEXT NOT NULL UNIQUE, " +
@@ -204,22 +202,14 @@ public class BrowserTable: Table {
                ")"
     }
 
-    func getQueueTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
-        if version <= 4 {
-            return nil
-        }
-
+    func getQueueTableCreationString() -> String {
         return "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
                    "url TEXT NOT NULL UNIQUE, " +
                    "title TEXT" +
                ") "
     }
 
-    func getBookmarksMirrorTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
-        if version < 9 {
-            return nil
-        }
-
+    func getBookmarksMirrorTableCreationString() -> String {
         // The stupid absence of naming conventions here is thanks to pre-Sync Weave. Sorry.
         // For now we have the simplest possible schema: everything in one.
         let sql =
@@ -256,11 +246,7 @@ public class BrowserTable: Table {
      * We need to explicitly store what's provided by the server, because we can't rely on
      * referenced child nodes to exist yet!
      */
-    func getBookmarksMirrorStructureTableCreationString(forVersion version: Int = BrowserTable.DefaultVersion) -> String? {
-        if version < 10 {
-            return nil
-        }
-
+    func getBookmarksMirrorStructureTableCreationString() -> String {
         // TODO: index me.
         let sql =
         "CREATE TABLE IF NOT EXISTS \(TableBookmarksMirrorStructure) " +
@@ -272,7 +258,7 @@ public class BrowserTable: Table {
         return sql
     }
 
-    func create(db: SQLiteDBConnection, version: Int) -> Bool {
+    func create(db: SQLiteDBConnection) -> Bool {
         let favicons =
         "CREATE TABLE IF NOT EXISTS \(TableFavicons) (" +
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -367,8 +353,8 @@ public class BrowserTable: Table {
             "ON \(TableBookmarksMirrorStructure) (parent, idx)"
 
         let queries: [String?] = [
-            getDomainsTableCreationString(forVersion: version),
-            getHistoryTableCreationString(forVersion: version),
+            getDomainsTableCreationString(),
+            getHistoryTableCreationString(),
             favicons,
             visits,
             bookmarks,
@@ -381,8 +367,8 @@ public class BrowserTable: Table {
             widestFavicons,
             historyIDsWithIcon,
             iconForURL,
-            getQueueTableCreationString(forVersion: version),
-            getTopSitesTableCreationString(forVersion: version),
+            getQueueTableCreationString(),
+            getTopSitesTableCreationString(),
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -393,7 +379,8 @@ public class BrowserTable: Table {
                self.prepopulateRootFolders(db)
     }
 
-    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
+    func updateTable(db: SQLiteDBConnection, from: Int) -> Bool {
+        let to = BrowserTable.DefaultVersion
         if from == to {
             log.debug("Skipping update from \(from) to \(to).")
             return true
@@ -402,23 +389,23 @@ public class BrowserTable: Table {
         if from == 0 {
             // This is likely an upgrade from before Bug 1160399.
             log.debug("Updating browser tables from zero. Assuming drop and recreate.")
-            return drop(db) && create(db, version: to)
+            return drop(db) && create(db)
         }
 
         if from > to {
             // This is likely an upgrade from before Bug 1160399.
             log.debug("Downgrading browser tables. Assuming drop and recreate.")
-            return drop(db) && create(db, version: to)
+            return drop(db) && create(db)
         }
 
         log.debug("Updating browser tables from \(from) to \(to).")
 
         if from < 4 && to >= 4 {
-            return drop(db) && create(db, version: to)
+            return drop(db) && create(db)
         }
 
         if from < 5 && to >= 5  {
-            let queries: [String?] = [getQueueTableCreationString(forVersion: to)]
+            let queries: [String] = [getQueueTableCreationString()]
             if !self.runValidQueries(db, queries: queries) {
                 return false
             }
@@ -434,8 +421,8 @@ public class BrowserTable: Table {
         }
 
         if from < 7 && to >= 7 {
-            let queries: [String?] = [
-                getDomainsTableCreationString(forVersion: to),
+            let queries: [String] = [
+                getDomainsTableCreationString(),
                 "ALTER TABLE \(TableHistory) ADD COLUMN domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE",
             ]
 
@@ -456,13 +443,13 @@ public class BrowserTable: Table {
         }
 
         if from < 9 && to >= 9 {
-            if !self.run(db, sql: getBookmarksMirrorTableCreationString(forVersion: to)!) {
+            if !self.run(db, sql: getBookmarksMirrorTableCreationString()) {
                 return false
             }
         }
 
         if from < 10 && to >= 10 {
-            if !self.run(db, sql: getBookmarksMirrorStructureTableCreationString(forVersion: to)!) {
+            if !self.run(db, sql: getBookmarksMirrorStructureTableCreationString()) {
                 return false
             }
 
@@ -474,7 +461,7 @@ public class BrowserTable: Table {
         }
 
         if from < 11 && to >= 11 {
-            if !self.runValidQueries(db, queries: [(getTopSitesTableCreationString(forVersion: to), nil)]) {
+            if !self.run(db, sql: getTopSitesTableCreationString()) {
                 return false
             }
         }

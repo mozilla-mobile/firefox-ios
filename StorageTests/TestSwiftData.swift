@@ -30,8 +30,8 @@ class TestSwiftData: XCTestCase {
 
         swiftData!.withConnection(SwiftData.Flags.ReadWriteCreate) { db in
             let f = FaviconsTable<Favicon>()
-            f.create(db, version: 1)    // Because BrowserTable needs it.
-            table.create(db, version: 1)
+            f.create(db)    // Because BrowserTable needs it.
+            table.create(db)
             return nil
         }
 
