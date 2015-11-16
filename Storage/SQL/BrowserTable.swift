@@ -103,10 +103,30 @@ public class BrowserTable: Table {
         return true
     }
 
+    func run(db: SQLiteDBConnection, queries: [String]) -> Bool {
+        for sql in queries {
+            if !run(db, sql: sql) {
+                return false
+            }
+        }
+        return true
+    }
+
     func runValidQueries(db: SQLiteDBConnection, queries: [(String?, Args?)]) -> Bool {
         for (sql, args) in queries {
             if let sql = sql {
                 if !run(db, sql: sql, args: args) {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
+    func runValidQueries(db: SQLiteDBConnection, queries: [String?]) -> Bool {
+        for sql in queries {
+            if let sql = sql {
+                if !run(db, sql: sql) {
                     return false
                 }
             }
