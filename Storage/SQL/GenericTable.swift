@@ -25,12 +25,20 @@ class TableInfoWrapper: TableInfo {
 }
 
 /**
- * Something that knows how to build and maintain part of a database.
+ * Something that knows how to construct part of a database.
+ */
+protocol SectionCreator: TableInfo {
+    func create(db: SQLiteDBConnection) -> Bool
+}
+
+protocol SectionUpdater: TableInfo {
+    func updateTable(db: SQLiteDBConnection, from: Int) -> Bool
+}
+
+/*
  * This should really be called "Section" or something like that.
  */
-protocol Table: TableInfo {
-    func create(db: SQLiteDBConnection, version: Int) -> Bool
-    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool
+protocol Table: SectionCreator, SectionUpdater {
     func exists(db: SQLiteDBConnection) -> Bool
     func drop(db: SQLiteDBConnection) -> Bool
 }
@@ -117,7 +125,7 @@ class GenericTable<T>: BaseTable {
         return nil
     }
 
-    func create(db: SQLiteDBConnection, version: Int) -> Bool {
+    func create(db: SQLiteDBConnection) -> Bool {
         if let err = db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (\(rows))") {
             log.error("Error creating \(self.name) - \(err)")
             return false
@@ -125,7 +133,8 @@ class GenericTable<T>: BaseTable {
         return true
     }
 
-    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
+    func updateTable(db: SQLiteDBConnection, from: Int) -> Bool {
+        let to = self.version
         log.debug("Update table \(self.name) from \(from) to \(to)")
         return false
     }
