@@ -469,6 +469,11 @@ class BrowserViewController: UIViewController {
     }
 
     private func showRestoreTabsAlert() {
+        guard !DebugSettingsBundleOptions.skipSessionRestore else {
+            self.tabManager.addTabAndSelect()
+            return
+        }
+
         let alert = UIAlertController.restoreTabsAlert(
             okayCallback: { _ in
                 self.tabManager.restoreTabs()
@@ -478,11 +483,7 @@ class BrowserViewController: UIViewController {
             }
         )
 
-        if DebugSettingsBundleOptions.doNotRestoreTabs {
-            self.tabManager.addTabAndSelect()
-        } else {
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
+        self.presentViewController(alert, animated: true, completion: nil)
     }
 
     override func viewDidAppear(animated: Bool) {
