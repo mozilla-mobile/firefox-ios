@@ -248,6 +248,37 @@ public class SQLiteLogins: BrowserLogins {
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
     }
 
+    public func getAllLogins() -> Deferred<Maybe<Cursor<LoginData>>> {
+        return searchLoginsByUsername(nil)
+    }
+
+    public func searchLoginsByUsername(username: String?, orPassword password: String? = nil, orHostname hostname: String? = nil) -> Deferred<Maybe<Cursor<LoginData>>> {
+        let projection = SQLiteLogins.MainWithLastUsedColumns
+        var searchClauses = [String]()
+        if let username = username {
+            searchClauses.append(" username LIKE '\(username)%' ")
+        }
+
+        if let password = password {
+            searchClauses.append(" password LIKE '\(password)%' ")
+        }
+
+        if let hostname = hostname {
+            searchClauses.append(" hostname LIKE '\(hostname)%' ")
+        }
+
+        let whereSearchClause = searchClauses.count > 0 ? "AND" + searchClauses.joinWithSeparator("OR") : ""
+        let sql =
+        "SELECT \(projection) FROM " +
+            "\(TableLoginsLocal) WHERE is_deleted = 0 " + whereSearchClause +
+            "UNION ALL " +
+            "SELECT \(projection) FROM " +
+            "\(TableLoginsMirror) WHERE is_overridden = 0 " + whereSearchClause +
+        "ORDER BY hostname ASC"
+
+        return db.runQuery(sql, args: [], factory: SQLiteLogins.LoginDataFactory)
+    }
+
     public func addLogin(login: LoginData) -> Success {
         let nowMicro = NSDate.nowMicroseconds()
         let nowMilli = nowMicro / 1000

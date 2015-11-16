@@ -75,6 +75,115 @@ class TestSQLiteLogins: XCTestCase {
         waitForExpectationsWithTimeout(10.0, handler: nil)
     }
 
+    func testSearchLogins() {
+        let loginA = Login.createWithHostname("alphabet.com", username: "username1", password: "password1")
+        let loginB = Login.createWithHostname("alpha.com", username: "username2", password: "password2")
+
+        func addLogins() -> Success {
+            return addLogin(loginB) >>> {
+                self.addLogin(loginA) >>> succeed
+            }
+        }
+
+        func checkAllLogins() -> Success {
+            return logins.getAllLogins() >>== { results in
+                XCTAssertEqual(results.count, 2)
+                return succeed()
+            }
+        }
+
+        func checkFindMultipleUsernames() -> Success {
+            return logins.searchLoginsByUsername("username") >>== { results in
+                XCTAssertEqual(results.count, 2)
+                XCTAssertEqual(results[0]!.username, "username2")
+                XCTAssertEqual(results[1]!.username, "username1")
+                return succeed()
+            }
+        }
+
+        func checkFindSingleUsername() -> Success {
+            return logins.searchLoginsByUsername("username1") >>== { results in
+                XCTAssertEqual(results.count, 1)
+                XCTAssertEqual(results[0]!.username, "username1")
+                return succeed()
+            }
+        }
+
+        func checkFindMultipleHostnames() -> Success {
+            return logins.searchLoginsByUsername(nil, orPassword: nil, orHostname: "alpha") >>== { results in
+                XCTAssertEqual(results.count, 2)
+                XCTAssertEqual(results[0]!.hostname, "alpha.com")
+                XCTAssertEqual(results[1]!.hostname, "alphabet.com")
+                return succeed()
+            }
+        }
+
+        func checkFindSingleHostname() -> Success {
+            return logins.searchLoginsByUsername(nil, orPassword: nil, orHostname: "alphabet") >>== { results in
+                XCTAssertEqual(results.count, 1)
+                XCTAssertEqual(results[0]!.hostname, "alphabet.com")
+                return succeed()
+            }
+        }
+
+        func checkFindMultiplePasswords() -> Success {
+            return logins.searchLoginsByUsername(nil, orPassword: "password") >>== { results in
+                XCTAssertEqual(results.count, 2)
+                XCTAssertEqual(results[0]!.password, "password2")
+                XCTAssertEqual(results[1]!.password, "password1")
+                return succeed()
+            }
+        }
+
+        func checkFindSinglePassword() -> Success {
+            return logins.searchLoginsByUsername(nil, orPassword: "password1") >>== { results in
+                XCTAssertEqual(results.count, 1)
+                XCTAssertEqual(results[0]!.password, "password1")
+                return succeed()
+            }
+        }
+
+        func checkFindPasswordOrHostname() -> Success {
+            return logins.searchLoginsByUsername(nil, orPassword: "password", orHostname: "alpha") >>== { results in
+                XCTAssertEqual(results.count, 2)
+                return succeed()
+            }
+        }
+
+        func checkFindHostnameOrUsername() -> Success {
+            return logins.searchLoginsByUsername("username", orPassword: nil, orHostname: "alpha") >>== { results in
+                XCTAssertEqual(results.count, 2)
+                return succeed()
+            }
+        }
+
+        func checkFindHostnameOrUsernameOrPassword() -> Success {
+            return logins.searchLoginsByUsername("username", orPassword: "password", orHostname: "alpha") >>== { results in
+                XCTAssertEqual(results.count, 2)
+                return succeed()
+            }
+        }
+
+        XCTAssertTrue(addLogins().value.isSuccess)
+
+        XCTAssertTrue(checkAllLogins().value.isSuccess)
+
+        XCTAssertTrue(checkFindMultipleUsernames().value.isSuccess)
+        XCTAssertTrue(checkFindSingleUsername().value.isSuccess)
+
+        XCTAssertTrue(checkFindMultipleHostnames().value.isSuccess)
+        XCTAssertTrue(checkFindSingleHostname().value.isSuccess)
+
+        XCTAssertTrue(checkFindMultiplePasswords().value.isSuccess)
+        XCTAssertTrue(checkFindSinglePassword().value.isSuccess)
+
+        XCTAssertTrue(checkFindPasswordOrHostname().value.isSuccess)
+        XCTAssertTrue(checkFindHostnameOrUsername().value.isSuccess)
+        XCTAssertTrue(checkFindHostnameOrUsernameOrPassword().value.isSuccess)
+
+        XCTAssertTrue(removeAllLogins().value.isSuccess)
+    }
+
     /*
     func testAddUseOfLogin() {
         let expectation = self.expectationWithDescription("Add visit")

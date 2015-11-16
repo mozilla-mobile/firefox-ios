@@ -502,6 +502,8 @@ public protocol BrowserLogins {
     func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Maybe<LoginUsageData>>
     func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>>
     func getLoginsForProtectionSpace(protectionSpace: NSURLProtectionSpace, withUsername username: String?) -> Deferred<Maybe<Cursor<LoginData>>>
+    func getAllLogins() -> Deferred<Maybe<Cursor<LoginData>>>
+    func searchLoginsByUsername(username: String?, orPassword password: String?, orHostname hostname: String?) -> Deferred<Maybe<Cursor<LoginData>>>
 
     // Add a new login regardless of whether other logins might match some fields. Callers
     // are responsible for querying first if they care.
