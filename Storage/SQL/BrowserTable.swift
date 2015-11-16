@@ -366,23 +366,23 @@ public class BrowserTable: Table {
         let indexStructureParentIdx = "CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureParentIdx) " +
             "ON \(TableBookmarksMirrorStructure) (parent, idx)"
 
-        let queries: [(String?, Args?)] = [
-            (getDomainsTableCreationString(forVersion: version), nil),
-            (getHistoryTableCreationString(forVersion: version), nil),
-            (favicons, nil),
-            (visits, nil),
-            (bookmarks, nil),
-            (bookmarksMirror, nil),
-            (bookmarksMirrorStructure, nil),
-            (indexStructureParentIdx, nil),
-            (faviconSites, nil),
-            (indexShouldUpload, nil),
-            (indexSiteIDDate, nil),
-            (widestFavicons, nil),
-            (historyIDsWithIcon, nil),
-            (iconForURL, nil),
-            (getQueueTableCreationString(forVersion: version), nil),
-            (getTopSitesTableCreationString(forVersion: version), nil),
+        let queries: [String?] = [
+            getDomainsTableCreationString(forVersion: version),
+            getHistoryTableCreationString(forVersion: version),
+            favicons,
+            visits,
+            bookmarks,
+            bookmarksMirror,
+            bookmarksMirrorStructure,
+            indexStructureParentIdx,
+            faviconSites,
+            indexShouldUpload,
+            indexSiteIDDate,
+            widestFavicons,
+            historyIDsWithIcon,
+            iconForURL,
+            getQueueTableCreationString(forVersion: version),
+            getTopSitesTableCreationString(forVersion: version),
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -416,7 +416,7 @@ public class BrowserTable: Table {
         }
 
         if from < 5 && to >= 5  {
-            let queries: [(String?, Args?)] = [(getQueueTableCreationString(forVersion: to), nil)]
+            let queries: [String?] = [getQueueTableCreationString(forVersion: to)]
             if !self.runValidQueries(db, queries: queries) {
                 return false
             }
@@ -424,17 +424,17 @@ public class BrowserTable: Table {
 
         if from < 6 && to >= 6 {
             if !self.run(db, queries: [
-                ("DROP INDEX IF EXISTS \(IndexVisitsSiteIDDate)", nil),
-                ("CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDIsLocalDate) ON \(TableVisits) (siteID, is_local, date)", nil)
+                "DROP INDEX IF EXISTS \(IndexVisitsSiteIDDate)",
+                "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDIsLocalDate) ON \(TableVisits) (siteID, is_local, date)",
             ]) {
                 return false
             }
         }
 
         if from < 7 && to >= 7 {
-            let queries: [(String?, Args?)] = [
-                (getDomainsTableCreationString(forVersion: to), nil),
-                ("ALTER TABLE \(TableHistory) ADD COLUMN domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE", nil)
+            let queries: [String?] = [
+                getDomainsTableCreationString(forVersion: to),
+                "ALTER TABLE \(TableHistory) ADD COLUMN domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE",
             ]
 
             if !self.runValidQueries(db, queries: queries) {
@@ -527,10 +527,10 @@ public class BrowserTable: Table {
         let dropTemp = "DROP TABLE \(tmpTable)"
 
         // Now run these.
-        if !self.run(db, queries: [(domains, nil),
-                                   (domainIDs, nil),
-                                   (updateHistory, nil),
-                                   (dropTemp, nil)]) {
+        if !self.run(db, queries: [domains,
+                                   domainIDs,
+                                   updateHistory,
+                                   dropTemp]) {
             log.error("Unable to migrate domains.")
             return false
         }
@@ -551,13 +551,13 @@ public class BrowserTable: Table {
 
     func drop(db: SQLiteDBConnection) -> Bool {
         log.debug("Dropping all browser tables.")
-        let additional: [(String, Args?)] = [
-            ("DROP TABLE IF EXISTS faviconSites", nil) // We renamed it to match naming convention.
+        let additional = [
+            "DROP TABLE IF EXISTS faviconSites" // We renamed it to match naming convention.
         ]
 
-        let queries: [(String, Args?)] = AllViews.map { ("DROP VIEW IF EXISTS \($0!)", nil) } as [(String, Args?)] +
-                      AllIndices.map { ("DROP INDEX IF EXISTS \($0!)", nil) } as [(String, Args?)] +
-                      AllTables.map { ("DROP TABLE IF EXISTS \($0!)", nil) } as [(String, Args?)] +
+        let queries = AllViews.map { "DROP VIEW IF EXISTS \($0!)" } +
+                      AllIndices.map { "DROP INDEX IF EXISTS \($0!)" } +
+                      AllTables.map { "DROP TABLE IF EXISTS \($0!)" } +
                       additional
 
         return self.run(db, queries: queries)
