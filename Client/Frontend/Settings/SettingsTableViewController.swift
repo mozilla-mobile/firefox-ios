@@ -629,6 +629,24 @@ private class SearchSetting: Setting {
     }
 }
 
+private class LoginsSetting: Setting {
+    let profile: Profile
+    var tabManager: TabManager!
+
+    override var accessoryType: UITableViewCellAccessoryType { return .DisclosureIndicator }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        self.tabManager = settings.tabManager
+
+        let loginsTitle = NSLocalizedString("Logins", comment: "Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager.")
+        super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSForegroundColorAttributeName: UIConstants.TableViewRowTextColor]))
+    }
+
+    override func onClick(navigationController: UINavigationController?) {
+    }
+}
+
 private class ClearPrivateDataSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
@@ -720,7 +738,7 @@ class SettingsTableViewController: UITableViewController {
             SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)
         ]
 
-        var privacySettings: [Setting] = [ClearPrivateDataSetting(settings: self)]
+        var privacySettings: [Setting] = [LoginsSetting(settings: self), ClearPrivateDataSetting(settings: self)]
 
         if #available(iOS 9, *) {
             privacySettings += [
@@ -877,7 +895,7 @@ class SettingsTableViewController: UITableViewController {
         }
 
         if #available(iOS 9, *) {
-            if indexPath.section == 2 && indexPath.row == 1 {
+            if indexPath.section == 2 && indexPath.row == 2 {
                 return 64
             }
         }
