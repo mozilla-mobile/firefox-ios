@@ -28,3 +28,6 @@ MOZ_BREAKPAD_SERVER_TYPE = socorro
 
 // Vendor property to send to crash-stats
 MOZ_VENDOR = Mozilla
+
+// Flag to indicate if we want to include the debug settings bundle or not
+INCLUDE_SETTINGS_BUNDLE = NO
