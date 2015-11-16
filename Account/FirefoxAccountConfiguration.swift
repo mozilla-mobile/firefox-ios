@@ -8,12 +8,14 @@ public enum FirefoxAccountConfigurationLabel: String {
     case LatestDev = "LatestDev"
     case StableDev = "StableDev"
     case Production = "Production"
+    case ChinaEdition = "ChinaEdition"
 
     public func toConfiguration() -> FirefoxAccountConfiguration {
         switch self {
         case LatestDev: return LatestDevFirefoxAccountConfiguration()
         case StableDev: return StableDevFirefoxAccountConfiguration()
         case Production: return ProductionFirefoxAccountConfiguration()
+        case ChinaEdition: return ChinaEditionFirefoxAccountConfiguration()
         }
     }
 }
@@ -97,6 +99,30 @@ public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration
     public let forceAuthURL = NSURL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_ios_v1")!
 
     public let sync15Configuration: Sync15Configuration = ProductionSync15Configuration()
+}
+
+public struct ChinaEditionFirefoxAccountConfiguration: FirefoxAccountConfiguration {
+    public init() {
+    }
+
+    public let label = FirefoxAccountConfigurationLabel.ChinaEdition
+
+    public let authEndpointURL = NSURL(string: "https://api-accounts.firefox.com.cn/v1")!
+    public let oauthEndpointURL = NSURL(string: "https://oauth.firefox.com.cn/v1")!
+    public let profileEndpointURL = NSURL(string: "https://profile.firefox.com.cn/v1")!
+
+    public let signInURL = NSURL(string: "https://accounts.firefox.com.cn/signin?service=sync&context=fx_ios_v1")!
+    public let settingsURL = NSURL(string: "https://accounts.firefox.com.cn/settings?context=fx_ios_v1")!
+    public let forceAuthURL = NSURL(string: "https://accounts.firefox.com.cn/force_auth?service=sync&context=fx_ios_v1")!
+
+    public let sync15Configuration: Sync15Configuration = ChinaEditionSync15Configuration()
+}
+
+public struct ChinaEditionSync15Configuration: Sync15Configuration {
+    public init() {
+    }
+
+    public let tokenServerEndpointURL = NSURL(string: "https://sync.firefox.com.cn/token/1.0/sync/1.5")!
 }
 
 public protocol Sync15Configuration {

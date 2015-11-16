@@ -423,7 +423,13 @@ public class BrowserProfile: Profile {
         return Singleton.instance
     }()
 
-    let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
+    var accountConfiguration: FirefoxAccountConfiguration {
+        let syncService: Bool = self.prefs.boolForKey("useChinaSyncService") ?? false
+        if syncService {
+            return ChinaEditionFirefoxAccountConfiguration()
+        }
+        return ProductionFirefoxAccountConfiguration()
+    }
 
     private lazy var account: FirefoxAccount? = {
         if let dictionary = KeychainWrapper.objectForKey(self.name + ".account") as? [String: AnyObject] {
