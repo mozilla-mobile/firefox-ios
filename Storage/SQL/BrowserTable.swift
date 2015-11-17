@@ -159,23 +159,8 @@ public class BrowserTable: Table {
         return self.run(db, sql: sql, args: args)
     }
 
-    func getHistoryTableCreationString() -> String {
-        return "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
-            "url TEXT UNIQUE, " +                 // May only be null for deleted records.
-            "title TEXT NOT NULL, " +
-            "server_modified INTEGER, " +         // Can be null. Integer milliseconds.
-            "local_modified INTEGER, " +          // Can be null. Client clock. In extremis only.
-            "is_deleted TINYINT NOT NULL, " +     // Boolean. Locally deleted.
-            "should_upload TINYINT NOT NULL, " +  // Boolean. Set when changed or visits added.
-            "domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE, " +
-            "CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)" +
-            ")"
-    }
-
-    func getTopSitesTableCreationString() -> String {
-        return "CREATE TABLE IF NOT EXISTS \(TableCachedTopSites) (" +
+    let topSitesTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableCachedTopSites) (" +
             "historyID INTEGER, " +
             "url TEXT NOT NULL, " +
             "title TEXT NOT NULL, " +
@@ -191,23 +176,21 @@ public class BrowserTable: Table {
             "iconDate REAL, " +
             "iconType INTEGER, " +
             "iconWidth INTEGER, " +
-            "frecencies REAL)"
-    }
+            "frecencies REAL" +
+        ")"
 
-    func getDomainsTableCreationString() -> String {
-        return "CREATE TABLE IF NOT EXISTS \(TableDomains) (" +
-                   "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                   "domain TEXT NOT NULL UNIQUE, " +
-                   "showOnTopSites TINYINT NOT NULL DEFAULT 1" +
-               ")"
-    }
+    let domainsTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableDomains) (" +
+           "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+           "domain TEXT NOT NULL UNIQUE, " +
+           "showOnTopSites TINYINT NOT NULL DEFAULT 1" +
+       ")"
 
-    func getQueueTableCreationString() -> String {
-        return "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
-                   "url TEXT NOT NULL UNIQUE, " +
-                   "title TEXT" +
-               ") "
-    }
+    let queueTableCreate =
+        "CREATE TABLE IF NOT EXISTS \(TableQueuedTabs) (" +
+            "url TEXT NOT NULL UNIQUE, " +
+            "title TEXT" +
+        ") "
 
     func getBookmarksMirrorTableCreationString() -> String {
         // The stupid absence of naming conventions here is thanks to pre-Sync Weave. Sorry.
@@ -268,6 +251,20 @@ public class BrowserTable: Table {
         "type INTEGER NOT NULL, " +
         "date REAL NOT NULL" +
         ") "
+
+        let history =
+        "CREATE TABLE IF NOT EXISTS \(TableHistory) (" +
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "guid TEXT NOT NULL UNIQUE, " +       // Not null, but the value might be replaced by the server's.
+        "url TEXT UNIQUE, " +                 // May only be null for deleted records.
+        "title TEXT NOT NULL, " +
+        "server_modified INTEGER, " +         // Can be null. Integer milliseconds.
+        "local_modified INTEGER, " +          // Can be null. Client clock. In extremis only.
+        "is_deleted TINYINT NOT NULL, " +     // Boolean. Locally deleted.
+        "should_upload TINYINT NOT NULL, " +  // Boolean. Set when changed or visits added.
+        "domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE, " +
+        "CONSTRAINT urlOrDeleted CHECK (url IS NOT NULL OR is_deleted = 1)" +
+        ")"
 
         // Right now we don't need to track per-visit deletions: Sync can't
         // represent them! See Bug 1157553 Comment 6.
@@ -353,8 +350,8 @@ public class BrowserTable: Table {
             "ON \(TableBookmarksMirrorStructure) (parent, idx)"
 
         let queries: [String] = [
-            getDomainsTableCreationString(),
-            getHistoryTableCreationString(),
+            self.domainsTableCreate,
+            history,
             favicons,
             visits,
             bookmarks,
@@ -367,8 +364,8 @@ public class BrowserTable: Table {
             widestFavicons,
             historyIDsWithIcon,
             iconForURL,
-            getQueueTableCreationString(),
-            getTopSitesTableCreationString(),
+            self.queueTableCreate,
+            self.topSitesTableCreate,
         ]
 
         assert(queries.count == AllTablesIndicesAndViews.count, "Did you forget to add your table, index, or view to the list?")
@@ -405,7 +402,7 @@ public class BrowserTable: Table {
         }
 
         if from < 5 && to >= 5  {
-            if !self.run(db, sql: getQueueTableCreationString()) {
+            if !self.run(db, sql: self.queueTableCreate) {
                 return false
             }
         }
@@ -414,7 +411,7 @@ public class BrowserTable: Table {
             if !self.run(db, queries: [
                 "DROP INDEX IF EXISTS \(IndexVisitsSiteIDDate)",
                 "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDIsLocalDate) ON \(TableVisits) (siteID, is_local, date)",
-                getDomainsTableCreationString(),
+                self.domainsTableCreate,
                 "ALTER TABLE \(TableHistory) ADD COLUMN domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE",
             ]) {
                 return false
@@ -451,7 +448,7 @@ public class BrowserTable: Table {
         }
 
         if from < 11 && to >= 11 {
-            if !self.run(db, sql: getTopSitesTableCreationString()) {
+            if !self.run(db, sql: self.topSitesTableCreate) {
                 return false
             }
         }
