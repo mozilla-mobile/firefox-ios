@@ -37,7 +37,7 @@ platform :ios do
 
     # create a name for this build
     ENV["DATESTAMP"] = Time.now.utc.iso8601.gsub(/\W/, '')
-    ENV["BRANCH_NAME"] = "firefox-ios-#{lane_context[SharedValues::LANE_NAME].gsub!(' ','-')}-#{ENV["APP_VERSION"]}(#{ENV["BUILD_VERSION"]})"
+    ENV["BRANCH_NAME"] = "firefox-#{lane_context[SharedValues::LANE_NAME].gsub!(' ','-')}-#{ENV["APP_VERSION"]}(#{ENV["BUILD_VERSION"]})"
     ENV["BUILD_NAME"] = "#{ENV["BRANCH_NAME"]}-#{ENV["DATESTAMP"]}"
     puts ENV["BUILD_NAME"]
 
@@ -45,7 +45,7 @@ platform :ios do
 
     # checkout a new branch for build
     checkout_git_branch(
-      base_branch: opts[:branch],
+      base_branch: opts[:base_branch],
       branch: ENV["BRANCH_NAME"]
     )
 
