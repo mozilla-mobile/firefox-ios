@@ -126,14 +126,7 @@ public class BrowserTable: Table {
     }
 
     func runValidQueries(db: SQLiteDBConnection, queries: [String?]) -> Bool {
-        for sql in queries {
-            if let sql = sql {
-                if !run(db, sql: sql) {
-                    return false
-                }
-            }
-        }
-        return true
+        return self.run(db: db, queries: optFilter(queries))
     }
 
     func prepopulateRootFolders(db: SQLiteDBConnection) -> Bool {
