@@ -115,7 +115,7 @@ public func optDictionaryEqual<K: Equatable, V: Equatable>(lhs: [K: V]?, rhs: [K
  * Return members of `a` that aren't nil, changing the type of the sequence accordingly.
  */
 public func optFilter<T>(a: [T?]) -> [T] {
-    return a.filter { $0 != nil }.map { $0! }
+    return a.flatMap { $0 }
 }
 
 /**
