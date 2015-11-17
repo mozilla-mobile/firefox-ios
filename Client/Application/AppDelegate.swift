@@ -36,15 +36,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Short circuit the app if we want to email logs from the debug menu
         if DebugSettingsBundleOptions.emailLogsOnLaunch {
-            self.window?.rootViewController = UIViewController();
+            self.window?.rootViewController = UIViewController()
             presentEmailComposerWithLogs()
             return true
         } else {
-            return startApplication()
+            return startApplication(application, withLaunchOptions: launchOptions)
         }
     }
 
-    private func startApplication() -> Bool {
+    private func startApplication(application: UIApplication,  withLaunchOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         log.debug("Setting UA…")
         // Set the Firefox UA for browsing.
         setUserAgent()
@@ -58,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Logger.syncLogger.newLogWithDate(NSDate())
 
         log.debug("Getting profile…")
-        let profile = getProfile(application!)
+        let profile = getProfile(application)
 
         if !DebugSettingsBundleOptions.disableLocalWebServer {
             log.debug("Starting web server…")
@@ -81,12 +81,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.tabManager = TabManager(defaultNewTabRequest: defaultRequest, prefs: profile.prefs, imageStore: imageStore)
         self.tabManager.stateDelegate = self
 
-        browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
-
         // Add restoration class, the factory that will return the ViewController we
         // will restore with.
         log.debug("Initing BVC…")
 
+        browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
         browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
         browserViewController.restorationClass = AppDelegate.self
         browserViewController.automaticallyAdjustsScrollViewInsets = false
@@ -346,7 +345,7 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
     func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
         // Dismiss the view controller and start the app up
         controller.dismissViewControllerAnimated(true, completion: nil)
-        startApplication()
+        startApplication(application!, withLaunchOptions: self.launchOptions)
     }
 }
 
