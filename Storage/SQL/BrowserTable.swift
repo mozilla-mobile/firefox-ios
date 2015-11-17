@@ -352,7 +352,7 @@ public class BrowserTable: Table {
         let indexStructureParentIdx = "CREATE INDEX IF NOT EXISTS \(IndexBookmarksMirrorStructureParentIdx) " +
             "ON \(TableBookmarksMirrorStructure) (parent, idx)"
 
-        let queries: [String?] = [
+        let queries: [String] = [
             getDomainsTableCreationString(),
             getHistoryTableCreationString(),
             favicons,
@@ -375,7 +375,7 @@ public class BrowserTable: Table {
 
         log.debug("Creating \(queries.count) tables, views, and indices.")
 
-        return self.runValidQueries(db, queries: queries) &&
+        return self.run(db, queries: queries) &&
                self.prepopulateRootFolders(db)
     }
 
@@ -405,8 +405,7 @@ public class BrowserTable: Table {
         }
 
         if from < 5 && to >= 5  {
-            let queries: [String] = [getQueueTableCreationString()]
-            if !self.runValidQueries(db, queries: queries) {
+            if !self.run(db, sql: getQueueTableCreationString()) {
                 return false
             }
         }
