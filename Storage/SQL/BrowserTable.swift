@@ -411,6 +411,8 @@ public class BrowserTable: Table {
             return drop(db) && create(db, version: to)
         }
 
+        log.debug("Updating browser tables from \(from) to \(to).")
+
         if from < 4 && to >= 4 {
             return drop(db) && create(db, version: to)
         }
