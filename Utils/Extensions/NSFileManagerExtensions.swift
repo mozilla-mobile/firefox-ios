@@ -89,6 +89,12 @@ public extension NSFileManager {
         }
     }
 
+    func contentsOfDirectoryAtPath(path: String, withFilenamePrefix prefix: String) throws -> [String] {
+        return try NSFileManager.defaultManager().contentsOfDirectoryAtPath(path)
+            .filter { $0.hasPrefix("\(prefix).") }
+            .sort { $0 < $1 }
+    }
+
     private func errorWithCode(code: NSFileManagerExtensionsErrorCodes, underlyingError error: NSError? = nil) -> NSError {
         var userInfo = [String: AnyObject]()
         if let _ = error {

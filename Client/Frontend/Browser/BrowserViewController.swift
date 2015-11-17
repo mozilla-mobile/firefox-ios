@@ -468,6 +468,11 @@ class BrowserViewController: UIViewController {
     }
 
     private func showRestoreTabsAlert() {
+        guard !DebugSettingsBundleOptions.skipSessionRestore else {
+            self.tabManager.addTabAndSelect()
+            return
+        }
+
         let alert = UIAlertController.restoreTabsAlert(
             okayCallback: { _ in
                 self.tabManager.restoreTabs()

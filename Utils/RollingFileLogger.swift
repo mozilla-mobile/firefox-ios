@@ -62,10 +62,7 @@ public class RollingFileLogger: XCGLogger {
         }
 
         do {
-            let logFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(logDirectoryPath!)
-                .filter { $0.hasPrefix("\(prefix).") }
-                .sort { $0 < $1 }
-
+            let logFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(logDirectoryPath!, withFilenamePrefix: prefix)
             if let oldestLogFilename = logFiles.first {
                 try NSFileManager.defaultManager().removeItemAtPath("\(logDirectoryPath!)/\(oldestLogFilename)")
             }
