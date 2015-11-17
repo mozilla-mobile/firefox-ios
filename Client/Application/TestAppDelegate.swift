@@ -13,7 +13,7 @@ class TestAppDelegate: AppDelegate {
 
         // Skip the first run UI.
         profile.prefs.setInt(1, forKey: IntroViewControllerSeenProfileKey)
-
+        self.profile = profile
         return profile
     }
 }
