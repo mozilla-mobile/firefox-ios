@@ -793,7 +793,7 @@ extension BrowserTableV10: SectionCreator, TableInfo {
 class TestSQLiteHistory: XCTestCase {
     let files = MockFiles()
 
-    override func tearDown() {
+    private func deleteDatabases() {
         for v in ["6", "7", "8", "10", "6-data"] {
             do { try
                 files.remove("browser-v\(v).db")
@@ -801,9 +801,16 @@ class TestSQLiteHistory: XCTestCase {
         }
     }
 
+    override func tearDown() {
+        super.tearDown()
+        self.deleteDatabases()
+    }
+
     override func setUp() {
+        super.setUp()
+
         // Just in case tearDown didn't run or succeed last time!
-        self.tearDown()
+        self.deleteDatabases()
     }
 
     // Test that our visit partitioning for frecency is correct.
