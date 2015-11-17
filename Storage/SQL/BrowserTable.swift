@@ -414,18 +414,9 @@ public class BrowserTable: Table {
             if !self.run(db, queries: [
                 "DROP INDEX IF EXISTS \(IndexVisitsSiteIDDate)",
                 "CREATE INDEX IF NOT EXISTS \(IndexVisitsSiteIDIsLocalDate) ON \(TableVisits) (siteID, is_local, date)",
-            ]) {
-                return false
-            }
-        }
-
-        if from < 7 && to >= 7 {
-            let queries: [String] = [
                 getDomainsTableCreationString(),
                 "ALTER TABLE \(TableHistory) ADD COLUMN domain_id INTEGER REFERENCES \(TableDomains)(id) ON DELETE CASCADE",
-            ]
-
-            if !self.runValidQueries(db, queries: queries) {
+            ]) {
                 return false
             }
 
