@@ -337,6 +337,10 @@ extension BrowserDB {
         return run([(sql, args)])
     }
 
+    func run(sql: [String]) -> Success {
+        return self.run(sql.map { (sql: $0, args: nil) })
+    }
+
     /**
      * Runs an array of sql commands. Note: These will all run in order in a transaction and will block
      * the callers thread until they've finished. If any of them fail the operation will abort (no more
