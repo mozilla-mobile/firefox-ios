@@ -35,6 +35,9 @@ DerivedData
 builds
 provisioning-profiles
 
+#python environment
+python-env/
+
 # OS X
 .DS_Store
 
