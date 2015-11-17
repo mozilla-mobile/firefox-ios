@@ -337,8 +337,8 @@ extension BrowserDB {
         return run([(sql, args)])
     }
 
-    func run(sql: [String]) -> Success {
-        return self.run(sql.map { (sql: $0, args: nil) })
+    func run(commands: [String]) -> Success {
+        return self.run(commands.map { (sql: $0, args: nil) })
     }
 
     /**
