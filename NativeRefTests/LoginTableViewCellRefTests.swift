@@ -17,7 +17,9 @@ class LoginTableViewCellRefTests: FBSnapshotTestCase {
 
     override func setUp() {
         super.setUp()
-        recordMode = true
+        if NSProcessInfo.processInfo().environment["RECORD_SNAPSHOTS"] == "YES" {
+            recordMode = true
+        }
         cell = LoginTableViewCell(frame: defaultFrame)
     }
 
