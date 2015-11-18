@@ -1,4 +1,5 @@
+duckduckgo
 google
+gulesider-mobile-NO
 twitter
 wikipedia-NO
-gulesider-mobile-NO
