@@ -78,39 +78,26 @@ class TestSQLiteLogins: XCTestCase {
     func testSearchLogins() {
         let loginA = Login.createWithHostname("alphabet.com", username: "username1", password: "password1")
         let loginB = Login.createWithHostname("alpha.com", username: "username2", password: "password2")
+        let loginC = Login.createWithHostname("berry.com", username: "username3", password: "password3")
+        let loginD = Login.createWithHostname("candle.com", username: "username4", password: "password4")
 
         func addLogins() -> Success {
-            return addLogin(loginB) >>> {
-                self.addLogin(loginA) >>> succeed
-            }
+            addLogin(loginA).value
+            addLogin(loginB).value
+            addLogin(loginC).value
+            addLogin(loginD).value
+            return succeed()
         }
 
         func checkAllLogins() -> Success {
             return logins.getAllLogins() >>== { results in
-                XCTAssertEqual(results.count, 2)
+                XCTAssertEqual(results.count, 4)
                 return succeed()
             }
         }
 
-        func checkFindMultipleUsernames() -> Success {
-            return logins.searchLoginsByUsername("username") >>== { results in
-                XCTAssertEqual(results.count, 2)
-                XCTAssertEqual(results[0]!.username, "username2")
-                XCTAssertEqual(results[1]!.username, "username1")
-                return succeed()
-            }
-        }
-
-        func checkFindSingleUsername() -> Success {
-            return logins.searchLoginsByUsername("username1") >>== { results in
-                XCTAssertEqual(results.count, 1)
-                XCTAssertEqual(results[0]!.username, "username1")
-                return succeed()
-            }
-        }
-
-        func checkFindMultipleHostnames() -> Success {
-            return logins.searchLoginsByUsername(nil, orPassword: nil, orHostname: "alpha") >>== { results in
+        func checkSearchHostnames() -> Success {
+            return logins.searchLoginsWithQuery("pha") >>== { results in
                 XCTAssertEqual(results.count, 2)
                 XCTAssertEqual(results[0]!.hostname, "alpha.com")
                 XCTAssertEqual(results[1]!.hostname, "alphabet.com")
@@ -118,48 +105,24 @@ class TestSQLiteLogins: XCTestCase {
             }
         }
 
-        func checkFindSingleHostname() -> Success {
-            return logins.searchLoginsByUsername(nil, orPassword: nil, orHostname: "alphabet") >>== { results in
-                XCTAssertEqual(results.count, 1)
-                XCTAssertEqual(results[0]!.hostname, "alphabet.com")
+        func checkSearchUsernames() -> Success {
+            return logins.searchLoginsWithQuery("username") >>== { results in
+                XCTAssertEqual(results.count, 4)
+                XCTAssertEqual(results[0]!.username, "username2")
+                XCTAssertEqual(results[1]!.username, "username1")
+                XCTAssertEqual(results[2]!.username, "username3")
+                XCTAssertEqual(results[3]!.username, "username4")
                 return succeed()
             }
         }
 
-        func checkFindMultiplePasswords() -> Success {
-            return logins.searchLoginsByUsername(nil, orPassword: "password") >>== { results in
-                XCTAssertEqual(results.count, 2)
+        func checkSearchPasswords() -> Success {
+            return logins.searchLoginsWithQuery("pass") >>== { results in
+                XCTAssertEqual(results.count, 4)
                 XCTAssertEqual(results[0]!.password, "password2")
                 XCTAssertEqual(results[1]!.password, "password1")
-                return succeed()
-            }
-        }
-
-        func checkFindSinglePassword() -> Success {
-            return logins.searchLoginsByUsername(nil, orPassword: "password1") >>== { results in
-                XCTAssertEqual(results.count, 1)
-                XCTAssertEqual(results[0]!.password, "password1")
-                return succeed()
-            }
-        }
-
-        func checkFindPasswordOrHostname() -> Success {
-            return logins.searchLoginsByUsername(nil, orPassword: "password", orHostname: "alpha") >>== { results in
-                XCTAssertEqual(results.count, 2)
-                return succeed()
-            }
-        }
-
-        func checkFindHostnameOrUsername() -> Success {
-            return logins.searchLoginsByUsername("username", orPassword: nil, orHostname: "alpha") >>== { results in
-                XCTAssertEqual(results.count, 2)
-                return succeed()
-            }
-        }
-
-        func checkFindHostnameOrUsernameOrPassword() -> Success {
-            return logins.searchLoginsByUsername("username", orPassword: "password", orHostname: "alpha") >>== { results in
-                XCTAssertEqual(results.count, 2)
+                XCTAssertEqual(results[2]!.password, "password3")
+                XCTAssertEqual(results[3]!.password, "password4")
                 return succeed()
             }
         }
@@ -167,19 +130,9 @@ class TestSQLiteLogins: XCTestCase {
         XCTAssertTrue(addLogins().value.isSuccess)
 
         XCTAssertTrue(checkAllLogins().value.isSuccess)
-
-        XCTAssertTrue(checkFindMultipleUsernames().value.isSuccess)
-        XCTAssertTrue(checkFindSingleUsername().value.isSuccess)
-
-        XCTAssertTrue(checkFindMultipleHostnames().value.isSuccess)
-        XCTAssertTrue(checkFindSingleHostname().value.isSuccess)
-
-        XCTAssertTrue(checkFindMultiplePasswords().value.isSuccess)
-        XCTAssertTrue(checkFindSinglePassword().value.isSuccess)
-
-        XCTAssertTrue(checkFindPasswordOrHostname().value.isSuccess)
-        XCTAssertTrue(checkFindHostnameOrUsername().value.isSuccess)
-        XCTAssertTrue(checkFindHostnameOrUsernameOrPassword().value.isSuccess)
+        XCTAssertTrue(checkSearchHostnames().value.isSuccess)
+        XCTAssertTrue(checkSearchUsernames().value.isSuccess)
+        XCTAssertTrue(checkSearchPasswords().value.isSuccess)
 
         XCTAssertTrue(removeAllLogins().value.isSuccess)
     }

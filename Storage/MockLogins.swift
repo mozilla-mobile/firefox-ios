@@ -43,17 +43,13 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return Deferred(value: Maybe(success: cursor))
     }
 
-    public func searchLoginsByUsername(username: String?, orPassword password: String?, orHostname hostname: String?) -> Deferred<Maybe<Cursor<LoginData>>> {
+    public func searchLoginsWithQuery(query: String?) -> Deferred<Maybe<Cursor<LoginData>>> {
         let cursor = ArrayCursor(data: cache.filter({ login in
             var checks = [Bool]()
-            if let username = username {
-                checks.append(login.username?.startsWith(username) ?? false)
-            }
-            if let password = password {
-                checks.append(login.password.startsWith(password))
-            }
-            if let hostname = hostname {
-                checks.append(login.hostname.startsWith(hostname))
+            if let query = query {
+                checks.append(login.username?.contains(query) ?? false)
+                checks.append(login.password.contains(query))
+                checks.append(login.hostname.contains(query))
             }
             return checks.contains(true)
         }).sort({ (loginA, loginB) -> Bool in
