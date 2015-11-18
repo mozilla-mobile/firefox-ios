@@ -227,6 +227,65 @@ class TestSQLiteLogins: XCTestCase {
     }
 }
 
+class TestSQLiteLoginsPerf: XCTestCase {
+    var db: BrowserDB!
+    var logins: SQLiteLogins!
+
+    override func setUp() {
+        super.setUp()
+        let files = MockFiles()
+        self.db = BrowserDB(filename: "testsqlitelogins.db", files: files)
+        self.logins = SQLiteLogins(db: self.db)
+    }
+
+    func testLoginsSearchMatchOnePerf() {
+        populateTestLogins()
+
+        // Measure time to find one entry amongst the 1000 of them
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+            for _ in 0...5 {
+                self.logins.searchLoginsWithQuery("username500").value
+            }
+            self.stopMeasuring()
+        }
+
+        XCTAssertTrue(removeAllLogins().value.isSuccess)
+    }
+
+    func testLoginsSearchMatchAllPerf() {
+        populateTestLogins()
+
+        // Measure time to find all matching results
+        self.measureMetrics([XCTPerformanceMetric_WallClockTime], automaticallyStartMeasuring: true) {
+            for _ in 0...5 {
+                self.logins.searchLoginsWithQuery("username").value
+            }
+            self.stopMeasuring()
+        }
+
+        XCTAssertTrue(removeAllLogins().value.isSuccess)
+    }
+
+    func populateTestLogins() {
+        for i in 0..<1000 {
+            let login = Login.createWithHostname("website\(i).com", username: "username\(i)", password: "password\(i)")
+            addLogin(login).value
+        }
+    }
+
+    func addLogin(login: LoginData) -> Success {
+        log.debug("Add \(login)")
+        return logins.addLogin(login)
+    }
+
+    func removeAllLogins() -> Success {
+        log.debug("Remove All")
+        // Because we don't want to just mark them as deleted.
+        return self.db.run("DELETE FROM \(TableLoginsMirror)") >>>
+            { self.db.run("DELETE FROM \(TableLoginsLocal)") }
+    }
+}
+
 class TestSyncableLogins: XCTestCase {
     var db: BrowserDB!
     var logins: SQLiteLogins!
