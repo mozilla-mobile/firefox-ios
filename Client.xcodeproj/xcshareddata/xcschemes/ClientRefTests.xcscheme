@@ -74,7 +74,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "RECORD_SNAPSHOTS"
-            value = "YES"
+            value = "NO"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
