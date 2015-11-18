@@ -52,9 +52,9 @@ public class BrowserDB {
     }
 
     // Creates a table and writes its table info into the table-table database.
-    private func createTable(conn: SQLiteDBConnection, table: Table) -> TableResult {
+    private func createTable(conn: SQLiteDBConnection, table: SectionCreator) -> TableResult {
         log.debug("Try create \(table.name) version \(table.version)")
-        if !table.create(conn, version: table.version) {
+        if !table.create(conn) {
             // If creating failed, we'll bail without storing the table info
             log.debug("Creation failed.")
             return .Failed
@@ -66,7 +66,7 @@ public class BrowserDB {
 
     // Updates a table and writes its table into the table-table database.
     // Exposed internally for testing.
-    func updateTable(conn: SQLiteDBConnection, table: Table) -> TableResult {
+    func updateTable(conn: SQLiteDBConnection, table: SectionUpdater) -> TableResult {
         log.debug("Trying update \(table.name) version \(table.version)")
         var from = 0
         // Try to find the stored version of the table
@@ -82,7 +82,7 @@ public class BrowserDB {
             return .Exists
         }
 
-        if !table.updateTable(conn, from: from, to: table.version) {
+        if !table.updateTable(conn, from: from) {
             // If the update failed, we'll bail without writing the change to the table-table.
             log.debug("Updating failed.")
             return .Failed
@@ -335,6 +335,10 @@ extension BrowserDB {
 
     func run(sql: String, withArgs args: Args? = nil) -> Success {
         return run([(sql, args)])
+    }
+
+    func run(commands: [String]) -> Success {
+        return self.run(commands.map { (sql: $0, args: nil) })
     }
 
     /**

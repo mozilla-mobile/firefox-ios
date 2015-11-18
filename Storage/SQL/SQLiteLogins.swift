@@ -36,9 +36,7 @@ private class LoginsTable: Table {
         return true
     }
 
-    func create(db: SQLiteDBConnection, version: Int) -> Bool {
-        // We ignore the version.
-
+    func create(db: SQLiteDBConnection) -> Bool {
         let common =
         "id INTEGER PRIMARY KEY AUTOINCREMENT" +
         ", hostname TEXT NOT NULL" +
@@ -72,7 +70,8 @@ private class LoginsTable: Table {
         return self.run(db, queries: [mirror, local])
     }
 
-    func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
+    func updateTable(db: SQLiteDBConnection, from: Int) -> Bool {
+        let to = self.version
         if from == to {
             log.debug("Skipping update from \(from) to \(to).")
             return true
@@ -81,12 +80,12 @@ private class LoginsTable: Table {
         if from == 0 {
             // This is likely an upgrade from before Bug 1160399.
             log.debug("Updating logins tables from zero. Assuming drop and recreate.")
-            return drop(db) && create(db, version: to)
+            return drop(db) && create(db)
         }
 
         // TODO: real update!
         log.debug("Updating logins table from \(from) to \(to).")
-        return drop(db) && create(db, version: to)
+        return drop(db) && create(db)
     }
 
     func exists(db: SQLiteDBConnection) -> Bool {
