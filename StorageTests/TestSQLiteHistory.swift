@@ -6,6 +6,14 @@ import Foundation
 import Shared
 import XCTest
 
+func advanceTimestamp(timestamp: Timestamp, by: Int) -> Timestamp {
+    return timestamp + UInt64(by)
+}
+
+func advanceMicrosecondTimestamp(timestamp: MicrosecondTimestamp, by: Int) -> MicrosecondTimestamp {
+    return timestamp + UInt64(by)
+}
+
 extension Site {
     func asPlace() -> Place {
         return Place(guid: self.guid!, url: self.url, title: self.title)
@@ -1219,7 +1227,7 @@ class TestSQLiteHistory: XCTestCase {
         let site = Site(url: "http://s\(5)ite\(5)/foo", title: "A \(5)")
         site.guid = "abc\(5)def"
         for i in 0...20 {
-            addVisitForSite(site, intoHistory: history, from: .Local, atTime: Timestamp(1438088398461 + (1000 * i)))
+            addVisitForSite(site, intoHistory: history, from: .Local, atTime: advanceTimestamp(1438088398461, by: 1000 * i))
         }
 
         let expectation = self.expectationWithDescription("First.")
@@ -1254,7 +1262,7 @@ class TestSQLiteHistory: XCTestCase {
             let site = Site(url: "http://s\(0)ite\(0)/foo", title: "A \(0)")
             site.guid = "abc\(0)def"
             for i in 0...20 {
-                addVisitForSite(site, intoHistory: history, from: .Local, atTime: Timestamp(1439088398461 + (1000 * i)))
+                addVisitForSite(site, intoHistory: history, from: .Local, atTime: advanceTimestamp(1439088398461, by: 1000 * i))
             }
             return succeed()
         }
@@ -1301,7 +1309,8 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
 
         history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).value
 
-        let local = SiteVisit(site: site, date: Timestamp(1000 * 1437088398461), type: VisitType.Link)
+        let ts: MicrosecondTimestamp = 1437088398461000
+        let local = SiteVisit(site: site, date: ts, type: VisitType.Link)
         XCTAssertTrue(history.addLocalVisit(local).value.isSuccess)
     }
 }
@@ -1363,7 +1372,7 @@ private func populateHistoryForFrecencyCalcuations(history: SQLiteHistory, siteC
 
         history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).value
         for j in 0...20 {
-            let visitTime = Timestamp(1000 * (1437088398461 + (1000 * i) + j))
+            let visitTime = advanceMicrosecondTimestamp(1437088398461000, by: ((1000000 * i) + (1000 * j)))
             addVisitForSite(site, intoHistory: history, from: .Local, atTime: visitTime)
             addVisitForSite(site, intoHistory: history, from: .Remote, atTime: visitTime)
         }
