@@ -634,6 +634,7 @@
 		E6327A8A1BF6473A008D12E0 /* DebugSettingsBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */; };
 		E6327A8B1BF64799008D12E0 /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3968F241A38FE8500CEFD3B /* TabManager.swift */; };
 		E635D25E1B729DEE0078962F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E635D25D1B729DEE0078962F /* Logger.swift */; };
+		E63ED8091BFCF9770097D08E /* SwiftSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B9A1BEA4E7100D28BEF /* SwiftSupport.swift */; };
 		E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64ED8F91BC55AE300DAF864 /* UIAlertControllerExtensions.swift */; };
 		E65072A31B2737DA001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
 		E65072A41B273824001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
@@ -4798,6 +4799,7 @@
 				E65C5BE01BEA522600D28BEF /* UIImage+Snapshot.m in Sources */,
 				E65C5BD51BEA4F8A00D28BEF /* FBSnapshotTestController.m in Sources */,
 				E65C5BD41BEA4F8A00D28BEF /* FBSnapshotTestCasePlatform.m in Sources */,
+				E63ED8091BFCF9770097D08E /* SwiftSupport.swift in Sources */,
 				E65C5BD31BEA4F8A00D28BEF /* FBSnapshotTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
