@@ -37,7 +37,7 @@ platform :ios do
 
     # create a name for this build
     ENV["DATESTAMP"] = Time.now.utc.iso8601.gsub(/\W/, '')
-    ENV["BRANCH_NAME"] = "firefox-#{lane_context[SharedValues::LANE_NAME].gsub!(' ','-')}-#{ENV["APP_VERSION"]}-#{ENV["BUILD_VERSION"]}"
+    ENV["BRANCH_NAME"] = options[:branch] || "firefox-#{lane_context[SharedValues::LANE_NAME].gsub!(' ','-')}-#{ENV["APP_VERSION"]}-#{ENV["BUILD_VERSION"]}"
     ENV["BUILD_NAME"] = "#{ENV["BRANCH_NAME"]}-#{ENV["DATESTAMP"]}"
     puts ENV["BUILD_NAME"]
 
