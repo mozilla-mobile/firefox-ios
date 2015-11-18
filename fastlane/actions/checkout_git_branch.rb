@@ -55,7 +55,7 @@ module Fastlane
                                        env_name: "FL_CHECKOUT_GIT_BRANCH_BASE",
                                        description: "The name of the branch to branch from if creating a new branch",
                                        is_string: true, # true: verifies the input is a string, false: every kind of value
-                                       default_value: "master") # the default value if the user didn't provide one
+                                       default_value: "") # the default value if the user didn't provide one
         ]
       end
 
