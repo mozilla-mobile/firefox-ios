@@ -17,6 +17,8 @@ DerivedData
 *.xcuserstate
 *.xcscmblueprint
 
+fastlane/scripts/upload.sh
+
 # fastlane temporary profiling data
 /fastlane/report.xml
 # deliver temporary error output
