@@ -2147,6 +2147,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 }
 
                 Alamofire.request(.GET, url)
+                    .validate(statusCode: 200..<300)
                     .response { responseRequest, responseResponse, responseData, responseError in
                         // only set the image onto pasteboard if the thing currently in pasteboard is
                         // the URL of this image, otherwise, in low bandwidth situations,
