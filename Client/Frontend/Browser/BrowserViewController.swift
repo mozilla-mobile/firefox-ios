@@ -2158,7 +2158,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let pasteBoard = UIPasteboard.generalPasteboard()
                 pasteBoard.string = url.absoluteString
                 // put the actual image on the clipboard
-                // do this be asyncronously just in case we're in a low bandwidth situation
+                // do this asynchronously just in case we're in a low bandwidth situation
                 let application = UIApplication.sharedApplication()
                 var taskId: UIBackgroundTaskIdentifier = 0
                 taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
@@ -2173,8 +2173,9 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                         if pasteBoard.string == url.absoluteString {
                             guard let imageData = responseData where responseError == nil else { return }
                             pasteBoard.image = UIImage.imageFromDataThreadSafe(imageData)
-                            application.endBackgroundTask(taskId)
                         }
+
+                        application.endBackgroundTask(taskId)
                 }
             }
             actionSheetController.addAction(copyAction)
