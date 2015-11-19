@@ -296,8 +296,11 @@ public class SQLiteBookmarks: BookmarksModelFactory {
     }
 }
 
-extension SQLiteBookmarks: ShareToDestination {
-    public func addToMobileBookmarks(url: NSURL, title: String, favicon: Favicon?) -> Success {
+extension SQLiteBookmarks {
+    /**
+     * Assumption: the provided GUID exists in either the local table or the mirror table.
+     */
+    func insertBookmark(url: NSURL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String) -> Success {
         var err: NSError?
 
         return self.db.withWritableConnection(&err) {  (conn, err) -> Success in
@@ -310,8 +313,8 @@ extension SQLiteBookmarks: ShareToDestination {
                     BookmarkNodeType.Bookmark.rawValue,
                     urlString,
                     title,
-                    BookmarkRoots.MobileFolderGUID,
-                    BookmarksFolderTitleMobile,
+                    parent,
+                    parentTitle,
                     NSDate.nowNumber(),
                     SyncStatus.New.rawValue,
                 ]
@@ -337,8 +340,8 @@ extension SQLiteBookmarks: ShareToDestination {
                 // Now add to the structure table.
                 // TODO: mark as modified.
                 let structure = "INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) " +
-                "VALUES (?, ?, 0)"      // TODO: a real position!
-                let structureArgs: Args = [BookmarkRoots.MobileFolderGUID, newGUID]
+                                "VALUES (?, ?, 0)"      // TODO: a real position!
+                let structureArgs: Args = [parent, newGUID]
 
                 err = conn.executeChange(structure, withArgs: structureArgs)
                 if let err = err {
@@ -357,6 +360,13 @@ extension SQLiteBookmarks: ShareToDestination {
             }
             return insertBookmark(-1)
         }
+    }
+}
+extension SQLiteBookmarks: ShareToDestination {
+    public func addToMobileBookmarks(url: NSURL, title: String, favicon: Favicon?) -> Success {
+        return self.insertBookmark(url, title: title, favicon: favicon,
+                                   intoFolder: BookmarkRoots.MobileFolderGUID,
+                                   withTitle: BookmarksFolderTitleMobile)
     }
 
     public func shareItem(item: ShareItem) {
