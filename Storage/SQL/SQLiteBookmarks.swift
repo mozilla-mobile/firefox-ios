@@ -298,71 +298,229 @@ public class SQLiteBookmarks: BookmarksModelFactory {
 }
 
 extension SQLiteBookmarks {
+    private func getSQLToOverrideParent(folder: GUID, atModifiedTime modified: Timestamp) -> (sql: [String], args: Args) {
+        let args: Args = [folder]
+
+        // Copy it to the local table.
+        // Most of these will be NULL, because we're only dealing with folders,
+        // and in this case only the Mobile Bookmarks root.
+        let overrideSQL = "INSERT OR IGNORE INTO \(TableBookmarksLocal) " +
+                          "(guid, type, bmkUri, title, parentid, parentName, feedUri, siteUri, pos," +
+                          " description, tags, keyword, folderName, queryId, local_modified, sync_status, faviconID) " +
+                          "SELECT guid, type, bmkUri, title, parentid, parentName, " +
+                          "feedUri, siteUri, pos, description, tags, keyword, folderName, queryId, " +
+                          "\(modified) AS local_modified, \(SyncStatus.Changed.rawValue) AS sync_status, faviconID " +
+                          "FROM \(TableBookmarksMirror) WHERE guid = ?"
+
+        // Copy its mirror structure.
+        let dropSQL = "DELETE FROM \(TableBookmarksLocalStructure) WHERE parent = ?"
+        let copySQL = "INSERT INTO \(TableBookmarksLocalStructure) " +
+                      "SELECT * FROM \(TableBookmarksMirrorStructure) WHERE parent = ?"
+
+        // Mark as overridden.
+        let markSQL = "UPDATE \(TableBookmarksMirror) SET is_overridden = 1 WHERE guid = ?"
+        return (sql: [overrideSQL, dropSQL, copySQL, markSQL], args: args)
+    }
+
     /**
-     * Assumption: the provided GUID exists in either the local table or the mirror table.
+     * Insert a bookmark into the specified folder.
+     * If the folder doesn't exist, or is deleted, insertion will fail.
+     *
+     * Preconditions:
+     * * `deferred` has not been filled.
+     * * this function is called inside a transaction that hasn't been finished.
+     *
+     * Postconditions:
+     * * `deferred` has been filled with success or failure.
+     * * the transaction will include any status/overlay changes necessary to save the bookmark.
+     * * the return value determines whether the transaction should be committed, and
+     *   matches the success-ness of the Deferred.
+     *
+     * Sorry about the long line. If we break it, the indenting below gets crazy.
+     */
+    func insertBookmarkInTransaction(deferred: Success, url: NSURL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String)(conn: SQLiteDBConnection, inout err: NSError?) -> Bool {
+
+        log.debug("Begun bookmark transaction on thread \(NSThread.currentThread())")
+
+        // Keep going if this returns true.
+        func change(sql: String, args: Args?, desc: String) -> Bool {
+            err = conn.executeChange(sql, withArgs: args)
+            if let err = err {
+                log.error(desc)
+                deferred.fillIfUnfilled(Maybe(failure: DatabaseError(err: err)))
+                return false
+            }
+            return true
+        }
+
+        let urlString = url.absoluteString
+        let newGUID = Bytes.generateGUID()
+        let now = NSDate.now()
+        let parentArgs: Args = [parent]
+
+        //// Insert the new bookmark and icon without touching structure.
+        var args: Args = [
+            newGUID,
+            BookmarkNodeType.Bookmark.rawValue,
+            urlString,
+            title,
+            parent,
+            parentTitle,
+            NSDate.nowNumber(),
+            SyncStatus.New.rawValue,
+        ]
+
+        let faviconID: Int?
+
+        // Insert the favicon.
+        if let icon = favicon {
+            faviconID = self.favicons.insertOrUpdate(conn, obj: icon)
+        } else {
+            faviconID = nil
+        }
+
+        log.debug("Inserting bookmark with specified icon \(faviconID).")
+
+        // If the caller didn't provide an icon (and they usually don't!),
+        // do a reverse lookup in history. We use a view to make this simple.
+        let iconValue: String
+        if let faviconID = faviconID {
+            iconValue = "?"
+            args.append(faviconID)
+        } else {
+            iconValue = "(SELECT iconID FROM \(ViewIconForURL) WHERE url = ?)"
+            args.append(urlString)
+        }
+
+        let insertSQL = "INSERT INTO \(TableBookmarksLocal) " +
+                        "(guid, type, bmkUri, title, parentid, parentName, local_modified, sync_status, faviconID) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, \(iconValue))"
+        if !change(insertSQL, args: args, desc: "Error inserting \(newGUID).") {
+            return false
+        }
+
+        let bumpParentStatus = { (status: Int) -> Bool in
+            let bumpSQL = "UPDATE \(TableBookmarksLocal) SET sync_status = \(status), local_modified = \(now) WHERE guid = ?"
+            return change(bumpSQL, args: parentArgs, desc: "Error bumping \(parent)'s modified time.")
+        }
+
+
+        func overrideParentMirror() -> Bool {
+            // We do this slightly tortured work so that we can reuse these queries
+            // in a different context.
+            let (sql, args) = getSQLToOverrideParent(parent, atModifiedTime: now)
+            var generator = sql.generate()
+            while let query = generator.next() {
+                if !change(query, args: args, desc: "Error running overriding query.") {
+                    return false
+                }
+            }
+            return true
+        }
+
+        //// Make sure our parent is overridden and appropriately bumped.
+        // See discussion here: <https://github.com/mozilla/firefox-ios/commit/2041f1bbde430de29aefb803aae54ed26db47d23#commitcomment-14572312>
+        // Note that this isn't as obvious as you might think. We must:
+        let localStatusFactory: SDRow -> (Int, Bool) = { row in
+            let status = row["sync_status"] as! Int
+            let deleted = (row["is_deleted"] as! Int) != 0
+            return (status, deleted)
+        }
+
+        let overriddenFactory: SDRow -> Bool = { row in
+            row.getBoolean("is_overridden")
+        }
+
+        // TODO: these can be merged into a single query.
+        let mirrorStatusSQL = "SELECT is_overridden FROM \(TableBookmarksMirror) WHERE guid = ?"
+        let localStatusSQL = "SELECT sync_status, is_deleted FROM \(TableBookmarksLocal) WHERE guid = ?"
+        let mirrorStatus = conn.executeQuery(mirrorStatusSQL, factory: overriddenFactory, withArgs: parentArgs)[0]
+        let localStatus = conn.executeQuery(localStatusSQL, factory: localStatusFactory, withArgs: parentArgs)[0]
+
+        let parentExistsInMirror = mirrorStatus != nil
+        let parentExistsLocally = localStatus != nil
+
+        // * Figure out if we were already overridden. We only want to re-clone
+        //   if we weren't.
+        if !parentExistsLocally {
+            if !parentExistsInMirror {
+                deferred.fillIfUnfilled(Maybe(failure: DatabaseError(description: "Folder \(parent) doesn't exist in either mirror or local.")))
+                return false
+            }
+            // * Mark the parent folder as overridden if necessary.
+            //   Overriding the parent involves copying the parent's structure, so that
+            //   we can amend it, but also the parent's row itself so that we know it's
+            //   changed.
+            overrideParentMirror()
+        } else {
+            let (status, deleted) = localStatus!
+            if deleted {
+                log.error("Trying to insert into deleted local folder.")
+                deferred.fillIfUnfilled(Maybe(failure: DatabaseError(description: "Local folder \(parent) is deleted.")))
+                return false
+            }
+
+            // * Bump the overridden parent's modified time. We already copied its
+            //   structure and values, and if it's in the local table it'll either
+            //   already be New or Changed.
+
+            if let syncStatus = SyncStatus(rawValue: status) {
+                switch syncStatus {
+                case .Synced:
+                    log.debug("We don't expect folders to ever be marked as Synced.")
+                    if !bumpParentStatus(SyncStatus.Changed.rawValue) {
+                        return false
+                    }
+                case .New:
+                    fallthrough
+                case .Changed:
+                    // Leave it marked as new or changed, but bump the timestamp.
+                    if !bumpParentStatus(syncStatus.rawValue) {
+                        return false
+                    }
+                }
+            } else {
+                log.warning("Local folder marked with unknown state \(status). This should never occur.")
+                if !bumpParentStatus(SyncStatus.Changed.rawValue) {
+                    return false
+                }
+            }
+        }
+
+        /// Add the new bookmark as a child in the modified local structure.
+        // We always append the new row: after insertion, the new item will have the largest index.
+        let newIndex = "(SELECT (COALESCE(MAX(idx), -1) + 1) AS newIndex FROM \(TableBookmarksLocalStructure) WHERE parent = ?)"
+        let structureSQL = "INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) " +
+                           "VALUES (?, ?, \(newIndex))"
+        let structureArgs: Args = [parent, newGUID, parent]
+
+        log.debug("Wrapping up bookmark transaction on thread \(NSThread.currentThread())")
+        if !change(structureSQL, args: structureArgs, desc: "Error adding new item \(newGUID) to local structure.") {
+            return false
+        }
+
+
+        /// Fill the deferred and commit the transaction.
+        deferred.fill(Maybe(success: ()))
+        return true
+    }
+
+    /**
+     * Assumption: the provided folder GUID exists in either the local table or the mirror table.
      */
     func insertBookmark(url: NSURL, title: String, favicon: Favicon?, intoFolder parent: GUID, withTitle parentTitle: String) -> Success {
-        var err: NSError?
+        log.debug("Inserting bookmark task on thread \(NSThread.currentThread())")
+        let deferred = Success()
 
-        return self.db.withWritableConnection(&err) {  (conn, err) -> Success in
-            func insertBookmark(icon: Int) -> Success {
-                log.debug("Inserting bookmark with specified icon \(icon).")
-                let urlString = url.absoluteString
-                let newGUID = Bytes.generateGUID()
-                var args: Args = [
-                    newGUID,
-                    BookmarkNodeType.Bookmark.rawValue,
-                    urlString,
-                    title,
-                    parent,
-                    parentTitle,
-                    NSDate.nowNumber(),
-                    SyncStatus.New.rawValue,
-                ]
+        var error: NSError?
+        let inTransaction = self.insertBookmarkInTransaction(deferred, url: url, title: title, favicon: favicon, intoFolder: parent, withTitle: parentTitle)
+        error = self.db.transaction(synchronous: false, err: &error, callback: inTransaction)
 
-                // If the caller didn't provide an icon (and they usually don't!),
-                // do a reverse lookup in history. We use a view to make this simple.
-                let iconValue: String
-                if icon == -1 {
-                    iconValue = "(SELECT iconID FROM \(ViewIconForURL) WHERE url = ?)"
-                    args.append(urlString)
-                } else {
-                    iconValue = "?"
-                    args.append(icon)
-                }
-
-                let sql = "INSERT INTO \(TableBookmarksLocal) (guid, type, bmkUri, title, parentid, parentName, local_modified, sync_status, faviconID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, \(iconValue))"
-                err = conn.executeChange(sql, withArgs: args)
-                if let err = err {
-                    log.error("Error inserting \(newGUID). Got \(err).")
-                    return deferMaybe(DatabaseError(err: err))
-                }
-
-                // Now add to the structure table.
-                // TODO: mark as modified.
-                let structure = "INSERT INTO \(TableBookmarksLocalStructure) (parent, child, idx) " +
-                                "VALUES (?, ?, 0)"      // TODO: a real position!
-                let structureArgs: Args = [parent, newGUID]
-
-                err = conn.executeChange(structure, withArgs: structureArgs)
-                if let err = err {
-                    log.error("Error adding structure for \(newGUID). Got \(err).")
-                    return deferMaybe(DatabaseError(err: err))
-                }
-
-                return succeed()
-            }
-
-            // Insert the favicon.
-            if let icon = favicon {
-                if let id = self.favicons.insertOrUpdate(conn, obj: icon) {
-                	return insertBookmark(id)
-                }
-            }
-            return insertBookmark(-1)
-        }
+        log.debug("Returning deferred on thread \(NSThread.currentThread())")
+        return deferred
     }
 }
+
 extension SQLiteBookmarks: ShareToDestination {
     public func addToMobileBookmarks(url: NSURL, title: String, favicon: Favicon?) -> Success {
         return self.insertBookmark(url, title: title, favicon: favicon,
