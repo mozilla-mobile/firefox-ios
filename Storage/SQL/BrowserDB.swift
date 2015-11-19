@@ -218,8 +218,12 @@ public class BrowserDB {
         return withConnection(flags: SwiftData.Flags.ReadOnly, err: &err, callback: callback)
     }
 
-    func transaction(inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> Bool) {
-        db.transaction { connection in
+    func transaction(inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> Bool) -> NSError? {
+        return self.transaction(synchronous: true, err: &err, callback: callback)
+    }
+
+    func transaction(synchronous synchronous: Bool=true, inout err: NSError?, callback: (connection: SQLiteDBConnection, inout err: NSError?) -> Bool) -> NSError? {
+        return db.transaction(synchronous: synchronous) { connection in
             var err: NSError? = nil
             return callback(connection: connection, err: &err)
         }
@@ -229,14 +233,14 @@ public class BrowserDB {
 extension BrowserDB {
     func vacuum() {
         log.debug("Vacuuming a BrowserDB.")
-        db.withConnection(SwiftData.Flags.ReadWriteCreate) { connection in
+        db.withConnection(SwiftData.Flags.ReadWriteCreate, synchronous: true) { connection in
             return connection.vacuum()
         }
     }
 
     func checkpoint() {
         log.debug("Checkpointing a BrowserDB.")
-        db.transaction { connection in
+        db.transaction(synchronous: true) { connection in
             connection.checkpoint()
             return true
         }
