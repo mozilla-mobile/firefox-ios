@@ -510,6 +510,7 @@ public class SQLiteDBConnection {
 
     /// Executes a change on the database.
     func executeChange(sqlStr: String, withArgs args: [AnyObject?]? = nil) -> NSError? {
+        log.debug("Running change\n \(sqlStr);")
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
@@ -544,6 +545,7 @@ public class SQLiteDBConnection {
     /// Queries the database.
     /// Returns a cursor pre-filled with the complete result set.
     func executeQuery<T>(sqlStr: String, factory: ((SDRow) -> T), withArgs args: [AnyObject?]? = nil) -> Cursor<T> {
+        log.debug("Running query \(sqlStr);")
         var error: NSError?
         let statement: SQLiteDBStatement?
         do {
