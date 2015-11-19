@@ -304,11 +304,8 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                         }
                     }
                 }
-
-                
-                
-                print("new title \(bookmarkTitleTextField.text)")
             }
+            
             editAlertController.addAction(okAction)
             
             // TextField
