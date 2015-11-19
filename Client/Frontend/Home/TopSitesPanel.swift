@@ -137,7 +137,7 @@ class TopSitesPanel: UIViewController {
 
     private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
         func reloadThumbnails() {
-            self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount)
+            self.profile.history.getTopSitesWithLimit(maxFrecencyLimit)
                 .uponQueue(dispatch_get_main_queue()) { result in
                     self.deleteOrUpdateSites(result, indexPath: indexPath)
             }
