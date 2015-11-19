@@ -2170,9 +2170,10 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                         // only set the image onto pasteboard if the thing currently in pasteboard is
                         // the URL of this image, otherwise, in low bandwidth situations,
                         // we might be overwriting something that the user has subsequently added
-                        if pasteBoard.string == url.absoluteString {
-                            guard let imageData = responseData where responseError == nil else { return }
-                            pasteBoard.image = UIImage.imageFromDataThreadSafe(imageData)
+                        if pasteBoard.string == url.absoluteString,
+                           let imageData = responseData where responseError == nil,
+                           let image = UIImage.imageFromDataThreadSafe(imageData) {
+                            pasteBoard.image = image
                         }
 
                         application.endBackgroundTask(taskId)
