@@ -265,14 +265,22 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             }
         })
         
-        let edit = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: "Edit", handler: { (action, indexPath) in
-            let editAlertController = UIAlertController(title: "Edit bookmark title", message: "Change the name for \((self.source?.current[indexPath.row] as! BookmarkItem).url)", preferredStyle: .Alert)
+        let editTitle = NSLocalizedString("Edit", tableName: "BookmarkPanel", comment: "Action button for editing bookmarks in the bookmarks panel.")
+        
+        let edit = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: editTitle, handler: { (action, indexPath) in
+            let messagePrefix = "Change the name for\n" // later localized
+            let urlTruncated = (self.source!.current[indexPath.row] as! BookmarkItem).url.ellipsize(maxLength: 30)
             
-            editAlertController.addTextFieldWithConfigurationHandler({ (textField) -> Void in
-                textField.placeholder = self.source?.current[indexPath.row]?.title
-                textField.text = self.source?.current[indexPath.row]?.title
-            })
+            let attributedMessage = NSMutableAttributedString()
+            attributedMessage.appendAttributedString(NSAttributedString(string: messagePrefix, attributes: [NSForegroundColorAttributeName : UIColor.blackColor(), NSFontAttributeName : UIFont.systemFontOfSize(13)]))
+            attributedMessage.appendAttributedString(NSAttributedString(string: urlTruncated, attributes: [NSForegroundColorAttributeName : UIColor.lightGrayColor(), NSFontAttributeName : UIFont.systemFontOfSize(13)]))
             
+            let editAlertController = UIAlertController(title: "Edit bookmark title", message: "asdfasdf", preferredStyle: .Alert)
+
+            // change message to use attributed string
+            editAlertController.setValue(attributedMessage, forKey: "attributedMessage")
+            
+            // OK Action
             let okAction = UIAlertAction(title: "OK", style: .Default) { (_) in
                 let bookmarkTitleTextField = editAlertController.textFields![0] as UITextField
                 let bookmark = self.source?.current[indexPath.row]!
@@ -292,8 +300,6 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                             dispatch_async(dispatch_get_main_queue()) {
                                 self.source = model
                                 self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
-                                
-//                                NSNotificationCenter.defaultCenter().postNotificationName(BookmarkStatusChangedNotification, object: bookmark, userInfo:["added":false])
                             }
                         }
                     }
@@ -305,6 +311,19 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             }
             editAlertController.addAction(okAction)
             
+            // TextField
+            editAlertController.addTextFieldWithConfigurationHandler({ (textField) -> Void in
+                textField.placeholder = self.source?.current[indexPath.row]?.title
+                textField.text = self.source?.current[indexPath.row]?.title
+                
+                // Disable OK Button when the textfield is empty
+                NSNotificationCenter.defaultCenter().addObserverForName(UITextFieldTextDidChangeNotification, object: textField, queue: NSOperationQueue.mainQueue()) { (notification) in
+                    
+                    let whitespaceSet = NSCharacterSet.whitespaceCharacterSet()
+                    okAction.enabled = textField.text!.stringByTrimmingCharactersInSet(whitespaceSet) != ""
+                }
+            })
+            
             let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in }
             editAlertController.addAction(cancelAction)
             
@@ -313,6 +332,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
 
         return [delete,edit]
+//        return [delete]
     }
 }
 
