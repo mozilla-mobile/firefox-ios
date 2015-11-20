@@ -298,8 +298,8 @@ class BrowserViewController: UIViewController {
             return false
         })
         copyAddressAction = AccessibleAction(name: NSLocalizedString("Copy Address", comment: "Copy the URL from the location bar"), handler: { () -> Bool in
-            if let urlString = self.urlBar.currentURL?.absoluteString {
-                UIPasteboard.generalPasteboard().string = urlString
+            if let url = self.urlBar.currentURL {
+                UIPasteboard.generalPasteboard().URL = url
             }
             return true
         })
@@ -2124,7 +2124,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let copyTitle = NSLocalizedString("Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
             let copyAction = UIAlertAction(title: copyTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) -> Void in
                 let pasteBoard = UIPasteboard.generalPasteboard()
-                pasteBoard.string = url.absoluteString
+                pasteBoard.URL = url
             }
             actionSheetController.addAction(copyAction)
         }
@@ -2155,10 +2155,10 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let copyImageTitle = NSLocalizedString("Copy Image", comment: "Context menu item for copying an image to the clipboard")
             let copyAction = UIAlertAction(title: copyImageTitle, style: UIAlertActionStyle.Default) { (action: UIAlertAction) -> Void in
-                let pasteBoard = UIPasteboard.generalPasteboard()
-                pasteBoard.string = url.absoluteString
                 // put the actual image on the clipboard
                 // do this asynchronously just in case we're in a low bandwidth situation
+                let pasteboard = UIPasteboard.generalPasteboard()
+                pasteboard.URL = url
                 let application = UIApplication.sharedApplication()
                 var taskId: UIBackgroundTaskIdentifier = 0
                 taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
@@ -2171,7 +2171,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                         // only set the image onto pasteboard if the thing currently in pasteboard is
                         // the URL of this image, otherwise, in low bandwidth situations,
                         // we might be overwriting something that the user has subsequently added
-                        if pasteBoard.string == url.absoluteString,
+                        if pasteBoard.URL == url,
                            let imageData = responseData where responseError == nil,
                            let image = UIImage.imageFromDataThreadSafe(imageData) {
                             // Using addItems allows the pasteboard to include both an image and text representation.
