@@ -2156,8 +2156,11 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                         if changeCount == pasteboard.changeCount,
                            let imageData = responseData where responseError == nil,
                            let image = UIImage.imageFromDataThreadSafe(imageData) {
-                            // Using addItems allows the pasteboard to include both an image and text representation.
-                            pasteBoard.addItems([[kUTTypeImage as String: image]])
+                            // Setting pasteboard.items allows us to set multiple representations for the same item.
+                            pasteboard.items = [[
+                                kUTTypeURL as String: url,
+                                kUTTypePNG as String: image
+                            ]]
                         }
 
                         application.endBackgroundTask(taskId)
