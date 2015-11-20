@@ -118,6 +118,27 @@ platform :ios do
     aurora(options)
   end
 
+  desc "Uploads an ipa"
+  lane :upload do |options|
+    build_number = get_build_number(xcodeproj: "Client.xcodeproj")
+    version_number = get_version_number(xcodeproj: "Client.xcodeproj")
+    ENV["BUILD_VERSION"] = options[:build] || build_number
+    ENV["APP_VERSION"] = options[:version] || version_number
+    ENV["BUILD_FLAVOUR"] = lane_context[SharedValues::LANE_NAME].gsub!('ios ','')
+    puts ENV["BUILD_FLAVOUR"]
+    # create a name for this build
+    ENV["DATESTAMP"] = Time.now.utc.iso8601.gsub(/\W/, '')
+
+    upload_enterprise_build(
+      plist: "fastlane/templates/FennecAurora-L10N.plist.tmpl",
+      html: "fastlane/templates/FennecAurora-L10N.html.tmpl",
+      release_notes: "../release_notes.txt",
+      build_name: options[:build_name],
+      host: "people.mozilla.org",
+      upload_location: "/home/iosbuilds",
+    )
+  end
+
   desc "Takes marketing snapshots using current branch"
   lane :marketing do
     snapshot
