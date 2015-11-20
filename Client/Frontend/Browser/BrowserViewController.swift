@@ -2159,6 +2159,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 // do this asynchronously just in case we're in a low bandwidth situation
                 let pasteboard = UIPasteboard.generalPasteboard()
                 pasteboard.URL = url
+                let changeCount = pasteboard.changeCount
                 let application = UIApplication.sharedApplication()
                 var taskId: UIBackgroundTaskIdentifier = 0
                 taskId = application.beginBackgroundTaskWithExpirationHandler { _ in
@@ -2168,10 +2169,10 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 Alamofire.request(.GET, url)
                     .validate(statusCode: 200..<300)
                     .response { responseRequest, responseResponse, responseData, responseError in
-                        // only set the image onto pasteboard if the thing currently in pasteboard is
-                        // the URL of this image, otherwise, in low bandwidth situations,
-                        // we might be overwriting something that the user has subsequently added
-                        if pasteBoard.URL == url,
+                        // Only set the image onto the pasteboard if the pasteboard hasn't changed since
+                        // fetching the image; otherwise, in low-bandwidth situations,
+                        // we might be overwriting something that the user has subsequently added.
+                        if changeCount == pasteboard.changeCount,
                            let imageData = responseData where responseError == nil,
                            let image = UIImage.imageFromDataThreadSafe(imageData) {
                             // Using addItems allows the pasteboard to include both an image and text representation.
