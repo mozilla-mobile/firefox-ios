@@ -144,35 +144,28 @@ public class TokenServerClient {
             mutableURLRequest.setValue(clientState, forHTTPHeaderField: "X-Client-State")
         }
 
-        alamofire.request(mutableURLRequest)
-                 .validate(contentType: ["application/json"])
-                 .responseJSON { (_, response, result) in
-
-                    // Don't cancel requests just because our Manager is deallocated.
-                    withExtendedLifetime(self.alamofire) {
-                        if let error = result.error as? NSError {
-                            deferred.fill(Maybe(failure: TokenServerError.Local(error)))
+        alamofire.request(mutableURLRequest).validate(contentType: ["application/json"]).responseJSON { (response) -> Void in
+            // Don't cancel requests just because our Manager is deallocated.
+            withExtendedLifetime(self.alamofire) {
+                switch response.result {
+                case .Failure(let error):
+                    deferred.fill(Maybe(failure: TokenServerError.Local(error)))
+                    return
+                case .Success(let data):
+                    let json = JSON(data)
+                    if let remoteTimestampHeader = response.response?.allHeaderFields["x-timestamp"] as? String {
+                        if let statusCode = response.response?.statusCode, remoteError = TokenServerClient.remoteErrorFromJSON(json, statusCode: statusCode, remoteTimestampHeader: remoteTimestampHeader) {
+                            deferred.fill(Maybe(failure: remoteError))
                             return
                         }
-
-                        if let data: AnyObject = result.value { // Declaring the type quiets a Swift warning about inferring AnyObject.
-                            let json = JSON(data)
-                            let remoteTimestampHeader = response?.allHeaderFields["x-timestamp"] as? String
-
-                            if let remoteError = TokenServerClient.remoteErrorFromJSON(json, statusCode: response!.statusCode,
-                                remoteTimestampHeader: remoteTimestampHeader) {
-                                    deferred.fill(Maybe(failure: remoteError))
-                                    return
-                            }
-
-                            if let token = TokenServerClient.tokenFromJSON(json, remoteTimestampHeader: remoteTimestampHeader) {
-                                deferred.fill(Maybe(success: token))
-                                return
-                            }
+                        if let token = TokenServerClient.tokenFromJSON(json, remoteTimestampHeader: remoteTimestampHeader) {
+                            deferred.fill(Maybe(success: token))
+                            return
                         }
-
-                        deferred.fill(Maybe(failure: TokenServerClientUnknownError))
                     }
+                    deferred.fill(Maybe(failure: TokenServerClientUnknownError))
+                }
+            }
         }
         return deferred
     }
