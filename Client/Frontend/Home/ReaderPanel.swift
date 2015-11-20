@@ -442,7 +442,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
             profile.readingList?.updateRecord(record, unread: false)
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.Bookmark
-            homePanelDelegate?.homePanel(self, didSelectURL: encodedURL, visitType: visitType)
+            homePanelDelegate?.homePanel(self, didSelectURL: encodedURL, visitType: visitType, inNewTab: true)
         }
     }
 }

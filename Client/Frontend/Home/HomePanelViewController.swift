@@ -17,7 +17,7 @@ private struct HomePanelViewControllerUX {
 }
 
 protocol HomePanelViewControllerDelegate: class {
-    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType)
+    func homePanelViewController(homePanelViewController: HomePanelViewController, didSelectURL url: NSURL, visitType: VisitType, inNewTab: Bool)
     func homePanelViewController(HomePanelViewController: HomePanelViewController, didSelectPanel panel: Int)
     func homePanelViewControllerDidRequestToSignIn(homePanelViewController: HomePanelViewController)
     func homePanelViewControllerDidRequestToCreateAccount(homePanelViewController: HomePanelViewController)
@@ -37,7 +37,7 @@ struct HomePanelUX {
 protocol HomePanelDelegate: class {
     func homePanelDidRequestToSignIn(homePanel: HomePanel)
     func homePanelDidRequestToCreateAccount(homePanel: HomePanel)
-    func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType)
+    func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType, inNewTab: Bool)
     optional func homePanelWillEnterEditingMode(homePanel: HomePanel)
 }
 
@@ -225,8 +225,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         }
     }
 
-    func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType) {
-        delegate?.homePanelViewController(self, didSelectURL: url, visitType: visitType)
+    func homePanel(homePanel: HomePanel, didSelectURL url: NSURL, visitType: VisitType, inNewTab: Bool) {
+        delegate?.homePanelViewController(self, didSelectURL: url, visitType: visitType, inNewTab: inNewTab)
         dismissViewControllerAnimated(true, completion: nil)
     }
 
