@@ -176,6 +176,8 @@ public class BrowserDB {
 
             do {
                 try self.files.move(self.filename, toRelativePath: bak)
+                try self.files.move(self.filename + "-shm", toRelativePath: bak + "-shm")
+                try self.files.move(self.filename + "-wal", toRelativePath: bak + "-wal")
                 success = true
             } catch _ {
                 success = false
