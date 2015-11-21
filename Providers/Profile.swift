@@ -183,6 +183,7 @@ public class BrowserProfile: Profile {
      * see Bug 1218833. Be sure to only perform synchronous actions here.
      */
     init(localName: String, app: UIApplication?) {
+        log.debug("Initing profile \(localName) on thread \(NSThread.currentThread()).")
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
         self.app = app
@@ -261,6 +262,7 @@ public class BrowserProfile: Profile {
     }
 
     deinit {
+        log.debug("Deiniting profile \(self.localName).")
         self.syncManager.endTimedSyncs()
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationOnLocationChange, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: ProfileDidFinishSyncingNotification, object: nil)
