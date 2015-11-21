@@ -167,6 +167,9 @@ public class BrowserDB {
             log.debug("Couldn't create or update \(tables.map { $0.name }).")
             log.debug("Attempting to move \(self.filename) to another location.")
 
+            // Make sure that we don't still have open the files that we want to move!
+            db.close()
+
             // Note that a backup file might already exist! We append a counter to avoid this.
             var bakCounter = 0
             var bak: String
