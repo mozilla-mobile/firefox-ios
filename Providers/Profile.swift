@@ -576,8 +576,11 @@ public class BrowserProfile: Profile {
                 let when: dispatch_time_t = dispatch_time(DISPATCH_TIME_NOW, SyncConstants.SyncDelayTriggered)
 
                 // Trigger on the main queue. The bulk of the sync work runs in the background.
+                let greenLight = self.greenLight()
                 dispatch_after(when, dispatch_get_main_queue()) {
-                    self.syncLogins()
+                    if greenLight() {
+                        self.syncLogins()
+                    }
                 }
             }
         }
