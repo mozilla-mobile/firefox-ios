@@ -77,6 +77,7 @@ public class SwiftData {
 
         dispatch_sync(sharedConnectionQueue) {
             if self.sharedConnection == nil {
+                log.debug(">>> Creating shared SQLiteDBConnection for \(self.filename) on thread \(NSThread.currentThread()).")
                 self.sharedConnection = SQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.ReadWriteCreate.toSQL(), key: self.key, prevKey: self.prevKey)
             }
             connection = self.sharedConnection
@@ -95,6 +96,7 @@ public class SwiftData {
         if SwiftData.ReuseConnections {
             conn = getSharedConnection()
         } else {
+            log.debug(">>> Creating non-shared SQLiteDBConnection for \(self.filename) on thread \(NSThread.currentThread()).")
             conn = SQLiteDBConnection(filename: filename, flags: flags.toSQL(), key: self.key, prevKey: self.prevKey)
         }
 
