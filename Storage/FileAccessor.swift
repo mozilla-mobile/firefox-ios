@@ -32,7 +32,7 @@ public class FileAccessor {
     }
 
     /**
-     * Gets the file or directory at the given path, relative to the root.
+     * Removes the file or directory at the given path, relative to the root.
      */
     public func remove(relativePath: String) throws {
         let path = rootPath.stringByAppendingPathComponent(relativePath)
@@ -58,6 +58,11 @@ public class FileAccessor {
     public func exists(relativePath: String) -> Bool {
         let path = rootPath.stringByAppendingPathComponent(relativePath)
         return NSFileManager.defaultManager().fileExistsAtPath(path)
+    }
+
+    public func fileWrapper(relativePath: String) throws -> NSFileWrapper {
+        let path = rootPath.stringByAppendingPathComponent(relativePath)
+        return try NSFileWrapper(URL: NSURL.fileURLWithPath(path), options: NSFileWrapperReadingOptions.Immediate)
     }
 
     /**
