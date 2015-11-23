@@ -297,6 +297,11 @@ public class SQLiteDBConnection {
         assert(cursor[0] == expected, message)
     }
 
+    private func pragma(pragma: String, factory: SDRow -> String) -> String? {
+        let cursor = executeQueryUnsafe("PRAGMA \(pragma)", factory: factory)
+        return cursor[0]
+    }
+
     init?(filename: String, flags: Int32, key: String? = nil, prevKey: String? = nil) {
         log.debug("Opening connection to \(filename).")
         self.filename = filename
