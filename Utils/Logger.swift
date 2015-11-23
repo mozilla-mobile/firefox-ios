@@ -21,7 +21,7 @@ public extension Logger {
     static let keychainLogger: XCGLogger = Logger.fileLoggerWithName("keychain")
 
     /// Logger used for logging database errors such as corruption
-    static let corruptLogger: XCGLogger = RollingFileLogger(filenameRoot: "dbCorruption", logDirectoryPath: Logger.logFileDirectoryPath())
+    static let corruptLogger = RollingFileLogger(filenameRoot: "corruptLogger", logDirectoryPath: Logger.logFileDirectoryPath())
 
     /**
     Return the log file directory path. If the directory doesn't exist, make sure it exist first before returning the path.
@@ -79,15 +79,10 @@ public extension Logger {
         filenamesAndURLs.append(("keychain", urlForLogNamed("keychain")!))
 
         // Grab all sync log files
-        if let logDir = Logger.logFileDirectoryPath() {
-            let syncFiles = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(logDir, withFilenamePrefix: syncLogger.root)
-            let syncFilenamesAndURLS: [(String, NSURL)] = syncFiles.flatMap { filename in
-                if let url = NSURL(string: "\(logDir)/\(filename)") {
-                    return (filename, url)
-                }
-                return nil
-            }
-            filenamesAndURLs += syncFilenamesAndURLS
+        do {
+            filenamesAndURLs += try syncLogger.logFilenamesAndURLs()
+            filenamesAndURLs += try corruptLogger.logFilenamesAndURLs()
+        } catch _ {
         }
 
         return filenamesAndURLs.map { ($0, NSData(contentsOfFile: $1.absoluteString)) }
