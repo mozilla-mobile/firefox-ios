@@ -645,6 +645,9 @@
 		E66C5B481BDA81050051AA93 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */; };
 		E679FDBB1B99CF10008C220A /* PrivateBrowsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
+		E695D8651C037E9F00D3FCCE /* FSUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = E695D8631C037E9F00D3FCCE /* FSUtils.h */; };
+		E695D8661C037E9F00D3FCCE /* FSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E695D8641C037E9F00D3FCCE /* FSUtils.m */; };
+		E695D8681C03804F00D3FCCE /* FSUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E695D8671C03804F00D3FCCE /* FSUtilsTests.swift */; };
 		E698FFDA1B4AADF40001F623 /* BrowserScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */; };
 		E69922171B94E3EF007C480D /* Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = E69922121B94E3EF007C480D /* Licenses.html */; };
 		E69966991B72674B0036F797 /* RollingFileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69966981B72674B0036F797 /* RollingFileLogger.swift */; };
@@ -1846,6 +1849,9 @@
 		E66C5B471BDA81050051AA93 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		E679FDBA1B99CF10008C220A /* PrivateBrowsingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTests.swift; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
+		E695D8631C037E9F00D3FCCE /* FSUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSUtils.h; sourceTree = "<group>"; };
+		E695D8641C037E9F00D3FCCE /* FSUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSUtils.m; sourceTree = "<group>"; };
+		E695D8671C03804F00D3FCCE /* FSUtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSUtilsTests.swift; sourceTree = "<group>"; };
 		E698FFD91B4AADF40001F623 /* BrowserScrollController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserScrollController.swift; sourceTree = "<group>"; };
 		E69922121B94E3EF007C480D /* Licenses.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Licenses.html; sourceTree = "<group>"; };
 		E69966981B72674B0036F797 /* RollingFileLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RollingFileLogger.swift; sourceTree = "<group>"; };
@@ -2753,6 +2759,8 @@
 				2F3444561AB22A4B00FD9731 /* TimeConstants.swift */,
 				B729F0691B75CBEF00745F7A /* UserAgent.swift */,
 				D3ACB4381AD33EBA00748D50 /* WeakList.swift */,
+				E695D8631C037E9F00D3FCCE /* FSUtils.h */,
+				E695D8641C037E9F00D3FCCE /* FSUtils.m */,
 				E4252A0D1AF01AE40028C684 /* Swizzling.m */,
 				E4C358531AF1440B00299F7E /* Swizzling.h */,
 				E46C51C11B41ADD800EB349F /* Try.h */,
@@ -3035,6 +3043,7 @@
 		E6F9650D1B2F1CF20034B023 /* SharedTests */ = {
 			isa = PBXGroup;
 			children = (
+				E695D8671C03804F00D3FCCE /* FSUtilsTests.swift */,
 				E6F9653B1B2F1D5D0034B023 /* NSURLExtensionsTests.swift */,
 				E6F965411B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift */,
 				E61453BD1B750A1700C3F9D7 /* RollingFileLoggerTests.swift */,
@@ -3328,6 +3337,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E695D8651C037E9F00D3FCCE /* FSUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4481,6 +4491,7 @@
 				B729F06A1B75CBEF00745F7A /* UserAgent.swift in Sources */,
 				E69BEA5E1BC6A7F300EA6D04 /* ArrayExtensions.swift in Sources */,
 				D37016031BF282450063D032 /* UIImageExtensions.swift in Sources */,
+				E695D8661C037E9F00D3FCCE /* FSUtils.m in Sources */,
 				2FDE87521ABA3EA0005317B1 /* TimeConstants.swift in Sources */,
 				2891CEC41ADC7F2900427D3C /* NSURLExtensions.swift in Sources */,
 				2FDE87321ABA3E87005317B1 /* json.swift in Sources */,
@@ -4753,6 +4764,7 @@
 			files = (
 				E61453BE1B750A1700C3F9D7 /* RollingFileLoggerTests.swift in Sources */,
 				E6F965421B2F25110034B023 /* NSMutableAttributedStringExtensionsTests.swift in Sources */,
+				E695D8681C03804F00D3FCCE /* FSUtilsTests.swift in Sources */,
 				E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
