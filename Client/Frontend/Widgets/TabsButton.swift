@@ -19,7 +19,6 @@ class TabsButton: UIControl {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = TabsButtonUX.TitleFont
-        label.textColor = TabsButtonUX.TitleColor
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
         label.textAlignment = NSTextAlignment.Center
         label.userInteractionEnabled = false
@@ -35,7 +34,6 @@ class TabsButton: UIControl {
 
     private lazy var labelBackground: UIView = {
         let background = UIView()
-        background.backgroundColor = TabsButtonUX.TitleBackgroundColor
         background.layer.cornerRadius = TabsButtonUX.CornerRadius
         background.userInteractionEnabled = false
         return background
@@ -44,7 +42,6 @@ class TabsButton: UIControl {
     private lazy var borderView: InnerStrokedView = {
         let border = InnerStrokedView()
         border.strokeWidth = TabsButtonUX.BorderStrokeWidth
-        border.color = TabsButtonUX.BorderColor
         border.cornerRadius = TabsButtonUX.CornerRadius
         border.userInteractionEnabled = false
         return border

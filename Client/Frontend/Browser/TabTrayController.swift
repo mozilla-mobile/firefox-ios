@@ -239,7 +239,7 @@ class TabTrayController: UIViewController {
                 togglePrivateMode.selected = privateMode
                 togglePrivateMode.accessibilityValue = privateMode ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
                 tabDataSource.tabs = tabsToDisplay
-                collectionView.reloadData()
+                collectionView?.reloadData()
             }
         }
     }
@@ -485,6 +485,17 @@ class TabTrayController: UIViewController {
         return privateMode && tabManager.privateTabs.count == 0
     }
 
+    @available(iOS 9, *)
+    func changePrivacyMode(isPrivate: Bool) {
+        if isPrivate != privateMode {
+            guard let _ = collectionView else {
+                privateMode = isPrivate
+                return
+            }
+            SELdidTogglePrivateMode()
+        }
+    }
+
     private func openNewTab(request: NSURLRequest? = nil) {
         if #available(iOS 9, *) {
             if privateMode {
@@ -552,10 +563,9 @@ extension TabTrayController: TabManagerDelegate {
     func tabManager(tabManager: TabManager, didAddTab tab: Browser) {
         // Get the index of the added tab from it's set (private or normal)
         guard let index = tabsToDisplay.indexOf(tab) else { return }
-        
-        tabDataSource.addTab(tab)
 
-        self.collectionView.performBatchUpdates({ _ in
+        tabDataSource.addTab(tab)
+        self.collectionView?.performBatchUpdates({ _ in
             self.collectionView.insertItemsAtIndexPaths([NSIndexPath(forItem: index, inSection: 0)])
         }, completion: { finished in
             if finished {

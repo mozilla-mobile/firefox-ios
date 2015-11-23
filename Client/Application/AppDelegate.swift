@@ -18,6 +18,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     weak var profile: BrowserProfile?
     var tabManager: TabManager!
 
+    @available(iOS 9, *)
+    lazy var quickActions: QuickActions = {
+        let actions = QuickActions()
+        return actions
+    }()
+
     weak var application: UIApplication?
     var launchOptions: [NSObject: AnyObject]?
 
@@ -137,6 +143,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+        // Override point for customization after application launch.
+        var shouldPerformAdditionalDelegateHandling = true
+
         log.debug("Did finish launching.")
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
             AdjustIntegration.sharedInstance.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
@@ -150,8 +159,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Logger.syncLogger.deleteOldLogsDownToSizeLimit
         )
 
+
+        if #available(iOS 9, *) {
+            // If a shortcut was launched, display its information and take the appropriate action
+            if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsShortcutItemKey] as? UIApplicationShortcutItem {
+
+                quickActions.launchedShortcutItem = shortcutItem
+
+                // This will block "performActionForShortcutItem:completionHandler" from being called.
+                shouldPerformAdditionalDelegateHandling = false
+            }
+        }
+
         log.debug("Done with applicationDidFinishLaunching.")
-        return true
+
+        return shouldPerformAdditionalDelegateHandling
     }
 
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
@@ -188,6 +210,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // We could load these here, but then we have to futz with the tab counter
         // and making NSURLRequests.
         self.browserViewController.loadQueuedTabs()
+
+        // handle quick actions is available
+        if #available(iOS 9, *) {
+            if let shortcut = quickActions.launchedShortcutItem {
+                // dispatch asynchronously so that BVC is all set up for handling new tabs
+                // when we try and open them
+                self.quickActions.handleShortCutItem(shortcut, completionBlock: self.handleShortCutItemType)
+                quickActions.launchedShortcutItem = nil
+            }
+        }
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
@@ -307,6 +339,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if let urlToOpen = NSURL(string: alertURL) {
                 NSNotificationCenter.defaultCenter().postNotificationName(FSReadingListAddReadingListItemNotification, object: self, userInfo: ["URL": urlToOpen, "Title": title])
             }
+        }
+    }
+
+    @available(iOS 9.0, *)
+    func application(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: Bool -> Void) {
+        let handledShortCutItem = quickActions.handleShortCutItem(shortcutItem, completionBlock: handleShortCutItemType)
+
+        completionHandler(handledShortCutItem)
+    }
+
+    @available(iOS 9, *)
+    func handleShortCutItemType(type: ShortcutType, userData: [String : NSSecureCoding]?) {
+        switch(type) {
+        case .NewTab:
+            browserViewController.applyNormalModeTheme(force: true)
+            browserViewController.openBlankNewTabAndFocus()
+        case .NewPrivateTab:
+            browserViewController.applyPrivateModeTheme(force: true)
+            browserViewController.openBlankNewTabAndFocus(isPrivate: true)
         }
     }
 }

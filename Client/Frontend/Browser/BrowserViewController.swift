@@ -847,13 +847,31 @@ class BrowserViewController: UIViewController {
     }
 
     func openURLInNewTab(url: NSURL) {
-        let tab: Browser
         if #available(iOS 9, *) {
-            tab = tabManager.addTab(NSURLRequest(URL: url), isPrivate: tabTrayController?.privateMode ?? false)
+            openURLInNewTab(url, isPrivate: tabTrayController?.privateMode ?? false)
         } else {
-            tab = tabManager.addTab(NSURLRequest(URL: url))
+            tabManager.addTabAndSelect(NSURLRequest(URL: url))
         }
-        tabManager.selectTab(tab)
+    }
+
+    @available(iOS 9, *)
+    func openURLInNewTab(url: NSURL?, isPrivate: Bool) {
+        let request: NSURLRequest?
+        if let url = url {
+            request = NSURLRequest(URL: url)
+        } else {
+            request = nil
+        }
+        let tabTrayController = self.tabTrayController ?? TabTrayController(tabManager: tabManager, profile: profile)
+        tabTrayController.changePrivacyMode(isPrivate)
+        self.tabTrayController = tabTrayController
+        tabManager.addTabAndSelect(request, isPrivate: isPrivate)
+    }
+
+    @available(iOS 9, *)
+    func openBlankNewTabAndFocus(isPrivate isPrivate: Bool = false) {
+        openURLInNewTab(nil, isPrivate: isPrivate)
+        urlBar.browserLocationViewDidTapLocation(urlBar.locationView)
     }
 }
 
@@ -2221,7 +2239,7 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 // MARK: Browser Chrome Theming
 extension BrowserViewController {
 
-    func applyPrivateModeTheme() {
+    func applyPrivateModeTheme(force force: Bool = false) {
         BrowserLocationView.appearance().baseURLFontColor = UIColor.lightGrayColor()
         BrowserLocationView.appearance().hostFontColor = UIColor.whiteColor()
         BrowserLocationView.appearance().backgroundColor = UIConstants.PrivateModeLocationBackgroundColor
@@ -2249,11 +2267,15 @@ extension BrowserViewController {
         ReaderModeBarView.appearance().backgroundColor = UIConstants.PrivateModeReaderModeBackgroundColor
         ReaderModeBarView.appearance().buttonTintColor = UIColor.whiteColor()
 
+        if force {
+            forceApplyTheme()
+        }
+
         header.blurStyle = .Dark
         footerBackground?.blurStyle = .Dark
     }
 
-    func applyNormalModeTheme() {
+    func applyNormalModeTheme(force force: Bool = false) {
         BrowserLocationView.appearance().baseURLFontColor = BrowserLocationViewUX.BaseURLFontColor
         BrowserLocationView.appearance().hostFontColor = BrowserLocationViewUX.HostFontColor
         BrowserLocationView.appearance().backgroundColor = UIColor.whiteColor()
@@ -2281,8 +2303,18 @@ extension BrowserViewController {
         ReaderModeBarView.appearance().backgroundColor = UIColor.whiteColor()
         ReaderModeBarView.appearance().buttonTintColor = UIColor.darkGrayColor()
 
+        if force {
+            forceApplyTheme()
+        }
+
         header.blurStyle = .ExtraLight
         footerBackground?.blurStyle = .ExtraLight
+    }
+
+    func forceApplyTheme() {
+        urlBar.forceApplyTheme()
+        toolbar?.forceApplyTheme()
+        readerModeBar?.forceApplyTheme()
     }
 }
 
@@ -2323,4 +2355,8 @@ class BlurWrapper: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+protocol Themeable {
+    func forceApplyTheme()
 }
