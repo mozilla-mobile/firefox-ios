@@ -179,8 +179,18 @@ public class BrowserDB {
 
             do {
                 try self.files.move(self.filename, toRelativePath: bak)
-                try self.files.move(self.filename + "-shm", toRelativePath: bak + "-shm")
-                try self.files.move(self.filename + "-wal", toRelativePath: bak + "-wal")
+
+                let shm = self.filename + "-shm"
+                let wal = self.filename + "-wal"
+                log.debug("Moving \(shm) and \(wal)…")
+                if self.files.exists(shm) {
+                    log.debug("\(shm) exists.")
+                    try self.files.move(shm, toRelativePath: bak + "-shm")
+                }
+                if self.files.exists(wal) {
+                    log.debug("\(wal) exists.")
+                    try self.files.move(wal, toRelativePath: bak + "-wal")
+                }
                 success = true
             } catch _ {
                 success = false
