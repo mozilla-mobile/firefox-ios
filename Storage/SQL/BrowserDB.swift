@@ -167,6 +167,9 @@ public class BrowserDB {
             log.debug("Couldn't create or update \(tables.map { $0.name }).")
             log.debug("Attempting to move \(self.filename) to another location.")
 
+            // Make sure that we don't still have open the files that we want to move!
+            db.close()
+
             // Note that a backup file might already exist! We append a counter to avoid this.
             var bakCounter = 0
             var bak: String
@@ -176,6 +179,18 @@ public class BrowserDB {
 
             do {
                 try self.files.move(self.filename, toRelativePath: bak)
+
+                let shm = self.filename + "-shm"
+                let wal = self.filename + "-wal"
+                log.debug("Moving \(shm) and \(wal)…")
+                if self.files.exists(shm) {
+                    log.debug("\(shm) exists.")
+                    try self.files.move(shm, toRelativePath: bak + "-shm")
+                }
+                if self.files.exists(wal) {
+                    log.debug("\(wal) exists.")
+                    try self.files.move(wal, toRelativePath: bak + "-wal")
+                }
                 success = true
             } catch _ {
                 success = false
