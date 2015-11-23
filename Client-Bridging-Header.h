@@ -17,5 +17,6 @@
 #import "Carthage/Checkouts/SWTableViewCell/SWTableViewCell/PodFiles/SWTableViewCell.h"
 #import "Carthage/Checkouts/RaptureXML/RaptureXML/RXMLElement.h"
 #import "Carthage/Checkouts/ios_sdk/Adjust/Adjust.h"
+#import "Carthage/Checkouts/onepassword-extension/OnePasswordExtension.h"
 
 #endif
