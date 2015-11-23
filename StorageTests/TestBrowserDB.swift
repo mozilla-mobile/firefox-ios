@@ -79,7 +79,7 @@ class TestBrowserDB: XCTestCase {
         let shmB = try! files.fileWrapper("foo.db-shm")
         let creationB = shmB.fileAttributes[NSFileCreationDate] as! NSDate
         let inodeB = (shmB.fileAttributes[NSFileSystemFileNumber] as! NSNumber).unsignedLongValue
-        XCTAssertNotEqual(creationA, creationB)
+        XCTAssertTrue(creationA.compare(creationB) != NSComparisonResult.OrderedDescending)
         XCTAssertNotEqual(inodeA, inodeB)
 
         XCTAssertTrue(files.exists("foo.db.bak.1"))
