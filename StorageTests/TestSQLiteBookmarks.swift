@@ -11,7 +11,7 @@ private func getBrowserDB(filename: String, files: FileAccessor) -> BrowserDB? {
 
     // BrowserTable exists only to perform create/update etc. operations -- it's not
     // a queryable thing that needs to stick around.
-    if !db.createOrUpdate(BrowserTable(version: BrowserTable.DefaultVersion)) {
+    if !db.createOrUpdate(BrowserTable()) {
         return nil
     }
     return db

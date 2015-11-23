@@ -66,16 +66,17 @@ class TestSchemaTable: XCTestCase {
 
         typealias Type = Int
 
-        // Called if the table is created
+        // Called if the table is created.
         let createCallback: () -> Bool
-        // Called if the table is upgraded
-        let updateCallback: (from: Int, to: Int) -> Bool
+
+        // Called if the table is upgraded.
+        let updateCallback: (from: Int) -> Bool
 
         let dropCallback: (() -> Void)?
 
         init(version: Int,
                 createCallback: () -> Bool,
-                updateCallback: (from: Int, to: Int) -> Bool,
+                updateCallback: (from: Int) -> Bool,
                 dropCallback: (() -> Void)? = nil) {
             self._version = version
             self.createCallback = createCallback
@@ -97,14 +98,14 @@ class TestSchemaTable: XCTestCase {
             return err == nil
         }
 
-        func create(db: SQLiteDBConnection, version: Int) -> Bool {
+        func create(db: SQLiteDBConnection) -> Bool {
             // BrowserDB uses a different query to determine if a table exists, so we need to ensure it actually happens
             db.executeChange("CREATE TABLE IF NOT EXISTS \(name) (ID INTEGER PRIMARY KEY AUTOINCREMENT)")
             return createCallback()
         }
 
-        func updateTable(db: SQLiteDBConnection, from: Int, to: Int) -> Bool {
-            return updateCallback(from: from, to: to)
+        func updateTable(db: SQLiteDBConnection, from: Int) -> Bool {
+            return updateCallback(from: from)
         }
 
         // These are all no-ops for testing
@@ -120,7 +121,7 @@ class TestSchemaTable: XCTestCase {
         let t = TestTable(version: 1, createCallback: { _ -> Bool in
             XCTAssert(true, "Should have created table")
             return true
-        }, updateCallback: { (from, to) -> Bool in
+        }, updateCallback: { from -> Bool in
             XCTFail("Should not try to update table")
             return false
         })
@@ -133,10 +134,9 @@ class TestSchemaTable: XCTestCase {
         let t = TestTable(version: 2, createCallback: { _ -> Bool in
             XCTAssertTrue(dropped, "Create should be called after upgrade attempt")
             return true
-        }, updateCallback: { (from, to) -> Bool in
+        }, updateCallback: { from -> Bool in
             XCTAssert(true, "Should try to update table")
             XCTAssertEqual(from, 1, "From is correct")
-            XCTAssertEqual(to, 2, "To is correct")
 
             // We'll return false here. The db will take that as a sign to drop and recreate our table.
             upgraded = true
@@ -152,7 +152,7 @@ class TestSchemaTable: XCTestCase {
         let t = TestTable(version: 2, createCallback: { _ -> Bool in
             XCTFail("Should not try to create table")
             return false
-        }, updateCallback: { (from, to) -> Bool in
+        }, updateCallback: { from -> Bool in
             XCTFail("Should not try to update table")
             return false
         })
