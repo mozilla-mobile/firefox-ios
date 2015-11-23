@@ -50,6 +50,9 @@ public class SwiftData {
     static var EnableWAL = true
     static var EnableForeignKeys = true
 
+    /// Used to keep track of the corrupted databases we've logged.
+    static var corruptionLogsWritten = Set<String>()
+
     /// Used for testing.
     static var ReuseConnections = true
 
@@ -293,11 +296,11 @@ public class SQLiteDBConnection {
     }
 
     private func pragma<T: Equatable>(pragma: String, expected: T?, factory: SDRow -> T, message: String) {
-        let cursor = executeQueryUnsafe("PRAGMA \(pragma)", factory: factory)
-        assert(cursor[0] == expected, message)
+        let cursorResult = self.pragma(pragma, factory: factory)
+        assert(cursorResult == expected, message)
     }
 
-    private func pragma(pragma: String, factory: SDRow -> String) -> String? {
+    private func pragma<T>(pragma: String, factory: SDRow -> T) -> T? {
         let cursor = executeQueryUnsafe("PRAGMA \(pragma)", factory: factory)
         return cursor[0]
     }
@@ -461,6 +464,11 @@ public class SQLiteDBConnection {
             statement = nil
         }
         if let error = error {
+            // Special case: Write additional info to the database log in the case of a database corruption.
+            if error.code == Int(SQLITE_CORRUPT) {
+                writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
+            }
+
             log.error("SQL error: \(error.localizedDescription) for SQL \(sqlStr).")
             statement?.close()
             return error
@@ -489,7 +497,7 @@ public class SQLiteDBConnection {
         }
         if let error = error {
             // Special case: Write additional info to the database log in the case of a database corruption.
-            if error.code == 11 {
+            if error.code == Int(SQLITE_CORRUPT) {
                 writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
             }
 
@@ -507,21 +515,27 @@ public class SQLiteDBConnection {
     }
 
     func writeCorruptionInfoForDBNamed(dbFilename: String, toLogger logger: XCGLogger) {
-        logger.error("Corrupt DB Detected! - DB Filenamed: \(dbFilename)")
-        let dbFileURL = "file://\(dbFilename)".asURL!
-        let dbFileSize = NSFileManager.defaultManager().allocatedFileSizeForFileAtURL(dbFileURL)
-        logger.error("DB file size: \(dbFileSize) bytes")
+        dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            guard !SwiftData.corruptionLogsWritten.contains(dbFilename) else { return }
 
-        if let message = pragma("integrity_check", factory: StringFactory) {
-            logger.error("Integrity check message: \(message)")
+            logger.error("Corrupt DB Detected! - DB Filename: \(dbFilename)")
+
+            let dbFileSize = ("file://\(dbFilename)".asURL)?.allocatedFileSize() ?? 0
+            logger.error("DB file size: \(dbFileSize) bytes")
+
+            if let message = self.pragma("integrity_check", factory: StringFactory) {
+                logger.error("Integrity check message: \(message)")
+            }
+
+            // Write call stack
+            logger.error("Call stack: \(NSThread.callStackSymbols())")
+
+            // Write open file handles
+            let openDescriptors = FSUtils.openFileDescriptors()
+            logger.error("Open file descriptors: \(openDescriptors)")
+
+            SwiftData.corruptionLogsWritten.insert(dbFilename)
         }
-
-        // Write call stack
-        logger.error("Call stack: \(NSThread.callStackSymbols())")
-
-        // Write open file handlers
-        let openDescriptors = FSUtils.openFileDescriptors()
-        logger.error("Open file descriptors: \(openDescriptors)")
     }
 
     /**

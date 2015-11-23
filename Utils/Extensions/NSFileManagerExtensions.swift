@@ -55,19 +55,7 @@ public extension NSFileManager {
             return 0
         }
 
-        // First try to get the total allocated size and in failing that, get the file allocated size
-        if let url = url as? NSURL {
-            return allocatedFileSizeForFileAtURL(url)
-        } else {
-            return 0
-        }
-    }
-
-    func allocatedFileSizeForFileAtURL(url: NSURL) -> Int64 {
-        // First try to get the total allocated size and in failing that, get the file allocated size
-        return url.getResourceLongLongForKey(NSURLTotalFileAllocatedSizeKey)
-            ?? url.getResourceLongLongForKey(NSURLFileAllocatedSizeKey)
-            ?? 0
+        return (url as? NSURL)?.allocatedFileSize() ?? 0
     }
 
     func allocatedSizeOfDirectoryAtURL(url: NSURL, forFilesPrefixedWith prefix: String, isLargerThanBytes threshold: Int64) throws -> Bool {
