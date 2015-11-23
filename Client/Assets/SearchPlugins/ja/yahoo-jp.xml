@@ -10,7 +10,7 @@
 <Url type="text/html" method="GET" template="http://search.yahoo.co.jp/search">
   <Param name="p" value="{searchTerms}"/>
   <Param name="ei" value="UTF-8"/>
-  <MozParam name="fr" condition="pref" pref="yahoo-fr-ja" />
+  <Param name="fr" value="mozff" />
   <Param name="type" value="ios" />
 </Url>
 <SearchForm>http://search.yahoo.co.jp/</SearchForm>
