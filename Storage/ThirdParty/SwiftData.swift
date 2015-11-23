@@ -488,6 +488,11 @@ public class SQLiteDBConnection {
             statement = nil
         }
         if let error = error {
+            // Special case: Write additional info to the database log in the case of a database corruption.
+            if error.code == 11 {
+                writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
+            }
+
             log.error("SQL error: \(error.localizedDescription).")
             return Cursor<T>(err: error)
         }
@@ -499,6 +504,24 @@ public class SQLiteDBConnection {
         statement?.close()
 
         return cursor
+    }
+
+    func writeCorruptionInfoForDBNamed(dbFilename: String, toLogger logger: XCGLogger) {
+        logger.error("Corrupt DB Detected! - DB Filenamed: \(dbFilename)")
+        let dbFileURL = "file://\(dbFilename)".asURL!
+        let dbFileSize = NSFileManager.defaultManager().allocatedFileSizeForFileAtURL(dbFileURL)
+        logger.error("DB file size: \(dbFileSize) bytes")
+
+        if let message = pragma("integrity_check", factory: StringFactory) {
+            logger.error("Integrity check message: \(message)")
+        }
+
+        // Write call stack
+        logger.error("Call stack: \(NSThread.callStackSymbols())")
+
+        // Write open file handlers
+        let openDescriptors = FSUtils.openFileDescriptors()
+        logger.error("Open file descriptors: \(openDescriptors)")
     }
 
     /**

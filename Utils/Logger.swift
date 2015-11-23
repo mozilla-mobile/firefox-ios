@@ -20,6 +20,9 @@ public extension Logger {
     /// Logger used for recording interactions with the keychain
     static let keychainLogger: XCGLogger = Logger.fileLoggerWithName("keychain")
 
+    /// Logger used for logging database errors such as corruption
+    static let corruptLogger: XCGLogger = RollingFileLogger(filenameRoot: "dbCorruption", logDirectoryPath: Logger.logFileDirectoryPath())
+
     /**
     Return the log file directory path. If the directory doesn't exist, make sure it exist first before returning the path.
 
