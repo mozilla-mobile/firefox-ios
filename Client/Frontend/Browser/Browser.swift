@@ -243,6 +243,13 @@ class Browser: NSObject {
                 }
             }
 
+            if let urlComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: false) where (urlComponents.user != nil) || (urlComponents.password != nil) {
+                urlComponents.user = nil
+                urlComponents.password = nil
+                return urlComponents.URL
+            }
+
+
             if !AboutUtils.isAboutURL(url) {
                 return url
             }
