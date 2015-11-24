@@ -43,7 +43,7 @@ class TopSitesPanel: UIViewController {
                     homePanelDelegate?.homePanelWillEnterEditingMode?(self)
                 }
 
-                updateRemoveButtonStates()
+                updateAllRemoveButtonStates()
             }
         }
     }
@@ -125,16 +125,9 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    private func updateRemoveButtonStates() {
-        for i in 0..<layout.thumbnailCount {
-            if let cell = collection?.cellForItemAtIndexPath(NSIndexPath(forItem: i, inSection: 0)) as? ThumbnailCell {
-                //TODO: Only toggle the remove button for non-suggested tiles for now
-                if i < dataSource.data.count {
-                    cell.toggleRemoveButton(editingThumbnails)
-                } else {
-                    cell.toggleRemoveButton(false)
-                }
-            }
+    private func updateAllRemoveButtonStates() {
+        collection?.indexPathsForVisibleItems().forEach { indexPath in
+            updateRemoveButtonStateForIndexPath(indexPath)
         }
     }
 
@@ -150,6 +143,13 @@ class TopSitesPanel: UIViewController {
         >>> self.profile.history.refreshTopSitesCache
         >>> reloadThumbnails
     }
+    private func updateRemoveButtonStateForIndexPath(indexPath: NSIndexPath, forCell cell: ThumbnailCell? = nil) {
+        // If we have a cell passed in, use it. If not, then use the indexPath to get it.
+        let cell = cell ?? (collection?.cellForItemAtIndexPath(indexPath) as? ThumbnailCell)
+        dataSource[indexPath.row] is SuggestedSite ?
+            cell?.toggleRemoveButton(false) :
+            cell?.toggleRemoveButton(editingThumbnails)
+     }
 
     private func refreshTopSites(frecencyLimit: Int) {
         // Reload right away with whatever is in the cache, then check to see if the cache is invalid. If it's invalid,
