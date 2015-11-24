@@ -1577,8 +1577,13 @@ extension BrowserViewController: WKNavigationDelegate {
             callExternal(url)
             decisionHandler(WKNavigationActionPolicy.Cancel)
         default:
+            // If this is a scheme that we don't know how to handle, see if an external app
+            // can handle it. If not then we show an error page. In either case we cancel
+            // the request so that the webview does not see it.
             if UIApplication.sharedApplication().canOpenURL(url) {
                 openExternal(url)
+            } else {
+                ErrorPageHelper().showPage(NSError(domain: kCFErrorDomainCFNetwork as String, code: Int(CFNetworkErrors.CFErrorHTTPBadURL.rawValue), userInfo: [:]), forUrl: url, inWebView: webView)
             }
             decisionHandler(WKNavigationActionPolicy.Cancel)
         }
@@ -1674,9 +1679,11 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 }
 
+/// List of schemes that are allowed to open a popup window
+private let SchemesAllowedToOpenPopups = ["http", "https", "javascript", "data"]
+
 extension BrowserViewController: WKUIDelegate {
     func webView(webView: WKWebView, createWebViewWithConfiguration configuration: WKWebViewConfiguration, forNavigationAction navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-
         guard let currentTab = tabManager.selectedTab else { return nil }
 
         screenshotHelper.takeScreenshot(currentTab)
@@ -1690,6 +1697,14 @@ extension BrowserViewController: WKUIDelegate {
             newTab = tabManager.addTab(navigationAction.request, configuration: configuration)
         }
         tabManager.selectTab(newTab)
+        
+        // If the page we just opened has a bad scheme, we return nil here so that JavaScript does not
+        // get a reference to it which it can return from window.open() - this will end up as a
+        // CFErrorHTTPBadURL being presented.
+        guard let scheme = navigationAction.request.URL?.scheme.lowercaseString where SchemesAllowedToOpenPopups.contains(scheme) else {
+            return nil
+        }
+        
         return newTab.webView
     }
 
