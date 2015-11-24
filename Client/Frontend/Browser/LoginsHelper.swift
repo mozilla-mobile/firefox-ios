@@ -10,14 +10,11 @@ import WebKit
 
 private let log = Logger.browserLogger
 
-private let SaveButtonTitle = NSLocalizedString("Save", comment: "Button to save the user's password")
 private let NotNowButtonTitle = NSLocalizedString("Not now", comment: "Button to not save the user's password")
 private let UpdateButtonTitle = NSLocalizedString("Update", comment: "Button to update the user's password")
+private let YesButtonTitle = NSLocalizedString("Yes", comment: "Button to save the user's password")
 private let CancelButtonTitle = NSLocalizedString("Cancel", comment: "Authentication prompt cancel button")
 private let LogInButtonTitle  = NSLocalizedString("Log in", comment: "Authentication prompt log in button")
-
-// Copied from SearchViewController.swift PromptYes
-private let PromptYes = NSLocalizedString("Yes", tableName: "Search", comment: "For search suggestions prompt. This string should be short so it fits nicely on the prompt row.")
 
 class LoginsHelper: BrowserHelper {
     private weak var browser: Browser?
@@ -146,7 +143,7 @@ class LoginsHelper: BrowserHelper {
                     return
                 }),
 
-                SnackButton(title: PromptYes, callback: { (bar: SnackBar) -> Void in
+                SnackButton(title: YesButtonTitle, callback: { (bar: SnackBar) -> Void in
                     self.browser?.removeSnackbar(bar)
                     self.snackBar = nil
                     self.profile.logins.addLogin(login)
