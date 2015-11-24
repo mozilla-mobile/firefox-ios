@@ -1609,23 +1609,22 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    func webView(webView: WKWebView,
-        didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge,
-        completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
-            if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPBasic || challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPDigest {
-                if let tab = tabManager[webView] {
-                    let helper = tab.getHelper(name: LoginsHelper.name()) as! LoginsHelper
-                    helper.handleAuthRequest(self, challenge: challenge).uponQueue(dispatch_get_main_queue()) { res in
-                        if let credentials = res.successValue {
-                            completionHandler(.UseCredential, credentials.credentials)
-                        } else {
-                            completionHandler(NSURLSessionAuthChallengeDisposition.RejectProtectionSpace, nil)
-                        }
-                    }
-                }
+    func webView(webView: WKWebView, didReceiveAuthenticationChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
+        guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPBasic ||
+              challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodHTTPDigest,
+              let tab = tabManager[webView] else {
+            completionHandler(NSURLSessionAuthChallengeDisposition.PerformDefaultHandling, nil)
+            return
+        }
+
+        let loginsHelper = tab.getHelper(name: LoginsHelper.name()) as? LoginsHelper
+        Authenticator.handleAuthRequest(self, challenge: challenge, loginsHelper: loginsHelper).uponQueue(dispatch_get_main_queue()) { res in
+            if let credentials = res.successValue {
+                completionHandler(.UseCredential, credentials.credentials)
             } else {
-                completionHandler(NSURLSessionAuthChallengeDisposition.PerformDefaultHandling, nil)
+                completionHandler(NSURLSessionAuthChallengeDisposition.RejectProtectionSpace, nil)
             }
+        }
     }
 
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
