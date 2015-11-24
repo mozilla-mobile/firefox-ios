@@ -301,10 +301,13 @@ private class TopSitesCollectionView: UICollectionView {
 private class TopSitesLayout: UICollectionViewLayout {
 
     private var thumbnailRows: Int {
+        assert(NSThread.isMainThread(), "Interacts with UIKit components - not thread-safe.")
         return max(2, Int((self.collectionView?.frame.height ?? self.thumbnailHeight) / self.thumbnailHeight))
     }
 
     private var thumbnailCols: Int {
+        assert(NSThread.isMainThread(), "Interacts with UIKit components - not thread-safe.")
+
         let size = collectionView?.bounds.size ?? CGSizeZero
         let traitCollection = collectionView!.traitCollection
         if traitCollection.horizontalSizeClass == .Compact {
@@ -333,12 +336,19 @@ private class TopSitesLayout: UICollectionViewLayout {
     }
 
     private var thumbnailCount: Int {
+        assert(NSThread.isMainThread(), "Interacts with UIKit components - not thread-safe.")
         return thumbnailRows * thumbnailCols
     }
-    private var width: CGFloat { return self.collectionView?.frame.width ?? 0 }
+
+    private var width: CGFloat {
+        assert(NSThread.isMainThread(), "Interacts with UIKit components - not thread-safe.")
+        return self.collectionView?.frame.width ?? 0
+    }
 
     // The width and height of the thumbnail here are the width and height of the tile itself, not the image inside the tile.
     private var thumbnailWidth: CGFloat {
+        assert(NSThread.isMainThread(), "Interacts with UIKit components - not thread-safe.")
+
         let size = collectionView?.bounds.size ?? CGSizeZero
         let insets = ThumbnailCellUX.insetsForCollectionViewSize(size,
             traitCollection:  collectionView!.traitCollection)
@@ -348,6 +358,8 @@ private class TopSitesLayout: UICollectionViewLayout {
     // The tile's height is determined the aspect ratio of the thumbnails width. We also take into account
     // some padding between the title and the image.
     private var thumbnailHeight: CGFloat {
+        assert(NSThread.isMainThread(), "Interacts with UIKit components - not thread-safe.")
+
         return floor(thumbnailWidth / CGFloat(ThumbnailCellUX.ImageAspectRatio))
     }
 
