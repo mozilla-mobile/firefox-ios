@@ -20,17 +20,18 @@
 
     for (selector in this.selectors) {
       var icons = document.querySelectorAll(selector)
+      if (icons.length) {
+        res = {}
+      }
       for (var i = 0; i < icons.length; i++) {
         var href = icons[i].href;
         res[href] = this.selectors[selector];
-        if (!foundIcons && this.selectors[selector] == ICON) {
           foundIcons = true
         }
       }
-    }
 
     // If we didn't find anything in the page, look to see if a favicon.ico file exists for the domain
-    if (res) {
+    if (!foundIcons) {
       var href = document.location.origin + "/favicon.ico";
       res[href] = GUESS;
     }

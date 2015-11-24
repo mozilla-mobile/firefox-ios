@@ -10,6 +10,27 @@ protocol Identifiable {
 }
 
 public enum IconType: Int {
+    public func isPreferredTo (other: IconType) -> Bool {
+        return rank > other.rank
+    }
+
+    private var rank: Int {
+        switch self {
+        case .AppleIconPrecomposed:
+            return 5
+        case .AppleIcon:
+            return 4
+        case .Icon:
+            return 3
+        case .Local:
+            return 2
+        case .Guess:
+            return 1
+        case .NoneFound:
+            return 0
+        }
+    }
+
     case Icon = 0
     case AppleIcon = 1
     case AppleIconPrecomposed = 2
