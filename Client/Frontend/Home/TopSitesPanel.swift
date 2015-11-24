@@ -23,7 +23,7 @@ class TopSitesPanel: UIViewController {
 
     private var collection: TopSitesCollectionView? = nil
     private lazy var dataSource: TopSitesDataSource = {
-        return TopSitesDataSource(profile: self.profile, data: Cursor(status: .Failure, msg: "Nothing loaded yet"))
+        return TopSitesDataSource(profile: self.profile)
     }()
     private lazy var layout: TopSitesLayout = { return TopSitesLayout() }()
 
@@ -33,6 +33,10 @@ class TopSitesPanel: UIViewController {
             self.calculateApproxThumbnailCountForOrientation(UIInterfaceOrientation.Portrait)
         )
     }()
+
+    private var cachedCursor: Cursor<Site>?
+    private var refillingTiles: Bool = false
+    private var deletionsInFlight: Int = 0
 
     var editingThumbnails: Bool = false {
         didSet {
@@ -54,6 +58,7 @@ class TopSitesPanel: UIViewController {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 
         coordinator.animateAlongsideTransition({ context in
+            self.dataSource.setDataFromCursor(self.cachedCursor, usingLayout: self.layout)
             self.collection?.reloadData()
         }, completion: nil)
     }
@@ -110,43 +115,20 @@ class TopSitesPanel: UIViewController {
         }
     }
 
-    //MARK: Private Helpers
-    private func updateDataSourceWithSites(result: Maybe<Cursor<Site>>) {
-        if let data = result.successValue {
-            self.dataSource.data = data
-            self.dataSource.profile = self.profile
-
-            // redraw now we've udpated our sources
-            self.collection?.collectionViewLayout.invalidateLayout()
-            self.collection?.setNeedsLayout()
-        }
-    }
-
     private func updateAllRemoveButtonStates() {
         collection?.indexPathsForVisibleItems().forEach { indexPath in
             updateRemoveButtonStateForIndexPath(indexPath)
         }
     }
 
-    private func deleteHistoryTileForSite(site: Site, atIndexPath indexPath: NSIndexPath) {
-        func reloadThumbnails() {
-            self.profile.history.getTopSitesWithLimit(self.layout.thumbnailCount)
-                .uponQueue(dispatch_get_main_queue()) { result in
-                    self.deleteOrUpdateSites(result, indexPath: indexPath)
-            }
-        }
-
-        profile.history.removeSiteFromTopSites(site)
-        >>> self.profile.history.refreshTopSitesCache
-        >>> reloadThumbnails
-    }
     private func updateRemoveButtonStateForIndexPath(indexPath: NSIndexPath, forCell cell: ThumbnailCell? = nil) {
         // If we have a cell passed in, use it. If not, then use the indexPath to get it.
         let cell = cell ?? (collection?.cellForItemAtIndexPath(indexPath) as? ThumbnailCell)
+
         dataSource[indexPath.row] is SuggestedSite ?
             cell?.toggleRemoveButton(false) :
             cell?.toggleRemoveButton(editingThumbnails)
-     }
+    }
 
     private func refreshTopSites(frecencyLimit: Int) {
         // Reload right away with whatever is in the cache, then check to see if the cache is invalid. If it's invalid,
@@ -160,48 +142,33 @@ class TopSitesPanel: UIViewController {
     }
 
     private func reloadTopSitesWithLimit(limit: Int) -> Success {
-        return self.profile.history.getTopSitesWithLimit(limit).bindQueue(dispatch_get_main_queue()) { result in
-            self.updateDataSourceWithSites(result)
+        return invalidateTopSitesCursor().bindQueue(dispatch_get_main_queue()) { _ in
+            self.dataSource.setDataFromCursor(self.cachedCursor, usingLayout: self.layout)
+            self.dataSource.profile = self.profile
+
+            // redraw now that we've updated our sources
+            self.collection?.collectionViewLayout.invalidateLayout()
+            self.collection?.setNeedsLayout()
             self.collection?.reloadData()
             return succeed()
         }
     }
 
-    private func deleteOrUpdateSites(result: Maybe<Cursor<Site>>, indexPath: NSIndexPath) {
-        guard let collectionView = collection else { return }
-        // get the number of top sites items we have before we update the data sourcce 
-        // this is so we know how many new top sites cells to add
-        // as a sync may have brought in more results than we had previously
-        let previousNumOfThumbnails = collectionView.dataSource?.collectionView(collectionView, numberOfItemsInSection: 0) ?? 0
-
-        // Exit early if the query failed in some way.
-        guard result.isSuccess else {
-            return
+    private func invalidateTopSitesCursor() -> Success {
+        return profile.history.getTopSitesWithLimit(maxFrecencyLimit).bind { result in
+            self.cachedCursor = result.successValue
+            return succeed()
         }
+    }
 
-        // now update the data source with the new data
-        self.updateDataSourceWithSites(result)
-
-        let data = dataSource.data
-        collection?.performBatchUpdates({
-
-            // find out how many thumbnails, up the max for display, we can actually add
-            let numOfCellsFromData = data.count + SuggestedSites.count
-            let numOfThumbnails = min(numOfCellsFromData, self.layout.thumbnailCount)
-
-            // If we have enough data to fill the tiles after the deletion, then delete the correct tile and insert any that are missing
-            if (numOfThumbnails >= previousNumOfThumbnails) {
-                self.collection?.deleteItemsAtIndexPaths([indexPath])
-                let indexesToAdd = ((previousNumOfThumbnails-1)..<numOfThumbnails).map{ NSIndexPath(forItem: $0, inSection: 0) }
-                self.collection?.insertItemsAtIndexPaths(indexesToAdd)
-            }
-            // If we don't have any data to backfill our tiles, just delete
-            else {
-                self.collection?.deleteItemsAtIndexPaths([indexPath])
-            }
-        }, completion: { _ in
-            self.updateRemoveButtonStates()
-        })
+    private func refillDeletedTiles() -> Success {
+        return self.profile.history.refreshTopSitesCache().bind { _ in
+            return self.invalidateTopSitesCursor()
+        } .bindQueue(dispatch_get_main_queue()) { _ in
+            self.invalidateAndAppendNewSites()
+            self.refillingTiles = false
+            return succeed()
+        }
     }
 
     /**
@@ -243,8 +210,6 @@ class TopSitesPanel: UIViewController {
 extension TopSitesPanel: HomePanel {
     func endEditing() {
         editingThumbnails = false
-
-        collection?.reloadData()
     }
 }
 
@@ -263,24 +228,57 @@ extension TopSitesPanel: UICollectionViewDelegate {
     }
 
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        if let thumbnailCell = cell as? ThumbnailCell {
-            thumbnailCell.delegate = self
-
-            if editingThumbnails && indexPath.item < dataSource.data.count && thumbnailCell.removeButton.hidden {
-                thumbnailCell.removeButton.hidden = false
-            }
-        }
+        let thumbnailCell = cell as? ThumbnailCell
+        thumbnailCell?.delegate = self
+        updateRemoveButtonStateForIndexPath(indexPath, forCell: thumbnailCell)
     }
 }
 
 extension TopSitesPanel: ThumbnailCellDelegate {
+
     func didRemoveThumbnail(thumbnailCell: ThumbnailCell) {
-        if let indexPath = collection?.indexPathForCell(thumbnailCell) {
-            if let site = dataSource[indexPath.item] {
-                self.deleteHistoryTileForSite(site, atIndexPath: indexPath)
+        guard let indexPath = collection?.indexPathForCell(thumbnailCell),
+            let site = dataSource[indexPath.item] else {
+            return
+        }
+
+        if !refillingTiles {
+            self.removeSiteAtIndexPath(indexPath)
+            deletionsInFlight++
+
+            self.profile.history.removeSiteFromTopSites(site).uponQueue(dispatch_get_main_queue()) { _ in
+                self.deletionsInFlight--
+                if self.deletionsInFlight == 0 {
+                    self.refillingTiles = true
+                    self.refillDeletedTiles()
+                }
             }
         }
-        
+    }
+
+    func removeSiteAtIndexPath(indexPath: NSIndexPath) {
+        dataSource.removeSiteAtIndex(indexPath.item)
+        self.collection?.deleteItemsAtIndexPaths([indexPath])
+    }
+
+    func invalidateAndAppendNewSites() {
+        guard let cursor = self.cachedCursor else {
+            return
+        }
+
+        var sites = [(Site, NSIndexPath)]()
+        for i in self.dataSource.count..<self.layout.thumbnailCount {
+            if i < cursor.count {
+                sites.append(
+                    (cursor[i]!, NSIndexPath(forItem: i, inSection: 0)))
+            } else if i >= cursor.count && i < SuggestedSites.count + cursor.count {
+                sites.append(
+                    (SuggestedSites[i - cursor.count]!, NSIndexPath(forItem: i, inSection: 0)))
+            }
+        }
+
+        self.dataSource.appendSites( sites.map { $0.0 } )
+        self.collection?.insertItemsAtIndexPaths( sites.map { $0.1 } )
     }
 
     func didLongPressThumbnail(thumbnailCell: ThumbnailCell) {
@@ -440,29 +438,47 @@ private class TopSitesLayout: UICollectionViewLayout {
 }
 
 private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
-    var data: Cursor<Site>
+    var count: Int {
+        return data.count
+    }
+
     var profile: Profile
     var editingThumbnails: Bool = false
+
+    private var data: [Site] = []
 
     private let blurQueue = dispatch_queue_create("FaviconBlurQueue", DISPATCH_QUEUE_CONCURRENT)
     private let BackgroundFadeInDuration: NSTimeInterval = 0.3
 
-    init(profile: Profile, data: Cursor<Site>) {
-        self.data = data
+    init(profile: Profile) {
         self.profile = profile
     }
 
+    func setDataFromCursor(cursor: Cursor<Site>?, usingLayout layout: TopSitesLayout) {
+        guard let cursor = cursor else {
+            data = []
+            return
+        }
+
+        let limit = min(layout.thumbnailCount, cursor.count + SuggestedSites.count)
+        let combinedData = cursor.asArray() + (SuggestedSites.asArray() as [Site])
+        let dataSlice = combinedData[0..<limit]
+        data = Array(dataSlice)
+    }
+
+    func removeSiteAtIndex(index: Int) {
+        guard index >= 0 && index < data.count else {
+            return
+        }
+        data.removeAtIndex(index)
+    }
+
+    func appendSites(sites: [Site]) {
+        data += sites
+    }
+
     @objc func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if data.status != .Success {
-            return 0
-        }
-
-        // If there aren't enough data items to fill the grid, look for items in suggested sites.
-        if let layout = collectionView.collectionViewLayout as? TopSitesLayout {
-            return min(data.count + SuggestedSites.count, layout.thumbnailCount)
-        }
-
-        return 0
+        return data.count
     }
 
     private func setDefaultThumbnailBackgroundForCell(cell: ThumbnailCell) {
@@ -571,14 +587,16 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
     }
 
     subscript(index: Int) -> Site? {
-        if data.status != .Success {
+        // Bounds check on provided index
+        guard (index < data.count + SuggestedSites.count) && index >= 0 else {
             return nil
         }
 
-        if index >= data.count {
+        if index >= data.count && index < data.count + SuggestedSites.count {
             return SuggestedSites[index - data.count]
+        } else {
+            return data[index] as Site?
         }
-        return data[index] as Site?
     }
 
     @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -589,8 +607,8 @@ private class TopSitesDataSource: NSObject, UICollectionViewDataSource {
         let traitCollection = collectionView.traitCollection
         cell.updateLayoutForCollectionViewSize(collectionView.bounds.size, traitCollection: traitCollection)
 
-        if indexPath.item >= data.count {
-            configureCell(cell, forSuggestedSite: site as! SuggestedSite)
+        if let suggestedSite = data[indexPath.item] as? SuggestedSite {
+            configureCell(cell, forSuggestedSite: suggestedSite)
         } else {
             configureCell(cell, forSite: site, isEditing: editingThumbnails, profile: profile)
         }
