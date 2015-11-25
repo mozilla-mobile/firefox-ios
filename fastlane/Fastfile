@@ -21,145 +21,35 @@ fastlane_version "1.39.0"
 default_platform :ios
 
 
+import_build_tools(
+  url: 'git@github.com:mozilla/firefox-ios-build-tools.git',
+  clone_folder: "../build-tools"
+)
+
+#move all the build tools to the right places
+clone_folder = "../../build-tools"
+sh("rsync -a #{clone_folder}/scripts ../")
+sh("rsync -a #{clone_folder}/fastlane/Appfile Appfile")
+sh("rsync -a #{clone_folder}/fastlane/Snapfile Snapfile")
+sh("rsync -a #{clone_folder}/fastlane/SnapshotHelper.swift SnapshotHelper.swift")
+sh("rsync -a #{clone_folder}/fastlane/scripts .")
+sh("rsync -a #{clone_folder}/fastlane/frames .")
+sh("rsync -a #{clone_folder}/fastlane/templates .")
+
+#import the fastfile
+import "#{clone_folder}/fastlane/BaseFastfile"
+
+sh("rm -rf #{clone_folder}")
+
 platform :ios do
   before_all do 
   end
 
-  private_lane :setup do |options|
-    puts "Setup: #{options[:options]}\n"
-    opts = options[:options]
-
-    # set build and version numbers
-    build_number = get_build_number(xcodeproj: "Client.xcodeproj")
-    version_number = get_version_number(xcodeproj: "Client.xcodeproj")
-    ENV["BUILD_VERSION"] = opts[:build] || build_number
-    ENV["APP_VERSION"] = opts[:version] || version_number
-
-    # create a name for this build
-    ENV["DATESTAMP"] = Time.now.utc.iso8601.gsub(/\W/, '')
-    ENV["BRANCH_NAME"] = options[:branch] || "firefox-#{ENV["APP_VERSION"]}-#{ENV["BUILD_VERSION"]}-#{ENV["DATESTAMP"]}"
-    ENV["BUILD_NAME"] = "firefox-#{lane_context[SharedValues::LANE_NAME].gsub!(' ','-')}-#{ENV["APP_VERSION"]}-#{ENV["BUILD_VERSION"]}-#{ENV["DATESTAMP"]}.ipa"
-    puts "Building #{ENV["BUILD_NAME"]} from branch #{ENV["BRANCH_NAME"]}"
-
-    ENV["SIGH_USERNAME"] = options[:username]
-
-    # checkout a new branch for build
-    checkout_git_branch(
-      base_branch: opts[:base_branch],
-      branch: ENV["BRANCH_NAME"]
-    )
-
-    if opts[:localise] || false
-      # import locales
-      sh("../scripts/localise.sh")
-    end
-
-    # make builds & prov profile dirs
-    sh("./scripts/mkdirs.sh")
-
-    version_bumped = false
-
-    if ENV["BUILD_VERSION"] != build_number
-      increment_build_number(
-        build_number: ENV["BUILD_VERSION"],
-        xcodeproj: 'Client.xcodeproj',
-      )
-      version_bumped = true
-    end
-
-    if ENV["APP_VERSION"] != version_number
-      increment_version_number(
-        version_number: ENV["APP_VERSION"],
-        xcodeproj: 'Client.xcodeproj',
-      ) 
-      version_bumped = true
-    end
-
-    if version_bumped == true
-      commit_version_bump(
-        message: 'Version Bump', 
-        xcodeproj: 'Client.xcodeproj', 
-      ) 
-    end
+  desc "Tests stuff"
+  lane :test do
+    Helper.log.debug "testing......"
   end
 
-  desc "Builds an Aurora build"
-  lane :aurora do |options|
-    options = options[:options] || options
-    puts "Aurora: #{options}\n"
-    setup(options: options)
-
-    sigh(app_identifier: "org.mozilla.ios.FennecAurora",
-      output_path: "./provisioning-profiles/",
-      username: options[:username] || "ios-builds@mozilla.com" )
-    sigh(app_identifier: "org.mozilla.ios.FennecAurora.SendTo",
-      output_path: "./provisioning-profiles/",
-      username: options[:username] || "ios-builds@mozilla.com")
-    sigh(app_identifier: "org.mozilla.ios.FennecAurora.ShareTo",
-      output_path: "./provisioning-profiles/",
-      username: options[:username] || "ios-builds@mozilla.com" )
-    sigh(app_identifier: "org.mozilla.ios.FennecAurora.ViewLater",
-      output_path: "./provisioning-profiles/",
-      username: options[:username] || "ios-builds@mozilla.com" )
-
-    gym(scheme: "FennecAurora",
-      output_directory: "./builds/",
-      output_name: "#{ENV["BUILD_NAME"]}",
-      sdk: "iphoneos",
-      clean: true,
-      export_method: "enterprise",
-      include_symbols: true,
-      include_bitcode: false)
-
-  end
-
-  desc "Builds an l10n build"
-  lane :l10n do |options|
-    aurora(options)
-  end
-
-  desc "Uploads an ipa"
-  lane :upload do |options|
-    build_number = get_build_number(xcodeproj: "Client.xcodeproj")
-    version_number = get_version_number(xcodeproj: "Client.xcodeproj")
-    ENV["BUILD_VERSION"] = options[:build] || build_number
-    ENV["APP_VERSION"] = options[:version] || version_number
-    ENV["BUILD_FLAVOUR"] = lane_context[SharedValues::LANE_NAME].gsub!('ios ','')
-    puts ENV["BUILD_FLAVOUR"]
-    # create a name for this build
-    ENV["DATESTAMP"] = Time.now.utc.iso8601.gsub(/\W/, '')
-
-    upload_enterprise_build(
-      plist: "fastlane/templates/FennecAurora-L10N.plist.tmpl",
-      html: "fastlane/templates/FennecAurora-L10N.html.tmpl",
-      release_notes: "../release_notes.txt",
-      build_name: options[:build_name],
-      host: "people.mozilla.org",
-      upload_location: "/home/iosbuilds",
-    )
-  end
-
-  desc "Takes marketing snapshots using current branch"
-  lane :marketing do
-    snapshot
-    frameit(white: true)
-  end
-
-  after_all do |lane|
-    # This block is called, only if the executed lane was successful
-    
-    #commit_version_bump(
-    #  message: 'Version Bump',                    # create a commit with a custom message
-    #  xcodeproj: 'Client.xcodeproj', # optional, if you have multiple Xcode project files, you must specify your main project here
-    #) 
-  end
-
-  error do |lane, exception|
-    # slack(
-    #   message: exception.message,
-    #   success: false
-    # )
-  end
 end
 # More information about multiple platforms in fastlane: 
 # https://github.com/KrauseFx/fastlane/blob/master/docs/Platforms.md

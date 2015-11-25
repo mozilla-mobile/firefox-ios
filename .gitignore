@@ -36,6 +36,15 @@ fastlane/scripts/upload.sh
 # folders for storing builds and prov profiles
 builds
 provisioning-profiles
+assets
+#build tools
+scripts
+fastlane/Appfile
+fastlane/Snapfile
+fastlane/SnapshotHelper.swift
+fastlane/frames
+fastlane/scripts
+fastlane/templates
 
 #python environment
 python-env/
