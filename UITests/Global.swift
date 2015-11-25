@@ -209,7 +209,12 @@ class BrowserUtils {
 
         // Clear all private tabs if we're running iOS 9
         if #available(iOS 9, *) {
-            tester.tapViewWithAccessibilityLabel("Private Mode")
+            // Switch to Private Mode if we're not in it already.
+            do {
+                try tester.tryFindingTappableViewWithAccessibilityLabel("Private Mode", value: "Off", traits: UIAccessibilityTraitButton)
+                tester.tapViewWithAccessibilityLabel("Private Mode")
+            } catch _ {}
+
             while tabsView.numberOfItemsInSection(0) > 0 {
                 let cell = tabsView.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))!
                 tester.swipeViewWithAccessibilityLabel(cell.accessibilityLabel, inDirection: KIFSwipeDirection.Left)
@@ -346,6 +351,23 @@ class SimplePageServer {
 
         webServer.addHandlerForMethod("GET", path: "/loginForm.html", requestClass: GCDWebServerRequest.self) { _ in
             return GCDWebServerDataResponse(HTML: self.getPageData("loginForm"))
+        }
+
+        webServer.addHandlerForMethod("GET", path: "/auth.html", requestClass: GCDWebServerRequest.self) { (request: GCDWebServerRequest!) in
+            // "user:pass", Base64-encoded.
+            let expectedAuth = "Basic dXNlcjpwYXNz"
+
+            let response: GCDWebServerDataResponse
+            if request.headers["Authorization"] as? String == expectedAuth && request.query["logout"] == nil {
+                response = GCDWebServerDataResponse(HTML: "<html><body>logged in</body></html>")
+            } else {
+                // Request credentials if the user isn't logged in.
+                response = GCDWebServerDataResponse(HTML: "<html><body>auth fail</body></html>")
+                response.statusCode = 401
+                response.setValue("Basic realm=\"test\"", forAdditionalHeader: "WWW-Authenticate")
+            }
+
+            return response
         }
 
         if !webServer.startWithPort(0, bonjourName: nil) {
