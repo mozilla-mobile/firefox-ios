@@ -541,12 +541,16 @@ public class SQLiteDBConnection {
             }
             logger.error("----")
 
-            // Write call stack
+            // Write call stack.
             logger.error("Call stack: \(NSThread.callStackSymbols())")
 
-            // Write open file handles
+            // Write open file handles.
             let openDescriptors = FSUtils.openFileDescriptors()
-            logger.error("Open file descriptors: \(openDescriptors)")
+            logger.error("Open file descriptors: ")
+            for (k, v) in openDescriptors {
+                logger.error("  \(k): \(v)")
+            }
+            logger.error("----")
 
             SwiftData.corruptionLogsWritten.insert(dbFilename)
         }
