@@ -527,14 +527,17 @@ public class SQLiteDBConnection {
         dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             guard !SwiftData.corruptionLogsWritten.contains(dbFilename) else { return }
 
-            logger.error("Corrupt DB Detected! - DB Filename: \(dbFilename)")
+            logger.error("Corrupt DB detected! DB filename: \(dbFilename)")
 
             let dbFileSize = ("file://\(dbFilename)".asURL)?.allocatedFileSize() ?? 0
             logger.error("DB file size: \(dbFileSize) bytes")
 
-            if let message = self.pragma("integrity_check", factory: StringFactory) {
-                logger.error("Integrity check message: \(message)")
+            logger.error("Integrity check:")
+            let messages = self.executeQueryUnsafe("PRAGMA integrity_check", factory: StringFactory)
+            for message in messages {
+                logger.error(message)
             }
+            logger.error("----")
 
             // Write call stack
             logger.error("Call stack: \(NSThread.callStackSymbols())")
