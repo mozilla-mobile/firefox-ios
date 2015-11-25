@@ -26,14 +26,16 @@ class SearchSettingsTableViewController: UITableViewController {
         // So that we push the default search engine controller on selection.
         tableView.allowsSelectionDuringEditing = true
 
-        tableView.registerClass(SettingsTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
+        tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
 
         // Insert Done button if being presented outside of the Settings Nav stack
         if !(self.navigationController is SettingsNavigationController) {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Done", comment: "Done button label for search settings table"), style: .Done, target: self, action: "SELDismiss")
         }
 
-        tableView.tableFooterView = UIView()
+        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 44))
+        footer.showBottomBorder = false
+        tableView.tableFooterView = footer
 
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
@@ -149,7 +151,7 @@ class SearchSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderView
+        let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
         var sectionTitle: String
         if section == SectionDefault {
             sectionTitle = NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")

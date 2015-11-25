@@ -8,8 +8,8 @@ import Shared
 private let SectionToggles = 0
 private let SectionButton = 1
 private let NumberOfSections = 2
-private let SectionHeaderIdentifier = "SectionHeaderIdentifier"
-private let HeaderHeight: CGFloat = 44
+private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
+private let HeaderFooterHeight: CGFloat = 44
 private let TogglesPrefKey = "clearprivatedata.toggles"
 
 private let log = Logger.browserLogger
@@ -51,12 +51,13 @@ class ClearPrivateDataTableViewController: UITableViewController {
 
         title = NSLocalizedString("Clear Private Data", tableName: "ClearPrivateData", comment: "Navigation title in settings.")
 
-        tableView.registerClass(SettingsTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
+        tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
         tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-
-        tableView.tableFooterView = UIView()
+        let footer = SettingsTableSectionHeaderFooterView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: HeaderFooterHeight))
+        footer.showBottomBorder = false
+        tableView.tableFooterView = footer
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -79,9 +80,6 @@ class ClearPrivateDataTableViewController: UITableViewController {
             cell.accessibilityTraits = UIAccessibilityTraitButton
             clearButton = cell
         }
-
-        // Make the separator line fill the entire table width.
-        cell.separatorInset = UIEdgeInsetsZero
 
         return cell
     }
@@ -134,11 +132,11 @@ class ClearPrivateDataTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderView
+        return tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderFooterIdentifier) as! SettingsTableSectionHeaderFooterView
     }
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return HeaderHeight
+        return HeaderFooterHeight
     }
 
     @objc func switchValueChanged(toggle: UISwitch) {
