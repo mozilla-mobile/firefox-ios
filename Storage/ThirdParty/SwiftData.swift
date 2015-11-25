@@ -387,7 +387,7 @@ public class SQLiteDBConnection {
     /**
      * Blindly attempts a WAL checkpoint on all attached databases.
      */
-    func checkpoint(mode: Int32 = SQLITE_CHECKPOINT_PASSIVE) {
+    func checkpoint(mode: Int32 = SQLITE_CHECKPOINT_FULL) {
         guard sqliteDB != nil else {
             log.warning("Trying to checkpoint a nil DB!")
             return
