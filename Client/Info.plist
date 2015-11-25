@@ -88,8 +88,8 @@
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
-			<key>UIApplicationShortcutItemIconType</key>
-			<string>UIApplicationShortcutIconTypeAdd</string>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quick_action_new_tab</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>ShortcutItemTitleNewTab</string>
 			<key>UIApplicationShortcutItemType</key>
@@ -97,7 +97,7 @@
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
-			<string>smallPrivateMask</string>
+			<string>quick_action_new_private_tab</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>ShortcutItemTitleNewPrivateTab</string>
 			<key>UIApplicationShortcutItemType</key>
