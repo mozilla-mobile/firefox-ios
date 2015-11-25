@@ -771,7 +771,7 @@ class SettingsTableViewController: UITableViewController {
             style: UIBarButtonItemStyle.Done,
             target: navigationController, action: "SELdone")
         tableView.registerClass(SettingsTableViewCell.self, forCellReuseIdentifier: Identifier)
-        tableView.registerClass(SettingsTableSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
+        tableView.registerClass(SettingsTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
         tableView.tableFooterView = SettingsTableFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 128))
 
         tableView.separatorColor = UIConstants.TableViewSeparatorColor
@@ -842,7 +842,7 @@ class SettingsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderView
+        let headerView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SectionHeaderIdentifier) as! SettingsTableSectionHeaderFooterView
         let sectionSetting = settings[section]
         if let sectionTitle = sectionSetting.title?.string {
             headerView.titleLabel.text = sectionTitle
@@ -925,7 +925,7 @@ class SettingsTableFooterView: UIView {
     }
 }
 
-class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
+class SettingsTableSectionHeaderFooterView: UITableViewHeaderFooterView {
     var showTopBorder: Bool = true {
         didSet {
             topBorder.hidden = !showTopBorder
@@ -968,6 +968,12 @@ class SettingsTableSectionHeaderView: UITableViewHeaderFooterView {
         clipsToBounds = true
         layer.addSublayer(topBorder)
         layer.addSublayer(bottomBorder)
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        showTopBorder = true
+        showBottomBorder = true
     }
 
     required init?(coder aDecoder: NSCoder) {
