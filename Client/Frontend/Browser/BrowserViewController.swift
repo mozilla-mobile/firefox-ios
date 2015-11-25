@@ -91,6 +91,8 @@ class BrowserViewController: UIViewController {
         return toolbar ?? urlBar
     }
 
+    let findInPageBar = FindInPageBar()
+
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
         self.tabManager = tabManager
@@ -338,6 +340,11 @@ class BrowserViewController: UIViewController {
         self.updateToolbarStateForTraitCollection(self.traitCollection)
 
         log.debug("BVC setting up constraints…")
+
+        findInPageBar.hidden = true
+        findInPageBar.delegate = self
+        view.addSubview(findInPageBar)
+
         setupConstraints()
         log.debug("BVC done.")
     }
@@ -373,6 +380,12 @@ class BrowserViewController: UIViewController {
             make.leading.equalTo(webViewContainer)
             make.height.equalTo(0)
             make.top.equalTo(webViewContainer)
+        }
+
+        findInPageBar.snp_makeConstraints { make in
+            make.leading.trailing.equalTo(self.view)
+            make.bottom.equalTo(self.footer.snp_top)
+            make.height.equalTo(UIConstants.ToolbarHeight)
         }
     }
 
@@ -872,6 +885,13 @@ class BrowserViewController: UIViewController {
         }
         tabManager.selectTab(tab)
     }
+
+    private func toggleFindInPageBar() {
+        findInPageBar.hidden = !findInPageBar.hidden
+        if !findInPageBar.hidden {
+            findInPageBar.becomeFirstResponder()
+        }
+    }
 }
 
 /**
@@ -1097,6 +1117,10 @@ extension BrowserViewController: BrowserToolbarDelegate {
         tabManager.selectedTab?.goForward()
     }
 
+    func browserToolbarDidPressFindInPage(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
+        toggleFindInPageBar()
+    }
+
     func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
 // See 1159373 - Disable long press back/forward for backforward list
 //        let controller = BackForwardListViewController()
@@ -1216,6 +1240,10 @@ extension BrowserViewController: BrowserDelegate {
         let sessionRestoreHelper = SessionRestoreHelper(browser: browser)
         sessionRestoreHelper.delegate = self
         browser.addHelper(sessionRestoreHelper, name: SessionRestoreHelper.name())
+
+        let findInPageHelper = FindInPageHelper(browser: browser)
+        findInPageHelper.delegate = self
+        browser.addHelper(findInPageHelper, name: FindInPageHelper.name())
     }
 
     func browser(browser: Browser, willDeleteWebView webView: WKWebView) {
@@ -2399,5 +2427,43 @@ class BlurWrapper: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate {
+    func findInPage(findInPage: FindInPageBar, didTextChange text: String) {
+        find(text, function: "find")
+    }
+
+    func findInPage(findInPage: FindInPageBar, didFindNextWithText text: String) {
+        find(text, function: "findNext")
+    }
+
+    func findInPage(findInPage: FindInPageBar, didFindPreviousWithText text: String) {
+        find(text, function: "findPrevious")
+    }
+
+    func findInPageDidPressDone(findInPage: FindInPageBar) {
+        toggleFindInPageBar()
+
+        guard let webView = tabManager.selectedTab?.webView else { return }
+        webView.evaluateJavaScript("__firefox__.findDone()", completionHandler: nil)
+    }
+
+    private func find(text: String, function: String) {
+        guard let webView = tabManager.selectedTab?.webView else { return }
+
+        let escaped = text.stringByReplacingOccurrencesOfString("\\", withString: "\\\\")
+                          .stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+
+        webView.evaluateJavaScript("__firefox__.\(function)(\"\(escaped)\")", completionHandler: nil)
+    }
+
+    func findInPageHelper(findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int) {
+        findInPageBar.currentResult = currentResult
+    }
+
+    func findInPageHelper(findInPageHelper: FindInPageHelper, didUpdateTotalResults totalResults: Int) {
+        findInPageBar.totalResults = totalResults
     }
 }
