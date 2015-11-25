@@ -353,6 +353,23 @@ class SimplePageServer {
             return GCDWebServerDataResponse(HTML: self.getPageData("loginForm"))
         }
 
+        webServer.addHandlerForMethod("GET", path: "/auth.html", requestClass: GCDWebServerRequest.self) { (request: GCDWebServerRequest!) in
+            // "user:pass", Base64-encoded.
+            let expectedAuth = "Basic dXNlcjpwYXNz"
+
+            let response: GCDWebServerDataResponse
+            if request.headers["Authorization"] as? String == expectedAuth && request.query["logout"] == nil {
+                response = GCDWebServerDataResponse(HTML: "<html><body>logged in</body></html>")
+            } else {
+                // Request credentials if the user isn't logged in.
+                response = GCDWebServerDataResponse(HTML: "<html><body>auth fail</body></html>")
+                response.statusCode = 401
+                response.setValue("Basic realm=\"test\"", forAdditionalHeader: "WWW-Authenticate")
+            }
+
+            return response
+        }
+
         if !webServer.startWithPort(0, bonjourName: nil) {
             XCTFail("Can't start the GCDWebServer")
         }
