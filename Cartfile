@@ -1,4 +1,4 @@
-github "Alamofire/Alamofire"        "swift-2.0"
+github "Alamofire/Alamofire"        "3.1.2"
 github "mozilla/Base32"             "swift-2.0"        # So we don't have to tag a release for Emily's fixes.
 github "mozilla/Deferred"           "master"           # Making Deferred extensible in swift 2.0
 github "swisspol/GCDWebServer"                         # Implicit: latest tag.
