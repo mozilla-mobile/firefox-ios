@@ -182,6 +182,13 @@ class TabManager : NSObject {
         return self.addTab(request, configuration: configuration, flushToDisk: true, zombie: false, isPrivate: isPrivate)
     }
 
+    @available(iOS 9, *)
+    func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil, isPrivate: Bool) -> Browser {
+        let tab = addTab(request, configuration: configuration, isPrivate: isPrivate)
+        selectTab(tab)
+        return tab
+    }
+
     func addTabAndSelect(request: NSURLRequest! = nil, configuration: WKWebViewConfiguration! = nil) -> Browser {
         let tab = addTab(request, configuration: configuration)
         selectTab(tab)

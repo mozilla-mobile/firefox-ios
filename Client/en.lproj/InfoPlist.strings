@@ -3,3 +3,5 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 NSLocationWhenInUseUsageDescription = "Websites you visit may request your location.";
+ShortcutItemTitleNewTab = "New Tab";
+ShortcutItemTitleNewPrivateTab = "New Private Tab";

@@ -2,22 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>itms-books</string>
-		<string>org-appextension-feature-password-management</string>
-	</array>
+	<key>AdjustAppToken</key>
+	<string>$(ADJUST_APP_TOKEN)</string>
+	<key>AdjustEnvironment</key>
+	<string>$(ADJUST_ENVIRONMENT)</string>
 	<key>AppID</key>
 	<string>$(MOZ_APP_ID)</string>
 	<key>BreakpadProduct</key>
 	<string>$(MOZ_SOCORRO_PRODUCT_NAME)</string>
 	<key>BreakpadProductDisplay</key>
 	<string>$(MOZ_BUNDLE_DISPLAY_NAME)</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
 	<key>BreakpadReportInterval</key>
 	<string>$(MOZ_BREAKPAD_UPLOAD_FREQUENCY)</string>
 	<key>BreakpadServerType</key>
@@ -59,8 +53,18 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(MOZ_BUILD_ID)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>itms-books</string>
+		<string>org-appextension-feature-password-management</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Websites you visit may request your location.</string>
 	<key>ReleaseChannel</key>
@@ -80,6 +84,25 @@
 		<string>FiraSans-Regular.ttf</string>
 		<string>FiraSans-SemiBold.ttf</string>
 		<string>FiraSans-UltraLight.ttf</string>
+	</array>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quick_action_new_tab</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>ShortcutItemTitleNewTab</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).NewTab</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconFile</key>
+			<string>quick_action_new_private_tab</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>ShortcutItemTitleNewPrivateTab</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).NewPrivateTab</string>
+		</dict>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
@@ -107,12 +130,6 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>Vendor</key>
-	<string>$(MOZ_VENDOR)</string>
-	<key>AdjustEnvironment</key>
-	<string>$(ADJUST_ENVIRONMENT)</string>
-	<key>AdjustAppToken</key>
-	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>
@@ -128,5 +145,7 @@
 			<string></string>
 		</dict>
 	</array>
+	<key>Vendor</key>
+	<string>$(MOZ_VENDOR)</string>
 </dict>
 </plist>

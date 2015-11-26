@@ -250,3 +250,9 @@ extension BrowserToolbar {
         }
     }
 }
+
+extension BrowserToolbar: Themeable {
+    func forceApplyTheme() {
+        actionButtonTintColor = BrowserToolbar.appearance().actionButtonTintColor
+    }
+}

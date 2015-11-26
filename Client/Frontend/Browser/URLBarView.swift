@@ -700,7 +700,34 @@ extension URLBarView {
         }
     }
 
-   }
+}
+
+extension URLBarView: Themeable {
+    
+    func forceApplyTheme() {
+        locationView.baseURLFontColor = BrowserLocationView.appearance().baseURLFontColor
+        locationView.hostFontColor = BrowserLocationView.appearance().hostFontColor
+        locationView.backgroundColor = BrowserLocationView.appearance().backgroundColor
+
+        locationTextField?.backgroundColor = ToolbarTextField.appearance().backgroundColor
+        locationTextField?.textColor = ToolbarTextField.appearance().textColor
+        locationTextField?.clearButtonTintColor = ToolbarTextField.appearance().clearButtonTintColor
+        locationTextField?.highlightColor = ToolbarTextField.appearance().highlightColor
+
+        locationBorderColor = URLBarView.appearance().locationBorderColor
+        locationActiveBorderColor = URLBarView.appearance().locationActiveBorderColor
+        progressBarTint = URLBarView.appearance().progressBarTint
+        cancelTextColor = URLBarView.appearance().cancelTextColor
+        actionButtonTintColor = URLBarView.appearance().actionButtonTintColor
+
+        tabsButton.borderColor = TabsButton.appearance().borderColor
+        tabsButton.borderWidth = TabsButton.appearance().borderWidth
+        tabsButton.titleFont = TabsButton.appearance().titleFont
+        tabsButton.titleBackgroundColor = TabsButton.appearance().titleBackgroundColor
+        tabsButton.textColor = TabsButton.appearance().textColor
+        tabsButton.insets = TabsButton.appearance().insets
+    }
+}
 
 /* Code for drawing the urlbar curve */
 // Curve's aspect ratio
