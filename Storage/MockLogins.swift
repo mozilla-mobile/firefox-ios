@@ -34,6 +34,32 @@ public class MockLogins: BrowserLogins, SyncableLogins {
         return Deferred(value: Maybe(success: cursor))
     }
 
+    public func getAllLogins() -> Deferred<Maybe<Cursor<LoginData>>> {
+        let cursor = ArrayCursor(data: cache.sort({ (loginA, loginB) -> Bool in
+            return loginA.hostname > loginB.hostname
+        }).map({ login in
+            return login as LoginData
+        }))
+        return Deferred(value: Maybe(success: cursor))
+    }
+
+    public func searchLoginsWithQuery(query: String?) -> Deferred<Maybe<Cursor<LoginData>>> {
+        let cursor = ArrayCursor(data: cache.filter({ login in
+            var checks = [Bool]()
+            if let query = query {
+                checks.append(login.username?.contains(query) ?? false)
+                checks.append(login.password.contains(query))
+                checks.append(login.hostname.contains(query))
+            }
+            return checks.contains(true)
+        }).sort({ (loginA, loginB) -> Bool in
+            return loginA.hostname > loginB.hostname
+        }).map({ login in
+            return login as LoginData
+        }))
+        return Deferred(value: Maybe(success: cursor))
+    }
+
     // This method is only here for testing
     public func getUsageDataForLoginByGUID(guid: GUID) -> Deferred<Maybe<LoginUsageData>> {
         let res = cache.filter({ login in

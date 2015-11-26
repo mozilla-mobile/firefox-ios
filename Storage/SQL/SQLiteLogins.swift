@@ -248,6 +248,38 @@ public class SQLiteLogins: BrowserLogins {
         return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
     }
 
+    public func getAllLogins() -> Deferred<Maybe<Cursor<LoginData>>> {
+        return searchLoginsWithQuery(nil)
+    }
+
+    public func searchLoginsWithQuery(query: String?) -> Deferred<Maybe<Cursor<LoginData>>> {
+        let projection = SQLiteLogins.MainWithLastUsedColumns
+        var searchClauses = [String]()
+        var args: Args? = nil
+        if let query = query {
+            // Add wildcards to change query to 'contains in' and add them to args. We need 6 args because
+            // we include the where clause twice: Once for the local table and another for the remote.
+            args = (0..<6).map { _ in
+                return "%\(query)%" as String?
+            }
+
+            searchClauses.append(" username LIKE ? ")
+            searchClauses.append(" password LIKE ? ")
+            searchClauses.append(" hostname LIKE ? ")
+        }
+
+        let whereSearchClause = searchClauses.count > 0 ? "AND" + searchClauses.joinWithSeparator("OR") : ""
+        let sql =
+        "SELECT \(projection) FROM " +
+            "\(TableLoginsLocal) WHERE is_deleted = 0 " + whereSearchClause +
+            "UNION ALL " +
+            "SELECT \(projection) FROM " +
+            "\(TableLoginsMirror) WHERE is_overridden = 0 " + whereSearchClause +
+        "ORDER BY hostname ASC"
+
+        return db.runQuery(sql, args: args, factory: SQLiteLogins.LoginDataFactory)
+    }
+
     public func addLogin(login: LoginData) -> Success {
         let nowMicro = NSDate.nowMicroseconds()
         let nowMilli = nowMicro / 1000
