@@ -1167,7 +1167,6 @@ extension BrowserViewController: BrowserToolbarDelegate {
             }
 
             setupPopover()
-            presentViewController(activityViewController, animated: true, completion: nil)
 
             if activityViewController.popoverPresentationController != nil {
                 displayedPopoverController = activityViewController
