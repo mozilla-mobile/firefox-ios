@@ -8,6 +8,9 @@ import WebKit
 
 private let log = Logger.browserLogger
 
+// Removed Clearables as part of Bug 1226654, but keeping the string around.
+private let removedSavedLoginsLabel = NSLocalizedString("Saved Logins", tableName: "ClearPrivateData", comment: "Settings item for clearing passwords and login data")
+
 // A base protocol for something that can be cleared.
 protocol Clearable {
     func clear() -> Success
@@ -41,34 +44,6 @@ class HistoryClearable: Clearable {
             NSNotificationCenter.defaultCenter().postNotificationName(NotificationPrivateDataClearedHistory, object: nil)
             log.debug("HistoryClearable succeeded: \(success).")
             return Deferred(value: success)
-        }
-    }
-}
-
-// Clear all stored passwords. This will clear both Firefox's SQLite storage and the system shared
-// Credential storage.
-class PasswordsClearable: Clearable {
-    let profile: Profile
-    init(profile: Profile) {
-        self.profile = profile
-    }
-
-    var label: String {
-        return NSLocalizedString("Saved Logins", tableName: "ClearPrivateData", comment: "Settings item for clearing passwords and login data")
-    }
-
-    func clear() -> Success {
-        // Clear our storage
-        return profile.logins.removeAll() >>== { res in
-            let storage = NSURLCredentialStorage.sharedCredentialStorage()
-            let credentials = storage.allCredentials
-            for (space, credentials) in credentials {
-                for (_, credential) in credentials {
-                    storage.removeCredential(credential, forProtectionSpace: space)
-                }
-            }
-            log.debug("PasswordsClearable succeeded.")
-            return succeed()
         }
     }
 }

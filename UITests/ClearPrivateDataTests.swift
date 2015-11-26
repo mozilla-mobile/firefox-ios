@@ -10,13 +10,12 @@ import UIKit
 // Needs to be in sync with Client Clearables.
 private enum Clearable: String {
     case History = "Browsing History"
-    case Logins = "Saved Logins"
     case Cache = "Cache"
     case OfflineData = "Offline Website Data"
     case Cookies = "Cookies"
 }
 
-private let AllClearables = Set([Clearable.History, Clearable.Logins, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
+private let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
 
 class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     private var webRoot: String!
@@ -85,7 +84,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func testRemembersToggles() {
-        clearPrivateData([Clearable.History, Clearable.Logins])
+        clearPrivateData([Clearable.History])
 
         openClearPrivateDataDialog()
 
@@ -95,7 +94,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             (Clearable.Cookies, "0"),
             (Clearable.OfflineData, "0"),
             (Clearable.History, "1"),
-            (Clearable.Logins, "1"),
         ].forEach { clearable, value in
             XCTAssertEqual(value, tester().waitForViewWithAccessibilityLabel(clearable.rawValue).accessibilityValue)
         }
@@ -209,42 +207,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         clearPrivateData([Clearable.Cache])
         webView.reload()
         XCTAssertEqual(cachedServer.requests, requests + 1)
-    }
-
-    func testClearsLogins() {
-        tester().tapViewWithAccessibilityIdentifier("url")
-        let url = "\(webRoot)/loginForm.html"
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
-        tester().waitForWebViewElementWithAccessibilityLabel("Submit")
-
-        // The form should be empty when we first load it.
-        XCTAssertFalse(tester().hasWebViewElementWithAccessibilityLabel("foo"))
-        XCTAssertFalse(tester().hasWebViewElementWithAccessibilityLabel("bar"))
-
-        // Fill it in and submit.
-        tester().enterText("foo", intoWebViewInputWithName: "username")
-        tester().enterText("bar", intoWebViewInputWithName: "password")
-        tester().tapWebViewElementWithAccessibilityLabel("Submit")
-
-        // Say "Yes" to the remember password prompt.
-        tester().tapViewWithAccessibilityLabel("Yes")
-
-        // Verify that the form is autofilled after reloading.
-        tester().tapViewWithAccessibilityLabel("Reload")
-        XCTAssert(tester().hasWebViewElementWithAccessibilityLabel("foo"))
-        XCTAssert(tester().hasWebViewElementWithAccessibilityLabel("bar"))
-
-        // Ensure that clearing other data has no effect on the saved logins.
-        clearPrivateData(AllClearables.subtract([Clearable.Logins]))
-        tester().tapViewWithAccessibilityLabel("Reload")
-        XCTAssert(tester().hasWebViewElementWithAccessibilityLabel("foo"))
-        XCTAssert(tester().hasWebViewElementWithAccessibilityLabel("bar"))
-
-        // Ensure that clearing logins clears the form.
-        clearPrivateData([Clearable.Logins])
-        tester().tapViewWithAccessibilityLabel("Reload")
-        XCTAssertFalse(tester().hasWebViewElementWithAccessibilityLabel("foo"))
-        XCTAssertFalse(tester().hasWebViewElementWithAccessibilityLabel("bar"))
     }
 
     private func setCookies(webView: WKWebView, cookie: String) {
