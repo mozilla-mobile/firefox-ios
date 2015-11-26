@@ -1,0 +1,55 @@
+# Customise this file, documentation can be found here:
+# https://github.com/KrauseFx/fastlane/tree/master/docs
+# All available actions: https://github.com/KrauseFx/fastlane/blob/master/docs/Actions.md
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# By default, fastlane will send which actions are used
+# No personal data is shared, more information on https://github.com/fastlane/enhancer
+# Uncomment the following line to opt out
+# opt_out_usage
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "1.39.0"
+
+default_platform :ios
+
+
+import_build_tools(
+  url: 'git@github.com:mozilla/firefox-ios-build-tools.git',
+  clone_folder: "../build-tools"
+)
+
+#move all the build tools to the right places
+clone_folder = "../../build-tools"
+sh("rsync -a #{clone_folder}/scripts ../")
+sh("rsync -a #{clone_folder}/fastlane/Appfile Appfile")
+sh("rsync -a #{clone_folder}/fastlane/Snapfile Snapfile")
+sh("rsync -a #{clone_folder}/fastlane/SnapshotHelper.swift SnapshotHelper.swift")
+sh("rsync -a #{clone_folder}/fastlane/scripts .")
+sh("rsync -a #{clone_folder}/fastlane/frames .")
+sh("rsync -a #{clone_folder}/fastlane/templates .")
+
+#import the fastfile
+import "#{clone_folder}/fastlane/BaseFastfile"
+
+sh("rm -rf #{clone_folder}")
+
+platform :ios do
+  before_all do 
+  end
+
+  desc "Tests stuff"
+  lane :test do
+    Helper.log.debug "testing......"
+  end
+
+end
+# More information about multiple platforms in fastlane: 
+# https://github.com/KrauseFx/fastlane/blob/master/docs/Platforms.md
