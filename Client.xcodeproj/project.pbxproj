@@ -643,6 +643,7 @@
 		E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64ED8F91BC55AE300DAF864 /* UIAlertControllerExtensions.swift */; };
 		E65072A31B2737DA001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
 		E65072A41B273824001A0AC6 /* GeometryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A99D761B20D95800006EDD /* GeometryExtensions.swift */; };
+		E65607611C08B4E200534B02 /* SearchInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65607601C08B4E200534B02 /* SearchInputView.swift */; };
 		E65AB12C1B7CDADF00C2B47A /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65AB12B1B7CDADF00C2B47A /* SessionRestoreHelper.swift */; };
 		E65C5BC71BEA4F6500D28BEF /* NativeRefTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C5BC61BEA4F6500D28BEF /* NativeRefTests.swift */; };
 		E65C5BD31BEA4F8A00D28BEF /* FBSnapshotTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = E65C5B951BEA4E7100D28BEF /* FBSnapshotTestCase.m */; };
@@ -1839,6 +1840,7 @@
 		E6327A631BF6438E008D12E0 /* DebugSettingsBundleOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettingsBundleOptions.swift; sourceTree = "<group>"; };
 		E635D25D1B729DEE0078962F /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E64ED8F91BC55AE300DAF864 /* UIAlertControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIAlertControllerExtensions.swift; path = Extensions/UIAlertControllerExtensions.swift; sourceTree = "<group>"; };
+		E65607601C08B4E200534B02 /* SearchInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInputView.swift; sourceTree = "<group>"; };
 		E65AB12B1B7CDADF00C2B47A /* SessionRestoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRestoreHelper.swift; sourceTree = "<group>"; };
 		E65C5B931BEA4E7100D28BEF /* FBSnapshotTestCase-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FBSnapshotTestCase-Info.plist"; sourceTree = "<group>"; };
 		E65C5B941BEA4E7100D28BEF /* FBSnapshotTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FBSnapshotTestCase.h; sourceTree = "<group>"; };
@@ -2600,6 +2602,7 @@
 				E660BE051BB0666D009AC090 /* InnerStrokedView.swift */,
 				E663D5771BB341C4001EF30E /* ToggleButton.swift */,
 				7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */,
+				E65607601C08B4E200534B02 /* SearchInputView.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -4886,6 +4889,7 @@
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				E42475E51AB73B9B00B23D33 /* SWUtilityButtonTapGestureRecognizer.m in Sources */,
 				D38B2D2E1A8D96D00040E6B5 /* GCDWebServer.m in Sources */,
+				E65607611C08B4E200534B02 /* SearchInputView.swift in Sources */,
 				E4B334601BBF2393004E2BFF /* Adjust.m in Sources */,
 				E42475E81AB73B9B00B23D33 /* SWUtilityButtonView.m in Sources */,
 				0B3E7DB81B27A7F600E2E84D /* AboutUtils.swift in Sources */,
