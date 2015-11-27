@@ -6,6 +6,7 @@ import Foundation
 import UIKit
 import SnapKit
 import Storage
+import Shared
 
 private struct LoginListUX {
     static let RowHeight: CGFloat = 58
@@ -45,6 +46,8 @@ class LoginListViewController: UIViewController {
 
         self.title = NSLocalizedString("Logins", comment: "Title for Logins List View screen")
         loginDataSource = LoginCursorDataSource(tableView: self.tableView)
+        loginSearchController = LoginSearchController(profile: self.profile, dataSource: loginDataSource!)
+        searchView.delegate = loginSearchController
 
         view.addSubview(searchView)
         view.addSubview(tableView)
@@ -65,7 +68,11 @@ class LoginListViewController: UIViewController {
         super.viewWillAppear(animated)
         tableView.dataSource = loginDataSource
         tableView.delegate = self
-        tableView.reloadData()
+
+        profile.logins.getAllLogins().uponQueue(dispatch_get_main_queue()) { result in
+            self.loginDataSource?.cursor = result.successValue
+            self.tableView.reloadData()
+        }
     }
 }
 
@@ -81,22 +88,54 @@ extension LoginListViewController: UITableViewDelegate {
     }
 }
 
+/// Controller that handles interactions with the search widget and updating the data source for searching
+private class LoginSearchController: NSObject, SearchInputViewDelegate {
+
+    private let profile: Profile
+
+    private var activeSearchDeferred: Success?
+
+    private unowned let dataSource: LoginCursorDataSource
+
+    init(profile: Profile, dataSource: LoginCursorDataSource) {
+        self.profile = profile
+        self.dataSource = dataSource
+        super.init()
+    }
+
+    @objc func searchInputView(searchView: SearchInputView, didChangeTextTo text: String) {
+        // Cancel the previous in-flight search query by filling it before kicking off another query.
+        activeSearchDeferred?.fillIfUnfilled(Maybe(success: ()))
+        searchLoginsWithText(text)
+    }
+
+    @objc func searchInputViewDidClose(searchView: SearchInputView) {
+        activeSearchDeferred = profile.logins.getAllLogins()
+            .bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
+    }
+
+    private func searchLoginsWithText(text: String) -> Success {
+        activeSearchDeferred = profile.logins.searchLoginsWithQuery(text)
+            .bindQueue(dispatch_get_main_queue(), f: reloadTableWithResult)
+        return activeSearchDeferred!
+    }
+
+    private func reloadTableWithResult(result: Maybe<Cursor<LoginData>>) -> Success {
+        self.dataSource.cursor = result.successValue
+        self.dataSource.tableView.reloadData()
+        self.activeSearchDeferred = nil
+        return succeed()
+    }
+}
+
 /// Data source for handling LoginData objects from a Cursor
 private class LoginCursorDataSource: NSObject, UITableViewDataSource {
 
-    unowned var tableView: UITableView
+    private unowned let tableView: UITableView
 
     private let LoginCellIdentifier = "LoginCell"
 
-    private let data = [
-        Login.createWithHostname("alphabet.com", username: "A@mozilla.com", password: "password1"),
-        Login.createWithHostname("amazon.com", username: "AB@mozilla.com", password: "password1"),
-        Login.createWithHostname("canada.com", username: "ABC@mozilla.com", password: "password1"),
-        Login.createWithHostname("detroit.com", username: "C@mozilla.com", password: "password1"),
-        Login.createWithHostname("hannover.com", username: "D@mozilla.com", password: "password1"),
-        Login.createWithHostname("zoolander.com", username: "Z@mozilla.com", password: "password1"),
-        Login.createWithHostname("zombo.com", username: "ZZ@mozilla.com", password: "password1")
-    ]
+    var cursor: Cursor<LoginData>?
 
     init(tableView: UITableView) {
         self.tableView = tableView
@@ -123,7 +162,9 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
 
     @objc func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
         var firstHostnameCharacters = [Character]()
-        data.forEach { login in
+        cursor?.forEach { login in
+            guard let login = login else { return }
+
             let firstChar = login.hostname.uppercaseString[login.hostname.startIndex]
             if !firstHostnameCharacters.contains(firstChar) {
                 firstHostnameCharacters.append(firstChar)
@@ -147,7 +188,9 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
         guard let sectionTitles = sectionIndexTitlesForTableView(tableView) else {
             return []
         }
+
         let titleForSectionAtIndex = sectionTitles[section]
-        return data.filter { $0.hostname.uppercaseString.startsWith(titleForSectionAtIndex) }
+        let logins = cursor?.filter { $0?.hostname.uppercaseString.startsWith(titleForSectionAtIndex) ?? false }
+        return logins?.flatMap { $0 } ?? []
     }
 }
