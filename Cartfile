@@ -6,7 +6,7 @@ github "kif-framework/KIF"          "master"
 github "ZaBlanc/RaptureXML"         "master"
 github "mozilla/readability"        "master"
 github "rs/SDWebImage"              "master"           # To get the fix for libwebp
-github "Masonry/Snap"               "Swift-2.0"
+github "SnapKit/SnapKit"            "0.18.0"
 github "st3fan/SQLite.swift"        "swift-2"
 github "CEWendel/SWTableViewCell"                      # Implicit: latest tag.
 github "st3fan/SWXMLHash"           "xcode-7.0"        # So we get Swift 2.0 fixes.
