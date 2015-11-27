@@ -652,6 +652,8 @@ private class LoginsSetting: Setting {
     }
 
     override func onClick(navigationController: UINavigationController?) {
+        let viewController = LoginListViewController(profile: profile)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
