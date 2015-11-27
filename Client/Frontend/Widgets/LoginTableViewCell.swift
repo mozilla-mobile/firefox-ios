@@ -8,14 +8,14 @@ import SnapKit
 import Storage
 
 struct LoginTableViewCellUX {
-    static let highlightedLabelFont = UIFont.systemFontOfSize(8)
+    static let highlightedLabelFont = UIFont.systemFontOfSize(12)
     static let highlightedLabelTextColor = UIConstants.HighlightBlue
 
-    static let descriptionLabelFont = UIFont.systemFontOfSize(10)
+    static let descriptionLabelFont = UIFont.systemFontOfSize(16)
     static let descriptionLabelTextColor = UIColor.blackColor()
 
-    static let HorizontalMargin: CGFloat = 10
-    static let IconImageSize: CGFloat = 30
+    static let HorizontalMargin: CGFloat = 14
+    static let IconImageSize: CGFloat = 34
 }
 
 enum LoginTableViewCellStyle {

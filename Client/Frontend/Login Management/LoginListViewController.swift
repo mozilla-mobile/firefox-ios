@@ -7,6 +7,11 @@ import UIKit
 import SnapKit
 import Storage
 
+private struct LoginListUX {
+    static let RowHeight: CGFloat = 58
+    static let SearchHeight: CGFloat = 58
+}
+
 class LoginListViewController: UIViewController {
 
     private var loginDataSource: LoginCursorDataSource? = nil
@@ -47,7 +52,7 @@ class LoginListViewController: UIViewController {
         searchView.snp_makeConstraints { make in
             make.top.equalTo(snp_topLayoutGuideBottom).constraint
             make.left.right.equalTo(self.view)
-            make.height.equalTo(44)
+            make.height.equalTo(LoginListUX.SearchHeight)
         }
 
         tableView.snp_makeConstraints { make in
@@ -69,6 +74,10 @@ extension LoginListViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // Force the headers to be hidden
         return 0
+    }
+
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return LoginListUX.RowHeight
     }
 }
 
@@ -92,7 +101,7 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
     init(tableView: UITableView) {
         self.tableView = tableView
         super.init()
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
+        self.tableView.registerClass(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
     }
 
     @objc func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -104,10 +113,11 @@ private class LoginCursorDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(LoginCellIdentifier, forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier(LoginCellIdentifier, forIndexPath: indexPath) as! LoginTableViewCell
 
         let login = loginsForSection(indexPath.section)[indexPath.row]
-        cell.textLabel?.text = login.hostname
+        cell.style = .IconAndBothLabels
+        cell.updateCellWithLogin(login)
         return cell
     }
 
