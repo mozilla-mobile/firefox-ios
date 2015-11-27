@@ -30,7 +30,9 @@ public let SuggestedSites: SuggestedSitesCursor = SuggestedSitesCursor()
 
 public class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
     private init() {
-        let sites = DefaultSuggestedSites.sites
+        let locale = NSLocale.currentLocale()
+        let sites = DefaultSuggestedSites.sites[locale.localeIdentifier] ??
+                    DefaultSuggestedSites.sites["default"]! as Array<SuggestedSiteData>
         let tiles = sites.map({data in SuggestedSite(data: data)})
         super.init(data: tiles, status: .Success, statusMessage: "Loaded")
     }
