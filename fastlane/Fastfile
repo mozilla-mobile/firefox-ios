@@ -22,5 +22,3 @@ sh("rsync -a #{clone_folder}/fastlane/templates .")
 
 #import the fastfile
 import "#{clone_folder}/fastlane/BaseFastfile"
-
-#sh("rm -rf #{clone_folder}")
