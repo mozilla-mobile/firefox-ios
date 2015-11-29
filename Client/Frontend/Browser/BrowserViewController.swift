@@ -2366,7 +2366,7 @@ extension BrowserViewController {
 
         TabsButton.appearance().borderColor = UIConstants.PrivateModePurple
         TabsButton.appearance().borderWidth = 1
-        TabsButton.appearance().titleFont = UIConstants.DefaultMediumBoldFont
+        TabsButton.appearance().titleFont = UIConstants.DefaultChromeBoldFont
         TabsButton.appearance().titleBackgroundColor = UIConstants.AppBackgroundColor
         TabsButton.appearance().textColor = UIConstants.PrivateModePurple
         TabsButton.appearance().insets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)

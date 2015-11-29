@@ -23,21 +23,17 @@ private struct ReadingListTableViewCellUX {
     static let ReadIndicatorLeftOffset: CGFloat = 18
     static let ReadAccessibilitySpeechPitch: Float = 0.7 // 1.0 default, 0.0 lowest, 2.0 highest
 
-    static let TitleLabelFont = UIFont.systemFontOfSize(UIConstants.DeviceFontSize, weight: UIFontWeightMedium)
     static let TitleLabelTopOffset: CGFloat = 14 - 4
     static let TitleLabelLeftOffset: CGFloat = 16 + 16 + 16
     static let TitleLabelRightOffset: CGFloat = -40
 
-    static let HostnameLabelFont = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
     static let HostnameLabelBottomOffset: CGFloat = 11
 
     static let DeleteButtonBackgroundColor = UIColor(rgb: 0xef4035)
-    static let DeleteButtonTitleFont = UIFont.systemFontOfSize(15, weight: UIFontWeightLight)
     static let DeleteButtonTitleColor = UIColor.whiteColor()
     static let DeleteButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 
     static let MarkAsReadButtonBackgroundColor = UIColor(rgb: 0x2193d1)
-    static let MarkAsReadButtonTitleFont = UIFont.systemFontOfSize(15, weight: UIFontWeightLight)
     static let MarkAsReadButtonTitleColor = UIColor.whiteColor()
     static let MarkAsReadButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 
@@ -52,10 +48,8 @@ private struct ReadingListPanelUX {
     static let WelcomeScreenTopPadding: CGFloat = 16
     static let WelcomeScreenPadding: CGFloat = 15
 
-    static let WelcomeScreenHeaderFont = UIFont.boldSystemFontOfSize(UIConstants.DeviceFontSize - 1)
     static let WelcomeScreenHeaderTextColor = UIColor.darkGrayColor()
 
-    static let WelcomeScreenItemFont = UIFont.systemFontOfSize(14, weight: UIFontWeightLight)
     static let WelcomeScreenItemTextColor = UIColor.grayColor()
     static let WelcomeScreenItemWidth = 220
     static let WelcomeScreenItemOffset = -20
@@ -129,7 +123,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         contentView.addSubview(titleLabel)
         titleLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
         titleLabel.numberOfLines = 2
-        titleLabel.font = ReadingListTableViewCellUX.TitleLabelFont
+        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
         titleLabel.snp_makeConstraints { (make) -> () in
             make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelTopOffset)
             make.left.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelLeftOffset)
@@ -139,14 +133,14 @@ class ReadingListTableViewCell: SWTableViewCell {
         contentView.addSubview(hostnameLabel)
         hostnameLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
         hostnameLabel.numberOfLines = 1
-        hostnameLabel.font = ReadingListTableViewCellUX.HostnameLabelFont
+        hostnameLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         hostnameLabel.snp_makeConstraints { (make) -> () in
             make.bottom.equalTo(self.contentView).offset(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)
             make.left.right.equalTo(self.titleLabel)
         }
 
         deleteButton.backgroundColor = ReadingListTableViewCellUX.DeleteButtonBackgroundColor
-        deleteButton.titleLabel?.font = ReadingListTableViewCellUX.DeleteButtonTitleFont
+        deleteButton.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         deleteButton.titleLabel?.textColor = ReadingListTableViewCellUX.DeleteButtonTitleColor
         deleteButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
         deleteButton.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -158,7 +152,7 @@ class ReadingListTableViewCell: SWTableViewCell {
         rightUtilityButtons = [deleteButton]
 
         markAsReadButton.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
-        markAsReadButton.titleLabel?.font = ReadingListTableViewCellUX.MarkAsReadButtonTitleFont
+        markAsReadButton.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         markAsReadButton.titleLabel?.textColor = ReadingListTableViewCellUX.MarkAsReadButtonTitleColor
         markAsReadButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
         markAsReadButton.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -231,6 +225,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
     init() {
         super.init(nibName: nil, bundle: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationDynamicFontChanged, object: nil)
     }
 
     required init!(coder aDecoder: NSCoder) {
@@ -265,11 +260,19 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
 
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
     }
 
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
         case NotificationFirefoxAccountChanged:
+            refreshReadingList()
+            break
+        case NotificationDynamicFontChanged:
+            if emptyStateOverlayView.superview != nil {
+                emptyStateOverlayView.removeFromSuperview()
+            }
+            emptyStateOverlayView = createEmptyStateOverview()
             refreshReadingList()
             break
         default:
@@ -325,7 +328,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         containerView.addSubview(welcomeLabel)
         welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "See http://mzl.la/1LXbDOL")
         welcomeLabel.textAlignment = NSTextAlignment.Center
-        welcomeLabel.font = ReadingListPanelUX.WelcomeScreenHeaderFont
+        welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         welcomeLabel.textColor = ReadingListPanelUX.WelcomeScreenHeaderTextColor
         welcomeLabel.adjustsFontSizeToFitWidth = true
         welcomeLabel.snp_makeConstraints { make in
@@ -340,7 +343,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         let readerModeLabel = UILabel()
         containerView.addSubview(readerModeLabel)
         readerModeLabel.text = NSLocalizedString("Open articles in Reader View by tapping the book icon when it appears in the title bar.", comment: "See http://mzl.la/1LXbDOL")
-        readerModeLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
+        readerModeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         readerModeLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
         readerModeLabel.numberOfLines = 0
         readerModeLabel.snp_makeConstraints { make in
@@ -359,7 +362,7 @@ class ReadingListPanel: UITableViewController, HomePanel, SWTableViewCellDelegat
         let readingListLabel = UILabel()
         containerView.addSubview(readingListLabel)
         readingListLabel.text = NSLocalizedString("Save pages to your Reading List by tapping the book plus icon in the Reader View controls.", comment: "See http://mzl.la/1LXbDOL")
-        readingListLabel.font = ReadingListPanelUX.WelcomeScreenItemFont
+        readingListLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         readingListLabel.textColor = ReadingListPanelUX.WelcomeScreenItemTextColor
         readingListLabel.numberOfLines = 0
         readingListLabel.snp_makeConstraints { make in

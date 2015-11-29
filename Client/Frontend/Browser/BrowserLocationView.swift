@@ -93,7 +93,7 @@ class BrowserLocationView: UIView {
         urlTextField.attributedPlaceholder = self.placeholder
         urlTextField.accessibilityIdentifier = "url"
         urlTextField.accessibilityActionsSource = self
-        urlTextField.font = UIConstants.DefaultMediumFont
+        urlTextField.font = UIConstants.DefaultChromeFont
         return urlTextField
     }()
 

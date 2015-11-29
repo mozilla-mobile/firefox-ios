@@ -8,10 +8,8 @@ import Shared
 struct ThumbnailCellUX {
     /// Ratio of width:height of the thumbnail image.
     static let ImageAspectRatio: Float = 1.0
-    static let TextSize = UIConstants.DefaultSmallFontSize
     static let BorderColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
     static let BorderWidth: CGFloat = 1
-    static let LabelFont = UIConstants.DefaultSmallFont
     static let LabelColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.blackColor() : UIColor(rgb: 0x353535)
     static let LabelBackgroundColor = UIColor(white: 1.0, alpha: 0.5)
     static let LabelAlignment: NSTextAlignment = .Center
@@ -132,7 +130,7 @@ class ThumbnailCell: UICollectionViewCell {
     lazy var textLabel: UILabel = {
         let textLabel = UILabel()
         textLabel.setContentHuggingPriority(1000, forAxis: UILayoutConstraintAxis.Vertical)
-        textLabel.font = ThumbnailCellUX.LabelFont
+        textLabel.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
         textLabel.textColor = ThumbnailCellUX.LabelColor
         textLabel.textAlignment = ThumbnailCellUX.LabelAlignment
         return textLabel
@@ -227,6 +225,7 @@ class ThumbnailCell: UICollectionViewCell {
         backgroundImage.image = nil
         removeButton.hidden = true
         imageWrapper.backgroundColor = UIColor.clearColor()
+        textLabel.font = DynamicFontHelper.defaultHelper.DefaultSmallFont
     }
 
     func SELdidRemove() {

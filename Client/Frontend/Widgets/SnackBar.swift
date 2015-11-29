@@ -35,7 +35,7 @@ class SnackButton : UIButton {
         super.init(frame: CGRectZero)
 
         setTitle(title, forState: .Normal)
-        titleLabel?.font = UIConstants.DefaultMediumFont
+        titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         setBackgroundImage(highlightImg, forState: .Highlighted)
         setTitleColor(UIConstants.HighlightText, forState: .Highlighted)
 
@@ -81,7 +81,7 @@ class SnackBar: UIView {
 
     convenience init(text: String, img: UIImage?, buttons: [SnackButton]?) {
         var attributes = [String: AnyObject]()
-        attributes[NSFontAttributeName] = UIConstants.DefaultMediumFont
+        attributes[NSFontAttributeName] = DynamicFontHelper.defaultHelper.DefaultMediumFont
         attributes[NSBackgroundColorAttributeName] = UIColor.clearColor()
         let attrText = NSAttributedString(string: text, attributes: attributes)
         self.init(attrText: attrText, img: img, buttons: buttons)
@@ -132,7 +132,7 @@ class SnackBar: UIView {
 
         imageView.contentMode = UIViewContentMode.Left
 
-        textLabel.font = UIConstants.DefaultMediumFont
+        textLabel.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         textLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
         textLabel.numberOfLines = 0
         textLabel.backgroundColor = UIColor.clearColor()

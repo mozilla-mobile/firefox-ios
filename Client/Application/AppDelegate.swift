@@ -59,6 +59,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Start the keyboard helper to monitor and cache keyboard state.
         KeyboardHelper.defaultHelper.startObserving()
 
+        log.debug("Starting dynamic font helper…")
+        // Start the keyboard helper to monitor and cache keyboard state.
+        DynamicFontHelper.defaultHelper.startObserving()
+
         log.debug("Creating Sync log file…")
         let logDate = NSDate()
         // Create a new sync log file on cold app launch. Note that this doesn't roll old logs.
