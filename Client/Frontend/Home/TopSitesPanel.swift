@@ -68,6 +68,7 @@ class TopSitesPanel: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationProfileDidFinishSyncing, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationPrivateDataClearedHistory, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "notificationReceived:", name: NotificationDynamicFontChanged, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -96,11 +97,12 @@ class TopSitesPanel: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationFirefoxAccountChanged, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationProfileDidFinishSyncing, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationPrivateDataClearedHistory, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
     }
-    
+
     func notificationReceived(notification: NSNotification) {
         switch notification.name {
-        case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory:
+        case NotificationFirefoxAccountChanged, NotificationProfileDidFinishSyncing, NotificationPrivateDataClearedHistory, NotificationDynamicFontChanged:
             refreshTopSites(maxFrecencyLimit)
             break
         default:
