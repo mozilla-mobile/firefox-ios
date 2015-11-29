@@ -134,6 +134,20 @@ public class DynamicFontHelper: NSObject {
         }
     }
 
+    /**
+     * Reader mode
+     */
+    var ReaderStandardFontSize: CGFloat {
+        get {
+            return _defaultStandardFontSize - 2
+        }
+    }
+    var ReaderBigFontSize: CGFloat {
+        get {
+            return _defaultStandardFontSize + 5
+        }
+    }
+
     func refreshFonts() {
         _defaultStandardFontSize = UIFontDescriptor.preferredFontDescriptorWithTextStyle(UIFontTextStyleBody).pointSize
         _deviceFontSize = _defaultStandardFontSize * (DeviceInfo.deviceModel().rangeOfString("iPad") != nil ? iPadFactor : iPhoneFactor)

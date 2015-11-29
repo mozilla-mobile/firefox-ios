@@ -825,8 +825,10 @@ class BrowserViewController: UIViewController {
         if let url = tab.url {
             if ReaderModeUtils.isReaderModeURL(url) {
                 showReaderModeBar(animated: false)
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: "SELDynamicFontChanged:", name: NotificationDynamicFontChanged, object: nil)
             } else {
                 hideReaderModeBar(animated: false)
+                NSNotificationCenter.defaultCenter().removeObserver(self, name: NotificationDynamicFontChanged, object: nil)
             }
 
             updateInContentHomePanel(url)
@@ -2036,6 +2038,19 @@ extension BrowserViewController {
                 }
             }
         }
+    }
+
+    func SELDynamicFontChanged(notification: NSNotification) {
+        guard notification.name == NotificationDynamicFontChanged else { return }
+
+        var readerModeStyle = DefaultReaderModeStyle
+        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
+            if let style = ReaderModeStyle(dict: dict) {
+                readerModeStyle = style
+            }
+        }
+        readerModeStyle.fontSize = ReaderModeFontSize.defaultSize
+        self.readerModeStyleViewController(ReaderModeStyleViewController(), didConfigureStyle: readerModeStyle)
     }
 }
 

@@ -123,7 +123,6 @@ class ReadingListTableViewCell: SWTableViewCell {
         contentView.addSubview(titleLabel)
         titleLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
         titleLabel.numberOfLines = 2
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
         titleLabel.snp_makeConstraints { (make) -> () in
             make.top.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelTopOffset)
             make.left.equalTo(self.contentView).offset(ReadingListTableViewCellUX.TitleLabelLeftOffset)
@@ -133,14 +132,12 @@ class ReadingListTableViewCell: SWTableViewCell {
         contentView.addSubview(hostnameLabel)
         hostnameLabel.textColor = ReadingListTableViewCellUX.ActiveTextColor
         hostnameLabel.numberOfLines = 1
-        hostnameLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         hostnameLabel.snp_makeConstraints { (make) -> () in
             make.bottom.equalTo(self.contentView).offset(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)
             make.left.right.equalTo(self.titleLabel)
         }
 
         deleteButton.backgroundColor = ReadingListTableViewCellUX.DeleteButtonBackgroundColor
-        deleteButton.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         deleteButton.titleLabel?.textColor = ReadingListTableViewCellUX.DeleteButtonTitleColor
         deleteButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
         deleteButton.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -152,7 +149,6 @@ class ReadingListTableViewCell: SWTableViewCell {
         rightUtilityButtons = [deleteButton]
 
         markAsReadButton.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
-        markAsReadButton.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         markAsReadButton.titleLabel?.textColor = ReadingListTableViewCellUX.MarkAsReadButtonTitleColor
         markAsReadButton.titleLabel?.lineBreakMode = NSLineBreakMode.ByWordWrapping
         markAsReadButton.titleLabel?.textAlignment = NSTextAlignment.Center
@@ -164,6 +160,19 @@ class ReadingListTableViewCell: SWTableViewCell {
         leftUtilityButtons = [markAsReadButton]
 
         accessibilityCustomActions = [deleteAction, markAsReadAction]
+        setupDynamicFonts()
+    }
+
+    func setupDynamicFonts() {
+        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
+        hostnameLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
+        deleteButton.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLight
+        markAsReadButton.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLight
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        setupDynamicFonts()
     }
 
     required init?(coder aDecoder: NSCoder) {
