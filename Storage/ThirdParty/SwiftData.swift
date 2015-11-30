@@ -268,8 +268,7 @@ public class SQLiteDBConnection {
 
     public var version: Int {
         get {
-            let res = executeQueryUnsafe("PRAGMA user_version", factory: IntFactory)
-            return res[0] ?? 0
+            return pragma("user_version", factory: IntFactory) ?? 0
         }
 
         set {
@@ -311,6 +310,7 @@ public class SQLiteDBConnection {
 
     private func pragma<T>(pragma: String, factory: SDRow -> T) -> T? {
         let cursor = executeQueryUnsafe("PRAGMA \(pragma)", factory: factory)
+        defer { cursor.close() }
         return cursor[0]
     }
 
@@ -339,7 +339,7 @@ public class SQLiteDBConnection {
         // For where these values come from, see Bug 1213623.
         //
 
-        let currentPageSize = executeQueryUnsafe("PRAGMA page_size", factory: IntFactory)[0]
+        let currentPageSize = pragma("page_size", factory: IntFactory)
         let desiredPageSize = 32 * 1024
 
         // This has to be done without WAL, so we always hop into rollback/delete journal mode.
@@ -373,7 +373,7 @@ public class SQLiteDBConnection {
         }
 
         if SwiftData.EnableForeignKeys {
-            executeQueryUnsafe("PRAGMA foreign_keys=ON", factory: IntFactory)
+            pragma("foreign_keys=ON", factory: IntFactory)
         }
 
         // Retry queries before returning locked errors.
@@ -472,6 +472,10 @@ public class SQLiteDBConnection {
             error = error1
             statement = nil
         }
+
+        // Close, not reset -- this isn't going to be reused.
+        defer { statement?.close() }
+
         if let error = error {
             // Special case: Write additional info to the database log in the case of a database corruption.
             if error.code == Int(SQLITE_CORRUPT) {
@@ -479,7 +483,6 @@ public class SQLiteDBConnection {
             }
 
             log.error("SQL error: \(error.localizedDescription) for SQL \(sqlStr).")
-            statement?.close()
             return error
         }
 
@@ -489,7 +492,6 @@ public class SQLiteDBConnection {
             error = createErr("During: SQL Step \(sqlStr)", status: Int(status))
         }
 
-        statement?.close()
         return error
     }
 
@@ -504,6 +506,11 @@ public class SQLiteDBConnection {
             error = error1
             statement = nil
         }
+
+        // Close, not reset -- this isn't going to be reused, and the FilledSQLiteCursor
+        // consumes everything.
+        defer { statement?.close() }
+
         if let error = error {
             // Special case: Write additional info to the database log in the case of a database corruption.
             if error.code == Int(SQLITE_CORRUPT) {
@@ -514,13 +521,7 @@ public class SQLiteDBConnection {
             return Cursor<T>(err: error)
         }
 
-        let cursor = FilledSQLiteCursor<T>(statement: statement!, factory: factory)
-
-        // Close, not reset -- this isn't going to be reused, and the cursor has
-        // consumed everything.
-        statement?.close()
-
-        return cursor
+        return FilledSQLiteCursor<T>(statement: statement!, factory: factory)
     }
 
     func writeCorruptionInfoForDBNamed(dbFilename: String, toLogger logger: XCGLogger) {
