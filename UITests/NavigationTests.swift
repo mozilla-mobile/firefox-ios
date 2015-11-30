@@ -114,64 +114,6 @@ class NavigationTests: KIFTestCase, UITextFieldDelegate {
         tester().tapViewWithAccessibilityLabel("home")
     }
 
-    func testToggleBetweenMobileAndDesktopSite() {
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(webRoot)/numberedPage.html?page=1\n")
-        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
-
-        // Initially the mobile site should be loaded with an offer to request the desktop site
-        tester().longPressViewWithAccessibilityLabel("Reload", duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Request Desktop Site")
-
-        // Request desktop site
-        tester().tapViewWithAccessibilityLabel("Request Desktop Site")
-        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
-
-        // After requesting the desktop site we should offer to request the mobile site
-        tester().longPressViewWithAccessibilityLabel("Reload", duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Request Mobile Site")
-
-        // Request mobile site
-        tester().tapViewWithAccessibilityLabel("Request Mobile Site")
-        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
-
-        // After requesting the mobile site we should offer to request the desktop site again
-        tester().longPressViewWithAccessibilityLabel("Reload", duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Request Desktop Site")
-
-        tester().tapViewWithAccessibilityLabel("Cancel")
-    }
-
-    func testNewNavigationLoadsMobileSite() {
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(webRoot)/numberedPage.html?page=1\n")
-        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
-
-        // Initially the mobile site should be loaded with an offer to request the desktop site
-        tester().longPressViewWithAccessibilityLabel("Reload", duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Request Desktop Site")
-
-        // Request desktop site
-        tester().tapViewWithAccessibilityLabel("Request Desktop Site")
-        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
-
-        // After requesting the desktop site we should offer to request the mobile site
-        tester().longPressViewWithAccessibilityLabel("Reload", duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Request Mobile Site")
-
-        // Navigate to different URL
-        tester().tapViewWithAccessibilityLabel("Cancel")
-        tester().tapViewWithAccessibilityIdentifier("url")
-        tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(webRoot)/numberedPage.html?page=2\n")
-        tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
-
-        // The new navigation should load the mobile site with an offer to request the desktop site
-        tester().longPressViewWithAccessibilityLabel("Reload", duration: 1)
-        tester().waitForViewWithAccessibilityLabel("Request Desktop Site")
-
-        tester().tapViewWithAccessibilityLabel("Cancel")
-    }
-
     override func tearDown() {
         BrowserUtils.clearHistoryItems(tester(), numberOfTests: 5)
     }

@@ -30,7 +30,6 @@ protocol BrowserToolbarDelegate: class {
     func browserToolbarDidLongPressBack(browserToolbar: BrowserToolbarProtocol, button: UIButton)
     func browserToolbarDidLongPressForward(browserToolbar: BrowserToolbarProtocol, button: UIButton)
     func browserToolbarDidPressReload(browserToolbar: BrowserToolbarProtocol, button: UIButton)
-    func browserToolbarDidLongPressReload(browserToolbar: BrowserToolbarProtocol, button: UIButton)
     func browserToolbarDidPressStop(browserToolbar: BrowserToolbarProtocol, button: UIButton)
     func browserToolbarDidPressBookmark(browserToolbar: BrowserToolbarProtocol, button: UIButton)
     func browserToolbarDidLongPressBookmark(browserToolbar: BrowserToolbarProtocol, button: UIButton)
@@ -93,8 +92,6 @@ public class BrowserToolbarHelper: NSObject {
         toolbar.stopReloadButton.setImage(UIImage(named: "reload"), forState: .Normal)
         toolbar.stopReloadButton.setImage(UIImage(named: "reloadPressed"), forState: .Highlighted)
         toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the browser toolbar Reload button")
-        let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: "SELdidLongPressStopReload:")
-        toolbar.stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
         toolbar.stopReloadButton.addTarget(self, action: "SELdidClickStopReload", forControlEvents: UIControlEvents.TouchUpInside)
 
         toolbar.shareButton.setImage(UIImage(named: "send"), forState: .Normal)
@@ -152,12 +149,6 @@ public class BrowserToolbarHelper: NSObject {
             toolbar.browserToolbarDelegate?.browserToolbarDidPressStop(toolbar, button: toolbar.stopReloadButton)
         } else {
             toolbar.browserToolbarDelegate?.browserToolbarDidPressReload(toolbar, button: toolbar.stopReloadButton)
-        }
-    }
-
-    func SELdidLongPressStopReload(recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == UIGestureRecognizerState.Began && !loading {
-            toolbar.browserToolbarDelegate?.browserToolbarDidLongPressReload(toolbar, button: toolbar.stopReloadButton)
         }
     }
 

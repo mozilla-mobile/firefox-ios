@@ -1065,30 +1065,6 @@ extension BrowserViewController: BrowserToolbarDelegate {
         tabManager.selectedTab?.reload()
     }
 
-    func browserToolbarDidLongPressReload(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
-        guard #available(iOS 9.0, *) else {
-            return
-        }
-
-        guard let tab = tabManager.selectedTab where tab.webView?.URL != nil else {
-            return
-        }
-
-        let toggleActionTitle: String
-        if tab.desktopSite {
-            toggleActionTitle = NSLocalizedString("Request Mobile Site", comment: "Action Sheet Button for Requesting the Mobile Site")
-        } else {
-            toggleActionTitle = NSLocalizedString("Request Desktop Site", comment: "Action Sheet Button for Requesting the Desktop Site")
-        }
-
-        let controller = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-        controller.addAction(UIAlertAction(title: toggleActionTitle, style: .Default, handler: { _ in tab.toggleDesktopSite() }))
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment:"Action Sheet Cancel Button"), style: .Cancel, handler: nil))
-        controller.popoverPresentationController?.sourceView = toolbar ?? urlBar
-        controller.popoverPresentationController?.sourceRect = button.frame
-        presentViewController(controller, animated: true, completion: nil)
-    }
-
     func browserToolbarDidPressStop(browserToolbar: BrowserToolbarProtocol, button: UIButton) {
         tabManager.selectedTab?.stop()
     }
@@ -1658,12 +1634,6 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         addOpenInViewIfNeccessary(webView.URL)
-
-        // Remember whether or not a desktop site was requested and reset potentially spoofed user agent
-        if #available(iOS 9.0, *) {
-            tab.desktopSite = webView.customUserAgent?.isEmpty == false
-            webView.customUserAgent = nil
-        }
     }
 
     private func addOpenInViewIfNeccessary(url: NSURL?) {
