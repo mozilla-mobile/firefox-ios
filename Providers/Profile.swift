@@ -384,7 +384,10 @@ public class BrowserProfile: Profile {
         return SQLiteLogins(db: self.loginsDB)
     }()
 
-    private lazy var loginsKey: String? = {
+    // This is currently only used within the dispatch_once block in loginsDB, so we don't
+    // have to worry about races giving us two keys. But if this were ever to be used
+    // elsewhere, it'd be unsafe, so we wrap this in a dispatch_once, too.
+    private var loginsKey: String? {
         let key = "sqlcipher.key.logins.db"
         struct Singleton {
             static var token: dispatch_once_t = 0
@@ -402,7 +405,7 @@ public class BrowserProfile: Profile {
             }
         }
         return Singleton.instance
-    }()
+    }
 
     private var loginsDBCreated = false
     private lazy var loginsDB: BrowserDB = {
