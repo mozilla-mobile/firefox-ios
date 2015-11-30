@@ -105,11 +105,11 @@ public class BrowserDB {
     // creation of the table in the database.
     func createOrUpdate(tables: Table...) -> Bool {
         var success = true
+
         let doCreate = { (table: Table, connection: SQLiteDBConnection) -> () in
             switch self.createTable(connection, table: table) {
             case .Created:
                 success = true
-                connection.checkpoint()
                 return
             case .Exists:
                 log.debug("Table already exists.")
@@ -134,7 +134,6 @@ public class BrowserDB {
                     case .Updated:
                         log.debug("Updated table \(table.name).")
                         success = true
-                        connection.checkpoint()
                         break
                     case .Exists:
                         log.debug("Table \(table.name) already exists.")
