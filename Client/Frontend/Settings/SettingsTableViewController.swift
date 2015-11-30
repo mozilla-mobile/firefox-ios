@@ -467,8 +467,14 @@ private class DeleteExportedDataSetting: HiddenSetting {
 
     override func onClick(navigationController: UINavigationController?) {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        let fileManager = NSFileManager.defaultManager()
         do {
-            try NSFileManager.defaultManager().removeItemInDirectory(documentsPath, named: "browser.db")
+            let files = try fileManager.contentsOfDirectoryAtPath(documentsPath)
+            for file in files {
+                if file.startsWith("browser.") || file.startsWith("logins.") {
+                    try fileManager.removeItemInDirectory(documentsPath, named: file)
+                }
+            }
         } catch {
             print("Couldn't delete exported data: \(error).")
         }
@@ -483,12 +489,14 @@ private class ExportBrowserDataSetting: HiddenSetting {
 
     override func onClick(navigationController: UINavigationController?) {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
-        if let browserDB = NSURL.fileURLWithPath(documentsPath).URLByAppendingPathComponent("browser.db").path {
-            do {
-                try self.settings.profile.files.copy("browser.db", toAbsolutePath: browserDB)
-            } catch {
-                print("Couldn't export browser data: \(error).")
+        do {
+            let log = Logger.syncLogger
+            try self.settings.profile.files.copyMatching(fromRelativeDirectory: "", toAbsoluteDirectory: documentsPath) { file in
+                log.debug("Matcher: \(file)")
+                return file.startsWith("browser.") || file.startsWith("logins.")
             }
+        } catch {
+            print("Couldn't export browser data: \(error).")
         }
     }
 }

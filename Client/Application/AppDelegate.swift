@@ -130,6 +130,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    func applicationWillTerminate(application: UIApplication) {
+        log.debug("Application will terminate.")
+
+        // We have only five seconds here, so let's hope this doesn't take too long.
+        self.profile?.shutdown()
+
+        // Allow deinitializers to close our database connections.
+        self.profile = nil
+        self.tabManager = nil
+        self.browserViewController = nil
+        self.rootViewController = nil
+    }
+
     /**
      * We maintain a weak reference to the profile so that we can pause timed
      * syncs when we're backgrounded.
@@ -240,7 +253,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
-            self.profile?.shutdown()
+            self.profile?.background()
             application.endBackgroundTask(taskId)
         }
     }

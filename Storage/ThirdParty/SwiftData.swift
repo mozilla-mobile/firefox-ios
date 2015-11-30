@@ -68,6 +68,8 @@ public class SwiftData {
         self.filename = filename
         self.sharedConnectionQueue = dispatch_queue_create("SwiftData queue: \(filename)", DISPATCH_QUEUE_SERIAL)
 
+        log.debug("XXX key is \(key).")
+
         // Ensure that multi-thread mode is enabled by default.
         // See https://www.sqlite.org/threadsafe.html
         assert(sqlite3_threadsafe() == 2)
@@ -154,13 +156,10 @@ public class SwiftData {
         }
     }
 
-    func close() {
-        dispatch_sync(sharedConnectionQueue) {
-            if self.sharedConnection != nil {
-                self.sharedConnection?.closeCustomConnection()
-            }
-            self.sharedConnection = nil
-        }
+    // Don't use this unless you know what you're doing. The deinitializer
+    // should be used to achieve refcounting semantics.
+    func forceClose() {
+        self.sharedConnection = nil
     }
 
     public enum Flags {
@@ -268,8 +267,7 @@ public class SQLiteDBConnection {
 
     public var version: Int {
         get {
-            let res = executeQueryUnsafe("PRAGMA user_version", factory: IntFactory)
-            return res[0] ?? 0
+            return pragma("user_version", factory: IntFactory) ?? 0
         }
 
         set {
@@ -311,6 +309,7 @@ public class SQLiteDBConnection {
 
     private func pragma<T>(pragma: String, factory: SDRow -> T) -> T? {
         let cursor = executeQueryUnsafe("PRAGMA \(pragma)", factory: factory)
+        defer { cursor.close() }
         return cursor[0]
     }
 
@@ -323,9 +322,12 @@ public class SQLiteDBConnection {
             return nil
         }
 
-        // Setting the key need to be the first thing done with the database.
+        // Setting the key needs to be the first thing done with the database.
         if let _ = setKey(key) {
-            closeCustomConnection()
+            if let err = closeCustomConnection(immediately: true) {
+                log.error("Couldn't close connection: \(err). Failing to open.")
+                return nil
+            }
             if let _ = openWithFlags(flags) {
                 return nil
             }
@@ -335,12 +337,18 @@ public class SQLiteDBConnection {
             }
         }
 
+        // If we just created the DB -- i.e., no tables have been created yet -- then
+        // we can set the page size right now and save a vacuum.
         //
         // For where these values come from, see Bug 1213623.
         //
+        // Note that sqlcipher uses cipher_page_size instead, but we don't set that
+        // because it needs to be set from day one.
 
-        let currentPageSize = executeQueryUnsafe("PRAGMA page_size", factory: IntFactory)[0]
         let desiredPageSize = 32 * 1024
+        pragma("page_size=\(desiredPageSize)", factory: IntFactory)
+
+        let currentPageSize = pragma("page_size", factory: IntFactory)
 
         // This has to be done without WAL, so we always hop into rollback/delete journal mode.
         if currentPageSize != desiredPageSize {
@@ -373,7 +381,7 @@ public class SQLiteDBConnection {
         }
 
         if SwiftData.EnableForeignKeys {
-            executeQueryUnsafe("PRAGMA foreign_keys=ON", factory: IntFactory)
+            pragma("foreign_keys=ON", factory: IntFactory)
         }
 
         // Retry queries before returning locked errors.
@@ -382,7 +390,9 @@ public class SQLiteDBConnection {
 
     deinit {
         log.debug("deinit: closing connection on thread \(NSThread.currentThread()).")
-        closeCustomConnection()
+        dispatch_sync(self.queue) {
+            self.closeCustomConnection()
+        }
     }
 
     var lastInsertedRowID: Int {
@@ -396,7 +406,7 @@ public class SQLiteDBConnection {
     /**
      * Blindly attempts a WAL checkpoint on all attached databases.
      */
-    func checkpoint(mode: Int32 = SQLITE_CHECKPOINT_PASSIVE) {
+    func checkpoint(mode: Int32 = SQLITE_CHECKPOINT_FULL) {
         guard sqliteDB != nil else {
             log.warning("Trying to checkpoint a nil DB!")
             return
@@ -441,21 +451,25 @@ public class SQLiteDBConnection {
     }
 
     /// Closes a connection. This is called via deinit. Do not call this yourself.
-    private func closeCustomConnection() -> NSError? {
+    private func closeCustomConnection(immediately immediately: Bool=false) -> NSError? {
         log.debug("Closing custom connection for \(self.filename) on \(NSThread.currentThread()).")
-        // Make sure we don't try to call sqlite3_close multiple times.
         // TODO: add a lock here?
-        guard self.sqliteDB != nil else {
+        let db = self.sqliteDB
+        self.sqliteDB = nil
+
+        // Don't bother trying to call sqlite3_close multiple times.
+        guard db != nil else {
             log.warning("Connection was nil.")
             return nil
         }
 
-        let status = sqlite3_close(self.sqliteDB)
+        let status = immediately ? sqlite3_close(db) : sqlite3_close_v2(db)
         log.debug("Closed \(self.filename).")
-        self.sqliteDB = nil
 
+        // Note that if we use sqlite3_close_v2, this will still return SQLITE_OK even if
+        // there are outstanding prepared statements
         if status != SQLITE_OK {
-            log.error("Got \(status) while closing.")
+            log.error("Got status \(status) while closing.")
             return createErr("During: closing database with flags", status: Int(status))
         }
 
@@ -472,6 +486,10 @@ public class SQLiteDBConnection {
             error = error1
             statement = nil
         }
+
+        // Close, not reset -- this isn't going to be reused.
+        defer { statement?.close() }
+
         if let error = error {
             // Special case: Write additional info to the database log in the case of a database corruption.
             if error.code == Int(SQLITE_CORRUPT) {
@@ -479,7 +497,6 @@ public class SQLiteDBConnection {
             }
 
             log.error("SQL error: \(error.localizedDescription) for SQL \(sqlStr).")
-            statement?.close()
             return error
         }
 
@@ -489,7 +506,6 @@ public class SQLiteDBConnection {
             error = createErr("During: SQL Step \(sqlStr)", status: Int(status))
         }
 
-        statement?.close()
         return error
     }
 
@@ -504,6 +520,11 @@ public class SQLiteDBConnection {
             error = error1
             statement = nil
         }
+
+        // Close, not reset -- this isn't going to be reused, and the FilledSQLiteCursor
+        // consumes everything.
+        defer { statement?.close() }
+
         if let error = error {
             // Special case: Write additional info to the database log in the case of a database corruption.
             if error.code == Int(SQLITE_CORRUPT) {
@@ -514,34 +535,41 @@ public class SQLiteDBConnection {
             return Cursor<T>(err: error)
         }
 
-        let cursor = FilledSQLiteCursor<T>(statement: statement!, factory: factory)
-
-        // Close, not reset -- this isn't going to be reused, and the cursor has
-        // consumed everything.
-        statement?.close()
-
-        return cursor
+        return FilledSQLiteCursor<T>(statement: statement!, factory: factory)
     }
 
     func writeCorruptionInfoForDBNamed(dbFilename: String, toLogger logger: XCGLogger) {
         dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             guard !SwiftData.corruptionLogsWritten.contains(dbFilename) else { return }
 
-            logger.error("Corrupt DB Detected! - DB Filename: \(dbFilename)")
+            logger.error("Corrupt DB detected! DB filename: \(dbFilename)")
 
             let dbFileSize = ("file://\(dbFilename)".asURL)?.allocatedFileSize() ?? 0
             logger.error("DB file size: \(dbFileSize) bytes")
 
-            if let message = self.pragma("integrity_check", factory: StringFactory) {
-                logger.error("Integrity check message: \(message)")
+            logger.error("Integrity check:")
+            let messages = self.executeQueryUnsafe("PRAGMA integrity_check", factory: StringFactory)
+            defer { messages.close() }
+
+            if messages.status == CursorStatus.Success {
+                for message in messages {
+                    logger.error(message)
+                }
+                logger.error("----")
+            } else {
+                logger.error("Couldn't run integrity check: \(messages.statusMessage).")
             }
 
-            // Write call stack
+            // Write call stack.
             logger.error("Call stack: \(NSThread.callStackSymbols())")
 
-            // Write open file handles
+            // Write open file handles.
             let openDescriptors = FSUtils.openFileDescriptors()
-            logger.error("Open file descriptors: \(openDescriptors)")
+            logger.error("Open file descriptors: ")
+            for (k, v) in openDescriptors {
+                logger.error("  \(k): \(v)")
+            }
+            logger.error("----")
 
             SwiftData.corruptionLogsWritten.insert(dbFilename)
         }

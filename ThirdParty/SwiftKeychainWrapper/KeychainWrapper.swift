@@ -67,11 +67,12 @@ public class KeychainWrapper {
     /// :param: keyName The key to check for.
     /// :returns: True if a value exists for the key. False otherwise.
     public class func hasValueForKey(keyName: String) -> Bool {
-        if let _: NSData? = self.dataForKey(keyName) {
-            return true
-        } else {
+        let data = self.dataForKey(keyName)
+
+        if data == nil {
             return false
         }
+        return true
     }
 
     /// Returns a string value for a specified key.
@@ -125,7 +126,10 @@ public class KeychainWrapper {
             SecItemCopyMatching(keychainQueryDictionary, UnsafeMutablePointer($0))
         }
 
-        return status == noErr ? result as? NSData : nil
+        if status == noErr {
+            return result as? NSData
+        }
+        return nil
     }
 
     /// Returns a NSData object for a specified key.

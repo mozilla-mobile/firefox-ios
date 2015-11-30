@@ -137,6 +137,7 @@ protocol Profile: class {
     var readingList: ReadingListService? { get }
     var logins: protocol<BrowserLogins, SyncableLogins, ResettableSyncStorage> { get }
 
+    func background()
     func shutdown()
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
@@ -219,13 +220,34 @@ public class BrowserProfile: Profile {
         self.init(localName: localName, app: nil)
     }
 
+    private func logProfileFDs() {
+        let openDescriptors = FSUtils.openFileDescriptors()
+        log.debug("Open file descriptors: ")
+        log.debug("----")
+        for (k, v) in openDescriptors {
+            if v.containsString(self.name) {
+                log.debug("  \(k): \(v)")
+            }
+        }
+        log.debug("----")
+    }
+
+    func background() {
+        log.debug("Backgrounding profile.")
+        if AppConstants.IsDebug {
+            self.logProfileFDs()
+        }
+    }
+
     func shutdown() {
+        log.debug("Shutting down profile.")
+
         if self.dbCreated {
-            db.close()
+            db.forceClose()
         }
 
         if self.loginsDBCreated {
-            loginsDB.close()
+            loginsDB.forceClose()
         }
     }
 
@@ -386,14 +408,22 @@ public class BrowserProfile: Profile {
 
     private lazy var loginsKey: String? = {
         let key = "sqlcipher.key.logins.db"
-        if KeychainWrapper.hasValueForKey(key) {
-            return KeychainWrapper.stringForKey(key)
+        struct Singleton {
+            static var token: dispatch_once_t = 0
+            static var instance: String!
         }
-
-        let Length: UInt = 256
-        let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-        KeychainWrapper.setString(secret, forKey: key)
-        return secret
+        dispatch_once(&Singleton.token) {
+            if KeychainWrapper.hasValueForKey(key) {
+                let value = KeychainWrapper.stringForKey(key)
+                Singleton.instance = value
+            } else {
+                let Length: UInt = 256
+                let secret = Bytes.generateRandomBytes(Length).base64EncodedString
+                KeychainWrapper.setString(secret, forKey: key)
+                Singleton.instance = secret
+            }
+        }
+        return Singleton.instance
     }()
 
     private var loginsDBCreated = false
@@ -403,7 +433,8 @@ public class BrowserProfile: Profile {
             static var instance: BrowserDB!
         }
         dispatch_once(&Singleton.token) {
-            Singleton.instance = BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
+            let key = self.loginsKey
+            Singleton.instance = BrowserDB(filename: "logins.db", secretKey: key, files: self.files)
             self.loginsDBCreated = true
         }
         return Singleton.instance
