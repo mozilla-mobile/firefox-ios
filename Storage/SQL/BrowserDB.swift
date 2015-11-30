@@ -168,6 +168,8 @@ public class BrowserDB {
             log.debug("Attempting to move \(self.filename) to another location.")
 
             // Make sure that we don't still have open the files that we want to move!
+            // Note that we use sqlite3_close_v2, which might actually _not_ close the
+            // database file yet. For this reason we move the -shm and -wal files, too.
             db.forceClose()
 
             // Note that a backup file might already exist! We append a counter to avoid this.
