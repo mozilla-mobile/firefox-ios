@@ -403,7 +403,8 @@ public class BrowserProfile: Profile {
             static var instance: BrowserDB!
         }
         dispatch_once(&Singleton.token) {
-            Singleton.instance = BrowserDB(filename: "logins.db", secretKey: self.loginsKey, files: self.files)
+            let key = self.loginsKey
+            Singleton.instance = BrowserDB(filename: "logins.db", secretKey: key, files: self.files)
             self.loginsDBCreated = true
         }
         return Singleton.instance
