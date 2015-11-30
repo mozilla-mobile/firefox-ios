@@ -326,12 +326,18 @@ public class SQLiteDBConnection {
             }
         }
 
+        // If we just created the DB -- i.e., no tables have been created yet -- then
+        // we can set the page size right now and save a vacuum.
         //
         // For where these values come from, see Bug 1213623.
         //
+        // Note that sqlcipher uses cipher_page_size instead, but we don't set that
+        // because it needs to be set from day one.
+
+        let desiredPageSize = 32 * 1024
+        pragma("page_size=\(desiredPageSize)", factory: IntFactory)
 
         let currentPageSize = pragma("page_size", factory: IntFactory)
-        let desiredPageSize = 32 * 1024
 
         // This has to be done without WAL, so we always hop into rollback/delete journal mode.
         if currentPageSize != desiredPageSize {
