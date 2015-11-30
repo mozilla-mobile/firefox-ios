@@ -453,15 +453,15 @@ public class SQLiteDBConnection {
         }
 
         let status = immediately ? sqlite3_close(db) : sqlite3_close_v2(db)
-        log.debug("Closed \(self.filename).")
 
         // Note that if we use sqlite3_close_v2, this will still return SQLITE_OK even if
         // there are outstanding prepared statements
         if status != SQLITE_OK {
-            log.error("Got status \(status) while closing.")
+            log.error("Got status \(status) while attempting to close.")
             return createErr("During: closing database with flags", status: Int(status))
         }
 
+        log.debug("Closed \(self.filename).")
         return nil
     }
 
@@ -550,7 +550,11 @@ public class SQLiteDBConnection {
             }
 
             // Write call stack.
-            logger.error("Call stack: \(NSThread.callStackSymbols())")
+            logger.error("Call stack: ")
+            for message in NSThread.callStackSymbols() {
+                logger.error(" >> \(message)")
+            }
+            logger.error("----")
 
             // Write open file handles.
             let openDescriptors = FSUtils.openFileDescriptors()
