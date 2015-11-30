@@ -44,34 +44,22 @@ public class DynamicFontHelper: NSObject {
      */
     private var _deviceFontSize: CGFloat
     var DeviceFontSize: CGFloat {
-        get {
-            return _deviceFontSize
-        }
+        return _deviceFontSize
     }
     var DeviceFont: UIFont {
-        get {
-            return UIFont.systemFontOfSize(_deviceFontSize, weight: UIFontWeightMedium)
-        }
+        return UIFont.systemFontOfSize(_deviceFontSize, weight: UIFontWeightMedium)
     }
     var DeviceFontLight: UIFont {
-        get {
-            return UIFont.systemFontOfSize(_deviceFontSize, weight: UIFontWeightLight)
-        }
+        return UIFont.systemFontOfSize(_deviceFontSize, weight: UIFontWeightLight)
     }
     var DeviceFontSmall: UIFont {
-        get {
-            return UIFont.systemFontOfSize(_deviceFontSize - 1, weight: UIFontWeightMedium)
-        }
+        return UIFont.systemFontOfSize(_deviceFontSize - 1, weight: UIFontWeightMedium)
     }
     var DeviceFontSmallLight: UIFont {
-        get {
-            return UIFont.systemFontOfSize(_deviceFontSize - 1, weight: UIFontWeightLight)
-        }
+        return UIFont.systemFontOfSize(_deviceFontSize - 1, weight: UIFontWeightLight)
     }
     var DeviceFontSmallBold: UIFont {
-        get {
-            return UIFont.systemFontOfSize(_deviceFontSize - 1, weight: UIFontWeightBold)
-        }
+        return UIFont.systemFontOfSize(_deviceFontSize - 1, weight: UIFontWeightBold)
     }
 
     /**
@@ -79,19 +67,13 @@ public class DynamicFontHelper: NSObject {
      */
     private var _defaultSmallFontSize: CGFloat
     var DefaultSmallFontSize: CGFloat {
-        get {
-            return _defaultSmallFontSize
-        }
+        return _defaultSmallFontSize
     }
     var DefaultSmallFont: UIFont {
-        get {
-            return UIFont.systemFontOfSize(_defaultSmallFontSize, weight: UIFontWeightRegular)
-        }
+        return UIFont.systemFontOfSize(_defaultSmallFontSize, weight: UIFontWeightRegular)
     }
     var DefaultSmallFontBold: UIFont {
-        get {
-            return UIFont.boldSystemFontOfSize(_defaultSmallFontSize)
-        }
+        return UIFont.boldSystemFontOfSize(_defaultSmallFontSize)
     }
 
     /**
@@ -99,19 +81,13 @@ public class DynamicFontHelper: NSObject {
      */
     private var _defaultMediumFontSize: CGFloat
     var DefaultMediumFontSize: CGFloat {
-        get {
-            return _defaultMediumFontSize
-        }
+        return _defaultMediumFontSize
     }
     var DefaultMediumFont: UIFont {
-        get {
-            return UIFont.systemFontOfSize(_defaultMediumFontSize, weight: UIFontWeightRegular)
-        }
+        return UIFont.systemFontOfSize(_defaultMediumFontSize, weight: UIFontWeightRegular)
     }
     var DefaultMediumBoldFont: UIFont {
-        get {
-            return UIFont.boldSystemFontOfSize(_defaultMediumFontSize)
-        }
+        return UIFont.boldSystemFontOfSize(_defaultMediumFontSize)
     }
 
     /**
@@ -119,33 +95,23 @@ public class DynamicFontHelper: NSObject {
      */
     private var _defaultStandardFontSize: CGFloat
     var DefaultStandardFontSize: CGFloat {
-        get {
-            return _defaultStandardFontSize
-        }
+        return _defaultStandardFontSize
     }
     var DefaultStandardFont: UIFont {
-        get {
-            return UIFont.systemFontOfSize(_defaultStandardFontSize, weight: UIFontWeightRegular)
-        }
+        return UIFont.systemFontOfSize(_defaultStandardFontSize, weight: UIFontWeightRegular)
     }
     var DefaultStandardFontBold: UIFont {
-        get {
-            return UIFont.boldSystemFontOfSize(_defaultStandardFontSize)
-        }
+        return UIFont.boldSystemFontOfSize(_defaultStandardFontSize)
     }
 
     /**
      * Reader mode
      */
     var ReaderStandardFontSize: CGFloat {
-        get {
-            return _defaultStandardFontSize - 2
-        }
+        return _defaultStandardFontSize - 2
     }
     var ReaderBigFontSize: CGFloat {
-        get {
-            return _defaultStandardFontSize + 5
-        }
+        return _defaultStandardFontSize + 5
     }
 
     func refreshFonts() {
