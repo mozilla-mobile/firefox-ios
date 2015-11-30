@@ -386,14 +386,22 @@ public class BrowserProfile: Profile {
 
     private lazy var loginsKey: String? = {
         let key = "sqlcipher.key.logins.db"
-        if KeychainWrapper.hasValueForKey(key) {
-            return KeychainWrapper.stringForKey(key)
+        struct Singleton {
+            static var token: dispatch_once_t = 0
+            static var instance: String!
         }
-
-        let Length: UInt = 256
-        let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-        KeychainWrapper.setString(secret, forKey: key)
-        return secret
+        dispatch_once(&Singleton.token) {
+            if KeychainWrapper.hasValueForKey(key) {
+                let value = KeychainWrapper.stringForKey(key)
+                Singleton.instance = value
+            } else {
+                let Length: UInt = 256
+                let secret = Bytes.generateRandomBytes(Length).base64EncodedString
+                KeychainWrapper.setString(secret, forKey: key)
+                Singleton.instance = secret
+            }
+        }
+        return Singleton.instance
     }()
 
     private var loginsDBCreated = false
