@@ -68,6 +68,8 @@ public class SwiftData {
         self.filename = filename
         self.sharedConnectionQueue = dispatch_queue_create("SwiftData queue: \(filename)", DISPATCH_QUEUE_SERIAL)
 
+        log.debug("XXX key is \(key).")
+
         // Ensure that multi-thread mode is enabled by default.
         // See https://www.sqlite.org/threadsafe.html
         assert(sqlite3_threadsafe() == 2)
