@@ -549,11 +549,16 @@ public class SQLiteDBConnection {
 
             logger.error("Integrity check:")
             let messages = self.executeQueryUnsafe("PRAGMA integrity_check", factory: StringFactory)
-            for message in messages {
-                logger.error(message)
+            defer { messages.close() }
+
+            if messages.status == CursorStatus.Success {
+                for message in messages {
+                    logger.error(message)
+                }
+                logger.error("----")
+            } else {
+                logger.error("Couldn't run integrity check: \(messages.statusMessage).")
             }
-            messages.close()
-            logger.error("----")
 
             // Write call stack.
             logger.error("Call stack: \(NSThread.callStackSymbols())")
