@@ -22,7 +22,7 @@ class ShareExtensionHelper: NSObject {
         printInfo.outputType = .General
         let renderer = BrowserPrintPageRenderer(browser: selectedTab)
 
-        var activityItems = [printInfo, renderer, url]
+        var activityItems = [printInfo, renderer]
         if let title = selectedTab.title {
             activityItems.append(TitleActivityItemProvider(title: title))
         }
