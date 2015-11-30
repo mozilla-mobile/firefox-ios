@@ -63,9 +63,6 @@ public class MockProfile: Profile {
     }
 
     func shutdown() {
-        if dbCreated {
-            db.close()
-        }
     }
 
     private var dbCreated = false
