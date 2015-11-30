@@ -60,11 +60,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         KeyboardHelper.defaultHelper.startObserving()
 
         log.debug("Creating Sync log file…")
+        let logDate = NSDate()
         // Create a new sync log file on cold app launch. Note that this doesn't roll old logs.
-        Logger.syncLogger.newLogWithDate(NSDate())
+        Logger.syncLogger.newLogWithDate(logDate)
 
         log.debug("Creating corrupt DB logger…")
-        Logger.corruptLogger.newLogWithDate(NSDate())
+        Logger.corruptLogger.newLogWithDate(logDate)
+
+        log.debug("Creating Browser log file…")
+        Logger.browserLogger.newLogWithDate(logDate)
 
         log.debug("Getting profile…")
         let profile = getProfile(application)
@@ -158,9 +162,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Now roll logs.
         log.debug("Triggering log roll.")
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
-            Logger.syncLogger.deleteOldLogsDownToSizeLimit
-        )
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+            Logger.syncLogger.deleteOldLogsDownToSizeLimit()
+            Logger.browserLogger.deleteOldLogsDownToSizeLimit()
+        }
 
 
         if #available(iOS 9, *) {
