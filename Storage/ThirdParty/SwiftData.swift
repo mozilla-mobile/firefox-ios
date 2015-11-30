@@ -311,30 +311,42 @@ public class SQLiteDBConnection {
         return cursor[0]
     }
 
-    init?(filename: String, flags: Int32, key: String? = nil, prevKey: String? = nil) {
-        log.debug("Opening connection to \(filename).")
-        self.filename = filename
-        self.queue = dispatch_queue_create("SQLite connection: \(filename)", DISPATCH_QUEUE_SERIAL)
-        if let failure = openWithFlags(flags) {
-            log.warning("Opening connection to \(filename) failed: \(failure).")
-            return nil
+    private func prepareShared() {
+        if SwiftData.EnableForeignKeys {
+            pragma("foreign_keys=ON", factory: IntFactory)
         }
 
+        // Retry queries before returning locked errors.
+        sqlite3_busy_timeout(self.sqliteDB, DatabaseBusyTimeout)
+    }
+
+    private func prepareEncrypted(flags: Int32, key: String, prevKey: String? = nil) -> Bool {
         // Setting the key needs to be the first thing done with the database.
         if let _ = setKey(key) {
             if let err = closeCustomConnection(immediately: true) {
                 log.error("Couldn't close connection: \(err). Failing to open.")
-                return nil
+                return false
             }
             if let _ = openWithFlags(flags) {
-                return nil
+                return false
             }
             if let _ = reKey(prevKey, newKey: key) {
                 log.error("Unable to encrypt database")
-                return nil
+                return false
             }
         }
 
+        if SwiftData.EnableWAL {
+            log.info("Enabling WAL mode.")
+            pragma("journal_mode=WAL", expected: "wal",
+                   factory: StringFactory, message: "WAL journal mode set")
+        }
+
+        self.prepareShared()
+        return true
+    }
+
+    private func prepareCleartext() {
         // If we just created the DB -- i.e., no tables have been created yet -- then
         // we can set the page size right now and save a vacuum.
         //
@@ -378,12 +390,25 @@ public class SQLiteDBConnection {
                    factory: IntFactory, message: "WAL journal size limit set")
         }
 
-        if SwiftData.EnableForeignKeys {
-            pragma("foreign_keys=ON", factory: IntFactory)
+        self.prepareShared()
+    }
+
+    init?(filename: String, flags: Int32, key: String? = nil, prevKey: String? = nil) {
+        log.debug("Opening connection to \(filename).")
+        self.filename = filename
+        self.queue = dispatch_queue_create("SQLite connection: \(filename)", DISPATCH_QUEUE_SERIAL)
+        if let failure = openWithFlags(flags) {
+            log.warning("Opening connection to \(filename) failed: \(failure).")
+            return nil
         }
 
-        // Retry queries before returning locked errors.
-        sqlite3_busy_timeout(sqliteDB, DatabaseBusyTimeout)
+        if let key = key {
+            if !self.prepareEncrypted(flags, key: key, prevKey: prevKey) {
+                return nil
+            }
+        } else {
+            self.prepareCleartext()
+        }
     }
 
     deinit {
