@@ -79,6 +79,27 @@ public class FileAccessor {
         try NSFileManager.defaultManager().moveItemAtPath(fromPath, toPath: toPath as String)
     }
 
+    public func copyMatching(fromRelativeDirectory relativePath: String, toAbsoluteDirectory absolutePath: String, matching: String -> Bool) throws {
+        let fileManager = NSFileManager.defaultManager()
+        let path = rootPath.stringByAppendingPathComponent(relativePath)
+        let pathURL = NSURL.fileURLWithPath(path)
+        let destURL = NSURL.fileURLWithPath(absolutePath, isDirectory: true)
+
+        let files = try fileManager.contentsOfDirectoryAtPath(path)
+        for file in files {
+            if !matching(file) {
+                continue
+            }
+
+            let from = pathURL.URLByAppendingPathComponent(file, isDirectory: false).path!
+            let to = destURL.URLByAppendingPathComponent(file, isDirectory: false).path!
+            do {
+                try fileManager.copyItemAtPath(from, toPath: to)
+            } catch {
+            }
+        }
+    }
+
     public func copy(fromRelativePath: String, toAbsolutePath: String) throws -> Bool {
         let fromPath = rootPath.stringByAppendingPathComponent(fromRelativePath)
         guard let dest = NSURL.fileURLWithPath(toAbsolutePath).URLByDeletingLastPathComponent?.path else {
