@@ -156,13 +156,10 @@ public class SwiftData {
         }
     }
 
-    func close() {
-        dispatch_sync(sharedConnectionQueue) {
-            if self.sharedConnection != nil {
-                self.sharedConnection?.closeCustomConnection()
-            }
-            self.sharedConnection = nil
-        }
+    // Don't use this unless you know what you're doing. The deinitializer
+    // should be used to achieve refcounting semantics.
+    func forceClose() {
+        self.sharedConnection = nil
     }
 
     public enum Flags {
@@ -387,7 +384,9 @@ public class SQLiteDBConnection {
 
     deinit {
         log.debug("deinit: closing connection on thread \(NSThread.currentThread()).")
-        closeCustomConnection()
+        dispatch_sync(self.queue) {
+            self.closeCustomConnection()
+        }
     }
 
     var lastInsertedRowID: Int {

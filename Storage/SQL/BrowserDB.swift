@@ -168,7 +168,7 @@ public class BrowserDB {
             log.debug("Attempting to move \(self.filename) to another location.")
 
             // Make sure that we don't still have open the files that we want to move!
-            db.close()
+            db.forceClose()
 
             // Note that a backup file might already exist! We append a counter to avoid this.
             var bakCounter = 0
@@ -348,8 +348,8 @@ extension BrowserDB {
         }
     }
 
-    public func close() {
-        db.close()
+    public func forceClose() {
+        db.forceClose()
     }
 
     func run(sql: String, withArgs args: Args? = nil) -> Success {

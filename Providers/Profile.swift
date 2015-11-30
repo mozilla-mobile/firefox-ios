@@ -220,12 +220,14 @@ public class BrowserProfile: Profile {
     }
 
     func shutdown() {
+        log.debug("Shutting down profile.")
+
         if self.dbCreated {
-            db.close()
+            db.forceClose()
         }
 
         if self.loginsDBCreated {
-            loginsDB.close()
+            loginsDB.forceClose()
         }
     }
 
