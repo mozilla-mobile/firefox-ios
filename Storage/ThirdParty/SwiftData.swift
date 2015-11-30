@@ -325,9 +325,12 @@ public class SQLiteDBConnection {
             return nil
         }
 
-        // Setting the key need to be the first thing done with the database.
+        // Setting the key needs to be the first thing done with the database.
         if let _ = setKey(key) {
-            closeCustomConnection()
+            if let err = closeCustomConnection(immediately: true) {
+                log.error("Couldn't close connection: \(err). Failing to open.")
+                return nil
+            }
             if let _ = openWithFlags(flags) {
                 return nil
             }
@@ -443,21 +446,25 @@ public class SQLiteDBConnection {
     }
 
     /// Closes a connection. This is called via deinit. Do not call this yourself.
-    private func closeCustomConnection() -> NSError? {
+    private func closeCustomConnection(immediately immediately: Bool=false) -> NSError? {
         log.debug("Closing custom connection for \(self.filename) on \(NSThread.currentThread()).")
-        // Make sure we don't try to call sqlite3_close multiple times.
         // TODO: add a lock here?
-        guard self.sqliteDB != nil else {
+        let db = self.sqliteDB
+        self.sqliteDB = nil
+
+        // Don't bother trying to call sqlite3_close multiple times.
+        guard db != nil else {
             log.warning("Connection was nil.")
             return nil
         }
 
-        let status = sqlite3_close(self.sqliteDB)
+        let status = immediately ? sqlite3_close(db) : sqlite3_close_v2(db)
         log.debug("Closed \(self.filename).")
-        self.sqliteDB = nil
 
+        // Note that if we use sqlite3_close_v2, this will still return SQLITE_OK even if
+        // there are outstanding prepared statements
         if status != SQLITE_OK {
-            log.error("Got \(status) while closing.")
+            log.error("Got status \(status) while closing.")
             return createErr("During: closing database with flags", status: Int(status))
         }
 
