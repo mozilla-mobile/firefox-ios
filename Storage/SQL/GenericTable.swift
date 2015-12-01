@@ -89,10 +89,10 @@ public enum FilterType {
 let DBCouldNotOpenErrorCode = 200
 
 enum TableResult {
-    case Exists
-    case Created
-    case Updated
-    case Failed
+    case Exists             // The table already existed.
+    case Created            // The table was correctly created.
+    case Updated            // The table was updated to a new version.
+    case Failed             // Table creation failed.
 }
 
 
