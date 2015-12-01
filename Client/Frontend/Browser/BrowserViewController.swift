@@ -1577,8 +1577,13 @@ extension BrowserViewController: WKNavigationDelegate {
             callExternal(url)
             decisionHandler(WKNavigationActionPolicy.Cancel)
         default:
+            // If this is a scheme that we don't know how to handle, see if an external app
+            // can handle it. If not then we show an error page. In either case we cancel
+            // the request so that the webview does not see it.
             if UIApplication.sharedApplication().canOpenURL(url) {
                 openExternal(url)
+            } else {
+                ErrorPageHelper().showPage(NSError(domain: kCFErrorDomainCFNetwork as String, code: Int(CFNetworkErrors.CFErrorHTTPBadURL.rawValue), userInfo: [:]), forUrl: url, inWebView: webView)
             }
             decisionHandler(WKNavigationActionPolicy.Cancel)
         }
@@ -1674,9 +1679,11 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 }
 
+/// List of schemes that are allowed to open a popup window
+private let SchemesAllowedToOpenPopups = ["http", "https", "javascript", "data"]
+
 extension BrowserViewController: WKUIDelegate {
     func webView(webView: WKWebView, createWebViewWithConfiguration configuration: WKWebViewConfiguration, forNavigationAction navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-
         guard let currentTab = tabManager.selectedTab else { return nil }
 
         screenshotHelper.takeScreenshot(currentTab)
@@ -1690,15 +1697,41 @@ extension BrowserViewController: WKUIDelegate {
             newTab = tabManager.addTab(navigationAction.request, configuration: configuration)
         }
         tabManager.selectTab(newTab)
+        
+        // If the page we just opened has a bad scheme, we return nil here so that JavaScript does not
+        // get a reference to it which it can return from window.open() - this will end up as a
+        // CFErrorHTTPBadURL being presented.
+        guard let scheme = navigationAction.request.URL?.scheme.lowercaseString where SchemesAllowedToOpenPopups.contains(scheme) else {
+            return nil
+        }
+        
         return newTab.webView
+    }
+
+    /// Show a title for a JavaScript Panel (alert) based on the WKFrameInfo. On iOS9 we will use the new securityOrigin
+    /// and on iOS 8 we will fall back to the request URL. If the request URL is nil, which happens for JavaScript pages,
+    /// we fall back to "JavaScript" as a title.
+    private func titleForJavaScriptPanelInitiatedByFrame(frame: WKFrameInfo) -> String {
+        var title: String = "JavaScript"
+        if #available(iOS 9, *) {
+            title = "\(frame.securityOrigin.`protocol`)://\(frame.securityOrigin.host)"
+            if frame.securityOrigin.port != 0 {
+                title += ":\(frame.securityOrigin.port)"
+            }
+        } else {
+            if let url = frame.request.URL {
+                title = "\(url.scheme)://\(url.hostPort))"
+            }
+        }
+        return title
     }
 
     func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
         tabManager.selectTab(tabManager[webView])
 
         // Show JavaScript alerts.
-        let title = frame.request.URL!.host
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+
+        let alertController = UIAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
             completionHandler()
         }))
@@ -1709,8 +1742,7 @@ extension BrowserViewController: WKUIDelegate {
         tabManager.selectTab(tabManager[webView])
 
         // Show JavaScript confirm dialogs.
-        let title = frame.request.URL!.host
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alertController.addAction(UIAlertAction(title: OKString, style: UIAlertActionStyle.Default, handler: { _ in
             completionHandler(true)
         }))
@@ -1724,8 +1756,7 @@ extension BrowserViewController: WKUIDelegate {
         tabManager.selectTab(tabManager[webView])
 
         // Show JavaScript input dialogs.
-        let title = frame.request.URL!.host
-        let alertController = UIAlertController(title: title, message: prompt, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: prompt, preferredStyle: UIAlertControllerStyle.Alert)
         var input: UITextField!
         alertController.addTextFieldWithConfigurationHandler({ (textField: UITextField) in
             textField.text = defaultText
