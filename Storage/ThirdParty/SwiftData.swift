@@ -300,9 +300,12 @@ public class SQLiteDBConnection {
         sqlite3_interrupt(sqliteDB)
     }
 
-    private func pragma<T: Equatable>(pragma: String, expected: T?, factory: SDRow -> T, message: String) {
+    private func pragma<T: Equatable>(pragma: String, expected: T?, factory: SDRow -> T, message: String) throws {
         let cursorResult = self.pragma(pragma, factory: factory)
-        assert(cursorResult == expected, message)
+        if cursorResult != expected {
+            log.error("\(message): \(cursorResult), \(expected)")
+            throw NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "PRAGMA didn't return expected output: \(message)."])
+        }
     }
 
     private func pragma<T>(pragma: String, factory: SDRow -> T) -> T? {
@@ -320,33 +323,32 @@ public class SQLiteDBConnection {
         sqlite3_busy_timeout(self.sqliteDB, DatabaseBusyTimeout)
     }
 
-    private func prepareEncrypted(flags: Int32, key: String, prevKey: String? = nil) -> Bool {
+    private func prepareEncrypted(flags: Int32, key: String?, prevKey: String? = nil) throws {
         // Setting the key needs to be the first thing done with the database.
         if let _ = setKey(key) {
             if let err = closeCustomConnection(immediately: true) {
                 log.error("Couldn't close connection: \(err). Failing to open.")
-                return false
+                throw err
             }
-            if let _ = openWithFlags(flags) {
-                return false
+            if let err = openWithFlags(flags) {
+                throw err
             }
-            if let _ = reKey(prevKey, newKey: key) {
+            if let err = reKey(prevKey, newKey: key) {
                 log.error("Unable to encrypt database")
-                return false
+                throw err
             }
         }
 
         if SwiftData.EnableWAL {
             log.info("Enabling WAL mode.")
-            pragma("journal_mode=WAL", expected: "wal",
-                   factory: StringFactory, message: "WAL journal mode set")
+            try pragma("journal_mode=WAL", expected: "wal",
+                       factory: StringFactory, message: "WAL journal mode set")
         }
 
         self.prepareShared()
-        return true
     }
 
-    private func prepareCleartext() {
+    private func prepareCleartext() throws {
         // If we just created the DB -- i.e., no tables have been created yet -- then
         // we can set the page size right now and save a vacuum.
         //
@@ -362,10 +364,11 @@ public class SQLiteDBConnection {
 
         // This has to be done without WAL, so we always hop into rollback/delete journal mode.
         if currentPageSize != desiredPageSize {
-            pragma("journal_mode=DELETE", expected: "delete",
-                   factory: StringFactory, message: "delete journal mode set")
+            try pragma("journal_mode=DELETE", expected: "delete",
+                       factory: StringFactory, message: "delete journal mode set")
 
-            pragma("page_size=\(desiredPageSize)", expected: nil, factory: IntFactory, message: "Page size set")
+            try pragma("page_size=\(desiredPageSize)", expected: nil,
+                       factory: IntFactory, message: "Page size set")
 
             log.info("Vacuuming to alter database page size from \(currentPageSize) to \(desiredPageSize).")
             if let err = self.vacuum() {
@@ -382,12 +385,12 @@ public class SQLiteDBConnection {
             let desiredCheckpointSize = desiredPagesPerJournal * desiredPageSize
             let desiredJournalSizeLimit = 3 * desiredCheckpointSize
 
-            pragma("journal_mode=WAL", expected: "wal",
-                   factory: StringFactory, message: "WAL journal mode set")
-            pragma("wal_autocheckpoint=\(desiredPagesPerJournal)", expected: desiredPagesPerJournal,
-                   factory: IntFactory, message: "WAL autocheckpoint set")
-            pragma("journal_size_limit=\(desiredJournalSizeLimit)", expected: desiredJournalSizeLimit,
-                   factory: IntFactory, message: "WAL journal size limit set")
+            try pragma("journal_mode=WAL", expected: "wal",
+                       factory: StringFactory, message: "WAL journal mode set")
+            try pragma("wal_autocheckpoint=\(desiredPagesPerJournal)", expected: desiredPagesPerJournal,
+                       factory: IntFactory, message: "WAL autocheckpoint set")
+            try pragma("journal_size_limit=\(desiredJournalSizeLimit)", expected: desiredJournalSizeLimit,
+                       factory: IntFactory, message: "WAL journal size limit set")
         }
 
         self.prepareShared()
@@ -402,12 +405,18 @@ public class SQLiteDBConnection {
             return nil
         }
 
-        if let key = key {
-            if !self.prepareEncrypted(flags, key: key, prevKey: prevKey) {
+        if key == nil && prevKey == nil {
+            do {
+                try self.prepareCleartext()
+            } catch {
                 return nil
             }
         } else {
-            self.prepareCleartext()
+            do {
+                try self.prepareEncrypted(flags, key: key, prevKey: prevKey)
+            } catch {
+                return nil
+            }
         }
     }
 
