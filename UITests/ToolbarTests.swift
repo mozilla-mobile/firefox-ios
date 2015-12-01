@@ -129,6 +129,20 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertEqual(autocompleteField.text, "", "Verify that backspace keypress deletes text when url is highlighted")
     }
 
+    func testUserInfoRemovedFromURL() {
+        let hostWithUsername = webRoot.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "username:password@127.0.0.1", options: NSStringCompareOptions(), range: nil)
+        let urlWithUserInfo = "\(hostWithUsername)/numberedPage.html?page=1"
+        let url = "\(webRoot)/numberedPage.html?page=1"
+
+        _ = tester().waitForViewWithAccessibilityIdentifier("url") as! UITextField
+        tester().tapViewWithAccessibilityIdentifier("url")
+        tester().enterTextIntoCurrentFirstResponder(urlWithUserInfo+"\n")
+        tester().waitForAnimationsToFinish()
+
+        let urlField = tester().waitForViewWithAccessibilityIdentifier("url") as! UITextField
+        XCTAssertEqual(urlField.text, url)
+    }
+
     override func tearDown() {
         let previousOrientation = UIDevice.currentDevice().valueForKey("orientation") as! Int
         if previousOrientation == UIInterfaceOrientation.LandscapeLeft.rawValue {
